@@ -37,7 +37,7 @@ import * as P from "./presets.js";
 import { PromptBox, focusEnd, openEditorSheet } from "./prompt.js";
 import { samplingBar, widgetIO } from "./sampling.js";
 import { Stage } from "./stage.js";
-import { loadCatalog, catalogByFolder } from "./models.js";
+import { loadCatalog, refreshCatalog, catalogByFolder } from "./models.js";
 import { viewUrl } from "./api.js";
 import { t } from "./i18n.js";
 import * as S from "./state.js";
@@ -691,6 +691,7 @@ export class PreStageEditor {
     placeNear(pop, anchor);
     dismissable(pop);
     loadCatalog(() => pop.isConnected && render());
+    refreshCatalog(() => pop.isConnected && render());
   }
 
   // ---- popovers --------------------------------------------------------------
