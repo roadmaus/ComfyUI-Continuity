@@ -374,7 +374,11 @@ class MiniMaxH3FacePass(io.ComfyNode):
                 width, height, seed, steps, cfg, sampler_name, scheduler,
                 denoise, reel) -> io.NodeOutput:
         import nodes
-        from comfy_extras.nodes_minimax_h3 import _empty_av_latent, _encode_ref_audio
+        from comfy_extras.nodes_minimax_h3 import _empty_av_latent
+        # Not from core directly: `_encode_ref_audio` sits on the node class on a
+        # core before 2026-08-13. `encode.py` already resolves which spelling this
+        # install has.
+        from .encode import _encode_ref_audio
 
         frames = spill.open_frames(source)
         count = int(source["frames"])
