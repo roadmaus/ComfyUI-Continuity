@@ -65,7 +65,8 @@ export const takeable = (asset) => asset.kind === "image" && asset.role === "ref
 /** In the order the weights popover lists them, which is the order you set them
  *  in: the two checkpoints, then the three things every mode needs, then the
  *  preview decoder, which changes nothing about the render. */
-export const MODEL_FIELDS = ["fl2va", "ref2va", "clip", "vae", "audio_vae", "preview"];
+export const MODEL_FIELDS = ["fl2va", "ref2va", "clip", "vae", "audio_vae",
+                             "preview", "sam3"];
 
 export const MODEL_LABEL = {
   fl2va: "FL2VA checkpoint",
@@ -74,6 +75,7 @@ export const MODEL_LABEL = {
   vae: "Video VAE",
   audio_vae: "Audio VAE",
   preview: "Preview decoder",
+  sam3: "Face detector",
 };
 
 /** What each field is for, said once, in the popover. */
@@ -85,6 +87,8 @@ export const MODEL_HINT = {
   audio_vae: "Decodes the sound. H3 always generates some, so this is never optional.",
   preview: "taeh3, from models/vae_approx — what the live preview decodes through. "
          + "Without it the preview is latent2rgb, which is colour without detail.",
+  sam3: "A SAM3 checkpoint, from models/checkpoints — what the face pass asks "
+      + "where the face is. Needed only when the face pass is switched on.",
 };
 
 /** UNETLoader's own list. Applies to both checkpoints — they are the same
@@ -114,8 +118,10 @@ export const nextRoute = (route) => ROUTES[(ROUTES.indexOf(route) + 1) % ROUTES.
 
 /** Which fields a device can be pinned for: the five that become a loader.
  *  `preview` is not one — it is a filename handed to KJNodes' node, which puts
- *  its decoder wherever the sampler is. Mirrors `models.DEVICE_FIELDS`. */
-export const DEVICE_FIELDS = MODEL_FIELDS.filter((field) => field !== "preview");
+ *  its decoder wherever the sampler is — and neither is `sam3`, which the face
+ *  pass loads and releases inside its own node. Mirrors `models.DEVICE_FIELDS`. */
+export const DEVICE_FIELDS = MODEL_FIELDS.filter(
+  (field) => field !== "preview" && field !== "sam3");
 
 /** Everything but `preview` is needed to render at all — and of the two
  *  checkpoints, only the one the mode routes to. `requiredModels` answers that
@@ -125,6 +131,7 @@ export const ALWAYS_REQUIRED = ["clip", "vae", "audio_vae"];
 export function emptyModels() {
   return {
     fl2va: "", ref2va: "", clip: "", vae: "", audio_vae: "", preview: "",
+    sam3: "",
     dtype: "default",
     // Which checkpoint everything runs on whatever the mode derives.
     route: "auto",
@@ -226,8 +233,10 @@ export function guessModels(models, files) {
  * passes `timelineCheckpoints(timeline)`, because a chained clip legitimately
  * runs some shots on one checkpoint and some on the other.
  */
-export function requiredModels(checkpoints) {
-  return [...ALWAYS_REQUIRED, ...checkpoints];
+export function requiredModels(checkpoints, face = false) {
+  // The detector only when a pass in this render actually asks for one — a file
+  // nothing loads is not a file anybody has to own. Mirrors `models.check`.
+  return [...ALWAYS_REQUIRED, ...(face ? ["sam3"] : []), ...checkpoints];
 }
 
 /**
@@ -388,6 +397,66 @@ export const sampleEdge = (target) =>
 export const twoPass = (target) =>
   sampleEdge(target) < target.short_edge && target.upscale !== "direct";
 
+/**
+ * The face pass. Mirrors `compile.face_piece` / `compile.face_for`.
+ *
+ * H3 draws a face badly in proportion to how small the head is in frame, which
+ * is not something a bigger canvas reaches. So after a pass is decoded, the
+ * face is cropped out frame by frame, re-drawn at a canvas where it fills the
+ * picture, and composited back.
+ *
+ * The piece owns the two knobs and a card owns only the switch: "on", "off", or
+ * nothing at all, which inherits. How the pass works is one answer per render;
+ * what a card gets to say is whether this shot is one that needs it.
+ */
+export const DEFAULT_FACE_CANVAS = 512;
+export const MIN_FACE_CANVAS = MIN_SHORT_EDGE;
+export const MAX_FACE_CANVAS = NATIVE_SHORT_EDGE;
+export const DEFAULT_FACE_DENOISE = 0.45;
+export const MIN_FACE_DENOISE = 0.1;
+export const MAX_FACE_DENOISE = 0.9;
+export const FACE_OVERRIDES = ["on", "off"];
+
+export const emptyFace = () => ({
+  on: false, canvas: DEFAULT_FACE_CANVAS, denoise: DEFAULT_FACE_DENOISE,
+});
+
+export function parseFace(raw) {
+  const face = { ...emptyFace(), ...(raw && typeof raw === "object" ? raw : {}) };
+  const canvas = Number(face.canvas);
+  const denoise = Number(face.denoise);
+  face.on = Boolean(face.on);
+  face.canvas = Number.isFinite(canvas)
+    ? Math.min(MAX_FACE_CANVAS, Math.max(MIN_FACE_CANVAS,
+        Math.round(canvas / CANVAS_MULTIPLE) * CANVAS_MULTIPLE))
+    : DEFAULT_FACE_CANVAS;
+  face.denoise = Number.isFinite(denoise)
+    ? Math.min(MAX_FACE_DENOISE, Math.max(MIN_FACE_DENOISE, denoise))
+    : DEFAULT_FACE_DENOISE;
+  return face;
+}
+
+/** Absent while it is off, so every blob that never asked for one is unchanged. */
+export const serializeFace = (face) =>
+  (face?.on ? { face: { on: true, canvas: face.canvas, denoise: face.denoise } } : {});
+
+/** What one card's switch says: "on", "off", or "" for inherit. */
+export const faceOverride = (segment) =>
+  (FACE_OVERRIDES.includes(segment?.face) ? segment.face : "");
+
+/** Whether this shot runs the face pass, piece and card taken together. */
+export const faceOn = (piece, segment) => {
+  const override = faceOverride(segment);
+  if (override) return override === "on" && Boolean(piece?.face?.on);
+  return Boolean(piece?.face?.on);
+};
+
+/** Whether any shot on this strip runs one — what decides if a detector is
+ *  needed at all. Mirrors the `face` flag `render.emit` hands `models.check`. */
+export const faceAnywhere = (timeline) =>
+  Boolean(timeline?.face?.on)
+  && (timeline.segments ?? []).some((segment) => !isClip(segment) && faceOn(timeline, segment));
+
 const clampRefineDenoise = (value) => {
   const n = Number(value);
   if (!Number.isFinite(n)) return DEFAULT_REFINE_DENOISE;
@@ -420,6 +489,8 @@ export function emptyState() {
     upscale: UPSCALE_MODES[0],
     sample_edge: NATIVE_SHORT_EDGE,
     refine_denoise: DEFAULT_REFINE_DENOISE,
+    // The face pass, off until asked for. Owned wherever the canvas is owned.
+    face: emptyFace(),
     // "auto" follows the mode. Pinning it runs the same payload on the other
     // weights; compile.py decides which pins it will accept.
     checkpoint: "auto",
@@ -448,6 +519,7 @@ export function parseState(raw) {
       if (!UPSCALE_MODES.includes(state.upscale)) state.upscale = UPSCALE_MODES[0];
       state.sample_edge = clampSampleEdge(state.sample_edge);
       state.refine_denoise = clampRefineDenoise(state.refine_denoise);
+      state.face = parseFace(state.face);
       state.models = parseModels(state.models);
       state.turbo = parseTurbo(state.turbo);
       normalizeCheckpoint(state);
@@ -581,6 +653,7 @@ export function serializeState(state) {
     ...(state.sample_edge !== NATIVE_SHORT_EDGE ? { sample_edge: state.sample_edge } : {}),
     ...(state.refine_denoise !== DEFAULT_REFINE_DENOISE
       ? { refine_denoise: state.refine_denoise } : {}),
+    ...serializeFace(state.face),
     // Not in serializeCommon: the weights belong to the node, and a timeline
     // segment goes through that function too. The turbo switch likewise.
     ...serializeModels(state.models),
@@ -756,6 +829,9 @@ export function emptyTimeline() {
     upscale: UPSCALE_MODES[0],
     sample_edge: NATIVE_SHORT_EDGE,
     refine_denoise: DEFAULT_REFINE_DENOISE,
+    // The face pass, off until asked for. One answer for the whole piece; a
+    // card may still opt out of it.
+    face: emptyFace(),
     // Patched onto every segment, in front of whatever that segment adds. What
     // a turbo LoRA is for: you want it on the whole clip, not shot by shot.
     loras: [],
@@ -830,6 +906,12 @@ function syncCanvas(timeline) {
     segment.upscale = timeline.upscale;
     segment.sample_edge = timeline.sample_edge;
     segment.refine_denoise = timeline.refine_denoise;
+    // The face pass is *not* mirrored down: a segment's `face` key is its own
+    // switch, not a copy of the piece's settings. What is cleaned up here is a
+    // card left saying "on" after the piece was switched off — compile refuses
+    // that pairing by name, and a switch nobody can see is not worth being
+    // refused over. Same repair `merge` gets on a clip, two blocks up.
+    if (!timeline.face?.on && faceOverride(segment) === "on") delete segment.face;
     // The piece's reference pool, mirrored like the canvas so a segment state
     // answers `mode()`, `checkpoint()` and the prompt box's chips on its own:
     // a segment citing @ref-1 is a reference generation and every accessor has
@@ -915,7 +997,8 @@ export { syncCanvas as syncTimeline };
  * Mirrors `compile.PIECE_FIELDS`.
  */
 export const PIECE_FIELDS = ["aspect", "short_edge", "upscale", "sample_edge",
-                             "refine_denoise", "models", "turbo", "output_prefix"];
+                             "refine_denoise", "face", "models", "turbo",
+                             "output_prefix"];
 
 /** What only a lone generation ever carried at the top level. Tells a version-1
  *  `creator_data` blob from a fresh node's "{}" — which is an empty piece and
@@ -983,6 +1066,7 @@ export function parseTimeline(raw) {
       if (!UPSCALE_MODES.includes(timeline.upscale)) timeline.upscale = UPSCALE_MODES[0];
       timeline.sample_edge = clampSampleEdge(timeline.sample_edge);
       timeline.refine_denoise = clampRefineDenoise(timeline.refine_denoise);
+      timeline.face = parseFace(timeline.face);
       timeline.models = parseModels(timeline.models);
       timeline.turbo = parseTurbo(timeline.turbo);
       // No card is invented for a blob that has none: a fresh node's widget is
@@ -1071,6 +1155,7 @@ export function serializeTimeline(timeline) {
     ...(timeline.sample_edge !== NATIVE_SHORT_EDGE ? { sample_edge: timeline.sample_edge } : {}),
     ...(timeline.refine_denoise !== DEFAULT_REFINE_DENOISE
       ? { refine_denoise: timeline.refine_denoise } : {}),
+    ...serializeFace(timeline.face),
     loras: serializeLoras(timeline.loras ?? []),
     // The reference pool. Absent when empty, so a timeline that never used one
     // round-trips exactly as it always did.
@@ -1112,6 +1197,9 @@ export function serializeTimeline(timeline) {
       // with no numbers to keep in step. Never on the first segment, which is
       // always a pass of its own.
       if (index > 0 && merged(segment)) out.merge = true;
+      // The card's own answer about the face pass, and only when it has one:
+      // absent is the third state and the default, which is to inherit.
+      if (faceOverride(segment)) out.face = faceOverride(segment);
       // Absent means a hard cut, which is the default, so only continuations
       // add anything. Never on the first segment: there is nothing to continue.
       if (index > 0 && segment.continue) out.continue = true;

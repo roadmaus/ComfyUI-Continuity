@@ -9,7 +9,8 @@ import { el, icon, dismissable, placeNear } from "./dom.js";
 import { t } from "./i18n.js";
 import { ASPECT_PRESETS, MIN_SHORT_EDGE, MAX_SHORT_EDGE, NATIVE_SHORT_EDGE, CANVAS_MULTIPLE } from "./canvas.js";
 import { UPSCALE_MODES, DEFAULT_REFINE_DENOISE, MIN_REFINE_DENOISE, MAX_REFINE_DENOISE,
-         twoPass, sampleEdge } from "./state.js";
+         twoPass, sampleEdge, emptyFace, MIN_FACE_CANVAS, MAX_FACE_CANVAS,
+         MIN_FACE_DENOISE, MAX_FACE_DENOISE } from "./state.js";
 
 /**
  * A −/value/+ pill. The same shape as the duration control, because a number
@@ -321,3 +322,109 @@ export function openResolutionPopover(anchor, target, geometry, commit) {
   dismissable(pop);
 }
 
+
+/**
+ * The face pass, as a pill on the sampler row.
+ *
+ * H3 draws a face badly in proportion to how small the head is in frame, and
+ * no canvas size reaches that: an upscaler re-resolves what was drawn, and what
+ * was drawn was a smudge. What this switches on is a second, small generation
+ * per pass — the face cropped out frame by frame, re-drawn where it fills the
+ * picture, composited back.
+ *
+ * It sits with the accelerators because it is the same kind of statement they
+ * are: a thing done to the render rather than a thing the piece *is*. Off reads
+ * as off, unlit, for the same reason theirs do — a render with it on is not a
+ * plain render, and that is worth seeing at a glance.
+ *
+ * @param {object} spec
+ * @param {object} spec.target  the piece or timeline, mutated in place
+ * @param {() => void} spec.commit
+ */
+export function facesPill({ target, commit }) {
+  const face = target.face ?? emptyFace();
+  return el("button", {
+    class: `mmc-pill${face.on ? " accel-on" : ""}`,
+    title: face.on
+      ? t("The face pass is on: every pass has its face re-drawn at {edge} px and "
+        + "composited back. Needs a SAM3 checkpoint in the weights control.",
+          { edge: face.canvas })
+      : t("The face pass is off. Switch it on for shots where the head is small in "
+        + "frame — that is where H3 draws a face worst, and it is not something a "
+        + "bigger canvas fixes."),
+    onclick: (event) => openFacesPopover(event.currentTarget, { target, commit }),
+  }, [el("span", { text: face.on ? t("faces") : t("faces off") })]);
+}
+
+/** On or off, and — on — the two knobs. The card switches are on the cards. */
+export function openFacesPopover(anchor, { target, commit }) {
+  const pop = el("div", { class: "mmc-pop mmc-faces-pop" });
+  const body = el("div");
+
+  const render = () => {
+    const face = target.face ?? (target.face = emptyFace());
+    const rows = [
+      el("div", { class: "mmc-pop-title", text: t("Face pass") }),
+      el("button", {
+        class: "mmc-opt",
+        "aria-checked": !face.on,
+        onclick: () => { face.on = false; render(); commit(); },
+      }, [
+        el("span", { class: "mmc-opt-label mmc-opt-col" }, [
+          el("span", { text: t("off") }),
+          el("span", { class: "mmc-opt-sub", text: t("one pass per shot, as it always was") }),
+        ]),
+        el("span", { class: "mmc-radio" }),
+      ]),
+      el("button", {
+        class: "mmc-opt",
+        "aria-checked": face.on,
+        onclick: () => { face.on = true; render(); commit(); },
+      }, [
+        el("span", { class: "mmc-opt-label mmc-opt-col" }, [
+          el("span", { text: t("on") }),
+          el("span", { class: "mmc-opt-sub",
+                       text: t("re-draw the face after each pass") }),
+        ]),
+        el("span", { class: "mmc-radio" }),
+      ]),
+    ];
+    if (face.on) {
+      rows.push(el("div", { class: "mmc-refine-row" }, [
+        el("span", { class: "mmc-refine-label", text: t("crop at") }),
+        stepperPill({
+          value: face.canvas,
+          min: MIN_FACE_CANVAS, max: MAX_FACE_CANVAS, step: CANVAS_MULTIPLE, width: "56px",
+          title: t("The canvas each face crop is generated at. Bigger is more faithful "
+               + "and costs the square of it — the face fills this either way, so most "
+               + "of what a larger one buys is the hair around it."),
+          format: (n) => `${n} px`,
+          onChange: (next) => { face.canvas = next; render(); commit(); },
+        }),
+      ]));
+      rows.push(el("div", { class: "mmc-refine-row" }, [
+        el("span", { class: "mmc-refine-label", text: t("redraw") }),
+        stepperPill({
+          value: Number(face.denoise),
+          min: MIN_FACE_DENOISE, max: MAX_FACE_DENOISE, step: 0.05, width: "40px",
+          title: t("How much of the schedule the face crop re-runs — the ceiling, not "
+               + "the amount: it is scaled down frame by frame by how large the face "
+               + "already is. Higher synthesises more and drifts further from the head "
+               + "that is there."),
+          format: (n) => n.toFixed(2),
+          onChange: (next) => { face.denoise = next; render(); commit(); },
+        }),
+      ]));
+      rows.push(el("div", { class: "mmc-pop-note",
+                            text: t("Costs a second, smaller generation per pass, and "
+                                  + "needs a SAM3 checkpoint picked under weights.") }));
+    }
+    body.replaceChildren(...rows);
+  };
+
+  render();
+  pop.appendChild(body);
+  document.body.appendChild(pop);
+  placeNear(pop, anchor);
+  dismissable(pop);
+}

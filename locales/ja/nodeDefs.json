@@ -46,5 +46,9 @@
   "MiniMaxH3RefinePass": {
     "display_name": "MiniMax H3 リファインパス",
     "description": "2 パスレンダリングの 2 パス目: H3 AV レイテントの映像側をアップスケールしてスケジュール途中から再サンプリングし、サウンドトラックにはノイズを加えません。render.emit がグラフに書き込みます。"
+  },
+  "MiniMaxH3FacePass": {
+    "display_name": "MiniMax H3 フェイスパス",
+    "description": "デコード済みパスの顔をフレームごとに切り出し、顔が大きく写るキャンバスで描き直して元の画に合成し直します。render.emit がグラフに書き込みます。"
   }
 }

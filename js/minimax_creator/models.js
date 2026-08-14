@@ -81,14 +81,16 @@ export const hasPreviewOverride = () => catalog?.preview_override !== false;
  * @param {object} spec.models       the state's weights block, mutated in place
  * @param {string[]} spec.checkpoints the checkpoints the *modes* derive; a
  *   forced route collapses this to one, so it is passed raw and resolved here
+ * @param {boolean} [spec.face]     whether a pass in this render runs the face
+ *   pass, which is what decides whether the detector counts as missing
  * @param {() => void} spec.onChange after a pick
  * @param {object} [spec.turbo]      `{container, widgetIO}` — the state or
  *   timeline that owns the turbo switch, and the widget IO the switch writes
  *   through when its file is swapped while engaged. Absent, no turbo row.
  */
-export function weightsPill({ models, checkpoints, onChange, turbo }) {
+export function weightsPill({ models, checkpoints, onChange, turbo, face = false }) {
   const routed = S.routedCheckpoints(models, checkpoints);
-  const missing = S.missingModels(models, S.requiredModels(routed));
+  const missing = S.missingModels(models, S.requiredModels(routed, face));
   // What the pill reports when everything is picked, in order of how much it
   // changes about the run: which cards it is spread over first, then precision,
   // then nothing worth saying.
@@ -113,25 +115,25 @@ export function weightsPill({ models, checkpoints, onChange, turbo }) {
           models: missing.map((f) => t(S.MODEL_LABEL[f])).join(", "),
         })
       : t("Which checkpoints, text encoder and VAEs this node loads."),
-    onclick: (event) => openWeightsPopover(event.currentTarget, { models, checkpoints, onChange, turbo }),
+    onclick: (event) => openWeightsPopover(event.currentTarget, { models, checkpoints, onChange, turbo, face }),
   }, [icon("weights", 16), el("span", { text: label })]);
 }
 
 /**
- * Six rows, each opening the file list for its folder.
+ * A row per file, each opening the list for its folder.
  *
  * Rebuilt in place after every pick rather than closed: setting up a machine
  * means setting all six, and closing the popover between each one would make
  * that six round trips through a pill.
  */
-export function openWeightsPopover(anchor, { models, checkpoints, onChange, turbo }) {
+export function openWeightsPopover(anchor, { models, checkpoints, onChange, turbo, face = false }) {
   const pop = el("div", { class: "mmc-pop mmc-weights-pop" });
   const body = el("div");
 
   // Recomputed inside `render` rather than captured: forcing a route changes
   // which of the two checkpoints is required, and that has to show on the row
   // the moment the route above it is picked.
-  const required = () => new Set(S.requiredModels(S.routedCheckpoints(models, checkpoints)));
+  const required = () => new Set(S.requiredModels(S.routedCheckpoints(models, checkpoints), face));
 
   const render = () => {
     const files = catalogFiles();

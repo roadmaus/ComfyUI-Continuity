@@ -46,5 +46,9 @@
   "MiniMaxH3RefinePass": {
     "display_name": "MiniMax H3 精修通道",
     "description": "两遍渲染的第二遍：放大 H3 AV latent 的视频部分并从调度中途重新采样，音轨不加噪。由 render.emit 写入图中。"
+  },
+  "MiniMaxH3FacePass": {
+    "display_name": "MiniMax H3 面部处理",
+    "description": "把已解码采样中的面部逐帧裁剪出来，在脸能占满画面的画布上重画，再合成回原画。由 render.emit 写入图中。"
   }
 }

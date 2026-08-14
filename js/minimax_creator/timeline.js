@@ -18,7 +18,7 @@ import * as P from "./presets.js";
 import { PromptBox, openEditorSheet } from "./prompt.js";
 import { openSettings } from "./settings.js";
 import { openTrim } from "./trim.js";
-import { openAspectPopover, openResolutionPopover, openChoicePopover, stepperPill, aspectGlyph, PILL_GLYPH } from "./pills.js";
+import { openAspectPopover, openResolutionPopover, openChoicePopover, facesPill, stepperPill, aspectGlyph, PILL_GLYPH } from "./pills.js";
 import { refine, refineButton, chosenModel as refineModel } from "./refine.js";
 import { samplingBar, widgetIO } from "./sampling.js";
 import { Stage } from "./stage.js";
@@ -1144,6 +1144,25 @@ class Timeline {
     if (loras) meta.push(t(loras === 1 ? "{count} LoRA" : "{count} LoRAs", { count: loras }));
     if (rewrite) meta.push(using ? t("refined") : t("refined (off)"));
 
+    // The card's half of the face pass, and only while the piece is running
+    // one: a switch for something that is not happening is a switch that lies.
+    // Two states, because with the piece on, "on" and "inherit" are the same
+    // thing — what a card gets to say is that *this* shot does not need it.
+    const repaired = S.faceOn(this.timeline, segment);
+    const faceChip = this.timeline.face?.on ? el("button", {
+      class: `mmc-tl-card-face${repaired ? " on" : ""}`,
+      text: repaired ? t("face") : t("no face"),
+      title: repaired
+        ? t("This shot's face is re-drawn after it renders. Click to leave it alone.")
+        : t("This shot is left as it renders. Click to have its face re-drawn."),
+      onclick: (event) => {
+        event.stopPropagation();
+        if (repaired) segment.face = "off";
+        else delete segment.face;
+        this.commit();
+      },
+    }) : null;
+
     return el("div", {
       class: "mmc-tl-card",
       style: { width: `${cardWidth(seconds)}px` },
@@ -1178,7 +1197,12 @@ class Timeline {
         text: prompt || t("No prompt yet"),
         title: using && typed ? t("Not queued — this card's rewrite is. Open it to read or revert.") : "",
       }),
-      ...(meta.length ? [el("div", { class: "mmc-tl-card-meta", text: meta.join(" · ") })] : []),
+      ...(meta.length || faceChip
+        ? [el("div", { class: "mmc-tl-card-meta" }, [
+            ...(meta.length ? [el("span", { text: meta.join(" · ") })] : []),
+            ...(faceChip ? [faceChip] : []),
+          ])]
+        : []),
       el("div", { class: "mmc-tl-card-foot" }, [
         el("button", { class: "mmc-tl-edit", text: t("Edit"), onclick: () => this.edit(index) }),
         el("button", {
@@ -2359,12 +2383,19 @@ export class TimelineBody {
       // A chained timeline legitimately runs some shots on one checkpoint and
       // some on the other, so the pill is asked about the set rather than
       // about one — a Ref2VA it never reaches for is not missing.
-      trailing: [weightsPill({
-        models: this.timeline.models,
-        checkpoints: S.timelineCheckpoints(this.timeline),
-        onChange: () => this.commit(),
-        turbo: { container: this.timeline, widgetIO: this.widgetIO() },
-      })],
+      trailing: [
+        facesPill({ target: this.timeline, commit: () => this.commit() }),
+        weightsPill({
+          models: this.timeline.models,
+          checkpoints: S.timelineCheckpoints(this.timeline),
+          // Only when a shot on the strip actually runs the pass: a piece with
+          // it on and every card opted out loads no detector, and a weights
+          // pill saying one is missing would be reporting a file nothing opens.
+          face: S.faceAnywhere(this.timeline),
+          onChange: () => this.commit(),
+          turbo: { container: this.timeline, widgetIO: this.widgetIO() },
+        }),
+      ],
     });
   }
 }

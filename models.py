@@ -120,6 +120,12 @@ FOLDERS = {
     "vae": "vae",
     "audio_vae": "vae",
     "preview": "vae_approx",
+    # The face pass's detector: a SAM3 checkpoint, which is a fused file — model
+    # and its own text encoder together — and so is picked from `checkpoints`
+    # and loaded by `facepass` itself rather than by a loader emitted here. It
+    # is in this map because it is a file the user picks in the same control,
+    # not because it becomes a link.
+    "sam3": "checkpoints",
 }
 
 # UNETLoader's own list, read rather than invented so a retune of core's dtype
@@ -153,6 +159,7 @@ LABEL = {
     "vae": "the video VAE",
     "audio_vae": "the audio VAE",
     "preview": "the preview decoder",
+    "sam3": "the face detector",
 }
 
 
@@ -173,6 +180,10 @@ class Weights:
     vae: Optional[str] = None
     audio_vae: Optional[str] = None
     preview: Optional[str] = None
+    # The face pass's SAM3 detector. Unlike the five above it never becomes a
+    # loader in the graph: `facepass` loads it, uses it and gives its VRAM back
+    # inside one node. Only a render with the face pass switched on needs it.
+    sam3: Optional[str] = None
     dtype: str = DEFAULT_DTYPE
     # Which checkpoint everything runs on, whatever the mode derives. "auto"
     # leaves each generation's own `checkpoint` pin alone.
@@ -356,7 +367,7 @@ def available():
     }
 
 
-def check(weights, checkpoints, where, audio=True):
+def check(weights, checkpoints, where, audio=True, face=False):
     """Refuse now if a file this render needs was never picked.
 
     `checkpoints` is the set the compiled payloads actually route to, so a
@@ -368,7 +379,11 @@ def check(weights, checkpoints, where, audio=True):
     asking it for an audio VAE would be demanding a file the render will never
     open.
     """
-    needed = ["clip", "vae", *(["audio_vae"] if audio else []), *sorted(checkpoints)]
+    needed = ["clip", "vae", *(["audio_vae"] if audio else []),
+              # Only when a pass in this render actually asks for the face pass:
+              # a detector nothing runs is a file nobody has to own.
+              *(["sam3"] if face else []),
+              *sorted(checkpoints)]
     for name in needed:
         if weights.get(name):
             continue

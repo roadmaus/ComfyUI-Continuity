@@ -193,7 +193,22 @@ export const css = `
 /* The card keeps showing the typed sentence because that is what the shot is
    recognised by — dimmed, because it is not what the shot queues. */
 .mmc-tl-card-prompt.superseded { opacity: .42; }
-.mmc-tl-card-meta { color: var(--mmc-dim); font-size: 11px; }
+.mmc-tl-card-meta {
+  color: var(--mmc-dim); font-size: 11px;
+  display: flex; align-items: center; gap: 6px;
+}
+/* This shot's half of the face pass. Unlit while the shot is opted out, so a
+   strip tells you at a glance which cards are being repaired. */
+.mmc-tl-card-face {
+  border: 0; padding: 1px 6px; border-radius: 6px; cursor: pointer;
+  background: var(--mmc-surface-3); color: var(--mmc-dim);
+  font-size: 10px; font-family: inherit; margin-left: auto;
+  /* The narrowest card wraps its meta text onto two lines; the chip is the
+     part that must stay readable, so it neither shrinks nor breaks. */
+  flex: none; white-space: nowrap;
+}
+.mmc-tl-card-face.on { background: rgba(90, 150, 255, 0.18); color: var(--mmc-blue); }
+.mmc-tl-card-face:hover { filter: brightness(1.25); }
 .mmc-tl-card-foot { display: flex; align-items: center; gap: 4px; }
 .mmc-tl-edit {
   height: 26px; padding: 0 12px; border-radius: 8px; background: var(--mmc-surface-3);

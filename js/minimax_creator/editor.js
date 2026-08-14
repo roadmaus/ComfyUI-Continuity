@@ -20,7 +20,7 @@ import { openPresetLibrary } from "./presetlib.js";
 import { openTrim, trimLabel } from "./trim.js";
 import { PromptBox, focusEnd, openEditorSheet } from "./prompt.js";
 import { RefinePanel, refineButton, refine } from "./refine.js";
-import { openAspectPopover, openResolutionPopover, aspectGlyph, PILL_GLYPH } from "./pills.js";
+import { openAspectPopover, openResolutionPopover, facesPill, aspectGlyph, PILL_GLYPH } from "./pills.js";
 import { samplingBar, widgetIO } from "./sampling.js";
 import { Stage } from "./stage.js";
 import { weightsPill, loadCatalog, catalogFiles } from "./models.js";
@@ -565,13 +565,19 @@ export class CreatorEditor {
         onCommit: () => this.commit(),
       }) : [],
       // Last on the row, because it is the one thing there you set when you
-      // install a checkpoint rather than when you write a prompt.
-      trailing: this.nodeId ? [weightsPill({
-        models: this.piece.models,
-        checkpoints: [S.checkpoint(this.state)],
-        onChange: () => this.commit(),
-        turbo: { container: this.piece, widgetIO: this.widgetIO() },
-      })] : [],
+      // install a checkpoint rather than when you write a prompt. The face pass
+      // goes in front of it: it is a thing done to the render, like the
+      // accelerators it sits beside, rather than a file you picked once.
+      trailing: this.nodeId ? [
+        facesPill({ target: this.piece, commit: () => this.commit() }),
+        weightsPill({
+          models: this.piece.models,
+          checkpoints: [S.checkpoint(this.state)],
+          face: Boolean(this.piece.face?.on),
+          onChange: () => this.commit(),
+          turbo: { container: this.piece, widgetIO: this.widgetIO() },
+        }),
+      ] : [],
     })] : []));
     this.prompt.refresh();
     this.syncPrompt();
