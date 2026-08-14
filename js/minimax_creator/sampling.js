@@ -97,6 +97,7 @@ export function samplingBar({ widgets, value, set, perSegment = false, turbo = [
     // back to, and again once the seed already is that one.
     const last = lastSeed(widgets.seed);
     const reusable = last !== null && last !== Number(value("seed", 0));
+    const seedText = String(value("seed", 0));
     pills.push(el("div", { class: "mmc-pill mmc-pill-group" }, [
       el("button", {
         class: "mmc-step mmc-seed-dice",
@@ -115,7 +116,14 @@ export function samplingBar({ widgets, value, set, perSegment = false, turbo = [
       el("input", {
         class: "mmc-seed-input",
         type: "text",
-        value: String(value("seed", 0)),
+        value: seedText,
+        // Sized to the digits it is holding. The field was 92px, which is a
+        // guess that fits about eight digits — and seeds are ten, so the number
+        // that identifies the render was the one thing on the row you could not
+        // read. `ch` is exactly one digit in the mono face the stylesheet gives
+        // this, so the pill breathes with its content instead: tight around a
+        // hand-typed 7, wide enough for anything the dice can roll.
+        style: { width: `${Math.min(21, Math.max(5, seedText.length + 1))}ch` },
         title: perSegment
           ? t("Segment k runs on seed + k, so consecutive shots are not the same noise twice.")
           : t("The seed of the one generation."),
@@ -125,8 +133,13 @@ export function samplingBar({ widgets, value, set, perSegment = false, turbo = [
         },
         onpointerdown: (event) => event.stopPropagation(),
       }),
+      // Quiet on "fixed", which is now the default and the state where nothing
+      // happens; awake on the three that move the seed between queues. The same
+      // rule the accelerator pills follow — what is doing something to your
+      // render is what is lit — and it hands the digits back the emphasis they
+      // were competing with.
       ...(widgets.control_after_generate ? [el("button", {
-        class: "mmc-ghost mmc-seed-mode",
+        class: `mmc-ghost mmc-seed-mode${control === "fixed" ? "" : " on"}`,
         title: t("What happens to the seed after each queue"),
         text: control,
         onclick: (event) => openChoicePopover(event.currentTarget, {

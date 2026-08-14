@@ -568,11 +568,23 @@ export const css = `
 .mmc-seed-dice { display: flex; align-items: center; padding: 0 4px; }
 .mmc-seed-dice svg { width: 15px; height: 15px; stroke: currentColor; fill: none;
   stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+/* The seed is an identifier, not a quantity — nobody reads it as one billion
+   and something, they compare it against another one and copy it. So it is set
+   the way the sheet sets a hash: mono, tabular, every digit in its own column,
+   which is what makes "is this the same seed" answerable at a glance. The width
+   comes from the digit count (see samplingBar) and one ch is one digit in this
+   face; the bounds below are guard rails, not the size. */
 .mmc-seed-input {
-  width: 92px; background: none; border: 0; outline: none; color: var(--mmc-text);
-  font-family: inherit; font-size: 13px; text-align: center; padding: 0;
+  background: none; border: 0; outline: none; color: var(--mmc-text);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: 12.5px; text-align: center; padding: 0;
+  min-width: 5ch; max-width: 21ch;
 }
-.mmc-seed-mode { font-size: 11px; padding: 0 8px 0 4px; }
+/* Dim on "fixed" — the default, and the state where nothing happens to the seed
+   between queues. The three that do move it read at full strength. */
+.mmc-seed-mode { font-size: 11px; padding: 0 8px 0 4px; color: var(--mmc-off); }
+.mmc-seed-mode.on { color: var(--mmc-text); }
 /* Sampler lists are long; the popover scrolls rather than running off screen. */
 .mmc-pop-scroll { max-height: 320px; overflow-y: auto; min-width: 190px; }
 
