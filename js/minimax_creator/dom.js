@@ -202,6 +202,13 @@ export function mountOverlay(overlay, onEscape) {
 /** Anchor a popover to a pill, kept inside the viewport. */
 export function placeNear(popover, anchor, { above = true } = {}) {
   const place = () => {
+    // The pill this hangs off may be gone: a popover whose rows commit — the
+    // face pass's, the two-pass section's — re-renders the node under itself,
+    // and the button that was clicked is replaced by an identical one in the
+    // same place. A detached element measures (0, 0, 0, 0), so re-placing
+    // against it would throw the popover into the top-left corner. Its current
+    // position is still the right one, so the answer is to leave it there.
+    if (anchor.isConnected === false) return;
     const rect = anchor.getBoundingClientRect();
     const box = popover.getBoundingClientRect();
     const left = Math.max(8, Math.min(rect.left, window.innerWidth - box.width - 8));

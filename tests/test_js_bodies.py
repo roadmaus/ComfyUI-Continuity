@@ -80,7 +80,7 @@ DOM = """
 class Node {
   constructor(tag) {
     this.tagName = tag; this.children = []; this.style = {}; this.attrs = {};
-    this.className = ""; this.textContent = ""; this.listeners = {}; this.isConnected = false;
+    this.className = ""; this.textContent = ""; this.listeners = {};
     this.classList = { add: () => {}, remove: () => {}, toggle: () => {}, contains: () => false };
     this.dataset = {};
   }
@@ -100,10 +100,21 @@ class Node {
   removeEventListener() {}
   appendChild(c) { this.children.push(c); c.parent = this; return c; }
   append(...c) { c.forEach((x) => this.appendChild(x)); }
-  replaceChildren(...c) { this.children = []; c.forEach((x) => this.appendChild(x)); }
+  // The old children are detached, as a real one detaches them: `isConnected`
+  // is read off the parent chain, and a node left pointing at its former parent
+  // would answer that it is still in the document.
+  replaceChildren(...c) {
+    this.children.forEach((x) => { if (x.parent === this) x.parent = null; });
+    this.children = [];
+    c.forEach((x) => this.appendChild(x));
+  }
   insertBefore(n) { return this.appendChild(n); }
   cloneNode() { return new Node(this.tagName); }
-  remove() {}
+  remove() {
+    if (!this.parent) return;
+    this.parent.children = this.parent.children.filter((c) => c !== this);
+    this.parent = null;
+  }
   normalize() {}
   contains() { return false; }
   /** Enough of a selector match for `PromptBox.claim`, which asks whether a
@@ -123,6 +134,15 @@ class Node {
       node = node.parent;
     }
     return null;
+  }
+  /** Whether this node is in the document, walked the way the real one is —
+   *  `placeNear` asks, because a popover whose anchor was re-rendered under it
+   *  must not be placed against a detached element. */
+  get isConnected() {
+    let node = this;
+    while (node.parent) node = node.parent;
+    return node === globalThis.document.body || node === globalThis.document.head
+        || node === globalThis.document.documentElement;
   }
   focus() { globalThis.document.activeElement = this; }
   blur() { if (globalThis.document.activeElement === this) globalThis.document.activeElement = null; }
@@ -175,7 +195,14 @@ globalThis.cancelAnimationFrame = () => {};
 // fits — see TimelineBody.fitLane. Nothing in this DOM has a width, so the
 // measure bails and the observer has nothing to report; it exists so that
 // registering one is not a crash.
-globalThis.ResizeObserver = class { observe() {} unobserve() {} disconnect() {} };
+// Recorded rather than inert: what a popover does when it *grows* is the thing
+// worth testing — see the placement check.
+globalThis.__observers = [];
+globalThis.ResizeObserver = class {
+  constructor(fn) { this.fn = fn; globalThis.__observers.push(this); }
+  observe() {} unobserve() {} disconnect() { this.dead = true; }
+  fire() { if (!this.dead) this.fn([]); }
+};
 globalThis.Image = class { set src(v) {} };
 globalThis.fetch = async () => ({ ok: true, json: async () => ({}) });
 export const NodeClass = Node;
@@ -799,6 +826,37 @@ try {
   out.errors.push(`face rule: ${error.message}`);
 }
 
+// ---- a popover outlives the row that opened it ------------------------------
+//
+// Rows that commit — the face pass's on/off, the two-pass section's — re-render
+// the node underneath the open popover, so the button that was clicked is
+// replaced by an identical one. The popover then grows (the face pass's knobs
+// appear), its ResizeObserver re-places it, and if that measures the *old*
+// button it measures nothing and the popover lands in the top-left corner.
+try {
+  const dom = await import("./js/minimax_creator/dom.js");
+  const row = dom.el("div");
+  const anchor = dom.el("button", { text: "faces off" });
+  row.appendChild(anchor);
+  document.body.appendChild(row);
+  // Measured only while it is in the document — a detached element really does
+  // report all zeros, and that is the whole of what goes wrong here.
+  anchor.getBoundingClientRect = () => (anchor.isConnected
+    ? { top: 700, left: 420, width: 60, height: 24, bottom: 724, right: 480 }
+    : { top: 0, left: 0, width: 0, height: 0, bottom: 0, right: 0 });
+  const pop = dom.el("div");
+  document.body.appendChild(pop);
+  dom.placeNear(pop, anchor);
+  const placed = { left: pop.style.left, top: pop.style.top };
+  // What committing does: the row is redrawn and the old button is detached.
+  row.replaceChildren(dom.el("button", { text: "faces" }));
+  globalThis.__observers.forEach((observer) => observer.fire());
+  out.placement = { placed, after: { left: pop.style.left, top: pop.style.top },
+                    anchorGone: anchor.isConnected === false };
+} catch (error) {
+  out.errors.push(`placement: ${error.message}`);
+}
+
 console.log(JSON.stringify(out));
 """
 
@@ -1006,5 +1064,13 @@ check("the prompt survives the round trip",
       report.get("switch", {}).get("promptKept"), True)
 check("the rebuilt body is not empty",
       report.get("switch", {}).get("rendered"), True)
+
+placement = report.get("placement", {})
+check("the popover is placed against the pill that opened it",
+      (placement.get("placed") or {}).get("top"), "592px")
+check("the row under it is redrawn and the pill it was placed against is gone",
+      placement.get("anchorGone"), True)
+check("...and the popover stays where it was rather than jumping to the corner",
+      placement.get("after"), placement.get("placed"))
 
 passed(f"the frontend loads and all {len(report['nodes'])} bodies mount")
