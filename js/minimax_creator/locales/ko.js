@@ -416,6 +416,8 @@ export const ko = {
  "temp {n}": "temp {n}",
  "Fix the seed at a number": "seed를 숫자로 고정",
  "Roll a new seed now": "지금 새 seed 굴리기",
+ "Back to {seed}, the seed the last queue ran on": "마지막 큐가 실행한 seed {seed}로 되돌리기",
+ "Nothing queued yet — after a render this comes back to the seed it ran on": "아직 큐에 넣은 적이 없습니다. 렌더 후에는 실행한 seed로 되돌릴 수 있습니다",
  "new every time": "매번 새로",
  "Every refine comes out differently. Click to fix it.": "리파인할 때마다 결과가 달라집니다. 클릭하면 고정합니다.",
  "Refining the same prompt gives the same rewrite. Click to vary it again.": "같은 프롬프트를 리파인하면 같은 리라이트가 나옵니다. 클릭하면 다시 변하게 합니다.",

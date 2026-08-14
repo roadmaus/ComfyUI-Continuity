@@ -8,6 +8,7 @@ import { TimelineBody } from "./minimax_creator/timeline.js";
 import { PreStageBody } from "./minimax_creator/prestage.js";
 import { Satellite } from "./minimax_creator/satellite.js";
 import { SAMPLING_WIDGETS } from "./minimax_creator/sampling.js";
+import { rememberQueuedSeeds } from "./minimax_creator/seedmemory.js";
 import { primeSettings } from "./minimax_creator/api.js";
 import { openPresetLibrary } from "./minimax_creator/presetlib.js";
 import * as S from "./minimax_creator/state.js";
@@ -240,6 +241,13 @@ function collectSampling(node) {
       hideWidget(linked);
     }
   }
+  // Fixed, not the frontend's "randomize". A render here is minutes and often a
+  // pass in a piece being tuned a line at a time, so a seed that moves on its
+  // own throws away the one variable you were holding still — and it moves
+  // invisibly, because the widget is hidden and the pill is the only thing
+  // saying so. Set at creation only: a saved workflow assigns its widget values
+  // after `nodeCreated`, so a node that chose otherwise keeps its choice.
+  if (widgets.control_after_generate) widgets.control_after_generate.value = "fixed";
   requestAnimationFrame(() => Object.values(widgets).forEach(hideWidget));
   return widgets;
 }
@@ -291,6 +299,12 @@ function attach(node, build) {
 
 app.registerExtension({
   name: "minimax.creator",
+
+  setup() {
+    // One hook for the whole canvas, installed once — every node's seed row
+    // reads out of the same memory.
+    rememberQueuedSeeds();
+  },
 
   async nodeCreated(node) {
     if (PIECE.includes(node.comfyClass)) {

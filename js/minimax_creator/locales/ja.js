@@ -416,6 +416,8 @@ export const ja = {
  "temp {n}": "temp {n}",
  "Fix the seed at a number": "seed を数値に固定",
  "Roll a new seed now": "今すぐ新しい seed を振る",
+ "Back to {seed}, the seed the last queue ran on": "直前のキューが実行した seed {seed} に戻す",
+ "Nothing queued yet — after a render this comes back to the seed it ran on": "まだキューがありません。レンダー後、実行した seed に戻せます",
  "new every time": "毎回新規",
  "Every refine comes out differently. Click to fix it.": "リファインのたびに結果が変わります。クリックで固定。",
  "Refining the same prompt gives the same rewrite. Click to vary it again.": "同じプロンプトのリファインは同じリライトになります。クリックで再び変化させます。",

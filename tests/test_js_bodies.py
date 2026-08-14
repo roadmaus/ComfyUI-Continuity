@@ -209,8 +209,17 @@ export const NodeClass = Node;
 """
 
 STUBS = {
-    "app.js": "export const app = { registerExtension: (e) => { globalThis.__ext = e; },"
-              " graph: null, canvas: null };",
+    # `queuePrompt` and `graphToPrompt` are here because the pack wraps them —
+    # what the last queue ran on is read off the serialized prompt, so the stub
+    # has to be able to hand one back.
+    "app.js": """
+export const app = {
+  registerExtension: (e) => { globalThis.__ext = e; },
+  graph: null, canvas: null,
+  async queuePrompt() { return this.graphToPrompt(); },
+  async graphToPrompt() { return globalThis.__prompt ?? { output: {} }; },
+};
+""",
     # `fetchApi` answers the settings route the way the server does, and records
     # what was posted — which is what lets the settings page be exercised here.
     "api.js": """
@@ -236,7 +245,10 @@ CHECK = """
 await import("./dom.mjs");
 await import("./js/minimax_creator.js");
 const S = await import("./js/minimax_creator/state.js");
+const { app } = await import("../scripts/app.js");
 const ext = globalThis.__ext;
+// The seed memory is installed here, the same way the frontend installs it.
+await ext.setup?.();
 
 const out = { registered: ext?.name ?? null, nodes: {}, still: null, errors: [] };
 
@@ -244,7 +256,12 @@ const fakeNode = (comfyClass, widgetName, blob) => ({
   comfyClass, id: 3, size: [400, 300], pos: [0, 0], title: comfyClass,
   widgets: [
     { name: widgetName, value: blob, type: "customtext", options: {}, computeSize: () => [0, 0] },
-    { name: "seed", value: 0 }, { name: "steps", value: 20 }, { name: "cfg", value: 1 },
+    // The after-generate control is a *linked* widget the frontend hangs off the
+    // seed, which is where the pack finds it — and it arrives on "randomize",
+    // which is the thing being overridden.
+    { name: "seed", value: 0,
+      linkedWidgets: [{ name: "control_after_generate", value: "randomize", options: {} }] },
+    { name: "steps", value: 20 }, { name: "cfg", value: 1 },
     { name: "sampler_name", value: "res_multistep" }, { name: "scheduler", value: "simple" },
   ],
   addDOMWidget(name, type, el) { this.dom = el; return { name, element: el }; },
@@ -857,6 +874,56 @@ try {
   out.errors.push(`placement: ${error.message}`);
 }
 
+// ---- the seed does not move on its own, and the last one is reachable -------
+//
+// A render here is minutes, and the seed widget is hidden — so the frontend's
+// own "randomize" would roll the one variable being held still, invisibly. The
+// node opens on "fixed" instead, and because a fixed seed is only half the
+// answer, the row also offers the seed the last queue actually ran on: the way
+// back to a shot worth keeping once the number has moved on.
+try {
+  const first = (root, cls) => {
+    let hit = null;
+    const walk = (n) => {
+      if (!hit && String(n.className ?? "").split(" ").includes(cls)) hit = n;
+      (n.children ?? []).forEach(walk);
+    };
+    walk(root);
+    return hit;
+  };
+  const node = fakeNode("MiniMaxH3Creator", "creator_data", ONE_SHOT);
+  await ext.nodeCreated(node);
+  const seed = node.widgets.find((w) => w.name === "seed");
+  const backButton = () => first(node.mmcBody.root, "mmc-seed-last");
+  out.seed = {
+    // Set at creation, over what the frontend handed us.
+    control: seed.linkedWidgets[0].value,
+    // The button is there from the start — it is how anyone finds out the
+    // feature exists — but nothing has been queued, so it is inert.
+    beforeQueue: !!backButton(),
+    beforeQueueOff: "disabled" in (backButton()?.attrs ?? {}),
+  };
+
+  // A queue goes out. What the server was asked to run is what gets remembered
+  // — read off the serialized prompt, not off the widget, because the widget is
+  // free to have moved on by then. Which is what happens next.
+  globalThis.__prompt = { output: { "3": { inputs: { seed: 4242 } } } };
+  app.graph = { _nodes: [node], setDirtyCanvas() {} };
+  await app.queuePrompt();
+  seed.value = 999;
+  node.mmcBody.render();
+
+  const back = backButton();
+  out.seed.afterQueue = !("disabled" in (back?.attrs ?? {}));
+  back?.listeners?.click?.[0]?.();
+  out.seed.restored = seed.value;
+  // ...and once the seed *is* that one, it goes inert again rather than
+  // offering a click that would change nothing.
+  out.seed.thenOff = "disabled" in (backButton()?.attrs ?? {});
+} catch (error) {
+  out.errors.push(`seed: ${error.message}`);
+}
+
 console.log(JSON.stringify(out));
 """
 
@@ -1072,5 +1139,15 @@ check("the row under it is redrawn and the pill it was placed against is gone",
       placement.get("anchorGone"), True)
 check("...and the popover stays where it was rather than jumping to the corner",
       placement.get("after"), placement.get("placed"))
+
+# The seed: fixed on arrival, and the last queued one always reachable.
+seed = report.get("seed", {})
+check("a fresh node opens on a fixed seed", seed.get("control"), "fixed")
+check("the way back to the last seed is on the row from the start",
+      seed.get("beforeQueue"), True)
+check("...inert until something has been queued", seed.get("beforeQueueOff"), True)
+check("after a queue it offers the seed that ran", seed.get("afterQueue"), True)
+check("...and clicking it puts that seed back", seed.get("restored"), 4242)
+check("...after which it is inert again", seed.get("thenOff"), True)
 
 passed(f"the frontend loads and all {len(report['nodes'])} bodies mount")

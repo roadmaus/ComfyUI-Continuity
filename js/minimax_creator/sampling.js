@@ -13,6 +13,7 @@ import { el, icon } from "./dom.js";
 import { t } from "./i18n.js";
 import { openChoicePopover, stepperPill } from "./pills.js";
 import { uiSetting } from "./api.js";
+import { lastSeed } from "./seedmemory.js";
 
 export const SEED_CONTROL = ["fixed", "increment", "decrement", "randomize"];
 
@@ -89,12 +90,28 @@ export function samplingBar({ widgets, value, set, perSegment = false, turbo = [
 
   if (widgets.seed) {
     const control = value("control_after_generate", "fixed");
+    // What the last queue actually ran on, offered back. Always drawn, beside
+    // the dice it undoes — a control that appears only once it would do
+    // something is a control nobody knows is there, which is the whole of what
+    // was wrong with hiding it. Dimmed and inert until there is a seed to go
+    // back to, and again once the seed already is that one.
+    const last = lastSeed(widgets.seed);
+    const reusable = last !== null && last !== Number(value("seed", 0));
     pills.push(el("div", { class: "mmc-pill mmc-pill-group" }, [
       el("button", {
         class: "mmc-step mmc-seed-dice",
         title: t("Roll a new seed now"),
         onclick: () => set("seed", Math.floor(Math.random() * 0xffffffff)),
       }, [icon("dice", 15)]),
+      el("button", {
+        class: "mmc-step mmc-seed-last",
+        // `.mmc-step:disabled` already dims it and refuses the cursor.
+        disabled: !reusable,
+        title: last === null
+          ? t("Nothing queued yet — after a render this comes back to the seed it ran on")
+          : t("Back to {seed}, the seed the last queue ran on", { seed: last }),
+        onclick: () => { if (reusable) set("seed", last); },
+      }, [icon("rewind", 15)]),
       el("input", {
         class: "mmc-seed-input",
         type: "text",

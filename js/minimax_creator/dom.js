@@ -76,6 +76,10 @@ export const ICONS = {
   pause: `<path d="M8 5v14M16 5v14"/>`,
   scissors: `<circle cx="6" cy="6" r="2.4"/><circle cx="6" cy="18" r="2.4"/><path d="M8 7.4L20 18M8 16.6L20 6"/>`,
   dice: `<rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.2"/><circle cx="15.5" cy="15.5" r="1.2"/><circle cx="12" cy="12" r="1.2"/>`,
+  // Back round to where it was: the seed the last queue ran on, put back. An
+  // arrow returning to its own start, which is what the button does — beside
+  // `dice`, whose whole job is the opposite.
+  rewind: `<path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1"/><path d="M3 4v5h5"/>`,
   sliders: `<path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/>`,
   // The seam between two shots: the second picks up where the first left off.
   link: `<path d="M9 12h6"/><path d="M11 8H8a4 4 0 000 8h3M13 8h3a4 4 0 010 8h-3"/>`,

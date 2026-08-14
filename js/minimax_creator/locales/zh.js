@@ -417,6 +417,8 @@ export const zh = {
  "temp {n}": "温度 {n}",
  "Fix the seed at a number": "把 seed 固定为一个数",
  "Roll a new seed now": "现在换一个新 seed",
+ "Back to {seed}, the seed the last queue ran on": "回到上次入队实际运行的 seed {seed}",
+ "Nothing queued yet — after a render this comes back to the seed it ran on": "还没有入队。渲染之后可以回到它实际运行的 seed",
  "new every time": "每次都新",
  "Every refine comes out differently. Click to fix it.": "每次润色的结果都不同。点击固定。",
  "Refining the same prompt gives the same rewrite. Click to vary it again.": "同一提示词润色得到相同改写。点击恢复变化。",
