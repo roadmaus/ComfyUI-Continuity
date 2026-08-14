@@ -565,9 +565,27 @@ export const css = `
 .mmc-pill-static { cursor: default; }
 .mmc-pill-static:hover { background: var(--mmc-surface-2); }
 .mmc-pill-static svg { color: var(--mmc-dim); }
-.mmc-seed-dice { display: flex; align-items: center; padding: 0 4px; }
-.mmc-seed-dice svg { width: 15px; height: 15px; stroke: currentColor; fill: none;
-  stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+/* The seed pill's two icon buttons — the die that rolls it, the arrow that puts
+   the last one back — under one rule, because they sit side by side and any
+   difference between them reads as a mistake rather than as a distinction. The
+   arrow inherited neither: an SVG in a button with no flex sits on the text
+   baseline, so it rode above the die, and .mmc-pill svg drew it a pixel larger
+   at 16. Centred both ways and the same 15px for both. */
+.mmc-seed-dice, .mmc-seed-last {
+  display: flex; align-items: center; justify-content: center;
+  /* Narrower than a stepper's +/-, which is what .mmc-step is sized for: two
+     34px boxes around 15px of glyph put 68px of nothing in front of the digits.
+     Still a 26px target, and the row's rhythm is set by the ink, not the box. */
+  width: 22px; padding: 0 2px;
+}
+.mmc-seed-dice svg, .mmc-seed-last svg {
+  width: 15px; height: 15px; stroke: currentColor; fill: none;
+  stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
+}
+/* The die is a closed square and the arrow an open arc, so at equal stroke the
+   arrow reads lighter than its neighbour. A hair more weight, not a larger
+   glyph — the boxes stay identical. */
+.mmc-seed-last svg { stroke-width: 1.85; }
 /* The seed is an identifier, not a quantity — nobody reads it as one billion
    and something, they compare it against another one and copy it. So it is set
    the way the sheet sets a hash: mono, tabular, every digit in its own column,
