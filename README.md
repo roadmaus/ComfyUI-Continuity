@@ -11,7 +11,29 @@ key, nothing uploaded.
 
 ![Sampling, then the finished clip playing beside the node](docs/img/preview.gif)
 
-## What is new in 2.1
+## What is new in 2.2
+
+**[The face pass](#faces).** H3 draws a face badly in proportion to how small
+the head is in frame, and no upscaler reaches that — an upscaler re-resolves what
+was drawn, and what was drawn was a smudge. The **faces** pill on the sampler row
+switches on a second, small generation per pass: the face is tracked frame by
+frame, cropped to fill its own canvas, re-drawn by H3 itself at a denoise scaled
+to how large it already is, and pasted back under a feathered mask. It needs a
+SAM3 checkpoint, which ships with ComfyUI core; nothing else to install. Asked
+for in [#9](https://github.com/roadmaus/ComfyUI-MiniMax-Creator/issues/9).
+
+**The seed that made this.** `control_after_generate` rolls the seed the moment a
+queue goes out, so the number that made the shot on screen is gone from the UI by
+the time you decide you want it. The sampler row remembers what was actually
+sent and grows a button that puts it back.
+
+One fix rides along: the rewrite box no longer loses the caret after every
+character ([#11](https://github.com/roadmaus/ComfyUI-MiniMax-Creator/issues/11)).
+Typing in it re-rendered the panel that owned it, which rebuilt the very box
+being typed into; it is refreshed in place now. The soundscape and score fields
+had it too.
+
+### What 2.1 brought
 
 **[Presets](#presets).** A setup you can put back — the whole node, or the
 sections of it you tick. Saved off a node you have dialled in, or read back out
@@ -28,6 +50,11 @@ free on Linux and macOS and was not free at all on Windows, where a large output
 folder made an upload look like it had hung. An upload also stops re-listing
 anything: the file it just wrote is a row it already has, and the renders folder
 was never involved.
+
+### Coming from 2.1
+
+Nothing to do. The face pass ships off, and a piece with it off renders exactly
+what it rendered before.
 
 ### Coming from 2.0
 
