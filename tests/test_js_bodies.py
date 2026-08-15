@@ -166,6 +166,11 @@ class Node {
   get nodeType() { return this.tagName === "#text" ? 3 : 1; }
   set innerHTML(v) { this._html = v; }
   get innerHTML() { return this._html ?? ""; }
+  // A text node's text, under the name the DOM gives it. `PromptBox.getValue`
+  // walks the box with this, which is how what was typed becomes the prompt in
+  // the state — without it the box round-trips to `undefined` here.
+  get nodeValue() { return this.textContent; }
+  set nodeValue(v) { this.textContent = v; }
   set value(v) { this._value = v; }
   get value() { return this._value ?? ""; }
   /** Everything rendered under this node, flattened — what the checks read. */
@@ -200,6 +205,9 @@ globalThis.window = { addEventListener() {}, removeEventListener() {},
                       getSelection: () => ({ rangeCount: 0, isCollapsed: true,
                                              removeAllRanges() {}, addRange() {},
                                              getRangeAt: () => document.createRange() }) };
+// The node-type constants the pack compares against — `getValue` asks whether
+// each child of the prompt box is a text node or a chip.
+globalThis.Node = { ELEMENT_NODE: 1, TEXT_NODE: 3 };
 globalThis.requestAnimationFrame = () => {};
 globalThis.cancelAnimationFrame = () => {};
 // The timeline lane measures itself to decide how much of each block's label
@@ -1002,6 +1010,112 @@ try {
   out.errors.push(`seed: ${error.message}`);
 }
 
+// The pool shelf reports where each piece reference is used, and it has to do
+// it while the card that cites it is being written — the shelf was redrawn only
+// by a full render of the modal, so a handle typed into a segment left the chip
+// on "cited nowhere yet" for the whole of the edit that cited it. Reported in
+// #12: from the outside that is the feature simply not working.
+try {
+  const findAll = (root, cls) => {
+    const hits = [];
+    const walk = (n) => {
+      if (String(n.className ?? "").split(" ").includes(cls)) hits.push(n);
+      (n.children ?? []).forEach(walk);
+    };
+    walk(root);
+    return hits;
+  };
+  const node = fakeNode("MiniMaxH3Timeline", "timeline_data", JSON.stringify({
+    version: 2, render: "chained", prompt: "", aspect: "16:9", short_edge: 768,
+    assets: [{ handle: "ref-1", kind: "image", role: "reference", filename: "sheet.png" }],
+    segments: [{ prompt: "shot 1", duration_s: 5, assets: [], loras: [] },
+               { prompt: "shot 2", duration_s: 5, assets: [], loras: [] }],
+  }));
+  await ext.nodeCreated(node);
+  const timeline = node.mmcBody.timeline;
+  const { openTimeline: openTimelineModal } = await import("./js/minimax_creator/timeline.js");
+  openTimelineModal({ timeline, onCommit: () => node.mmcBody.commit() });
+  await new Promise((done) => setTimeout(done, 0));
+  const modal = document.body.children.at(-1);
+  const shelf = () => findAll(modal, "mmc-tl-pool")[0]?.text ?? "";
+
+  out.poolShelf = { idle: shelf().includes("cited nowhere yet") };
+
+  // Open card 1 and write the citation into its box, the way a user does.
+  findAll(modal, "mmc-tl-edit")[0].listeners.click[0]();
+  const sheet = document.body.children.at(-1);
+  const box = findAll(sheet, "mmc-prompt")[0];
+  box.append(document.createTextNode(" @ref-1"));
+  box.listeners.input.forEach((fn) => fn({ target: box }));
+
+  out.poolShelf.wrote = timeline.segments[0].prompt;
+  // The whole bug: this used to still say "cited nowhere yet".
+  out.poolShelf.live = shelf().includes("in segment 1");
+} catch (error) {
+  out.errors.push(`pool shelf: ${error.message}`);
+}
+
+// ...and the one way that readout is true and still reads as broken: the same
+// picture attached to a card in its own right. The piece copy is uncited, the
+// card copy is doing the work, and "cited nowhere yet" said nothing about the
+// reference plainly on screen in that card. Also #12.
+try {
+  const findAll = (root, cls) => {
+    const hits = [];
+    const walk = (n) => {
+      if (String(n.className ?? "").split(" ").includes(cls)) hits.push(n);
+      (n.children ?? []).forEach(walk);
+    };
+    walk(root);
+    return hits;
+  };
+  const node = fakeNode("MiniMaxH3Timeline", "timeline_data", JSON.stringify({
+    version: 2, render: "chained", prompt: "", aspect: "16:9", short_edge: 768,
+    assets: [{ handle: "ref-1", kind: "image", role: "reference", filename: "sheet.png" }],
+    segments: [{
+      prompt: "shot 1 with @img-2", duration_s: 5, loras: [],
+      assets: [{ handle: "img-2", kind: "image", role: "reference", filename: "sheet.png" }],
+    }],
+  }));
+  await ext.nodeCreated(node);
+  const { openTimeline: openTimelineModal } = await import("./js/minimax_creator/timeline.js");
+  openTimelineModal({ timeline: node.mmcBody.timeline, onCommit: () => {} });
+  await new Promise((done) => setTimeout(done, 0));
+  const shelf = findAll(document.body.children.at(-1), "mmc-tl-pool")[0]?.text ?? "";
+  out.poolDouble = {
+    says: shelf.includes("attached to segment 1 (@img-2)"),
+    notIdle: !shelf.includes("cited nowhere yet"),
+  };
+} catch (error) {
+  out.errors.push(`pool double: ${error.message}`);
+}
+
+// A rewrite takes only what the reply carries. The two audio fields are typed
+// in by hand as often as they are written, and a reply that skipped them used
+// to blank them — deleting a line the user wrote, in a box they were looking
+// at. The timeline has always taken them this way; this is the face agreeing.
+try {
+  const node = fakeNode("MiniMaxH3Creator", "creator_data", JSON.stringify({
+    version: 2, prompt: "", models: {},
+    segments: [{ prompt: "a lighthouse", assets: [], loras: [], duration_s: 6,
+                 soundscape: "surf on shingle", music: "a low drone" }],
+  }));
+  await ext.nodeCreated(node);
+  const shot = node.mmcBody.timeline.segments[0];
+  node.mmcBody.faceEditor.refinePanel.apply(
+    { soundscape: "", music: "", seen: "", problems: [] },
+    { body: "A lighthouse at dusk." });
+  out.audioKept = { soundscape: shot.soundscape, music: shot.music };
+  // ...and a reply that *does* carry them still wins.
+  node.mmcBody.faceEditor.refinePanel.apply(
+    { soundscape: "wind over the lamp", music: "", seen: "", problems: [] },
+    { body: "A lighthouse at dusk." });
+  out.audioKept.written = shot.soundscape;
+  out.audioKept.musicStill = shot.music;
+} catch (error) {
+  out.errors.push(`audio kept: ${error.message}`);
+}
+
 console.log(JSON.stringify(out));
 """
 
@@ -1213,6 +1327,31 @@ if "opening.mp4" not in (first.get("modal") or ""):
 global_prompt = report.get("globalPrompt", {})
 check("a pool citation in the global prompt is a chip", global_prompt.get("chips"), ["ref-1"])
 check("...and the prose around it is still there", global_prompt.get("text"), True)
+
+# The pool shelf: where each piece reference is used, kept true while the card
+# that cites it is being written rather than only after the window closes.
+shelf = report.get("poolShelf", {})
+check("a pool reference nothing cites says so", shelf.get("idle"), True)
+check("...and writing its handle into a card lands in that card's prompt",
+      shelf.get("wrote"), "shot 1 @ref-1")
+check("...which the shelf reports without waiting for the window to close",
+      shelf.get("live"), True)
+
+double = report.get("poolDouble", {})
+check("a piece reference attached to a card in its own right names that card",
+      double.get("says"), True)
+check("...rather than reporting a picture plainly in use as unused",
+      double.get("notIdle"), True)
+
+# A rewrite writes what it returned and nothing else.
+audio = report.get("audioKept", {})
+check("a reply with no soundscape leaves the one that was typed",
+      audio.get("soundscape"), "surf on shingle")
+check("...and the score with it", audio.get("music"), "a low drone")
+check("a reply that carries a soundscape still writes it",
+      audio.get("written"), "wind over the lamp")
+check("...without blanking the score it said nothing about",
+      audio.get("musicStill"), "a low drone")
 
 check("switching to an image model rebuilds the body",
       report.get("switch", {}).get("image"), "PreStageEditor")

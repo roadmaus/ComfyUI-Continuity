@@ -293,11 +293,22 @@ class Timeline {
   poolChip(asset) {
     const everywhere = S.poolCitedGlobally(this.timeline, asset);
     const cited = S.poolCitations(this.timeline, asset);
+    // Uncited, but the same file is attached to a card under its own handle:
+    // the reference *is* in use, one level down, and saying "cited nowhere yet"
+    // about it is technically true and useless. Say which card and which handle
+    // instead — that is the whole of what happened, and it is enough to decide
+    // whether to cite the piece copy or drop it. See `S.poolDoubles`.
+    const doubles = everywhere || cited.length ? [] : S.poolDoubles(this.timeline, asset);
     const where = everywhere
       ? t("everywhere — cited in the global prompt")
       : cited.length
         ? t(cited.length === 1 ? "in segment {list}" : "in segments {list}", { list: cited.join(", ") })
-        : t("cited nowhere yet");
+        : doubles.length
+          ? t(doubles.length === 1
+                ? "not cited — attached to segment {list} instead"
+                : "not cited — attached to segments {list} instead",
+              { list: doubles.map((d) => `${d.segment} (@${d.handle})`).join(", ") })
+          : t("cited nowhere yet");
     const thumb = asset.kind === "image"
       ? el("img", { class: "mmc-asset-thumb", src: viewUrl(asset.filename, { preview: true }), alt: "" })
       : el("span", { class: "mmc-asset-thumb", text: asset.kind === "video" ? "▶" : "♪" });
@@ -310,11 +321,20 @@ class Timeline {
       onclick: () => this.replacePoolAsset(asset),
     });
     return el("div", {
-      class: `mmc-asset${everywhere || cited.length ? "" : " idle"}`,
+      // Not idle where a double exists: the file is being used, and dimming the
+      // chip that says so would contradict its own text.
+      class: `mmc-asset${everywhere || cited.length || doubles.length ? "" : " idle"}`,
       title: everywhere || cited.length
         ? t("{file} — {where}", { file: asset.filename, where })
-        : t("{file} — no segment cites @{handle} yet, so it rides into none of them.",
-            { file: asset.filename, handle: asset.handle }),
+        : doubles.length
+          ? t("{file} — this same file is attached to segment {list} under its own handle, "
+            + "so that copy is the one being used and @{handle} rides into nothing. "
+            + "Cite @{handle} there and remove the card's copy to keep one reference "
+            + "for the whole piece.",
+              { file: asset.filename, handle: asset.handle,
+                list: doubles.map((d) => `${d.segment} (@${d.handle})`).join(", ") })
+          : t("{file} — no segment cites @{handle} yet, so it rides into none of them.",
+              { file: asset.filename, handle: asset.handle }),
     }, [
       thumb,
       el("button", {
@@ -1512,7 +1532,15 @@ class Timeline {
     const segment = this.timeline.segments[index];
     const editor = new CreatorEditor({
       state: segment,
-      onCommit: () => { this.onCommit?.(); this.renderStrip(); },
+      // The shelf as well as the strip: writing `@ref-1` in this card is what
+      // makes the pool chip say "in segment 3", and the shelf is the only place
+      // that fact is ever shown. Redrawn on the card's own commits rather than
+      // waiting for the window to close, because a readout that lags the thing
+      // it reports on reads as one that does not work — the chip sat on "cited
+      // nowhere yet" for the whole of the edit that cited it. It holds no caret
+      // and nothing focusable, so rebuilding it under an open window costs
+      // nothing. See `renderPool` and `S.poolCitations`.
+      onCommit: () => { this.onCommit?.(); this.renderStrip(); this.renderPool(); },
       // Both belong to the timeline rather than to one shot: the canvas because
       // the segments are joined, the continuation because it describes the seam
       // in front of this segment and so does not exist for the first one.

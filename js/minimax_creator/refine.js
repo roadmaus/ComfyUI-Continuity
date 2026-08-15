@@ -508,9 +508,15 @@ export class RefinePanel {
       enabled: true,
       ...(this.audioFields ? { replaced } : {}),
     };
+    // Only what the reply actually carries. An empty field means the model had
+    // nothing to add, which is not the same as "make this empty" — and these
+    // two are typed in by hand as often as they are written by a rewrite, so
+    // blanking them on a reply that skipped them deleted a line the user wrote
+    // in a box they were looking at. The timeline has always taken them this
+    // way (see `Timeline.takePiece`); this is the face agreeing with it.
     if (this.audioFields) {
-      state.soundscape = result.soundscape ?? "";
-      state.music = result.music ?? "";
+      if (result.soundscape) state.soundscape = result.soundscape;
+      if (result.music) state.music = result.music;
     }
     this.seen = result.seen ?? "";
     this.problems = result.problems ?? [];

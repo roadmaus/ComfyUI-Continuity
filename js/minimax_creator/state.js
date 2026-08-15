@@ -1985,6 +1985,32 @@ export function poolCitations(timeline, asset) {
     .filter((n) => n !== null);
 }
 
+/**
+ * Where a pool asset's *file* is attached to a card in its own right — the same
+ * picture, under a second handle, doing the same job one level down.
+ *
+ * The one way the shelf's readout is true and still reads as broken. A piece
+ * reference is used by citing `@ref-2` in a card; attaching the file to the
+ * card instead gives it a handle of the card's own (`@img-3`) and works
+ * perfectly, so the piece copy is left uncited and the shelf says so — and from
+ * the outside that is a reference plainly in use being reported as unused.
+ *
+ * Reported rather than repaired: both are legal, and which one was meant is the
+ * user's to say. Matched on filename, which is what "the same reference" means
+ * here — the handle is exactly the thing that differs.
+ *
+ * @returns {{segment: number, handle: string}[]} 1-based card numbers with the
+ *   handle the file wears there.
+ */
+export function poolDoubles(timeline, asset) {
+  const out = [];
+  timeline.segments.forEach((segment, index) => {
+    const own = (segment.assets ?? []).find((entry) => entry.filename === asset.filename);
+    if (own) out.push({ segment: index + 1, handle: own.handle });
+  });
+  return out;
+}
+
 /** Next free pool handle: ref-1, ref-2, ... One counter across kinds — the
  *  prefix says "the piece's", not what the file is; the glossary says that. */
 export function nextPoolHandle(timeline) {
