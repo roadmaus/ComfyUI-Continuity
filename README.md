@@ -11,11 +11,28 @@ key, nothing uploaded.
 
 ![Sampling, then the finished clip playing beside the node](docs/img/preview.gif)
 
-## What is new in 2.0
+## What is new in 2.1
 
-If you already have this pack installed, the headline is that there is one node
-now instead of two. Update, restart, open your workflows — they load and render
-the same. Nothing about a saved piece has to be redone; see
+**[Presets](#presets).** A setup you can put back — the whole node, or the
+sections of it you tick. Saved off a node you have dialled in, or read back out
+of a render you already made, since the file carries the workflow that made it.
+The library is on the rail beside Gallery and Settings.
+
+Also in 2.1: the settings page no longer resets the fields you did not touch
+([#8](https://github.com/roadmaus/ComfyUI-MiniMax-Creator/issues/8)). A save is a
+patch over the file now, so naming a video folder stops putting the stills folder
+back.
+
+### Coming from 2.0
+
+Nothing to do. Presets are additive, and a node with no preset saved behaves
+exactly as it did.
+
+### Coming from 1.x
+
+The headline is that there is one node now instead of two. Update, restart, open
+your workflows — they load and render the same. Nothing about a saved piece has
+to be redone; see
 [Upgrading from the two-node version](#upgrading-from-the-two-node-version) for
 what happens to a Timeline node you already placed.
 
@@ -329,6 +346,86 @@ The blob's shape is the timeline's either way — a global prompt, one canvas, o
 set of weights and a list of segments — so the right-click **Copy creator_data
 JSON** now hands you a piece rather than a lone request.
 
+## Presets
+
+A preset is a setup you can put back. **Presets** on the rail opens the library —
+beside Gallery and Settings on a Creator, last on a PreStage's single group, and
+in the right-click menu of all three node ids.
+
+What it saves is the blob *and the sampler row*, because the row was never in the
+blob: `steps`, `cfg`, the sampler, the scheduler, the two flow shifts and the
+cache pill are stock widgets the node hides and redraws as pills. A preset holding
+only `creator_data` would drop the turbo schedule and the step count, which is
+most of what anyone actually tunes.
+
+Three things can be saved, and each knows which of them it is:
+
+| scope | saved from | holds |
+|---|---|---|
+| **piece** | a Creator, whatever is on its face | canvas, weights, the sampler row, the writing, LoRAs, the reference pool, the strip |
+| **shot** | one card off a strip | its writing, its references and LoRAs, the row it was dialled at, and how long it runs with the seam in front of it |
+| **prestage** | a PreStage | its architecture, canvas and quality, the writing, references and LoRAs, and the weights for the architecture it runs |
+
+Applying is per-section rather than all-or-nothing, which is the point: tick
+*look* and *speed* to drop a canvas and a step count onto a shot you have already
+written, and the prose stays where it is. A section that cannot cross into the
+target is shown with the reason on it instead of hidden — *Weights: this PreStage
+runs Krea 2, and these are H3 checkpoints* is information, and a missing row is a
+bug report.
+
+Two fields are never captured. The **seed** is the one number that has to be
+different next time, and the **output prefix** is a per-machine preference the
+[folders page](#where-files-go) already draws a line around. Applying runs the
+same normalisers the editor does, so a preset cannot put a node into a state you
+could not have built by hand: seams the restored durations can no longer afford
+are pruned, a checkpoint pin the restored references make illegal is dropped, and
+a piece's nine reference images are cut to the three slots Krea 2's edit path has.
+Ctrl+Z is the undo. A preset naming a LoRA or a checkpoint this machine does not
+have applies anyway and the affected chips render as missing, which is what a
+workflow from someone else's disk already does.
+
+### Taken from a render
+
+By the time you know which render was the good one, you have usually moved on —
+three prompts later, a different LoRA, the strip rebuilt. The setup is not gone,
+though. Both save nodes embed the workflow that made the file, the MP4 in its
+container tags and the PNG in its text chunks, so **From a render** opens the
+gallery and the file you pick becomes a preset. Nothing is stored for this; it was
+in the files all along.
+
+It reads the API-form `prompt` tag and never the canvas `workflow` tag, because
+that one is keyed by name. `workflow` holds `widgets_values`, which is
+*positional*, and this pack has already changed the length of that row once when
+the two flow shifts arrived — a render from before that carries nine entries where
+the node now declares eleven, and everything after the gap reads one slot out with
+no error anywhere. A file saved under `--disable-metadata` carries neither tag,
+and the library says which of those it is rather than failing.
+
+### The card
+
+The hero of a card is the render the preset was saved from. The stage is already
+holding it when you press save, so the cover is the thing you were looking at when
+you decided you liked it — nothing to guess and no best frame to pick. It fills an
+empty cover only, because a card you recognise must not change under you; **Set**
+and **Change** open the same gallery for one chosen by hand, and **Clear** puts the
+card back on the lane.
+
+With no cover the card draws the piece itself: the lane at its real proportions,
+merged shots closed up under one casing, seams between them, and the blocks filled
+with the thumbnails of whatever the preset names. With neither, the flat lane. The
+library stars, shelves and searches the way the picker does.
+
+Seven starters ship with the pack — a native 20-step row and a 4-step draft row, a
+9:16 canvas, a feathered continuation and a hard cut, and a poster and a character
+sheet for the two image architectures. They are the same for everybody, so they
+cannot be renamed or deleted: apply one, change what you want and press **Save
+current setup** to get one that is yours.
+
+Presets live in ComfyUI's user data next to the picker's favourites, as one index
+plus a file per preset. That means they follow the user rather than the workflow,
+which is why **Export** and **Import** hand the library — or one card — over as
+JSON when you move to another machine.
+
 ## Modes and duration
 
 What you attach picks the mode, and the mode picks the checkpoint — only that one is
@@ -510,7 +607,8 @@ python3 tests/test_compile.py         # canvas math, modes, limits, ordering
 python3 tests/test_refine.py
 python3 tests/test_assets.py          # what the picker's listing walk finds
 python3 tests/test_outputs.py         # what an output prefix may be
-python3 tests/test_settings.py        # what the settings file may hold
+python3 tests/test_settings.py        # what the settings file may hold, and that a save is a patch
+python3 tests/test_presets.py         # capture, apply per section, and what never crosses
 python3 tests/test_canvas_mirror.py   # canvas.js against canvas.py
 python3 tests/test_piece_mirror.py    # an old creator_data blob lifts to one shot
 python3 tests/test_prestage_mirror.py
