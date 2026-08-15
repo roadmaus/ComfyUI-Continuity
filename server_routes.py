@@ -59,16 +59,45 @@ def _scan(root, annotation=""):
     the thumb and probe routes here, `media.resolve` at execute time — already
     goes through `get_annotated_filepath`, so an annotated path is a file the
     whole pipeline can reach with no second load path.
+
+    Read off `os.scandir`'s entries rather than `os.walk`'s names, because
+    enumerating the directory has already answered everything this asks. Going
+    back by path — `islink`, `getmtime`, `getsize` — is three more syscalls per
+    file, and on Windows that is the entire cost of a listing: `FindFirstFileW`
+    hands back the size and the timestamps inline, so `DirEntry.stat()` there is
+    free for everything except a symlink, while `os.path.getmtime` on a path
+    string is a fresh open through the whole filter driver stack, virus scanner
+    included. On Linux and macOS the same change saves two syscalls of three and
+    nothing was ever slow enough to notice, which is how a folder of renders
+    that lists in a second here listed in minutes on someone's Windows
+    server (#4).
     """
-    for directory, dirnames, filenames in os.walk(root):
-        dirnames[:] = sorted(d for d in dirnames if not d.startswith("."))
-        for filename in sorted(filenames):
-            if filename.startswith("."):
+    pending = [root]
+    index = 0
+    while index < len(pending):
+        directory = pending[index]
+        index += 1
+        try:
+            with os.scandir(directory) as scan:
+                entries = sorted(scan, key=lambda e: e.name)
+        except OSError:
+            continue
+        subfolder = os.path.relpath(directory, root)
+        subfolder = "" if subfolder == "." else subfolder.replace(os.sep, "/")
+        for entry in entries:
+            if entry.name.startswith("."):
                 continue
-            kind = _classify(filename)
+            try:
+                # follow_symlinks=False is os.walk's own default: a link to a
+                # directory is listed, not descended into.
+                if entry.is_dir(follow_symlinks=False):
+                    pending.append(entry.path)
+                    continue
+            except OSError:
+                continue
+            kind = _classify(entry.name)
             if kind is None:
                 continue
-            path = os.path.join(directory, filename)
             # A symlink pointing outside the root is a file this pack cannot
             # open: `get_annotated_filepath` resolves the link and then refuses
             # it for leaving the folder, so listing it would offer a thumbnail
@@ -79,23 +108,23 @@ def _scan(root, annotation=""):
             # thing standing between a crafted filename and the rest of the
             # disk. Symlinking media into input/ does not work; the flag that
             # does is `--input-directory`, and the README says so.
-            if os.path.islink(path) and not folder_paths.is_within_directory(root, path):
+            #
+            # `is_symlink` reads the type the enumeration already returned, so
+            # what cost a syscall per file now costs one per symlink.
+            if entry.is_symlink() and not folder_paths.is_within_directory(root, entry.path):
                 continue
-            subfolder = os.path.relpath(directory, root)
-            subfolder = "" if subfolder == "." else subfolder.replace(os.sep, "/")
             try:
-                mtime = os.path.getmtime(path)
-                size = os.path.getsize(path)
+                stat = entry.stat()
             except OSError:
                 continue
-            relative = f"{subfolder}/{filename}" if subfolder else filename
+            relative = f"{subfolder}/{entry.name}" if subfolder else entry.name
             yield {
                 "path": relative + annotation,
-                "name": filename,
+                "name": entry.name,
                 "subfolder": subfolder,
                 "kind": kind,
-                "size": size,
-                "mtime": mtime,
+                "size": stat.st_size,
+                "mtime": stat.st_mtime,
             }
 
 

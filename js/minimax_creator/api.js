@@ -25,8 +25,20 @@ export function listingTruncated(root = "input") {
   return cache.get(root)?.truncated === true;
 }
 
-export function invalidate() {
-  cache.clear();
+/** Drop a cached listing. One root by name, or all of them when called bare —
+ *  which is what a move or a delete wants, since an annotated filename can name
+ *  either folder and the caller does not unpack it to find out. */
+export function invalidate(root) {
+  if (root) cache.delete(root); else cache.clear();
+}
+
+/** Put a row into a cached listing without asking the server for it again.
+ *  A no-op when that root has not been listed yet: there is no listing to be
+ *  newest in, and the next real one will find the file on disk anyway. */
+function remember(root, asset) {
+  const hit = cache.get(root);
+  if (!hit) return;
+  hit.assets = [asset, ...hit.assets.filter((a) => a.path !== asset.path)];
 }
 
 /** Move one file into another subfolder of the root it already lives in — the
@@ -408,9 +420,38 @@ export async function fetchPeaks(path) {
   }
 }
 
+// Which tab a file belongs on. The listing route asks core's mimetype table the
+// same question; a File already carries the browser's answer, and the extension
+// covers what it leaves blank (.mkv and .flac come back empty in some
+// browsers). Null when neither knows, which is the caller's cue to list the
+// folder properly rather than invent a row — though a file core cannot classify
+// either is one no listing was going to show.
+const EXTENSIONS = {
+  image: ["png", "jpg", "jpeg", "webp", "gif", "bmp", "tif", "tiff", "avif"],
+  video: ["mp4", "webm", "mkv", "mov", "avi", "m4v", "mpg", "mpeg", "wmv"],
+  audio: ["mp3", "wav", "flac", "ogg", "opus", "m4a", "aac", "wma"],
+};
+
+function kindOf(file, name) {
+  const top = (file.type || "").split("/")[0];
+  if (top === "image" || top === "video" || top === "audio") return top;
+  const extension = name.slice(name.lastIndexOf(".") + 1).toLowerCase();
+  for (const [kind, list] of Object.entries(EXTENSIONS)) {
+    if (list.includes(extension)) return kind;
+  }
+  return null;
+}
+
 /**
  * Upload into the input folder. Core's /upload/image is what LoadVideo and
  * LoadAudio post to as well, despite the name — there is no separate endpoint.
+ *
+ * Resolves to a listing row rather than to a name, because the upload response
+ * plus the File already say everything a grid cell reads, and the row goes
+ * straight into the cached input listing. Walking the folder again to be told
+ * what we just put there is what made a two-megabyte upload take minutes on a
+ * machine with a large output folder (#4) — and it re-listed *output* too, which
+ * an upload into input cannot have changed.
  */
 export async function upload(file, subfolder = "") {
   const form = new FormData();
@@ -419,10 +460,19 @@ export async function upload(file, subfolder = "") {
   const response = await api.fetchApi("/upload/image", { method: "POST", body: form });
   if (!response.ok) throw new Error(t("upload failed ({status})", { status: response.status }));
   const body = await response.json();
-  invalidate();
-  return {
-    path: body.subfolder ? `${body.subfolder}/${body.name}` : body.name,
-    name: body.name,
-    subfolder: body.subfolder || "",
+  const name = body.name;
+  const into = body.subfolder || "";
+  const kind = kindOf(file, name);
+  const asset = {
+    path: into ? `${into}/${name}` : name,
+    name,
+    subfolder: into,
+    kind,
+    size: file.size,
+    // Seconds, as the listing route reports it. The server's own mtime will be
+    // a shade later; nothing reads this but the newest-first sort.
+    mtime: Date.now() / 1000,
   };
+  if (kind) remember("input", asset); else invalidate("input");
+  return asset;
 }
