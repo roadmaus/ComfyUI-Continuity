@@ -151,6 +151,29 @@ export function keepScroll(element) {
   return element;
 }
 
+/**
+ * Make an asset chip's thumbnail the way to swap the file behind it.
+ *
+ * The thumbnail is the part of the chip that *is* the file, so it is where
+ * "point this at something else" belongs. Removing and re-adding renumbers the
+ * handle, which means rewriting every sentence in the prompt that names it —
+ * for the common act of trying the same reference with a different picture,
+ * that is the whole edit for none of the change.
+ */
+export function swappable(thumb, { title, onclick }) {
+  thumb.classList.add("mmc-asset-swap");
+  thumb.title = title;
+  thumb.setAttribute("role", "button");
+  thumb.setAttribute("tabindex", "0");
+  thumb.addEventListener("click", onclick);
+  thumb.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    onclick(event);
+  });
+  return thumb;
+}
+
 /** Close-on-outside-click / Escape, shared by every popover. */
 export function dismissable(node, onClose) {
   floatAbove(node);

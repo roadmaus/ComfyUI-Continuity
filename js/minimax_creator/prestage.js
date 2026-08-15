@@ -26,7 +26,7 @@
 // switching the arch rewrites the row, and the turbo pill exists only on Krea
 // (Turbo *is* a checkpoint there; Ideogram's speed axis is its preset table).
 
-import { el, icon, ICONS, svg, dismissable, keepScroll, placeNear } from "./dom.js";
+import { el, icon, ICONS, svg, dismissable, keepScroll, placeNear, swappable } from "./dom.js";
 import { openPicker } from "./picker.js";
 import { openLoras } from "./loras.js";
 import { openFrameGrab } from "./framegrab.js";
@@ -258,6 +258,19 @@ export class PreStageEditor {
     this.commit();
   }
 
+  /** Point a style reference at a different image, keeping its handle — the
+   *  prompt cites it by handle, and a re-add would renumber. */
+  async replaceRef(ref) {
+    const chosen = await openPicker({
+      kinds: ["image", "renders"], kind: "image", only: "image", single: true,
+      capacity: () => ({ used: 0, max: 1, filesLeft: 1 }),
+    });
+    const picked = chosen?.[0];
+    if (!picked || picked.path === ref.filename) return;
+    ref.filename = picked.path;
+    this.commit();
+  }
+
   async manageLoras() {
     await openLoras({ state: this.state, checkpointModes: false, onChange: () => this.commit() });
     this.commit();
@@ -404,7 +417,13 @@ export class PreStageEditor {
   renderInitChip() {
     const init = this.state.init;
     return el("div", { class: "mmc-asset mmc-tag-0", title: init.filename }, [
-      el("img", { class: "mmc-asset-thumb", src: viewUrl(init.filename, { preview: true }), alt: init.filename }),
+      // Straight back into the same picker the tool opens, which already keeps
+      // the denoise you dialled in — the whole point of swapping the still is
+      // to see the settings you have against a different picture.
+      swappable(
+        el("img", { class: "mmc-asset-thumb", src: viewUrl(init.filename, { preview: true }), alt: init.filename }),
+        { title: t("Pick a different init image — the denoise stays"), onclick: () => this.setInit(false) },
+      ),
       el("span", { class: "mmc-asset-handle", text: t("init") }),
       el("button", {
         class: "mmc-ghost",
@@ -434,7 +453,14 @@ export class PreStageEditor {
       class: `mmc-asset mmc-tag-${S.tagIndex(ref.handle)}`,
       title: ref.filename,
     }, [
-      el("img", { class: "mmc-asset-thumb", src: viewUrl(ref.filename, { preview: true }), alt: ref.filename }),
+      swappable(
+        el("img", { class: "mmc-asset-thumb", src: viewUrl(ref.filename, { preview: true }), alt: ref.filename }),
+        {
+          title: t("Swap the file behind @{handle} — the handle stays, so the prompt still fits.",
+                   { handle: ref.handle }),
+          onclick: () => this.replaceRef(ref),
+        },
+      ),
       el("span", { class: "mmc-asset-handle", text: `@${ref.handle}` }),
       el("span", { class: "mmc-asset-role", text: t("style") }),
       el("button", {

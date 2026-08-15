@@ -8,7 +8,7 @@
 // with the node's, because there is only one editor.
 
 import { probe, viewUrl } from "./api.js";
-import { el, icon, mountOverlay } from "./dom.js";
+import { el, icon, mountOverlay, swappable } from "./dom.js";
 import { CreatorEditor } from "./editor.js";
 import { t } from "./i18n.js";
 import { openLoras } from "./loras.js";
@@ -301,6 +301,14 @@ class Timeline {
     const thumb = asset.kind === "image"
       ? el("img", { class: "mmc-asset-thumb", src: viewUrl(asset.filename, { preview: true }), alt: "" })
       : el("span", { class: "mmc-asset-thumb", text: asset.kind === "video" ? "▶" : "♪" });
+    // The pool is the one place a swap pays the most: @char rides into every
+    // segment that cites it, so re-casting the character is one click here
+    // rather than a re-add and a rewrite in each of them.
+    swappable(thumb, {
+      title: t("Swap the file behind @{handle} — the handle stays, so every citation still fits.",
+               { handle: asset.handle }),
+      onclick: () => this.replacePoolAsset(asset),
+    });
     return el("div", {
       class: `mmc-asset${everywhere || cited.length ? "" : " idle"}`,
       title: everywhere || cited.length
@@ -409,6 +417,25 @@ class Timeline {
       if (picked.trim) entry.trim = picked.trim;
       this.timeline.assets.push(entry);
     }
+    this.commit();
+  }
+
+  /** Point a pool reference at a different file, keeping its handle — see the
+   *  editor's `replaceAsset`, which this is the pool-side twin of. */
+  async replacePoolAsset(asset) {
+    const chosen = await openPicker({
+      kinds: [asset.kind, "renders"],
+      kind: asset.kind,
+      only: asset.kind,
+      single: true,
+      capacity: () => ({ used: 0, max: 1, filesLeft: 1 }),
+    });
+    const picked = chosen?.[0];
+    if (!picked || picked.path === asset.filename) return;
+    asset.filename = picked.path;
+    if (picked.trim) asset.trim = picked.trim;
+    else delete asset.trim;
+    if (asset.kind === "video") asset.track = picked.track ?? S.DEFAULT_TRACK;
     this.commit();
   }
 

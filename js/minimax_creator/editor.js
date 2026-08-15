@@ -11,7 +11,7 @@
 // contenteditable destroys the caret, and attaching an asset from the @ menu
 // commits *while the user is typing in it*.
 
-import { el, icon, ICONS, keepScroll, svg } from "./dom.js";
+import { el, icon, ICONS, keepScroll, svg, swappable } from "./dom.js";
 import { t } from "./i18n.js";
 import { openPicker } from "./picker.js";
 import { openLoras } from "./loras.js";
@@ -468,6 +468,41 @@ export class CreatorEditor {
     return true;
   }
 
+  /**
+   * Point an attached reference at a different file, keeping its handle.
+   *
+   * Trying the same reference with another picture is one substitution, not a
+   * removal and a re-add: the handle survives, so every @mention in the prompt
+   * still means this row and the prompt does not have to be rewritten around
+   * the renumbering. Same kind only, for the same reason — @img-1 has to go on
+   * being an image.
+   */
+  async replaceAsset(asset) {
+    const chosen = await openPicker({
+      kinds: [asset.kind, "renders"],
+      kind: asset.kind,
+      only: asset.kind,
+      single: true,
+      // The slot it occupies is the slot it will occupy: a swap adds nothing to
+      // count, so the reference caps have nothing to say about it.
+      capacity: () => ({ used: 0, max: 1, filesLeft: 1 }),
+    });
+    const picked = chosen?.[0];
+    if (!picked || picked.path === asset.filename) return;
+    asset.filename = picked.path;
+    // A trim is a range in the old file's timeline and means nothing in
+    // another's — either the picker's segment editor set one for this pick, or
+    // the new file starts whole.
+    if (picked.trim) asset.trim = picked.trim;
+    else delete asset.trim;
+    // Same for sound: whether this clip has any is a fact about this clip, and
+    // the old one's answer must not carry over onto a silent replacement.
+    if (asset.kind === "video") asset.track = picked.track ?? S.DEFAULT_TRACK;
+    this.commit();
+    if (asset.role !== "reference") this.probeKeyframe();
+    else if (asset.kind === "video" && !picked.track) await this.applySoundDefault(asset);
+  }
+
   /** The segment editor, on an already-attached clip. */
   async editSegment(asset) {
     const result = await openTrim({
@@ -849,6 +884,11 @@ export class CreatorEditor {
       const thumb = asset.kind === "image"
         ? el("img", { class: "mmc-asset-thumb", src: viewUrl(asset.filename, { preview: true }), alt: asset.filename })
         : el("span", { class: "mmc-asset-thumb" }, [svg(ICONS[asset.kind], 15)]);
+      swappable(thumb, {
+        title: t("Swap the file behind @{handle} — the handle stays, so the prompt still fits.",
+                 { handle: asset.handle }),
+        onclick: () => this.replaceAsset(asset),
+      });
 
       const parts = [thumb, el("span", { class: "mmc-asset-handle", text: `@${asset.handle}` })];
 

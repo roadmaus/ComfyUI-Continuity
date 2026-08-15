@@ -38,6 +38,8 @@ const PER_PAGE = 240;
  * @param {string} options.kind           tab to open on
  * @param {(kind:string)=>{used:number,max:number,filesLeft:number}} options.capacity
  * @param {boolean} options.single        pick exactly one (start/end frame)
+ * @param {string} options.only           show only this kind, on every tab the
+ *   renders one included — a swap has to be the kind whose handle it inherits
  * @param {boolean} options.viewOnly      browse and play, select nothing — the
  *   Timeline's gallery, which has no segment to attach a pick to
  * @returns {Promise<Array|null>} chosen assets, or null if cancelled
@@ -258,7 +260,7 @@ class Picker {
     // holds; an input tab counts only its own kind, because that is the slice
     // its grid is showing.
     const scoped = this.kind === "renders"
-      ? this.renders
+      ? (this.options.only ? this.renders.filter((a) => a.kind === this.options.only) : this.renders)
       : this.assets.filter((a) => a.kind === this.kind);
     const count = (test) => scoped.filter(test).length;
 
@@ -469,8 +471,12 @@ class Picker {
       : this.shelf === "fav" ? (asset) => this.isFav(asset.path)
         : (asset) => asset.subfolder === this.shelf;
     // "renders" is a tab and not a kind, so it shows every kind the output
-    // folder holds — a still and the clip it seeded are both renders.
-    const onKind = this.kind === "renders" ? () => true : (asset) => asset.kind === this.kind;
+    // folder holds — a still and the clip it seeded are both renders. Unless
+    // the caller is replacing one file with another, where anything but that
+    // kind is a pick it would have to refuse.
+    const only = this.options.only;
+    const onKind = only ? (asset) => asset.kind === only
+      : this.kind === "renders" ? () => true : (asset) => asset.kind === this.kind;
     return this.activeAssets().filter((asset) =>
       onKind(asset) && onShelf(asset)
       && (!this.query || asset.path.toLowerCase().includes(this.query)));
