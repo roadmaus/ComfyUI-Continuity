@@ -179,7 +179,9 @@ class Node {
   }
 }
 globalThis.document = {
-  createElement: (tag) => new Node(tag),
+  // Uppercase, as an HTML element's `tagName` really is — the prompt box tells
+  // a <br> and a block wrapper apart by it.
+  createElement: (tag) => new Node(String(tag).toUpperCase()),
   createElementNS: (ns, tag) => new Node(tag),
   createTextNode: (t) => Object.assign(new Node("#text"), { textContent: t }),
   body: new Node("body"),
@@ -1116,6 +1118,54 @@ try {
   out.errors.push(`audio kept: ${error.message}`);
 }
 
+// The prompt box reads back whatever is actually in it.
+//
+// Its DOM is meant to be flat and everything the box does keeps it that way,
+// but undo restores the engine's snapshot rather than ours and Ctrl+B is the
+// browser's own command on a contenteditable. Reading the top level only made
+// a wrapper the engine put there cost the line break it stands for and turned
+// a chip inside it into its own label — silently, on a keystroke, straight
+// into the state. Built here the way an engine builds it, not the way the box
+// does.
+try {
+  const find = (root, cls) => {
+    let hit = null;
+    const walk = (n) => {
+      if (!hit && String(n.className ?? "").split(" ").includes(cls)) hit = n;
+      (n.children ?? []).forEach(walk);
+    };
+    walk(root);
+    return hit;
+  };
+  const node = fakeNode("MiniMaxH3Creator", "creator_data", JSON.stringify({
+    version: 2, prompt: "", models: {},
+    segments: [{
+      prompt: "", duration_s: 6, loras: [],
+      assets: [{ handle: "img-1", kind: "image", role: "reference", filename: "a.png" }],
+    }],
+  }));
+  await ext.nodeCreated(node);
+  const body = node.mmcBody;
+  const box = find(body.root, "mmc-prompt");
+  const chip = document.createElement("span");
+  chip.setAttribute("data-handle", "img-1");
+  chip.textContent = "@img-1";
+  const wrapper = document.createElement("div");
+  wrapper.append(document.createTextNode("second line about "), chip);
+  box.replaceChildren(document.createTextNode("first line"), wrapper);
+  box.listeners.input.forEach((fn) => fn({ target: box }));
+  out.nested = { read: body.timeline.segments[0].prompt };
+
+  // ...and a wrapper around the whole content is not a blank first line.
+  const whole = document.createElement("div");
+  whole.append(document.createTextNode("all of it"));
+  box.replaceChildren(whole);
+  box.listeners.input.forEach((fn) => fn({ target: box }));
+  out.nested.wrapped = body.timeline.segments[0].prompt;
+} catch (error) {
+  out.errors.push(`nested: ${error.message}`);
+}
+
 console.log(JSON.stringify(out));
 """
 
@@ -1327,6 +1377,14 @@ if "opening.mp4" not in (first.get("modal") or ""):
 global_prompt = report.get("globalPrompt", {})
 check("a pool citation in the global prompt is a chip", global_prompt.get("chips"), ["ref-1"])
 check("...and the prose around it is still there", global_prompt.get("text"), True)
+
+# A wrapper the engine put in the box costs neither the line it stands for nor
+# the chip inside it.
+nested = report.get("nested", {})
+check("a block in the prompt box reads back as the newline it is",
+      nested.get("read"), "first line\nsecond line about @img-1")
+check("...but one around the whole content is not a blank first line",
+      nested.get("wrapped"), "all of it")
 
 # The pool shelf: where each piece reference is used, kept true while the card
 # that cites it is being written rather than only after the window closes.

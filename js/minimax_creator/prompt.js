@@ -19,6 +19,11 @@ import { tagIndex } from "./state.js";
 const TRIGGER = /@([\w-]*)$/;
 const MAX_SUGGESTIONS = 40;
 
+// What counts as a line of its own when the browser has put one in the box.
+// Nothing here is ever built by this class — see `getValue`, which is where
+// they are read back out as the newlines they stand for.
+const BLOCK = new Set(["DIV", "P", "LI", "TR", "BLOCKQUOTE", "PRE", "H1", "H2", "H3", "H4", "H5", "H6"]);
+
 /**
  * The window a node face opens: one overlay, whatever the caller puts in it.
  *
@@ -103,6 +108,12 @@ export class PromptBox {
     this.root.addEventListener("input", () => this.onEdit());
     this.root.addEventListener("keydown", (event) => this.onKeyDown(event), true);
     this.root.addEventListener("paste", (event) => this.onPaste(event));
+    // Text dragged in, held to the same rule as text pasted in. Left to the
+    // browser this is the one editing route into the box that arrives as
+    // markup — a drop carries `text/html` and the default handler inserts it
+    // whole, wrappers and all, into a box whose every other route is plain
+    // text. See `onPaste`, which this is the same handler as.
+    this.root.addEventListener("drop", (event) => this.onPaste(event));
     this.root.addEventListener("blur", () => setTimeout(() => this.closeMenu(), 120));
 
     // The graph canvas swallows keys and drags otherwise.
@@ -165,14 +176,46 @@ export class PromptBox {
 
   // ---- value <-> DOM -------------------------------------------------------
 
+  /**
+   * The box, as the text `compile.py` parses.
+   *
+   * The DOM in here is meant to be flat — text nodes and chips, nothing else —
+   * and everything this class does keeps it that way: Enter inserts a literal
+   * "\n" rather than letting the browser wrap a line in a <div>, paste and drop
+   * are forced to plain text. But "meant to be" is not "guaranteed": undo
+   * restores the engine's own snapshot rather than ours, and Ctrl+B and friends
+   * are the browser's commands on a contenteditable and wrap what is selected.
+   *
+   * So this reads whatever is actually there rather than what should be. It
+   * used to walk the top level only, which was fine for the text — a wrapper's
+   * `textContent` still carries it — and quietly wrong for everything that is
+   * not text: a chip inside a wrapper came out as its label, and the *line
+   * break a block wrapper is* came out as nothing at all. That is a paragraph
+   * boundary disappearing from a prompt on a keystroke nobody would connect to
+   * it, and the state is written from here on every one of them, so the loss is
+   * saved as soon as it happens.
+   */
   getValue() {
     let text = "";
-    for (const node of this.root.childNodes) {
-      if (node.nodeType === Node.TEXT_NODE) text += node.nodeValue;
-      else if (node.dataset?.handle) text += `@${node.dataset.handle}`;
-      else if (node.tagName === "BR") text += "\n";
-      else text += node.textContent;
-    }
+    const walk = (parent) => {
+      for (const node of parent.childNodes) {
+        if (node.nodeType === Node.TEXT_NODE) {
+          text += node.nodeValue;
+        } else if (node.dataset?.handle) {
+          text += `@${node.dataset.handle}`;
+        } else if (node.tagName === "BR") {
+          text += "\n";
+        } else {
+          // A block the engine put there is a line, and the newline it stands
+          // for is the thing that would otherwise vanish. Not before the first
+          // one: the browser wraps the *whole* content as readily as the tail
+          // of it, and that must not grow a leading blank line.
+          if (BLOCK.has(node.tagName) && text && !text.endsWith("\n")) text += "\n";
+          walk(node);
+        }
+      }
+    };
+    walk(this.root);
     return text;
   }
 
@@ -289,11 +332,30 @@ export class PromptBox {
     else this.closeMenu();
   }
 
+  /** Text in from outside the box, always plain. Serves both `paste` and
+   *  `drop` — the same event shape under two names, `dataTransfer` for the one
+   *  and `clipboardData` for the other. */
   onPaste(event) {
     event.preventDefault();
-    const text = event.clipboardData?.getData("text/plain") ?? "";
+    const source = event.clipboardData ?? event.dataTransfer;
+    const text = source?.getData("text/plain") ?? "";
+    // A drop lands where it was dropped, not where the caret was: the selection
+    // at that moment is still the text being dragged, so inserting at it would
+    // put the text back where it came from. Best effort — an engine without
+    // `caretRangeFromPoint` falls through to the caret, which is where a paste
+    // goes anyway.
+    if (event.dataTransfer) this.caretAt(event);
     this.insertText(text.replace(/\r\n?/g, "\n"));
     this.onEdit();
+  }
+
+  /** Put the caret where a pointer event landed. */
+  caretAt(event) {
+    const range = document.caretRangeFromPoint?.(event.clientX, event.clientY);
+    if (!range || !this.root.contains(range.startContainer)) return;
+    const selection = window.getSelection();
+    selection?.removeAllRanges();
+    selection?.addRange(range);
   }
 
   onKeyDown(event) {
