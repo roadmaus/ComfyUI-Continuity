@@ -1,8 +1,5 @@
 # Changelog
 
-What changed in each release, newest first. The [README](README.md) describes
-what the node does; this describes what moved.
-
 ## 2.2.1
 
 All from [#12](https://github.com/roadmaus/ComfyUI-MiniMax-Creator/issues/12).
