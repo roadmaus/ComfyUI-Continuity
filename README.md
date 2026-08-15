@@ -574,7 +574,7 @@ Set `COMFYUI_BASE` as well when `--base-directory` points somewhere else — on 
 Desktop install the running tree and the folder holding `custom_nodes`, `models` and
 `output` are usually two different places.
 
-The design decisions, in full, are in [PLAN.md](PLAN.md).
+The design decisions, in full, are in [docs/PLAN.md](docs/PLAN.md).
 
 ## License
 
