@@ -46,5 +46,9 @@
   "MiniMaxH3RefinePass": {
     "display_name": "MiniMax H3 리파인 패스",
     "description": "2패스 렌더링의 두 번째 패스: H3 AV 레이턴트의 영상 쪽을 업스케일해 스케줄 중간부터 다시 샘플링하며, 사운드트랙에는 노이즈를 더하지 않습니다. render.emit이 그래프에 기록합니다."
+  },
+  "MiniMaxH3FacePass": {
+    "display_name": "MiniMax H3 얼굴 패스",
+    "description": "디코드된 패스의 얼굴을 프레임마다 잘라내어 얼굴이 크게 잡히는 캔버스에서 다시 그린 뒤 원본에 합성합니다. render.emit이 그래프에 기록합니다."
   }
 }

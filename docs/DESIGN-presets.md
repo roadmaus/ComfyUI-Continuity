@@ -90,7 +90,7 @@ and that the node already treats as one thing.
 
 | Section | What is in it | Owner today |
 |---|---|---|
-| **look** | `aspect`, `short_edge`, `upscale`, `sample_edge`, `refine_denoise` | the piece / the pre-stage |
+| **look** | `aspect`, `short_edge`, `upscale`, `sample_edge`, `refine_denoise`, `face` | the piece / the pre-stage |
 | **weights** | the whole `models` block — files, `dtype`, `route`, `devices` | the piece |
 | **speed** | `turbo` + every sampler widget | the node (blob + widgets) |
 | **prompt** | `prompt`, `soundscape`, `music`, `refined` | the piece / the shot |

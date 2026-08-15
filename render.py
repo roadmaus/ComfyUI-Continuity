@@ -58,6 +58,7 @@ from . import accel, canvas, compile as compiler, media, models, outputs, settin
 
 SEGMENT_NODE = "MiniMaxH3TimelineSegment"
 REFINE_NODE = "MiniMaxH3RefinePass"
+FACE_NODE = "MiniMaxH3FacePass"
 PASS_FRAMES_NODE = "MiniMaxH3PassFrames"
 PASS_AUDIO_NODE = "MiniMaxH3PassAudio"
 REEL_NODE = "MiniMaxH3Reel"
@@ -136,7 +137,10 @@ def compile_all(payloads, labels):
     out = []
     for index, payload in enumerate(payloads):
         where = labels[index] if index < len(labels) else f"Segment {index + 1}"
-        if "clip" in payload:
+        # `None` is a payload that was never built — a pass with no face repair
+        # in the face-conditioning list — and reads the same way a clip does:
+        # there is nothing here to compile.
+        if payload is None or "clip" in payload:
             out.append(None)
             continue
         try:
@@ -200,6 +204,36 @@ def inherited_audio(graph, source, seconds):
     return graph.node(PASS_AUDIO_NODE, source=source[1], seconds=seconds).out(0)
 
 
+def face_payload(payload, face):
+    """The payload the face pass's *conditioning* is built from.
+
+    The crop is a square of one face, so two kinds of thing are taken out of the
+    segment before it is compiled again at that canvas:
+
+    - **The face settings themselves**, so the pass compiled here does not ask
+      for a face pass of its own. This is what ends the recursion, the way a
+      pinned target ends the refine pass's.
+    - **Start and end frames.** A keyframe is a condition latent for the whole
+      picture, injected at every step; inside a face crop it is an instruction to
+      match a composition that is not in the crop. References survive — a
+      character sheet is exactly what a face crop wants, and it is what the
+      reference workflows lean on — so a segment with a keyframe compiles here as
+      the text-or-reference pass it becomes without one, and routes accordingly.
+
+    The seam inputs are dropped by the emitter rather than here: they are node
+    links, not blob fields, and they are anchors for the full canvas for the same
+    reason a keyframe is.
+    """
+    request = {key: value for key, value in payload["request"].items() if key != "face"}
+    assets = [asset for asset in (request.get("assets") or [])
+              if isinstance(asset, dict) and asset.get("role") == "reference"]
+    if assets or "assets" in request:
+        request["assets"] = assets
+    return {"request": request,
+            "canvas": {"width": face.width, "height": face.height, "ratio": 1.0,
+                       "label": "1:1", "from_image": False, "clamped": False}}
+
+
 def emit(payloads, labels, weights, sampling, acceleration, unique_id,
          filename_prefix=FILENAME_PREFIX):
     """-> the graph, which the caller finalizes. Nothing comes back out of it.
@@ -231,7 +265,18 @@ def emit(payloads, labels, weights, sampling, acceleration, unique_id,
                     for index, payload in enumerate(payloads)]
     compiled = compile_all(payloads, labels)
     where = routed(compiled, labels)
-    models.check(weights, set(where), where)
+
+    # The face pass's conditioning is a second compile of the same segment at
+    # the crop canvas, and dropping the keyframes can land it on the other
+    # checkpoint — so it is compiled here, before the loaders are built, and its
+    # route joins the set they are built from. `None` wherever a pass is not
+    # having its face repaired, so the list indexes alongside `compiled`.
+    face_payloads = [face_payload(payloads[index], one.face) if one and one.face else None
+                     for index, one in enumerate(compiled)]
+    face_compiled = compile_all(face_payloads, labels) if any(face_payloads) \
+        else [None] * len(payloads)
+    where = {**routed(face_compiled, labels), **where}
+    models.check(weights, set(where), where, face=any(face_payloads))
 
     graph = GraphBuilder()
     links = models.emit_links(graph, weights, set(where))
@@ -403,8 +448,61 @@ def emit(payloads, labels, weights, sampling, acceleration, unique_id,
             **({"head": one.feather} if one.feather > 1 else {}),
             **({"tail": one.ends_feather} if one.ends_feather > 1 else {}),
             **({"reel": reel} if reel is not None else {}))
-        reel = written.out(0)
-        decoded.append(("pass", written.out(1)))
+        source = written
+
+        if one.face:
+            # The face pass, on the pass as delivered: it reads the frames back
+            # off the spill, re-draws the face at a canvas where it is large,
+            # and writes a replacement. It goes *here*, after the pass is
+            # written and before the next segment is emitted, because what the
+            # next seam inherits is `decoded[]` — put at the end of the render
+            # instead, every seam would have continued from a face this pass
+            # then went on to repair.
+            #
+            # Its conditioning is the second segment node, compiled at the crop
+            # canvas so the references are encoded at the size they are seen at.
+            # No seam links on it: `prev_image` and the rest anchor the full
+            # canvas, and there is no full canvas in a crop.
+            face = face_compiled[index]
+            face_inputs = {"clip": links.clip,
+                           "segment_data": json.dumps(face_payloads[index],
+                                                      sort_keys=True)}
+            if face.encodes_video():
+                face_inputs["vae"] = links.vae
+            if face.encodes_audio():
+                face_inputs["audio_vae"] = links.audio_vae
+            if links.model_fl2va is not None:
+                face_inputs["model_fl2va"] = links.model_fl2va
+            if links.model_ref2va is not None:
+                face_inputs["model_ref2va"] = links.model_ref2va
+            crop = graph.node(SEGMENT_NODE, **face_inputs)
+
+            # Patched exactly as the passes are — the LoRAs come with the
+            # segment node, cfg 1.0 skips the negative, the accelerators and the
+            # preview decoder sit in the same places — because it is the same
+            # model answering a smaller question.
+            crop_model = crop.out(0)
+            if sampling.shifted():
+                crop_model = graph.node(
+                    "MiniMaxH3SigmaShift", model=crop_model,
+                    shift_video=sampling.shift_video,
+                    shift_audio=sampling.shift_audio).out(0)
+            crop_model = accel.graph_apply(graph, crop_model, acceleration, sampling.steps)
+            crop_model = models.graph_preview(graph, crop_model, weights)
+            source = graph.node(
+                FACE_NODE, model=crop_model, positive=crop.out(1),
+                negative=graph.node("ConditioningZeroOut",
+                                    conditioning=crop.out(1)).out(0),
+                vae=links.vae, audio_vae=links.audio_vae,
+                source=written.out(1), reel=written.out(0),
+                detector=weights.sam3 or "",
+                width=one.face.width, height=one.face.height,
+                seed=sampling.seed + index, steps=sampling.steps, cfg=sampling.cfg,
+                sampler_name=sampling.sampler_name, scheduler=sampling.scheduler,
+                denoise=one.face.denoise)
+
+        reel = source.out(0)
+        decoded.append(("pass", source.out(1)))
 
     emit_tail(graph, reel, unique_id, filename_prefix)
     return graph

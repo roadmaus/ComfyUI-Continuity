@@ -76,6 +76,10 @@ export const ICONS = {
   pause: `<path d="M8 5v14M16 5v14"/>`,
   scissors: `<circle cx="6" cy="6" r="2.4"/><circle cx="6" cy="18" r="2.4"/><path d="M8 7.4L20 18M8 16.6L20 6"/>`,
   dice: `<rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.2"/><circle cx="15.5" cy="15.5" r="1.2"/><circle cx="12" cy="12" r="1.2"/>`,
+  // Back round to where it was: the seed the last queue ran on, put back. An
+  // arrow returning to its own start, which is what the button does — beside
+  // `dice`, whose whole job is the opposite.
+  rewind: `<path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1"/><path d="M3 4v5h5"/>`,
   sliders: `<path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/>`,
   // The seam between two shots: the second picks up where the first left off.
   link: `<path d="M9 12h6"/><path d="M11 8H8a4 4 0 000 8h3M13 8h3a4 4 0 010 8h-3"/>`,
@@ -147,6 +151,29 @@ export function keepScroll(element) {
   return element;
 }
 
+/**
+ * Make an asset chip's thumbnail the way to swap the file behind it.
+ *
+ * The thumbnail is the part of the chip that *is* the file, so it is where
+ * "point this at something else" belongs. Removing and re-adding renumbers the
+ * handle, which means rewriting every sentence in the prompt that names it —
+ * for the common act of trying the same reference with a different picture,
+ * that is the whole edit for none of the change.
+ */
+export function swappable(thumb, { title, onclick }) {
+  thumb.classList.add("mmc-asset-swap");
+  thumb.title = title;
+  thumb.setAttribute("role", "button");
+  thumb.setAttribute("tabindex", "0");
+  thumb.addEventListener("click", onclick);
+  thumb.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    onclick(event);
+  });
+  return thumb;
+}
+
 /** Close-on-outside-click / Escape, shared by every popover. */
 export function dismissable(node, onClose) {
   floatAbove(node);
@@ -202,6 +229,13 @@ export function mountOverlay(overlay, onEscape) {
 /** Anchor a popover to a pill, kept inside the viewport. */
 export function placeNear(popover, anchor, { above = true } = {}) {
   const place = () => {
+    // The pill this hangs off may be gone: a popover whose rows commit — the
+    // face pass's, the two-pass section's — re-renders the node under itself,
+    // and the button that was clicked is replaced by an identical one in the
+    // same place. A detached element measures (0, 0, 0, 0), so re-placing
+    // against it would throw the popover into the top-left corner. Its current
+    // position is still the right one, so the answer is to leave it there.
+    if (anchor.isConnected === false) return;
     const rect = anchor.getBoundingClientRect();
     const box = popover.getBoundingClientRect();
     const left = Math.max(8, Math.min(rect.left, window.innerWidth - box.width - 8));

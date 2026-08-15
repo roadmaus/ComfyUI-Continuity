@@ -193,7 +193,22 @@ export const css = `
 /* The card keeps showing the typed sentence because that is what the shot is
    recognised by — dimmed, because it is not what the shot queues. */
 .mmc-tl-card-prompt.superseded { opacity: .42; }
-.mmc-tl-card-meta { color: var(--mmc-dim); font-size: 11px; }
+.mmc-tl-card-meta {
+  color: var(--mmc-dim); font-size: 11px;
+  display: flex; align-items: center; gap: 6px;
+}
+/* This shot's half of the face pass. Unlit while the shot is opted out, so a
+   strip tells you at a glance which cards are being repaired. */
+.mmc-tl-card-face {
+  border: 0; padding: 1px 6px; border-radius: 6px; cursor: pointer;
+  background: var(--mmc-surface-3); color: var(--mmc-dim);
+  font-size: 10px; font-family: inherit; margin-left: auto;
+  /* The narrowest card wraps its meta text onto two lines; the chip is the
+     part that must stay readable, so it neither shrinks nor breaks. */
+  flex: none; white-space: nowrap;
+}
+.mmc-tl-card-face.on { background: rgba(90, 150, 255, 0.18); color: var(--mmc-blue); }
+.mmc-tl-card-face:hover { filter: brightness(1.25); }
 .mmc-tl-card-foot { display: flex; align-items: center; gap: 4px; }
 .mmc-tl-edit {
   height: 26px; padding: 0 12px; border-radius: 8px; background: var(--mmc-surface-3);
@@ -550,14 +565,44 @@ export const css = `
 .mmc-pill-static { cursor: default; }
 .mmc-pill-static:hover { background: var(--mmc-surface-2); }
 .mmc-pill-static svg { color: var(--mmc-dim); }
-.mmc-seed-dice { display: flex; align-items: center; padding: 0 4px; }
-.mmc-seed-dice svg { width: 15px; height: 15px; stroke: currentColor; fill: none;
-  stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-.mmc-seed-input {
-  width: 92px; background: none; border: 0; outline: none; color: var(--mmc-text);
-  font-family: inherit; font-size: 13px; text-align: center; padding: 0;
+/* The seed pill's two icon buttons — the die that rolls it, the arrow that puts
+   the last one back — under one rule, because they sit side by side and any
+   difference between them reads as a mistake rather than as a distinction. The
+   arrow inherited neither: an SVG in a button with no flex sits on the text
+   baseline, so it rode above the die, and .mmc-pill svg drew it a pixel larger
+   at 16. Centred both ways and the same 15px for both. */
+.mmc-seed-dice, .mmc-seed-last {
+  display: flex; align-items: center; justify-content: center;
+  /* Narrower than a stepper's +/-, which is what .mmc-step is sized for: two
+     34px boxes around 15px of glyph put 68px of nothing in front of the digits.
+     Still a 26px target, and the row's rhythm is set by the ink, not the box. */
+  width: 22px; padding: 0 2px;
 }
-.mmc-seed-mode { font-size: 11px; padding: 0 8px 0 4px; }
+.mmc-seed-dice svg, .mmc-seed-last svg {
+  width: 15px; height: 15px; stroke: currentColor; fill: none;
+  stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
+}
+/* The die is a closed square and the arrow an open arc, so at equal stroke the
+   arrow reads lighter than its neighbour. A hair more weight, not a larger
+   glyph — the boxes stay identical. */
+.mmc-seed-last svg { stroke-width: 1.85; }
+/* The seed is an identifier, not a quantity — nobody reads it as one billion
+   and something, they compare it against another one and copy it. So it is set
+   the way the sheet sets a hash: mono, tabular, every digit in its own column,
+   which is what makes "is this the same seed" answerable at a glance. The width
+   comes from the digit count (see samplingBar) and one ch is one digit in this
+   face; the bounds below are guard rails, not the size. */
+.mmc-seed-input {
+  background: none; border: 0; outline: none; color: var(--mmc-text);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: 12.5px; text-align: center; padding: 0;
+  min-width: 5ch; max-width: 21ch;
+}
+/* Dim on "fixed" — the default, and the state where nothing happens to the seed
+   between queues. The three that do move it read at full strength. */
+.mmc-seed-mode { font-size: 11px; padding: 0 8px 0 4px; color: var(--mmc-off); }
+.mmc-seed-mode.on { color: var(--mmc-text); }
 /* Sampler lists are long; the popover scrolls rather than running off screen. */
 .mmc-pop-scroll { max-height: 320px; overflow-y: auto; min-width: 190px; }
 

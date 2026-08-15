@@ -180,6 +180,43 @@ def write(images, audio, fps, name=None):
     return spec
 
 
+def rewrite(spec, blocks, name=None):
+    """The same pass with new pictures: -> a spec for the rewritten one.
+
+    `blocks` yields IMAGE batches in play order, together as long as the source
+    and the same size — a caller that repairs a pass a chunk at a time, so the
+    rewritten pass is never held whole any more than the original was. What
+    comes back is the source spec with a new frames file under it.
+
+    **The sound is not rewritten, and not copied either: the new spec points at
+    the same file.** A pass that has been repaired in the picture has the
+    soundtrack it already had — the one the user heard when they decided the
+    picture needed work — and re-deriving it would be a re-roll of something
+    nobody asked to change. Two specs naming one audio file is safe: spills are
+    deleted by age, never by whoever is finished with them.
+    """
+    frames_path, _, meta_path = _paths(name or uuid.uuid4().hex)
+    written = 0
+    try:
+        with open(frames_path, "wb") as handle:
+            for block in blocks:
+                handle.write((block * 255).clamp(0, 255).byte().cpu().numpy().tobytes())
+                written += int(block.shape[0])
+    except OSError as exc:
+        raise SpillError(f"could not write this pass to {frames_path}: {exc}") from exc
+
+    if written != int(spec["frames"]):
+        raise SpillError(
+            f"a rewritten pass has to be as long as the one it replaces: "
+            f"{written} frames written over {spec['frames']}")
+
+    out = {**spec, "frames_path": frames_path, "frames": written}
+    with open(meta_path, "w", encoding="utf-8") as handle:
+        json.dump(out, handle, sort_keys=True)
+    prune()
+    return out
+
+
 def open_frames(spec):
     """The pass's frames as a read-only memmap, shaped (N, H, W, 3) uint8.
 
@@ -227,6 +264,36 @@ def frames(spec, count, at="tail"):
     # whose contents depend on the file still being there. It is the seam's
     # width — a frame, or at most 39 — so the copy is nothing.
     return torch.from_numpy(np.array(window)).float().div_(255.0)
+
+
+def sound_between(spec, start_seconds, end_seconds):
+    """The soundtrack under one stretch of a pass, as an AUDIO dict.
+
+    What `sound` does at the ends, said about the middle: the face pass
+    re-generates a window of frames and has to hand the model the sound that
+    plays under exactly those frames, or the mouth it draws is answering
+    somebody else's syllable. Clamped to what the pass has rather than padded —
+    the window is derived from the frame count, so anything outside it is
+    rounding at the last sample.
+    """
+    import torch
+
+    if "audio_path" not in spec:
+        raise SpillError("that pass decoded no sound")
+    rate, channels = int(spec["rate"]), int(spec["channels"])
+    have = int(spec["samples"])
+    start = max(0, min(have, int(round(float(start_seconds) * rate))))
+    end = max(start + 1, min(have, int(round(float(end_seconds) * rate))))
+    _touch(spec)
+    try:
+        data = np.memmap(spec["audio_path"], dtype=np.float32, mode="r",
+                         shape=(channels, have))
+    except OSError as exc:
+        raise SpillError(
+            f"this render's sound is no longer on disk at {spec['audio_path']} — "
+            f"see the frames it went with. Queue the render again.") from exc
+    window = np.array(data[:, start:end])            # copied — see `frames`
+    return {"waveform": torch.from_numpy(window).unsqueeze(0), "sample_rate": rate}
 
 
 def sound(spec, seconds, at="tail"):

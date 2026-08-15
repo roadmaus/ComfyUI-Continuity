@@ -56,6 +56,23 @@ export function loadCatalog(onReady) {
   return catalog;
 }
 
+/** Ask again, and re-render when the answer differs from what is on screen.
+ *
+ * `loadCatalog` answers once and holds it for the life of the page, which is
+ * right for a pill that redraws on every commit and wrong the moment a file is
+ * copied into a model folder while the tab is open — the listing that never
+ * expires is a file that can never be picked. Opening the popover is the one
+ * moment the listing is being read rather than displayed, so that is where the
+ * question is asked again. `listModels` has its own 60s window, so a run of
+ * opens is one request. */
+export function refreshCatalog(onChanged) {
+  listModels().then((body) => {
+    const same = JSON.stringify(body) === JSON.stringify(catalog);
+    catalog = body;
+    if (!same) onChanged?.(body);
+  }).catch(() => {});           // a failed re-ask leaves what is already here
+}
+
 export const catalogFiles = () => catalog?.files ?? {};
 
 /** The raw per-folder listings (`diffusion_models`, `text_encoders`, `vae`) —
@@ -81,14 +98,16 @@ export const hasPreviewOverride = () => catalog?.preview_override !== false;
  * @param {object} spec.models       the state's weights block, mutated in place
  * @param {string[]} spec.checkpoints the checkpoints the *modes* derive; a
  *   forced route collapses this to one, so it is passed raw and resolved here
+ * @param {boolean} [spec.face]     whether a pass in this render runs the face
+ *   pass, which is what decides whether the detector counts as missing
  * @param {() => void} spec.onChange after a pick
  * @param {object} [spec.turbo]      `{container, widgetIO}` — the state or
  *   timeline that owns the turbo switch, and the widget IO the switch writes
  *   through when its file is swapped while engaged. Absent, no turbo row.
  */
-export function weightsPill({ models, checkpoints, onChange, turbo }) {
+export function weightsPill({ models, checkpoints, onChange, turbo, face = false }) {
   const routed = S.routedCheckpoints(models, checkpoints);
-  const missing = S.missingModels(models, S.requiredModels(routed));
+  const missing = S.missingModels(models, S.requiredModels(routed, face));
   // What the pill reports when everything is picked, in order of how much it
   // changes about the run: which cards it is spread over first, then precision,
   // then nothing worth saying.
@@ -113,25 +132,25 @@ export function weightsPill({ models, checkpoints, onChange, turbo }) {
           models: missing.map((f) => t(S.MODEL_LABEL[f])).join(", "),
         })
       : t("Which checkpoints, text encoder and VAEs this node loads."),
-    onclick: (event) => openWeightsPopover(event.currentTarget, { models, checkpoints, onChange, turbo }),
+    onclick: (event) => openWeightsPopover(event.currentTarget, { models, checkpoints, onChange, turbo, face }),
   }, [icon("weights", 16), el("span", { text: label })]);
 }
 
 /**
- * Six rows, each opening the file list for its folder.
+ * A row per file, each opening the list for its folder.
  *
  * Rebuilt in place after every pick rather than closed: setting up a machine
  * means setting all six, and closing the popover between each one would make
  * that six round trips through a pill.
  */
-export function openWeightsPopover(anchor, { models, checkpoints, onChange, turbo }) {
+export function openWeightsPopover(anchor, { models, checkpoints, onChange, turbo, face = false }) {
   const pop = el("div", { class: "mmc-pop mmc-weights-pop" });
   const body = el("div");
 
   // Recomputed inside `render` rather than captured: forcing a route changes
   // which of the two checkpoints is required, and that has to show on the row
   // the moment the route above it is picked.
-  const required = () => new Set(S.requiredModels(S.routedCheckpoints(models, checkpoints)));
+  const required = () => new Set(S.requiredModels(S.routedCheckpoints(models, checkpoints), face));
 
   const render = () => {
     const files = catalogFiles();
@@ -284,6 +303,7 @@ export function openWeightsPopover(anchor, { models, checkpoints, onChange, turb
   // rather than block: the rows are meaningful without it — they say what is
   // picked — and the file lists fill in behind them. The LoRA names likewise,
   // fetched here rather than at load because only this popover wants them.
-  if (!catalog) loadCatalog(() => pop.isConnected && render());
+  if (catalog) refreshCatalog(() => pop.isConnected && render());
+  else loadCatalog(() => pop.isConnected && render());
   if (turbo) loadLoraNames(() => pop.isConnected && render());
 }

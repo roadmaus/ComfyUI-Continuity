@@ -8,7 +8,7 @@
 // with the node's, because there is only one editor.
 
 import { probe, viewUrl } from "./api.js";
-import { el, icon, mountOverlay } from "./dom.js";
+import { el, icon, mountOverlay, swappable } from "./dom.js";
 import { CreatorEditor } from "./editor.js";
 import { t } from "./i18n.js";
 import { openLoras } from "./loras.js";
@@ -18,7 +18,7 @@ import * as P from "./presets.js";
 import { PromptBox, openEditorSheet } from "./prompt.js";
 import { openSettings } from "./settings.js";
 import { openTrim } from "./trim.js";
-import { openAspectPopover, openResolutionPopover, openChoicePopover, stepperPill, aspectGlyph, PILL_GLYPH } from "./pills.js";
+import { openAspectPopover, openResolutionPopover, openChoicePopover, facesPill, stepperPill, aspectGlyph, PILL_GLYPH } from "./pills.js";
 import { refine, refineButton, chosenModel as refineModel } from "./refine.js";
 import { samplingBar, widgetIO } from "./sampling.js";
 import { Stage } from "./stage.js";
@@ -301,6 +301,14 @@ class Timeline {
     const thumb = asset.kind === "image"
       ? el("img", { class: "mmc-asset-thumb", src: viewUrl(asset.filename, { preview: true }), alt: "" })
       : el("span", { class: "mmc-asset-thumb", text: asset.kind === "video" ? "▶" : "♪" });
+    // The pool is the one place a swap pays the most: @char rides into every
+    // segment that cites it, so re-casting the character is one click here
+    // rather than a re-add and a rewrite in each of them.
+    swappable(thumb, {
+      title: t("Swap the file behind @{handle} — the handle stays, so every citation still fits.",
+               { handle: asset.handle }),
+      onclick: () => this.replacePoolAsset(asset),
+    });
     return el("div", {
       class: `mmc-asset${everywhere || cited.length ? "" : " idle"}`,
       title: everywhere || cited.length
@@ -409,6 +417,25 @@ class Timeline {
       if (picked.trim) entry.trim = picked.trim;
       this.timeline.assets.push(entry);
     }
+    this.commit();
+  }
+
+  /** Point a pool reference at a different file, keeping its handle — see the
+   *  editor's `replaceAsset`, which this is the pool-side twin of. */
+  async replacePoolAsset(asset) {
+    const chosen = await openPicker({
+      kinds: [asset.kind, "renders"],
+      kind: asset.kind,
+      only: asset.kind,
+      single: true,
+      capacity: () => ({ used: 0, max: 1, filesLeft: 1 }),
+    });
+    const picked = chosen?.[0];
+    if (!picked || picked.path === asset.filename) return;
+    asset.filename = picked.path;
+    if (picked.trim) asset.trim = picked.trim;
+    else delete asset.trim;
+    if (asset.kind === "video") asset.track = picked.track ?? S.DEFAULT_TRACK;
     this.commit();
   }
 
@@ -1144,6 +1171,25 @@ class Timeline {
     if (loras) meta.push(t(loras === 1 ? "{count} LoRA" : "{count} LoRAs", { count: loras }));
     if (rewrite) meta.push(using ? t("refined") : t("refined (off)"));
 
+    // The card's half of the face pass, and only while the piece is running
+    // one: a switch for something that is not happening is a switch that lies.
+    // Two states, because with the piece on, "on" and "inherit" are the same
+    // thing — what a card gets to say is that *this* shot does not need it.
+    const repaired = S.faceOn(this.timeline, segment);
+    const faceChip = this.timeline.face?.on ? el("button", {
+      class: `mmc-tl-card-face${repaired ? " on" : ""}`,
+      text: repaired ? t("face") : t("no face"),
+      title: repaired
+        ? t("This shot's face is re-drawn after it renders. Click to leave it alone.")
+        : t("This shot is left as it renders. Click to have its face re-drawn."),
+      onclick: (event) => {
+        event.stopPropagation();
+        if (repaired) segment.face = "off";
+        else delete segment.face;
+        this.commit();
+      },
+    }) : null;
+
     return el("div", {
       class: "mmc-tl-card",
       style: { width: `${cardWidth(seconds)}px` },
@@ -1178,7 +1224,12 @@ class Timeline {
         text: prompt || t("No prompt yet"),
         title: using && typed ? t("Not queued — this card's rewrite is. Open it to read or revert.") : "",
       }),
-      ...(meta.length ? [el("div", { class: "mmc-tl-card-meta", text: meta.join(" · ") })] : []),
+      ...(meta.length || faceChip
+        ? [el("div", { class: "mmc-tl-card-meta" }, [
+            ...(meta.length ? [el("span", { text: meta.join(" · ") })] : []),
+            ...(faceChip ? [faceChip] : []),
+          ])]
+        : []),
       el("div", { class: "mmc-tl-card-foot" }, [
         el("button", { class: "mmc-tl-edit", text: t("Edit"), onclick: () => this.edit(index) }),
         el("button", {
@@ -2359,12 +2410,19 @@ export class TimelineBody {
       // A chained timeline legitimately runs some shots on one checkpoint and
       // some on the other, so the pill is asked about the set rather than
       // about one — a Ref2VA it never reaches for is not missing.
-      trailing: [weightsPill({
-        models: this.timeline.models,
-        checkpoints: S.timelineCheckpoints(this.timeline),
-        onChange: () => this.commit(),
-        turbo: { container: this.timeline, widgetIO: this.widgetIO() },
-      })],
+      trailing: [
+        facesPill({ target: this.timeline, commit: () => this.commit() }),
+        weightsPill({
+          models: this.timeline.models,
+          checkpoints: S.timelineCheckpoints(this.timeline),
+          // Only when a shot on the strip actually runs the pass: a piece with
+          // it on and every card opted out loads no detector, and a weights
+          // pill saying one is missing would be reporting a file nothing opens.
+          face: S.faceAnywhere(this.timeline),
+          onChange: () => this.commit(),
+          turbo: { container: this.timeline, widgetIO: this.widgetIO() },
+        }),
+      ],
     });
   }
 }

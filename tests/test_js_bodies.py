@@ -80,7 +80,7 @@ DOM = """
 class Node {
   constructor(tag) {
     this.tagName = tag; this.children = []; this.style = {}; this.attrs = {};
-    this.className = ""; this.textContent = ""; this.listeners = {}; this.isConnected = false;
+    this.className = ""; this.textContent = ""; this.listeners = {};
     this.classList = { add: () => {}, remove: () => {}, toggle: () => {}, contains: () => false };
     this.dataset = {};
   }
@@ -100,21 +100,32 @@ class Node {
   removeEventListener() {}
   appendChild(c) { this.children.push(c); c.parent = this; return c; }
   append(...c) { c.forEach((x) => this.appendChild(x)); }
-  // A browser has nowhere to put the focus when the element holding it leaves
-  // the document, so it puts it nowhere — which is exactly the failure this
-  // models: a box rebuilt under the caret stops accepting what is typed into it.
+  // The old children are detached, as a real one detaches them: `isConnected`
+  // is read off the parent chain, and a node left pointing at its former parent
+  // would answer that it is still in the document.
+  //
+  // And a browser has nowhere to put the focus once the element holding it has
+  // left, so it puts it nowhere — which is the failure the refine panel's boxes
+  // exist to survive: one rebuilt under the caret stops taking what is typed.
   replaceChildren(...c) {
     const dropped = (n) => {
       if (globalThis.document.activeElement === n) globalThis.document.activeElement = null;
       (n.children ?? []).forEach(dropped);
     };
-    this.children.forEach(dropped);
+    this.children.forEach((x) => {
+      if (x.parent === this) x.parent = null;
+      dropped(x);
+    });
     this.children = [];
     c.forEach((x) => this.appendChild(x));
   }
   insertBefore(n) { return this.appendChild(n); }
   cloneNode() { return new Node(this.tagName); }
-  remove() {}
+  remove() {
+    if (!this.parent) return;
+    this.parent.children = this.parent.children.filter((c) => c !== this);
+    this.parent = null;
+  }
   normalize() {}
   contains() { return false; }
   /** Enough of a selector match for `PromptBox.claim`, which asks whether a
@@ -134,6 +145,15 @@ class Node {
       node = node.parent;
     }
     return null;
+  }
+  /** Whether this node is in the document, walked the way the real one is —
+   *  `placeNear` asks, because a popover whose anchor was re-rendered under it
+   *  must not be placed against a detached element. */
+  get isConnected() {
+    let node = this;
+    while (node.parent) node = node.parent;
+    return node === globalThis.document.body || node === globalThis.document.head
+        || node === globalThis.document.documentElement;
   }
   focus() { globalThis.document.activeElement = this; }
   blur() { if (globalThis.document.activeElement === this) globalThis.document.activeElement = null; }
@@ -186,15 +206,31 @@ globalThis.cancelAnimationFrame = () => {};
 // fits — see TimelineBody.fitLane. Nothing in this DOM has a width, so the
 // measure bails and the observer has nothing to report; it exists so that
 // registering one is not a crash.
-globalThis.ResizeObserver = class { observe() {} unobserve() {} disconnect() {} };
+// Recorded rather than inert: what a popover does when it *grows* is the thing
+// worth testing — see the placement check.
+globalThis.__observers = [];
+globalThis.ResizeObserver = class {
+  constructor(fn) { this.fn = fn; globalThis.__observers.push(this); }
+  observe() {} unobserve() {} disconnect() { this.dead = true; }
+  fire() { if (!this.dead) this.fn([]); }
+};
 globalThis.Image = class { set src(v) {} };
 globalThis.fetch = async () => ({ ok: true, json: async () => ({}) });
 export const NodeClass = Node;
 """
 
 STUBS = {
-    "app.js": "export const app = { registerExtension: (e) => { globalThis.__ext = e; },"
-              " graph: null, canvas: null };",
+    # `queuePrompt` and `graphToPrompt` are here because the pack wraps them —
+    # what the last queue ran on is read off the serialized prompt, so the stub
+    # has to be able to hand one back.
+    "app.js": """
+export const app = {
+  registerExtension: (e) => { globalThis.__ext = e; },
+  graph: null, canvas: null,
+  async queuePrompt() { return this.graphToPrompt(); },
+  async graphToPrompt() { return globalThis.__prompt ?? { output: {} }; },
+};
+""",
     # `fetchApi` answers the settings route the way the server does, and records
     # what was posted — which is what lets the settings page be exercised here.
     "api.js": """
@@ -220,7 +256,10 @@ CHECK = """
 await import("./dom.mjs");
 await import("./js/minimax_creator.js");
 const S = await import("./js/minimax_creator/state.js");
+const { app } = await import("../scripts/app.js");
 const ext = globalThis.__ext;
+// The seed memory is installed here, the same way the frontend installs it.
+await ext.setup?.();
 
 const out = { registered: ext?.name ?? null, nodes: {}, still: null, errors: [] };
 
@@ -228,7 +267,12 @@ const fakeNode = (comfyClass, widgetName, blob) => ({
   comfyClass, id: 3, size: [400, 300], pos: [0, 0], title: comfyClass,
   widgets: [
     { name: widgetName, value: blob, type: "customtext", options: {}, computeSize: () => [0, 0] },
-    { name: "seed", value: 0 }, { name: "steps", value: 20 }, { name: "cfg", value: 1 },
+    // The after-generate control is a *linked* widget the frontend hangs off the
+    // seed, which is where the pack finds it — and it arrives on "randomize",
+    // which is the thing being overridden.
+    { name: "seed", value: 0,
+      linkedWidgets: [{ name: "control_after_generate", value: "randomize", options: {} }] },
+    { name: "steps", value: 20 }, { name: "cfg", value: 1 },
     { name: "sampler_name", value: "res_multistep" }, { name: "scheduler", value: "simple" },
   ],
   addDOMWidget(name, type, el) { this.dom = el; return { name, element: el }; },
@@ -877,6 +921,87 @@ try {
   out.errors.push(`face rule: ${error.message}`);
 }
 
+// ---- a popover outlives the row that opened it ------------------------------
+//
+// Rows that commit — the face pass's on/off, the two-pass section's — re-render
+// the node underneath the open popover, so the button that was clicked is
+// replaced by an identical one. The popover then grows (the face pass's knobs
+// appear), its ResizeObserver re-places it, and if that measures the *old*
+// button it measures nothing and the popover lands in the top-left corner.
+try {
+  const dom = await import("./js/minimax_creator/dom.js");
+  const row = dom.el("div");
+  const anchor = dom.el("button", { text: "faces off" });
+  row.appendChild(anchor);
+  document.body.appendChild(row);
+  // Measured only while it is in the document — a detached element really does
+  // report all zeros, and that is the whole of what goes wrong here.
+  anchor.getBoundingClientRect = () => (anchor.isConnected
+    ? { top: 700, left: 420, width: 60, height: 24, bottom: 724, right: 480 }
+    : { top: 0, left: 0, width: 0, height: 0, bottom: 0, right: 0 });
+  const pop = dom.el("div");
+  document.body.appendChild(pop);
+  dom.placeNear(pop, anchor);
+  const placed = { left: pop.style.left, top: pop.style.top };
+  // What committing does: the row is redrawn and the old button is detached.
+  row.replaceChildren(dom.el("button", { text: "faces" }));
+  globalThis.__observers.forEach((observer) => observer.fire());
+  out.placement = { placed, after: { left: pop.style.left, top: pop.style.top },
+                    anchorGone: anchor.isConnected === false };
+} catch (error) {
+  out.errors.push(`placement: ${error.message}`);
+}
+
+// ---- the seed does not move on its own, and the last one is reachable -------
+//
+// A render here is minutes, and the seed widget is hidden — so the frontend's
+// own "randomize" would roll the one variable being held still, invisibly. The
+// node opens on "fixed" instead, and because a fixed seed is only half the
+// answer, the row also offers the seed the last queue actually ran on: the way
+// back to a shot worth keeping once the number has moved on.
+try {
+  const first = (root, cls) => {
+    let hit = null;
+    const walk = (n) => {
+      if (!hit && String(n.className ?? "").split(" ").includes(cls)) hit = n;
+      (n.children ?? []).forEach(walk);
+    };
+    walk(root);
+    return hit;
+  };
+  const node = fakeNode("MiniMaxH3Creator", "creator_data", ONE_SHOT);
+  await ext.nodeCreated(node);
+  const seed = node.widgets.find((w) => w.name === "seed");
+  const backButton = () => first(node.mmcBody.root, "mmc-seed-last");
+  out.seed = {
+    // Set at creation, over what the frontend handed us.
+    control: seed.linkedWidgets[0].value,
+    // The button is there from the start — it is how anyone finds out the
+    // feature exists — but nothing has been queued, so it is inert.
+    beforeQueue: !!backButton(),
+    beforeQueueOff: "disabled" in (backButton()?.attrs ?? {}),
+  };
+
+  // A queue goes out. What the server was asked to run is what gets remembered
+  // — read off the serialized prompt, not off the widget, because the widget is
+  // free to have moved on by then. Which is what happens next.
+  globalThis.__prompt = { output: { "3": { inputs: { seed: 4242 } } } };
+  app.graph = { _nodes: [node], setDirtyCanvas() {} };
+  await app.queuePrompt();
+  seed.value = 999;
+  node.mmcBody.render();
+
+  const back = backButton();
+  out.seed.afterQueue = !("disabled" in (back?.attrs ?? {}));
+  back?.listeners?.click?.[0]?.();
+  out.seed.restored = seed.value;
+  // ...and once the seed *is* that one, it goes inert again rather than
+  // offering a click that would change nothing.
+  out.seed.thenOff = "disabled" in (backButton()?.attrs ?? {});
+} catch (error) {
+  out.errors.push(`seed: ${error.message}`);
+}
+
 console.log(JSON.stringify(out));
 """
 
@@ -1097,5 +1222,23 @@ check("the prompt survives the round trip",
       report.get("switch", {}).get("promptKept"), True)
 check("the rebuilt body is not empty",
       report.get("switch", {}).get("rendered"), True)
+
+placement = report.get("placement", {})
+check("the popover is placed against the pill that opened it",
+      (placement.get("placed") or {}).get("top"), "592px")
+check("the row under it is redrawn and the pill it was placed against is gone",
+      placement.get("anchorGone"), True)
+check("...and the popover stays where it was rather than jumping to the corner",
+      placement.get("after"), placement.get("placed"))
+
+# The seed: fixed on arrival, and the last queued one always reachable.
+seed = report.get("seed", {})
+check("a fresh node opens on a fixed seed", seed.get("control"), "fixed")
+check("the way back to the last seed is on the row from the start",
+      seed.get("beforeQueue"), True)
+check("...inert until something has been queued", seed.get("beforeQueueOff"), True)
+check("after a queue it offers the seed that ran", seed.get("afterQueue"), True)
+check("...and clicking it puts that seed back", seed.get("restored"), 4242)
+check("...after which it is inert again", seed.get("thenOff"), True)
 
 passed(f"the frontend loads and all {len(report['nodes'])} bodies mount")

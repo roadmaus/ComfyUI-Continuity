@@ -126,6 +126,35 @@ check("a pass with no sound writes none", "audio_path" in silent, False)
 expect_error("...and says so rather than inventing silence",
              lambda: spill.sound(silent, 0.5), "decoded none")
 
+# ---- a pass repaired in the picture -----------------------------------------
+#
+# What the face pass writes back. The frames are new, the sound is the sound it
+# already had — and the new spec points at the *same* audio file rather than a
+# copy of it, because a pass whose face was redrawn did not have its soundtrack
+# re-decided.
+
+middle = spill.sound_between(spec, 10 / FPS, 15 / FPS)
+check("a window off the middle is the length it asked for",
+      int(middle["waveform"].shape[-1]), int(round(15 / FPS * RATE)) - int(round(10 / FPS * RATE)))
+check("...and is the sound under those frames",
+      round(float(middle["waveform"][0, 0, 0]), 3),
+      round(float(tone(30 / FPS)["waveform"][0, 0, int(round(10 / FPS * RATE))]), 3))
+expect_error("a window off a pass that decoded no sound",
+             lambda: spill.sound_between(silent, 0, 1), "decoded no sound")
+
+repaired = spill.rewrite(spec, [ramp(20) * 0 + 0.5, ramp(10) * 0 + 0.5])
+check("a rewritten pass is as long as the one it replaces",
+      repaired["frames"], spec["frames"])
+check("...and is a different file", repaired["frames_path"] != spec["frames_path"], True)
+check("...holding the new pictures",
+      round(float(spill.frames(repaired, 1)[0, 0, 0, 0]) * 255), 127)
+check("...while the original is left alone",
+      round(float(spill.frames(spec, 1)[0, 0, 0, 0]) * 255), 29)
+check("the sound is the same file, not a copy of it",
+      repaired["audio_path"], spec["audio_path"])
+expect_error("a rewrite that does not cover the pass",
+             lambda: spill.rewrite(spec, [ramp(4)]), "as long as the one it replaces")
+
 # ---- the failures a spill has that a tensor did not -------------------------
 
 gone = spill.write(ramp(4), None, FPS)

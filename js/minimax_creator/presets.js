@@ -297,7 +297,8 @@ const pick = (source, keys) => Object.fromEntries(
 export function capturePiece(timeline, io) {
   const blob = JSON.parse(S.serializeTimeline(timeline));
   return {
-    look: pick(blob, ["aspect", "short_edge", "upscale", "sample_edge", "refine_denoise"]),
+    look: pick(blob, ["aspect", "short_edge", "upscale", "sample_edge", "refine_denoise",
+                      "face"]),
     weights: blob.models ?? {},
     speed: { turbo: blob.turbo ?? null, row: readRow(io, SPEED_WIDGETS) },
     prompt: pick(blob, ["prompt", "soundscape", "music", "refined"]),
@@ -658,7 +659,8 @@ export function coverFromResult(result) {
  *  native has to put a node that did back, not leave it where it was. */
 function lookDefaults() {
   const empty = S.emptyTimeline();
-  return pick(empty, ["aspect", "short_edge", "upscale", "sample_edge", "refine_denoise"]);
+  return pick(empty, ["aspect", "short_edge", "upscale", "sample_edge", "refine_denoise",
+                      "face"]);
 }
 
 /** Re-handle a list of assets against what the target already has, so applying

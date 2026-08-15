@@ -234,6 +234,44 @@ many shots the clip holds and the second each one starts on.
 It is a button rather than a queue-time step on purpose: you should see what the
 model will read *before* five minutes of sampling, not infer it from the result.
 
+## Faces
+
+H3 draws a face badly in proportion to how small the head is **in frame**. It is
+not a resolution problem — it is there at 768 and above — so no upscaler reaches
+it: an upscaler re-resolves what was drawn, and what was drawn was a smudge.
+
+The **faces** pill on the sampler row switches on a second, small generation per
+pass. After a pass is rendered, its face is tracked frame by frame, cropped out
+so it fills a 512 px canvas, re-drawn by H3 itself at a low denoise — low enough
+that it stays frame-aligned and keeps the lipsync the soundtrack already has —
+and composited back under a feathered mask. Only the face box is pasted; the
+wider crop is context for the sampler, not content for the composite.
+
+Two knobs, both in the pill's popover:
+
+- **crop at** — the canvas each crop is generated at. 512 by default; the face
+  fills it either way, so most of what a larger one buys is the hair around it.
+- **redraw** — how much of the schedule the crop re-runs. This is a *ceiling*:
+  it is scaled down frame by frame by how large the face already is, so a shot
+  where somebody walks towards the camera is synthesised where the head is tiny
+  and barely touched by the time it is close.
+
+On a timeline every card carries a small **face** chip while the pass is on;
+click it to leave that shot alone. The two knobs stay the piece's — one render
+has one answer for how the pass works, and what a card says is whether this shot
+needs it.
+
+It needs a **SAM3 checkpoint** in `models/checkpoints`, picked in the weights
+control. SAM3 ships with ComfyUI core, so there is nothing to install — it is
+open-vocabulary, so it is simply asked for "face", and it tracks, which is what
+keeps a crop on one person when two are in shot. Nothing else is needed: no
+ultralytics, no insightface, no segmentation pack.
+
+What it costs: one extra generation per pass, at a quarter of a 768 pass's
+pixels, plus loading the detector between passes. Frames where no face is found
+are left exactly as they rendered, and a pass with no face in it at all is left
+alone and says so in the log.
+
 ## PreStage
 
 ![PreStage feeding a Creator](docs/img/pre-stage.png)
@@ -598,6 +636,13 @@ This pack is glue. The work underneath it belongs to other people:
   passes" option is built on: upscale the video half of the AV latent between
   two samplers, leave the audio out of the re-noise. Our refine pass is an
   independent implementation of that idea, wired into the render graph.
+- **[ComfyUI-H3-FaceRefine](https://github.com/Carasibana/ComfyUI-H3-FaceRefine)** by
+  Carasibana, and **zuanfilm**'s graph built on it — worked out the face pass this
+  pack's **faces** pill runs: a per-frame crop that holds the face at a constant
+  fraction of one canvas, a denoise scaled by how big the face already is, and a
+  paste of the face box alone rather than the whole crop. Ours is an independent
+  implementation of those findings, using core's SAM3 in place of the
+  ultralytics/insightface stack theirs needs.
 - **[taehv](https://github.com/madebyollin/taehv)** by madebyollin — the tiny decoder
   that makes the preview look like the video.
 - **larryvrh** and **lightx2v** — the H3 distillation LoRAs behind turbo.
@@ -610,6 +655,7 @@ matching pills light up.
 
 ```
 python3 tests/test_compile.py         # canvas math, modes, limits, ordering
+python3 tests/test_faces.py           # face windows, crops, and the piece/shot switch
 python3 tests/test_refine.py
 python3 tests/test_assets.py          # what the picker's listing walk finds
 python3 tests/test_outputs.py         # what an output prefix may be
@@ -633,7 +679,7 @@ Set `COMFYUI_BASE` as well when `--base-directory` points somewhere else — on 
 Desktop install the running tree and the folder holding `custom_nodes`, `models` and
 `output` are usually two different places.
 
-The design decisions, in full, are in [PLAN.md](PLAN.md).
+The design decisions, in full, are in [docs/PLAN.md](docs/PLAN.md).
 
 ## License
 

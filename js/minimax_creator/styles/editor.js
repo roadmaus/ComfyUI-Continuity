@@ -60,6 +60,15 @@ export const css = `
      row carries no tag (LoRA chips share this class). */
   box-shadow: 0 0 0 2px var(--tag, transparent);
 }
+/* A thumbnail you can click is a thumbnail that swaps the file under the chip's
+   handle. Said with the pointer and a lit ring rather than another button in a
+   row that already has four — the picture is the affordance. */
+.mmc-asset-swap { cursor: pointer; }
+.mmc-asset-swap:hover, .mmc-asset-swap:focus-visible {
+  filter: brightness(1.3);
+  box-shadow: 0 0 0 2px var(--mmc-accent);
+  outline: none;
+}
 .mmc-asset-handle { color: var(--tag, var(--mmc-accent)); font-weight: 500; }
 .mmc-asset-role { color: var(--mmc-dim); }
 .mmc-asset-x {

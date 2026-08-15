@@ -131,4 +131,13 @@ export const css = `
 }
 .mmc-refine-label { color: var(--mmc-dim); font-size: 12px; }
 
+/* The face-pass popover: the same option rows and knob rows as the two-pass
+   section above, plus one line saying what it costs. Fixed width so the note
+   does not reflow the popover as the knobs change. */
+.mmc-faces-pop { width: 260px; }
+.mmc-pop-note {
+  color: var(--mmc-dim); font-size: 11px; line-height: 1.45;
+  padding: 8px 10px 2px; border-top: 1px solid var(--mmc-line); margin-top: 6px;
+}
+
 `;
