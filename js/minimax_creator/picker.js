@@ -153,11 +153,17 @@ class Picker {
 
   async load({ force = false } = {}) {
     try {
-      this.assets = await listAssets({ force });
-      if (this.options.kinds.includes("renders")) {
-        this.renders = await listAssets({ force, root: "output" });
-      }
-      this.prefs = await loadPickerPrefs();
+      // All three at once. The two folders have nothing to say to each other,
+      // and waiting for input to come back before asking for output made a slow
+      // disk twice as slow for no reason (#4).
+      const [assets, renders, prefs] = await Promise.all([
+        listAssets({ force }),
+        this.options.kinds.includes("renders") ? listAssets({ force, root: "output" }) : [],
+        loadPickerPrefs(),
+      ]);
+      this.assets = assets;
+      this.renders = renders;
+      this.prefs = prefs;
       // A mark on a file the listing no longer has is a mark on nothing.
       this.marked = this.marked.filter((p) => this.activeAssets().some((a) => a.path === p));
       this.loaded = true;
@@ -220,6 +226,20 @@ class Picker {
    *  through it, which is why there is only one implementation of any of it. */
   activeAssets() {
     return this.kind === "renders" ? this.renders : this.assets;
+  }
+
+  /** The label the upload button wears when it is not uploading. */
+  uploadLabel() {
+    return t("+  Upload {kind}", { kind: t(KIND_LABEL[this.kind].toLowerCase()) });
+  }
+
+  /** Take the rows an upload just produced into the input listing, newest
+   *  first, which is the order the server sorts in. Uploads only ever land in
+   *  input, so `renders` is not touched and does not have to be re-read. */
+  absorb(added) {
+    this.assets = [...added, ...this.assets.filter((a) => !added.some((b) => b.path === a.path))];
+    this.renderShelves();
+    this.renderGrid();
   }
 
   /** Which hand-made shelf names belong to the folder being browsed. Two lists
@@ -906,13 +926,22 @@ class Picker {
       // shelf a place rather than a filter.
       const into = this.shelf === "all" || this.shelf === "fav" ? "" : this.shelf;
       try {
-        for (const file of files) await upload(file, into);
-        await this.load({ force: true });
+        const added = [];
+        for (const file of files) added.push(await upload(file, into));
+        // "Uploading…" stops when the uploading does. It used to stay up for the
+        // re-listing that followed, so a finished upload read as a stuck one and
+        // got reported as one (#4).
+        this.uploadButton.textContent = this.uploadLabel();
+        // Each row came back complete, so the grid redraws from what is already
+        // known. A file neither the browser nor core can classify has no kind to
+        // draw a cell with, and that one case reads the folder properly.
+        if (added.every((asset) => asset.kind)) this.absorb(added);
+        else await this.load({ force: true });
       } catch (error) {
         this.grid.replaceChildren(el("div", { class: "mmc-empty", text: t("Upload failed: {error}", { error: error.message }) }));
       } finally {
         this.uploadButton.disabled = false;
-        this.uploadButton.textContent = t("+  Upload {kind}", { kind: t(KIND_LABEL[this.kind].toLowerCase()) });
+        this.uploadButton.textContent = this.uploadLabel();
       }
     });
     document.body.appendChild(input);

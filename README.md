@@ -508,6 +508,7 @@ matching pills light up.
 ```
 python3 tests/test_compile.py         # canvas math, modes, limits, ordering
 python3 tests/test_refine.py
+python3 tests/test_assets.py          # what the picker's listing walk finds
 python3 tests/test_outputs.py         # what an output prefix may be
 python3 tests/test_settings.py        # what the settings file may hold
 python3 tests/test_canvas_mirror.py   # canvas.js against canvas.py
