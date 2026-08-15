@@ -18,10 +18,16 @@ sections of it you tick. Saved off a node you have dialled in, or read back out
 of a render you already made, since the file carries the workflow that made it.
 The library is on the rail beside Gallery and Settings.
 
-Also in 2.1: the settings page no longer resets the fields you did not touch
-([#8](https://github.com/roadmaus/ComfyUI-MiniMax-Creator/issues/8)). A save is a
-patch over the file now, so naming a video folder stops putting the stills folder
-back.
+Two fixes ride along. The settings page no longer resets the fields you did not
+touch ([#8](https://github.com/roadmaus/ComfyUI-MiniMax-Creator/issues/8)): a
+save is a patch over the file now, so naming a video folder stops putting the
+stills folder back. And the picker reads what it needs off the directory entry
+instead of asking the filesystem three more times per file
+([#4](https://github.com/roadmaus/ComfyUI-MiniMax-Creator/issues/4)) — which is
+free on Linux and macOS and was not free at all on Windows, where a large output
+folder made an upload look like it had hung. An upload also stops re-listing
+anything: the file it just wrote is a row it already has, and the renders folder
+was never involved.
 
 ### Coming from 2.0
 
