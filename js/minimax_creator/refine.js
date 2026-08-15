@@ -462,6 +462,11 @@ export class RefinePanel {
     this.seen = "";
     this.root = el("div", { class: "mmc-refined" });
     this.bodyBox = null;
+    // The editable boxes, by key, and the arrangement they were last drawn in.
+    // Together they are what "refreshed in place" is made of — see `box` and
+    // the shape gate at the top of `render`.
+    this.boxes = new Map();
+    this.shape = null;
     this.render();
   }
 
@@ -547,16 +552,60 @@ export class RefinePanel {
     return !!refined && (refined.source ?? "") !== (this.getState().prompt ?? "");
   }
 
-  textarea(get, set, { rows = 3, placeholder = "", className = "mmc-refined-box" }) {
-    const box = el("textarea", {
-      class: className, rows: String(rows), placeholder,
-      oninput: (event) => { set(event.target.value); this.onCommit?.(); },
-    });
-    box.value = get() ?? "";
-    box.addEventListener("pointerdown", (event) => event.stopPropagation());
-    // A rewrite is longer than the rows it is given, and this box lives in a
-    // node body where the wheel is the canvas's zoom — see `keepScroll`.
-    return keepScroll(box);
+  /**
+   * One of the panel's editable boxes: built on first sight, then kept.
+   *
+   * These are typed into, and typing in one runs `onCommit` — which on the node
+   * face ends in a full `render` of this panel. Rebuilding the element under
+   * the caret is what that used to mean: a textarea removed from the document
+   * takes the focus with it and its replacement starts scrolled to the top, so
+   * the box accepted one character per click and jumped back to the top after
+   * each one. The element is now made once and only its value is refreshed
+   * afterwards — and `render` leaves the DOM alone entirely unless the panel's
+   * shape has actually moved.
+   *
+   * `set` is captured at creation and outlives every later render, so it must
+   * resolve the state it writes to when it is *called* rather than closing over
+   * whichever object was current when the box was built. See the call sites.
+   */
+  box(key, value, set, { rows = 3, placeholder = "", className = "mmc-refined-box" } = {}) {
+    if (!this.boxes.has(key)) {
+      const made = el("textarea", {
+        class: className, rows: String(rows), placeholder,
+        oninput: (event) => { set(event.target.value); this.onCommit?.(); },
+      });
+      made.addEventListener("pointerdown", (event) => event.stopPropagation());
+      // A rewrite is longer than the rows it is given, and this box lives in a
+      // node body where the wheel is the canvas's zoom — see `keepScroll`.
+      keepScroll(made);
+      this.boxes.set(key, made);
+    }
+    return this.fill(key, value);
+  }
+
+  /** A value into a box that is already drawn, and only where it differs:
+   *  writing a box's own text back into it would put the caret at the end. */
+  fill(key, value) {
+    const box = this.boxes.get(key);
+    const next = value ?? "";
+    if (box && box.value !== next) box.value = next;
+    return box;
+  }
+
+  /** The state into the boxes, rebuilding nothing. What a render does when the
+   *  shape has not moved — a second rewrite landing on top of an identical one
+   *  still has to show its new prose. */
+  syncBoxes() {
+    const state = this.getState();
+    const refined = this.refined;
+    this.fill("body", refined?.body);
+    if (refined?.sections) {
+      for (const name of REF_SECTIONS) this.fill(`section:${name}`, refined.sections[name]);
+    }
+    if (this.audioFields) {
+      this.fill("soundscape", state.soundscape);
+      this.fill("music", state.music);
+    }
   }
 
   render() {
@@ -565,9 +614,28 @@ export class RefinePanel {
     // The audio fields keep the panel open on their own once they hold
     // something: they are queued whether or not a rewrite exists, so a pair the
     // user typed themselves must not lose the only place they can be edited.
-    const audio = this.audioFields && (state.soundscape?.trim() || state.music?.trim());
-    if (!refined && !audio && !this.problems.length) {
+    const audio = !!(this.audioFields && (state.soundscape?.trim() || state.music?.trim()));
+    const empty = !refined && !audio && !this.problems.length;
+
+    // What the panel is made of, as against what is written in it. Typing moves
+    // the second and never the first, so a shape that has not moved is a panel
+    // that must not be rebuilt — the boxes in it are being written in. Every
+    // part of the arrangement is in here: what the head says, whether the two
+    // folds exist, and the warnings under them.
+    const shape = JSON.stringify([
+      empty, !!refined, refined?.enabled !== false, refined?.model ?? null,
+      refined?.template ?? null, !!refined?.forced, refined?.skill ?? null,
+      this.stale, this.seen, !!refined?.sections, audio, this.problems,
+    ]);
+    if (shape === this.shape) {
+      this.syncBoxes();
+      return;
+    }
+    this.shape = shape;
+
+    if (empty) {
       this.root.replaceChildren();
+      this.boxes.clear();
       return;
     }
 
@@ -641,9 +709,9 @@ export class RefinePanel {
         ]));
       }
 
-      this.bodyBox = this.textarea(
-        () => refined.body,
-        (value) => { refined.body = value; },
+      this.bodyBox = this.box(
+        "body", refined.body,
+        (value) => { const current = this.refined; if (current) current.body = value; },
         { rows: 8, placeholder: t("The rewritten description.") });
       parts.push(this.bodyBox);
 
@@ -659,9 +727,9 @@ export class RefinePanel {
         for (const name of REF_SECTIONS) {
           sections.append(el("label", { class: "mmc-refined-section" }, [
             el("span", { class: "mmc-tl-field-name", text: name }),
-            this.textarea(
-              () => refined.sections[name],
-              (value) => { refined.sections[name] = value; },
+            this.box(
+              `section:${name}`, refined.sections[name],
+              (value) => { const sections = this.refined?.sections; if (sections) sections[name] = value; },
               { rows: 3, className: "mmc-refined-box mmc-tl-small" }),
           ]));
         }
@@ -677,17 +745,17 @@ export class RefinePanel {
       parts.push(el("div", { class: "mmc-tl-audio" }, [
         el("label", { class: "mmc-tl-field" }, [
           el("span", { class: "mmc-tl-field-name", text: "overall_soundscape" }),
-          this.textarea(
-            () => state.soundscape,
-            (value) => { state.soundscape = value; },
+          this.box(
+            "soundscape", state.soundscape,
+            (value) => { this.getState().soundscape = value; },
             { rows: 3, className: "mmc-refined-box mmc-tl-small",
               placeholder: t("Everything heard in the room. Empty leaves it to the model; N/A is silence.") }),
         ]),
         el("label", { class: "mmc-tl-field" }, [
           el("span", { class: "mmc-tl-field-name", text: "non_diegetic_music" }),
-          this.textarea(
-            () => state.music,
-            (value) => { state.music = value; },
+          this.box(
+            "music", state.music,
+            (value) => { this.getState().music = value; },
             { rows: 3, className: "mmc-refined-box mmc-tl-small",
               placeholder: t("The score only the audience hears. Empty leaves it to the model.") }),
         ]),

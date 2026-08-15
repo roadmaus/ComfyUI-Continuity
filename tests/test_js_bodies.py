@@ -100,7 +100,18 @@ class Node {
   removeEventListener() {}
   appendChild(c) { this.children.push(c); c.parent = this; return c; }
   append(...c) { c.forEach((x) => this.appendChild(x)); }
-  replaceChildren(...c) { this.children = []; c.forEach((x) => this.appendChild(x)); }
+  // A browser has nowhere to put the focus when the element holding it leaves
+  // the document, so it puts it nowhere — which is exactly the failure this
+  // models: a box rebuilt under the caret stops accepting what is typed into it.
+  replaceChildren(...c) {
+    const dropped = (n) => {
+      if (globalThis.document.activeElement === n) globalThis.document.activeElement = null;
+      (n.children ?? []).forEach(dropped);
+    };
+    this.children.forEach(dropped);
+    this.children = [];
+    c.forEach((x) => this.appendChild(x));
+  }
   insertBefore(n) { return this.appendChild(n); }
   cloneNode() { return new Node(this.tagName); }
   remove() {}
@@ -292,6 +303,73 @@ try {
   };
 } catch (error) {
   out.errors.push(`node face: ${error.message}`);
+}
+
+// The rewrite is edited in place, never rebuilt under the caret.
+//
+// Typing in the refined box commits, and on the node face a commit re-renders
+// the whole body — which used to replace the very textarea being typed into.
+// A browser gives the focus to nobody when the element holding it is removed,
+// and the replacement starts scrolled to the top, so the box took one character
+// per click and jumped back to the top after each one. Nothing here has a caret
+// to lose, so what is checked is the thing the caret rides on: the box you are
+// writing in has to be the same object afterwards.
+try {
+  const find = (root, cls) => {
+    let hit = null;
+    const walk = (n) => {
+      if (!hit && String(n.className ?? "").split(" ").includes(cls)) hit = n;
+      (n.children ?? []).forEach(walk);
+    };
+    walk(root);
+    return hit;
+  };
+  // No `model` on the rewrite: with none chosen here either, the panel's head
+  // says the same thing before and after the second rewrite lands below, which
+  // is what makes that one a refresh rather than a rebuild.
+  const node = fakeNode("MiniMaxH3Creator", "creator_data", JSON.stringify({
+    version: 2, prompt: "", models: {},
+    segments: [{
+      prompt: "a lighthouse", assets: [], loras: [], duration_s: 6, soundscape: "surf",
+      refined: { body: "A lighthouse at dusk.", source: "a lighthouse", enabled: true,
+                 sections: { subject_definitions: "", summary: "", retention_analysis: "" } },
+    }],
+  }));
+  await ext.nodeCreated(node);
+  const body = node.mmcBody;
+  const type = (box, text) => {
+    box.value = text;
+    box.listeners.input.forEach((fn) => fn({ target: box }));
+  };
+
+  const first = find(body.root, "mmc-refined-box");
+  document.activeElement = first;
+  type(first, "A lighthouse at dusk, lamp turning.");
+  const afterOne = find(body.root, "mmc-refined-box");
+  type(afterOne, "A lighthouse at dusk, lamp turning slowly.");
+
+  out.refineBox = {
+    drawn: !!first,
+    // The whole bug, in two comparisons.
+    sameAfterOne: first === afterOne,
+    sameAfterTwo: first === find(body.root, "mmc-refined-box"),
+    stillFocused: document.activeElement === first,
+    // ...and it is still writing through to the blob on every one of them.
+    written: JSON.parse(node.widgets[0].value).segments[0].refined.body,
+  };
+
+  // The other half: a panel that is not rebuilt still has to show a rewrite
+  // that lands on top of an identical one, or refining twice would leave the
+  // first rewrite's prose on screen.
+  body.faceEditor.refinePanel.apply(
+    { soundscape: "surf", music: "", seen: "", problems: [],
+      sections: { subject_definitions: "", summary: "", retention_analysis: "" } },
+    { body: "A second rewrite." });
+  const afterApply = find(body.root, "mmc-refined-box");
+  out.refineBox.applied = afterApply?.value;
+  out.refineBox.sameAfterApply = first === afterApply;
+} catch (error) {
+  out.errors.push(`refine box: ${error.message}`);
 }
 
 // A strip with supplied footage in it, on the node and in the modal.
@@ -889,6 +967,19 @@ check("...and a way into the window", face.get("expand"), True)
 check("clicking it opens the window", face.get("opened"), True)
 check("...with a box of its own in it", face.get("boxInSheet"), True)
 check("...which is not the face's", face.get("sameState"), True)
+
+# The rewrite is edited in place. A commit re-renders the body, and the box the
+# rewrite is written in is on the commit path of its own keystrokes — so it has
+# to survive them as the same element, or it loses the caret once per character.
+box = report.get("refineBox", {})
+check("the rewrite is drawn in a box", box.get("drawn"), True)
+check("...which survives a keystroke", box.get("sameAfterOne"), True)
+check("...and the next one", box.get("sameAfterTwo"), True)
+check("...keeping the focus it had", box.get("stillFocused"), True)
+check("...while still writing through to the blob",
+      box.get("written"), "A lighthouse at dusk, lamp turning slowly.")
+check("a second rewrite still lands in it", box.get("applied"), "A second rewrite.")
+check("...without rebuilding it", box.get("sameAfterApply"), True)
 
 # ...and it is the same window a card on the strip opens.
 window = report.get("window", {})
