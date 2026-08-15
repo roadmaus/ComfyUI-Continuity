@@ -478,10 +478,19 @@ class MiniMaxH3FacePass(io.ComfyNode):
             (video_mask, torch.zeros_like(audio, dtype=torch.float32)))
 
         samples = comfy.nested_tensor.NestedTensor((video, audio))
-        noise = comfy.sample.prepare_noise(samples, seed + start)
+        # The seed as given, the same in every window. It used to be `seed +
+        # start`, on the theory that equal-length windows should not be sampled
+        # against the identical noise tensor — but the common case is one window,
+        # where `start` is 0 and the offset does nothing, and where there are
+        # several they are re-drawing different frames behind a per-frame
+        # strength mask, so identical starting noise costs nothing. What it did
+        # cost was the seed: `start` is derived from the pass's frame count, so
+        # trimming a few frames off a seam moved the face repair's noise without
+        # the number on the node having changed.
+        noise = comfy.sample.prepare_noise(samples, seed)
         sampled = comfy.sample.sample(
             model, noise, steps, cfg, sampler_name, scheduler, positive, negative,
-            samples, denoise=denoise, noise_mask=mask, seed=seed + start,
+            samples, denoise=denoise, noise_mask=mask, seed=seed,
             callback=latent_preview.prepare_callback(model, steps),
             disable_pbar=not comfy.utils.PROGRESS_BAR_ENABLED)
 

@@ -382,10 +382,13 @@ def emit(payloads, labels, weights, sampling, acceleration, unique_id,
             "KSampler",
             model=model, positive=segment.out(1), negative=against,
             latent_image=segment.out(2),
-            # Same seed on every segment would give consecutive shots the same
-            # noise, which reads as a stutter rather than as continuity. With one
-            # payload this is just the seed.
-            seed=sampling.seed + index, steps=sampling.steps, cfg=sampling.cfg,
+            # The seed as set, on every pass. A piece is one look, and the seed
+            # is the handle on it: offsetting it per segment made segment 3 of a
+            # six-segment chain unreproducible from the number on the node, and
+            # made the same clip render differently for having been moved. What
+            # separates consecutive shots is their prompts and their seams, not
+            # their noise.
+            seed=sampling.seed, steps=sampling.steps, cfg=sampling.cfg,
             sampler_name=sampling.sampler_name, scheduler=sampling.scheduler,
             denoise=1.0,
         )
@@ -427,7 +430,7 @@ def emit(payloads, labels, weights, sampling, acceleration, unique_id,
                 model=refine_model, positive=second.out(1), negative=refine_against,
                 latent=sampled.out(0),
                 width=one.refine.width, height=one.refine.height,
-                seed=sampling.seed + index, steps=sampling.steps, cfg=sampling.cfg,
+                seed=sampling.seed, steps=sampling.steps, cfg=sampling.cfg,
                 sampler_name=sampling.sampler_name, scheduler=sampling.scheduler,
                 denoise=one.refine.denoise,
             )
@@ -497,7 +500,7 @@ def emit(payloads, labels, weights, sampling, acceleration, unique_id,
                 source=written.out(1), reel=written.out(0),
                 detector=weights.sam3 or "",
                 width=one.face.width, height=one.face.height,
-                seed=sampling.seed + index, steps=sampling.steps, cfg=sampling.cfg,
+                seed=sampling.seed, steps=sampling.steps, cfg=sampling.cfg,
                 sampler_name=sampling.sampler_name, scheduler=sampling.scheduler,
                 denoise=one.face.denoise)
 

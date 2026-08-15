@@ -27,6 +27,13 @@ queue goes out, so the number that made the shot on screen is gone from the UI b
 the time you decide you want it. The sampler row remembers what was actually
 sent and grows a button that puts it back.
 
+**One seed for the piece.** A timeline used to run segment k on `seed + k`, so
+the number on the node named the first shot's noise and nothing else: no shot
+after it could be reproduced from what the UI showed, and re-ordering the strip
+re-rolled every shot below the card you moved. The seed you set now carries
+through every segment — chained or single, and through the refine and face
+passes inside them.
+
 One fix rides along: the rewrite box no longer loses the caret after every
 character ([#11](https://github.com/roadmaus/ComfyUI-MiniMax-Creator/issues/11)).
 Typing in it re-rendered the panel that owned it, which rebuilt the very box

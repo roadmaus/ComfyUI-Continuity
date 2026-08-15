@@ -112,7 +112,7 @@ def _schema(node_id, display_name, blob, deprecated=False):
             # see that module for why that is better than five wires.
             io.String.Input(blob, multiline=True, default=DEFAULT_DATA),
             io.Int.Input("seed", default=0, min=0, max=0xffffffffffffffff, control_after_generate=True,
-                tooltip="One shot: it is just the seed. Several: segment k runs on seed + k, so consecutive shots are not the same noise with different prompts — except within one pass, which is a single generation and so a single seed."),
+                tooltip="The seed for the whole piece: every segment, chained or single, and every refine and face pass inside them, runs on this number. What separates consecutive shots is their prompts and their seams, not their noise."),
             io.Int.Input("steps", default=20, min=1, max=10000),
             # The released H3 checkpoints are CFG-distilled, so guidance is
             # already in the weights and 1.0 is the value they were trained

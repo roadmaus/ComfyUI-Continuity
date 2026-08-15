@@ -104,7 +104,7 @@ half of one node.
 │ │ ⟨▤ chained · 5 segments⟩ ⟨◷ 29.0 s⟩ ⟨16:9 1366×768⟩   │ │
 │ │ ⟨✦ 2 LoRAs⟩ ⟨▢ 1 piece ref⟩          [⚙ Edit timeline]│ │
 │ └───────────────────────────────────────────────────────┘ │
-│  ⟨seed 4211 ⟳ +k⟩ ⟨20 steps⟩ ⟨res_multistep⟩ ⟨simple⟩    │
+│  ⟨seed 4211 ⟳⟩ ⟨20 steps⟩ ⟨res_multistep⟩ ⟨simple⟩       │
 └───────────────────────────────────────────────────────────┘
 ```
 

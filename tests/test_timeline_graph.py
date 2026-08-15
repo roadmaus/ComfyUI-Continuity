@@ -221,9 +221,11 @@ sampler_id = graph[reel_node_id]["inputs"]["samples"][0]
 check("...which came from segment 1's sampler",
       graph[sampler_id]["inputs"]["model"][0], segments[0][0])
 
-# Distinct seeds, so consecutive shots are not the same noise twice.
-check("seeds advance with the segment",
-      sorted(i["seed"] for _, i in by_type["KSampler"]), [100, 101, 102])
+# One seed for the piece. It used to be seed + k, which meant the number on the
+# node named segment 1's noise and nothing else — a shot could not be reproduced
+# from it, and moving a card re-rolled every shot after it.
+check("every segment runs on the seed as set",
+      sorted(i["seed"] for _, i in by_type["KSampler"]), [100, 100, 100])
 
 # ---- the loaders and the tail -----------------------------------------------
 #

@@ -125,7 +125,7 @@ export function samplingBar({ widgets, value, set, perSegment = false, turbo = [
         // hand-typed 7, wide enough for anything the dice can roll.
         style: { width: `${Math.min(21, Math.max(5, seedText.length + 1))}ch` },
         title: perSegment
-          ? t("Segment k runs on seed + k, so consecutive shots are not the same noise twice.")
+          ? t("One seed for the whole piece: every segment runs on this number.")
           : t("The seed of the one generation."),
         onchange: (event) => {
           const parsed = Number(String(event.target.value).replace(/[^\d]/g, "")) || 0;

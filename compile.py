@@ -1078,7 +1078,8 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
 # re-encoded in the middle, so there is no seam to carry a frame or a tail across
 # and no roundtrip drift; the whole clip's picture and sound are generated at
 # once. The price is that everything the pass can only have one of — mode,
-# checkpoint, LoRA stack, seed — is now the timeline's rather than the segment's.
+# checkpoint, LoRA stack — is now the timeline's rather than the segment's. (The
+# seed is the timeline's either way: every pass runs on the one set on the node.)
 RENDER_MODES = ("chained", "single")
 
 _HANDLE_PREFIX = {"image": "img", "video": "vid", "audio": "aud"}

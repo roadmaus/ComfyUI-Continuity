@@ -481,7 +481,7 @@ class Timeline {
       option(true, "One pass",
         t("One generation. The segments become the shots of a single description, cut times and all, "
         + "so nothing is decoded and re-encoded mid-clip and there is no seam to cross. "
-        + "Everything a single pass can only have one of — mode, checkpoint, LoRAs, seed — "
+        + "Everything a single pass can only have one of — mode, checkpoint, LoRAs — "
         + "becomes the timeline's.")),
     ]);
   }
@@ -950,8 +950,8 @@ class Timeline {
         title: t("Generate segment {n} in the same pass as the one before it: one "
              + "generation, with this cut written into its description for the model to "
              + "draw. Nothing is decoded and re-encoded here, so there is no seam to "
-             + "cross — in exchange the two shots share one mode, one checkpoint, one "
-             + "LoRA stack and one seed. Everything you set here is kept, and comes "
+             + "cross — in exchange the two shots share one mode, one checkpoint and "
+             + "one LoRA stack. Everything you set here is kept, and comes "
              + "back if you split the pass again.", { n: index + 1 }),
         onclick: () => this.mergeAt(index),
       }, [el("span", { text: "▤" }), el("span", { text: t("one pass") })])]),

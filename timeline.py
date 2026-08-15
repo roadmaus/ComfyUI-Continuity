@@ -13,7 +13,7 @@ removes the seam entirely: continuity, sound and colour carry because they were
 never broken. `compile.single_payload` does the whole of it — the timeline
 becomes one ordinary request and everything downstream is unchanged. What it
 costs is anything one pass can only have one of: one mode, one checkpoint, one
-LoRA stack, one seed, and no per-segment continuation to switch.
+LoRA stack, and no per-segment continuation to switch.
 
 The rest of this module is the chained path: the nodes the emitter writes into
 the expanded graph, and the two helpers `creator_node` names its payloads with.
