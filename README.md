@@ -574,7 +574,12 @@ This pack is glue. The work underneath it belongs to other people:
   cache at a time; all of them trade fidelity for speed, so A/B against a
   native render before trusting one on a final piece.
 - **[ComfyUI-KJNodes](https://github.com/kijai/ComfyUI-KJNodes)** by Kijai — gives the
-  live preview a real decoder. Kijai's turbo conversions are in the switch too.
+  live preview a real decoder, and the `sage` pill: H3's own attention run
+  quantized, which is faster and, unlike the caches, wants *less* VRAM rather
+  than trading fidelity for steps. It needs the
+  [sageattention](https://github.com/thu-ml/SageAttention) package and an NVIDIA
+  card; it composes with everything else on the row. Kijai's turbo conversions
+  are in the switch too.
 - **[ComfyUI-MultiGPU](https://github.com/pollockjj/ComfyUI-MultiGPU)** by pollockjj —
   puts a device chip on every row of the weights popover.
 - **[ComfyUI-GGUF](https://github.com/city96/ComfyUI-GGUF)** by city96 — loads the

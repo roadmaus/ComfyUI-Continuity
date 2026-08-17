@@ -150,6 +150,8 @@ def _schema(node_id, display_name, blob, deprecated=False):
                 tooltip="Spectrum: forecast features across steps instead of evaluating every one. Needs ComfyUI-Spectrum-MiniMax-H3. Combines with block_cache; cannot be combined with EasyCache."),
             io.Float.Input("spectrum_blend", default=0.5, min=0.0, max=1.0, step=0.01,
                 tooltip="Spectrum's video spectral share. Higher is faster and further from a native render. Ignored unless 'spectrum' is on."),
+            io.Boolean.Input("sage", default=False,
+                tooltip="Sage attention: run H3's attention quantized (int8 queries and keys, fp8 or fp16 values). Faster and, unlike the caches, lower peak VRAM. Needs ComfyUI-KJNodes and the sageattention package, on an NVIDIA card. Composes with everything above."),
         ],
         # Nothing comes out either: the render is saved and shown in the node
         # body, so there is no socket for a graph to hang off.
@@ -175,7 +177,8 @@ def _fingerprint(blob):
 def _render(blob, seed, steps, cfg, sampler_name, scheduler,
             block_cache, spectrum, spectrum_blend, unique_id,
             shift_video=render.SHIFT_DEFAULTS[0],
-            shift_audio=render.SHIFT_DEFAULTS[1]):
+            shift_audio=render.SHIFT_DEFAULTS[1],
+            sage=False):
     """The whole of what either node id does. See the module docstring."""
     try:
         data = compiler.as_piece(json.loads(blob))
@@ -198,7 +201,7 @@ def _render(blob, seed, steps, cfg, sampler_name, scheduler,
                         sampler_name=sampler_name, scheduler=scheduler,
                         shift_video=shift_video, shift_audio=shift_audio),
         accel.Settings(block_cache=block_cache, spectrum=spectrum,
-                       spectrum_blend=spectrum_blend),
+                       spectrum_blend=spectrum_blend, sage=sage),
         unique_id,
         # Resolved here rather than inside the save node: a prefix that cannot be
         # used should stop the queue before anything is sampled, not after —
@@ -221,10 +224,11 @@ class MiniMaxH3Creator(io.ComfyNode):
     def execute(cls, creator_data, seed, steps, cfg, sampler_name, scheduler,
                 block_cache="off", spectrum=False, spectrum_blend=0.5,
                 shift_video=render.SHIFT_DEFAULTS[0],
-                shift_audio=render.SHIFT_DEFAULTS[1]) -> io.NodeOutput:
+                shift_audio=render.SHIFT_DEFAULTS[1],
+                sage=False) -> io.NodeOutput:
         return _render(creator_data, seed, steps, cfg, sampler_name, scheduler,
                        block_cache, spectrum, spectrum_blend, cls.hidden.unique_id,
-                       shift_video=shift_video, shift_audio=shift_audio)
+                       shift_video=shift_video, shift_audio=shift_audio, sage=sage)
 
 
 class MiniMaxH3Timeline(io.ComfyNode):
@@ -260,10 +264,11 @@ class MiniMaxH3Timeline(io.ComfyNode):
     def execute(cls, timeline_data, seed, steps, cfg, sampler_name, scheduler,
                 block_cache="off", spectrum=False, spectrum_blend=0.5,
                 shift_video=render.SHIFT_DEFAULTS[0],
-                shift_audio=render.SHIFT_DEFAULTS[1]) -> io.NodeOutput:
+                shift_audio=render.SHIFT_DEFAULTS[1],
+                sage=False) -> io.NodeOutput:
         return _render(timeline_data, seed, steps, cfg, sampler_name, scheduler,
                        block_cache, spectrum, spectrum_blend, cls.hidden.unique_id,
-                       shift_video=shift_video, shift_audio=shift_audio)
+                       shift_video=shift_video, shift_audio=shift_audio, sage=sage)
 
 
 class MiniMaxCreatorExtension(ComfyExtension):

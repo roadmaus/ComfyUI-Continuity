@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.3
+
+Asked for in [#16](https://github.com/roadmaus/ComfyUI-MiniMax-Creator/issues/16).
+
+**Sage attention is a pill on the sampler row.** H3's own attention, run
+quantized — int8 queries and keys, fp8 or fp16 values — through Kijai's
+`MiniMax H3 Mem Eff Sage Attention Patch` in
+[ComfyUI-KJNodes](https://github.com/kijai/ComfyUI-KJNodes). It is the first
+accelerator here that is not a trade of fidelity for skipped steps: it changes
+what one attention call costs, so it wants *less* VRAM rather than more, and it
+composes with every cache and with Spectrum instead of ruling any of them out.
+It goes on first, innermost of the patches, so everything else wraps a model
+whose attention is already quantized. Off by default, and switched on without
+the pack or the `sageattention` library installed it says so before anything is
+queued, the way the other accelerators do. NVIDIA only.
+
 ## 2.2.1
 
 All from [#12](https://github.com/roadmaus/ComfyUI-MiniMax-Creator/issues/12).

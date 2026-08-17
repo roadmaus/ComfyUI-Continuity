@@ -599,7 +599,8 @@ finally:
 # ---- accelerators -----------------------------------------------------------
 
 check("no accelerator nodes by default",
-      [k for k in kinds if k in (accel_mod.BLOCK_CACHE_NODE, accel_mod.SPECTRUM_NODE)], [])
+      [k for k in kinds if k in (accel_mod.BLOCK_CACHE_NODE, accel_mod.SPECTRUM_NODE,
+                                 accel_mod.SAGE_NODE)], [])
 check("the sampler reads the segment directly when off",
       sampler["model"][0], segment_id)
 
@@ -617,6 +618,16 @@ class _FakePack:
                              "mode": (["H3 Safe — 0.08", "H3 Fast — 0.10"], {"default": "H3 Fast — 0.10"})}}
 
 
+class _FakeSage:
+    """KJNodes' sage patch as the V3 shim declares it: `model` and nothing else."""
+
+    FUNCTION = "EXECUTE_NORMALIZED"
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {"required": {"model": ["MODEL", {}]}}
+
+
 _restore = dict(comfy_nodes.NODE_CLASS_MAPPINGS)
 comfy_nodes.NODE_CLASS_MAPPINGS[accel_mod.BLOCK_CACHE_NODE] = _FakePack
 try:
@@ -629,9 +640,25 @@ try:
           accel_kinds["KSampler"][0][1]["model"][0], patches[0][0])
     check("conditioning still comes from the segment",
           accel_kinds["KSampler"][0][1]["positive"][0], accel_segment)
+
+    # Sage in the same graph as a cache, which is the arrangement the ordering
+    # rule is about: kijai's node reads the segment and the cache reads *it*.
+    comfy_nodes.NODE_CLASS_MAPPINGS[accel_mod.SAGE_NODE] = _FakeSage
+    sage_kinds = by_class(build(block_cache="fast", sage=True).expand)
+    sage_patch = sage_kinds[accel_mod.SAGE_NODE]
+    check("one sage patch", len(sage_patch), 1)
+    check("sage reads the segment",
+          sage_patch[0][1]["model"][0], sage_kinds["MiniMaxH3TimelineSegment"][0][0])
+    check("sage is built with model alone", list(sage_patch[0][1]), ["model"])
+    check("the cache reads sage",
+          sage_kinds[accel_mod.BLOCK_CACHE_NODE][0][1]["model"][0], sage_patch[0][0])
 finally:
     comfy_nodes.NODE_CLASS_MAPPINGS.clear()
     comfy_nodes.NODE_CLASS_MAPPINGS.update(_restore)
+
+expect_error("sage without KJNodes is refused up front",
+             lambda: build(sage=True),
+             "kijai/ComfyUI-KJNodes")
 
 # ---- the Creator is a one-segment timeline ----------------------------------
 #

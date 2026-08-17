@@ -23,7 +23,7 @@ export const SEED_CONTROL = ["fixed", "increment", "decrement", "randomize"];
 export const SAMPLING_WIDGETS = [
   "seed", "control_after_generate", "steps", "cfg", "sampler_name", "scheduler",
   "shift_video", "shift_audio",
-  "block_cache", "spectrum", "spectrum_blend",
+  "block_cache", "spectrum", "spectrum_blend", "sage",
 ];
 
 const BLOCK_CACHE_TITLE = {
@@ -258,6 +258,20 @@ export function samplingBar({ widgets, value, set, perSegment = false, turbo = [
         onChange: (next) => set("spectrum_blend", next),
       }));
     }
+  }
+
+  // Last of the accelerators, and the only one that does not change which steps
+  // run — it changes what one attention call costs, so it sits with them but
+  // rules nothing else out.
+  if (widgets.sage) {
+    const on = Boolean(value("sage", false));
+    pills.push(el("button", {
+      class: `mmc-pill${on ? " accel-on" : ""}`,
+      title: on
+        ? t("Sage attention on — H3's attention runs quantized. Faster, and lower peak VRAM.")
+        : t("Sage attention off. Needs ComfyUI-KJNodes and sageattention on an NVIDIA card when switched on."),
+      onclick: () => set("sage", !on),
+    }, [el("span", { text: on ? t("sage") : t("sage off") })]));
   }
 
   return el("div", { class: "mmc-pills" }, [...pills, ...trailing]);

@@ -270,7 +270,7 @@ export function crossable(key, from, to, { arch = null, targetArch = null } = {}
  *  restored one would turn "run it again" into "run the same frame again". */
 export const SPEED_WIDGETS = ["steps", "cfg", "sampler_name", "scheduler",
                               "shift_video", "shift_audio",
-                              "block_cache", "spectrum", "spectrum_blend"];
+                              "block_cache", "spectrum", "spectrum_blend", "sage"];
 
 /** What a pre-stage's row actually has. Its node declares five widgets; the
  *  shifts and the accelerators belong to the video sampler alone. */

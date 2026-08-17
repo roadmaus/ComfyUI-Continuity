@@ -146,7 +146,31 @@ class FakeTeaCache:
         return (("teacache", model, tuple(sorted(kwargs.items()))),)
 
 
-def install(*, block_cache=True, spectrum=True, easycache=True, teacache=True):
+class FakeSage:
+    """`MiniMaxH3MemoryEfficientSageAttentionPatch`, as the registry holds it.
+
+    Kijai's node is a V3 `io.ComfyNode`, the first one `accel.py` reaches for, so
+    what this stands in for is the *shim's* shape rather than the source's: one
+    `model` input carrying an empty options dict, and a `FUNCTION` naming the
+    generated `EXECUTE_NORMALIZED` rather than the `execute` its author wrote.
+    Both were read off a live ComfyUI 0.33 rather than guessed at.
+
+    It declares nothing else, which is the point of it — there is no tuning here
+    that could go stale, so `node_defaults` must come back empty and the node
+    must be built with `model` alone.
+    """
+
+    FUNCTION = "EXECUTE_NORMALIZED"
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {"required": {"model": ["MODEL", {}]}}
+
+    def EXECUTE_NORMALIZED(self, model, **kwargs):
+        return (("sage", model, tuple(sorted(kwargs.items()))),)
+
+
+def install(*, block_cache=True, spectrum=True, easycache=True, teacache=True, sage=True):
     NODES.NODE_CLASS_MAPPINGS = {}
     if block_cache:
         NODES.NODE_CLASS_MAPPINGS[accel.BLOCK_CACHE_NODE] = FakeBlockCache
@@ -156,6 +180,8 @@ def install(*, block_cache=True, spectrum=True, easycache=True, teacache=True):
         NODES.NODE_CLASS_MAPPINGS[accel.EASYCACHE_NODE] = FakeEasyCache
     if teacache:
         NODES.NODE_CLASS_MAPPINGS[accel.TEACACHE_NODE] = FakeTeaCache
+    if sage:
+        NODES.NODE_CLASS_MAPPINGS[accel.SAGE_NODE] = FakeSage
 
 
 class FakeGraph:
@@ -188,7 +214,7 @@ check("no nodes built when off", graph.built, [])
 
 # An accelerator that is off must not be built even when its pack is missing —
 # nothing should depend on a pack it was not asked to use.
-install(block_cache=False, spectrum=False)
+install(block_cache=False, spectrum=False, sage=False)
 check("off needs no pack installed", accel.plan(accel.Settings()), [])
 
 # ---- presets resolve against the pack's own labels --------------------------
@@ -259,8 +285,35 @@ expect_error("a core without EasyCache says to update",
              lambda: accel.plan(accel.Settings(block_cache="easy")),
              "update ComfyUI")
 
+# ---- sage attention ---------------------------------------------------------
+
+install()
+check("sage is off by default", accel.Settings().sage, False)
+check("sage alone counts as an accelerator", accel.Settings(sage=True).any, True)
+
+sage = accel.plan(accel.Settings(sage=True))
+check("sage plans kijai's node", [node_id for node_id, _ in sage], [accel.SAGE_NODE])
+check("sage is built with model alone", sage[0][1], {})
+
+# Sage is not a step-caching accelerator, so unlike the three that are it rules
+# nothing out — every cache and Spectrum both have to survive beside it. The one
+# pair that is refused stays refused for its own reason, not sage's.
+for mode in ("safe", "fast", "aggressive", "easy", "tea"):
+    planned = [n for n, _ in accel.plan(accel.Settings(block_cache=mode, sage=True))]
+    check(f"sage composes with '{mode}'", (planned[0], len(planned)), (accel.SAGE_NODE, 2))
+expect_error("sage does not rescue easy + spectrum",
+             lambda: accel.plan(accel.Settings(block_cache="easy", spectrum=True, sage=True)),
+             "EasyCache")
+
+install(sage=False)
+expect_error("missing sage pack names the node",
+             lambda: accel.plan(accel.Settings(sage=True)), accel.SAGE_NODE)
+expect_error("missing sage pack names KJNodes and the library",
+             lambda: accel.plan(accel.Settings(sage=True)), "kijai/ComfyUI-KJNodes")
+
 # ---- ordering ---------------------------------------------------------------
 
+install()
 both = accel.Settings(block_cache="fast", spectrum=True)
 check("block cache is applied before spectrum",
       [node_id for node_id, _ in accel.plan(both)],
@@ -273,6 +326,19 @@ check("both nodes are built", [node_id for node_id, _ in graph.built],
 check("block cache takes the incoming link", graph.built[0][1]["model"], "MODEL_LINK")
 check("spectrum chains off the block cache", graph.built[1][1]["model"], f"{accel.BLOCK_CACHE_NODE}:0")
 check("the sampler gets spectrum's output", out, f"{accel.SPECTRUM_NODE}:0")
+
+# Sage goes on first of all three, so the caches wrap a model whose attention is
+# already quantized rather than the other way round.
+everything = accel.Settings(block_cache="fast", spectrum=True, sage=True)
+check("sage is applied before the cache and spectrum",
+      [node_id for node_id, _ in accel.plan(everything)],
+      [accel.SAGE_NODE, accel.BLOCK_CACHE_NODE, accel.SPECTRUM_NODE])
+
+graph = FakeGraph()
+out = accel.graph_apply(graph, "MODEL_LINK", everything)
+check("sage takes the incoming link", graph.built[0][1]["model"], "MODEL_LINK")
+check("the cache chains off sage", graph.built[1][1]["model"], f"{accel.SAGE_NODE}:0")
+check("the sampler still gets spectrum's output", out, f"{accel.SPECTRUM_NODE}:0")
 
 # ---- a missing pack says which, and where to get it -------------------------
 
@@ -311,5 +377,11 @@ result = accel.direct_apply("MODEL", both)
 check("direct_apply chains both packs in order",
       (result[0], result[1][0]), ("spectrum", "block_cache"))
 check("direct_apply is a no-op when off", accel.direct_apply("MODEL", accel.Settings()), "MODEL")
+
+# The V3 half of the same contract: a node whose `FUNCTION` is the shim's
+# generated name rather than a method its author wrote still runs, and still
+# comes back through `[0]`.
+check("direct_apply runs a V3 node through its shim",
+      accel.direct_apply("MODEL", accel.Settings(sage=True))[:2], ("sage", "MODEL"))
 
 passed("all accelerator tests passed")
