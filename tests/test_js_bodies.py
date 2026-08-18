@@ -516,6 +516,85 @@ try {
   out.errors.push(`empty timeline: ${error.message}`);
 }
 
+// Clear: the piece goes, the machine stays.
+//
+// The line it draws between the two halves is the whole feature, so it is
+// driven through the rail rather than through `S.clearPiece` — a tool the face
+// does not draw is the same bug to the user as one that empties the wrong half.
+try {
+  const all = (root, cls) => {
+    const hits = [];
+    const walk = (n) => {
+      if (String(n.className ?? "").split(" ").includes(cls)) hits.push(n);
+      (n.children ?? []).forEach(walk);
+    };
+    walk(root);
+    return hits;
+  };
+  const press = (node) => node?.listeners?.click?.[0]?.();
+  const shot = (prompt) => ({ prompt, assets: [], loras: [], duration_s: 5 });
+  const written = (segments) => JSON.stringify({
+    version: 2,
+    prompt: "the whole piece",
+    soundscape: "rain",
+    music: "strings",
+    aspect: "9:16",
+    short_edge: 512,
+    assets: [{ handle: "ref-1", kind: "image", role: "reference", filename: "sheet.png" }],
+    loras: [{ name: "style.safetensors", strength: 0.8 }],
+    models: { fl2va: "fl2va.safetensors", clip: "clip.safetensors", vae: "vae.safetensors" },
+    turbo: { lora: "turbo.safetensors" },
+    segments,
+  });
+
+  const strip = fakeNode("MiniMaxH3Creator", "creator_data",
+                         written([shot("shot 1"), shot("shot 2")]));
+  await ext.nodeCreated(strip);
+  const tool = () => all(strip.mmcBody.root, "mmc-tool-danger")[0];
+  out.clear = { onStrip: Boolean(tool()) };
+  // The first press only arms it — the piece is still whole afterwards, and the
+  // label is now the question.
+  press(tool());
+  out.clear.armedLabel = (tool()?.text ?? "").trim();
+  out.clear.survivesOnePress = strip.mmcBody.timeline.segments.length;
+  press(tool());
+
+  const after = strip.mmcBody.timeline;
+  out.clear.kept = {
+    models: after.models.fl2va,
+    turbo: after.turbo.lora,
+    loras: after.loras.length,
+    aspect: after.aspect,
+    short_edge: after.short_edge,
+  };
+  out.clear.emptied = {
+    prompt: after.prompt,
+    soundscape: after.soundscape,
+    music: after.music,
+    assets: after.assets.length,
+    cards: after.segments.length,
+    cardPrompt: after.segments[0].prompt,
+  };
+  // ...and in the widget, which is what actually queues.
+  out.clear.blob = JSON.parse(strip.mmcBody.read());
+  // Emptied, the tool has nothing left to do and says so rather than arming
+  // over an empty piece.
+  out.clear.disabledAfter = tool()?.attrs?.disabled !== undefined;
+
+  // The other face: one shot wears that shot's editor, and Clear is in its rail
+  // too — the piece is what it empties from either.
+  const lone = fakeNode("MiniMaxH3Creator", "creator_data", written([shot("the only shot")]));
+  await ext.nodeCreated(lone);
+  const loneTool = () => all(lone.mmcBody.root, "mmc-tool-danger")[0];
+  out.clear.onLoneShot = Boolean(loneTool());
+  press(loneTool());
+  press(loneTool());
+  out.clear.loneEmptied = lone.mmcBody.timeline.segments[0].prompt;
+  out.clear.loneKept = lone.mmcBody.timeline.models.fl2va;
+} catch (error) {
+  out.errors.push(`clear: ${error.message}`);
+}
+
 // Two controls that write through somebody else's callback, and were dead.
 //
 // The render toggle wrote merge flags, which are statements about the seam in
@@ -1302,6 +1381,31 @@ check("...with nothing written in it", (empty.get("cleared") or {}).get("prompt"
 check("...and the face back to being that shot's",
       (empty.get("cleared") or {}).get("wears"), "shot")
 check("...and the strip still draws once a second is added", empty.get("added"), 2)
+
+# ---- Clear ------------------------------------------------------------------
+#
+# One control, one line: what you wrote for this scene goes, what you set up for
+# this machine stays. Both halves are checked, because getting either wrong is
+# what makes the button unusable — one loses the setup, the other does nothing.
+clear = report.get("clear", {})
+check("the strip face carries Clear", clear.get("onStrip"), True)
+check("...and so does the lone shot's", clear.get("onLoneShot"), True)
+check("one press only asks", clear.get("armedLabel"), "Really clear?")
+check("...and changes nothing", clear.get("survivesOnePress"), 2)
+check("clearing keeps the machine",
+      clear.get("kept"),
+      {"models": "fl2va.safetensors", "turbo": "turbo.safetensors", "loras": 1,
+       "aspect": "9:16", "short_edge": 512})
+check("...and empties the piece",
+      clear.get("emptied"),
+      {"prompt": "", "soundscape": "", "music": "", "assets": 0,
+       "cards": 1, "cardPrompt": ""})
+check("...in the blob the node queues", (clear.get("blob") or {}).get("prompt"), "")
+check("...which keeps its weights", ((clear.get("blob") or {}).get("models") or {}).get("fl2va"),
+      "fl2va.safetensors")
+check("an emptied piece has nothing left to clear", clear.get("disabledAfter"), True)
+check("clearing from the lone shot empties it too", clear.get("loneEmptied"), "")
+check("...and keeps the weights there as well", clear.get("loneKept"), "fl2va.safetensors")
 
 # Controls that write through an owner's callback still move what they draw.
 # ---- the face rule ----------------------------------------------------------

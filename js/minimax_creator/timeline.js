@@ -8,6 +8,7 @@
 // with the node's, because there is only one editor.
 
 import { probe, viewUrl } from "./api.js";
+import { clearButton } from "./clear.js";
 import { el, icon, mountOverlay, swappable } from "./dom.js";
 import { CreatorEditor } from "./editor.js";
 import { t } from "./i18n.js";
@@ -1809,6 +1810,9 @@ export class TimelineBody {
       // nothing about it, which is the same promise the canvas and the weights
       // already make.
       presetTarget: () => this.presetTarget(),
+      // The piece's, for the same reason: the face is wearing the only card,
+      // but what Clear empties is the node.
+      clearTool: () => [this.clearTool()],
       // One card of a piece, refined against the piece — the same target the
       // strip gives a card, because that is what this is. The route knows a
       // piece of one segment has no cut times of its own and asks the model for
@@ -2013,6 +2017,9 @@ export class TimelineBody {
         tool("Add LoRA", "effect",
              t("Manage the LoRAs patched onto every segment of this timeline"),
              () => this.manageLoras()),
+        // End of the cluster, and the end of the piece: everything above it
+        // adds to the scene, and this is the one that takes the scene back.
+        this.clearTool(),
       ]),
       el("div", { class: "mmc-rail-group" }, [
         tool("Presets", "star",
@@ -2031,6 +2038,22 @@ export class TimelineBody {
              () => openSettings().then(() => this.render())),
       ]),
     ]);
+  }
+
+  /**
+   * Start the next scene: empty what was written, keep the machine.
+   *
+   * Built here for both faces — the strip's rail draws it directly, and the
+   * lone shot's is handed the same factory — because what it empties is the
+   * piece either way, and the shot editor holds one card of one.
+   */
+  clearTool() {
+    return clearButton({
+      written: S.pieceWritten(this.timeline),
+      // Nothing else to do about the hosted editor: the strip is a new array of
+      // new cards, and `faceBody` rebuilds off exactly that identity.
+      run: () => { S.clearPiece(this.timeline); this.commit(); },
+    });
   }
 
   /** The piece's reference pool, filled from the node body. The same entry the

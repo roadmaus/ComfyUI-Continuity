@@ -870,4 +870,8 @@ export const ko = {
  "This shot's face is re-drawn after it renders. Click to leave it alone.": "이 샷은 렌더 뒤 얼굴을 다시 그립니다. 클릭하면 그대로 둡니다.",
  "This shot is left as it renders. Click to have its face re-drawn.": "이 샷은 렌더된 그대로 둡니다. 클릭하면 얼굴을 다시 그립니다.",
  "A SAM3 checkpoint, from models/checkpoints — what the face pass asks where the face is. Needed only when the face pass is switched on.": "models/checkpoints의 SAM3 체크포인트 — 얼굴 패스가 얼굴 위치를 묻는 대상입니다. 얼굴 패스를 켤 때만 필요합니다.",
+ "Clear": "비우기",
+ "Really clear?": "정말 비울까요?",
+ "Empty the prompts, the references and the shots — everything you wrote for this scene. The weights, the LoRAs, the canvas and the sampler stay as they are.": "프롬프트, 레퍼런스, 샷 — 이 장면을 위해 쓴 것을 모두 비웁니다. 가중치, LoRA, 캔버스, 샘플러는 그대로 남습니다.",
+ "Nothing written yet.": "아직 쓴 내용이 없습니다.",
 };

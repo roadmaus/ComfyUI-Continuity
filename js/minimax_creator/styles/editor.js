@@ -36,6 +36,23 @@ export const css = `
 .mmc-tool svg { width: 22px; height: 22px; stroke: currentColor; fill: none;
   stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 
+/* Clear, the one tool in the rail that takes something away. Idle it is a
+   sibling of the rest — a rail where one tile shouts would be a rail that reads
+   as a warning — and it declares itself only under the pointer, in the same red
+   the picker's Delete uses for files. Armed, the second press is the one that
+   empties the piece, so the tile goes solid and the label asks. */
+.mmc-tool.mmc-tool-danger:hover:not(:disabled) { color: #e0743c; }
+.mmc-tool.mmc-tool-danger:hover:not(:disabled) .mmc-tool-icon {
+  background: rgba(224,116,60,.14); border-color: rgba(224,116,60,.45);
+}
+.mmc-tool.mmc-tool-danger.armed { color: #f08a55; }
+.mmc-tool.mmc-tool-danger.armed .mmc-tool-icon,
+.mmc-tool.mmc-tool-danger.armed:hover:not(:disabled) .mmc-tool-icon {
+  background: #b03a2a; border-color: #b03a2a; color: #fff;
+}
+.mmc-tool:focus-visible { outline: none; }
+.mmc-tool:focus-visible .mmc-tool-icon { border-color: var(--mmc-accent); }
+
 /* --- attached assets ------------------------------------------------------ */
 .mmc-assets { display: flex; gap: 8px; flex-wrap: wrap; }
 /* On a node face the chips are the other thing that used to grow the node: nine

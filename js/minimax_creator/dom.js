@@ -106,6 +106,11 @@ export const ICONS = {
   // the package's 1.6, the same deal `brain` above gets. `sliders` is spoken
   // for: the timeline wears it for "Edit timeline".
   gear: `<path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/><circle cx="12" cy="12" r="3"/>`,
+  // Lucide's `eraser`, verbatim. Wiping the board rather than binning it: Clear
+  // empties what was written and leaves the desk — the weights, the LoRAs, the
+  // canvas — exactly where it stood, which a wastebasket would have promised
+  // the opposite of.
+  eraser: `<path d="M21 21H8a2 2 0 0 1-1.42-.587l-3.994-3.999a2 2 0 0 1 0-2.828l10-10a2 2 0 0 1 2.829 0l5.999 6a2 2 0 0 1 0 2.828L12.834 21"/><path d="m5.082 11.09 8.828 8.828"/>`,
 };
 
 export function icon(name, size = 22) {

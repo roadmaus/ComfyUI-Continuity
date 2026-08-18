@@ -870,4 +870,8 @@ export const ja = {
  "This shot's face is re-drawn after it renders. Click to leave it alone.": "このショットはレンダー後に顔を描き直します。クリックすると対象から外します。",
  "This shot is left as it renders. Click to have its face re-drawn.": "このショットはレンダーされたままです。クリックすると顔を描き直します。",
  "A SAM3 checkpoint, from models/checkpoints — what the face pass asks where the face is. Needed only when the face pass is switched on.": "models/checkpoints の SAM3 チェックポイント。顔パスが顔の位置を尋ねる相手です。顔パスがオンのときだけ必要です。",
+ "Clear": "クリア",
+ "Really clear?": "本当にクリアしますか？",
+ "Empty the prompts, the references and the shots — everything you wrote for this scene. The weights, the LoRAs, the canvas and the sampler stay as they are.": "プロンプト・リファレンス・ショットをすべて空にします。このシーンで書いたものが対象です。ウェイト、LoRA、キャンバス、サンプラーはそのまま残ります。",
+ "Nothing written yet.": "まだ何も書かれていません。",
 };

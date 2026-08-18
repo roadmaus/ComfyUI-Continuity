@@ -92,6 +92,10 @@ export class CreatorEditor {
    * @param {() => Element[]} [options.extraTools]  extra rail tools, after the
    *   gallery. What a body needs that a Creator does not — the pre-stage's
    *   frame grabber is the only one.
+   * @param {() => Element[]} [options.clearTool]  the piece's Clear, last in the
+   *   rail's own cluster. Supplied by the owner rather than built here for the
+   *   same reason `presetTarget` is: this editor is one shot, and what Clear
+   *   empties is the piece the shot belongs to — see `clear.js`.
    * @param {boolean} [options.settingsTool]  false where the settings page has
    *   nothing to say about what this body makes. It holds the video rate
    *   control, and a pre-stage writes PNGs.
@@ -128,7 +132,8 @@ export class CreatorEditor {
                 routeOf = null, setRoute = null, preStage = null, pieceView = null,
                 durationPill = true, extraPills = null, extraTools = null,
                 settingsTool = true, stage = null, editorTitle = null,
-                piece = null, afterPanel = null, presetTarget = null }) {
+                piece = null, afterPanel = null, presetTarget = null,
+                clearTool = null }) {
     this.presetTarget = presetTarget;
     this.piece = piece ?? state;
     this.afterPanel = afterPanel;
@@ -142,6 +147,7 @@ export class CreatorEditor {
     this.settingsTool = settingsTool;
     this.extraPills = extraPills;
     this.extraTools = extraTools;
+    this.clearTool = clearTool;
     this.state = state;
     // Where the standing checkpoint route is read from and written to. A node
     // body owns its own; a timeline segment editor reads the timeline's and
@@ -790,10 +796,13 @@ export class CreatorEditor {
         // With the adds because they are one: the PreStage's frame grab puts an
         // init image on this generation, whatever tool the host lends the rail.
         ...(this.extraTools?.() ?? []),
-        // Last of the cluster because it is the step after the rest of it: the
-        // rewrite is written against the references and the duration, so it
-        // wants them settled first.
+        // After the adds because it is the step after them: the rewrite is
+        // written against the references and the duration, so it wants them
+        // settled first.
         ...(this.refineTarget ? [refineButton({ run: () => this.refine() })] : []),
+        // Then the end of the cluster, and the end of the piece: everything to
+        // its left writes the scene, and this is the one that takes it back.
+        ...(this.clearTool?.() ?? []),
       ]),
       el("div", { class: "mmc-rail-group" }, [
         // With the machine's cluster rather than the piece's: a preset outlives

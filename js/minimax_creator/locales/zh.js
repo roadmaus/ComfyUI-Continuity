@@ -871,4 +871,8 @@ export const zh = {
  "This shot's face is re-drawn after it renders. Click to leave it alone.": "该镜头渲染后会重画面部。点击可让它保持原样。",
  "This shot is left as it renders. Click to have its face re-drawn.": "该镜头保持渲染结果不变。点击可重画其面部。",
  "A SAM3 checkpoint, from models/checkpoints — what the face pass asks where the face is. Needed only when the face pass is switched on.": "来自 models/checkpoints 的 SAM3 检查点——面部处理靠它找到脸的位置。仅在面部处理开启时需要。",
+ "Clear": "清空",
+ "Really clear?": "确定要清空吗？",
+ "Empty the prompts, the references and the shots — everything you wrote for this scene. The weights, the LoRAs, the canvas and the sampler stay as they are.": "清空提示词、参考素材和所有镜头——也就是你为这个场景写下的一切。权重、LoRA、画布和采样器保持不变。",
+ "Nothing written yet.": "还没有写入任何内容。",
 };

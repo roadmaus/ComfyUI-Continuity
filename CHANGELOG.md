@@ -1,5 +1,20 @@
 # Changelog
 
+## Unreleased
+
+Asked for in [#17](https://github.com/roadmaus/ComfyUI-MiniMax-Creator/issues/17).
+
+**Clear starts the next scene without taking the setup with it.** A new rail
+tool, last in the cluster the add tools are in. It empties what you wrote for
+this scene — the prompt, the soundscape and the score, any rewrite over them,
+the reference pool, and the strip, which goes back to one blank shot. It leaves
+everything you set up once: where the checkpoints are, which LoRAs are patched
+onto them, the turbo switch, the canvas, the face pass, the render mode and the
+whole sampler row. Irreversible, and one press away from three tools you press
+often, so it asks: the first press arms it, the second clears, and five seconds,
+Escape or a click anywhere else puts it back. On a piece with nothing in it the
+tool is simply unavailable.
+
 ## 2.3
 
 Asked for in [#16](https://github.com/roadmaus/ComfyUI-MiniMax-Creator/issues/16).

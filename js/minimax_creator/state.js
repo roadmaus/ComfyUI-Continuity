@@ -873,6 +873,54 @@ export function emptyTimeline() {
 }
 
 /**
+ * What "Clear" empties: the piece as it was written.
+ *
+ * The standing prompt, the two Context-IR audio fields, the rewrite over them,
+ * the reference pool, and the strip — which goes back to one blank shot, the
+ * same thing a piece is when you drop the node.
+ *
+ * Everything not named here survives, and that is the whole point of the
+ * control. Where the weights are, which LoRAs are patched onto them, the turbo
+ * switch, the canvas, the face pass and the render mode are all set once for a
+ * machine or for a project; retyping them is not part of starting the next
+ * scene. The sampler row is not in the blob at all and so is untouched by
+ * construction.
+ */
+export const CLEARED_KEYS = ["prompt", "soundscape", "music", "refined", "assets", "segments"];
+
+/** The shot's own writing — everything on a card that is not mirrored down onto
+ *  it by `syncCanvas`, which is where the canvas and the pool arrive from. */
+const segmentWritten = (segment) =>
+  Boolean((segment.prompt || "").trim()
+    || (segment.soundscape || "").trim()
+    || (segment.music || "").trim()
+    || segment.refined
+    || segment.assets?.length
+    || segment.loras?.length
+    || isClip(segment)
+    || segment.duration_s !== DEFAULT_DURATION_S
+    || (segment.checkpoint && segment.checkpoint !== "auto")
+    || faceOverride(segment));
+
+/** Whether `clearPiece` would change anything. A piece still as it was dropped
+ *  has nothing to clear, and the tool says so by being unavailable rather than
+ *  by arming, confirming and then doing nothing. */
+export function pieceWritten(timeline) {
+  if (CLEARED_KEYS.some((key) => typeof timeline[key] === "string" && timeline[key].trim())) return true;
+  if (timeline.refined) return true;
+  if (timeline.assets?.length) return true;
+  const segments = timeline.segments ?? [];
+  return segments.length !== 1 || segmentWritten(segments[0]);
+}
+
+/** Empty the piece, in place — the body holds this object and everything else
+ *  in the node mutates it rather than replacing it. */
+export function clearPiece(timeline) {
+  const blank = emptyTimeline();
+  for (const key of CLEARED_KEYS) timeline[key] = blank[key];
+}
+
+/**
  * Mirror the timeline's canvas onto each segment, so a segment state answers
  * `resolved()` and `mode()` on its own and the editor needs no special case.
  * Stripped again by `serializeTimeline` — the segments do not own it.
