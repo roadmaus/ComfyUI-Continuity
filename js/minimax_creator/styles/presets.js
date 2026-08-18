@@ -221,6 +221,61 @@ export const css = `
   color: #f0b3c5; font-size: 12.5px;
 }
 
+/* ---- the Style tab ------------------------------------------------------- */
+/* The catalogue's card is the preset card with its middle swapped: the hero is a
+   still rather than a strip, and the descriptor stands where the section chips
+   would. A row of chips all reading "style", under nine hundred cards on a tab
+   that holds nothing else, would be nine hundred repetitions of the tab's own
+   name — so the words go there instead, and they are the words that are about to
+   land in the prompt.
+
+   Taller band than a preset's, and the still fills it rather than fitting inside
+   it. The atlas keeps each clip's true shape, so a fitted still would draw a
+   4:3 clip at half the width of a 16:9 one — and the shape of somebody else's
+   dataset clip has no bearing on the canvas you are about to render. What is
+   being judged here is grain, palette and medium, and those want pixels. */
+.mmc-preset-card[data-style] .mmc-preset-hero { height: 132px; }
+.mmc-preset-card[data-style] .mmc-preset-name {
+  font-size: 13.5px; line-height: 1.35; white-space: normal; padding-right: 0;
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2;
+  line-clamp: 2; overflow: hidden;
+}
+/* The rest of the descriptor, which is what tells one entry from the twenty
+   beside it that open on the same three words. */
+.mmc-style-rest {
+  margin: -6px 0 0; font-size: 11.5px; line-height: 1.45; color: var(--mmc-dim);
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2;
+  line-clamp: 2; overflow: hidden;
+}
+/* One descriptor can be read off several clips. The first fills the band and the
+   rest are counted here; all of them are in the inspector. */
+.mmc-style-more {
+  position: absolute; right: 6px; bottom: 6px; padding: 1px 6px; border-radius: 7px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 9.5px; font-style: normal; color: #e6e6e6; background: rgba(0,0,0,.62);
+}
+
+.mmc-style-full {
+  margin: -6px 0 0; font-size: 12.5px; line-height: 1.55; color: var(--mmc-dim);
+}
+/* Every frame the descriptor was read off. Two style sentences can read almost
+   alike; the frames are what tell them apart, and this is where there is room
+   for all of them. */
+.mmc-style-shots { display: flex; flex-wrap: wrap; gap: 7px; }
+.mmc-style-shots figure { margin: 0; width: 74px; }
+.mmc-style-shots img {
+  width: 74px; height: 56px; object-fit: cover; display: block;
+  border-radius: 6px; background: #131313;
+}
+.mmc-style-shots figcaption {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 9.5px; color: var(--mmc-off); text-align: center; margin-top: 3px;
+}
+.mmc-style-credit {
+  margin: 0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 9.5px; line-height: 1.6; color: var(--mmc-off);
+}
+
 /* ---- the save sheet ------------------------------------------------------ */
 
 .mmc-preset-save { display: flex; flex-direction: column; gap: 14px; padding: 20px 22px; }

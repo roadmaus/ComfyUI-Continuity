@@ -422,6 +422,51 @@ plus a file per preset. That means they follow the user rather than the workflow
 which is why **Export** and **Import** hand the library — or one card — over as
 JSON when you move to another machine.
 
+### The style atlas
+
+A fourth tab, and the only one that is a catalogue rather than a shelf of your
+own work. It holds **941 looks** indexed from
+[ostris/minimax_h3_1k](https://huggingface.co/datasets/ostris/minimax_h3_1k) — a
+thousand H3 clips with detailed captions — by
+[hoodtronik's Style Atlas](https://github.com/hoodtronik/minimax-h3-style-atlas),
+grouped into eight media categories with a still off every clip.
+
+What makes them worth having is that they are not adjectives somebody thought of.
+They are the exact strings this model was captioned with, in the position the
+caption puts them: *Claymation with visible fingerprint texture and gently
+stuttering stop-motion movement* is not a description of claymation, it is a
+phrase H3 has seen a thousand frames of.
+
+Applying one **swaps the lead** rather than replacing the prompt. The descriptor
+goes in front, and where the prompt already opens with a descriptor from the
+atlas, that one comes out — so trying six looks on the same shot gives you six
+prompts rather than six stacked paragraphs:
+
+```
+The cat knocks a mug off the table, and it shatters.
+  → Claymation with visible fingerprint texture …, the cat knocks a mug off …
+  → LEGO brickfilm stop motion with bright plastic sheen …, the cat knocks a mug …
+```
+
+Nothing else moves — not the canvas, the strip, the weights, or a card that was
+already written — and it lands on a piece, a card or a PreStage alike.
+
+The atlas is **vendored**: the index and one still per clip, about 5 MB, sitting
+in the pack. No video, nothing downloaded and nothing streamed from Hugging Face,
+so the tab works with the network off and costs the dataset's author nothing. The
+module is fetched the first time you open the tab, never at boot.
+
+Some descriptors run past the look into the setting the clip happened to have —
+upstream reads the *opening* of a caption and H3's captions fuse the two. That is
+not trimmed, because trimming means guessing where a look stops being a look. The
+whole descriptor is in the inspector before you press Apply, and what lands is a
+prompt sitting in the editor, ready to be cut.
+
+Updating the copy is one script: `python3 tools/vendor_style_atlas.py <clone>`
+rewrites the index, drops stills for clips upstream removed, and stamps the
+revision it was taken from. Details in
+[docs/DESIGN-style-atlas.md](docs/DESIGN-style-atlas.md).
+
 ## Modes and duration
 
 What you attach picks the mode, and the mode picks the checkpoint — only that one is
@@ -600,6 +645,12 @@ This pack is glue. The work underneath it belongs to other people:
   paste of the face box alone rather than the whole crop. Ours is an independent
   implementation of those findings, using core's SAM3 in place of the
   ultralytics/insightface stack theirs needs.
+- **[minimax-h3-style-atlas](https://github.com/hoodtronik/minimax-h3-style-atlas)**
+  by hoodtronik, over the
+  **[minimax_h3_1k](https://huggingface.co/datasets/ostris/minimax_h3_1k)** dataset
+  by **ostris** — the 941 looks on the preset library's style tab, and the still
+  on every card. Vendored as text and one frame per clip; the dataset's video is
+  neither shipped nor fetched.
 - **[taehv](https://github.com/madebyollin/taehv)** by madebyollin — the tiny decoder
   that makes the preview look like the video.
 - **larryvrh** and **lightx2v** — the H3 distillation LoRAs behind turbo.
@@ -618,6 +669,7 @@ python3 tests/test_assets.py          # what the picker's listing walk finds
 python3 tests/test_outputs.py         # what an output prefix may be
 python3 tests/test_settings.py        # what the settings file may hold, and that a save is a patch
 python3 tests/test_presets.py         # capture, apply per section, and what never crosses
+python3 tests/test_style_atlas.py     # the vendored atlas is whole, and a style leads the prompt
 python3 tests/test_canvas_mirror.py   # canvas.js against canvas.py
 python3 tests/test_piece_mirror.py    # an old creator_data blob lifts to one shot
 python3 tests/test_prestage_mirror.py
