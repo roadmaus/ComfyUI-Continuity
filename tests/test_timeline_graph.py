@@ -929,3 +929,107 @@ expect_error("a clip cannot be merged into a pass",
              lambda: with_clip({"prompt": "a", "duration_s": 5},
                                {**CLIP, "merge": True}),
              "cannot share a generation")
+
+
+# ---- takes and holds --------------------------------------------------------
+#
+# A strip shot a pass at a time. The rewrite itself is `test_compile.py`'s; what
+# is checked here is that it reaches the graph — a held card costs no sampler, a
+# kept take is spliced as the file it is, and the seam into the card after it
+# reads that file rather than a pass nothing generated.
+
+TAKE = {"filename": "minimax/renders/takes/H3_00001_s01.mp4", "duration_s": 5.0,
+        "width": 1280, "height": 720, "has_audio": True}
+
+stepped = by_class(with_clip(
+    {"prompt": "wide", "duration_s": 5, "hold": True, "take": dict(TAKE)},
+    {"prompt": "closer", "duration_s": 10, "continue": True},
+    {"prompt": "cut away", "duration_s": 5, "hold": True},
+))
+check("a held card with no take costs no sampler", len(stepped["KSampler"]), 1)
+check("...and a kept one costs none either",
+      len(stepped["MiniMaxH3TimelineSegment"]), 1)
+check("the kept take reaches the reel as a file", len(stepped["MiniMaxH3ClipReel"]), 1)
+check("...named by the take",
+      json.loads(stepped["MiniMaxH3ClipReel"][0][1]["clip_data"])["filename"],
+      TAKE["filename"])
+check("the card after it inherits from the take's tail",
+      (len(stepped["MiniMaxH3ClipFrames"]), "MiniMaxH3PassFrames" in stepped),
+      (1, False))
+check("the card being shot is announced by its number on the strip",
+      json.loads(stepped["MiniMaxH3TimelineSegment"][0][1]["segment_data"])["progress"],
+      {"index": 2})
+
+# The takes the save node is told to write: the cards that were actually
+# sampled, and the seed each ran on.
+plan = json.loads(stepped["MiniMaxH3Save"][0][1]["takes"])
+check("the save node is told which card each part is", plan["cards"], [1, 2])
+check("...and what seed it ran on", plan["seeds"], [100, 100])
+
+# A card's own seed. The node's everywhere it is absent, which is every card
+# until somebody rolls one.
+seeded = by_class(with_clip(
+    {"prompt": "wide", "duration_s": 5},
+    {"prompt": "closer", "duration_s": 5, "seed": 4242},
+))
+check("a card with no seed of its own runs on the node's",
+      sorted(i["seed"] for _, i in seeded["KSampler"]), [100, 4242])
+check("...and the save node records the same two",
+      json.loads(seeded["MiniMaxH3Save"][0][1]["takes"])["seeds"], [100, 4242])
+
+# A lone generation has one take and it is the render, so there is nothing to
+# write twice.
+check("a one-pass render is told to keep nothing",
+      by_class(with_clip({"prompt": "only", "duration_s": 5}))
+      ["MiniMaxH3Save"][0][1]["takes"], "")
+
+expect_error("a strip with every card held and nothing to play",
+             lambda: with_clip({"prompt": "a", "duration_s": 5, "hold": True},
+                               {"prompt": "b", "duration_s": 5, "hold": True}),
+             "held with nothing to play")
+
+
+# The takes themselves, written. `_takes` is the one part of this that touches
+# the disk, and what it has to get right is which card each file belongs to —
+# a take reported against the wrong number is a card that would play somebody
+# else's shot without saying so.
+
+import tempfile
+
+import folder_paths as _folder_paths
+
+_short = _run_reel(12)
+_reel = [{"pass": spilled},
+         {"clip": {"filename": "footage.mp4", "start": 0.0, "duration": 4.0,
+                   "sound": True, "width": 8, "height": 8}},
+         {"pass": _short.result[1]}]
+_plan = json.dumps({"cards": [1, 2, 4], "seeds": [100, None, 4242]})
+
+with tempfile.TemporaryDirectory() as _out:
+    _was = _folder_paths.get_output_directory
+    _folder_paths.get_output_directory = lambda: _out
+    try:
+        written = tl.MiniMaxH3Save._takes(_reel, _plan, "minimax/renders/H3", 24.0, 20)
+    finally:
+        _folder_paths.get_output_directory = _was
+
+    check("only the generated passes are written",
+          [take["segment"] for take in written], [1, 4])
+    check("...into the takes shelf",
+          {take["subfolder"] for take in written}, {"minimax/renders/takes"})
+    check("...named for the card each one is",
+          [take["filename"].endswith(f"_s{take['segment']:02}.mp4") for take in written],
+          [True, True])
+    check("...as long as the pass they came from",
+          [take["duration_s"] for take in written], [2.0, 0.5])
+    check("...carrying the seed each ran on",
+          [take["seed"] for take in written], [100, 4242])
+    check("...and whether there is sound in them",
+          [take["has_audio"] for take in written], [True, True])
+    check("the files are on disk",
+          sorted(os.path.basename(p) for p in __import__("glob").glob(
+              os.path.join(_out, "minimax", "renders", "takes", "*.mp4"))),
+          sorted(take["filename"] for take in written))
+
+check("a render with nothing to keep writes nothing",
+      tl.MiniMaxH3Save._takes(_reel, "", "minimax/renders/H3", 24.0, 20), [])

@@ -43,11 +43,12 @@ and are built once for the whole chain.
 """
 
 import json
+import logging
 
 from comfy_api.latest import io
 
 from . import (canvas, compile as compiler, encode as encoder, lora, media, mux,
-               payload as payload_repair, settings, spill)
+               outputs, payload as payload_repair, settings, spill)
 
 # The reel's own socket type: the parts of the finished video in play order,
 # each of them a file — a pass `spill.py` wrote, or a clip the user supplied.
@@ -121,7 +122,7 @@ def stamps(data):
     return tuple(out)
 
 
-def labels(runs):
+def labels(runs, segments=None):
     """What to call each payload in an error raised about it.
 
     A pass holding one segment is that segment, and is named the way it always
@@ -133,10 +134,22 @@ def labels(runs):
     one card is a lone generation — there is no strip on the node's face, so
     "Segment 1" would name something the user cannot see. It says what the
     Creator node always said instead, which is what that piece still is.
+
+    `segments` is the piece the runs were read off, and is only ever the
+    rendered one — a render that holds cards back is shorter than the strip, so
+    a payload's position in it is not the number on the card. `card_no` is the
+    number the user is looking at, written by `compile.rendered_piece`; without
+    it the position is the number, which is what it has always been.
     """
+    def number(index):
+        if segments is None:
+            return index + 1
+        return int(segments[index].get("card_no") or index + 1)
+
     if len(runs) == 1:
         return ["This generation" if runs[0][1] - runs[0][0] == 1 else "This one-pass render"]
-    return [f"Segment {start + 1}" if end - start == 1 else f"Segments {start + 1}-{end}"
+    return [f"Segment {number(start)}" if end - start == 1
+            else f"Segments {number(start)}-{number(end - 1)}"
             for start, end in runs]
 
 
@@ -659,6 +672,9 @@ class MiniMaxH3Save(io.ComfyNode):
                 # `render.emit_tail` is the one place that reads the setting.
                 io.Int.Input("crf", default=settings.DEFAULT_CRF,
                              min=settings.MIN_CRF, max=settings.MAX_CRF),
+                # Which card each part of the reel is and what seed it ran on,
+                # or empty on a render with nothing to keep. See `_takes`.
+                io.String.Input("takes", default="", optional=True),
             ],
             outputs=[],
             hidden=[io.Hidden.prompt, io.Hidden.extra_pnginfo],
@@ -666,7 +682,7 @@ class MiniMaxH3Save(io.ComfyNode):
 
     @classmethod
     def execute(cls, reel, fps, filename_prefix,
-                crf=settings.DEFAULT_CRF) -> io.NodeOutput:
+                crf=settings.DEFAULT_CRF, takes="") -> io.NodeOutput:
         import os
 
         import folder_paths
@@ -695,9 +711,83 @@ class MiniMaxH3Save(io.ComfyNode):
         # node, that stock player lands on the canvas node right under the
         # stage already showing the same clip. A key core does not know keeps
         # the report and loses the widget; stage.js reads it by name.
-        return io.NodeOutput(ui={"mmc_video": [
+        report = {"mmc_video": [
             {"filename": filename, "subfolder": subfolder, "type": "output"},
-        ]})
+        ]}
+        kept = cls._takes(reel, takes, filename_prefix, fps, crf)
+        if kept:
+            report["mmc_takes"] = kept
+        return io.NodeOutput(ui=report)
+
+    @classmethod
+    def _takes(cls, reel, takes, filename_prefix, fps, crf):
+        """Every generated pass, written out again as a file of its own.
+
+        What a take is for: a piece is built a pass at a time, and a card whose
+        pass came out right should never have to be sampled again. The strip
+        splices the file back in as footage it already has — see
+        `compile.rendered_piece` — so this is the one thing standing between a
+        render and never paying for that pass twice.
+
+        Only the generated passes. A part that is already a file — supplied
+        footage, or a take being spliced back in — has nothing to write: it is
+        the file it would be written from.
+
+        No metadata: the workflow rides in the piece's own container, and a take
+        is a working file rather than something to drop back on a canvas.
+        Failures are reported and swallowed for the same reason — the render is
+        already on disk, and losing the piece over a take that could not be
+        written would be the wrong trade entirely.
+        """
+        import os
+
+        import folder_paths
+
+        try:
+            plan = json.loads(takes) if takes else None
+        except json.JSONDecodeError:
+            plan = None
+        if not plan:
+            return []
+
+        cards = plan.get("cards") or []
+        seeds = plan.get("seeds") or []
+        wanted = [index for index, part in enumerate(reel)
+                  if not mux.is_clip(part) and index < len(cards)]
+        if not wanted:
+            return []
+
+        # One counter for the whole render, so a piece's takes sort together
+        # and read as the set they are.
+        width, height = mux.reel_geometry(reel)
+        directory, name, counter, subfolder, _ = folder_paths.get_save_image_path(
+            outputs.takes(filename_prefix), folder_paths.get_output_directory(),
+            width, height)
+
+        written = []
+        for index in wanted:
+            spec = reel[index]["pass"]
+            card = int(cards[index])
+            filename = f"{name}_{counter:05}_s{card:02}.mp4"
+            try:
+                mux.write(os.path.join(directory, filename), [reel[index]],
+                          fps=float(fps), crf=int(crf))
+            except Exception as exc:      # noqa: BLE001 - see the docstring
+                logging.warning("MiniMax: could not write the take for segment "
+                                "%s: %s", card, exc)
+                continue
+            written.append({
+                "segment": card,
+                "filename": filename,
+                "subfolder": subfolder,
+                "type": "output",
+                "duration_s": round(int(spec["frames"]) / float(fps), 6),
+                "width": int(spec["width"]),
+                "height": int(spec["height"]),
+                "has_audio": "audio_path" in spec,
+                "seed": int(seeds[index]) if index < len(seeds) else None,
+            })
+        return written
 
 
 # Registered by `creator_node.MiniMaxCreatorExtension` — one extension for the

@@ -185,14 +185,23 @@ def _render(blob, seed, steps, cfg, sampler_name, scheduler,
     except json.JSONDecodeError as exc:
         raise ValueError(f"the node's data is not valid JSON: {exc}") from exc
 
+    # The piece as this queue will make it, which is not always the piece on the
+    # strip: a card held back is not sampled, and a card playing a kept take is
+    # spliced from the file it already has. `rendered_piece` hands back the blob
+    # itself when neither is in play, so a strip that never touched any of this
+    # compiles to exactly what it always did.
+    piece = compiler.rendered_piece(data)
+
     # One payload per pass, and a pass is a run of merged segments — usually one
     # segment long, and on a piece of one shot there is exactly one of each. How
     # the piece is *compiled* is the only thing the merging changes; what is
     # built from the result is the same loop either way. `render.emit` wires each
     # payload to the one before it, and a pass holding several segments simply
     # has no seam inside it to wire.
-    payloads = compiler.timeline_payloads(data, image_size_lookup=media.image_size)
-    labels = timeline.labels(compiler.timeline_runs(data))
+    payloads = compiler.timeline_payloads(piece, image_size_lookup=media.image_size)
+    segments = compiler.timeline_segments(piece)
+    runs = compiler.timeline_runs(piece)
+    labels = timeline.labels(runs, segments)
 
     graph = render.emit(
         payloads, labels,
@@ -207,7 +216,14 @@ def _render(blob, seed, steps, cfg, sampler_name, scheduler,
         # used should stop the queue before anything is sampled, not after —
         # `get_save_image_path` raising at the end of a render costs the user the
         # render.
-        filename_prefix=outputs.video(data, settings.video_prefix()))
+        filename_prefix=outputs.video(data, settings.video_prefix()),
+        # Which card each pass is, and what seed it runs on. Both are read off
+        # the run's first segment because both are properties of the generation
+        # rather than of a card: a pass holding three shots is one sampler call
+        # with one seed, and it is the one card the strip would send you to.
+        cards=[int(segments[start].get("card_no") or start + 1)
+               for start, _ in runs],
+        seeds=[compiler.segment_seed(segments[start], start) for start, _ in runs])
     return render.expanded(graph)
 
 

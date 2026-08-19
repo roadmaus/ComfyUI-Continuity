@@ -85,6 +85,76 @@ export function widgetIO(widgets, onChange) {
  *   "how is this run" and nowhere else because it is not a sampler setting
  * @returns {HTMLElement}
  */
+/**
+ * One card's own seed, on the card's own editor.
+ *
+ * Not the sampler row: steps, cfg, the sampler and the accelerators describe
+ * how the piece is run and there is one answer to that for the whole node. The
+ * seed is the one number a card has business overriding, and the reason is
+ * shooting a piece a pass at a time — retaking segment 2 under a single number
+ * for the whole piece means rolling the number that made the take already kept
+ * on segment 1, so the handle stops describing the piece. A take's seed is a
+ * fact about the take.
+ *
+ * Unlit while the card inherits, which is every card until somebody rolls one
+ * here — the row's rule everywhere else, and the honest reading: an inherited
+ * seed is doing nothing to this card that it is not doing to all of them.
+ *
+ * @param {number|null} options.own    this card's seed, or null to inherit
+ * @param {number} options.piece       the number on the node, which is what an
+ *                                     inheriting card runs on
+ * @param {(seed: number|null) => void} options.onChange  null clears the override
+ * @param {number|null} [options.taken] the seed the card's take was made on,
+ *   named in the tooltip because "which seed made this" is the whole reason
+ *   the number is on screen at all
+ */
+export function segmentSeedPill({ own, piece, onChange, taken = null }) {
+  const inherited = own === null || own === undefined;
+  const shown = String(inherited ? piece : own);
+  return el("div", { class: `mmc-pill mmc-pill-group${inherited ? "" : " on"}` }, [
+    el("button", {
+      class: "mmc-step mmc-seed-dice",
+      title: t("Roll a seed for this card alone. The rest of the piece keeps the "
+             + "number on the node."),
+      onclick: () => onChange(Math.floor(Math.random() * 0xffffffff)),
+    }, [icon("dice", 15)]),
+    el("button", {
+      class: "mmc-step mmc-seed-last",
+      disabled: inherited,
+      title: inherited
+        ? t("This card runs on the piece's seed, which is what every card does "
+          + "until you roll one here.")
+        : t("Back to the piece's seed, {seed}.", { seed: piece }),
+      onclick: () => { if (!inherited) onChange(null); },
+    }, [icon("rewind", 15)]),
+    el("input", {
+      class: "mmc-seed-input",
+      type: "text",
+      value: shown,
+      style: { width: `${Math.min(21, Math.max(5, shown.length + 1))}ch` },
+      title: [
+        inherited
+          ? t("The piece's seed. Type a number to give this card one of its own.")
+          : t("This card's own seed. The rest of the piece runs on {seed}.", { seed: piece }),
+        taken === null ? null : t("Its take was made on {seed}.", { seed: taken }),
+      ].filter(Boolean).join(" "),
+      onchange: (event) => {
+        const text = String(event.target.value).replace(/[^\d]/g, "");
+        onChange(text === "" ? null : Number(text) || 0);
+      },
+      onpointerdown: (event) => event.stopPropagation(),
+    }),
+    // Which of the two numbers is in force. A readout, not a control — the
+    // rewind beside it is how you go back — so it is a span and wears the
+    // "fixed" seed mode's own quiet.
+    el("span", {
+      class: `mmc-seed-mode${inherited ? "" : " on"}`,
+      text: inherited ? t("piece") : t("card"),
+    }),
+  ]);
+}
+
+
 export function samplingBar({ widgets, value, set, perSegment = false, turbo = [], trailing = [] }) {
   const pills = [];
 
@@ -125,7 +195,8 @@ export function samplingBar({ widgets, value, set, perSegment = false, turbo = [
         // hand-typed 7, wide enough for anything the dice can roll.
         style: { width: `${Math.min(21, Math.max(5, seedText.length + 1))}ch` },
         title: perSegment
-          ? t("One seed for the whole piece: every segment runs on this number.")
+          ? t("The piece's seed: every card runs on this number unless it was given "
+            + "one of its own, which is set on the card.")
           : t("The seed of the one generation."),
         onchange: (event) => {
           const parsed = Number(String(event.target.value).replace(/[^\d]/g, "")) || 0;

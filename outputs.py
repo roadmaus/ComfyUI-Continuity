@@ -93,3 +93,20 @@ def video(data, default=None):
 def image(data, default=None):
     """The prefix a PreStage still lands under."""
     return clean(data.get("output_prefix"), default or IMAGE_PREFIX)
+
+
+def takes(prefix):
+    """A render's prefix -> the prefix its individual passes land under.
+
+    One folder deeper, and named for what is in it. A piece shot a pass at a
+    time writes a file per pass as well as the piece, and those are working
+    files: they are what a card plays instead of being sampled again, and they
+    are of no interest once the piece is finished. In their own shelf they sort
+    apart from the renders in the gallery and can be swept in one gesture; mixed
+    in with them, a ten-card piece would bury the video it made.
+
+    The stem is the render's own, so a take is recognisably from the same
+    render as the file beside it.
+    """
+    folder, _, stem = prefix.rpartition("/")
+    return f"{folder}/takes/{stem}" if folder else f"takes/{stem}"

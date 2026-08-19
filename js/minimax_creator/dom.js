@@ -111,6 +111,14 @@ export const ICONS = {
   // canvas — exactly where it stood, which a wastebasket would have promised
   // the opposite of.
   eraser: `<path d="M21 21H8a2 2 0 0 1-1.42-.587l-3.994-3.999a2 2 0 0 1 0-2.828l10-10a2 2 0 0 1 2.829 0l5.999 6a2 2 0 0 1 0 2.828L12.834 21"/><path d="m5.082 11.09 8.828 8.828"/>`,
+  // Lucide's `lock` and `lock-open`, verbatim — the same deal `brain`, `gear`
+  // and `eraser` get: drawn for a 2.0 stroke and rendered here at the package's
+  // own weight. A card that is not in the next render is locked and a card that
+  // is is open, which is the one metaphor for this nobody has to be taught.
+  // The two differ only in the shackle, which is exactly the reading: the same
+  // body, open or closed.
+  lock: `<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>`,
+  lockOpen: `<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/>`,
 };
 
 export function icon(name, size = 22) {

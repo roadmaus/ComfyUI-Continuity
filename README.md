@@ -323,6 +323,43 @@ on — *Pass 3 of 5* — so a long strip's step count finally says where in the 
 you are. Cached segments are skipped, so the chip always names the segment
 actually being made.
 
+### Shooting a piece a pass at a time
+
+A long strip does not have to be rendered all at once. Every card carries a
+padlock, at the right of its head: **unlocked** is in the next render, **locked**
+is not. Write all three segments, lock the last two, render — you get segment 1
+alone. Look at it. If it is wrong, render again; if it is right, lock segment 1
+too and unlock segment 2, and the next render generates segment 2 continuing
+from the file segment 1 already made, without sampling segment 1 again.
+
+Nothing on a locked card is lost: its prompt, references, LoRAs, seam and length
+are all still set and still editable, it is simply not generated. What the card
+*looks* like says what the lock is holding — solid because the film already
+exists, perforated because it has not been shot yet — and the chip in its meta
+row names it, **kept** or **not shot**. The bar says what the next queue will
+cost: *6.0 s next*, against the piece's full length.
+
+Every render of more than one pass writes each pass as its own file under
+`takes/`, next to the finished video, and hands it back to the card that made
+it. A card carrying one shows **take ready** until you rule on it. Locking the
+card is what keeps that take; leaving it unlocked is what shoots it again. Edit
+a card whose take is kept and it says **kept · edited** — the take still plays,
+but it is no longer what the card describes.
+
+A lock belongs to a *pass*, not a card: a merged run is one generation and one
+file, so it locks, keeps and draws as one piece of film, with its padlock on the
+pass rail. A strip where every card is locked and kept is not an error — it
+queues the piece written out of the takes it already has, at no sampling cost at
+all.
+
+**A card may also carry its own seed**, on the seed pill in its editor. Absent —
+which is every card until you roll one there — it runs on the number on the
+node, and the piece stays one look under one handle. It is retaking that needs
+the exception: re-rolling the node's seed to shoot segment 2 again would move
+the number that made the take already locked in on segment 1, so a take's seed
+is a fact about the take. The pill says which of the two is in force, and names the
+seed the card's take was made on.
+
 ### Upgrading from the two-node version
 
 Through 1.x the Creator and the Timeline were two nodes. As of 2.0 they are one

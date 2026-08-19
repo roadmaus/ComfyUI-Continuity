@@ -93,4 +93,11 @@ check("a blob's key is used", outputs.video({"output_prefix": "shots/a"}), "shot
 check("the two defaults are different folders",
       outputs.VIDEO_PREFIX.rsplit("/", 1)[0] != outputs.IMAGE_PREFIX.rsplit("/", 1)[0], True)
 
+# A render's takes sort into a shelf of their own, one folder under wherever
+# the render itself lands, and keep the render's stem.
+check("takes go one folder deeper", outputs.takes("minimax/renders/H3"),
+      "minimax/renders/takes/H3")
+check("...even under a typed folder", outputs.takes("shots/a"), "shots/takes/a")
+check("...and under no folder at all", outputs.takes("H3"), "takes/H3")
+
 passed("all output-prefix tests passed")

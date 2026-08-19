@@ -258,6 +258,112 @@ export const css = `
 .mmc-tl-cut span:first-child { font-size: 13px; }
 .mmc-tl-cut:hover { color: var(--mmc-accent); border-left-color: var(--mmc-accent); }
 
+/* --- a piece shot a pass at a time ----------------------------------------
+
+   A card is in the next render, or it is not. When it is not, the difference
+   worth drawing is whether the film exists yet — so the two off states borrow
+   the two marks this strip already had for exactly those facts, and nothing new
+   is invented and no new colour is spent.
+
+   None of it draws on a strip that has never held anything back, which is every
+   strip anyone has rendered so far. */
+
+/* A card playing the take it already has. Solid, which is the clip card's skin
+   and for the clip card's stated reason: the difference worth seeing at a
+   glance is that this stretch of the piece already exists. Deliberately no
+   accent — a kept card is the one thing on the strip that will cost nothing,
+   and what deserves the eye is what is about to run. */
+.mmc-tl-card.mmc-tl-kept { background: var(--mmc-surface-3); }
+
+/* A card that has not been shot yet: raw stock. The perforation rail the grow
+   control wears, which in this pack already means film that has not been
+   through the gate — here across the top of the card instead of across the
+   panel. Emptied of its fill rather than faded out: everything on it is still
+   set, still readable and still editable, which is the whole of what holding a
+   card is for. */
+.mmc-tl-card.mmc-tl-unshot {
+  position: relative; background: none; border-color: rgba(255,255,255,.06);
+}
+.mmc-tl-card.mmc-tl-unshot::before {
+  content: ""; position: absolute; left: 10px; right: 10px; top: 5px; height: 4px;
+  background-image: repeating-linear-gradient(90deg,
+    var(--mmc-surface-3) 0 8px, transparent 8px 20px);
+}
+.mmc-tl-card.mmc-tl-unshot .mmc-tl-card-prompt,
+.mmc-tl-card.mmc-tl-unshot .mmc-tl-dur { color: var(--mmc-dim); }
+
+/* What a locked card is locked as, in the row that already carries what the
+   card costs. A readout and not a control — the lock beside the mode badge is
+   the switch — so it has the static pill's manners: no hover, no cursor. Absent
+   while the card is simply in the render with nothing rendered yet, because
+   that is the ordinary state and a mark every card carries says nothing. */
+.mmc-tl-card-state {
+  padding: 1px 6px; border-radius: 6px; margin-left: auto;
+  background: var(--mmc-surface-3); color: var(--mmc-dim);
+  font-size: 10px; flex: none; white-space: nowrap;
+}
+/* A take that came back and has not been ruled on. Amber, the strip's own
+   colour for what the piece is made of, because an undecided take is the one
+   thing here that is waiting on the user. */
+.mmc-tl-card-state.ready { background: rgba(240,166,60,.16); color: var(--mmc-accent); }
+/* ...and the take that has been. Brighter than "not shot" and nothing more:
+   this is the state that costs nothing and needs nothing, so it reports and
+   gets out of the way. */
+.mmc-tl-card-state.kept { color: var(--mmc-text); }
+/* ...and a kept take the card has stopped describing. The warm orange the
+   off-distribution marks wear, meaning what it means there: a statement about
+   what will happen, not a refusal. The take still plays. */
+.mmc-tl-card-state.stale { background: rgba(224,116,60,.16); color: #e0743c; }
+
+/* The switch, in the card's head with the rest of what the card *is*. One
+   control, one question — is this card in the next render — drawn as the one
+   metaphor for it nobody has to be taught: a padlock, open or shut. Clicking a
+   card that has just rendered is how a take is kept, because keeping is
+   locking; there is no second button for it.
+
+   Bigger than the glyphs beside it and given room to be hit. This is the
+   control the whole feature is, and at the 10px a ghost button would otherwise
+   draw it at, a lock is a smudge. */
+.mmc-tl-hold {
+  display: flex; align-items: center; justify-content: center;
+  width: 22px; height: 20px; padding: 0; flex: 0 0 auto;
+}
+.mmc-tl-hold svg {
+  width: 15px; height: 15px; stroke: currentColor; fill: none;
+  stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round;
+}
+/* Shut on a card whose film exists, and shut on one that has not been shot. The
+   lock says only that the card is out of the render — which of the two it is
+   the card's own skin says, and its chip names. */
+.mmc-tl-hold.kept { color: var(--mmc-text); }
+/* Dim, not off: what it marks is quiet, but the control is live and --mmc-off
+   in this pack is what a dead button wears. */
+.mmc-tl-hold.unshot { color: var(--mmc-dim); }
+
+/* A pass of several shots wears it as one piece of film, because that is what
+   it is: one generation, one take, one answer. The casing takes the skin the
+   lone card takes, and the switch sits on the rail with the other things a pass
+   has one of. */
+.mmc-tl-pass.on.mmc-tl-kept .mmc-tl-pass-cards { background: var(--mmc-surface-3); }
+/* The casing keeps its amber edge: a pass that has not been shot is still one
+   generation, and that is the whole of what the casing says. Only the fill goes
+   — it is what said the film exists. */
+.mmc-tl-pass.on.mmc-tl-unshot .mmc-tl-pass-cards { position: relative; background: none; }
+.mmc-tl-pass.on.mmc-tl-unshot .mmc-tl-pass-cards::before {
+  content: ""; position: absolute; left: 12px; right: 12px; top: 3px; height: 4px;
+  background-image: repeating-linear-gradient(90deg,
+    var(--mmc-surface-3) 0 8px, transparent 8px 20px);
+}
+.mmc-tl-pass.on.mmc-tl-unshot .mmc-tl-card-prompt,
+.mmc-tl-pass.on.mmc-tl-unshot .mmc-tl-dur { color: var(--mmc-dim); }
+.mmc-tl-pass-head .mmc-tl-hold { flex: 0 0 auto; }
+
+/* What this queue will make, when that is not the whole piece. Left of the
+   total it is measured against, and in the strip's own amber: it is a fact
+   about the piece's structure, like the pass casings and the cut marks, and it
+   is the one number on this bar that changes with every click of a hold. */
+.mmc-tl-next { color: var(--mmc-accent); }
+
 /* --- passes --------------------------------------------------------------- */
 
 /* Every card sits in one of these whether or not it shares it, so the cards
@@ -464,6 +570,13 @@ export const css = `
 .mmc-tl-tick-n { color: var(--mmc-text); font-size: 12px; font-weight: 500; }
 .mmc-tl-tick-s { color: var(--mmc-dim); font-size: 11px; }
 .mmc-tl-lane:hover .mmc-tl-tick { border-color: rgba(255,255,255,.18); }
+/* Where the shoot has got to, at a tenth the size of the strip's own picture of
+   it: a block filled in because that stretch of film exists, hollowed out
+   because it has not been shot. Same two readings the cards wear, minus the
+   perforations, which at eighteen pixels would be a smudge. */
+.mmc-tl-tick.kept { background: var(--mmc-surface-3); }
+.mmc-tl-tick.unshot { background: none; border-style: dashed; }
+.mmc-tl-tick.unshot .mmc-tl-tick-n, .mmc-tl-tick.unshot .mmc-tl-tick-s { color: var(--mmc-off); }
 .mmc-tl-tick.on {
   background: rgba(240,166,60,.13); border-color: rgba(240,166,60,.32); color: var(--mmc-accent);
 }

@@ -1537,3 +1537,103 @@ for label, blob in [
     check(f"the stamped canvas is the derived one — {label}", new, old)
 
 passed("all contract tests passed")
+
+
+# ---- takes and holds --------------------------------------------------------
+#
+# A strip shot a pass at a time. What is checked here is the rewrite, because
+# the rewrite is the whole mechanism: everything downstream of it only ever
+# sees a piece made of shots and clips, exactly as it did before any of this.
+
+def strip(*segments, **fields):
+    blob = {"version": 2, "prompt": "", "aspect": "16:9", "short_edge": 768,
+            "loras": [], "models": {}, "segments": list(segments)}
+    blob.update(fields)
+    return blob
+
+
+def shot(prompt="a room", seconds=6, **fields):
+    return {"prompt": prompt, "duration_s": seconds, "assets": [], **fields}
+
+
+def take(seconds=6.0, **fields):
+    return {"filename": "minimax/renders/takes/H3_00001_s01.mp4",
+            "duration_s": seconds, "width": 1280, "height": 720,
+            "has_audio": True, **fields}
+
+
+untouched = strip(shot("one"), shot("two"), shot("three"))
+check("a strip with no holds is handed straight back",
+      compiler.rendered_piece(untouched) is compiler.as_piece(untouched), True)
+
+# Segment 1 kept, 2 and 3 not shot yet: one clip, and nothing else.
+sequential = strip(shot("one", hold=True, take=take()),
+                   shot("two", hold=True), shot("three", hold=True))
+rendered = compiler.rendered_piece(sequential)
+check("a kept card becomes a clip", [s.get("kind") for s in rendered["segments"]], ["clip"])
+check("...of its take's file", rendered["segments"][0]["filename"],
+      "minimax/renders/takes/H3_00001_s01.mp4")
+check("...at its take's length", rendered["segments"][0]["duration_s"], 6.0)
+check("...and held cards with no take are not in the render",
+      len(rendered["segments"]), 1)
+
+# The ordinary next step: 1 kept, 2 in the render, 3 still held.
+step2 = strip(shot("one", hold=True, take=take()),
+              shot("two", **{"continue": True}), shot("three", hold=True))
+rendered = compiler.rendered_piece(step2)
+check("the card being shot survives the rewrite",
+      [s.get("kind", "shot") for s in rendered["segments"]], ["clip", "shot"])
+check("the seam into it is untouched", rendered["segments"][1].get("continue"), True)
+check("the cards keep their numbers on the strip",
+      [s["card_no"] for s in rendered["segments"]], [1, 2])
+payloads = compiler.timeline_payloads(rendered, image_size_lookup=_look)
+check("the take is spliced rather than sampled", "clip" in payloads[0], True)
+check("and the shot after it continues from the take", payloads[1]["continue"], True)
+
+# The seam a kept card was generated with is not a seam any more.
+kept_seam = strip(shot("one"), shot("two", hold=True, take=take(),
+                                    **{"continue": True, "feather": 22}))
+rendered = compiler.rendered_piece(kept_seam)
+check("a kept card's own incoming seam is dropped",
+      [rendered["segments"][1].get(key) for key in ("continue", "feather")], [None, None])
+
+# Holds belong to the pass: a merged run is one take, spliced once.
+merged = strip(shot("one", hold=True, take=take(seconds=12.0)),
+               shot("two", merge=True, hold=True, take=take()),
+               shot("three"))
+rendered = compiler.rendered_piece(merged)
+check("a merged run is one clip of the pass's take",
+      [s.get("kind", "shot") for s in rendered["segments"]], ["clip", "shot"])
+check("...at the pass's own length", rendered["segments"][0]["duration_s"], 12.0)
+
+expect_error("a strip with nothing left to render",
+             lambda: compiler.rendered_piece(
+                 strip(shot("one", hold=True), shot("two", hold=True))),
+             "held with nothing to play")
+
+# ...but a strip where every card plays a take is the end of a shoot: it samples
+# nothing and writes the piece out of the film it already has.
+finished = strip(shot("one", hold=True, take=take()), shot("two", hold=True, take=take()))
+check("a fully kept strip renders as footage",
+      [s["kind"] for s in compiler.rendered_piece(finished)["segments"]], ["clip", "clip"])
+expect_error("a take that does not say how long it is",
+             lambda: compiler.rendered_piece(
+                 strip(shot("one", hold=True,
+                            take={"filename": "a.mp4", "duration_s": 0}))),
+             "does not say how long it is")
+
+# One pass over the whole strip: a hold there holds the generation, because
+# there is only one and no half of it to hold.
+single = strip(shot("one"), shot("two"), render="single")
+check("a one-pass strip with no holds is unchanged",
+      compiler.rendered_piece(single) is compiler.as_piece(single), True)
+single_held = strip(shot("one", hold=True, take=take(seconds=12.0)),
+                    shot("two", hold=True), render="single")
+rendered = compiler.rendered_piece(single_held)
+check("a held one-pass strip plays its take",
+      [rendered["render"], len(rendered["segments"])], ["chained", 1])
+
+check("a card with no seed runs on the piece's", compiler.segment_seed(shot(), 0), None)
+check("a card with one runs on its own", compiler.segment_seed(shot(seed=7), 0), 7)
+expect_error("a seed that is not a number",
+             lambda: compiler.segment_seed(shot(seed="x"), 0), "seed must be a whole number")

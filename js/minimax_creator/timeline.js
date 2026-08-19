@@ -59,6 +59,13 @@ export function openTimeline(options) {
  */
 const cardWidth = (seconds) => 132 + Math.round(Math.sqrt(seconds) * 26);
 
+/** What a card or a pass looks like when it is not in the next render: solid
+ *  because the film already exists, perforated because it does not. Empty for
+ *  everything in the render, which is every card on a strip that has never held
+ *  one back. */
+const holdSkin = (head) => (S.isHeld(head)
+  ? (S.takeOn(head) ? " mmc-tl-kept" : " mmc-tl-unshot") : "");
+
 class Timeline {
   constructor({ timeline, onCommit, edit = null, io = null }, resolve) {
     this.timeline = timeline;
@@ -527,6 +534,7 @@ class Timeline {
     const active = S.activeGlobalLoras(this.timeline).length;
     const idle = (this.timeline.loras?.length ?? 0) - active;
     const refined = this.timeline.segments.some((segment) => segment.refined?.body);
+    const problem = S.stripProblem(this.timeline);
 
     this.barHost.replaceChildren(
       this.renderMode(),
@@ -612,6 +620,20 @@ class Timeline {
         onclick: () => this.revertAll(),
       }, [el("span", { text: t("Revert all") })])] : []),
       el("div", { class: "mmc-tl-total" }, [
+        // What this queue will actually make, when that is not the whole piece.
+        // The one number that says what holding a card back bought: a strip of
+        // eight cards with seven of them held is six seconds of sampling, not
+        // forty-eight, and nothing else on this bar would say so. Absent while
+        // the two are the same, which they are on every strip that has never
+        // held anything.
+        ...(S.shotInParts(this.timeline) ? [el("b", {
+          class: "mmc-tl-next",
+          text: t("{s} s next", { s: S.sampledSeconds(this.timeline).toFixed(1) }),
+          title: t("The next render generates {s} s of the {total} s this piece runs to. "
+                 + "The rest is either film it already has or cards you are holding back.",
+                   { s: S.sampledSeconds(this.timeline).toFixed(1),
+                     total: seconds.toFixed(1) }),
+        })] : []),
         el("b", { text: `${seconds.toFixed(1)} s` }),
         el("span", { text: single
           ? t(count === 1 ? "{count} shot · {frames} frames" : "{count} shots · {frames} frames",
@@ -634,6 +656,14 @@ class Timeline {
         el("span", { text: t(passes.length === 1 ? "{count} generation per queue"
           : "{count} generations per queue", { count: passes.length }) }),
       ]),
+      // A refusal the queue would raise, about the strip rather than about one
+      // pass. Said here for the same reason the pass's own problems are said
+      // under their rail: while the cards are still in front of you and it is
+      // one click to make it right.
+      ...(problem ? [el("div", { class: "mmc-tl-problem" }, [
+        el("span", { class: "mmc-note-key", text: t("render") }),
+        el("span", { text: problem }),
+      ])] : []),
       // Whatever the last refine had to say — no text encoder is chosen, or it
       // wrote a label nothing backs. Shown on the bar rather than in a card,
       // because the call was about all of them.
@@ -654,6 +684,11 @@ class Timeline {
   renderStrip() {
     const parts = [];
     const passes = S.passes(this.timeline);
+    // Which kept takes have stopped describing their cards. Asked once for the
+    // strip rather than once per card: the answer is a comparison against the
+    // serialized piece, and twenty cards would otherwise serialize it twenty
+    // times to draw one mark.
+    this.edited = S.editedSince(this.timeline);
     passes.forEach((pass, position) => {
       if (position > 0) parts.push(this.renderJoin(pass.start));
       parts.push(this.renderPass(pass));
@@ -720,8 +755,13 @@ class Timeline {
     const frames = framesForSeconds(S.cutTimes(pass.segments).total);
     const seconds = secondsForFrames(frames);
     const problem = S.passProblem(this.timeline, pass);
+    // A pass is one generation, so it is held or shot as one and its take is
+    // the pass's. The casing wears the skin the card wears alone — solid
+    // because the film exists, perforated because it does not — and the rail
+    // carries the switch, alongside the other things a pass has one of.
+    const chip = this.takeChip(pass.start);
 
-    return el("div", { class: "mmc-tl-pass on" }, [
+    return el("div", { class: `mmc-tl-pass on${holdSkin(pass.segments[0])}` }, [
       el("div", { class: "mmc-tl-pass-head" }, [
         el("span", { class: "mmc-tl-pass-name" }, [
           icon("timeline", 13), el("span", { text: t("one pass") }),
@@ -736,6 +776,7 @@ class Timeline {
                 { frames }),
         }),
         el("span", { class: "mmc-tl-mode", text: S.passMode(pass.segments) }),
+        ...(chip ? [chip] : []),
         el("button", {
           class: "mmc-ghost mmc-tl-pass-split",
           text: t("Split"),
@@ -745,6 +786,7 @@ class Timeline {
                  { count }),
           onclick: () => this.splitPass(pass),
         }),
+        this.holdSwitch(pass.start, count),
       ]),
       el("div", { class: "mmc-tl-pass-cards" }, cards),
       ...(problem ? [el("div", { class: "mmc-tl-problem" }, [
@@ -1163,6 +1205,99 @@ class Timeline {
     ]);
   }
 
+  /**
+   * The one control on a card that says whether it is in the next render.
+   *
+   * One question with three answers, because what "not in it" means depends on
+   * whether there is film: a card holding a take plays it, a card holding
+   * nothing is simply not in this render and keeps everything set on it. There
+   * is no second button for keeping a take — keeping *is* holding, and a take
+   * that came back is kept by the same click that would have held the card
+   * without one.
+   *
+   * `shots` is how many cards this one switch answers for. Past one it is a
+   * whole pass and the switch is drawn on the rail rather than on a card: a
+   * pass is one generation and there is no half of one to hold.
+   */
+  holdSwitch(index, shots = 1) {
+    const segment = this.timeline.segments[index];
+    const held = S.isHeld(segment);
+    const take = S.takeOn(segment);
+    const what = shots > 1 ? t("This pass") : t("This card");
+    return el("button", {
+      class: `mmc-ghost mmc-tl-hold${held ? (take ? " kept" : " unshot") : ""}`,
+      title: held
+        ? (take
+          ? t("Locked: {what} plays the take it already has instead of being "
+            + "generated. Unlock it to shoot it again — everything written on it "
+            + "is still set.", { what })
+          : t("Locked: {what} is not in the next render and has nothing to play "
+            + "yet. Everything written on it is kept. Unlock it to shoot it.",
+              { what }))
+        : (take
+          ? t("Unlocked: {what} is generated again by the next render. Lock it to "
+            + "keep the take it just made — the cards after it go on continuing "
+            + "from that file.", { what })
+          : t("Unlocked: {what} is generated by the next render. Lock it to hold it "
+            + "back and shoot the rest first — nothing written on it is lost.",
+              { what })),
+      onclick: (event) => {
+        event.stopPropagation();
+        if (held) delete segment.hold; else segment.hold = true;
+        this.commit();
+      },
+    }, [icon(held ? "lock" : "lockOpen", 15)]);
+  }
+
+  /**
+   * What a locked card is locked *as*, in words.
+   *
+   * The lock says a card is out of the next render; it cannot also say whether
+   * there is film. The skin draws that — solid because the take exists,
+   * perforated because it has not been shot — and this names it, because a
+   * picture nobody has been taught to read is not a label. Absent on a card
+   * that is simply in the render with nothing rendered yet, which is the
+   * ordinary state and the one a mark would only add noise to.
+   */
+  takeChip(index) {
+    const segment = this.timeline.segments[index];
+    const take = S.takeOn(segment);
+    const held = S.isHeld(segment);
+    if (!take) {
+      return held ? el("span", {
+        class: "mmc-tl-card-state",
+        text: t("not shot"),
+        title: t("Locked, with nothing rendered yet: this card is not in the next "
+               + "render and nothing plays in its place. Everything written on it "
+               + "is kept."),
+      }) : null;
+    }
+    if (this.edited?.has(index)) {
+      return el("span", {
+        class: "mmc-tl-card-state stale",
+        text: held ? t("kept · edited") : t("take · edited"),
+        title: t("This take was made before you changed the card, so it is no longer "
+               + "what the card describes. It still plays — shoot the card again to "
+               + "replace it."),
+      });
+    }
+    if (held) {
+      return el("span", {
+        class: "mmc-tl-card-state kept",
+        text: t("kept"),
+        title: t("Locked, and playing the take it already has. The next render splices "
+               + "this file in instead of generating it, and the cards after it go on "
+               + "continuing from it."),
+      });
+    }
+    return el("span", {
+      class: "mmc-tl-card-state ready",
+      text: t("take ready"),
+      title: t("This card rendered and the file is on disk. Lock the card to keep that "
+             + "take and stop paying for it; leave it unlocked to shoot it again."),
+    });
+  }
+
   renderCard(segment, index, pass) {
     if (S.isClip(segment)) return this.renderClipCard(segment, index);
     // Whether this card is a generation or a shot inside one. Everything below
@@ -1211,8 +1346,17 @@ class Timeline {
       },
     }) : null;
 
+    // Which of the three things this card is: in the next render, playing the
+    // take it already has, or not shot yet. The skin says which — solid because
+    // the film exists, perforated because it does not — and the switch in the
+    // head is where it is changed.
+    // In a pass of several shots both are the pass's: it is one generation, so
+    // it is held, kept and drawn as one piece of film. See `renderPass`.
+    const skin = shared ? "" : holdSkin(segment);
+    const chip = shared ? null : this.takeChip(index);
+
     return el("div", {
-      class: "mmc-tl-card",
+      class: `mmc-tl-card${skin}`,
       style: { width: `${cardWidth(seconds)}px` },
       // Double-click anywhere on the card, because "Edit" is a small target and
       // opening a segment is the thing you do most in here.
@@ -1236,6 +1380,12 @@ class Timeline {
         // The mode is a property of the generation, and a pass holding several
         // shots has one of those for all of them — so it moves to the rail.
         ...(shared ? [] : [el("span", { class: "mmc-tl-mode", text: S.mode(segment) })]),
+        // Whether this card is in the next render. On the head rather than in
+        // the foot because it says what the card *is* to this queue, which is
+        // the question the rest of this row answers — and because a pass of
+        // several shots answers it once, on its rail, where a per-card switch
+        // would be offering half a generation.
+        ...(shared ? [] : [this.holdSwitch(index)]),
       ]),
       // Dimmed while a rewrite stands in for it, the same way the editor dims the
       // box this caption is showing: the card would otherwise read as if the
@@ -1245,9 +1395,10 @@ class Timeline {
         text: prompt || t("No prompt yet"),
         title: using && typed ? t("Not queued — this card's rewrite is. Open it to read or revert.") : "",
       }),
-      ...(meta.length || faceChip
+      ...(meta.length || faceChip || chip
         ? [el("div", { class: "mmc-tl-card-meta" }, [
             ...(meta.length ? [el("span", { text: meta.join(" · ") })] : []),
+            ...(chip ? [chip] : []),
             ...(faceChip ? [faceChip] : []),
           ])]
         : []),
@@ -1355,7 +1506,14 @@ class Timeline {
 
   duplicate(index) {
     if (S.addSegmentRefusal(this.timeline, this.timeline.segments[index].duration_s)) return;
-    this.timeline.segments.splice(index + 1, 0, S.cloneSegment(this.timeline.segments[index]));
+    const copy = S.cloneSegment(this.timeline.segments[index]);
+    // The take is not copied and neither is the hold. A take is the film one
+    // card made, and a copy of the card has not been shot — carrying it over
+    // would put the same seconds of picture on the strip twice under two
+    // numbers, and the second one would claim to be done.
+    delete copy.take;
+    delete copy.hold;
+    this.timeline.segments.splice(index + 1, 0, copy);
     // Every segment after the insertion moved down one card; a seam naming one
     // of them follows it. Nothing pointed at the clone a moment ago, and a seam
     // naming the original still does.
@@ -1554,6 +1712,16 @@ class Timeline {
       // it is a cut inside one generation, and continuity there is the model's
       // to keep rather than a wiring decision — and neither has shot 1.
       continuePill: index > 0 && S.passOf(this.timeline, index).start === index,
+      // The one sampler setting this card may answer for itself. The rest of
+      // the row is the node's — one look, one schedule, one set of
+      // accelerators — but a card retaken until it came out right is a card
+      // whose noise is its own, and holding the piece's number still is the
+      // whole point of retaking one pass. See `segmentSeedPill`.
+      seedTarget: () => ({
+        own: S.segmentSeed(segment),
+        piece: Number(this.io().value("seed", 0)) || 0,
+        taken: S.takeOn(segment)?.seed ?? null,
+      }),
       // One card, refined against the whole timeline: the server compiles the
       // strip to build this segment's payload, so the rewrite is written knowing
       // the global prompt, the canvas and whether this shot continues the last.
@@ -1656,6 +1824,12 @@ export class TimelineBody {
       // queueing and the announce.
       segmentLabel: (index) => t("Pass {n} of {count}",
         { n: index, count: S.passes(this.timeline).length }),
+      // Every pass this render wrote, back onto the card that made it. The card
+      // is not held by it: what came back is a take, and whether to keep it is
+      // the point of looking at it. See `takeTakes`.
+      onTakes: (reported) => {
+        if (S.attachTakes(this.timeline, reported)) this.commit();
+      },
       // View-only: a timeline's references live on its segments, so a pick from
       // here would have no card to land on. The Creator attaches; this browses.
       onGallery: () => openPicker({
@@ -2290,8 +2464,14 @@ export class TimelineBody {
         // the thing that happens rarely, so the hard cut is what gets drawn —
         // as a real break in the band, which is what it is.
         const cut = !offset && index > 0 && !continues;
+        // ...and the same picture the strip draws, at a tenth the size: a block
+        // filled in because the film exists, hollow because it does not. What
+        // the node's one honest picture of the piece is for is knowing where
+        // the shoot has got to without opening the strip.
+        const head = pass.segments[0];
+        const state = S.isHeld(head) ? (S.takeOn(head) ? " kept" : " unshot") : "";
         return el("div", {
-          class: `mmc-tl-tick${continues ? " on" : ""}${cut ? " cut" : ""}`,
+          class: `mmc-tl-tick${continues ? " on" : ""}${cut ? " cut" : ""}${state}`,
           style: { flexGrow: String(Math.max(1, seconds)) },
           title: shared
             ? (offset

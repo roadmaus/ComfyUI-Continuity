@@ -2,6 +2,40 @@
 
 ## Unreleased
 
+**A piece can be shot a pass at a time.** Every card on the strip carries a
+padlock: unlocked is in the next render, locked is not. Write the whole piece,
+lock the cards you are not ready for, and render the first one alone; look at
+it, render it again if it is wrong, and when it is right lock *it* and unlock
+the next. The next render generates that card continuing from the file the first
+one already made — segment 1 is never sampled twice. A locked card keeps
+everything set on it and is simply not generated, so the strip stays the plan it
+always was.
+
+Every render of more than one pass now writes each pass as its own file under a
+`takes/` shelf beside the finished video, and hands it back to the card that
+made it. That is what a locked card plays instead of being sampled: a take is
+spliced into the reel exactly as supplied footage is, and the seam after it
+inherits its last frame the same way. A card with an unruled-on take says **take
+ready**; locking the card is what keeps it. Edit a card whose take is kept and it
+says **kept · edited** — the take still plays, and the card no longer describes
+it.
+
+The padlock says a card is out of the render; what the card looks like says what
+the lock is holding — solid because the film exists, perforated (the mark this
+strip already used for film that has not been through the gate) because it has
+not been shot — and a chip names it, **kept** or **not shot**. The bar says what
+the next queue will make, *6.0 s next* against the piece's length, and the lane
+on the node body shows the same picture at a tenth the size. A lock belongs to a
+pass rather than a card, since a pass is one generation and there is no half of
+one to lock.
+
+**A card may carry its own seed.** New on the seed pill in a card's editor, and
+absent on every card until it is rolled there — a piece is one look and the seed
+is the handle on it. Retaking is what needs the exception: re-rolling the node's
+seed to shoot one card again moves the number that made the take already locked
+in on another, so a take's seed is a fact about the take. The pill says which of the
+two numbers is in force, and names the one the card's take was made on.
+
 Asked for in [#17](https://github.com/roadmaus/ComfyUI-MiniMax-Creator/issues/17).
 
 **Clear starts the next scene without taking the setup with it.** A new rail

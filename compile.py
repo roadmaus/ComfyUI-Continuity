@@ -1178,6 +1178,181 @@ def clip_size(segments):
     return None
 
 
+# ---- takes and holds --------------------------------------------------------
+
+# A card that is not in the next render, and what it plays instead.
+#
+# A piece is built a pass at a time — you write the whole strip, shoot the first
+# stretch of it, look at what came back, and only then shoot the next. Two keys
+# say that much:
+#
+#   `hold`  this card is not sampled by the next render
+#   `take`  the render this card already has: a file, and what is in it
+#
+# The four readings fall out of the pair, so there is no third key and no state
+# machine. Held with a take is a card playing the film it already has; held with
+# none is a card that has not been shot yet and is simply not in this render.
+# Unheld is a card that is sampled, whether or not there is an old take sitting
+# on it — retaking is the absence of a hold, not a mode.
+#
+# **A take is a clip.** Everything a kept take needs — spliced into the reel
+# rather than sampled, read at its tail by the seam after it, conformed to the
+# piece's canvas — is what supplied footage has always done here, and there is
+# nothing about a file this pack made that makes it a different kind of file.
+# So `rendered_piece` rewrites a kept card into a clip card and the rest of this
+# module never learns that takes exist.
+#
+# **Holds belong to the pass, not the card.** A pass is one generation and there
+# is no half of one to hold, so a run of merged cards is held or shot together
+# and its take is the pass's. Read off the run's first card, the same place the
+# seam flags are read from.
+#
+# A clip card carries neither: it is played rather than generated, so "not in
+# the next render" could only mean "not in the piece", which is what removing it
+# is for.
+
+
+def is_held(segment):
+    """Whether this card is out of the next render. Meaningless on a clip."""
+    return not is_clip(segment) and bool(segment.get("hold"))
+
+
+def take_of(segment):
+    """This card's kept take — the render it plays instead of being sampled —
+    or None.
+
+    Only while the card is held: a take on a card that is in the render is a
+    take about to be replaced, which is the whole of what "retake" is.
+    """
+    take = segment.get("take")
+    if not is_held(segment) or not isinstance(take, dict):
+        return None
+    return take if str(take.get("filename") or "").strip() else None
+
+
+def is_kept(segment):
+    """Whether this card plays a take instead of being sampled."""
+    return take_of(segment) is not None
+
+
+def take_spec(segment, index):
+    """A card's kept take -> what the graph needs to splice it, as a clip card.
+
+    A pass was generated with its soundtrack, so a take plays with it. That is
+    the one place this differs from a clip card, which has a switch for it: a
+    clip's sound is somebody else's and may be the wrong sound for the piece,
+    while a take's is the sound this piece generated for exactly these frames.
+    """
+    take = take_of(segment)
+    duration = take.get("duration_s")
+    try:
+        seconds = float(duration or 0)
+    except (TypeError, ValueError) as exc:
+        raise CompileError(
+            f"segment {index + 1}: this card's take does not say how long it is"
+        ) from exc
+    if seconds <= 0:
+        raise CompileError(
+            f"segment {index + 1}: this card's take does not say how long it is — "
+            f"retake it, or drop the take and shoot the card again")
+
+    card = {"kind": "clip", "filename": str(take["filename"]).strip(),
+            "duration_s": seconds,
+            "sound": take.get("has_audio") is not False,
+            "has_audio": take.get("has_audio") is not False}
+    for key in ("width", "height"):
+        try:
+            value = int(take[key])
+        except (KeyError, TypeError, ValueError):
+            continue
+        if value > 0:
+            card[key] = value
+    return card
+
+
+def segment_seed(segment, index):
+    """This card's own seed, or None for the piece's.
+
+    Absent is the default and means the number on the node: a piece is one look
+    and the seed is the handle on it. A card that carries one is a card that was
+    retaken until it came out right, and the number that made it is a fact about
+    that take rather than about the piece.
+    """
+    raw = segment.get("seed")
+    if raw is None or raw == "":
+        return None
+    try:
+        seed = int(raw)
+    except (TypeError, ValueError) as exc:
+        raise CompileError(
+            f"segment {index + 1}: seed must be a whole number") from exc
+    if seed < 0:
+        raise CompileError(f"segment {index + 1}: seed cannot be negative")
+    return seed
+
+
+def rendered_piece(data):
+    """The piece as the next render will make it: holds resolved, takes spliced.
+
+    Two rewrites, run by run, both of them the strip's own state said in the one
+    vocabulary the rest of this module has:
+
+    - a **kept** pass becomes a single clip card of its take, because that is
+      what it is — footage this piece already has;
+    - a **held** pass with no take is dropped, because there is nothing to play
+      and nothing is being generated.
+
+    A strip where every card is kept is not refused: it samples nothing and
+    writes the piece out of the takes it already has, which is exactly the
+    gesture that finishes a piece shot a pass at a time.
+
+    Run by run rather than card by card: a pass is one generation and its take
+    is one file, so rewriting a merged run card by card would splice the same
+    take once per card.
+
+    The incoming seam is dropped from a rewritten card. A kept take is film that
+    already exists and the cut in front of it is already in it, so the flags that
+    described how it was generated have nothing left to describe — and a live
+    seam in front of a clip means the other thing entirely (the pass behind it
+    ends on the clip's opening frame), which is not what the strip was saying.
+    The seam *after* it is untouched and goes on working: the next pass inherits
+    its first frame from the take's tail exactly as it would from a pass's.
+
+    Each rendered card carries `card_no`, its 1-based number on the strip the
+    user is looking at, so an error about it names the card they can go and open
+    rather than the position it happens to occupy in a shortened render.
+
+    Returns `data` itself when nothing is held, so a strip that has never
+    touched any of this compiles to exactly what it always did.
+    """
+    data = as_piece(data)
+    segments = timeline_segments(data)
+    if not any(is_held(segment) for segment in segments):
+        return data
+
+    runs = timeline_runs(data, segments)
+    rendered = []
+    for start, end in runs:
+        head = segments[start]
+        if not is_held(head):
+            for index in range(start, end):
+                rendered.append({**segments[index], "card_no": index + 1})
+            continue
+        if is_kept(head):
+            rendered.append({**take_spec(head, start), "card_no": start + 1})
+        # ...and a held pass with no take is not in this render at all.
+
+    if not rendered:
+        raise CompileError(
+            "every card on this strip is held with nothing to play, so there is "
+            "nothing to render — put one back in the render to shoot it")
+
+    # A rewritten card is a clip, and a strip holding one is never a single
+    # pass. The runs above were read off the strip as the user set it, so the
+    # merging that survived the rewrite is already written on the cards.
+    return {**data, "segments": rendered, "render": "chained"}
+
+
 def render_mode(data):
     """Which of `RENDER_MODES` a timeline blob asks for. Absent means chained."""
     mode = data.get("render") or "chained"

@@ -235,7 +235,7 @@ def face_payload(payload, face):
 
 
 def emit(payloads, labels, weights, sampling, acceleration, unique_id,
-         filename_prefix=FILENAME_PREFIX):
+         filename_prefix=FILENAME_PREFIX, cards=None, seeds=None):
     """-> the graph, which the caller finalizes. Nothing comes back out of it.
 
     `labels[i]` names payload i in any error raised about it — "Segment 2", or
@@ -244,6 +244,13 @@ def emit(payloads, labels, weights, sampling, acceleration, unique_id,
     against the node the user is looking at. `filename_prefix` is where the
     result lands under output/; the callers get it from `outputs.video`, which
     has already refused anything unusable.
+
+    `cards[i]` is the number on the strip of the card payload i renders, and
+    `seeds[i]` its own seed or None for the piece's. Both are the Timeline's:
+    the Creator has one generation, one card and one seed, and passes neither.
+    Together they are also what the save node writes the takes from — see
+    `MiniMaxH3Save` — so a piece rendered a pass at a time gets one file per
+    pass to keep as well as the piece.
     """
     # All three of these raise, and all three are cheap: an accelerator whose
     # pack is not installed, a request that cannot compile, or weights that were
@@ -261,8 +268,14 @@ def emit(payloads, labels, weights, sampling, acceleration, unique_id,
     # appended, so earlier segments keep their cache keys, where a total would
     # invalidate the whole strip for adding one shot at the end.
     if len(payloads) > 1:
-        payloads = [{**payload, "progress": {"index": index + 1}}
-                    for index, payload in enumerate(payloads)]
+        # The card's number on the strip, not its position in the render: a
+        # piece shot a pass at a time renders fewer passes than it has cards,
+        # and "rendering segment 2" has to name the card the user can go and
+        # open. Without `cards` the two are the same thing, which is what they
+        # have always been.
+        numbers = cards or range(1, len(payloads) + 1)
+        payloads = [{**payload, "progress": {"index": int(number)}}
+                    for payload, number in zip(payloads, numbers)]
     compiled = compile_all(payloads, labels)
     where = routed(compiled, labels)
 
@@ -277,6 +290,15 @@ def emit(payloads, labels, weights, sampling, acceleration, unique_id,
         else [None] * len(payloads)
     where = {**routed(face_compiled, labels), **where}
     models.check(weights, set(where), where, face=any(face_payloads))
+
+    # This card's own seed where it has one, the node's everywhere else. Held as
+    # a lookup rather than folded into the payloads: the payload is the segment
+    # node's cache key and the seed is not one of its inputs — it goes to the
+    # sampler — so putting it there would re-encode every conditioning for a
+    # re-roll that changes no conditioning at all.
+    def seed_for(index):
+        seed = (seeds or [None] * len(payloads))[index]
+        return sampling.seed if seed is None else int(seed)
 
     graph = GraphBuilder()
     links = models.emit_links(graph, weights, set(where))
@@ -382,13 +404,22 @@ def emit(payloads, labels, weights, sampling, acceleration, unique_id,
             "KSampler",
             model=model, positive=segment.out(1), negative=against,
             latent_image=segment.out(2),
-            # The seed as set, on every pass. A piece is one look, and the seed
-            # is the handle on it: offsetting it per segment made segment 3 of a
-            # six-segment chain unreproducible from the number on the node, and
-            # made the same clip render differently for having been moved. What
-            # separates consecutive shots is their prompts and their seams, not
-            # their noise.
-            seed=sampling.seed, steps=sampling.steps, cfg=sampling.cfg,
+            # The seed on the node, on every pass, unless this card carries one
+            # of its own. A piece is one look and the seed is the handle on it:
+            # *offsetting* it per segment made segment 3 of a six-segment chain
+            # unreproducible from the number on the node, and made the same clip
+            # render differently for having been moved. What separates
+            # consecutive shots is their prompts and their seams, not their
+            # noise.
+            #
+            # A card that names its own seed is the other thing entirely, and is
+            # what shooting a piece a pass at a time needs: retaking segment 2
+            # under one number for the whole piece means rolling the number that
+            # the take already kept on segment 1 was made under, so the handle
+            # stops describing the piece. A take's seed is a fact about the
+            # take. Absent — which is every card until somebody rolls one — this
+            # is the node's seed and nothing has changed.
+            seed=seed_for(index), steps=sampling.steps, cfg=sampling.cfg,
             sampler_name=sampling.sampler_name, scheduler=sampling.scheduler,
             denoise=1.0,
         )
@@ -430,7 +461,7 @@ def emit(payloads, labels, weights, sampling, acceleration, unique_id,
                 model=refine_model, positive=second.out(1), negative=refine_against,
                 latent=sampled.out(0),
                 width=one.refine.width, height=one.refine.height,
-                seed=sampling.seed, steps=sampling.steps, cfg=sampling.cfg,
+                seed=seed_for(index), steps=sampling.steps, cfg=sampling.cfg,
                 sampler_name=sampling.sampler_name, scheduler=sampling.scheduler,
                 denoise=one.refine.denoise,
             )
@@ -500,18 +531,25 @@ def emit(payloads, labels, weights, sampling, acceleration, unique_id,
                 source=written.out(1), reel=written.out(0),
                 detector=weights.sam3 or "",
                 width=one.face.width, height=one.face.height,
-                seed=sampling.seed, steps=sampling.steps, cfg=sampling.cfg,
+                seed=seed_for(index), steps=sampling.steps, cfg=sampling.cfg,
                 sampler_name=sampling.sampler_name, scheduler=sampling.scheduler,
                 denoise=one.face.denoise)
 
         reel = source.out(0)
         decoded.append(("pass", source.out(1)))
 
-    emit_tail(graph, reel, unique_id, filename_prefix)
+    # What the save node needs to write each pass out as its own file: which
+    # card it is and what seed it ran on. Only on a piece of several passes —
+    # a lone generation's take is the render, and writing it twice would be one
+    # file to keep and one to delete.
+    takes = json.dumps({"cards": list(cards),
+                        "seeds": [seed_for(index) for index in range(len(payloads))]},
+                       sort_keys=True) if cards and len(payloads) > 1 else ""
+    emit_tail(graph, reel, unique_id, filename_prefix, takes)
     return graph
 
 
-def emit_tail(graph, reel, unique_id, filename_prefix=FILENAME_PREFIX):
+def emit_tail(graph, reel, unique_id, filename_prefix=FILENAME_PREFIX, takes=""):
     """Write the reel to a file, and report it against `unique_id`.
 
     H3 generates picture and sound together and they should leave together, which
@@ -533,10 +571,16 @@ def emit_tail(graph, reel, unique_id, filename_prefix=FILENAME_PREFIX):
     node with unchanged inputs is a cache hit, so a save node that read the
     setting itself would keep writing yesterday's quality until something else
     about the render changed.
+
+    `takes` is what the strip needs back to keep a pass: the card each part
+    belongs to and the seed it ran on. Passed as a plain input rather than read
+    off the reel, because the reel knows nothing about cards — and passed as an
+    input for the same reason the quality target is one, so that keeping a take
+    and re-queueing writes the files again instead of hitting the cache.
     """
     save = graph.node(SAVE_NODE, reel=reel,
                       fps=float(canvas.FPS), filename_prefix=filename_prefix,
-                      crf=settings.video_crf())
+                      crf=settings.video_crf(), takes=takes)
     save.set_override_display_id(unique_id)
     return save
 

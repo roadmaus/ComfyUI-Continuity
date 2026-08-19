@@ -21,7 +21,7 @@ import { openTrim, trimLabel } from "./trim.js";
 import { PromptBox, focusEnd, openEditorSheet } from "./prompt.js";
 import { RefinePanel, refineButton, refine } from "./refine.js";
 import { openAspectPopover, openResolutionPopover, facesPill, aspectGlyph, PILL_GLYPH } from "./pills.js";
-import { samplingBar, widgetIO } from "./sampling.js";
+import { samplingBar, segmentSeedPill, widgetIO } from "./sampling.js";
 import { Stage } from "./stage.js";
 import { weightsPill, loadCatalog, catalogFiles } from "./models.js";
 import * as Turbo from "./turbo.js";
@@ -133,7 +133,10 @@ export class CreatorEditor {
                 durationPill = true, extraPills = null, extraTools = null,
                 settingsTool = true, stage = null, editorTitle = null,
                 piece = null, afterPanel = null, presetTarget = null,
-                clearTool = null }) {
+                clearTool = null, seedTarget = null }) {
+    // The one sampler setting a card may answer for itself — see
+    // `segmentSeedPill`. Null on a node body, which owns the whole row.
+    this.seedTarget = seedTarget;
     this.presetTarget = presetTarget;
     this.piece = piece ?? state;
     this.afterPanel = afterPanel;
@@ -579,7 +582,25 @@ export class CreatorEditor {
     this.assetsHost.replaceChildren(...(state.assets.length ? [this.renderAssets()] : []));
     this.loraHost.replaceChildren(...(state.loras.length ? [this.renderLoras()] : []));
     this.pillsHost.replaceChildren(this.renderPills(geometry, S.mode(state)));
-    this.samplingHost.replaceChildren(...(this.samplingWidgets ? [samplingBar({
+    // A card's own seed, where the sampler row belongs to the node above it.
+    // It takes the row's place on the body, holding the one pill of that row
+    // this card is entitled to set.
+    if (!this.samplingWidgets && this.seedTarget) {
+      const target = this.seedTarget();
+      this.samplingHost.replaceChildren(el("div", { class: "mmc-pills" }, [
+        segmentSeedPill({
+          own: target.own,
+          piece: target.piece,
+          taken: target.taken,
+          onChange: (seed) => {
+            if (seed === null) delete this.state.seed; else this.state.seed = seed;
+            this.onCommit?.();
+            this.render();
+          },
+        }),
+      ]));
+    }
+    else this.samplingHost.replaceChildren(...(this.samplingWidgets ? [samplingBar({
       widgets: this.samplingWidgets,
       value: (name, fallback) => {
         const widget = this.samplingWidgets[name];

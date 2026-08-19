@@ -68,12 +68,18 @@ export class Stage {
    *   segment is being rendered — the Timeline passes one that knows the strip
    *   ("Segment 2 of 5"); without it the announce's index shows bare.
    */
-  constructor({ nodeId, onVisibility, onGallery, resultChips, segmentLabel }) {
+  constructor({ nodeId, onVisibility, onGallery, resultChips, segmentLabel,
+                onTakes = null }) {
     this.nodeId = nodeId;
     this.onVisibility = onVisibility;
     this.onGallery = onGallery;
     this.resultChips = resultChips;
     this.segmentLabel = segmentLabel;
+    // What each pass of this render wrote, for the body that owns a strip to
+    // hand back to the cards that made them. The stage itself has no use for
+    // it — it shows one finished piece — but the executed message is where the
+    // files are named and there is one of those, not one per node.
+    this.onTakes = onTakes;
     this.state = "idle";
     this.segment = null;     // 1-based index of the segment now rendering
     this.progress = null;    // {step, total}
@@ -221,6 +227,10 @@ export class Stage {
         // also what says whether the result is a clip or a still.
         const saved = detail.output?.mmc_video?.[0] ?? detail.output?.mmc_image?.[0];
         if (!saved) break;
+        // The passes, each as its own file. Reported alongside the piece by
+        // `MiniMaxH3Save` on any render of more than one pass, so a card whose
+        // pass came out right never has to be sampled again.
+        if (detail.output?.mmc_takes?.length) this.onTakes?.(detail.output.mmc_takes);
         this.state = "done";
         this.progress = null;
         this.result = { url: outputUrl(saved), name: saved.filename,

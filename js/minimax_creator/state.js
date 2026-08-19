@@ -785,6 +785,151 @@ export function clipSegment({ filename, duration, width, height, hasAudio }) {
   };
 }
 
+// ---- takes and holds --------------------------------------------------------
+//
+// A piece built a pass at a time. Mirrors the same section of compile.py, which
+// is where the argument for the shape lives; what is here is what the strip
+// needs to draw it.
+//
+// Two keys and four readings. `hold` takes a card out of the next render;
+// `take` is the render it already has. Held with a take is a card playing the
+// film it already has, held without one is a card that has not been shot yet,
+// and no hold at all is a card that is sampled — whether or not an old take is
+// sitting on it, because retaking is the absence of a hold rather than a mode
+// of its own.
+//
+// Neither belongs to a clip card: it is played rather than generated, so "not
+// in the next render" could only mean "not in the piece", which is what
+// removing it is for.
+
+/** Whether this card is out of the next render. Mirrors `compile.is_held`. */
+export const isHeld = (segment) => !isClip(segment) && segment?.hold === true;
+
+/** The render this card has, kept or not. A card being retaken still has last
+ *  time's until this one lands. */
+export const takeOn = (segment) =>
+  (segment?.take && String(segment.take.filename || "").trim() ? segment.take : null);
+
+/** Whether this card plays a take instead of being sampled. Mirrors
+ *  `compile.take_of`: a take only counts while the card is held, because a take
+ *  on a card that is in the render is a take about to be replaced. */
+export const isKept = (segment) => isHeld(segment) && takeOn(segment) !== null;
+
+/** Whether a pass is sampled by the next render. A pass is one generation and
+ *  there is no half of one to hold, so the run's first card answers for it —
+ *  the same place the seam flags and the mode are read from. */
+export const passShot = (pass) => !isClip(pass.segments[0]) && !isHeld(pass.segments[0]);
+
+/**
+ * A card's own seed, or null for the piece's.
+ *
+ * Absent is the default and means the number on the node: a piece is one look
+ * and the seed is the handle on it. A card carries one when it has been retaken
+ * until it came out right — the number that made that take is a fact about the
+ * take. Mirrors `compile.segment_seed`.
+ */
+export function segmentSeed(segment) {
+  const raw = segment?.seed;
+  if (raw === null || raw === undefined || raw === "") return null;
+  const seed = Number(raw);
+  return Number.isInteger(seed) && seed >= 0 ? seed : null;
+}
+
+/**
+ * The takes a finished render reported, onto the cards that made them.
+ *
+ * -> whether any landed. By card number rather than by position, because a
+ * render is not always the whole strip: the save node is told which card each
+ * pass is, and that number is the number on the card. One that has moved or
+ * been deleted since the queue went out is left alone rather than guessed at.
+ *
+ * Nothing is held here. A take that came back is a take to look at, and holding
+ * the card is the gesture that says it is good — doing it here would decide for
+ * the user, and would quietly stop the next queue from re-rendering the card
+ * they were about to re-render.
+ *
+ * `stamp` is what the card looked like when its take was attached, so an edit
+ * afterwards can be marked rather than silently shipped — see `editedSince`. It
+ * is taken now rather than at queue time, which leaves a window: a card edited
+ * while its own render was still running is stamped as if the edit had been in
+ * it. The cost of closing that is a queue-time hook, for a mark that only ever
+ * says "look at this again".
+ */
+export function attachTakes(timeline, reports) {
+  // One serialization for the whole report rather than one per take: the strip
+  // is the thing being hashed, and it is the same strip for all of them.
+  const stamps = stampsOf(timeline);
+  let landed = false;
+  for (const report of reports ?? []) {
+    const index = Number(report.segment) - 1;
+    const segment = timeline.segments[index];
+    if (!segment || isClip(segment)) continue;
+    segment.take = takeFrom(report, stamps[index]);
+    landed = true;
+  }
+  return landed;
+}
+
+function takeFrom(report, stamp) {
+  return {
+    // Annotated the way the picker annotates a file from the gallery, because
+    // that is what this is: a video under output/, named so that
+    // `folder_paths.get_annotated_filepath` finds it. Without the tag it would
+    // be looked for in the input folder and the take would simply not exist.
+    filename: `${[report.subfolder, report.filename].filter(Boolean).join("/")} [output]`,
+    duration_s: Number(report.duration_s) || 0,
+    ...(report.width && report.height
+      ? { width: Number(report.width), height: Number(report.height) } : {}),
+    has_audio: report.has_audio !== false,
+    ...(Number.isInteger(report.seed) ? { seed: report.seed } : {}),
+    stamp,
+  };
+}
+
+/**
+ * Which cards' kept takes no longer describe the card.
+ *
+ * -> a Set of segment indices. Editing a kept card is allowed — the take is
+ * still the film that exists — but the card has stopped being a description of
+ * it, and marking that is the difference between a strip you can trust and one
+ * that quietly ships last week's shot. The piece's own fields are in the stamp
+ * too: changing the global prompt or the canvas changes what every card would
+ * render to, so every take goes stale together, which is the truth.
+ */
+export function editedSince(timeline) {
+  const stamps = stampsOf(timeline);
+  const edited = new Set();
+  timeline.segments.forEach((segment, index) => {
+    const take = takeOn(segment);
+    if (take && take.stamp && take.stamp !== stamps[index]) edited.add(index);
+  });
+  return edited;
+}
+
+/** One stamp per card, off a single serialization of the piece. Per card rather
+ *  than per call because a strip of twenty would otherwise serialize the piece
+ *  twenty times to answer one question about it. */
+function stampsOf(timeline) {
+  const blob = JSON.parse(serializeTimeline(timeline));
+  const { segments, ...piece } = blob;
+  const head = JSON.stringify(piece);
+  return (segments ?? []).map((card) => {
+    const { hold, take, ...rest } = card;
+    return hash(head + JSON.stringify(rest));
+  });
+}
+
+/** FNV-1a, base 36. Not a checksum of anything anyone else reads — it only has
+ *  to change when the card does. */
+function hash(text) {
+  let value = 0x811c9dc5;
+  for (let index = 0; index < text.length; index += 1) {
+    value ^= text.charCodeAt(index);
+    value = Math.imul(value, 0x01000193) >>> 0;
+  }
+  return value.toString(36);
+}
+
 export function emptySegment() {
   const state = emptyState();
   delete state.version;
@@ -946,7 +1091,24 @@ function syncCanvas(timeline) {
   timeline.segments.forEach((segment, index) => {
     if (isClip(segment)) delete segment.merge;
     if (index && isClip(timeline.segments[index - 1])) delete segment.merge;
+    // A clip is played rather than generated, so it has no hold to be out of
+    // the render by and no take to play instead of one.
+    if (isClip(segment)) { delete segment.hold; delete segment.take; }
   });
+  // Holds belong to the pass. A pass is one generation and its take is one
+  // file, so a run of merged cards is shot or held together and the run's first
+  // card is where both are read from — the same rule the mode badge and the
+  // off-distribution mark already follow. Cleared here rather than guarded at
+  // every read, so merging a kept card into a live pass cannot leave half a
+  // pass holding a take of the other half.
+  for (const pass of passes(timeline)) {
+    if (pass.segments.length < 2) continue;
+    const held = isHeld(pass.segments[0]);
+    pass.segments.forEach((segment, offset) => {
+      if (held) segment.hold = true; else delete segment.hold;
+      if (offset) delete segment.take;
+    });
+  }
   for (const segment of timeline.segments) {
     if (isClip(segment)) continue;   // no canvas, no pool, no prompt to mirror
     segment.aspect = timeline.aspect;
@@ -1174,6 +1336,30 @@ export function parseTimeline(raw) {
         delete segment.feather;
         const width = Number(raw?.feather);
         if (FEATHER_GRID.includes(width) && width > 1) segment.feather = width;
+        // Whether this card is in the next render, and the render it already
+        // has. Both survive a reload for the same reason the prompt does: a
+        // piece shot a pass at a time is shot over days, and a strip that
+        // forgot which cards were done would ask for them all again.
+        delete segment.hold;
+        if (raw?.hold === true) segment.hold = true;
+        delete segment.take;
+        const take = raw?.take;
+        if (take && typeof take === "object" && String(take.filename || "").trim()) {
+          segment.take = {
+            filename: String(take.filename),
+            duration_s: Number(take.duration_s) || 0,
+            ...(Number(take.width) > 0 && Number(take.height) > 0
+              ? { width: Number(take.width), height: Number(take.height) } : {}),
+            has_audio: take.has_audio !== false,
+            ...(Number.isInteger(take.seed) ? { seed: take.seed } : {}),
+            ...(take.stamp ? { stamp: String(take.stamp) } : {}),
+          };
+        }
+        // The card's own seed. Absent — which is every card until somebody
+        // rolls one here — means the number on the node.
+        delete segment.seed;
+        const seed = Number(raw?.seed);
+        if (Number.isInteger(seed) && seed >= 0) segment.seed = seed;
         return segment;
       });
       return syncCanvas(timeline);
@@ -1262,6 +1448,12 @@ export function serializeTimeline(timeline) {
       // The seam's width — only on a live picture seam, and only past the
       // classic single frame, which absence already says.
       if (out.continue && feather(segment) > 1) out.feather = feather(segment);
+      // Out of the next render, and the render it already has. Only the
+      // deliberate states are written: a card nobody has held and nothing has
+      // rendered writes exactly what it always did.
+      if (segment.hold === true) out.hold = true;
+      if (takeOn(segment)) out.take = { ...segment.take };
+      if (segmentSeed(segment) !== null) out.seed = segmentSeed(segment);
       return out;
     }),
   }, null, 2);
@@ -1342,6 +1534,38 @@ export function timelineFrames(timeline) {
 export function timelineSeconds(timeline) {
   return secondsForFrames(timelineFrames(timeline));
 }
+
+/**
+ * How much of the piece the next queue will actually make.
+ *
+ * The same arithmetic as `timelineFrames` over the passes that are sampled: a
+ * held card is not one, and neither is a card playing a take or a supplied
+ * clip. Equal to the whole piece on a strip that has never held anything, which
+ * is why the bar only shows it when the two differ — a number that always
+ * matched its neighbour would be noise on every render anyone has run so far.
+ */
+export function sampledFrames(timeline) {
+  const all = passes(timeline);
+  return all.reduce((total, pass, index) => {
+    if (!passShot(pass)) return total;
+    const head = pass.segments[0];
+    const overlap = index > 0 && continues(head) && feather(head) > 1 ? feather(head) : 0;
+    const after = all[index + 1]?.segments[0];
+    const runs = after && isClip(after) && continues(after) && feather(after) > 1
+      ? feather(after) : 0;
+    return total + framesForSeconds(cutTimes(pass.segments).total) - overlap - runs;
+  }, 0);
+}
+
+/** ...in seconds of finished video. */
+export function sampledSeconds(timeline) {
+  return secondsForFrames(sampledFrames(timeline));
+}
+
+/** Whether the strip is holding anything back — which is what decides whether
+ *  any of this is drawn at all. */
+export const shotInParts = (timeline) =>
+  timeline.segments.some((segment) => isHeld(segment) || takeOn(segment));
 
 /**
  * Why another card cannot be added, or null when it can — the string goes
@@ -1903,6 +2127,28 @@ export function passMode(segments) {
  * Nothing to say about a pass of one: everything below is about shots sharing a
  * generation, and a lone segment shares its with nobody.
  */
+/**
+ * What is wrong with the strip as a whole, or null — the refusals a queue would
+ * meet, said while the cards are still in front of you.
+ *
+ * Only one so far, and it is the one a piece shot a pass at a time can walk
+ * into by clicking: holding the last card that was still in the render leaves
+ * nothing for the queue to generate. Said rather than prevented, the way this
+ * pack says the others — the strip is still saveable, and putting one card back
+ * makes it right again.
+ */
+export function stripProblem(timeline) {
+  if (!timeline.segments.length) return null;
+  // A strip where every card plays a take is not a problem — it is the last
+  // step of shooting a piece a pass at a time, and what it queues is the piece
+  // written out of the film it already has, at no sampling cost at all. What
+  // there is nothing to do about is a strip with no film and no generation.
+  if (passes(timeline).some((pass) => passShot(pass) || isKept(pass.segments[0])
+                                      || isClip(pass.segments[0]))) return null;
+  return t("Every card is held with nothing to play, so the next render has "
+         + "nothing to make. Put one back in the render to shoot it.");
+}
+
 export function passProblem(timeline, pass) {
   const shots = pass.segments;
   if (shots.length < 2) return null;
