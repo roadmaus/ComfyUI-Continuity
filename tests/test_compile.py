@@ -461,8 +461,33 @@ expect_error("unknown takes",
 expect_error("a keyframe cannot be narrowed",
              lambda: build(prompt="x", assets=[image("img-1", role="first_frame", takes="person")]),
              "used whole")
-expect_error("a video cannot be narrowed",
-             lambda: build(assets=[video("vid-1", takes="person")]), "used whole")
+
+# --- and what a reference video takes -----------------------------------------
+#
+# The same field, four more values. They are roles H3's reference guide gives a
+# clip rather than crops of it, so compile still only stores and validates —
+# but the values a picture never had are refused on a picture, and a clip with
+# no picture left to scope is refused all of them.
+
+check("a reference video defaults to the whole clip",
+      build(assets=[video("vid-1")]).ref_videos[0].takes, "full")
+check("a camera reference is kept",
+      build(assets=[video("vid-1", takes="camera")]).ref_videos[0].takes, "camera")
+check("a motion reference is kept",
+      build(assets=[video("vid-1", takes="motion")]).ref_videos[0].takes, "motion")
+check("a clip can be narrowed the way a picture can",
+      build(assets=[video("vid-1", takes="person")]).ref_videos[0].takes, "person")
+expect_error("a video's takes must be one of its own",
+             lambda: build(assets=[video("vid-1", takes="storyboard")]),
+             "takes must be one of")
+expect_error("a picture has no camera to take",
+             lambda: build(assets=[image("img-1", takes="camera")]), "takes must be one of")
+expect_error("a sound-only clip has no picture to narrow",
+             lambda: build(assets=[image("img-1"), video("vid-1", track="sound", takes="motion")]),
+             "sound-only clip is always used whole")
+expect_error("audio cannot be narrowed",
+             lambda: build(assets=[image("img-1"), audio("aud-1", takes="person")]),
+             "used whole")
 
 # --- loras and trigger words -------------------------------------------------
 

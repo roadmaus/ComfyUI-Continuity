@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+**A reference clip now says what it lends.** The scope dial that reference
+images have had — `full · person · object · scene · style` — is on video chips
+too, with four more values that only a moving picture has. `motion` lends the
+action alone and carries it onto whoever the prompt puts in the shot. `camera`
+lends the move, the cuts and the pacing, with nothing visible in the clip
+appearing. `edit` says the clip *is* the video being edited, which is how you
+replace one subject and keep everything else. `continue` picks the video up
+where the clip ends. Each one becomes a different label in the rewrite: the
+content takes and `motion` mine the clip for a `<Subject N>`, while `camera`,
+`edit` and `continue` ask for the `<Video N>` entry, retention marker and
+task-type prefix H3's reference form gives whole-video relationships. The dial
+opens as a menu now rather than cycling, on the card's chip and on the
+timeline pool's alike, and a clip taken for its sound alone has no dial — there
+is no picture left to scope.
+
 **A piece can be shot a pass at a time.** Every card on the strip carries a
 padlock: unlocked is in the next render, locked is not. Write the whole piece,
 lock the cards you are not ready for, and render the first one alone; look at

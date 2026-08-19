@@ -142,15 +142,26 @@ TRACKS = ("picture", "picture+sound", "sound")
 # speed, never more detail than it had.
 DEFAULT_REF_SIZE = {"image": "match", "video": "max"}
 
-# What of a reference image is actually the reference. "full" — the default and
-# the only behaviour that existed before the setting — is the whole picture.
+# What of a reference is actually the reference. "full" — the default and the
+# only behaviour that existed before the setting — is the whole file.
+#
 # The others narrow it: a "person" reference contributes the person's likeness
 # and nothing else, so the picture's background, palette and pose stop bleeding
 # into the target video the moment the user says "her from @img-1". The DiT is
 # handed the same tensor either way — the narrowing lives in the prose, which
 # is where H3's reference form expresses it (`retention_analysis`) — so the
 # field is read by the refiner's glossary and by nothing on the encode path.
-TAKES = ("full", "person", "object", "scene", "style")
+#
+# A clip can be narrowed the same four ways, and four more that only a moving
+# picture has. They are the roles H3's reference guide gives a video, and each
+# one is a different label in the rewrite: "motion" and the four content takes
+# mine the clip for a `<Subject N>` and leave its structure behind, while
+# "camera", "edit" and "continue" are the whole-video relationships the guide
+# reserves `<Video N>` for. Naming the role here is what lets the refiner pick
+# the label — the file rides in identically either way.
+IMAGE_TAKES = ("full", "person", "object", "scene", "style")
+VIDEO_TAKES = IMAGE_TAKES + ("motion", "camera", "edit", "continue")
+TAKES = {"image": IMAGE_TAKES, "video": VIDEO_TAKES}
 
 
 class CompileError(ValueError):
@@ -166,7 +177,7 @@ class Asset:
     track: str | None = None   # video only: one of TRACKS; None for images and audio
     ref_size: str = "match"    # reference image/video: match | max; see DEFAULT_REF_SIZE
     trim: tuple[float, float] | None = None   # video/audio only: (start, end) seconds; None = whole file
-    takes: str = "full"        # reference image only: one of TAKES; what of it is the reference
+    takes: str = "full"        # reference image/video: one of TAKES[kind]; what of it is the reference
 
 
 @dataclass
@@ -402,26 +413,33 @@ def _parse_assets(raw):
         if ref_size not in ("match", "max"):
             raise CompileError(f"@{handle}: ref_size must be 'match' or 'max'")
 
-        # Only a reference image has anything to narrow: a keyframe is bound
-        # whole by the alignment line, and video/audio narrowing is `track`'s
-        # job. Refused rather than ignored, so a blob claiming a person-only
-        # end frame does not queue quietly meaning something else.
+        track = _parse_track(handle, kind, item)
+
+        # Only a reference picture has anything to narrow: a keyframe is bound
+        # whole by the alignment line, audio's narrowing is nothing at all, and
+        # a clip taken for its soundtrack alone has no picture left to scope.
+        # Refused rather than ignored, so a blob claiming a person-only end
+        # frame does not queue quietly meaning something else.
         takes = item.get("takes") or "full"
-        if takes not in TAKES:
-            raise CompileError(
-                f"@{handle}: takes must be one of {', '.join(TAKES)} (got {takes!r})")
-        if takes != "full" and (kind != "image" or role != "reference"):
-            raise CompileError(
-                f"@{handle}: 'takes' narrows a reference image; a {role.replace('_', ' ')} "
-                f"{kind} is always used whole"
-            )
+        allowed = TAKES.get(kind, ()) if role == "reference" and track != "sound" else ()
+        if takes != "full":
+            if not allowed:
+                whole = ("sound-only clip" if track == "sound"
+                         else f"{role.replace('_', ' ')} {kind}")
+                raise CompileError(
+                    f"@{handle}: 'takes' narrows a reference picture; a {whole} "
+                    f"is always used whole"
+                )
+            if takes not in allowed:
+                raise CompileError(
+                    f"@{handle}: takes must be one of {', '.join(allowed)} (got {takes!r})")
 
         assets.append(Asset(
             handle=handle,
             kind=kind,
             role=role,
             filename=filename,
-            track=_parse_track(handle, kind, item),
+            track=track,
             ref_size=ref_size,
             trim=_parse_trim(handle, kind, item.get("trim")),
             takes=takes,

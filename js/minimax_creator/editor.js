@@ -20,7 +20,8 @@ import { openPresetLibrary } from "./presetlib.js";
 import { openTrim, trimLabel } from "./trim.js";
 import { PromptBox, focusEnd, openEditorSheet } from "./prompt.js";
 import { RefinePanel, refineButton, refine } from "./refine.js";
-import { openAspectPopover, openResolutionPopover, facesPill, aspectGlyph, PILL_GLYPH } from "./pills.js";
+import { openAspectPopover, openResolutionPopover, openChoicePopover, facesPill, aspectGlyph,
+         PILL_GLYPH } from "./pills.js";
 import { samplingBar, segmentSeedPill, widgetIO } from "./sampling.js";
 import { Stage } from "./stage.js";
 import { weightsPill, loadCatalog, catalogFiles } from "./models.js";
@@ -39,6 +40,40 @@ const TRACK_CHIP = {
   "picture": { text: "sound off", next: "picture+sound" },
   "sound": { text: "sound only", next: "picture+sound" },
 };
+
+// What the narrowing chip explains, per kind. Both lists say the same thing
+// about the four takes they share; a clip's other four are the whole-video
+// roles, which is a different sentence and a longer one.
+export const IMAGE_TAKES_HELP =
+  "What of this picture is the reference. full: the whole image. "
+  + "person / object / scene / style: only that — a person reference keeps the "
+  + "likeness and drops the picture's background, palette, pose and action. "
+  + "Read by Refine, and worth saying in the prompt too if you skip refining.";
+export const VIDEO_TAKES_HELP =
+  "What of this clip is the reference. full: the whole thing. "
+  + "person / object / scene / style: only that much of what it shows. "
+  + "motion: the action alone, carried onto whoever the prompt puts in the "
+  + "shot. camera: the camera move, cuts and pacing, with nothing in it "
+  + "appearing. edit: the clip is the video being edited. continue: the video "
+  + "picks up where it ends. Read by Refine, and worth saying in the prompt "
+  + "too if you skip refining.";
+
+/** The narrowing menu, shared by the chip on a card and the one in the
+ *  timeline's pool. Labels are translated, so the pick maps back by key. */
+export function pickTakes(anchor, asset, commit) {
+  const options = S.takeOptions(asset);
+  openChoicePopover(anchor, {
+    title: t("@{handle} is a reference to", { handle: asset.handle }),
+    options: options.map((key) => t(key)),
+    value: t(S.takes(asset)),
+    onPick: (choice) => {
+      const key = options.find((k) => t(k) === choice) ?? "full";
+      if (key === "full") delete asset.takes;
+      else asset.takes = key;
+      commit();
+    },
+  });
+}
 
 export class CreatorEditor {
   /**
@@ -948,20 +983,12 @@ export class CreatorEditor {
         }));
       }
       if (S.takeable(asset)) {
-        const take = S.takes(asset);
         parts.push(el("button", {
           class: "mmc-ghost",
           style: { fontSize: "11px" },
-          title: t("What of this picture is the reference. full: the whole image. "
-               + "person / object / scene / style: only that — a person reference "
-               + "keeps the likeness and drops the picture's background, palette, "
-               + "pose and action. Read by Refine, and worth saying in the prompt "
-               + "too if you skip refining."),
-          text: t(take),
-          onclick: () => {
-            asset.takes = S.TAKES[(S.TAKES.indexOf(take) + 1) % S.TAKES.length];
-            this.commit();
-          },
+          title: asset.kind === "video" ? t(VIDEO_TAKES_HELP) : t(IMAGE_TAKES_HELP),
+          text: t(S.takes(asset)),
+          onclick: (event) => pickTakes(event.currentTarget, asset, () => this.commit()),
         }));
       }
       if (S.sizeable(asset)) {

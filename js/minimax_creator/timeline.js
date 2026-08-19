@@ -10,7 +10,7 @@
 import { probe, viewUrl } from "./api.js";
 import { clearButton } from "./clear.js";
 import { el, icon, mountOverlay, swappable } from "./dom.js";
-import { CreatorEditor } from "./editor.js";
+import { CreatorEditor, pickTakes, IMAGE_TAKES_HELP, VIDEO_TAKES_HELP } from "./editor.js";
 import { t } from "./i18n.js";
 import { openLoras } from "./loras.js";
 import { openPicker } from "./picker.js";
@@ -353,15 +353,15 @@ class Timeline {
         onclick: () => this.citeInGlobal(asset),
       }),
       el("span", { class: "mmc-tl-pool-where", text: where }),
-      // What of the picture is the reference — a character sheet is usually the
-      // person, not the sheet's background. Images only, like the editor's own.
-      ...(asset.kind === "image" ? [el("button", {
+      // What of the file is the reference — a character sheet is usually the
+      // person, not the sheet's background, and a clip is as often borrowed for
+      // its camera as for what it shows. The editor's own chip, same menu.
+      ...(S.takeable(asset) ? [el("button", {
         class: "mmc-ghost",
         style: { fontSize: "11px" },
-        title: t("What of this picture is the reference — narrowing it keeps the picture's "
-             + "background and palette out of the video."),
+        title: asset.kind === "video" ? t(VIDEO_TAKES_HELP) : t(IMAGE_TAKES_HELP),
         text: t(S.takes(asset)),
-        onclick: (event) => this.pickPoolTakes(event.currentTarget, asset),
+        onclick: (event) => pickTakes(event.currentTarget, asset, () => this.commit()),
       })] : []),
       // What the reference is encoded at. The pool's copy is the only place a
       // shared reference can be set, so without it every citation of it is
@@ -405,21 +405,6 @@ class Timeline {
     const joiner = current && !/\s$/.test(current) ? " " : "";
     this.setGlobalPrompt(`${current}${joiner}@${asset.handle} `);
     this.commit();
-  }
-
-  pickPoolTakes(anchor, asset) {
-    const label = (key) => t(key);
-    openChoicePopover(anchor, {
-      title: t("@{handle} is a reference to", { handle: asset.handle }),
-      options: S.TAKES.map(label),
-      value: label(S.takes(asset)),
-      onPick: (choice) => {
-        const key = S.TAKES.find((k) => label(k) === choice) ?? "full";
-        if (key === "full") delete asset.takes;
-        else asset.takes = key;
-        this.commit();
-      },
-    });
   }
 
   /** The same picker the segments use, filling the pool instead of a card. */

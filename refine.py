@@ -53,6 +53,7 @@ data and are unit-tested that way. `refine_local.py` is what loads the model and
 """
 
 import json
+import os
 import re
 from pathlib import Path
 
@@ -558,6 +559,142 @@ def describe_slots(slots):
         extra = f" — {slot['note']}" if slot.get("note") else ""
         lines.append(f"@{slot['handle']}{label}{where}: {slot['what']}{extra}")
     return lines
+
+
+# What each role is, in the words the glossary uses. The reference guide names
+# these slots itself; this is the same distinction said once for the model.
+_WHAT = {
+    "first_frame": "the target video's first frame",
+    "last_frame": "the target video's final frame",
+}
+
+# A narrowed reference image, said as what it is and what it is not. The DiT is
+# handed the whole picture either way; the narrowing has to live in the prose —
+# the subject definition and the retention line — which is exactly what these
+# notes tell the refiner to write. Phrased as scope, not prohibition: the
+# retention markers can only cover what the definition claims.
+_TAKES_WHAT = {
+    "person": "a person reference",
+    "object": "an object reference",
+    "scene": "a scene reference",
+    "style": "a style reference",
+}
+_TAKES_NOTE = {
+    "person": "only the person is the reference — face, hair, skin, build and "
+              "what they wear. The picture's background, palette, lighting, "
+              "pose and action are not part of it: define the subject as the "
+              "person alone and retain nothing else from this picture",
+    "object": "only the object itself is the reference. The picture's "
+              "surroundings, lighting and arrangement are not part of it: "
+              "define the subject as the object alone and retain nothing else "
+              "from this picture. Anyone the request names is not in this "
+              "picture unless you can actually see them there",
+    "scene": "only the place is the reference — the environment, its surfaces "
+             "and its light. Any people or passing objects in the picture, and "
+             "its framing, are not part of it. Nobody the request names is in "
+             "this picture unless you can actually see them there",
+    "style": "only the look is the reference — medium, palette, light and "
+             "rendering. The picture's subjects, layout and content are not "
+             "part of it. Nothing the request names is in this picture unless "
+             "you can actually see it there",
+}
+
+# The un-narrowed case. `takes` defaults to "full", so this is what most
+# reference images ride in with, and it is where the hallucination actually
+# bites: with no scope note at all, the one attached picture becomes the place
+# the model grounds whoever the request mentions, seen there or not.
+_FULL_NOTE = ("describe as coming from this picture only what you can "
+              "actually see in it — a subject the request names that it does "
+              "not show is defined from the request alone, with no handle")
+
+# The same field on a clip, where the four content takes read as they do for a
+# picture and four more say what a moving picture alone can lend. The split the
+# notes are written around is the reference guide's own: content mined out of a
+# clip is a `<Subject N>` like any other, while the clip's structure — its
+# camera, its cuts, the fact that it is being edited or continued — is what
+# `<Video N>` is reserved for. Saying which one this file is stops the refiner
+# guessing, and the guess is usually "both".
+_VIDEO_TAKES_WHAT = {
+    "person": "a reference video, for the person in it",
+    "object": "a reference video, for the object in it",
+    "scene": "a reference video, for the place in it",
+    "style": "a reference video, for its look",
+    "motion": "a reference video, for the motion in it",
+    "camera": "a reference video, for its camera work",
+    "edit": "the source video this generation edits",
+    "continue": "the source video this generation continues from",
+}
+_VIDEO_TAKES_NOTE = {
+    "person": "only the person is the reference — face, hair, build and what "
+              "they wear. The clip's setting, camera work, cuts and what "
+              "happens in it are not part of it: define a <Subject N> for the "
+              "person alone and give this clip no <Video N> entry",
+    "object": "only the object itself is the reference. The clip's "
+              "surroundings, camera work and action are not part of it: define "
+              "a <Subject N> for the object alone and give this clip no "
+              "<Video N> entry",
+    "scene": "only the place is the reference — the environment, its surfaces "
+             "and its light. Anyone in the clip, its framing and its camera "
+             "work are not part of it: define a <Subject N> for the place "
+             "alone and give this clip no <Video N> entry",
+    "style": "only the look is the reference — medium, palette, light and "
+             "rendering. The clip's subjects, action and camera work are not "
+             "part of it: define a <Subject N> for the look alone and give "
+             "this clip no <Video N> entry",
+    "motion": "only the motion is the reference — how the body moves, its "
+              "timing and its weight. Whoever performs it, where it happens "
+              "and how it is shot are not part of it: define the target "
+              "subject as taking its motion from this clip, mark that line "
+              "attribute_transfer in retention_analysis, and give the clip no "
+              "<Video N> entry of its own",
+    "camera": "only the camera and the cutting are the reference — the move, "
+              "its speed, the shot changes and the pacing. Nobody and nothing "
+              "visible in the clip appears in the target video: give it a "
+              "<Video N> entry for its camera and pacing structure, mark that "
+              "line weak_reference, and define no subject from it",
+    "edit": "this clip is the source video being edited. Give it a <Video N> "
+            "entry, open the summary with 'The target video is an edited "
+            "version of <Video N>.', and put 'video editing' in the task-type "
+            "prefix. Everything the request does not change stays as it is in "
+            "the clip",
+    "continue": "the target video picks up from the end of this clip. Give it "
+                "a <Video N> entry, put 'video continuation' in the task-type "
+                "prefix, and carry its final state — subjects, framing, light "
+                "— into the opening of the new footage",
+}
+
+
+def slot_row(asset, label=None, show_label=False):
+    """One glossary line's worth of an asset."""
+    what = _WHAT.get(asset.role)
+    if what is None:
+        what = {
+            "image": _TAKES_WHAT.get(asset.takes, "a reference image"),
+            # A narrowed clip says what it lends; an un-narrowed one is still
+            # described by its streams, which is the only thing there was to
+            # say about a clip before the setting reached video.
+            "video": _VIDEO_TAKES_WHAT.get(
+                asset.takes,
+                {"picture": "a reference video, picture only",
+                 "picture+sound": "a reference video, picture and soundtrack",
+                 "sound": "a reference video used for its soundtrack alone"}.get(
+                     asset.track, "a reference video")),
+            "audio": "a reference audio clip",
+        }[asset.kind]
+    row = {"handle": asset.handle, "what": f"{what} ({os.path.basename(asset.filename)})"}
+    if asset.role == "reference":
+        if asset.kind == "image":
+            row["note"] = _TAKES_NOTE.get(asset.takes, _FULL_NOTE)
+        elif asset.kind == "video" and asset.takes in _VIDEO_TAKES_NOTE:
+            row["note"] = _VIDEO_TAKES_NOTE[asset.takes]
+    # Only where the ordinal is unambiguous. Handles are allocated per segment,
+    # so across a strip two cards each have a `<Picture 1>` — showing both would
+    # tell the model that one label means two files.
+    if show_label and label:
+        row["label"] = label
+    if asset.kind == "audio" or (asset.kind == "video" and asset.track == "sound"):
+        row["note"] = "you cannot hear it; take what it holds from the request"
+    return row
 
 
 def user_message(shots, seconds=None, images=0, mode=None, piece=None, pool=None,

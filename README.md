@@ -124,9 +124,19 @@ sound** brings its soundtrack in as a reference audio too, **picture only**
 references it silently, and **sound only** throws the picture away — which is what
 you want for a voice, a room tone, or scoring that happens to live in an mp4.
 
-Reference *images* get a scope dial instead: `full · person · object · scene ·
-style`. On `person`, "her from @img-1" stops dragging that image's background,
-palette and pose along with the face.
+Every reference also gets a scope dial. An image's reads `full · person · object ·
+scene · style`; on `person`, "her from @img-1" stops dragging that image's
+background, palette and pose along with the face.
+
+A clip's dial takes the same four and four more, which are the roles H3's
+reference guide gives a video: `motion` lends the action alone and carries it
+onto whoever the prompt puts in the shot, `camera` lends the move, the cuts and
+the pacing with nothing in the clip appearing, `edit` says the clip *is* the
+video being edited — which is how you replace a subject and keep the rest — and
+`continue` picks the video up where the clip ends. Each one is a different label
+in the rewrite: the content takes and `motion` mine the clip for a `<Subject N>`,
+while `camera`, `edit` and `continue` are the whole-video relationships
+`<Video N>` is reserved for. The dial is on the chip, next to the trim.
 
 The PreStage's style references are cited the same way. Writing `@ref-2` becomes
 `Picture 2` — the label core's Qwen-edit encoder writes in front of that slot, so
@@ -314,8 +324,9 @@ share the strip with a start/end-frame segment (references and frames are
 different checkpoints), and the compiler says so naming both. The `@` menu
 inside every segment offers the pool under *Piece references*, the refiner is
 shown it once and may cite it where the subject appears — globally included —
-and a reference image can be narrowed (*person*, *object*, *scene*, *style*) so
-a sheet contributes the likeness without its background. In one pass, all
+and a reference can be narrowed (*person*, *object*, *scene*, *style*, and for a
+clip *motion*, *camera*, *edit*, *continue*) so a sheet contributes the likeness
+without its background. In one pass, all
 citations of the same piece reference share a single `<Picture N>`.
 
 While a chained piece renders, the preview overlay names the pass the sampler is

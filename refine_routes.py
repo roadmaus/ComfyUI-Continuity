@@ -30,77 +30,6 @@ from . import compile as compiler, media, preview, refine, refine_local, refine_
 # fill it with pictures and leave no room for the guide.
 MAX_IMAGES = 16
 
-# What each role is, in the words the glossary uses. The reference guide names
-# these slots itself; this is the same distinction said once for the model.
-_WHAT = {
-    "first_frame": "the target video's first frame",
-    "last_frame": "the target video's final frame",
-}
-
-# A narrowed reference image, said as what it is and what it is not. The DiT is
-# handed the whole picture either way; the narrowing has to live in the prose —
-# the subject definition and the retention line — which is exactly what these
-# notes tell the refiner to write. Phrased as scope, not prohibition: the
-# retention markers can only cover what the definition claims.
-_TAKES_WHAT = {
-    "person": "a person reference",
-    "object": "an object reference",
-    "scene": "a scene reference",
-    "style": "a style reference",
-}
-_TAKES_NOTE = {
-    "person": "only the person is the reference — face, hair, skin, build and "
-              "what they wear. The picture's background, palette, lighting, "
-              "pose and action are not part of it: define the subject as the "
-              "person alone and retain nothing else from this picture",
-    "object": "only the object itself is the reference. The picture's "
-              "surroundings, lighting and arrangement are not part of it: "
-              "define the subject as the object alone and retain nothing else "
-              "from this picture. Anyone the request names is not in this "
-              "picture unless you can actually see them there",
-    "scene": "only the place is the reference — the environment, its surfaces "
-             "and its light. Any people or passing objects in the picture, and "
-             "its framing, are not part of it. Nobody the request names is in "
-             "this picture unless you can actually see them there",
-    "style": "only the look is the reference — medium, palette, light and "
-             "rendering. The picture's subjects, layout and content are not "
-             "part of it. Nothing the request names is in this picture unless "
-             "you can actually see it there",
-}
-
-# The un-narrowed case. `takes` defaults to "full", so this is what most
-# reference images ride in with, and it is where the hallucination actually
-# bites: with no scope note at all, the one attached picture becomes the place
-# the model grounds whoever the request mentions, seen there or not.
-_FULL_NOTE = ("describe as coming from this picture only what you can "
-              "actually see in it — a subject the request names that it does "
-              "not show is defined from the request alone, with no handle")
-
-
-def _slot(asset, label, show_label):
-    """One glossary line's worth of an asset."""
-    what = _WHAT.get(asset.role)
-    if what is None:
-        what = {
-            "image": _TAKES_WHAT.get(asset.takes, "a reference image"),
-            "video": {"picture": "a reference video, picture only",
-                      "picture+sound": "a reference video, picture and soundtrack",
-                      "sound": "a reference video used for its soundtrack alone"}.get(
-                          asset.track, "a reference video"),
-            "audio": "a reference audio clip",
-        }[asset.kind]
-    row = {"handle": asset.handle, "what": f"{what} ({os.path.basename(asset.filename)})"}
-    if asset.kind == "image" and asset.role == "reference":
-        row["note"] = _TAKES_NOTE.get(asset.takes, _FULL_NOTE)
-    # Only where the ordinal is unambiguous. Handles are allocated per segment,
-    # so across a strip two cards each have a `<Picture 1>` — showing both would
-    # tell the model that one label means two files.
-    if show_label and label:
-        row["label"] = label
-    if asset.kind == "audio" or (asset.kind == "video" and asset.track == "sound"):
-        row["note"] = "you cannot hear it; take what it holds from the request"
-    return row
-
 
 def _still(path):
     """One frame of a clip, as a PIL image.
@@ -170,7 +99,7 @@ def _look(compiled, show_labels):
     ordered += compiled.ref_images + compiled.ref_videos + compiled.ref_audios
 
     for asset in ordered:
-        slot = _slot(asset, compiled.labels.get(asset.handle), show_labels)
+        slot = refine.slot_row(asset, compiled.labels.get(asset.handle), show_labels)
         picture = _picture(asset)
         if picture is not None:
             images.append(picture)
@@ -187,7 +116,7 @@ def _look_pool(pool):
     """
     slots, images = [], []
     for asset in pool:
-        slot = _slot(asset, None, False)
+        slot = refine.slot_row(asset)
         picture = _picture(asset)
         if picture is not None:
             images.append(picture)

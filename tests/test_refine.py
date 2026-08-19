@@ -268,6 +268,57 @@ check("an asset with no picture is not numbered", "[image" in numbered[1], False
 check("...and the next picture keeps counting from the pictures, not the lines",
       "[image 2]" in numbered[2], True)
 
+# ---- the glossary ------------------------------------------------------------
+#
+# What each attached file is, said once for the model. The narrowing lives here
+# and nowhere else on the way to the DiT — encode hands over the same tensor
+# whatever `takes` says — so a row that stops carrying it is a setting that
+# silently does nothing.
+
+
+class Slot:
+    """As much of `compile.Asset` as a glossary row reads."""
+
+    def __init__(self, handle, kind, takes="full", role="reference", track=None):
+        self.handle, self.kind, self.role = handle, kind, role
+        self.takes, self.track = takes, track
+        self.filename = f"clips/{handle}.mp4" if kind != "image" else f"stills/{handle}.png"
+
+
+check("an un-narrowed picture is still scoped to what it shows",
+      "only what you can actually see in it" in refine.slot_row(Slot("img-1", "image"))["note"],
+      True)
+check("a person reference says the background is not part of it",
+      "background, palette, lighting" in refine.slot_row(Slot("img-1", "image", "person"))["note"],
+      True)
+check("a keyframe is described by its role, not its narrowing",
+      refine.slot_row(Slot("img-1", "image", role="first_frame"))["what"],
+      "the target video's first frame (img-1.png)")
+
+# A clip's four extra takes are the reference guide's video roles, and each one
+# is a different label in the rewrite. The notes are what say which.
+video = lambda takes, track="picture": refine.slot_row(Slot("vid-1", "video", takes, track=track))
+check("an un-narrowed clip is described by its streams",
+      video("full")["what"], "a reference video, picture only (vid-1.mp4)")
+check("...and carries no scope note",
+      "note" in video("full"), False)
+check("a camera reference is a Video entry",
+      "<Video N> entry for its camera and pacing structure" in video("camera")["note"], True)
+check("...and puts nobody from the clip on screen",
+      "Nobody and nothing visible in the clip appears" in video("camera")["note"], True)
+check("a motion reference is an attribute transfer onto the target subject",
+      "attribute_transfer" in video("motion")["note"], True)
+check("...and is not a Video entry",
+      "give the clip no <Video N> entry of its own" in video("motion")["note"], True)
+check("an edit says the target is an edited version of the clip",
+      "The target video is an edited version of <Video N>." in video("edit")["note"], True)
+check("a continuation asks for the task type by name",
+      "'video continuation' in the task-type" in video("continue")["note"], True)
+check("a clip taken for its sound is told it cannot be heard",
+      video("full", track="sound")["note"],
+      "you cannot hear it; take what it holds from the request")
+
+
 # ---- the transport ----------------------------------------------------------
 #
 # ComfyUI is handed one string and samples plain logits, so the turns, the

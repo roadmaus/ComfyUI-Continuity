@@ -42,19 +42,32 @@ export const refSize = (asset) => asset.ref_size || DEFAULT_REF_SIZE[asset.kind]
 export const sizeable = (asset) =>
   asset.role === "reference" && DEFAULT_REF_SIZE[asset.kind] !== undefined;
 
-/** What of a reference image is actually the reference. "full" — the default —
- *  is the whole picture; the others narrow it so "her from @img-1" stops
- *  dragging the picture's background, palette and pose into the video. Read by
- *  the refiner's glossary; the DiT gets the same tensor either way. */
-export const TAKES = ["full", "person", "object", "scene", "style"];
+/** What of a reference is actually the reference. "full" — the default — is
+ *  the whole file; the others narrow it so "her from @img-1" stops dragging the
+ *  picture's background, palette and pose into the video. Read by the refiner's
+ *  glossary; the DiT gets the same tensor either way. Mirrors compile.TAKES.
+ *
+ *  A clip takes the same four and four more, which are the roles H3's reference
+ *  guide gives a video: the content takes and "motion" mine it for a
+ *  `<Subject N>`, while "camera", "edit" and "continue" are the whole-video
+ *  relationships `<Video N>` is reserved for. */
+export const IMAGE_TAKES = ["full", "person", "object", "scene", "style"];
+export const VIDEO_TAKES = [...IMAGE_TAKES, "motion", "camera", "edit", "continue"];
+export const TAKES = { image: IMAGE_TAKES, video: VIDEO_TAKES };
 
-/** The narrowing in force for an asset — the stored one, or the whole picture. */
-export const takes = (asset) => (TAKES.includes(asset.takes) ? asset.takes : "full");
+/** The list an asset may choose from — empty for anything with nothing to
+ *  narrow, which is what `takeable` reads. */
+export const takeOptions = (asset) =>
+  (asset.role === "reference" && asset.track !== "sound" && TAKES[asset.kind]) || [];
 
-/** Whether an asset has a narrowing to choose at all: reference images only —
- *  a keyframe is bound whole by the alignment line, and a video's narrowing is
- *  its track. */
-export const takeable = (asset) => asset.kind === "image" && asset.role === "reference";
+/** The narrowing in force for an asset — the stored one, or the whole file. */
+export const takes = (asset) =>
+  (takeOptions(asset).includes(asset.takes) ? asset.takes : "full");
+
+/** Whether an asset has a narrowing to choose at all: reference pictures only —
+ *  a keyframe is bound whole by the alignment line, audio has nothing to scope,
+ *  and a clip taken for its soundtrack alone has no picture left. */
+export const takeable = (asset) => takeOptions(asset).length > 0;
 
 // ---- weights ----------------------------------------------------------------
 //
