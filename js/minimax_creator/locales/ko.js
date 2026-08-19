@@ -48,6 +48,7 @@ export const ko = {
  "edit": "편집",
  "continue": "이어가기",
  "full": "전체",
+ "whole": "전체 구간",
  "voice": "목소리",
  "ambience": "앰비언스",
  "copy": "복사",

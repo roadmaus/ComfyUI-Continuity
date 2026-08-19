@@ -48,6 +48,7 @@ export const ja = {
  "edit": "編集",
  "continue": "継続",
  "full": "全体",
+ "whole": "全編",
  "voice": "声",
  "ambience": "アンビエンス",
  "copy": "複製",

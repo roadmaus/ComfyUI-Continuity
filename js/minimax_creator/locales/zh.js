@@ -49,6 +49,7 @@ export const zh = {
  "edit": "编辑",
  "continue": "续接",
  "full": "完整",
+ "whole": "整段",
  "voice": "人声",
  "ambience": "环境声",
  "copy": "直接复用",

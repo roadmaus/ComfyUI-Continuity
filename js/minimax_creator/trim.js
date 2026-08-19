@@ -25,9 +25,15 @@ export function formatTime(seconds) {
   return `${minutes}:${rest < 10 ? "0" : ""}${rest.toFixed(1)}`;
 }
 
-/** What the "full / 0:02–0:07" buttons show. */
+/** What the "whole / 0:02–0:07" buttons show.
+ *
+ *  "whole", not "full", and the difference matters on a video chip: the scope
+ *  dial two pills along says "full" for a reference nobody has narrowed, so an
+ *  untrimmed clip used to read `@vid-1 full sound on full max` — one word for
+ *  the entire duration and the same word for the entire content. This is the
+ *  duration one, and `isWhole` below is already what this module calls it. */
 export function trimLabel(asset) {
-  return asset.trim ? `${formatTime(asset.trim.start)}–${formatTime(asset.trim.end)}` : t("full");
+  return asset.trim ? `${formatTime(asset.trim.start)}–${formatTime(asset.trim.end)}` : t("whole");
 }
 
 // The track switch, in the order it reads on screen. The labels say what comes
