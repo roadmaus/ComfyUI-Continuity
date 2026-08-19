@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 2.4
 
 **A reference's scope can now reach the model, not just the refiner.** The
 `full · person · object · scene · style` dial has always been prose or nothing —
@@ -101,6 +101,12 @@ tried on one shot is six prompts and not six stacked paragraphs. Nothing else
 moves, and it lands on a piece, a card or a PreStage alike. Vendored — the index
 and one still per clip, about 5 MB, no video and nothing fetched at runtime — and
 `tools/vendor_style_atlas.py` re-reads a fresh clone when upstream grows.
+
+**A trimmed clip and an unnarrowed one no longer say the same word.** An
+untrimmed video reference read `@vid-1 full sound on full max` — "full" for the
+whole duration, and "full" again two pills along for a reference nobody has
+scoped. The duration one is "whole" now, which is what the trim editor's own
+tooltip has always called it.
 
 ## 2.3
 
