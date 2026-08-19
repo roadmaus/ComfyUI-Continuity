@@ -49,6 +49,19 @@ often, so it asks: the first press arms it, the second clears, and five seconds,
 Escape or a click anywhere else puts it back. On a piece with nothing in it the
 tool is simply unavailable.
 
+**941 looks on a style tab in the preset library.** A fourth scope beside piece,
+shot and pre-stage, holding every distinct visual style in the `ostris/minimax_h3_1k`
+dataset as indexed by hoodtronik's [Style Atlas](https://github.com/hoodtronik/minimax-h3-style-atlas)
+— grouped into eight media categories, each card a still off the clip the phrase
+was read from. These are the exact strings H3 was captioned with rather than
+adjectives we thought of, so applying one puts a phrase the model has seen a
+thousand frames of at the front of your prompt. It *swaps* rather than replaces:
+a style already leading the prompt comes out as the new one goes in, so six looks
+tried on one shot is six prompts and not six stacked paragraphs. Nothing else
+moves, and it lands on a piece, a card or a PreStage alike. Vendored — the index
+and one still per clip, about 5 MB, no video and nothing fetched at runtime — and
+`tools/vendor_style_atlas.py` re-reads a fresh clone when upstream grows.
+
 ## 2.3
 
 Asked for in [#16](https://github.com/roadmaus/ComfyUI-MiniMax-Creator/issues/16).

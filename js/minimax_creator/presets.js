@@ -211,6 +211,14 @@ export const SECTIONS = [
     key: "shot", label: "Timing & seam", hue: 1,
     hint: "How long this card runs, and what happens in front of it.",
   },
+  // The one section no capture produces. A style comes from the shipped atlas
+  // rather than off a node, and it is the only section that *edits* the field it
+  // lands on instead of replacing it — see `leadWithStyle`. Hue 7 is the one
+  // reference-identity colour the other seven sections left free.
+  {
+    key: "style", label: "Style", hue: 7,
+    hint: "Goes in front of the prompt; a style already there is swapped out.",
+  },
 ];
 
 export const SECTION = Object.fromEntries(SECTIONS.map((s) => [s.key, s]));
@@ -218,13 +226,17 @@ export const SECTION = Object.fromEntries(SECTIONS.map((s) => [s.key, s]));
 /** Which sections a scope can hold at all. A shot has no canvas and no weights —
  *  the piece owns both — and only a piece has a strip. */
 export const SCOPE_SECTIONS = {
-  piece: ["look", "weights", "speed", "prompt", "loras", "refs", "strip"],
-  shot: ["prompt", "refs", "loras", "shot", "speed"],
-  prestage: ["look", "weights", "speed", "prompt", "loras", "refs"],
+  piece: ["look", "weights", "speed", "prompt", "loras", "refs", "strip", "style"],
+  shot: ["prompt", "refs", "loras", "shot", "speed", "style"],
+  prestage: ["look", "weights", "speed", "prompt", "loras", "refs", "style"],
+  // A style is a source and never a target: you apply one to a node, and there
+  // is no node a style could be captured off. It is the one scope whose tab is a
+  // catalogue rather than a shelf of your own work.
+  style: ["style"],
 };
 
-export const SCOPES = ["piece", "shot", "prestage"];
-export const SCOPE_LABEL = { piece: "Piece", shot: "Shot", prestage: "Pre-stage" };
+export const SCOPES = ["piece", "shot", "prestage", "style"];
+export const SCOPE_LABEL = { piece: "Piece", shot: "Shot", prestage: "Pre-stage", style: "Style" };
 
 /**
  * Whether one section of a preset can land on a target of another scope, and why
@@ -561,6 +573,10 @@ export function canvasOf(body) {
 /** The facts line, which is instrument reading rather than prose — the library
  *  sets it in a monospace face for exactly that reason. */
 export function factsOf(body, scope) {
+  if (scope === "style") {
+    const style = body.style ?? {};
+    return { category: style.category ?? "", clips: (style.clips ?? []).length };
+  }
   if (scope === "prestage") {
     const arch = body.weights?.arch ?? S.PRESTAGE_ARCHES[0];
     return {
@@ -606,6 +622,10 @@ export function factsOf(body, scope) {
  */
 export function describe(data, scope, { cover = null } = {}) {
   const facts = factsOf(data, scope);
+  // A style's pictures are files this pack ships, not renders on this machine,
+  // so they are plain URLs rather than the `{path, kind}` rows `stillUrl`
+  // resolves through a route. `stylelib.js` puts them on the row itself.
+  if (scope === "style") return { facts, frames: [] };
   if (scope === "prestage") return { facts, canvas: canvasOf(data), frames: [] };
   if (scope === "shot") {
     const shot = data.shot ?? {};
@@ -643,6 +663,72 @@ export function coverFromResult(result) {
     kind: result.isImage ? "image" : "video",
     mtime: Math.floor(Date.now() / 1000),
   };
+}
+
+// ---- the style clause -------------------------------------------------------
+//
+// A style is the one section that *edits* the field it lands on instead of
+// replacing it. Every other section owns its fields outright — applying `look`
+// puts a whole canvas back — but a style is a clause at the front of a sentence
+// somebody wrote, and a style that wiped the prompt would be a style used once.
+//
+// So applying one **swaps the lead**: the descriptor goes in front, and where the
+// prompt already opens with a descriptor from the atlas, that one comes out. Try
+// six looks on the same shot and you get six prompts, not six stacked paragraphs.
+//
+// Knowing which openings are swappable means knowing the atlas, and the atlas is
+// a sixth of a megabyte the library imports only when its tab is opened. So the
+// vocabulary is *registered* here rather than imported: `stylelib.js` calls this
+// as it loads, and loading it is the only way a style can reach an apply at all.
+
+let VOCABULARY = [];
+
+/** Teach the swap which openings belong to a style rather than to a sentence.
+ *  Longest first, so "Claymation with visible fingerprint texture" is matched
+ *  ahead of the bare "Claymation" that is also in the atlas. */
+export function setStyleVocabulary(phrases) {
+  VOCABULARY = [...new Set(phrases ?? [])]
+    .map((phrase) => String(phrase).trim())
+    .filter(Boolean)
+    .sort((a, b) => b.length - a.length)
+    .map((phrase) => phrase.toLowerCase());
+}
+
+/** How much of `text` is a descriptor from the atlas — 0 for none. The match has
+ *  to land on a clause boundary, or the bare "Claymation" would also match
+ *  "Claymationist puppets" and eat a word that was never a style. */
+function leadLength(text) {
+  const lower = text.toLowerCase();
+  for (const phrase of VOCABULARY) {
+    if (!lower.startsWith(phrase)) continue;
+    const after = text[phrase.length];
+    if (after === undefined || /[\s,.;:—-]/.test(after)) return phrase.length;
+  }
+  return 0;
+}
+
+// The openings it is safe to lower-case once they are mid-sentence behind a
+// descriptor: a closed list of articles and prepositions. Lower-casing whatever
+// the prompt happens to start with would turn "Marcus waits at the gate" into
+// "marcus waits at the gate", and mangling somebody's character is worse than a
+// capital letter after a comma.
+const SAFE_LEAD = /^(A|An|The|In|Inside|On|At|Across|Under|Over|Through|Along|Beside|Behind|Beneath|Outside|From|Two|Three|Four|Five|Six)\b/;
+
+/**
+ * `text`, opening with `phrase`.
+ *
+ * The descriptor leads and the prompt follows it after a comma, which is the
+ * shape H3's own captions have — the atlas *is* the opening clause of one, and
+ * the scene is what came after it.
+ */
+export function leadWithStyle(text, phrase) {
+  const descriptor = String(phrase ?? "").trim().replace(/[,.;:\s]+$/, "");
+  const body = String(text ?? "").trim();
+  const rest = body.slice(leadLength(body)).replace(/^[\s,.;:—-]+/, "");
+  if (!descriptor) return rest;
+  if (!rest) return descriptor;
+  const tail = SAFE_LEAD.test(rest) ? rest[0].toLowerCase() + rest.slice(1) : rest;
+  return `${descriptor}, ${tail}`;
 }
 
 // ---- apply ------------------------------------------------------------------
@@ -720,6 +806,9 @@ export function applyToPiece(body, keys, timeline, io, { from = "piece" } = {}) 
     timeline.music = text.music ?? "";
     timeline.refined = text.refined ?? null;
   }
+  if (chosen.has("style")) {
+    timeline.prompt = leadWithStyle(timeline.prompt, body.style?.text);
+  }
   if (chosen.has("loras")) {
     timeline.loras = JSON.parse(JSON.stringify(body.loras ?? []));
   }
@@ -761,6 +850,9 @@ export function applyToShot(body, keys, segment, io, { from = "shot" } = {}) {
     segment.soundscape = text.soundscape ?? "";
     segment.music = text.music ?? "";
     segment.refined = text.refined ?? null;
+  }
+  if (chosen.has("style")) {
+    segment.prompt = leadWithStyle(segment.prompt, body.style?.text);
   }
   if (chosen.has("loras")) {
     segment.loras = JSON.parse(JSON.stringify(body.loras ?? []));
@@ -829,6 +921,9 @@ export function applyToPreStage(body, keys, state, io, { from = "prestage" } = {
   }
   if (chosen.has("prompt")) {
     state.prompt = body.prompt?.prompt ?? "";
+  }
+  if (chosen.has("style")) {
+    state.prompt = leadWithStyle(state.prompt, body.style?.text);
   }
   if (chosen.has("loras")) {
     state.loras = JSON.parse(JSON.stringify(body.loras ?? []));
@@ -905,7 +1000,10 @@ export async function importPresets(file) {
   if (!incoming.length) throw new Error(t("That file holds no presets."));
   const saved = [];
   for (const entry of incoming) {
-    if (!entry?.data || !SCOPES.includes(entry.scope)) continue;
+    // A style is shipped, never stored: the Style tab draws the vendored atlas
+    // and would not show a row that landed in the user's library beside it. A
+    // file claiming one is skipped rather than imported into somewhere invisible.
+    if (!entry?.data || !SCOPES.includes(entry.scope) || entry.scope === "style") continue;
     saved.push(await savePreset({
       name: entry.name ?? t("Untitled preset"),
       scope: entry.scope,

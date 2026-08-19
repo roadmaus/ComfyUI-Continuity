@@ -17,6 +17,14 @@
 // Nothing here stores an image. A cover is a filename in the output folder and a
 // block's picture is a filename the preset had to hold anyway; both are served by
 // routes that shipped long before presets did.
+//
+// **The Style tab is the one exception, and it is a catalogue rather than a
+// shelf.** Its rows are the vendored H3 Style Atlas — shipped, read-only, stills
+// included — so its cards draw pictures this pack has on disk and its bar has
+// nothing to save. It is a fourth scope because that is exactly what it is: a
+// style is a thing a preset can be *of*, applicable to all three nodes and
+// capturable off none of them. The module that builds those rows is imported the
+// first time the tab is opened, and never at boot.
 
 import { el, icon, mountOverlay } from "./dom.js";
 import { t } from "./i18n.js";
@@ -27,6 +35,11 @@ import * as P from "./presets.js";
 
 const SHELF_ALL = "all";
 const SHELF_FAV = "fav";
+
+// Cards are materialised a batch at a time behind a sentinel — the picker's own
+// deal for the same problem. The Style tab is 941 rows, and rebuilding all of
+// them on every keystroke of the search is a tab that stutters.
+const PAGE_SIZE = 60;
 
 /**
  * Open the library.
@@ -63,6 +76,17 @@ class PresetLibrary {
     this.keys = new Set();     // which of them are ticked
     this.problem = null;
     this.busy = false;
+    // The shipped catalogue, read on first sight of its tab. Kept apart from
+    // `rows` rather than folded into it: nothing that writes a user's library
+    // should ever have nine hundred read-only rows in its hands.
+    this.styles = [];
+    this.stylesLoading = false;
+    this.atlas = null;
+    // The grid, materialised in batches — see `appendCards`.
+    this.gridRows = [];
+    this.visibleCount = PAGE_SIZE;
+    this.cards = new Map();
+    this.observer = null;
     // Which preset's Delete is armed, if any — the picker's two-press confirm.
     this.armed = null;
   }
@@ -88,36 +112,15 @@ class PresetLibrary {
     }));
 
     this.shelfRow = el("div", { class: "mmc-shelves" });
+    this.bar = el("div", { class: "mmc-modal-bar" });
+    this.renderBar();
 
     this.modal = el("div", { class: "mmc-modal" }, [
       el("div", { class: "mmc-modal-head" }, [
         ...this.tabs,
         el("button", { class: "mmc-close", text: "✕", title: t("Close"), onclick: () => this.close() }),
       ]),
-      el("div", { class: "mmc-modal-bar" }, [
-        this.search,
-        el("button", {
-          class: "mmc-organize",
-          title: t("Read a .json of presets exported from another machine"),
-          onclick: () => this.importFile(),
-        }, [icon("folder", 14), el("span", { text: t("Import") })]),
-        // Not conditional on a target, unlike the button beside it: this reads a
-        // file rather than a node, so it works in the read-only library the
-        // context menu opens — and on a machine whose renders came from
-        // somewhere else entirely.
-        el("button", {
-          class: "mmc-organize",
-          title: t("Take a preset from the workflow embedded in a finished render"),
-          onclick: () => this.saveFromRender(),
-        }, [icon("gallery", 14), el("span", { text: t("From a render") })]),
-        // Absent rather than disabled where there is nothing to save: the
-        // library opened from a context menu has no node behind it.
-        ...(this.target ? [el("button", {
-          class: "mmc-upload",
-          text: t("+  Save current setup"),
-          onclick: () => this.saveCurrent(),
-        })] : []),
-      ]),
+      this.bar,
       this.shelfRow,
       this.problemLine,
       el("div", { class: "mmc-preset-split" }, [this.grid, this.inspector]),
@@ -132,6 +135,43 @@ class PresetLibrary {
     this.unmount = mountOverlay(this.overlay, () => this.close());
     this.renderInspector();
     this.load();
+  }
+
+  /**
+   * The bar under the tabs: the search, and the verbs that make a preset.
+   *
+   * Rebuilt per scope rather than built once, for the Style tab's sake — the
+   * catalogue is shipped and read-only, so Save, Import and *From a render* have
+   * nothing to act on there and are gone rather than dimmed. The search element
+   * itself is carried across, so switching tabs does not drop what was typed in
+   * it or the caret sitting in it.
+   */
+  renderBar() {
+    const catalogue = this.scope === "style";
+    this.search.placeholder = catalogue ? t("Search styles…") : t("Search presets…");
+    this.bar.replaceChildren(this.search, ...(catalogue ? [] : [
+      el("button", {
+        class: "mmc-organize",
+        title: t("Read a .json of presets exported from another machine"),
+        onclick: () => this.importFile(),
+      }, [icon("folder", 14), el("span", { text: t("Import") })]),
+      // Not conditional on a target, unlike the button beside it: this reads a
+      // file rather than a node, so it works in the read-only library the
+      // context menu opens — and on a machine whose renders came from somewhere
+      // else entirely.
+      el("button", {
+        class: "mmc-organize",
+        title: t("Take a preset from the workflow embedded in a finished render"),
+        onclick: () => this.saveFromRender(),
+      }, [icon("gallery", 14), el("span", { text: t("From a render") })]),
+      // Absent rather than disabled where there is nothing to save: the library
+      // opened from a context menu has no node behind it.
+      ...(this.target ? [el("button", {
+        class: "mmc-upload",
+        text: t("+  Save current setup"),
+        onclick: () => this.saveCurrent(),
+      })] : []),
+    ]));
   }
 
   async load() {
@@ -149,6 +189,8 @@ class PresetLibrary {
   }
 
   close() {
+    this.observer?.disconnect();
+    this.observer = null;
     this.unmount();
     this.resolve();
   }
@@ -169,22 +211,59 @@ class PresetLibrary {
     for (const [index, tab] of P.SCOPES.entries()) {
       this.tabs[index].setAttribute("aria-selected", String(tab === scope));
     }
+    this.renderBar();
     this.renderShelves();
     this.renderGrid();
     this.renderInspector();
+    if (scope === "style") this.readAtlas();
+  }
+
+  /**
+   * Read the shipped style catalogue, once.
+   *
+   * A dynamic import rather than one at the top of the file: the atlas is a
+   * sixth of a megabyte of descriptors, and a user who never opens this tab
+   * should never pay for it. It arrives with its own vocabulary registered —
+   * see `setStyleVocabulary` — which is what lets applying a second style swap
+   * the first one out instead of stacking on it.
+   */
+  async readAtlas() {
+    if (this.styles.length || this.stylesLoading) return;
+    this.stylesLoading = true;
+    this.renderGrid();
+    try {
+      const module = await import("./presets/stylelib.js");
+      this.styles = module.styleRows();
+      this.atlas = module.ATLAS;
+    } catch (error) {
+      this.say(t("Could not read the style atlas — {error}", { error: error.message }));
+    }
+    this.stylesLoading = false;
+    if (this.scope !== "style") return;
+    this.renderShelves();
+    this.renderGrid();
   }
 
   // ---- shelves --------------------------------------------------------------
 
+  /** The rows this tab is showing at all — a user's library, or the catalogue. */
+  pool() {
+    return this.scope === "style" ? this.styles : this.rows;
+  }
+
   folders() {
-    return [...new Set(this.rows.filter((row) => row.scope === this.scope && row.folder)
+    return [...new Set(this.pool().filter((row) => row.scope === this.scope && row.folder)
       .map((row) => row.folder))].sort();
   }
 
   renderShelves() {
     const shelves = [
       [SHELF_ALL, t("All")],
-      [SHELF_FAV, t("★ Starred")],
+      // Nothing in the catalogue can be starred — a shipped row is the same for
+      // everybody and has nowhere to keep one — so the shelf that would always
+      // be empty is not offered. The atlas's eight media groups take its place,
+      // and they arrive as folders, which is what a shelf already is.
+      ...(this.scope === "style" ? [] : [[SHELF_FAV, t("★ Starred")]]),
       ...this.folders().map((folder) => [folder, folder]),
     ];
     if (!shelves.some(([key]) => key === this.shelf)) this.shelf = SHELF_ALL;
@@ -197,7 +276,7 @@ class PresetLibrary {
   }
 
   visible() {
-    return this.rows.filter((row) => {
+    return this.pool().filter((row) => {
       if (row.scope !== this.scope) return false;
       if (this.shelf === SHELF_FAV && !row.starred) return false;
       if (this.shelf !== SHELF_ALL && this.shelf !== SHELF_FAV && row.folder !== this.shelf) return false;
@@ -209,17 +288,58 @@ class PresetLibrary {
   // ---- the grid -------------------------------------------------------------
 
   renderGrid() {
-    const rows = this.visible();
-    if (!rows.length) {
+    this.observer?.disconnect();
+    this.observer = null;
+    this.cards.clear();
+    this.gridRows = this.visible();
+    this.visibleCount = PAGE_SIZE;
+    if (!this.gridRows.length) {
       this.grid.replaceChildren(el("div", { class: "mmc-preset-empty", text: this.emptyWords() }));
       return;
     }
-    this.grid.replaceChildren(...rows.map((row) => this.renderCard(row)));
+    this.grid.replaceChildren();
+    this.appendCards(0);
+  }
+
+  /** Materialise cards from `from` up to `visibleCount`; where rows remain, a
+   *  sentinel watches the grid's own scrollport and appends the next batch as it
+   *  comes into view. Cards already built are never touched, so their stills are
+   *  never re-fetched — the picker's arrangement, for the picker's reason. */
+  appendCards(from) {
+    const to = Math.min(this.visibleCount, this.gridRows.length);
+    for (const row of this.gridRows.slice(from, to)) {
+      const holder = this.renderCard(row);
+      this.cards.set(row.id, holder.firstElementChild);
+      this.grid.appendChild(holder);
+    }
+    if (to >= this.gridRows.length) return;
+    const sentinel = el("div", { class: "mmc-grid-sentinel" });
+    this.grid.appendChild(sentinel);
+    this.observer = new IntersectionObserver((entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      this.observer.disconnect();
+      this.observer = null;
+      sentinel.remove();
+      this.visibleCount = to + PAGE_SIZE;
+      this.appendCards(to);
+    }, { root: this.grid, rootMargin: "300px" });
+    this.observer.observe(sentinel);
+  }
+
+  /** Move the selection ring without rebuilding the grid. Selecting is the one
+   *  thing that happens constantly, and a rebuild would throw away every card
+   *  scrolled to past the first batch — on the Style tab, most of them. */
+  markSelected() {
+    for (const [id, card] of this.cards) {
+      card.setAttribute("aria-selected", String(this.selected?.id === id));
+    }
   }
 
   emptyWords() {
+    if (this.scope === "style" && this.stylesLoading) return t("Reading the style atlas…");
     if (this.query) return t("Nothing here matches “{query}”.", { query: this.query });
     if (this.shelf === SHELF_FAV) return t("No starred presets yet. The star on a card puts it here.");
+    if (this.scope === "style") return t("The style atlas could not be read.");
     if (this.target?.scope === this.scope) {
       return t("No presets yet. Set this node up the way you want it, then Save current setup.");
     }
@@ -231,22 +351,30 @@ class PresetLibrary {
     // inside the card: a button inside a button is invalid, and the inner one's
     // clicks are the browser's to route however it likes.
     const holder = el("div", { class: "mmc-preset-holder" });
+    // A style card carries the descriptor where a preset card carries its
+    // section chips: the descriptor *is* the content, and a row of chips saying
+    // "style" under nine hundred cards on the Style tab would say nothing. The
+    // opening clauses are the name and the rest of the sentence is set under it,
+    // so the whole thing is readable and no half of it is printed twice.
+    const style = row.scope === "style";
     const card = el("button", {
       class: "mmc-preset-card",
       "aria-selected": this.selected?.id === row.id,
-      "data-builtin": row.builtin ? "" : null,
+      "data-builtin": row.builtin && !style ? "" : null,
+      "data-style": style ? "" : null,
       onclick: () => this.select(row),
     }, [
       this.renderHero(row),
       el("p", { class: "mmc-preset-name", text: row.name }),
+      ...(style && row.rest ? [el("p", { class: "mmc-style-rest", text: row.rest })] : []),
       el("p", { class: "mmc-preset-facts", text: this.factsLine(row) }),
-      el("div", { class: "mmc-preset-chips" }, [
+      ...(style ? [] : [el("div", { class: "mmc-preset-chips" }, [
         ...(row.sections ?? []).map((key) => el("span", {
           class: `mmc-preset-chip mmc-tag-${P.SECTION[key]?.hue ?? 0}`,
           text: t(P.SECTION[key]?.label ?? key).toLowerCase(),
         })),
         ...(row.builtin ? [el("span", { class: "mmc-preset-chip plain", text: t("built-in") })] : []),
-      ]),
+      ])]),
     ]);
     holder.append(card);
     // Not on a builtin: a shipped starter is the same for everybody and has
@@ -267,6 +395,25 @@ class PresetLibrary {
    * the one before it: a cover, else the pictured lane, else the bare shape.
    */
   renderHero(row) {
+    // A style's picture is a file this pack ships, addressed directly — there is
+    // no output folder behind it and no thumbnail route to resolve it through,
+    // which is the one place the library's "nothing here stores an image" rule
+    // does not hold. Where the descriptor was read off several clips, the first
+    // fills the band and the others are counted in the corner; all of them are
+    // in the inspector, which is where there is room to look at them.
+    if (row.scope === "style") {
+      const hero = el("div", { class: "mmc-preset-hero" });
+      const [first, ...more] = row.thumbs ?? [];
+      if (first) {
+        hero.append(el("img", {
+          class: "mmc-preset-cover",
+          onerror: (event) => event.target.remove(),
+          src: first, alt: "", loading: "lazy",
+        }));
+      }
+      if (more.length) hero.append(el("em", { class: "mmc-style-more", text: `+${more.length}` }));
+      return hero;
+    }
     const cover = stillUrl(row.cover);
     const hero = el("div", { class: "mmc-preset-hero", "data-cover": cover ? "" : null });
     if (cover) {
@@ -359,6 +506,12 @@ class PresetLibrary {
 
   factsLine(row) {
     const facts = row.facts ?? {};
+    if (row.scope === "style") {
+      const clips = facts.clips ?? 0;
+      return [facts.category,
+              t(clips === 1 ? "{count} clip" : "{count} clips", { count: clips })]
+        .filter(Boolean).join(" · ");
+    }
     if (row.scope === "prestage") {
       return [facts.arch, facts.aspect, facts.quality].filter(Boolean).join(" · ");
     }
@@ -390,7 +543,7 @@ class PresetLibrary {
     // changing your mind about it.
     this.armed = null;
     this.say(null);
-    this.renderGrid();
+    this.markSelected();
     this.renderInspector();
     const body = await P.loadBody(row);
     // A second click while the first was in flight: only paint for the row that
@@ -427,6 +580,7 @@ class PresetLibrary {
         el("div", { class: "mmc-preset-insp-hint", text: t("Reading…") }));
       return;
     }
+    if (row.scope === "style") { this.renderStyleInspector(row); return; }
 
     const applicable = [...this.keys].length;
     this.inspector.replaceChildren(
@@ -472,6 +626,51 @@ class PresetLibrary {
           },
         })]),
       ]),
+    );
+  }
+
+  /**
+   * A style, in the inspector.
+   *
+   * Its own renderer rather than a handful of branches through the preset one,
+   * because almost none of that panel applies: there is no name to edit, no
+   * cover to set, nothing to export and nothing to delete. What is left is the
+   * descriptor — the whole of it, selectable, because it is the text that is
+   * about to go into the prompt — every still the atlas read it off, and Apply.
+   *
+   * The stills are the panel's argument. A descriptor is a paragraph of English
+   * and two of them can read almost identically; the frames are what tell
+   * "grainy 16mm exploitation print" from "faded 35mm exploitation print" at a
+   * glance, and here there is room for all of them rather than the one the card
+   * had space for.
+   */
+  renderStyleInspector(row) {
+    const clips = row.data?.style?.clips ?? [];
+    const applicable = this.keys.size;
+    this.inspector.replaceChildren(
+      el("div", { class: "mmc-preset-insp-title", text: row.name }),
+      ...(row.rest ? [el("p", { class: "mmc-style-full", text: row.rest })] : []),
+      el("p", { class: "mmc-preset-insp-meta", text: this.factsLine(row) }),
+      el("div", { class: "mmc-style-shots" }, (row.thumbs ?? []).map((url, index) =>
+        el("figure", {}, [
+          el("img", { onerror: (event) => event.target.remove(),
+                      src: url, alt: "", loading: "lazy" }),
+          el("figcaption", { text: clips[index] ?? "" }),
+        ]))),
+      el("div", { class: "mmc-preset-rows" }, this.renderSectionRows(row)),
+      ...(this.target ? [el("button", {
+        class: "mmc-preset-apply",
+        disabled: !applicable || this.busy,
+        text: applicable
+          ? t("Apply to {label}", { label: this.target.label })
+          : t("Nothing here fits this node"),
+        onclick: () => this.apply(row),
+      })] : []),
+      // The atlas is somebody else's work and the dataset under it is somebody
+      // else's again. Both are named where a style is used, not only in a readme.
+      el("p", { class: "mmc-style-credit", text:
+        t("Style Atlas by hoodtronik · dataset {dataset} by ostris",
+          { dataset: this.atlas?.dataset ?? "minimax_h3_1k" }) }),
     );
   }
 
@@ -666,6 +865,7 @@ class PresetLibrary {
         this.tabs[index].setAttribute("aria-selected", String(tab === this.scope));
       }
       this.say(null);
+      this.renderBar();
       this.renderShelves();
       this.renderGrid();
       await this.select(row);

@@ -2,3 +2,4 @@ tests/
 docs/
 __pycache__/
 .github/
+tools/
