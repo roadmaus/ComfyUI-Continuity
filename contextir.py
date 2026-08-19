@@ -66,6 +66,139 @@ AUDIO_SEAM_LINE = (
 )
 
 
+# ---- saying what each reference is ------------------------------------------
+#
+# The scope on an asset's chip — `Asset.takes` — is prose or it is nothing: the
+# DiT is handed the same tensor whichever way the dial is set, and H3 has no
+# reference-conditioning switch to carry the difference. Until now the only
+# thing that read the dial was the refiner's glossary, so a piece queued without
+# a rewrite had the setting quietly do nothing.
+#
+# These lines are the same distinction said mechanically, for the model rather
+# than for a rewriter. They go where `AUDIO_SEAM_LINE` goes and for the same
+# reason: the tokenizer is shown every reference and numbers it, and a label the
+# prompt never defines is a label pointing at nothing.
+#
+# Written as statements about what is retained and what is not, because that is
+# what the reference form's `subject_definitions` and `retention_analysis` say
+# in the sentences the model was trained on. They cannot be a *rewrite* — no
+# rule turns a sentence into a six-section document — so this stays a floor, the
+# way the rest of this module is: emitted only where nothing better is present,
+# and skipped entirely once a refiner has supplied the real sections.
+#
+# `%s` is the asset's label, already allocated by `compile.plan_references`, so
+# the ordinals here and the tensors in the payload come from the one walk.
+_DEFINE = {
+    ("image", "full"): "%s is a reference picture. What the target video takes "
+                       "from it is what the picture actually shows.",
+    ("image", "person"): "%s is a person reference: the face, hair, skin, build "
+                         "and clothing in it are retained, and its background, "
+                         "palette, lighting, pose and action are not.",
+    ("image", "object"): "%s is an object reference: the object itself is "
+                         "retained, and the picture's surroundings, lighting "
+                         "and arrangement are not.",
+    ("image", "scene"): "%s is a scene reference: its environment, surfaces and "
+                        "light are retained, and any people or passing objects "
+                        "in it, and its framing, are not.",
+    ("image", "style"): "%s is a style reference: its medium, palette, light "
+                        "and rendering are retained, and its subjects, layout "
+                        "and content are not.",
+
+    ("video", "full"): "%s is a reference video.",
+    ("video", "person"): "%s is a person reference: the face, hair, build and "
+                         "clothing of the person in it are retained, and the "
+                         "clip's setting, camera work, cuts and action are not.",
+    ("video", "object"): "%s is an object reference: the object itself is "
+                         "retained, and the clip's surroundings, camera work "
+                         "and action are not.",
+    ("video", "scene"): "%s is a scene reference: its environment, surfaces and "
+                        "light are retained, and anyone in it, its framing and "
+                        "its camera work are not.",
+    ("video", "style"): "%s is a style reference: its medium, palette, light "
+                        "and rendering are retained, and its subjects, action "
+                        "and camera work are not.",
+    # The two that move something onto a subject the clip does not contain. Both
+    # say the clip's own content stays out, which is the failure they exist to
+    # prevent.
+    ("video", "motion"): "%s is a motion reference: the movement in it — its "
+                         "path, its timing and its weight — is carried onto the "
+                         "target video's own subject, and nobody and nothing "
+                         "visible in the clip appears in the target video.",
+    ("video", "camera"): "%s is a camera reference: its camera movement, its "
+                         "shot changes and its pacing are followed, and nobody "
+                         "and nothing visible in the clip appears in the target "
+                         "video.",
+    # The two whole-video relationships, phrased the way the guide's own summary
+    # line opens.
+    ("video", "edit"): "The target video is an edited version of %s. Everything "
+                       "this description does not change stays as it is in the "
+                       "source video.",
+    ("video", "continue"): "The target video continues from the end of %s, "
+                           "carrying its closing subjects, framing and light "
+                           "into the opening of the new footage.",
+
+    ("audio", "full"): "%s is a reference audio clip.",
+    ("audio", "voice"): "%s is a voice reference: the target speaker follows "
+                        "its timbre and delivery, and its words and its "
+                        "background sound are not copied.",
+    ("audio", "music"): "%s is a music-style reference: its genre, "
+                        "instrumentation and mood guide the target video's "
+                        "score, and the recording itself is not reused.",
+    ("audio", "ambience"): "%s is an ambience reference: its room tone and "
+                           "sound texture guide the target video's background "
+                           "sound, and the recording itself is not reused.",
+    ("audio", "copy"): "%s is reused directly: its signal is the target video's "
+                       "own audio.",
+}
+
+# A clip brought in with its soundtrack is two labels for one file, and the
+# audio one is not addressable by handle — `_labels_from_plan` keys it
+# `"<handle>:audio"` precisely because the handle is already spoken for. So its
+# line names the clip it came off instead, which is the guide's own phrasing for
+# a shared source.
+_SOUNDTRACK = "%s is the synchronized audio track of %s."
+
+
+def _define(asset, label):
+    """The one sentence that says what `asset` is, or `None` for a role that
+    already has one.
+
+    A keyframe is not here: the mode instruction line above it already states
+    how the target video aligns to it, and a second sentence saying the same
+    thing in other words is one the model has to reconcile.
+    """
+    if asset.role != "reference":
+        return None
+    kind = "audio" if (asset.kind == "audio" or asset.track == "sound") else asset.kind
+    form = _DEFINE.get((kind, asset.takes)) or _DEFINE.get((kind, "full"))
+    return form % label if form else None
+
+
+def reference_preamble(plan):
+    """`compile.plan_references`'s walk -> the lines that define its labels.
+
+    One line per label, in the order the tokenizer is shown them, so the prose
+    and the payload agree about which file is which without either side
+    re-deriving the order.
+    """
+    # The `<Video N>` a soundtrack belongs to is assigned by the step after it,
+    # so the clip's own label is looked up rather than carried forward.
+    video_label = {step["asset"].handle: step["label"]
+                   for step in plan if step["op"] == "video"}
+    lines = []
+    for step in plan:
+        asset, label = step["asset"], step["label"]
+        if step["op"] == "soundtrack":
+            owner = video_label.get(asset.handle)
+            lines.append(_SOUNDTRACK % (label, owner) if owner
+                         else _DEFINE[("audio", "full")] % label)
+            continue
+        line = _define(asset, label)
+        if line:
+            lines.append(line)
+    return " ".join(lines)
+
+
 def count_shots(body):
     """How many shots a description holds — what `instruction`'s `Shot N` is."""
     return len(SHOT_RE.findall(body or ""))
@@ -184,7 +317,7 @@ def instruction(mode, seconds, shots=1):
 
 
 def compose(mode, body, soundscape="", music="", seconds=0.0, preamble="", shots=1,
-            sections=None):
+            sections=None, definitions=""):
     """The user's prose -> the sectioned prompt the DiT was trained to read.
 
     `body` is what the user wrote, with `@handles` already substituted and any
@@ -203,6 +336,14 @@ def compose(mode, body, soundscape="", music="", seconds=0.0, preamble="", shots
     distinction matters: those three sections cannot be derived from a sentence,
     so wrapping a hand-written reference prompt in `detailed_description:` would
     claim a form the rest of which is missing.
+
+    `definitions` is `reference_preamble`'s output — one sentence per reference
+    label, saying what that file lends. It stands in the same slot as `preamble`
+    and is dropped the moment something better occupies it: a refined reference
+    form defines its labels in `subject_definitions` and states their scope in
+    `retention_analysis`, and a body that carries either section is one somebody
+    has already written by hand. Two descriptions of the same reference is worse
+    than none, because the model has to decide which of them it is being told.
     """
     body = (body or "").strip()
     soundscape = (soundscape or "").strip()
@@ -225,6 +366,13 @@ def compose(mode, body, soundscape="", music="", seconds=0.0, preamble="", shots
     # prompt the user has since hand-edited into full form is not given a second
     # copy of a section it already has.
     reference_form = mode == "REF2VA" and bool(sections)
+
+    # What each reference is, where nothing else says it. See `definitions`.
+    definitions = (definitions or "").strip()
+    if (definitions and not reference_form
+            and not any(has_field(body, name) for name in REF_SECTIONS)):
+        out.append(definitions)
+
     if reference_form:
         for name in REF_SECTIONS:
             value = str(sections.get(name) or "").strip()

@@ -226,7 +226,7 @@ class SettingsPage {
         note: "Two stepper pills after the scheduler, for dialling the two schedules "
             + "by hand. A turbo LoRA's card may name the values it was distilled against." },
     ];
-    return [this.section("Nodes", "Flow shift pills",
+    return [...this.renderScopes(), this.section("Nodes", "Flow shift pills",
       "Whether the sampler row offers H3's two flow shifts — the video and audio "
       + "schedule clocks. The values apply either way; this only decides who has "
       + "to look at them.",
@@ -246,6 +246,56 @@ class SettingsPage {
           el("span", {
             text: t("Open nodes pick the change up the next time they redraw — "
                 + "closing this page is enough."),
+          }),
+        ]),
+      ])];
+  }
+
+  /**
+   * Whether a reference's scope is written into the prompt for the model.
+   *
+   * The one setting on this page that reaches the render, which is worth being
+   * plain about: the same `.json` queues different prose on a machine that has
+   * this on. It sits here anyway because it is a statement about how you prompt
+   * rather than about this piece — some people write the scope into their own
+   * sentence and want no second copy of it — and a per-node copy would turn one
+   * answer into a dozen.
+   */
+  renderScopes() {
+    const on = this.settings.define_refs === true;
+    const rows = [
+      { value: false, label: "Only the refiner",
+        note: "What every render did before this existed. The scope reaches Refine's "
+            + "glossary and stops there, so a piece queued without a rewrite has the "
+            + "chip set to something the model is never told." },
+      { value: true, label: "Also the prompt",
+        note: "One sentence per reference, written in front of the description: what "
+            + "that file lends and what it does not. Shown in the box above your own "
+            + "text, so you can read what is being sent. A refined reference form "
+            + "says it better and replaces these." },
+    ];
+    return [this.section("Nodes", "Reference scopes in the prompt",
+      "H3 has no reference-conditioning switch — the DiT is handed the same tensor "
+      + "whatever a chip says, so 'camera only' or 'her face, not her background' is "
+      + "prose or it is nothing. This decides whether the compiler writes that prose "
+      + "itself, or leaves it to Refine.",
+      [
+        el("div", { class: "mmc-set-choices" }, rows.map((row) => el("button", {
+          class: "mmc-opt mmc-set-opt",
+          "aria-checked": row.value === on,
+          onclick: () => row.value !== on && this.set({ define_refs: row.value }),
+        }, [
+          el("span", { class: "mmc-radio" }),
+          el("span", { class: "mmc-set-opt-text" }, [
+            el("span", { class: "mmc-set-opt-label", text: t(row.label) }),
+            el("span", { class: "mmc-set-opt-note", text: t(row.note) }),
+          ]),
+        ]))),
+        el("div", { class: "mmc-set-foot" }, [
+          el("span", {
+            text: t("This one changes what is queued, not just what is drawn: a "
+                + "workflow shared with someone whose copy is set the other way "
+                + "renders the other prose."),
           }),
         ]),
       ])];

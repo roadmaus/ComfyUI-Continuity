@@ -67,6 +67,18 @@ DEFAULTS = {
     # here because it is per-machine like everything else in this file, and one
     # settings page writing one file beats a second store for one boolean.
     "show_shift_pills": False,
+    # Whether a reference's scope is written into the prompt for the model as
+    # well as into the refiner's glossary. Off by default: it is the behaviour
+    # every render had before it existed, and the sentences cost tokens a
+    # refined piece is already spending better.
+    #
+    # This one does reach the render, which is the line the rest of this file
+    # draws and the reason it is worth naming out loud: two people opening the
+    # same `.json` get the same shot only if they agree about it. It sits here
+    # anyway because it is a statement about how you prompt — some people write
+    # the scope into their own prose and want no second copy of it — and a
+    # per-node copy would make that one answer into a dozen.
+    "define_refs": False,
 }
 
 
@@ -90,10 +102,11 @@ def clean(raw):
         if not MIN_CRF <= crf <= MAX_CRF:
             raise ValueError(f"video_crf must be between {MIN_CRF} and {MAX_CRF}")
         clean_settings["video_crf"] = crf
-    if "show_shift_pills" in raw and raw["show_shift_pills"] is not None:
-        if not isinstance(raw["show_shift_pills"], bool):
-            raise ValueError("show_shift_pills must be true or false")
-        clean_settings["show_shift_pills"] = raw["show_shift_pills"]
+    for flag in ("show_shift_pills", "define_refs"):
+        if flag in raw and raw[flag] is not None:
+            if not isinstance(raw[flag], bool):
+                raise ValueError(f"{flag} must be true or false")
+            clean_settings[flag] = raw[flag]
     for key, fallback in (("video_prefix", DEFAULT_VIDEO_PREFIX),
                           ("image_prefix", DEFAULT_IMAGE_PREFIX)):
         if key in raw and raw[key] is not None:
@@ -166,3 +179,8 @@ def video_prefix():
 def image_prefix():
     """Where pre-stage stills land, unless the blob names somewhere itself."""
     return load()["image_prefix"]
+
+
+def define_refs():
+    """Whether the compiler writes each reference's scope into the prompt."""
+    return load()["define_refs"]

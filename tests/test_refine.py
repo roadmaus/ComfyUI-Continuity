@@ -318,6 +318,43 @@ check("a clip taken for its sound is told it cannot be heard",
       video("full", track="sound")["note"],
       "you cannot hear it; take what it holds from the request")
 
+# Audio's own four, which are the guide's audio roles. The split that decides
+# both the task-type prefix and the retention marker is copy against reference,
+# so the notes name the marker rather than leave it to be inferred — and every
+# one of them still opens on the deafness, because what the refiner cannot hear
+# governs everything else it might have said about the file.
+sound = lambda takes, kind="audio", track=None: refine.slot_row(
+    Slot("aud-1" if kind == "audio" else "vid-1", kind, takes, track=track))
+
+check("an un-narrowed audio reference says only that it cannot be heard",
+      sound("full")["note"], "you cannot hear it; take what it holds from the request")
+check("a voice reference binds the speaker and refuses the words",
+      "Only the voice is the reference" in sound("voice")["note"], True)
+check("...and marks the retention line for it",
+      "mark that line reference in retention_analysis" in sound("voice")["note"], True)
+check("...and still opens on what cannot be heard",
+      sound("voice")["note"].startswith("you cannot hear it"), True)
+check("a music reference is written into non_diegetic_music",
+      "Say so in non_diegetic_music" in sound("music")["note"], True)
+check("an ambience reference is written into overall_soundscape",
+      "Say so in overall_soundscape" in sound("ambience")["note"], True)
+check("a copied signal asks for the task-type prefix by name",
+      "'audio reuse' in the task-type prefix" in sound("copy")["note"], True)
+check("...and for fully_copy in retention_analysis",
+      "fully_copy in retention_analysis" in sound("copy")["note"], True)
+check("a narrowed audio reference says what it is for",
+      sound("voice")["what"], "a reference audio clip, for the voice in it (aud-1.mp4)")
+
+# A clip taken for its soundtrack alone is an audio reference in a container
+# with a picture in it: it scopes with the audio vocabulary, but it is still
+# described as the clip it came from.
+check("a sound-only clip keeps its own description",
+      sound("full", kind="video", track="sound")["what"],
+      "a reference video used for its soundtrack alone (vid-1.mp4)")
+check("...and takes the audio scopes",
+      "Only the musical style is the reference"
+      in sound("music", kind="video", track="sound")["note"], True)
+
 
 # ---- the transport ----------------------------------------------------------
 #

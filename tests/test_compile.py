@@ -482,12 +482,124 @@ expect_error("a video's takes must be one of its own",
              "takes must be one of")
 expect_error("a picture has no camera to take",
              lambda: build(assets=[image("img-1", takes="camera")]), "takes must be one of")
-expect_error("a sound-only clip has no picture to narrow",
+
+# --- and what a reference audio takes -----------------------------------------
+#
+# The guide's own audio roles, and the split that decides both the task-type
+# prefix and the retention marker: a signal copied outright against one only
+# referenced. A clip taken for its soundtrack alone scopes here rather than with
+# the pictures — it arrives in `ref_audios` and its picture is never encoded, so
+# the picture vocabulary would narrow a file that is not there.
+
+check("a reference audio clip defaults to the whole signal",
+      build(assets=[image("img-1"), audio("aud-1")]).ref_audios[0].takes, "full")
+check("a voice reference is kept",
+      build(assets=[image("img-1"), audio("aud-1", takes="voice")]).ref_audios[0].takes, "voice")
+check("a copied signal is kept",
+      build(assets=[image("img-1"), audio("aud-1", takes="copy")]).ref_audios[0].takes, "copy")
+check("a sound-only clip scopes as the audio it has become",
+      build(assets=[image("img-1"),
+                    video("vid-1", track="sound", takes="music")]).ref_audios[0].takes,
+      "music")
+expect_error("a sound-only clip has no picture left to narrow",
              lambda: build(assets=[image("img-1"), video("vid-1", track="sound", takes="motion")]),
-             "sound-only clip is always used whole")
-expect_error("audio cannot be narrowed",
+             "takes must be one of")
+expect_error("audio has no person in it to take",
              lambda: build(assets=[image("img-1"), audio("aud-1", takes="person")]),
+             "takes must be one of")
+expect_error("a keyframe is still refused outright",
+             lambda: build(prompt="x", assets=[image("img-1", role="last_frame", takes="style")]),
              "used whole")
+
+# --- saying what each reference is, for the model -----------------------------
+#
+# `takes` used to be read by the refiner's glossary and by nothing else, so a
+# piece queued without a rewrite had the dial quietly do nothing. Switched on,
+# the same distinction is written into the prompt as prose — the only place H3
+# can carry it, since the DiT is handed the same tensor either way.
+#
+# A floor, like the rest of `contextir`: emitted where nothing better is there,
+# and dropped the moment a refiner has written the real sections.
+
+def defined(prompt="", assets=(), **rest):
+    data = {"prompt": prompt, "assets": list(assets), "duration_s": 6,
+            "aspect": "16:9", "short_edge": 768}
+    data.update(rest)
+    return compiler.compile_request(
+        data, image_size_lookup=lambda _f: (1500, 1000), define_refs=True)
+
+
+check("off by default, nothing is said about a reference",
+      "is a person reference" in build("a walk", [image("img-1", takes="person")]).prompt,
+      False)
+
+person = defined("a walk", [image("img-1", takes="person")])
+check("on, the picture's scope is stated in the prompt",
+      "<Picture 1> is a person reference:" in person.prompt, True)
+check("...saying what is retained",
+      "face, hair, skin, build and clothing in it are retained" in person.prompt, True)
+check("...and what is not",
+      "background, palette, lighting, pose and action are not" in person.prompt, True)
+check("...ahead of the description, where subject_definitions goes",
+      person.prompt.index("is a person reference")
+      < person.prompt.index("detailed_description:")
+      if "detailed_description:" in person.prompt
+      else person.prompt.index("is a person reference") < person.prompt.index("a walk"),
+      True)
+
+check("an un-narrowed picture is still named, so its label points at something",
+      "<Picture 1> is a reference picture." in defined("a walk", [image("img-1")]).prompt,
+      True)
+
+check("a camera reference says nobody in the clip appears",
+      "nobody and nothing visible in the clip appears in the target video"
+      in defined("a walk", [video("vid-1", takes="camera")]).prompt, True)
+check("an edit opens on the guide's own summary sentence",
+      "The target video is an edited version of <Video 1>."
+      in defined("a walk", [video("vid-1", takes="edit")]).prompt, True)
+check("a continuation names the clip it picks up from",
+      "The target video continues from the end of <Video 1>"
+      in defined("a walk", [video("vid-1", takes="continue")]).prompt, True)
+check("a voice reference binds timbre and refuses the words",
+      "its words and its background sound are not copied"
+      in defined("a walk", [image("img-1"), audio("aud-1", takes="voice")]).prompt, True)
+check("a copied signal says it is the target's own audio",
+      "<Audio 1> is reused directly" in
+      defined("a walk", [image("img-1"), audio("aud-1", takes="copy")]).prompt, True)
+
+# The ordinals come off `plan_references`, so the prose and the payload cannot
+# disagree about which file is which.
+two = defined("a walk", [image("img-1", takes="style"), image("img-2", takes="person"),
+                         video("vid-1", takes="motion")])
+check("every label is defined, in the order the tokenizer is shown them",
+      [line for line in ("<Picture 1> is a style reference",
+                         "<Picture 2> is a person reference",
+                         "<Video 1> is a motion reference")
+       if line in two.prompt],
+      ["<Picture 1> is a style reference", "<Picture 2> is a person reference",
+       "<Video 1> is a motion reference"])
+
+# A clip with its soundtrack is two labels for one file, and the audio one is not
+# addressable by handle — so its line names the clip it came off.
+sound = defined("a walk", [video("vid-1", track="picture+sound", takes="camera")])
+check("a soundtrack's label is defined against its clip",
+      "<Audio 1> is the synchronized audio track of <Video 1>." in sound.prompt, True)
+
+# The one thing that must not happen: two descriptions of the same reference.
+refined = defined("a walk", [image("img-1", takes="person")], refined={
+    "enabled": True, "body": "a woman walks", "sections": {
+        "subject_definitions": "<Subject 1> is the woman in @img-1.",
+        "summary": "[reference generation] She walks.",
+        "retention_analysis": "<Subject 1>: fully_preserved - her likeness is retained."}})
+check("a refined reference form defines its own labels, so nothing is added",
+      "is a person reference" in refined.prompt, False)
+check("...and the refiner's own definition is what is queued",
+      "subject_definitions: <Subject 1> is the woman in <Picture 1>." in refined.prompt, True)
+
+check("a keyframe is left to the alignment instruction",
+      "is a reference picture" in defined("a walk", [image("img-1", role="first_frame")]).prompt,
+      False)
+
 
 # --- loras and trigger words -------------------------------------------------
 

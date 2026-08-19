@@ -234,7 +234,8 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
         if progress:
             _announce(cls.hidden.unique_id, progress)
 
-        compiled = compiler.compile_segment(payload, image_size_lookup=media.image_size)
+        compiled = compiler.compile_segment(payload, image_size_lookup=media.image_size,
+                                            define_refs=settings.define_refs())
 
         # Both VAEs are wired only when the encoder will actually reach for them
         # (`render` gates on the same two predicates), so a missing one here is a

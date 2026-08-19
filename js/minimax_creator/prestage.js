@@ -861,6 +861,10 @@ export class PreStageBody {
       // The settings page holds the video rate control and this node writes
       // PNGs, so it would be a button over nothing.
       settingsTool: false,
+      // Plain mode replaces the whole composed prompt with the typed sentence
+      // after compiling, so the reference scopes are built and then dropped.
+      // A band promising them there would be describing a prompt nobody reads.
+      scopesSent: () => still.prompt_mode !== "plain",
       // The pre-stage's, not the request's: what you save from this node is
       // this node, and on the H3 branch the request is only where it keeps its
       // files. Same reasoning as the piece's face wearing its one shot.

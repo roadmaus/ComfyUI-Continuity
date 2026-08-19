@@ -10,7 +10,7 @@
 import { probe, viewUrl } from "./api.js";
 import { clearButton } from "./clear.js";
 import { el, icon, mountOverlay, swappable } from "./dom.js";
-import { CreatorEditor, pickTakes, IMAGE_TAKES_HELP, VIDEO_TAKES_HELP } from "./editor.js";
+import { CreatorEditor, pickTakes, takesHelp } from "./editor.js";
 import { t } from "./i18n.js";
 import { openLoras } from "./loras.js";
 import { openPicker } from "./picker.js";
@@ -354,12 +354,13 @@ class Timeline {
       }),
       el("span", { class: "mmc-tl-pool-where", text: where }),
       // What of the file is the reference — a character sheet is usually the
-      // person, not the sheet's background, and a clip is as often borrowed for
-      // its camera as for what it shows. The editor's own chip, same menu.
+      // person, not the sheet's background, a clip is as often borrowed for its
+      // camera as for what it shows, and a voice is borrowed for its timbre and
+      // not its words. The editor's own chip, same menu.
       ...(S.takeable(asset) ? [el("button", {
         class: "mmc-ghost",
         style: { fontSize: "11px" },
-        title: asset.kind === "video" ? t(VIDEO_TAKES_HELP) : t(IMAGE_TAKES_HELP),
+        title: t(takesHelp(asset)),
         text: t(S.takes(asset)),
         onclick: (event) => pickTakes(event.currentTarget, asset, () => this.commit()),
       })] : []),

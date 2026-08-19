@@ -138,6 +138,23 @@ in the rewrite: the content takes and `motion` mine the clip for a `<Subject N>`
 while `camera`, `edit` and `continue` are the whole-video relationships
 `<Video N>` is reserved for. The dial is on the chip, next to the trim.
 
+An audio reference's dial reads `full · voice · music · ambience · copy`, which
+are the roles the guide gives an `<Audio N>`. `voice` carries a timbre and a
+delivery onto whoever speaks without carrying the words, `music` and `ambience`
+reference a style or a room without reusing the recording, and `copy` says the
+signal itself becomes the video's audio. A clip you set to **sound only** scopes
+here rather than with the pictures — it is an audio reference that happens to
+have arrived in an mp4.
+
+None of this reaches the DiT as a switch: H3 has no reference-conditioning
+input, so every one of these distinctions is prose or it is nothing. Refine
+reads the dial and writes that prose for you. If you queue without refining,
+turn on **Reference scopes in the prompt** under Settings → Nodes and the
+compiler writes it instead — one sentence per reference in front of the
+description, shown in the prompt box above your own text so you can read what is
+being sent. It steps aside for a refined reference form, which says the same
+thing better and in the model's own sections.
+
 The PreStage's style references are cited the same way. Writing `@ref-2` becomes
 `Picture 2` — the label core's Qwen-edit encoder writes in front of that slot, so
 it is the name the model is actually reading. Which slot a reference gets is the
@@ -324,10 +341,11 @@ share the strip with a start/end-frame segment (references and frames are
 different checkpoints), and the compiler says so naming both. The `@` menu
 inside every segment offers the pool under *Piece references*, the refiner is
 shown it once and may cite it where the subject appears — globally included —
-and a reference can be narrowed (*person*, *object*, *scene*, *style*, and for a
-clip *motion*, *camera*, *edit*, *continue*) so a sheet contributes the likeness
-without its background. In one pass, all
-citations of the same piece reference share a single `<Picture N>`.
+and a reference can be narrowed (*person*, *object*, *scene*, *style*, for a clip
+*motion*, *camera*, *edit*, *continue*, and for a sound *voice*, *music*,
+*ambience*, *copy*) so a sheet contributes the likeness without its background.
+In one pass, all citations of the same piece reference share a single
+`<Picture N>`.
 
 While a chained piece renders, the preview overlay names the pass the sampler is
 on — *Pass 3 of 5* — so a long strip's step count finally says where in the piece
@@ -604,6 +622,14 @@ split as the folder pill above: where a file lands is part of the piece, how man
 megabytes it takes is not. The value lives in `user/minimax_creator.settings.json`
 and applies to every video the Creator writes. PreStage stills are PNG and have
 nothing to set.
+
+The page's **Nodes** tab holds two more, both off by default. *Flow shift pills*
+decides whether the sampler row offers H3's two schedule clocks — a control over
+who has to look at them, not over what is sampled. *Reference scopes in the
+prompt* is the one setting on the page that changes what is queued: on, the
+compiler writes each reference's scope into the prompt as prose, and the prompt
+box shows it above your own text. Worth knowing before you share a workflow —
+someone whose copy is set the other way renders the other prose.
 
 Needs ComfyUI 0.29 or newer, which is where `crf` reached core's video writer.
 On an older build anything but Standard is refused at save time rather than

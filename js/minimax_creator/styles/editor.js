@@ -240,6 +240,37 @@ export const css = `
 }
 .mmc-prompt-excerpt.empty { font-style: italic; }
 .mmc-prompt-fold[open] .mmc-prompt-excerpt { display: none; }
+/* --- the scope band ------------------------------------------------------- */
+/* What the compiler writes in front of the description, shown where it lands:
+   inside the prompt's fold, above the box. Generated, so it is not a field —
+   no border, no background of its own, and never focusable. It reads as a note
+   the prompt carries rather than as a second box to write in, which is the one
+   thing it must not be mistaken for.
+
+   Held off the box by the fold's own 8px gap and separated by a rule, because
+   the two are the same prompt and stacking them with no line between made the
+   sentences read as text somebody had typed. */
+.mmc-scopes:empty { display: none; }
+.mmc-scopes {
+  display: flex; flex-direction: column; gap: 5px; flex: none;
+  padding-bottom: 9px; border-bottom: 1px solid var(--mmc-line);
+  user-select: text; cursor: default;
+}
+.mmc-scopes-head {
+  display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;
+  color: var(--mmc-off); font-size: 10px; letter-spacing: .09em; text-transform: uppercase;
+}
+/* The one thing the band cannot show honestly: ordinals are allocated at queue
+   time, so the names here are handles and the model reads labels. Said once, in
+   the quietest type on the row, rather than in a tooltip nobody opens. */
+.mmc-scopes-why { letter-spacing: 0; text-transform: none; font-size: 10.5px; opacity: .8; }
+.mmc-scopes-line {
+  margin: 0; color: var(--mmc-dim); font-size: 12.5px; line-height: 1.55;
+}
+/* Dimmed with the box it belongs to: while a rewrite stands in for the prompt,
+   neither of them is what gets queued. */
+.mmc-prompt-fold.superseded > .mmc-scopes { opacity: .42; }
+
 /* .mmc-ref, not .mmc-chip: the refiner's language chips own that name, and the
    two rules fighting over it is what once turned these gray. */
 .mmc-ref {

@@ -664,8 +664,46 @@ _VIDEO_TAKES_NOTE = {
 }
 
 
+# The same field on an audio reference, where the vocabulary is the guide's own
+# audio roles. The split that matters here is copy against reference — it is the
+# difference between an "audio reuse" task-type prefix and an "audio reference"
+# one, and between `fully_copy` and `reference` in retention_analysis — so the
+# notes name the marker they want rather than leaving the refiner to infer it.
+_AUDIO_TAKES_WHAT = {
+    "voice": "a reference audio clip, for the voice in it",
+    "music": "a reference audio clip, for its musical style",
+    "ambience": "a reference audio clip, for its ambience",
+    "copy": "a reference audio clip, reused as the target video's own audio",
+}
+_AUDIO_TAKES_NOTE = {
+    "voice": "only the voice is the reference — its timbre, its pitch and its "
+             "delivery. Bind it to the speaker it belongs to and mark that line "
+             "reference in retention_analysis. Its words are not carried into "
+             "the target video and its background sound is not copied",
+    "music": "only the musical style is the reference — genre, "
+             "instrumentation, mood and tempo. Say so in non_diegetic_music, "
+             "mark that line reference in retention_analysis, and do not treat "
+             "the recording itself as reused",
+    "ambience": "only the ambience is the reference — its room tone and sound "
+                "texture. Say so in overall_soundscape, mark that line "
+                "reference in retention_analysis, and do not treat the "
+                "recording itself as reused",
+    "copy": "this signal is reused as the target video's own audio. Mark that "
+            "line fully_copy in retention_analysis and put 'audio reuse' in the "
+            "task-type prefix",
+}
+
+
+# A clip taken for its soundtrack alone is an audio reference and is scoped as
+# one — `compile._parse_assets` allows it exactly that vocabulary. Everywhere the
+# glossary asks "what kind of thing is this", that is the answer it wants.
+def _scope_kind(asset):
+    return "audio" if asset.kind == "audio" or asset.track == "sound" else asset.kind
+
+
 def slot_row(asset, label=None, show_label=False):
     """One glossary line's worth of an asset."""
+    kind = _scope_kind(asset)
     what = _WHAT.get(asset.role)
     if what is None:
         what = {
@@ -676,24 +714,34 @@ def slot_row(asset, label=None, show_label=False):
             "video": _VIDEO_TAKES_WHAT.get(
                 asset.takes,
                 {"picture": "a reference video, picture only",
-                 "picture+sound": "a reference video, picture and soundtrack",
-                 "sound": "a reference video used for its soundtrack alone"}.get(
+                 "picture+sound": "a reference video, picture and soundtrack"}.get(
                      asset.track, "a reference video")),
-            "audio": "a reference audio clip",
-        }[asset.kind]
+            # Including a sound-only clip, which is an audio reference that
+            # happens to arrive in a container with a picture in it.
+            "audio": _AUDIO_TAKES_WHAT.get(
+                asset.takes,
+                "a reference video used for its soundtrack alone"
+                if asset.kind == "video" else "a reference audio clip"),
+        }[kind]
     row = {"handle": asset.handle, "what": f"{what} ({os.path.basename(asset.filename)})"}
     if asset.role == "reference":
-        if asset.kind == "image":
+        if kind == "image":
             row["note"] = _TAKES_NOTE.get(asset.takes, _FULL_NOTE)
-        elif asset.kind == "video" and asset.takes in _VIDEO_TAKES_NOTE:
+        elif kind == "video" and asset.takes in _VIDEO_TAKES_NOTE:
             row["note"] = _VIDEO_TAKES_NOTE[asset.takes]
     # Only where the ordinal is unambiguous. Handles are allocated per segment,
     # so across a strip two cards each have a `<Picture 1>` — showing both would
     # tell the model that one label means two files.
     if show_label and label:
         row["label"] = label
-    if asset.kind == "audio" or (asset.kind == "video" and asset.track == "sound"):
-        row["note"] = "you cannot hear it; take what it holds from the request"
+    # What the refiner cannot hear, last, because it governs everything else it
+    # might have said about the file. A narrowed one still gets its scope: it is
+    # being told which role to write, and that is a thing it can do from the
+    # request without hearing the clip at all.
+    if kind == "audio":
+        deaf = "you cannot hear it; take what it holds from the request"
+        scope = _AUDIO_TAKES_NOTE.get(asset.takes)
+        row["note"] = f"{deaf}. {scope[0].upper()}{scope[1:]}" if scope else deaf
     return row
 
 

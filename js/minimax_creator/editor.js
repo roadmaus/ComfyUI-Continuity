@@ -26,7 +26,7 @@ import { samplingBar, segmentSeedPill, widgetIO } from "./sampling.js";
 import { Stage } from "./stage.js";
 import { weightsPill, loadCatalog, catalogFiles } from "./models.js";
 import * as Turbo from "./turbo.js";
-import { viewUrl, probeAudio } from "./api.js";
+import { viewUrl, probeAudio, uiSetting } from "./api.js";
 import * as S from "./state.js";
 import { MIN_SECONDS, MAX_SECONDS, describeRatio, isTrainedLength } from "./canvas.js";
 
@@ -57,6 +57,25 @@ export const VIDEO_TAKES_HELP =
   + "appearing. edit: the clip is the video being edited. continue: the video "
   + "picks up where it ends. Read by Refine, and worth saying in the prompt "
   + "too if you skip refining.";
+export const AUDIO_TAKES_HELP =
+  "What of this sound is the reference. full: the whole clip. voice: its "
+  + "timbre and delivery, carried onto whoever speaks, without its words. "
+  + "music: its genre, instrumentation and mood, not the recording. ambience: "
+  + "its room tone and texture. copy: the signal itself becomes the video's "
+  + "own audio. Read by Refine, and worth saying in the prompt too if you skip "
+  + "refining.";
+
+/** The tooltip for a scope chip — one per vocabulary, so a clip taken for its
+ *  soundtrack alone is explained as the audio it has become. */
+export const takesHelp = (asset) =>
+  ({ image: IMAGE_TAKES_HELP, video: VIDEO_TAKES_HELP, audio: AUDIO_TAKES_HELP })[S.scopeKind(asset)];
+
+/** The references this segment will actually queue with, in the order
+ *  `compile._inject_pool` merges them: the pool assets it cites go in front, so
+ *  a reference shared by several segments keeps the low ordinals. `citedPool`
+ *  already drops any handle the segment defines itself, which is that
+ *  function's "the more specific entry wins" rule. */
+const mergedRefs = (state) => [...S.citedPool(state), ...(state.assets ?? [])];
 
 /** The narrowing menu, shared by the chip on a card and the one in the
  *  timeline's pool. Labels are translated, so the pick maps back by key. */
@@ -168,7 +187,7 @@ export class CreatorEditor {
                 durationPill = true, extraPills = null, extraTools = null,
                 settingsTool = true, stage = null, editorTitle = null,
                 piece = null, afterPanel = null, presetTarget = null,
-                clearTool = null, seedTarget = null }) {
+                clearTool = null, seedTarget = null, scopesSent = null }) {
     // The one sampler setting a card may answer for itself — see
     // `segmentSeedPill`. Null on a node body, which owns the whole row.
     this.seedTarget = seedTarget;
@@ -183,6 +202,9 @@ export class CreatorEditor {
     this.pieceView = pieceView;
     this.durationPill = durationPill;
     this.settingsTool = settingsTool;
+    // Whether the composed prompt is what the DiT ends up reading. Only the
+    // pre-stage's plain mode says otherwise — see `renderScopes`.
+    this.scopesSent = scopesSent;
     this.extraPills = extraPills;
     this.extraTools = extraTools;
     this.clearTool = clearTool;
@@ -212,6 +234,7 @@ export class CreatorEditor {
         this.state.prompt = text;
         this.onCommit?.();
         this.renderNotices();   // dangling-handle warning, without disturbing the caret
+        this.renderScopes();    // citing a pool reference is what attaches it
       },
       onAttach: (row) => this.attachFromMention(row),
       attachBlocked: (action) => S.blockedReason(this.state, action),
@@ -678,6 +701,7 @@ export class CreatorEditor {
     })] : []));
     this.prompt.refresh();
     this.syncPrompt();
+    this.renderScopes();
     this.refinePanel.render();
     this.renderExpand();
     this.renderNotices();
@@ -769,6 +793,7 @@ export class CreatorEditor {
       extraPills: this.extraPills,
       extraTools: this.extraTools,
       settingsTool: this.settingsTool,
+      scopesSent: this.scopesSent,
       refineTarget: this.refineTarget,
       onRefined: this.onRefined,
       onReverted: this.onReverted,
@@ -813,6 +838,65 @@ export class CreatorEditor {
   syncPrompt() {
     const refined = this.state.refined;
     this.prompt.setSuperseded(!!refined?.body?.trim() && refined.enabled !== false);
+  }
+
+  /**
+   * The scope band: what the compiler will write in front of the description,
+   * one sentence per reference, above the box and inside its fold.
+   *
+   * Off unless the machine's `define_refs` setting is on, because that is the
+   * setting this is a window onto — a band showing lines nothing will send is
+   * worse than no band. Empty in the keyframe modes too: there is no reference
+   * plan there, the alignment instruction already names the pictures, and
+   * `compile_request` passes no definitions for them either.
+   *
+   * Handles here, `<Picture 1>` in the prompt that is queued — the same trade
+   * the box itself makes, and for the same reason: ordinals are allocated at
+   * queue time and move whenever an asset is added or dropped, so a name shown
+   * here would be stale as often as it was right. The caption says so once.
+   */
+  renderScopes() {
+    const host = this.prompt.scopeHost;
+    if (!host) return;
+    const state = this.state;
+    // A refined reference form defines its own labels in `subject_definitions`
+    // and scopes them in `retention_analysis`, so `contextir.compose` drops
+    // these lines rather than say the same thing twice. Mirrored here so the
+    // band goes when the rewrite that replaces it arrives.
+    const refined = state.refined;
+    const superseded = !!refined?.body?.trim() && refined.enabled !== false
+      && Object.values(refined.sections ?? {}).some((text) => String(text ?? "").trim());
+
+    const lines = uiSetting("define_refs", false) && S.mode(state) === "REF2VA" && !superseded
+      // ...and only where the composed prompt is what the DiT actually reads.
+      // The pre-stage's plain mode swaps the whole composition for the typed
+      // sentence after compiling, so a band there would be showing lines that
+      // are built and then thrown away.
+      && (this.scopesSent?.() ?? true)
+      // In front, the way `compile._inject_pool` merges them: a shared
+      // reference keeps the low ordinals. A handle the segment defines itself
+      // wins, which is the same rule that function applies.
+      ? S.refDefinitions(mergedRefs(state))
+      : [];
+
+    if (!lines.length) return host.replaceChildren();
+    host.replaceChildren(
+      el("div", { class: "mmc-scopes-head" }, [
+        el("span", { text: t("sent to the model with your prompt") }),
+        el("span", {
+          class: "mmc-scopes-why",
+          text: t("each @name is written as its <Picture N> label when you queue"),
+        }),
+      ]),
+      ...lines.map(({ handle, sentence }) => {
+        const [before, after] = sentence.split("%s");
+        return el("p", { class: "mmc-scopes-line" }, [
+          el("span", { text: before }),
+          el("span", { class: `mmc-ref mmc-tag-${S.tagIndex(handle)}`, text: `@${handle}` }),
+          el("span", { text: after ?? "" }),
+        ]);
+      }),
+    );
   }
 
   renderNotices() {
@@ -986,7 +1070,7 @@ export class CreatorEditor {
         parts.push(el("button", {
           class: "mmc-ghost",
           style: { fontSize: "11px" },
-          title: asset.kind === "video" ? t(VIDEO_TAKES_HELP) : t(IMAGE_TAKES_HELP),
+          title: t(takesHelp(asset)),
           text: t(S.takes(asset)),
           onclick: (event) => pickTakes(event.currentTarget, asset, () => this.commit()),
         }));

@@ -137,7 +137,15 @@ export class PromptBox {
       el("span", { class: "mmc-prompt-head-name", text: t("your prompt") }),
       this.excerpt,
     ]);
-    this.frame = el("details", { class: "mmc-prompt-fold" }, [this.head, this.root]);
+    // What the compiler will write in front of the description, where the
+    // `define_refs` setting is on and this prompt cites references. Inside the
+    // fold and above the box, because it is part of the same prompt: it folds
+    // away with it, and it reads in the order the model reads it. Filled by the
+    // owner — see `CreatorEditor.renderScopes` — and empty otherwise, which is
+    // every prompt on a machine that leaves the setting alone.
+    this.scopeHost = el("div", { class: "mmc-scopes" });
+    this.frame = el("details", { class: "mmc-prompt-fold" },
+                    [this.head, this.scopeHost, this.root]);
     this.frame.open = true;
     this.frame.addEventListener("toggle", () => this.syncExcerpt());
     this.frame.addEventListener("pointerdown", (event) => event.stopPropagation());

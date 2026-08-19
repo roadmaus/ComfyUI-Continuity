@@ -2,6 +2,31 @@
 
 ## Unreleased
 
+**A reference's scope can now reach the model, not just the refiner.** The
+`full · person · object · scene · style` dial has always been prose or nothing —
+H3 has no reference-conditioning switch, and the DiT is handed the same tensor
+whatever the chip says — but until now the only thing that read it was Refine's
+glossary, so a piece queued without a rewrite had the setting quietly do
+nothing. Settings → Nodes → **Reference scopes in the prompt** turns on a second
+reader: the compiler writes one sentence per reference in front of the
+description, saying what that file lends and what it does not. The sentences are
+shown in the prompt box above your own text, so what gets sent is readable while
+you are still setting the chips. Off by default, and dropped entirely when a
+refined reference form is what is queued — that form defines its own labels in
+`subject_definitions` and scopes them in `retention_analysis`, and two
+descriptions of one reference is worse than none.
+
+**Audio references get the dial too.** `full · voice · music · ambience · copy`,
+which are the roles H3's reference guide gives an `<Audio N>`. `voice` carries a
+timbre and a delivery onto whoever speaks without carrying the words, `music`
+and `ambience` reference a style or a texture without reusing the recording, and
+`copy` says the signal itself is the video's own audio — the difference between
+an `audio reference` task-type prefix and an `audio reuse` one, and between
+`reference` and `fully_copy` in the retention lines. A clip taken for its
+soundtrack alone scopes here rather than with the pictures, which is a change:
+it used to be refused a scope outright on the grounds that it had no picture
+left to narrow, and it turns out the thing it does have is a sound.
+
 **A reference clip now says what it lends.** The scope dial that reference
 images have had — `full · person · object · scene · style` — is on video chips
 too, with four more values that only a moving picture has. `motion` lends the

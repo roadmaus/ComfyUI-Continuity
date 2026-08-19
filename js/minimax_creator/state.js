@@ -44,30 +44,131 @@ export const sizeable = (asset) =>
 
 /** What of a reference is actually the reference. "full" — the default — is
  *  the whole file; the others narrow it so "her from @img-1" stops dragging the
- *  picture's background, palette and pose into the video. Read by the refiner's
- *  glossary; the DiT gets the same tensor either way. Mirrors compile.TAKES.
+ *  picture's background, palette and pose into the video. The DiT gets the same
+ *  tensor either way, so this is prose or it is nothing: the refiner's glossary
+ *  reads it always, and the prompt itself reads it when the `define_refs`
+ *  setting is on. Mirrors compile.TAKES.
  *
  *  A clip takes the same four and four more, which are the roles H3's reference
  *  guide gives a video: the content takes and "motion" mine it for a
  *  `<Subject N>`, while "camera", "edit" and "continue" are the whole-video
- *  relationships `<Video N>` is reserved for. */
+ *  relationships `<Video N>` is reserved for. Audio takes the guide's own audio
+ *  roles, whose split is copy against reference — the difference between an
+ *  "audio reuse" task-type prefix and an "audio reference" one. */
 export const IMAGE_TAKES = ["full", "person", "object", "scene", "style"];
 export const VIDEO_TAKES = [...IMAGE_TAKES, "motion", "camera", "edit", "continue"];
-export const TAKES = { image: IMAGE_TAKES, video: VIDEO_TAKES };
+export const AUDIO_TAKES = ["full", "voice", "music", "ambience", "copy"];
+export const TAKES = { image: IMAGE_TAKES, video: VIDEO_TAKES, audio: AUDIO_TAKES };
+
+/** Which vocabulary an asset scopes with. A clip taken for its soundtrack alone
+ *  is an audio reference and scopes as one: it arrives among the audio, takes an
+ *  `<Audio N>` and never has its picture encoded, so the picture words would be
+ *  narrowing a file that is not there. Mirrors `compile._parse_assets`. */
+export const scopeKind = (asset) =>
+  (asset.kind === "audio" || asset.track === "sound") ? "audio" : asset.kind;
 
 /** The list an asset may choose from — empty for anything with nothing to
  *  narrow, which is what `takeable` reads. */
 export const takeOptions = (asset) =>
-  (asset.role === "reference" && asset.track !== "sound" && TAKES[asset.kind]) || [];
+  (asset.role === "reference" && TAKES[scopeKind(asset)]) || [];
 
 /** The narrowing in force for an asset — the stored one, or the whole file. */
 export const takes = (asset) =>
   (takeOptions(asset).includes(asset.takes) ? asset.takes : "full");
 
-/** Whether an asset has a narrowing to choose at all: reference pictures only —
- *  a keyframe is bound whole by the alignment line, audio has nothing to scope,
- *  and a clip taken for its soundtrack alone has no picture left. */
+/** Whether an asset has a narrowing to choose at all: references only — a
+ *  keyframe is bound whole by the alignment line. */
 export const takeable = (asset) => takeOptions(asset).length > 0;
+
+// What each scope says to the model, in the sentence the prompt carries when
+// `define_refs` is on. Mirrors `contextir._DEFINE` — the compiler writes these
+// with the label the tokenizer will see (`<Picture 1>`), and the box shows them
+// with the handle, exactly as it shows every other reference the prompt makes.
+// `%s` is where that name goes.
+//
+// Kept here rather than fetched because the band redraws on every keystroke that
+// changes an asset, and a sentence that arrived a frame late would read as the
+// setting not having taken.
+export const DEFINE = {
+  "image:full": "%s is a reference picture. What the target video takes from it is "
+              + "what the picture actually shows.",
+  "image:person": "%s is a person reference: the face, hair, skin, build and clothing "
+                + "in it are retained, and its background, palette, lighting, pose "
+                + "and action are not.",
+  "image:object": "%s is an object reference: the object itself is retained, and the "
+                + "picture's surroundings, lighting and arrangement are not.",
+  "image:scene": "%s is a scene reference: its environment, surfaces and light are "
+               + "retained, and any people or passing objects in it, and its "
+               + "framing, are not.",
+  "image:style": "%s is a style reference: its medium, palette, light and rendering "
+               + "are retained, and its subjects, layout and content are not.",
+
+  "video:full": "%s is a reference video.",
+  "video:person": "%s is a person reference: the face, hair, build and clothing of "
+                + "the person in it are retained, and the clip's setting, camera "
+                + "work, cuts and action are not.",
+  "video:object": "%s is an object reference: the object itself is retained, and the "
+                + "clip's surroundings, camera work and action are not.",
+  "video:scene": "%s is a scene reference: its environment, surfaces and light are "
+               + "retained, and anyone in it, its framing and its camera work are not.",
+  "video:style": "%s is a style reference: its medium, palette, light and rendering "
+               + "are retained, and its subjects, action and camera work are not.",
+  "video:motion": "%s is a motion reference: the movement in it — its path, its "
+                + "timing and its weight — is carried onto the target video's own "
+                + "subject, and nobody and nothing visible in the clip appears in "
+                + "the target video.",
+  "video:camera": "%s is a camera reference: its camera movement, its shot changes "
+                + "and its pacing are followed, and nobody and nothing visible in "
+                + "the clip appears in the target video.",
+  "video:edit": "The target video is an edited version of %s. Everything this "
+              + "description does not change stays as it is in the source video.",
+  "video:continue": "The target video continues from the end of %s, carrying its "
+                  + "closing subjects, framing and light into the opening of the "
+                  + "new footage.",
+
+  "audio:full": "%s is a reference audio clip.",
+  "audio:voice": "%s is a voice reference: the target speaker follows its timbre and "
+               + "delivery, and its words and its background sound are not copied.",
+  "audio:music": "%s is a music-style reference: its genre, instrumentation and mood "
+               + "guide the target video's score, and the recording itself is not "
+               + "reused.",
+  "audio:ambience": "%s is an ambience reference: its room tone and sound texture "
+                  + "guide the target video's background sound, and the recording "
+                  + "itself is not reused.",
+  "audio:copy": "%s is reused directly: its signal is the target video's own audio.",
+};
+
+// A clip brought in with its soundtrack is two labels for one file. The compiler
+// names the audio one against the clip it came off; here there is one handle for
+// both, so the sentence says the same thing about it.
+const SOUNDTRACK = "The synchronized audio track of %s rides with it.";
+
+/**
+ * One sentence per reference, in the order `compile.plan_references` walks them
+ * — pictures, then clips, then audio — so the band reads in the order the model
+ * is shown them.
+ *
+ * `%s` is left in place: the caller decides whether the name is a chip or text.
+ *
+ * @returns {{handle: string, sentence: string}[]}
+ */
+export function refDefinitions(assets) {
+  const refs = (assets || []).filter((a) => a?.role === "reference");
+  const of = (kind) => refs.filter((a) => scopeKind(a) === kind && a.kind === kind);
+  const lines = [];
+  const say = (asset, sentence) => lines.push({ handle: asset.handle, sentence });
+
+  for (const asset of of("image")) say(asset, DEFINE[`image:${takes(asset)}`]);
+  for (const asset of of("video")) {
+    if (asset.track === "picture+sound") say(asset, SOUNDTRACK);
+    say(asset, DEFINE[`video:${takes(asset)}`]);
+  }
+  // Audio proper, and the clips that became audio by being taken for their sound.
+  for (const asset of refs.filter((a) => scopeKind(a) === "audio")) {
+    say(asset, DEFINE[`audio:${takes(asset)}`]);
+  }
+  return lines.filter((line) => line.sentence);
+}
 
 // ---- weights ----------------------------------------------------------------
 //

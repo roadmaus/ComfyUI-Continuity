@@ -806,8 +806,9 @@ try {
   await new Promise((done) => setTimeout(done, 0));
   out.settings.posted = globalThis.__posted;
 
-  // The Nodes tab: the shift pills' visibility, read but not clicked — a click
-  // would append to __posted and muddy the folder assertion above.
+  // The Nodes tab: the two node settings, read but not clicked — a click would
+  // append to __posted and muddy the folder assertion above. Both ship off, and
+  // in this order: reference scopes first, then the shift pills.
   tabButtons[2].listeners.click[0]();
   const opts = [];
   const findOpts = (node) => {
@@ -1319,9 +1320,11 @@ check("the Creator keeps the settings tool", "Settings" in (report["creator"] or
 settings = report.get("settings", {})
 check("the settings page has all three tabs", settings.get("tabs"),
       ["Quality", "Folders", "Nodes"])
-# The shift pills ship hidden: the Nodes tab's two rows are Hidden then Shown,
-# and Hidden is the one checked on a fresh settings file.
-check("the shift pills are hidden by default", settings.get("shiftRows"), ["true", "false"])
+# Both node settings ship off, and each tab row is a pair — the "no" option
+# first and checked on a fresh settings file. Reference scopes come before the
+# shift pills: one changes what is queued and the other only what is drawn.
+check("both node settings default to off",
+      settings.get("shiftRows"), ["true", "false", "true", "false"])
 check("the quality tab shows the encoder value", settings.get("quality"), True)
 check("the folders tab carries both stored prefixes", settings.get("fields"),
       ["minimax/renders/H3", "minimax/stills/prestage"])

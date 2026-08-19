@@ -159,9 +159,16 @@ DEFAULT_REF_SIZE = {"image": "match", "video": "max"}
 # "camera", "edit" and "continue" are the whole-video relationships the guide
 # reserves `<Video N>` for. Naming the role here is what lets the refiner pick
 # the label — the file rides in identically either way.
+#
+# Audio narrows too, along the roles the guide gives `<Audio N>`: a signal that
+# is copied outright, or one only referenced for its timbre, its style or its
+# texture. Those are the two task-type prefixes ("audio reuse" against "audio
+# reference") and the two ends of the audio retention scale, so naming the role
+# on the chip is what decides both.
 IMAGE_TAKES = ("full", "person", "object", "scene", "style")
 VIDEO_TAKES = IMAGE_TAKES + ("motion", "camera", "edit", "continue")
-TAKES = {"image": IMAGE_TAKES, "video": VIDEO_TAKES}
+AUDIO_TAKES = ("full", "voice", "music", "ambience", "copy")
+TAKES = {"image": IMAGE_TAKES, "video": VIDEO_TAKES, "audio": AUDIO_TAKES}
 
 
 class CompileError(ValueError):
@@ -177,7 +184,7 @@ class Asset:
     track: str | None = None   # video only: one of TRACKS; None for images and audio
     ref_size: str = "match"    # reference image/video: match | max; see DEFAULT_REF_SIZE
     trim: tuple[float, float] | None = None   # video/audio only: (start, end) seconds; None = whole file
-    takes: str = "full"        # reference image/video: one of TAKES[kind]; what of it is the reference
+    takes: str = "full"        # reference: one of TAKES[kind]; what of it is the reference
 
 
 @dataclass
@@ -415,20 +422,23 @@ def _parse_assets(raw):
 
         track = _parse_track(handle, kind, item)
 
-        # Only a reference picture has anything to narrow: a keyframe is bound
-        # whole by the alignment line, audio's narrowing is nothing at all, and
-        # a clip taken for its soundtrack alone has no picture left to scope.
-        # Refused rather than ignored, so a blob claiming a person-only end
-        # frame does not queue quietly meaning something else.
+        # Only a reference has anything to narrow: a keyframe is bound whole by
+        # the alignment line, so a narrowing on one is refused rather than
+        # ignored — a blob claiming a person-only end frame must not queue
+        # quietly meaning something else.
+        #
+        # A clip taken for its soundtrack alone scopes as the audio it has
+        # become: it arrives in `ref_audios`, takes an `<Audio N>` and never has
+        # its picture encoded, so the picture vocabulary would be narrowing a
+        # file that is not there.
         takes = item.get("takes") or "full"
-        allowed = TAKES.get(kind, ()) if role == "reference" and track != "sound" else ()
+        allowed = ((TAKES["audio"] if track == "sound" else TAKES.get(kind, ()))
+                   if role == "reference" else ())
         if takes != "full":
             if not allowed:
-                whole = ("sound-only clip" if track == "sound"
-                         else f"{role.replace('_', ' ')} {kind}")
                 raise CompileError(
-                    f"@{handle}: 'takes' narrows a reference picture; a {whole} "
-                    f"is always used whole"
+                    f"@{handle}: 'takes' narrows a reference; a "
+                    f"{role.replace('_', ' ')} {kind} is always used whole"
                 )
             if takes not in allowed:
                 raise CompileError(
@@ -834,7 +844,8 @@ def _check_feather(width, live, what):
 
 def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=None,
                     continues_audio=False, shots=1, feather=1,
-                    ends_on=False, ends_on_audio=False, ends_feather=1):
+                    ends_on=False, ends_on_audio=False, ends_feather=1,
+                    define_refs=False):
     """`creator_data` dict -> `Compiled`.
 
     `image_size_lookup(filename) -> (width, height)` supplies the keyframe
@@ -851,6 +862,12 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     arrives as a tensor too. Only a timeline can say it, and only in front of a
     clip: a generated pass after this one has nothing to hand backwards, since
     it does not exist until this one has been sampled.
+
+    `define_refs` writes a sentence per reference into the prompt saying what
+    that file lends — see `contextir.reference_preamble`. Passed in rather than
+    read here: it is a setting on the machine, and this module reaches no disk
+    and imports nothing of ComfyUI's, which is what `tests/test_compile.py`
+    depends on.
     """
     if not isinstance(data, dict):
         raise CompileError("creator_data must be a JSON object")
@@ -994,6 +1011,12 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
         # wins: a card may write several shots inside the one the timeline
         # allotted it, and the last of those is the one holding the end frame.
         shots=max(int(shots or 1), contextir.count_shots(body)),
+        # What each reference lends, said for the model rather than for the
+        # refiner. Only where there is a plan to read: the keyframe modes label
+        # their pictures through the alignment instruction instead, which
+        # `compose` has already written by the time this lands.
+        definitions=(contextir.reference_preamble(plan)
+                     if define_refs and plan else ""),
         # Only ever a refiner's: the reference form's other three sections cannot
         # be derived from a sentence, so without them a REF2VA body is left
         # exactly as it has always been.
@@ -2313,11 +2336,11 @@ def single_payload(data):
     return group_payload(data)
 
 
-def compile_segment(payload, image_size_lookup=None):
+def compile_segment(payload, image_size_lookup=None, define_refs=False):
     """One payload from `timeline_payloads` or `single_payload` -> `Compiled`."""
     spec = payload.get("canvas")
     return compile_request(
-        payload["request"], image_size_lookup,
+        payload["request"], image_size_lookup, define_refs=define_refs,
         continues=bool(payload.get("continue")),
         continues_audio=bool(payload.get("continue_audio")),
         shots=int(payload.get("shots", 1)),
