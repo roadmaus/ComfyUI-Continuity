@@ -75,10 +75,11 @@ export async function deleteAsset(filename) {
 
 // ---- picker preferences -----------------------------------------------------
 //
-// Favorites and hand-made shelves. Stored per ComfyUI user via the userdata
-// API, so they follow the user across browsers; localStorage is the fallback
-// for frontends without it. One object: {favorites: [path], folders: [name],
-// renderFolders: [name]}.
+// Favorites, hand-made shelves, and the folder each root was last left in.
+// Stored per ComfyUI user via the userdata API, so they follow the user across
+// browsers; localStorage is the fallback for frontends without it. One object:
+// {favorites: [path], folders: [name], renderFolders: [name],
+//  lastShelf: {input, renders}}.
 //
 // Two folder lists because the picker browses two folders — `folders` is the
 // input one and keeps its name so prefs written before the gallery could be
@@ -90,12 +91,20 @@ const PREFS_KEY = "mmc-picker-prefs";
 let prefsCache = null;
 
 const names = (value) => (Array.isArray(value) ? value.filter((p) => typeof p === "string") : []);
+const shelfName = (value) => (typeof value === "string" ? value : "all");
 
 function normalizePrefs(raw) {
   return {
     favorites: names(raw?.favorites),
     folders: names(raw?.folders),
     renderFolders: names(raw?.renderFolders),
+    // Where the picker was last left, one per root. The picker checks the
+    // folder is still there before opening on it — a remembered place can be
+    // renamed or emptied between sessions.
+    lastShelf: {
+      input: shelfName(raw?.lastShelf?.input),
+      renders: shelfName(raw?.lastShelf?.renders),
+    },
   };
 }
 

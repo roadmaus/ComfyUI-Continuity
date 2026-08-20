@@ -1,5 +1,28 @@
 # Changelog
 
+## Unreleased
+
+**A folder browses as a folder.** The row of places above the gallery used to
+list every subfolder the input or output folder held, flattened — a nested path
+was its own chip, and the row wrapped until an output folder filed by day and
+take was more chips than gallery, with the pictures pushed off the bottom of
+the modal. It is one line now, whatever is in there: a trail on the left saying
+where you are, and beside it the folders one step inside, scrolled sideways
+when there are more than fit. Clicking a folder goes in, and the grid shows
+everything under it however deep, so the chips narrow rather than dead-end.
+Leaving is one click on any step of the trail, dragging a file onto a step
+moves it there, and the "+" makes its new shelf inside the folder you are
+looking at. The preset library's shelves scroll on one line too, and the
+Move to… menu reads as the tree it is.
+
+**The picker opens where you left it.** Each root remembers its own folder — one
+for the input tabs, which share a folder and so share the place in it, and one
+for the gallery — and the next opening lands there with the trail already
+showing, instead of at the top of a folder you then have to find your way down
+again. It rides in the same prefs file the stars do, so it follows the ComfyUI
+user rather than one browser, and a remembered folder that has since been
+renamed or removed quietly falls back to the whole folder.
+
 ## 2.4
 
 **A reference's scope can now reach the model, not just the refiner.** The

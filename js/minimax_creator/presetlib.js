@@ -111,7 +111,10 @@ class PresetLibrary {
       onclick: () => this.selectScope(scope),
     }));
 
-    this.shelfRow = el("div", { class: "mmc-shelves" });
+    // The chips go in the picker's scrolling strip: a library filed into more
+    // folders than fit scrolls sideways rather than growing rows downwards and
+    // pushing the grid off the modal.
+    this.shelfRow = el("div", { class: "mmc-shelf-strip" });
     this.bar = el("div", { class: "mmc-modal-bar" });
     this.renderBar();
 
@@ -121,7 +124,7 @@ class PresetLibrary {
         el("button", { class: "mmc-close", text: "✕", title: t("Close"), onclick: () => this.close() }),
       ]),
       this.bar,
-      this.shelfRow,
+      el("div", { class: "mmc-shelves" }, [this.shelfRow]),
       this.problemLine,
       el("div", { class: "mmc-preset-split" }, [this.grid, this.inspector]),
     ]);

@@ -32,6 +32,14 @@ const PAGE_SIZE = 60;
 // folder should be jumped through, not scrolled end to end.
 const PER_PAGE = 240;
 
+/** The small chevron the shelf row points with: sideways between crumbs, and
+ *  on a chip that has folders inside it. CSS turns it. */
+function chevron(cls) {
+  const mark = icon("chevron", 12);
+  mark.classList.add(cls);
+  return mark;
+}
+
 /**
  * @param {object} options
  * @param {string[]} options.kinds        tabs to show, in order
@@ -63,7 +71,10 @@ class Picker {
     // Which shelf the grid shows: "all", "fav", or an input subfolder. Shelves
     // are shared across tabs — a folder is a place, not a kind.
     this.shelf = "all";
-    this.prefs = { favorites: [], folders: [] };
+    // Set once the first listing has landed and the remembered folder has been
+    // opened; every later reload leaves the shelf alone.
+    this.restored = false;
+    this.prefs = { favorites: [], folders: [], renderFolders: [], lastShelf: {} };
     // path -> {trim, track}. Set only for files the user opened the segment
     // editor on; everything else is attached whole and silent, as before.
     this.settings = new Map();
@@ -169,6 +180,13 @@ class Picker {
       // A mark on a file the listing no longer has is a mark on nothing.
       this.marked = this.marked.filter((p) => this.activeAssets().some((a) => a.path === p));
       this.loaded = true;
+      // First listing: open where this root was last left. Only the first, and
+      // only if nothing has been clicked — a reload after a move must not drag
+      // the user back out of the folder they are working in.
+      if (!this.restored) {
+        this.restored = true;
+        this.shelf = this.rememberedShelf();
+      }
     } catch (error) {
       this.assets = [];
       this.renders = [];
@@ -192,9 +210,10 @@ class Picker {
     if (kind !== "renders") this.uploadButton.textContent = t("+  Upload {kind}", { kind: t(KIND_LABEL[kind].toLowerCase()) });
     // Shelves are shared between the input tabs — a folder is a place, not a
     // kind — but the output folder is a different place, so crossing that line
-    // drops back to "all" rather than selecting a shelf that is not there.
+    // opens where that root was last left rather than on a shelf that is not
+    // there.
     if ((kind === "renders") !== (previous === "renders")) {
-      this.shelf = "all";
+      this.shelf = this.rememberedShelf();
       this.marked = [];
     }
     this.page = 0;
@@ -253,17 +272,76 @@ class Picker {
     return this.kind === "renders" ? "renderFolders" : "folders";
   }
 
+  /** Which root the tab is browsing. The shelf is remembered per root, not per
+   *  kind: the image and video tabs share a folder, so they share the place in
+   *  it they were left. */
+  rootKey() {
+    return this.kind === "renders" ? "renders" : "input";
+  }
+
+  /** Open where the picker was last left. A remembered folder that has since
+   *  been renamed, emptied out or deleted is not a place any more, so the
+   *  fallback is the whole folder rather than an empty grid nobody asked for. */
+  rememberedShelf() {
+    const shelf = this.prefs.lastShelf?.[this.rootKey()] ?? "all";
+    if (shelf === "all" || shelf === "fav") return shelf;
+    return this.folders().includes(shelf) ? shelf : "all";
+  }
+
+  /** Write the shelf down as the place to open on next time. Through the same
+   *  prefs file the stars go in, so it follows the ComfyUI user across browsers
+   *  rather than living in one machine's localStorage. */
+  rememberShelf() {
+    const key = this.rootKey();
+    if (this.prefs.lastShelf?.[key] === this.shelf) return;
+    this.prefs = { ...this.prefs, lastShelf: { ...this.prefs.lastShelf, [key]: this.shelf } };
+    savePickerPrefs(this.prefs);
+  }
+
   /** Every place a file can live: real subfolders seen in the listing (any
    *  kind — a folder is shared) plus shelves made by hand that are still
-   *  empty. Sorted; nested paths are simply their own shelves. */
+   *  empty. A nested path brings its ancestors with it — a render written to
+   *  "2026-08/take3" makes "2026-08" a place too, even though no file sits
+   *  directly in it. Sorted. */
   folders() {
-    const seen = new Set(this.prefs[this.folderKey()]);
-    for (const asset of this.activeAssets()) if (asset.subfolder) seen.add(asset.subfolder);
+    const seen = new Set();
+    const add = (path) => {
+      const parts = path.split("/");
+      for (let i = 1; i <= parts.length; i++) seen.add(parts.slice(0, i).join("/"));
+    };
+    for (const name of this.prefs[this.folderKey()] ?? []) add(name);
+    for (const asset of this.activeAssets()) if (asset.subfolder) add(asset.subfolder);
     return [...seen].sort((a, b) => a.localeCompare(b));
+  }
+
+  /** The folders one step inside `parent` — "" is the root. The shelf row
+   *  shows a level at a time, not the whole tree flattened: an output folder
+   *  dated by day and cut by take has hundreds of leaves, and all of them at
+   *  once is a wall of chips with a gallery hiding behind it. */
+  childFolders(parent) {
+    const prefix = parent ? `${parent}/` : "";
+    return this.folders().filter((folder) =>
+      folder !== parent && folder.startsWith(prefix) && !folder.slice(prefix.length).includes("/"));
+  }
+
+  /** Is `subfolder` that folder or anywhere under it? Browsing a folder shows
+   *  everything it holds, however deep — the child chips narrow from there, so
+   *  no folder is ever an empty room with the files one level down. */
+  under(subfolder, folder) {
+    if (!folder) return true;
+    const sub = subfolder || "";
+    return sub === folder || sub.startsWith(`${folder}/`);
+  }
+
+  /** The folder being browsed. "all" and the star are shelves, not places, so
+   *  both sit at the root. */
+  here() {
+    return this.shelf === "all" || this.shelf === "fav" ? "" : this.shelf;
   }
 
   setShelf(shelf) {
     this.shelf = shelf;
+    this.rememberShelf();
     this.page = 0;
     this.visibleCount = PAGE_SIZE;
     this.renderShelves();
@@ -283,48 +361,103 @@ class Picker {
       ? (this.options.only ? this.renders.filter((a) => a.kind === this.options.only) : this.renders)
       : this.assets.filter((a) => a.kind === this.kind);
     const count = (test) => scoped.filter(test).length;
+    const here = this.here();
 
-    const chip = ({ key, label, iconName, n, droppable }) => {
-      const node = el("button", {
-        class: "mmc-shelf",
-        "aria-selected": this.shelf === key,
-        onclick: () => this.setShelf(key),
-      }, [
-        ...(iconName ? [icon(iconName, 13)] : []),
-        el("span", { text: label }),
-        ...(n ? [el("span", { class: "mmc-shelf-n", text: String(n) })] : []),
-      ]);
-      if (droppable) {
-        node.addEventListener("dragover", (event) => {
-          if (!this.dragging) return;
-          event.preventDefault();
-          node.classList.add("drop");
-        });
-        node.addEventListener("dragleave", () => node.classList.remove("drop"));
-        node.addEventListener("drop", (event) => {
-          event.preventDefault();
-          node.classList.remove("drop");
-          this.moveTo(key);
-        });
-      }
+    // Any chip or crumb can be dropped on: dragging a cell onto a place moves
+    // the file there, and that is as true of the parent above as of a child.
+    const droppable = (node, target) => {
+      node.addEventListener("dragover", (event) => {
+        if (!this.dragging) return;
+        event.preventDefault();
+        node.classList.add("drop");
+      });
+      node.addEventListener("dragleave", () => node.classList.remove("drop"));
+      node.addEventListener("drop", (event) => {
+        event.preventDefault();
+        node.classList.remove("drop");
+        this.moveTo(target);
+      });
       return node;
     };
 
-    this.shelfRow.replaceChildren(
-      chip({ key: "all", label: t("All"), n: count(() => true), droppable: true }),
-      chip({ key: "fav", label: "", iconName: "star", n: count((a) => this.isFav(a.path)) }),
-      ...this.folders().map((folder) => chip({
-        key: folder, label: folder, iconName: "folder",
-        n: count((a) => a.subfolder === folder), droppable: true,
-      })),
-      this.newShelfChip(),
-    );
+    const chip = ({ key, label, title, iconName, n, deep, drops = true }) => {
+      const node = el("button", {
+        class: "mmc-shelf",
+        "aria-selected": this.shelf === key,
+        title: title || label,
+      }, [
+        ...(iconName ? [icon(iconName, 13)] : []),
+        ...(label ? [el("span", { class: "mmc-shelf-name", text: label })] : []),
+        ...(n ? [el("span", { class: "mmc-shelf-n", text: String(n) })] : []),
+        // A chip that has folders of its own says so, so the row reads as a
+        // way in rather than a flat list of filters.
+        ...(deep ? [chevron("mmc-shelf-into")] : []),
+      ]);
+      node.addEventListener("click", () => this.setShelf(key));
+      return drops ? droppable(node, key) : node;
+    };
+
+    // The trail: where you are, and every step back out. Always present, so
+    // leaving a folder is one click however deep it goes.
+    const crumbs = el("div", { class: "mmc-crumbs" });
+    const crumb = (key, label, current) => {
+      const node = el("button", {
+        class: "mmc-crumb", "aria-selected": current, title: label,
+        onclick: () => this.setShelf(key),
+      }, [el("span", { text: label })]);
+      return droppable(node, key);
+    };
+    crumbs.appendChild(crumb("all", t("All"), this.shelf === "all"));
+    const parts = here ? here.split("/") : [];
+    parts.forEach((part, i) => {
+      crumbs.appendChild(chevron("mmc-crumb-sep"));
+      crumbs.appendChild(crumb(parts.slice(0, i + 1).join("/"), part, i === parts.length - 1));
+    });
+
+    // One line, scrolled sideways when it needs to be: the row keeps its
+    // height no matter how many folders a level holds, and the gallery keeps
+    // the rest of the modal.
+    const strip = el("div", { class: "mmc-shelf-strip" });
+    if (!here) {
+      strip.appendChild(chip({
+        key: "fav", label: "", title: t("favorites"), iconName: "star",
+        n: count((a) => this.isFav(a.path)), drops: false,
+      }));
+    }
+    for (const folder of this.childFolders(here)) {
+      strip.appendChild(chip({
+        key: folder, label: folder.slice(here ? here.length + 1 : 0), title: folder, iconName: "folder",
+        n: count((a) => this.under(a.subfolder, folder)),
+        deep: this.childFolders(folder).length > 0,
+      }));
+    }
+    strip.addEventListener("scroll", () => this.markStripEdges(strip));
+    // A trackpad swipes sideways on its own; a wheel only ever sends deltaY,
+    // and without this the row is unreachable for anyone using one.
+    strip.addEventListener("wheel", (event) => {
+      if (event.deltaX || !event.deltaY) return;
+      event.preventDefault();
+      strip.scrollLeft += event.deltaY;
+    }, { passive: false });
+
+    this.shelfRow.replaceChildren(crumbs, strip, this.newShelfChip(here));
+    requestAnimationFrame(() => this.markStripEdges(strip));
+  }
+
+  /** Fade the end the row runs past, and only that end — a strip that fits
+   *  shows no fade at all, so the cue always means "there is more". */
+  markStripEdges(strip) {
+    if (!strip.isConnected) return;
+    const slack = strip.scrollWidth - strip.clientWidth;
+    strip.classList.toggle("more-l", strip.scrollLeft > 2);
+    strip.classList.toggle("more-r", slack > 2 && strip.scrollLeft < slack - 2);
   }
 
   /** The trailing "+" that flips into a name field. A new shelf is only a
    *  remembered name until a file lands on it — the directory itself is
-   *  created by the first upload or move. */
-  newShelfChip() {
+   *  created by the first upload or move. It lands inside the folder being
+   *  browsed, so the row makes the tree it navigates. */
+  newShelfChip(parent = "") {
     const add = el("button", { class: "mmc-shelf mmc-shelf-new", text: "+", title: t("New shelf") });
     add.addEventListener("click", () => {
       const field = el("input", {
@@ -333,8 +466,9 @@ class Picker {
           event.stopPropagation();
           if (event.key === "Escape") this.renderShelves();
           if (event.key !== "Enter") return;
-          const name = field.value.trim().replace(/^\/+|\/+$/g, "");
-          if (!name || /(^|\/)\.|\\/.test(name)) { this.warn(t("Shelf names cannot start with a dot.")); return; }
+          const typed = field.value.trim().replace(/^\/+|\/+$/g, "");
+          if (!typed || /(^|\/)\.|\\/.test(typed)) { this.warn(t("Shelf names cannot start with a dot.")); return; }
+          const name = parent ? `${parent}/${typed}` : typed;
           const key = this.folderKey();
           if (!this.prefs[key].includes(name)) {
             this.prefs = { ...this.prefs, [key]: [...this.prefs[key], name] };
@@ -427,9 +561,15 @@ class Picker {
     menu.appendChild(el("button", { class: "mmc-move-opt", onclick: () => go("") },
       [icon("image", 13), el("span", {
         text: this.kind === "renders" ? t("Output folder (root)") : t("Input folder (root)") })]));
+    // The whole tree, but read as a tree: each folder under the one it sits in,
+    // named by its own last step. A flat column of full paths is unreadable
+    // once the output folder is a few days deep.
     for (const folder of this.folders()) {
-      menu.appendChild(el("button", { class: "mmc-move-opt", onclick: () => go(folder) },
-        [icon("folder", 13), el("span", { text: folder })]));
+      const depth = folder.split("/").length - 1;
+      const option = el("button", { class: "mmc-move-opt", title: folder, onclick: () => go(folder) },
+        [icon("folder", 13), el("span", { text: folder.slice(folder.lastIndexOf("/") + 1) })]);
+      option.style.paddingLeft = `${10 + depth * 14}px`;
+      menu.appendChild(option);
     }
     // The same rules as newShelfChip: a name that needs rewriting is refused.
     const field = el("input", {
@@ -489,7 +629,7 @@ class Picker {
   visible() {
     const onShelf = this.shelf === "all" ? () => true
       : this.shelf === "fav" ? (asset) => this.isFav(asset.path)
-        : (asset) => asset.subfolder === this.shelf;
+        : (asset) => this.under(asset.subfolder, this.shelf);
     // "renders" is a tab and not a kind, so it shows every kind the output
     // folder holds — a still and the clip it seeded are both renders. Unless
     // the caller is replacing one file with another, where anything but that
@@ -747,10 +887,16 @@ class Picker {
       onclick: (event) => { event.stopPropagation(); this.toggleFav(asset); },
     }, [icon("star", 13)]));
 
-    // On the All shelf a file's home is worth a caption; on its own shelf
-    // the chip above already says it.
-    if (this.shelf === "all" && asset.subfolder) {
-      cell.appendChild(el("div", { class: "mmc-cell-home", text: asset.subfolder }));
+    // A file's home is worth a caption whenever the row above does not already
+    // say it: the full path out on All, and the part below here when the grid
+    // is showing what a folder holds further down.
+    const here = this.here();
+    const home = asset.subfolder || "";
+    if (home && home !== here) {
+      cell.appendChild(el("div", {
+        class: "mmc-cell-home",
+        text: here ? home.slice(here.length + 1) : home,
+      }));
     }
 
     // Organizing is dragging: the cell rides to a shelf chip. The chips take

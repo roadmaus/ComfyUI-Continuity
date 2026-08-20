@@ -124,18 +124,58 @@ export const css = `
   stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 
 /* --- shelves -------------------------------------------------------------- */
-/* One row of places between the search bar and the grid: All, favorites, every
-   input subfolder, and the "+" that makes a new one. The same chip family as
+/* One row of places between the search bar and the grid, and one line of it
+   whatever the folder holds: a trail on the left saying where you are, then a
+   strip of the folders one step inside, scrolled sideways when there are more
+   than fit. A wrapping list of every leaf path used to push the gallery off
+   the bottom of a deeply filed output folder. The chips are the same family as
    the refiner's language row, so the picker keeps the node's vocabulary. */
-.mmc-shelves { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; padding: 0 24px 12px; }
+.mmc-shelves { display: flex; gap: 10px; align-items: center; padding: 0 24px 12px; min-width: 0; }
 .mmc-shelf {
-  display: flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px;
+  display: flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; flex: none;
+  max-width: 220px;
   border-radius: 15px; background: var(--mmc-surface-2); border: 1px solid var(--mmc-line);
   color: var(--mmc-dim); font-size: 12px; font-family: inherit; cursor: pointer;
   transition: background .12s ease, color .12s ease, transform .12s ease;
 }
+.mmc-shelf-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* Turned a quarter: a chip with folders of its own is a way in, not a filter. */
+.mmc-shelf-into { transform: rotate(-90deg); opacity: .5; margin-right: -3px; }
+
+/* The trail. It never scrolls away — leaving a folder is one click from any
+   depth — so it takes only the width it needs and truncates the long names. */
+.mmc-crumbs { display: flex; align-items: center; gap: 1px; flex: 0 1 auto; min-width: 0; max-width: 45%; }
+.mmc-crumb {
+  display: block; max-width: 130px; padding: 0 8px; height: 28px; flex: 0 1 auto;
+  border-radius: 8px; background: none; border: 0; color: var(--mmc-dim);
+  font-size: 12px; font-family: inherit; cursor: pointer;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.mmc-crumb:hover { color: var(--mmc-text); background: var(--mmc-surface-2); }
+/* Where you are keeps its full name; the steps above it give up the width. */
+.mmc-crumb[aria-selected="true"] { color: var(--mmc-text); font-weight: 600; flex: none; max-width: 220px; }
+.mmc-crumb.drop { color: var(--mmc-text); background: var(--mmc-surface-3); box-shadow: inset 0 0 0 1px var(--mmc-accent); }
+.mmc-crumb-sep { transform: rotate(-90deg); opacity: .35; flex: none; }
+.mmc-crumbs + .mmc-shelf-strip { border-left: 1px solid var(--mmc-line); padding-left: 10px; }
+
+/* The strip of what is inside. Fixed height, sideways scroll, and a fade on
+   whichever end still has chips past it. */
+.mmc-shelf-strip {
+  display: flex; align-items: center; gap: 8px; flex: 1 1 0; min-width: 0;
+  overflow-x: auto; overflow-y: hidden; padding: 3px 0;
+  scrollbar-width: thin; scrollbar-color: var(--mmc-line) transparent;
+  scroll-behavior: smooth; overscroll-behavior-x: contain;
+}
+.mmc-shelf-strip::-webkit-scrollbar { height: 5px; }
+.mmc-shelf-strip::-webkit-scrollbar-thumb { background: var(--mmc-line); border-radius: 3px; }
+.mmc-shelf-strip.more-r { mask-image: linear-gradient(90deg, #000 calc(100% - 40px), transparent); }
+.mmc-shelf-strip.more-l { mask-image: linear-gradient(90deg, transparent, #000 40px); }
+.mmc-shelf-strip.more-l.more-r {
+  mask-image: linear-gradient(90deg, transparent, #000 40px, #000 calc(100% - 40px), transparent);
+}
 .mmc-shelf:hover { color: var(--mmc-text); background: var(--mmc-surface-3); }
-.mmc-shelf[aria-selected="true"] { color: var(--mmc-bg); background: var(--mmc-accent); border-color: var(--mmc-accent); }
+.mmc-shelf[aria-selected="true"],
+.mmc-shelf[aria-pressed="true"] { color: var(--mmc-bg); background: var(--mmc-accent); border-color: var(--mmc-accent); }
 .mmc-shelf svg { width: 13px; height: 13px; flex: none; }
 .mmc-shelf-n { font-size: 10px; opacity: .7; }
 /* A chip with cargo hovering over it: swell and light up. The one place the
