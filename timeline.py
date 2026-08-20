@@ -122,18 +122,25 @@ def stamps(data):
     return tuple(out)
 
 
-def labels(runs, segments=None):
+def labels(runs, segments=None, whole_piece=True):
     """What to call each payload in an error raised about it.
 
     A pass holding one segment is that segment, and is named the way it always
     was — most pieces are nothing but these. A pass holding several is named by
     the cards it covers, because that is what the user would go and look at.
 
-    A piece that is *one* pass has no card worth singling out, and there are two
-    of those. One pass over several cards is the one-pass render. One pass over
-    one card is a lone generation — there is no strip on the node's face, so
-    "Segment 1" would name something the user cannot see. It says what the
-    Creator node always said instead, which is what that piece still is.
+    A piece that is one pass *over the whole strip* has no card worth singling
+    out, and there are two of those. One pass over several cards is the one-pass
+    render. One pass over one card is a lone generation — there is no strip on
+    the node's face, so "Segment 1" would name something the user cannot see. It
+    says what the Creator node always said instead, which is what that piece
+    still is.
+
+    Over the whole strip, and not merely alone in this render: a card shot by
+    itself out of six is also one run, and calling it "This generation" would
+    name it as the piece when it is one shot of one. `whole_piece` is whether
+    this render covers the strip; True where nobody says otherwise, which is
+    what this assumed before a card could be held back.
 
     `segments` is the piece the runs were read off, and is only ever the
     rendered one — a render that holds cards back is shorter than the strip, so
@@ -146,8 +153,9 @@ def labels(runs, segments=None):
             return index + 1
         return int(segments[index].get("card_no") or index + 1)
 
-    if len(runs) == 1:
-        return ["This generation" if runs[0][1] - runs[0][0] == 1 else "This one-pass render"]
+    if len(runs) == 1 and whole_piece:
+        covered = runs[0][1] - runs[0][0]
+        return ["This generation" if covered == 1 else "This one-pass render"]
     return [f"Segment {number(start)}" if end - start == 1
             else f"Segments {number(start)}-{number(end - 1)}"
             for start, end in runs]

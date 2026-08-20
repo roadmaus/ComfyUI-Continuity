@@ -1774,3 +1774,32 @@ check("a card with no seed runs on the piece's", compiler.segment_seed(shot(), 0
 check("a card with one runs on its own", compiler.segment_seed(shot(seed=7), 0), 7)
 expect_error("a seed that is not a number",
              lambda: compiler.segment_seed(shot(seed="x"), 0), "seed must be a whole number")
+
+
+# ---- what a card's bookkeeping must not reach ---------------------------------
+#
+# A request is the segment node's cache key. The strip keeps four keys on a card
+# that say what has been *done* with the generation rather than what it is, and
+# every one of them used to be copied straight into the request — so re-rolling
+# a seed, or shooting one card of six, re-encoded conditioning that had not
+# changed. `render.emit` holds the seed out of the payload for precisely this
+# reason and was quietly undone by the copy.
+
+def _request(**fields):
+    return compiler.timeline_payloads(strip(shot("a room", **fields)))[0]["request"]
+
+
+plain_request = _request()
+for _key, _value in (("seed", 4242), ("take", take()), ("hold", True), ("card_no", 3)):
+    check(f"a card's {_key} is not part of what it generates",
+          _request(**{_key: _value}), plain_request)
+
+# ...and the same card, compiled as part of a render that holds its neighbours
+# back, is the same generation it is in the whole render. This is the one that
+# costs money: a piece shot a pass at a time compiles every card through
+# `rendered_piece`, which stamps `card_no` on all of them.
+_whole = compiler.timeline_payloads(strip(shot("one"), shot("two"), shot("three")))
+_part = compiler.timeline_payloads(compiler.rendered_piece(
+    strip(shot("one", hold=True), shot("two", hold=True), shot("three"))))
+check("a card shot alone generates what it generates in the whole render",
+      _part[0]["request"], _whole[2]["request"])

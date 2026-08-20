@@ -1,5 +1,29 @@
 # Changelog
 
+## Unreleased
+
+**A card shot by itself is still a card of a piece.** Shooting one segment,
+keeping what came back and moving on to the next is the whole point of the lock
+— and it never worked. The take a render writes out was written only where the
+render had more than one pass in it, which a strip with five cards locked and
+one open does not: the take never landed, so the card could not be kept, so the
+next render was one pass again, and the strip never got off the ground. Every
+place that asked "is there one pass here" was really asking "is this render the
+whole piece", and those stopped being the same question the day a card could be
+held back. So a card shot alone now writes its take, says which card it is while
+it renders, and is named by its own number in anything it raises — while a strip
+genuinely generated in one go is still one generation with one take, which is
+the render.
+
+**A card compiles to the same generation however it is shot.** Four things the
+strip records about a card — the seed it ran on, the take it has, whether it is
+locked, and its number — were being folded into the description handed to the
+model, which is what the segment's cache is keyed on. Nothing about the picture
+changed when they did, so re-rolling a seed re-encoded the references it was not
+changing, and shooting one card of six re-encoded all six. They are kept out of
+it now: the conditioning behind a card is reused whenever the card still says
+the same thing.
+
 ## 2.5
 
 **A folder browses as a folder.** The row of places above the gallery used to

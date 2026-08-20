@@ -2027,6 +2027,25 @@ def _chained_request(data, index, segment, pool, global_cited, global_prompt):
     request.pop("continue_from", None)
     request.pop("feather", None)
     request.pop("merge", None)
+    # ...and the bookkeeping the strip keeps about a card, which describes what
+    # has been *done* with the generation rather than what it is. This request
+    # is the segment node's cache key, so anything left in it here is a
+    # re-encode of conditioning that did not change:
+    #
+    # - `seed` goes to the sampler and never to the encoder. `render.emit` holds
+    #   it in a lookup beside the payloads for exactly this reason, and said so;
+    #   copied in off the segment, it undid that and made re-rolling a card
+    #   re-encode it.
+    # - `take` is the film the card already has. A card that has rendered once
+    #   describes the same generation it did before it rendered.
+    # - `hold` is whether the card is in this render at all, which it plainly
+    #   is by the time anything is compiling it.
+    # - `card_no` is the number on the strip, written by `rendered_piece` so
+    #   errors and announcements can name the card. It only exists on a render
+    #   that holds something back, so leaving it in meant every card of a
+    #   part-render missed the cache the whole render had just filled.
+    for key in ("seed", "take", "hold", "card_no"):
+        request.pop(key, None)
     request["prompt"] = _join_prompt(global_prompt, segment.get("prompt"))
     # A shot-scoped rewrite gets the same join: it stands in for the
     # segment's own sentence, not for the piece, so the global prompt goes

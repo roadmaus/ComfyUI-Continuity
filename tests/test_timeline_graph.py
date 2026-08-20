@@ -978,10 +978,61 @@ check("...and the save node records the same two",
       json.loads(seeded["MiniMaxH3Save"][0][1]["takes"])["seeds"], [100, 4242])
 
 # A lone generation has one take and it is the render, so there is nothing to
-# write twice.
+# write twice. True of a whole strip merged into one pass as well: it is one
+# generation over twelve cards, and its take is still the render.
 check("a one-pass render is told to keep nothing",
       by_class(with_clip({"prompt": "only", "duration_s": 5}))
       ["MiniMaxH3Save"][0][1]["takes"], "")
+check("...and a strip generated in one go is told the same",
+      by_class(with_clip({"prompt": "wide", "duration_s": 5},
+                         {"prompt": "closer", "duration_s": 5, "merge": True}))
+      ["MiniMaxH3Save"][0][1]["takes"], "")
+
+# A card shot by itself, which is how a piece is built one expensive generation
+# at a time: lock the rest, shoot this one, keep what came back, move on. It is
+# one payload and it is *not* the piece, so it is the one render that most needs
+# its take written — without it the card can never become kept, the next render
+# is one payload again, and the strip never gets off the ground.
+solo = by_class(with_clip(
+    {"prompt": "wide", "duration_s": 5},
+    {"prompt": "closer", "duration_s": 5, "hold": True},
+    {"prompt": "cut away", "duration_s": 5, "hold": True},
+))
+check("a card shot alone costs one sampler", len(solo["KSampler"]), 1)
+check("...and is still told to keep its take",
+      json.loads(solo["MiniMaxH3Save"][0][1]["takes"])["cards"], [1])
+check("...on the seed it ran on",
+      json.loads(solo["MiniMaxH3Save"][0][1]["takes"])["seeds"], [100])
+check("...and announces which card it is",
+      json.loads(solo["MiniMaxH3TimelineSegment"][0][1]["segment_data"])["progress"],
+      {"index": 1})
+
+# ...and the same card shot alone from the middle of the strip. The number it
+# announces is the number on the card, not its position in a render of one.
+sixth = by_class(with_clip(
+    {"prompt": "one", "duration_s": 5, "hold": True},
+    {"prompt": "two", "duration_s": 5, "hold": True},
+    {"prompt": "three", "duration_s": 5},
+))
+check("a card shot alone out of the middle keeps its own number",
+      json.loads(sixth["MiniMaxH3TimelineSegment"][0][1]["segment_data"])["progress"],
+      {"index": 3})
+check("...and its take is written against that number",
+      json.loads(sixth["MiniMaxH3Save"][0][1]["takes"])["cards"], [3])
+
+# The payload a card shot alone compiles to is the payload it compiles to in the
+# whole render, byte for byte. It is the same generation either way, and a
+# render that held the others back used to stamp no number on it — which made
+# shooting one card miss the cache the full render had just filled.
+whole = by_class(with_clip(
+    {"prompt": "one", "duration_s": 5},
+    {"prompt": "two", "duration_s": 5},
+    {"prompt": "three", "duration_s": 5},
+))
+check("a card shot alone compiles to what it compiles to in the whole render",
+      json.loads(sixth["MiniMaxH3TimelineSegment"][0][1]["segment_data"]),
+      json.loads([i["segment_data"] for _, i in whole["MiniMaxH3TimelineSegment"]
+                  if json.loads(i["segment_data"])["progress"]["index"] == 3][0]))
 
 expect_error("a strip with every card held and nothing to play",
              lambda: with_clip({"prompt": "a", "duration_s": 5, "hold": True},

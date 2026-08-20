@@ -201,7 +201,13 @@ def _render(blob, seed, steps, cfg, sampler_name, scheduler,
     payloads = compiler.timeline_payloads(piece, image_size_lookup=media.image_size)
     segments = compiler.timeline_segments(piece)
     runs = compiler.timeline_runs(piece)
-    labels = timeline.labels(runs, segments)
+    # Whether this render is the strip the user is looking at, or part of one.
+    # A held card is dropped from the rendered piece, so a shorter piece is a
+    # render of part of a strip — which is a different thing from a piece that
+    # happens to be short, and everything that used to read "one payload" as
+    # "one lone generation" needs to be told which it has.
+    whole_piece = len(segments) == len(compiler.timeline_segments(data))
+    labels = timeline.labels(runs, segments, whole_piece)
 
     graph = render.emit(
         payloads, labels,
@@ -223,7 +229,11 @@ def _render(blob, seed, steps, cfg, sampler_name, scheduler,
         # with one seed, and it is the one card the strip would send you to.
         cards=[int(segments[start].get("card_no") or start + 1)
                for start, _ in runs],
-        seeds=[compiler.segment_seed(segments[start], start) for start, _ in runs])
+        seeds=[compiler.segment_seed(segments[start], start) for start, _ in runs],
+        # See `render.emit`: a card shot by itself is one payload and is still
+        # one card of a piece, so the take it makes is worth keeping and the
+        # number it announces is worth saying.
+        whole_piece=whole_piece)
     return render.expanded(graph)
 
 

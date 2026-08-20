@@ -240,7 +240,8 @@ def face_payload(payload, face):
 
 
 def emit(payloads, labels, weights, sampling, acceleration, unique_id,
-         filename_prefix=FILENAME_PREFIX, cards=None, seeds=None):
+         filename_prefix=FILENAME_PREFIX, cards=None, seeds=None,
+         whole_piece=True):
     """-> the graph, which the caller finalizes. Nothing comes back out of it.
 
     `labels[i]` names payload i in any error raised about it — "Segment 2", or
@@ -251,11 +252,18 @@ def emit(payloads, labels, weights, sampling, acceleration, unique_id,
     has already refused anything unusable.
 
     `cards[i]` is the number on the strip of the card payload i renders, and
-    `seeds[i]` its own seed or None for the piece's. Both are the Timeline's:
-    the Creator has one generation, one card and one seed, and passes neither.
-    Together they are also what the save node writes the takes from — see
-    `MiniMaxH3Save` — so a piece rendered a pass at a time gets one file per
-    pass to keep as well as the piece.
+    `seeds[i]` its own seed or None for the piece's. Together they are also what
+    the save node writes the takes from — see `MiniMaxH3Save` — so a piece
+    rendered a pass at a time gets one file per pass to keep as well as the
+    piece.
+
+    `whole_piece` is whether this render covers the strip the user is looking
+    at. Everything below that used to ask "is there only one payload" is really
+    asking "is this render the whole piece, made in one go", and those were the
+    same question until a card could be held back. They stopped being it the
+    moment they could: a card shot by itself out of six is one payload and is
+    emphatically not a lone generation. True where nobody says otherwise, which
+    is what this assumed before holding existed.
     """
     # All three of these raise, and all three are cheap: an accelerator whose
     # pack is not installed, a request that cannot compile, or weights that were
@@ -267,12 +275,21 @@ def emit(payloads, labels, weights, sampling, acceleration, unique_id,
     # for every generation instead of once per generation.
     payloads = [weights.routed(payload) for payload in payloads]
     # Which segment each payload is, for the stage's "now rendering segment N"
-    # chip — the segment node announces it when it executes. Only where there
-    # are several: a lone generation has no position worth reporting. The index
-    # alone, never the total: a payload's index is stable when a segment is
-    # appended, so earlier segments keep their cache keys, where a total would
-    # invalidate the whole strip for adding one shot at the end.
-    if len(payloads) > 1:
+    # chip — the segment node announces it when it executes. Not on a piece
+    # generated in one go: there is one thing happening and no position within
+    # it worth reporting, which is as true of a one-pass render over twelve
+    # cards as it is of a lone generation.
+    #
+    # A card shot by itself is the case this had wrong. It is one payload and it
+    # is not the piece, so it does say which card it is — and because the stamp
+    # is the card's own number, its payload then serialises identically whether
+    # it was shot alone or with the whole strip. Gated on `len(payloads)`, as it
+    # was, shooting one card missed the cache the full render had just filled.
+    #
+    # The index alone, never the total: a payload's index is stable when a
+    # segment is appended, so earlier segments keep their cache keys, where a
+    # total would invalidate the whole strip for adding one shot at the end.
+    if len(payloads) > 1 or not whole_piece:
         # The card's number on the strip, not its position in the render: a
         # piece shot a pass at a time renders fewer passes than it has cards,
         # and "rendering segment 2" has to name the card the user can go and
@@ -544,12 +561,19 @@ def emit(payloads, labels, weights, sampling, acceleration, unique_id,
         decoded.append(("pass", source.out(1)))
 
     # What the save node needs to write each pass out as its own file: which
-    # card it is and what seed it ran on. Only on a piece of several passes —
-    # a lone generation's take is the render, and writing it twice would be one
-    # file to keep and one to delete.
+    # card it is and what seed it ran on. Not where the render is the whole
+    # piece made in one go: that take is the render, and writing it twice would
+    # be one file to keep and one to delete.
+    #
+    # "The whole piece" and not "one payload", because those differ exactly
+    # where takes matter most. A card shot by itself out of six is one payload,
+    # and gating on that is what stopped a piece from ever being shot a pass at
+    # a time: the take never landed, so the card could not be kept, so the next
+    # render was one payload again, and so on for the whole strip.
     takes = json.dumps({"cards": list(cards),
                         "seeds": [seed_for(index) for index in range(len(payloads))]},
-                       sort_keys=True) if cards and len(payloads) > 1 else ""
+                       sort_keys=True) \
+        if cards and (len(payloads) > 1 or not whole_piece) else ""
     emit_tail(graph, reel, unique_id, filename_prefix, takes)
     return graph
 
