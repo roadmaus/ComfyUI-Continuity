@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 2.11
 
 **The cast is "they".** A subject is whoever you say it is — a person, an object,
 a place, a look — and every sentence around it was written as though each one
