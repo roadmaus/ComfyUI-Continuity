@@ -1676,6 +1676,76 @@ export function sampledSeconds(timeline) {
   return secondsForFrames(sampledFrames(timeline));
 }
 
+/**
+ * Shoot this pass and nothing else: lock every other card, unlock this one.
+ *
+ * -> whether anything changed. The gesture the whole feature is for. A piece is
+ * built one expensive generation at a time — shoot a card, look at it, keep it,
+ * move on — and doing that by hand means locking five cards to shoot the sixth,
+ * then unlocking one and locking another for every step after. Said once, it is
+ * one click per card: soloing the next card locks the one before it, and a card
+ * locked with a take is a card playing its take, so the strip walks itself
+ * forward.
+ *
+ * Whole passes, because a pass is one generation and there is no half of one to
+ * shoot. Clips are left alone: a supplied clip is played rather than generated,
+ * so it is not something to hold back from a render.
+ */
+export function soloPass(timeline, index) {
+  let changed = false;
+  for (const pass of passes(timeline)) {
+    const head = pass.segments[0];
+    if (isClip(head)) continue;
+    const wanted = !(pass.start <= index && index < pass.start + pass.segments.length);
+    for (const segment of pass.segments) {
+      if (wanted === (segment.hold === true)) continue;
+      if (wanted) segment.hold = true; else delete segment.hold;
+      changed = true;
+    }
+  }
+  return changed;
+}
+
+/**
+ * Lock or unlock the whole strip.
+ *
+ * -> whether anything changed. The two ends of shooting a piece in parts: lock
+ * everything to stop generating and let the render assemble the piece out of
+ * the takes it already has, unlock everything to put the whole strip back in
+ * the pot. Neither is reachable by soloing, which always leaves one card out.
+ */
+export function holdAll(timeline, held) {
+  let changed = false;
+  for (const segment of timeline.segments) {
+    if (isClip(segment)) continue;
+    if (held === (segment.hold === true)) continue;
+    if (held) segment.hold = true; else delete segment.hold;
+    changed = true;
+  }
+  return changed;
+}
+
+/**
+ * Forget the take on this card. -> whether there was one.
+ *
+ * The card goes back to what it was before it rendered: locked with nothing to
+ * play, or simply in the next render. Only the strip's memory of the file is
+ * dropped — the take itself stays under output/ with the rest of them, because
+ * it is a render somebody may still want and this is a card saying it is not
+ * the one.
+ *
+ * The pass's, like everything else about a take: a pass is one generation and
+ * its take is one file, so the run's first card answers for it.
+ */
+export function dropTake(timeline, index) {
+  const segment = passes(timeline).find(
+    (pass) => pass.start <= index && index < pass.start + pass.segments.length,
+  )?.segments[0];
+  if (!segment || !takeOn(segment)) return false;
+  delete segment.take;
+  return true;
+}
+
 /** Whether the strip is holding anything back — which is what decides whether
  *  any of this is drawn at all. */
 export const shotInParts = (timeline) =>

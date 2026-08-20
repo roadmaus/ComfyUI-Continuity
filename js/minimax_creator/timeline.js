@@ -605,6 +605,14 @@ class Timeline {
              + "prompt, soundscape and score the refiner wrote go with them."),
         onclick: () => this.revertAll(),
       }, [el("span", { text: t("Revert all") })])] : []),
+      // The two ends of shooting a piece in parts. Neither is reachable by
+      // going card to card, which always leaves one of them out: locking the
+      // last one is how a shoot *finishes*, and putting the whole strip back is
+      // how it starts over. Drawn only once the strip is shooting in parts, the
+      // same gate the "{s} s next" readout below uses — a strip nobody has held
+      // anything on is not in this mode yet, and the way into it is to click a
+      // card's number.
+      ...this.holdAllPills(),
       el("div", { class: "mmc-tl-total" }, [
         // What this queue will actually make, when that is not the whole piece.
         // The one number that says what holding a card back bought: a strip of
@@ -1236,6 +1244,92 @@ class Timeline {
   }
 
   /**
+   * Lock the whole strip, or put all of it back.
+   *
+   * Two buttons rather than one that toggles: on a part-shot strip neither
+   * "locked" nor "unlocked" is the state it is in, so a switch would have to
+   * pick a side and would read as a lie half the time. Each is offered when it
+   * has something to do and absent when it does not.
+   *
+   * Locking everything is how a shoot ends — nothing is generated and the
+   * render writes the piece out of the takes it already has — so it goes dead
+   * when there would be nothing to write with, which is the same thing the
+   * strip would otherwise refuse a moment later.
+   */
+  holdAllPills() {
+    if (!S.shotInParts(this.timeline)) return [];
+    const passes = S.passes(this.timeline).filter((pass) => !S.isClip(pass.segments[0]));
+    const loose = passes.filter((pass) => !S.isHeld(pass.segments[0]));
+    const nothingLeft = !passes.some((pass) => S.takeOn(pass.segments[0]))
+      && !S.passes(this.timeline).some((pass) => S.isClip(pass.segments[0]));
+    return [
+      ...(loose.length ? [el("button", {
+        class: "mmc-pill mmc-tl-holdall",
+        disabled: nothingLeft || undefined,
+        title: nothingLeft
+          ? t("Nothing has been shot yet, so locking the strip would leave the next "
+            + "render with nothing to make.")
+          : t("Lock every card. Nothing is generated and the next render writes the "
+            + "piece out of the takes it already has — which is how a piece shot a "
+            + "card at a time is finished."),
+        onclick: () => { if (S.holdAll(this.timeline, true)) this.commit(); },
+      }, [icon("lock", 13), el("span", { text: t("Lock all") })])] : []),
+      ...(loose.length < passes.length ? [el("button", {
+        class: "mmc-pill mmc-tl-holdall",
+        title: t("Put every card back in the render. Takes are kept — a card that is "
+               + "unlocked is simply shot again, and its take stands until the new "
+               + "one lands."),
+        onclick: () => { if (S.holdAll(this.timeline, false)) this.commit(); },
+      }, [icon("lockOpen", 13), el("span", { text: t("Unlock all") })])] : []),
+    ];
+  }
+
+  /**
+   * The card's number, and the way to shoot that number and nothing else.
+   *
+   * A piece is built one expensive generation at a time, and doing that by hand
+   * means locking five cards to shoot the sixth — then unlocking one and
+   * locking another for every step after it. Said in one click it is the whole
+   * workflow: shoot a card, look at it, and click the next card's number, which
+   * locks the one you just shot. A card locked with a take is a card playing
+   * its take, so the strip walks itself forward and nothing is generated twice.
+   *
+   * The number rather than a control of its own, because there is no room for
+   * one — a five-second card's head is 26 px from full — and because the number
+   * is already what a card is called. "Shoot only 4" is the sentence, and the
+   * badge is the 4 in it. It goes quiet on a strip of one pass, where there is
+   * no "only" to ask for.
+   *
+   * The pass's, like the lock beside it: a pass is one generation and there is
+   * no half of one to shoot, so a number inside a merged run shoots the run.
+   */
+  soloBadge(index) {
+    const number = String(index + 1);
+    const runs = S.passes(this.timeline);
+    // Nothing to ask for on a strip that is one generation: "only this" and
+    // "all of it" are the same request there.
+    if (runs.length < 2) return el("span", { class: "mmc-tl-index", text: number });
+    const shared = runs.some((pass) => pass.segments.length > 1
+      && pass.start <= index && index < pass.start + pass.segments.length);
+    return el("button", {
+      class: "mmc-tl-index mmc-tl-solo",
+      text: number,
+      title: shared
+        ? t("Shoot only this pass. The shots merged with this one are generated "
+          + "with it — a pass is one generation — and every other card is locked "
+          + "and stays as it is.")
+        : t("Shoot only this one. Every other card is locked and stays as it "
+          + "is — the ones that already have takes go on playing them, and "
+          + "nothing else is generated. Click the next card's number when "
+          + "this one is good."),
+      onclick: (event) => {
+        event.stopPropagation();
+        if (S.soloPass(this.timeline, index)) this.commit();
+      },
+    });
+  }
+
+  /**
    * What a locked card is locked *as*, in words.
    *
    * The lock says a card is out of the next render; it cannot also say whether
@@ -1258,30 +1352,39 @@ class Timeline {
                + "is kept."),
       }) : null;
     }
-    if (this.edited?.has(index)) {
-      return el("span", {
-        class: "mmc-tl-card-state stale",
-        text: held ? t("kept · edited") : t("take · edited"),
-        title: t("This take was made before you changed the card, so it is no longer "
-               + "what the card describes. It still plays — shoot the card again to "
-               + "replace it."),
-      });
-    }
-    if (held) {
-      return el("span", {
-        class: "mmc-tl-card-state kept",
-        text: t("kept"),
-        title: t("Locked, and playing the take it already has. The next render splices "
-               + "this file in instead of generating it, and the cards after it go on "
-               + "continuing from it."),
-      });
-    }
-    return el("span", {
-      class: "mmc-tl-card-state ready",
-      text: t("take ready"),
-      title: t("This card rendered and the file is on disk. Lock the card to keep that "
-             + "take and stop paying for it; leave it unlocked to shoot it again."),
-    });
+    const [tone, name, why] = this.edited?.has(index)
+      ? ["stale", held ? t("kept · edited") : t("take · edited"),
+         t("This take was made before you changed the card, so it is no longer "
+         + "what the card describes. It still plays — shoot the card again to "
+         + "replace it.")]
+      : held
+        ? ["kept", t("kept"),
+           t("Locked, and playing the take it already has. The next render splices "
+           + "this file in instead of generating it, and the cards after it go on "
+           + "continuing from it.")]
+        : ["ready", t("take ready"),
+           t("This card rendered and the file is on disk. Lock the card to keep that "
+           + "take and stop paying for it; leave it unlocked to shoot it again.")];
+    // The chip names the take; the ✕ beside it is how the card stops having
+    // one. Looking at a take and deciding against it is half of shooting a
+    // piece in parts, and until now the only way to say so was to render over
+    // it. Wearing the chip's own colour, because it acts on what the chip
+    // says — and hidden until the card is under the pointer or the keyboard,
+    // because a strip of takes is meant to read as film rather than as a row
+    // of things to delete.
+    return el("span", { class: `mmc-tl-card-state ${tone}`, title: why }, [
+      el("span", { text: name }),
+      el("button", {
+        class: "mmc-tl-take-x",
+        text: "✕",
+        title: t("Forget this take. The card goes back to not shot; the file stays "
+               + "under output/ — this only stops the card playing it."),
+        onclick: (event) => {
+          event.stopPropagation();
+          if (S.dropTake(this.timeline, index)) this.commit();
+        },
+      }),
+    ]);
   }
 
   renderCard(segment, index, pass) {
@@ -1349,7 +1452,7 @@ class Timeline {
       ondblclick: () => this.edit(index),
     }, [
       el("div", { class: "mmc-tl-card-head" }, [
-        el("span", { class: "mmc-tl-index", text: String(index + 1) }),
+        this.soloBadge(index),
         // The off-distribution mark belongs to whatever is actually generated in
         // one go. Alone, that is this card; in a pass it is the pass, and
         // marking every card would say it about the wrong thing — the rail

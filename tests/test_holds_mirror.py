@@ -176,4 +176,90 @@ except compiler.CompileError as exc:
 else:
     FAILURES.append("a strip with every card held was not refused")
 
-passed(f"state.js mirrors compile.py across {len(CASES)} part-shot strips")
+# ---- the shoot itself, step by step ------------------------------------------
+#
+# The controls exist so that a piece can be built one expensive generation at a
+# time, and every step of that is a click on the strip followed by a queue. This
+# walks the whole thing through `state.js` — solo a card, land the take a render
+# would report, solo the next — and asks `compile.py` at each step what it would
+# actually sample. What it is guarding is the walk-forward: soloing card 2 locks
+# card 1, and a card locked *with a take* is a card playing its take, so the
+# strip carries itself along and nothing is ever generated twice.
+
+WALK = """
+const s = await import(process.argv[1]);
+const timeline = s.parseTimeline(JSON.stringify({
+  version: 2, render: "chained", prompt: "p", aspect: "16:9", short_edge: 768,
+  segments: [1, 2, 3].map((n) => ({
+    prompt: "shot " + n, duration_s: 5, assets: [], loras: [],
+  })),
+}));
+const out = [];
+const land = (index) => s.attachTakes(timeline, [{
+  segment: index + 1, filename: "s" + (index + 1) + ".mp4", subfolder: "takes",
+  duration_s: 5, width: 1280, height: 720, has_audio: true,
+}]);
+const step = (name) => {
+  s.syncTimeline(timeline);
+  out.push({ name, blob: s.serializeTimeline(timeline) });
+};
+s.soloPass(timeline, 0); step("solo 1");
+land(0);                 step("take 1 lands");
+s.soloPass(timeline, 1); step("solo 2");
+land(1);                 step("take 2 lands");
+s.soloPass(timeline, 2); step("solo 3");
+land(2);                 step("take 3 lands");
+s.holdAll(timeline, true);   step("lock all");
+s.dropTake(timeline, 1);     step("discard take 2");
+s.holdAll(timeline, false);  step("unlock all");
+console.log(JSON.stringify(out));
+"""
+
+walked = subprocess.run(
+    ["node", "--input-type=module", "--eval", WALK, MIRROR],
+    capture_output=True, text=True)
+if walked.returncode != 0:
+    print("failed to walk state.js:\n" + walked.stderr.strip())
+    sys.exit(1)
+
+
+def sampled_cards(blob):
+    """Which cards this blob would actually generate, by their number."""
+    piece = compiler.rendered_piece(json.loads(blob))
+    segments = compiler.timeline_segments(piece)
+    return [int(segments[start].get("card_no") or start + 1)
+            for start, _ in compiler.timeline_runs(piece, segments)
+            if "clip" not in compiler.timeline_payloads(piece)[
+                [r[0] for r in compiler.timeline_runs(piece, segments)].index(start)]]
+
+
+def played_cards(blob):
+    """...and which play film they already have."""
+    piece = compiler.rendered_piece(json.loads(blob))
+    segments = compiler.timeline_segments(piece)
+    runs = compiler.timeline_runs(piece, segments)
+    payloads = compiler.timeline_payloads(piece)
+    return [int(segments[start].get("card_no") or start + 1)
+            for (start, _), payload in zip(runs, payloads) if "clip" in payload]
+
+
+# Card by card: exactly one generation each time, and the cards behind it
+# playing the takes they already have rather than being sampled again.
+WANT = [
+    ("solo 1",         [1], []),
+    ("take 1 lands",   [1], []),      # the take is there; the card is still in the render
+    ("solo 2",         [2], [1]),     # ...until soloing 2 locks it, and it becomes film
+    ("take 2 lands",   [2], [1]),
+    ("solo 3",         [3], [1, 2]),
+    ("take 3 lands",   [3], [1, 2]),
+    ("lock all",       [],  [1, 2, 3]),   # the last step: assembled, nothing sampled
+    ("discard take 2", [],  [1, 3]),      # ...and card 2 drops out until it is shot again
+    ("unlock all",     [1, 2, 3], []),    # everything back in the pot
+]
+for (name, shot, played), seen in zip(WANT, json.loads(walked.stdout)):
+    check(f"{name}: generated", sampled_cards(seen["blob"]), shot)
+    check(f"{name}: played from film", played_cards(seen["blob"]), played)
+    check(f"{name}: is the step it says", seen["name"], name)
+
+passed(f"state.js mirrors compile.py across {len(CASES)} part-shot strips, "
+       f"and a {len(WANT)}-step shoot walks itself forward")

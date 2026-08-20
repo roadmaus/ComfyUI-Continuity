@@ -293,11 +293,13 @@ export const css = `
 .mmc-tl-card.mmc-tl-unshot .mmc-tl-dur { color: var(--mmc-dim); }
 
 /* What a locked card is locked as, in the row that already carries what the
-   card costs. A readout and not a control — the lock beside the mode badge is
-   the switch — so it has the static pill's manners: no hover, no cursor. Absent
-   while the card is simply in the render with nothing rendered yet, because
-   that is the ordinary state and a mark every card carries says nothing. */
+   card costs. The word is a readout — the lock beside the mode badge is the
+   switch that changes it — and the only thing it can be clicked for is to stop
+   having a take at all. Absent while the card is simply in the render with
+   nothing rendered yet, because that is the ordinary state and a mark every
+   card carries says nothing. */
 .mmc-tl-card-state {
+  display: inline-flex; align-items: center; gap: 3px;
   padding: 1px 6px; border-radius: 6px; margin-left: auto;
   background: var(--mmc-surface-3); color: var(--mmc-dim);
   font-size: 10px; flex: none; white-space: nowrap;
@@ -314,6 +316,54 @@ export const css = `
    off-distribution marks wear, meaning what it means there: a statement about
    what will happen, not a refusal. The take still plays. */
 .mmc-tl-card-state.stale { background: rgba(224,116,60,.16); color: #e0743c; }
+
+/* Looking at a take and deciding against it is half of shooting a piece in
+   parts, and it is the one thing the strip had no word for: the way to reject a
+   take was to render over it. This is that word, kept to a hairline and given
+   no colour of its own — it inherits whatever the chip beside it is wearing, so
+   the control is tinted by the state it acts on rather than adding a fourth
+   colour to a 10px row.
+
+   Out of sight until the card is under the pointer or the keyboard reaches it.
+   A strip of finished takes should read as film rather than as a row of things
+   to delete, and this is only wanted at the moment somebody has decided. */
+.mmc-tl-take-x {
+  border: 0; background: none; padding: 0; margin: 0 -2px 0 0;
+  font: inherit; line-height: 1; color: inherit; cursor: pointer;
+  opacity: 0; transition: opacity .12s ease;
+}
+.mmc-tl-card:hover .mmc-tl-take-x,
+.mmc-tl-pass-head:hover .mmc-tl-take-x,
+.mmc-tl-card:focus-within .mmc-tl-take-x,
+.mmc-tl-pass-head:focus-within .mmc-tl-take-x { opacity: .55; }
+.mmc-tl-take-x:hover, .mmc-tl-take-x:focus-visible { opacity: 1; }
+/* A pointer that cannot hover has no way to reveal it, so there it simply is. */
+@media (hover: none) { .mmc-tl-take-x { opacity: .55; } }
+@media (prefers-reduced-motion: reduce) { .mmc-tl-take-x { transition: none; } }
+
+/* The card's number, doubling as the way to shoot that number and nothing
+   else. There is no room in a card's head for a control of its own — a
+   five-second card runs out about 26 px after the lock — and the number is
+   already what the card is called, so "shoot only 4" is said by clicking the 4.
+
+   It looks exactly like the badge it replaces until it is pointed at, which is
+   the whole of the restraint here: the resting strip is a row of numbered
+   cards, and the verb surfaces where somebody is already looking. */
+.mmc-tl-solo {
+  border: 0; font: inherit; color: inherit; cursor: pointer;
+  padding: 0; transition: background-color .12s ease, color .12s ease;
+}
+.mmc-tl-solo:hover, .mmc-tl-solo:focus-visible {
+  background: var(--mmc-accent); color: #1a1206;
+}
+@media (prefers-reduced-motion: reduce) { .mmc-tl-solo { transition: none; } }
+
+/* Lock all and Unlock all sit with Refine all and Revert all, and are the same
+   shape of thing: one press for a gesture that is otherwise one press per card,
+   offered only while it has something to do. */
+.mmc-tl-holdall svg { stroke: currentColor; fill: none; stroke-width: 1.8;
+  stroke-linecap: round; stroke-linejoin: round; }
+.mmc-tl-holdall[disabled] { opacity: .45; cursor: not-allowed; }
 
 /* The switch, in the card's head with the rest of what the card *is*. One
    control, one question — is this card in the next render — drawn as the one

@@ -2,6 +2,32 @@
 
 ## Unreleased
 
+**Shoot one card, then the next.** Building a piece one expensive generation at
+a time meant locking five cards to shoot the sixth, then unlocking one and
+locking another for every step after it. A card's number on the strip is now the
+way to say it: click the 4 and card 4 is the only thing generated, everything
+else locked and left exactly as it is. Because a card locked with a take is a
+card playing that take, clicking the next number keeps what you just shot and
+carries the strip forward — one click per card, for the whole piece. Clicking a
+number inside a merged run shoots the run, a pass being one generation. On a
+strip that is a single generation the numbers stay what they were, there being
+no "only" to ask for.
+
+**Lock all, and unlock all.** The two ends of that, which going card by card
+never reaches: lock everything and the next render generates nothing and writes
+the piece out of the takes it already has, which is how a piece shot in parts is
+finished. Unlock everything to put the whole strip back in the pot. They sit on
+the bar beside Refine all, appear once the strip is shooting in parts, and Lock
+all goes dead while there is nothing shot to assemble from.
+
+**A take can be turned down.** Looking at a take and deciding against it is half
+of shooting in parts, and the only way to say so was to render over it. The chip
+that names a take — kept, take ready, kept · edited — now carries a ✕ that
+forgets it: the card goes back to not shot, and the file stays under output/,
+because this is a card saying the take is not the one rather than a file being
+deleted. It is out of sight until the card is under the pointer, so a strip of
+finished takes still reads as film.
+
 **A card shot by itself is still a card of a piece.** Shooting one segment,
 keeping what came back and moving on to the next is the whole point of the lock
 — and it never worked. The take a render writes out was written only where the
