@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 2.10
 
 **A turbo lead-in.** Every H3 distillation LoRA trades the same thing away: the
 frames stay good and the model stops listening, because a turbo LoRA buys its
