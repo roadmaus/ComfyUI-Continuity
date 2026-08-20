@@ -120,9 +120,9 @@ export const ICONS = {
   lock: `<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>`,
   lockOpen: `<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/>`,
   // The cast's two. Nothing else in the pack has anybody in it: `face` is a
-  // subject with no picture behind her, and the badge on a reference that lends
-  // one her looks. `swap` is the other thing a reference can do to a person —
-  // she takes the place of whoever is in the clip — and reads as an exchange
+  // subject with no picture behind them, and the badge on a reference that lends
+  // one their looks. `swap` is the other thing a reference can do to a person —
+  // they take the place of whoever is in the clip — and reads as an exchange
   // rather than as a link, which `link` already spends itself on.
   face: `<circle cx="12" cy="8.5" r="3.6"/><path d="M4.8 20a7.2 7.2 0 0114.4 0"/>`,
   swap: `<path d="M4 8h13l-3.5-3.5"/><path d="M20 16H7l3.5 3.5"/>`,

@@ -24,28 +24,113 @@ export const css = `
 .mmc-cast-empty-title { font-size: 12.5px; color: var(--mmc-dim); }
 .mmc-cast-empty-note { font-size: 11px; color: var(--mmc-off); line-height: 1.45; }
 
-.mmc-cast-list { display: flex; flex-direction: column; gap: 8px; }
+/* The shelf is one list rather than a stack of loose cards: a cast is a call
+   sheet, and hairlines between the lines of one sheet read as a roster where
+   eight separately bordered boxes read as eight unrelated things. */
+.mmc-cast-list {
+  display: flex; flex-direction: column; min-width: 0;
+  background: var(--mmc-surface); border: 1px solid var(--mmc-line);
+  border-radius: 12px; overflow: hidden;
+}
 
-/* One card per subject. The left edge is her identity hue — the same one her
+/* One entry per subject. The left edge is their identity hue — the same one their
    @name wears as a chip in the sentence — so a cast of five reads as five
    colours down the shelf and a chip mid-prompt can be matched to a face without
    reading either. That is the pack's existing "this chip is that picture"
    device, pointed at a person instead of a file. */
 .mmc-cast-card {
-  display: flex; flex-direction: column; gap: 8px;
-  padding: 10px 12px 10px 13px; min-width: 0;
-  background: var(--mmc-surface); border: 1px solid var(--mmc-line);
-  border-left: 3px solid var(--tag, var(--mmc-accent)); border-radius: 12px;
+  display: flex; flex-direction: column; min-width: 0;
+  border-left: 3px solid var(--tag, var(--mmc-accent));
 }
-/* Cast but never written into a prompt: she is in no shot, which is a state
+.mmc-cast-card + .mmc-cast-card { border-top: 1px solid var(--mmc-line); }
+/* Open is the editor, and it is lifted off the sheet so the fields in it read as
+   one card rather than as more rows of the list. */
+.mmc-cast-card.open {
+  gap: 8px; padding: 10px 12px 11px 10px; background: var(--mmc-surface-2);
+}
+/* Cast but never written into a prompt: they are in no shot, which is a state
    worth seeing at a glance and not worth shouting about. */
 .mmc-cast-card.idle { border-left-color: var(--mmc-off); }
 .mmc-cast-card.idle .mmc-cast-face { opacity: .62; }
-.mmc-cast-card.bad { border-color: rgba(255,140,120,.45); }
+.mmc-cast-card.bad { border-left-color: #ff8c78; }
+
+/* --- shut: one line ------------------------------------------------------- */
+
+.mmc-cast-row { display: flex; align-items: center; gap: 4px; min-width: 0; padding-right: 8px; }
+/* The line is the button. Nothing else on it can be pressed, so opening
+   somebody is a click anywhere along them — and the ✕ beside it is the one thing
+   you can hit on purpose. */
+.mmc-cast-grip {
+  flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px;
+  padding: 7px 4px 7px 9px; background: none; border: 0; cursor: pointer;
+  color: inherit; font: inherit; text-align: left;
+}
+.mmc-cast-grip:hover { background: var(--mmc-surface-2); }
+.mmc-cast-grip:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: -2px; }
+.mmc-cast-grip .mmc-cast-face { width: 30px; height: 30px; border-radius: 8px; }
+.mmc-cast-grip .mmc-cast-face-blank svg { width: 16px; height: 16px; }
+
+.mmc-cast-line-ident { display: flex; align-items: baseline; gap: 7px; min-width: 0; }
+.mmc-cast-line-name {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12.5px; color: var(--tag, var(--mmc-text));
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.mmc-cast-line-takes { font-size: 11px; color: var(--mmc-off); flex: none; }
+
+/* Their files as a texture rather than a row of controls — the reading a shut
+   line owes is "two pictures and a voice", not "which picture". */
+.mmc-cast-minis { display: flex; gap: 3px; flex: none; }
+.mmc-cast-mini { position: relative; display: block; line-height: 0; }
+.mmc-cast-mini-thumb {
+  width: 22px; height: 22px; border-radius: 6px; object-fit: cover;
+  background: var(--mmc-surface-3); display: flex; align-items: center;
+  justify-content: center; color: var(--mmc-dim);
+}
+.mmc-cast-mini-thumb svg { width: 11px; height: 11px; }
+/* The three that are not their looks say so with the colour their badge wears on
+   the open card. A dot, because at 22px a glyph is a smudge. */
+.mmc-cast-mini-motion::after, .mmc-cast-mini-voice::after,
+.mmc-cast-mini-replaces::after {
+  content: ""; position: absolute; right: -1px; bottom: -1px;
+  width: 7px; height: 7px; border-radius: 999px;
+  box-shadow: 0 0 0 1.5px var(--mmc-surface);
+}
+.mmc-cast-mini-motion::after { background: #6ebeff; }
+.mmc-cast-mini-voice::after { background: #a8c858; }
+.mmc-cast-mini-replaces::after { background: var(--mmc-accent); }
+.mmc-cast-mini.missing .mmc-cast-mini-thumb { box-shadow: 0 0 0 1.5px rgba(255,140,120,.5); }
+.mmc-cast-line-words { font-size: 11px; color: var(--mmc-off); flex: none; }
+
+/* Where they walk on, or what is wrong with them — the two things a shut line is
+   read for, in the place the eye already goes for a status. */
+.mmc-cast-line-state {
+  margin-left: auto; font-size: 11px; color: var(--mmc-dim); flex: none;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 46%;
+}
+.mmc-cast-card.idle .mmc-cast-line-state { color: var(--mmc-off); }
+.mmc-cast-line-state.bad { color: #ff8c78; }
+.mmc-cast-chev { display: flex; color: var(--mmc-off); flex: none; }
+
+/* --- open: the way back out ----------------------------------------------- */
+
+.mmc-cast-shut, .mmc-cast-keepme {
+  display: flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px; padding: 0; border: 0; border-radius: 6px;
+  background: none; color: var(--mmc-off); cursor: pointer; flex: none;
+}
+.mmc-cast-shut { transform: rotate(180deg); }
+.mmc-cast-shut:hover, .mmc-cast-keepme:hover:not(:disabled) {
+  background: var(--mmc-surface-3); color: var(--mmc-text);
+}
+.mmc-cast-keepme:disabled { opacity: .4; cursor: default; }
+/* Kept: the star fills, the way a starred preset's does in the library. */
+.mmc-cast-keepme.on { color: var(--mmc-accent); }
+.mmc-cast-keepme.on svg { fill: currentColor; }
 
 .mmc-cast-top { display: flex; gap: 12px; align-items: flex-start; min-width: 0; }
 
-/* Her face: the first still she is built out of, at a size you can recognise
+/* Their face: the first still they are built out of, at a size you can recognise
    somebody at. Square, because every other thumbnail in the pack is. */
 .mmc-cast-face {
   width: 46px; height: 46px; border-radius: 10px; object-fit: cover; flex: none;
@@ -74,7 +159,7 @@ export const css = `
 .mmc-cast-name:focus { border-bottom-color: var(--tag, var(--mmc-accent)); }
 .mmc-cast-name::placeholder { color: var(--mmc-off); font-weight: 400; }
 
-/* What she is. A word, not a pill: it sits inside the name line as the rest of
+/* What they are. A word, not a pill: it sits inside the name line as the rest of
    the sentence "@anna is a person", and a bordered chip there would read as a
    second control of the same weight as the name itself. */
 .mmc-cast-takes {
@@ -95,7 +180,7 @@ export const css = `
 .mmc-cast-side { display: flex; gap: 4px; align-items: center; flex: none; }
 .mmc-cast-where { font-size: 11px; color: var(--mmc-dim); white-space: nowrap; }
 /* The commonest way to lose an afternoon with this feature is to cast somebody
-   and never write her name. So the readout that says so is also the button that
+   and never write their name. So the readout that says so is also the button that
    fixes it, and it is dashed to say there is something outstanding here. */
 .mmc-cast-where-idle {
   background: none; border: 1px dashed var(--mmc-line); border-radius: 999px;
@@ -106,10 +191,10 @@ export const css = `
 }
 .mmc-cast-where-idle:disabled { cursor: default; opacity: .5; }
 
-/* --- what she is made of --------------------------------------------------- */
+/* --- what they are made of --------------------------------------------------- */
 
-/* The row the whole redesign is for. Every file behind her is a real thumbnail
-   here, wearing its own hue, with a badge saying what it lends her — where this
+/* The row the whole redesign is for. Every file behind them is a real thumbnail
+   here, wearing its own hue, with a badge saying what it lends them — where this
    used to be four ghost chips that all looked like every other ghost chip in
    the pack, and the way to add one was a "+" character among them. */
 .mmc-cast-refs {
@@ -130,14 +215,14 @@ export const css = `
   justify-content: center; color: var(--mmc-dim);
   box-shadow: 0 0 0 2px var(--tag, transparent);
 }
-/* A handle the shot no longer holds. Not hidden — she still claims it, and the
+/* A handle the shot no longer holds. Not hidden — they still claims it, and the
    card refuses to queue until somebody says otherwise. */
 .mmc-cast-ref.missing .mmc-cast-ref-thumb {
   box-shadow: 0 0 0 2px rgba(255,140,120,.5); color: #ff8c78;
 }
 .mmc-cast-missing { font-size: 15px; }
 
-/* What the file lends her, in the corner of the file. Small on purpose: the
+/* What the file lends them, in the corner of the file. Small on purpose: the
    picture is the thing you recognise and the badge is the thing you check. */
 .mmc-cast-badge {
   position: absolute; right: -3px; bottom: -3px;
@@ -146,13 +231,13 @@ export const css = `
   background: var(--mmc-surface-3); box-shadow: 0 0 0 2px var(--mmc-surface);
   color: var(--mmc-text);
 }
-/* Her looks are the default and wear no badge at all — see refTile in cast.js. These
+/* Their looks are the default and wear no badge at all — see refTile in cast.js. These
    three are the departures from it, and each says which. */
 .mmc-cast-badge-motion { color: #6ebeff; }
 .mmc-cast-badge-voice { color: #a8c858; }
 .mmc-cast-badge-replaces { color: var(--mmc-accent); }
 
-/* The way to hang another file on her: a tile of the same size as the files,
+/* The way to hang another file on them: a tile of the same size as the files,
    in the same row, so it reads as the next slot rather than as a control. */
 .mmc-cast-add {
   width: 38px; height: 38px; box-sizing: border-box; border-radius: 9px; flex: none;
@@ -195,7 +280,7 @@ export const css = `
 /* --- the menus ------------------------------------------------------------- */
 
 /* Two lines and a picture per row, where a sampler's menu is one word. Wider
-   than a choice popover for the same reason: "Her looks come from this" and the
+   than a choice popover for the same reason: "Their looks come from this" and the
    sentence under it are what make the four roles tellable apart. */
 .mmc-cast-menu { min-width: 290px; max-width: 340px; }
 .mmc-cast-menu .mmc-opt { align-items: flex-start; padding: 8px 10px; }

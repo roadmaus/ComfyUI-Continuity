@@ -18,6 +18,7 @@ import { openPicker } from "./picker.js";
 import { openLoras } from "./loras.js";
 import { openSettings } from "./settings.js";
 import { openPresetLibrary } from "./presetlib.js";
+import { keepSubject } from "./presets.js";
 import { openTrim, trimLabel } from "./trim.js";
 import { PromptBox, focusEnd, openEditorSheet } from "./prompt.js";
 import { RefinePanel, refineButton, refine } from "./refine.js";
@@ -188,11 +189,17 @@ export class CreatorEditor {
                 durationPill = true, extraPills = null, extraTools = null,
                 settingsTool = true, stage = null, editorTitle = null,
                 piece = null, afterPanel = null, presetTarget = null,
-                clearTool = null, seedTarget = null, scopesSent = null }) {
+                clearTool = null, seedTarget = null, scopesSent = null,
+                castFromLibrary = null }) {
     // The one sampler setting a card may answer for itself — see
     // `segmentSeedPill`. Null on a node body, which owns the whole row.
     this.seedTarget = seedTarget;
     this.presetTarget = presetTarget;
+    // Who to hand a kept cast member to. Not derivable here: this body is a
+    // node face on one host and one card of a strip on another, and only the
+    // second one is a shot whose cast is owned a level up. See the `@` menu's
+    // `castFromLibrary` hook.
+    this.castFromLibrary = castFromLibrary;
     this.piece = piece ?? state;
     this.afterPanel = afterPanel;
     // What the window this body opens into is called. A node face is a preview
@@ -245,6 +252,17 @@ export class CreatorEditor {
       getPool: () => this.state.pool ?? [],
       // Mirrored down by `syncTimeline` beside the pool — see `state.cast`.
       getCast: () => this.state.cast ?? [],
+      // Typing `@ann` into the sentence offers the roster, and picking somebody
+      // out of it casts them here with their files. The shelf opens with them: they
+      // have just arrived, and the card that says what they are made of is the
+      // thing to look at next.
+      castFromLibrary: this.castFromLibrary
+        ? (member) => {
+            const handle = this.castFromLibrary(member);
+            if (handle) { this.castOpen = true; this.render(); }
+            return handle;
+          }
+        : null,
       onOverflow: (over) => this.onPromptOverflow(over),
     });
     // Leaving the box arms the escalation again — see `onPromptOverflow`.
@@ -939,7 +957,7 @@ export class CreatorEditor {
    * that was only ever in the Timeline window belongs here too, and it is
    * literally the same shelf (`cast.js`). What is different here is only the
    * scope: the files somebody can be built out of are this shot's own
-   * attachments plus whatever pool rides on it, and "where is she cited" has
+   * attachments plus whatever pool rides on it, and "where is they cited" has
    * one answer, this prompt.
    *
    * Drawn where this body owns the piece's cast — a node face. Inside the
@@ -970,6 +988,17 @@ export class CreatorEditor {
         return { cited, text: cited ? t("in the prompt") : "" };
       },
       cite: (subject) => this.citeName(subject.handle),
+      // The roster, both ways. Kept against this shot's own files, and taken out
+      // of the library through the piece's preset target — which is what knows
+      // where a pool asset lands and what has to be redrawn once one has.
+      keep: (subject, assets) => keepSubject(subject, assets),
+      // Offered only where somebody could actually land: a cast belongs to a
+      // piece, and this body is also what a PreStage's H3 branch draws, where
+      // the roster would open on a tab whose every Apply is refused.
+      library: this.presetTarget?.()?.scope === "piece"
+        ? () => openPresetLibrary({ target: this.presetTarget(), scope: "cast" })
+            .then(() => this.render())
+        : null,
       touch: () => this.onCommit?.(),
       commit: () => this.commit(),
     });
@@ -1018,8 +1047,8 @@ export class CreatorEditor {
   }
 
   /** Write a subject's name into the prompt. The answer to the commonest way to
-   *  lose an afternoon with this feature: casting somebody and never citing her,
-   *  which leaves her in no shot and nothing on screen to say so. */
+   *  lose an afternoon with this feature: casting somebody and never citing them,
+   *  which leaves them in no shot and nothing on screen to say so. */
   citeName(handle) {
     if (!handle) return;
     const current = this.state.prompt ?? "";
@@ -1059,14 +1088,14 @@ export class CreatorEditor {
         }, [el("span", { class: "mmc-tool-icon" }, [icon("effect")]), el("span", { text: t("Add LoRA") })]),
         // Who is in it, as against what is attached to it. Ungated, and
         // deliberately: a subject can be a name and a description with no file
-        // behind her at all, which is what a cast is in a text-only generation
+        // behind them at all, which is what a cast is in a text-only generation
         // — and gating this on having attached something is what made the
         // feature invisible to exactly the prompt that needed it most.
         ...(this.nodeId ? [el("button", {
           class: `mmc-tool${(this.piece.subjects ?? []).length || this.castOpen ? " on" : ""}`,
           title: t("Who is in the video: a person, an object, a place or a look that "
-                 + "comes back shot after shot. Name her once, write @anna in the "
-                 + "prompt, and whatever is behind her rides in with her."),
+                 + "comes back shot after shot. Name them once, write @anna in the "
+                 + "prompt, and whatever is behind them rides in with them."),
           onclick: () => this.toggleCast(),
         }, [el("span", { class: "mmc-tool-icon" }, [icon("face")]), el("span", { text: t("Cast") })])] : []),
         // With the adds because they are one: the PreStage's frame grab puts an

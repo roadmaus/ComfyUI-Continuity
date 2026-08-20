@@ -324,6 +324,67 @@ for (const [cls, widget, blob] of [
   }
 }
 
+// Somebody typed into the sentence. The `@` menu offers the cast library where
+// the host owns a piece to cast her into, and picking her is what attaches her
+// files — so the hook the menu calls has to land a whole subject, not a name.
+try {
+  const node = fakeNode("MiniMaxH3Creator", "creator_data", ONE_SHOT);
+  await ext.nodeCreated(node);
+  const hooks = node.mmcBody.faceBody().prompt.hooks;
+  const handle = await hooks.castFromLibrary({
+    handle: "anna", takes: "person", description: "dark coat",
+    files: [{ slot: "from", filename: "anna/face.png", kind: "image" },
+            { slot: "voice", filename: "anna/voice.wav", kind: "audio" }],
+  });
+  const piece = node.mmcBody.timeline;
+  const shot = piece.segments[0];
+  out.castFromMention = {
+    handle,
+    cast: (piece.subjects ?? []).length,
+    // Her files are ordinary references on the shot the face is drawing — a
+    // piece of one shot has no pool worth the name.
+    attached: (shot.assets ?? []).map((asset) => `${asset.handle}=${asset.filename}`).join(","),
+    poolLeftAlone: (piece.assets ?? []).length === 0,
+    voiceBound: piece.subjects?.[0]?.voice === shot.assets?.[1]?.handle,
+    // Nothing to cast her into, nothing offered: a PreStage's prompt box has no
+    // piece behind it, so the roster stays out of its menu.
+    notOnAPreStage: null,
+  };
+  const still = fakeNode("MiniMaxH3PreStage", "prestage_data",
+                         JSON.stringify({ arch: "minimax" }));
+  await ext.nodeCreated(still);
+  out.castFromMention.notOnAPreStage =
+    !still.mmcBody.editor?.prompt?.hooks?.castFromLibrary;
+} catch (error) {
+  out.errors.push(`castFromMention: ${error.message}`);
+}
+
+// …and her name is written into the sentence by string surgery rather than by
+// caret surgery, because casting her rebuilds the box the caret was in. This is
+// the bug: the "@" was typed, she was cast, and the name never arrived.
+try {
+  const node = fakeNode("MiniMaxH3Creator", "creator_data", ONE_SHOT);
+  await ext.nodeCreated(node);
+  const editor = node.mmcBody.faceBody();
+  const box = editor.prompt;
+  box.setValue("a woman at the door, @");
+  editor.state.prompt = box.getValue();
+  const before = box.getValue();
+  const handle = await box.hooks.castFromLibrary({
+    handle: "anna", takes: "person",
+    files: [{ slot: "from", filename: "anna/face.png", kind: "image" }],
+  });
+  box.writeName(before, { at: before.length - 1, length: 1 }, handle);
+  out.wroteName = {
+    // In the state, which is what queues…
+    state: editor.state.prompt,
+    // …and in the box, read back through the chips it was rebuilt into.
+    value: box.getValue(),
+  };
+} catch (error) {
+  out.errors.push(`wroteName: ${error.message}`);
+}
+
 // The face is typed into, and the window is where a prompt goes when it stops
 // fitting. The box on the face is the live one — that is the whole point of it
 // being there — and the corner control opens the same body full size.
@@ -1395,6 +1456,26 @@ for unwanted in ("Settings", " s ", "sweep"):
     if unwanted in (report["still"] or ""):
         FAILURES.append(f"the H3 still's body should not carry {unwanted!r}")
 check("the Creator keeps the settings tool", "Settings" in (report["creator"] or ""), True)
+
+# ---- somebody typed into the sentence ---------------------------------------
+
+mention = report.get("castFromMention", {})
+check("picking a kept member out of the @ menu casts her", mention.get("handle"), "anna")
+check("...as one subject on the piece", mention.get("cast"), 1)
+check("...with her files attached as ordinary references on the shot",
+      mention.get("attached"), "img-1=anna/face.png,aud-1=anna/voice.wav")
+check("...and nothing hidden in a pool the face does not draw",
+      mention.get("poolLeftAlone"), True)
+check("...and her voice still bound to the file that is her voice",
+      mention.get("voiceBound"), True)
+check("a pre-stage is offered no roster — it has no piece to cast her into",
+      mention.get("notOnAPreStage"), True)
+
+wrote = report.get("wroteName", {})
+check("her name lands where the @ was typed, not on a lost caret",
+      wrote.get("state"), "a woman at the door, @anna ")
+check("...and reads back off the box as the same sentence",
+      wrote.get("value"), "a woman at the door, @anna ")
 
 # The settings page owns three questions now — how good the file is, where it
 # goes, and what the node faces offer — so it has three tabs, and the folder

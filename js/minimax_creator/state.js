@@ -43,7 +43,7 @@ export const sizeable = (asset) =>
   asset.role === "reference" && DEFAULT_REF_SIZE[asset.kind] !== undefined;
 
 /** What of a reference is actually the reference. "full" — the default — is
- *  the whole file; the others narrow it so "her from @img-1" stops dragging the
+ *  the whole file; the others narrow it so "them from @img-1" stops dragging the
  *  picture's background, palette and pose into the video. The DiT gets the same
  *  tensor either way, so this is prose or it is nothing: the refiner's glossary
  *  reads it always, and the prompt itself reads it when the `define_refs`
@@ -79,6 +79,70 @@ export const takes = (asset) =>
 /** Whether an asset has a narrowing to choose at all: references only — a
  *  keyframe is bound whole by the alignment line. */
 export const takeable = (asset) => takeOptions(asset).length > 0;
+
+// ---- what a file lending itself to somebody is narrowed to -------------------
+//
+// A picture hung on @anna as their looks *is* a person reference, and leaving it at
+// "full" says the opposite in the one place the model reads: "what the target
+// video takes from it is what the picture actually shows" — its background, its
+// pose, the lot. The two settings were never independent; the second one was
+// just being typed twice, and the second typing was easy to forget.
+//
+// So hanging a file on somebody narrows the file, and the four slots map onto
+// the vocabulary the file already has:
+//
+//   their looks    -> what they are: person, object, scene or style
+//   they move    -> motion, the guide's own word for mining a clip for movement
+//   their voice    -> voice, likewise for timbre
+//   their place    -> edit, which is "the target video is an edited version of
+//                   this one, and everything the description does not change
+//                   stays" — the whole of swapping them in for its occupant
+//
+// **Only over the default.** A narrowing somebody chose is theirs: this fills a
+// blank rather than overruling an answer, and the one moment it moves an answer
+// is when *they* changes, where the old answer was this rule's own doing.
+
+/** What the slot a file sits in says the file should be narrowed to, or null
+ *  where the file has no such word to take. */
+export function slotTake(subject, slot, asset) {
+  const wanted = slot === "from" ? (subject.takes ?? "person")
+    : slot === "motion" ? "motion"
+    : slot === "voice" ? "voice"
+    : slot === "replaces" ? "edit"
+    : null;
+  return wanted && takeOptions(asset).includes(wanted) ? wanted : null;
+}
+
+/** Narrow a file to what its slot says, unless somebody has already narrowed it
+ *  themselves. `over` is the value that counts as unanswered beside "full" —
+ *  the take they used to carry, when what they *is* has just been changed.
+ *  Answers whether anything moved. */
+export function inheritTake(subject, slot, asset, { over = null } = {}) {
+  if (!asset || !takeable(asset)) return false;
+  const wanted = slotTake(subject, slot, asset);
+  if (!wanted) return false;
+  const standing = takes(asset);
+  if (standing === wanted) return false;
+  if (standing !== "full" && standing !== over) return false;
+  asset.takes = wanted;
+  return true;
+}
+
+/** Every file behind a subject, narrowed to what its slot says. Handed the files
+ *  that exist here — a handle attached somewhere else is not this surface's to
+ *  change — and `over` where they have just stopped being one thing and started
+ *  being another. */
+export function inheritTakes(subject, assets, { over = null } = {}) {
+  let moved = false;
+  const find = (handle) => (assets ?? []).find((asset) => asset.handle === handle);
+  for (const handle of subject.from ?? []) {
+    moved = inheritTake(subject, "from", find(handle), { over }) || moved;
+  }
+  for (const slot of ["motion", "voice", "replaces"]) {
+    if (subject[slot]) moved = inheritTake(subject, slot, find(subject[slot])) || moved;
+  }
+  return moved;
+}
 
 // What each scope says to the model, in the sentence the prompt carries when
 // `define_refs` is on. Mirrors `contextir._DEFINE` — the compiler writes these
@@ -1531,6 +1595,24 @@ export function parseTimeline(raw) {
         if (Number.isInteger(seed) && seed >= 0) segment.seed = seed;
         return segment;
       });
+      // Every cast file narrowed to what its slot says — once, on the way in.
+      //
+      // A piece written before hanging a file on somebody narrowed it carries
+      // their pictures at "full", which tells the model the opposite of what they
+      // are: "what the target video takes from it is what the picture actually
+      // shows", background and pose and all. That is not a preference anybody
+      // set, it is a line nobody knew was there, so it is repaired here rather
+      // than left for the user to find four shots later.
+      //
+      // Read against the lists a subject's handle can actually name — the pool,
+      // and a lone shot's own row, which is where a piece of one shot keeps their
+      // pictures. Never across cards: `img-1` on card 2 is a different file
+      // from `img-1` on card 5, and narrowing somebody else's picture because
+      // it shares a handle is worse than the line this is fixing.
+      const lone = timeline.segments.length === 1 ? (timeline.segments[0].assets ?? []) : [];
+      for (const subject of timeline.subjects) {
+        inheritTakes(subject, [...timeline.assets, ...lone]);
+      }
       return syncCanvas(timeline);
     }
   } catch {
@@ -2625,7 +2707,7 @@ export function subjectProblem(scope, subject) {
   // there is no picture to point at, and the description is the whole of what
   // the name can mean. Mirrors the same relaxation in `subjects.parse`.
   if (!files.length && !subject.replaces && !String(subject.description ?? "").trim()) {
-    return "nothing behind her yet — hang a file on her, or describe her in words";
+    return "nothing behind them yet — hang a file on them, or describe them in words";
   }
   const wanted = [...files, subject.replaces].filter(Boolean);
   const missing = wanted.filter((h) => !byHandle.has(h));
@@ -2639,7 +2721,7 @@ export function subjectProblem(scope, subject) {
   const keyframe = wanted.map((h) => byHandle.get(h)).find((a) => a.role !== "reference");
   if (keyframe) {
     return `@${keyframe.handle} is this shot's ${keyframe.role === "first_frame" ? "start" : "end"} `
-         + "frame — a moment of the video being made, not a reference she is made of";
+         + "frame — a moment of the video being made, not a reference they are made of";
   }
   return "";
 }
@@ -2656,9 +2738,9 @@ export function citedPool(state) {
   const pool = state.pool ?? [];
   if (!pool.length) return [];
   const found = citedHandles(poolTexts(state));
-  // Casting a subject cites every file behind her, plus the clip she stands in
+  // Casting a subject cites every file behind them, plus the clip they stand in
   // the place of — writing `@anna` is the whole gesture, and it would be a
-  // strange one that made you name her photographs beside her. Mirrors the
+  // strange one that made you name their photographs beside them. Mirrors the
   // same expansion in `compile.cited_pool`.
   for (const subject of citedCast(state)) {
     for (const handle of subjectFiles(subject)) found.add(handle);

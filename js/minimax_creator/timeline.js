@@ -239,6 +239,7 @@ class Timeline {
       attachedLabel: () => t("Piece references"),
       getCast: () => this.timeline.subjects ?? [],
       onAttach: (row) => this.attachToPool(row),
+      castFromLibrary: (member) => this.castFromLibrary(member),
     });
     box.frame.classList.add("mmc-tl-prompt-frame");
     box.frame.addEventListener("pointerdown", (event) => event.stopPropagation());
@@ -493,7 +494,7 @@ class Timeline {
    * The shelf itself is `cast.js` and is the same one the node face mounts —
    * one node, one cast, one way of editing it. What is the window's is only
    * what it can answer that the shelf cannot: which files there are to build
-   * somebody out of, and which cards on the strip write her name.
+   * somebody out of, and which cards on the strip write their name.
    */
   renderCast() {
     this.castShelf ??= new CastShelf({
@@ -515,9 +516,15 @@ class Timeline {
         };
       },
       // Into the global prompt, which is in front of every shot — the same
-      // gesture the pool's own handle button makes, and the answer to "she is
+      // gesture the pool's own handle button makes, and the answer to "they are
       // in the piece, in all of it".
       cite: (subject) => this.citeName(subject.handle),
+      // The roster, both ways — see the same pair on the node face. Casting
+      // somebody out of the library attaches their files to the pool, which is
+      // the shelf this window is already drawing.
+      keep: (subject, assets) => P.keepSubject(subject, assets),
+      library: () => openPresetLibrary({ target: this.pieceTarget(), scope: "cast" })
+        .then(() => { this.renderStrip(); this.renderPool(); this.renderCast(); }),
       // A keystroke in a name or a description: written through, nothing
       // redrawn. The card holds the caret.
       touch: () => this.onCommit?.(),
@@ -530,6 +537,49 @@ class Timeline {
       this.castHost.replaceChildren(this.castShelf.root);
     }
     this.castShelf.render();
+  }
+
+  /**
+   * Cast somebody out of the roster, from an `@` typed into any prose in this
+   * window — the global prompt or a card's.
+   *
+   * Their files land in the piece's pool and they land in the piece's cast, which
+   * is what the shelf above is already drawing; the caller writes their name where
+   * the caret is. Not `commit`: the caret is in a box that is about to receive a
+   * chip, so only the two shelves that gained a row are redrawn.
+   */
+  castFromLibrary(member) {
+    const subject = P.addSubjectToPiece(member, this.timeline);
+    if (!subject) return null;
+    this.onCommit?.();
+    this.renderPool();
+    this.renderCast();
+    this.renderStrip();
+    return subject.handle;
+  }
+
+  /**
+   * The piece, as something a preset can land on — the window's own.
+   *
+   * The node has one of these already; this window is the same piece with the
+   * strip open, and the cast shelf in it needs somewhere to put somebody taken
+   * out of the roster. No cover is offered: a cover comes off the stage, the
+   * stage belongs to the node, and this window never sees it.
+   */
+  pieceTarget() {
+    return {
+      scope: "piece",
+      label: t("this piece"),
+      capture: () => ({
+        data: P.capturePiece(this.timeline, this.io()),
+        defaultName: (this.timeline.prompt || this.timeline.segments?.[0]?.prompt || "")
+          .trim().split("\n")[0].slice(0, 48),
+      }),
+      apply: (body, keys, from) => {
+        P.applyToPiece(body, keys, this.timeline, this.io(), { from });
+        this.commit();
+      },
+    };
   }
 
   /** One file, attached to the pool, for the cast shelf's "attach a file…".
@@ -2001,6 +2051,10 @@ class Timeline {
       onCommit: () => {
         this.onCommit?.(); this.renderStrip(); this.renderPool(); this.renderCast();
       },
+      // A member typed into this card's prose is cast into the *piece* — where
+      // the cast lives — and their files land in the piece's pool. The card is
+      // where they are written, not where they are kept.
+      castFromLibrary: (member) => this.castFromLibrary(member),
       // Both belong to the timeline rather than to one shot: the canvas because
       // the segments are joined, the continuation because it describes the seam
       // in front of this segment and so does not exist for the first one.
@@ -2270,6 +2324,14 @@ export class TimelineBody {
       // about where they live — which is what makes growing a second one a
       // matter of adding a card and not of moving any settings.
       piece: this.timeline,
+      // The face is wearing the piece's only card, and the piece is what a cast
+      // member is cast into — see the window's own hook of the same name.
+      castFromLibrary: (member) => {
+        const subject = P.addSubjectToPiece(member, this.timeline);
+        if (!subject) return null;
+        this.commit();
+        return subject.handle;
+      },
       onCommit: () => this.commit(),
       samplingWidgets: this.widgets,
       onWidgetChange: this.onWidgetChange,

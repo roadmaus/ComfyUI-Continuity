@@ -595,9 +595,9 @@ CAST_NOTE = (
     "`<Subject N>` and its own line in `retention_analysis`. So do not define "
     "them and do not analyse them — write neither of those two sections, and "
     "write no `<Subject N>` label of your own. What you write instead is the "
-    "name: `@anna`, in the shot where she appears, exactly as you would write a "
+    "name: `@anna`, in the shot where they appear, exactly as you would write a "
     "file's handle. Do not also name the files behind a subject — they are "
-    "cited inside her definition already, and naming them again tells the model "
+    "cited inside their definition already, and naming them again tells the model "
     "the same thing twice in two voices."
 )
 
@@ -1099,8 +1099,8 @@ def uncited(text, handles, labels, cast=()):
     body that never says `@img-1` about its own start frame is correct.
     """
     written_handles = set(HANDLE_RE.findall(text))
-    # Writing `@anna` cites every file she is made of: they were pulled into
-    # this generation *because* she was cited, and the rewrite naming her is the
+    # Writing `@anna` cites every file they are made of: they were pulled into
+    # this generation *because* they were cited, and the rewrite naming them is the
     # citation that keeps them there. Reporting them as unmentioned would be
     # asking for exactly the doubled naming `CAST_NOTE` forbids.
     for subject in cast or ():

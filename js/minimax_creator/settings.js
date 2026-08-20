@@ -397,7 +397,7 @@ class SettingsPage {
     ];
     return [this.section("Nodes", "Reference scopes in the prompt",
       "H3 has no reference-conditioning switch — the DiT is handed the same tensor "
-      + "whatever a chip says, so 'camera only' or 'her face, not her background' is "
+      + "whatever a chip says, so 'camera only' or 'their face, not their background' is "
       + "prose or it is nothing. This decides whether the compiler writes that prose "
       + "itself, or leaves it to Refine.",
       [

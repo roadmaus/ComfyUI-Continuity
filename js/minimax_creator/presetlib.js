@@ -25,10 +25,17 @@
 // style is a thing a preset can be *of*, applicable to all three nodes and
 // capturable off none of them. The module that builds those rows is imported the
 // first time the tab is opened, and never at boot.
+//
+// **The Cast tab is a roster.** Its rows are people rather than setups — one
+// member each, their pictures named rather than handled, so casting them into a
+// piece attaches the files as it goes. Nothing is captured off a node *here*:
+// somebody is kept from the star on their own card on the cast shelf, which is
+// where they are being looked at, and this tab is where they are found again. See
+// `presets.captureSubject`.
 
 import { el, icon, mountOverlay } from "./dom.js";
 import { t } from "./i18n.js";
-import { renderMeta, stillUrl } from "./api.js";
+import { renderMeta, stillUrl, viewUrl } from "./api.js";
 import { openPicker } from "./picker.js";
 import { BUILTIN } from "./presets/builtin.js";
 import * as P from "./presets.js";
@@ -49,11 +56,28 @@ const PAGE_SIZE = 60;
  *   `{scope, label, capture(), apply(body, keys, fromScope), arch()}`. Null opens
  *   the library read-only, which is what the node context menu does when there is
  *   nothing sensible to apply to.
+ * @param {string} [options.scope]  which tab to open on, where the caller knows
+ *   better than the target does — the cast shelf's own way in wants the roster,
+ *   not the piece the roster would be applied to.
  * @returns {Promise<void>}
  */
 export function openPresetLibrary(options) {
   return new Promise((resolve) => new PresetLibrary(options, resolve).mount());
 }
+
+/** What stands in for a face on a member kept in words alone. Follows `takes`,
+ *  the same four `cast.js` draws — a person glyph over a described loft says the
+ *  wrong thing. */
+const CAST_GLYPH = { person: "face", object: "weights", scene: "image", style: "effect" };
+
+/** What each file lends them, as the caption under it. The shelf's own four
+ *  answers, shortened — a caption is read beside the picture it belongs to, so
+ *  it can say "voice" where a menu row has to say the whole sentence. These are
+ *  `ROLES[].label` in `cast.js`, which is the row of words this pack already
+ *  uses for the same four answers. */
+const CAST_SLOT_LABEL = {
+  from: "looks", motion: "moves", voice: "voice", replaces: "their place",
+};
 
 /** mm:ss, which is how a length is read off a strip. */
 function clock(seconds) {
@@ -62,12 +86,14 @@ function clock(seconds) {
 }
 
 class PresetLibrary {
-  constructor({ target = null }, resolve) {
+  constructor({ target = null, scope = null }, resolve) {
     this.target = target;
     this.resolve = resolve;
     // Opens on the scope the node can actually take, because that is what you
-    // came for. The tabs are still there to browse the rest.
-    this.scope = target?.scope ?? "piece";
+    // came for — unless the caller asked for a tab by name, which is what a
+    // "From the library" button on a shelf is doing. The tabs are still there to
+    // browse the rest.
+    this.scope = scope ?? target?.scope ?? "piece";
     this.query = "";
     this.shelf = SHELF_ALL;
     this.rows = [];
@@ -151,7 +177,14 @@ class PresetLibrary {
    */
   renderBar() {
     const catalogue = this.scope === "style";
-    this.search.placeholder = catalogue ? t("Search styles…") : t("Search presets…");
+    const roster = this.scope === "cast";
+    this.search.placeholder = catalogue
+      ? t("Search styles…")
+      : roster ? t("Search the cast…") : t("Search presets…");
+    // Nothing on the Cast tab is captured off a node, so the two verbs that read
+    // one are gone rather than dimmed: a member is kept from the ★ on their own
+    // card, and a render holds a workflow rather than a person. Import stays —
+    // a roster is exactly the thing you carry between machines.
     this.bar.replaceChildren(this.search, ...(catalogue ? [] : [
       el("button", {
         class: "mmc-organize",
@@ -162,14 +195,14 @@ class PresetLibrary {
       // file rather than a node, so it works in the read-only library the
       // context menu opens — and on a machine whose renders came from somewhere
       // else entirely.
-      el("button", {
+      ...(roster ? [] : [el("button", {
         class: "mmc-organize",
         title: t("Take a preset from the workflow embedded in a finished render"),
         onclick: () => this.saveFromRender(),
-      }, [icon("gallery", 14), el("span", { text: t("From a render") })]),
+      }, [icon("gallery", 14), el("span", { text: t("From a render") })])]),
       // Absent rather than disabled where there is nothing to save: the library
       // opened from a context menu has no node behind it.
-      ...(this.target ? [el("button", {
+      ...(this.target && !roster ? [el("button", {
         class: "mmc-upload",
         text: t("+  Save current setup"),
         onclick: () => this.saveCurrent(),
@@ -343,6 +376,10 @@ class PresetLibrary {
     if (this.query) return t("Nothing here matches “{query}”.", { query: this.query });
     if (this.shelf === SHELF_FAV) return t("No starred presets yet. The star on a card puts it here.");
     if (this.scope === "style") return t("The style atlas could not be read.");
+    if (this.scope === "cast") {
+      return t("Nobody kept yet. Cast somebody on a node, then press the ★ on their "
+             + "card to keep them here — they come back with their pictures.");
+    }
     if (this.target?.scope === this.scope) {
       return t("No presets yet. Set this node up the way you want it, then Save current setup.");
     }
@@ -360,18 +397,24 @@ class PresetLibrary {
     // opening clauses are the name and the rest of the sentence is set under it,
     // so the whole thing is readable and no half of it is printed twice.
     const style = row.scope === "style";
+    // A member's card carries no chips either, and for the style card's reason:
+    // "cast" under every row of a roster says nothing. Their name is a handle
+    // rather than a title, so it is written the way it is written in a prompt —
+    // with the @ on it, in the face the prompt box uses.
+    const cast = row.scope === "cast";
     const card = el("button", {
       class: "mmc-preset-card",
       "aria-selected": this.selected?.id === row.id,
       "data-builtin": row.builtin && !style ? "" : null,
       "data-style": style ? "" : null,
+      "data-cast": cast ? "" : null,
       onclick: () => this.select(row),
     }, [
       this.renderHero(row),
-      el("p", { class: "mmc-preset-name", text: row.name }),
+      el("p", { class: "mmc-preset-name", text: cast ? `@${row.name}` : row.name }),
       ...(style && row.rest ? [el("p", { class: "mmc-style-rest", text: row.rest })] : []),
       el("p", { class: "mmc-preset-facts", text: this.factsLine(row) }),
-      ...(style ? [] : [el("div", { class: "mmc-preset-chips" }, [
+      ...(style || cast ? [] : [el("div", { class: "mmc-preset-chips" }, [
         ...(row.sections ?? []).map((key) => el("span", {
           class: `mmc-preset-chip mmc-tag-${P.SECTION[key]?.hue ?? 0}`,
           text: t(P.SECTION[key]?.label ?? key).toLowerCase(),
@@ -417,6 +460,23 @@ class PresetLibrary {
       if (more.length) hero.append(el("em", { class: "mmc-style-more", text: `+${more.length}` }));
       return hero;
     }
+    // A member's picture is one of their own references — an *input* file, not a
+    // render — so it is addressed directly rather than through the still route.
+    // A cover set by hand still wins: somebody who picked a frame of them walking
+    // picked it because it is the better likeness.
+    if (row.scope === "cast" && !row.cover) {
+      const hero = el("div", { class: "mmc-preset-hero mmc-cast-hero" });
+      if (row.portrait) {
+        hero.append(el("img", {
+          class: "mmc-preset-cover",
+          onerror: (event) => { event.target.remove(); hero.append(this.renderCastGlyph(row)); },
+          src: viewUrl(row.portrait, { preview: true }), alt: "", loading: "lazy",
+        }));
+      } else {
+        hero.append(this.renderCastGlyph(row));
+      }
+      return hero;
+    }
     const cover = stillUrl(row.cover);
     const hero = el("div", { class: "mmc-preset-hero", "data-cover": cover ? "" : null });
     if (cover) {
@@ -434,6 +494,9 @@ class PresetLibrary {
         src: cover, alt: "", loading: "lazy",
       }));
     }
+    // A member with a cover is their cover and nothing else — there is no lane
+    // behind a person to draw under it.
+    if (row.scope === "cast") return hero;
     if (row.scope === "prestage") {
       if (!cover) hero.append(this.renderCanvasFigure(row));
       return hero;
@@ -444,6 +507,13 @@ class PresetLibrary {
     }
     hero.append(this.renderLane(row, { pictured: !cover }));
     return hero;
+  }
+
+  /** Their glyph, where no picture of them exists — a member kept in words alone,
+   *  or one whose file has since been deleted off this machine. */
+  renderCastGlyph(row) {
+    return el("div", { class: "mmc-cast-hero-blank" },
+              [icon(CAST_GLYPH[row.facts?.takes ?? "person"] ?? "face", 26)]);
   }
 
   renderLane(row, { pictured }) {
@@ -509,6 +579,9 @@ class PresetLibrary {
 
   factsLine(row) {
     const facts = row.facts ?? {};
+    // What they are, then what they were built out of. Shared with the `@` menu,
+    // which offers the same people mid-sentence — see `presets.castFactsLine`.
+    if (row.scope === "cast") return P.castFactsLine(facts);
     if (row.scope === "style") {
       const clips = facts.clips ?? 0;
       return [facts.category,
@@ -602,12 +675,19 @@ class PresetLibrary {
             onchange: (event) => this.rename(row, event.target.value),
           }),
       this.renderMeta(row),
+      ...(row.scope === "cast" ? [this.renderCastBody(row)] : []),
       el("div", { class: "mmc-preset-rows" }, this.renderSectionRows(row)),
       ...(this.target ? [el("button", {
         class: "mmc-preset-apply",
         disabled: !applicable || this.busy,
+        // A member is cast, not applied. The verb is the one the shelf uses for
+        // the same act, and it says where they land — which is the question
+        // somebody with two nodes open actually has.
         text: applicable
-          ? t("Apply to {label} ({count})", { label: this.target.label, count: applicable })
+          ? (row.scope === "cast"
+              ? t("Cast @{handle} into {label}",
+                  { handle: this.body?.cast?.handle ?? row.name, label: this.target.label })
+              : t("Apply to {label} ({count})", { label: this.target.label, count: applicable }))
           : t("Nothing here fits this node"),
         onclick: () => this.apply(row),
       })] : []),
@@ -675,6 +755,41 @@ class PresetLibrary {
         t("Style Atlas by hoodtronik · dataset {dataset} by ostris",
           { dataset: this.atlas?.dataset ?? "minimax_h3_1k" }) }),
     );
+  }
+
+  /**
+   * Who they are, in the inspector: their references at a size you can recognise
+   * somebody at, each captioned with what it lends them, and their description
+   * under them.
+   *
+   * The captions are the panel's argument. Four thumbnails of the same person say
+   * nothing about why there are four; "their looks / their looks / they move like
+   * this / this is their voice" is the definition itself, written out — and it is
+   * the thing to check before casting them into a piece that already has a
+   * different clip doing their movement.
+   */
+  renderCastBody(row) {
+    const member = this.body?.cast ?? {};
+    const files = member.files ?? [];
+    const description = String(member.description ?? "").trim();
+    return el("div", { class: "mmc-cast-insp" }, [
+      ...(files.length ? [el("div", { class: "mmc-cast-insp-files" }, files.map((file) =>
+        el("figure", {}, [
+          (file.kind ?? "image") === "image"
+            ? el("img", {
+                onerror: (event) => event.target.replaceWith(icon("image", 18)),
+                src: viewUrl(file.filename, { preview: true }), alt: "", loading: "lazy",
+              })
+            : el("span", { class: "mmc-cast-insp-glyph" },
+                 [icon(file.kind === "audio" ? "audio" : "video", 18)]),
+          el("figcaption", { text: t(CAST_SLOT_LABEL[file.slot] ?? file.slot) }),
+        ])))] : []),
+      ...(description ? [el("p", { class: "mmc-cast-insp-desc", text: description })] : []),
+      ...(files.length || description ? [] : [el("p", {
+        class: "mmc-preset-insp-hint",
+        text: t("Nothing behind them — they are a name and nothing else."),
+      })]),
+    ]);
   }
 
   renderMeta(row) {
@@ -773,6 +888,15 @@ class PresetLibrary {
         const seams = segments.filter((segment) => segment.continue).length;
         return [t(segments.length === 1 ? "{count} card" : "{count} cards", { count: segments.length }),
                 seams ? t("{count} continuations", { count: seams }) : null].filter(Boolean).join(" · ");
+      }
+      case "cast": {
+        const member = body.cast ?? {};
+        const files = (member.files ?? []).length;
+        return [
+          `@${member.handle ?? "subject"}`,
+          t(files === 1 ? "{count} file" : "{count} files", { count: files }),
+          t("added to the cast"),
+        ].join(" · ");
       }
       case "shot": {
         const shot = body.shot ?? {};

@@ -276,6 +276,43 @@ export const css = `
   font-size: 9.5px; line-height: 1.6; color: var(--mmc-off);
 }
 
+/* ---- the Cast tab -------------------------------------------------------- */
+
+/* A roster card is a portrait, so its hero is taller than a strip's band and its
+   picture is framed rather than filled edge to edge: what you are reading off it
+   is a face, and a face wants the head-room a 96px letterbox crops off. */
+.mmc-preset-card[data-cast] .mmc-preset-hero { height: 124px; }
+.mmc-cast-hero { background: var(--mmc-surface-3); }
+.mmc-cast-hero-blank {
+  position: absolute; inset: 0; display: flex; align-items: center;
+  justify-content: center; color: var(--mmc-off);
+}
+/* Their name is a handle — the token you type into a sentence — so it is set in
+   the face the prompt box sets handles in, at the size a card's title wants. */
+.mmc-preset-card[data-cast] .mmc-preset-name {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 14px; font-weight: 500; padding-right: 22px;
+}
+
+/* Their references, in the inspector: what they are made of, captioned with what
+   each one lends them. The captions are the panel's argument — four pictures of
+   the same person say nothing about why there are four. */
+.mmc-cast-insp { display: flex; flex-direction: column; gap: 9px; }
+.mmc-cast-insp-files { display: flex; flex-wrap: wrap; gap: 7px; }
+.mmc-cast-insp-files figure { margin: 0; width: 66px; }
+.mmc-cast-insp-files img, .mmc-cast-insp-glyph {
+  width: 66px; height: 66px; object-fit: cover; display: flex;
+  align-items: center; justify-content: center; color: var(--mmc-dim);
+  border-radius: 8px; background: var(--mmc-surface-3);
+}
+.mmc-cast-insp-files figcaption {
+  font-size: 9.5px; line-height: 1.35; color: var(--mmc-off);
+  text-align: center; margin-top: 3px;
+}
+.mmc-cast-insp-desc {
+  margin: 0; font-size: 12px; line-height: 1.55; color: var(--mmc-dim);
+}
+
 /* ---- the save sheet ------------------------------------------------------ */
 
 .mmc-preset-save { display: flex; flex-direction: column; gap: 14px; padding: 20px 22px; }

@@ -211,6 +211,14 @@ export const SECTIONS = [
     key: "shot", label: "Timing & seam", hue: 1,
     hint: "How long this card runs, and what happens in front of it.",
   },
+  // Somebody, rather than a setting. The one section whose files are named
+  // rather than handled: a cast member is kept so they can walk into a piece they
+  // were never attached to, and a handle means nothing over there. See
+  // `captureSubject`.
+  {
+    key: "cast", label: "Cast", hue: 6,
+    hint: "One cast member, their references, and what they take from them.",
+  },
   // The one section no capture produces. A style comes from the shipped atlas
   // rather than off a node, and it is the only section that *edits* the field it
   // lands on instead of replacing it — see `leadWithStyle`. Hue 7 is the one
@@ -226,17 +234,23 @@ export const SECTION = Object.fromEntries(SECTIONS.map((s) => [s.key, s]));
 /** Which sections a scope can hold at all. A shot has no canvas and no weights —
  *  the piece owns both — and only a piece has a strip. */
 export const SCOPE_SECTIONS = {
-  piece: ["look", "weights", "speed", "prompt", "loras", "refs", "strip", "style"],
+  piece: ["look", "weights", "speed", "prompt", "loras", "refs", "strip", "style", "cast"],
   shot: ["prompt", "refs", "loras", "shot", "speed", "style"],
   prestage: ["look", "weights", "speed", "prompt", "loras", "refs", "style"],
   // A style is a source and never a target: you apply one to a node, and there
   // is no node a style could be captured off. It is the one scope whose tab is a
   // catalogue rather than a shelf of your own work.
   style: ["style"],
+  // A cast member is a source and a target both — kept from a node's own shelf,
+  // applied to any piece. What they cannot be is a *setup*: their tab holds one
+  // person per row rather than one node per row, which is why they are a scope of
+  // their own and not an eighth section of a piece.
+  cast: ["cast"],
 };
 
-export const SCOPES = ["piece", "shot", "prestage", "style"];
-export const SCOPE_LABEL = { piece: "Piece", shot: "Shot", prestage: "Pre-stage", style: "Style" };
+export const SCOPES = ["piece", "shot", "prestage", "cast", "style"];
+export const SCOPE_LABEL = { piece: "Piece", shot: "Shot", prestage: "Pre-stage",
+                             cast: "Cast", style: "Style" };
 
 /**
  * Whether one section of a preset can land on a target of another scope, and why
@@ -250,6 +264,11 @@ export function crossable(key, from, to, { arch = null, targetArch = null } = {}
   if (!SCOPE_SECTIONS[to]?.includes(key)) {
     if (key === "strip") return { ok: false, why: "Only a piece has a strip." };
     if (key === "shot") return { ok: false, why: "Only a card has a duration and a seam." };
+    if (key === "cast") {
+      return { ok: false, why: to === "shot"
+        ? "A cast belongs to the piece, not to one shot — apply them from the piece's own Presets."
+        : "Only a piece has a cast." };
+    }
     if (key === "look" && to === "shot") return { ok: false, why: "The piece owns the canvas, not the shot." };
     if (key === "weights" && to === "shot") return { ok: false, why: "The piece owns the weights, not the shot." };
     return { ok: false, why: "Not something this node holds." };
@@ -381,6 +400,116 @@ export function capturePreStage(state, io) {
       refs: blob.refs ?? [],
     },
   };
+}
+
+// ---- capture one cast member ------------------------------------------------
+//
+// The other kind of thing worth keeping. Everything above this line is a *node*
+// set up a certain way; a cast member is a person, and the reason to keep them is
+// that they have to be the same person in a piece you have not written yet.
+//
+// **Their files are named, not handled.** Everywhere else in this pack a subject
+// cites `@img-2`, and that handle is a fact about one node's attachment list —
+// carried into another piece it points at nothing, or worse, at somebody else's
+// picture. So what is stored is the filename, and applying them is what attaches
+// the file and hands out the handle. That is the whole difference between this
+// section and `refs`, and it is why they are a scope of their own.
+//
+// The slot rides with each file because it is the half a filename cannot say: the
+// same clip is their movement on one card and the place they take on the next.
+
+/** The four slots a file can sit in behind a subject, in citation order.
+ *  Mirrors `ROLES` in `cast.js` and `subjects.Subject`. */
+export const SUBJECT_SLOTS = ["from", "motion", "voice", "replaces"];
+
+/** What of an asset row travels with a cast member. The handle is deliberately
+ *  not in it — see above — and neither is `role`, which is `reference` for
+ *  everything a subject can be built out of. */
+function storedFile(asset, slot) {
+  return {
+    slot,
+    filename: asset.filename,
+    kind: asset.kind ?? "image",
+    ...(asset.track ? { track: asset.track } : {}),
+    ...(asset.ref_size ? { ref_size: asset.ref_size } : {}),
+    ...(asset.trim ? { trim: asset.trim } : {}),
+  };
+}
+
+/**
+ * One subject as a preset body, against the files they are built out of *here*.
+ *
+ * A handle they claim that is not attached any more is dropped rather than
+ * carried: the library is where they are correct by definition, and a member who
+ * arrived with a reference to a file nobody has is a card that cannot queue on
+ * every machine they land on.
+ */
+export function captureSubject(subject, assets) {
+  const byHandle = new Map((assets ?? []).map((asset) => [asset.handle, asset]));
+  const files = [];
+  for (const handle of subject.from ?? []) {
+    const asset = byHandle.get(handle);
+    if (asset?.filename) files.push(storedFile(asset, "from"));
+  }
+  for (const slot of ["motion", "voice", "replaces"]) {
+    const asset = byHandle.get(subject[slot]);
+    if (asset?.filename) files.push(storedFile(asset, slot));
+  }
+  return {
+    data: {
+      cast: {
+        handle: subject.handle || "subject",
+        takes: subject.takes ?? "person",
+        ...(subject.description ? { description: subject.description } : {}),
+        ...(subject.replaces_what ? { replaces_what: subject.replaces_what } : {}),
+        ...(subject.relationship ? { relationship: subject.relationship } : {}),
+        files,
+      },
+    },
+    cover: null,
+    defaultName: subject.handle || "",
+  };
+}
+
+/**
+ * What a kept member is made of, in one line: what they are, then what is behind
+ * them. Off the index row's `facts`, so it costs nothing to draw.
+ *
+ * Here rather than in the library because two surfaces read it — the roster card
+ * and the `@` menu's own row, which offers them mid-sentence — and a second
+ * implementation of "person · 2 pictures · voice" would drift from this one.
+ */
+export function castFactsLine(facts = {}) {
+  const pictures = facts.pictures ?? 0;
+  return [
+    t(facts.takes ?? "person"),
+    pictures
+      ? t(pictures === 1 ? "{count} picture" : "{count} pictures", { count: pictures })
+      : null,
+    facts.motion ? t("moves") : null,
+    facts.voice ? t("voice") : null,
+    facts.replaces ? t("their place") : null,
+    !pictures && !facts.motion && !facts.voice && !facts.replaces && facts.described
+      ? t("described") : null,
+  ].filter(Boolean).join(" · ");
+}
+
+/**
+ * Keep one subject in the roster, as they stand on this node.
+ *
+ * Kept *over* a member of the same name rather than beside them. The star on their
+ * card is pressed twice for one reason — they have changed since the last time,
+ * another picture, a voice — and a library that answered that with a second
+ * @anna would make the roster useless at exactly the point it started being
+ * used. A name is who somebody is here; there is one of them.
+ */
+export async function keepSubject(subject, assets) {
+  const captured = captureSubject(subject, assets);
+  const name = captured.defaultName || t("Untitled preset");
+  const standing = (await listPresets()).find(
+    (row) => row.scope === "cast" && !row.builtin && row.name === name);
+  if (standing) return replaceBody(standing.id, { data: captured.data, scope: "cast" });
+  return savePreset({ name, scope: "cast", data: captured.data });
 }
 
 // ---- capture from a render --------------------------------------------------
@@ -573,6 +702,18 @@ export function canvasOf(body) {
 /** The facts line, which is instrument reading rather than prose — the library
  *  sets it in a monospace face for exactly that reason. */
 export function factsOf(body, scope) {
+  if (scope === "cast") {
+    const member = body.cast ?? {};
+    const files = member.files ?? [];
+    return {
+      takes: member.takes ?? "person",
+      pictures: files.filter((file) => file.slot === "from").length,
+      motion: files.some((file) => file.slot === "motion"),
+      voice: files.some((file) => file.slot === "voice"),
+      replaces: files.some((file) => file.slot === "replaces"),
+      described: Boolean(String(member.description ?? "").trim()),
+    };
+  }
   if (scope === "style") {
     const style = body.style ?? {};
     return { category: style.category ?? "", clips: (style.clips ?? []).length };
@@ -625,6 +766,14 @@ export function describe(data, scope, { cover = null } = {}) {
   // A style's pictures are files this pack ships, not renders on this machine,
   // so they are plain URLs rather than the `{path, kind}` rows `stillUrl`
   // resolves through a route. `stylelib.js` puts them on the row itself.
+  // Their face is one of their own pictures, addressed as an input file — there is
+  // no render behind a cast member and no output folder to look in. Where they are
+  // words alone there is nothing to show, and the card draws their glyph instead.
+  if (scope === "cast") {
+    const still = (data.cast?.files ?? []).find(
+      (file) => file.slot === "from" && (file.kind ?? "image") === "image");
+    return { facts, portrait: still?.filename ?? null, frames: [] };
+  }
   if (scope === "style") return { facts, frames: [] };
   if (scope === "prestage") return { facts, canvas: canvasOf(data), frames: [] };
   if (scope === "shot") {
@@ -766,6 +915,107 @@ function rehandle(assets, target) {
   return out;
 }
 
+/**
+ * A free name for somebody arriving from the library.
+ *
+ * Two things can be in the way. Another subject of that name is the ordinary
+ * one — cast @anna twice and the second is @anna_2, because two subjects called
+ * the same thing is a piece where `@anna` means neither. A *file* of that name
+ * is the rarer one and matters just as much: one @ means one thing, and
+ * `subjectProblem` refuses a subject that shadows a handle.
+ */
+function freeSubjectHandle(wanted, timeline) {
+  const taken = new Set([
+    ...(timeline.subjects ?? []).map((subject) => subject.handle),
+    ...(timeline.assets ?? []).map((asset) => asset.handle),
+    // The shots' own attachments as well as the pool: on a piece of one shot
+    // that is where their pictures just landed.
+    ...(timeline.segments ?? []).flatMap((segment) => (segment.assets ?? [])
+      .map((asset) => asset.handle)),
+  ]);
+  const base = S.SUBJECT_HANDLE_RE.test(wanted) ? wanted : "subject";
+  let handle = base;
+  for (let n = 2; taken.has(handle); n += 1) handle = `${base}_${n}`;
+  return handle;
+}
+
+/**
+ * Walk one stored cast member into a piece, files and all.
+ *
+ * The one section that *adds* rather than replaces. Every other section owns its
+ * fields outright — applying `look` puts a whole canvas back — but a cast is a
+ * list of people and casting somebody has never meant dismissing everybody else.
+ *
+ * **Their files attach where a file attaches.** A picture of Anna arriving with
+ * them is an ordinary image reference and shows up in the reference row as one,
+ * under `img-2`, beside anything else attached — because that is what it is, and
+ * because a file the node holds and never shows is a file nobody can size, trim
+ * or take off again.
+ *
+ * Which list is *the* list depends on the piece, and on nothing else:
+ *
+ * - **One shot.** The shot's own attachments. A piece of one shot has no pool
+ *   worth the name — its face draws that shot's references and nothing else — so
+ *   a file put in the pool would be attached, paid for, and invisible.
+ * - **A strip.** The piece's reference pool, which is the one list several cards
+ *   can cite. A subject lives on the piece; their files cannot live on one card of
+ *   it and be there for the rest.
+ *
+ * A file already attached is *used* rather than attached twice — the same
+ * picture under two handles is two references to the model and half a wasted
+ * budget.
+ */
+export function addSubjectToPiece(stored, timeline) {
+  if (!stored) return null;
+  if (!Array.isArray(timeline.assets)) timeline.assets = [];
+  if (!Array.isArray(timeline.subjects)) timeline.subjects = [];
+  const single = (timeline.segments ?? []).length === 1;
+  const host = single ? timeline.segments[0] : timeline;
+  if (!Array.isArray(host.assets)) host.assets = [];
+  const slots = { from: [] };
+  for (const file of stored.files ?? []) {
+    if (!file?.filename) continue;
+    const kind = file.kind ?? "image";
+    // Anywhere the piece already holds it — the shot's row or the pool, since a
+    // subject may cite either and neither is worth a second copy.
+    let asset = [...host.assets, ...(single ? timeline.assets : [])].find(
+      (entry) => entry.filename === file.filename && entry.kind === kind);
+    if (!asset) {
+      asset = {
+        handle: single ? S.nextHandle(host, kind) : S.nextPoolHandle(timeline),
+        kind,
+        role: "reference",
+        filename: file.filename,
+        ref_size: file.ref_size ?? "max",
+        ...(file.track ? { track: file.track } : {}),
+        ...(file.trim ? { trim: file.trim } : {}),
+      };
+      host.assets.push(asset);
+    }
+    if (file.slot === "from") slots.from.push(asset.handle);
+    else if (SUBJECT_SLOTS.includes(file.slot)) slots[file.slot] = asset.handle;
+    // Narrowed to what the slot says, exactly as hanging it on them by hand
+    // would — a picture that arrives as their looks is a person reference and has
+    // to say so. Over the default only; a file the piece already held under a
+    // narrowing somebody chose keeps it. See `state.inheritTake`.
+    S.inheritTake({ ...stored, takes: stored.takes ?? "person" }, file.slot, asset);
+  }
+  const subject = {
+    handle: freeSubjectHandle(stored.handle || "subject", timeline),
+    takes: S.SUBJECT_TAKES.includes(stored.takes) ? stored.takes : "person",
+    from: slots.from,
+    ...(slots.motion ? { motion: slots.motion } : {}),
+    ...(slots.voice ? { voice: slots.voice } : {}),
+    ...(slots.replaces ? { replaces: slots.replaces } : {}),
+    ...(stored.description ? { description: String(stored.description) } : {}),
+    ...(stored.replaces_what ? { replaces_what: String(stored.replaces_what) } : {}),
+    ...(S.SUBJECT_MARKERS.includes(stored.relationship)
+      ? { relationship: stored.relationship } : {}),
+  };
+  timeline.subjects.push(subject);
+  return subject;
+}
+
 /** Write the speed row through the widget accessor. Names the target does not
  *  declare are skipped by `widgetIO.set` itself, which is what makes one stored
  *  row applicable to a pre-stage's shorter one. */
@@ -824,6 +1074,11 @@ export function applyToPiece(body, keys, timeline, io, { from = "piece" } = {}) 
       role: "reference",
       handle: asset.handle ?? `ref-${index + 1}`,
     }));
+  }
+  if (chosen.has("cast")) {
+    // Added, never assigned — see `addSubjectToPiece`. Applied after `refs`, so
+    // a preset carrying both finds the pool it is meant to look in.
+    addSubjectToPiece(body.cast, timeline);
   }
   if (chosen.has("strip")) {
     const strip = body.strip ?? {};

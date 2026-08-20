@@ -1,5 +1,74 @@
 # Changelog
 
+## Unreleased
+
+**The cast is "they".** A subject is whoever you say it is — a person, an object,
+a place, a look — and every sentence around it was written as though each one
+were the same particular person, in gendered pronouns nobody typed. That is the
+tool deciding something it has no business deciding, and it is wrong about three
+of the four things a subject can be. The shelf, the library, the `@`
+menu, the refiner's own instructions and all three translations say *they* now, in
+the copy and in the comments both, and `tests/test_neutral_copy.py` fails the
+build if a gendered pronoun is written back into any of the four languages. The
+two lines it allows through are quotations — the example of who a clip's occupant
+gets replaced by, and MiniMax's own guide.
+
+**A cast you can keep.** A subject was built by hand on every node they appeared
+on, which is how the same person becomes three slightly different people across a
+project. The **★** on their card writes them into a cast library — their name, their
+words, their retention marker and their references *by filename* — and **From the
+library** on the shelf head brings them back into a piece that never had their
+pictures attached. Their files attach as they land, as *ordinary references*: an
+image of them is an image reference in the reference row under `img-2`, sizeable
+and removable like anything else you attached. On a piece of one shot they land
+on that shot; on a strip they go to the piece's pool, which is the one list
+several cards can cite. A file already attached is used rather than attached
+twice.
+
+They have a tab of their own in the preset library, the fourth one: a roster, one
+card per person, their own picture as the hero and *person · 2 pictures · voice*
+under it. Select them and the panel shows every reference at a size you can
+recognise somebody at, captioned with what it lends them, over **Cast @anna into
+this piece**. Nothing is captured off a node there — a person is kept from the
+card you are looking at them on — so the tab has no *Save current setup* and no
+*From a render*, while Import and Export work as they do everywhere else.
+
+Keeping them twice keeps them *over* the standing copy: a name is who somebody is,
+and there is one of them. Casting them into a piece that already has an `@anna`
+lands them as `@anna_2` instead, because two subjects of one name is a piece where
+the name means neither.
+
+**And the way in is the sentence.** Type `@ann` in any prompt and the roster is
+in the menu under **Cast library**, below whoever is already cast — their own face
+on the row, and *person · 2 pictures · voice* under their name. Picking them casts
+them and writes their name in one press: their files attach as references, and their
+name is written in at the `@` you typed. The name goes in by character offset
+rather than by caret — casting them rebuilds the box the caret was sitting in, and
+a caret does not survive that where an offset does. Somebody already cast here is
+left out of that half of the menu — they are in the list above under the name they
+actually have. A card's prose offers them too, and casts them into the piece the card
+belongs to; a PreStage has no piece behind its prompt, so it is offered nobody.
+
+**A file hung on somebody is narrowed to what they are.** A picture given to @anna
+as their looks was still scoped `full` — "what the target video takes from it is
+what the picture actually shows" — which is the opposite of what a person
+reference means, and it was a second setting nobody knew they had to change. It
+follows the slot now: their looks take what they are (person, object, scene or
+style), their movement clip takes `motion`, their voice takes `voice`, and the clip
+they take somebody's place in takes `edit`. A dial set by hand is left alone, and
+the only thing that moves one afterwards is changing what *they* are — their pictures
+follow them from `person` to `scene` and a hand-set dial still does not. A piece
+written before this is repaired as it loads.
+
+**The shelf is a call sheet now.** Every member drew a full card, so a cast of six
+was several screens of fields, of which five sets were being scrolled past rather
+than read — on a node face, a 300px scrollport holding one and a half people. A
+member is a *line* until you open them: their face, their name, what they are made of,
+and where they walk on, which is the whole of what a cast gets checked for. One is
+open at a time, and the open one is the card that was always there. What is wrong
+with somebody is on their shut line too, in red, so a card that cannot queue is
+visible without opening anybody.
+
 ## 2.10
 
 **A turbo lead-in.** Every H3 distillation LoRA trades the same thing away: the
@@ -59,8 +128,8 @@ definition sentence of its own — it is cited inside the subject that claims it
 which is the guide's rule. Refine is handed the cast pinned: it writes the film
 around your subjects and is told to define and renumber none of them.
 
-Citing a subject carries her files into that shot the way citing a piece
-reference already carried that file, so a shot that never names her costs
+Citing a subject carries their files into that shot the way citing a piece
+reference already carried that file, so a shot that never names them costs
 nothing. And a name is a citation only because it was declared: `@anna` in a
 piece with no Anna in it is prose and stays prose, so nothing already written
 changes meaning.
@@ -68,21 +137,21 @@ changes meaning.
 **The cast shelf, rebuilt, and on the node itself.** It only ever appeared in
 the Timeline window, and it refused to open at all until a reference had been
 attached — so the one prompt that most needs a cast, a text-only one where a
-name is all that keeps the same woman in shot 1 and in shot 9, could not have
+name is all that keeps the same person in shot 1 and in shot 9, could not have
 one. Cast is on the rail now, beside Add image, on every node; the same shelf is
 still in the Timeline window, and it is literally the same shelf.
 
-A subject can be a name and a description with nothing behind her, and the two
-sections she makes derivable are emitted in the base modes too — a `<Subject 1>`
+A subject can be a name and a description with nothing behind them, and the two
+sections they make derivable are emitted in the base modes too — a `<Subject 1>`
 written into a description the prompt never defines is a label pointing at
 nothing. The base form is otherwise untouched, and a piece with nobody cast
 compiles to exactly the bytes it always did.
 
-The card itself is new. What a file lends a subject — her looks, her movement,
-her voice, the place she takes — used to be four ghost chips, with the way to
+The card itself is new. What a file lends a subject — their looks, their movement,
+their voice, the place they take — used to be four ghost chips, with the way to
 add one a "+" character among them that nobody found. They are thumbnails now,
-each wearing the file's own identity hue, each badged with what it lends her,
-and one menu behind a tile moves it between the four. The card wears her hue on
+each wearing the file's own identity hue, each badged with what it lends them,
+and one menu behind a tile moves it between the four. The card wears their hue on
 its left edge, the same hue `@anna` wears as a chip in the sentence. A subject
 nobody has written into a prompt says so, and the readout that says it is the
 button that fixes it.

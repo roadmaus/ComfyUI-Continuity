@@ -3,7 +3,7 @@
 // The chip is the whole point of this UI. H3 addresses references by ordinal
 // label — <Picture 2>, <Video 1> — and getting those right by hand is the real
 // difficulty of prompting the model. Typing "@" and picking a file is how a
-// person says "use *this* one for her face" without ever seeing a label.
+// person says "use *this* one for their face" without ever seeing a label.
 //
 // The DOM is kept deliberately flat: only text nodes and chip spans, never the
 // <div>/<br> soup contenteditable produces on its own. Enter inserts a literal
@@ -13,6 +13,7 @@
 
 import { el, floatAbove, icon, keepScroll, mountOverlay } from "./dom.js";
 import { t } from "./i18n.js";
+import { castFactsLine, listPresets, loadBody } from "./presets.js";
 import { listAssets, viewUrl } from "./api.js";
 import { tagIndex } from "./state.js";
 
@@ -88,6 +89,11 @@ export class PromptBox {
    *   pool asset is, and recognised differently: a subject's name is only a
    *   citation because somebody declared it, so the chips are built from this
    *   list rather than from a shape
+   * @param {(member:object)=>string|null} [hooks.castFromLibrary]  cast one
+   *   kept member into the piece and answer with the name they landed under.
+   *   Absent where there is no piece to cast them into — a card's editor is one
+   *   shot of a piece whose cast is owned a level up — and the roster is left
+   *   out of the menu with it.
    * @param {()=>string} [hooks.attachedLabel]  what to call `getState().assets`
    *   in the menu. The timeline's global prompt is written against the piece's
    *   own pool rather than a card's attachments, and "Attached" would name it
@@ -408,6 +414,82 @@ export class PromptBox {
     return { node, start: range.startOffset - match[0].length, end: range.startOffset, query: match[1] };
   }
 
+  /**
+   * Where the typed `@query` sits in the *string* `getValue` produces, rather
+   * than in the DOM.
+   *
+   * `insertChip` works off the live selection, which is right for everything
+   * that happens in one turn of the event loop — attaching a file from this
+   * menu is a synchronous call and the caret is exactly where it was left. It is
+   * wrong for anything that has to wait: casting somebody out of the library
+   * reads their definition off disk first, and by the time that answers, the box
+   * has been rebuilt underneath — `render` calls `refresh`, `refresh` calls
+   * `build`, and every text node the caret pointed into is gone. The range then
+   * points at a detached node, the chip is inserted into nothing, and what is
+   * left on screen is the bare "@" that was typed.
+   *
+   * So the spot is measured now, as a character offset, and the name is written
+   * into the text afterwards. An offset survives a rebuild; a node does not.
+   *
+   * The walk mirrors `getValue`'s, because it is the same string being counted.
+   */
+  triggerSpot() {
+    const trigger = this.triggerRange();
+    if (!trigger) return null;
+    let at = 0;
+    let found = null;
+    const walk = (parent) => {
+      for (const node of parent.childNodes) {
+        if (found !== null) return;
+        if (node === trigger.node) { found = at + trigger.start; return; }
+        if (node.nodeType === Node.TEXT_NODE) at += node.nodeValue.length;
+        else if (node.dataset?.handle) at += node.dataset.handle.length + 1;
+        else if (node.tagName === "BR") at += 1;
+        else {
+          if (BLOCK.has(node.tagName) && at) at += 1;
+          walk(node);
+        }
+      }
+    };
+    walk(this.root);
+    return found === null ? null : { at: found, length: trigger.end - trigger.start };
+  }
+
+  /** Put `@handle ` where `spot` was, in the text. With no spot — the box was
+   *  rebuilt out from under the measurement — the name goes on the end, which is
+   *  what every other "write their name in for me" in this pack does. */
+  writeName(before, spot, handle) {
+    const text = spot
+      ? `${before.slice(0, spot.at)}@${handle} ${before.slice(spot.at + spot.length)}`
+      : `${before}${before && !/\s$/.test(before) ? " " : ""}@${handle} `;
+    this.setValue(text);
+    this.hooks.onInput(text);
+    this.placeCaret((spot ? spot.at : text.length - handle.length - 2) + handle.length + 2);
+  }
+
+  /** The caret at a character offset into the box. `setValue` builds a flat
+   *  list of text nodes and chips, so one pass over the top level finds it. */
+  placeCaret(index) {
+    let at = 0;
+    for (const node of this.root.childNodes) {
+      const length = node.nodeType === Node.TEXT_NODE
+        ? node.nodeValue.length
+        : node.dataset?.handle ? node.dataset.handle.length + 1 : 1;
+      if (node.nodeType === Node.TEXT_NODE && index <= at + length) {
+        const range = document.createRange();
+        range.setStart(node, Math.max(0, index - at));
+        range.collapse(true);
+        const selection = window.getSelection();
+        selection?.removeAllRanges();
+        selection?.addRange(range);
+        this.root.focus();
+        return;
+      }
+      at += length;
+    }
+    focusEnd(this.root);
+  }
+
   insertText(text) {
     const selection = window.getSelection();
     if (!selection?.rangeCount) return;
@@ -465,11 +547,18 @@ export class PromptBox {
     }
     this.place();
     this.renderMenu();          // attached assets are known immediately
-    try {
-      this.library = await listAssets();
-    } catch {
-      this.library = [];
-    }
+    // Two reads, both started at once and each painted as it lands. The roster
+    // is a small file in this user's own data and usually cached, so it is
+    // waited for first; the input folder is a walk of a directory and can take
+    // as long as it takes.
+    const files = listAssets().catch(() => []);
+    const roster = this.hooks.castFromLibrary
+      ? listPresets().then((rows) => rows.filter((row) => row.scope === "cast"))
+          .catch(() => [])
+      : Promise.resolve([]);
+    this.roster = await roster;
+    if (this.menu) this.renderMenu();
+    this.library = await files;
     if (this.menu) this.renderMenu();
   }
 
@@ -493,9 +582,20 @@ export class PromptBox {
     this.menu.style.top = `${Math.max(8, Math.min(top, window.innerHeight - height - 8))}px`;
   }
 
-  /** The cast first, then attached assets, then the piece's pool, then the
-   *  input folder. The cast leads because a subject is what a sentence is
-   *  usually about, and because citing one is how her files get here at all. */
+  /**
+   * The cast first, then the roster, then attached assets, the piece's pool and
+   * the input folder.
+   *
+   * The cast leads because a subject is what a sentence is usually about, and
+   * because citing one is how their files get here at all. The roster is second
+   * for the same reason a beat later: typing `@ann` in a piece that has never
+   * met Anna is somebody asking for *their*, and the answer is to cast them — with
+   * everything behind them — rather than to say the name matches nothing.
+   *
+   * Somebody already cast here is dropped from the roster half. They are in the
+   * list above under the name they actually has, and offering the kept copy
+   * beside them would be offering to cast a second Anna.
+   */
   options() {
     const state = this.hooks.getState();
     const cast = (this.hooks.getCast?.() ?? [])
@@ -521,6 +621,19 @@ export class PromptBox {
           || asset.filename.toLowerCase().includes(this.query))
         .map((asset) => ({ kind: "pool", handle: asset.handle, path: asset.filename, mediaKind: asset.kind }));
 
+    const here = new Set((this.hooks.getCast?.() ?? []).map((subject) => subject.handle));
+    // Out while references are blocked here — a start or end frame is set — for
+    // the reason the pool and the input folder are out: casting them attaches
+    // their pictures, and a keyframe shot that also carries references is a node
+    // that refuses to queue. They are still on the shelf, where the refusal can
+    // be explained.
+    const roster = this.hooks.attachBlocked("reference") ? [] : (this.roster ?? [])
+      .filter((row) => !here.has(row.name))
+      .filter((row) => !this.query
+        || row.name.toLowerCase().includes(this.query)
+        || (row.note ?? "").toLowerCase().includes(this.query))
+      .map((row) => ({ kind: "roster", handle: row.name, row }));
+
     const used = new Set(state.assets.map((a) => a.filename));
     const library = (this.library ?? [])
       .filter((row) => !used.has(row.path))
@@ -528,20 +641,21 @@ export class PromptBox {
       .slice(0, MAX_SUGGESTIONS)
       .map((row) => ({ kind: "library", path: row.path, mediaKind: row.kind, row }));
 
-    return { cast, attached, pool, library };
+    return { cast, roster, attached, pool, library };
   }
 
   renderMenu() {
     if (!this.menu) return;
-    const { cast, attached, pool, library } = this.options();
-    this.flat = [...cast, ...attached, ...pool, ...library];
+    const { cast, roster, attached, pool, library } = this.options();
+    this.flat = [...cast, ...roster, ...attached, ...pool, ...library];
     if (this.active >= this.flat.length) this.active = Math.max(0, this.flat.length - 1);
 
     // openMenu() renders once immediately and again when the library resolves,
     // and every keystroke re-renders too. Rebuilding identical rows would throw
     // away the highlight and re-fire mouseenter under a stationary pointer, so
     // only rebuild when the list actually differs.
-    const signature = this.flat.map((option) => option.handle ?? option.path).join("\u0000");
+    const signature = this.flat
+      .map((option) => `${option.kind}:${option.handle ?? option.path}`).join("\u0000");
     if (this.rows?.length && signature === this.signature) return;
     this.signature = signature;
 
@@ -552,8 +666,8 @@ export class PromptBox {
       return;
     }
 
-    // A subject's thumbnail is the first picture she is made of — the point of
-    // the row is to recognise her, and her own face does that where a glyph
+    // A subject's thumbnail is the first picture they are made of — the point of
+    // the row is to recognise them, and their own face does that where a glyph
     // cannot. Looked up through the pool because that is where a cast's files
     // live; a subject built only out of a clip or a vacancy keeps the glyph.
     const faceOf = (subject) => {
@@ -569,7 +683,11 @@ export class PromptBox {
     let index = 0;
     const row = (option) => {
       const here = index++;
-      const face = option.kind === "cast" ? faceOf(option.subject) : null;
+      // A kept member's face is in their index row: it is one of their own
+      // pictures, named at the moment they were kept, so the menu draws them
+      // without reading a body it does not otherwise need.
+      const face = option.kind === "cast" ? faceOf(option.subject)
+        : option.kind === "roster" ? option.row.portrait : null;
       const thumb = option.mediaKind === "image" || face
         ? el("img", {
             class: "mmc-mention-thumb",
@@ -577,14 +695,15 @@ export class PromptBox {
           })
         : el("span", {
             class: "mmc-mention-thumb",
-            text: option.kind === "cast" ? "☺" : option.mediaKind === "video" ? "▶" : "♪",
+            text: option.kind === "cast" || option.kind === "roster" ? "☺"
+              : option.mediaKind === "video" ? "▶" : "♪",
           });
 
       // Attached assets are known by their handle; a library file is known by
       // its name, and only earns a second line when it lives in a subfolder —
       // repeating the same string twice told the user nothing. A subject's
-      // second line is what she is, which is the whole of what the cast knows
-      // about her that her name does not say.
+      // second line is what they are, which is the whole of what the cast knows
+      // about them that their name does not say.
       const made = option.kind === "cast"
         ? (option.subject.description
            || [...(option.subject.from ?? []), option.subject.motion, option.subject.voice]
@@ -592,12 +711,16 @@ export class PromptBox {
         : null;
       const title = option.handle ? `@${option.handle}` : option.path.split("/").pop();
       const subtitle = option.kind === "cast" ? made
+        : option.kind === "roster" ? castFactsLine(option.row.facts)
         : option.handle ? option.path : (option.row?.subfolder || "");
 
       const item = el("button", {
         class: "mmc-mention-row",
         "aria-selected": here === this.active,
-        title: option.kind === "cast" ? `@${option.handle}` : option.path,
+        title: option.kind === "roster"
+          ? t("Cast @{handle} here — their references are attached as they land.",
+              { handle: option.handle })
+          : option.kind === "cast" ? `@${option.handle}` : option.path,
         onmouseenter: () => this.highlight(here),
         onclick: (event) => { event.preventDefault(); this.choose(here); },
       }, [
@@ -620,6 +743,13 @@ export class PromptBox {
     if (cast.length) {
       this.menu.appendChild(el("div", { class: "mmc-mention-head", text: t("Cast") }));
       for (const option of cast) this.menu.appendChild(row(option));
+    }
+    if (roster.length) {
+      this.menu.appendChild(el("div", {
+        class: "mmc-mention-head",
+        text: t("Cast library — cast them with their files"),
+      }));
+      for (const option of roster) this.menu.appendChild(row(option));
     }
     if (attached.length) {
       this.menu.appendChild(el("div", {
@@ -663,9 +793,32 @@ export class PromptBox {
     this.highlight((this.active + delta + this.flat.length) % this.flat.length, { scroll: true });
   }
 
-  choose(index) {
+  async choose(index) {
     const option = this.flat?.[index];
     if (!option) return;
+    if (option.kind === "roster") {
+      // Measured before anything else happens — see `triggerSpot`. Casting them
+      // attaches files and redraws the body they were cast into, and the box is
+      // rebuilt with it; a caret would not survive that and an offset does.
+      const spot = this.triggerSpot();
+      const before = this.getValue();
+      // The menu goes second: what happens next is a read and a write, and a
+      // list still standing over a sentence that is being changed reads as a
+      // list that did not take the click.
+      this.closeMenu();
+      try {
+        const body = await loadBody(option.row);
+        const member = body?.cast;
+        if (!member) return;
+        const handle = await this.hooks.castFromLibrary(member);
+        if (handle) this.writeName(before, spot, handle);
+      } catch {
+        // Their body could not be read, or the host refused them. The typed "@ann"
+        // is left exactly as it was typed, which is prose and queues as prose —
+        // nothing has been half-cast.
+      }
+      return;
+    }
     if (option.kind === "cast" || option.kind === "attached" || option.kind === "pool") {
       // Both already have a handle; for a pool asset the chip *is* the
       // attachment — the citation carries it into this generation at queue time.

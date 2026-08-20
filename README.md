@@ -107,7 +107,7 @@ you can match a reference in the prose to a picture without reading.
 
 Why this matters: H3 does not take free text. It takes a structured description
 where every reference is addressed as `<Picture 1>`, `<Video 2>`, `<Audio 1>`.
-Writing `use @img-1 for her face` assigns those labels for you, in the exact order
+Writing `use @img-1 for their face` assigns those labels for you, in the exact order
 the tokenizer expects.
 
 ### Trimming
@@ -125,7 +125,7 @@ references it silently, and **sound only** throws the picture away — which is 
 you want for a voice, a room tone, or scoring that happens to live in an mp4.
 
 Every reference also gets a scope dial. An image's reads `full · person · object ·
-scene · style`; on `person`, "her from @img-1" stops dragging that image's
+scene · style`; on `person`, "them from @img-1" stops dragging that image's
 background, palette and pose along with the face.
 
 A clip's dial takes the same four and four more, which are the roles H3's
@@ -171,49 +171,93 @@ used only to define somebody gets no picture entry of its own; it is cited
 
 So people are cast, not attached. **Cast** is on the rail beside Add image; the
 same shelf is in the Timeline window, under the piece references. Press it, give
-the subject a name, and hang files on her.
+the subject a name, and hang files on them.
 
-Each file behind her is a thumbnail on her card, badged with what it lends her.
-Click a thumbnail to change that, or to take it off; click the dashed tile to
+The shelf is a call sheet: one line each — their face, their name, what they are made
+of, and where they walk on — and the line opens into their card when you click it.
+One is open at a time, so a cast of eight is eight lines you can read at a glance
+rather than eight stacked forms you scroll past.
+
+**Hanging a file on somebody sets its scope dial.** A picture given to @anna as
+their looks *is* a person reference, so it becomes one — the dial on `@img-1` reads
+`person`, and the line the model is handed says their face, hair, build and
+clothing are retained and the picture's background, pose and palette are not. Their
+movement clip becomes `motion`, their voice `voice`, and the clip they take
+somebody's place in `edit`. The two settings were never independent; the second
+one was just being typed twice, and forgetting it told the model the opposite of
+what you meant.
+
+A dial you set by hand is yours and stays put. The only time one moves after that
+is when *they* do: change @anna from a person to a place and their pictures follow
+them from `person` to `scene` — the ones this rule set, not the ones you did. A
+piece written before this landed has their files repaired when it loads.
+
+Each file behind them is a thumbnail on their open card, badged with what it
+lends them. Click a thumbnail to change that, or to take it off; click the dashed tile to
 hang another one on, picking from what is attached or attaching something new.
 
 - **Several pictures, one person.** Four angles of the same face are one subject,
-  not four references that happen to rhyme. Files that give her looks wear no
+  not four references that happen to rhyme. Files that lend them their looks wear no
   badge — they are the common case; the badges mark the three departures from it.
-- **A face from a still, a walk from a clip.** Set one file to *she moves like
-  this* and the definition says her appearance comes from the pictures and her
+- **A face from a still, a walk from a clip.** Set one file to *they move like
+  this* and the definition says their appearance comes from the pictures and their
   motion from the clip.
-- **A voice.** *This is her voice* binds an audio reference as her voice timbre
-  and gives her a speaker ID. IDs run in cast order, so the first speaker is the
+- **A voice.** *This is their voice* binds an audio reference as their voice timbre
+  and gives them a speaker ID. IDs run in cast order, so the first speaker is the
   one at the top of the shelf.
-- **Swapping a person for a person.** *She takes somebody's place in this* names
-  a reference clip, and the box under it says who — "the man at the counter". The
+- **Swapping a person for a person.** *They take somebody's place in this* names
+  a reference clip, and the box under it says who — "the person at the counter". The
   clip's framing, camera work and action are kept; its occupant is replaced by
-  her. That is the whole gesture, and the one the guide spells as the
+  them. That is the whole gesture, and the one the guide spells as the
   `transferred` marker.
-- **Nothing behind her at all.** A name and a description is a subject too, and
+- **Nothing behind them at all.** A name and a description is a subject too, and
   it is the useful one in a prompt with no references in it: it is what keeps
-  her the same woman in shot 1 and in shot 9. Her description becomes her whole
+  them the same person in shot 1 and in shot 9. Their description becomes their whole
   definition.
 
-Then you write with her. `@anna walks in and looks at @ben` — the same `@` chip
+Then you write with them. `@anna walks in and looks at @ben` — the same `@` chip
 everything else uses, in the same menu, under **Cast**. Citing a subject is what
-carries her files into that shot, exactly as citing a piece reference carries
-that file: a shot that never names her does not pay for her pictures.
+carries their files into that shot, exactly as citing a piece reference carries
+that file: a shot that never names them does not pay for their pictures.
 
 A name is only a name because you declared it. `@anna` in a piece where nobody
 cast Anna is ordinary prose and stays that way — nothing you have already written
 changes meaning because this shelf exists.
 
-A subject nobody has written into a prompt is in no shot, and her card says so —
-click that and it writes her name in for you.
+A subject nobody has written into a prompt is in no shot, and their card says so —
+click that and it writes their name in for you.
+
+### Keeping somebody
+
+Somebody worth casting is usually worth casting again, and rebuilding them by hand
+on the next node is how a character drifts. The **★** on their open card keeps them
+in the cast library — their name, their words, their retention marker, and their files
+*by filename* rather than by handle. **From the library** at the top of the shelf
+brings them back into a piece that never had their pictures attached. Their files
+attach as they land, as ordinary references — an image reference is an image
+reference, and it appears in the reference row under `img-2` like anything else
+you added, sizeable and removable. On a piece of one shot they attach to that
+shot; on a strip they go to the piece's pool, which is the one list several cards
+can cite. A file already attached is used rather than attached twice.
+
+The shortest way back to them is not the shelf at all: type `@ann` in any prompt
+and the roster is in the menu under **Cast library**, under whoever is already
+cast. Picking them there casts them *and* writes their name — their files attach
+as references where you would have attached them by hand, and the name is written
+in at the `@` you typed. That is the whole gesture: you were writing the sentence
+they are in, and now they are in it.
+
+Their name is who they are, so keeping them twice keeps them *over* the standing copy
+rather than beside it. Casting them into a piece that already has an @anna gives
+the arrival `@anna_2` instead — two subjects of one name is a piece where the
+name means neither.
 
 What it produces is the part of the form that could not be written before. At
 queue time the compiler emits `subject_definitions` and `retention_analysis` in
 the guide's own shapes, in the reference form and in the plain modes alike — so a
 `<Subject 1>` is always defined wherever it is written. Every subject is defined
 once and its fate marked `fully_preserved`, `partially_preserved`, `transferred`
-or `reused`, with the shots she appears in read off the description. Refine is
+or `reused`, with the shots they appear in read off the description. Refine is
 handed the cast as pinned fact: it writes the film around your subjects and is told not to define or
 renumber them.
 
@@ -290,7 +334,7 @@ the workflow's.
 trained to read, using a small local vision model. The result lands in an editable
 box under the prompt — correct it, switch it off without losing it, or revert.
 
-It looks at your attached images, writes real dialogue lines instead of "she says
+It looks at your attached images, writes real dialogue lines instead of "they say
 something", always writes a soundscape, keeps quoted words exactly, and picks how
 many shots the clip holds and the second each one starts on.
 
@@ -511,6 +555,7 @@ Three things can be saved, and each knows which of them it is:
 | **piece** | a Creator, whatever is on its face | canvas, weights, the sampler row, the writing, LoRAs, the reference pool, the strip |
 | **shot** | one card off a strip | its writing, its references and LoRAs, the row it was dialled at, and how long it runs with the seam in front of it |
 | **prestage** | a PreStage | its architecture, canvas and quality, the writing, references and LoRAs, and the weights for the architecture it runs |
+| **cast** | the ★ on a cast member's card | one person — their name, their words, their retention marker and their references, named as files |
 
 Applying is per-section rather than all-or-nothing, which is the point: tick
 *look* and *speed* to drop a canvas and a step count onto a shot you have already
@@ -571,6 +616,22 @@ Presets live in ComfyUI's user data next to the picker's favourites, as one inde
 plus a file per preset. That means they follow the user rather than the workflow,
 which is why **Export** and **Import** hand the library — or one card — over as
 JSON when you move to another machine.
+
+### The cast tab
+
+The library's fourth tab is a roster rather than a shelf of setups: one card per
+person, their own picture as the hero, and *person · 2 pictures · voice* under it.
+Selecting them shows what they are made of — every reference at a size you can
+recognise somebody at, captioned with what it lends them — and **Cast @anna into
+this piece** puts them on the node with their files.
+
+Nothing is captured off a node here, so the tab has no *Save current setup* and no
+*From a render*: a person is kept from their own card, on the shelf where you are
+looking at them. Import and Export work as they do everywhere else, which is how a
+roster moves between machines.
+
+A member is refused by a card and by a PreStage, with the reason on the row —
+a cast belongs to the piece, and a pre-stage has none.
 
 ### The style atlas
 
@@ -846,6 +907,7 @@ python3 tests/test_canvas_mirror.py   # canvas.js against canvas.py
 python3 tests/test_piece_mirror.py    # an old creator_data blob lifts to one shot
 python3 tests/test_prestage_mirror.py
 python3 tests/test_cast_mirror.py     # state.js against subjects.py
+python3 tests/test_neutral_copy.py    # nobody in the cast has a gender you did not give them
 python3 tests/test_outputs_mirror.py  # outputs.js against outputs.py
 python3 tests/test_js_bodies.py       # the frontend loads and every node body mounts
 ```

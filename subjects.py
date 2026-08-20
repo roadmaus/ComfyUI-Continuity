@@ -18,7 +18,7 @@ examples say, and that a user with a cast in their head wants to say:
   - four photographs are one dog (`<Subject 2> is the fluffy white Samoyed in
     <Picture 2>, <Picture 3>, and <Picture 4>`);
   - a face comes from a still and a walk comes from a clip (`<Subject 1> is the
-    woman whose appearance comes from <Picture 1> and whose walking motion comes
+    person whose appearance comes from <Picture 1> and whose walking motion comes
     from <Video 1>`);
   - this person stands in the place of the person already in that clip, which is
     the marker `transferred` and a sentence naming who was replaced.
@@ -154,9 +154,9 @@ def parse(raw):
         # "whoever is there now, gone" is a real thing to say. The third is a
         # description, and it is what makes a cast work at all in a generation
         # that has no references: in T2VA there is no picture to point at, and
-        # "@anna is a woman in her thirties, close-cropped hair" is the whole of
+        # "@anna is a person in their thirties, close-cropped hair" is the whole of
         # what a name can mean there. That is still worth having, because it is
-        # what keeps her the same woman across nine shots.
+        # what keeps them the same person across nine shots.
         if not sources and not motion and not replaces and not description:
             raise SubjectError(
                 f"@{handle}: a subject needs something behind it — a picture or "

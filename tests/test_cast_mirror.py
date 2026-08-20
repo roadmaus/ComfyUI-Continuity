@@ -83,6 +83,54 @@ console.log(JSON.stringify({
     [...("@carol walks".matchAll(s.subjectCitationRe([{handle: "anna"}])))].map((m) => m[1]),
     s.subjectCitationRe([]) === null,
   ],
+  // ---- what a file lending itself to somebody is narrowed to ---------------
+  //
+  // Not a mirror — `subjects.py` never sees this, because by the time it does
+  // the narrowing is already a stored field on the asset. It is here because it
+  // is the other half of the same idea: the shelf says who somebody is, and the
+  // file behind her has to say the same thing to the model.
+  narrowing: (() => {
+    const image = (handle, takes) => ({ handle, kind: "image", role: "reference",
+                                        filename: `${handle}.png`, ...(takes ? { takes } : {}) });
+    const clip = (handle) => ({ handle, kind: "video", role: "reference",
+                                filename: `${handle}.mp4`, track: "picture" });
+    const sound = (handle) => ({ handle, kind: "audio", role: "reference",
+                                 filename: `${handle}.wav` });
+
+    // Her looks, her movement, her voice and the place she takes, each narrowed
+    // to the word its slot means.
+    const her = { handle: "anna", takes: "person", from: ["img-1"],
+                  motion: "vid-1", voice: "aud-1", replaces: "vid-2" };
+    const assets = [image("img-1"), clip("vid-1"), sound("aud-1"), clip("vid-2")];
+    s.inheritTakes(her, assets);
+    const slots = assets.map((a) => a.takes ?? "full").join(",");
+
+    // A narrowing somebody chose is theirs. "scene" is not what a person
+    // reference would be given, which is the point.
+    const chosen = [image("img-1", "scene")];
+    s.inheritTakes({ handle: "anna", takes: "person", from: ["img-1"] }, chosen);
+
+    // …until she stops being a person, where the narrowing this rule put there
+    // moves with her and the one somebody chose still does not.
+    const moved = [image("img-1", "person"), image("img-2", "style")];
+    s.inheritTakes({ handle: "loft", takes: "scene", from: ["img-1", "img-2"] },
+                   moved, { over: "person" });
+
+    // A blob written before any of this existed, repaired on the way in.
+    const loaded = s.parseTimeline(JSON.stringify({
+      version: 2, prompt: "@anna waits", models: {},
+      subjects: [{ handle: "anna", takes: "person", from: ["img-1"] }],
+      segments: [{ prompt: "@anna waits", duration_s: 6, loras: [],
+                   assets: [image("img-1")] }],
+    }));
+
+    return {
+      slots,
+      chosen: chosen[0].takes,
+      moved: moved.map((a) => a.takes).join(","),
+      onLoad: loaded.segments[0].assets[0].takes,
+    };
+  })(),
 }));
 """
 
@@ -124,6 +172,16 @@ check("a name inside a longer word is not",
       mirror["cites"][1], subjects.citation_re(one).findall("@annabelle walks"))
 check("and neither is an undeclared one",
       mirror["cites"][2], subjects.citation_re(one).findall("@carol walks"))
+narrowing = mirror["narrowing"]
+check("a file hung on somebody is narrowed to what its slot means",
+      narrowing["slots"], "person,motion,voice,edit")
+check("...and a narrowing somebody chose is left alone",
+      narrowing["chosen"], "scene")
+check("...while the one this rule put there follows her when she changes",
+      narrowing["moved"], "scene,style")
+check("a piece written before any of this is repaired on the way in",
+      narrowing["onLoad"], "person")
+
 check("an empty cast has no pattern at all",
       mirror["cites"][3], subjects.citation_re([]) is None)
 

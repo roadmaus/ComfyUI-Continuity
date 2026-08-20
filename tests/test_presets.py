@@ -617,6 +617,92 @@ try {
   out.errors.push(`renderRefusals: ${error.stack}`);
 }
 
+// ---- the cast ---------------------------------------------------------------
+//
+// A member is the one preset whose files are named rather than handled, and the
+// one that adds to a node instead of replacing part of it. Both are checked
+// here, against a piece that has never seen her pictures.
+
+const CAST_SOURCE = JSON.stringify({
+  version: 2, prompt: "@anna waits", models: {},
+  assets: [
+    { handle: "ref-1", kind: "image", role: "reference", filename: "anna/face.png" },
+    { handle: "ref-2", kind: "audio", role: "reference", filename: "anna/voice.wav" },
+    { handle: "ref-3", kind: "image", role: "reference", filename: "loft.png" },
+  ],
+  subjects: [{ handle: "anna", takes: "person", from: ["ref-1", "ref-9"], voice: "ref-2",
+               description: "mid-thirties, dark coat", relationship: "fully_preserved" }],
+  segments: [{ prompt: "@anna waits", assets: [], loras: [], duration_s: 6 }],
+});
+
+try {
+  const source = S.parseTimeline(CAST_SOURCE);
+  S.syncTimeline(source);
+  const captured = P.captureSubject(source.subjects[0], source.assets);
+  const member = captured.data.cast;
+
+  // A strip that has never seen her, so every file she needs is attached by the
+  // apply rather than found. Several cards can cite her, so her files go to the
+  // one list all of them can reach.
+  const target = S.parseTimeline(JSON.stringify({
+    version: 2, prompt: "", models: {},
+    assets: [{ handle: "ref-1", kind: "image", role: "reference", filename: "other.png" }],
+    segments: [{ prompt: "", assets: [], loras: [], duration_s: 6 },
+               { prompt: "", assets: [], loras: [], duration_s: 6 }],
+  }));
+  P.applyToPiece(captured.data, ["cast"], target, fakeIO({}));
+  const landed = target.subjects[0];
+
+  // …and again, into the same piece. She is somebody else now, and her files are
+  // the ones already attached.
+  P.applyToPiece(captured.data, ["cast"], target, fakeIO({}));
+  const poolAfter = target.assets.length;
+
+  // A piece of one shot has no pool worth the name: her pictures attach to the
+  // shot, under the handles the reference row shows, like anything else picked.
+  const lone = S.parseTimeline(JSON.stringify({
+    version: 2, prompt: "", models: {},
+    segments: [{ prompt: "", assets: [], loras: [], duration_s: 6 }],
+  }));
+  S.syncTimeline(lone);
+  P.applyToPiece(captured.data, ["cast"], lone, fakeIO({}));
+
+  out.cast = {
+    // Named, not handled: nothing in the body may be a handle from the node she
+    // was kept off.
+    namesFiles: member.files.every((file) => !!file.filename && !("handle" in file)),
+    // The dangling `ref-9` is dropped rather than carried into the library.
+    droppedDangling: member.files.filter((file) => file.slot === "from").length === 1,
+    slots: member.files.map((file) => file.slot).join(","),
+    keptWords: member.description === "mid-thirties, dark coat"
+            && member.relationship === "fully_preserved",
+    // Her two files attached beside the one that was already there.
+    attached: target.assets.length === 3,
+    // On a piece of one shot they are that shot's own references instead, named
+    // the way the row names them.
+    onTheShot: lone.segments[0].assets.map((asset) => asset.handle).join(","),
+    poolLeftAlone: (lone.assets ?? []).length === 0,
+    loneSound: S.subjectProblem(
+      { subjects: lone.subjects, assets: lone.segments[0].assets }, lone.subjects[0]) === "",
+    handlesFresh: landed.from[0] !== "ref-1" && landed.voice !== "ref-1",
+    // Everything the pack refuses a subject for: a name, files that exist, no
+    // collision with a file's handle.
+    sound: S.subjectProblem({ subjects: target.subjects, assets: target.assets }, landed) === "",
+    // The second arrival is a second person, on the same files.
+    twice: target.subjects.length === 2 && target.subjects[1].handle === "anna_2",
+    reused: poolAfter === 3,
+    // Adding, not replacing: somebody already cast is still cast.
+    added: target.subjects[0] === landed,
+    // A member is refused by a card, with a reason rather than a silence.
+    refusedByShot: P.crossable("cast", "cast", "shot").ok === false
+                && !!P.crossable("cast", "cast", "shot").why,
+    refusedByPreStage: P.crossable("cast", "cast", "prestage").ok === false,
+    takenByPiece: P.crossable("cast", "cast", "piece").ok === true,
+  };
+} catch (error) {
+  out.errors.push(`cast: ${error.stack}`);
+}
+
 // ---- storage ----------------------------------------------------------------
 
 try {
@@ -638,6 +724,28 @@ try {
   out.storage.deleted = (await P.listPresets({ force: true })).length === 0;
 } catch (error) {
   out.errors.push(`storage: ${error.stack}`);
+}
+
+// Kept over her, not beside her: pressing the star twice leaves one @anna.
+try {
+  const source = S.parseTimeline(CAST_SOURCE);
+  S.syncTimeline(source);
+  const first = await P.keepSubject(source.subjects[0], source.assets);
+  source.subjects[0].description = "and the cardigan is hers";
+  await P.keepSubject(source.subjects[0], source.assets);
+  const rows = (await P.listPresets({ force: true })).filter((row) => row.scope === "cast");
+  const body = await P.loadBody(rows[0]);
+  out.keep = {
+    one: rows.length === 1,
+    named: rows[0].name === "anna",
+    // The card draws her off the index alone, portrait included.
+    described: rows[0].facts?.takes === "person" && rows[0].portrait === "anna/face.png",
+    rewritten: body?.cast?.description === "and the cardigan is hers",
+    sameRow: rows[0].id === first.id,
+  };
+  await P.deletePreset(rows[0].id);
+} catch (error) {
+  out.errors.push(`keep: ${error.stack}`);
 }
 
 // The shipped starters load, describe themselves, and name no files.
@@ -857,6 +965,38 @@ check("the index carries the whole card, so the grid draws without a body",
 check("the body round-trips through storage", storage.get("bodyRoundTrips"), True)
 check("starring writes through", storage.get("starred"), True)
 check("deleting removes it", storage.get("deleted"), True)
+
+cast = report.get("cast", {})
+check("a kept cast member names her files rather than handling them",
+      cast.get("namesFiles"), True)
+check("...and a handle she claims that is not attached is dropped",
+      cast.get("droppedDangling"), True)
+check("...her slots ride with her files", cast.get("slots"), "from,voice")
+check("...as do her words and her retention marker", cast.get("keptWords"), True)
+check("casting her attaches her files to a piece that never had them",
+      cast.get("attached"), True)
+check("...under handles that are free there", cast.get("handlesFresh"), True)
+check("...and she is a subject the pack will queue", cast.get("sound"), True)
+check("on a piece of one shot her files are that shot's own references",
+      cast.get("onTheShot"), "img-1,aud-1")
+check("...and nothing is put in a pool the face does not draw",
+      cast.get("poolLeftAlone"), True)
+check("...she is queueable there too", cast.get("loneSound"), True)
+check("casting her twice is two people, not one overwritten",
+      cast.get("twice"), True)
+check("...on the files already attached, not a second copy of them",
+      cast.get("reused"), True)
+check("...and whoever was already cast is still cast", cast.get("added"), True)
+check("a card refuses her, and says why", cast.get("refusedByShot"), True)
+check("...so does a pre-stage", cast.get("refusedByPreStage"), True)
+check("...and a piece takes her", cast.get("takenByPiece"), True)
+
+keep = report.get("keep", {})
+check("keeping her twice leaves one of her", keep.get("one"), True)
+check("...filed under the name she is written as", keep.get("named"), True)
+check("...with the card's whole picture in the index", keep.get("described"), True)
+check("...and the second keep is the row the first made", keep.get("sameRow"), True)
+check("...rewritten rather than added to", keep.get("rewritten"), True)
 
 builtin = report.get("builtin", {})
 check("the shipped starters describe themselves", builtin.get("allDescribed"), True)

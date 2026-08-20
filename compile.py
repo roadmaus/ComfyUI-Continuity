@@ -1,7 +1,7 @@
 """`creator_data` (the UI's JSON blob) -> a validated, ordered generation request.
 
 This is the load-bearing module. The `@chip` a user types in the prompt box is
-not decoration: it is how they bind a slot to a role ("use @img-2 for her
+not decoration: it is how they bind a slot to a role ("use @img-2 for their
 face"), and H3 only understands that binding through its own ordinal labels,
 `<Picture N>` / `<Video N>` / `<Audio N>`.
 
@@ -147,7 +147,7 @@ DEFAULT_REF_SIZE = {"image": "match", "video": "max"}
 #
 # The others narrow it: a "person" reference contributes the person's likeness
 # and nothing else, so the picture's background, palette and pose stop bleeding
-# into the target video the moment the user says "her from @img-1". The DiT is
+# into the target video the moment the user says "them from @img-1". The DiT is
 # handed the same tensor either way — the narrowing lives in the prose, which
 # is where H3's reference form expresses it (`retention_analysis`) — so the
 # field is read by the refiner's glossary and by nothing on the encode path.
@@ -1787,8 +1787,8 @@ def cited_pool(pool, request, extra_texts=(), cast=()):
     for text in texts:
         found.update(HANDLE_RE.findall(text))
     # A subject citation is a citation of every file behind it: writing `@anna`
-    # is the whole gesture, and it would be a strange one that made you name her
-    # photographs beside her. Only the files a subject is *made of* — the clip
+    # is the whole gesture, and it would be a strange one that made you name them
+    # photographs beside them. Only the files a subject is *made of* — the clip
     # somebody is replaced in comes along too, because the replacement is stated
     # against it.
     pattern = subjects.citation_re(cast)
