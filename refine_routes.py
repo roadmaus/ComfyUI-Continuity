@@ -136,8 +136,13 @@ def _shot(compiled, text, seconds, continues, show_labels):
         "slots": slots,
         # Kept for the reply, not for the message: `normalize_handles` needs the
         # map to read an ordinal back off, and `check` needs the handle set.
-        "labels": dict(compiled.labels),
-        "handles": {a.handle for a in assets},
+        # The cast's labels go in the same map: with a cast pinned, `<Subject 1>`
+        # is a label like any other and reads back to `@anna`. The names join
+        # the handle set for the same reason — `@anna` in a rewrite is a
+        # citation, not an unattached file.
+        "labels": {**compiled.labels, **compiled.subject_labels},
+        "handles": {a.handle for a in assets} | set(compiled.subject_labels),
+        "cast": list(compiled.cast),
         # The references alone, for the dropped-citation warning: a keyframe is
         # bound by the instruction line and needs no mention in the prose, but a
         # reference nothing points at conditions nothing.
@@ -296,7 +301,11 @@ def _plan(body):
                 written += 1
 
     piece = str(data.get("prompt") or "")
-    return _representative(shots), shots, images, piece, single, pool, footage
+    # The piece's cast, whole rather than per shot: the glossary says who exists
+    # in this piece, and any shot may put any of them on screen — the citation
+    # is what casts them into that generation, exactly as it is for the pool.
+    cast = compiler.timeline_cast(data)
+    return _representative(shots), shots, images, piece, single, pool, footage, cast
 
 
 def _representative(shots):
@@ -444,7 +453,7 @@ def _run_skill(body, name, mode, shots, pictures, seconds, dropped, piece_text=N
             f"the model — one call looks at at most {MAX_IMAGES}"
         )
     problems += ["The rewrite " + p for p in refine.check(written, shot["handles"], shot["labels"])]
-    for handle in refine.uncited(written, shot["refs"], shot["labels"]):
+    for handle in refine.uncited(written, shot["refs"], shot["labels"], shot.get("cast")):
         problems.append(
             f"the rewrite never mentions @{handle} — the file is still attached, "
             f"but nothing in the prompt will point at it. Refine again, or write "
@@ -471,7 +480,7 @@ def _run(body):
     """The blocking half: compile, look, ask, parse. Runs on a thread."""
     body = _target(body)
     kind = body.get("kind")
-    derived, shots, pictures, piece_text, single, pool, footage = _plan(body)
+    derived, shots, pictures, piece_text, single, pool, footage, cast = _plan(body)
 
     seconds = sum(float(s.get("seconds") or 0) for s in shots)
 
@@ -555,6 +564,7 @@ def _run(body):
         piece=piece,
         pool=pool["slots"] if pool else None,
         footage=footage,
+        cast=cast,
     )
     content = refine_local.chat(
         body.get("model") or "",
@@ -631,6 +641,9 @@ def _run(body):
                 for name, text in own.items():
                     for problem in refine.check(text, shot["handles"], shot["labels"]):
                         problems.append(f"{where.rstrip()}'s {name} {problem}")
+                if cast:
+                    own = {name: text for name, text in own.items()
+                           if name not in ("subject_definitions", "retention_analysis")}
                 entry["sections"] = own
             else:
                 problems.append(
@@ -641,7 +654,8 @@ def _run(body):
             # a reference named only in another card's prose conditions nothing
             # in this one.
             here = "\n".join([written] + list((own or {}).values()))
-            for handle in refine.uncited(here, shot["refs"], shot["labels"]):
+            for handle in refine.uncited(here, shot["refs"], shot["labels"],
+                                         shot.get("cast")):
                 problems.append(
                     f"{where.rstrip()} never mentions @{handle} — the file is still "
                     f"attached, but nothing in that card's prompt will point at "
@@ -667,6 +681,15 @@ def _run(body):
     sections = parsed.get("sections")
     if sections:
         sections = {name: normalized(text, name) for name, text in sections.items()}
+        # The two the cast owns are dropped rather than stored. `compile_request`
+        # writes both from the cast and would override whatever came back here
+        # anyway — but a stored copy would still show in the panel, and the user
+        # would be reading a definition of Anna that is not the one the model
+        # will be handed. `CAST_NOTE` asks for neither; this is what happens
+        # when the model writes them regardless.
+        if cast:
+            sections = {name: text for name, text in sections.items()
+                        if name not in ("subject_definitions", "retention_analysis")}
         parsed["sections"] = sections
 
     # The rewritten global prompt. Never normalized: it is joined in front of
@@ -707,7 +730,7 @@ def _run(body):
                            + list((sections or {}).values())
                            + [parsed["soundscape"], parsed["music"], piece_out or ""])
     if not ref_shots:
-        for handle in refine.uncited(everything, refs, labels):
+        for handle in refine.uncited(everything, refs, labels, cast):
             problems.append(
                 f"the rewrite never mentions @{handle} — the file is still attached, "
                 f"but nothing in the prompt will point at it. Refine again, or write "

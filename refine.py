@@ -549,6 +549,59 @@ def describe_slots(slots):
     return lines
 
 
+# What a subject is, in one noun. The glossary's job is to say who is in the
+# piece, not to re-teach the guide's vocabulary — the model has just read the
+# section that defines `<Subject N>`.
+_CAST_WHAT = {
+    "person": "a person",
+    "object": "an object",
+    "scene": "a place",
+    "style": "a look",
+}
+
+
+def describe_cast(cast):
+    """The cast glossary, one line per declared subject.
+
+    Handles rather than labels, like the pool's: a subject's ordinal depends on
+    which shots cite it, and the model's job is to write the name. What each
+    subject is *made of* is listed after it so the model can tell that naming
+    the files behind Anna as well as Anna would be saying the same thing twice —
+    which is the mistake the whole block exists to prevent.
+    """
+    lines = []
+    for subject in cast:
+        head = f"@{subject.handle}: {_CAST_WHAT.get(subject.takes, 'a subject')}"
+        if subject.description:
+            head += f", {subject.description.rstrip('.')}"
+        made_of = []
+        if subject.sources:
+            made_of.append("from " + ", ".join("@" + h for h in subject.sources))
+        if subject.motion:
+            made_of.append(f"moving as in @{subject.motion}")
+        if subject.voice:
+            made_of.append(f"speaking with the voice in @{subject.voice}")
+        if subject.replaces:
+            made_of.append(
+                f"standing in the place of {subject.replaces_what or 'the corresponding subject'} "
+                f"in @{subject.replaces}")
+        lines.append(head + (" — " + "; ".join(made_of) if made_of else ""))
+    return lines
+
+
+CAST_NOTE = (
+    "The user has cast this piece: these subjects are pinned, and at generation "
+    "time each one is already written into `subject_definitions` with its own "
+    "`<Subject N>` and its own line in `retention_analysis`. So do not define "
+    "them and do not analyse them — write neither of those two sections, and "
+    "write no `<Subject N>` label of your own. What you write instead is the "
+    "name: `@anna`, in the shot where she appears, exactly as you would write a "
+    "file's handle. Do not also name the files behind a subject — they are "
+    "cited inside her definition already, and naming them again tells the model "
+    "the same thing twice in two voices."
+)
+
+
 # What each role is, in the words the glossary uses. The reference guide names
 # these slots itself; this is the same distinction said once for the model.
 _WHAT = {
@@ -734,7 +787,7 @@ def slot_row(asset, label=None, show_label=False):
 
 
 def user_message(shots, seconds=None, images=0, mode=None, piece=None, pool=None,
-                 footage=()):
+                 footage=(), cast=()):
     """What to rewrite, and what is attached to rewrite it against.
 
     `shots` is one entry per body wanted back, in play order:
@@ -851,6 +904,15 @@ def user_message(shots, seconds=None, images=0, mode=None, piece=None, pool=None
             "or globally when it runs through the whole piece."
         )
         lines.extend("  " + line for line in describe_slots(pool))
+
+    # After the pool, because a subject is made out of what the pool holds and
+    # reads as nonsense above it — and before the shots, because every shot may
+    # cite any of them.
+    if cast:
+        lines.append("")
+        lines.append("THE CAST")
+        lines.append(CAST_NOTE)
+        lines.extend("  " + line for line in describe_cast(cast))
     lines.append("")
 
     for number, shot in enumerate(shots, start=1):
@@ -947,6 +1009,19 @@ def chatml(system, message, images=0, prefill=PREFILL):
 # ---- handles and labels -----------------------------------------------------
 
 LABEL_RE = re.compile(r"<\s*(Picture|Video|Audio)\s+(\d+)\s*>")
+
+# The same with `<Subject N>` in it. Kept apart because the two are only the
+# same question where a cast exists: without one, every `<Subject N>` in a reply
+# is the model's own invention, defined inside its `subject_definitions` and
+# pointing at nothing outside the rewrite — so reporting them as stray or
+# rewriting them to a handle would both be wrong. With a cast, they are pinned
+# labels like any other and are read back the same way.
+ANY_LABEL_RE = re.compile(r"<\s*(Picture|Video|Audio|Subject)\s+(\d+)\s*>")
+
+
+def _pinned_subjects(labels):
+    """Whether this label map carries a cast — see `ANY_LABEL_RE`."""
+    return any(str(label).startswith("<Subject") for label in (labels or {}).values())
 HANDLE_RE = re.compile(r"@([A-Za-z]+-\d+)")
 
 
@@ -962,8 +1037,11 @@ def normalize_handles(text, labels):
     mistake and `check` is what reports it, so silently deleting it here would
     hide the one failure that produces a wrong video rather than an error.
 
-    `<Subject N>` is untouched — those are the reference guide's own invention,
-    defined inside the rewrite and pointing at nothing outside it.
+    `<Subject N>` is untouched where the piece has no cast — those are the
+    reference guide's own invention, defined inside the rewrite and pointing at
+    nothing outside it. Where there *is* a cast the label is pinned and means a
+    subject the user declared, so it reads back to that subject's name exactly
+    as a picture's ordinal reads back to its handle.
     """
     back = {label: handle for handle, label in (labels or {}).items() if ":" not in handle}
     if not back:
@@ -974,7 +1052,8 @@ def normalize_handles(text, labels):
         handle = back.get(canonical)
         return f"@{handle}" if handle else match.group(0)
 
-    return LABEL_RE.sub(swap, text)
+    pattern = ANY_LABEL_RE if _pinned_subjects(labels) else LABEL_RE
+    return pattern.sub(swap, text)
 
 
 def check(text, handles, labels):
@@ -996,8 +1075,9 @@ def check(text, handles, labels):
     # A video's soundtrack has a label but no handle of its own, so `<Audio 1>`
     # written for it is correct as it stands and must not be reported.
     known = set((labels or {}).values())
+    pattern = ANY_LABEL_RE if _pinned_subjects(labels) else LABEL_RE
     stray = sorted({f"<{kind} {int(n)}>" for kind, n in
-                    (m.groups() for m in LABEL_RE.finditer(text))} - known)
+                    (m.groups() for m in pattern.finditer(text))} - known)
     if stray:
         problems.append(
             "writes " + ", ".join(stray) + ", which no attached asset will be given"
@@ -1005,7 +1085,7 @@ def check(text, handles, labels):
     return problems
 
 
-def uncited(text, handles, labels):
+def uncited(text, handles, labels, cast=()):
     """Attached references the rewrite never cites, as handles. Empty means none.
 
     `text` is everything the model wrote joined together — the bodies, the
@@ -1019,6 +1099,13 @@ def uncited(text, handles, labels):
     body that never says `@img-1` about its own start frame is correct.
     """
     written_handles = set(HANDLE_RE.findall(text))
+    # Writing `@anna` cites every file she is made of: they were pulled into
+    # this generation *because* she was cited, and the rewrite naming her is the
+    # citation that keeps them there. Reporting them as unmentioned would be
+    # asking for exactly the doubled naming `CAST_NOTE` forbids.
+    for subject in cast or ():
+        if subject.handle in re.findall(r"@([A-Za-z][A-Za-z0-9_]*)", text):
+            written_handles.update(subject.files)
     written_labels = {f"<{kind} {int(n)}>" for kind, n in
                       (m.groups() for m in LABEL_RE.finditer(text))}
     missing = []

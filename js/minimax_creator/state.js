@@ -1262,6 +1262,10 @@ function syncCanvas(timeline) {
     // and `citedPool` mirrors both. Never serialized — all of it is the
     // timeline's.
     segment.pool = timeline.assets ?? [];
+    // The cast rides down with the pool and for the same reason: a segment
+    // citing @anna is a reference generation, and every accessor that reads the
+    // prompt — `citedPool`, the chips, `mode()` — has to be able to tell.
+    segment.cast = timeline.subjects ?? [];
     segment.globalTexts = {
       prompt: timeline.prompt ?? "",
       soundscape: timeline.soundscape ?? "",
@@ -1340,7 +1344,7 @@ export { syncCanvas as syncTimeline };
  */
 export const PIECE_FIELDS = ["aspect", "aspect_source", "short_edge", "upscale",
                              "sample_edge", "refine_denoise", "face", "models",
-                             "turbo", "output_prefix"];
+                             "turbo", "output_prefix", "subjects"];
 
 /** What only a lone generation ever carried at the top level. Tells a version-1
  *  `creator_data` blob from a fresh node's "{}" — which is an empty piece and
@@ -1388,6 +1392,24 @@ export function parseTimeline(raw) {
       // hand-edited blob can have the wrong type in it.
       if (!Array.isArray(timeline.loras)) timeline.loras = [];
       if (!Array.isArray(timeline.assets)) timeline.assets = [];
+      // The cast. Absent in every workflow saved before it existed, and a
+      // hand-edited blob can hold anything; kept as written otherwise, because
+      // whether a subject's files are still attached is the band's readout
+      // rather than a reason to drop somebody the user cast.
+      if (!Array.isArray(timeline.subjects)) timeline.subjects = [];
+      timeline.subjects = timeline.subjects
+        .filter((s) => s && typeof s.handle === "string")
+        .map((s) => ({
+          handle: s.handle,
+          from: Array.isArray(s.from) ? s.from.filter((h) => typeof h === "string") : [],
+          takes: SUBJECT_TAKES.includes(s.takes) ? s.takes : "person",
+          ...(s.description ? { description: String(s.description) } : {}),
+          ...(s.motion ? { motion: String(s.motion) } : {}),
+          ...(s.voice ? { voice: String(s.voice) } : {}),
+          ...(s.replaces ? { replaces: String(s.replaces) } : {}),
+          ...(s.replaces_what ? { replaces_what: String(s.replaces_what) } : {}),
+          ...(SUBJECT_MARKERS.includes(s.relationship) ? { relationship: s.relationship } : {}),
+        }));
       timeline.assets = timeline.assets.filter(
         (asset) => asset && typeof asset.handle === "string" && typeof asset.filename === "string");
       for (const asset of timeline.assets) {
@@ -1539,6 +1561,9 @@ export function serializeTimeline(timeline) {
     // The reference pool. Absent when empty, so a timeline that never used one
     // round-trips exactly as it always did.
     ...(timeline.assets?.length ? { assets: serializeAssets(timeline.assets) } : {}),
+    // The cast, on the same terms: absent when nobody was cast, so a piece
+    // without one round-trips to the bytes it always did.
+    ...(timeline.subjects?.length ? { subjects: timeline.subjects } : {}),
     audio_tail_s: clampTail(timeline.audio_tail_s),
     // Where this node's renders land, when the blob overrides the setting. No
     // control writes it — it is the hand-edit the README documents as the only
@@ -2493,6 +2518,127 @@ function poolTexts(state, { own = false } = {}) {
   return texts;
 }
 
+// ---- the cast ---------------------------------------------------------------
+//
+// Subjects are the piece's, like the pool, and cited the same way. What differs
+// is how a citation is recognised: a file's handle is known by its shape, a
+// subject's only by having been declared, so `@anna` means nothing in a piece
+// where nobody cast Anna and no prose is reinterpreted by the feature existing.
+// Mirrors `subjects.py`.
+
+/** What of the files behind a subject is the reference. Mirrors
+ *  `subjects.TAKES` — the four an image takes, without the whole-video
+ *  relationships, which have no subject in them. */
+export const SUBJECT_TAKES = ["person", "object", "scene", "style"];
+
+/** The reference guide's fixed relationship markers. Mirrors
+ *  `subjects.MARKERS`; they are English output values in every language. */
+export const SUBJECT_MARKERS = ["fully_preserved", "partially_preserved",
+                                "transferred", "reused"];
+
+/** A subject's name: letters, digits and underscores, starting with a letter.
+ *  No hyphen, which is exactly what tells it from a file's handle. Mirrors
+ *  `subjects.HANDLE_RE`. */
+export const SUBJECT_HANDLE_RE = /^[A-Za-z][A-Za-z0-9_]{0,31}$/;
+
+/** Every file handle a subject claims, in citation order. Mirrors
+ *  `subjects.Subject.files` — the clip somebody is replaced *in* is not among
+ *  them, because its own content is kept and it keeps its own definition. */
+export function subjectFiles(subject) {
+  const out = [...(subject.from ?? [])];
+  for (const extra of [subject.motion, subject.voice]) {
+    if (extra && !out.includes(extra)) out.push(extra);
+  }
+  return out;
+}
+
+/** A pattern matching `@name` for exactly the subjects in `cast`, or null for
+ *  an empty cast. Mirrors `subjects.citation_re`. */
+export function subjectCitationRe(cast) {
+  const names = (cast ?? []).map((s) => s.handle).filter(Boolean)
+    .sort((a, b) => b.length - a.length)
+    .map((n) => n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+  return names.length ? new RegExp(`@(${names.join("|")})\\b`, "g") : null;
+}
+
+/** The subjects the given texts cite, as a Set of names. */
+function citedSubjects(texts, cast) {
+  const pattern = subjectCitationRe(cast);
+  const found = new Set();
+  if (!pattern) return found;
+  for (const text of texts) {
+    for (const match of String(text ?? "").matchAll(pattern)) found.add(match[1]);
+  }
+  return found;
+}
+
+/** The subjects a segment's text casts into it, in cast order. */
+export function citedCast(state) {
+  const cast = state.cast ?? [];
+  if (!cast.length) return [];
+  const found = citedSubjects(poolTexts(state), cast);
+  return cast.filter((subject) => found.has(subject.handle));
+}
+
+/** Whether the timeline's own texts cite a subject — "in every segment". */
+export function subjectCitedGlobally(timeline, subject) {
+  return citedSubjects([timeline.prompt, timeline.soundscape, timeline.music],
+                       timeline.subjects ?? []).has(subject.handle);
+}
+
+/** Which segments cast a subject, as 1-based card numbers. */
+export function subjectCitations(timeline, subject) {
+  return timeline.segments
+    .map((segment, index) => (citedCast(segment).includes(subject) ? index + 1 : null))
+    .filter((n) => n !== null);
+}
+
+/** What is wrong with a subject, as one sentence, or "" if nothing is. Mirrors
+ *  the refusals in `subjects.parse` and `subjects.check`, so the band can say
+ *  it where it is fixable instead of at queue time.
+ *
+ *  `scope` is anything with `subjects` and `assets` — the piece for the shelf in
+ *  the Timeline window, and the shot plus whatever pool rides on it for the one
+ *  on the node face. Which files count is a fact about *where* the subject is
+ *  being checked: somebody built out of a card's own attachment is fine on that
+ *  card and dangling on the next one, and the surface asking is the one that
+ *  knows which it is. */
+export function subjectProblem(scope, subject) {
+  if (!subject.handle) return "this subject has no name yet";
+  if (!SUBJECT_HANDLE_RE.test(subject.handle)) {
+    return "a name is letters, digits and underscores, starting with a letter — no hyphen";
+  }
+  const twins = (scope.subjects ?? []).filter((s) => s.handle === subject.handle);
+  if (twins.length > 1) return `two subjects are both called @${subject.handle}`;
+  const assets = scope.assets ?? [];
+  const byHandle = new Map(assets.map((a) => [a.handle, a]));
+  if (byHandle.has(subject.handle)) {
+    return `@${subject.handle} is also a file's handle — one @ means one thing`;
+  }
+  const files = subjectFiles(subject);
+  // Described in words alone is a subject: in a generation with no references
+  // there is no picture to point at, and the description is the whole of what
+  // the name can mean. Mirrors the same relaxation in `subjects.parse`.
+  if (!files.length && !subject.replaces && !String(subject.description ?? "").trim()) {
+    return "nothing behind her yet — hang a file on her, or describe her in words";
+  }
+  const wanted = [...files, subject.replaces].filter(Boolean);
+  const missing = wanted.filter((h) => !byHandle.has(h));
+  if (missing.length) {
+    return `built out of ${missing.map((h) => "@" + h).join(", ")}, which is not attached here`;
+  }
+  // A keyframe is a fact about one moment of the target video, not a reference
+  // somebody is made of — `subjects.check` refuses it, so the shelf says so
+  // where it can still be undone. Named separately from "not attached": the
+  // file is right there, and "missing" would send the user looking for it.
+  const keyframe = wanted.map((h) => byHandle.get(h)).find((a) => a.role !== "reference");
+  if (keyframe) {
+    return `@${keyframe.handle} is this shot's ${keyframe.role === "first_frame" ? "start" : "end"} `
+         + "frame — a moment of the video being made, not a reference she is made of";
+  }
+  return "";
+}
+
 /** The pool assets a segment's text cites, in pool order. Mirrors
  *  `compile.cited_pool`: the prompt with the global one joined in front (a
  *  citation there is a citation everywhere), the rewrite standing in for it
@@ -2505,6 +2651,14 @@ export function citedPool(state) {
   const pool = state.pool ?? [];
   if (!pool.length) return [];
   const found = citedHandles(poolTexts(state));
+  // Casting a subject cites every file behind her, plus the clip she stands in
+  // the place of — writing `@anna` is the whole gesture, and it would be a
+  // strange one that made you name her photographs beside her. Mirrors the
+  // same expansion in `compile.cited_pool`.
+  for (const subject of citedCast(state)) {
+    for (const handle of subjectFiles(subject)) found.add(handle);
+    if (subject.replaces) found.add(subject.replaces);
+  }
   const own = new Set(state.assets.map((a) => a.handle));
   return pool.filter((asset) => found.has(asset.handle) && !own.has(asset.handle));
 }

@@ -12,6 +12,7 @@
 // commits *while the user is typing in it*.
 
 import { el, icon, ICONS, keepScroll, svg, swappable } from "./dom.js";
+import { CastShelf } from "./cast.js";
 import { t } from "./i18n.js";
 import { openPicker } from "./picker.js";
 import { openLoras } from "./loras.js";
@@ -242,6 +243,8 @@ export class CreatorEditor {
       // `syncTimeline` mirrors it on as `pool`, the way the canvas rides on.
       // Citable by chip, never attached: the citation is the attachment.
       getPool: () => this.state.pool ?? [],
+      // Mirrored down by `syncTimeline` beside the pool — see `state.cast`.
+      getCast: () => this.state.cast ?? [],
       onOverflow: (over) => this.onPromptOverflow(over),
     });
     // Leaving the box arms the escalation again — see `onPromptOverflow`.
@@ -262,6 +265,10 @@ export class CreatorEditor {
 
     this.railHost = el("div");
     this.assetsHost = el("div");
+    // The cast, under the files it is built out of, because a subject is built
+    // out of what is there and reads as nonsense above it. Empty unless this
+    // body owns the piece's cast — see `renderCastShelf`.
+    this.castHost = el("div");
     this.loraHost = el("div");
     this.pillsHost = el("div");
     this.noticeHost = el("div");
@@ -301,6 +308,7 @@ export class CreatorEditor {
     this.root = el("div", { class: "mmc-root" }, [
       this.railHost,
       this.assetsHost,
+      this.castHost,
       this.loraHost,
       // `frame`, not `root`: the box brings its own disclosure, which folds it
       // away once a rewrite is what gets queued.
@@ -655,6 +663,7 @@ export class CreatorEditor {
 
     this.railHost.replaceChildren(this.renderRail());
     this.assetsHost.replaceChildren(...(state.assets.length ? [this.renderAssets()] : []));
+    this.renderCastShelf();
     this.loraHost.replaceChildren(...(state.loras.length ? [this.renderLoras()] : []));
     this.pillsHost.replaceChildren(this.renderPills(geometry, S.mode(state)));
     // A card's own seed, where the sampler row belongs to the node above it.
@@ -923,6 +932,104 @@ export class CreatorEditor {
     );
   }
 
+  /**
+   * The cast, on the node's own face.
+   *
+   * There is one node, and a cast belongs to the piece it makes — so the shelf
+   * that was only ever in the Timeline window belongs here too, and it is
+   * literally the same shelf (`cast.js`). What is different here is only the
+   * scope: the files somebody can be built out of are this shot's own
+   * attachments plus whatever pool rides on it, and "where is she cited" has
+   * one answer, this prompt.
+   *
+   * Drawn where this body owns the piece's cast — a node face. Inside the
+   * Timeline window a card's editor is one shot of a piece whose cast is edited
+   * one level up, in the same window, and a second editable copy of it there
+   * would be two places to change one thing.
+   *
+   * Hidden until there is a cast or somebody asks for one, because most
+   * generations have neither, and a node face is a preview with no room to
+   * spend on a shelf nobody opened. The rail is what asks.
+   */
+  renderCastShelf() {
+    if (!this.nodeId) { this.castHost.replaceChildren(); return; }
+    const cast = this.piece.subjects ?? [];
+    if (!cast.length && !this.castOpen) { this.castHost.replaceChildren(); return; }
+    this.castShelf ??= new CastShelf({
+      getCast: () => this.piece.subjects ?? [],
+      setCast: (list) => { this.piece.subjects = list; },
+      // This shot's attachments and the piece's pool together: both are files
+      // this generation carries, and `subjects.check` runs against the two of
+      // them merged. A keyframe is in the list rather than filtered out of it —
+      // it is refused, and the shelf says why, which is more use than a picture
+      // that is on the node and not in the menu.
+      getAssets: () => [...(this.state.assets ?? []), ...(this.state.pool ?? [])],
+      addAsset: () => this.attachOneAsset(),
+      whereCited: (subject) => {
+        const cited = S.citedCast({ ...this.state, cast: [subject] }).length > 0;
+        return { cited, text: cited ? t("in the prompt") : "" };
+      },
+      cite: (subject) => this.citeName(subject.handle),
+      touch: () => this.onCommit?.(),
+      commit: () => this.commit(),
+    });
+    // Mounted once. `replaceChildren` with the same node still detaches and
+    // reattaches it, and a detached input loses the caret — which on a host that
+    // redraws per keystroke is the whole bug over again, one level up.
+    if (this.castHost.firstChild !== this.castShelf.root) {
+      this.castHost.replaceChildren(this.castShelf.root);
+    }
+    this.castShelf.render();
+  }
+
+  /** Open the shelf and cast the first person, in one press of the rail. Once
+   *  somebody is on it the shelf stays, so this only ever has to do the second
+   *  half on the way in. */
+  toggleCast() {
+    const cast = this.piece.subjects ?? [];
+    if (cast.length) {
+      // Already open and populated: the rail's job here is to put the shelf
+      // back if it was closed, and otherwise to add the next person.
+      this.castOpen = true;
+      this.render();
+      this.castShelf?.addSubject();
+      return;
+    }
+    this.castOpen = !this.castOpen;
+    this.render();
+    if (this.castOpen) this.castShelf?.addSubject();
+  }
+
+  /** One file, attached to this shot, for the cast shelf's "attach a file…".
+   *  `addReferences` takes several and answers nothing; a subject is being given
+   *  one thing, and the shelf needs to know which entry it was. */
+  async attachOneAsset() {
+    const blocked = S.blockedReason(this.state, "reference");
+    if (blocked) { this.flash(blocked); return null; }
+    const chosen = await openPicker({
+      kinds: ["image", "video", "audio", "renders"],
+      kind: "image",
+      capacity: (k) => S.capacity(this.state, k),
+    });
+    if (!chosen?.length) return null;
+    const before = new Set(this.state.assets.map((a) => a.handle));
+    await this.attachAssets(chosen.slice(0, 1));
+    return this.state.assets.find((a) => !before.has(a.handle)) ?? null;
+  }
+
+  /** Write a subject's name into the prompt. The answer to the commonest way to
+   *  lose an afternoon with this feature: casting somebody and never citing her,
+   *  which leaves her in no shot and nothing on screen to say so. */
+  citeName(handle) {
+    if (!handle) return;
+    const current = this.state.prompt ?? "";
+    if (new RegExp(`@${handle}\\b`).test(current)) return;
+    const joiner = current && !/\s$/.test(current) ? " " : "";
+    this.state.prompt = `${current}${joiner}@${handle} `;
+    this.prompt.setValue(this.state.prompt);
+    this.commit();
+  }
+
   renderRail() {
     const disabled = !!S.blockedReason(this.state, "reference");
     const tool = (kind, label, iconName) =>
@@ -950,6 +1057,18 @@ export class CreatorEditor {
           title: t("Manage the LoRAs patched onto the routed checkpoint"),
           onclick: () => this.manageLoras(),
         }, [el("span", { class: "mmc-tool-icon" }, [icon("effect")]), el("span", { text: t("Add LoRA") })]),
+        // Who is in it, as against what is attached to it. Ungated, and
+        // deliberately: a subject can be a name and a description with no file
+        // behind her at all, which is what a cast is in a text-only generation
+        // — and gating this on having attached something is what made the
+        // feature invisible to exactly the prompt that needed it most.
+        ...(this.nodeId ? [el("button", {
+          class: `mmc-tool${(this.piece.subjects ?? []).length || this.castOpen ? " on" : ""}`,
+          title: t("Who is in the video: a person, an object, a place or a look that "
+                 + "comes back shot after shot. Name her once, write @anna in the "
+                 + "prompt, and whatever is behind her rides in with her."),
+          onclick: () => this.toggleCast(),
+        }, [el("span", { class: "mmc-tool-icon" }, [icon("face")]), el("span", { text: t("Cast") })])] : []),
         // With the adds because they are one: the PreStage's frame grab puts an
         // init image on this generation, whatever tool the host lends the rail.
         ...(this.extraTools?.() ?? []),

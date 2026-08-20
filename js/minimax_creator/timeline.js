@@ -8,6 +8,7 @@
 // with the node's, because there is only one editor.
 
 import { probe, viewUrl } from "./api.js";
+import { CastShelf } from "./cast.js";
 import { clearButton } from "./clear.js";
 import { el, icon, mountOverlay, swappable } from "./dom.js";
 import { CreatorEditor, pickTakes, takesHelp } from "./editor.js";
@@ -194,6 +195,7 @@ class Timeline {
         // prompt flips a chip from idle to "everywhere" as it is written. The
         // shelf holds no caret, so rebuilding it here loses nothing.
         this.renderPool();
+        this.renderCast();
       },
     });
     box.value = this.timeline[key] ?? "";
@@ -231,9 +233,11 @@ class Timeline {
         // it is written. The shelf holds no caret, so rebuilding it here loses
         // nothing — and `renderPool` is why this cannot be a full `render`.
         this.renderPool();
+        this.renderCast();
       },
       attachBlocked: () => null,
       attachedLabel: () => t("Piece references"),
+      getCast: () => this.timeline.subjects ?? [],
       onAttach: (row) => this.attachToPool(row),
     });
     box.frame.classList.add("mmc-tl-prompt-frame");
@@ -259,6 +263,7 @@ class Timeline {
     // into it, so only the shelf that gained a row is redrawn.
     this.onCommit?.();
     this.renderPool();
+    this.renderCast();
     return entry.handle;
   }
 
@@ -302,6 +307,7 @@ class Timeline {
     ]);
 
     this.poolHost = el("div", { class: "mmc-tl-pool" });
+    this.castHost = el("div", { class: "mmc-tl-cast" });
     this.barHost = el("div", { class: "mmc-tl-bar" });
     this.stripHost = el("div", { class: "mmc-tl-strip" });
 
@@ -311,7 +317,8 @@ class Timeline {
         el("button", { class: "mmc-close", text: "✕", title: t("Close"), onclick: () => this.close() }),
       ]),
       el("div", { class: "mmc-tl-body" }, [
-        this.promptBox.frame, this.audioHost, this.poolHost, this.barHost, this.stripHost,
+        this.promptBox.frame, this.audioHost, this.poolHost, this.castHost,
+        this.barHost, this.stripHost,
       ]),
     ]);
 
@@ -346,6 +353,7 @@ class Timeline {
       ? t("The whole piece: setting, look, who is in it. Opens Shot 1's description, so write it as the start of one.")
       : t("The whole piece: setting, look, who is in it. Added in front of every segment's own prompt."));
     this.renderPool();
+    this.renderCast();
     this.renderBar();
     this.renderStrip();
   }
@@ -477,6 +485,87 @@ class Timeline {
         },
       }),
     ]);
+  }
+
+  /**
+   * The cast, in the window: the piece's, built out of the piece's pool.
+   *
+   * The shelf itself is `cast.js` and is the same one the node face mounts —
+   * one node, one cast, one way of editing it. What is the window's is only
+   * what it can answer that the shelf cannot: which files there are to build
+   * somebody out of, and which cards on the strip write her name.
+   */
+  renderCast() {
+    this.castShelf ??= new CastShelf({
+      getCast: () => this.timeline.subjects ?? [],
+      setCast: (list) => { this.timeline.subjects = list; },
+      getAssets: () => this.timeline.assets ?? [],
+      addAsset: () => this.attachOnePoolAsset(),
+      whereCited: (subject) => {
+        if (S.subjectCitedGlobally(this.timeline, subject)) {
+          return { cited: true, text: t("in every shot") };
+        }
+        const shots = S.subjectCitations(this.timeline, subject);
+        return {
+          cited: shots.length > 0,
+          text: shots.length
+            ? t(shots.length === 1 ? "in shot {list}" : "in shots {list}",
+                { list: shots.join(", ") })
+            : "",
+        };
+      },
+      // Into the global prompt, which is in front of every shot — the same
+      // gesture the pool's own handle button makes, and the answer to "she is
+      // in the piece, in all of it".
+      cite: (subject) => this.citeName(subject.handle),
+      // A keystroke in a name or a description: written through, nothing
+      // redrawn. The card holds the caret.
+      touch: () => this.onCommit?.(),
+      commit: () => this.commit(),
+    });
+    // Mounted once. `replaceChildren` with the same node still detaches and
+    // reattaches it, and a detached input loses the caret — which on a host that
+    // redraws per keystroke is the whole bug over again, one level up.
+    if (this.castHost.firstChild !== this.castShelf.root) {
+      this.castHost.replaceChildren(this.castShelf.root);
+    }
+    this.castShelf.render();
+  }
+
+  /** One file, attached to the pool, for the cast shelf's "attach a file…".
+   *  `addPoolAssets` takes several and answers nothing; a subject is being given
+   *  one thing, and the shelf needs to know which entry it was. */
+  async attachOnePoolAsset() {
+    const chosen = await openPicker({
+      kinds: ["image", "video", "audio", "renders"],
+      kind: "image",
+      capacity: () => ({ used: 0, max: S.MAX_REF_FILES, filesLeft: S.MAX_REF_FILES }),
+    });
+    if (!chosen?.length) return null;
+    const picked = chosen[0];
+    const entry = {
+      handle: S.nextPoolHandle(this.timeline),
+      kind: picked.kind,
+      role: "reference",
+      filename: picked.path ?? picked.filename,
+      ref_size: "max",
+    };
+    if (picked.trim) entry.trim = picked.trim;
+    if (entry.kind === "video") entry.track = picked.track ?? S.DEFAULT_TRACK;
+    this.timeline.assets.push(entry);
+    this.commit();
+    return entry;
+  }
+
+  /** Write a name into the global prompt, so it applies to every shot. The
+   *  cast's half of `citeInGlobal`, which does the same for a file. */
+  citeName(handle) {
+    if (!handle) return;
+    const current = this.timeline.prompt ?? "";
+    if (new RegExp(`@${handle}\\b`).test(current)) return;
+    const joiner = current && !/\s$/.test(current) ? " " : "";
+    this.setGlobalPrompt(`${current}${joiner}@${handle} `);
+    this.commit();
   }
 
   /** Write a pool handle into the global prompt — the one-click way to say
@@ -1909,7 +1998,9 @@ class Timeline {
       // nowhere yet" for the whole of the edit that cited it. It holds no caret
       // and nothing focusable, so rebuilding it under an open window costs
       // nothing. See `renderPool` and `S.poolCitations`.
-      onCommit: () => { this.onCommit?.(); this.renderStrip(); this.renderPool(); },
+      onCommit: () => {
+        this.onCommit?.(); this.renderStrip(); this.renderPool(); this.renderCast();
+      },
       // Both belong to the timeline rather than to one shot: the canvas because
       // the segments are joined, the continuation because it describes the seam
       // in front of this segment and so does not exist for the first one.

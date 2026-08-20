@@ -160,6 +160,63 @@ The PreStage's style references are cited the same way. Writing `@ref-2` becomes
 it is the name the model is actually reading. Which slot a reference gets is the
 payload's to decide, not yours to count.
 
+## The cast
+
+A reference is a file. A *subject* is who is in the video, and H3 keeps the two
+apart: `<Picture 1>` is a picture the tokenizer is shown, `<Subject 1>` is a
+person, an object, a place or a look that the target video actually contains.
+The reference guide is blunt about which of the two a character is — an image
+used only to define somebody gets no picture entry of its own; it is cited
+*inside* that subject's definition.
+
+So people are cast, not attached. **Cast** is on the rail beside Add image; the
+same shelf is in the Timeline window, under the piece references. Press it, give
+the subject a name, and hang files on her.
+
+Each file behind her is a thumbnail on her card, badged with what it lends her.
+Click a thumbnail to change that, or to take it off; click the dashed tile to
+hang another one on, picking from what is attached or attaching something new.
+
+- **Several pictures, one person.** Four angles of the same face are one subject,
+  not four references that happen to rhyme. Files that give her looks wear no
+  badge — they are the common case; the badges mark the three departures from it.
+- **A face from a still, a walk from a clip.** Set one file to *she moves like
+  this* and the definition says her appearance comes from the pictures and her
+  motion from the clip.
+- **A voice.** *This is her voice* binds an audio reference as her voice timbre
+  and gives her a speaker ID. IDs run in cast order, so the first speaker is the
+  one at the top of the shelf.
+- **Swapping a person for a person.** *She takes somebody's place in this* names
+  a reference clip, and the box under it says who — "the man at the counter". The
+  clip's framing, camera work and action are kept; its occupant is replaced by
+  her. That is the whole gesture, and the one the guide spells as the
+  `transferred` marker.
+- **Nothing behind her at all.** A name and a description is a subject too, and
+  it is the useful one in a prompt with no references in it: it is what keeps
+  her the same woman in shot 1 and in shot 9. Her description becomes her whole
+  definition.
+
+Then you write with her. `@anna walks in and looks at @ben` — the same `@` chip
+everything else uses, in the same menu, under **Cast**. Citing a subject is what
+carries her files into that shot, exactly as citing a piece reference carries
+that file: a shot that never names her does not pay for her pictures.
+
+A name is only a name because you declared it. `@anna` in a piece where nobody
+cast Anna is ordinary prose and stays that way — nothing you have already written
+changes meaning because this shelf exists.
+
+A subject nobody has written into a prompt is in no shot, and her card says so —
+click that and it writes her name in for you.
+
+What it produces is the part of the form that could not be written before. At
+queue time the compiler emits `subject_definitions` and `retention_analysis` in
+the guide's own shapes, in the reference form and in the plain modes alike — so a
+`<Subject 1>` is always defined wherever it is written. Every subject is defined
+once and its fate marked `fully_preserved`, `partially_preserved`, `transferred`
+or `reused`, with the shots she appears in read off the description. Refine is
+handed the cast as pinned fact: it writes the film around your subjects and is told not to define or
+renumber them.
+
 ## LoRAs
 
 ![The LoRA manager](docs/img/lora_picker.png)
@@ -752,6 +809,7 @@ matching pills light up.
 python3 tests/test_compile.py         # canvas math, modes, limits, ordering
 python3 tests/test_faces.py           # face windows, crops, and the piece/shot switch
 python3 tests/test_refine.py
+python3 tests/test_subjects.py       # the cast: citation, labels, and the two sections it writes
 python3 tests/test_assets.py          # what the picker's listing walk finds
 python3 tests/test_outputs.py         # what an output prefix may be
 python3 tests/test_settings.py        # what the settings file may hold, and that a save is a patch
@@ -760,6 +818,7 @@ python3 tests/test_style_atlas.py     # the vendored atlas is whole, and a style
 python3 tests/test_canvas_mirror.py   # canvas.js against canvas.py
 python3 tests/test_piece_mirror.py    # an old creator_data blob lifts to one shot
 python3 tests/test_prestage_mirror.py
+python3 tests/test_cast_mirror.py     # state.js against subjects.py
 python3 tests/test_outputs_mirror.py  # outputs.js against outputs.py
 python3 tests/test_js_bodies.py       # the frontend loads and every node body mounts
 ```

@@ -89,7 +89,7 @@ def plan(flags, kind="timeline", index=None, render="chained"):
     body = {"kind": kind, "data": strip(flags, render=render)}
     if index is not None:
         body["index"] = index
-    mode, shots, images, piece, single, pool, footage = routes._plan(body)
+    mode, shots, images, piece, single, pool, footage, cast = routes._plan(body)
     return {"mode": mode, "shots": shots, "piece": piece, "single": single}
 
 
@@ -138,7 +138,7 @@ check("lone card is the sampled length", 5.0 < lone[0]["seconds"] < 5.5, True)
 
 seamed = strip([False, True, False])
 seamed["segments"][2]["continue"] = True
-_, shots, _, _, _, _, _ = routes._plan({"kind": "timeline", "data": seamed})
+_, shots, _, _, _, _, _, _ = routes._plan({"kind": "timeline", "data": seamed})
 check("seam on the pass head", [s["continues"] for s in shots], [False, False, True])
 
 # The flag on a merged card describes a seam that no longer exists: it was
@@ -146,7 +146,7 @@ check("seam on the pass head", [s["continues"] for s in shots], [False, False, T
 # a frame the sampler will never hand it.
 inner = strip([False, True, True])
 inner["segments"][1]["continue"] = True
-_, shots, _, _, _, _, _ = routes._plan({"kind": "timeline", "data": inner})
+_, shots, _, _, _, _, _, _ = routes._plan({"kind": "timeline", "data": inner})
 check("no seam inside a pass", [s["continues"] for s in shots], [False, False, False])
 
 # ---- one card at a time, at any index --------------------------------------
@@ -194,7 +194,7 @@ check("mode", got["mode"], "T2VA")
 legacy = {"kind": "creator", "data": {
     "version": 1, "prompt": "a lighthouse", "duration_s": 6,
     "aspect": "16:9", "short_edge": 768, "assets": [], "loras": [], "models": {}}}
-mode, shots, _, piece, single, pool, footage = routes._plan(routes._target(legacy))
+mode, shots, _, piece, single, pool, footage, _ = routes._plan(routes._target(legacy))
 check("a retired creator target is one card of a piece", len(shots), 1)
 check("...carrying the blob's own prompt", shots[0]["text"], "a lighthouse")
 # Empty rather than the shot's own sentence: on a lifted blob the prompt sits

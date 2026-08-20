@@ -15,6 +15,7 @@ import { css as loras } from "./styles/loras.js";
 import { css as overlays } from "./styles/overlays.js";
 import { css as settings } from "./styles/settings.js";
 import { css as timeline } from "./styles/timeline.js";
+import { css as cast } from "./styles/cast.js";
 import { css as refine } from "./styles/refine.js";
 import { css as prestage } from "./styles/prestage.js";
 import { css as presets } from "./styles/presets.js";
@@ -29,6 +30,10 @@ const CSS = [
   overlays,
   settings,
   timeline,
+  // After the timeline's: the shelf is mounted inside both the node body and
+  // the timeline window, and a couple of its rules narrow what each of those
+  // says about the elements it wraps.
+  cast,
   refine,
   prestage,
   // After the picker's: the library reuses its modal, tabs and shelves and

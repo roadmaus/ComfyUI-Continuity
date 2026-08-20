@@ -80,6 +80,11 @@ export const css = `
 }
 .mmc-tl-pool-cite:hover { text-decoration: underline; }
 
+/* The cast shelf sits between the pool and the bar, in a host of its own. The
+   shelf itself is mounted from cast.js and wears the stylesheet next door,
+   because the same shelf is mounted on the node face. */
+.mmc-tl-cast { min-width: 0; }
+
 .mmc-tl-bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 .mmc-pill.on { border-color: rgba(255,255,255,.22); }
 /* An accelerator that is doing something. Lit rather than merely outlined,

@@ -1246,6 +1246,88 @@ try {
   out.errors.push(`nested: ${error.message}`);
 }
 
+// The cast, on the node's own face.
+//
+// The shelf used to live only in the Timeline window and to refuse to open at
+// all until a reference had been attached — which put it out of reach of a
+// text-only generation, where a name and a description are the whole of what
+// keeps the same woman in shot 1 and in shot 9. It is on the rail now, on a
+// node with nothing attached to it, and this is the path end to end: press the
+// rail, name her, describe her, cite her, and read `subjects` back out of the
+// blob the node writes.
+try {
+  const all = (root, cls) => {
+    const hits = [];
+    const walk = (n) => {
+      if (String(n.className ?? "").split(" ").includes(cls)) hits.push(n);
+      (n.children ?? []).forEach(walk);
+    };
+    walk(root);
+    return hits;
+  };
+  const click = (node) => node?.listeners?.click?.[0]?.();
+  const type = (field, value) => {
+    field._value = value;
+    field.listeners?.input?.forEach((fn) => fn({ target: { value } }));
+  };
+
+  const node = fakeNode("MiniMaxH3Creator", "creator_data", JSON.stringify({
+    version: 1, prompt: "a bare loft at dusk", assets: [], loras: [],
+  }));
+  await ext.nodeCreated(node);
+  const body = node.mmcBody;
+
+  const railCast = all(body.root, "mmc-tool").find((b) => b.text.includes("Cast"));
+  const beforePress = all(body.root, "mmc-cast-card").length;
+  click(railCast);
+  const cards = () => all(body.root, "mmc-cast-card");
+
+  const name = all(body.root, "mmc-cast-name")[0];
+  type(name, "anna");
+  name.listeners?.blur?.forEach((fn) => fn());
+  const desc = all(body.root, "mmc-cast-desc")[0];
+  type(desc, "a woman in her thirties, close-cropped hair");
+  desc.listeners?.blur?.forEach((fn) => fn());
+
+  // Cast but never written into a prompt: the readout says so, and clicking it
+  // is what fixes it.
+  const idle = all(body.root, "mmc-cast-where-idle");
+  click(idle[0]);
+
+  // The shelf must not redraw itself while it holds the caret. Every keystroke
+  // in a cast field is written straight through to the blob, and writing to the
+  // blob is what redraws the node — so a shelf that rebuilt on demand would
+  // rebuild the field under the caret between one letter and the next, and you
+  // could type exactly one character before the focus went with it.
+  const shelf = body.faceEditor.castShelf;
+  const card = () => all(shelf.root, "mmc-cast-card")[0];
+  const held = card();
+  shelf.root.contains = () => true;          // ...as it would while typing
+  globalThis.document.activeElement = all(shelf.root, "mmc-cast-name")[0];
+  shelf.render();
+  const survived = card() === held;
+  globalThis.document.activeElement = null;
+  shelf.root.contains = () => false;
+  shelf.render();
+  const rebuilt = card() !== held;
+
+  const blob = JSON.parse(node.widgets.find((w) => w.name === "creator_data").value);
+  out.cast = {
+    onRail: !!railCast,
+    // Ungated: nothing is attached to this node at all.
+    railEnabled: !railCast?.attrs?.disabled,
+    beforePress,
+    afterPress: cards().length,
+    idleBefore: idle.length,
+    idleAfter: all(body.root, "mmc-cast-where-idle").length,
+    survived, rebuilt,
+    prompt: body.timeline.segments[0].prompt,
+    subjects: blob.subjects,
+  };
+} catch (error) {
+  out.errors.push(`cast: ${error.message}`);
+}
+
 console.log(JSON.stringify(out));
 """
 
@@ -1546,5 +1628,24 @@ check("...inert until something has been queued", seed.get("beforeQueueOff"), Tr
 check("after a queue it offers the seed that ran", seed.get("afterQueue"), True)
 check("...and clicking it puts that seed back", seed.get("restored"), 4242)
 check("...after which it is inert again", seed.get("thenOff"), True)
+
+
+# ---- the cast, on the node face ---------------------------------------------
+cast = report.get("cast") or {}
+check("the cast is on the rail", cast.get("onRail"), True)
+check("and is not gated on having attached anything", cast.get("railEnabled"), True)
+check("the shelf is hidden until it is asked for", cast.get("beforePress"), 0)
+check("one press of the rail casts the first person", cast.get("afterPress"), 1)
+check("a subject nobody cites says so", cast.get("idleBefore"), 1)
+check("and clicking that is what cites her", cast.get("idleAfter"), 0)
+check("the shelf does not redraw under the caret", cast.get("survived"), True)
+check("and redraws once the field is left", cast.get("rebuilt"), True)
+check("the citation lands in the prompt",
+      "@anna" in (cast.get("prompt") or ""), True)
+check("she is described in words alone, with no reference behind her",
+      (cast.get("subjects") or [{}])[0].get("description"),
+      "a woman in her thirties, close-cropped hair")
+check("and rides in the blob the node writes",
+      (cast.get("subjects") or [{}])[0].get("handle"), "anna")
 
 passed(f"the frontend loads and all {len(report['nodes'])} bodies mount")

@@ -49,6 +49,15 @@ BODY_FIELDS = (BODY_FIELD, REF_BODY_FIELD)
 # at all, which is why `compose` only builds this form when it is handed them.
 REF_SECTIONS = ("subject_definitions", "summary", "retention_analysis")
 
+# The two of those a cast makes derivable, and the only two a *base*-mode prompt
+# can carry. `summary` is the refiner's and is a statement about the whole
+# reference form; these two are written by `subjects.py` out of what the user
+# declared, so they exist wherever a cast does — including in T2VA, where there
+# is no reference form at all. They have to be emitted there for the same reason
+# `AUDIO_SEAM_LINE` does: `<Subject 1>` written into a description the prompt
+# never defines is a label pointing at nothing.
+CAST_SECTIONS = ("subject_definitions", "retention_analysis")
+
 # The modes whose body belongs in `integrated_multimodal_description`.
 BASE_MODES = ("T2VA", "I2VA", "L2VA", "FL2VA")
 
@@ -174,12 +183,19 @@ def _define(asset, label):
     return form % label if form else None
 
 
-def reference_preamble(plan):
+def reference_lines(plan, skip=()):
     """`compile.plan_references`'s walk -> the lines that define its labels.
 
     One line per label, in the order the tokenizer is shown them, so the prose
     and the payload agree about which file is which without either side
     re-deriving the order.
+
+    `skip` is the handles a subject has already folded into its own definition —
+    `subjects.claimed`. Section 2.2 of the reference guide gives a picture that
+    only says what somebody looks like no entry of its own, so a claimed file is
+    defined once, inside the `<Subject N>` that cites it, and not again here.
+    A soundtrack's line is skipped by its `"<handle>:audio"` key, which is how
+    `_labels_from_plan` addresses it.
     """
     # The `<Video N>` a soundtrack belongs to is assigned by the step after it,
     # so the clip's own label is looked up rather than carried forward.
@@ -189,14 +205,24 @@ def reference_preamble(plan):
     for step in plan:
         asset, label = step["asset"], step["label"]
         if step["op"] == "soundtrack":
+            if f"{asset.handle}:audio" in skip:
+                continue
             owner = video_label.get(asset.handle)
             lines.append(_SOUNDTRACK % (label, owner) if owner
                          else _DEFINE[("audio", "full")] % label)
             continue
+        if asset.handle in skip:
+            continue
         line = _define(asset, label)
         if line:
             lines.append(line)
-    return " ".join(lines)
+    return lines
+
+
+def reference_preamble(plan, skip=()):
+    """`reference_lines` as the one paragraph the prompt carries when there is no
+    `subject_definitions` section for them to sit in."""
+    return " ".join(reference_lines(plan, skip))
 
 
 def count_shots(body):
@@ -393,18 +419,24 @@ def compose(mode, body, soundscape="", music="", seconds=0.0, preamble="", shots
     # prompt the user has since hand-edited into full form is not given a second
     # copy of a section it already has.
     reference_form = mode == "REF2VA" and bool(sections)
+    # A base-mode prompt with a cast in it. Not the six-section form — the body
+    # is still wrapped in `integrated_multimodal_description` below, because that
+    # is the form these modes were trained on — only the two label-defining
+    # sections in front of it.
+    cast_form = not reference_form and any(
+        str((sections or {}).get(name) or "").strip() for name in CAST_SECTIONS)
 
     # What each reference is, where nothing else says it. See `definitions`.
     definitions = (definitions or "").strip()
-    if (definitions and not reference_form
+    if (definitions and not reference_form and not cast_form
             and not any(has_field(body, name) for name in REF_SECTIONS)):
         out.append(definitions)
 
-    if reference_form:
-        for name in REF_SECTIONS:
-            value = str(sections.get(name) or "").strip()
-            if value and not has_field(body, name):
-                out.append(f"{name}: {value}")
+    for name in (REF_SECTIONS if reference_form
+                 else CAST_SECTIONS if cast_form else ()):
+        value = str(sections.get(name) or "").strip()
+        if value and not has_field(body, name):
+            out.append(f"{name}: {value}")
 
     if body:
         # Only wrapped when the body is plain prose. Anything already sectioned —

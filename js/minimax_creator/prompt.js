@@ -84,6 +84,10 @@ export class PromptBox {
    * @param {()=>object[]} [hooks.getPool]   the piece's reference pool, for a
    *   timeline segment: citable by handle, never attached — writing the chip is
    *   what attaches it at queue time
+   * @param {()=>object[]} [hooks.getCast]   the piece's cast. Cited exactly as a
+   *   pool asset is, and recognised differently: a subject's name is only a
+   *   citation because somebody declared it, so the chips are built from this
+   *   list rather than from a shape
    * @param {()=>string} [hooks.attachedLabel]  what to call `getState().assets`
    *   in the menu. The timeline's global prompt is written against the piece's
    *   own pool rather than a card's attachments, and "Attached" would name it
@@ -246,30 +250,37 @@ export class PromptBox {
   }
 
   /** Text -> [text nodes, chip spans]. Only handles with a live asset — the
-   *  state's own or the piece's pool — become chips; the rest stay as plain
-   *  text so the dangling-handle warning sees them. */
+   *  state's own or the piece's pool — and names the piece's cast declares
+   *  become chips; the rest stay as plain text so the dangling-handle warning
+   *  sees them.
+   *
+   *  The file half of the pattern is tried first, so `@img-1` is one handle and
+   *  never the word "img". A name nobody cast matches the second half, finds no
+   *  subject and stays prose — which is the promise the cast is built on. */
   build(text) {
     const known = new Set([
       ...this.hooks.getState().assets.map((a) => a.handle),
       ...(this.hooks.getPool?.() ?? []).map((a) => a.handle),
     ]);
+    const cast = new Set((this.hooks.getCast?.() ?? []).map((s) => s.handle));
     const out = [];
     let at = 0;
-    const pattern = /@([A-Za-z]+-\d+)/g;
+    const pattern = /@([A-Za-z]+-\d+|[A-Za-z][A-Za-z0-9_]*)/g;
     let match;
     while ((match = pattern.exec(text)) !== null) {
-      if (!known.has(match[1])) continue;
+      const handle = match[1];
+      if (!known.has(handle) && !cast.has(handle)) continue;
       if (match.index > at) out.push(document.createTextNode(text.slice(at, match.index)));
-      out.push(this.chip(match[1]));
+      out.push(this.chip(handle, cast.has(handle)));
       at = match.index + match[0].length;
     }
     if (at < text.length) out.push(document.createTextNode(text.slice(at)));
     return out;
   }
 
-  chip(handle) {
+  chip(handle, subject = false) {
     return el("span", {
-      class: `mmc-ref mmc-tag-${tagIndex(handle)}`,
+      class: `mmc-ref${subject ? " mmc-ref-cast" : ""} mmc-tag-${tagIndex(handle)}`,
       contenteditable: "false",
       "data-handle": handle,
       text: `@${handle}`,
@@ -482,9 +493,17 @@ export class PromptBox {
     this.menu.style.top = `${Math.max(8, Math.min(top, window.innerHeight - height - 8))}px`;
   }
 
-  /** Attached assets first, then the piece's pool, then the input folder. */
+  /** The cast first, then attached assets, then the piece's pool, then the
+   *  input folder. The cast leads because a subject is what a sentence is
+   *  usually about, and because citing one is how her files get here at all. */
   options() {
     const state = this.hooks.getState();
+    const cast = (this.hooks.getCast?.() ?? [])
+      .filter((subject) => subject.handle)
+      .filter((subject) => !this.query
+        || subject.handle.toLowerCase().includes(this.query)
+        || String(subject.description ?? "").toLowerCase().includes(this.query))
+      .map((subject) => ({ kind: "cast", handle: subject.handle, subject }));
     const attached = state.assets
       .filter((asset) => !this.query || asset.handle.toLowerCase().includes(this.query)
         || asset.filename.toLowerCase().includes(this.query))
@@ -509,13 +528,13 @@ export class PromptBox {
       .slice(0, MAX_SUGGESTIONS)
       .map((row) => ({ kind: "library", path: row.path, mediaKind: row.kind, row }));
 
-    return { attached, pool, library };
+    return { cast, attached, pool, library };
   }
 
   renderMenu() {
     if (!this.menu) return;
-    const { attached, pool, library } = this.options();
-    this.flat = [...attached, ...pool, ...library];
+    const { cast, attached, pool, library } = this.options();
+    this.flat = [...cast, ...attached, ...pool, ...library];
     if (this.active >= this.flat.length) this.active = Math.max(0, this.flat.length - 1);
 
     // openMenu() renders once immediately and again when the library resolves,
@@ -533,23 +552,52 @@ export class PromptBox {
       return;
     }
 
+    // A subject's thumbnail is the first picture she is made of — the point of
+    // the row is to recognise her, and her own face does that where a glyph
+    // cannot. Looked up through the pool because that is where a cast's files
+    // live; a subject built only out of a clip or a vacancy keeps the glyph.
+    const faceOf = (subject) => {
+      const pool = [...(this.hooks.getPool?.() ?? []),
+                    ...(this.hooks.getState().assets ?? [])];
+      for (const handle of subject.from ?? []) {
+        const asset = pool.find((a) => a.handle === handle);
+        if (asset?.kind === "image") return asset.filename;
+      }
+      return null;
+    };
+
     let index = 0;
     const row = (option) => {
       const here = index++;
-      const thumb = option.mediaKind === "image"
-        ? el("img", { class: "mmc-mention-thumb", src: viewUrl(option.path, { preview: true }), alt: "" })
-        : el("span", { class: "mmc-mention-thumb", text: option.mediaKind === "video" ? "▶" : "♪" });
+      const face = option.kind === "cast" ? faceOf(option.subject) : null;
+      const thumb = option.mediaKind === "image" || face
+        ? el("img", {
+            class: "mmc-mention-thumb",
+            src: viewUrl(face ?? option.path, { preview: true }), alt: "",
+          })
+        : el("span", {
+            class: "mmc-mention-thumb",
+            text: option.kind === "cast" ? "☺" : option.mediaKind === "video" ? "▶" : "♪",
+          });
 
       // Attached assets are known by their handle; a library file is known by
       // its name, and only earns a second line when it lives in a subfolder —
-      // repeating the same string twice told the user nothing.
+      // repeating the same string twice told the user nothing. A subject's
+      // second line is what she is, which is the whole of what the cast knows
+      // about her that her name does not say.
+      const made = option.kind === "cast"
+        ? (option.subject.description
+           || [...(option.subject.from ?? []), option.subject.motion, option.subject.voice]
+                .filter(Boolean).map((h) => "@" + h).join(", "))
+        : null;
       const title = option.handle ? `@${option.handle}` : option.path.split("/").pop();
-      const subtitle = option.handle ? option.path : (option.row?.subfolder || "");
+      const subtitle = option.kind === "cast" ? made
+        : option.handle ? option.path : (option.row?.subfolder || "");
 
       const item = el("button", {
         class: "mmc-mention-row",
         "aria-selected": here === this.active,
-        title: option.path,
+        title: option.kind === "cast" ? `@${option.handle}` : option.path,
         onmouseenter: () => this.highlight(here),
         onclick: (event) => { event.preventDefault(); this.choose(here); },
       }, [
@@ -569,6 +617,10 @@ export class PromptBox {
       return item;
     };
 
+    if (cast.length) {
+      this.menu.appendChild(el("div", { class: "mmc-mention-head", text: t("Cast") }));
+      for (const option of cast) this.menu.appendChild(row(option));
+    }
     if (attached.length) {
       this.menu.appendChild(el("div", {
         class: "mmc-mention-head",
@@ -614,7 +666,7 @@ export class PromptBox {
   choose(index) {
     const option = this.flat?.[index];
     if (!option) return;
-    if (option.kind === "attached" || option.kind === "pool") {
+    if (option.kind === "cast" || option.kind === "attached" || option.kind === "pool") {
       // Both already have a handle; for a pool asset the chip *is* the
       // attachment — the citation carries it into this generation at queue time.
       this.closeMenu();

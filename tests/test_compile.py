@@ -20,7 +20,7 @@ def _load():
     package.__path__ = [ROOT]
     sys.modules["mmc"] = package
     modules = {}
-    for name in ("canvas", "contextir", "compile", "compile_still"):
+    for name in ("canvas", "contextir", "subjects", "compile", "compile_still"):
         spec = importlib.util.spec_from_file_location(f"mmc.{name}", os.path.join(ROOT, f"{name}.py"))
         module = importlib.util.module_from_spec(spec)
         sys.modules[f"mmc.{name}"] = module

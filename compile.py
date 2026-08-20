@@ -17,7 +17,7 @@ lists this module produces in exactly that order; the two must be read together.
 import re
 from dataclasses import dataclass, field, replace
 
-from . import canvas, contextir
+from . import canvas, contextir, subjects
 
 MODES = ("T2VA", "I2VA", "L2VA", "FL2VA", "REF2VA")
 
@@ -251,6 +251,12 @@ class Compiled:
     ref_videos: list[Asset] = field(default_factory=list)
     ref_audios: list[Asset] = field(default_factory=list)
     labels: dict[str, str] = field(default_factory=dict)   # handle -> "<Picture 1>"
+    # The cast this generation carries — the subjects its own text cited — and
+    # what each became. Kept apart from `labels` rather than merged into it
+    # because the two are addressed differently: a file's handle is recognised
+    # by its shape, a subject's only by being declared. See `subjects.py`.
+    cast: list = field(default_factory=list)               # subjects.Subject
+    subject_labels: dict[str, str] = field(default_factory=dict)  # name -> "<Subject 1>"
     plan: list[dict] = field(default_factory=list)         # REF2VA only; see plan_references
     triggers: list[str] = field(default_factory=list)      # already prefixed onto `prompt`
     checkpoint_pinned: bool = False                        # the user chose it; not derived
@@ -667,6 +673,20 @@ def _substitute(prompt, labels, assets, where="prompt"):
     return HANDLE_RE.sub(lambda m: labels.get(m.group(1), m.group(0)), prompt)
 
 
+def _substitute_subjects(text, cast, subject_labels):
+    """Replace every `@name` the cast declares with its `<Subject N>`.
+
+    A second pass rather than part of `_substitute` because the two handle
+    shapes are matched differently and deliberately so: an asset handle is
+    recognised by its shape, a subject only ever by being declared. Nothing in
+    prose is reinterpreted by a cast existing somewhere else in the piece.
+    """
+    pattern = subjects.citation_re(cast)
+    if pattern is None:
+        return text
+    return pattern.sub(lambda m: subject_labels[m.group(1)], text)
+
+
 def refined_body(data):
     """The refiner's prose for this request, or None if it is not to be used.
 
@@ -925,11 +945,33 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
         plan = []
         labels = _keyframe_labels(first_frame, last_frame, continues)
 
+    # The cast, cut down to the subjects this generation actually cites. Read
+    # before any substitution, because a citation is `@anna` in what the user
+    # wrote and the labels are what it becomes. An uncited subject is not an
+    # error and costs nothing: the piece holds one cast and a shot carries the
+    # part of it that walks on.
+    try:
+        cast = subjects.parse(data.get("subjects"))
+    except subjects.SubjectError as exc:
+        raise CompileError(str(exc)) from exc
+    raw_body = refined_body(data) or str(data.get("prompt") or "")
+    raw_sections = refined_sections(data)
+    cast = subjects.cited(cast, [raw_body,
+                                 str(data.get("soundscape") or ""),
+                                 str(data.get("music") or "")]
+                          + list((raw_sections or {}).values()))
+    try:
+        subjects.check(cast, assets)
+    except subjects.SubjectError as exc:
+        raise CompileError(str(exc)) from exc
+    subject_labels = subjects.labels(cast)
+
     # The refiner's prose stands in for the user's sentence and is substituted the
     # same way — it holds the same `@handles`, which is the whole reason it is
     # stored in that form. Switching the panel's toggle off falls back here
     # rather than anywhere downstream, so nothing else has to know it exists.
-    body = _substitute(refined_body(data) or str(data.get("prompt") or ""), labels, assets)
+    body = _substitute_subjects(
+        _substitute(raw_body, labels, assets), cast, subject_labels)
 
     # Trigger words come from the LoRAs that are actually in this run — an entry
     # set to the other checkpoint contributes neither weights nor words. Keyed on
@@ -988,14 +1030,34 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     # Substituted like the body: the reference form cites `<Audio N>` in the
     # soundscape, and the refiner stores that citation as `@aud-1` exactly as it
     # does in a shot body.
-    soundscape = _substitute(str(data.get("soundscape") or ""), labels, assets,
-                             where="overall_soundscape")
-    music = _substitute(str(data.get("music") or ""), labels, assets,
-                        where="non_diegetic_music")
-    sections = refined_sections(data)
+    soundscape = _substitute_subjects(
+        _substitute(str(data.get("soundscape") or ""), labels, assets,
+                    where="overall_soundscape"), cast, subject_labels)
+    music = _substitute_subjects(
+        _substitute(str(data.get("music") or ""), labels, assets,
+                    where="non_diegetic_music"), cast, subject_labels)
+    sections = raw_sections
     if sections:
-        sections = {name: _substitute(text, labels, assets, where=name)
+        sections = {name: _substitute_subjects(
+                        _substitute(text, labels, assets, where=name),
+                        cast, subject_labels)
                     for name, text in sections.items()}
+
+    # The two sections a cast makes derivable. They are the compiler's rather
+    # than the refiner's wherever a cast exists: the user pinned who is in the
+    # video, and a rewrite that renumbered or redefined them would be pinning
+    # nothing. The refiner keeps `summary`, which is the film rather than the
+    # cast, and is told as much — see `refine.cast_glossary`.
+    #
+    # The files no subject claimed are defined in this same section rather than
+    # in a paragraph of their own: the guide puts every label's meaning in
+    # `subject_definitions`, and two places to look is one too many.
+    if cast:
+        unclaimed = (contextir.reference_lines(plan, skip=subjects.claimed(cast))
+                     if define_refs and plan else ())
+        sections = dict(sections or {})
+        sections["subject_definitions"] = subjects.definitions(cast, labels, unclaimed)
+        sections["retention_analysis"] = subjects.retention(cast, labels, body)
     prompt = contextir.compose(
         mode, body, soundscape, music, canvas.seconds_for_frames(frames),
         # The inherited tail is presented to the tokenizer as <Audio 1>, so the
@@ -1117,6 +1179,8 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
         ref_videos=ref_videos,
         ref_audios=ref_audios,
         labels=labels,
+        cast=cast,
+        subject_labels=subject_labels,
         plan=plan,
         triggers=triggers,
         continues=continues,
@@ -1680,7 +1744,21 @@ def timeline_pool(data):
     return pool
 
 
-def cited_pool(pool, request, extra_texts=()):
+def timeline_cast(data):
+    """The piece's cast, validated for shape. Empty where nobody declared one.
+
+    Piece-level for the same reason the pool is: Anna is Anna in shot 1 and in
+    shot 9, and a cast held per card would be nine unrelated Annas. What is per
+    card is which of them walk on — a shot carries the subjects its own text
+    cites, and `<Subject N>` is numbered off that.
+    """
+    try:
+        return subjects.parse(as_piece(data).get("subjects"))
+    except subjects.SubjectError as exc:
+        raise CompileError(str(exc)) from exc
+
+
+def cited_pool(pool, request, extra_texts=(), cast=()):
     """Which pool assets this segment's text cites, in pool order.
 
     The texts scanned are exactly the ones `compile_request` will substitute:
@@ -1708,10 +1786,25 @@ def cited_pool(pool, request, extra_texts=()):
     found = set()
     for text in texts:
         found.update(HANDLE_RE.findall(text))
+    # A subject citation is a citation of every file behind it: writing `@anna`
+    # is the whole gesture, and it would be a strange one that made you name her
+    # photographs beside her. Only the files a subject is *made of* — the clip
+    # somebody is replaced in comes along too, because the replacement is stated
+    # against it.
+    pattern = subjects.citation_re(cast)
+    if pattern is not None:
+        named = set()
+        for text in texts:
+            named.update(pattern.findall(text))
+        for subject in cast:
+            if subject.handle in named:
+                found.update(subject.files)
+                if subject.replaces:
+                    found.add(subject.replaces)
     return [asset for asset in pool if asset.handle in found]
 
 
-def _inject_pool(pool, request, extra_texts=()):
+def _inject_pool(pool, request, extra_texts=(), cast=()):
     """The cited pool assets, merged in front of the segment's own list.
 
     In front, so a reference shared by several segments keeps the low ordinals
@@ -1720,7 +1813,7 @@ def _inject_pool(pool, request, extra_texts=()):
     entry is the one the user was editing, the same rule `merge_loras` applies
     to a shadowed name.
     """
-    cited = cited_pool(pool, request, extra_texts)
+    cited = cited_pool(pool, request, extra_texts, cast)
     if not cited:
         return request.get("assets")
     own = list(request.get("assets") or [])
@@ -1735,7 +1828,7 @@ def _inject_pool(pool, request, extra_texts=()):
 # and every shot on the strip is held to them. Mirrors `state.PIECE_FIELDS`.
 PIECE_FIELDS = ("aspect", "aspect_source", "short_edge", "upscale",
                 "sample_edge", "refine_denoise", "face", "models", "turbo",
-                "output_prefix")
+                "output_prefix", "subjects")
 
 # What only a lone generation ever carried at the top level. Used to tell a
 # version-1 `creator_data` blob from a fresh node's "{}" — which is an empty
@@ -1847,6 +1940,7 @@ def timeline_payloads(data, image_size_lookup=None):
     segments = timeline_segments(data)
     global_prompt = str(data.get("prompt") or "")
     pool = timeline_pool(data)
+    cast = timeline_cast(data)
     # A pool handle written in the global prompt is a citation in *every*
     # segment — the join puts it in front of each one, and `_inject_pool` reads
     # the joined prompt. That is the attach-once gesture: a character sheet
@@ -1890,7 +1984,7 @@ def timeline_payloads(data, image_size_lookup=None):
             payloads.append(group_payload(data, start, end))
         else:
             payloads.append({"request": _chained_request(
-                data, head, pool, global_prompt)})
+                data, head, pool, global_prompt, cast)})
 
         payload = payloads[-1]
 
@@ -2175,7 +2269,7 @@ def output_canvas(data, spec):
         spec["ratio"], data.get("short_edge", canvas.NATIVE_SHORT_EDGE))
 
 
-def _chained_request(data, segment, pool, global_prompt):
+def _chained_request(data, segment, pool, global_prompt, cast=()):
     """One unmerged segment's request: everything it needs and nothing the
     others do. Split out of `timeline_payloads` when a payload stopped being one
     segment, and unchanged otherwise — a segment in no pass compiles to exactly
@@ -2250,9 +2344,17 @@ def _chained_request(data, segment, pool, global_prompt):
     # field above is final, so the scan reads exactly what will be
     # substituted; a segment citing none is byte-identical to one compiled
     # before the pool existed, which is what keeps its cache key still.
-    merged_assets = _inject_pool(pool, request)
+    merged_assets = _inject_pool(pool, request, cast=cast)
     if merged_assets is not request.get("assets"):
         request["assets"] = merged_assets
+    # The cast rides along whole and `compile_request` cuts it down to the
+    # subjects this segment cites — the same division of labour the pool has,
+    # and for the same reason: the citation scan wants the text after every
+    # join above is final. Written only where there is a cast at all, so a piece
+    # without one compiles to the bytes it did before the feature existed and
+    # its segment nodes stay cache hits.
+    if cast:
+        request["subjects"] = [_subject_dict(s) for s in cast]
     return request
 
 
@@ -2276,6 +2378,42 @@ def _asset_dict(asset):
         out["trim"] = {"start": asset.trim[0], "end": asset.trim[1]}
     if asset.takes != "full":
         out["takes"] = asset.takes
+    return out
+
+
+def _renamed(subject, rename):
+    """A subject whose file handles are the ones the merged asset list uses."""
+    if not rename:
+        return subject
+    pick = lambda h: rename.get(h, h) if h else h
+    return subjects.Subject(
+        handle=subject.handle,
+        sources=[pick(h) for h in subject.sources],
+        takes=subject.takes,
+        description=subject.description,
+        motion=pick(subject.motion),
+        voice=pick(subject.voice),
+        replaces=pick(subject.replaces),
+        replaces_what=subject.replaces_what,
+        marker=subject.marker,
+    )
+
+
+def _subject_dict(subject):
+    """`Subject` -> the blob shape `subjects.parse` reads. The inverse of
+    parsing, and like `_asset_dict` it writes only what differs from the
+    default."""
+    out = {"handle": subject.handle, "from": list(subject.sources)}
+    if subject.takes != "person":
+        out["takes"] = subject.takes
+    for key, value in (("description", subject.description),
+                       ("motion", subject.motion),
+                       ("voice", subject.voice),
+                       ("replaces", subject.replaces),
+                       ("replaces_what", subject.replaces_what),
+                       ("relationship", subject.marker)):
+        if value:
+            out[key] = value
     return out
 
 
@@ -2334,6 +2472,13 @@ def group_payload(data, start=0, end=None):
     global_prompt = str(data.get("prompt") or "").strip()
     pool = timeline_pool(data)
     pool_handles = {asset.handle for asset in pool}
+    cast = timeline_cast(data)
+    # A card's own assets are renamed onto the merged list, so a subject built
+    # out of one has to be renamed with them. Accumulated across the shots and
+    # first-appearance-wins, which is the same rule the merged list itself
+    # follows — and a pool asset keeps its handle, so a cast attached where a
+    # cast belongs passes through untouched.
+    cast_rename = {}
     # The global prompt opens the pass's first shot and the global audio fields
     # are merged into its one request, so a pool citation in any of them is that
     # shot's to carry — the merge below then owns it for the whole pass.
@@ -2367,7 +2512,8 @@ def group_payload(data, start=0, end=None):
             # the pool once and takes one <Picture N> — which is the point of
             # citing it twice.
             parsed = _parse_assets(_inject_pool(
-                pool, segment, extra_texts=global_texts if number == first_number else ()))
+                pool, segment, extra_texts=global_texts if number == first_number else (),
+                cast=cast))
         except CompileError as exc:
             raise CompileError(f"shot {number}: {exc}") from exc
 
@@ -2406,6 +2552,7 @@ def group_payload(data, start=0, end=None):
                     assets.append(replace(
                         asset, handle=f"{_HANDLE_PREFIX[asset.kind]}-{counters[asset.kind]}"))
             rename[asset.handle] = assets[position].handle
+            cast_rename.setdefault(asset.handle, assets[position].handle)
             # The piece's chosen aspect source, carried through the merge: the
             # request below is a single generation, so `{card, handle}` has to
             # become the handle the asset wears after renaming.
@@ -2482,6 +2629,10 @@ def group_payload(data, start=0, end=None):
     sections = refined_sections(data) if len(group) == len(segments) else None
     if sections:
         request["refined"] = {"sections": sections}
+    # One pass is one generation, so it carries the whole cast and
+    # `compile_request` cuts it down to whoever the assembled description cites.
+    if cast:
+        request["subjects"] = [_subject_dict(_renamed(s, cast_rename)) for s in cast]
     pin = _agree([s.get("checkpoint") for s in group], "the checkpoint", blank="auto")
     if pin != "auto":
         request["checkpoint"] = pin

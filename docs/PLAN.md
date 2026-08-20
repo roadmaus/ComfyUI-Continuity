@@ -82,6 +82,7 @@ for you. Everything else in this package exists to support that one gesture.
 | Where the aspect comes from | The first pass's own answer, then the first clip, then the pill — unless the user names a source (`aspect_source`: any attached picture on any card, a clip, a pool reference, or the pill forced over them) | Footage was shot at the size it was shot at, and cropping it to a preference throws away picture that cannot be got back; a ratio pill *is* a preference, so a clip outranks it. It does not outrank a keyframe on segment 1 — that rule already existed and every timeline without footage still follows it, so the order only ever adds a step that used to fall through to the pill. The scale stays the slider's: generated video stops at 896 and is off-distribution past 768, so a 1080p source is played at the render's size and the card says so. `canvas_from_image` is the same call a keyframe goes through, so the clamp and the area cap are the ones that already exist — but `from_image` stays false, because nothing in the generation is being matched to a still and `encode.py` reads that flag to decide whether a keyframe may be stretched onto the canvas or has to be cropped into it. |
 | The seam in front of a clip | The same switches, running the other way | Everywhere else the seam says what the card *after* the cut starts from. A clip is not conditioned on anything, so the only thing a seam there can say is what the card *before* it ends on: the clip's opening frame, and its opening sound. The switches stay where the cut is — the strip draws them there, and moving the clip moves them — and only their sentence changes; what changes underneath is which payload they land on. Mechanically it is an ordinary last-frame keyframe fed from a tensor, so it lands on the same four modes a pair of attached stills does — and on a shot carrying references it rides as a pinned guide on Ref2VA, the same road the continuation seam takes. |
 | Blending into a clip | The same grid, end-aligned, and it is exact | `_context_keyframes` pins guides at any frame index, so the only question was whether an end-aligned run lands on the VAE's temporal grid. It does, and not by luck: the feather grid is the standalone-encodable runs (17m+5) and a generation is 17n+5 frames, so a run ending on the last frame *begins* at frame 17(n−m) — a whole number of seventeen-frame cycles from the origin, and therefore in phase with the five-step pattern. So the tail blend is the head blend with an offset. The sound crosses with it because `AUDIO_END_KEY` already took any pixel-frame coordinate. What it costs is symmetrical too: the blended run is re-generated and trimmed off the *end* of the generated segment rather than the front of the clip — trimming the clip would edit footage the user chose. |
+| Who is in the shot | A cast of `<Subject N>`s above the assets, cited by `@handle` like anything else | H3's reference guide splits identity from provenance: `<Subject N>` is the reusable visible content and `<Picture N>`/`<Video N>` are the files it came off, and §2.2 is explicit that an image used only to define a character must *not* get a standalone picture entry — it is cited inside that subject's definition. Everything here addressed the files, so a person was `<Picture 1>` and the prose said `<Picture 1>` walked across the room. That is off-spec, and it also cannot say the three things the guide's own examples say: that four photos are one dog, that a face comes from a still and a walk from a clip, and that a subject *replaces* someone already in a reference video. So a subject becomes a thing the user declares — a name, the files behind it, what to take from them — and the compiler emits the two sections it now has the facts to write. |
 | Frame extraction | Client-side, through the trim editor's own scrubbing | `framegrab.js` is the trim editor's canvas + `seeked` + `drawFrame` machinery with a different ending: the playhead frame is painted at the clip's own resolution and uploaded through core's `/upload/image`, landing on an `input/prestage_frames/` shelf. Zero server half. |
 
 ## Phases
@@ -206,6 +207,84 @@ for you. Everything else in this package exists to support that one gesture.
   `render.emit` before emitting the sampler would make a re-run skip everything
   that has not changed. That is a store with a real invalidation problem in it
   and it wants deciding on its own, not smuggling in behind a memory fix.
+
+- [x] **10 — The cast.** `subjects.py`, and the two prompt sections it makes
+  derivable. What the decision row above is about.
+
+  **The shape.** A subject is declared on the piece, beside the reference pool:
+  a handle, the reference assets that define it, one `takes` word saying what of
+  them is the reference, and optionally a description, a clip its motion comes
+  from, an audio reference that is its voice, and the person in a reference
+  video it stands in for. It is cited in prose as `@anna` exactly as an asset
+  is, and `_substitute` turns it into `<Subject N>` at queue time — so the whole
+  chip, mention-menu, refined-body-stores-handles machinery carries it with no
+  changes at all. Handles share one namespace with the assets, because the user
+  types one `@`.
+
+  **Why it is above the assets rather than a field on one.** `takes` says what
+  of a *file* to keep; a subject says who is in the video. Those differ whenever
+  a subject is more than one file (four photos of the same dog — the guide's own
+  example), when it is more than one *kind* of file (appearance from a still,
+  motion from a clip), and when it is nobody in any file (a subject that only
+  exists to say what the woman in `@vid-1` is replaced by). None of those fit on
+  an asset. `takes` stays where it is for an unclaimed reference and moves onto
+  the subject for a claimed one — the retention decision the guide wants is
+  per-subject, so a subject built from a photo and a clip states it once.
+
+  **What it makes derivable.** `subject_definitions` and `retention_analysis`,
+  in the guide's own forms, from the direct path — sections that until now only
+  ever arrived from the refiner because they cannot be got out of a sentence.
+  With a cast they can: the definition line is the subject's sources and its
+  description, the retention line is its marker and what that marker covers, and
+  a replacement is the marker `transferred` plus the sentence naming who it
+  replaced. The `<Picture N>` a claimed asset still owns is cited *inside* the
+  definition and gets no `_DEFINE` sentence of its own — §2.2's rule, and the
+  reason `define_refs` now governs only the unclaimed.
+
+  - [x] **The module.** `subjects.py`: parse, validate against the asset list,
+    and write the two sections. No disk, no ComfyUI, like `compile.py` and
+    `contextir.py`.
+  - [x] **Labels and citation.** `<Subject N>` in cast order over the subjects
+    a generation actually carries; `@anna` in a shot's prose pulls anna's files
+    into that segment the way a pool citation already pulls its own.
+  - [x] **The refiner is handed the cast.** Pinned, not suggested: the numbering
+    and the definitions arrive fixed, the rewrite cites them, and `stray` grows
+    a `<Subject N>` arm so it cannot rename or renumber anybody.
+  - [x] **The band.** A cast card under the assets: add, name, hang files on
+    her, pick the take, write the description, bind a voice, name who she
+    replaces. `cast.js`, one shelf mounted twice — the node's own face and the
+    Timeline window — because there is one node and a cast belongs to the piece
+    either way.
+  - [x] **Everywhere, not only where there are references.** The first cut of
+    the shelf lived only in the Timeline window and refused to open until a
+    reference had been attached, which put it out of reach of exactly the
+    generation that most needs it. A subject may now be a name and a description
+    with nothing else behind her, and `contextir.compose` emits
+    `subject_definitions` and `retention_analysis` in the base modes too — a
+    `<Subject 1>` the prompt never defines is a label pointing at nothing, the
+    same failure `AUDIO_SEAM_LINE` exists to prevent. The base form is otherwise
+    untouched: the body stays in `integrated_multimodal_description`, and a piece
+    with nobody cast compiles to the bytes it always did.
+
+  **Decided: numbering is declaration order.** `<Subject N>` follows the cast
+  list, not the order the subjects appear in the video, and the speaker IDs
+  `(Sx)` a voice binding produces follow the same order. The guide numbers
+  speakers by actual vocal event, which nothing here can know before the video
+  exists — so the cast list is ordered and reorderable, and the user owns the
+  answer instead of the compiler guessing it.
+
+  **Decided: the references are the card.** The four things a file can lend a
+  subject — her looks, her movement, her voice, the place she takes — were four
+  ghost chips indistinguishable from every other ghost chip in the pack, and the
+  way to add one was a "+" character among them. They are thumbnails now, each
+  wearing its own identity hue, each with a badge naming what it lends her, and
+  one menu behind the tile switches between the four. Her looks are the default
+  and wear no badge: a badge on four tiles out of five is a badge that means
+  nothing.
+
+  **Not done: `<Subject N>` for a whole-video relationship.** A clip taken
+  `edit`, `camera` or `continue` is a `<Video N>` statement about the target
+  video and has no subject in it; those takes stay off the cast.
 
 ## Known rough edges in a chained timeline
 

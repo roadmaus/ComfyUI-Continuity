@@ -1,5 +1,67 @@
 # Changelog
 
+## 2.9
+
+**A cast.** You can say who is in the video now, and not only which files are
+attached. A subject is declared on the piece — a name, the references behind it,
+what of them is the reference — and cited in prose as `@anna`, the same chip
+everything else uses. It becomes `<Subject N>` at queue time.
+
+That is the split H3's reference guide draws and this pack did not: `<Picture N>`
+is a file, `<Subject N>` is who the video contains, and an image that only says
+what somebody looks like is meant to be cited *inside* a subject's definition
+rather than acting as itself. Four photographs are now one person; a face from a
+still can walk like somebody in a clip; an audio reference can be bound as a
+subject's voice, speaker ID and all; and a subject can stand in the place of the
+person in a reference clip, which is "swap this person for that one" said the way
+the guide says it — the `transferred` marker, the clip's own framing and camera
+work kept.
+
+Having the facts written down makes two sections derivable that previously could
+only ever come from the refiner: `subject_definitions` and `retention_analysis`
+are now written by the compiler on the direct path, with the shots each subject
+appears in read off the finished description. A claimed picture no longer gets a
+definition sentence of its own — it is cited inside the subject that claims it,
+which is the guide's rule. Refine is handed the cast pinned: it writes the film
+around your subjects and is told to define and renumber none of them.
+
+Citing a subject carries her files into that shot the way citing a piece
+reference already carried that file, so a shot that never names her costs
+nothing. And a name is a citation only because it was declared: `@anna` in a
+piece with no Anna in it is prose and stays prose, so nothing already written
+changes meaning.
+
+**The cast shelf, rebuilt, and on the node itself.** It only ever appeared in
+the Timeline window, and it refused to open at all until a reference had been
+attached — so the one prompt that most needs a cast, a text-only one where a
+name is all that keeps the same woman in shot 1 and in shot 9, could not have
+one. Cast is on the rail now, beside Add image, on every node; the same shelf is
+still in the Timeline window, and it is literally the same shelf.
+
+A subject can be a name and a description with nothing behind her, and the two
+sections she makes derivable are emitted in the base modes too — a `<Subject 1>`
+written into a description the prompt never defines is a label pointing at
+nothing. The base form is otherwise untouched, and a piece with nobody cast
+compiles to exactly the bytes it always did.
+
+The card itself is new. What a file lends a subject — her looks, her movement,
+her voice, the place she takes — used to be four ghost chips, with the way to
+add one a "+" character among them that nobody found. They are thumbnails now,
+each wearing the file's own identity hue, each badged with what it lends her,
+and one menu behind a tile moves it between the four. The card wears her hue on
+its left edge, the same hue `@anna` wears as a chip in the sentence. A subject
+nobody has written into a prompt says so, and the readout that says it is the
+button that fixes it.
+
+The name and description fields hold the caret, which they did not at first: a
+keystroke in a cast field is written straight through to the blob, and writing
+to the blob is what redraws the node — so the field was rebuilt between one
+letter and the next and you could type exactly one character. The shelf refuses
+to redraw while it holds the caret and catches up on the way out, the same
+bargain the prompt box and the refine panel already make. Leaving a field defers
+its redraw by a turn of the event loop, so a ✕ or a tile clicked while a field
+has the caret is not pulled out from under the pointer.
+
 ## 2.8
 
 **A start frame beside its references.** Frames and references used to lock
