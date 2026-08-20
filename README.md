@@ -623,13 +623,17 @@ megabytes it takes is not. The value lives in `user/minimax_creator.settings.jso
 and applies to every video the Creator writes. PreStage stills are PNG and have
 nothing to set.
 
-The page's **Nodes** tab holds two more, both off by default. *Flow shift pills*
-decides whether the sampler row offers H3's two schedule clocks — a control over
-who has to look at them, not over what is sampled. *Reference scopes in the
-prompt* is the one setting on the page that changes what is queued: on, the
-compiler writes each reference's scope into the prompt as prose, and the prompt
-box shows it above your own text. Worth knowing before you share a workflow —
-someone whose copy is set the other way renders the other prose.
+The page's **Nodes** tab holds three more. *Preview playback*, the only one on
+by default, decides whether the stage plays a clip the moment it has one — set
+it to *Waits for play* and a finished render holds its first frame, still, with
+the browser's controls to start it, which spares a crowded canvas a decoder per
+looping clip. *Flow shift pills* decides whether the sampler row offers H3's
+two schedule clocks — a control over who has to look at them, not over what is
+sampled. *Reference scopes in the prompt* is the one setting on the page that
+changes what is queued: on, the compiler writes each reference's scope into the
+prompt as prose, and the prompt box shows it above your own text. Worth knowing
+before you share a workflow — someone whose copy is set the other way renders
+the other prose.
 
 Needs ComfyUI 0.29 or newer, which is where `crf` reached core's video writer.
 On an older build anything but Standard is refused at save time rather than

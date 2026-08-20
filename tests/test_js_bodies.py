@@ -1320,11 +1320,13 @@ check("the Creator keeps the settings tool", "Settings" in (report["creator"] or
 settings = report.get("settings", {})
 check("the settings page has all three tabs", settings.get("tabs"),
       ["Quality", "Folders", "Nodes"])
-# Both node settings ship off, and each tab row is a pair — the "no" option
-# first and checked on a fresh settings file. Reference scopes come before the
-# shift pills: one changes what is queued and the other only what is drawn.
-check("both node settings default to off",
-      settings.get("shiftRows"), ["true", "false", "true", "false"])
+# Each tab row is a pair with the default first and checked on a fresh
+# settings file: previews ship playing, the scopes and shift pills ship off.
+# Preview playback leads — it governs the biggest thing a node draws — then
+# reference scopes before the shift pills: one changes what is queued and the
+# other only what is drawn.
+check("the node settings show their defaults checked",
+      settings.get("shiftRows"), ["true", "false", "true", "false", "true", "false"])
 check("the quality tab shows the encoder value", settings.get("quality"), True)
 check("the folders tab carries both stored prefixes", settings.get("fields"),
       ["minimax/renders/H3", "minimax/stills/prestage"])

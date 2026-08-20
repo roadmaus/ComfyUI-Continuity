@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.7.1
+
+**A stage that can hold still.** Every preview used to start playing the moment
+it existed, and on a canvas with a dozen finished renders that is a dozen
+looping clips decoding for nobody. Settings → Nodes now offers Preview
+playback: leave it on Plays itself and nothing changes; set it to Waits for
+play and the stage holds a clip's first frame, still, with the browser's
+controls to start it — sound on hover and looping unchanged once it is. Covers
+the finished render and the animated step previews alike, and it is
+per-machine like the rest of the settings file: the workflow says what the
+piece is, not how your canvas behaves.
+
 ## 2.7
 
 **Any template pins onto any request.** The refiner used to refuse a pinned

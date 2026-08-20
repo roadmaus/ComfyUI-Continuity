@@ -77,6 +77,16 @@ check("a null shift-pill setting is the default",
       settings.clean({"show_shift_pills": None})["show_shift_pills"], False)
 refuses("a shift-pill setting that is not a boolean", {"show_shift_pills": 1}, "true or false")
 
+# The stage's autoplay. The same strict boolean, defaulting the other way:
+# playing is what the stage has always done, so the file only ever needs to
+# say "stop".
+check("previews autoplay by default", settings.clean({})["autoplay_previews"], True)
+check("turning autoplay off is kept",
+      settings.clean({"autoplay_previews": False})["autoplay_previews"], False)
+check("a null autoplay setting is the default",
+      settings.clean({"autoplay_previews": None})["autoplay_previews"], True)
+refuses("an autoplay setting that is not a boolean", {"autoplay_previews": "yes"}, "true or false")
+
 # The output folders. `outputs.clean` is the authority — this only has to show
 # that the setting is held to it, so a prefix that would be refused at the end
 # of a render is refused while it is still a field being edited.

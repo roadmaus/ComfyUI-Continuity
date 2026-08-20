@@ -31,7 +31,7 @@
 
 import { api } from "../../../scripts/api.js";
 import { el } from "./dom.js";
-import { outputUrl } from "./api.js";
+import { outputUrl, uiSetting } from "./api.js";
 import { t } from "./i18n.js";
 
 /** Every event this listens to. `b_preview` is the metadata-less legacy frame:
@@ -373,7 +373,10 @@ export class Stage {
     const clip = el("video", {
       class: "mmc-stage-video",
       src: this.frame,
-      autoplay: true, loop: true, playsinline: true,
+      // Settings → Nodes decides whether it moves before being asked; a stage
+      // told to hold still holds the clip's first frame (preload paints it).
+      autoplay: uiSetting("autoplay_previews", true),
+      loop: true, playsinline: true, preload: "metadata",
     });
     // The property rather than the attribute: Chromium's autoplay gate reads
     // `muted`, and setAttribute("muted") sets only the attribute.
@@ -409,10 +412,16 @@ export class Stage {
     // The control bar is the browser's: scrubbing and volume are solved problems
     // and a hand-built transport here would only be a worse one. Muting from it
     // sticks until the pointer next arrives, which is the same rule.
+    //
+    // Whether it plays *itself* is Settings → Nodes' preview-playback answer,
+    // read at draw time off the same cache the shift pills use. Off means the
+    // first frame, still, and the browser's play button — everything above
+    // (loop, hover sound) applies unchanged once it is started by hand.
     return el("video", {
       class: "mmc-stage-video",
       src: this.result.url,
-      controls: true, autoplay: true, loop: true, muted: true, playsinline: true,
+      autoplay: uiSetting("autoplay_previews", true),
+      controls: true, loop: true, muted: true, playsinline: true, preload: "metadata",
       onmouseenter: (event) => { event.currentTarget.muted = false; },
       onmouseleave: (event) => { event.currentTarget.muted = true; },
       // The canvas pans on drag, and a drag that starts on the scrub bar is a

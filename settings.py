@@ -67,6 +67,12 @@ DEFAULTS = {
     # here because it is per-machine like everything else in this file, and one
     # settings page writing one file beats a second store for one boolean.
     "show_shift_pills": False,
+    # Whether the stage plays a clip the moment it has one — the finished
+    # render, and the animated step previews while it samples. On by default
+    # because it is what the stage has always done; off is for the canvases
+    # where a dozen finished renders is a dozen looping decoders playing for
+    # nobody. UI-only like the pills above: nothing queued ever reads it.
+    "autoplay_previews": True,
     # Whether a reference's scope is written into the prompt for the model as
     # well as into the refiner's glossary. Off by default: it is the behaviour
     # every render had before it existed, and the sentences cost tokens a
@@ -102,7 +108,7 @@ def clean(raw):
         if not MIN_CRF <= crf <= MAX_CRF:
             raise ValueError(f"video_crf must be between {MIN_CRF} and {MAX_CRF}")
         clean_settings["video_crf"] = crf
-    for flag in ("show_shift_pills", "define_refs"):
+    for flag in ("show_shift_pills", "define_refs", "autoplay_previews"):
         if flag in raw and raw[flag] is not None:
             if not isinstance(raw[flag], bool):
                 raise ValueError(f"{flag} must be true or false")

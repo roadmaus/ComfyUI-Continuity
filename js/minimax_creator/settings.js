@@ -215,6 +215,53 @@ class SettingsPage {
    * keeps its pill on screen whatever this says. In force means visible, the
    * same rule the Custom quality row lives by.
    */
+  /**
+   * Whether the stage plays what it shows, or waits to be asked. On by
+   * default — it is what the stage has always done — and off for the people
+   * whose complaint is real: a canvas with a dozen finished renders on it is
+   * a dozen looping decoders, all playing for nobody.
+   *
+   * UI-only, like everything else on this tab: the file written is the same
+   * file, and the sound rules do not move — a clip started by hand still
+   * follows the pointer, because no browser autoplays sound either way.
+   */
+  renderPreviews() {
+    const playing = this.settings.autoplay_previews !== false;
+    const rows = [
+      { value: true, label: "Plays itself",
+        note: "What the stage has always done: the clip loops silently as soon as it "
+            + "lands, and the sound follows the pointer. Step previews animate as the "
+            + "sampler works." },
+      { value: false, label: "Waits for play",
+        note: "The stage holds the first frame, still, with the browser's controls to "
+            + "start it. For crowded canvases, where every looping clip is a decoder "
+            + "running for nobody." },
+    ];
+    return this.section("Nodes", "Preview playback",
+      "Whether the stage plays a clip the moment it has one — the finished render, "
+      + "and the animated step previews while it samples. The file is the same "
+      + "either way; this only decides whether it moves before being asked.",
+      [
+        el("div", { class: "mmc-set-choices" }, rows.map((row) => el("button", {
+          class: "mmc-opt mmc-set-opt",
+          "aria-checked": row.value === playing,
+          onclick: () => row.value !== playing && this.set({ autoplay_previews: row.value }),
+        }, [
+          el("span", { class: "mmc-radio" }),
+          el("span", { class: "mmc-set-opt-text" }, [
+            el("span", { class: "mmc-set-opt-label", text: t(row.label) }),
+            el("span", { class: "mmc-set-opt-note", text: t(row.note) }),
+          ]),
+        ]))),
+        el("div", { class: "mmc-set-foot" }, [
+          el("span", {
+            text: t("Open nodes pick the change up the next time they redraw — "
+                + "closing this page is enough."),
+          }),
+        ]),
+      ]);
+  }
+
   renderNodes() {
     const shown = this.settings.show_shift_pills === true;
     const rows = [
@@ -226,7 +273,7 @@ class SettingsPage {
         note: "Two stepper pills after the scheduler, for dialling the two schedules "
             + "by hand. A turbo LoRA's card may name the values it was distilled against." },
     ];
-    return [...this.renderScopes(), this.section("Nodes", "Flow shift pills",
+    return [this.renderPreviews(), ...this.renderScopes(), this.section("Nodes", "Flow shift pills",
       "Whether the sampler row offers H3's two flow shifts — the video and audio "
       + "schedule clocks. The values apply either way; this only decides who has "
       + "to look at them.",
