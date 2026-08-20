@@ -65,6 +65,15 @@ CASES = [
     # Holds belong to the pass: a merged run held, and a merged run shot.
     [(False, True, True, 0), (False, False, False, 0), (True, False, False, 0)],
     [(False, False, False, 0), (False, True, True, 0), (True, True, True, 0)],
+    # A seam onto a card that is locked with nothing to play, which is what
+    # shooting out of order walks into: the queue refuses it and so must the
+    # bar. Both orders of it — the card in front never shot, and shot but
+    # dropped from behind a kept one.
+    [(False, True, False, 0), (False, False, False, 22), (False, True, False, 0)],
+    [(False, True, True, 0), (False, True, False, 0), (False, False, False, 22)],
+    # ...and the same shape with the seam onto film that *is* there, which is
+    # the ordinary sequential shoot and must not be refused.
+    [(False, True, True, 0), (False, False, False, 22), (False, True, False, 0)],
 ]
 
 SCRIPT = """
@@ -116,8 +125,18 @@ for cards, seen in zip(CASES, mirror):
     name = "".join(("m" if m else ".") + ("h" if h else ".") + ("t" if t else ".")
                    for m, h, t, _ in cards)
     data = json.loads(seen["blob"])
-    piece = compiler.rendered_piece(data)
-    payloads = compiler.timeline_payloads(piece)
+    # Everything the queue would refuse, in one place: a strip with nothing left
+    # to render, and a seam onto a card this render will not have. The bar says
+    # both while the cards are still in front of you, so both are one flag here.
+    try:
+        piece = compiler.rendered_piece(data)
+        payloads = compiler.timeline_payloads(piece)
+        refused = False
+    except compiler.CompileError:
+        piece, payloads, refused = None, [], True
+    check(f"{name}: refused", seen["problem"], refused)
+    if refused:
+        continue
     sampled = [payload for payload in payloads if "clip" not in payload]
 
     # How many generations the bar promises, and how many the queue builds.
@@ -134,8 +153,6 @@ for cards, seen in zip(CASES, mirror):
     check(f"{name}: shooting in parts", seen["inParts"],
           any(compiler.is_held(segment) or segment.get("take")
               for segment in compiler.timeline_segments(data)))
-    # And what the strip refuses is what the queue would have refused.
-    check(f"{name}: nothing to render", seen["problem"], not payloads)
 
 # The refusal itself, which the cases above never reach because a strip with
 # nothing left to render is one the bar is meant to talk you out of.

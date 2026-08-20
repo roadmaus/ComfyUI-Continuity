@@ -910,6 +910,7 @@ export const ja = {
  "{s} s next": "次は {s} 秒",
  "The next render generates {s} s of the {total} s this piece runs to. The rest is either film it already has or cards you are holding back.": "次のレンダーは、この作品の全長 {total} 秒のうち {s} 秒を生成します。残りは既にある映像か、保留中のカードです。",
  "render": "レンダー",
+ "Segment {card} continues from segment {source}, which is not in this render — it is locked with nothing to play. Shoot segment {source} first, or turn off the seam in front of segment {card} to start it on nothing.": "セグメント {card} はセグメント {source} から続いていますが、それは今回のレンダーに含まれていません — ロックされていて再生できるものがありません。先にセグメント {source} を撮るか、セグメント {card} の手前のシームをオフにして何もない状態から始めてください。",
  "Every card is held with nothing to play, so the next render has nothing to make. Put one back in the render to shoot it.": "すべてのカードが保留で再生できるものもないため、次のレンダーで作るものがありません。どれか一つをレンダーに戻してください。",
  "Roll a seed for this card alone. The rest of the piece keeps the number on the node.": "このカードだけにシードを振ります。作品の他の部分はノード上の数値のままです。",
  "This card runs on the piece's seed, which is what every card does until you roll one here.": "このカードは作品のシードで動きます。ここで振るまで、すべてのカードがそうです。",

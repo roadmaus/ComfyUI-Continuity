@@ -1373,13 +1373,24 @@ def rendered_piece(data):
 
     runs = timeline_runs(data, segments)
     rendered = []
+    # Where each card of the strip ended up in the render, so a seam naming one
+    # can be pointed at it afterwards. A dropped card has no entry, which is the
+    # whole of the test below. Every card of a kept run maps to the one clip
+    # that stands in for it: a seam reaching into a merged run lands on the pass
+    # that produces its frames, and a take is that pass.
+    place = {}
     for start, end in runs:
         head = segments[start]
         if not is_held(head):
+            first = len(rendered)
             for index in range(start, end):
+                place[index] = len(rendered)
                 rendered.append({**segments[index], "card_no": index + 1})
+            _rebase_seam(rendered[first], segments, start, first, place)
             continue
         if is_kept(head):
+            for index in range(start, end):
+                place[index] = len(rendered)
             rendered.append({**take_spec(head, start), "card_no": start + 1})
         # ...and a held pass with no take is not in this render at all.
 
@@ -1392,6 +1403,54 @@ def rendered_piece(data):
     # pass. The runs above were read off the strip as the user set it, so the
     # merging that survived the rewrite is already written on the cards.
     return {**data, "segments": rendered, "render": "chained"}
+
+
+def _rebase_seam(card, segments, start, first, place):
+    """Point a live card's seam at the card it names, in a shortened render.
+
+    Two things go wrong when a render holds cards back, and both are silent.
+
+    A seam inherits from *the card in front of it*, which the payloads read as
+    "the payload before this one" — so with the cards between them dropped, a
+    card shot by itself continues from whatever happens to precede it in the
+    shortened render. Shooting card 6 with cards 4 and 5 not yet shot had it
+    open on card 3's last frame and say nothing about it. There is no right
+    answer to reach for there: the frames it should continue from do not exist
+    yet, so this refuses, and the two ways out — shoot the card in front first,
+    or cut the seam and start fresh — are the two things the user actually
+    means. Shooting out of order is exactly as free as the cuts allow, which is
+    the rule anyone building this way already has in their head.
+
+    And `continue_from` is a number on the strip, read against a position in the
+    render. Those are the same number until something earlier is dropped, after
+    which a card naming its source silently inherits from a different one. It is
+    rewritten here to the position the source actually landed at.
+
+    Nothing is checked on the first card of the strip, on a clip, or on a card
+    whose seam is off: the flags there are leftovers from reordering rather than
+    a statement, which is how `timeline_payloads` reads them too.
+    """
+    head = segments[start]
+    if not start or is_clip(head):
+        return
+    if not (head.get("continue") or head.get("continue_audio")):
+        return
+    source = _continue_source(head.get("continue_from"), start)
+    if source is None:
+        source = start - 1
+    if source not in place:
+        raise CompileError(
+            f"segment {start + 1} continues from segment {source + 1}, which is "
+            f"not in this render — it is held with nothing to play. Shoot "
+            f"segment {source + 1} first, or turn off the seam in front of "
+            f"segment {start + 1} to start it on nothing."
+        )
+    # Absent means "the card in front of me", which is what the source is
+    # whenever it landed immediately behind: saying it again would say nothing.
+    if place[source] == first - 1:
+        card.pop("continue_from", None)
+    else:
+        card["continue_from"] = place[source] + 1
 
 
 def render_mode(data):

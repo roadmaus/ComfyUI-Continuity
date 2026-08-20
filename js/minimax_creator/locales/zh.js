@@ -911,6 +911,7 @@ export const zh = {
  "{s} s next": "下次 {s} 秒",
  "The next render generates {s} s of the {total} s this piece runs to. The rest is either film it already has or cards you are holding back.": "下次渲染将生成本片 {total} 秒中的 {s} 秒。其余部分要么是已有的画面，要么是你暂缓的卡片。",
  "render": "渲染",
+ "Segment {card} continues from segment {source}, which is not in this render — it is locked with nothing to play. Shoot segment {source} first, or turn off the seam in front of segment {card} to start it on nothing.": "片段 {card} 承接自片段 {source}，但它不在本次渲染中 — 它已锁定且没有可播放的内容。请先拍摄片段 {source}，或关闭片段 {card} 前面的接缝，让它从无到有开始。",
  "Every card is held with nothing to play, so the next render has nothing to make. Put one back in the render to shoot it.": "所有卡片都已暂缓且没有可播放的内容，下次渲染没有可制作的东西。请把其中一张放回渲染。",
  "Roll a seed for this card alone. The rest of the piece keeps the number on the node.": "只为此卡片掷一个种子。作品的其余部分仍使用节点上的数值。",
  "This card runs on the piece's seed, which is what every card does until you roll one here.": "此卡片使用作品的种子——在这里掷出之前，每张卡片都是如此。",

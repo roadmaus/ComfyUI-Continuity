@@ -2257,10 +2257,56 @@ export function stripProblem(timeline) {
   // step of shooting a piece a pass at a time, and what it queues is the piece
   // written out of the film it already has, at no sampling cost at all. What
   // there is nothing to do about is a strip with no film and no generation.
-  if (passes(timeline).some((pass) => passShot(pass) || isKept(pass.segments[0])
-                                      || isClip(pass.segments[0]))) return null;
-  return t("Every card is held with nothing to play, so the next render has "
-         + "nothing to make. Put one back in the render to shoot it.");
+  if (!passes(timeline).some((pass) => passShot(pass) || isKept(pass.segments[0])
+                                       || isClip(pass.segments[0]))) {
+    return t("Every card is held with nothing to play, so the next render has "
+           + "nothing to make. Put one back in the render to shoot it.");
+  }
+  return seamProblem(timeline);
+}
+
+/**
+ * A card that continues from film this render will not have. Mirrors
+ * `compile._rebase_seam`.
+ *
+ * A held card with no take is not in the render at all, so the card behind it
+ * moves up and inherits from whoever now sits in front of it. That is the one
+ * way shooting out of order goes wrong, and it goes wrong quietly: the shot
+ * comes back looking fine and is wrong only once the piece is assembled. The
+ * queue refuses it, and this is that refusal said while the cards are still in
+ * front of you.
+ *
+ * Which is also the rule for shooting out of order, stated: a card behind a cut
+ * shoots whenever you like, and a card behind a seam waits for the one it
+ * continues from. Nothing here objects to shooting card 6 before card 4 — only
+ * to card 6 claiming to continue from a card that has not been shot.
+ */
+export function seamProblem(timeline) {
+  const runs = passes(timeline);
+  // Every card whose frames this render actually has: generated now, spliced
+  // from a take, or supplied footage. A whole pass at a time, because a seam
+  // reaching into a merged run lands on the pass that produces its frames.
+  const here = new Set();
+  for (const pass of runs) {
+    const head = pass.segments[0];
+    if (isHeld(head) && !isKept(head)) continue;
+    pass.segments.forEach((_, index) => here.add(pass.start + index));
+  }
+  for (const pass of runs) {
+    const head = pass.segments[0];
+    // Nothing in front of the first card, nothing conditioned on a clip, and
+    // nothing to say about a card that is not being generated.
+    if (!pass.start || isClip(head) || isHeld(head)) continue;
+    if (!head.continue && !head.continue_audio) continue;
+    const source = continueSource(head, pass.start);
+    if (here.has(source - 1)) continue;
+    return t("Segment {card} continues from segment {source}, which is not in "
+           + "this render — it is locked with nothing to play. Shoot segment "
+           + "{source} first, or turn off the seam in front of segment {card} "
+           + "to start it on nothing.",
+             { card: pass.start + 1, source });
+  }
+  return null;
 }
 
 export function passProblem(timeline, pass) {

@@ -910,6 +910,7 @@ export const ko = {
  "{s} s next": "다음 {s}초",
  "The next render generates {s} s of the {total} s this piece runs to. The rest is either film it already has or cards you are holding back.": "다음 렌더는 이 작품 전체 {total}초 중 {s}초를 생성합니다. 나머지는 이미 있는 영상이거나 보류 중인 카드입니다.",
  "render": "렌더",
+ "Segment {card} continues from segment {source}, which is not in this render — it is locked with nothing to play. Shoot segment {source} first, or turn off the seam in front of segment {card} to start it on nothing.": "세그먼트 {card}는 세그먼트 {source}에서 이어지지만 이번 렌더에 없습니다 — 잠겨 있고 재생할 것도 없습니다. 세그먼트 {source}를 먼저 찍거나, 세그먼트 {card} 앞의 시임을 꺼서 아무것도 없이 시작하세요.",
  "Every card is held with nothing to play, so the next render has nothing to make. Put one back in the render to shoot it.": "모든 카드가 보류 상태이고 재생할 것도 없어 다음 렌더에서 만들 것이 없습니다. 하나를 렌더에 되돌리세요.",
  "Roll a seed for this card alone. The rest of the piece keeps the number on the node.": "이 카드에만 시드를 새로 뽑습니다. 나머지는 노드의 숫자를 그대로 씁니다.",
  "This card runs on the piece's seed, which is what every card does until you roll one here.": "이 카드는 작품의 시드로 실행됩니다. 여기서 새로 뽑기 전까지는 모든 카드가 그렇습니다.",

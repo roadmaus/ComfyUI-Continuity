@@ -1803,3 +1803,55 @@ _part = compiler.timeline_payloads(compiler.rendered_piece(
     strip(shot("one", hold=True), shot("two", hold=True), shot("three"))))
 check("a card shot alone generates what it generates in the whole render",
       _part[0]["request"], _whole[2]["request"])
+
+
+# ---- a seam cannot inherit from a card that is not in the render --------------
+#
+# The other half of shooting a piece a pass at a time. A held card is dropped,
+# so the card behind it moves up and its seam quietly points at somebody else's
+# last frame — which is a wrong shot that looks right until the piece is
+# assembled. Shooting out of order is free exactly across cuts, and this is what
+# makes that true rather than merely advisable.
+
+expect_error("a seam whose card has not been shot",
+             lambda: compiler.rendered_piece(
+                 strip(shot("one", hold=True, take=take()),
+                       shot("two", hold=True),
+                       shot("three", **{"continue": True}))),
+             "segment 3 continues from segment 2, which is not in this render")
+expect_error("...and a seam that only carries sound",
+             lambda: compiler.rendered_piece(
+                 strip(shot("one", hold=True), shot("two", continue_audio=True))),
+             "segment 2 continues from segment 1")
+expect_error("...and a named source that has not been shot",
+             lambda: compiler.rendered_piece(
+                 strip(shot("one", hold=True), shot("two", hold=True, take=take()),
+                       shot("three", **{"continue": True, "continue_from": 1}))),
+             "segment 3 continues from segment 1")
+
+# A cut is the thing that makes an order free, so a card with no seam shoots
+# whenever it likes — which is the whole of "start with segment 6, then 4".
+_solo = compiler.rendered_piece(strip(shot("one", hold=True), shot("two", hold=True),
+                                      shot("three")))
+check("a card behind a cut shoots out of order",
+      [s["card_no"] for s in _solo["segments"]], [3])
+
+# ...and the seam onto a kept take goes on working, because the take is in the
+# render: it is the film that card's frames come from.
+_after = compiler.timeline_payloads(compiler.rendered_piece(
+    strip(shot("one", hold=True, take=take()), shot("two", **{"continue": True}))))
+check("a card behind a kept take still continues from it",
+      (_after[-1]["continue"], "continue_from" in _after[-1]), (True, False))
+
+# `continue_from` is a number on the strip and was being read as a position in
+# the render. They are the same number until something earlier is dropped, and
+# after that a card named its source and inherited from a different one.
+_named = compiler.rendered_piece(
+    strip(shot("one", hold=True),                       # dropped: never shot
+          shot("two", hold=True, take=take()),
+          shot("three", hold=True, take=take()),
+          shot("four", hold=True, take=take()),
+          shot("five", **{"continue": True, "continue_from": 2})))
+_at = compiler.timeline_payloads(_named)[-1]["continue_from"]
+check("a named seam source follows the card it names into a shortened render",
+      _named["segments"][_at]["card_no"], 2)

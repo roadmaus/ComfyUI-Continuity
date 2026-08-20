@@ -15,6 +15,24 @@ it renders, and is named by its own number in anything it raises — while a str
 genuinely generated in one go is still one generation with one take, which is
 the render.
 
+**A seam cannot inherit from a card that is not in the render.** A locked card
+with nothing to play is dropped from the render, which moved the card behind it
+up and left its seam pointing at whoever now sat in front of it. Shooting card 6
+with cards 4 and 5 still unshot opened it on card 3's last frame and said
+nothing about it — a shot that looks right until the piece is assembled. It is
+refused now, naming the card it wanted and the two ways on: shoot that card
+first, or turn off the seam and start fresh. Which is also the rule for shooting
+out of order, finally stated — a card behind a cut shoots whenever you like, and
+a card behind a seam waits for the one it continues from. The strip says it
+while the cards are still in front of you rather than at the queue.
+
+**A named seam source follows the card it names.** Pointing a seam at a
+particular earlier card recorded that card's number on the strip, and the
+render read it as a position in the render — the same number until something
+earlier was held back, and a different card after that. It is rebased now, so a
+seam keeps meaning the card it was aimed at however much of the strip is
+locked.
+
 **A card compiles to the same generation however it is shot.** Four things the
 strip records about a card — the seed it ran on, the take it has, whether it is
 locked, and its number — were being folded into the description handed to the
