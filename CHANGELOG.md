@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 2.5
 
 **A folder browses as a folder.** The row of places above the gallery used to
 list every subfolder the input or output folder held, flattened — a nested path
