@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 2.6
 
 **Shoot one card, then the next.** Building a piece one expensive generation at
 a time meant locking five cards to shoot the sixth, then unlocking one and
