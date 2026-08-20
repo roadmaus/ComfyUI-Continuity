@@ -2,16 +2,9 @@
 
 ## 2.11
 
-**The cast is "they".** A subject is whoever you say it is — a person, an object,
-a place, a look — and every sentence around it was written as though each one
-were the same particular person, in gendered pronouns nobody typed. That is the
-tool deciding something it has no business deciding, and it is wrong about three
-of the four things a subject can be. The shelf, the library, the `@`
-menu, the refiner's own instructions and all three translations say *they* now, in
-the copy and in the comments both, and `tests/test_neutral_copy.py` fails the
-build if a gendered pronoun is written back into any of the four languages. The
-two lines it allows through are quotations — the example of who a clip's occupant
-gets replaced by, and MiniMax's own guide.
+**Wording.** The cast's copy says *they* throughout — the shelf, the library, the
+`@` menu, the refiner's instructions and all three translations. Translators:
+the reworded keys are renamed in `locales/`, so nothing is orphaned.
 
 **A cast you can keep.** A subject was built by hand on every node they appeared
 on, which is how the same person becomes three slightly different people across a

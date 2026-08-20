@@ -1,24 +1,11 @@
-"""Nobody in the cast has a gender the user did not give them.
+"""The cast's copy says "they".
 
-A subject is whoever the user says it is — a person, an object, a place, a look —
-and the copy around it was written as if every one of them were a woman: "hang a
-file on her", "she moves like this", "keep her in the library". That reads as the
-tool having decided something it has no business deciding, and it is wrong about
-three of the four things a subject can even be.
+The wording is spread over a shelf, a library tab, a mention menu, three
+dictionaries and two documents, so a stray "she" written back into any of them
+would be invisible until somebody read it on screen.
 
-So the pack says "they". This is the guard that keeps it there, because the copy
-is spread over a shelf, a library tab, a mention menu, three dictionaries and two
-documents, and one "she" written back into any of them would be invisible until
-somebody read it on screen.
-
-Two exclusions, both deliberate:
-
-  - `js/minimax_creator/presets/atlas.js` is a vendored catalogue of descriptors
-    for shipped stills, and those sentences describe the people in the pictures.
-  - `prompts/` holds the model instructions and their worked examples, which
-    describe example footage the same way.
-
-Neither is the pack talking about the user's cast.
+`presets/atlas.js` and `prompts/` are skipped: both describe the people in
+example footage rather than the user's cast.
 
     python3 tests/test_neutral_copy.py
 """
@@ -30,12 +17,10 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-# The pronouns, and the nouns that assume the same thing about somebody the user
-# has not described.
+# The pronouns, and the two nouns that carry the same reading.
 ENGLISH = re.compile(r"\b(she|her|hers|herself|he|him|his|himself|woman|women|man|men)\b",
                      re.IGNORECASE)
-# What each dictionary says instead. A translation carries the assumption just as
-# well as the English does.
+# The same words in each dictionary.
 # 他 is matched only where it stands alone: it is the second half of 其他
 # ("other"), which is an ordinary word and all over the Chinese dictionary.
 GENDERED = {"ja": ["彼女", "彼氏"], "zh": ["她", "(?<!其)他"], "ko": ["그녀"]}
