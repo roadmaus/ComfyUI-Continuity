@@ -39,6 +39,88 @@ const blendSeconds = (frames) => (frames / FPS).toFixed(1);
  *  blend sets the tail outright. */
 const blendSetsTail = (segment) => S.continuesAudio(segment) && S.feather(segment) > 1;
 
+/** filename -> {width, height}, null while a probe is out. Module-level so the
+ *  modal bar and the node face — two views of the same strip — measure a file
+ *  once between them. Clip cards never land here: they store their own size. */
+const ASPECT_SIZES = new Map();
+const aspectSizeOf = (filename) => ASPECT_SIZES.get(filename) || null;
+
+/** Measure the pictures the timeline's canvas can follow: the resolved source
+ *  (or segment 1's anchor under the auto rule), and with `all` every donor the
+ *  aspect popover will list. Stills through an <img>, videos through the probe
+ *  route; `onReady` re-renders when an answer lands. The backend re-reads the
+ *  files at queue time — this is only so the bar can tell the truth early. */
+function probeAspectSizes(timeline, onReady, { all = false } = {}) {
+  const want = [];
+  if (all) {
+    for (const segment of timeline.segments) {
+      if (!S.isClip(segment)) want.push(...S.aspectDonors(segment));
+    }
+    for (const asset of timeline.assets ?? []) {
+      if (asset.kind !== "audio" && !S.soundOnly(asset)) want.push(asset);
+    }
+  } else {
+    // Just what the bar needs: ask timelineAspectSize what it would read, by
+    // reading through a recording lookup.
+    S.timelineAspectSize(timeline, (filename) => {
+      want.push(...allDonors(timeline).filter((a) => a.filename === filename));
+      return aspectSizeOf(filename);
+    });
+  }
+  for (const asset of want) {
+    if (ASPECT_SIZES.has(asset.filename)) continue;
+    ASPECT_SIZES.set(asset.filename, null);
+    if (asset.kind === "video") {
+      probe(asset.filename).then(({ width, height }) => {
+        if (!width || !height) return;
+        ASPECT_SIZES.set(asset.filename, { width, height });
+        onReady();
+      });
+      continue;
+    }
+    const measure = new Image();
+    measure.onload = () => {
+      ASPECT_SIZES.set(asset.filename, { width: measure.naturalWidth, height: measure.naturalHeight });
+      onReady();
+    };
+    measure.src = viewUrl(asset.filename);
+  }
+}
+
+const allDonors = (timeline) => [
+  ...timeline.segments.flatMap((s) => (S.isClip(s) ? [] : S.aspectDonors(s))),
+  ...(timeline.assets ?? []).filter((a) => a.kind !== "audio" && !S.soundOnly(a)),
+];
+
+/** The bar's geometry, source honoured — the mirror of `_timeline_canvas`. */
+function timelineGeometry(timeline) {
+  const size = S.timelineAspectSize(timeline, aspectSizeOf);
+  const ratio = size ? size.width / size.height
+    : ASPECT_PRESETS.find(([label]) => label === timeline.aspect)?.[1] ?? 16 / 9;
+  const [width, height] = resolveCanvas(ratio, timeline.short_edge);
+  return { width, height, ratio, fromInput: !!size };
+}
+
+/** What the aspect pill's sub-line names as the ratio's source, or null when
+ *  the preset rules. */
+function aspectSourceLabel(timeline) {
+  const source = timeline.aspect_source;
+  if (source && typeof source === "object") {
+    const card = Number(source.card) || 0;
+    if (card && S.isClip(timeline.segments[card - 1])) {
+      return t("clip · card {n}", { n: card });
+    }
+    if (card) return `@${source.handle} · ${t("card {n}", { n: card })}`;
+    return `@${source.handle}`;
+  }
+  const head = timeline.segments[0];
+  if (head && !S.isClip(head)
+      && (S.frameAsset(head, "first_frame") || S.frameAsset(head, "last_frame"))) {
+    return t("from image");
+  }
+  return t("from clip");
+}
+
 
 /**
  * @param {object} options
@@ -454,9 +536,41 @@ class Timeline {
   }
 
   geometry() {
-    const ratio = ASPECT_PRESETS.find(([label]) => label === this.timeline.aspect)?.[1] ?? 16 / 9;
-    const [width, height] = resolveCanvas(ratio, this.timeline.short_edge);
-    return { width, height, ratio };
+    return timelineGeometry(this.timeline);
+  }
+
+  /** The bar's ratio popover: every picture the strip holds is offered as the
+   *  canvas's source — any card's frames, references and footage, and the
+   *  pool's — with the presets beneath them. */
+  openAspect(anchor) {
+    const donors = S.timelineAspectSources(this.timeline).map(({ value, card, asset }) => {
+      if (S.isClip(asset)) {
+        return {
+          value, label: t("clip"), tag: null,
+          ratio: asset.width && asset.height ? asset.width / asset.height : null,
+          sub: t("card {n}", { n: card }),
+        };
+      }
+      const size = aspectSizeOf(asset.filename);
+      const role = asset.role === "first_frame" ? t("start frame")
+        : asset.role === "last_frame" ? t("end frame")
+        : asset.kind === "video" ? t("reference video") : t("reference image");
+      return {
+        value, label: `@${asset.handle}`, tag: S.tagIndex(asset.handle),
+        ratio: size ? size.width / size.height : null,
+        sub: card ? `${role} · ${t("card {n}", { n: card })}` : t("piece reference"),
+      };
+    });
+    const autoSize = S.timelineAspectSize(this.timeline, aspectSizeOf, { ignoreChoice: true });
+    openAspectPopover(anchor, this.timeline, () => this.commit(), donors.length ? {
+      donors,
+      auto: {
+        ratio: autoSize ? autoSize.width / autoSize.height
+          : ASPECT_PRESETS.find(([label]) => label === this.timeline.aspect)?.[1] ?? 16 / 9,
+        sub: autoSize ? aspectSourceLabel({ ...this.timeline, aspect_source: undefined })
+          : this.timeline.aspect,
+      },
+    } : null);
   }
 
   /**
@@ -510,7 +624,8 @@ class Timeline {
    */
   renderBar() {
     const single = S.isSingle(this.timeline);
-    const { width, height, ratio } = this.geometry();
+    probeAspectSizes(this.timeline, () => this.renderBar(), { all: true });
+    const { width, height, ratio, fromInput } = this.geometry();
     const seconds = S.timelineSeconds(this.timeline);
     const frames = S.timelineFrames(this.timeline);
     const count = this.timeline.segments.length;
@@ -526,11 +641,17 @@ class Timeline {
       this.renderMode(),
       el("button", {
         class: "mmc-pill",
-        title: t("Aspect ratio, shared by every segment — they are joined end to end and have to match."),
-        onclick: (event) => openAspectPopover(event.currentTarget, this.timeline, () => this.commit()),
-      }, [aspectGlyph(ratio, PILL_GLYPH),
-          el("span", { text: this.timeline.aspect }),
-          el("span", { class: "mmc-pill-sub", text: describeRatio(ratio) })]),
+        title: fromInput
+          ? t("Aspect ratio, shared by every segment — taken from a picture the strip holds. Click to take it from another input, or force a preset.")
+          : t("Aspect ratio, shared by every segment — they are joined end to end and have to match."),
+        onclick: (event) => this.openAspect(event.currentTarget),
+      }, fromInput
+        ? [aspectGlyph(ratio, PILL_GLYPH),
+           el("span", { text: describeRatio(ratio) }),
+           el("span", { class: "mmc-pill-sub", text: aspectSourceLabel(this.timeline) })]
+        : [aspectGlyph(ratio, PILL_GLYPH),
+           el("span", { text: this.timeline.aspect }),
+           el("span", { class: "mmc-pill-sub", text: describeRatio(ratio) })]),
       el("button", {
         class: "mmc-pill",
         title: S.twoPass(this.timeline)
@@ -2358,9 +2479,8 @@ export class TimelineBody {
     const single = S.isSingle(this.timeline);
     const passes = S.passes(this.timeline);
     const seconds = S.timelineSeconds(this.timeline);
-    const [width, height] = resolveCanvas(
-      ASPECT_PRESETS.find(([label]) => label === this.timeline.aspect)?.[1] ?? 16 / 9,
-      this.timeline.short_edge);
+    probeAspectSizes(this.timeline, () => this.render());
+    const { width, height, ratio, fromInput } = timelineGeometry(this.timeline);
     const prompt = (this.timeline.prompt || "").trim();
     const globalLoras = S.activeGlobalLoras(this.timeline).length;
     const audio = [
@@ -2423,7 +2543,7 @@ export class TimelineBody {
             ? t("The canvas the one generation runs at.")
             : t("Shared by every segment — they are joined end to end and have to match."),
         }, [
-          el("span", { text: this.timeline.aspect }),
+          el("span", { text: fromInput ? describeRatio(ratio) : this.timeline.aspect }),
           el("span", { class: "mmc-pill-sub", text: `${width} × ${height}` }),
         ]),
         // Only when there are any: an empty pill would say the timeline has a

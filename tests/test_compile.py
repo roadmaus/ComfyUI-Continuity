@@ -144,9 +144,12 @@ check("pinning what was already derived is not a pin",
 check("a pin does not change the encoding",
       build(assets=[image("img-1", "first_frame")], checkpoint="ref2va").mode, "I2VA")
 
-expect_error("references cannot be pinned to fl2va",
-             lambda: build(assets=[image("img-1")], checkpoint="fl2va"),
-             "cannot be run through FL2VA")
+# The reverse pin is honoured too: the slot names an input, not a training,
+# and merges of the two checkpoints exist — the pin says what is loaded there.
+check("references pinned to fl2va are honoured",
+      build(assets=[image("img-1")], checkpoint="fl2va").checkpoint, "fl2va")
+check("...and flagged as the divergent pin they are",
+      build(assets=[image("img-1")], checkpoint="fl2va").checkpoint_pinned, True)
 expect_error("an unknown checkpoint is refused",
              lambda: build(checkpoint="sdxl"), "unknown checkpoint")
 
@@ -163,9 +166,60 @@ check("adaptive canvas", (adaptive.width, adaptive.height), (1152, 768))
 check("adaptive flag", adaptive.ratio_from_image, True)
 check("pill still rules ref2va", build(assets=[image("img-1")]).width, 1344)
 
-expect_error("frames + refs conflict",
-             lambda: build(assets=[image("img-1", "first_frame"), image("img-2")]),
-             "different checkpoints")
+# --- aspect source -----------------------------------------------------------
+# Where the ratio comes from is a choice now, not only the rule: "pill" forces
+# the preset even against a keyframe, and a handle adapts the canvas to any
+# attached picture — a reference as much as a frame.
+
+def build_sized(sizes, assets, **rest):
+    data = {"prompt": "", "assets": list(assets), "duration_s": 6,
+            "aspect": "16:9", "short_edge": 768, **rest}
+    return compiler.compile_request(
+        data, image_size_lookup=lambda f: sizes[f])
+
+TALL, WIDE = (768, 1344), (1500, 1000)
+sized = {"img-1.png": WIDE, "img-2.png": TALL, "vid-1.mp4": (1920, 1080)}
+
+from_ref = build_sized(sized, [image("img-1", "first_frame"), image("img-2")],
+                       aspect_source="img-2")
+check("a reference image can set the canvas",
+      (from_ref.width < from_ref.height, from_ref.ratio_from_image),
+      (True, False))
+check("a reference video can set the canvas",
+      build_sized(sized, [image("img-2"), video("vid-1")],
+                  aspect_source="vid-1").ratio, 1920 / 1080)
+pilled = build_sized(sized, [image("img-1", "first_frame")], aspect_source="pill")
+check("the pill can outrank a keyframe on purpose",
+      ((pilled.width, pilled.height), pilled.ratio_from_image),
+      ((1344, 768), False))
+check("choosing the anchor itself is the auto rule",
+      build_sized(sized, [image("img-1", "first_frame")],
+                  aspect_source="img-1").ratio_from_image, True)
+expect_error("a source that is not attached is refused",
+             lambda: build_sized(sized, [image("img-1")], aspect_source="img-9"),
+             "names nothing attached")
+expect_error("a soundtrack has no aspect to give",
+             lambda: build_sized(sized, [image("img-1"), audio("aud-1")],
+                                 aspect_source="aud-1"),
+             "no picture to take an aspect ratio from")
+
+# Frames and references share a generation now: the frames ride as pinned
+# guides on Ref2VA, exactly as a seam's inherited frame always has. The
+# references keep their <Picture N>s (cached reference prompts stay
+# byte-identical); the frames take the next ordinals and an alignment line.
+both = build(assets=[image("img-1", "first_frame"), image("img-2")])
+check("frames + refs are one REF2VA generation", both.mode, "REF2VA")
+check("...on the ref2va weights", both.checkpoint, "ref2va")
+check("the reference keeps its picture", both.labels["img-2"], "<Picture 1>")
+check("the frame takes the next ordinal", both.labels["img-1"], "<Picture 2>")
+check("the frame still anchors the canvas", both.ratio_from_image, True)
+check("the prompt aligns the frame at its ordinal",
+      "<Picture 2> (from [Shot 1]) aligns with the 0.00-second mark" in both.prompt, True)
+ends = build(assets=[image("img-1", "first_frame"), image("img-3", "last_frame"),
+                     image("img-2")])
+check("an end frame rides along too", ends.labels["img-3"], "<Picture 3>")
+check("...aligned at the far mark",
+      "<Picture 3> (from [Shot 1]) aligns with the 5.88-second mark" in ends.prompt, True)
 
 # --- label ordering (the contract encode.py walks) ---------------------------
 
@@ -1018,23 +1072,31 @@ check("...but not into a segment that writes its own soundscape",
                soundscape="hums like @ref-1", assets=[sheet])[0].ref_images,
       [])
 
-expect_error("a global citation against a keyframe segment names both",
-             lambda: timeline([segment("open", assets=[
-                 {"handle": "img-1", "kind": "image", "role": "first_frame",
-                  "filename": "a.png"}])],
-                 prompt="the piece follows @ref-1", assets=[sheet]),
-             "the global prompt cites @ref-1")
+# A global citation rides into a keyframe segment too, now that frames and
+# references share a generation: the segment becomes REF2VA and its frame
+# rides as a pinned guide.
+global_keyframe = timeline([segment("open", assets=[
+    {"handle": "img-1", "kind": "image", "role": "first_frame",
+     "filename": "a.png"}])],
+    prompt="the piece follows @ref-1", assets=[sheet])
+check("a global citation rides into a keyframe segment",
+      global_keyframe[0].mode, "REF2VA")
+check("...keeping the frame", global_keyframe[0].first_frame.handle, "img-1")
 
 expect_error("a pool keyframe is refused",
              lambda: timeline([segment("x")], assets=[
                  {"handle": "ref-1", "kind": "image", "role": "first_frame",
                   "filename": "a.png"}]),
              "belongs to one segment")
-expect_error("a keyframe segment citing the pool fails as the checkpoint clash it is",
-             lambda: timeline([segment("open on @ref-1", assets=[
-                 {"handle": "img-1", "kind": "image", "role": "first_frame",
-                  "filename": "a.png"}])], assets=[sheet]),
-             "different checkpoints")
+cited_keyframe = timeline([segment("open on @ref-1", assets=[
+    {"handle": "img-1", "kind": "image", "role": "first_frame",
+     "filename": "a.png"}])], assets=[sheet])
+check("a keyframe segment citing the pool runs as REF2VA",
+      cited_keyframe[0].mode, "REF2VA")
+check("...with the sheet injected and the frame kept",
+      ([a.filename for a in cited_keyframe[0].ref_images],
+       cited_keyframe[0].first_frame.filename),
+      (["sheet.png"], "a.png"))
 
 
 # ---- one pass ---------------------------------------------------------------
@@ -1117,10 +1179,12 @@ expect_error("a start frame after the first shot",
 expect_error("an end frame before the last shot",
              lambda: single([segment("a", assets=[ref("img-1", "z.png", "last_frame")]), segment("b")]),
              "the pass it is in ends on shot 2")
-expect_error("frames in one shot and references in another",
-             lambda: single([segment("a", assets=[ref("img-1", "z.png", "first_frame")]),
-                             segment("b @img-1", assets=[ref("img-1", "q.png")])]),
-             "cannot hold both")
+frames_and_refs = single([segment("a", assets=[ref("img-1", "z.png", "first_frame")]),
+                          segment("b @img-1", assets=[ref("img-1", "q.png")])])
+check("frames in one shot and references in another share the pass",
+      frames_and_refs.mode, "REF2VA")
+check("...the frame staying shot 1's",
+      frames_and_refs.first_frame.filename, "z.png")
 expect_error("shots that disagree about the checkpoint",
              lambda: single([segment("a", checkpoint="fl2va"), segment("b", checkpoint="ref2va")]),
              "disagree about the checkpoint")
@@ -1457,9 +1521,9 @@ check("cut times restart at the pass, not the timeline",
 check("a pass's duration is the sum of its shots",
       [p["request"]["duration_s"] for p in two_passes], [9.0, 9.0])
 
-# What a pass can only have one of is now a question about the pass. Frames and
-# references cannot share a generation — but they can share a timeline, one to
-# a pass, which is the whole point of a run shorter than the strip.
+# What a pass can only have one of is now a question about the pass. Frames
+# and references can share a generation (Ref2VA reads pinned frames), so the
+# split below is a choice about caching and control, not a requirement.
 mixed = compiler.timeline_payloads(
     {"segments": [segment("opens", assets=[ref("img-1", "z.png", "first_frame")]),
                   merged("still the same shot"),
@@ -1469,12 +1533,13 @@ mixed = compiler.timeline_payloads(
 check("a keyframe pass and a reference pass in one timeline",
       [compiler.compile_segment(p, lambda _f: (1500, 1000)).mode for p in mixed],
       ["I2VA", "REF2VA"])
-expect_error("...but not inside one pass",
-             lambda: compiler.timeline_payloads(
-                 {"segments": [segment("opens", assets=[ref("img-1", "z.png", "first_frame")]),
-                               merged("a face @img-2", assets=[ref("img-2", "q.png")])]},
-                 image_size_lookup=lambda _f: (1500, 1000)),
-             "Split the pass between them")
+merged_both = compiler.timeline_payloads(
+    {"segments": [segment("opens", assets=[ref("img-1", "z.png", "first_frame")]),
+                  merged("a face @img-2", assets=[ref("img-2", "q.png")])]},
+    image_size_lookup=lambda _f: (1500, 1000))
+check("...and inside one pass they merge into REF2VA",
+      compiler.compile_segment(merged_both[0], lambda _f: (1500, 1000)).mode,
+      "REF2VA")
 
 # The seam in front of a pass is the pass's; the seams inside it are gone.
 seamed = compiler.timeline_payloads(
@@ -1609,6 +1674,55 @@ check("the first clip decides when two disagree",
       clip_payloads([clip("a.mp4", duration_s=3, width=1080, height=1920),
                      clip("b.mp4", duration_s=3, width=1920, height=1080)]
                     )[0]["canvas"]["width"] < 768 * 2, True)
+
+# The piece's own aspect source outranks the whole precedence order: it is the
+# user naming the source instead of accepting the rule.
+chosen_card = clip_payloads([segment("a", duration_s=5,
+                                     assets=[ref("img-1", "z.png", "first_frame")]),
+                             segment("b @img-1", duration_s=5,
+                                     assets=[ref("img-1", "tall.png")])],
+                            aspect_source={"card": 2, "handle": "img-1"},
+                            image_size_lookup=lambda f: (768, 1344) if f == "tall.png"
+                                                        else (1500, 1000))
+check("a named card's reference sets the timeline's canvas",
+      (chosen_card[0]["canvas"]["width"] < chosen_card[0]["canvas"]["height"],
+       chosen_card[0]["canvas"]["from_image"]),
+      (True, False))
+check("naming segment 1's own anchor is the auto rule",
+      clip_payloads([segment("a", duration_s=5,
+                             assets=[ref("img-1", "z.png", "first_frame")])],
+                    aspect_source={"card": 1, "handle": "img-1"},
+                    image_size_lookup=lambda _f: (1500, 1000))[0]["canvas"]["from_image"],
+      True)
+check("the pill can be forced against a clip",
+      clip_payloads([segment("a", duration_s=5),
+                     clip(duration_s=3, width=1080, height=1920)],
+                    aspect="16:9", aspect_source="pill")[0]["canvas"]["label"],
+      "16:9")
+check("a pool reference can set it",
+      clip_payloads([segment("a", duration_s=5)],
+                    assets=[{"handle": "ref-1", "kind": "image",
+                             "role": "reference", "filename": "tall.png"}],
+                    aspect_source={"handle": "ref-1"},
+                    image_size_lookup=lambda f: (768, 1344) if f == "tall.png"
+                                                else (1500, 1000)
+                    )[0]["canvas"]["height"] > 768, True)
+expect_error("a card the strip does not have is refused",
+             lambda: clip_payloads([segment("a", duration_s=5)],
+                                   aspect_source={"card": 4, "handle": "img-1"},
+                                   image_size_lookup=lambda _f: (1500, 1000)),
+             "the strip has 1")
+
+# In one pass the piece's `{card, handle}` has to survive the merge's renaming:
+# the merged request carries the merged handle, and the canvas follows it.
+merged_source = compiler.compile_single(
+    {"segments": [segment("a", duration_s=5),
+                  segment("b @img-1", duration_s=5,
+                          assets=[ref("img-1", "tall.png")])],
+     "aspect_source": {"card": 2, "handle": "img-1"}},
+    image_size_lookup=lambda f: (768, 1344) if f == "tall.png" else (1500, 1000))
+check("the aspect source survives the one-pass merge",
+      merged_source.width < merged_source.height, True)
 
 # What the clip is conformed to on the way into the file is the size the
 # generated passes *deliver* — which past a two-pass render is not the size

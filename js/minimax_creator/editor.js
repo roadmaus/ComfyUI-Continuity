@@ -26,7 +26,7 @@ import { samplingBar, segmentSeedPill, widgetIO } from "./sampling.js";
 import { Stage } from "./stage.js";
 import { weightsPill, loadCatalog, catalogFiles } from "./models.js";
 import * as Turbo from "./turbo.js";
-import { viewUrl, probeAudio, uiSetting } from "./api.js";
+import { viewUrl, probe, probeAudio, uiSetting } from "./api.js";
 import * as S from "./state.js";
 import { MIN_SECONDS, MAX_SECONDS, describeRatio, isTrainedLength } from "./canvas.js";
 
@@ -566,8 +566,10 @@ export class CreatorEditor {
     // the old one's answer must not carry over onto a silent replacement.
     if (asset.kind === "video") asset.track = picked.track ?? S.DEFAULT_TRACK;
     this.commit();
-    if (asset.role !== "reference") this.probeKeyframe();
-    else if (asset.kind === "video" && !picked.track) await this.applySoundDefault(asset);
+    this.probeKeyframe();
+    if (asset.role === "reference" && asset.kind === "video" && !picked.track) {
+      await this.applySoundDefault(asset);
+    }
   }
 
   /** The segment editor, on an already-attached clip. */
@@ -609,17 +611,31 @@ export class CreatorEditor {
     if (!silent) this.commit();
   }
 
-  /** Image dimensions for the adaptive-canvas readout. The backend re-reads
-   *  them from disk; this is only so the pills can tell the truth early. */
+  /** Pixel sizes for the adaptive-canvas readout: the frames, and every
+   *  attached picture the aspect popover can offer as a source. The backend
+   *  re-reads them from disk; this is only so the pills and the list can tell
+   *  the truth early. Stills are measured in an <img>; a video's size comes
+   *  off the probe route, like a clip card's. A file that cannot be read
+   *  stays unmeasured and the readout keeps the preset. */
   probeKeyframe() {
-    const anchor = S.frameAsset(this.state, "first_frame") || S.frameAsset(this.state, "last_frame");
-    if (!anchor || this.sizes.has(anchor.filename)) return;
-    const probe = new Image();
-    probe.onload = () => {
-      this.sizes.set(anchor.filename, { width: probe.naturalWidth, height: probe.naturalHeight });
-      this.render();
-    };
-    probe.src = viewUrl(anchor.filename);
+    for (const asset of S.aspectDonors(this.state)) {
+      if (this.sizes.has(asset.filename)) continue;
+      this.sizes.set(asset.filename, null);
+      if (asset.kind === "video") {
+        probe(asset.filename).then(({ width, height }) => {
+          if (!width || !height) return;
+          this.sizes.set(asset.filename, { width, height });
+          this.render();
+        });
+        continue;
+      }
+      const measure = new Image();
+      measure.onload = () => {
+        this.sizes.set(asset.filename, { width: measure.naturalWidth, height: measure.naturalHeight });
+        this.render();
+      };
+      measure.src = viewUrl(asset.filename);
+    }
   }
 
   flash(message) {
@@ -633,8 +649,9 @@ export class CreatorEditor {
 
   render() {
     const state = this.state;
-    const anchor = S.frameAsset(state, "first_frame") || S.frameAsset(state, "last_frame");
-    const geometry = S.resolved(state, anchor ? this.sizes.get(anchor.filename) : null);
+    this.probeKeyframe();
+    const source = S.aspectSourceAsset(state);
+    const geometry = S.resolved(state, source ? this.sizes.get(source.filename) : null);
 
     this.railHost.replaceChildren(this.renderRail());
     this.assetsHost.replaceChildren(...(state.assets.length ? [this.renderAssets()] : []));
@@ -926,8 +943,8 @@ export class CreatorEditor {
         tool("image", "Add image", "image"),
         tool("video", "Add video", "video"),
         tool("audio", "Add audio", "audio"),
-        // Not gated like the reference tools: LoRAs sit on the checkpoint, not in the
-        // reference slots, so they are the one thing frames and references share.
+        // LoRAs sit on the checkpoint, not in the reference slots, so no
+        // attach rule ever gates them.
         el("button", {
           class: "mmc-tool",
           title: t("Manage the LoRAs patched onto the routed checkpoint"),
@@ -1161,19 +1178,23 @@ export class CreatorEditor {
       }),
     ]);
 
+    // Live even when a picture decides the ratio: the list is where the source
+    // itself is chosen now — any attached picture, or the preset over them.
+    const sourceAsset = S.aspectSourceAsset(state);
+    const chosen = (state.aspect_source ?? "auto") !== "auto";
     const aspectPill = el("button", {
       class: "mmc-pill",
-      disabled: geometry.fromImage || undefined,
       title: geometry.fromImage
-        ? t("The aspect ratio comes from the keyframe in the image modes — the resolution slider still sets the scale.")
+        ? t("The aspect ratio comes from this picture — the resolution slider still sets the scale. Click to take it from another input, or force a preset.")
         : t("Aspect Ratio"),
       onclick: (event) => this.openAspect(event.currentTarget),
     }, geometry.fromImage
-      // The ratio the keyframe brought with it, which is the one case where the
+      // The ratio the picture brought with it, which is the one case where the
       // pill is showing a shape no entry in the list would have drawn.
       ? [aspectGlyph(geometry.ratio, PILL_GLYPH),
          el("span", { text: describeRatio(geometry.ratio) }),
-         el("span", { class: "mmc-pill-sub", text: t("from image") })]
+         el("span", { class: "mmc-pill-sub",
+                      text: chosen ? `@${sourceAsset.handle}` : t("from image") })]
       : [aspectGlyph(geometry.ratio, PILL_GLYPH), el("span", { text: state.aspect })]);
 
     // With two passes on, the sub says so in one glance: sampled at the
@@ -1309,10 +1330,11 @@ export class CreatorEditor {
    * Two things can decide the weights. The node-level **route** is a standing
    * instruction and wins outright; failing that, this generation's own pin does,
    * and failing that the mode. Clicking cycles the route, because that is the
-   * one of the two that survives a mode change: pinning per generation is
-   * dropped the moment attaching a reference makes it illegal, so a preference
-   * expressed there quietly evaporates. `routeOf` is null in a timeline segment
-   * editor, where the route belongs to the timeline and this is a readout.
+   * standing statement of the two — a per-generation pin speaks for one
+   * generation. Either direction is honoured: the slots name inputs, not
+   * trainings, and merges of the two checkpoints exist. `routeOf` is null in a
+   * timeline segment editor, where the route belongs to the timeline and this
+   * is a readout.
    */
   renderRouting(currentMode) {
     const state = this.state;
@@ -1320,23 +1342,17 @@ export class CreatorEditor {
     const forced = route !== "auto";
     const routed = forced ? route : S.checkpoint(state);
     const pinned = !forced && S.checkpointPinned(state);
-    // Forcing FL2VA on a reference generation is refused at compile time, so the
-    // badge says so here rather than letting the queue do it.
-    const impossible = forced && route === "fl2va" && S.hasReferences(state);
     const canCycle = !!this.setRoute;
 
     const badge = el(canCycle ? "button" : "span", {
-      class: `mmc-mode${forced || pinned ? " pinned" : ""}${impossible ? " bad" : ""}`,
-      title: impossible
-        ? t("This generation has references, which are encoded for Ref2VA and cannot be "
-          + "read by FL2VA. It will be refused — change the route to auto or Ref2VA.")
-        : forced
-          ? t("Every generation on this node runs on {label}, whatever the mode derives. Click to change it.",
-              { label: S.CHECKPOINT_LABEL[route] })
-          : canCycle
-            ? t("Following the mode. Click to run everything on one checkpoint instead — "
-              + "Ref2VA takes the text-only and keyframe payloads too.")
-            : t("Following the timeline's route."),
+      class: `mmc-mode${forced || pinned ? " pinned" : ""}`,
+      title: forced
+        ? t("Every generation on this node runs on {label}, whatever the mode derives. Click to change it.",
+            { label: S.CHECKPOINT_LABEL[route] })
+        : canCycle
+          ? t("Following the mode. Click to run everything on one checkpoint instead — "
+            + "Ref2VA takes the text-only and keyframe payloads too.")
+          : t("Following the timeline's route."),
       onclick: canCycle ? () => this.setRoute(S.nextRoute(route)) : undefined,
     });
     badge.appendChild(el("b", { text: currentMode }));
@@ -1368,12 +1384,37 @@ export class CreatorEditor {
   // ---- popovers ------------------------------------------------------------
 
   openAspect(anchor) {
-    openAspectPopover(anchor, this.piece, () => this.commit());
+    // The canvas pill only renders on the face of a piece of one shot, so this
+    // shot is card 1 and the piece form of every source says so. The mirrored
+    // per-segment form (`syncCanvas`) is what `aspectSourceAsset` reads back.
+    const ratioOf = (asset) => {
+      const size = this.sizes.get(asset.filename);
+      return size?.width ? size.width / size.height : null;
+    };
+    const roleOf = (asset) =>
+      asset.role === "first_frame" ? t("start frame")
+        : asset.role === "last_frame" ? t("end frame")
+        : asset.kind === "video" ? t("reference video") : t("reference image");
+    const donors = S.aspectDonors(this.state).map((asset) => ({
+      value: { card: 1, handle: asset.handle },
+      label: `@${asset.handle}`,
+      tag: S.tagIndex(asset.handle),
+      ratio: ratioOf(asset),
+      sub: roleOf(asset),
+    }));
+    const anchorAsset = S.frameAsset(this.state, "first_frame")
+      || S.frameAsset(this.state, "last_frame");
+    openAspectPopover(anchor, this.piece, () => this.commit(), donors.length ? {
+      donors,
+      auto: anchorAsset
+        ? { ratio: ratioOf(anchorAsset), sub: `@${anchorAsset.handle}` }
+        : { ratio: S.resolved(this.state).ratio, sub: this.state.aspect },
+    } : null);
   }
 
   openResolution(anchor) {
     openResolutionPopover(anchor, this.piece, () => {
-      const asset = S.frameAsset(this.state, "first_frame") || S.frameAsset(this.state, "last_frame");
+      const asset = S.aspectSourceAsset(this.state);
       return S.resolved(this.state, asset ? this.sizes.get(asset.filename) : null);
     }, () => this.commit());
   }

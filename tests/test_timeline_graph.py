@@ -517,17 +517,12 @@ check("...so the checkpoint it skips need not be picked at all",
       [i["unet_name"] for _, i in grouped(build(routed("ref2va", without("fl2va"))).expand)["UNETLoader"]],
       [MODELS["ref2va"]])
 
-# The other direction still refuses, and still names the segment that made it
-# impossible — a route is a pin said once, not a licence to ignore the encoding.
-try:
-    build(routed("fl2va"))
-except ValueError as exc:
-    if "segment 3" not in str(exc).lower():
-        FAILURES.append(f"forced FL2VA: {str(exc)!r} does not name segment 3")
-    if "cannot be run through FL2VA" not in str(exc):
-        FAILURES.append(f"forced FL2VA: {str(exc)!r} does not say why")
-else:
-    FAILURES.append("forced FL2VA: expected a ValueError, got none")
+# The other direction is honoured too now — the slot names an input, not a
+# training, and merges of the two checkpoints exist. The route collapses the
+# clip onto the fl2va input exactly as it does onto ref2va.
+forced_fl = grouped(build(routed("fl2va")).expand)
+check("a forced FL2VA route collapses the clip onto that input",
+      [i["unet_name"] for _, i in forced_fl["UNETLoader"]], [MODELS["fl2va"]])
 
 # --- the sound seam ----------------------------------------------------------
 #

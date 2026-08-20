@@ -316,6 +316,33 @@ def instruction(mode, seconds, shots=1):
     return None
 
 
+def ref_frame_alignment(first_label, last_label, seconds, shots=1):
+    """The keyframe alignment line for a reference generation carrying its own
+    start/end frames, or "".
+
+    The same statement `instruction` quotes for the base modes, with the
+    ordinals the frames actually took: they are presented *after* the
+    references (see `compile._trailing_frame_labels`), so the first frame is
+    not `<Picture 1>` here and the line has to name the label it was given.
+    Rides in `compose`'s preamble slot — REF2VA's own instruction line states
+    its alignment inside `retention_analysis`, which a refined form still owns;
+    this line is about the pinned frames alone and coexists with it.
+    """
+    end = f"{float(seconds):.2f}"
+    last_shot = max(1, int(shots))
+    parts = []
+    if first_label:
+        parts.append(f"{first_label} (from [Shot 1]) aligns with the 0.00-second "
+                     f"mark of the target video")
+    if last_label:
+        parts.append(f"{last_label} (from [Shot {last_shot}]) aligns with the "
+                     f"{end}-second mark of the target video")
+    if not parts:
+        return ""
+    return ("How the reference pictures align with the target video — "
+            + "; ".join(parts) + ".")
+
+
 def compose(mode, body, soundscape="", music="", seconds=0.0, preamble="", shots=1,
             sections=None, definitions=""):
     """The user's prose -> the sectioned prompt the DiT was trained to read.

@@ -477,7 +477,6 @@ def _parse_track(handle, kind, item):
 def _derive_mode(first_frame, last_frame, ref_images, ref_videos, ref_audios,
                  continues=False, ends_on=False):
     has_refs = bool(ref_images or ref_videos or ref_audios)
-    has_frames = first_frame is not None or last_frame is not None or ends_on
 
     # Continuing *is* having a start frame — it is the source segment's last
     # one — so a segment cannot also name a file for the slot.
@@ -497,25 +496,13 @@ def _derive_mode(first_frame, last_frame, ref_images, ref_videos, ref_audios,
             "the cut into the clip a hard one"
         )
 
-    # FL2VA and Ref2VA are two different DiT checkpoints. The hosted API can mix
-    # a start frame with references in one call; the open weights cannot, so the
-    # UI greys one out against the other. Refuse loudly rather than silently
-    # dropping whichever the user cared about less. A *continuing* segment is
-    # the exception: its inherited frames ride in as pinned guides that
-    # payload.py places on the target timeline, which Ref2VA reads alongside
-    # its references — so a seam no longer forces a checkpoint choice.
-    if has_refs and has_frames:
-        raise CompileError(
-            "Ending on the clip after this segment pins its last frame, and a "
-            "pinned frame needs a different checkpoint from references "
-            "(FL2VA vs Ref2VA). Make the cut into the clip a hard one, or "
-            "remove the references."
-            if ends_on and last_frame is None and first_frame is None else
-            "Start/end frames and references need different checkpoints "
-            "(FL2VA vs Ref2VA) and cannot be combined in one generation. "
-            "Remove the frames or remove the references."
-        )
-
+    # References and frames used to lock each other out (FL2VA vs Ref2VA), but
+    # the continuation seam already proved the combination: an inherited frame
+    # rides as a pinned guide that payload.py places on the target timeline,
+    # and Ref2VA reads it alongside its references. A segment's own start/end
+    # frames — and the pinned frame of a seam into a clip — now ride the same
+    # road: Ref2VA is the superset training, and it is what a mixed segment
+    # runs on.
     if has_refs:
         if len(ref_images) > MAX_REF_IMAGES:
             raise CompileError(f"at most {MAX_REF_IMAGES} reference images ({len(ref_images)} given)")
@@ -558,9 +545,12 @@ def _resolve_checkpoint(mode, raw):
     a payload Ref2VA can also take, and running start/end frames through it is a
     legitimate thing to want.
 
-    The reverse is not a preference. Reference blocks have nothing to attend to
-    in FL2VA, and the result would be a quietly wrong video rather than an error,
-    so pinning against a REF2VA request is refused here.
+    The reverse used to be refused — reference blocks have nothing to attend to
+    in the original FL2VA training. But the slot names an input, not a training:
+    merges of the two checkpoints exist now, and whatever the user loaded into
+    the `fl2va` input is what a pin against a REF2VA request runs on. The pin is
+    an explicit statement about those weights, so it is honoured and flagged
+    (`pinned`) rather than second-guessed here.
     """
     choice = raw or "auto"
     if choice not in ("auto",) + CHECKPOINTS:
@@ -568,12 +558,6 @@ def _resolve_checkpoint(mode, raw):
     derived = "ref2va" if mode == "REF2VA" else "fl2va"
     if choice == "auto":
         return derived, False
-    if mode == "REF2VA" and choice == "fl2va":
-        raise CompileError(
-            "references are encoded for the Ref2VA checkpoint and cannot be run "
-            "through FL2VA — set the route back to auto or Ref2VA, or remove the "
-            "references"
-        )
     return choice, choice != derived
 
 
@@ -619,6 +603,24 @@ def _labels_from_plan(plan):
         if step["op"] == "soundtrack":
             key += ":audio"
         labels[key] = step["label"]
+    return labels
+
+
+def _trailing_frame_labels(plan, first_frame, last_frame):
+    """handle -> `<Picture N>` for start/end frames riding in a reference
+    generation.
+
+    The frames are presented to the tokenizer *after* the reference plan, so
+    every reference keeps the `<Picture N>` it would have had without them —
+    a cached reference-only prompt is byte-identical — and the frames take the
+    next ordinals. `encode.py` appends them in this same order.
+    """
+    labels = {}
+    ordinal = sum(1 for step in plan if step["op"] == "image")
+    for asset in (first_frame, last_frame):
+        if asset is not None:
+            ordinal += 1
+            labels[asset.handle] = f"<Picture {ordinal}>"
     return labels
 
 
@@ -918,6 +920,7 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     if mode == "REF2VA":
         plan = plan_references(ref_images, ref_videos, ref_audios)
         labels = _labels_from_plan(plan)
+        labels.update(_trailing_frame_labels(plan, first_frame, last_frame))
     else:
         plan = []
         labels = _keyframe_labels(first_frame, last_frame, continues)
@@ -1002,8 +1005,13 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
         # and a feathered seam pins the tail on this segment's own timeline —
         # in both, the tail rides unlabelled and the line would point at
         # nothing.
-        preamble=contextir.AUDIO_SEAM_LINE
-                 if continues_audio and mode != "REF2VA" and feather == 1 else "",
+        preamble=(contextir.ref_frame_alignment(
+                      labels.get(first_frame.handle) if first_frame else None,
+                      labels.get(last_frame.handle) if last_frame else None,
+                      canvas.seconds_for_frames(frames), shots)
+                  if mode == "REF2VA" else
+                  contextir.AUDIO_SEAM_LINE
+                  if continues_audio and feather == 1 else ""),
         # Which shot the end frame is reached by. A one-pass render says so
         # outright — it assembled the description and counted the cards' shots —
         # and any body that numbers its own shots says so by carrying them, which
@@ -1033,10 +1041,29 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     # anchor a later segment could have had — the inherited frame is already at
     # the canvas size, so there is nothing to adapt to.
     anchor = first_frame or last_frame
+    # Where the ratio comes from is a choice now, not only a rule: `auto` is
+    # the rule above (the anchor, then the pill), `pill` forces the preset even
+    # against an anchor, and a handle names any attached picture — a reference
+    # image or video as much as a frame — whose own dimensions the canvas
+    # adapts to. `ratio_from_image` stays what it always meant: the canvas is
+    # the anchor's own shape, so the anchor may be stretched onto it rather
+    # than cover-cropped into it.
+    aspect_source = data.get("aspect_source") or "auto"
     if canvas_spec is not None:
         width, height = canvas_spec.width, canvas_spec.height
         ratio, clamped, ratio_from_image = canvas_spec.ratio, canvas_spec.clamped, canvas_spec.from_image
-    elif anchor is not None and image_size_lookup is not None:
+    elif aspect_source not in ("auto", "pill") and image_size_lookup is not None:
+        chosen = next((a for a in assets if a.handle == aspect_source), None)
+        if chosen is None:
+            raise CompileError(
+                f"aspect_source @{aspect_source} names nothing attached to this generation")
+        if chosen.kind == "audio" or (chosen.kind == "video" and chosen.track == "sound"):
+            raise CompileError(
+                f"@{aspect_source} has no picture to take an aspect ratio from")
+        source_w, source_h = image_size_lookup(chosen.filename)
+        width, height, ratio, clamped = canvas.canvas_from_image(source_w, source_h, sample_edge)
+        ratio_from_image = chosen is anchor
+    elif aspect_source == "auto" and anchor is not None and image_size_lookup is not None:
         source_w, source_h = image_size_lookup(anchor.filename)
         width, height, ratio, clamped = canvas.canvas_from_image(source_w, source_h, sample_edge)
         ratio_from_image = True
@@ -1706,8 +1733,9 @@ def _inject_pool(pool, request, extra_texts=()):
 # creator/timeline split, written down as a list. A lone generation kept all of
 # these inline because it had nowhere else to keep them; a piece holds them once
 # and every shot on the strip is held to them. Mirrors `state.PIECE_FIELDS`.
-PIECE_FIELDS = ("aspect", "short_edge", "upscale", "sample_edge",
-                "refine_denoise", "face", "models", "turbo", "output_prefix")
+PIECE_FIELDS = ("aspect", "aspect_source", "short_edge", "upscale",
+                "sample_edge", "refine_denoise", "face", "models", "turbo",
+                "output_prefix")
 
 # What only a lone generation ever carried at the top level. Used to tell a
 # version-1 `creator_data` blob from a fresh node's "{}" — which is an empty
@@ -1820,13 +1848,10 @@ def timeline_payloads(data, image_size_lookup=None):
     global_prompt = str(data.get("prompt") or "")
     pool = timeline_pool(data)
     # A pool handle written in the global prompt is a citation in *every*
-    # segment — the join puts it in front of each one, and the scan below reads
+    # segment — the join puts it in front of each one, and `_inject_pool` reads
     # the joined prompt. That is the attach-once gesture: a character sheet
-    # cited globally rides into the whole strip without a per-segment mention.
-    # The one thing it cannot ride into is a keyframe segment, and that clash
-    # is named against the global prompt below rather than left to surface as
-    # a checkpoint error on a segment nobody edited.
-    global_cited = {asset.handle for asset in pool} & set(HANDLE_RE.findall(global_prompt))
+    # cited globally rides into the whole strip without a per-segment mention,
+    # keyframe segments included, whose frames ride as pinned guides on Ref2VA.
     runs = timeline_runs(data, segments)
 
     # The work bound, asked here because this is the one function both node paths
@@ -1865,7 +1890,7 @@ def timeline_payloads(data, image_size_lookup=None):
             payloads.append(group_payload(data, start, end))
         else:
             payloads.append({"request": _chained_request(
-                data, start, head, pool, global_cited, global_prompt)})
+                data, head, pool, global_prompt)})
 
         payload = payloads[-1]
 
@@ -2005,7 +2030,22 @@ def _timeline_canvas(data, segments, payloads, image_size_lookup):
     nothing in this generation is being matched to a still, and `encode.py`
     reads that flag to decide whether a keyframe may be stretched onto the
     canvas or has to be cover-cropped into it.
+
+    `aspect_source` outranks the order entirely — it is the user naming the
+    source instead of accepting the rule: `"pill"` forces the preset, and
+    `{card, handle}` names any card's attached picture (`{card}` alone for a
+    clip card, `{handle}` alone for a pool reference).
     """
+    source = data.get("aspect_source")
+    if source == "pill":
+        return _pill_canvas(data)
+    if isinstance(source, str) and source not in ("", "auto"):
+        # A hand-written blob's shorthand for the first card's asset — the
+        # same reading the frontend's parse gives it.
+        source = {"card": 1, "handle": source}
+    if isinstance(source, dict):
+        return _source_canvas(data, segments, source, image_size_lookup)
+
     if is_clip(segments[0]):
         # Payload 1 is footage: there is nothing to compile, and the clip is
         # the piece's own framing whether or not a later one disagrees.
@@ -2041,20 +2081,85 @@ def _clip_canvas(data, size):
     ratio the user can see on the bar.
     """
     width, height = size
-    short_edge = data.get("short_edge", canvas.NATIVE_SHORT_EDGE)
-    edge = first_pass_edge(data.get("sample_edge"), short_edge)
     if not width or not height:
-        label = data.get("aspect", "16:9")
-        if label not in canvas.ASPECT_PRESETS:
-            raise CompileError(f"unknown aspect ratio {label!r}")
-        ratio = canvas.ASPECT_PRESETS[label]
-        resolved_w, resolved_h = canvas.resolve_canvas(ratio, edge)
-        return {"width": resolved_w, "height": resolved_h, "ratio": ratio,
-                "label": label, "from_image": False, "clamped": False}
+        return _pill_canvas(data)
+    edge = first_pass_edge(data.get("sample_edge"),
+                           data.get("short_edge", canvas.NATIVE_SHORT_EDGE))
     resolved_w, resolved_h, ratio, clamped = canvas.canvas_from_image(width, height, edge)
     return {"width": resolved_w, "height": resolved_h, "ratio": ratio,
             "label": canvas.describe_ratio(ratio), "from_image": False,
             "clamped": clamped}
+
+
+def _pill_canvas(data):
+    """The ratio pill resolved at the first pass's own edge — what a timeline
+    with nothing better to consult is held to, and what `aspect_source: "pill"`
+    holds it to on purpose."""
+    edge = first_pass_edge(data.get("sample_edge"),
+                           data.get("short_edge", canvas.NATIVE_SHORT_EDGE))
+    label = data.get("aspect", "16:9")
+    if label not in canvas.ASPECT_PRESETS:
+        raise CompileError(f"unknown aspect ratio {label!r}")
+    ratio = canvas.ASPECT_PRESETS[label]
+    resolved_w, resolved_h = canvas.resolve_canvas(ratio, edge)
+    return {"width": resolved_w, "height": resolved_h, "ratio": ratio,
+            "label": label, "from_image": False, "clamped": False}
+
+
+def _source_canvas(data, segments, source, image_size_lookup):
+    """The canvas the piece's chosen aspect source gives.
+
+    The source names a picture the piece already holds — a card's attached
+    frame or reference, a clip card's footage, or a pool reference — and the
+    canvas adapts to that picture's own dimensions exactly as the auto rule
+    adapts to a keyframe. `from_image` is True only when the choice lands on
+    what payload 1's own anchor already is, because that is the one case where
+    a keyframe and the canvas are the same shape and stretching is honest.
+    """
+    handle = source.get("handle")
+    try:
+        card = int(source.get("card") or 0)
+    except (TypeError, ValueError) as exc:
+        raise CompileError(f"aspect source names no card: {source!r}") from exc
+
+    if not card:
+        pooled = next((a for a in timeline_pool(data) if a.handle == handle), None)
+        if pooled is None:
+            raise CompileError(f"aspect source @{handle} is not in the reference pool")
+        if pooled.kind == "audio" or (pooled.kind == "video" and pooled.track == "sound"):
+            raise CompileError(f"@{handle} has no picture to take an aspect ratio from")
+        return _sized_canvas(data, image_size_lookup, pooled.filename)
+
+    if not 1 <= card <= len(segments):
+        raise CompileError(
+            f"aspect source names card {card}, but the strip has {len(segments)}")
+    segment = segments[card - 1]
+    if is_clip(segment):
+        spec = clip_spec(segment, card - 1)
+        return _clip_canvas(data, (spec.get("source_width"), spec.get("source_height")))
+
+    item = next((a for a in (segment.get("assets") or [])
+                 if isinstance(a, dict) and a.get("handle") == handle), None)
+    if item is None:
+        raise CompileError(f"aspect source @{handle} is not attached to card {card}")
+    if item.get("kind") == "audio" or (item.get("kind") == "video"
+                                       and item.get("track") == "sound"):
+        raise CompileError(f"@{handle} has no picture to take an aspect ratio from")
+    resolved = _sized_canvas(data, image_size_lookup, item.get("filename"))
+    if card == 1 and item.get("role") in ("first_frame", "last_frame"):
+        anchor = next((a.get("handle") for role in ("first_frame", "last_frame")
+                       for a in (segment.get("assets") or [])
+                       if isinstance(a, dict) and a.get("role") == role), None)
+        resolved["from_image"] = handle == anchor
+    return resolved
+
+
+def _sized_canvas(data, image_size_lookup, filename):
+    """`_clip_canvas`'s arithmetic for a file whose size the backend reads
+    itself rather than trusts from the blob."""
+    if image_size_lookup is None:
+        return _pill_canvas(data)
+    return _clip_canvas(data, image_size_lookup(filename))
 
 
 def output_canvas(data, spec):
@@ -2070,7 +2175,7 @@ def output_canvas(data, spec):
         spec["ratio"], data.get("short_edge", canvas.NATIVE_SHORT_EDGE))
 
 
-def _chained_request(data, index, segment, pool, global_cited, global_prompt):
+def _chained_request(data, segment, pool, global_prompt):
     """One unmerged segment's request: everything it needs and nothing the
     others do. Split out of `timeline_payloads` when a payload stopped being one
     segment, and unchanged otherwise — a segment in no pass compiles to exactly
@@ -2148,20 +2253,6 @@ def _chained_request(data, index, segment, pool, global_cited, global_prompt):
     merged_assets = _inject_pool(pool, request)
     if merged_assets is not request.get("assets"):
         request["assets"] = merged_assets
-        if global_cited:
-            frame = next((a for a in (segment.get("assets") or [])
-                          if isinstance(a, dict)
-                          and a.get("role") in ("first_frame", "last_frame")), None)
-            if frame is not None:
-                raise CompileError(
-                    f"segment {index + 1} has a {frame['role'].replace('_', ' ')}, and "
-                    f"the global prompt cites "
-                    + ", ".join("@" + h for h in sorted(global_cited))
-                    + " — a reference cited there rides into every segment, and "
-                    "references cannot share a generation with start/end frames "
-                    "(FL2VA vs Ref2VA). Cite it only in the segments where it "
-                    "appears, or remove the frame."
-                )
     return request
 
 
@@ -2256,7 +2347,16 @@ def group_payload(data, start=0, end=None):
     shots = []           # (cut time in seconds, text) per shot
     at = 0.0
     stack = data.get("loras")
-    with_refs, with_frames = [], []
+    piece_aspect_source = data.get("aspect_source")
+    # "pill" and a pool handle survive the merge as they are — a pool asset
+    # keeps its handle (see the rename note below); a card's asset is renamed,
+    # and the loop translates it as it goes.
+    merged_aspect_source = (
+        "pill" if piece_aspect_source == "pill"
+        else piece_aspect_source.get("handle")
+        if (isinstance(piece_aspect_source, dict)
+            and not piece_aspect_source.get("card"))
+        else None)
 
     for number, segment in enumerate(group, start=first_number):
         try:
@@ -2287,11 +2387,6 @@ def group_payload(data, start=0, end=None):
                     f"makes, so it can only be that shot's. Split the pass after shot "
                     f"{number} to give it one of its own."
                 )
-            if asset.role == "reference":
-                with_refs.append(number)
-            else:
-                with_frames.append(number)
-
             # A pool asset keys — and keeps — its own handle: the global prompt
             # is prepended to shot 1's text *without* the shot's rename pass,
             # so a citation there only resolves if the merged list still calls
@@ -2311,6 +2406,13 @@ def group_payload(data, start=0, end=None):
                     assets.append(replace(
                         asset, handle=f"{_HANDLE_PREFIX[asset.kind]}-{counters[asset.kind]}"))
             rename[asset.handle] = assets[position].handle
+            # The piece's chosen aspect source, carried through the merge: the
+            # request below is a single generation, so `{card, handle}` has to
+            # become the handle the asset wears after renaming.
+            if (isinstance(piece_aspect_source, dict)
+                    and int(piece_aspect_source.get("card") or 0) == number
+                    and piece_aspect_source.get("handle") == asset.handle):
+                merged_aspect_source = assets[position].handle
 
         # A refined shot replaces the typed one here rather than downstream,
         # because the merged request is a single generation and `compile_request`
@@ -2340,16 +2442,6 @@ def group_payload(data, start=0, end=None):
 
         stack = merge_loras(stack, segment.get("loras"))
 
-    # Named here rather than left to `_derive_mode`'s merged view, which can only
-    # say that the timeline has both and not which shots to go and look at.
-    if with_refs and with_frames:
-        raise CompileError(
-            f"shot {with_frames[0]} has a start/end frame and shot {with_refs[0]} has "
-            f"references. Those are two different checkpoints (FL2VA vs Ref2VA) and one "
-            f"generation runs on one of them, so a pass cannot hold both. Split the pass "
-            f"between them and each side gets the checkpoint it needs."
-        )
-
     try:
         body = contextir.shot_body(shots)
     except ValueError as exc:
@@ -2363,6 +2455,7 @@ def group_payload(data, start=0, end=None):
         # to the 17n+5 grid once, at the end — not per shot.
         "duration_s": at,
         "aspect": data.get("aspect", "16:9"),
+        **({"aspect_source": merged_aspect_source} if merged_aspect_source else {}),
         "short_edge": data.get("short_edge", canvas.NATIVE_SHORT_EDGE),
         # The two-pass choice is the timeline's, like the canvas it belongs to.
         **{key: data[key] for key in ("upscale", "sample_edge", "refine_denoise") if key in data},

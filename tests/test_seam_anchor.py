@@ -249,4 +249,39 @@ loaded = {
 values = encoder._encode_frames(clip, vae, AudioVae(), compiled, loaded)[0][0][1]
 check("a start frame beside a sound seam stays on frame 0", anchors(values), [0.0])
 
+# ---- a segment's own frames beside references --------------------------------
+#
+# The combination the two checkpoints used to refuse: references in the layout
+# *and* the segment's own start/end frames, riding as pinned guides exactly as
+# a seam's inherited frame does. The frames are presented after the references,
+# so the references keep their <Picture N>s and the frames take the next.
+mixed = compiler.compile_request(
+    {"prompt": "she turns to face @img-2", "duration_s": 6, "aspect": "16:9",
+     "short_edge": 768,
+     "assets": [
+         {"handle": "img-1", "kind": "image", "role": "first_frame", "filename": "open.png"},
+         {"handle": "img-3", "kind": "image", "role": "last_frame", "filename": "close.png"},
+         {"handle": "img-2", "kind": "image", "role": "reference", "filename": "face.png"},
+     ]},
+    image_size_lookup=lambda _f: (1344, 768))
+check("frames + refs compile to REF2VA", mixed.mode, "REF2VA")
+
+clip, vae = Clip(), Vae()
+mixed_loaded = {
+    "img-1": {"image": torch.zeros(1, 768, 1344, 3)},
+    "img-3": {"image": torch.zeros(1, 768, 1344, 3)},
+    "img-2": {"image": torch.zeros(1, 512, 512, 3)},
+}
+values = encoder._encode_references(clip, vae, AudioVae(), mixed, mixed_loaded)[0][0][1]
+check("the frames pin at the clip's own first and last frame",
+      anchors(values), [0.0, round((mixed.frames - 1) * FRAME_RESCALE, 4)])
+check("the reference block still rides beside them",
+      [b["kind"] for b in values["minimax_refs"]], ["image"])
+check("the frames are presented after the reference",
+      [item["type"] for item in clip.tokenized["minimax_ref_items"]],
+      ["image", "image", "image"])
+check("...at the canvas's own size, as pinned frames are",
+      tuple(clip.tokenized["minimax_ref_items"][1]["data"].shape[1:3]),
+      (mixed.height, mixed.width))
+
 passed("all seam-anchor tests passed")

@@ -350,15 +350,16 @@ check("...which changes the cache key",
       forced["MiniMaxH3TimelineSegment"][0][1]["segment_data"] != segment_inputs["segment_data"],
       True)
 
-# Forcing it the other way round is the one direction that is not a preference:
-# reference blocks have nothing to attend to in FL2VA, so it is refused rather
-# than quietly producing a wrong video.
+# Forcing it the other way round is honoured too: the slot names an input, not
+# a training, and merges of the two checkpoints exist — the pin says what the
+# user loaded there.
 with_refs = json.loads(DATA)
 with_refs["assets"] = [{"handle": "img-1", "kind": "image", "role": "reference",
                         "filename": "a.png"}]
-expect_error("forcing FL2VA onto a reference generation is refused",
-             lambda: build(routed("fl2va", json.dumps(with_refs))),
-             "cannot be run through FL2VA")
+check("forcing FL2VA onto a reference generation is honoured",
+      [i["unet_name"] for _, i in
+       by_class(build(routed("fl2va", json.dumps(with_refs))).expand)["UNETLoader"]],
+      [MODELS["fl2va"]])
 # ...but forcing Ref2VA onto one is a no-op rather than an error.
 check("forcing Ref2VA onto a reference generation is fine",
       [i["unet_name"] for _, i in

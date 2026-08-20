@@ -208,17 +208,22 @@ def _encode_frames(clip, vae, audio_vae, compiled, loaded):
         else:
             keyframes.append(_pin({"image": tail[-1:]}, 0))
     elif compiled.first_frame is not None:
-        # Geometry anchor: plain stretch, because the canvas was derived from
-        # this image's own aspect ratio and already matches it.
-        image = _resize(loaded[compiled.first_frame.handle]["image"], compiled.width, compiled.height, "disabled")
+        # Geometry anchor: plain stretch when the canvas was derived from this
+        # image's own aspect ratio (`ratio_from_image`) and already matches it.
+        # Cover-cropped when something else decided the canvas — a chosen
+        # aspect source, a clip's, or the pill forced against it.
+        crop = "disabled" if compiled.ratio_from_image else "center"
+        image = _resize(loaded[compiled.first_frame.handle]["image"], compiled.width, compiled.height, crop)
         images.append(image)
         keyframes.append(_pin({"image": image}, 0))
 
     if compiled.last_frame is not None:
         # Follower: cover-crop onto whatever canvas the first frame established.
-        # Follower whenever something already set the canvas — a first frame, or
-        # in a timeline the frame inherited from the previous segment.
-        crop = "center" if (compiled.first_frame is not None or compiled.continues) else "disabled"
+        # Follower whenever something already set the canvas — a first frame,
+        # in a timeline the frame inherited from the previous segment, or any
+        # canvas that is not this image's own shape.
+        crop = "center" if (compiled.first_frame is not None or compiled.continues
+                            or not compiled.ratio_from_image) else "disabled"
         image = _resize(loaded[compiled.last_frame.handle]["image"], compiled.width, compiled.height, crop)
         images.append(image)
         keyframes.append(_pin({"image": image}, frame_count - 1, stock=frame_count - 1))
@@ -405,11 +410,7 @@ def _encode_references(clip, vae, audio_vae, compiled, loaded):
         # the prompt cites, it is the seam's own sound riding in conditioning.
         blocks.extend(_seam_blocks(audio_vae, compiled, loaded, frame_count))
 
-    tokens = clip.tokenize(compiled.prompt, minimax_ref_items=items)
-    cond = clip.encode_from_tokens_scheduled(tokens)
-    if blocks:
-        cond = node_helpers.conditioning_set_values(cond, {"minimax_refs": blocks})
-
+    keyframes = []
     if compiled.continues:
         # The seam alongside references — a combination old core's node
         # surface stops short of. The inherited frames ride as guides pinned
@@ -420,9 +421,52 @@ def _encode_references(clip, vae, audio_vae, compiled, loaded):
         # also rebuilds the latent list that core's `extra_conds` overwrites.
         tail = _resize(loaded[PREV_FRAME]["image"], compiled.width, compiled.height, "center")
         if compiled.feather > 1:
-            keyframes = _context_keyframes(vae, tail[-compiled.feather:], compiled.feather)
+            keyframes.extend(_context_keyframes(vae, tail[-compiled.feather:], compiled.feather))
         else:
-            keyframes = [_pin({"latent": vae.encode(tail[-1:])}, 0)]
+            keyframes.append(_pin({"latent": vae.encode(tail[-1:])}, 0))
+    elif compiled.first_frame is not None:
+        # The segment's own start frame, riding with references the same way
+        # the seam does — pinned at frame 0 on this segment's own timeline.
+        # Unlike the seam it *is* presented: it has a handle, the prompt may
+        # cite it, and `_trailing_frame_labels` gave it the `<Picture N>` after
+        # the references' own — so the item is appended after the plan's, where
+        # the tokenizer counts it at exactly that ordinal. Stretched only when
+        # the canvas is its own shape (`ratio_from_image`), cover-cropped
+        # otherwise, like any follower of a canvas something else decided.
+        crop = "disabled" if compiled.ratio_from_image else "center"
+        image = _resize(loaded[compiled.first_frame.handle]["image"],
+                        compiled.width, compiled.height, crop)
+        items.append({"type": "image", "data": image})
+        keyframes.append(_pin({"latent": vae.encode(image)}, 0))
+
+    if compiled.last_frame is not None:
+        # Follower whenever something else set the canvas; its own shape only
+        # when it is the anchor itself (no first frame, no seam).
+        crop = "center" if (compiled.first_frame is not None or compiled.continues
+                            or not compiled.ratio_from_image) else "disabled"
+        image = _resize(loaded[compiled.last_frame.handle]["image"],
+                        compiled.width, compiled.height, crop)
+        items.append({"type": "image", "data": image})
+        keyframes.append(_pin({"latent": vae.encode(image)},
+                              frame_count - 1, stock=frame_count - 1))
+    elif compiled.ends_on:
+        # The seam into a supplied clip, alongside references — the mirror of
+        # `continues` above, and like it unpresented: the clip's opening frames
+        # have no handle and the prompt never cites them.
+        head = _resize(loaded[NEXT_FRAME]["image"], compiled.width, compiled.height, "center")
+        if compiled.ends_feather > 1:
+            keyframes.extend(_context_keyframes(
+                vae, head[:compiled.ends_feather], compiled.ends_feather,
+                at=frame_count - compiled.ends_feather))
+        else:
+            keyframes.append(_pin({"latent": vae.encode(head[:1])},
+                                  frame_count - 1, stock=frame_count - 1))
+
+    tokens = clip.tokenize(compiled.prompt, minimax_ref_items=items)
+    cond = clip.encode_from_tokens_scheduled(tokens)
+    if blocks:
+        cond = node_helpers.conditioning_set_values(cond, {"minimax_refs": blocks})
+    if keyframes:
         cond = node_helpers.conditioning_set_values(cond, {
             "minimax_keyframes": keyframes,
             "minimax_frame_count": frame_count,

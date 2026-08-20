@@ -1223,9 +1223,27 @@ function syncCanvas(timeline) {
       if (offset) delete segment.take;
     });
   }
-  for (const segment of timeline.segments) {
-    if (isClip(segment)) continue;   // no canvas, no pool, no prompt to mirror
+  // The piece's aspect source, pruned before it is mirrored: a card that was
+  // deleted or an asset that was detached leaves a name pointing at nothing,
+  // and compile would refuse the strip over it. Cleared here once, like every
+  // other stale flag, rather than guarded at every read.
+  const source = timeline.aspect_source;
+  if (source !== undefined && source !== "pill" && !validAspectSource(timeline, source)) {
+    delete timeline.aspect_source;
+  }
+  timeline.segments.forEach((segment, index) => {
+    if (isClip(segment)) return;   // no canvas, no pool, no prompt to mirror
     segment.aspect = timeline.aspect;
+    // Mirrored in the segment's own vocabulary — a handle, "pill", or nothing
+    // — so `aspectSourceAsset` answers per segment. A source naming another
+    // card's asset mirrors as nothing here; only the timeline bar can show it.
+    delete segment.aspect_source;
+    const src = timeline.aspect_source;
+    if (src === "pill") segment.aspect_source = "pill";
+    else if (src && typeof src === "object" && src.handle
+             && (!src.card || Number(src.card) === index + 1)) {
+      segment.aspect_source = src.handle;
+    }
     segment.short_edge = timeline.short_edge;
     segment.upscale = timeline.upscale;
     segment.sample_edge = timeline.sample_edge;
@@ -1249,7 +1267,7 @@ function syncCanvas(timeline) {
       soundscape: timeline.soundscape ?? "",
       music: timeline.music ?? "",
     };
-  }
+  });
   // Segment 1 has nothing in front of it. Kept in step here rather than guarded
   // at every read, so reordering cannot leave a stale flag behind. `merge` goes
   // with the seam flags because it is one of them — the statement that there is
@@ -1320,9 +1338,9 @@ export { syncCanvas as syncTimeline };
  *
  * Mirrors `compile.PIECE_FIELDS`.
  */
-export const PIECE_FIELDS = ["aspect", "short_edge", "upscale", "sample_edge",
-                             "refine_denoise", "face", "models", "turbo",
-                             "output_prefix"];
+export const PIECE_FIELDS = ["aspect", "aspect_source", "short_edge", "upscale",
+                             "sample_edge", "refine_denoise", "face", "models",
+                             "turbo", "output_prefix"];
 
 /** What only a lone generation ever carried at the top level. Tells a version-1
  *  `creator_data` blob from a fresh node's "{}" — which is an empty piece and
@@ -1382,6 +1400,16 @@ export function parseTimeline(raw) {
         delete asset.with_audio;
       }
       if (!RENDER_MODES.includes(timeline.render)) timeline.render = "chained";
+      // The piece form is "pill" or {card?, handle?}. A bare handle is a
+      // hand-written blob's shorthand for the first card's asset (a lone
+      // generation, usually), read as such; anything else is dropped and
+      // `syncCanvas` prunes what no longer names a picture.
+      const src = timeline.aspect_source;
+      if (typeof src === "string" && src && src !== "pill" && src !== "auto") {
+        timeline.aspect_source = { card: 1, handle: src };
+      } else if (src !== "pill" && (!src || typeof src !== "object")) {
+        delete timeline.aspect_source;
+      }
       timeline.audio_tail_s = clampTail(timeline.audio_tail_s);
       for (const key of ["soundscape", "music"]) {
         if (typeof timeline[key] !== "string") timeline[key] = "";
@@ -1498,6 +1526,9 @@ export function serializeTimeline(timeline) {
     // is nothing in it, which is every timeline that is not a refined one-pass.
     ...serializeRefined(timeline.refined),
     aspect: timeline.aspect,
+    // Absent means auto — the rule that always held — so a piece that never
+    // chose a source round-trips exactly as it always did.
+    ...(timeline.aspect_source ? { aspect_source: timeline.aspect_source } : {}),
     short_edge: timeline.short_edge,
     ...(timeline.upscale !== UPSCALE_MODES[0] ? { upscale: timeline.upscale } : {}),
     ...(timeline.sample_edge !== NATIVE_SHORT_EDGE ? { sample_edge: timeline.sample_edge } : {}),
@@ -2407,14 +2438,6 @@ export function passProblem(timeline, pass) {
     }
   }
 
-  const withRefs = shots.findIndex(hasReferences);
-  const withFrames = shots.findIndex((s) => frameAsset(s, "first_frame") || frameAsset(s, "last_frame"));
-  if (withRefs >= 0 && withFrames >= 0) {
-    return t("Shot {frames} has a start/end frame and shot {refs} has references. "
-           + "Those are different checkpoints and one generation runs on one of them.",
-           { frames: number(withFrames), refs: number(withRefs) });
-  }
-
   for (const [key, what] of [["checkpoint", "the checkpoint"], ["soundscape", "the soundscape"],
                              ["music", "the music"]]) {
     const seen = new Set(shots
@@ -2484,14 +2507,6 @@ export function citedPool(state) {
   const found = citedHandles(poolTexts(state));
   const own = new Set(state.assets.map((a) => a.handle));
   return pool.filter((asset) => found.has(asset.handle) && !own.has(asset.handle));
-}
-
-/** The subset of `citedPool` this segment cites in its own text — what remains
- *  when the global prompt's citations are set aside. For messages that tell
- *  the user *where* to edit a mention out. */
-export function citedPoolOwn(state) {
-  const found = citedHandles(poolTexts(state, { own: true }));
-  return citedPool(state).filter((asset) => found.has(asset.handle));
 }
 
 /** Whether the timeline's own texts cite a pool asset — the "applies to every
@@ -2606,13 +2621,6 @@ export function remapContinueFrom(timeline, map) {
 /** ...and one whose sound carries on from it. Not implied by the above. */
 export const continuesAudio = (state) => state.continue_audio === true;
 
-/** A frame the segment names itself — a file in a slot, not an inherited one.
- *  This is what still locks references out: an inherited frame rides as a
- *  pinned guide references can coexist with, a named file cannot. */
-export function frameFile(state) {
-  return !!(frameAsset(state, "first_frame") || frameAsset(state, "last_frame"));
-}
-
 export function mode(state) {
   if (hasReferences(state)) return "REF2VA";
   const first = frameAsset(state, "first_frame");
@@ -2657,13 +2665,42 @@ export function overflow(state) {
   return null;
 }
 
-/** The resolved geometry and duration shown on the pills. */
-export function resolved(state, keyframeSize = null) {
+/** Attached pictures an aspect ratio can be taken from — everything but sound:
+ *  frames, reference images, and reference videos not cited for their
+ *  soundtrack alone. Mirrors the assets `compile_request` accepts as an
+ *  `aspect_source`. */
+export const aspectDonors = (state) =>
+  state.assets.filter((a) => a.kind === "image"
+                             || (a.kind === "video" && a.track !== "sound"));
+
+/**
+ * The asset whose own pixels decide the ratio under the current aspect source,
+ * or null when the pill's preset rules. Mirrors `compile_request`'s resolution
+ * order: an explicit handle names any attached picture (a mirrored pool
+ * reference included), "pill" forces the preset, and auto is the rule that
+ * always held — the anchor frame, then the pill.
+ */
+export function aspectSourceAsset(state) {
+  const source = state.aspect_source ?? "auto";
+  if (source === "pill") return null;
+  if (source !== "auto") {
+    return aspectDonors(state).find((a) => a.handle === source)
+      ?? (state.pool ?? []).find((a) => a.handle === source && a.kind !== "audio"
+                                        && !soundOnly(a))
+      ?? null;
+  }
+  return frameAsset(state, "first_frame") || frameAsset(state, "last_frame");
+}
+
+/** The resolved geometry and duration shown on the pills. `sourceSize` is the
+ *  pixel size of `aspectSourceAsset`'s answer, when the caller has probed it —
+ *  the keyframe under the auto rule, any chosen picture otherwise. */
+export function resolved(state, sourceSize = null) {
   const frames = framesForSeconds(state.duration_s);
   let ratio = ASPECT_PRESETS.find(([label]) => label === state.aspect)?.[1] ?? 16 / 9;
   let fromImage = false;
-  if (keyframeSize && keyframeSize.width && keyframeSize.height) {
-    ratio = keyframeSize.width / keyframeSize.height;
+  if (sourceSize && sourceSize.width && sourceSize.height) {
+    ratio = sourceSize.width / sourceSize.height;
     fromImage = true;
   }
   const [width, height] = resolveCanvas(ratio, state.short_edge);
@@ -2671,37 +2708,15 @@ export function resolved(state, keyframeSize = null) {
 }
 
 /**
- * Why the UI blocks an action, or null. Frames and references need different
- * checkpoints and cannot be combined in one pass, so each side locks the other
- * out rather than letting the backend reject the graph at queue time.
+ * Why the UI blocks an action, or null. Frames and references share a
+ * generation now — the frames ride as pinned guides Ref2VA reads alongside its
+ * references, exactly as a seam's inherited frame always has — so what is left
+ * here is the one true redundancy: a continuation *is* a start frame, so a
+ * segment cannot also name a file for the slot.
  */
 export function blockedReason(state, action) {
-  // A continuing segment no longer locks references out (or the other way
-  // round): the inherited frames ride as pinned guides that payload.py places
-  // on the segment's own timeline, which Ref2VA reads alongside its
-  // references. Only a segment's *own* frame files still conflict with them.
-  if (action === "reference" && frameFile(state)) {
-    return t("Remove the start/end frame first — references use the Ref2VA checkpoint, frames use FL2VA.");
-  }
   if (action === "first_frame" && continues(state)) {
     return t("This segment's start frame is an earlier segment's last frame. Turn continuation off to choose one.");
-  }
-  if ((action === "first_frame" || action === "last_frame") && hasReferences(state)) {
-    // The reference may be a cited pool asset rather than an attached file, in
-    // which case "remove" means editing the mention out — of this segment's
-    // text, or of the global prompt whose join put the citation everywhere.
-    if (references(state).length) {
-      return t("Remove the references first — start/end frames use the FL2VA checkpoint, references use Ref2VA.");
-    }
-    const own = citedPoolOwn(state);
-    if (own.length) {
-      return t("This segment cites a piece reference ({handles}) — edit the mention out first: "
-        + "start/end frames use the FL2VA checkpoint, references use Ref2VA.",
-          { handles: own.map((a) => `@${a.handle}`).join(", ") });
-    }
-    return t("The global prompt cites {handles}, which rides into every segment — edit the "
-      + "mention out of the global prompt to use start/end frames here.",
-        { handles: citedPool(state).map((a) => `@${a.handle}`).join(", ") });
   }
   if (action === "continue" && frameAsset(state, "first_frame")) {
     return t("Remove this segment's start frame first — continuing would replace it with the source "
@@ -2715,8 +2730,9 @@ export function blockedReason(state, action) {
  *
  * A different question from `blockedReason`, and asked of a different card: a
  * clip is not conditioned on anything, so what this seam does is pin the *end*
- * of the shot behind it. That makes it a keyframe generation — which a shot
- * already carrying references or its own end frame cannot be.
+ * of the shot behind it. A shot carrying references takes the pin like any
+ * other — the frame rides as a pinned guide on Ref2VA — so the only conflict
+ * left is a shot that already names its own end frame.
  */
 export function clipSeamBlocked(timeline, index, action) {
   const clip = timeline.segments[index];
@@ -2736,12 +2752,81 @@ export function clipSeamBlocked(timeline, index, action) {
   if (frameAsset(before, "last_frame")) {
     return t("Segment {n} has its own end frame. Remove it to end on this clip instead.", { n });
   }
-  if (hasReferences(before)) {
-    return t("Segment {n} carries references, and ending on this clip pins its last frame — "
-           + "those are different checkpoints (Ref2VA vs FL2VA). Remove the references, "
-           + "or keep this a hard cut.", { n });
-  }
   return null;
+}
+
+/** Whether a piece-level aspect source still names a picture the piece holds.
+ *  `syncCanvas` prunes what fails this, so a deleted card or a detached asset
+ *  cannot leave a source compile would refuse the strip over. */
+export function validAspectSource(timeline, source) {
+  // Piece level knows two shapes: "pill" (checked by the caller) and the
+  // object form — `parseTimeline` normalizes a hand-written bare handle into
+  // it before anything gets here.
+  if (!source || typeof source !== "object") return false;
+  const card = Number(source.card) || 0;
+  if (!card) {
+    return (timeline.assets ?? []).some((a) => a.handle === source.handle
+      && a.kind !== "audio" && !soundOnly(a));
+  }
+  const segment = timeline.segments[card - 1];
+  if (!segment) return false;
+  if (isClip(segment)) return !source.handle;
+  return aspectDonors(segment).some((a) => a.handle === source.handle);
+}
+
+/**
+ * Every picture the piece could take its aspect from, for the popover:
+ * `{value, card, asset}` per donor — a clip card's footage (`{card}` alone),
+ * and every card's frames and visual references — plus the pool's.
+ */
+export function timelineAspectSources(timeline) {
+  const sources = [];
+  timeline.segments.forEach((segment, index) => {
+    if (isClip(segment)) {
+      sources.push({ value: { card: index + 1 }, card: index + 1, asset: segment });
+      return;
+    }
+    for (const asset of aspectDonors(segment)) {
+      sources.push({ value: { card: index + 1, handle: asset.handle },
+                     card: index + 1, asset });
+    }
+  });
+  for (const asset of timeline.assets ?? []) {
+    if (asset.kind === "audio" || soundOnly(asset)) continue;
+    sources.push({ value: { handle: asset.handle }, card: null, asset });
+  }
+  return sources;
+}
+
+/**
+ * The size whose ratio the timeline's canvas follows, or null when the pill
+ * rules. Mirrors `compile._timeline_canvas`: the chosen source when one is
+ * named, else segment 1's own anchor, else the first clip. `sizeOf(filename)`
+ * is the caller's probe cache and may return undefined while a probe is still
+ * out — the pill then shows the preset until the answer lands.
+ */
+export function timelineAspectSize(timeline, sizeOf, { ignoreChoice = false } = {}) {
+  const source = ignoreChoice ? undefined : timeline.aspect_source;
+  if (source === "pill") return null;
+  if (source && typeof source === "object") {
+    const card = Number(source.card) || 0;
+    if (card && isClip(timeline.segments[card - 1])) {
+      const clip = timeline.segments[card - 1];
+      return clip.width && clip.height ? { width: clip.width, height: clip.height } : null;
+    }
+    const donor = card
+      ? aspectDonors(timeline.segments[card - 1] ?? { assets: [] })
+          .find((a) => a.handle === source.handle)
+      : (timeline.assets ?? []).find((a) => a.handle === source.handle);
+    return (donor && sizeOf(donor.filename)) || null;
+  }
+  const head = timeline.segments[0];
+  if (head && !isClip(head)) {
+    const anchor = frameAsset(head, "first_frame") || frameAsset(head, "last_frame");
+    if (anchor) return sizeOf(anchor.filename) || null;
+  }
+  const clip = timeline.segments.find((s) => isClip(s) && s.width && s.height);
+  return clip ? { width: clip.width, height: clip.height } : null;
 }
 
 /** The widest blend the segment behind a clip can afford. The overlap is

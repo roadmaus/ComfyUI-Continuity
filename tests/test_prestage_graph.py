@@ -482,12 +482,14 @@ check("a forced route loads that checkpoint and no other",
 check("and it reaches the segment node as the request's own pin",
       json.loads(routed["MiniMaxH3TimelineSegment"][0][1]["segment_data"])["request"]["checkpoint"],
       "ref2va")
-expect_error("forcing FL2VA on a still with references is refused",
-             lambda: still(still_blob(request={
-                 "assets": [{"handle": "img-1", "kind": "image", "role": "reference",
-                             "filename": "face.png"}],
-                 "models": {**H3_MODELS, "route": "fl2va"}})),
-             "cannot be run through FL2VA")
+# Forcing FL2VA on a still with references is honoured — the slot names an
+# input, not a training, and merges of the two checkpoints exist.
+forced_refs = by_class(still(still_blob(request={
+    "assets": [{"handle": "img-1", "kind": "image", "role": "reference",
+                "filename": "face.png"}],
+    "models": {**H3_MODELS, "route": "fl2va"}})).expand)
+check("forcing FL2VA on a still with references loads that input",
+      [i["unet_name"] for _, i in forced_refs["UNETLoader"]], [H3_MODELS["fl2va"]])
 
 # References route to Ref2VA and are the video node's own — including a clip
 # taken with its soundtrack, which is the one thing that loads the audio VAE.
@@ -545,12 +547,20 @@ expect_error("a still with no VAE is refused, naming the folder",
              lambda: still(still_blob(request={
                  "models": {k: v for k, v in H3_MODELS.items() if k != "vae"}})),
              "models/vae")
-expect_error("keyframes and references together are refused",
-             lambda: still(still_blob(request={"assets": [
-                 {"handle": "img-1", "kind": "image", "role": "first_frame", "filename": "open.png"},
-                 {"handle": "img-2", "kind": "image", "role": "reference", "filename": "face.png"},
-             ]})),
-             "cannot be combined")
+# A keyframe and a reference share a still generation now: the frame rides as
+# a pinned guide on Ref2VA, exactly as it does in a video segment. The size
+# lookup is stubbed like the keyframe test above — the adaptive canvas is the
+# one thing on this path that touches the disk.
+media.image_size = lambda filename: (1920, 1080)
+try:
+    mixed_still = by_class(still(still_blob(request={"assets": [
+        {"handle": "img-1", "kind": "image", "role": "first_frame", "filename": "open.png"},
+        {"handle": "img-2", "kind": "image", "role": "reference", "filename": "face.png"},
+    ]})).expand)
+finally:
+    media.image_size = real_image_size
+check("a keyframe and a reference share the still, on Ref2VA",
+      [i["unet_name"] for _, i in mixed_still["UNETLoader"]], [H3_MODELS["ref2va"]])
 
 # ---- GGUF checkpoints -------------------------------------------------------
 #

@@ -1,5 +1,31 @@
 # Changelog
 
+## 2.8
+
+**A start frame beside its references.** Frames and references used to lock
+each other out — attaching one greyed the other, and a strip could not merge a
+keyframe shot with a reference shot. The lock is gone at every level: a
+generation takes a start frame, an end frame *and* references (images, video,
+audio) in one request, a globally cited piece reference rides into a keyframe
+segment, a reference shot can end on a clip, and one pass holds all of it. The
+frames ride as guides pinned at the clip's own first and last frame — the same
+mechanism the continuation seam has always used, which Ref2VA reads alongside
+its references — presented after the references so every `<Picture N>` a
+cached prompt already has stays put, with an alignment line naming the
+ordinals the frames took. Forcing the FL2VA slot onto a reference generation
+is honoured now too, instead of refused: the slot names what you loaded into
+it, and merges of the two trainings exist.
+
+**The aspect ratio, from any input.** The canvas used to take its shape from
+the start frame or the first clip whether you liked it or not — the ratio pill
+went dead the moment a keyframe existed. The pill is always live now, and its
+popover starts with the ratio's *source*: Auto (the rule that always held),
+then every attached picture the piece holds — frames, reference images and
+videos, clip cards' footage, pool references — each drawn at its own shape,
+with the presets beneath them to force over the lot. Choosing a preset while
+pictures are on offer writes the choice down, so footage can no longer quietly
+outrank a ratio you just picked.
+
 ## 2.7.1
 
 **A stage that can hold still.** Every preview used to start playing the moment

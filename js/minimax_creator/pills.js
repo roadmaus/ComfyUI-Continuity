@@ -84,14 +84,77 @@ export const PILL_GLYPH = 16;
  * @param {HTMLElement} anchor  the pill to hang the popover off
  * @param {object} target       anything with an `aspect` field — a state or a timeline
  * @param {() => void} commit   called once, after a choice
+ * @param {object} [sources]    offered when the piece holds pictures the ratio
+ *   can be taken from: `{ auto: {ratio, sub}, donors: [{value, label, tag,
+ *   ratio, sub}] }`. Picking a donor writes its `value` to
+ *   `target.aspect_source`; a preset writes `"pill"`; Auto removes the field.
+ *   `ratio` may be null while a probe is still out — the glyph then draws the
+ *   frame square and says nothing it does not know.
  */
-export function openAspectPopover(anchor, target, commit) {
-  const pop = el("div", { class: "mmc-pop" }, [el("div", { class: "mmc-pop-title", text: t("Aspect Ratio") })]);
+export function openAspectPopover(anchor, target, commit, sources = null) {
+  const donors = sources?.donors?.length ? sources.donors : null;
+  const current = target.aspect_source ?? "auto";
+  const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+  const pick = (value) => {
+    if (value === undefined) delete target.aspect_source;
+    else target.aspect_source = value;
+    close();
+    commit();
+  };
+
+  const pop = el("div", { class: "mmc-pop" },
+    [el("div", { class: "mmc-pop-title", text: t("Aspect Ratio") })]);
+
+  if (donors) {
+    // The ratio's source before its value: every attached picture is offered,
+    // drawn at its own shape, so choosing a source is done by looking at
+    // frames rather than at numbers.
+    pop.appendChild(el("button", {
+      class: "mmc-opt",
+      "aria-checked": current === "auto",
+      title: t("The standing rule: a start frame decides, then supplied footage, then the preset."),
+      onclick: () => pick(undefined),
+    }, [
+      el("span", { class: "mmc-opt-label" }, [
+        aspectGlyph(sources.auto?.ratio ?? 16 / 9),
+        el("span", { text: t("Auto") }),
+        ...(sources.auto?.sub
+          ? [el("span", { class: "mmc-opt-sub", text: sources.auto.sub })] : []),
+      ]),
+      el("span", { class: "mmc-radio" }),
+    ]));
+    for (const donor of donors) {
+      pop.appendChild(el("button", {
+        class: "mmc-opt",
+        "aria-checked": same(current, donor.value),
+        onclick: () => pick(donor.value),
+      }, [
+        el("span", { class: "mmc-opt-label" }, [
+          aspectGlyph(donor.ratio ?? 1),
+          donor.tag == null
+            ? el("span", { text: donor.label })
+            : el("span", { class: `mmc-ref mmc-tag-${donor.tag}`, text: donor.label }),
+          ...(donor.sub ? [el("span", { class: "mmc-opt-sub", text: donor.sub })] : []),
+        ]),
+        el("span", { class: "mmc-radio" }),
+      ]));
+    }
+    pop.appendChild(el("div", { class: "mmc-pop-title", text: t("Preset") }));
+  }
+
   for (const [label, ratio] of ASPECT_PRESETS) {
     pop.appendChild(el("button", {
       class: "mmc-opt",
-      "aria-checked": target.aspect === label,
-      onclick: () => { target.aspect = label; close(); commit(); },
+      "aria-checked": target.aspect === label
+        && (!donors || current === "pill" || current === "auto"),
+      onclick: () => {
+        target.aspect = label;
+        // With pictures on offer, choosing a preset is choosing it *over*
+        // them — written down as "pill" so a clip or keyframe cannot quietly
+        // outrank a choice the user just made. With nothing on offer the
+        // preset already rules and the blob stays exactly as it always was.
+        pick(donors ? "pill" : undefined);
+      },
     }, [
       el("span", { class: "mmc-opt-label" }, [aspectGlyph(ratio), el("span", { text: label })]),
       el("span", { class: "mmc-radio" }),

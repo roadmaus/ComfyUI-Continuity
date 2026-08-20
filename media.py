@@ -5,9 +5,10 @@ picks files in the UI and the node fetches them here at execute time. That makes
 this the only module that touches disk.
 """
 
+import av
 import numpy as np
 import torch
-from PIL import Image, ImageOps
+from PIL import Image, ImageOps, UnidentifiedImageError
 
 import folder_paths
 from comfy_api.latest import InputImpl
@@ -34,10 +35,29 @@ def resolve(filename):
 
 
 def image_size(filename):
-    """(width, height) without decoding pixels — used for the adaptive canvas."""
-    with Image.open(resolve(filename)) as img:
-        img = ImageOps.exif_transpose(img)
-        return img.size
+    """(width, height) without decoding pixels — used for the adaptive canvas.
+
+    A video container answers the same question since the aspect source became
+    a choice: any attached picture can set the canvas, and a reference clip's
+    picture is read off its header (rotation honoured) exactly as the probe
+    route reads it. Dispatch is by what the file actually is — PIL knows every
+    still format and says so when handed anything else.
+    """
+    path = resolve(filename)
+    try:
+        with Image.open(path) as img:
+            img = ImageOps.exif_transpose(img)
+            return img.size
+    except UnidentifiedImageError:
+        pass
+    with av.open(path) as container:
+        stream = next(iter(container.streams.video), None)
+        if stream is None:
+            raise MediaError(f"{filename!r} has no picture to take a size from")
+        width, height = int(stream.width), int(stream.height)
+        if int(getattr(stream, "rotation", 0) or 0) % 180:
+            width, height = height, width
+        return width, height
 
 
 def load_image(filename):

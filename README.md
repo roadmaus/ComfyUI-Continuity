@@ -336,9 +336,9 @@ above the strip hands out `@ref-N` handles, and the citation is the attachment:
 write the handle in the **global prompt** (or click the handle on its chip) and
 the reference rides into *every* segment; write it in one segment's prompt and it
 rides into that segment alone. Uncited, it rides into none — so editing an
-unrelated segment re-renders nothing extra. A globally cited reference cannot
-share the strip with a start/end-frame segment (references and frames are
-different checkpoints), and the compiler says so naming both. The `@` menu
+unrelated segment re-renders nothing extra. A cited reference rides into a
+start/end-frame segment like any other: the segment becomes a Ref2VA
+generation and its frames ride as pinned guides. The `@` menu
 inside every segment offers the pool under *Piece references*, the refiner is
 shown it once and may cite it where the subject appears — globally included —
 and a reference can be narrowed (*person*, *object*, *scene*, *style*, for a clip
@@ -543,10 +543,15 @@ loaded:
 | nothing | T2VA | FL2VA |
 | start and/or end frame | I2VA / L2VA / FL2VA | FL2VA |
 | any reference image/video/audio | REF2VA | Ref2VA |
+| frames *and* references | REF2VA | Ref2VA |
 
-Frames and references cannot be combined. Clicking the mode badge forces everything
-onto one checkpoint instead, which is worth it because Ref2VA handles text and
-keyframes fine and one checkpoint can then cover a whole timeline.
+Frames and references combine: the frames ride as guides pinned at the clip's
+first and last frame — the same mechanism a timeline seam has always used — and
+the generation runs on Ref2VA, whose training reads keyframes alongside its
+references. Clicking the mode badge forces everything onto one checkpoint
+instead — in either direction, since the slots name what you loaded into them
+and merges of the two checkpoints exist — which is worth it because one
+checkpoint can then cover a whole timeline.
 
 Frame counts must satisfy `n % 17 == 5` at 24 fps, so there is no 6.00-second H3
 video. The pill shows whole seconds and the compiler lands on the nearest legal
@@ -558,7 +563,11 @@ count:
 | real | 5.17 | 5.88 | 7.29 | 8.00 | 8.71 | 10.13 | 12.25 | 15.08 |
 
 The resolution slider sets the **short edge** (384–2048, native 768); both axes snap
-to 32. In the image modes the aspect comes from the keyframe.
+to 32. By default the aspect comes from the start frame when there is one, then
+from supplied footage, then from the ratio pill — but the pill's popover lets
+you take it from *any* attached picture instead: a start or end frame, a
+reference image or video, a clip card's footage, or a pool reference, with the
+presets available to force over all of them.
 
 Past 768 the popover offers a choice, because the open weights were trained at a
 768 px short edge and going above it directly is off-distribution. **Two passes**
