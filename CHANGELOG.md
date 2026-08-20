@@ -2,10 +2,6 @@
 
 ## 2.11
 
-**Wording.** The cast's copy says *they* throughout — the shelf, the library, the
-`@` menu, the refiner's instructions and all three translations. Translators:
-the reworded keys are renamed in `locales/`, so nothing is orphaned.
-
 **A cast you can keep.** A subject was built by hand on every node they appeared
 on, which is how the same person becomes three slightly different people across a
 project. The **★** on their card writes them into a cast library — their name, their
