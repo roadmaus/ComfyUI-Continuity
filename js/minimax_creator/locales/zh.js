@@ -404,7 +404,7 @@ export const zh = {
  "first frame — the rewrite opens on the attached image and develops forward.": "首帧——改写以附加图像开场并向前发展。",
  "last frame — the rewrite converges on the attached image at the end.": "末帧——改写在结尾收束到附加图像。",
  "first and last frame — the rewrite is the motion path between the two.": "首帧与末帧——改写是两者之间的运动路径。",
- "@ references — the six-section form that defines and tracks them. Follows references automatically; it cannot be pinned without them.": "@ 参考——定义并跟踪它们的六段式格式。自动跟随参考；没有参考时无法固定。",
+ "@ references — the six-section form that defines and tracks them. Pinnable on any request, but without references it may degrade quality.": "@ 参考——定义并跟踪它们的六段式格式。可固定到任何请求，但没有参考时质量可能下降。",
  "template": "模板",
  "Which of the built-in prompt templates writes the rewrite. auto follows the request, like the weights route; the result panel says which one was used.": "由哪个内置提示词模板写改写。auto 跟随请求，和权重路由一样；结果面板会说明用了哪个。",
  "prompt": "提示词",

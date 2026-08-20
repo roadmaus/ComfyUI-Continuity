@@ -403,7 +403,7 @@ export const ja = {
  "first frame — the rewrite opens on the attached image and develops forward.": "先頭フレーム — リライトは添付画像から始まり、前へ展開します。",
  "last frame — the rewrite converges on the attached image at the end.": "最終フレーム — リライトは最後に添付画像へ収束します。",
  "first and last frame — the rewrite is the motion path between the two.": "先頭と最終フレーム — リライトは両者の間のモーションパスになります。",
- "@ references — the six-section form that defines and tracks them. Follows references automatically; it cannot be pinned without them.": "@ リファレンス — それらを定義・追跡する 6 セクション形式。リファレンスに自動で従い、リファレンスなしでは固定できません。",
+ "@ references — the six-section form that defines and tracks them. Pinnable on any request, but without references it may degrade quality.": "@ リファレンス — それらを定義・追跡する 6 セクション形式。どのリクエストにも固定できますが、リファレンスなしでは品質が低下する場合があります。",
  "template": "テンプレート",
  "Which of the built-in prompt templates writes the rewrite. auto follows the request, like the weights route; the result panel says which one was used.": "どの組み込みプロンプトテンプレートがリライトを書くか。auto はウェイトのルートと同じくリクエストに従い、結果パネルにどれが使われたか表示されます。",
  "prompt": "プロンプト",

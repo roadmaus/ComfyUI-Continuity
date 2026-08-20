@@ -43,9 +43,9 @@ const DEFAULTS = {
   // Which of the built-in per-mode templates writes the rewrite. "auto"
   // follows the request's derived mode — frames pick I2VA/L2VA/FL2VA,
   // @ references pick REF2VA, nothing picks T2VA — exactly as the weights
-  // pill's route does. A pinned name overrides the four base templates
-  // against each other; REF2VA is pinned to references in both directions,
-  // and the server refuses the mismatch loudly.
+  // pill's route does. A pinned name overrides everywhere, REF2VA included;
+  // a pin across the reference boundary comes back with a quality hint in
+  // the reply's problems rather than a refusal.
   template: "auto",
   // How long the reply may run, in tokens — not a context size. There is no
   // context setting on this backend: ComfyUI's Qwen3-VL tokenizer never
@@ -233,7 +233,7 @@ export function openSettings(anchor, onChange) {
     ["L2VA", "last frame — the rewrite converges on the attached image at the end."],
     ["FL2VA", "first and last frame — the rewrite is the motion path between the two."],
     ["REF2VA", "@ references — the six-section form that defines and tracks them. "
-               + "Follows references automatically; it cannot be pinned without them."],
+               + "Pinnable on any request, but without references it may degrade quality."],
   ];
 
   /** Which per-mode template writes the rewrite. Hidden while a skill is

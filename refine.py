@@ -296,31 +296,19 @@ def choose_template(choice, mode):
     and the day it is not, the override should be visible rather than a code
     edit.
 
-    REF2VA is pinned in both directions, like the checkpoint it belongs to.
-    A request with references needs the six-section form or its handles have
-    nowhere to be defined; a request without them would have that form writing
-    subject definitions for assets that do not exist. The four base templates
-    swap freely — forcing T2VA on a first-frame request is asking for the
-    describe-from-nothing style on purpose, and the alignment line still binds
-    the frame at queue time.
+    Every pin is honoured, REF2VA included — a pinned template is the user
+    saying which form they want, and the alignment line still binds whatever
+    is attached at queue time. Crossing the reference boundary costs fidelity
+    rather than correctness: REF2VA on a frames-only request writes subject
+    definitions with no assets to define, and a base template on a reference
+    request leaves the handles with no six-section form to be defined in —
+    the route reports that as a quality hint instead of refusing.
     """
     choice = str(choice or "auto").strip().upper()
     if choice in ("", "AUTO"):
         return mode, False
     if choice not in MODE_TEMPLATE:
         raise RefineError(f"unknown refine template {choice!r}")
-    if mode == "REF2VA" and choice != "REF2VA":
-        raise RefineError(
-            "this request has @ references, and only the REF2VA template writes "
-            "the six-section form that defines them — set the template back to "
-            "auto, or remove the references"
-        )
-    if choice == "REF2VA" and mode != "REF2VA":
-        raise RefineError(
-            "the REF2VA template writes subject definitions and retention "
-            "analysis for @ references, and this request has none — attach "
-            "references, or set the template back to auto"
-        )
     return choice, choice != mode
 
 

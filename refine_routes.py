@@ -576,6 +576,22 @@ def _run(body):
         parsed["shots"] = [refine.join_shots(parsed["shots"], parsed["cuts"], seconds)]
 
     problems = []
+    # A pin across the reference boundary is honoured, not refused — but the
+    # form and the attachments no longer describe each other, so say what that
+    # costs. The base templates swapping among themselves need no note: they
+    # are one form at different levels of framing.
+    if forced and (mode == "REF2VA") != (derived == "REF2VA"):
+        problems.append(
+            "the REF2VA template is pinned but this request has no @ references "
+            "— the six-section form will define subjects no asset backs, which "
+            "may degrade the result. The pinned template was honoured; set it "
+            "to auto if that is not what you wanted."
+            if mode == "REF2VA" else
+            f"this request has @ references but the {mode} template is pinned — "
+            f"the rewrite has no six-section form to define the handles in, "
+            f"which may degrade the result. The pinned template was honoured; "
+            f"set it to auto if that is not what you wanted."
+        )
     if dropped:
         problems.append(
             f"{dropped} attached file{'s were' if dropped != 1 else ' was'} not shown to "

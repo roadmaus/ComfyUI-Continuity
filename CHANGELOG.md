@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.7
+
+**Any template pins onto any request.** The refiner used to refuse a pinned
+REF2VA template on a request without @ references, and a base template on one
+with them — a first frame plus an always-REF2VA pin got an error instead of a
+rewrite, even though the checkpoint handles that prompt fine. Both refusals are
+gone: every pin is honoured, and a pin across the reference boundary comes back
+with a hint in the result panel saying it may degrade quality, alongside the
+rewrite rather than instead of it.
+
 ## 2.6
 
 **Shoot one card, then the next.** Building a piece one expensive generation at

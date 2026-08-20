@@ -118,10 +118,9 @@ check("the contract is the last thing read, after the example",
 # ---- choosing the template --------------------------------------------------
 #
 # `auto` follows the derived mode — the mode *is* the template — and a pin
-# replaces it, the same dial the weights pill has. REF2VA is pinned to
-# references in both directions: with them the handles need the six-section
-# form to be defined in, without them that form would define assets that do
-# not exist.
+# replaces it, the same dial the weights pill has. Every pin is honoured,
+# REF2VA included: a pin across the reference boundary costs fidelity, and
+# the route reports that as a quality hint rather than refusing here.
 
 check("auto follows the derived mode", refine.choose_template("auto", "I2VA"), ("I2VA", False))
 check("...and so do empty and None",
@@ -132,10 +131,10 @@ check("a base template pins freely across base modes",
 check("pinning what auto would pick is not a pin",
       refine.choose_template("I2VA", "I2VA"), ("I2VA", False))
 check("case does not matter", refine.choose_template("fl2va", "T2VA"), ("FL2VA", True))
-expect_error("references cannot lose their form",
-             lambda: refine.choose_template("T2VA", "REF2VA"), "six-section")
-expect_error("the reference form cannot be pinned without references",
-             lambda: refine.choose_template("REF2VA", "I2VA"), "has none")
+check("a base template pins onto a reference request",
+      refine.choose_template("T2VA", "REF2VA"), ("T2VA", True))
+check("the reference form pins without references",
+      refine.choose_template("REF2VA", "I2VA"), ("REF2VA", True))
 expect_error("an unknown template is refused",
              lambda: refine.choose_template("IMAX", "T2VA"), "unknown refine template")
 

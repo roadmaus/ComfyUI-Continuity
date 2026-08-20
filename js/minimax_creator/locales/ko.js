@@ -403,7 +403,7 @@ export const ko = {
  "first frame — the rewrite opens on the attached image and develops forward.": "첫 프레임 — 리라이트가 첨부된 이미지에서 시작해 앞으로 전개됩니다.",
  "last frame — the rewrite converges on the attached image at the end.": "끝 프레임 — 리라이트가 끝에서 첨부된 이미지로 수렴합니다.",
  "first and last frame — the rewrite is the motion path between the two.": "첫/끝 프레임 — 리라이트가 둘 사이의 모션 경로가 됩니다.",
- "@ references — the six-section form that defines and tracks them. Follows references automatically; it cannot be pinned without them.": "@ 레퍼런스 — 이를 정의하고 추적하는 6단 구성 형식입니다. 레퍼런스를 자동으로 따르며, 레퍼런스 없이는 고정할 수 없습니다.",
+ "@ references — the six-section form that defines and tracks them. Pinnable on any request, but without references it may degrade quality.": "@ 레퍼런스 — 이를 정의하고 추적하는 6단 구성 형식입니다. 어떤 요청에도 고정할 수 있지만, 레퍼런스가 없으면 품질이 저하될 수 있습니다.",
  "template": "템플릿",
  "Which of the built-in prompt templates writes the rewrite. auto follows the request, like the weights route; the result panel says which one was used.": "내장 프롬프트 템플릿 중 어느 것이 리라이트를 쓸지. auto는 가중치 라우트처럼 요청을 따르며, 결과 패널에 어느 것이 쓰였는지 표시됩니다.",
  "prompt": "프롬프트",
