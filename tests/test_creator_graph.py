@@ -803,3 +803,80 @@ direct_kinds = by_class(build(data=json.dumps(
 check("direct past native is the old one-pass graph",
       ("MiniMaxH3RefinePass" in direct_kinds, len(direct_kinds["MiniMaxH3TimelineSegment"])),
       (False, 1))
+
+# --- the turbo lead-in -------------------------------------------------------
+#
+# One schedule sampled in two sittings: the opening steps on the model with the
+# distillation held off it, then the leftover noise to the model that has it.
+# The setting is this machine's, so it is patched in rather than typed into the
+# blob — and off (the default, and every graph above) none of it exists.
+
+TURBO_DATA = json.dumps({
+    **json.loads(DATA),
+    "loras": [{"name": "turbo/lightx2v.safetensors", "strength": 0.6},
+              {"name": "look/grain.safetensors", "strength": 0.8}],
+    "turbo": {"lora": "turbo/lightx2v.safetensors", "on": True, "quality": "medium"},
+})
+
+check("a turbo render with the lead-in off is one ordinary sampler",
+      [len(by_class(build(data=TURBO_DATA).expand).get(k, []))
+       for k in ("KSampler", "KSamplerAdvanced")],
+      [1, 0])
+
+was = settings_mod.turbo_lead_in
+settings_mod.turbo_lead_in = lambda: 2
+try:
+    lead_kinds = by_class(build(data=TURBO_DATA, steps=6).expand)
+    lead_graph = {nid: dict(inputs=i, class_type=c) for c, nodes_ in lead_kinds.items()
+                  for nid, i in nodes_}
+
+    check("the lead-in splits the schedule in two",
+          [len(lead_kinds.get(k, [])) for k in ("KSampler", "KSamplerAdvanced")], [0, 2])
+
+    opening, rest = sorted((i for _, i in lead_kinds["KSamplerAdvanced"]),
+                           key=lambda i: i["start_at_step"])
+    check("the opening steps come first and hand their noise on",
+          (opening["add_noise"], opening["start_at_step"], opening["end_at_step"],
+           opening["return_with_leftover_noise"]),
+          ("enable", 0, 2, "enable"))
+    check("...and the rest of the same schedule finishes it without re-noising",
+          (rest["add_noise"], rest["start_at_step"], rest["end_at_step"],
+           rest["return_with_leftover_noise"]),
+          ("disable", 2, 6, "disable"))
+    check("both sittings are one run: one seed, one step count, one sampler",
+          [(i["noise_seed"], i["steps"], i["sampler_name"], i["cfg"]) for i in (opening, rest)],
+          [(100, 6, "res_multistep", 1.0)] * 2)
+
+    # The whole point: the opening steps sample on the segment node's second
+    # model output, which is the stack with the distillation left off it.
+    segment_id = lead_kinds["MiniMaxH3TimelineSegment"][0][0]
+    check("the opening steps run on the lead model, the rest on the distilled one",
+          [(i["model"][0], i["model"][1]) for i in (opening, rest)],
+          [(segment_id, 3), (segment_id, 0)])
+    check("...and the segment node is told which file to hold off it",
+          lead_kinds["MiniMaxH3TimelineSegment"][0][1]["hold_lora"],
+          "turbo/lightx2v.safetensors")
+    check("the reel still decodes the finished latent",
+          lead_graph[lead_kinds["MiniMaxH3Reel"][0][1]["samples"][0]]["class_type"],
+          "KSamplerAdvanced")
+
+    # A lead-in with nothing to lead: no distillation on the model, or a
+    # schedule too short to give steps away from. Both are the ordinary graph,
+    # and neither is an error — the switch is simply not in play.
+    check("no turbo LoRA engaged is the ordinary graph",
+          [len(by_class(build(data=DATA).expand).get(k, []))
+           for k in ("KSampler", "KSamplerAdvanced")],
+          [1, 0])
+    check("a schedule no longer than the lead-in is the ordinary graph",
+          [len(by_class(build(data=TURBO_DATA, steps=2).expand).get(k, []))
+           for k in ("KSampler", "KSamplerAdvanced")],
+          [1, 0])
+
+    off = json.loads(TURBO_DATA)
+    off["loras"][0]["enabled"] = False
+    check("a distillation this shot switched off is the ordinary graph",
+          [len(by_class(build(data=json.dumps(off), steps=6).expand).get(k, []))
+           for k in ("KSampler", "KSamplerAdvanced")],
+          [1, 0])
+finally:
+    settings_mod.turbo_lead_in = was

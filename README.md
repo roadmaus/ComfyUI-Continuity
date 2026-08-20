@@ -257,6 +257,33 @@ back. The shift pills are ordinary controls the rest of the time — H3 samples
 picture and sound on two flow clocks, and at the default 12/3 the graph carries
 no shift node at all.
 
+**Turbo lead-in** is the answer to the complaint every distillation earns: the
+frames are fine and the model stopped listening. A turbo LoRA buys its speed by
+collapsing the schedule, and the opening steps are where a shot's composition and
+motion are actually decided — so a piece rendered entirely through one follows the
+prompt less closely than H3 does on its own. Under **Settings → Nodes** you can
+hand those opening steps back: one or two of them sample on the checkpoint with
+the distillation held off it, and the rest of the same schedule finishes on the
+distilled model. One seed, one step count, one set of sigmas — the split only
+moves where the LoRA takes over.
+
+While turbo is engaged the sampler row carries it too, as a stepper beside the
+quality stops: `lead 2/8`, the steps given back over the steps the run has. The
+numerator alone would not say much — two of four is half the render on the base
+weights, two of eight a quarter — so the pill always spells the fraction, and it
+sits next to the `good 8` that set the eight. It is the same one answer the
+settings page holds, reachable from the row rather than a second copy of it;
+other open nodes pick a change up the next time they redraw.
+
+They are not extra steps: they come out of the count on the node, so a 6-step
+turbo render with a two-step lead-in is still six, and two of eight costs about a
+quarter of what the distillation saved. It applies only where the turbo switch has
+engaged a LoRA — a checkpoint with the distillation merged into its weights has
+none to hold off — and the refine and face passes are untouched, since they resume
+partway down the schedule and the steps this splits are not in them. Off by
+default, and like the rest of that page it is this machine's answer rather than
+the workflow's.
+
 ## Refine
 
 `Refine` rewrites your sentence into the long, sectioned description H3 was actually

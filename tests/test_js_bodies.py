@@ -1402,13 +1402,16 @@ check("the Creator keeps the settings tool", "Settings" in (report["creator"] or
 settings = report.get("settings", {})
 check("the settings page has all three tabs", settings.get("tabs"),
       ["Quality", "Folders", "Nodes"])
-# Each tab row is a pair with the default first and checked on a fresh
-# settings file: previews ship playing, the scopes and shift pills ship off.
-# Preview playback leads — it governs the biggest thing a node draws — then
-# reference scopes before the shift pills: one changes what is queued and the
-# other only what is drawn.
+# Every row on the tab, in order, with each setting's default checked on a fresh
+# settings file: previews ship playing, and the lead-in, the scopes and the
+# shift pills all ship off. Preview playback leads — it governs the biggest
+# thing a node draws — then the turbo lead-in and the reference scopes, which
+# change what is queued, and the shift pills last, which change only what is
+# drawn. The lead-in is the one row group that is not a pair: off, one step,
+# two steps.
 check("the node settings show their defaults checked",
-      settings.get("shiftRows"), ["true", "false", "true", "false", "true", "false"])
+      settings.get("shiftRows"),
+      ["true", "false", "true", "false", "false", "true", "false", "true", "false"])
 check("the quality tab shows the encoder value", settings.get("quality"), True)
 check("the folders tab carries both stored prefixes", settings.get("fields"),
       ["minimax/renders/H3", "minimax/stills/prestage"])

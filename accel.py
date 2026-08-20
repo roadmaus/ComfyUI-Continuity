@@ -53,7 +53,7 @@ subgraph and `direct_apply` for the ones holding a real MODEL, so the Creator
 node can take the same settings later without this module changing.
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 BLOCK_CACHE_NODE = "ApplyMiniMaxH3FirstBlockCache"
 EASYCACHE_NODE = "EasyCache"
@@ -95,6 +95,17 @@ class Settings:
     @property
     def any(self):
         return self.block_cache != "off" or self.spectrum or self.sage
+
+
+def uncached(settings):
+    """`settings` with the step caches off and everything else as it stands.
+
+    For the turbo lead-in's opening steps, which are the ones a step cache would
+    be reusing — and reusing the opening of a schedule is precisely what the
+    lead-in exists to stop. Sage survives, because it skips nothing: it makes
+    one attention call cheaper and every step still runs.
+    """
+    return replace(settings, block_cache="off", spectrum=False)
 
 
 def _node_class(node_id):

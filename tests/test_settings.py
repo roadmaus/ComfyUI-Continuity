@@ -87,6 +87,24 @@ check("a null autoplay setting is the default",
       settings.clean({"autoplay_previews": None})["autoplay_previews"], True)
 refuses("an autoplay setting that is not a boolean", {"autoplay_previews": "yes"}, "true or false")
 
+# The turbo lead-in: how many opening steps a distilled render samples without
+# the distillation. A whole number of steps rather than a boolean, because "off"
+# and "how far" are one answer — and held to a ceiling, past which the idea
+# stops being a lead-in.
+check("no lead-in by default", settings.clean({})["turbo_lead_in"], 0)
+check("a lead-in is kept", settings.clean({"turbo_lead_in": 2})["turbo_lead_in"], 2)
+check("a null lead-in is the default", settings.clean({"turbo_lead_in": None})["turbo_lead_in"], 0)
+check("both ends of the range are legal",
+      (settings.clean({"turbo_lead_in": 0})["turbo_lead_in"],
+       settings.clean({"turbo_lead_in": settings.MAX_LEAD_IN})["turbo_lead_in"]),
+      (0, settings.MAX_LEAD_IN))
+refuses("a lead-in past the ceiling", {"turbo_lead_in": settings.MAX_LEAD_IN + 1}, "between")
+refuses("a negative lead-in", {"turbo_lead_in": -1}, "between")
+refuses("a fractional lead-in", {"turbo_lead_in": 1.5}, "whole number")
+# `True` is an int in Python, and a settings page that sent one would be storing
+# a one-step lead-in nobody picked.
+refuses("a boolean lead-in", {"turbo_lead_in": True}, "whole number")
+
 # The output folders. `outputs.clean` is the authority — this only has to show
 # that the setting is held to it, so a prefix that would be refused at the end
 # of a render is refused while it is still a field being edited.
@@ -118,6 +136,11 @@ with tempfile.TemporaryDirectory() as directory:
           {**settings.DEFAULTS, "video_crf": 14})
     check("...and that is what loads", settings.load()["video_crf"], 14)
     check("...and what the save node asks for", settings.video_crf(), 14)
+
+    check("the lead-in reaches the render the same way",
+          (settings.save({"turbo_lead_in": 2})["turbo_lead_in"], settings.turbo_lead_in()),
+          (2, 2))
+    settings.save({"turbo_lead_in": 0})
 
     # A save is a patch over the file, not a replacement of it. The page sends
     # the one field just edited, so a second save must not hand back the first

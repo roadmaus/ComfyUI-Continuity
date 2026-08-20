@@ -386,6 +386,11 @@ export function missingModels(models, required) {
 export const TURBO_QUALITIES = ["draft", "medium", "good"];
 export const TURBO_STEPS = { draft: 4, medium: 6, good: 8 };
 
+/** How far the lead-in stepper may reach, mirrored from `settings.MAX_LEAD_IN`.
+ *  The server refuses anything past it either way; this only keeps the pill
+ *  from offering a value that would come straight back refused. */
+export const TURBO_LEAD_MAX = 4;
+
 /** What the switch sets the row to. H3 samples picture and sound as one latent
  *  on two flow clocks, and at turbo step counts res_multistep leaves the audio
  *  warbling — euler + beta is the combination the turbo LoRAs were tuned

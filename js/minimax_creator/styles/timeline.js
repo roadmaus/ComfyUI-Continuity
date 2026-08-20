@@ -92,6 +92,13 @@ export const css = `
    without reading the pill. */
 .mmc-pill.accel-on { border-color: rgba(110,190,255,.45); color: #6ebeff; }
 .mmc-pill.accel-on:hover:not(:disabled) { border-color: rgba(110,190,255,.7); }
+/* A lit stepper lights all the way through: the turbo lead-in's +/- are part
+   of the same control as the number between them, and .mmc-step's own
+   --mmc-text left them reading as two grey buttons flanking a blue value.
+   Inherit, the rule .mmc-turbo-main and .mmc-turbo-pick already follow. The
+   :not() keeps a stepper at the end of its range dim, which is the arrow
+   saying it has nowhere left to go. */
+.mmc-pill.accel-on .mmc-step:not(:disabled) { color: inherit; }
 /* An architecture that is not settled yet. Dashed rather than coloured: this
    says "the output may not be good", which is a different statement from the
    accelerator blue's "this render is not native". */

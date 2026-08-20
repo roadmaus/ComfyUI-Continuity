@@ -7,6 +7,9 @@ their blob to payloads and hand them here, and this emits
 
     loaders -> segment -> [accelerators] -> [preview] -> KSampler -> Reel -> Save
 
+(with a turbo lead-in on, that one KSampler is two KSamplerAdvanced nodes
+sharing a schedule — see `LeadIn`.)
+
 once per payload, adding each to the reel the save node writes. The Creator
 passes one payload and the Timeline passes one per segment; a single-payload
 render is the same code with the loop running once, which is why there is no
@@ -95,6 +98,68 @@ class Sampling:
 
     def shifted(self):
         return (self.shift_video, self.shift_audio) != SHIFT_DEFAULTS
+
+
+@dataclass(frozen=True)
+class LeadIn:
+    """The turbo lead-in: how many opening steps run without the distillation.
+
+    A distillation LoRA is a step-collapsed velocity field. It is very good at
+    finishing a shot and it is not what decided the shot — the opening steps of
+    a flow schedule are where the composition, the motion and everything the
+    prompt actually asked for are settled, and a 4-step distill settles them at
+    a quarter of the resolution the base weights would. That is what people
+    mean when they say a turbo LoRA makes H3 stupid: not that the frames are
+    worse, but that it stopped listening.
+
+    So the schedule is split rather than shortened. `steps` opening steps sample
+    on the checkpoint with the distillation held off it, the leftover noise is
+    handed on, and the rest of the same schedule runs on the distilled model as
+    it always did. The sigmas, the seed and the step count are one run's — this
+    only moves where the distillation takes over. Two steps of eight costs about
+    a quarter of the time the distill saved and buys back the part it sold.
+
+    **What it is not.** Not extra steps: they come out of the count on the node,
+    so a 6-step turbo render with a 2-step lead-in is still six. Not real
+    guidance either — the released H3 checkpoints are CFG-distilled and 1.0 is
+    the value they were trained at, so both halves sample at the node's cfg and
+    nothing here doubles the sampling cost.
+
+    **Where it does not reach.** The refine and face passes re-noise partway
+    down the schedule and sample from there; the opening steps this is about
+    are not in them, and they carry on as before.
+
+    `lora` is the file the switch engaged. Without one there is nothing to hold
+    off — a checkpoint with the distillation merged into the weights has no
+    lead-in to give, which is a real answer and not a failure.
+    """
+
+    steps: int = 0
+    lora: str = ""
+
+    @classmethod
+    def of(cls, data):
+        """The lead-in this machine asks for, for the piece `data` describes."""
+        turbo = data.get("turbo") or {}
+        if not turbo.get("on") or not turbo.get("lora"):
+            return cls()
+        return cls(steps=settings.turbo_lead_in(), lora=str(turbo["lora"]))
+
+    def within(self, sampling, compiled, payload):
+        """Whether this payload actually splits — the whole test, in one place.
+
+        Three ways a lead-in that is switched on still does nothing here, and
+        all three are ordinary rather than wrong: nobody asked for one, the
+        schedule is too short to give steps away from, or this generation is
+        not wearing the LoRA (a shot that turned it off, or a checkpoint it does
+        not claim). `active_loras` is the same filter the segment node patches
+        by, so the two cannot disagree about what is on the model.
+        """
+        if self.steps <= 0 or not self.lora or self.steps >= sampling.steps:
+            return False
+        return any(entry["name"] == self.lora for entry in
+                   compiler.active_loras(payload["request"].get("loras"),
+                                         compiled.checkpoint))
 
 
 @dataclass(frozen=True)
@@ -209,6 +274,32 @@ def inherited_audio(graph, source, seconds):
     return graph.node(PASS_AUDIO_NODE, source=source[1], seconds=seconds).out(0)
 
 
+def patched(graph, model, sampling, acceleration, weights):
+    """The three patches every sampler in this module runs behind, in order.
+
+    The flow shifts first, only when they leave the checkpoints' own values: a
+    turbo LoRA's card names the schedule it was distilled against, and this is
+    where the pills reach the run. Core's node on both sides of the 2026-08-13
+    split, so there is no version to gate on.
+
+    Then the accelerators, which want to sit between the model patches and the
+    sampler — FirstBlockCache refuses to run downstream of another DiT block
+    replacement — and last the preview decoder, which wraps OUTER_SAMPLE and so
+    wants to be outside them rather than under. Off, each of these adds nothing
+    and returns what it was given.
+
+    Written once because the pass, the refine, the face crop and the lead-in all
+    need exactly this and a fourth copy is how the four stop agreeing.
+    """
+    if sampling.shifted():
+        model = graph.node(
+            "MiniMaxH3SigmaShift", model=model,
+            shift_video=sampling.shift_video,
+            shift_audio=sampling.shift_audio).out(0)
+    model = accel.graph_apply(graph, model, acceleration, sampling.steps)
+    return models.graph_preview(graph, model, weights)
+
+
 def face_payload(payload, face):
     """The payload the face pass's *conditioning* is built from.
 
@@ -241,7 +332,7 @@ def face_payload(payload, face):
 
 def emit(payloads, labels, weights, sampling, acceleration, unique_id,
          filename_prefix=FILENAME_PREFIX, cards=None, seeds=None,
-         whole_piece=True):
+         whole_piece=True, lead_in=None):
     """-> the graph, which the caller finalizes. Nothing comes back out of it.
 
     `labels[i]` names payload i in any error raised about it — "Segment 2", or
@@ -257,6 +348,10 @@ def emit(payloads, labels, weights, sampling, acceleration, unique_id,
     rendered a pass at a time gets one file per pass to keep as well as the
     piece.
 
+    `lead_in` is the turbo lead-in this machine asks for — see `LeadIn`. Absent
+    means none, which is every render this pack made before the setting existed
+    and every render on a machine that leaves it off.
+
     `whole_piece` is whether this render covers the strip the user is looking
     at. Everything below that used to ask "is there only one payload" is really
     asking "is this render the whole piece, made in one go", and those were the
@@ -270,6 +365,7 @@ def emit(payloads, labels, weights, sampling, acceleration, unique_id,
     # never picked should say so before anything is queued rather than after the
     # first segment has sampled.
     accel.plan(acceleration, sampling.steps)
+    lead_in = lead_in or LeadIn()
     # Before compiling, and before the payloads become segment cache keys: a
     # standing route is the same statement the per-request pin makes, said once
     # for every generation instead of once per generation.
@@ -345,12 +441,22 @@ def emit(payloads, labels, weights, sampling, acceleration, unique_id,
             decoded.append(("clip", spec))
             continue
 
+        # Whether this generation's schedule is split — asked once, because the
+        # answer wires the segment node as well as the sampler, and a graph
+        # where those two disagreed would hold a model nothing samples on.
+        splits = lead_in.within(sampling, one, payloads[index])
+
         inputs = {
             "clip": links.clip,
             # sort_keys so an unchanged payload serialises identically every
             # time — this string is the segment node's cache key.
             "segment_data": json.dumps(payloads[index], sort_keys=True),
         }
+        if splits:
+            # Only when it is in play: an input the graph does not write is an
+            # input the segment node's cache key does not carry, so a render
+            # without a lead-in keeps the key it had before this existed.
+            inputs["hold_lora"] = lead_in.lora
         # The VAEs are wired into the encoder only when this segment actually
         # encodes with them — a keyframe or a sound seam. A text-only segment
         # touches neither until decode, and a decode node runs after sampling
@@ -402,49 +508,70 @@ def emit(payloads, labels, weights, sampling, acceleration, unique_id,
         # skipped outright, so there is nothing here worth a socket on the node.
         against = graph.node("ConditioningZeroOut", conditioning=segment.out(1)).out(0)
 
-        # The flow shifts, only when they leave the checkpoint's own values:
-        # a turbo LoRA's card names the schedule it was distilled against, and
-        # this is where the pills reach the run. Core's node on both sides of
-        # the 2026-08-13 split, so there is no version to gate on.
-        model = segment.out(0)
-        if sampling.shifted():
-            model = graph.node(
-                "MiniMaxH3SigmaShift", model=model,
-                shift_video=sampling.shift_video,
-                shift_audio=sampling.shift_audio).out(0)
-        # After the segment node, which is where the LoRAs are patched on — both
-        # packs want to sit between the model patches and the sampler, and
-        # FirstBlockCache refuses to run downstream of another DiT block
-        # replacement. Off, this is the segment's model unchanged.
-        model = accel.graph_apply(graph, model, acceleration, sampling.steps)
-        # Last patch before the sampler: it wraps OUTER_SAMPLE, so it wants to be
-        # outside the accelerators rather than under them. Adds nothing when the
-        # pack is absent or no decoder was picked.
-        model = models.graph_preview(graph, model, weights)
+        # Patched after the segment node, which is where the LoRAs go on. Off,
+        # every one of these adds nothing and this is the segment's model
+        # unchanged.
+        model = patched(graph, segment.out(0), sampling, acceleration, weights)
 
-        sampled = graph.node(
-            "KSampler",
-            model=model, positive=segment.out(1), negative=against,
-            latent_image=segment.out(2),
-            # The seed on the node, on every pass, unless this card carries one
-            # of its own. A piece is one look and the seed is the handle on it:
-            # *offsetting* it per segment made segment 3 of a six-segment chain
-            # unreproducible from the number on the node, and made the same clip
-            # render differently for having been moved. What separates
-            # consecutive shots is their prompts and their seams, not their
-            # noise.
-            #
-            # A card that names its own seed is the other thing entirely, and is
-            # what shooting a piece a pass at a time needs: retaking segment 2
-            # under one number for the whole piece means rolling the number that
-            # the take already kept on segment 1 was made under, so the handle
-            # stops describing the piece. A take's seed is a fact about the
-            # take. Absent — which is every card until somebody rolls one — this
-            # is the node's seed and nothing has changed.
-            seed=seed_for(index), steps=sampling.steps, cfg=sampling.cfg,
+        # What every sampler below this line is handed, whether the schedule is
+        # run in one sitting or two. The seed is not in here because the two
+        # sitting the lead-in makes spell it differently — `noise_seed` — and a
+        # dict that had to be unpacked and then corrected would be worse than
+        # naming it twice.
+        #
+        # The seed is the node's, on every pass, unless this card carries one of
+        # its own. A piece is one look and the seed is the handle on it:
+        # *offsetting* it per segment made segment 3 of a six-segment chain
+        # unreproducible from the number on the node, and made the same clip
+        # render differently for having been moved. What separates consecutive
+        # shots is their prompts and their seams, not their noise.
+        #
+        # A card that names its own seed is the other thing entirely, and is
+        # what shooting a piece a pass at a time needs: retaking segment 2 under
+        # one number for the whole piece means rolling the number that the take
+        # already kept on segment 1 was made under, so the handle stops
+        # describing the piece. A take's seed is a fact about the take. Absent —
+        # which is every card until somebody rolls one — this is the node's seed
+        # and nothing has changed.
+        common = dict(
+            steps=sampling.steps, cfg=sampling.cfg,
             sampler_name=sampling.sampler_name, scheduler=sampling.scheduler,
-            denoise=1.0,
+            positive=segment.out(1), negative=against,
         )
+
+        if splits:
+            # The split. One schedule, sampled in two sittings: the opening
+            # steps on the model the segment node handed back with the
+            # distillation held off it, then the leftover noise to the model
+            # that has it. `add_noise` is on for the first and off for the
+            # second, which is what makes them one run rather than two.
+            #
+            # The lead-in is not cached. The step accelerators reuse a forward
+            # they have already paid for, and there are two forwards here to
+            # reuse — they would be caching the exact steps this feature exists
+            # to run properly. Sage stays: it makes one attention call cheaper
+            # and skips nothing.
+            opening = graph.node(
+                "KSamplerAdvanced",
+                model=patched(graph, segment.out(3), sampling,
+                              accel.uncached(acceleration), weights),
+                latent_image=segment.out(2),
+                add_noise="enable", noise_seed=seed_for(index),
+                start_at_step=0, end_at_step=lead_in.steps,
+                return_with_leftover_noise="enable", **common)
+            sampled = graph.node(
+                "KSamplerAdvanced",
+                model=model, latent_image=opening.out(0),
+                # The noise is already in the latent. A second `enable` here
+                # would add a whole schedule's worth of it on top and throw the
+                # opening steps away.
+                add_noise="disable", noise_seed=seed_for(index),
+                start_at_step=lead_in.steps, end_at_step=sampling.steps,
+                return_with_leftover_noise="disable", **common)
+        else:
+            sampled = graph.node(
+                "KSampler", model=model, latent_image=segment.out(2),
+                seed=seed_for(index), denoise=1.0, **common)
 
         if one.refine:
             # The two-pass upscale: the first pass sampled at the smaller
@@ -467,17 +594,12 @@ def emit(payloads, labels, weights, sampling, acceleration, unique_id,
             # Patched the same way as the first pass, because it is the same
             # run at a different size: cfg 1.0 skips the negative, the LoRAs
             # come with the segment node, the accelerators and the preview
-            # decoder sit in the same places.
+            # decoder sit in the same places. No lead-in: this pass re-noises
+            # partway down the schedule and samples from there, so the opening
+            # steps a lead-in splits are not in it to split.
             refine_against = graph.node(
                 "ConditioningZeroOut", conditioning=second.out(1)).out(0)
-            refine_model = second.out(0)
-            if sampling.shifted():
-                refine_model = graph.node(
-                    "MiniMaxH3SigmaShift", model=refine_model,
-                    shift_video=sampling.shift_video,
-                    shift_audio=sampling.shift_audio).out(0)
-            refine_model = accel.graph_apply(graph, refine_model, acceleration, sampling.steps)
-            refine_model = models.graph_preview(graph, refine_model, weights)
+            refine_model = patched(graph, second.out(0), sampling, acceleration, weights)
             sampled = graph.node(
                 REFINE_NODE,
                 model=refine_model, positive=second.out(1), negative=refine_against,
@@ -537,14 +659,7 @@ def emit(payloads, labels, weights, sampling, acceleration, unique_id,
             # segment node, cfg 1.0 skips the negative, the accelerators and the
             # preview decoder sit in the same places — because it is the same
             # model answering a smaller question.
-            crop_model = crop.out(0)
-            if sampling.shifted():
-                crop_model = graph.node(
-                    "MiniMaxH3SigmaShift", model=crop_model,
-                    shift_video=sampling.shift_video,
-                    shift_audio=sampling.shift_audio).out(0)
-            crop_model = accel.graph_apply(graph, crop_model, acceleration, sampling.steps)
-            crop_model = models.graph_preview(graph, crop_model, weights)
+            crop_model = patched(graph, crop.out(0), sampling, acceleration, weights)
             source = graph.node(
                 FACE_NODE, model=crop_model, positive=crop.out(1),
                 negative=graph.node("ConditioningZeroOut",

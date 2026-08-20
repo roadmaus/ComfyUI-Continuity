@@ -46,6 +46,22 @@ const QUALITY = [
         + "texture H.264 usually eats first." },
 ];
 
+// The turbo lead-in, in steps: how much of a distilled render's opening is
+// sampled on the base weights. `settings.py` decides what is allowed (up to
+// four, so a hand-edited file can go further than this offers); these are the
+// three answers worth clicking.
+const LEAD_IN = [
+  { steps: 0, label: "Off",
+    note: "The whole schedule runs on the distillation, which is what a turbo "
+        + "render has always been." },
+  { steps: 1, label: "One step",
+    note: "The cheapest version of the idea. Enough on a 4-step render, where one "
+        + "step is a quarter of the schedule." },
+  { steps: 2, label: "Two steps",
+    note: "The one to start with at 6 and 8 steps. Costs about a quarter of what "
+        + "the distillation saved." },
+];
+
 export function openSettings() {
   return new Promise((resolve) => new SettingsPage(resolve).mount());
 }
@@ -262,6 +278,63 @@ class SettingsPage {
       ]);
   }
 
+  /**
+   * How many of a turbo render's opening steps run without the distillation.
+   *
+   * The other setting on this page that reaches the render, and the one people
+   * arrive at this page looking for: a distillation LoRA is very good at
+   * finishing a shot and it is not what decided the shot, so a piece rendered
+   * entirely through one stops following the prompt as closely as the model on
+   * its own would. This hands the opening steps back to the base weights and
+   * lets the distillation finish, on the same schedule and the same seed.
+   *
+   * Per machine rather than per node because it is a statement about how you
+   * use a distillation — the LoRA, the steps and the schedule are all still the
+   * workflow's. A `.json` shared with someone who leaves this off renders the
+   * distillation's own opening, which is the same bargain `define_refs` makes.
+   */
+  renderLeadIn() {
+    const current = Number(this.settings.turbo_lead_in) || 0;
+    // A file edited by hand can ask for more than the three rows offer. Shown
+    // as its own row rather than silently rounded — it is in force, so it has
+    // to be visible, and picking a row below is how you leave it.
+    const rows = LEAD_IN.some((row) => row.steps === current)
+      ? LEAD_IN
+      : [{ steps: current, label: "Custom",
+           note: "Set by hand in the settings file. Pick one of the rows below to leave it." },
+         ...LEAD_IN];
+
+    return [this.section("Rendering", "Turbo lead-in",
+      "Turbo LoRAs buy their speed by collapsing the schedule, and the opening "
+      + "steps are where a shot's composition and motion are actually decided — "
+      + "which is why a distilled render stops listening to the prompt as closely. "
+      + "This runs the opening on the checkpoint with the LoRA held off it, then "
+      + "hands the rest of the same schedule to the distilled model.",
+      [
+        el("div", { class: "mmc-set-choices" }, rows.map((row) => el("button", {
+          class: "mmc-opt mmc-set-opt",
+          "aria-checked": row.steps === current,
+          onclick: () => row.steps !== current && this.set({ turbo_lead_in: row.steps }),
+        }, [
+          el("span", { class: "mmc-radio" }),
+          el("span", { class: "mmc-set-opt-text" }, [
+            el("span", { class: "mmc-set-opt-label", text: t(row.label) }),
+            el("span", { class: "mmc-set-opt-note", text: t(row.note) }),
+          ]),
+        ]))),
+        el("div", { class: "mmc-set-foot" }, [
+          el("span", {
+            text: t("Not extra steps: they come out of the count on the node, so a "
+                + "6-step turbo render with a two-step lead-in is still six. Only "
+                + "where the turbo switch has engaged a LoRA — a checkpoint with the "
+                + "distillation merged into its weights has none to hold off. The "
+                + "refine and face passes are untouched: they resume partway down "
+                + "the schedule, so the steps this splits are not in them."),
+          }),
+        ]),
+      ])];
+  }
+
   renderNodes() {
     const shown = this.settings.show_shift_pills === true;
     const rows = [
@@ -273,7 +346,8 @@ class SettingsPage {
         note: "Two stepper pills after the scheduler, for dialling the two schedules "
             + "by hand. A turbo LoRA's card may name the values it was distilled against." },
     ];
-    return [this.renderPreviews(), ...this.renderScopes(), this.section("Nodes", "Flow shift pills",
+    return [this.renderPreviews(), ...this.renderLeadIn(), ...this.renderScopes(),
+      this.section("Nodes", "Flow shift pills",
       "Whether the sampler row offers H3's two flow shifts — the video and audio "
       + "schedule clocks. The values apply either way; this only decides who has "
       + "to look at them.",

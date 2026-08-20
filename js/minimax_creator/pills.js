@@ -23,14 +23,15 @@ import { UPSCALE_MODES, DEFAULT_REFINE_DENOISE, MIN_REFINE_DENOISE, MAX_REFINE_D
  * @param {(value:number) => string} [spec.format]
  */
 export function stepperPill({ value, onChange, min = -Infinity, max = Infinity, step = 1,
-                              iconName, format = String, title, width = "34px" }) {
+                              iconName, format = String, title, width = "34px",
+                              className = "" }) {
   const clamp = (next) => Math.min(max, Math.max(min, Math.round(next * 1e6) / 1e6));
   const arrow = (label, delta) => el("button", {
     class: "mmc-step", text: label,
     disabled: clamp(value + delta) === value || undefined,
     onclick: () => onChange(clamp(value + delta)),
   });
-  return el("div", { class: "mmc-pill mmc-pill-group", title }, [
+  return el("div", { class: `mmc-pill mmc-pill-group${className ? ` ${className}` : ""}`, title }, [
     arrow("−", -step),
     ...(iconName ? [icon(iconName, 16)] : []),
     el("span", { text: format(value), style: { minWidth: width, textAlign: "center" } }),

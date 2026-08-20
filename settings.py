@@ -85,7 +85,23 @@ DEFAULTS = {
     # the scope into their own prose and want no second copy of it — and a
     # per-node copy would make that one answer into a dozen.
     "define_refs": False,
+    # How many of a turbo render's opening steps run on the un-distilled
+    # weights — the turbo LoRA held off the model for those steps and patched
+    # on for the rest. 0 is off, which is what every render did before this
+    # existed. See `render.LeadIn` for what it builds and why.
+    #
+    # This reaches the render, like `define_refs` and for a related reason: it
+    # is a statement about how you use a distillation rather than about this
+    # piece. The LoRA, the steps and the schedule are all still the workflow's;
+    # this only says where in that schedule the distillation takes over.
+    "turbo_lead_in": 0,
 }
+
+# How far the lead-in may reach. Not a hard truth about the model — it is the
+# point past which the idea stops being a lead-in: the distillation is what the
+# remaining steps are for, and a render that spends most of its schedule on the
+# base weights at turbo step counts is a bad 20-step render, not a fast one.
+MAX_LEAD_IN = 4
 
 
 def clean(raw):
@@ -108,6 +124,16 @@ def clean(raw):
         if not MIN_CRF <= crf <= MAX_CRF:
             raise ValueError(f"video_crf must be between {MIN_CRF} and {MAX_CRF}")
         clean_settings["video_crf"] = crf
+    if "turbo_lead_in" in raw and raw["turbo_lead_in"] is not None:
+        lead = raw["turbo_lead_in"]
+        # `True` is an int in Python and would sail through as a one-step
+        # lead-in, the same trap `video_crf` sets above.
+        if isinstance(lead, bool) or not isinstance(lead, (int, float)) or lead != int(lead):
+            raise ValueError("turbo_lead_in must be a whole number of steps")
+        lead = int(lead)
+        if not 0 <= lead <= MAX_LEAD_IN:
+            raise ValueError(f"turbo_lead_in must be between 0 and {MAX_LEAD_IN}")
+        clean_settings["turbo_lead_in"] = lead
     for flag in ("show_shift_pills", "define_refs", "autoplay_previews"):
         if flag in raw and raw[flag] is not None:
             if not isinstance(raw[flag], bool):
@@ -190,3 +216,8 @@ def image_prefix():
 def define_refs():
     """Whether the compiler writes each reference's scope into the prompt."""
     return load()["define_refs"]
+
+
+def turbo_lead_in():
+    """How many opening steps a turbo render samples without the distillation."""
+    return load()["turbo_lead_in"]

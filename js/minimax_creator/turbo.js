@@ -13,8 +13,8 @@
 // the switch notices on the next commit and gives the sampler row back.
 
 import { el, icon } from "./dom.js";
-import { openChoicePopover } from "./pills.js";
-import { listLoras } from "./api.js";
+import { openChoicePopover, stepperPill } from "./pills.js";
+import { listLoras, uiSetting, patchSettings } from "./api.js";
 import * as S from "./state.js";
 import { t } from "./i18n.js";
 
@@ -196,6 +196,12 @@ const QUALITY_TITLE = {
 export function turboPills({ container, value, set, onCommit }) {
   const turbo = container.turbo;
   const on = turbo.on && engaged(container);
+  // The lead-in is this machine's setting, not this node's, and it is in force
+  // on every turbo render made here — so the row carries it rather than leaving
+  // a render that samples its opening on the base weights looking identical to
+  // one that does not. Only where there is a LoRA to hold off: a merged
+  // checkpoint has none. See `settings.js` and `render.LeadIn`.
+  const lead = turbo.lora ? Number(uiSetting("turbo_lead_in", 0)) || 0 : 0;
   const short = (name) => name.split("/").pop().replace(/\.[^.]+$/, "");
   const pills = [];
 
@@ -245,8 +251,17 @@ export function turboPills({ container, value, set, onCommit }) {
           });
         }
       },
+    // Just the state. The filename used to ride here and was the widest thing
+    // on the row by a factor of four — forty characters of
+    // `minimax_h3_turbo_v4_step600_ema_pruned_comfyui` for a decision made once,
+    // the day the file was downloaded, crowding out the numbers that are
+    // actually dialled. It is named in the tooltip, in the picker beside this,
+    // and in the weights popover. "merged" stays: that is not which file, it is
+    // that there is no file, which changes what the switch does.
     }, [icon("bolt", 16), el("span", {
-      text: on ? t("turbo · {name}", { name: turbo.lora ? short(turbo.lora) : t("merged") }) : t("turbo off"),
+      text: !on ? t("turbo off")
+        : turbo.lora ? t("turbo")
+        : t("turbo · merged"),
     })]),
     // Which file, as its own control — the seed pill's shape: the big half
     // throws the switch, the small half changes what it throws. Only once
@@ -285,6 +300,43 @@ export function turboPills({ container, value, set, onCommit }) {
       el("span", { text: t(quality === "medium" ? "med" : quality) }),
       el("span", { class: "mmc-pill-sub", text: String(S.TURBO_STEPS[quality]) }),
     ]))));
+  }
+
+  // The lead-in, beside the quality stops because it is a slice of exactly the
+  // number they set: `lead 2/6` next to the `med 6` that made it six. A stepper
+  // rather than stops of its own — it is a plain count with a natural zero, and
+  // the row already spells counts this way (steps, cfg, the two shifts).
+  //
+  // Shown as a fraction because the numerator alone means nothing: two of four
+  // is half the render on the base weights, two of eight is a quarter. Lit only
+  // when it is doing something, like every other accelerator on this row.
+  //
+  // Writing here writes the settings file — this is a shortcut into the one
+  // answer that page holds, not a second copy of it, the same bargain the
+  // switch strikes with the LoRA stack. Other open nodes pick it up when they
+  // next redraw.
+  if (on && turbo.lora) {
+    const steps = Number(value("steps", 0)) || 0;
+    pills.push(stepperPill({
+      value: lead, min: 0, max: Math.min(S.TURBO_LEAD_MAX, Math.max(0, steps - 1)),
+      step: 1, width: "44px",
+      className: lead ? "accel-on" : "",
+      // Parenthesised: `+` binds tighter than `:`, and without them the last
+      // sentence would only ever appear on the off branch.
+      title: (lead
+        ? t("Turbo lead-in: the first {n} of these {steps} steps sample with the "
+          + "distillation held off the checkpoint, and the rest finish on it. "
+          + "One seed, one schedule — this only moves where the LoRA takes over.",
+          { n: lead, steps })
+        : t("Turbo lead-in — off. A distillation decides a shot in far fewer steps "
+          + "than the model would, which is what makes a turbo render stop "
+          + "following the prompt. Hand the opening steps back and the rest of "
+          + "the same schedule still finishes on the LoRA."))
+        + " " + t("This machine's setting, not this workflow's — the same one on "
+                + "the settings page."),
+      format: (n) => (n ? t("lead {n}/{steps}", { n, steps }) : t("lead off")),
+      onChange: (next) => { patchSettings({ turbo_lead_in: next }).then(onCommit); onCommit(); },
+    }));
   }
 
   return pills;

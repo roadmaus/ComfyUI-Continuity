@@ -177,6 +177,30 @@ export function noteSettings(settings) {
   uiSettings = settings;
 }
 
+/**
+ * Write one setting through from somewhere that is not the settings page — the
+ * sampler row's lead-in stepper, so far.
+ *
+ * Painted first and corrected after, the same deal the page has: the cache is
+ * noted optimistically so the pill moves under the pointer, and the server's
+ * own answer replaces it. A refusal puts the old value back, because a value
+ * the server would not store must not be left on a pill looking set.
+ *
+ * There is one copy of these settings and this is a shortcut into it, not a
+ * second store: other open nodes read the new value the next time they redraw.
+ */
+export async function patchSettings(patch) {
+  const previous = uiSettings;
+  noteSettings({ ...(uiSettings ?? {}), ...patch });
+  try {
+    noteSettings(await saveSettings(patch));
+    return true;
+  } catch {
+    uiSettings = previous;
+    return false;
+  }
+}
+
 /** Fetch the settings once, ever; `onReady` fires when the cache holds them —
  *  immediately, after the first caller's fetch has already landed. */
 export function primeSettings(onReady) {

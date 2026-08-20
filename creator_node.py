@@ -233,7 +233,13 @@ def _render(blob, seed, steps, cfg, sampler_name, scheduler,
         # See `render.emit`: a card shot by itself is one payload and is still
         # one card of a piece, so the take it makes is worth keeping and the
         # number it announces is worth saying.
-        whole_piece=whole_piece)
+        whole_piece=whole_piece,
+        # Read off `data` and not off `piece`: the turbo switch is a property of
+        # the piece as it stands, and a render holding cards back does not
+        # change which LoRA is the distillation. Reading the setting here rather
+        # than inside `emit` is the same rule the output prefix follows — the
+        # file on disk is consulted once per queue, above the graph.
+        lead_in=render.LeadIn.of(data))
     return render.expanded(graph)
 
 

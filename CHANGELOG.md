@@ -1,5 +1,39 @@
 # Changelog
 
+## Unreleased
+
+**A turbo lead-in.** Every H3 distillation LoRA trades the same thing away: the
+frames stay good and the model stops listening, because a turbo LoRA buys its
+speed by collapsing the schedule and the opening steps are where a shot's
+composition and motion are actually decided. **Settings → Nodes → Turbo lead-in**
+hands those steps back — one or two of them sample on the checkpoint with the
+distillation held off it, then the leftover noise goes to the distilled model and
+the rest of the same schedule runs as it always did.
+
+One run, not two: one seed, one step count, one set of sigmas, and the lead-in's
+steps come out of the count on the node rather than being added to it. It engages
+only where the turbo switch has engaged a LoRA, only when the schedule is long
+enough to give steps away from, and only on shots actually wearing that LoRA;
+anywhere else the graph is exactly the one this pack built before. The step caches
+sit out the lead-in — reusing the opening of a schedule is the thing it exists to
+stop — while sage attention stays, since it skips no steps. The refine and face
+passes are unchanged: they resume partway down the schedule and the split is not
+in them.
+
+**The turbo pill, rebuilt around it.** The switch used to spell the engaged
+file's whole name on the sampler row — forty characters of
+`minimax_h3_turbo_v4_step600_ema_pruned_comfyui`, the widest thing on the row by
+a factor of four, for a decision made once the day the file was downloaded. The
+pill reads `turbo` now and names the file in its tooltip, in the picker beside it
+and in the weights popover, which is where choosing one already happened.
+
+The room that frees goes to the lead-in, which is settable there: a stepper
+reading `lead 2/8` — the steps given back over the steps the run has — sitting
+beside the quality stops, next to the `good 8` that set the eight. The fraction
+is the whole point, since two of four is half the render on the base weights and
+two of eight is a quarter. It writes the same settings file the page does, a
+shortcut into one answer rather than a second copy of it.
+
 ## 2.9
 
 **A cast.** You can say who is in the video now, and not only which files are

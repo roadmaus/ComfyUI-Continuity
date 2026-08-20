@@ -204,11 +204,23 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
                     tooltip="The opening frames of the supplied clip this segment runs into."),
                 io.Audio.Input("next_audio", optional=True,
                     tooltip="The opening of that clip's soundtrack, when this segment's sound runs into it."),
+                # The turbo lead-in's one question, asked of the node that
+                # patches the LoRAs because that is the only place that can
+                # answer it. Optional, and written into the graph only when the
+                # lead-in is on: a render without one has the inputs — and so
+                # the cache key — it had before this existed.
+                io.String.Input("hold_lora", optional=True,
+                    tooltip="A LoRA to leave off the 'lead model' output — the distillation, for a turbo lead-in."),
             ],
             outputs=[
                 io.Model.Output(display_name="model"),
                 io.Conditioning.Output(display_name="positive"),
                 io.Latent.Output(),
+                # The same model with `hold_lora` left off, for the opening
+                # steps of a turbo lead-in. Without a `hold_lora` it *is* the
+                # first output — the same object, not a second patch of it —
+                # so a graph that never wires this pays nothing for it.
+                io.Model.Output(display_name="lead model"),
             ],
             # For the "now rendering segment N" report — the announce below
             # names this node, whose id is the Timeline's plus a GraphBuilder
@@ -228,7 +240,7 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
     def execute(cls, clip, segment_data, vae=None, audio_vae=None,
                 model_fl2va=None, model_ref2va=None,
                 prev_image=None, prev_audio=None,
-                next_image=None, next_audio=None) -> io.NodeOutput:
+                next_image=None, next_audio=None, hold_lora="") -> io.NodeOutput:
         payload = _parse(segment_data)
 
         # Which segment the queue has reached, told to the stage the moment
@@ -281,7 +293,14 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
                 f"{compiled.checkpoint.upper()} checkpoint — connect it to "
                 f"'model_{compiled.checkpoint}'."
             )
-        model = lora.apply(model, payload["request"].get("loras"), compiled.checkpoint)
+        entries = payload["request"].get("loras")
+        # The lead-in's model first, off the same unpatched weights: it is the
+        # stack minus the distillation, so it carries whatever character or
+        # style LoRAs the piece is wearing. Only built when one is named —
+        # otherwise the second output is this one, and no LoRA is loaded twice.
+        lead = lora.apply(model, entries, compiled.checkpoint,
+                          without=hold_lora) if hold_lora else None
+        model = lora.apply(model, entries, compiled.checkpoint)
 
         loaded = media.load_all(compiled)
         if compiled.continues:
@@ -332,9 +351,11 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
             # on a seam that needs neither, so every seam wears it rather than
             # this node re-deriving which ones do.
             model = payload_repair.repair(model)
+            if lead is not None:
+                lead = payload_repair.repair(lead)
 
         cond, latent = encoder.encode(clip, vae, audio_vae, compiled, loaded)
-        return io.NodeOutput(model, cond, latent)
+        return io.NodeOutput(model, cond, latent, model if lead is None else lead)
 
 
 class MiniMaxH3Reel(io.ComfyNode):

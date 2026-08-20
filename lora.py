@@ -47,9 +47,18 @@ def _load(path):
     return weights
 
 
-def apply(model, entries, target):
-    """Patch `model` with every enabled LoRA that claims the `target` checkpoint."""
+def apply(model, entries, target, without=""):
+    """Patch `model` with every enabled LoRA that claims the `target` checkpoint.
+
+    `without` names one file to leave off — the turbo lead-in's, and nothing
+    else so far. It is a name and not an index because the stack a payload
+    carries is the merged one (`compile.merge_loras`), where a segment naming
+    the same file replaces the piece's entry rather than adding to it, so the
+    position of an entry is not stable and the file it names is.
+    """
     for entry in active_loras(entries, target):
+        if without and entry["name"] == without:
+            continue
         weights = _load(resolve(entry["name"]))
         model = comfy.sd.load_lora_for_models(
             model, None, weights, float(entry.get("strength", 1.0)), 0)[0]
