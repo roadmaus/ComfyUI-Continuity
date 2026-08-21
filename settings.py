@@ -67,6 +67,17 @@ DEFAULTS = {
     # here because it is per-machine like everything else in this file, and one
     # settings page writing one file beats a second store for one boolean.
     "show_shift_pills": False,
+    # Whether the node faces offer the controls most rows never touch — the
+    # turbo lead-in, and the two accelerators that trade something subtle
+    # enough that a row wearing them is not a row anybody set by accident.
+    # Off by default, for the same reason as the pills above: the sampler row
+    # should be the length of the decisions actually being made.
+    #
+    # It hides rather than disables, and it never hides something that is on.
+    # A control in force keeps its pill whatever this says — the rule the
+    # shift pills and the custom quality row already live by — so switching
+    # this off can never quietly change what a render does.
+    "advanced": False,
     # Whether the stage plays a clip the moment it has one — the finished
     # render, and the animated step previews while it samples. On by default
     # because it is what the stage has always done; off is for the canvases
@@ -134,7 +145,7 @@ def clean(raw):
         if not 0 <= lead <= MAX_LEAD_IN:
             raise ValueError(f"turbo_lead_in must be between 0 and {MAX_LEAD_IN}")
         clean_settings["turbo_lead_in"] = lead
-    for flag in ("show_shift_pills", "define_refs", "autoplay_previews"):
+    for flag in ("show_shift_pills", "define_refs", "autoplay_previews", "advanced"):
         if flag in raw and raw[flag] is not None:
             if not isinstance(raw[flag], bool):
                 raise ValueError(f"{flag} must be true or false")

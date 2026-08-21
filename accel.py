@@ -12,20 +12,49 @@ Five accelerators make H3 substantially faster and none of them is ours:
   instead of evaluating every one of them.
 - **Sage attention** (`ComfyUI-KJNodes`) swaps H3's own attention forward for a
   quantized one — int8 queries and keys, fp8 or fp16 values.
+- **Comfy Kitchen attention** (core's `ModelAttentionBackend`) is the same idea
+  with nothing to install: core's own int8 attention kernel, set as the model's
+  optimized attention. It is the other end of one switch with sage, not a
+  second one — see `attention` below.
+- **Chunked feed-forward** (`ComfyUI-KJNodes`) splits H3's SwiGLU over the
+  packed sequence. Alone among these it does not trade anything: activations
+  are quantized per token, so the output matches the unchunked model and only
+  peak VRAM moves.
+- **fp16 accumulation** (`ComfyUI-KJNodes`) lets CUDA accumulate matmuls in
+  fp16 while this model runs. Not a patch on the model — a callback that sets
+  one torch flag before the run and clears it after — and the only one here
+  that needs a recent enough torch rather than a pack setting.
 
 The first three are one axis — each skips or reuses steps of the same forward,
 so running two at once would cache a cache — and share the `cache` widget.
 Spectrum is a different idea and its own switch; its README rules out exactly
 one pairing (EasyCache), which is refused by name.
 
-Sage is a third idea again, and the only one that does not touch *which* steps
-run: it changes what one attention call costs, so it composes with every cache
-and with Spectrum. It gets its own switch for that reason, and it goes on first
-— innermost of the patches — so everything else wraps a model whose attention
-is already quantized. Kijai's node reaches the attention by object patch rather
-than by replacing DiT blocks, which is also why FirstBlockCache does not read it
-as a conflict: that check looks at `patches_replace["dit"]` and sage is not
-there.
+Attention is a third idea again, and the only one that does not touch *which*
+steps run: it changes what one attention call costs, so it composes with every
+cache and with Spectrum. It gets its own switch for that reason, and it goes on
+first — innermost of the patches — so everything else wraps a model whose
+attention is already quantized. Kijai's node reaches the attention by object
+patch rather than by replacing DiT blocks, which is also why FirstBlockCache
+does not read it as a conflict: that check looks at `patches_replace["dit"]` and
+sage is not there.
+
+**Sage and Kitchen are one switch and not two.** Both of them answer "what does
+one attention call cost", and a model has one attention: switching both on would
+mean whichever ran last silently won. So `attention` names the backend — the
+checkpoint's own, sage, or core's kitchen kernel — and picking one is what turns
+the other off. Kitchen needs no install and no NVIDIA-only package, which is why
+it is worth offering next to sage rather than instead of it: core hides the
+option itself on a build that cannot run it, and this reads that list rather
+than guessing at it.
+
+**Chunked feed-forward is a fourth axis and its own switch.** It touches the
+MLP, not the attention and not the schedule, so it composes with every one of
+the above. It is also the only accelerator here that is not a trade: chunking a
+per-token-quantized SwiGLU is arithmetic rearrangement, and what moves is peak
+VRAM rather than fidelity. It reaches the model by object patch on each block's
+`mlp.forward`, so, like sage, FirstBlockCache does not see it as a DiT block
+replacement.
 
 All of them are MODEL patchers: model in, patched model out, everything else
 unchanged. That is the whole reason this module can be twenty lines of wiring —
@@ -42,11 +71,13 @@ at the settings its author recommends. So `node_defaults` reads them back off th
 installed class's own `INPUT_TYPES`, and this module only names the handful it
 actually overrides. A pack that gains a knob gets its own default for it.
 
-**Order is `sage -> block cache -> spectrum -> sampler`**, which is the packs'
-own advice: FirstBlockCache refuses to sit downstream of another DiT block
-replacement, and Spectrum documents itself as the last patch before the guider.
-They compose — the caches are wrappers and block patches respectively, sage is
-an object patch under both, and none of them trips another's conflict check.
+**Order is `attention -> chunked ffn -> torch settings -> block cache ->
+spectrum -> sampler`**,
+which is the packs' own advice: FirstBlockCache refuses to sit downstream of
+another DiT block replacement, and Spectrum documents itself as the last patch
+before the guider. They compose — the caches are wrappers and block patches
+respectively, the attention and the MLP are object patches under both, and none
+of them trips another's conflict check.
 
 Nothing here is Timeline-specific. `graph_apply` is for the nodes that build a
 subgraph and `direct_apply` for the ones holding a real MODEL, so the Creator
@@ -60,6 +91,16 @@ EASYCACHE_NODE = "EasyCache"
 TEACACHE_NODE = "MiniMaxH3TeaCache"
 SPECTRUM_NODE = "SpectrumApplyMiniMaxH3"
 SAGE_NODE = "MiniMaxH3MemoryEfficientSageAttentionPatch"
+KITCHEN_NODE = "ModelAttentionBackend"
+CHUNK_FFN_NODE = "MiniMaxChunkFeedForward"
+TORCH_SETTINGS_NODE = "ModelPatchTorchSettings"
+
+# What core's node calls the kernel. Matched against the options the installed
+# class actually offers rather than passed blind: `ModelAttentionBackend` leaves
+# this out of its list entirely on a build where the kernel is unavailable, and
+# a name it does not offer would otherwise fall back to pytorch attention with a
+# line in the log nobody reads.
+KITCHEN_OPTION = "comfy kitchen attention"
 
 # Where to get each pack, named in the error rather than in a README nobody is
 # reading at the moment the node fails. EasyCache ships with ComfyUI itself, so
@@ -70,7 +111,22 @@ SOURCES = {
     EASYCACHE_NODE: "ComfyUI core (comfy_extras/nodes_easycache.py) — update ComfyUI",
     SPECTRUM_NODE: "https://github.com/xmarre/ComfyUI-Spectrum-MiniMax-H3",
     SAGE_NODE: "https://github.com/kijai/ComfyUI-KJNodes (and the sageattention package)",
+    KITCHEN_NODE: "ComfyUI core (comfy_extras/nodes_model_advanced.py) — update ComfyUI",
+    CHUNK_FFN_NODE: "https://github.com/kijai/ComfyUI-KJNodes",
+    TORCH_SETTINGS_NODE: "https://github.com/kijai/ComfyUI-KJNodes",
 }
+
+# What the `attention` widget offers. One backend at a time, because a model has
+# one attention and two patches would mean the last one applied quietly won.
+# "default" is the checkpoint's own and emits no node at all.
+ATTENTION_MODES = ["default", "sage", "kitchen"]
+
+# KJNodes' own defaults are 2 chunks over 4096 tokens; 4 is what the H3 workflows
+# that use it settle on and what issue #18 asked for. Named here rather than read
+# off the class because these two are a *preset* — the pack's defaults are its
+# answer to "chunk at all", and this is ours to "chunk for H3 video".
+CHUNK_FFN_CHUNKS = 4
+CHUNK_FFN_THRESHOLD = 4096
 
 # What the node's `block_cache` widget offers — one step-caching accelerator at
 # a time, whichever implementation. The FirstBlockCache presets are matched
@@ -90,11 +146,15 @@ class Settings:
     block_cache: str = "off"
     spectrum: bool = False
     spectrum_blend: float = 0.5
-    sage: bool = False
+    attention: str = "default"
+    chunk_ffn: bool = False
+    fp16_accumulation: bool = False
 
     @property
     def any(self):
-        return self.block_cache != "off" or self.spectrum or self.sage
+        return (self.block_cache != "off" or self.spectrum
+                or self.attention != "default" or self.chunk_ffn
+                or self.fp16_accumulation)
 
 
 def uncached(settings):
@@ -102,8 +162,9 @@ def uncached(settings):
 
     For the turbo lead-in's opening steps, which are the ones a step cache would
     be reusing — and reusing the opening of a schedule is precisely what the
-    lead-in exists to stop. Sage survives, because it skips nothing: it makes
-    one attention call cheaper and every step still runs.
+    lead-in exists to stop. The attention backend and the chunked feed-forward
+    survive, because they skip nothing: they make one call cheaper or smaller and
+    every step still runs.
     """
     return replace(settings, block_cache="off", spectrum=False)
 
@@ -169,6 +230,41 @@ def _block_cache_kwargs(node, mode):
     return kwargs
 
 
+def _kitchen_kwargs(node):
+    """Core's arguments for the kitchen kernel, or a message saying why not.
+
+    The option list is built per call inside `INPUT_TYPES` off
+    `COMFY_KITCHEN_INT8_ATTENTION_IS_AVAILABLE`, so asking the installed class
+    is the only way to know whether this machine can run it. A build without the
+    kernel offers "pytorch attention" alone, and core's own node would answer a
+    name it does not know by warning to the log and sampling on pytorch
+    attention — which is the render you did not ask for, finished. So this
+    raises instead, on the same terms as a missing pack.
+    """
+    kwargs = node_defaults(node)
+    options = node.INPUT_TYPES()["required"]["attention"][0]
+    if KITCHEN_OPTION not in options:
+        raise ValueError(
+            f"This ComfyUI cannot run '{KITCHEN_OPTION}' — '{KITCHEN_NODE}' "
+            f"offers {list(options)}. The kernel ships with comfy-kitchen and "
+            f"needs a card and a Triton it supports; switch the attention back "
+            f"to 'default' or to 'sage'.")
+    kwargs["attention"] = KITCHEN_OPTION
+    return kwargs
+
+
+def _chunk_ffn_kwargs(node):
+    """KJNodes' arguments for the chunked feed-forward, at our preset.
+
+    Everything but the two numbers comes off the class, so a knob the pack gains
+    arrives with the pack's own default for it.
+    """
+    kwargs = node_defaults(node)
+    kwargs["chunks"] = CHUNK_FFN_CHUNKS
+    kwargs["seq_threshold"] = CHUNK_FFN_THRESHOLD
+    return kwargs
+
+
 def _spectrum_kwargs(node, blend):
     kwargs = node_defaults(node)
     kwargs["enabled"] = True
@@ -189,12 +285,32 @@ def plan(settings, sampler_steps=None):
             "Spectrum cannot be combined with EasyCache — its own conflict "
             "check refuses the pair. Pick one, or switch the cache to another "
             "implementation.")
+    if settings.attention not in ATTENTION_MODES:
+        raise ValueError(
+            f"unknown attention backend {settings.attention!r} — "
+            f"this build offers {ATTENTION_MODES}")
     steps = []
     # First, so everything downstream wraps a model whose attention is already
-    # quantized. The node has no inputs but `model` — there is no tuning here to
-    # go stale, and `node_defaults` correctly returns nothing for it.
-    if settings.sage:
+    # quantized. Kijai's node has no inputs but `model` — there is no tuning
+    # there to go stale, and `node_defaults` correctly returns nothing for it.
+    if settings.attention == "sage":
         steps.append((SAGE_NODE, node_defaults(_require(SAGE_NODE))))
+    elif settings.attention == "kitchen":
+        steps.append((KITCHEN_NODE, _kitchen_kwargs(_require(KITCHEN_NODE))))
+    # Then the MLP, which is the other object patch and the other thing every
+    # step pays for. Its order against the attention does not matter — they
+    # patch different keys on different modules and neither wraps the other —
+    # so it goes here, under everything that decides which steps run at all.
+    if settings.chunk_ffn:
+        steps.append((CHUNK_FFN_NODE, _chunk_ffn_kwargs(_require(CHUNK_FFN_NODE))))
+    # Not a patch on the model at all, in the end: it hangs a callback that
+    # flips one torch flag while this model runs and puts it back afterwards. It
+    # sits with the others because it belongs to the same question — what one
+    # step costs — and because a run either has it or does not.
+    if settings.fp16_accumulation:
+        kwargs = node_defaults(_require(TORCH_SETTINGS_NODE))
+        kwargs["enable_fp16_accumulation"] = True
+        steps.append((TORCH_SETTINGS_NODE, kwargs))
     if settings.block_cache in _FBC_MODES:
         node = _require(BLOCK_CACHE_NODE)
         steps.append((BLOCK_CACHE_NODE, _block_cache_kwargs(node, settings.block_cache)))

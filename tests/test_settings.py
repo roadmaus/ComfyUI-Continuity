@@ -77,6 +77,16 @@ check("a null shift-pill setting is the default",
       settings.clean({"show_shift_pills": None})["show_shift_pills"], False)
 refuses("a shift-pill setting that is not a boolean", {"show_shift_pills": 1}, "true or false")
 
+# The advanced switch: the same strict boolean, and the same default. It only
+# decides what a node *draws* — a row with an advanced control switched on
+# keeps that control whatever this says, which is the frontend's rule and is
+# why nothing here can change a render.
+check("advanced controls are hidden by default", settings.clean({})["advanced"], False)
+check("turning them on is kept", settings.clean({"advanced": True})["advanced"], True)
+check("a null advanced setting is the default",
+      settings.clean({"advanced": None})["advanced"], False)
+refuses("an advanced setting that is not a boolean", {"advanced": "yes"}, "true or false")
+
 # The stage's autoplay. The same strict boolean, defaulting the other way:
 # playing is what the stage has always done, so the file only ever needs to
 # say "stop".

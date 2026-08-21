@@ -23,8 +23,30 @@ export const SEED_CONTROL = ["fixed", "increment", "decrement", "randomize"];
 export const SAMPLING_WIDGETS = [
   "seed", "control_after_generate", "steps", "cfg", "sampler_name", "scheduler",
   "shift_video", "shift_audio",
-  "block_cache", "spectrum", "spectrum_blend", "sage",
+  "block_cache", "spectrum", "spectrum_blend", "sage", "attention", "chunk_ffn",
+  "fp16_accumulation",
 ];
+
+// `sage` is in that list and is never drawn: it is the switch `attention`
+// replaced, kept so a workflow saved with it on still runs sage, and hidden so
+// nobody sets it from two places. See `adoptSage`.
+
+const ATTENTION_TITLE = {
+  default: "The checkpoint's own attention.",
+  sage: "Sage attention — H3's attention runs quantized. Faster, and lower peak VRAM. Needs ComfyUI-KJNodes and sageattention on an NVIDIA card.",
+  kitchen: "Comfy Kitchen attention — core's own int8 kernel, nothing to install. Needs a ComfyUI whose build ships it.",
+};
+
+// Noun first, the way the cache pill reads ("cache off", "cache fast"): the
+// pill has to say what it is a choice *about*, and a pill reading "kitchen"
+// on its own says nothing at all to somebody who has not read the release
+// notes. The backends keep their own names — they are what the packs and core
+// call them, and searching for either finds the right page.
+const ATTENTION_LABEL = {
+  default: "attention default",
+  sage: "attention sage",
+  kitchen: "attention kitchen",
+};
 
 const BLOCK_CACHE_TITLE = {
   off: "Step caching is off.",
@@ -34,6 +56,24 @@ const BLOCK_CACHE_TITLE = {
   easy: "EasyCache — core's own step reuse, nothing to install. Cannot be combined with Spectrum.",
   tea: "TeaCache — skips transformer forwards on timestep similarity. Needs ComfyUI-MiniMaxH3-TeaCache.",
 };
+
+/**
+ * Carry a workflow saved with the old `sage` switch onto the `attention` list.
+ *
+ * The switch became one option of a list, and the two cannot both be authority
+ * or a node would say sage in one place and default in the other. So the switch
+ * is read exactly once — the first time a node carrying it is drawn — moved onto
+ * the list and cleared, and after that the list is the only thing that decides.
+ * A node that never had it on passes straight through and nothing is written.
+ *
+ * Only while the list is still at its default: a workflow saved *after* the
+ * rename has already answered this, including by answering "default".
+ */
+function adoptSage(widgets, set) {
+  if (!widgets.sage?.value) return;
+  if (String(widgets.attention?.value ?? "default") === "default") set("attention", "sage");
+  set("sage", false);
+}
 
 /**
  * Read and write the real widgets, by name.
@@ -271,6 +311,10 @@ export function samplingBar({ widgets, value, set, perSegment = false, turbo = [
   // rule: what is in force has to be visible, and hiding it is how a stale
   // turbo preset would quietly ruin every later render.
   const showShifts = uiSetting("show_shift_pills", false);
+  // Whether this machine wants the controls most rows never touch. It hides,
+  // it does not disable: a control that is *on* keeps its pill whatever this
+  // says, so nothing can be switched on and out of sight at the same time.
+  const advanced = uiSetting("advanced", false) === true;
   if (widgets.shift_video && (showShifts || Number(value("shift_video", 12)) !== 12)) {
     pills.push(stepperPill({
       value: Number(value("shift_video", 12)), min: 0.01, max: 100, step: 0.5, width: "48px",
@@ -331,18 +375,50 @@ export function samplingBar({ widgets, value, set, perSegment = false, turbo = [
     }
   }
 
-  // Last of the accelerators, and the only one that does not change which steps
-  // run — it changes what one attention call costs, so it sits with them but
-  // rules nothing else out.
-  if (widgets.sage) {
-    const on = Boolean(value("sage", false));
+  // Last of the accelerators, and the two that do not change which steps run —
+  // one changes what an attention call costs and the other what the MLP peaks
+  // at, so they sit with them but rule nothing else out.
+  if (widgets.attention) {
+    adoptSage(widgets, set);
+    const options = widgets.attention.options?.values || [];
+    const current = String(value("attention", "default"));
+    pills.push(el("button", {
+      class: `mmc-pill${current === "default" ? "" : " accel-on"}`,
+      title: t(ATTENTION_TITLE[current] || ATTENTION_TITLE.default),
+      onclick: (event) => openChoicePopover(event.currentTarget, {
+        title: t("Attention"),
+        options: typeof options === "function" ? options(widgets.attention) : options,
+        value: current,
+        onPick: (picked) => set("attention", picked),
+      }),
+    }, [el("span", { text: t(ATTENTION_LABEL[current] || ATTENTION_LABEL.default) })]));
+  }
+
+  // The last two are named for what you get rather than for how they are
+  // built. "Chunk FFN" and "fp16 accumulation" are what the packs call them and
+  // are in the tooltips, where somebody looking for them will find them; on the
+  // row they are the only pills that would have asked you to know what a
+  // feed-forward is before you could tell whether you wanted one.
+  if (widgets.chunk_ffn && (advanced || Boolean(value("chunk_ffn", false)))) {
+    const on = Boolean(value("chunk_ffn", false));
     pills.push(el("button", {
       class: `mmc-pill${on ? " accel-on" : ""}`,
       title: on
-        ? t("Sage attention on — H3's attention runs quantized. Faster, and lower peak VRAM.")
-        : t("Sage attention off. Needs ComfyUI-KJNodes and sageattention on an NVIDIA card when switched on."),
-      onclick: () => set("sage", !on),
-    }, [el("span", { text: on ? t("sage") : t("sage off") })]));
+        ? t("Low VRAM on — H3's feed-forward runs in chunks, so the peak is lower. The frames are the same ones: chunking is a rearrangement, not a trade. Needs ComfyUI-KJNodes.")
+        : t("Low VRAM — run H3's feed-forward in chunks (KJNodes' Chunk FFN). Lowers the peak a render has to fit in, and changes nothing about the frames. Needs ComfyUI-KJNodes."),
+      onclick: () => set("chunk_ffn", !on),
+    }, [el("span", { text: on ? t("low vram") : t("low vram off") })]));
+  }
+
+  if (widgets.fp16_accumulation && (advanced || Boolean(value("fp16_accumulation", false)))) {
+    const on = Boolean(value("fp16_accumulation", false));
+    pills.push(el("button", {
+      class: `mmc-pill${on ? " accel-on" : ""}`,
+      title: on
+        ? t("Fast math on — cuBLAS accumulates fp16 matmuls in fp16 while this model runs (KJNodes' fp16 accumulation). Only fp16 matmuls: a bf16 or quantized H3 has none, and nothing changes there.")
+        : t("Fast math — let cuBLAS accumulate fp16 matmuls in fp16 while this model runs (KJNodes' fp16 accumulation). Faster where the card supports it, at some precision. Only reaches a genuinely fp16 model: the released H3 checkpoints run bf16, and their quantized layers go through comfy-kitchen's own kernels rather than cuBLAS, so on those this does nothing at all. Needs ComfyUI-KJNodes and torch 2.7 or newer."),
+      onclick: () => set("fp16_accumulation", !on),
+    }, [el("span", { text: on ? t("fast math") : t("fast math off") })]));
   }
 
   return el("div", { class: "mmc-pills" }, [...pills, ...trailing]);

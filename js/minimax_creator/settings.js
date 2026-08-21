@@ -335,6 +335,61 @@ class SettingsPage {
       ])];
   }
 
+  /**
+   * Whether the node faces offer the controls most rows never touch.
+   *
+   * The sampler row has grown: a cache, Spectrum, an attention backend, a
+   * turbo switch with a lead-in inside it, and two accelerators that trade
+   * something too subtle to be set by accident. Every one of them is worth
+   * having and none of them is worth *reading past* on the way to the seed.
+   *
+   * So this is a length control, not a permission: nothing is disabled and
+   * nothing is locked. And it never hides something that is on — a lead-in
+   * that is set, a card already running low VRAM, keeps its pill whatever this
+   * says. In force means visible, which is the same rule the custom quality
+   * row and the shift pills live by, and it is what makes turning this off a
+   * safe thing to do without checking what you had switched on.
+   *
+   * First on the tab because it decides how much of the rest of the tab there
+   * is: the turbo lead-in section below only appears when this is on.
+   */
+  renderAdvanced() {
+    const on = this.settings.advanced === true;
+    const rows = [
+      { value: false, label: "Standard",
+        note: "The sampler row as most renders use it: the seed, the schedule, the "
+            + "caches and the attention backend. A control you have already switched "
+            + "on still shows its pill — it is in force, so it stays visible." },
+      { value: true, label: "Everything",
+        note: "Adds the turbo lead-in, low VRAM and fast math to the sampler row, and "
+            + "the turbo lead-in to this page. For the rows where the last few percent "
+            + "of speed or of VRAM is worth a decision." },
+    ];
+    return this.section("Nodes", "Advanced controls",
+      "How much of the sampler row a node draws. Everything here is available "
+      + "either way — this decides what is on screen while you work, not what a "
+      + "render is allowed to do.",
+      [
+        el("div", { class: "mmc-set-choices" }, rows.map((row) => el("button", {
+          class: "mmc-opt mmc-set-opt",
+          "aria-checked": row.value === on,
+          onclick: () => row.value !== on && this.set({ advanced: row.value }),
+        }, [
+          el("span", { class: "mmc-radio" }),
+          el("span", { class: "mmc-set-opt-text" }, [
+            el("span", { class: "mmc-set-opt-label", text: t(row.label) }),
+            el("span", { class: "mmc-set-opt-note", text: t(row.note) }),
+          ]),
+        ]))),
+        el("div", { class: "mmc-set-foot" }, [
+          el("span", {
+            text: t("Open nodes pick the change up the next time they redraw — "
+                + "closing this page is enough."),
+          }),
+        ]),
+      ]);
+  }
+
   renderNodes() {
     const shown = this.settings.show_shift_pills === true;
     const rows = [
@@ -346,7 +401,14 @@ class SettingsPage {
         note: "Two stepper pills after the scheduler, for dialling the two schedules "
             + "by hand. A turbo LoRA's card may name the values it was distilled against." },
     ];
-    return [this.renderPreviews(), ...this.renderLeadIn(), ...this.renderScopes(),
+    // The lead-in is an advanced control, so its section comes and goes with
+    // the switch above — except while it is set, which is the rule the pill
+    // follows too: a setting in force must be reachable from the page that
+    // holds it, or it is a number changing renders with nowhere to change it
+    // back.
+    const leadIn = this.settings.advanced === true || Number(this.settings.turbo_lead_in) > 0
+      ? this.renderLeadIn() : [];
+    return [this.renderAdvanced(), this.renderPreviews(), ...leadIn, ...this.renderScopes(),
       this.section("Nodes", "Flow shift pills",
       "Whether the sampler row offers H3's two flow shifts — the video and audio "
       + "schedule clocks. The values apply either way; this only decides who has "

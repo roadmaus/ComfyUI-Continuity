@@ -150,8 +150,19 @@ def _schema(node_id, display_name, blob, deprecated=False):
                 tooltip="Spectrum: forecast features across steps instead of evaluating every one. Needs ComfyUI-Spectrum-MiniMax-H3. Combines with block_cache; cannot be combined with EasyCache."),
             io.Float.Input("spectrum_blend", default=0.5, min=0.0, max=1.0, step=0.01,
                 tooltip="Spectrum's video spectral share. Higher is faster and further from a native render. Ignored unless 'spectrum' is on."),
+            # Superseded by `attention` below and kept for the workflows that
+            # were saved with it on: widget values are restored by position, so
+            # this slot cannot be reclaimed without silently handing the next
+            # widget a `true`. It means "sage" only while `attention` is still
+            # at its default — see `_attention`.
             io.Boolean.Input("sage", default=False,
-                tooltip="Sage attention: run H3's attention quantized (int8 queries and keys, fp8 or fp16 values). Faster and, unlike the caches, lower peak VRAM. Needs ComfyUI-KJNodes and the sageattention package, on an NVIDIA card. Composes with everything above."),
+                tooltip="Deprecated — use 'attention'. A workflow saved with this on still runs sage attention."),
+            io.Combo.Input("attention", options=accel.ATTENTION_MODES, default="default",
+                tooltip="Which attention H3 runs. 'default' is the checkpoint's own; 'sage' is quantized attention (needs ComfyUI-KJNodes and the sageattention package, NVIDIA only); 'kitchen' is core's own int8 kernel, with nothing to install. One at a time — a model has one attention. Both are faster and lower on peak VRAM, and both compose with the caches and with Spectrum."),
+            io.Boolean.Input("chunk_ffn", default=False,
+                tooltip="Low VRAM: run H3's feed-forward in chunks over the packed sequence (KJNodes' Chunk FFN). Lowers the peak a render has to fit in, and the frames are the same ones — activations are quantized per token, so chunking is a rearrangement rather than a trade. Needs ComfyUI-KJNodes. Composes with everything above."),
+            io.Boolean.Input("fp16_accumulation", default=False,
+                tooltip="Fast math: let cuBLAS accumulate fp16 matmuls in fp16 while this model runs, and put the flag back afterwards (KJNodes' fp16 accumulation). It reaches fp16 matmuls only — the released H3 checkpoints run bf16, and their quantized layers go through comfy-kitchen's kernels rather than cuBLAS, so on those there is nothing for it to change. For a genuinely fp16 model it is faster where the card supports it, at some precision. Needs ComfyUI-KJNodes and torch 2.7 or newer, and raises rather than pretending on a torch without the flag."),
         ],
         # Nothing comes out either: the render is saved and shown in the node
         # body, so there is no socket for a graph to hang off.
@@ -174,11 +185,25 @@ def _fingerprint(blob):
         return (blob, ())
 
 
+def _attention(attention, sage):
+    """Which backend the row is asking for, across the rename.
+
+    `sage` was a switch before `attention` was a list, and a workflow saved with
+    it on has to keep running sage. It is read only while `attention` is still
+    at its default, so picking a backend on the list is what settles it — up to
+    and including picking `default` on a node whose old switch was on.
+    """
+    if attention == "default" and sage:
+        return "sage"
+    return attention
+
+
 def _render(blob, seed, steps, cfg, sampler_name, scheduler,
             block_cache, spectrum, spectrum_blend, unique_id,
             shift_video=render.SHIFT_DEFAULTS[0],
             shift_audio=render.SHIFT_DEFAULTS[1],
-            sage=False):
+            sage=False, attention="default", chunk_ffn=False,
+            fp16_accumulation=False):
     """The whole of what either node id does. See the module docstring."""
     try:
         data = compiler.as_piece(json.loads(blob))
@@ -216,7 +241,10 @@ def _render(blob, seed, steps, cfg, sampler_name, scheduler,
                         sampler_name=sampler_name, scheduler=scheduler,
                         shift_video=shift_video, shift_audio=shift_audio),
         accel.Settings(block_cache=block_cache, spectrum=spectrum,
-                       spectrum_blend=spectrum_blend, sage=sage),
+                       spectrum_blend=spectrum_blend,
+                       attention=_attention(attention, sage),
+                       chunk_ffn=chunk_ffn,
+                       fp16_accumulation=fp16_accumulation),
         unique_id,
         # Resolved here rather than inside the save node: a prefix that cannot be
         # used should stop the queue before anything is sampled, not after —
@@ -257,10 +285,13 @@ class MiniMaxH3Creator(io.ComfyNode):
                 block_cache="off", spectrum=False, spectrum_blend=0.5,
                 shift_video=render.SHIFT_DEFAULTS[0],
                 shift_audio=render.SHIFT_DEFAULTS[1],
-                sage=False) -> io.NodeOutput:
+                sage=False, attention="default", chunk_ffn=False,
+                fp16_accumulation=False) -> io.NodeOutput:
         return _render(creator_data, seed, steps, cfg, sampler_name, scheduler,
                        block_cache, spectrum, spectrum_blend, cls.hidden.unique_id,
-                       shift_video=shift_video, shift_audio=shift_audio, sage=sage)
+                       shift_video=shift_video, shift_audio=shift_audio, sage=sage,
+                       attention=attention, chunk_ffn=chunk_ffn,
+                       fp16_accumulation=fp16_accumulation)
 
 
 class MiniMaxH3Timeline(io.ComfyNode):
@@ -297,10 +328,13 @@ class MiniMaxH3Timeline(io.ComfyNode):
                 block_cache="off", spectrum=False, spectrum_blend=0.5,
                 shift_video=render.SHIFT_DEFAULTS[0],
                 shift_audio=render.SHIFT_DEFAULTS[1],
-                sage=False) -> io.NodeOutput:
+                sage=False, attention="default", chunk_ffn=False,
+                fp16_accumulation=False) -> io.NodeOutput:
         return _render(timeline_data, seed, steps, cfg, sampler_name, scheduler,
                        block_cache, spectrum, spectrum_blend, cls.hidden.unique_id,
-                       shift_video=shift_video, shift_audio=shift_audio, sage=sage)
+                       shift_video=shift_video, shift_audio=shift_audio, sage=sage,
+                       attention=attention, chunk_ffn=chunk_ffn,
+                       fp16_accumulation=fp16_accumulation)
 
 
 class MiniMaxCreatorExtension(ComfyExtension):

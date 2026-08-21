@@ -1,0 +1,144 @@
+diff --git a/h3lora/adaln.py b/h3lora/adaln.py
+index 4aa4f3a..eb36f42 100644
+--- a/h3lora/adaln.py
++++ b/h3lora/adaln.py
+@@ -150,8 +150,12 @@ def fit_table_to_table(source_table: torch.Tensor, target_table: torch.Tensor):
+ 
+     Returns ``(M [k_src, k_tgt], a [k_src], residual)``.
+     """
+-    src = source_table.to(torch.float64)
+-    tgt = target_table.to(torch.float64)
++    # MMC: to the CPU as well as to float64. A model's own `adaln_t_table` is on
++    # the compute device, the LoRA's comes off disk on the CPU, and lstsq on two
++    # tensors from different devices raises (upstream AUDIT_REPORT H5). This fit
++    # is [grid, 8] either way, so there is nothing to gain by doing it on a GPU.
++    src = source_table.detach().to(device="cpu", dtype=torch.float64)
++    tgt = target_table.detach().to(device="cpu", dtype=torch.float64)
+     if src.shape[0] != tgt.shape[0]:
+         raise ValueError(
+             f"adaLN tables have different grid resolutions ({src.shape[0]} vs {tgt.shape[0]})"
+@@ -172,8 +176,14 @@ class AdalnContext:
+         self.table = table
+         self.grid_path = grid_path
+         self.residual = None
+-        self._basis = None
+-        self._failed = False
++        # MMC: one basis per source table, not one per stack. On a dense target
++        # the fit belongs to the table the *LoRA* shipped, so a memo held on the
++        # context handed the second curve LoRA of a stack the first one's basis —
++        # plausibly shaped, silently wrong (upstream AUDIT_REPORT H1). A failure
++        # is cached the same way, per table, so one unfittable LoRA no longer
++        # stops the next one from being ported.
++        self._bases = {}
++        self._warned_no_table = False
+ 
+     @property
+     def is_curve(self) -> bool:
+@@ -189,16 +199,22 @@ class AdalnContext:
+         """
+         table = self.table if self.table is not None else curve_table
+         if table is None:
+-            if not self._failed:
++            if not self._warned_no_table:
+                 LOG.warning(
+                     "H3 PowerLoraStack: cannot rebase adaLN onto a dense checkpoint - "
+                     "the LoRA does not carry the adaln_t_table of the curve bake it "
+                     "was trained against"
+                 )
+-                self._failed = True
++                self._warned_no_table = True
+             return None
+-        if self._basis is not None or self._failed:
+-            return self._basis
++        # MMC: keyed by what is in the table rather than by which object holds
++        # it — a state dict is loaded, read and dropped per LoRA, so identity
++        # says nothing about content and two bakes must not share a fit.
++        key = (tuple(table.shape), float(table.float().sum()),
++               float(table.float().abs().sum()))
++        if key in self._bases:
++            return self._bases[key]
++        basis = None
+         try:
+             if not self.grid_path:
+                 raise ValueError(
+@@ -206,13 +222,12 @@ class AdalnContext:
+                     "adaLN porting"
+                 )
+             grid = load_silu_grid(self.grid_path)
+-            self._basis = fit_basis(table.detach().to("cpu"), grid)
+-            self.residual = self._basis[2]
++            basis = fit_basis(table.detach().to("cpu"), grid)
++            self.residual = basis[2]
+         except Exception as exc:
+             LOG.warning("H3 PowerLoraStack: adaLN porting unavailable (%s)", exc)
+-            self._failed = True
+-            self._basis = None
+-        return self._basis
++        self._bases[key] = basis
++        return basis
+ 
+ 
+ def port_adaln_pairs(sd: dict, ctx: AdalnContext, source_table=None):
+diff --git a/h3lora/apply.py b/h3lora/apply.py
+index 115ff7b..590906b 100644
+--- a/h3lora/apply.py
++++ b/h3lora/apply.py
+@@ -149,10 +149,17 @@ def apply_stack(model, entries, mode="auto", adaln_mode="auto", grid_path="",
+         name = entry.get("name") or entry["path"]
+         strength = float(entry.get("strength", 1.0))
+         row_schedule = schedule_mod.resolve(schedule, row_index)
+-        lora_sd = comfy.utils.load_torch_file(entry["path"], safe_load=True)
++        # MMC: a caller that already holds the file hands it over rather than
++        # naming it. `lora.py` keeps a small cache of these — they are ~700 MB
++        # each and a piece of six segments applies the same stack six times — so
++        # reading from `path` here would be six reads of a file already in RAM.
++        lora_sd = entry.get("weights")
++        if lora_sd is None:
++            lora_sd = comfy.utils.load_torch_file(entry["path"], safe_load=True)
+ 
+         normalized, unmatched = keymap.normalize(lora_sd, index)
+-        measured = gain.measure_state_dict(normalized, name)
++        # MMC: cached on the file — see `gain.measure_state_dict`.
++        measured = gain.measure_state_dict(normalized, name, path=entry.get("path", ""))
+ 
+         # before porting: the port derives its bias delta as ``B @ const``, so
+         # scaling B's rows here carries through to the emitted .diff_b
+diff --git a/h3lora/gain.py b/h3lora/gain.py
+index 595da01..d51769d 100644
+--- a/h3lora/gain.py
++++ b/h3lora/gain.py
+@@ -207,13 +207,32 @@ def _measure(mods, get, name: str) -> dict:
+     return acc.result(name)
+ 
+ 
+-def measure_state_dict(normalized_sd: dict, name: str = "") -> dict:
++def measure_state_dict(normalized_sd: dict, name: str = "", path: str = "") -> dict:
+     """Measure an already-loaded, key-normalised LoRA.
+ 
+     Used on the apply path, where the tensors are in memory anyway, so this
+     costs only the r x r arithmetic.
++
++    MMC: `path` caches the answer on the file, as `measure_file` does. "Only the
++    r x r arithmetic" is still tens of GFLOP on a full H3 adapter, and this pack
++    applies the same stack once per segment — where upstream's node applies it
++    once per queue. What is measured is the file, so a second segment is asking
++    a question already answered.
+     """
+-    return _measure(_pairs(normalized_sd.keys()), lambda k: normalized_sd[k], name)
++    key = None
++    if path:
++        try:
++            st = os.stat(path)
++            key = (path, st.st_mtime_ns, st.st_size, "sd")
++        except OSError:
++            key = None
++        hit = _cache.get(key) if key else None
++        if hit is not None:
++            return hit
++    info = _measure(_pairs(normalized_sd.keys()), lambda k: normalized_sd[k], name)
++    if key is not None:
++        _cache[key] = info
++    return info
+ 
+ 
+ def measure_file(path: str) -> dict:

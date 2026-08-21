@@ -865,11 +865,11 @@ try {
   fields[0].value = "client/shoot-3/take";
   fields[0].listeners.change[0]();
   await new Promise((done) => setTimeout(done, 0));
-  out.settings.posted = globalThis.__posted;
+  // Copied, not referenced: the Nodes tab clicks below append to the same array.
+  out.settings.posted = [...globalThis.__posted];
 
   // The Nodes tab: the two node settings, read but not clicked — a click would
-  // append to __posted and muddy the folder assertion above. Both ship off, and
-  // in this order: reference scopes first, then the shift pills.
+  // append to __posted, which is why the folder assertion above copies it.
   tabButtons[2].listeners.click[0]();
   const opts = [];
   const findOpts = (node) => {
@@ -878,6 +878,21 @@ try {
   };
   findOpts(page);
   out.settings.shiftRows = opts.map((o) => o.getAttribute("aria-checked"));
+
+  // Then turn the advanced controls on — the first section's second row — and
+  // count again. The turbo lead-in's three rows are what should appear: it is
+  // an advanced control, and while the switch is off its section is not on the
+  // page at all. Clicked last, so `posted` above is still only the folder edit.
+  opts[1].listeners.click[0]();
+  await new Promise((done) => setTimeout(done, 0));
+  const shown = [];
+  const findShown = (node) => {
+    if (node.className === "mmc-opt mmc-set-opt") shown.push(node);
+    (node.children ?? []).forEach(findShown);
+  };
+  findShown(page);
+  out.settings.advancedRows = shown.length;
+  out.settings.advancedLeadIn = page.text.includes("Turbo lead-in");
 } catch (error) {
   out.errors.push(`settings page: ${error.message}`);
 }
@@ -1484,15 +1499,22 @@ settings = report.get("settings", {})
 check("the settings page has all three tabs", settings.get("tabs"),
       ["Quality", "Folders", "Nodes"])
 # Every row on the tab, in order, with each setting's default checked on a fresh
-# settings file: previews ship playing, and the lead-in, the scopes and the
-# shift pills all ship off. Preview playback leads — it governs the biggest
-# thing a node draws — then the turbo lead-in and the reference scopes, which
+# settings file: previews ship playing, and the advanced controls, the scopes
+# and the shift pills all ship off. Advanced leads, because it decides how much
+# of the rest of the tab there is — the turbo lead-in is an advanced control and
+# its three rows are simply not on the page while it is off, which is what makes
+# this list four pairs and not four pairs plus a triple. Then preview playback,
+# which governs the biggest thing a node draws, the reference scopes, which
 # change what is queued, and the shift pills last, which change only what is
-# drawn. The lead-in is the one row group that is not a pair: off, one step,
-# two steps.
+# drawn.
 check("the node settings show their defaults checked",
       settings.get("shiftRows"),
-      ["true", "false", "true", "false", "false", "true", "false", "true", "false"])
+      ["true", "false", "true", "false", "true", "false", "true", "false"])
+# And with the advanced controls on, the turbo lead-in is back on the page: the
+# four pairs plus its three rows. That is the whole of what the switch does to
+# this tab — it adds a section, it never disables one.
+check("advanced controls bring the turbo lead-in back to the page",
+      (settings.get("advancedRows"), settings.get("advancedLeadIn")), (11, True))
 check("the quality tab shows the encoder value", settings.get("quality"), True)
 check("the folders tab carries both stored prefixes", settings.get("fields"),
       ["minimax/renders/H3", "minimax/stills/prestage"])

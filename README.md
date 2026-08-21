@@ -291,6 +291,27 @@ opens the detail sheet — the showcase with the generation settings recorded fo
 image, and, at the bottom, which of the files above each field was read from. **Rescan**
 re-reads everything, which is what to press after editing a sidecar by hand.
 
+**How they are loaded is not ComfyUI's stock path.** H3 mostly runs quantized, and
+on a quantized checkpoint the stock merge — dequantize, add the delta, requantize
+with a recalculated codebook — injects about 1.5% relative weight noise, where a
+typical H3 LoRA delta is 0.01–0.08% of the weight. The adapter is replaced by
+rounding noise, and the merge is also two orders of magnitude slower than not
+doing it. Two more things go wrong quietly: H3 ships in two adaLN forms and a LoRA
+trained against one has the wrong width for the other, so those pairs are dropped
+— on a distillation LoRA that is most of the adapter — and the five key
+conventions H3 LoRAs ship under do not all resolve by splitting on underscores.
+
+So this pack ships **[ComfyUI-H3-PowerLoraStack](https://github.com/cicalooo/ComfyUI-H3-PowerLoraStack)**'s
+library (Apache-2.0, by cicalooo) and loads through it: quantized layers get an
+exact runtime low-rank branch instead of a merge, adaLN is ported between bases
+rather than dropped, keys resolve against the model's own key set, and a stack of
+several LoRAs fuses into one pair per layer rather than N. Nothing is asked of
+you and there is nothing to install — it is the path. What each file did lands in
+the ComfyUI console: what merged, what branched, what the adaLN port managed, and
+how far each file's real perturbation is from the strength you gave it. Upstream's
+own nodes are worth having on top for what this does not vendor — per-modality
+adaLN, strength schedules, auto-balance.
+
 **turbo** on the sampler row is a switch, not a preset: it adds a distillation LoRA
 (larryvrh's `minimax_h3_turbo_v4_step600_ema`, the lightx2v 4-step distill, or
 Kijai's conversions), moves the sampler to euler + beta, drops the steps to
@@ -777,8 +798,16 @@ megabytes it takes is not. The value lives in `user/minimax_creator.settings.jso
 and applies to every video the Creator writes. PreStage stills are PNG and have
 nothing to set.
 
-The page's **Nodes** tab holds three more. *Preview playback*, the only one on
-by default, decides whether the stage plays a clip the moment it has one — set
+The page's **Nodes** tab holds the rest. *Advanced controls* comes first, because
+it decides how much of the rest there is: the sampler row has grown a cache,
+Spectrum, an attention backend and a turbo switch with a lead-in inside it, and
+*Standard* draws the part of it most renders use while *Everything* adds the
+turbo lead-in, `low vram` and `fast math` — and the turbo lead-in's own section
+to this page. It hides rather than disables, and it never hides something that
+is on: a control already switched on keeps its pill either way, so turning this
+off cannot change what a render does. *Preview playback*, the only setting on
+the tab that is on by default, decides whether the stage plays a clip the
+moment it has one — set
 it to *Waits for play* and a finished render holds its first frame, still, with
 the browser's controls to start it, which spares a crowded canvas a decoder per
 looping clip. *Flow shift pills* decides whether the sampler row offers H3's
@@ -851,12 +880,23 @@ This pack is glue. The work underneath it belongs to other people:
   cache at a time; all of them trade fidelity for speed, so A/B against a
   native render before trusting one on a final piece.
 - **[ComfyUI-KJNodes](https://github.com/kijai/ComfyUI-KJNodes)** by Kijai — gives the
-  live preview a real decoder, and the `sage` pill: H3's own attention run
-  quantized, which is faster and, unlike the caches, wants *less* VRAM rather
-  than trading fidelity for steps. It needs the
+  live preview a real decoder, `sage` on the attention pill — H3's own attention
+  run quantized, which is faster and, unlike the caches, wants *less* VRAM
+  rather than trading fidelity for steps, and needs the
   [sageattention](https://github.com/thu-ml/SageAttention) package and an NVIDIA
-  card; it composes with everything else on the row. Kijai's turbo conversions
-  are in the switch too.
+  card — and the `low vram` pill, which splits H3's feed-forward over the
+  packed sequence for the same lower peak and no trade at all: the activations
+  are quantized per token, so the frames are the ones you would have had — and
+  `fast math`, which lets cuBLAS accumulate fp16 matmuls in fp16 while the model
+  runs. That last one reaches fp16 matmuls only: the released H3 checkpoints run
+  bf16 and their quantized layers use comfy-kitchen's kernels rather than cuBLAS,
+  so it is there for an fp16 model and does nothing on the usual bakes. All three
+  compose with everything else on the row. Kijai's turbo conversions are in the
+  switch too.
+- **ComfyUI core** — `kitchen` on the attention pill is core's own int8
+  attention kernel, with nothing to install. The option appears only on a build
+  that ships the kernel and can run it; where it does not, the pill says so
+  rather than sampling on something else.
 - **[ComfyUI-MultiGPU](https://github.com/pollockjj/ComfyUI-MultiGPU)** by pollockjj —
   puts a device chip on every row of the weights popover.
 - **[ComfyUI-GGUF](https://github.com/city96/ComfyUI-GGUF)** by city96 — loads the
@@ -885,6 +925,10 @@ This pack is glue. The work underneath it belongs to other people:
   neither shipped nor fetched.
 - **[taehv](https://github.com/madebyollin/taehv)** by madebyollin — the tiny decoder
   that makes the preview look like the video.
+- **[ComfyUI-H3-PowerLoraStack](https://github.com/cicalooo/ComfyUI-H3-PowerLoraStack)**
+  by cicalooo — the H3-safe LoRA library this pack loads every LoRA through.
+  Vendored (Apache-2.0) rather than called, because it is the correct path
+  rather than an optional one; see `h3lora/__init__.py`.
 - **larryvrh** and **lightx2v** — the H3 distillation LoRAs behind turbo.
 - **CiviMeta** — the sidecar format the LoRA cards read.
 

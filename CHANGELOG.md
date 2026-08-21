@@ -1,5 +1,80 @@
 # Changelog
 
+## Unreleased
+
+**Every LoRA now loads the way a quantized H3 needs loading.** The stock path is
+dequantize, add the delta, requantize with a recalculated codebook — a round trip
+that is not idempotent. It injects about 1.5% relative weight noise where a
+typical H3 LoRA delta is 0.01–0.08% of the weight, so on the int8 and w4a8 bakes
+most people run, the adapter was being replaced by rounding noise. It is also two
+orders of magnitude slower than not doing it. Two more things went wrong without
+saying so: H3 ships in a dense and a curve adaLN form, and a LoRA trained against
+one has the wrong `lora_A` width for the other, so ComfyUI dropped those pairs —
+on a distillation LoRA that is most of the adapter — and the five key conventions
+H3 LoRAs are published under do not all survive being split on underscores.
+
+So this pack now ships cicalooo's
+[ComfyUI-H3-PowerLoraStack](https://github.com/cicalooo/ComfyUI-H3-PowerLoraStack)
+library (Apache-2.0) and loads through it. Quantized layers get an exact runtime
+low-rank branch — `y = W_q(x) + B @ A @ x`, the quantized kernel untouched, about
+1.5% more FLOPs at rank 64 — instead of a merge. adaLN is changed of basis rather
+than dropped. Keys resolve against the model's own key set. A stack of several
+LoRAs fuses into one pair per layer rather than one per file. There is nothing to
+install and nothing to switch on: it is the path, the way it should have been all
+along. Everything the loader did is in the console — what merged, what branched,
+what the adaLN port managed, and how far each file's real perturbation is from
+the strength you gave it, which is the number that says a LoRA is being run at
+five times the strength its author meant.
+
+Vendored rather than wired in, which is the opposite of what this pack does with
+the caches and Spectrum, and for the opposite reason: those are accelerators, off
+by default, and a copy of somebody else's tuning goes stale. This is not optional
+and not tuning — it is what correct looks like — and a user who did not install a
+pack would have got all three failures silently, with a finished render and no
+sign anything was wrong. Two open findings from upstream's own audit are fixed in
+the copy: a shared adaLN basis that handed the second curve LoRA of a stack the
+first one's fit, and a table-to-table fit that raised on a model whose table was
+on the GPU. `h3lora/__init__.py` says what changed and `tools/vendor_h3lora.py`
+re-syncs it, patch and all.
+
+**The attention pill is a list now.** Sage was a switch, and switches are the
+wrong shape for a slot that holds one thing: a model has one attention, and core
+now ships its own int8 kernel through `ModelAttentionBackend`. So the pill offers
+**default**, **sage** and **kitchen**, and picking one is what turns the other
+off. Kitchen needs nothing installed — no NVIDIA-only package, no build step —
+and appears only on a ComfyUI whose build can actually run it; asked for on one
+that cannot, it says so rather than quietly sampling on pytorch attention, which
+is the render you did not ask for, finished. A workflow saved with the old switch
+on still runs sage, once, and then the list is what decides.
+
+**Two more pills, both about what a step costs rather than how many run.**
+**low vram** splits H3's feed-forward over the packed sequence (KJNodes' Chunk
+FFN), which lowers the peak a render has to fit in and is the only accelerator
+here that trades nothing at all — activations are quantized per token, so
+chunking is arithmetic rearrangement and the frames are the ones you would have
+had. **fast math** lets cuBLAS accumulate fp16 matmuls in fp16 while this model
+runs (KJNodes' fp16 accumulation) and puts the flag back afterwards — and it is
+worth saying where that reaches, because it is narrower than it sounds: fp16
+matmuls only. The released H3 checkpoints run bf16, and their quantized layers
+go through comfy-kitchen's own kernels rather than cuBLAS, so on the bakes
+nearly everybody runs there is nothing for it to change. It is on the row for
+the fp16 model that would use it, and its tooltip says all of this rather than
+leaving it to a stopwatch. Both compose with every cache, with Spectrum, and
+with either attention backend, and both survive the turbo lead-in — they skip
+nothing, so there is nothing for the lead-in to protect. They are named for what
+you get rather than for how they are built; the packs' own names are in the
+tooltips, where somebody looking for them will find them.
+
+**And the sampler row has a length now.** It has grown a cache, Spectrum, an
+attention backend, a turbo switch with a lead-in inside it and those two, which
+is a lot of row to read past on the way to the seed. **Settings → Nodes →
+Advanced controls** decides how much of it a node draws: **Standard** is the
+row most renders use, **Everything** adds the turbo lead-in, low vram and fast
+math, and the turbo lead-in section to that page. It hides, it never disables —
+a control already switched on keeps its pill either way, which is the rule the
+shift pills and the custom quality row already live by, so turning it off can
+never change what a render does.
+
 ## 2.11
 
 **A cast you can keep.** A subject was built by hand on every node they appeared

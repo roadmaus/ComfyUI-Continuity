@@ -315,7 +315,12 @@ export function turboPills({ container, value, set, onCommit }) {
   // answer that page holds, not a second copy of it, the same bargain the
   // switch strikes with the LoRA stack. Other open nodes pick it up when they
   // next redraw.
-  if (on && turbo.lora) {
+  // Advanced, like the two accelerators it sits beside: a lead-in is a claim
+  // about how a distillation should be used, and a row that never makes that
+  // claim should not have to carry the control for it. In force is still
+  // visible — a lead-in that is set shows its pill whatever the setting says,
+  // because a number that is changing the render must never be off screen.
+  if (on && turbo.lora && (uiSetting("advanced", false) === true || lead > 0)) {
     const steps = Number(value("steps", 0)) || 0;
     pills.push(stepperPill({
       value: lead, min: 0, max: Math.min(S.TURBO_LEAD_MAX, Math.max(0, steps - 1)),
