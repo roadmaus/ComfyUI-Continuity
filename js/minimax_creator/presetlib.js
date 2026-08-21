@@ -1074,6 +1074,11 @@ class PresetLibrary {
     try {
       await P.deletePreset(row.id);
       this.rows = this.rows.filter((entry) => entry.id !== row.id);
+      // Let go of them before the sheet closes: `closeSheet` flushes, and a
+      // flush against a deleted row writes their body back and then reads a row
+      // that is no longer in the index.
+      this.editing = null;
+      this.body = null;
     } catch (error) {
       this.say(t("Could not delete it — {error}", { error: error.message }));
     }
