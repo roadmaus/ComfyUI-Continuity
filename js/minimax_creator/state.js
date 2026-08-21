@@ -1259,6 +1259,99 @@ export function clearPiece(timeline) {
 }
 
 /**
+ * The files a subject's handles can name in a piece: the pool, and a lone
+ * shot's own row.
+ *
+ * A piece of one shot keeps its cast's pictures on that shot — see
+ * `promoteCastFiles` for why — so the two lists are one scope wherever the
+ * question is "what is this piece's cast built out of". The same pair
+ * `parseTimeline` narrows against on the way in.
+ */
+export function castAssets(timeline) {
+  const segments = timeline.segments ?? [];
+  const lone = segments.length === 1 ? (segments[0].assets ?? []) : [];
+  return [...(timeline.assets ?? []), ...lone];
+}
+
+/** `text` with `@old` rewritten to `@new` for each entry of `renamed`. The
+ *  word boundary is what keeps `@img-1` off the front of `@img-10`. */
+function renameCitations(text, renamed) {
+  let out = String(text ?? "");
+  for (const [from, to] of renamed) {
+    out = out.replace(new RegExp(`@${from.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "g"), `@${to}`);
+  }
+  return out;
+}
+
+/**
+ * A piece of more than one shot keeps its cast's files in the pool.
+ *
+ * A piece of one shot keeps them on that shot's own row instead — both
+ * `presets.addSubjectToPiece` and the face's own "attach a file…" put them
+ * there — because a piece with a pool is not a lone shot any more and the node
+ * would answer casting somebody by folding its face into the strip summary.
+ *
+ * The cast itself is the piece's either way, and that is where the two part
+ * company the moment a second card exists: the files are somewhere only card 1
+ * can see. The shelf in the Timeline window draws a member with no pictures
+ * behind them, and citing them on card 2 is refused at queue time over files
+ * that are sitting right there on card 1.
+ *
+ * So growing the strip moves them, once, here — which is also what repairs a
+ * piece that was grown before this existed, since every load syncs. Handles are
+ * reallocated: `ref-N` is what a pool entry is called, and `img-1` on card 1 is
+ * not the same file as `img-1` on card 5. Card 1's own prose is rewritten to
+ * follow, because it is the only text where the old name ever meant anything.
+ */
+function promoteCastFiles(timeline) {
+  const cast = timeline.subjects ?? [];
+  const segment = timeline.segments?.[0];
+  if (!cast.length || (timeline.segments?.length ?? 0) < 2 || isClip(segment)) return;
+  const claimed = new Set();
+  for (const subject of cast) {
+    for (const handle of subjectFiles(subject)) claimed.add(handle);
+    if (subject.replaces) claimed.add(subject.replaces);
+  }
+  if (!Array.isArray(timeline.assets)) timeline.assets = [];
+  const renamed = new Map();
+  for (const asset of [...(segment.assets ?? [])]) {
+    // References only. A keyframe a subject claims is refused by
+    // `subjectProblem` and by `subjects.check`, and moving it would turn a
+    // refusal the user can still act on into a picture that quietly changed
+    // card.
+    if (!claimed.has(asset.handle) || asset.role !== "reference") continue;
+    const was = asset.handle;
+    asset.handle = nextPoolHandle(timeline);
+    renamed.set(was, asset.handle);
+    timeline.assets.push(asset);
+    segment.assets = segment.assets.filter((entry) => entry !== asset);
+  }
+  if (!renamed.size) return;
+  for (const subject of cast) {
+    if (Array.isArray(subject.from)) {
+      subject.from = subject.from.map((handle) => renamed.get(handle) ?? handle);
+    }
+    for (const slot of ["motion", "voice", "replaces"]) {
+      if (renamed.has(subject[slot])) subject[slot] = renamed.get(subject[slot]);
+    }
+  }
+  for (const key of ["prompt", "soundscape", "music"]) {
+    if (segment[key]) segment[key] = renameCitations(segment[key], renamed);
+  }
+  const refined = segment.refined;
+  if (refined?.body) refined.body = renameCitations(refined.body, renamed);
+  for (const [name, text] of Object.entries(refined?.sections ?? {})) {
+    refined.sections[name] = renameCitations(text, renamed);
+  }
+  // The piece's aspect source, where it named one of these on card 1. Card 0 is
+  // the pool, which is where the file is now.
+  const source = timeline.aspect_source;
+  if (source && typeof source === "object" && renamed.has(source.handle)) {
+    timeline.aspect_source = { handle: renamed.get(source.handle) };
+  }
+}
+
+/**
  * Mirror the timeline's canvas onto each segment, so a segment state answers
  * `resolved()` and `mode()` on its own and the editor needs no special case.
  * Stripped again by `serializeTimeline` — the segments do not own it.
@@ -1302,6 +1395,9 @@ function syncCanvas(timeline) {
       if (offset) delete segment.take;
     });
   }
+  // Before the aspect source is pruned, because a promoted file is one of the
+  // things it can name and it must be renamed rather than dropped.
+  promoteCastFiles(timeline);
   // The piece's aspect source, pruned before it is mirrored: a card that was
   // deleted or an asset that was detached leaves a name pointing at nothing,
   // and compile would refuse the strip over it. Cleared here once, like every
@@ -1619,9 +1715,14 @@ export function parseTimeline(raw) {
       // pictures. Never across cards: `img-1` on card 2 is a different file
       // from `img-1` on card 5, and narrowing somebody else's picture because
       // it shares a handle is worse than the line this is fixing.
-      const lone = timeline.segments.length === 1 ? (timeline.segments[0].assets ?? []) : [];
+      //
+      // After the promotion rather than before it, so a piece grown into a
+      // strip before that repair existed is narrowed on the load that moves its
+      // cast's files rather than on the one after. `syncCanvas` runs it again
+      // below and has nothing left to do.
+      promoteCastFiles(timeline);
       for (const subject of timeline.subjects) {
-        inheritTakes(subject, [...timeline.assets, ...lone]);
+        inheritTakes(subject, castAssets(timeline));
       }
       return syncCanvas(timeline);
     }

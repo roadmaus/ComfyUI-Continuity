@@ -536,13 +536,18 @@ class Timeline {
    * one node, one cast, one way of editing it. What is the window's is only
    * what it can answer that the shelf cannot: which files there are to build
    * somebody out of, and which cards on the strip write their name.
+   *
+   * The pool *and* a lone shot's own row, because that is where a piece of one
+   * shot keeps its cast's pictures — see `S.castAssets`. Reading the pool alone
+   * drew every one of them as a member built out of a file "not attached here",
+   * on a piece where the face beside this window shows their photographs.
    */
   renderCast() {
     this.castShelf ??= new CastShelf({
       getCast: () => this.timeline.subjects ?? [],
       setCast: (list) => { this.timeline.subjects = list; },
-      getAssets: () => this.timeline.assets ?? [],
-      addAsset: () => this.attachOnePoolAsset(),
+      getAssets: () => S.castAssets(this.timeline),
+      addAsset: () => this.attachOneCastAsset(),
       whereCited: (subject) => {
         if (S.subjectCitedGlobally(this.timeline, subject)) {
           return { cited: true, text: t("in every shot") };
@@ -570,10 +575,18 @@ class Timeline {
       // file another shot writes by hand — a pool asset can be cited straight
       // from a prompt without any subject in between, and dropping one would
       // break that sentence.
+      //
+      // The lone shot's row on the same terms, since that is the other half of
+      // what the shelf was built out of.
       dropAssets: (handles) => {
         const texts = S.allTexts(this.timeline);
-        this.timeline.assets = (this.timeline.assets ?? []).filter(
-          (asset) => !handles.includes(asset.handle) || S.handleWritten(texts, asset.handle));
+        const keep = (asset) =>
+          !handles.includes(asset.handle) || S.handleWritten(texts, asset.handle);
+        this.timeline.assets = (this.timeline.assets ?? []).filter(keep);
+        const segments = this.timeline.segments ?? [];
+        if (segments.length === 1 && segments[0].assets) {
+          segments[0].assets = segments[0].assets.filter(keep);
+        }
       },
       // A keystroke in a name or a description: written through, nothing
       // redrawn. The card holds the caret.
@@ -632,19 +645,29 @@ class Timeline {
     };
   }
 
-  /** One file, attached to the pool, for the cast shelf's "attach a file…".
+  /** One file, attached for the cast shelf's "attach a file…".
    *  `addPoolAssets` takes several and answers nothing; a subject is being given
-   *  one thing, and the shelf needs to know which entry it was. */
-  async attachOnePoolAsset() {
+   *  one thing, and the shelf needs to know which entry it was.
+   *
+   *  Onto the pool, or onto a lone shot's own row where that is where the cast's
+   *  files live — the same rule `presets.addSubjectToPiece` follows, and for the
+   *  same reason: a piece with a pool is not a lone shot any more, so putting a
+   *  member's first picture in one would fold the node's face into the strip
+   *  summary as the answer to hanging a photograph on somebody. */
+  async attachOneCastAsset() {
+    const single = this.timeline.segments.length === 1;
+    const host = single ? this.timeline.segments[0] : this.timeline;
     const chosen = await openPicker({
       kinds: ["image", "video", "audio", "renders"],
       kind: "image",
-      capacity: () => ({ used: 0, max: S.MAX_REF_FILES, filesLeft: S.MAX_REF_FILES }),
+      capacity: (kind) => (single
+        ? S.capacity(host, kind)
+        : { used: 0, max: S.MAX_REF_FILES, filesLeft: S.MAX_REF_FILES }),
     });
     if (!chosen?.length) return null;
     const picked = chosen[0];
     const entry = {
-      handle: S.nextPoolHandle(this.timeline),
+      handle: single ? S.nextHandle(host, picked.kind) : S.nextPoolHandle(this.timeline),
       kind: picked.kind,
       role: "reference",
       filename: picked.path ?? picked.filename,
@@ -652,7 +675,8 @@ class Timeline {
     };
     if (picked.trim) entry.trim = picked.trim;
     if (entry.kind === "video") entry.track = picked.track ?? S.DEFAULT_TRACK;
-    this.timeline.assets.push(entry);
+    if (!Array.isArray(host.assets)) host.assets = [];
+    host.assets.push(entry);
     this.commit();
     return entry;
   }
