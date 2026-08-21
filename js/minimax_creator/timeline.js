@@ -525,6 +525,15 @@ class Timeline {
       keep: (subject, assets) => P.keepSubject(subject, assets),
       library: () => openPresetLibrary({ target: this.pieceTarget(), scope: "cast" })
         .then(() => { this.renderStrip(); this.renderPool(); this.renderCast(); }),
+      // The pool loses what the departing member alone was built out of. Not a
+      // file another shot writes by hand — a pool asset can be cited straight
+      // from a prompt without any subject in between, and dropping one would
+      // break that sentence.
+      dropAssets: (handles) => {
+        const texts = S.allTexts(this.timeline);
+        this.timeline.assets = (this.timeline.assets ?? []).filter(
+          (asset) => !handles.includes(asset.handle) || S.handleWritten(texts, asset.handle));
+      },
       // A keystroke in a name or a description: written through, nothing
       // redrawn. The card holds the caret.
       touch: () => this.onCommit?.(),

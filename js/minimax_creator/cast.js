@@ -59,8 +59,12 @@ import * as S from "./state.js";
 
 /** The four things a file can lend a subject, and what tells them apart on
  *  sight. `from` takes several files; the other three take one each, which is
- *  why picking one of them off a tile moves the handle rather than adding it. */
-const ROLES = [
+ *  why picking one of them off a tile moves the handle rather than adding it.
+ *
+ *  Exported because the library's cast editor asks the same question about the
+ *  same four answers, and two lists of these words would drift into two
+ *  vocabularies for one thing. */
+export const ROLES = [
   {
     key: "from", glyph: "face", label: "looks",
     lead: "Their looks come from this",
@@ -101,7 +105,7 @@ const BLANK_FACE = { person: "face", object: "weights", scene: "image", style: "
  *  four values themselves are `subjects.TAKES` and are shown as they are — the
  *  same four an asset's own chip wears, so the two rows agree — and this is the
  *  line under them in the menu. */
-const TAKES_NOTE = {
+export const TAKES_NOTE = {
   person: "Keeps the likeness — face, hair, build, clothing — and drops the "
         + "picture's background, palette, pose and action.",
   object: "Keeps the thing itself and drops the surroundings, lighting and "
@@ -115,7 +119,7 @@ const TAKES_NOTE = {
 /** The relationship markers, said as what happens rather than as the output
  *  value. The value itself is the subtitle: it is what goes into the prompt,
  *  and somebody comparing against MiniMax's guide has to be able to find it. */
-const MARKER_LABEL = {
+export const MARKER_LABEL = {
   derive: "decide for me",
   fully_preserved: "kept whole",
   partially_preserved: "partly kept",
@@ -123,7 +127,7 @@ const MARKER_LABEL = {
   reused: "reused as is",
 };
 
-const MARKER_NOTE = {
+export const MARKER_NOTE = {
   derive: "Kept whole, or moved onto them where they take somebody's place.",
   fully_preserved: "Everything the definition claims is carried into the video.",
   partially_preserved: "Some of it is carried over and the rest is free to change.",
@@ -134,7 +138,7 @@ const MARKER_NOTE = {
 /** A popover of rows, each of which may be a picture and two lines rather than
  *  a word. `openChoicePopover` takes strings, which is right for a sampler and
  *  wrong for "which of these four files is their voice". */
-function openMenu(anchor, { title, sections }) {
+export function openMenu(anchor, { title, sections }) {
   const pop = el("div", { class: "mmc-pop mmc-pop-scroll mmc-cast-menu" },
                  title ? [el("div", { class: "mmc-pop-title", text: title })] : []);
   let close = () => {};
@@ -201,6 +205,11 @@ function assetThumb(asset, className = "mmc-asset-thumb") {
  * `commit`              persist a structural change — somebody added, removed,
  *                       or a file moved between slots — and let the host redraw
  *                       whatever else was reading the cast.
+ * `dropAssets`          take the files a departing member leaves behind off the
+ *                       node, given their handles. The host's, because only it
+ *                       knows which of its collections a handle is in and
+ *                       whether a prompt still writes it. Absent where there is
+ *                       nothing to detach from, and nothing is dropped.
  * `keep`                 write one subject into the cast library, given them and
  *                       the files they are built out of here. Absent where there
  *                       is nowhere to keep them, and the star is absent with it.
@@ -210,8 +219,9 @@ function assetThumb(asset, className = "mmc-asset-thumb") {
  */
 export class CastShelf {
   constructor({ getCast, setCast, getAssets, addAsset, whereCited, cite, touch, commit,
-                keep = null, library = null }) {
+                keep = null, library = null, dropAssets = null }) {
     this.getCast = getCast;
+    this.dropAssets = dropAssets;
     this.setCast = setCast;
     this.getAssets = getAssets;
     this.addAsset = addAsset;
@@ -499,9 +509,25 @@ export class CastShelf {
     ];
   }
 
+  /**
+   * Take somebody out of the cast, and their pictures with them.
+   *
+   * Casting somebody *attaches* files — the `+` on their card does it, and so
+   * does taking them out of the library — so removing them and leaving the
+   * files was a node that grew a picture every time you changed your mind, each
+   * one needing its own ✕ on the asset row to find and undo.
+   *
+   * Only what they alone claimed, and only what the host agrees is loose: a
+   * picture two members are built out of stays for the other one, and a file a
+   * prompt still writes by handle stays because the sentence would break
+   * without it. Both of those questions are answered outside this method — see
+   * `state.soleClaims` and the host's own `dropAssets`.
+   */
   remove(subject) {
     if (this.opened === subject) this.opened = null;
+    const loose = S.soleClaims(subject, this.getCast());
     this.setCast(this.getCast().filter((s) => s !== subject));
+    if (loose.length) this.dropAssets?.(loose);
     this.save();
   }
 

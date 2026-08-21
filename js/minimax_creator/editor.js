@@ -999,6 +999,16 @@ export class CreatorEditor {
         ? () => openPresetLibrary({ target: this.presetTarget(), scope: "cast" })
             .then(() => this.render())
         : null,
+      // This shot's own attachments lose what the departing member alone was
+      // built out of. The pool is left alone even though `getAssets` merges it
+      // in: it belongs to the piece, and one card is not the place a file is
+      // taken off every other card.
+      dropAssets: (handles) => {
+        const texts = [this.state.prompt, this.state.soundscape, this.state.music,
+                       ...(this.piece === this.state ? [] : S.allTexts(this.piece))];
+        this.state.assets = (this.state.assets ?? []).filter(
+          (asset) => !handles.includes(asset.handle) || S.handleWritten(texts, asset.handle));
+      },
       touch: () => this.onCommit?.(),
       commit: () => this.commit(),
     });

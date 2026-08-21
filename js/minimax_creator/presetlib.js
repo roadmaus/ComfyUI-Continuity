@@ -35,8 +35,10 @@
 
 import { el, icon, mountOverlay } from "./dom.js";
 import { t } from "./i18n.js";
-import { renderMeta, stillUrl, viewUrl } from "./api.js";
+import { renderMeta, stillUrl, upload, viewUrl } from "./api.js";
 import { openPicker } from "./picker.js";
+import { openMenu, MARKER_LABEL, MARKER_NOTE, ROLES, TAKES_NOTE } from "./cast.js";
+import { SUBJECT_TAKES, tagIndex } from "./state.js";
 import { BUILTIN } from "./presets/builtin.js";
 import * as P from "./presets.js";
 
@@ -70,14 +72,35 @@ export function openPresetLibrary(options) {
  *  wrong thing. */
 const CAST_GLYPH = { person: "face", object: "weights", scene: "image", style: "effect" };
 
-/** What each file lends them, as the caption under it. The shelf's own four
- *  answers, shortened — a caption is read beside the picture it belongs to, so
- *  it can say "voice" where a menu row has to say the whole sentence. These are
- *  `ROLES[].label` in `cast.js`, which is the row of words this pack already
- *  uses for the same four answers. */
-const CAST_SLOT_LABEL = {
-  from: "looks", motion: "moves", voice: "voice", replaces: "their place",
-};
+/** What each file lends them, as the caption under it — a caption is read beside
+ *  the picture it belongs to, so it can say "voice" where a menu row has to say
+ *  the whole sentence. Off `ROLES` rather than written out again: the shelf, the
+ *  editor and the inspector answer the same question and must answer it in the
+ *  same words. */
+const ROLE = Object.fromEntries(ROLES.map((role) => [role.key, role]));
+const CAST_SLOT_LABEL = Object.fromEntries(ROLES.map((role) => [role.key, role.label]));
+
+/** Where a style's frame lands under input/, and what it is called there. A
+ *  shelf of their own so the picker does not mix nine hundred catalogue frames
+ *  into the root, and the clip's own id in the name so the same look used twice
+ *  is one file — `framegrab.js` files its own frames the same way. */
+const STYLE_REF_FOLDER = "style_refs";
+const STYLE_REF_PREFIX = "atlas_";
+
+/**
+ * A style's opening clauses as something you would type after an `@`.
+ *
+ * Off the lead rather than the whole descriptor: the lead is the medium, which
+ * is what the look is *called* — `@lego_brickfilm`, `@claymation`. Trimmed to
+ * three words because the handle is written into a prompt by hand and a
+ * forty-character one never will be.
+ */
+function styleHandle(lead) {
+  const words = String(lead ?? "").toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, " ")
+    .split(/[\s-]+/).filter(Boolean).slice(0, 3);
+  return words.join("_") || "look";
+}
 
 /** mm:ss, which is how a length is read off a strip. */
 function clock(seconds) {
@@ -99,6 +122,10 @@ class PresetLibrary {
     this.rows = [];
     this.selected = null;      // the row the inspector is showing
     this.body = null;          // its sections, once fetched
+    // Which of a style's frames is the one to cast. Per selection, like the
+    // body: a style read off five clips offers five, and the first is the one
+    // the card already showed you.
+    this.stillIndex = 0;
     this.keys = new Set();     // which of them are ticked
     this.problem = null;
     this.busy = false;
@@ -115,6 +142,10 @@ class PresetLibrary {
     this.observer = null;
     // Which preset's Delete is armed, if any — the picker's two-press confirm.
     this.armed = null;
+    // The member the editor sheet is open on, if any. The sheet takes the whole
+    // split rather than sitting in the 306px inspector — see `renderSheet`.
+    this.editing = null;
+    this.saveTimer = null;
   }
 
   mount() {
@@ -144,15 +175,25 @@ class PresetLibrary {
     this.bar = el("div", { class: "mmc-modal-bar" });
     this.renderBar();
 
+    // The two faces of the window: the grid with its inspector, and the editor
+    // sheet that replaces both. Built together and swapped by `renderSheet`,
+    // rather than the sheet being a second overlay — it is the same window
+    // showing one person instead of all of them, and a modal over a modal would
+    // say otherwise.
+    this.split = el("div", { class: "mmc-preset-split" }, [this.grid, this.inspector]);
+    this.sheet = el("div", { class: "mmc-cast-sheet", style: { display: "none" } });
+    this.shelves = el("div", { class: "mmc-shelves" }, [this.shelfRow]);
+
     this.modal = el("div", { class: "mmc-modal" }, [
       el("div", { class: "mmc-modal-head" }, [
         ...this.tabs,
         el("button", { class: "mmc-close", text: "✕", title: t("Close"), onclick: () => this.close() }),
       ]),
       this.bar,
-      el("div", { class: "mmc-shelves" }, [this.shelfRow]),
+      this.shelves,
       this.problemLine,
-      el("div", { class: "mmc-preset-split" }, [this.grid, this.inspector]),
+      this.split,
+      this.sheet,
     ]);
     this.modal.style.position = "relative";
 
@@ -206,6 +247,15 @@ class PresetLibrary {
         class: "mmc-upload",
         text: t("+  Save current setup"),
         onclick: () => this.saveCurrent(),
+      })] : []),
+      // The roster's own verb, in the slot Save leaves empty. Not conditional on
+      // a target: a member is a person and their pictures, and neither of those
+      // is read off a node — which is the whole reason making one used to mean
+      // attaching a file somewhere else first and starring the result.
+      ...(roster ? [el("button", {
+        class: "mmc-upload",
+        text: t("+  New cast member"),
+        onclick: () => this.newMember(),
       })] : []),
     ]));
   }
@@ -377,8 +427,9 @@ class PresetLibrary {
     if (this.shelf === SHELF_FAV) return t("No starred presets yet. The star on a card puts it here.");
     if (this.scope === "style") return t("The style atlas could not be read.");
     if (this.scope === "cast") {
-      return t("Nobody kept yet. Cast somebody on a node, then press the ★ on their "
-             + "card to keep them here — they come back with their pictures.");
+      return t("Nobody kept yet. A person, an object, a place or a look that has to be "
+             + "the same one shot after shot — make them here, or press the ★ on "
+             + "somebody already cast on a node to keep them.");
     }
     if (this.target?.scope === this.scope) {
       return t("No presets yet. Set this node up the way you want it, then Save current setup.");
@@ -414,6 +465,11 @@ class PresetLibrary {
       el("p", { class: "mmc-preset-name", text: cast ? `@${row.name}` : row.name }),
       ...(style && row.rest ? [el("p", { class: "mmc-style-rest", text: row.rest })] : []),
       el("p", { class: "mmc-preset-facts", text: this.factsLine(row) }),
+      // A member's own prose, under their numbers. Without it a roster of twelve
+      // is twelve rows of "person · 2 pictures" and the only thing telling them
+      // apart is a name you chose months ago — which is the same reason the
+      // description exists on the shelf at all.
+      ...(cast && row.blurb ? [el("p", { class: "mmc-cast-blurb", text: row.blurb })] : []),
       ...(style || cast ? [] : [el("div", { class: "mmc-preset-chips" }, [
         ...(row.sections ?? []).map((key) => el("span", {
           class: `mmc-preset-chip mmc-tag-${P.SECTION[key]?.hue ?? 0}`,
@@ -613,8 +669,14 @@ class PresetLibrary {
   // ---- the inspector --------------------------------------------------------
 
   async select(row) {
+    // On the roster a card opens the editor rather than the inspector: a member
+    // is a thing you keep working on — another picture, a line of description —
+    // and the panel that could only read them back is what sent people to the
+    // node and the star in the first place.
+    if (row.scope === "cast") return this.edit(row);
     this.selected = row;
     this.body = null;
+    this.stillIndex = 0;
     // An armed Delete belongs to the preset it was armed on; moving away is
     // changing your mind about it.
     this.armed = null;
@@ -638,6 +700,493 @@ class PresetLibrary {
     return P.crossable(key, row.scope, this.target.scope, {
       arch: row.facts?.arch ?? null,
       targetArch: this.target.arch?.() ?? null,
+    });
+  }
+
+  // ---- the editor sheet -----------------------------------------------------
+  //
+  // Making somebody used to mean four surfaces: attach a picture to a node, add
+  // a subject on the cast shelf, point the subject at the picture, then press
+  // the star to keep the result. Three of those are about a node, and a member
+  // is not about a node — their files are stored by *name* precisely so they can
+  // outlive the graph they were built on (see `presets.captureSubject`). So the
+  // roster makes its own, and nothing here reads a node at all.
+  //
+  // **The sheet takes the whole window rather than the inspector.** 306px fits a
+  // read-back — four thumbnails and a paragraph — and does not fit an editor:
+  // the files wrap into a ragged block at the width that also has to hold a
+  // description worth writing. Across the split they sit in one row at the size
+  // you recognise somebody at, and the description is a box instead of a line.
+  // The cost is honest and paid once: while you are editing, the roster is not
+  // on screen, and "Back to the cast" is the only way out.
+  //
+  // **There is no Save.** The row exists from the moment New is pressed —
+  // saving it is what gives it an id to write a body against — so every edit is
+  // a change to something that is already in the library, and a Save button
+  // would be a lie about when it started counting. Delete is the way back, and
+  // it is the two-press one the picker uses.
+
+  /**
+   * Cast somebody who does not exist yet.
+   *
+   * Named for the first free `subject`, `subject_2`… — `cast.js:addSubject`'s own
+   * placeholder, because the name is the token the user will type and only they
+   * know what it should be.
+   */
+  async newMember() {
+    if (this.busy) return;
+    this.busy = true;
+    try {
+      const taken = new Set(this.rows.filter((row) => row.scope === "cast")
+                                     .map((row) => row.name));
+      let handle = "subject";
+      for (let n = 2; taken.has(handle); n += 1) handle = `subject_${n}`;
+      const row = await P.savePreset({
+        name: handle,
+        scope: "cast",
+        data: { cast: { handle, takes: "person", files: [] } },
+      });
+      this.rows = [row, ...this.rows];
+      this.busy = false;
+      await this.edit(row);
+      // Straight into the name: it is the first thing to change about them, and
+      // the placeholder is there to be typed over.
+      const field = this.sheet.querySelector(".mmc-cast-sheet-name");
+      field?.focus();
+      field?.select();
+    } catch (error) {
+      this.busy = false;
+      this.say(t("Could not make a cast member — {error}", { error: error.message }));
+    }
+  }
+
+  /** Open the sheet on one member, fetching their body if it is not in hand. */
+  async edit(row) {
+    this.editing = row;
+    this.selected = row;
+    this.armed = null;
+    this.say(null);
+    this.body = null;
+    this.renderSheet();
+    const body = await P.loadBody(row);
+    if (this.editing?.id !== row.id) return;
+    // A member with no `cast` section is a row from a broken import; giving them
+    // an empty one here is what lets the editor put them right rather than
+    // throwing on every field.
+    this.body = { cast: { handle: row.name, takes: "person", files: [], ...(body?.cast ?? {}) } };
+    this.keys = new Set(["cast"]);
+    this.renderSheet();
+  }
+
+  /** Back to the grid. */
+  closeSheet() {
+    this.flushSave();
+    this.editing = null;
+    this.selected = null;
+    this.body = null;
+    this.armed = null;
+    this.renderSheet();
+    this.renderGrid();
+  }
+
+  /**
+   * Persist the member being edited.
+   *
+   * Debounced, because the description is typed into and a write per keystroke
+   * is a write per keystroke to userdata. Structural changes — a file added, a
+   * slot moved, the name — call `flushSave` instead, since the thing that
+   * follows them is a redraw that reads the index back.
+   */
+  queueSave() {
+    clearTimeout(this.saveTimer);
+    this.saveTimer = setTimeout(() => this.flushSave(), 500);
+  }
+
+  async flushSave() {
+    clearTimeout(this.saveTimer);
+    const row = this.editing;
+    const body = this.body;
+    if (!row || !body) return;
+    try {
+      const name = String(body.cast.handle || "").trim() || t("Untitled preset");
+      const updated = await P.replaceBody(row.id, { data: body, scope: "cast" });
+      // The row's name *is* their handle — `keepSubject` files them under it, and
+      // a roster where the card says one thing and the prompt token is another
+      // would be unusable.
+      const named = name === updated.name ? updated : await P.updatePreset(row.id, { name });
+      this.rows = this.rows.map((entry) => (entry.id === row.id ? { ...entry, ...named } : entry));
+      if (this.editing?.id === row.id) this.editing = { ...this.editing, ...named };
+    } catch (error) {
+      this.say(t("Could not save them — {error}", { error: error.message }));
+    }
+  }
+
+  /** The sheet, or the grid — one of the two is showing at any time. */
+  renderSheet() {
+    const open = Boolean(this.editing);
+    this.split.style.display = open ? "none" : "";
+    this.sheet.style.display = open ? "" : "none";
+    this.shelves.style.display = open ? "none" : "";
+    this.bar.style.display = open ? "none" : "";
+    if (!open) { this.sheet.replaceChildren(); return; }
+
+    const row = this.editing;
+    const member = this.body?.cast;
+    this.sheet.replaceChildren(
+      el("div", { class: "mmc-cast-sheet-bar" }, [
+        el("button", { class: "mmc-cast-sheet-back", onclick: () => this.closeSheet() }, [
+          icon("chevron", 15), el("span", { text: t("Back to the cast") }),
+        ]),
+        el("span", { class: "mmc-cast-sheet-saved", text: t("Saved as you type") }),
+      ]),
+      ...(member
+        ? [el("div", { class: "mmc-cast-sheet-body" }, [
+            this.sheetWho(member),
+            this.sheetRefs(member),
+            this.sheetWords(member),
+          ]),
+          this.sheetFoot(row, member)]
+        : [el("div", { class: "mmc-preset-insp-hint", style: { padding: "26px 40px" },
+                       text: t("Reading…") })]),
+    );
+  }
+
+  /** Who they are: their face, their handle, and what they are. */
+  sheetWho(member) {
+    const portrait = (member.files ?? []).find(
+      (file) => file.slot === "from" && (file.kind ?? "image") === "image");
+    const name = el("input", {
+      class: "mmc-cast-sheet-name",
+      value: member.handle ?? "",
+      spellcheck: false,
+      "aria-label": t("Their name"),
+      placeholder: "subject",
+      onkeydown: (event) => {
+        event.stopPropagation();
+        if (event.key === "Enter") event.target.blur();
+      },
+      // The handle is a token in a sentence, so the characters a sentence cannot
+      // separate it from are refused as they are typed rather than at save —
+      // "@a name" cites nobody, and finding that out later is worse.
+      oninput: (event) => {
+        const clean = event.target.value.replace(/[^A-Za-z0-9_-]/g, "_");
+        if (clean !== event.target.value) {
+          const at = event.target.selectionStart;
+          event.target.value = clean;
+          event.target.setSelectionRange(at, at);
+        }
+        member.handle = clean;
+        this.queueSave();
+      },
+      onblur: () => this.flushSave().then(() => this.renderSheet()),
+    });
+
+    // Their identity hue, off the shelf's own call on the same handle — @ana is
+    // one colour wherever they are drawn, which is the whole point of the hues.
+    return el("div", { class: `mmc-cast-sheet-band mmc-tag-${tagIndex(member.handle || "x")}` }, [
+      el("div", { class: "mmc-cast-sheet-legend", text: t("Who") }),
+      el("div", { class: "mmc-cast-sheet-who" }, [
+        portrait
+          ? el("img", {
+              class: "mmc-cast-sheet-face",
+              onerror: (event) => event.target.replaceWith(this.sheetBlankFace(member)),
+              src: viewUrl(portrait.filename, { preview: true }), alt: "", loading: "lazy",
+            })
+          : this.sheetBlankFace(member),
+        el("span", { class: "mmc-cast-sheet-at", text: "@" }),
+        name,
+        el("span", { class: "mmc-cast-sheet-is", text: t("is a") }),
+        el("button", {
+          class: "mmc-cast-sheet-takes",
+          title: t("What of the pictures behind them is kept, and what it means where "
+                 + "there are none. Same four an attached file takes."),
+          text: `${t(member.takes ?? "person")}  ▾`,
+          onclick: (event) => this.pickTakes(event.currentTarget, member),
+        }),
+      ]),
+    ]);
+  }
+
+  sheetBlankFace(member) {
+    return el("span", { class: "mmc-cast-sheet-face mmc-cast-sheet-face-blank" },
+              [icon(CAST_GLYPH[member.takes ?? "person"] ?? "face", 22)]);
+  }
+
+  /** The four things they can be built out of, as the tiles they are. */
+  sheetRefs(member) {
+    const files = member.files ?? [];
+    return el("div", { class: "mmc-cast-sheet-band" }, [
+      el("div", { class: "mmc-cast-sheet-legend", text: t("Made out of") }),
+      el("div", { class: "mmc-cast-sheet-refs" }, [
+        ...files.map((file, index) => this.sheetTile(member, file, index)),
+        el("div", { class: "mmc-cast-sheet-ref" }, [
+          el("button", {
+            class: "mmc-cast-sheet-add",
+            text: "+",
+            title: t("Attach a picture, a clip or a recording"),
+            onclick: () => this.addFile(member),
+          }),
+          el("span", { class: "mmc-cast-sheet-cap", text: t("add") }),
+        ]),
+        ...(files.length ? [] : [el("p", { class: "mmc-cast-sheet-nothing", text:
+          t("Pictures of them, a clip they move like, a recording of their voice. "
+          + "Or nothing at all — a name and a description is a cast member too.") })]),
+      ]),
+      // The retention marker, under the row rather than at the far end of it: it
+      // is a statement about all of them together, and on a sheet this wide
+      // "margin-left: auto" put it three hundred pixels from the thing it is
+      // about. Only where there is something to retain.
+      ...(files.length ? [el("div", { class: "mmc-cast-sheet-keeprow" }, [
+        el("button", {
+          class: "mmc-cast-sheet-keep",
+          title: t("The reference guide's own relationship marker, written into the "
+                 + "retention line. Left to decide, it is kept whole — or moved onto "
+                 + "them, where they take somebody's place."),
+          // The shelf's own wording, verbatim: "kept whole" alone under a row of
+          // pictures reads as a stray label rather than as a setting with a
+          // value, and it had already been solved once.
+          text: `${t("what is kept: {value}", { value: t(MARKER_LABEL[member.relationship ?? "derive"]) })}  ▾`,
+          onclick: (event) => this.pickMarker(event.currentTarget, member),
+        }),
+      ])] : []),
+      ...(files.some((file) => file.slot === "replaces")
+        ? [this.sheetReplaces(member)] : []),
+    ]);
+  }
+
+  /** One file, wearing what it lends them. */
+  sheetTile(member, file, index) {
+    const kind = file.kind ?? "image";
+    const role = ROLE[file.slot] ?? ROLE.from;
+    const tile = el("button", {
+      class: "mmc-cast-sheet-tile",
+      title: t("{lead} — press to change what it lends them, or take it off.",
+               { lead: t(role.lead) }),
+      onclick: (event) => this.pickSlot(event.currentTarget, member, index),
+    }, [
+      kind === "image"
+        ? el("img", {
+            class: "mmc-cast-sheet-thumb",
+            onerror: (event) => event.target.replaceWith(
+              el("span", { class: "mmc-cast-sheet-thumb" }, [icon("image", 18)])),
+            src: viewUrl(file.filename, { preview: true }), alt: "", loading: "lazy",
+          })
+        : el("span", { class: "mmc-cast-sheet-thumb" },
+             [icon(kind === "audio" ? "audio" : "video", 18)]),
+      // Their looks are the default and wear no badge — the three departures from
+      // it each say which, the way the shelf's own tiles do.
+      ...(file.slot === "from" ? [] : [el("span", { class: "mmc-cast-sheet-badge" },
+                                          [icon(role.glyph, 10)])]),
+    ]);
+    // The role colour rides on the wrapper as one variable that the badge and
+    // the caption both read, rather than a colour class on each: they are one
+    // statement about one file, and two rules meant two chances for a later
+    // stylesheet to win half of it.
+    return el("div", { class: `mmc-cast-sheet-ref mmc-role-${file.slot}` }, [
+      tile,
+      el("span", { class: "mmc-cast-sheet-cap", text: t(role.label) }),
+    ]);
+  }
+
+  /** Who they replace, which only exists once a clip says they replace somebody. */
+  sheetReplaces(member) {
+    const field = el("input", {
+      class: "mmc-cast-sheet-desc mmc-cast-sheet-replaces",
+      value: member.replaces_what ?? "",
+      placeholder: t("who they replace in that clip — the person at the counter"),
+      title: t("Written into the retention line, so the model knows who is going."),
+      onkeydown: (event) => event.stopPropagation(),
+      oninput: (event) => { member.replaces_what = event.target.value; this.queueSave(); },
+    });
+    return el("div", { class: "mmc-cast-sheet-line" }, [
+      el("span", { class: "mmc-cast-sheet-of", text: t("in place of") }),
+      field,
+    ]);
+  }
+
+  /**
+   * The description — the field that was the whole reason a member had to be
+   * built on a node and starred, because it was the one thing the library could
+   * show and not write.
+   *
+   * Two legends, because the field is doing two jobs. With pictures behind them
+   * it fills in what a picture cannot say; with nothing behind them it *is* the
+   * definition, and the box has to ask for enough. Both are `cast.js`'s own
+   * words for the same two states.
+   */
+  sheetWords(member) {
+    const bare = !(member.files ?? []).length;
+    const field = el("textarea", {
+      class: "mmc-cast-sheet-desc",
+      rows: 3,
+      // `text`, not `value`: a textarea has no value attribute — what it holds
+      // is its content — and `el` sets attributes. As `value` this rendered an
+      // empty box over the top of somebody's description on every open.
+      text: member.description ?? "",
+      placeholder: bare
+        ? t("A retired lighthouse keeper in a salt-stained oilskin, white stubble, "
+          + "one clouded eye…")
+        : t("Nervous around strangers, never takes the cardigan off."),
+      onkeydown: (event) => event.stopPropagation(),
+      oninput: (event) => { member.description = event.target.value; this.queueSave(); },
+      onblur: () => this.flushSave(),
+    });
+    return el("div", { class: "mmc-cast-sheet-band" }, [
+      el("div", {
+        class: "mmc-cast-sheet-legend",
+        text: bare
+          ? t("Describe them — this is all the model will know")
+          : t("What a picture cannot say"),
+      }),
+      field,
+    ]);
+  }
+
+  /** Cast them, export them, delete them. */
+  sheetFoot(row, member) {
+    return el("div", { class: "mmc-cast-sheet-foot" }, [
+      el("button", {
+        class: "mmc-preset-danger",
+        text: t("Export"),
+        onclick: () => P.exportPresets([row], [this.body]),
+      }),
+      el("button", {
+        class: `mmc-preset-danger${this.armed === row.id ? " armed" : ""}`,
+        text: this.armed === row.id ? t("Really delete?") : t("Delete"),
+        onclick: () => {
+          if (this.armed === row.id) { this.removeEdited(row); return; }
+          this.armed = row.id;
+          this.renderSheet();
+        },
+      }),
+      ...(this.target ? [el("button", {
+        class: "mmc-preset-apply mmc-cast-sheet-apply",
+        disabled: this.busy,
+        text: t("Cast @{handle} into {label}",
+                { handle: member.handle || row.name, label: this.target.label }),
+        onclick: () => this.castEdited(row),
+      })] : []),
+    ]);
+  }
+
+  async removeEdited(row) {
+    clearTimeout(this.saveTimer);
+    try {
+      await P.deletePreset(row.id);
+      this.rows = this.rows.filter((entry) => entry.id !== row.id);
+    } catch (error) {
+      this.say(t("Could not delete it — {error}", { error: error.message }));
+    }
+    this.closeSheet();
+  }
+
+  async castEdited(row) {
+    if (this.busy) return;
+    this.busy = true;
+    await this.flushSave();
+    try {
+      this.target.apply(this.body, ["cast"], "cast");
+      this.close();
+    } catch (error) {
+      this.busy = false;
+      this.say(t("Could not cast them — {error}", { error: error.message }));
+      this.renderSheet();
+    }
+  }
+
+  /** Attach a file to them, uploading it if that is what the picker comes back
+   *  with. The slot is guessed from what the file *is* — a sound file is a voice
+   *  and a still is a look — which is the same guess `cast.js` makes when
+   *  something is dropped on a card, and it is right almost every time. */
+  async addFile(member) {
+    const chosen = await openPicker({
+      kinds: ["image", "video", "audio", "renders"],
+      kind: "image",
+      capacity: () => ({ used: 0, max: 8, filesLeft: 8 }),
+    });
+    if (!chosen?.length) return;
+    for (const asset of chosen) {
+      const kind = asset.kind ?? "image";
+      const slot = (ROLES.find((role) => role.fits({ kind })) ?? ROLE.from).key;
+      member.files = [...(member.files ?? []), { slot, filename: asset.path, kind }];
+    }
+    await this.flushSave();
+    this.renderSheet();
+  }
+
+  /** What this file lends them — the shelf's own four answers, and the way off. */
+  pickSlot(anchor, member, index) {
+    const file = member.files[index];
+    const kind = file.kind ?? "image";
+    openMenu(anchor, {
+      title: t("What this file lends them"),
+      sections: [{
+        rows: [
+          ...ROLES.filter((role) => role.fits({ kind })).map((role) => ({
+            label: t(role.lead),
+            note: t(role.note),
+            checked: file.slot === role.key,
+            onPick: () => this.setSlot(member, index, role.key),
+          })),
+          {
+            label: t("Take it off them"),
+            onPick: () => {
+              member.files = member.files.filter((_, at) => at !== index);
+              this.flushSave().then(() => this.renderSheet());
+            },
+          },
+        ],
+      }],
+    });
+  }
+
+  /** Move a file into a slot. The three single-file slots hold one each, so a
+   *  file moving into an occupied one sends the sitting tenant back to `from` —
+   *  the shelf's own rule, and the alternative is a silently dropped picture. */
+  setSlot(member, index, slot) {
+    if (slot !== "from") {
+      member.files = member.files.map((file, at) =>
+        (at !== index && file.slot === slot ? { ...file, slot: "from" } : file));
+    }
+    member.files = member.files.map((file, at) =>
+      (at === index ? { ...file, slot } : file));
+    this.flushSave().then(() => this.renderSheet());
+  }
+
+  /** What they are: person, object, scene or look. */
+  pickTakes(anchor, member) {
+    openMenu(anchor, {
+      title: t("What they are"),
+      sections: [{
+        rows: SUBJECT_TAKES.map((key) => ({
+          label: t(key),
+          note: t(TAKES_NOTE[key]),
+          checked: key === (member.takes ?? "person"),
+          onPick: () => {
+            member.takes = key;
+            this.flushSave().then(() => this.renderSheet());
+          },
+        })),
+      }],
+    });
+  }
+
+  /** The retention marker, said as what happens rather than as the value. */
+  pickMarker(anchor, member) {
+    openMenu(anchor, {
+      title: t("What happens to what they are made of"),
+      sections: [{
+        rows: Object.keys(MARKER_LABEL).map((key) => ({
+          label: t(MARKER_LABEL[key]),
+          note: t(MARKER_NOTE[key]),
+          checked: key === (member.relationship ?? "derive"),
+          onPick: () => {
+            if (key === "derive") delete member.relationship;
+            else member.relationship = key;
+            this.flushSave().then(() => this.renderSheet());
+          },
+        })),
+      }],
     });
   }
 
@@ -721,25 +1270,62 @@ class PresetLibrary {
    * descriptor — the whole of it, selectable, because it is the text that is
    * about to go into the prompt — every still the atlas read it off, and Apply.
    *
-   * The stills are the panel's argument. A descriptor is a paragraph of English
-   * and two of them can read almost identically; the frames are what tell
-   * "grainy 16mm exploitation print" from "faded 35mm exploitation print" at a
-   * glance, and here there is room for all of them rather than the one the card
-   * had space for.
+   * The stills are the panel's argument, and now they are also a way in. A
+   * descriptor is a paragraph of English and two of them can read almost
+   * identically; the frames are what tell "grainy 16mm exploitation print" from
+   * "faded 35mm exploitation print" at a glance. Pressing one casts it — see
+   * `castStill` — because the picture is the better half of what a style is and
+   * there is no other way to get a frame of an obscure look.
    */
   renderStyleInspector(row) {
     const clips = row.data?.style?.clips ?? [];
+    const caption = row.data?.style?.caption ?? "";
     const applicable = this.keys.size;
     this.inspector.replaceChildren(
       el("div", { class: "mmc-preset-insp-title", text: row.name }),
       ...(row.rest ? [el("p", { class: "mmc-style-full", text: row.rest })] : []),
       el("p", { class: "mmc-preset-insp-meta", text: this.factsLine(row) }),
-      el("div", { class: "mmc-style-shots" }, (row.thumbs ?? []).map((url, index) =>
-        el("figure", {}, [
+      // The frames pick as well as show, where there is more than one of them.
+      // A figure is a choice rather than a button, and the one verb sits under
+      // the strip: five clips of a look are five views of one thing, not five
+      // things to do.
+      el("div", { class: "mmc-style-shots" }, (row.thumbs ?? []).map((url, index) => {
+        const chosen = index === this.stillIndex;
+        const only = (row.thumbs ?? []).length < 2;
+        const figure = el("figure", { "data-chosen": chosen && !only ? "" : null }, [
           el("img", { onerror: (event) => event.target.remove(),
                       src: url, alt: "", loading: "lazy" }),
           el("figcaption", { text: clips[index] ?? "" }),
-        ]))),
+        ]);
+        if (only) return figure;
+        return el("button", {
+          class: "mmc-style-shot",
+          "aria-pressed": chosen,
+          title: t("Read off clip {clip}", { clip: clips[index] ?? "" }),
+          onclick: () => { this.stillIndex = index; this.renderInspector(); },
+        }, [figure]);
+      })),
+      // The picture is the half of a style that words cannot carry, and for a
+      // medium nobody has a folder of it is the only picture there is. So the
+      // frame is offered as plainly as the phrase, right under it.
+      ...(this.target && row.stills?.length ? [el("button", {
+        class: "mmc-style-cast",
+        disabled: this.busy,
+        title: t("Attach the frame at its full size as a look to build from, and "
+               + "put the style's own words in its description. It arrives as "
+               + "@{handle} — write that into the prompt.",
+          { handle: styleHandle(row.name) }),
+        onclick: () => this.castStill(row, this.stillIndex),
+      }, [icon("effect", 13), el("span", { text: t("Cast this frame as a look") })])] : []),
+      // What the clip's caption said, where it said more than the style. Not
+      // applied and not searchable-only: somebody comparing this entry against
+      // the atlas page has to be able to see the sentence they remember, and
+      // somebody wondering why the phrase is short has to be able to see what
+      // came out of it.
+      ...(caption ? [el("details", { class: "mmc-style-caption" }, [
+        el("summary", { text: t("What the clip's own caption said") }),
+        el("p", { text: caption }),
+      ])] : []),
       el("div", { class: "mmc-preset-rows" }, this.renderSectionRows(row)),
       ...(this.target ? [el("button", {
         class: "mmc-preset-apply",
@@ -755,6 +1341,57 @@ class PresetLibrary {
         t("Style Atlas by hoodtronik · dataset {dataset} by ostris",
           { dataset: this.atlas?.dataset ?? "minimax_h3_1k" }) }),
     );
+  }
+
+  /**
+   * One of a style's frames, cast as a look to build from.
+   *
+   * The descriptor tells the model what the look is called; the frame shows it
+   * one. For a medium nobody has a folder of — a 1972 educational puppet show, a
+   * needle-felted diorama — the second is the only one you can get, which is why
+   * the full-size frames are vendored at all rather than streamed on demand: a
+   * node that needs the network to hand you a picture is a node that is broken
+   * on half the machines it runs on.
+   *
+   * It arrives as a subject rather than as an attachment, because that is what
+   * this is: `takes: "style"` is the pack's own word for a picture whose medium,
+   * palette and rendering are kept and whose subject and layout are dropped —
+   * which is precisely the distinction the descriptor is being cut along.
+   *
+   * The still is copied into the input folder rather than cited where it sits.
+   * Everything downstream of here — the picker, `media.resolve`, the thumb route
+   * — addresses a file by an input-relative path, and a path into the extension's
+   * own web folder is not one. It is a copy, so a style used in ten pieces is one
+   * file: the name is the clip's, and an upload of a name that is already there
+   * is the same picture by definition.
+   */
+  async castStill(row, index) {
+    const clip = row.data?.style?.clips?.[index];
+    const still = row.stills?.[index];
+    if (!clip || !still || this.busy) return;
+    this.busy = true;
+    this.say(t("Attaching the frame…"));
+    try {
+      const response = await fetch(still);
+      if (!response.ok) throw new Error(t("the frame is not on disk"));
+      const blob = await response.blob();
+      const asset = await upload(
+        new File([blob], `${STYLE_REF_PREFIX}${clip}.webp`, { type: "image/webp" }),
+        STYLE_REF_FOLDER);
+      this.target.apply({
+        cast: {
+          handle: styleHandle(row.name),
+          takes: "style",
+          description: row.data.style.text,
+          files: [{ slot: "from", filename: asset.path, kind: "image", ref_size: "max" }],
+        },
+      }, ["cast"], "cast");
+      this.close();
+    } catch (error) {
+      this.busy = false;
+      this.say(t("Could not cast that frame — {error}", { error: error.message }));
+      this.renderInspector();
+    }
   }
 
   /**

@@ -96,9 +96,9 @@ export const css = `
   width: 7px; height: 7px; border-radius: 999px;
   box-shadow: 0 0 0 1.5px var(--mmc-surface);
 }
-.mmc-cast-mini-motion::after { background: #6ebeff; }
-.mmc-cast-mini-voice::after { background: #a8c858; }
-.mmc-cast-mini-replaces::after { background: var(--mmc-accent); }
+.mmc-cast-mini-motion::after { background: var(--mmc-role-motion); }
+.mmc-cast-mini-voice::after { background: var(--mmc-role-voice); }
+.mmc-cast-mini-replaces::after { background: var(--mmc-role-replaces); }
 .mmc-cast-mini.missing .mmc-cast-mini-thumb { box-shadow: 0 0 0 1.5px rgba(255,140,120,.5); }
 .mmc-cast-line-words { font-size: 11px; color: var(--mmc-off); flex: none; }
 
@@ -233,9 +233,9 @@ export const css = `
 }
 /* Their looks are the default and wear no badge at all — see refTile in cast.js. These
    three are the departures from it, and each says which. */
-.mmc-cast-badge-motion { color: #6ebeff; }
-.mmc-cast-badge-voice { color: #a8c858; }
-.mmc-cast-badge-replaces { color: var(--mmc-accent); }
+.mmc-cast-badge-motion { color: var(--mmc-role-motion); }
+.mmc-cast-badge-voice { color: var(--mmc-role-voice); }
+.mmc-cast-badge-replaces { color: var(--mmc-role-replaces); }
 
 /* The way to hang another file on them: a tile of the same size as the files,
    in the same row, so it reads as the next slot rather than as a control. */

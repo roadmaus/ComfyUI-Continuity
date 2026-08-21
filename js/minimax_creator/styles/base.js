@@ -14,6 +14,15 @@ export const css = `
   --mmc-dim: #8b8b8b;
   --mmc-off: #565656;
   --mmc-accent: #f0a63c;
+  /* What a file lends a subject, as colour. Their looks are the default and
+     wear none; these are the three departures from it, and they are worn by the
+     shelf's badges and dots and by the library's editor tiles. Tokens rather
+     than three literals per surface, because the surfaces disagree about
+     cascade order and a caption that lost its colour to a later stylesheet is
+     how that was found out. */
+  --mmc-role-motion: #6ebeff;
+  --mmc-role-voice: #a8c858;
+  --mmc-role-replaces: var(--mmc-accent);
   --mmc-blue: #2f7bf6;
   /* Reference identity hues: one per attached asset, worn by its thumbnail
      ring, its handle in the bar, and its chip in the prompt, so a chip in the

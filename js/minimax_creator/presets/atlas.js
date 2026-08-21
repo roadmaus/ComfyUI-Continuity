@@ -4,17 +4,18 @@
 // everything about how a style is *shown* lives in `stylelib.js`, which is
 // hand-written, so re-running the generator cannot clobber a design decision.
 //
-// Styles and stills are from the Style Atlas by hoodtronik, built over the
-// `ostris/minimax_h3_1k` dataset by ostris. Text and one still frame per clip;
-// no video is vendored, downloaded or streamed by this pack.
+// Styles are from the Style Atlas by hoodtronik, built over the `ostris/minimax_h3_1k`
+// dataset by ostris; the pictures are one frame of each clip, cut from the
+// dataset at vendor time. No video is vendored, and nothing this pack does at
+// runtime touches the network — the frames are on disk.
 //
 //   upstream  https://github.com/hoodtronik/minimax-h3-style-atlas
-//   revision  c9e284e8e36b04c03f3374035cf8cac6d0d753bd
+//   revision  923750c65405f862d60d3535ac4a6b0f4f96dc3e
 //   dataset   https://huggingface.co/datasets/ostris/minimax_h3_1k
 
 export const ATLAS = {
   upstream: "hoodtronik/minimax-h3-style-atlas",
-  revision: "c9e284e8e36b04c03f3374035cf8cac6d0d753bd",
+  revision: "923750c65405f862d60d3535ac4a6b0f4f96dc3e",
   dataset: "ostris/minimax_h3_1k",
   styles: 941,
   clips: 1000,

@@ -2639,6 +2639,54 @@ export function subjectFiles(subject) {
   return out;
 }
 
+/**
+ * The handles `subject` claims that nobody else in `cast` claims too.
+ *
+ * What a member takes with them when they leave. Casting somebody attaches
+ * their pictures as it goes — `presets.addSubjectToPiece` and the shelf's own
+ * `+` both do it — so removing them and leaving the files behind makes the node
+ * accumulate pictures nothing points at, and the only way back is to find each
+ * one on the asset row and press its own ✕.
+ *
+ * Claims only, deliberately. Whether a *prompt* still writes `@img-2` is a
+ * question about the host's own texts, and the host is the one that can answer
+ * it — see `handleWritten`. A shelf knows the cast and nothing else.
+ */
+export function soleClaims(subject, cast) {
+  const held = new Set();
+  for (const other of cast ?? []) {
+    if (other === subject) continue;
+    for (const handle of subjectFiles(other)) held.add(handle);
+    if (other.replaces) held.add(other.replaces);
+  }
+  const mine = new Set(subjectFiles(subject));
+  if (subject.replaces) mine.add(subject.replaces);
+  return [...mine].filter((handle) => !held.has(handle));
+}
+
+/**
+ * Whether any of `texts` writes `@handle`.
+ *
+ * Texts only — no subject expansion. A host asking "may I drop this file now?"
+ * has *just* taken somebody out of the cast, and the segment mirrors that
+ * `syncTimeline` maintains have not caught up yet; a check that expanded the
+ * cast would read the stale copy, find the departing member still citing the
+ * file, and keep every one of them.
+ */
+export function handleWritten(texts, handle) {
+  return citedHandles(texts).has(handle);
+}
+
+/** Every text in a piece a citation could be written into: the timeline's own
+ *  three, and each segment's. */
+export function allTexts(timeline) {
+  const texts = [timeline.prompt, timeline.soundscape, timeline.music];
+  for (const segment of timeline.segments ?? []) {
+    texts.push(segment.prompt, segment.soundscape, segment.music);
+  }
+  return texts;
+}
+
 /** A pattern matching `@name` for exactly the subjects in `cast`, or null for
  *  an empty cast. Mirrors `subjects.citation_re`. */
 export function subjectCitationRe(cast) {

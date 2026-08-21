@@ -481,16 +481,18 @@ export function captureSubject(subject, assets) {
  */
 export function castFactsLine(facts = {}) {
   const pictures = facts.pictures ?? 0;
+  const clips = facts.clips ?? 0;
+  const nothing = !pictures && !clips && !facts.motion && !facts.voice && !facts.replaces;
   return [
     t(facts.takes ?? "person"),
     pictures
       ? t(pictures === 1 ? "{count} picture" : "{count} pictures", { count: pictures })
       : null,
+    clips ? t(clips === 1 ? "{count} clip" : "{count} clips", { count: clips }) : null,
     facts.motion ? t("moves") : null,
     facts.voice ? t("voice") : null,
     facts.replaces ? t("their place") : null,
-    !pictures && !facts.motion && !facts.voice && !facts.replaces && facts.described
-      ? t("described") : null,
+    nothing && facts.described ? t("described") : null,
   ].filter(Boolean).join(" · ");
 }
 
@@ -705,9 +707,16 @@ export function factsOf(body, scope) {
   if (scope === "cast") {
     const member = body.cast ?? {};
     const files = member.files ?? [];
+    const built = files.filter((file) => file.slot === "from");
     return {
       takes: member.takes ?? "person",
-      pictures: files.filter((file) => file.slot === "from").length,
+      // Counted apart, because they read apart. A clip standing in the `from`
+      // slot lends its frames the way a still does, but calling it a picture put
+      // "2 pictures" under a card whose second file was an mp4 — and the card's
+      // own face, which only ever draws an image, then had one to draw for one
+      // of those two and not the other.
+      pictures: built.filter((file) => (file.kind ?? "image") === "image").length,
+      clips: built.filter((file) => (file.kind ?? "image") !== "image").length,
       motion: files.some((file) => file.slot === "motion"),
       voice: files.some((file) => file.slot === "voice"),
       replaces: files.some((file) => file.slot === "replaces"),
@@ -772,7 +781,17 @@ export function describe(data, scope, { cover = null } = {}) {
   if (scope === "cast") {
     const still = (data.cast?.files ?? []).find(
       (file) => file.slot === "from" && (file.kind ?? "image") === "image");
-    return { facts, portrait: still?.filename ?? null, frames: [] };
+    // Their own prose, on the index so the card can set it without fetching a
+    // body. Capped rather than clamped in CSS alone: the index is read whole on
+    // every library open, and a member described in nine hundred words would be
+    // nine hundred words in every one of them.
+    const words = String(data.cast?.description ?? "").trim().replace(/\s+/g, " ");
+    return {
+      facts,
+      portrait: still?.filename ?? null,
+      ...(words ? { blurb: words.slice(0, 160) } : {}),
+      frames: [],
+    };
   }
   if (scope === "style") return { facts, frames: [] };
   if (scope === "prestage") return { facts, canvas: canvasOf(data), frames: [] };

@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 2.12
 
 **Every LoRA now loads the way a quantized H3 needs loading.** The stock path is
 dequantize, add the delta, requantize with a recalculated codebook — a round trip
@@ -74,6 +74,55 @@ math, and the turbo lead-in section to that page. It hides, it never disables �
 a control already switched on keeps its pill either way, which is the rule the
 shift pills and the custom quality row already live by, so turning it off can
 never change what a render does.
+
+**A style is a look now, not somebody else's scene.** The Style tab's 941
+descriptors are the opening clause of a dataset caption, split at the first
+action beat — so a third of them carried the clip's cast and setting into your
+prompt along with the medium. Seventy-two shipped a literal `(S1)`, the dataset's
+own subject token; a hundred and sixty-one were cut off mid-word at 250
+characters, because that is where the atlas page truncates. Asking for LEGO also
+asked for a chef minifig and a stovetop fire. The clause chain is now walked and
+stopped at the first clause that is about *something* rather than about how it
+looks — 333 of the 941 are shorter, none came out empty, no `(S1)` survives and
+the truncations are down to eighteen. It is a cut, never a rewrite: nothing is
+invented and no clause is reordered, the verbatim descriptor is still what the
+search reads, and the inspector shows it under **What the clip's own caption
+said**. A prompt written before this still gets its long descriptor swapped out
+when you apply a style over it.
+
+**And a style has a picture you can actually use.** The card stills are 192px —
+enough to tell one look from another, not a reference. So one frame per clip is
+now vendored at the clip's own resolution, 512 to 1088 across, and **Cast this
+frame as a look** attaches it as a `takes: "style"` subject with the distilled
+descriptor as its description. This is the answer to "where do I find a still of
+a 1972 educational puppet show": you do not, the atlas has one. Both sizes are
+cut from the same frame of the same clip at vendor time, so the card and the
+reference are one moment rather than two. Nothing streams — the frames are on
+disk and the whole catalogue works with the machine offline, which is why they
+are vendored rather than fetched on demand.
+
+**A cast member is made where you look for them.** Keeping somebody used to mean
+four surfaces: attach a picture to a node, add a subject on that node's shelf,
+point the subject at the picture, press **★**. Three of those are about a node,
+and a member is deliberately not about a node — their files are stored by
+filename precisely so they outlive the graph they were built on. So the roster
+makes its own. **+ New cast member** opens an editor over the grid: their face
+and handle, what they are, their files as tiles you press to say what each one
+lends them, and their description as a box rather than the line the inspector had
+room for. Nothing there reads a node, and there is no Save — the row exists from
+the moment you press New, so every edit is a change to something already in the
+library. The **★** on a node still works; there are two ways in now rather than
+one. Their description reaches their card too, so a roster of twelve is scanned
+by who somebody *is* rather than by how many files are behind them.
+
+**Removing somebody takes their pictures with them.** Casting attaches files —
+the `+` on their card does it, and so does taking them out of the library — so
+the **✕** undid half of what it was undoing, and the node quietly accumulated a
+picture every time you changed your mind, each one needing to be found on the
+asset row and removed by hand. Now it takes what that member alone was built out
+of. Not a picture a second member is also built out of, not a file a prompt
+writes by hand as `@img-2`, and never the piece's pool from inside one card of a
+strip.
 
 ## 2.11
 

@@ -1,7 +1,7 @@
 """The vendored style atlas is complete, and a style applied leads the prompt.
 
 Two halves, and the first is the one that rots. `js/minimax_creator/presets/`
-holds a generated index and a folder of stills, written by
+holds a generated index and two folders of pictures, written by
 `tools/vendor_style_atlas.py` from upstream's page — and the failure mode of a
 vendored asset tree is not a crash, it is a card with a hole where a picture
 should be, six months after somebody moved a file. So: every clip the index names
@@ -32,6 +32,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PRESETS = os.path.join(ROOT, "js", "minimax_creator", "presets")
 MODULE = os.path.join(PRESETS, "atlas.js")
 THUMBS = os.path.join(PRESETS, "atlas")
+STILLS = os.path.join(THUMBS, "full")
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from harness import FAILURES, check, passed, skip  # noqa: E402
@@ -74,17 +75,35 @@ check("every descriptor is text and every style has a clip",
 check("every category index names a category",
       all(0 <= index < len(categories) for index, _, _ in rows), True)
 
-# ---- the stills -------------------------------------------------------------
+# ---- the pictures -----------------------------------------------------------
 #
-# Both directions. A clip with no still is a hole in a card; a still no clip
-# names is a file that will be here forever because nothing ever looks at it.
+# Both directions, and both sizes. A clip with no picture is a hole in a card; a
+# picture no clip names is a file that will be here forever because nothing ever
+# looks at it.
+#
+# The full-size stills are checked as hard as the card pictures because they are
+# the half that is easy to lose: nothing draws them until somebody asks for a
+# style as a reference, so a folder that silently failed to vendor would look
+# perfectly healthy until the day it was needed.
 
-on_disk = {name for name in os.listdir(THUMBS)} if os.path.isdir(THUMBS) else set()
 wanted = {"%s.webp" % clip for clip in set(clips)}
-check("every clip has a still", sorted(wanted - on_disk)[:4], [])
-check("...and no still is an orphan", sorted(on_disk - wanted)[:4], [])
-check("the stills are webp and not empty",
+on_disk = {name for name in os.listdir(THUMBS)
+           if name != "full"} if os.path.isdir(THUMBS) else set()
+stills = {name for name in os.listdir(STILLS)} if os.path.isdir(STILLS) else set()
+
+check("every clip has a card picture", sorted(wanted - on_disk)[:4], [])
+check("...and no card picture is an orphan", sorted(on_disk - wanted)[:4], [])
+check("every clip has a full-size still", sorted(wanted - stills)[:4], [])
+check("...and no still is an orphan", sorted(stills - wanted)[:4], [])
+check("the pictures are webp and not empty",
       all(os.path.getsize(os.path.join(THUMBS, name)) > 256 for name in sorted(on_disk)[:50]),
+      True)
+# A still that came out thumbnail-sized is a still that was copied from the card
+# picture rather than cut from the clip — which is the one way this could go
+# wrong and still pass every check above it.
+check("the stills are bigger than the card pictures",
+      all(os.path.getsize(os.path.join(STILLS, name))
+          > os.path.getsize(os.path.join(THUMBS, name)) for name in sorted(stills)[:50]),
       True)
 
 if shutil.which("node") is None:
