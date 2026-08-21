@@ -28,7 +28,7 @@
 
 import { el, icon, ICONS, svg, dismissable, keepScroll, placeNear, swappable } from "./dom.js";
 import { openPicker } from "./picker.js";
-import { openLoras } from "./loras.js";
+import { openLoras, loraBlock } from "./loras.js";
 import { openFrameGrab } from "./framegrab.js";
 import { openChoicePopover, stepperPill, aspectGlyph, edgeSlider, PILL_GLYPH } from "./pills.js";
 import { CreatorEditor } from "./editor.js";
@@ -276,6 +276,15 @@ export class PreStageEditor {
     this.commit();
   }
 
+  /** Try another file in this LoRA's slot. See `state.replaceLora`. */
+  async swapLora(entry) {
+    await openLoras({
+      state: this.state, checkpointModes: false, swapping: entry.name,
+      onChange: () => this.commit(),
+    });
+    this.commit();
+  }
+
   probeInit() {
     const init = this.state.init;
     if (!init || this.sizes.has(init.filename)) return;
@@ -474,34 +483,16 @@ export class PreStageEditor {
   }
 
   renderLoras() {
-    const chip = (entry) => el("div", { class: "mmc-asset", title: entry.name }, [
-      el("span", { class: "mmc-asset-thumb" }, [svg(ICONS.effect, 15)]),
-      el("span", { class: "mmc-asset-handle", text: entry.name.split("/").pop().replace(/\.[^.]+$/, "") }),
-      el("button", {
-        class: "mmc-ghost",
-        style: { fontSize: "11px" },
-        title: t("Strength — edit on the LoRA card"),
-        text: Number(entry.strength ?? 1).toFixed(2),
-        onclick: () => this.manageLoras(),
-      }),
-      el("button", {
-        class: "mmc-asset-x", text: "✕", title: t("Remove {name}", { name: entry.name }),
-        onclick: () => { S.removeLora(this.state, entry.name); this.commit(); },
-      }),
-    ]);
-
-    const parts = [el("div", { class: "mmc-assets" }, this.state.loras.map(chip))];
-    const triggers = S.promptTriggers(this.state);
-    if (triggers.length) {
-      parts.push(el("div", {
-        class: "mmc-note",
-        title: t("Prefixed to the prompt when this queues. Edit the list on the LoRA cards."),
-      }, [
-        el("span", { class: "mmc-note-key", text: t("triggers") }),
-        el("span", { text: triggers.join(", ") }),
-      ]));
-    }
-    return el("div", { class: "mmc-lora-block" }, parts);
+    // No targets: the PreStage's image models have one DiT each, so "which
+    // checkpoint does this LoRA claim" is not a question here — the same
+    // reason the manager drops the mode row for them.
+    return loraBlock(this.state, {
+      targets: null,
+      onToggle: (entry) => { S.toggleLora(this.state, entry.name); this.commit(); },
+      onManage: () => this.manageLoras(),
+      onSwap: (entry) => this.swapLora(entry),
+      onRemove: (entry) => { S.removeLora(this.state, entry.name); this.commit(); },
+    });
   }
 
   renderPills() {

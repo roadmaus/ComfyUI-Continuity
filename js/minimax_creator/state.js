@@ -1167,6 +1167,10 @@ export function emptyTimeline() {
     // cited by @handle from any segment's text and injected into exactly the
     // segments that cite it. Mirrors compile.timeline_pool.
     assets: [],
+    // The cast: who the piece is about. Written alongside the prompt that cites
+    // them and cleared with it — a subject nobody names is a shelf of files the
+    // next scene never asked for.
+    subjects: [],
     // How much of the previous segment's sound a continuing seam inherits.
     // Mirrors compile.DEFAULT_AUDIO_TAIL_S.
     audio_tail_s: DEFAULT_AUDIO_TAIL_S,
@@ -1204,8 +1208,13 @@ export function emptyTimeline() {
  * What "Clear" empties: the piece as it was written.
  *
  * The standing prompt, the two Context-IR audio fields, the rewrite over them,
- * the reference pool, and the strip — which goes back to one blank shot, the
- * same thing a piece is when you drop the node.
+ * the reference pool, the cast, and the strip — which goes back to one blank
+ * shot, the same thing a piece is when you drop the node.
+ *
+ * The cast goes with the prose that cites it. Left behind, it is a set of
+ * subjects no `@handle` in the piece names any more: they draw a shelf, they
+ * ride down onto every card as `segment.cast`, and they make the next scene's
+ * first prompt answer to somebody it never cast.
  *
  * Everything not named here survives, and that is the whole point of the
  * control. Where the weights are, which LoRAs are patched onto them, the turbo
@@ -1214,7 +1223,7 @@ export function emptyTimeline() {
  * scene. The sampler row is not in the blob at all and so is untouched by
  * construction.
  */
-export const CLEARED_KEYS = ["prompt", "soundscape", "music", "refined", "assets", "segments"];
+export const CLEARED_KEYS = ["prompt", "soundscape", "music", "refined", "assets", "subjects", "segments"];
 
 /** The shot's own writing — everything on a card that is not mirrored down onto
  *  it by `syncCanvas`, which is where the canvas and the pool arrive from. */
@@ -1237,6 +1246,7 @@ export function pieceWritten(timeline) {
   if (CLEARED_KEYS.some((key) => typeof timeline[key] === "string" && timeline[key].trim())) return true;
   if (timeline.refined) return true;
   if (timeline.assets?.length) return true;
+  if (timeline.subjects?.length) return true;
   const segments = timeline.segments ?? [];
   return segments.length !== 1 || segmentWritten(segments[0]);
 }
@@ -2358,18 +2368,23 @@ export function activeLoras(state) {
  *  have put it. */
 export function addLora(state, name, triggers = [], strength = null) {
   if (findLora(state, name)) return null;
+  const entry = newLora(name, triggers, strength);
+  state.loras.push(entry);
+  return entry;
+}
+
+/** One entry, as the file and its sidecar describe it. */
+function newLora(name, triggers, strength) {
   // A file with no sidecar arrives as `strength: null`, and `Number(null)` is 0
   // — a weight, and a legal one, so it has to be ruled out before the cast.
   const preferred = typeof strength === "number" ? strength : NaN;
-  const entry = {
+  return {
     name,
     strength: Number.isFinite(preferred) && preferred >= -1 && preferred <= 2
       ? preferred : turboStrength(name),
     enabled: true,
     modes: [...CHECKPOINTS], triggers: [...triggers],
   };
-  state.loras.push(entry);
-  return entry;
 }
 
 /**
@@ -2571,6 +2586,54 @@ export function activeGlobalLoras(timeline) {
 
 export function removeLora(state, name) {
   state.loras = state.loras.filter((entry) => entry.name !== name);
+}
+
+/**
+ * Out of the run without leaving the stack: the chip's mute.
+ *
+ * `enabled: false` is read everywhere a LoRA is counted — `activeLoras`,
+ * `activeGlobalLoras`, the trigger prefix, `compile.merge_loras` — and it is
+ * the answer to the only question the ✕ used to be asked: is this file the
+ * reason the last render looked like that. Removing it to find out costs the
+ * strength you dialled in, the checkpoint you pinned it to and the trigger
+ * words you edited; muting it costs nothing and is the same click again to
+ * undo. Turbo counts it as switching off, which is what it is — see `turbo.js`.
+ */
+export function toggleLora(state, name) {
+  const entry = findLora(state, name);
+  if (entry) entry.enabled = entry.enabled === false;
+  return entry;
+}
+
+/**
+ * Swap the file under one entry, keeping its slot.
+ *
+ * The slot is what you set up — where it sits in the patch order, which
+ * checkpoint it claims, whether it is muted — and the file is what you are
+ * trying out, so a swap changes the file and what travels with the file: the
+ * new sidecar's trigger words and the weight its author settled on, exactly
+ * what adding it fresh would have given you. Strengths do not carry across
+ * files: 0.6 on a character LoRA and 0.6 on a distill are not the same number.
+ *
+ * Swapping to a file already in the stack is not a swap but a removal — the
+ * same LoRA cannot be patched twice — so the old slot goes and the entry that
+ * was already there is left exactly as it stands.
+ */
+export function replaceLora(state, name, next, triggers = [], strength = null) {
+  const at = state.loras.findIndex((entry) => entry.name === name);
+  if (at < 0 || next === name) return null;
+  const was = state.loras[at];
+  const already = findLora(state, next);
+  if (already) {
+    state.loras.splice(at, 1);
+    return already;
+  }
+  state.loras[at] = {
+    ...newLora(next, triggers, strength),
+    modes: [...loraModes(was)],
+    ...(was.enabled === false ? { enabled: false } : {}),
+  };
+  return state.loras[at];
 }
 
 // ---- assets -----------------------------------------------------------------

@@ -87,6 +87,14 @@ export const css = `
   outline: none;
 }
 .mmc-asset-handle { color: var(--tag, var(--mmc-accent)); font-weight: 500; }
+/* The LoRA chip's name, which is its mute switch. A button that has to keep
+   reading as the label it replaced: no chrome, and the pointer plus the hover
+   is what says it does something. */
+.mmc-asset-name {
+  background: none; border: 0; padding: 0; font: inherit; font-weight: 500;
+  cursor: pointer; line-height: inherit;
+}
+.mmc-asset-name:hover, .mmc-asset-name:focus-visible { color: var(--mmc-text); outline: none; }
 .mmc-asset-role { color: var(--mmc-dim); }
 .mmc-asset-x {
   background: none; border: 0; color: var(--mmc-off); cursor: pointer;
@@ -98,6 +106,15 @@ export const css = `
    out of the run. */
 .mmc-asset.idle { opacity: .5; }
 .mmc-asset.idle .mmc-asset-handle { color: var(--mmc-dim); }
+/* Muted: switched off by hand, and kept. Struck through rather than merely
+   dimmed, because idle already spends dimming on "not on this checkpoint"
+   and the two have to be tellable apart on a chip that can be both. */
+.mmc-asset.off { opacity: .6; }
+.mmc-asset.off .mmc-asset-name { color: var(--mmc-dim); text-decoration: line-through; }
+/* The swap button sits in the ✕'s row and wears its colours; the glyph needs
+   the extra line-height reset a text button does not. */
+.mmc-asset-shuffle { display: flex; align-items: center; padding: 2px; }
+.mmc-asset-shuffle:hover { color: var(--mmc-text); }
 .mmc-lora-block { display: flex; flex-direction: column; gap: 6px; }
 /* What the LoRAs add to the front of the prompt. Not a warning — it is working
    as intended — but it has to be readable, because the prompt box does not

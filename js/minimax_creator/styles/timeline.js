@@ -86,6 +86,10 @@ export const css = `
 .mmc-tl-cast { min-width: 0; }
 
 .mmc-tl-bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+/* The global stack, under the pill that counts it. Empty when there is none —
+   and then it must take no room at all, or the bar and the strip sit a gap
+   apart for a feature nobody used. */
+.mmc-tl-loras:empty { display: none; }
 .mmc-pill.on { border-color: rgba(255,255,255,.22); }
 /* An accelerator that is doing something. Lit rather than merely outlined,
    because a render with one on is not a native render and that is worth seeing

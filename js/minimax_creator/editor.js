@@ -15,7 +15,7 @@ import { el, icon, ICONS, keepScroll, svg, swappable } from "./dom.js";
 import { CastShelf } from "./cast.js";
 import { t } from "./i18n.js";
 import { openPicker } from "./picker.js";
-import { openLoras } from "./loras.js";
+import { openLoras, loraBlock } from "./loras.js";
 import { openSettings } from "./settings.js";
 import { openPresetLibrary } from "./presetlib.js";
 import { keepSubject } from "./presets.js";
@@ -1155,52 +1155,21 @@ export class CreatorEditor {
     this.commit();
   }
 
-  renderLoras() {
-    const target = S.checkpoint(this.state);
-    const chip = (entry) => {
-      const modes = S.loraModes(entry);
-      const idle = !modes.includes(target);
-      return el("div", {
-        class: `mmc-asset${idle ? " idle" : ""}`,
-        title: idle
-          ? t("{name} — set to {modes}, but this graph routes to {target}.", {
-              name: entry.name,
-              modes: modes.map((m) => S.CHECKPOINT_LABEL[m]).join(" + "),
-              target: S.CHECKPOINT_LABEL[target],
-            })
-          : entry.name,
-      }, [
-        el("span", { class: "mmc-asset-thumb" }, [svg(ICONS.effect, 15)]),
-        el("span", { class: "mmc-asset-handle", text: entry.name.split("/").pop().replace(/\.[^.]+$/, "") }),
-        el("button", {
-          class: "mmc-ghost",
-          style: { fontSize: "11px" },
-          title: t("Strength, and which checkpoint this LoRA belongs to"),
-          text: `${Number(entry.strength ?? 1).toFixed(2)} · ${S.claimsBoth(entry) ? t("both") : S.CHECKPOINT_LABEL[modes[0]]}`,
-          onclick: () => this.manageLoras(),
-        }),
-        el("button", {
-          class: "mmc-asset-x", text: "✕", title: t("Remove {name}", { name: entry.name }),
-          onclick: () => { S.removeLora(this.state, entry.name); this.commit(); },
-        }),
-      ]);
-    };
+  /** Try another file in this LoRA's slot — the grid opens as a one-shot
+   *  picker and the pick lands where this entry stood. See `state.replaceLora`. */
+  async swapLora(entry) {
+    await openLoras({ state: this.state, swapping: entry.name, onChange: () => this.commit() });
+    this.commit();
+  }
 
-    const parts = [el("div", { class: "mmc-assets" }, this.state.loras.map(chip))];
-    // Trigger words go in front of the prompt at compile time. Showing the
-    // prefix is the difference between that and the prompt quietly not being
-    // what the box says it is.
-    const triggers = S.promptTriggers(this.state);
-    if (triggers.length) {
-      parts.push(el("div", {
-        class: "mmc-note",
-        title: t("Prefixed to the prompt when this queues. Edit the list on the LoRA cards."),
-      }, [
-        el("span", { class: "mmc-note-key", text: t("triggers") }),
-        el("span", { text: triggers.join(", ") }),
-      ]));
-    }
-    return el("div", { class: "mmc-lora-block" }, parts);
+  renderLoras() {
+    return loraBlock(this.state, {
+      targets: [S.checkpoint(this.state)],
+      onToggle: (entry) => { S.toggleLora(this.state, entry.name); this.commit(); },
+      onManage: () => this.manageLoras(),
+      onSwap: (entry) => this.swapLora(entry),
+      onRemove: (entry) => { S.removeLora(this.state, entry.name); this.commit(); },
+    });
   }
 
   renderAssets() {

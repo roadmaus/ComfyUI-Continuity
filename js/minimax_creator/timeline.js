@@ -13,7 +13,7 @@ import { clearButton } from "./clear.js";
 import { el, icon, mountOverlay, swappable } from "./dom.js";
 import { CreatorEditor, pickTakes, takesHelp } from "./editor.js";
 import { t } from "./i18n.js";
-import { openLoras } from "./loras.js";
+import { openLoras, loraBlock, loraBase } from "./loras.js";
 import { openPicker } from "./picker.js";
 import { openPresetLibrary } from "./presetlib.js";
 import * as P from "./presets.js";
@@ -310,6 +310,7 @@ class Timeline {
     this.poolHost = el("div", { class: "mmc-tl-pool" });
     this.castHost = el("div", { class: "mmc-tl-cast" });
     this.barHost = el("div", { class: "mmc-tl-bar" });
+    this.loraHost = el("div", { class: "mmc-tl-loras" });
     this.stripHost = el("div", { class: "mmc-tl-strip" });
 
     this.modal = el("div", { class: "mmc-modal mmc-tl-modal" }, [
@@ -319,7 +320,7 @@ class Timeline {
       ]),
       el("div", { class: "mmc-tl-body" }, [
         this.promptBox.frame, this.audioHost, this.poolHost, this.castHost,
-        this.barHost, this.stripHost,
+        this.barHost, this.loraHost, this.stripHost,
       ]),
     ]);
 
@@ -356,7 +357,47 @@ class Timeline {
     this.renderPool();
     this.renderCast();
     this.renderBar();
+    this.renderLoras();
     this.renderStrip();
+  }
+
+  /**
+   * The global stack, named, under the pill that counts it.
+   *
+   * The pill has always said "2 LoRAs" and opened the manager, which meant the
+   * only way to see *which* two — or to take one out of the run for a
+   * comparison — was to open a modal over this one and read the lit cards.
+   * The chips are the same ones the Creator face wears, doing the same four
+   * things, so a stack looks and behaves the same wherever the piece is being
+   * written. Nothing is drawn when the stack is empty: the pill is where the
+   * feature is introduced.
+   */
+  renderLoras() {
+    const entries = this.timeline.loras ?? [];
+    this.loraHost.replaceChildren(...(entries.length ? [loraBlock(this.timeline, {
+      targets: S.timelineCheckpoints(this.timeline),
+      // Not the trigger note: a global LoRA's words are prefixed onto each
+      // segment's own prompt, so one line here would have to say "in front of
+      // which" and cannot.
+      triggers: false,
+      // `commit` re-renders, which redraws these chips and the pill counting
+      // them: a mute changes both.
+      onToggle: (entry) => { S.toggleLora(this.timeline, entry.name); this.commit(); },
+      onManage: () => this.openLoras(),
+      onSwap: (entry) => this.swapLora(entry),
+      onRemove: (entry) => { S.removeLora(this.timeline, entry.name); this.commit(); },
+    })] : []));
+  }
+
+  /** Try another file in this LoRA's slot. See `state.replaceLora`. */
+  async swapLora(entry) {
+    await openLoras({
+      state: this.timeline,
+      targets: S.timelineCheckpoints(this.timeline),
+      swapping: entry.name,
+      onChange: () => this.commit(),
+    });
+    this.render();
   }
 
   /**
@@ -2644,7 +2685,7 @@ export class TimelineBody {
     probeAspectSizes(this.timeline, () => this.render());
     const { width, height, ratio, fromInput } = timelineGeometry(this.timeline);
     const prompt = (this.timeline.prompt || "").trim();
-    const globalLoras = S.activeGlobalLoras(this.timeline).length;
+    const globalLoras = S.activeGlobalLoras(this.timeline);
     const audio = [
       ...(this.timeline.soundscape?.trim() ? [t("soundscape")] : []),
       ...(this.timeline.music?.trim() ? [t("music")] : []),
@@ -2710,14 +2751,20 @@ export class TimelineBody {
         ]),
         // Only when there are any: an empty pill would say the timeline has a
         // LoRA feature, which is the modal's job to say, not the node's.
-        ...(globalLoras ? [el("span", {
+        ...(globalLoras.length ? [el("span", {
           class: "mmc-pill mmc-pill-static",
-          title: single
+          title: (single
             ? t("Patched onto the one generation, in front of whatever the shots add.")
-            : t("Patched onto every segment, in front of whatever that segment adds."),
+            : t("Patched onto every segment, in front of whatever that segment adds."))
+            + "\n" + globalLoras.map((entry) => entry.name).join("\n"),
         }, [
           icon("effect", 16),
-          el("span", { text: t(globalLoras === 1 ? "{count} LoRA" : "{count} LoRAs", { count: globalLoras }) }),
+          el("span", { text: t(globalLoras.length === 1 ? "{count} LoRA" : "{count} LoRAs",
+                               { count: globalLoras.length }) }),
+          // Which ones, not just how many. The face has no room for the chips
+          // the strip window draws, and a bare count is a stack you have to
+          // open two things to identify.
+          el("span", { class: "mmc-pill-sub", text: globalLoras.map(loraBase).join(", ") }),
         ])] : []),
         // Only when there are any, like the LoRAs: the modal introduces the
         // feature, the node only reports what this timeline uses.

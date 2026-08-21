@@ -1,5 +1,47 @@
 # Changelog
 
+## 2.13
+
+**A LoRA can be switched off now, instead of only thrown away.** The stack was a
+row of names with one control on it — the ✕ — so the ordinary question "is this
+LoRA the reason it looks like that" cost the strength you dialled in, the
+checkpoint you pinned it to and the trigger words you edited, every time you
+asked it. The name is the switch now: click it and the LoRA is out of the run,
+off the checkpoint, its trigger words off the front of the prompt, and everything
+you set up still sitting on it; click it again and it is back. The flag has been
+in the blob and in `compile.py` since the beginning — nothing in the interface
+ever wrote it. Muting the file the turbo switch owns counts as turbo off, which
+is what it is.
+
+**And swapped for another, in the same slot.** The shuffle button beside the ✕
+opens the LoRA grid as a one-shot picker: one click and the file you pick takes
+that entry's place, keeping its position in the patch order, its checkpoint and
+its muted state, and taking strength and trigger words from its own sidecar —
+0.6 on a character LoRA and 0.6 on a distill are not the same number. Which
+makes trying the other version of a style two clicks rather than a removal, a
+search and a re-dial.
+
+**The timeline had no LoRAs in it at all.** The strip window drew a pill counting
+the stack and nothing naming it, so on a piece with a global LoRA there was no
+mute, no strength and no filename anywhere on screen — the only way to find out
+what was patched onto every segment was to open the manager over it and read the
+lit cards. It draws the same chips the Creator face does, under the bar, and the
+node's own strip face carries the names beside the count. One implementation of
+that chip now, shared by all three faces, rather than two near-copies and a hole.
+
+**Clear takes the cast with it.** It emptied the prompt, the references and the
+shots and left the people behind — a shelf of subjects no `@handle` in the piece
+named any more, each of them still pointing at reference files the same press had
+just deleted, and all of them still riding down onto the blank card the piece
+went back to. The cast is written alongside the prose that cites it and goes with
+it.
+
+## 2.12.2
+
+**Deleting a cast member no longer saves them on the way out.** The sheet flushes
+on close, and the flush ran against the row that had just been deleted — writing
+their body file back and then reading an index row that was gone.
+
 ## 2.12.1
 
 **Pasting a prompt no longer pastes a node.** ComfyUI decides a paste belongs to

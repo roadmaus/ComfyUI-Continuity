@@ -32,11 +32,128 @@ const LOOKAHEAD = 500;
 const FOLDER_KEY = "mmc.loraFolder";
 
 const MAX_STRENGTH = 2;
+
+/** A LoRA's filename as the chips, the swap header and the strip face's pill
+ *  say it: no folder, no extension. What a card shows is the sidecar's title
+ *  where there is one. */
+export const loraBase = (entry) => baseName(entry.name);
+const baseName = (name) => name.split("/").pop().replace(/\.[^.]+$/, "");
+
 const MODE_CHOICES = [
   ["fl2va", "FL2VA", "Only when generating from text or start/end frames."],
   ["ref2va", "Ref2VA", "Only when @ references are attached."],
   ["both", "Both", "Patch whichever checkpoint is routed."],
 ];
+
+/**
+ * The stack, as every face that has one draws it.
+ *
+ * Three faces hold LoRAs — the Creator's, the PreStage's and the timeline's —
+ * and they drew (or, in the timeline's case, did not draw) their own chips.
+ * That is fine for a row of one label and a ✕ and stops being fine the moment
+ * the chip carries decisions: a mute that means one thing on the Creator and
+ * another on the PreStage is not a mute, and a stack the timeline shows only as
+ * "2 LoRAs" is a stack you cannot mute, swap or read the strength of at all.
+ *
+ * So the chip lives here, beside the manager it opens, and the faces pass what
+ * differs: which checkpoints are in play (none, for the PreStage's single-DiT
+ * models) and the four callbacks that commit.
+ *
+ * @param {object} state              anything with a `loras` array
+ * @param {string[]|null} spec.targets the checkpoints this graph routes to, for
+ *                                     the idle mark; null where a LoRA cannot
+ *                                     claim the wrong one
+ * @param {boolean} [spec.triggers]   draw the trigger-word prefix note. Off for
+ *                                     the timeline, where the prefix is
+ *                                     composed per segment and one line under
+ *                                     the strip would be a guess at which.
+ */
+export function loraBlock(state, spec) {
+  const parts = [el("div", { class: "mmc-assets" },
+                    (state.loras ?? []).map((entry) => loraChip(entry, spec)))];
+  // Trigger words go in front of the prompt at compile time. Showing the
+  // prefix is the difference between that and the prompt quietly not being
+  // what the box says it is.
+  const triggers = spec.triggers === false ? [] : S.promptTriggers(state);
+  if (triggers.length) {
+    parts.push(el("div", {
+      class: "mmc-note",
+      title: t("Prefixed to the prompt when this queues. Edit the list on the LoRA cards."),
+    }, [
+      el("span", { class: "mmc-note-key", text: t("triggers") }),
+      el("span", { text: triggers.join(", ") }),
+    ]));
+  }
+  return el("div", { class: "mmc-lora-block" }, parts);
+}
+
+/** One entry: the mute, the weight, the swap and the ✕. */
+function loraChip(entry, { targets = null, onToggle, onManage, onSwap, onRemove }) {
+  const modes = S.loraModes(entry);
+  // Set to a checkpoint this graph does not route to. Still in the stack —
+  // dropping it on a route change would throw the setting away — but out of
+  // the run, and said so on the chip rather than only in the manager.
+  const idle = targets ? !modes.some((mode) => targets.includes(mode)) : false;
+  return el("div", {
+    class: `mmc-asset${idle ? " idle" : ""}${entry.enabled === false ? " off" : ""}`,
+    title: idle
+      ? t("{name} — set to {modes}, but this graph routes to {target}.", {
+          name: entry.name,
+          modes: modes.map((mode) => S.CHECKPOINT_LABEL[mode]).join(" + "),
+          target: targets.map((mode) => S.CHECKPOINT_LABEL[mode]).join(" + "),
+        })
+      : entry.name,
+  }, [
+    el("span", { class: "mmc-asset-thumb" }, [svg(ICONS.effect, 15)]),
+    // The name is the mute. Whether a LoRA is the reason the last render looked
+    // like that is a question you ask a dozen times an hour, and the only
+    // control that used to answer it was the ✕ — which takes the strength, the
+    // checkpoint and the trigger words with it.
+    loraName(entry, () => onToggle(entry)),
+    el("button", {
+      class: "mmc-ghost",
+      style: { fontSize: "11px" },
+      title: targets
+        ? t("Strength, and which checkpoint this LoRA belongs to")
+        : t("Strength — edit on the LoRA card"),
+      text: targets
+        ? `${Number(entry.strength ?? 1).toFixed(2)} · ${S.claimsBoth(entry) ? t("both") : S.CHECKPOINT_LABEL[modes[0]]}`
+        : Number(entry.strength ?? 1).toFixed(2),
+      onclick: () => onManage(entry),
+    }),
+    swapLoraButton(entry, () => onSwap(entry)),
+    el("button", {
+      class: "mmc-asset-x", text: "✕", title: t("Remove {name}", { name: entry.name }),
+      onclick: () => onRemove(entry),
+    }),
+  ]);
+}
+
+/** The name, which is the mute switch: click to take this LoRA out of the run
+ *  and click again to bring it back, with everything you set up still on it. */
+function loraName(entry, onToggle) {
+  const off = entry.enabled === false;
+  return el("button", {
+    class: "mmc-asset-handle mmc-asset-name",
+    "aria-pressed": off,
+    title: off
+      ? t("{name} is muted — out of the run, and kept exactly as you set it up. Click to bring it back.",
+          { name: baseName(entry.name) })
+      : t("{name} — click to mute it: out of the run, but its strength, checkpoint and triggers stay.",
+          { name: baseName(entry.name) }),
+    text: baseName(entry.name),
+    onclick: onToggle,
+  });
+}
+
+/** Try a different file in this slot. */
+function swapLoraButton(entry, onclick) {
+  return el("button", {
+    class: "mmc-asset-x mmc-asset-shuffle",
+    title: t("Swap {name} for another LoRA, in the same slot.", { name: baseName(entry.name) }),
+    onclick,
+  }, [svg(ICONS.shuffle, 13)]);
+}
 
 /**
  * @param {object} options
@@ -47,6 +164,9 @@ const MODE_CHOICES = [
  *                                     routes to; a timeline passes the set its
  *                                     segments route to, which can be both.
  * @param {() => void} options.onChange called after every edit; reserialises
+ * @param {string} [options.swapping]  the name of an entry to replace: the grid
+ *                                     becomes a one-shot picker, and the card
+ *                                     you click takes that entry's slot.
  */
 export function openLoras(options) {
   return new Promise((resolve) => {
@@ -58,9 +178,14 @@ class LoraManager {
   /** `checkpointModes: false` drops the FL2VA/Ref2VA segment and the idle
    *  marks — the PreStage's image models have one DiT each, so "which
    *  checkpoint does this LoRA claim" is not a question there. */
-  constructor({ state, onChange, targets, checkpointModes = true }, resolve) {
+  constructor({ state, onChange, targets, checkpointModes = true, swapping = null }, resolve) {
     this.state = state;
     this.checkpointModes = checkpointModes;
+    // Swapping is the same grid asked a different question — "which one
+    // instead" rather than "which ones" — so it is a flag on the manager
+    // rather than a second browser that would need its own folder memory,
+    // chunking, previews and sidecar reading.
+    this.swapping = swapping;
     this.targets = targets ?? (checkpointModes ? [S.checkpoint(state)] : [...S.CHECKPOINTS]);
     this.onChange = onChange;
     this.resolve = resolve;
@@ -96,12 +221,22 @@ class LoraManager {
     });
     this.foot = el("div", { class: "mmc-modal-foot" }, [
       this.slots = el("span", { class: "mmc-slots" }),
-      el("button", { class: "mmc-add", text: t("Done"), onclick: () => this.close() }),
+      el("button", {
+        class: "mmc-add",
+        // Nothing has changed yet in a swap, so the way out of one is Cancel.
+        text: this.swapping ? t("Cancel") : t("Done"),
+        onclick: () => this.close(),
+      }),
     ]);
 
     this.modal = el("div", { class: "mmc-modal" }, [
       el("div", { class: "mmc-modal-head" }, [
-        el("button", { class: "mmc-tab", "aria-selected": true, text: t("LoRAs") }),
+        el("button", {
+          class: "mmc-tab", "aria-selected": true,
+          text: this.swapping
+            ? t("Replace {name}", { name: baseName(this.swapping) })
+            : t("LoRAs"),
+        }),
         el("button", { class: "mmc-close", text: "✕", onclick: () => this.close() }),
       ]),
       el("div", { class: "mmc-modal-bar" }, [
@@ -187,6 +322,7 @@ class LoraManager {
   }
 
   toggle(row) {
+    if (this.swapping) return this.swapTo(row);
     if (S.findLora(this.state, row.name)) S.removeLora(this.state, row.name);
     // Both of these are the sidecar's opinion and both stay editable: the
     // triggers become chips that can be switched off, the strength a slider
@@ -195,6 +331,15 @@ class LoraManager {
     else S.addLora(this.state, row.name, row.trained_words || [], row.strength);
     this.refreshCard(row);
     this.changed();
+  }
+
+  /** Take the slot of the entry this manager was opened to replace, and leave:
+   *  one pick is the whole errand, and staying open would ask a question — which
+   *  of these two is the swap — that the grid can no longer answer. */
+  swapTo(row) {
+    S.replaceLora(this.state, this.swapping, row.name, row.trained_words || [], row.strength);
+    this.changed();
+    this.close();
   }
 
   /** Neither of these re-renders the grid: the trigger row owns a text input,
@@ -416,13 +561,18 @@ class LoraManager {
       class: "mmc-lora-art",
       role: "button",
       tabindex: "0",
-      title: t("{name} — double-click for details", { name: row.name }),
+      title: this.swapping
+        ? t("Use {name} instead", { name: row.name })
+        : t("{name} — double-click for details", { name: row.name }),
       // Double-clicks are detected by hand, same as the picker's cells: the
       // first click's toggle rebuilds the card, so the second click lands on a
       // replacement element and no browser synthesises a dblclick across two
       // nodes. The second click re-toggles first, so viewing the details
       // leaves the selection exactly where it stood.
       onclick: () => {
+        // One click is the whole gesture while swapping, and it closes the
+        // grid — there is no second one for a details view to arrive on.
+        if (this.swapping) return this.toggle(row);
         const now = Date.now();
         const double = this.lastClick
           && this.lastClick.name === row.name && now - this.lastClick.at < 400;
@@ -479,7 +629,9 @@ class LoraManager {
         text: t("no metadata"),
       }));
     }
-    if (entry) body.appendChild(this.controls(entry, row));
+    // Not while swapping: the controls edit an entry, and every card in that
+    // grid is a candidate rather than something in the stack.
+    if (entry && !this.swapping) body.appendChild(this.controls(entry, row));
     card.appendChild(body);
     return card;
   }
@@ -544,6 +696,17 @@ class LoraManager {
     // A hand-edited creator_data can carry anything; the slider needs a number.
     if (!Number.isFinite(entry.strength)) entry.strength = S.DEFAULT_STRENGTH;
     const readout = el("span", { class: "mmc-lora-strength", text: entry.strength.toFixed(2) });
+    // The same mute the chip on the node face carries, so a stack switched off
+    // there does not read as fully in here. See `state.toggleLora`.
+    const mute = el("button", {
+      class: "mmc-lora-mute",
+      "aria-pressed": entry.enabled === false,
+      title: entry.enabled === false
+        ? t("Muted — kept with its strength, its checkpoint and its triggers, and out of the run. Click to bring it back.")
+        : t("Mute: out of the run, but kept exactly as you set it up."),
+      text: entry.enabled === false ? t("muted") : t("mute"),
+      onclick: () => { S.toggleLora(this.state, entry.name); this.refreshCard(row); this.changed(); },
+    });
     const slider = el("input", {
       type: "range", min: -1, max: MAX_STRENGTH, step: 0.05, value: entry.strength,
       // Dragging must not re-render the card out from under the pointer, so the
@@ -567,7 +730,8 @@ class LoraManager {
       })));
 
     const rows = [
-      el("div", { class: "mmc-lora-row" }, [el("span", { class: "mmc-lora-label", text: t("Strength") }), readout]),
+      el("div", { class: "mmc-lora-row" }, [
+        el("span", { class: "mmc-lora-label", text: t("Strength") }), mute, readout]),
       slider,
       ...(this.checkpointModes ? [modes] : []),
       this.triggerBox(entry, row),
@@ -594,8 +758,15 @@ class LoraManager {
   }
 
   renderFoot() {
+    if (this.swapping) {
+      this.slots.textContent = t("Pick what takes {name}'s place — its strength, checkpoint and "
+                               + "triggers come from the file you pick.", { name: baseName(this.swapping) });
+      return;
+    }
     const entries = this.state.loras;
-    const active = entries.filter((entry) => this.applies(entry)).length;
+    // Muted counts with idle rather than with active: both mean the same thing
+    // to the next queue, which is that this file is not in it.
+    const active = entries.filter((entry) => entry.enabled !== false && this.applies(entry)).length;
     const extra = entries.length > active
       ? " " + t("({count} idle)", { count: entries.length - active })
       : "";

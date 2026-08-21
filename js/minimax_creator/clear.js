@@ -33,8 +33,8 @@ export function clearButton({ written, run }) {
     class: "mmc-tool mmc-tool-danger",
     disabled: written ? undefined : true,
     title: written
-      ? t("Empty the prompts, the references and the shots — everything you wrote for "
-        + "this scene. The weights, the LoRAs, the canvas and the sampler stay as they are.")
+      ? t("Empty the prompts, the cast, the references and the shots — everything you wrote "
+        + "for this scene. The weights, the LoRAs, the canvas and the sampler stay as they are.")
       : t("Nothing written yet."),
     onclick: () => {
       if (armed) { armed(); run(); return; }

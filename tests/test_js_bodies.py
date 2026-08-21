@@ -449,6 +449,10 @@ try {
     aspect: "9:16",
     short_edge: 512,
     assets: [{ handle: "ref-1", kind: "image", role: "reference", filename: "sheet.png" }],
+    // Somebody cast into the piece. Written here with the prompt that cites
+    // them, and so gone with it — a subject left behind is a shelf of people
+    // the next scene never asked for, still riding down onto every card.
+    subjects: [{ handle: "anna", from: ["ref-1"], takes: "person" }],
     loras: [{ name: "style.safetensors", strength: 0.8 }],
     models: { fl2va: "fl2va.safetensors", clip: "clip.safetensors", vae: "vae.safetensors" },
     turbo: { lora: "turbo.safetensors" },
@@ -480,11 +484,16 @@ try {
     soundscape: after.soundscape,
     music: after.music,
     assets: after.assets.length,
+    cast: after.subjects.length,
     cards: after.segments.length,
     cardPrompt: after.segments[0].prompt,
   };
   // ...and in the widget, which is what actually queues.
   out.clear.blob = JSON.parse(strip.mmcBody.read());
+  // Nobody rides down onto the blank card either — `syncCanvas` mirrors the
+  // cast onto every segment, and a stale copy there is what the prompt box's
+  // chips and `mode()` would still be reading.
+  out.clear.cardCast = (after.segments[0].cast ?? []).length;
   // Emptied, the tool has nothing left to do and says so rather than arming
   // over an empty piece.
   out.clear.disabledAfter = tool()?.attrs?.disabled !== undefined;
@@ -501,6 +510,91 @@ try {
   out.clear.loneKept = lone.mmcBody.timeline.models.fl2va;
 } catch (error) {
   out.errors.push(`clear: ${error.message}`);
+}
+
+// LoRAs: muted rather than removed, swapped in place, and named wherever a
+// piece is written.
+//
+// The stack used to be a row of labels with one control on it — the ✕ — so the
+// ordinary question "is this LoRA the reason it looks like that" cost the
+// strength, the checkpoint and the trigger words to ask. On the strip it cost
+// more than that: the timeline drew a pill counting the stack and nothing that
+// named it, so the answer was not reachable at all.
+try {
+  const all = (root, cls) => {
+    const hits = [];
+    const walk = (n) => {
+      if (String(n.className ?? "").split(" ").includes(cls)) hits.push(n);
+      (n.children ?? []).forEach(walk);
+    };
+    walk(root);
+    return hits;
+  };
+  const click = (node) => node?.listeners?.click?.[0]?.();
+  const stack = [{ name: "styles/glow.safetensors", strength: 0.8, triggers: ["glow"] },
+                 { name: "turbo.safetensors", strength: 1 }];
+
+  // The shot face, where the stack belongs to the shot.
+  // Nothing written on the piece: a piece prompt, a piece reference or a piece
+  // LoRA is what makes the node wear the strip instead. See `loneShot`.
+  const creator = fakeNode("MiniMaxH3Creator", "creator_data", JSON.stringify({
+    version: 2, prompt: "", assets: [],
+    segments: [{ prompt: "a lighthouse", assets: [], loras: stack, duration_s: 5 }],
+  }));
+  await ext.nodeCreated(creator);
+  const names = () => all(creator.mmcBody.root, "mmc-asset-name");
+  const entry = () => creator.mmcBody.timeline.segments[0].loras[0];
+  out.loras = { named: names().map((n) => n.text.trim()) };
+  // The name is the mute, and it is the same click back.
+  click(names()[0]);
+  out.loras.muted = entry().enabled;
+  out.loras.stillThere = {
+    count: creator.mmcBody.timeline.segments[0].loras.length,
+    strength: entry().strength,
+    triggers: (entry().triggers ?? []).length,
+  };
+  // ...and the run is told: a muted LoRA is off the checkpoint and its trigger
+  // words are off the front of the prompt.
+  out.loras.active = S.activeLoras(creator.mmcBody.timeline.segments[0]).length;
+  out.loras.triggers = S.promptTriggers(creator.mmcBody.timeline.segments[0]).length;
+  out.loras.serialized = (JSON.parse(creator.mmcBody.read()).segments[0].loras ?? [])[0]?.enabled;
+  click(names()[0]);
+  out.loras.backOn = entry().enabled;
+
+  // The strip, where it belongs to the piece and was drawn nowhere.
+  const strip = fakeNode("MiniMaxH3Creator", "creator_data", JSON.stringify({
+    version: 2, prompt: "the piece", assets: [], loras: stack,
+    segments: [{ prompt: "shot 1", assets: [], loras: [], duration_s: 5 },
+               { prompt: "shot 2", assets: [], loras: [], duration_s: 5 }],
+  }));
+  await ext.nodeCreated(strip);
+  const { openTimeline: openStrip } = await import("./js/minimax_creator/timeline.js");
+  openStrip({ timeline: strip.mmcBody.timeline, onCommit: () => strip.mmcBody.commit() });
+  await new Promise((done) => setTimeout(done, 0));
+  const sheet = document.body.children.at(-1);
+  out.loras.onStrip = all(sheet, "mmc-asset-name").map((n) => n.text.trim());
+  click(all(sheet, "mmc-asset-name")[1]);
+  out.loras.stripMuted = strip.mmcBody.timeline.loras[1].enabled;
+  // The pill over the chips counts what is in the run, so it moves with them.
+  out.loras.stripActive = S.activeGlobalLoras(strip.mmcBody.timeline).length;
+
+  // The swap: a different file in the same slot, keeping what the slot is for.
+  const piece = { loras: [{ name: "a.safetensors", strength: 0.8, modes: ["fl2va"], enabled: false },
+                          { name: "b.safetensors", strength: 1, modes: ["fl2va", "ref2va"] }] };
+  S.replaceLora(piece, "a.safetensors", "c.safetensors", ["trig"], 0.55);
+  out.loras.swapped = {
+    order: piece.loras.map((l) => l.name),
+    strength: piece.loras[0].strength,
+    modes: piece.loras[0].modes,
+    muted: piece.loras[0].enabled,
+    triggers: piece.loras[0].triggers,
+  };
+  // Onto a file already in the stack: the same LoRA cannot be patched twice, so
+  // the old slot goes rather than the stack holding it under two names.
+  S.replaceLora(piece, "c.safetensors", "b.safetensors");
+  out.loras.swappedOntoTwin = piece.loras.map((l) => l.name);
+} catch (error) {
+  out.errors.push(`loras: ${error.message}`);
 }
 
 // Two controls that write through somebody else's callback, and were dead.
@@ -1458,14 +1552,40 @@ check("clearing keeps the machine",
        "aspect": "9:16", "short_edge": 512})
 check("...and empties the piece",
       clear.get("emptied"),
-      {"prompt": "", "soundscape": "", "music": "", "assets": 0,
+      {"prompt": "", "soundscape": "", "music": "", "assets": 0, "cast": 0,
        "cards": 1, "cardPrompt": ""})
+check("...leaving nobody mirrored onto the blank card", clear.get("cardCast"), 0)
 check("...in the blob the node queues", (clear.get("blob") or {}).get("prompt"), "")
+check("...which casts nobody", (clear.get("blob") or {}).get("subjects"), None)
 check("...which keeps its weights", ((clear.get("blob") or {}).get("models") or {}).get("fl2va"),
       "fl2va.safetensors")
 check("an emptied piece has nothing left to clear", clear.get("disabledAfter"), True)
 check("clearing from the lone shot empties it too", clear.get("loneEmptied"), "")
 check("...and keeps the weights there as well", clear.get("loneKept"), "fl2va.safetensors")
+
+# ---- the LoRA stack ---------------------------------------------------------
+#
+# One chip, four things to do to a LoRA: mute it, re-weight it, swap the file
+# under it, drop it. The mute is the one this section exists for — it is what
+# makes "is this LoRA the problem" a question you can ask twice.
+loras = report.get("loras", {})
+check("the shot face names its LoRAs", loras.get("named"), ["glow", "turbo"])
+check("clicking a name mutes it", loras.get("muted"), False)
+check("...and keeps everything set up on it",
+      loras.get("stillThere"), {"count": 2, "strength": 0.8, "triggers": 1})
+check("...takes it off the checkpoint", loras.get("active"), 1)
+check("...and its trigger words off the prompt", loras.get("triggers"), 0)
+check("...in the blob the node queues", loras.get("serialized"), False)
+check("...and the same click brings it back", loras.get("backOn"), True)
+check("the strip names the piece's stack too", loras.get("onStrip"), ["glow", "turbo"])
+check("...and mutes from there", loras.get("stripMuted"), False)
+check("...which is one fewer in the run", loras.get("stripActive"), 1)
+check("a swap keeps the slot and takes the new file's setup",
+      loras.get("swapped"),
+      {"order": ["c.safetensors", "b.safetensors"], "strength": 0.55,
+       "modes": ["fl2va"], "muted": False, "triggers": ["trig"]})
+check("...and swapping onto one already in the stack is a removal",
+      loras.get("swappedOntoTwin"), ["b.safetensors"])
 
 # Controls that write through an owner's callback still move what they draw.
 # ---- the face rule ----------------------------------------------------------

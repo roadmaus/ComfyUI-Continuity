@@ -60,6 +60,18 @@ export const css = `
 .mmc-lora-row { display: flex; justify-content: space-between; align-items: center; font-size: 11px; }
 .mmc-lora-label { color: var(--mmc-dim); }
 .mmc-lora-strength { color: #ededed; font-variant-numeric: tabular-nums; }
+/* The card's mute, in the strength row: label left, this and the readout right.
+   Pressed is lit the way a chosen trigger chip is — same "on" in the same
+   panel — except that what is lit here is the LoRA being *off*. */
+.mmc-lora-mute {
+  margin-left: auto; margin-right: 8px; padding: 1px 7px; border-radius: 8px;
+  background: none; border: 1px solid var(--mmc-line); color: var(--mmc-off);
+  font-family: inherit; font-size: 10px; cursor: pointer;
+}
+.mmc-lora-mute:hover { color: #ededed; }
+.mmc-lora-mute[aria-pressed="true"] {
+  background: rgba(224,116,60,.16); border-color: transparent; color: #e0743c;
+}
 .mmc-lora-ctl input[type="range"] { width: 100%; accent-color: var(--mmc-blue); margin: 0; }
 .mmc-lora-idle { font-size: 10px; color: #e0743c; }
 .mmc-seg {

@@ -126,6 +126,11 @@ export const ICONS = {
   // rather than as a link, which `link` already spends itself on.
   face: `<circle cx="12" cy="8.5" r="3.6"/><path d="M4.8 20a7.2 7.2 0 0114.4 0"/>`,
   swap: `<path d="M4 8h13l-3.5-3.5"/><path d="M20 16H7l3.5 3.5"/>`,
+  // Lucide's `shuffle`, verbatim — the same deal `brain`, `gear` and `eraser`
+  // get. One file leaving as another arrives, which is what swapping the file
+  // under a LoRA chip is. `swap` above is the cast's and reads as two things
+  // trading places; this one is "try a different one in this slot".
+  shuffle: `<path d="m18 14 4 4-4 4"/><path d="m18 2 4 4-4 4"/><path d="M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-8.6a4 4 0 0 1 3.3-1.7H22"/><path d="M2 6h1.972a4 4 0 0 1 3.6 2.2"/><path d="M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45"/>`,
 };
 
 export function icon(name, size = 22) {
