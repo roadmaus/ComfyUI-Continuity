@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.12.1
+
+**Pasting a prompt no longer pastes a node.** ComfyUI decides a paste belongs to
+the graph by asking whether it landed on an `<input>` or a `<textarea>`. The
+prompt box is neither — it is a contenteditable, because the `@` references are
+atomic chips a textarea cannot hold — so every Ctrl+V at a caret in there also
+dealt out whatever was last copied on the canvas. That clipboard lives in
+localStorage and outlasts restarts, workflows and subgraphs, so what landed was
+often a node copied weeks ago, once per paste, stacked on the Creator and only
+found on the way out of the editor. The box now keeps its own paste to itself,
+and its copy and cut with it. One consequence worth knowing: pasting an image
+while the caret is in a prompt box no longer builds a LoadImage node, because
+that went the same way. Thanks to @MrUSBEN for the report (#22).
+
 ## 2.12
 
 **Every LoRA now loads the way a quantized H3 needs loading.** The stock path is

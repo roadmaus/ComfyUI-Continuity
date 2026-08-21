@@ -126,8 +126,12 @@ export class PromptBox {
     this.root.addEventListener("drop", (event) => this.onPaste(event));
     this.root.addEventListener("blur", () => setTimeout(() => this.closeMenu(), 120));
 
-    // The graph canvas swallows keys and drags otherwise.
-    for (const name of ["keyup", "pointerdown", "pointerup"]) {
+    // The graph canvas swallows keys and drags otherwise, and answers a copy
+    // or a cut in here by taking one of the graph — the same document listener
+    // and the same blind spot as the paste one; see `onPaste`. Today a text
+    // selection talks it out of that, and a selection is what a copy is, but
+    // that is their guard holding rather than ours.
+    for (const name of ["keyup", "pointerdown", "pointerup", "copy", "cut"]) {
       this.root.addEventListener(name, (event) => event.stopPropagation());
     }
     // The wheel is not just swallowed: a box that has overflowed has to scroll
@@ -362,6 +366,17 @@ export class PromptBox {
    *  and `clipboardData` for the other. */
   onPaste(event) {
     event.preventDefault();
+    // And kept off the canvas. ComfyUI pastes nodes from a `document` listener
+    // that decides the event is "on the graph" by asking whether the target is
+    // an <input> or a <textarea>; a contenteditable is neither, and preventing
+    // the default is not enough either — unlike its drop handler, the paste one
+    // never looks at `defaultPrevented`. So every Ctrl+V at a collapsed caret
+    // in here also dealt out whatever is in `litegrapheditor_clipboard`, which
+    // is localStorage and remembers the last copied nodes across restarts and
+    // workflows forever. That is the pile of duplicates found stacked on the
+    // node after a session of writing prompts. Stopping here is enough: their
+    // listener is on `document` and does not capture.
+    event.stopPropagation();
     const source = event.clipboardData ?? event.dataTransfer;
     const text = source?.getData("text/plain") ?? "";
     // A drop lands where it was dropped, not where the caret was: the selection
