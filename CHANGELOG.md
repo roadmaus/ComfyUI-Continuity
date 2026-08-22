@@ -1,40 +1,28 @@
 # Changelog
 
-## 2.22
+## 2.23
 
-**A reference is muted now, not binned, when its last mention goes.** Deleting
-`@img-1` out of the sentence is how you take a picture out of a shot, and it was
-taking the file, the handle, the narrowing and the trim with it — so a mention
-deleted while trying a sentence without it cost the whole setup, and the way back
-was the picker and every one of those answers again. The reference stays on the
-row, dimmed and struck through in the sentence, and does not reach the model.
-Bringing it back is one press on the same switch a LoRA has carried all along:
-out of the run, kept exactly as you attached it. The glyph beside the ✕ works it
-by hand, on any reference, whether or not the prompt ever named it.
+**A reference the sentence stops naming is muted, not binned.** Deleting `@img-1`
+used to take the file, the handle, the narrowing and the trim with it. It stays
+on the row now, dimmed and out of the run — the same switch a LoRA carries, with
+a glyph beside the ✕ to work it by hand on any reference.
 
-**And the reference row is the same row in both fullscreen views.** The simple
-view hid the cast's own pictures, on the grounds that a chip for @vera's photo
-says what the @vera in the sentence already says. That held until a file could be
-muted: a muted picture is a thing you go looking for, and a row that draws only
-some of what is attached is not an answer you can trust.
+**The reference row is the same row in both fullscreen views.** The simple view
+hid the cast's own pictures; a row that draws only some of what is attached is
+not an answer you can trust once a file can be sitting there muted.
 
 **Pressing a name in the prompt opens the cast drawer again after the card is
-rebuilt.** Which view a card is drawn in was remembered on the editor, and the
-face's editor is rebuilt whenever the segment under it changes — a preset
-carrying a strip, Clear, a workflow re-read. The replacement went back to
-answering from its node id, so in the simple fullscreen view a press on a name
-put up the *resident* drawer, which that view's stylesheet hides: the press
-looked dead, and the only cure was a round trip through the full view. The body
-remembers it now, and stamps whichever editor it builds next.
+rebuilt.** Which view a card is drawn in was remembered on the editor, which is
+rebuilt whenever the segment under it changes — so in the simple view the press
+put up a drawer that view hides, and only a round trip through the full view
+cured it. The body remembers it now.
 
-**The next shot is a pill in the pill row.** Growing a piece a second shot used
-to be a dashed perforation rail across the whole body — a horizon line spent on
-one quiet button — and the fullscreen editor's simple view answered that by
-hiding it outright, which left the face people write single shots on with no way
-to add a second one short of opening the timeline and appending there. It is a
-`+ Add shot` pill now, in the tail of the pill row beside the route badge and
-Timeline: the one part of the panel that is about the piece rather than about
-this shot. Same control on both faces, so there is nothing left to hide.
+**The next shot is a pill in the pill row.** Growing a piece a second shot was a
+dashed rule across the whole body, which the simple view hid outright — leaving
+the face people write single shots on with no way to add one. It is `+ Add shot`
+in the tail of the row, on both faces.
+
+## 2.22
 
 **Duplicating a card no longer leaves a second copy of a cast member's picture
 behind.** A cast member's files live on the card while a piece is one shot, and
