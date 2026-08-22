@@ -11,7 +11,7 @@
 // contenteditable destroys the caret, and attaching an asset from the @ menu
 // commits *while the user is typing in it*.
 
-import { el, icon, ICONS, keepScroll, svg, swappable } from "./dom.js";
+import { el, icon, ICONS, dismissable, keepScroll, placeNear, svg, swappable } from "./dom.js";
 import { CastShelf } from "./cast.js";
 import { t } from "./i18n.js";
 import { openPicker } from "./picker.js";
@@ -78,6 +78,27 @@ export const takesHelp = (asset) =>
  *  already drops any handle the segment defines itself, which is that
  *  function's "the more specific entry wins" rule. */
 const mergedRefs = (state) => [...S.citedPool(state), ...(state.assets ?? [])];
+
+/**
+ * What somebody has set on a reference, in the fewest words that still say it.
+ *
+ * Only the answers that were chosen. Every one of these has a default that is
+ * the whole file, whole clip, sound on, canvas-matched — and a chip reciting
+ * four of those said nothing four times. Empty for an ordinary file, which is
+ * most of them.
+ */
+export function referenceSummary(asset) {
+  const said = [];
+  if (S.takeable(asset) && S.takes(asset) !== "full") said.push(t(S.takes(asset)));
+  if (asset.kind !== "image" && asset.trim) said.push(trimLabel(asset));
+  if (asset.kind === "video" && (asset.track ?? S.DEFAULT_TRACK) !== S.DEFAULT_TRACK) {
+    said.push(t(TRACK_CHIP[asset.track]?.text ?? ""));
+  }
+  if (S.sizeable(asset) && S.refSize(asset) !== S.DEFAULT_REF_SIZE[asset.kind]) {
+    said.push(t(S.refSize(asset)));
+  }
+  return said.filter(Boolean).join(" · ");
+}
 
 /** The narrowing menu, shared by the chip on a card and the one in the
  *  timeline's pool. Labels are translated, so the pick maps back by key. */
@@ -188,7 +209,7 @@ export class CreatorEditor {
                 routeOf = null, setRoute = null, preStage = null, pieceView = null,
                 durationPill = true, extraPills = null, extraTools = null,
                 settingsTool = true, stage = null, editorTitle = null,
-                piece = null, afterPanel = null, presetTarget = null,
+                piece = null, castPiece = null, afterPanel = null, presetTarget = null,
                 clearTool = null, seedTarget = null, scopesSent = null,
                 castFromLibrary = null, fullscreen = null }) {
     // The one sampler setting a card may answer for itself — see
@@ -201,6 +222,13 @@ export class CreatorEditor {
     // `castFromLibrary` hook.
     this.castFromLibrary = castFromLibrary;
     this.piece = piece ?? state;
+    // Where the cast lives, which is not always where the piece does. A card of
+    // a strip is one shot of a piece whose subjects are kept a level up, and its
+    // `piece` is the card itself — so without this, clicking somebody's name in
+    // a card looked them up in an empty list and deleting their chip took them
+    // out of nothing. Defaults to the piece, which is the answer on every body
+    // that owns its own cast.
+    this.castPiece = castPiece ?? this.piece;
     this.afterPanel = afterPanel;
     // What the window this body opens into is called. A node face is a preview
     // of one generation, and the window is that generation — so the owner names
@@ -268,10 +296,21 @@ export class CreatorEditor {
           }
         : null,
       onOverflow: (over) => this.onPromptOverflow(over),
-      // Only where there is a shelf for it to summon: a card's editor is one
-      // shot of a piece whose cast is owned a level up, and a chip that changed
-      // the cursor and then did nothing is worse than one that never offered.
-      onCastChip: this.nodeId ? (handle) => this.openCastMember(handle) : null,
+      // The `/` menu's two doors. Both are rail tools already — this only puts
+      // them on the keyboard, in the box where the sentence that needs them is
+      // being written. Omitted where the tool itself is: a body with no preset
+      // target has no library to open.
+      openLibrary: this.presetTarget
+        ? (scope) => openPresetLibrary({ target: this.presetTarget(), scope })
+            .then(() => this.render())
+        : null,
+      onBrowse: () => this.addReferences("image"),
+      // A name is a door, on every body that draws one. This used to be offered
+      // only on a node face, on the grounds that a card of a strip has its cast
+      // a level up — but the cast is reachable from here now (`castPiece`), and
+      // a chip you could see and not open was the same dead end from the other
+      // side.
+      onCastChip: (handle) => this.openCastMember(handle),
       onUncited: (handles) => this.dropCited(handles),
     });
     // Leaving the box arms the escalation again — see `onPromptOverflow`.
@@ -656,7 +695,7 @@ export class CreatorEditor {
     // are still findable when the files are swept below.
     const orphans = [];
     for (const handle of handles) {
-      const cast = this.piece.subjects ?? [];
+      const cast = this.castPiece.subjects ?? [];
       const subject = cast.find((s) => s.handle === handle);
       if (!subject) continue;
       // Piece-wide: a member deleted from shot 3 is still in the piece while
@@ -665,13 +704,13 @@ export class CreatorEditor {
       // the first test left off.
       const pattern = S.subjectCitationRe([subject]);
       const stillCited = [...this.citingTexts(),
-                          ...(this.piece === this.state ? [] : S.allTexts(this.piece))]
+                          ...(this.castPiece === this.state ? [] : S.allTexts(this.castPiece))]
         .some((text) => String(text ?? "").match(pattern));
       if (stillCited) continue;
       orphans.push(...S.soleClaims(subject, cast));
       // The shelf drops an open card whose member is no longer in the cast on
       // its next render, so there is nothing to tell it.
-      this.piece.subjects = cast.filter((s) => s !== subject);
+      this.castPiece.subjects = cast.filter((s) => s !== subject);
       dropped = true;
     }
 
@@ -681,7 +720,7 @@ export class CreatorEditor {
     // prompt ever writes it.
     const loose = new Set([...handles, ...orphans]);
     const texts = [...this.citingTexts(),
-                   ...(this.piece === this.state ? [] : S.allTexts(this.piece))];
+                   ...(this.castPiece === this.state ? [] : S.allTexts(this.castPiece))];
     const keep = (asset) => asset.role !== "reference" || !loose.has(asset.handle)
                          || S.handleWritten(texts, asset.handle);
     const before = this.state.assets.length;
@@ -693,6 +732,125 @@ export class CreatorEditor {
     // left alone: `refresh` stands down while it holds the caret, which it does,
     // because a keystroke in it is what brought us here.
     if (dropped) this.commit();
+  }
+
+  /**
+   * Everything about one reference, opened from its name.
+   *
+   * The row of chips this replaces had one button per narrowing, sized to fit a
+   * node face, and the simple fullscreen view hid any of them still holding a
+   * default — so on the view meant to become the only one, a picture you had
+   * just attached could not be made a style reference at all. The default is
+   * precisely the state you are trying to leave.
+   *
+   * So the chip says what was *set* and the name opens the rest. One card,
+   * identical on a node face and in either fullscreen view, which is one fewer
+   * thing that has to be true twice.
+   *
+   * No nested popovers: every choice here is a row of options in the card
+   * itself, because a menu opened from a menu is dismissed by the click that
+   * opens it — `dismissable` closes on any pointerdown outside its own element,
+   * and a child popover is outside its parent.
+   */
+  openReferenceSheet(anchor, asset) {
+    const pop = el("div", { class: "mmc-pop mmc-refsheet" });
+
+    // A row of answers, one of them current. Written flat rather than as a menu
+    // because the whole list is four or five words, and because a menu opened
+    // from a menu is dismissed by the click that opens it — `dismissable`
+    // closes on any pointerdown outside its own element, and a child popover
+    // is outside its parent.
+    const choose = (name, help, options, current, pick) => el("div", {
+      class: "mmc-refsheet-row",
+    }, [
+      el("span", { class: "mmc-refsheet-name", title: help, text: name }),
+      el("div", { class: "mmc-refsheet-opts" }, options.map(({ key, label }) => el("button", {
+        class: "mmc-refsheet-opt",
+        "aria-checked": String(key === current),
+        onclick: () => { pick(key); paint(); },
+      }, [el("span", { text: label })]))),
+    ]);
+
+    // The two that open a window of their own close this card first: a popover
+    // left standing under a modal is one the modal's own Escape would have to
+    // know about.
+    const opens = (label, title, run, danger = false) => el("button", {
+      class: `mmc-refsheet-go${danger ? " danger" : ""}`,
+      title, text: label,
+      onclick: () => { close(); run(); },
+    });
+
+    // Rebuilt after every pick rather than patched: a commit redraws the body
+    // and replaces the chip this hangs off, so the marks in here are the only
+    // state left to keep true, and rewriting six buttons is cheaper than
+    // reasoning about which one changed. The card is portalled to <body>, so
+    // the body's redraw does not take it with it; `placeNear` leaves it where
+    // it is once its anchor goes.
+    const paint = () => {
+      const rows = [];
+      if (S.takeable(asset)) {
+        // The one people came here for. "Reads as" rather than "takes": it says
+        // what the model does with the file, which is the question being asked.
+        rows.push(choose(t("reads as"), t(takesHelp(asset)),
+          S.takeOptions(asset).map((key) => ({ key, label: t(key) })),
+          S.takes(asset),
+          (key) => {
+            if (key === "full") delete asset.takes;
+            else asset.takes = key;
+            this.commit();
+          }));
+      }
+      if (asset.kind === "video") {
+        rows.push(choose(t("sound"),
+          t("On by default: this clip's soundtrack is bound as a reference audio, taking an "
+          + "<Audio> slot before the video's own label, and needing the audio VAE connected. "
+          + "Off references the picture silently. Sound only references the soundtrack "
+          + "without the picture."),
+          Object.entries(TRACK_CHIP).map(([key, chip]) => ({ key, label: t(chip.text) })),
+          asset.track ?? S.DEFAULT_TRACK,
+          (key) => this.setTrack(asset, key)));
+      }
+      if (S.sizeable(asset)) {
+        rows.push(choose(t("detail"),
+          asset.kind === "video"
+            ? t("match: scale to the generation's pixel area. max: core's 768 reference canvas — "
+              + "more detail, and much the slower of the two. A video's reference tokens are its "
+              + "whole grid once per latent frame, so at full length one clip is about as long as "
+              + "the target video itself, and all of it rides through every sampling step.")
+            : t("match: scale to the generation's pixel area. max: 2048 short edge — better identity, "
+              + "several times slower, because reference tokens ride through every sampling step."),
+          [{ key: "match", label: t("match") }, { key: "max", label: t("max") }],
+          S.refSize(asset),
+          (key) => { asset.ref_size = key; this.commit(); }));
+      }
+
+      const foot = [];
+      if (asset.kind !== "image") {
+        foot.push(opens(trimLabel(asset), t("Use the whole clip, or only a segment of it"),
+                        () => this.editSegment(asset)));
+      }
+      foot.push(opens(t("Swap file"),
+                      t("Swap the file behind @{handle} — the handle stays, so the prompt still fits.",
+                        { handle: asset.handle }),
+                      () => this.replaceAsset(asset)));
+      foot.push(opens(t("Remove"), t("Remove @{handle}", { handle: asset.handle }),
+                      () => this.remove(asset.handle), true));
+
+      pop.replaceChildren(
+        el("div", { class: "mmc-pop-title mmc-refsheet-head" }, [
+          el("span", { class: `mmc-refsheet-handle mmc-tag-${S.tagIndex(asset.handle)}`,
+                       text: `@${asset.handle}` }),
+          el("span", { class: "mmc-refsheet-file", text: asset.filename }),
+        ]),
+        ...rows,
+        el("div", { class: "mmc-refsheet-foot" }, foot),
+      );
+    };
+
+    paint();
+    document.body.appendChild(pop);
+    placeNear(pop, anchor);
+    const close = dismissable(pop);
   }
 
   /** The segment editor, on an already-attached clip. */
@@ -943,6 +1101,7 @@ export class CreatorEditor {
       onCommit: () => { this.onCommit?.(); this.render(); },
       canvasPills: this.canvasPills,
       piece: this.piece,
+      castPiece: this.castPiece,
       durationPill: this.durationPill,
       extraPills: this.extraPills,
       extraTools: this.extraTools,
@@ -1080,12 +1239,16 @@ export class CreatorEditor {
    * spend on a shelf nobody opened. The rail is what asks.
    */
   renderCastShelf() {
-    if (!this.nodeId) { this.castHost.replaceChildren(); return; }
-    const cast = this.piece.subjects ?? [];
+    // Resident on a node face, which owns the piece's cast and has a rail tool
+    // to ask for it. Everywhere else the shelf is only ever here because a name
+    // was clicked — see `openCastMember` — so it comes with the summons and
+    // goes with it.
+    if (!this.nodeId && !this.castSummoned) { this.castHost.replaceChildren(); return; }
+    const cast = this.castPiece.subjects ?? [];
     if (!cast.length && !this.castOpen) { this.castHost.replaceChildren(); return; }
     this.castShelf ??= new CastShelf({
-      getCast: () => this.piece.subjects ?? [],
-      setCast: (list) => { this.piece.subjects = list; },
+      getCast: () => this.castPiece.subjects ?? [],
+      setCast: (list) => { this.castPiece.subjects = list; },
       // This shot's attachments and the piece's pool together: both are files
       // this generation carries, and `subjects.check` runs against the two of
       // them merged. A keyframe is in the list rather than filtered out of it —
@@ -1115,7 +1278,7 @@ export class CreatorEditor {
       // taken off every other card.
       dropAssets: (handles) => {
         const texts = [this.state.prompt, this.state.soundscape, this.state.music,
-                       ...(this.piece === this.state ? [] : S.allTexts(this.piece))];
+                       ...(this.castPiece === this.state ? [] : S.allTexts(this.castPiece))];
         this.state.assets = (this.state.assets ?? []).filter(
           (asset) => !handles.includes(asset.handle) || S.handleWritten(texts, asset.handle));
       },
@@ -1162,19 +1325,23 @@ export class CreatorEditor {
    * as the shelf is up.
    */
   openCastMember(handle) {
-    if (!this.nodeId) return;
     const already = this.castOpen;
+    const summoned = this.castSummoned;
+    // Both raised *before* the render, not after it. On a body with no node the
+    // shelf is drawn only for a summons, so a render that ran with the flag
+    // still down built no shelf — and the `openMember` below would have been
+    // asking `undefined` to open somebody.
     this.castOpen = true;
+    this.castSummoned = summoned || !already;
     this.render();
     if (!this.castShelf?.openMember(handle)) {
       // A chip whose name nobody answers to — a subject deleted out from under
       // a sentence that still writes them. Leave the shelf exactly as it was.
       this.castOpen = already;
+      this.castSummoned = summoned;
       this.render();
       return;
     }
-    // Only a shelf this call put up is a shelf this call may take down.
-    this.castSummoned = this.castSummoned || !already;
     this.render();
   }
 
@@ -1182,7 +1349,7 @@ export class CreatorEditor {
    *  somebody is on it the shelf stays, so this only ever has to do the second
    *  half on the way in. */
   toggleCast() {
-    const cast = this.piece.subjects ?? [];
+    const cast = this.castPiece.subjects ?? [];
     if (cast.length) {
       // Already open and populated: the rail's job here is to put the shelf
       // back if it was closed, and otherwise to add the next person.
@@ -1259,7 +1426,7 @@ export class CreatorEditor {
         // — and gating this on having attached something is what made the
         // feature invisible to exactly the prompt that needed it most.
         ...(this.nodeId ? [el("button", {
-          class: `mmc-tool mmc-tool-cast${(this.piece.subjects ?? []).length || this.castOpen ? " on" : ""}`,
+          class: `mmc-tool mmc-tool-cast${(this.castPiece.subjects ?? []).length || this.castOpen ? " on" : ""}`,
           title: t("Who is in the video: a person, an object, a place or a look that "
                  + "comes back shot after shot. Name them once, write @anna in the "
                  + "prompt, and whatever is behind them rides in with them."),
@@ -1348,7 +1515,7 @@ export class CreatorEditor {
     // @name in the sentence already says. Marked rather than filtered: the node
     // face wants them, and the simple view is where the sentence is enough.
     const cast = new Set();
-    for (const subject of this.piece.subjects ?? []) {
+    for (const subject of this.castPiece.subjects ?? []) {
       for (const handle of S.subjectFiles(subject)) cast.add(handle);
       if (subject.replaces) cast.add(subject.replaces);
     }
@@ -1362,65 +1529,32 @@ export class CreatorEditor {
         onclick: () => this.replaceAsset(asset),
       });
 
-      const parts = [thumb, el("span", { class: "mmc-asset-handle", text: `@${asset.handle}` })];
+      // The name is the door. It used to be dead text with four narrowing
+      // buttons beside it, three of which the simple view hid while they held
+      // their default — which is exactly when you need them, because the
+      // default is the answer you are trying to change. One gesture instead,
+      // the same one a cast member's name already answers to: click the name,
+      // get the card. See `openReferenceSheet`.
+      const handle = el("button", {
+        class: "mmc-asset-handle mmc-asset-door",
+        title: t("Open @{handle} — what it is a reference to, and everything else about it",
+                 { handle: asset.handle }),
+        text: `@${asset.handle}`,
+        onclick: (event) => this.openReferenceSheet(event.currentTarget, asset),
+      });
+
+      const parts = [thumb, handle];
 
       if (asset.role !== "reference") {
         parts.push(el("span", { class: "mmc-asset-role", text: asset.role === "first_frame" ? t("start") : t("end") }));
       }
-      // Each of the four narrowings says what it is, and whether it is still the
-      // answer nobody chose. The simple view keeps only what somebody set — see
-      // styles/fullscreen.js — so a chip there reads as short as the file is
-      // ordinary, and a clip trimmed to eight seconds still says so.
-      if (asset.kind !== "image") {
-        parts.push(el("button", {
-          class: `mmc-ghost mmc-asset-opt mmc-asset-trim${asset.trim ? "" : " plain"}`,
-          style: { fontSize: "11px" },
-          title: t("Use the whole clip, or only a segment of it"),
-          text: trimLabel(asset),
-          onclick: () => this.editSegment(asset),
-        }));
-      }
-      if (asset.kind === "video") {
-        const chip = TRACK_CHIP[asset.track] || TRACK_CHIP[S.DEFAULT_TRACK];
-        parts.push(el("button", {
-          class: `mmc-ghost mmc-asset-opt mmc-asset-track${
-            (asset.track ?? S.DEFAULT_TRACK) === S.DEFAULT_TRACK ? " plain" : ""}`,
-          style: { fontSize: "11px" },
-          title: t("On by default: this clip's soundtrack is bound as a reference audio, taking an "
-               + "<Audio> slot before the video's own label, and needing the audio VAE connected. "
-               + "Off references the picture silently. Pick 'sound only' in the segment editor to "
-               + "reference the soundtrack without the picture."),
-          text: t(chip.text),
-          onclick: () => this.setTrack(asset, chip.next),
-        }));
-      }
-      if (S.takeable(asset)) {
-        parts.push(el("button", {
-          class: `mmc-ghost mmc-asset-opt mmc-asset-takes${
-            S.takes(asset) === "full" ? " plain" : ""}`,
-          style: { fontSize: "11px" },
-          title: t(takesHelp(asset)),
-          text: t(S.takes(asset)),
-          onclick: (event) => pickTakes(event.currentTarget, asset, () => this.commit()),
-        }));
-      }
-      if (S.sizeable(asset)) {
-        const size = S.refSize(asset);
-        parts.push(el("button", {
-          class: `mmc-ghost mmc-asset-opt mmc-asset-size${
-            size === S.DEFAULT_REF_SIZE[asset.kind] ? " plain" : ""}`,
-          style: { fontSize: "11px" },
-          title: asset.kind === "video"
-            ? t("match: scale to the generation's pixel area. max: core's 768 reference canvas — "
-              + "more detail, and much the slower of the two. A video's reference tokens are its "
-              + "whole grid once per latent frame, so at full length one clip is about as long as "
-              + "the target video itself, and all of it rides through every sampling step.")
-            : t("match: scale to the generation's pixel area. max: 2048 short edge — better identity, "
-              + "several times slower, because reference tokens ride through every sampling step."),
-          text: t(size),
-          onclick: () => { asset.ref_size = size === "max" ? "match" : "max"; this.commit(); },
-        }));
-      }
+      // What somebody set, and nothing else — read, not pressed. A file left
+      // ordinary says nothing at all, and the row stays as short as the files
+      // in it are plain; a clip trimmed to eight seconds still says so, on the
+      // face and in both fullscreen views alike.
+      const said = referenceSummary(asset);
+      if (said) parts.push(el("span", { class: "mmc-asset-said", text: said }));
+
       parts.push(el("button", {
         class: "mmc-asset-x", text: "✕", title: t("Remove @{handle}", { handle: asset.handle }),
         onclick: () => this.remove(asset.handle),

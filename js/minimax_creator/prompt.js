@@ -18,7 +18,23 @@ import { listAssets, viewUrl } from "./api.js";
 import { tagIndex } from "./state.js";
 
 const TRIGGER = /@([\w-]*)$/;
+/* The other opening. `@` cites what is already in this piece; `/` is the layer
+   above it — where a thing comes *from*: the style atlas, the cast library, the
+   input folder. Only at the start of a word, or "input/clip" and "and/or" would
+   summon a menu mid-sentence. */
+const COMMAND = /\/([\w-]*)$/;
 const MAX_SUGGESTIONS = 40;
+
+/* The three sources `/` offers, in the order a shot is usually built: the look
+   it is in, who is in it, then what it points at. `door` is the row that opens
+   the window this source really lives in — a catalogue of 941 stills has no
+   honest 300px version, so the Style branch is that row and nothing else. */
+const SOURCES = [
+  { branch: "style", label: "Style", sub: "the shipped atlas of looks", iconName: "effect" },
+  { branch: "cast", label: "Cast", sub: "somebody from the cast library", iconName: "face" },
+  { branch: "refs", label: "References", sub: "a picture, a clip or a sound to point at",
+    iconName: "image" },
+];
 
 // What counts as a line of its own when the browser has put one in the box.
 // Nothing here is ever built by this class — see `getValue`, which is where
@@ -101,10 +117,16 @@ export class PromptBox {
    * @param {(over:boolean)=>void} [hooks.onOverflow]  the text stopped fitting
    *   the box, or started fitting it again. What a node face does about that is
    *   its own business — see `CreatorEditor.onPromptOverflow`.
-   * @param {(handle:string)=>void} [hooks.onCastChip]  somebody's name in the
+   * @param {(handle:string)=>void} [hooks.onCastChip]  a subject's name in the
    *   sentence was clicked. The name is where a subject is used, so it
    *   is also the obvious place to ask what they are made of — see
    *   `CreatorEditor.openCastMember`, which summons the shelf onto them.
+   * @param {(scope:string)=>void} [hooks.openLibrary]  open the preset library
+   *   on a scope — the `/` menu's door onto the style atlas and the cast
+   *   library. Absent where there is no node for a preset to land on, and the
+   *   rows are left out of the menu with it.
+   * @param {()=>void} [hooks.onBrowse]  open the file picker — the `/` menu's
+   *   door onto the input folder, for a file whose name you do not know.
    * @param {(handles:string[])=>void} [hooks.onUncited]  chips that were in the
    *   box a keystroke ago and are not in it now. Deleting a chip is how this
    *   redesign takes a reference or a cast member out of a shot, so the host has
@@ -419,7 +441,7 @@ export class PromptBox {
     this.syncExcerpt();
     this.reportOverflow();
     const trigger = this.triggerRange();
-    if (trigger) this.openMenu(trigger.query);
+    if (trigger) this.openMenu(trigger.query, trigger.mode);
     else this.closeMenu();
   }
 
@@ -461,6 +483,27 @@ export class PromptBox {
   }
 
   onKeyDown(event) {
+    // Out of a branch and back to the sources — the arrow that put you in it,
+    // reversed. Only while one is open and only in the `/` menu; everywhere
+    // else the left arrow is the caret's, which is what it must stay.
+    if (this.menu && this.mode === "/" && this.branch && event.key === "ArrowLeft") {
+      event.preventDefault();
+      event.stopPropagation();
+      this.branch = null;
+      this.active = 0;
+      this.signature = null;
+      this.renderMenu();
+      return;
+    }
+    // The right arrow is the other half of it, on a source row. A leaf row has
+    // nothing to go into, so there it stays the caret's.
+    if (this.menu && this.mode === "/" && event.key === "ArrowRight"
+        && this.flat?.[this.active]?.kind === "branch") {
+      event.preventDefault();
+      event.stopPropagation();
+      this.choose(this.active);
+      return;
+    }
     if (this.menu && ["ArrowDown", "ArrowUp", "Enter", "Tab", "Escape"].includes(event.key)) {
       event.preventDefault();
       event.stopPropagation();
@@ -479,16 +522,28 @@ export class PromptBox {
     }
   }
 
-  /** The "@query" immediately before the caret, or null. */
+  /** The "@query" or "/query" immediately before the caret, or null. `mode` is
+   *  which of the two it was — everything downstream of here (the menu, the
+   *  chip that replaces the typed text) is the same machinery either way. */
   triggerRange() {
     const selection = window.getSelection();
     if (!selection?.rangeCount || !selection.isCollapsed) return null;
     const range = selection.getRangeAt(0);
     const node = range.startContainer;
     if (node.nodeType !== Node.TEXT_NODE || !this.root.contains(node)) return null;
-    const match = TRIGGER.exec(node.nodeValue.slice(0, range.startOffset));
+    const text = node.nodeValue.slice(0, range.startOffset);
+    let mode = "@";
+    let match = TRIGGER.exec(text);
+    if (!match) {
+      match = COMMAND.exec(text);
+      // A slash inside a word is a path or a conjunction, not an opening. The
+      // `@` above needs no such guard: nothing in prose writes one mid-word.
+      if (match && match.index > 0 && !/\s/.test(text[match.index - 1])) match = null;
+      mode = "/";
+    }
     if (!match) return null;
-    return { node, start: range.startOffset - match[0].length, end: range.startOffset, query: match[1] };
+    return { node, start: range.startOffset - match[0].length, end: range.startOffset,
+             query: match[1], mode };
   }
 
   /**
@@ -614,8 +669,17 @@ export class PromptBox {
 
   // ---- suggestion menu -----------------------------------------------------
 
-  async openMenu(query) {
+  async openMenu(query, mode = "@") {
     this.query = query.toLowerCase();
+    // Switching openings is switching menus: the branch you had drilled into
+    // belongs to the `/` you have just deleted, and the highlight belongs to a
+    // list that no longer exists.
+    if (this.mode !== mode) {
+      this.mode = mode;
+      this.branch = null;
+      this.active = 0;
+      this.signature = null;
+    }
     if (!this.menu) {
       this.menu = el("div", { class: "mmc-mention" });
       // Above whatever is open: the same prompt box is the node's body and a
@@ -647,6 +711,8 @@ export class PromptBox {
     this.active = 0;
     this.rows = null;
     this.signature = null;
+    this.branch = null;
+    this.mode = null;
   }
 
   place() {
@@ -723,10 +789,116 @@ export class PromptBox {
     return { cast, roster, attached, pool, library };
   }
 
+  /**
+   * What `/` offers: the sources, and then one source's contents.
+   *
+   * `@` answers "cite something this piece already has". `/` is the question
+   * before it — where does a thing come from — which is why it is a layer over
+   * the same rows rather than a second menu of its own. Both halves of the
+   * cast branch are already here: the roster is what `@` shows when you type a
+   * name nobody has cast, and the input folder is what it shows when you type a
+   * filename. What `/` adds is being able to ask without knowing the name.
+   *
+   * Typing filters across every source at once, so `/cla` finds Clara and
+   * clay-turntable.png without choosing a branch first — the branches are a
+   * lens, not a gate, and picking the wrong one costs nothing.
+   *
+   * Every branch ends in a chip or in a door. Style is only a door: it is 941
+   * stills, chosen by looking at them, and a list of descriptors in a dropdown
+   * would be the catalogue with its pictures taken away.
+   */
+  commandOptions() {
+    const groups = [];
+    const asked = this.query;
+    const branch = this.branch;
+
+    const sources = SOURCES
+      .filter((source) => !branch)
+      .filter((source) => !asked || source.label.toLowerCase().includes(asked)
+        || source.branch.includes(asked))
+      .map((source) => ({ kind: "branch", ...source }));
+    if (sources.length) groups.push({ head: t("Bring in"), options: sources });
+
+    // Bare `/` is the three sources and nothing else: the question has not been
+    // asked yet, and forty filenames under it would answer one nobody put. A
+    // query searches every source at once — the branches are a lens, not a gate
+    // — and drilling into one narrows to it.
+    const wants = (name) => branch === name || (!branch && !!asked);
+
+    if (wants("cast") && this.hooks.castFromLibrary) {
+      const here = new Set((this.hooks.getCast?.() ?? []).map((subject) => subject.handle));
+      const rows = (this.roster ?? [])
+        .filter((row) => !here.has(row.name))
+        .filter((row) => !asked || row.name.toLowerCase().includes(asked)
+          || (row.note ?? "").toLowerCase().includes(asked))
+        .map((row) => ({ kind: "roster", handle: row.name, row }));
+      const doors = this.hooks.openLibrary
+        ? [{ kind: "door", door: "cast", label: t("Open the cast library"),
+             sub: t("build somebody, or edit who is kept") }]
+        : [];
+      if (rows.length || (branch && doors.length)) {
+        groups.push({ head: t("Cast library — cast them with their files"),
+                      options: [...rows, ...doors] });
+      }
+    }
+
+    if (wants("refs")) {
+      const used = new Set(this.hooks.getState().assets.map((a) => a.filename));
+      const rows = this.hooks.attachBlocked("reference") ? [] : (this.library ?? [])
+        .filter((row) => !used.has(row.path))
+        .filter((row) => !asked || row.path.toLowerCase().includes(asked))
+        .slice(0, MAX_SUGGESTIONS)
+        .map((row) => ({ kind: "library", path: row.path, mediaKind: row.kind, row }));
+      const blocked = this.hooks.attachBlocked("reference");
+      const doors = this.hooks.onBrowse
+        ? [{ kind: "door", door: "browse", label: t("Browse files"),
+             sub: t("the picker, with previews and trimming") }]
+        : [];
+      if (rows.length || (branch && doors.length)) {
+        groups.push({
+          head: blocked ? t("Input folder — unavailable while a start/end frame is set")
+                        : t("Input folder"),
+          options: [...rows, ...doors],
+        });
+      }
+    }
+
+    // The style branch is a door and nothing else, so it only appears when it is
+    // what was asked for. A door offered against every query would be a row
+    // that never matches anything and never goes away.
+    if (this.hooks.openLibrary && (branch === "style" || (asked && "style".startsWith(asked)))) {
+      groups.push({
+        head: t("Style"),
+        options: [{ kind: "door", door: "style", label: t("Open the style atlas"),
+                    sub: t("941 looks, with the frame each one is cut from") }],
+      });
+    }
+
+    return groups;
+  }
+
+  /** The groups the menu is showing, head and rows, in the order they read.
+   *  Two shapes over one renderer: `@` cites what is here, `/` says where a
+   *  thing comes from — see `options` and `commandOptions`. */
+  groups() {
+    if (this.mode === "/") return this.commandOptions();
+    const { cast, roster, attached, pool, library } = this.options();
+    return [
+      { head: t("Cast"), options: cast },
+      { head: t("Cast library — cast them with their files"), options: roster },
+      { head: this.hooks.attachedLabel?.() ?? t("Attached"), options: attached },
+      { head: t("Piece references"), options: pool },
+      { head: this.hooks.attachBlocked("reference")
+          ? t("Input folder — unavailable while a start/end frame is set")
+          : t("Input folder"),
+        options: library },
+    ].filter((group) => group.options.length);
+  }
+
   renderMenu() {
     if (!this.menu) return;
-    const { cast, roster, attached, pool, library } = this.options();
-    this.flat = [...cast, ...roster, ...attached, ...pool, ...library];
+    const groups = this.groups();
+    this.flat = groups.flatMap((group) => group.options);
     if (this.active >= this.flat.length) this.active = Math.max(0, this.flat.length - 1);
 
     // openMenu() renders once immediately and again when the library resolves,
@@ -734,7 +906,8 @@ export class PromptBox {
     // away the highlight and re-fire mouseenter under a stationary pointer, so
     // only rebuild when the list actually differs.
     const signature = this.flat
-      .map((option) => `${option.kind}:${option.handle ?? option.path}`).join("\u0000");
+      .map((option) => `${option.kind}:${option.handle ?? option.path ?? option.branch ?? option.door}`)
+      .join("\u0000");
     if (this.rows?.length && signature === this.signature) return;
     this.signature = signature;
 
@@ -767,7 +940,13 @@ export class PromptBox {
       // without reading a body it does not otherwise need.
       const face = option.kind === "cast" ? faceOf(option.subject)
         : option.kind === "roster" ? option.row.portrait : null;
-      const thumb = option.mediaKind === "image" || face
+      // The two `/` rows draw a rail glyph rather than a picture: a source is
+      // not a thing with a thumbnail, and a blank tile beside it would read as
+      // a file whose preview failed.
+      const thumb = option.kind === "branch" || option.kind === "door"
+        ? el("span", { class: "mmc-mention-thumb mmc-mention-glyph" },
+             [icon(option.iconName ?? "star", 15)])
+        : option.mediaKind === "image" || face
         ? el("img", {
             class: "mmc-mention-thumb",
             src: viewUrl(face ?? option.path, { preview: true }), alt: "",
@@ -788,15 +967,21 @@ export class PromptBox {
            || [...(option.subject.from ?? []), option.subject.motion, option.subject.voice]
                 .filter(Boolean).map((h) => "@" + h).join(", "))
         : null;
-      const title = option.handle ? `@${option.handle}` : option.path.split("/").pop();
-      const subtitle = option.kind === "cast" ? made
+      const title = option.kind === "branch" || option.kind === "door"
+        ? t(option.label)
+        : option.handle ? `@${option.handle}` : option.path.split("/").pop();
+      const subtitle = option.kind === "branch" || option.kind === "door" ? t(option.sub)
+        : option.kind === "cast" ? made
         : option.kind === "roster" ? castFactsLine(option.row.facts)
         : option.handle ? option.path : (option.row?.subfolder || "");
 
       const item = el("button", {
-        class: "mmc-mention-row",
+        class: `mmc-mention-row${option.kind === "branch" ? " mmc-mention-branch" : ""}`,
         "aria-selected": here === this.active,
-        title: option.kind === "roster"
+        title: option.kind === "branch"
+          ? t("Show what is in {label}", { label: t(option.label) })
+          : option.kind === "door" ? t(option.sub)
+          : option.kind === "roster"
           ? t("Cast @{handle} here — their references are attached as they land.",
               { handle: option.handle })
           : option.kind === "cast" ? `@${option.handle}` : option.path,
@@ -811,6 +996,9 @@ export class PromptBox {
           }),
           ...(subtitle ? [el("span", { class: "mmc-mention-sub", text: subtitle })] : []),
         ]),
+        // A branch goes deeper; a door leaves. Said with the glyph rather than
+        // with words, because the row already has two lines of them.
+        ...(option.kind === "branch" ? [el("span", { class: "mmc-mention-more", text: "›" })] : []),
       ]);
       // Keep focus in the box: a blurred contenteditable loses its caret, and
       // without a caret there is nowhere to insert the chip.
@@ -819,35 +1007,26 @@ export class PromptBox {
       return item;
     };
 
-    if (cast.length) {
-      this.menu.appendChild(el("div", { class: "mmc-mention-head", text: t("Cast") }));
-      for (const option of cast) this.menu.appendChild(row(option));
+    // The way back out of a branch, at the top where the thing it undoes is.
+    // Left arrow does it too — see `onKeyDown` — but a menu opened with the
+    // mouse has to be closable with it.
+    if (this.mode === "/" && this.branch) {
+      this.menu.appendChild(el("button", {
+        class: "mmc-mention-back",
+        onmouseenter: () => this.highlight(this.active),
+        onclick: (event) => {
+          event.preventDefault();
+          this.branch = null;
+          this.active = 0;
+          this.signature = null;
+          this.renderMenu();
+        },
+      }, [el("span", { text: "‹" }), el("span", { text: t("everything") })]));
     }
-    if (roster.length) {
-      this.menu.appendChild(el("div", {
-        class: "mmc-mention-head",
-        text: t("Cast library — cast them with their files"),
-      }));
-      for (const option of roster) this.menu.appendChild(row(option));
-    }
-    if (attached.length) {
-      this.menu.appendChild(el("div", {
-        class: "mmc-mention-head",
-        text: this.hooks.attachedLabel?.() ?? t("Attached"),
-      }));
-      for (const option of attached) this.menu.appendChild(row(option));
-    }
-    if (pool.length) {
-      this.menu.appendChild(el("div", { class: "mmc-mention-head", text: t("Piece references") }));
-      for (const option of pool) this.menu.appendChild(row(option));
-    }
-    if (library.length) {
-      const blocked = this.hooks.attachBlocked("reference");
-      this.menu.appendChild(el("div", {
-        class: "mmc-mention-head",
-        text: blocked ? t("Input folder — unavailable while a start/end frame is set") : t("Input folder"),
-      }));
-      for (const option of library) this.menu.appendChild(row(option));
+    for (const group of groups) {
+      if (!group.options.length) continue;
+      this.menu.appendChild(el("div", { class: "mmc-mention-head", text: group.head }));
+      for (const option of group.options) this.menu.appendChild(row(option));
     }
     this.place();
   }
@@ -875,6 +1054,31 @@ export class PromptBox {
   async choose(index) {
     const option = this.flat?.[index];
     if (!option) return;
+    // Drilling in, not picking: the typed text stays exactly as it is, because
+    // it is still the query — this only narrows what is being searched.
+    if (option.kind === "branch") {
+      this.branch = option.branch;
+      this.active = 0;
+      this.signature = null;
+      this.renderMenu();
+      return;
+    }
+    // A door leaves the box for the window the source really lives in. The
+    // typed "/" goes with it: it was the way to ask, and the asking is done.
+    if (option.kind === "door") {
+      const trigger = this.triggerRange();
+      if (trigger) {
+        const range = document.createRange();
+        range.setStart(trigger.node, trigger.start);
+        range.setEnd(trigger.node, trigger.end);
+        range.deleteContents();
+        this.hooks.onInput(this.getValue());
+      }
+      this.closeMenu();
+      if (option.door === "browse") this.hooks.onBrowse?.();
+      else this.hooks.openLibrary?.(option.door);
+      return;
+    }
     if (option.kind === "roster") {
       // Measured before anything else happens — see `triggerSpot`. Casting them
       // attaches files and redraws the body they were cast into, and the box is

@@ -240,6 +240,15 @@ class Timeline {
       getCast: () => this.timeline.subjects ?? [],
       onAttach: (row) => this.attachToPool(row),
       castFromLibrary: (member) => this.castFromLibrary(member),
+      // The shelf is already in this window, a few rows down — so a name in the
+      // standing prompt opens the card that is the whole reason it is there.
+      // It was the one prompt box in the pack whose chips did nothing.
+      onCastChip: (handle) => this.openCastMember(handle),
+      // The `/` menu's doors, onto this window's own piece: a style or a cast
+      // member chosen here lands on the piece, which is where both belong.
+      openLibrary: (scope) => openPresetLibrary({ target: this.pieceTarget(), scope })
+        .then(() => { this.renderStrip(); this.renderPool(); this.renderCast(); }),
+      onBrowse: () => this.addPoolAssets(),
       onUncited: (handles) => this.dropCitedCast(handles),
     });
     box.frame.classList.add("mmc-tl-prompt-frame");
@@ -576,6 +585,22 @@ class Timeline {
     this.renderCast();                       // the shelf owns the removal
     for (const subject of leaving) this.castShelf.remove(subject);
     this.render();
+  }
+
+  /**
+   * A name clicked in the standing prompt: open that member's card on the shelf
+   * below, and put it where the eye already is.
+   *
+   * The window is a tall scroller — the prompt at the top, the shelf under the
+   * pool, the strip under that — so opening a card three screens down and
+   * saying nothing would read as a click that did nothing. The shelf is already
+   * mounted here (`renderCast` mounts it once), so this only has to open and
+   * scroll.
+   */
+  openCastMember(handle) {
+    this.renderCast();
+    if (!this.castShelf?.openMember(handle)) return;
+    this.castHost.scrollIntoView({ block: "nearest", behavior: "smooth" });
   }
 
   renderCast() {
@@ -2174,6 +2199,10 @@ class Timeline {
       // the cast lives — and their files land in the piece's pool. The card is
       // where they are written, not where they are kept.
       castFromLibrary: (member) => this.castFromLibrary(member),
+      // ...and the same answer to "whose cast is this". Without it the editor
+      // looked the piece's subjects up on the segment, found none, and a name
+      // clicked in a card opened nothing while deleting one took nobody out.
+      castPiece: this.timeline,
       // Both belong to the timeline rather than to one shot: the canvas because
       // the segments are joined, the continuation because it describes the seam
       // in front of this segment and so does not exist for the first one.
@@ -2641,7 +2670,11 @@ export class TimelineBody {
     this.dropFaceEditor();
     // Same order as the Creator: the rail, what you are asking for, then how it
     // is run. The picture is beside the node, in the satellite.
-    this.root.replaceChildren(this.renderRail(), this.renderPanel(), this.renderSampling());
+    this.root.replaceChildren(this.renderRail(), this.renderPanel(),
+                              // Wrapped rather than mounted bare: the fullscreen shell folds
+                              // the sampler away in its simple view by this class, and a bar
+                              // parented straight to the root gave it nothing to fold.
+                              el("div", { class: "mmc-sampling-host" }, [this.renderSampling()]));
     // The reel is the one part of the body whose reading depends on the width
     // it ended up with, so it is fitted after it is in the document — once now,
     // and again from its own observer whenever the node is resized.

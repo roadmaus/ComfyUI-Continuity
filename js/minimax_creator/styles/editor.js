@@ -87,6 +87,23 @@ export const css = `
   outline: none;
 }
 .mmc-asset-handle { color: var(--tag, var(--mmc-accent)); font-weight: 500; }
+/* A reference's handle is a door: it opens the card holding everything about
+   that reference (see .mmc-refsheet). Drawn as the label it has always been —
+   no chrome, the tag's own colour — with the pointer and an underline on hover
+   as the only tell, because a row of chips that each grew a button would be the
+   crowding this card was made to undo. */
+.mmc-asset-door {
+  background: none; border: 0; padding: 0; font: inherit; font-weight: 500;
+  color: var(--tag, var(--mmc-accent)); cursor: pointer; line-height: inherit;
+}
+.mmc-asset-door:hover, .mmc-asset-door:focus-visible {
+  text-decoration: underline; text-underline-offset: 3px; outline: none;
+}
+/* What somebody set on this reference, and only that — "style", "0:00–0:08",
+   "sound off". Read, not pressed: the four buttons this replaces were four
+   places to click on a chip whose name is now the one place. Dim, because the
+   handle is what identifies the chip and this is a footnote to it. */
+.mmc-asset-said { color: var(--mmc-dim); font-size: 11px; }
 /* The LoRA chip's name, which is its mute switch. A button that has to keep
    reading as the label it replaced: no chrome, and the pointer plus the hover
    is what says it does something. */
@@ -341,6 +358,26 @@ export const css = `
   color: #7d7d7d; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .mmc-mention-empty { color: #7d7d7d; font-size: 13px; padding: 14px 10px; }
+
+/* --- the / menu's own rows -------------------------------------------------
+ *
+ * The same menu with a layer over it. A source row is not a thing you can cite
+ * — it is the question of where a thing comes from — so it reads as a heading
+ * you can press rather than as a result: the name in the body colour instead of
+ * a handle's, and a chevron saying the list goes on behind it.
+ */
+.mmc-mention-branch .mmc-mention-handle { color: #ededed; }
+.mmc-mention-glyph { color: #8b8b8b; }
+.mmc-mention-more { color: #7d7d7d; font-size: 15px; flex: none; padding-right: 2px; }
+/* The way back, above the narrowed list and reading as the thing it undoes.
+   Full width so it is a bar rather than a fourth row in the results. */
+.mmc-mention-back {
+  display: flex; align-items: center; gap: 8px; width: 100%;
+  padding: 6px 10px; margin-bottom: 2px; background: none; border: 0;
+  border-bottom: 1px solid var(--mmc-line); border-radius: 0;
+  color: #7d7d7d; font-family: inherit; font-size: 11px; text-align: left; cursor: pointer;
+}
+.mmc-mention-back:hover { color: #ededed; }
 
 .mmc-pills { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .mmc-pill {

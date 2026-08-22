@@ -697,15 +697,18 @@ export const css = `
  * only place the thing can be said — and wrong here, where the point of the view
  * is that there is one thing on screen.
  *
- * Two rules decide what goes, and neither of them is "hide the hard parts":
+ * One rule decides what goes, and it is not "hide the hard parts":
+ * **explanation goes; state stays.** The scopes band, the shelf's standing
+ * sentence and the empty shelf's note all describe what the controls beside
+ * them already say. Nothing here is the only place a fact is written.
  *
- * 1. **Explanation goes; state stays.** The scopes band, the shelf's standing
- *    sentence and the empty shelf's note all describe what the controls beside
- *    them already say. Nothing here is the only place a fact is written.
- * 2. **A setting nobody changed is not a setting.** A chip's narrowings carry a
- *    plain class while they hold their default (set in renderAssets), so what
- *    survives is exactly what somebody chose — "whole / sound on / full / max"
- *    disappears, and a clip trimmed to eight seconds still says so.
+ * There used to be a second rule — "a setting nobody changed is not a setting"
+ * — which hid a reference chip's narrowings while they held their default. It
+ * was wrong in the one case that mattered: the default is exactly the answer
+ * you are trying to leave, so a picture attached here could not be made a style
+ * reference at all. The chip now says what was set and its *name* opens the
+ * rest -- openReferenceSheet in editor.js -- which is the same card in both
+ * views and needs no rule here.
  *
  * Everything dropped is one press away in the full view, and none of it is
  * dropped from the render: these are display rules over the same bodies, and
@@ -751,7 +754,6 @@ export const css = `
   background: var(--mmc-surface-2); border: 1px solid var(--mmc-line);
 }
 .mmc-fs.simple .mmc-cast.summoned .mmc-cast-head { display: none; }
-.mmc-fs.simple .mmc-asset-opt.plain { display: none; }
 /* And the cast's own pictures out of the reference row entirely. Casting
    somebody attaches their files, so one person in a shot grew a chip saying
    what the @name in the sentence already says — and here the sentence is the

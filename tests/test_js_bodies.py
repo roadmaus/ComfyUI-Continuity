@@ -1583,6 +1583,182 @@ try {
   out.errors.push(`cast: ${error.stack}`);
 }
 
+
+// ---- a name is a door, in every box that draws one --------------------------
+//
+// The regression this exists for: `onCastChip` was wired on the Creator's face
+// and nowhere else, so the Timeline window's standing prompt and a card's
+// editor both drew cast chips that changed the cursor and did nothing. It was
+// invisible from every other test — the chips render, the sentence queues, and
+// only the click is dead.
+try {
+  const { openTimeline: openTimelineModal } = await import("./js/minimax_creator/timeline.js");
+  const all = (root, cls) => {
+    const hits = [];
+    const walk = (n) => {
+      if (String(n.className ?? "").split(" ").includes(cls)) hits.push(n);
+      (n.children ?? []).forEach(walk);
+    };
+    walk(root);
+    return hits;
+  };
+  // Read off the element rather than off the hook: the class is the pointer the
+  // user is being promised, and a box that answers for the chip without wearing
+  // it is the same dead click from the other side.
+  const castable = (root) =>
+    all(root, "mmc-prompt").map((box) => String(box.className).includes("mmc-prompt-castable"));
+
+  const strip = fakeNode("MiniMaxH3Creator", "creator_data", JSON.stringify({
+    version: 2, prompt: "@anna walks", models: {},
+    assets: [{ handle: "ref-1", kind: "image", role: "reference", filename: "anna.png" }],
+    subjects: [{ handle: "anna", from: ["ref-1"], takes: "person" }],
+    segments: [{ prompt: "shot 1", assets: [], loras: [], duration_s: 5 },
+               { prompt: "@anna at the door", assets: [], loras: [], duration_s: 5 }],
+  }));
+  await ext.nodeCreated(strip);
+
+  const single = fakeNode("MiniMaxH3Creator", "creator_data", ONE_SHOT);
+  await ext.nodeCreated(single);
+  out.doors = { onTheFace: castable(single.mmcBody.root).join(",") };
+
+  openTimelineModal({ timeline: strip.mmcBody.timeline,
+                      onCommit: () => strip.mmcBody.commit() });
+  await new Promise((done) => setTimeout(done, 0));
+  const modal = document.body.children.at(-1);
+  out.doors.inTheWindow = castable(modal).join(",");
+
+  // ...and a card of the strip, which is where a cast is owned a level up. Its
+  // editor used to look the piece's subjects up on the segment, find none, and
+  // open nothing — while deleting a chip took nobody out of anything.
+  const card = all(modal, "mmc-tl-card")[1] ?? all(modal, "mmc-tl-card")[0];
+  card?.listeners?.dblclick?.[0]?.();
+  await new Promise((done) => setTimeout(done, 0));
+  const sheet = document.body.children.at(-1);
+  out.doors.inACard = sheet === modal ? "no card opened" : castable(sheet).join(",");
+} catch (error) {
+  out.errors.push(`doors: ${error.stack}`);
+}
+
+// Clicking the name opens that member, and only that member — on a body with no
+// node, where the shelf is not resident and has to arrive with the summons.
+try {
+  const node = fakeNode("MiniMaxH3Creator", "creator_data", ONE_SHOT);
+  await ext.nodeCreated(node);
+  const editor = node.mmcBody.faceBody();
+  const box = editor.prompt;
+  const anna = await box.hooks.castFromLibrary({
+    handle: "anna", takes: "person",
+    files: [{ slot: "from", filename: "anna/face.png", kind: "image" }],
+  });
+  // A style is a subject too — same shelf, same chip, same way out. This is the
+  // shape `presetlib.castStill` puts in.
+  const look = await box.hooks.castFromLibrary({
+    handle: "claymation", takes: "style", description: "Claymation, fingerprint texture",
+    files: [{ slot: "from", filename: "styles/clay.webp", kind: "image" }],
+  });
+  box.setValue(`@${look}, @${anna} at the door`);
+  editor.state.prompt = box.getValue();
+
+  box.hooks.onCastChip(look);
+  out.summon = {
+    opened: editor.castShelf?.opened?.handle ?? null,
+    takes: editor.castShelf?.opened?.takes ?? null,
+    // A name nobody answers to leaves the shelf exactly as it was, rather than
+    // putting up an empty one.
+    strangerLeavesItAlone: (() => {
+      box.hooks.onCastChip("nobody");
+      return editor.castShelf?.opened?.handle ?? null;
+    })(),
+  };
+
+  // ...and deleting the style's chip takes the style off the node, picture and
+  // all — the same reaping a cast member gets, because it is the same thing.
+  box.root.children.find((n) => n.dataset?.handle === look)?.remove();
+  box.onEdit();
+  out.summon.styleGone = (node.mmcBody.timeline.subjects ?? [])
+    .map((s) => s.handle).join(",");
+  out.summon.andItsPicture = (node.mmcBody.timeline.segments[0].assets ?? [])
+    .map((a) => a.filename).join(",");
+} catch (error) {
+  out.errors.push(`summon: ${error.stack}`);
+}
+
+// ---- the reference card -----------------------------------------------------
+//
+// The chip's four narrowing buttons are one door now. What this guards is the
+// thing the simple fullscreen view could not do at all: take a picture that is
+// at its default and make it a style reference.
+try {
+  const node = fakeNode("MiniMaxH3Creator", "creator_data", ONE_SHOT);
+  await ext.nodeCreated(node);
+  const editor = node.mmcBody.faceBody();
+  const handle = editor.prompt.hooks.onAttach({ path: "doors/red.png", kind: "image" });
+  const asset = editor.state.assets.find((a) => a.handle === handle);
+
+  const all = (root, cls) => {
+    const hits = [];
+    const walk = (n) => {
+      if (String(n.className ?? "").split(" ").includes(cls)) hits.push(n);
+      (n.children ?? []).forEach(walk);
+    };
+    walk(root);
+    return hits;
+  };
+  const door = all(editor.root, "mmc-asset-door")[0];
+  out.refsheet = { hasDoor: Boolean(door), said: all(editor.root, "mmc-asset-said").length };
+  door?.listeners?.click?.[0]?.({ currentTarget: door });
+  const sheet = all(document.body, "mmc-refsheet")[0];
+  out.refsheet.opened = Boolean(sheet);
+  const options = all(sheet ?? { children: [] }, "mmc-refsheet-opt");
+  out.refsheet.offers = options.map((o) => o.text.trim()).join(",");
+  options.find((o) => o.text.trim() === "style")?.listeners?.click?.[0]?.();
+  out.refsheet.takes = asset.takes ?? "full";
+  // ...and the chip now says so, where before it said nothing until you opened
+  // the row of buttons that were hidden for saying nothing.
+  out.refsheet.chipSays = all(editor.root, "mmc-asset-said").map((n) => n.text).join(",");
+} catch (error) {
+  out.errors.push(`refsheet: ${error.stack}`);
+}
+
+// ---- the / menu -------------------------------------------------------------
+try {
+  const node = fakeNode("MiniMaxH3Creator", "creator_data", ONE_SHOT);
+  await ext.nodeCreated(node);
+  const box = node.mmcBody.faceBody().prompt;
+
+  await box.openMenu("", "/");
+  // The input folder answers with two files — openMenu re-reads it, so they go
+  // in after. A bare "/" listing them under the sources is the failure this
+  // checks for.
+  box.library = [{ path: "doors/red.png", kind: "image" },
+                 { path: "lamps/brass.png", kind: "image" }];
+  out.slash = {
+    sources: box.groups().flatMap((g) => g.options).map((o) => o.branch ?? o.door).join(","),
+    head: box.groups()[0]?.head ?? null,
+    // Typing searches every source at once, without choosing one first.
+    across: (() => {
+      box.query = "lamp";
+      const found = box.groups().flatMap((g) => g.options)
+        .map((o) => o.path ?? o.branch ?? `door:${o.door}`).join(",");
+      box.query = "";
+      return found;
+    })(),
+  };
+  // Drilling into a source narrows what is listed; the way back restores it.
+  box.branch = "refs";
+  out.slash.inRefs = box.groups().map((g) => g.head).join("|");
+  box.branch = "style";
+  out.slash.inStyle = box.groups().flatMap((g) => g.options).map((o) => o.door).join(",");
+  box.branch = null;
+
+  // `@` is untouched by any of it — the two openings share one renderer and
+  // this is the half that already worked.
+  await box.openMenu("", "@");
+  out.slash.mentionStillWorks = box.mode;
+} catch (error) {
+  out.errors.push(`slash: ${error.stack}`);
+}
+
 console.log(JSON.stringify(out));
 """
 
@@ -2032,5 +2208,57 @@ detached = cast.get("detached") or {}
 check("removing her takes her own picture off the node, and leaves the one "
       "the prompt writes by hand", detached.get("left"), ["img-2"])
 check("...and she is out of the cast", detached.get("cast"), 0)
+
+# ---- a name is a door -------------------------------------------------------
+#
+# `onCastChip` was wired on the Creator's face and nowhere else, so the Timeline
+# window's standing prompt and a card's editor both drew cast chips that changed
+# the cursor and did nothing. Every one of these read "false" before the fix, and
+# nothing else in this file noticed: the chips render and the sentence queues.
+doors = report.get("doors") or {}
+check("a cast chip on the node face opens somebody", doors.get("onTheFace"), "true")
+check("...and so does one in the timeline's standing prompt",
+      doors.get("inTheWindow"), "true")
+check("...and one in a card of the strip, whose cast is owned a level up",
+      doors.get("inACard"), "true")
+
+summon = report.get("summon") or {}
+check("clicking a name opens that member", summon.get("opened"), "claymation")
+check("a style is a subject like any other, and opens the same shelf",
+      summon.get("takes"), "style")
+check("a name nobody answers to leaves the shelf as it was",
+      summon.get("strangerLeavesItAlone"), "claymation")
+check("deleting a style's chip takes the style off the node",
+      summon.get("styleGone"), "anna")
+check("...and its picture with it", summon.get("andItsPicture"), "anna/face.png")
+
+# ---- the reference card -----------------------------------------------------
+#
+# The chip's four narrowing buttons are one door now, which is what lets the
+# simple fullscreen view narrow a reference at all: it hid any of them still
+# holding a default, and the default is the answer you are trying to leave.
+sheet = report.get("refsheet") or {}
+check("a reference's handle is a button", sheet.get("hasDoor"), True)
+check("...that opens the card", sheet.get("opened"), True)
+check("...offering every narrowing, defaults included",
+      sheet.get("offers"), "full,person,object,scene,style,match,max")
+check("...and picking one lands on the asset", sheet.get("takes"), "style")
+check("...where the chip then says so without being opened again",
+      sheet.get("chipSays"), "style · max")
+
+# ---- the / menu -------------------------------------------------------------
+slash = report.get("slash") or {}
+check("slash offers the three sources", slash.get("sources"), "style,cast,refs")
+check("...under one head", slash.get("head"), "Bring in")
+check("...and nothing else until something is asked",
+      slash.get("sources"), "style,cast,refs")
+check("typing searches every source at once, with the way to the picker under it",
+      slash.get("across"), "lamps/brass.png,door:browse")
+check("drilling into references narrows the menu to the input folder",
+      slash.get("inRefs"), "Input folder")
+check("the style branch is a door, because a catalogue of stills has no dropdown",
+      slash.get("inStyle"), "style")
+check("and the @ menu is untouched by any of it",
+      slash.get("mentionStillWorks"), "@")
 
 passed(f"the frontend loads and all {len(report['nodes'])} bodies mount")

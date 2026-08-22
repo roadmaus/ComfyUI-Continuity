@@ -140,4 +140,65 @@ export const css = `
   padding: 8px 10px 2px; border-top: 1px solid var(--mmc-line); margin-top: 6px;
 }
 
+/* --- the reference card ---------------------------------------------------- */
+/*
+ * One reference, opened from its name in the chip row. It replaces four small
+ * buttons that sat inside the chip itself — which fit a node face only by being
+ * tiny, and which the simple fullscreen view hid whenever they still held their
+ * default. The default is the answer you are trying to leave, so that view
+ * could not narrow a reference at all.
+ *
+ * Wider than a menu because the rows are label-and-answers rather than a list,
+ * and a fixed width so picking "person" after "full" does not resize the card
+ * under the pointer.
+ */
+.mmc-refsheet { width: 300px; padding: 10px; }
+.mmc-refsheet-head {
+  display: flex; align-items: baseline; gap: 8px; padding: 2px 2px 10px;
+  border-bottom: 1px solid var(--mmc-line); margin-bottom: 8px;
+}
+.mmc-refsheet-handle { color: var(--tag, var(--mmc-accent)); font-weight: 500; font-size: 13px; }
+/* The filename is provenance, not the title: it is often a long generated name,
+   so it takes what room is left and gives up the middle rather than wrapping
+   the card to three lines. */
+.mmc-refsheet-file {
+  color: var(--mmc-off); font-size: 11px; flex: 1; min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; direction: rtl; text-align: left;
+}
+.mmc-refsheet-row {
+  display: flex; align-items: center; gap: 10px; padding: 4px 2px;
+}
+.mmc-refsheet-name {
+  color: var(--mmc-dim); font-size: 11px; flex: none; width: 56px;
+  /* Helped, not decorated: every one of these rows carries a paragraph of
+     explanation on the label, and a dotted underline is how the rest of this
+     pack says a word has more behind it. */
+  cursor: help;
+}
+.mmc-refsheet-opts { display: flex; flex-wrap: wrap; gap: 4px; flex: 1; }
+.mmc-refsheet-opt {
+  padding: 4px 9px; background: var(--mmc-surface-2); border: 1px solid transparent;
+  border-radius: 8px; color: var(--mmc-dim); font: inherit; font-size: 11.5px;
+  cursor: pointer; line-height: 1.3;
+}
+.mmc-refsheet-opt:hover { background: var(--mmc-surface-3); color: var(--mmc-text); }
+.mmc-refsheet-opt[aria-checked="true"] {
+  background: var(--mmc-surface-3); border-color: var(--mmc-blue); color: var(--mmc-text);
+}
+.mmc-refsheet-opt:focus-visible { outline: none; border-color: var(--mmc-blue); }
+/* The three that open something else, ruled off from the answers above them:
+   everything over the line changes this reference, everything under it leaves
+   the card. */
+.mmc-refsheet-foot {
+  display: flex; flex-wrap: wrap; gap: 6px; padding-top: 10px; margin-top: 6px;
+  border-top: 1px solid var(--mmc-line);
+}
+.mmc-refsheet-go {
+  padding: 5px 10px; background: none; border: 1px solid var(--mmc-line);
+  border-radius: 9px; color: var(--mmc-dim); font: inherit; font-size: 11.5px; cursor: pointer;
+}
+.mmc-refsheet-go:hover { background: var(--mmc-surface-2); color: var(--mmc-text); }
+.mmc-refsheet-go.danger { margin-left: auto; }
+.mmc-refsheet-go.danger:hover { color: #e0743c; border-color: #e0743c; background: none; }
+
 `;

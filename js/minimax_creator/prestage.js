@@ -95,6 +95,15 @@ export class PreStageEditor {
       onAttach: (row) => this.attachFromMention(row),
       attachBlocked: () => this.refBlocked(),
       onOverflow: (over) => this.onPromptOverflow(over),
+      // The `/` menu's doors. No cast branch here and none offered — an image
+      // node has no piece to cast anybody into, which `commandOptions` reads off
+      // the missing `castFromLibrary` above. A style is another matter: the
+      // atlas applies to a pre-stage, and this is where its look is set.
+      openLibrary: this.presetTarget
+        ? (scope) => openPresetLibrary({ target: this.presetTarget(), scope })
+            .then(() => this.render())
+        : null,
+      onBrowse: () => this.addRefs(false),
     });
     this.prompt.root.dataset.placeholder =
       t("Describe the image. Both models were trained on long, detailed "
@@ -112,7 +121,10 @@ export class PreStageEditor {
     this.loraHost = el("div");
     this.pillsHost = el("div");
     this.noticeHost = el("div");
-    this.samplingHost = el("div");
+    // Classed, because the fullscreen shell folds the sampler away in its simple
+    // view by this name — see styles/fullscreen.js. The Creator body carries the
+    // same class for the same reason.
+    this.samplingHost = el("div", { class: "mmc-sampling-host" });
 
     // The box is typed into here, on the face, and the window takes over only
     // once the text outgrows it. `onFace` tells the face from the window: the

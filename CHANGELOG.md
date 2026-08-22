@@ -1,5 +1,38 @@
 # Changelog
 
+## 2.15
+
+**A name is a door, in every box that draws one.** Clicking somebody's name in
+the sentence opens their card — that was true on the Creator's face and nowhere
+else, so the Timeline window's standing prompt and a card of the strip both drew
+chips that changed the cursor and then did nothing. A card's editor was worse
+than dead: it looked the piece's subjects up on the segment, found none, and
+deleting a chip there took nobody out of anything. Both are wired now, and a
+card knows whose cast it is holding. A style is a subject like any other — it
+opens the same shelf and leaves the same way, by deleting its name.
+
+**One reference, one door.** A reference chip used to carry four small buttons —
+what of the file is the reference, what part of the clip, its soundtrack, its
+encode size — and the simple fullscreen view hid any of them still holding a
+default. That is exactly the answer you are trying to leave, so a picture
+attached in that view could not be made a style reference at all. The chip now
+says only what somebody *set*, and its handle opens a card with all of it: the
+same card on a node face and in either fullscreen view.
+
+**`/` — where a thing comes from.** `@` cites what this piece already has. `/`
+is the layer above it: the style atlas, the cast library, the input folder.
+Typing after it searches all three at once, so `/cla` finds Clara and
+clay-turntable.png without choosing a branch first; the arrow keys go in and
+back out. Every branch ends in a chip or in a door. Style is only a door — it is
+941 stills, chosen by looking at them, and a list of descriptors in a dropdown is
+the catalogue with the pictures taken away.
+
+**The Sampling settings toggle works on the Timeline and the pre-stage.** The
+simple view folds the sampler row away by a class on its host, and only the
+Creator body carried one: the Timeline mounted its bar straight onto the root and
+the pre-stage's host had no class at all. Pressing the button on either did
+nothing, which is what the screenshot showed.
+
 ## 2.14
 
 **The node can have the whole window now.** Settings → MiniMax H3 → Editor →
