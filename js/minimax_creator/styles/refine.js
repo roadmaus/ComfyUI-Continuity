@@ -63,24 +63,24 @@ export const css = `
    the same thing and behave like two different ones. */
 .mmc-opt-kind {
   flex: none; margin-left: auto; margin-right: 8px;
-  font-size: 10px; color: var(--mmc-dim);
+  font-size: calc(10px * var(--mmc-type)); color: var(--mmc-dim);
   border: 1px solid var(--mmc-line); border-radius: 999px; padding: 1px 7px;
 }
-.mmc-refine-hint { font-size: 11px; color: var(--mmc-dim); line-height: 1.4; }
+.mmc-refine-hint { font-size: calc(11px * var(--mmc-type)); color: var(--mmc-dim); line-height: 1.4; }
 .mmc-refine-note { padding: 2px 10px 8px; }
 .mmc-refine-empty {
   display: flex; flex-direction: column; align-items: flex-start; gap: 8px;
-  padding: 4px 10px 10px; font-size: 12px; color: var(--mmc-dim);
+  padding: 4px 10px 10px; font-size: calc(12px * var(--mmc-type)); color: var(--mmc-dim);
 }
 .mmc-refine-empty code {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: calc(11px * var(--mmc-type));
   color: var(--mmc-text); background: var(--mmc-surface-2);
   border: 1px solid var(--mmc-line); border-radius: 7px; padding: 5px 8px;
 }
-.mmc-refine-empty .mmc-ghost { font-size: 12px; }
+.mmc-refine-empty .mmc-ghost { font-size: calc(12px * var(--mmc-type)); }
 
 /* Everything but the model, folded away: it is set once and the model is not. */
-.mmc-refine-fold { font-size: 12px; }
+.mmc-refine-fold { font-size: calc(12px * var(--mmc-type)); }
 .mmc-refine-fold > summary {
   cursor: pointer; color: var(--mmc-dim); padding: 8px 10px;
   border-top: 1px solid var(--mmc-line); list-style-position: inside;
@@ -91,7 +91,7 @@ export const css = `
 }
 .mmc-refine-group { display: flex; flex-direction: column; gap: 7px; }
 .mmc-refine-row { display: flex; gap: 8px; flex-wrap: wrap; }
-.mmc-refine-seed { font-size: 12px; padding: 0 10px 0 2px; }
+.mmc-refine-seed { font-size: calc(12px * var(--mmc-type)); padding: 0 10px 0 2px; }
 
 /* Eleven languages: chips wrap into three lines and stay scannable, where a
    list would scroll and a <select> would be the only browser chrome in the node. */
@@ -99,7 +99,7 @@ export const css = `
 .mmc-chip {
   padding: 4px 10px; border-radius: 12px; background: var(--mmc-surface-2);
   border: 1px solid var(--mmc-line); color: var(--mmc-dim);
-  font-family: inherit; font-size: 11px; cursor: pointer; transition: all .12s ease;
+  font-family: inherit; font-size: calc(11px * var(--mmc-type)); cursor: pointer; transition: all .12s ease;
 }
 .mmc-chip:hover { color: var(--mmc-text); background: var(--mmc-surface-3); }
 .mmc-chip[aria-checked="true"] {
@@ -111,29 +111,29 @@ export const css = `
    it should not mean running the model again. */
 .mmc-refined { display: flex; flex-direction: column; gap: 8px; }
 .mmc-refined:empty { display: none; }
-.mmc-refined-head { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+.mmc-refined-head { display: flex; align-items: center; gap: 8px; font-size: calc(12px * var(--mmc-type)); }
 .mmc-refined-toggle {
   display: flex; align-items: center; gap: 6px; background: none; border: 0;
-  padding: 0; cursor: pointer; color: var(--mmc-off); font: inherit; font-size: 12px;
+  padding: 0; cursor: pointer; color: var(--mmc-off); font: inherit; font-size: calc(12px * var(--mmc-type));
 }
 .mmc-refined-toggle.on { color: var(--mmc-accent); }
 .mmc-dot {
   width: 7px; height: 7px; border-radius: 50%; background: currentColor; opacity: .5;
 }
 .mmc-refined-toggle.on .mmc-dot { opacity: 1; }
-.mmc-refined-model { color: var(--mmc-dim); font-size: 11px;
+.mmc-refined-model { color: var(--mmc-dim); font-size: calc(11px * var(--mmc-type));
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
-.mmc-refined-stale { color: var(--mmc-accent); font-size: 11px; opacity: .8; }
+.mmc-refined-stale { color: var(--mmc-accent); font-size: calc(11px * var(--mmc-type)); opacity: .8; }
 /* Said once, next to the dimmed prompt it is talking about. */
-.mmc-refined-lede { color: var(--mmc-dim); font-size: 11px; margin-top: -4px; }
+.mmc-refined-lede { color: var(--mmc-dim); font-size: calc(11px * var(--mmc-type)); margin-top: -4px; }
 .mmc-refined-box {
   width: 100%; box-sizing: border-box; resize: vertical;
   background: var(--mmc-surface); border: 1px solid var(--mmc-line); border-radius: 12px;
-  color: var(--mmc-text); font-family: inherit; font-size: 13px; line-height: 1.5;
+  color: var(--mmc-text); font-family: inherit; font-size: calc(13px * var(--mmc-type)); line-height: 1.5;
   padding: 10px 12px; outline: none;
 }
-.mmc-refined-box:focus { border-color: rgba(255,255,255,.2); }
-.mmc-refined-fold { font-size: 12px; color: var(--mmc-dim); }
+.mmc-refined-box:focus { border-color: var(--mmc-line-2); }
+.mmc-refined-fold { font-size: calc(12px * var(--mmc-type)); color: var(--mmc-dim); }
 .mmc-refined-fold summary { cursor: pointer; padding: 2px 0; }
 .mmc-refined-sections { display: flex; flex-direction: column; gap: 8px; padding-top: 8px; }
 .mmc-refined-section { display: flex; flex-direction: column; gap: 4px; }

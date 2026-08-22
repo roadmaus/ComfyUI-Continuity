@@ -97,7 +97,67 @@ DEFAULTS = {
     # the workflow's; this only says where in that schedule the distillation
     # takes over.
     "turbo_lead_in": 0,
+    # How large this pack draws its own text, as a multiplier on every size in
+    # it. 1 is what those sizes were written to be; the Appearance tab offers
+    # four points and this file will hold anything between MIN and MAX_TEXT_SCALE
+    # so a machine with an unusual screen can go past them by hand.
+    #
+    # UI-only, like the pills and the previews above: nothing queued reads it,
+    # and a `.json` shared with someone else renders the same shot at whatever
+    # size their own copy draws its buttons. It is here because it is per-machine
+    # — which is the whole of what this file is — and because a screen you have
+    # to lean into is not a per-workflow problem.
+    "text_scale": 1.0,
+    # Whether this pack wears ComfyUI's palette or a dark one of its own.
+    #
+    # "follow" is the default and is what the stylesheet does unaided: every
+    # colour in styles/ derives from the palette the Appearance tab is set to,
+    # so the pack changes when the desk does. "dark" keeps a dark ground for the
+    # fullscreen editor whatever the desk is set to, which is not stubbornness —
+    # it is what a tool for judging pictures is: a still or a frame read against
+    # white is read against the wrong thing, and every editor that grades or cuts
+    # is dark for that reason. There is deliberately no "light": a light editor
+    # over a dark graph is the one combination nobody asks for.
+    #
+    # It reaches the fullscreen shell and not the node faces. A node body sits
+    # inside a node ComfyUI draws in its own palette — title, chrome, the padding
+    # around whatever the custom node put there — so a dark body on a light desk
+    # is a dark island in a white card rather than a dark editor. The shell
+    # covers the viewport and has no host chrome left to disagree with.
+    #
+    # UI-only, like the pills and the text scale above.
+    "theme": "follow",
+    # How far this pack's surfaces step off the ground beneath them.
+    #
+    # The four surfaces are each a mix of the palette's ground and its ink; this
+    # multiplies how far along that mix each one sits. 1 is the ladder as drawn.
+    # It exists because the ladder is proportional to a palette's own contrast,
+    # and some palettes have very little — on Github, Nord and Solarized the
+    # four surfaces come out close enough to read as two. Below 1 for a flatter
+    # face, above 1 to pull the cards apart from what they sit on.
+    #
+    # UI-only. Applies to whatever palette is in force, including the pinned
+    # dark one above and any palette that does not exist yet.
+    "surface_lift": 1.0,
 }
+
+# What the text scale is allowed to be. The floor is where the 9px captions stop
+# being legible at all; the ceiling is where a node face holds one pill. Wider
+# than the four points the page offers, because the page is a set of good answers
+# and this is the limit of the honest ones.
+MIN_TEXT_SCALE = 0.8
+MAX_TEXT_SCALE = 1.6
+
+# What the pack may wear. "follow" reads ComfyUI's palette; "dark" pins a dark
+# ground regardless of it. No "light": see the note on the setting itself.
+THEMES = ("follow", "dark")
+
+# How far the surface ladder may be pushed. The floor is where the four surfaces
+# stop being four; the ceiling is where the cards stop looking like they belong
+# to the ground they are on. Wider than the page offers, for the same reason the
+# text scale is.
+MIN_SURFACE_LIFT = 0.4
+MAX_SURFACE_LIFT = 2.0
 
 # How far the lead-in may reach. Not a hard truth about the model — it is the
 # point past which the idea stops being a lead-in: the distillation is what the
@@ -136,6 +196,35 @@ def clean(raw):
         if not 0 <= lead <= MAX_LEAD_IN:
             raise ValueError(f"turbo_lead_in must be between 0 and {MAX_LEAD_IN}")
         clean_settings["turbo_lead_in"] = lead
+    if "text_scale" in raw and raw["text_scale"] is not None:
+        scale = raw["text_scale"]
+        # `True` is an int in Python and would sail through as scale 1, the same
+        # trap the two counts above set.
+        if isinstance(scale, bool) or not isinstance(scale, (int, float)):
+            raise ValueError("text_scale must be a number")
+        scale = float(scale)
+        if not MIN_TEXT_SCALE <= scale <= MAX_TEXT_SCALE:
+            raise ValueError(
+                f"text_scale must be between {MIN_TEXT_SCALE} and {MAX_TEXT_SCALE}"
+            )
+        clean_settings["text_scale"] = scale
+    if "surface_lift" in raw and raw["surface_lift"] is not None:
+        lift = raw["surface_lift"]
+        # `True` is an int in Python and would sail through as lift 1, the same
+        # trap every count above sets.
+        if isinstance(lift, bool) or not isinstance(lift, (int, float)):
+            raise ValueError("surface_lift must be a number")
+        lift = float(lift)
+        if not MIN_SURFACE_LIFT <= lift <= MAX_SURFACE_LIFT:
+            raise ValueError(
+                f"surface_lift must be between {MIN_SURFACE_LIFT} and {MAX_SURFACE_LIFT}"
+            )
+        clean_settings["surface_lift"] = lift
+    if "theme" in raw and raw["theme"] is not None:
+        theme = raw["theme"]
+        if theme not in THEMES:
+            raise ValueError("theme must be one of: " + ", ".join(THEMES))
+        clean_settings["theme"] = theme
     for flag in ("show_shift_pills", "autoplay_previews", "advanced"):
         if flag in raw and raw[flag] is not None:
             if not isinstance(raw[flag], bool):

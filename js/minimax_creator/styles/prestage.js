@@ -15,8 +15,8 @@ export const css = `
 /* The spawn pill. On, it wears the accent the continue pill wears — the
    pre-stage is part of this shot now, which is a stronger statement than the
    accelerators' blue "not native". */
-.mmc-prestage-toggle.on { border-color: rgba(240,166,60,.5); color: var(--mmc-accent); }
-.mmc-prestage-toggle.on:hover:not(:disabled) { border-color: rgba(240,166,60,.8); }
+.mmc-prestage-toggle.on { border-color: color-mix(in srgb, var(--mmc-accent) 50%, transparent); color: var(--mmc-accent); }
+.mmc-prestage-toggle.on:hover:not(:disabled) { border-color: color-mix(in srgb, var(--mmc-accent) 80%, transparent); }
 
 /* The left-hand satellite anchors on its right edge (satellite.js sets the
    transform); nothing else about the card changes side. */
@@ -28,9 +28,9 @@ export const css = `
    have to opt back in or they are pictures of buttons. */
 .mmc-stage-send {
   pointer-events: auto;
-  background: rgba(0,0,0,.55); border: 1px solid #4a4a4a; border-radius: 999px;
-  padding: 3px 10px; cursor: pointer; font-family: inherit; font-size: 12px;
-  color: #ededed;
+  background: var(--mmc-scrim-2); border: 1px solid var(--mmc-edge); border-radius: 999px;
+  padding: 3px 10px; cursor: pointer; font-family: inherit; font-size: calc(12px * var(--mmc-type));
+  color: var(--mmc-text);
 }
 .mmc-stage-send:hover { border-color: var(--mmc-accent); color: var(--mmc-accent); }
 
@@ -40,15 +40,15 @@ export const css = `
   display: flex; flex-direction: column; gap: 14px;
   width: min(720px, 92vw); padding: 20px 24px;
   background: var(--mmc-bg); border: 1px solid var(--mmc-line); border-radius: 18px;
-  box-shadow: 0 24px 64px rgba(0,0,0,.55);
+  box-shadow: 0 24px 64px var(--mmc-shadow-soft);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
-  color: var(--mmc-text); font-size: 13px;
+  color: var(--mmc-text); font-size: calc(13px * var(--mmc-type));
 }
-.mmc-grab-title { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+.mmc-grab-title { display: flex; align-items: center; gap: 8px; font-size: calc(14px * var(--mmc-type)); }
 .mmc-grab-title svg { stroke: currentColor; fill: none; stroke-width: 1.6; }
 .mmc-grab-stage {
   width: 100%; max-height: 46vh; object-fit: contain;
-  background: #000; border-radius: 12px;
+  background: var(--mmc-media-bg); border-radius: 12px;
 }
 .mmc-grab-row { display: flex; align-items: center; gap: 10px; }
 .mmc-grab-scrub { flex: 1; }
@@ -56,10 +56,10 @@ export const css = `
 .mmc-grab-actions { display: flex; justify-content: flex-end; gap: 12px; }
 .mmc-grab-actions .mmc-btn {
   padding: 8px 18px; border-radius: 999px; cursor: pointer; font-family: inherit;
-  font-size: 13px; background: var(--mmc-surface-2); color: var(--mmc-text);
+  font-size: calc(13px * var(--mmc-type)); background: var(--mmc-surface-2); color: var(--mmc-text);
   border: 1px solid var(--mmc-line);
 }
-.mmc-grab-actions .mmc-btn:hover:not(:disabled) { border-color: rgba(255,255,255,.25); }
-.mmc-grab-actions .mmc-btn-primary { background: var(--mmc-accent); color: #141414; border-color: transparent; }
+.mmc-grab-actions .mmc-btn:hover:not(:disabled) { border-color: var(--mmc-line-3); }
+.mmc-grab-actions .mmc-btn-primary { background: var(--mmc-accent); color: var(--mmc-on-accent); border-color: transparent; }
 .mmc-grab-actions .mmc-btn:disabled { opacity: .5; cursor: progress; }
 `;

@@ -3,6 +3,7 @@
 import { api } from "../../../scripts/api.js";
 import { t } from "./i18n.js";
 import { atlasUrl, isAtlasRef } from "./presets/atlasref.js";
+import { applyTextScale, applySurfaceLift, applyTheme } from "./styles.js";
 
 const cache = new Map();   // root -> {at, assets}
 const CACHE_MS = 4000;
@@ -173,9 +174,19 @@ export function uiSetting(key, fallback) {
 }
 
 /** The settings page's replies come through here, so the cache is never older
- *  than the last thing the page showed. */
+ *  than the last thing the page showed.
+ *
+ *  Three of these settings are not read by anyone: the text scale, the surface
+ *  lift and the theme are things the stylesheet needs, not things a body draws.
+ *  They are written onto the document here rather than by the page that sets
+ *  them, because this is every route the settings take — the first prime, the
+ *  page, the shortcut below — and the alternative is three call sites that have
+ *  to agree. */
 export function noteSettings(settings) {
   uiSettings = settings;
+  applyTextScale(settings?.text_scale);
+  applySurfaceLift(settings?.surface_lift);
+  applyTheme(settings?.theme);
 }
 
 /**

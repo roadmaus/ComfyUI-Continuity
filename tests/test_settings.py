@@ -115,6 +115,26 @@ refuses("a fractional lead-in", {"turbo_lead_in": 1.5}, "whole number")
 # a one-step lead-in nobody picked.
 refuses("a boolean lead-in", {"turbo_lead_in": True}, "whole number")
 
+# The text scale: one multiplier over every size the pack draws. A fraction
+# rather than a count, and bounded at both ends — the floor is where the 9px
+# captions stop being legible and the ceiling is where a node face holds one
+# pill, and a file holding either of those is a UI with no way left on it to say
+# otherwise.
+check("the drawn sizes by default", settings.clean({})["text_scale"], 1.0)
+check("a scale is kept", settings.clean({"text_scale": 1.25})["text_scale"], 1.25)
+check("a null scale is the default", settings.clean({"text_scale": None})["text_scale"], 1.0)
+check("a whole number is a scale", settings.clean({"text_scale": 1})["text_scale"], 1.0)
+check("both ends of the range are legal",
+      (settings.clean({"text_scale": settings.MIN_TEXT_SCALE})["text_scale"],
+       settings.clean({"text_scale": settings.MAX_TEXT_SCALE})["text_scale"]),
+      (settings.MIN_TEXT_SCALE, settings.MAX_TEXT_SCALE))
+refuses("a scale past the ceiling", {"text_scale": settings.MAX_TEXT_SCALE + 0.1}, "between")
+refuses("a scale under the floor", {"text_scale": settings.MIN_TEXT_SCALE - 0.1}, "between")
+# `True` is an int in Python, and it would sail through as the drawn sizes —
+# stored as a scale nobody picked and indistinguishable from one that was.
+refuses("a boolean scale", {"text_scale": True}, "must be a number")
+refuses("a scale that is not a number", {"text_scale": "large"}, "must be a number")
+
 # The output folders. `outputs.clean` is the authority — this only has to show
 # that the setting is held to it, so a prefix that would be refused at the end
 # of a render is refused while it is still a field being edited.

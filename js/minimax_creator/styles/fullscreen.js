@@ -20,12 +20,12 @@ export const css = `
    than it sounds: the piece's name, which view you are in, and the way back.
    Gallery and Settings are already in the body's rail and are not repeated. */
 .mmc-fs-bar {
-  flex: none; height: 54px; display: flex; align-items: center; gap: 12px;
+  flex: none; min-height: 54px; display: flex; align-items: center; gap: 12px;
   padding: 0 18px; border-bottom: 1px solid var(--mmc-line);
 }
 .mmc-fs-mark {
   display: flex; align-items: center; gap: 9px;
-  font-size: 13px; font-weight: 600; letter-spacing: .01em;
+  font-size: calc(13px * var(--mmc-type)); font-weight: 600; letter-spacing: .01em;
 }
 /* The mark is artwork, not a glyph — it brings its own fills and its own
    ground — so it is exempt from the stroke rule the rest of the bar's icons
@@ -40,7 +40,7 @@ export const css = `
 .mmc-fs-slash { color: var(--mmc-off); }
 /* The node's title, which is the piece's name — see fullscreen.js on why this
    pack does not store a second one. */
-.mmc-fs-piece { font-size: 13px; color: var(--mmc-dim); }
+.mmc-fs-piece { font-size: calc(13px * var(--mmc-type)); color: var(--mmc-dim); }
 .mmc-fs-gap { flex: 1; }
 
 /* Simple or Full, as one control rather than two: they are two answers to one
@@ -50,17 +50,17 @@ export const css = `
   background: var(--mmc-surface); border: 1px solid var(--mmc-line);
 }
 .mmc-fs-view {
-  height: 24px; padding: 0 13px; border-radius: 12px; border: 0; background: none;
-  color: var(--mmc-dim); font-family: inherit; font-size: 12px; cursor: pointer;
+  height: calc(24px * var(--mmc-type)); padding: 0 13px; border-radius: 12px; border: 0; background: none;
+  color: var(--mmc-dim); font-family: inherit; font-size: calc(12px * var(--mmc-type)); cursor: pointer;
 }
 .mmc-fs-view:hover { color: var(--mmc-text); }
 .mmc-fs-view[aria-pressed="true"] { background: var(--mmc-surface-3); color: var(--mmc-text); }
 .mmc-fs-view:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: -2px; }
 
 .mmc-fs-exit {
-  display: flex; align-items: center; gap: 7px; height: 30px; padding: 0 11px;
+  display: flex; align-items: center; gap: 7px; height: calc(30px * var(--mmc-type)); padding: 0 11px;
   border-radius: 15px; background: none; border: 1px solid transparent;
-  color: var(--mmc-dim); font-size: 12px; font-family: inherit; cursor: pointer;
+  color: var(--mmc-dim); font-size: calc(12px * var(--mmc-type)); font-family: inherit; cursor: pointer;
 }
 .mmc-fs-exit:hover { background: var(--mmc-surface-2); border-color: var(--mmc-line); color: var(--mmc-text); }
 .mmc-fs-exit svg { stroke: currentColor; fill: none; stroke-width: 1.6; }
@@ -150,7 +150,7 @@ export const css = `
   display: none; width: clamp(360px, 24vw, 460px); flex-direction: column;
   flex: 0 1 auto; min-width: 340px;
   min-height: 0; max-height: 100%; border-radius: 22px;
-  background: rgba(255,255,255,.018); border: 1px solid var(--mmc-line);
+  background: var(--mmc-tint); border: 1px solid var(--mmc-line);
 }
 .mmc-fs-pre.on { display: flex; }
 .mmc-fs-pre > .mmc-prestage-host, .mmc-fs-pre > .mmc-root { flex: 0 1 auto; min-height: 0; }
@@ -169,7 +169,7 @@ export const css = `
  */
 .mmc-fs-head {
   flex: none; padding: 15px 18px 3px;
-  font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+  font-size: calc(11px * var(--mmc-type)); font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
   color: var(--mmc-off);
 }
 /* The simple view has one column and the step switch says what is in it. */
@@ -177,9 +177,9 @@ export const css = `
 /* Quieter than the shot beside it, in the two ways a column can be quieter:
    smaller tools and less contrast. Nothing is hidden — this is still the node's
    whole face — it just stops competing for the eye. */
-.mmc-fs-pre { --mmc-tool-tile: 42px; }
+.mmc-fs-pre { --mmc-tool-tile: calc(42px * var(--mmc-type)); }
 .mmc-fs-pre .mmc-tool-icon { border-radius: 11px; }
-.mmc-fs-pre .mmc-tool { font-size: 11px; }
+.mmc-fs-pre .mmc-tool { font-size: calc(11px * var(--mmc-type)); }
 .mmc-fs-pre .mmc-tool svg { width: 18px; height: 18px; }
 .mmc-fs-pre .mmc-root { opacity: .82; transition: opacity .15s ease; }
 .mmc-fs-pre:hover .mmc-root, .mmc-fs-pre:focus-within .mmc-root { opacity: 1; }
@@ -200,8 +200,8 @@ export const css = `
   border-radius: 15px; background: var(--mmc-bg); border: 1px solid var(--mmc-line);
 }
 .mmc-fs-step {
-  height: 26px; padding: 0 18px; border-radius: 13px; border: 0; background: none;
-  color: var(--mmc-dim); font-family: inherit; font-size: 12px; cursor: pointer;
+  height: calc(26px * var(--mmc-type)); padding: 0 18px; border-radius: 13px; border: 0; background: none;
+  color: var(--mmc-dim); font-family: inherit; font-size: calc(12px * var(--mmc-type)); cursor: pointer;
 }
 .mmc-fs-step:hover { color: var(--mmc-text); }
 .mmc-fs-step[aria-pressed="true"] { background: var(--mmc-surface-3); color: var(--mmc-text); }
@@ -212,11 +212,11 @@ export const css = `
 .mmc-fs-step { display: flex; align-items: center; gap: 8px; }
 .mmc-fs-step-drop {
   display: flex; align-items: center; justify-content: center;
-  width: 16px; height: 16px; padding: 0; margin-right: -4px;
+  width: calc(16px * var(--mmc-type)); height: calc(16px * var(--mmc-type)); padding: 0; margin-right: -4px;
   border: 0; border-radius: 50%; background: none; cursor: pointer;
-  color: var(--mmc-off); font-family: inherit; font-size: 14px; line-height: 1;
+  color: var(--mmc-off); font-family: inherit; font-size: calc(14px * var(--mmc-type)); line-height: 1;
 }
-.mmc-fs-step-drop:hover { background: rgba(224,116,60,.18); color: #e0743c; }
+.mmc-fs-step-drop:hover { background: color-mix(in srgb, var(--mmc-warn) 18%, transparent); color: var(--mmc-warn); }
 
 /* The way in, inside. Both faces grow a control that opens the shell — the rail
    tile on a shot, the pill on a strip — and in here the same door is already in
@@ -241,8 +241,8 @@ export const css = `
  */
 .mmc-fs .mmc-panel {
   background: var(--mmc-bg);
-  border-color: rgba(0,0,0,.55);
-  box-shadow: inset 0 1px 2px rgba(0,0,0,.6);
+  border-color: var(--mmc-scrim-2);
+  box-shadow: inset 0 1px 2px var(--mmc-shadow);
   padding: 16px;
 }
 /* A page rather than a field: this is the one surface in the pack that holds
@@ -250,7 +250,7 @@ export const css = `
 
    The node's ten-line cap comes off at the foot of this file, with the other
    bounds a face needs and a window does not. */
-.mmc-fs .mmc-prompt { font-size: 16px; line-height: 1.62; }
+.mmc-fs .mmc-prompt { font-size: calc(16px * var(--mmc-type)); line-height: 1.62; }
 
 /* A page to start on, and no more. The well used to be whatever was left of a
    full-height column, which on a desk-sized screen is five hundred pixels of
@@ -268,7 +268,7 @@ export const css = `
    width and 56px is the only size that reads; in a column with a picture beside
    it, eleven of them wrapped to a second row and the shelf of tools became the
    tallest thing above the writing. */
-.mmc-fs { --mmc-tool-tile: 48px; }
+.mmc-fs { --mmc-tool-tile: calc(48px * var(--mmc-type)); }
 .mmc-fs .mmc-tool-icon { border-radius: 13px; }
 .mmc-fs .mmc-tool svg { width: 20px; height: 20px; }
 /*
@@ -293,7 +293,7 @@ export const css = `
  * it keep an even rhythm on their own.
  */
 .mmc-fs .mmc-rail {
-  display: grid; grid-template-columns: repeat(auto-fill, 76px);
+  display: grid; grid-template-columns: repeat(auto-fill, calc(76px * var(--mmc-type)));
   gap: 14px 0; justify-content: start; align-items: start;
 }
 .mmc-fs .mmc-rail-group { display: contents; margin-left: 0; }
@@ -394,7 +394,7 @@ export const css = `
 .mmc-fs-take {
   position: relative; flex: none; display: flex; height: 100%;
   border-radius: 10px; overflow: hidden;
-  background: #000; border: 1px solid var(--mmc-line);
+  background: var(--mmc-media-bg); border: 1px solid var(--mmc-line);
 }
 /* Sized off the lip rather than off the window, so every take is the same height
    whatever shape it is and the row reads as a strip of frames. Smaller than the
@@ -410,8 +410,8 @@ export const css = `
    times over, which identifies nothing. */
 .mmc-fs-take-note {
   position: absolute; left: 5px; bottom: 4px;
-  font-size: 10px; color: #ededed; font-variant-numeric: tabular-nums;
-  background: rgba(0,0,0,.55); border-radius: 999px; padding: 1px 6px;
+  font-size: calc(10px * var(--mmc-type)); color: var(--mmc-text); font-variant-numeric: tabular-nums;
+  background: var(--mmc-scrim-2); border-radius: 999px; padding: 1px 6px;
 }
 .mmc-fs-take-note:empty { display: none; }
 
@@ -464,7 +464,7 @@ export const css = `
      is a chip of text in an otherwise empty box — and it is the wrong answer for
      a narrow portrait render, which has media and a shape of its own. */
   min-width: 0;
-  border-radius: 18px; box-shadow: 0 24px 64px rgba(0,0,0,.5);
+  border-radius: 18px; box-shadow: 0 24px 64px var(--mmc-shadow-soft);
 }
 .mmc-fs-dock .mmc-stage[data-state="failed"] { min-width: 240px; }
 .mmc-fs-still .mmc-stage { max-width: 100%; max-height: 66vh; }
@@ -517,18 +517,18 @@ export const css = `
 .mmc-fs-grip {
   flex: none; display: flex; align-items: center; justify-content: center;
   width: 26px; height: 26px; padding: 0; border-radius: 9px;
-  background: rgba(255,255,255,.10); border: 1px solid rgba(255,255,255,.22);
+  background: var(--mmc-wash-2); border: 1px solid var(--mmc-line-2);
   -webkit-backdrop-filter: blur(14px) saturate(1.4);
   backdrop-filter: blur(14px) saturate(1.4);
-  color: #fff; cursor: nesw-resize; pointer-events: auto;
+  color: var(--mmc-strong); cursor: nesw-resize; pointer-events: auto;
   /* A drag on this is a resize, not a scroll and not a pan. */
   touch-action: none;
   transition: background .18s ease, transform .18s cubic-bezier(.4,0,.2,1);
 }
 .mmc-fs-grip svg { stroke: currentColor; fill: none; stroke-width: 1.8; }
-.mmc-fs-grip:hover { background: rgba(255,255,255,.18); }
+.mmc-fs-grip:hover { background: var(--mmc-wash-3); }
 .mmc-fs-grip:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 2px; }
-.mmc-fs-sizer.dragging .mmc-fs-grip { transform: scale(1.12); background: rgba(255,255,255,.22); }
+.mmc-fs-sizer.dragging .mmc-fs-grip { transform: scale(1.12); background: var(--mmc-wash-3); }
 /* The reading, and only while the drag is on: a permanent percentage in the
    corner of every render would be a number nobody asked for. It is a stage chip
    because it is one — the row along the bottom already established what a small
@@ -561,7 +561,7 @@ export const css = `
    intrinsic size, and the two maxima shrink it to the dock keeping the ratio.
    Without them the element would take the whole column and letterbox *inside*
    itself, which puts the caption a long way from the frame it captions. */
-/* Filled, faintly, and not only stroked: a 1px hairline at rgba(255,255,255,.16)
+/* Filled, faintly, and not only stroked: a 1px hairline at a faint alpha
    across a third of a large screen is a line you have to go looking for, and a
    dock that reads as empty is the thing this element exists to prevent. The
    fill is what carries the shape at any size; the stroke only edges it. */
@@ -572,10 +572,10 @@ export const css = `
   flex: 0 1 auto; min-height: 0; width: auto; height: auto;
   max-width: calc(100% * var(--mmc-plate-scale, 1));
   max-height: calc(100% * var(--mmc-plate-scale, 1));
-  fill: rgba(255,255,255,.028); stroke: rgba(255,255,255,.2); stroke-width: 1;
+  fill: var(--mmc-tint); stroke: var(--mmc-line-2); stroke-width: 1;
 }
 .mmc-fs-frame-note {
-  flex: none; font-size: 12px; color: var(--mmc-dim);
+  flex: none; font-size: calc(12px * var(--mmc-type)); color: var(--mmc-dim);
   letter-spacing: .05em; font-variant-numeric: tabular-nums;
 }
 /* The running halo is a LiteGraph impression — a 3px stroke placed to match the
@@ -599,7 +599,7 @@ export const css = `
  */
 .mmc-fs-prerun { padding: 8px 16px 16px; }
 .mmc-fs-run.ghost {
-  height: 38px; font-size: 13px; font-weight: 500;
+  height: calc(38px * var(--mmc-type)); font-size: calc(13px * var(--mmc-type)); font-weight: 500;
   background: none; border: 1px solid var(--mmc-line); color: var(--mmc-dim);
 }
 .mmc-fs-run.ghost:hover:not(:disabled) {
@@ -624,10 +624,10 @@ export const css = `
      grew with the card — on a large screen the desk's Render was a metre of
      amber with one word in the middle of it, the loudest thing in a room whose
      subject is the picture. */
-  height: 44px; padding: 0 24px; flex: 1; max-width: 380px;
+  height: calc(44px * var(--mmc-type)); padding: 0 24px; flex: 1; max-width: calc(380px * var(--mmc-type));
   border-radius: 22px; border: 0; cursor: pointer;
-  background: var(--mmc-accent); color: #141414;
-  font-family: inherit; font-size: 14px; font-weight: 600;
+  background: var(--mmc-accent); color: var(--mmc-on-accent);
+  font-family: inherit; font-size: calc(14px * var(--mmc-type)); font-weight: 600;
 }
 .mmc-fs-run:hover:not(:disabled) { filter: brightness(1.08); }
 .mmc-fs-label { display: flex; align-items: center; gap: 8px; }
@@ -645,10 +645,10 @@ export const css = `
 .mmc-fs-cancel {
   height: var(--mmc-pill-h); padding: 0 16px; border-radius: 19px; flex: none;
   background: none; border: 1px solid var(--mmc-line);
-  color: var(--mmc-dim); font-family: inherit; font-size: 13px; cursor: pointer;
+  color: var(--mmc-dim); font-family: inherit; font-size: calc(13px * var(--mmc-type)); cursor: pointer;
 }
-.mmc-fs-cancel:hover { border-color: rgba(224,116,60,.55); color: #e0743c; }
-.mmc-fs-note { font-size: 11px; color: var(--mmc-off); }
+.mmc-fs-cancel:hover { border-color: color-mix(in srgb, var(--mmc-warn) 55%, transparent); color: var(--mmc-warn); }
+.mmc-fs-note { font-size: calc(11px * var(--mmc-type)); color: var(--mmc-off); }
 
 /* The simple view's way to the sampler row it folded away. Only that view draws
    it — see the display:none directly below, which the .simple rule undoes. */
@@ -656,10 +656,10 @@ export const css = `
   display: none; align-items: center; gap: 7px; flex: none;
   height: var(--mmc-pill-h); padding: 0 14px; border-radius: 19px;
   background: none; border: 1px solid var(--mmc-line);
-  color: var(--mmc-dim); font-family: inherit; font-size: 13px; cursor: pointer;
+  color: var(--mmc-dim); font-family: inherit; font-size: calc(13px * var(--mmc-type)); cursor: pointer;
 }
 .mmc-fs-more svg { stroke: currentColor; fill: none; stroke-width: 1.6; }
-.mmc-fs-more:hover { color: var(--mmc-text); border-color: rgba(255,255,255,.2); }
+.mmc-fs-more:hover { color: var(--mmc-text); border-color: var(--mmc-line-2); }
 .mmc-fs-more[aria-pressed="true"] { color: var(--mmc-text); background: var(--mmc-surface-2); }
 
 /* --- the simple view ------------------------------------------------------ */
@@ -766,7 +766,7 @@ export const css = `
   position: relative;
   border-radius: 26px; padding: 18px;
   background: var(--mmc-surface); border: 1px solid var(--mmc-line);
-  box-shadow: 0 24px 64px rgba(0,0,0,.5);
+  box-shadow: 0 24px 64px var(--mmc-shadow-soft);
 }
 /* On the desk the body fills a column and scrolls inside it. Here the body is
    as tall as what is in it and the *window* is what scrolls, so the group can
@@ -783,12 +783,12 @@ export const css = `
    held by the tools themselves and not by a grid: the card is wide enough that
    this rail is one line, and a grid would put the cluster's hairline in a whole
    track of its own — far more room than a seam wants. */
-.mmc-fs.simple { --mmc-tool-tile: 44px; }
+.mmc-fs.simple { --mmc-tool-tile: calc(44px * var(--mmc-type)); }
 .mmc-fs.simple .mmc-rail { display: flex; justify-content: center; gap: 14px 0; }
 .mmc-fs.simple .mmc-rail-group {
   display: flex; align-items: flex-start; gap: 14px 0; margin-left: 0;
 }
-.mmc-fs.simple .mmc-tool { width: 68px; font-size: 11px; gap: 6px; }
+.mmc-fs.simple .mmc-tool { width: calc(68px * var(--mmc-type)); font-size: calc(11px * var(--mmc-type)); gap: 6px; }
 .mmc-fs.simple .mmc-tool-icon { border-radius: 12px; }
 .mmc-fs.simple .mmc-tool svg { width: 19px; height: 19px; }
 /* The split the node face makes with the whole width of the node — this
@@ -805,7 +805,7 @@ export const css = `
 .mmc-fs.simple .mmc-assets, .mmc-fs.simple .mmc-lora-block { justify-content: center; }
 /* The well is the whole composition here, so it gets the room to be one. */
 .mmc-fs.simple .mmc-panel { border-radius: 24px; padding: 18px; }
-.mmc-fs.simple .mmc-prompt { font-size: 17px; min-height: 84px; }
+.mmc-fs.simple .mmc-prompt { font-size: calc(17px * var(--mmc-type)); min-height: calc(84px * var(--mmc-type)); }
 
 /* Every row on this card is centred on the column — the rail, the step switch,
    the references — and the pill row is the one that was not.
@@ -838,6 +838,108 @@ export const css = `
 .mmc-fs.simple .mmc-fs-run { flex: 0 1 300px; }
 .mmc-fs.simple .mmc-fs-more { display: flex; }
 
+/* --- a window too narrow for the desk ------------------------------------- */
+/*
+ * Three regions with floors of 340, 500 and 260 want about 1160px before the
+ * gaps, and under that the body used to pan sideways — which is the one answer
+ * a workspace cannot give. You write in the card and judge in the picture, and a
+ * pan puts one of the two off the side of the screen while you are using the
+ * other.
+ *
+ * It is not a rare window either. Browser zoom is measured in CSS pixels, so
+ * Cmd + twice on a 1440px screen *is* a 1000px window — the desk started panning
+ * exactly when somebody zoomed in to read it.
+ *
+ * So the room gives up its axis before it gives up a region: the picture leaves
+ * the line and goes under the desk, full width, and the window scrolls. Left to
+ * right the desk still reads pre-stage, then shot; the picture they make is now
+ * beneath the pair rather than beside it, which is the same sentence with a line
+ * break in it. Nothing is hidden and nothing is folded away.
+ */
+@media (max-width: 1160px) {
+  .mmc-fs:not(.simple) .mmc-fs-body {
+    flex-direction: column; align-items: center;
+    /* The other axis, for the same reason it was the other axis before: this is
+       where the room now runs out. */
+    overflow: hidden auto;
+  }
+  /* Both cards were capped at the height of the body so the row could hold them
+     side by side. Stacked, that cap is the thing stopping the column from being
+     as long as its contents, and what scrolls is the window. */
+  .mmc-fs:not(.simple) .mmc-fs-desk,
+  .mmc-fs:not(.simple) .mmc-fs-col,
+  .mmc-fs:not(.simple) .mmc-fs-pre { max-height: none; }
+  .mmc-fs:not(.simple) .mmc-fs-desk { width: 100%; justify-content: center; }
+  /* A definite height rather than the slack in a row, because the plate's own
+     maxima are percentages of the region and a percentage of an auto height
+     resolves to nothing — the same trap the dock's comment names. Half the
+     window is what a picture under a desk can have without the writing above it
+     going off the top. */
+  .mmc-fs:not(.simple) .mmc-fs-reel {
+    flex: none; align-self: stretch; width: 100%; max-width: 100%;
+    height: 52vh; min-height: 240px;
+  }
+}
+
+/*
+ * And under about 900 the two faces stop fitting beside each other either — 340
+ * and 500 plus the gap is the whole of that width — so the desk takes the same
+ * break the body just took. Top to bottom it is pre-stage, shot, picture: the
+ * order the row read in, turned through ninety degrees and nothing else.
+ */
+@media (max-width: 900px) {
+  .mmc-fs:not(.simple) .mmc-fs-desk { flex-direction: column; width: 100%; }
+  .mmc-fs:not(.simple) .mmc-fs-col,
+  .mmc-fs:not(.simple) .mmc-fs-pre {
+    width: 100%; min-width: 0;
+  }
+  /* The measure was a cap on a card sharing a line with two others. Alone on
+     one, it is the line. */
+  .mmc-fs:not(.simple) .mmc-fs-col { max-width: 820px; }
+  .mmc-fs:not(.simple) .mmc-fs-pre { max-width: 820px; }
+  /* Both cards end in their own Render, and the rule that pushed it to the foot
+     was there to line the two buttons up along a shared bottom edge. Stacked
+     there is no shared edge, and an auto margin is then a hole between the
+     sampler row and the button under it. */
+  .mmc-fs:not(.simple) .mmc-fs-runrow { margin-top: 0; }
+}
+
+/* --- a window too narrow for the card beside the picture ------------------ */
+/*
+ * The simple view's own break, and it comes later because it has less to fit:
+ * one card of about 760 and the reel it opens beside it. Below roughly 1080 the
+ * two of them do not make a line, and this view clips where the desk panned —
+ * hiding the overflow is what makes the reel able to open from nothing.
+ *
+ * The picture goes above the card here rather than below it, which is the
+ * difference between the two views said out loud: the desk is a sequence read
+ * left to right and keeps that order when it folds, while this view is one piece
+ * with its picture over it. It is also what the view was always described as.
+ *
+ * The opening animation goes with the axis. Widening a column from nothing is
+ * not the same gesture — the card above it would jump down the page rather than
+ * slide across it — so the reel simply is or is not there, which is the answer
+ * this file already gives to reduced motion.
+ */
+@media (max-width: 1080px) {
+  .mmc-fs.simple .mmc-fs-body {
+    flex-direction: column; align-items: center;
+    overflow: hidden auto; padding: 16px; gap: 16px;
+  }
+  .mmc-fs.simple .mmc-fs-col {
+    width: 100%; max-width: var(--mmc-fs-measure);
+    max-height: none; overflow: visible;
+  }
+  /* Closed is gone, not zero-width: a column has no width to animate and an
+     empty region above the card is the outline of nothing. */
+  .mmc-fs.simple:not(.working) .mmc-fs-reel { display: none; }
+  .mmc-fs.simple.working .mmc-fs-reel {
+    order: -1; flex: none; align-self: stretch;
+    width: 100%; max-width: 100%; height: 52vh; min-height: 240px;
+    padding: 0; opacity: 1; transition: none;
+  }
+}
+
 /* --- a window too narrow for the card ------------------------------------- */
 /*
  * The measure already gives way to the window (see --mmc-fs-measure), so this is
@@ -849,10 +951,27 @@ export const css = `
  */
 @media (max-width: 720px) {
   .mmc-fs.simple .mmc-rail-group + .mmc-rail-group::before { display: none; }
-  .mmc-fs.simple .mmc-fs-body { padding: 12px; }
+  /* Written once per view rather than once for the shell, because the two
+     blocks above each set this at a specificity a bare ".mmc-fs" cannot reach —
+     and a rule that loses is worse than one that was never written. */
+  .mmc-fs.simple .mmc-fs-body,
+  .mmc-fs:not(.simple) .mmc-fs-body { padding: 12px; gap: 12px; }
   .mmc-fs.simple .mmc-fs-col { padding: 14px; border-radius: 20px; }
+  /* The desk's cards keep their inset on the body inside them, so it is that
+     rule the shell has to narrow rather than the card's own padding. */
+  .mmc-fs:not(.simple) .mmc-root:not(.hosting) { padding: 12px 12px 4px; }
+  .mmc-fs:not(.simple) .mmc-fs-col,
+  .mmc-fs:not(.simple) .mmc-fs-pre { border-radius: 18px; }
   .mmc-fs.simple .mmc-panel { padding: 14px; border-radius: 18px; }
-  .mmc-fs.simple .mmc-prompt { font-size: 16px; }
+  .mmc-fs.simple .mmc-prompt { font-size: calc(16px * var(--mmc-type)); }
+  /* The reel gave the picture half the window while there was a card beside or
+     under it worth reading at the same time. At this width the two take turns,
+     and a picture worth judging is worth more than half. */
+  .mmc-fs.simple.working .mmc-fs-reel,
+  .mmc-fs:not(.simple) .mmc-fs-reel { height: 44vh; }
+  /* The strip is a lip, and a lip that is a fifth of a phone-shaped window is a
+     second region. */
+  .mmc-fs, .mmc-fs.simple { --mmc-fs-lip: 84px; }
   /* The title bar is one line of chrome and it must stay one line. What goes is
      only what is said twice or said elsewhere: the node's name is on the card,
      and the way out keeps its arrow and its tooltip. */

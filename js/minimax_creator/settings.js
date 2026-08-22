@@ -15,9 +15,10 @@
 // be edited by hand, and a page that showed a remembered value would be showing
 // something the next render will not use.
 //
-// Two tabs, because the page now answers two questions that are not the same
-// question: how good the file is, and where it goes. Both are this machine's
-// rather than the workflow's, which is the only reason they share a page.
+// Tabs, because the page answers several questions that are not the same
+// question: how good the file is, where it goes, how much of a node face is
+// drawn, and how large it is drawn. Every one of them is this machine's rather
+// than the workflow's, which is the only reason they share a page.
 
 import { el, mountOverlay } from "./dom.js";
 import { loadSettings, saveSettings, noteSettings } from "./api.js";
@@ -62,6 +63,73 @@ const LEAD_IN = [
         + "the distillation saved." },
 ];
 
+// How large the pack draws its own text, as the multiplier `--mmc-type` carries
+// (styles/base.js). Four points, because a slider over a continuum of type sizes
+// is a control you tune rather than choose — and there are only about four
+// answers here: a step down, the sizes as drawn, and two steps up for a screen
+// you are sitting further from than the person who drew them was.
+//
+// `settings.py` decides what is *allowed* (0.8 to 1.6, so a hand-edited file can
+// go further); this decides what is *offered*.
+const TEXT_SCALE = [
+  { scale: 0.92, label: "Small",
+    note: "A step down: more of a node face, a longer strip of takes, and a "
+        + "little more of the picker's grid before it scrolls." },
+  { scale: 1, label: "Default",
+    note: "Every size in the pack as it was drawn." },
+  { scale: 1.12, label: "Large",
+    note: "The one to try first on a 4K screen at native resolution, where this "
+        + "pack is drawn a step smaller than the rest of the desk." },
+  { scale: 1.25, label: "Largest",
+    note: "A quarter again. Reads across a room; a node face on the canvas holds "
+        + "less before it scrolls, because the face is the size the graph gives "
+        + "it and only what is inside it grows." },
+];
+
+// What the pack may wear. Two answers, not three: "follow" is right for almost
+// everybody and is what the stylesheet does unaided, and the case for pinning is
+// specific enough to name on its own row. There is no "light" — a light editor
+// over a dark graph is the one combination nobody asks for, and offering it
+// would only be symmetry for its own sake.
+//
+// The pin reaches the fullscreen editor and nothing else, which is not a
+// limitation so much as the whole of where it makes sense: a node body sits
+// inside a node ComfyUI draws in its own palette, so a dark body on a light desk
+// is a dark island in a white card rather than a dark editor. The shell covers
+// the viewport and has no such argument to lose.
+//
+// `settings.py` decides what is allowed; this decides what is offered, and here
+// they happen to be the same two.
+const THEMES = [
+  { value: "follow", label: "Follow ComfyUI",
+    note: "Every colour this pack draws comes from the palette in ComfyUI's own "
+        + "Appearance settings, so the pack changes when the desk does — "
+        + "including palettes you made yourself." },
+  { value: "dark", label: "Dark in fullscreen",
+    note: "Node faces still follow the palette, but the fullscreen editor keeps "
+        + "a dark ground. For judging pictures: a frame read against white is "
+        + "read against the wrong thing, which is why the tools that cut and "
+        + "grade are dark." },
+];
+
+// How far the surfaces step off the ground. A tuned control rather than a chosen
+// one, like the text scale, and for the same reason it is offered as a handful
+// of points: the useful range is narrow and the difference between neighbouring
+// points is visible on screen the moment you pick one.
+const SURFACE_LIFT = [
+  { lift: 0.6, label: "Flat",
+    note: "The cards barely leave the ground. Quietest on a palette that already "
+        + "has plenty of contrast of its own." },
+  { lift: 1, label: "Default",
+    note: "The ladder as drawn." },
+  { lift: 1.4, label: "Raised",
+    note: "The one to try on Github, Nord or Solarized, where the palette's own "
+        + "contrast is low enough that the four surfaces read as two." },
+  { lift: 1.8, label: "Highest",
+    note: "Cards clearly apart from what they sit on. The most separation this "
+        + "offers before they stop looking like they belong to it." },
+];
+
 export function openSettings() {
   return new Promise((resolve) => new SettingsPage(resolve).mount());
 }
@@ -70,6 +138,7 @@ const TABS = [
   { key: "quality", label: "Quality" },
   { key: "folders", label: "Folders" },
   { key: "nodes", label: "Nodes" },
+  { key: "appearance", label: "Appearance" },
 ];
 
 class SettingsPage {
@@ -131,6 +200,13 @@ class SettingsPage {
     const previous = this.settings;
     this.settings = { ...this.settings, ...patch };
     this.problem = null;
+    // Through the cache on the way out as well as on the way back, which is the
+    // deal patchSettings already has: one of these settings is drawn by the
+    // stylesheet rather than by this page (the text scale, applied out of
+    // noteSettings), and a control whose effect waits for a round trip is a
+    // control that feels broken on a slow one. The reply below overwrites this
+    // with what was actually stored, and a refusal puts `previous` back.
+    noteSettings(this.settings);
     this.render();
     try {
       this.settings = await saveSettings(patch);
@@ -139,6 +215,7 @@ class SettingsPage {
       noteSettings(this.settings);
     } catch (error) {
       this.settings = previous;
+      noteSettings(previous);
       this.problem = t("Not saved — {error}", { error: error.message });
     }
     this.render();
@@ -172,6 +249,7 @@ class SettingsPage {
       ...(this.problem ? [el("div", { class: "mmc-set-problem", text: this.problem })] : []),
       ...(this.tab === "quality" ? [this.renderQuality()]
         : this.tab === "nodes" ? this.renderNodes()
+        : this.tab === "appearance" ? this.renderAppearance()
         : this.renderFolders()),
     );
   }
@@ -434,6 +512,160 @@ class SettingsPage {
       ])];
   }
 
+
+  // ---- appearance -------------------------------------------------------------
+
+  /**
+   * How large this pack draws its own text.
+   *
+   * One multiplier over every size in styles/ — see `--mmc-type` in
+   * styles/base.js for why it is a multiplier and not a set of named sizes. It
+   * is written onto the document out of `noteSettings`, so the page you are
+   * setting it on resizes under the pointer: the best preview a control like
+   * this can have is the thing itself, and it costs nothing to have.
+   *
+   * What moves with it is the text and what holds text — the pills, the rail's
+   * tiles, the fixed-height segments that carry a label. What does not is the
+   * room around them and the picture: the insets, the gaps between cards, the
+   * plate. That is the line between a text size and a magnifier, and the browser
+   * already has a magnifier on Cmd +.
+   */
+  renderAppearance() {
+    const current = Number(this.settings.text_scale) || 1;
+    // A file edited by hand can hold any point between settings.py's 0.8 and
+    // 1.6. Shown as its own row rather than rounded to the nearest offer — it is
+    // in force, so it has to be visible, and picking a row is how you leave it.
+    const rows = TEXT_SCALE.some((row) => row.scale === current)
+      ? TEXT_SCALE
+      : [{ scale: current, label: "Custom",
+           note: "Set by hand in the settings file. Pick one of the rows below to leave it." },
+         ...TEXT_SCALE];
+
+    return [this.section("Interface", "Text size",
+      "How large this pack draws its own text, everywhere it draws any: the node "
+      + "faces, the fullscreen editor, the timeline, the picker, and this page — "
+      + "which is why the words you are reading move as you choose. Nothing of "
+      + "ComfyUI's own moves with it.",
+      [
+        el("div", { class: "mmc-set-choices" }, rows.map((row) => el("button", {
+          class: "mmc-opt mmc-set-opt",
+          "aria-checked": row.scale === current,
+          onclick: () => row.scale !== current && this.set({ text_scale: row.scale }),
+        }, [
+          el("span", { class: "mmc-radio" }),
+          el("span", { class: "mmc-set-opt-text" }, [
+            el("span", { class: "mmc-set-opt-label", text: t(row.label) }),
+            el("span", { class: "mmc-set-opt-note", text: t(row.note) }),
+          ]),
+          // The number in force, on every row — the same promise the quality
+          // tab's crf column makes. A percentage rather than the stored 1.12,
+          // because "112%" is the one reading of a multiplier nobody has to be
+          // told how to read.
+          el("span", { class: "mmc-set-value", text: `${Math.round(row.scale * 100)}%` }),
+        ]))),
+        el("div", { class: "mmc-set-foot" }, [
+          el("span", {
+            text: t("Text and the controls that carry it — the pills, the tool "
+                + "tiles, the segments. The room around them and the picture stay "
+                + "where they are, so this makes the words larger rather than the "
+                + "window smaller. Open nodes pick the change up immediately. For "
+                + "everything at once, including ComfyUI's own chrome, the "
+                + "browser's own zoom is still the better tool."),
+          }),
+        ]),
+      ]),
+      this.themeSection(),
+      this.liftSection()];
+  }
+
+  /**
+   * Which palette the pack wears.
+   *
+   * The whole of this pack's colour derives from two of ComfyUI's own variables
+   * — see `--mmc-ground` and `--mmc-ink` in styles/base.js — so following the
+   * desk costs nothing and happens by itself. This setting only exists for the
+   * case following gets wrong: a light desk under a pack whose job is showing
+   * you a picture.
+   */
+  themeSection() {
+    const current = this.settings.theme === "dark" ? "dark" : "follow";
+    return this.section("Interface", "Colour",
+      "Whether this pack takes its colours from ComfyUI's palette or keeps a "
+      + "dark ground for the fullscreen editor. Following is the default and "
+      + "covers every palette there is, including ones you built yourself.",
+      [
+        el("div", { class: "mmc-set-choices" }, THEMES.map((row) => el("button", {
+          class: "mmc-opt mmc-set-opt",
+          "aria-checked": row.value === current,
+          onclick: () => row.value !== current && this.set({ theme: row.value }),
+        }, [
+          el("span", { class: "mmc-radio" }),
+          el("span", { class: "mmc-set-opt-text" }, [
+            el("span", { class: "mmc-set-opt-label", text: t(row.label) }),
+            el("span", { class: "mmc-set-opt-note", text: t(row.note) }),
+          ]),
+        ]))),
+        el("div", { class: "mmc-set-foot" }, [
+          el("span", {
+            text: t("This pack only. ComfyUI's own chrome is set in its own "
+                + "Appearance settings and does not move with this. The dark "
+                + "ground reaches the fullscreen editor and not the node faces, "
+                + "which stay part of the node ComfyUI draws around them. The "
+                + "accent amber is the pack's either way — on a pale palette it "
+                + "is drawn a shade deeper, because amber on white is not a "
+                + "colour a word can be written in."),
+          }),
+        ]),
+      ]);
+  }
+
+  /**
+   * How far the surfaces step off the ground beneath them.
+   *
+   * One multiplier over all four rungs of the ramp — see `--mmc-lift` in
+   * styles/base.js. It is here rather than left as a constant because the ramp
+   * is proportional to a palette's own contrast and some palettes have very
+   * little: there is no one set of percentages right for a ground of #ffffff
+   * and one of #073642.
+   */
+  liftSection() {
+    const current = Number(this.settings.surface_lift) || 1;
+    // A hand-edited file can hold any point between settings.py's 0.4 and 2.
+    // Shown as its own row rather than rounded to the nearest offer, the same
+    // promise the text scale above makes.
+    const rows = SURFACE_LIFT.some((row) => row.lift === current)
+      ? SURFACE_LIFT
+      : [{ lift: current, label: "Custom",
+           note: "Set by hand in the settings file. Pick one of the rows below to leave it." },
+         ...SURFACE_LIFT];
+
+    return this.section("Interface", "Surface separation",
+      "How far this pack's cards and panels step off the ground behind them. "
+      + "Every surface is a mix of the palette's own background and its text "
+      + "colour; this says how far along that mix each one sits.",
+      [
+        el("div", { class: "mmc-set-choices" }, rows.map((row) => el("button", {
+          class: "mmc-opt mmc-set-opt",
+          "aria-checked": row.lift === current,
+          onclick: () => row.lift !== current && this.set({ surface_lift: row.lift }),
+        }, [
+          el("span", { class: "mmc-radio" }),
+          el("span", { class: "mmc-set-opt-text" }, [
+            el("span", { class: "mmc-set-opt-label", text: t(row.label) }),
+            el("span", { class: "mmc-set-opt-note", text: t(row.note) }),
+          ]),
+          el("span", { class: "mmc-set-value", text: `${Math.round(row.lift * 100)}%` }),
+        ]))),
+        el("div", { class: "mmc-set-foot" }, [
+          el("span", {
+            text: t("Applies to whatever palette is in force, so it is worth a "
+                + "second look after changing the row above. The page you are "
+                + "reading moves with it, which is the best preview a control "
+                + "like this can have."),
+          }),
+        ]),
+      ]);
+  }
 
   // ---- folders ---------------------------------------------------------------
 

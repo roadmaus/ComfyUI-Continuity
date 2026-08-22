@@ -25,24 +25,25 @@ export const css = `
   position: relative; height: 100%; min-width: 240px;
   flex-direction: column; min-height: 0;
   border-radius: 16px; overflow: hidden;
-  background: #000; border: 1px solid var(--mmc-line);
-  box-shadow: 0 8px 30px rgba(0,0,0,.45);
+  background: var(--mmc-media-bg); border: 1px solid var(--mmc-line);
+  box-shadow: 0 8px 30px var(--mmc-shadow-soft);
 }
 /* The same running halo Comfy paints around the executing node: litegraph's
    "running" stroke style is a 3px line centered on a path 6px outside the node,
    covering 4.5–7.5px out. outline-offset 4.5px puts our 3px outline over the
    same band, so node and card keep the same silhouette while it runs — without
-   it the card read as shorter than the node for the whole render. Black, not
-   the node's status green: the card is not reporting progress, only holding
-   its edge. */
-.mmc-stage[data-state="sampling"] { outline: 3px solid #000; outline-offset: 4.5px; }
+   it the card read as shorter than the node for the whole render. The ground,
+   not the node's status green: the card is not reporting progress, only holding
+   its edge, so this wants the colour behind the card rather than a colour of its
+   own. It was a literal black for as long as that ground was black. */
+.mmc-stage[data-state="sampling"] { outline: 3px solid var(--mmc-bg); outline-offset: 4.5px; }
 .mmc-stage-media { flex: 1; min-height: 0; display: flex; }
 .mmc-stage-img, .mmc-stage-video {
   height: 100%; width: auto; min-height: 0; object-fit: contain;
   /* Until the media reports its size the card would be a sliver; until it is
      absurdly wide it may be as wide as it likes. Both bounds in graph units. */
   min-width: 240px; max-width: 1200px;
-  display: block; background: #000;
+  display: block; background: var(--mmc-media-bg);
 }
 
 /* Progress, as a rule along the bottom edge of the picture rather than a bar of
@@ -73,7 +74,7 @@ export const css = `
   position: absolute; left: 0; right: 0; bottom: 0;
   display: flex; align-items: flex-end; justify-content: space-between; gap: 10px;
   padding: 10px; pointer-events: none;
-  font-size: 11px; font-variant-numeric: tabular-nums;
+  font-size: calc(11px * var(--mmc-type)); font-variant-numeric: tabular-nums;
 }
 .mmc-stage-readout:empty { display: none; }
 /* Wrapping, and upwards: a row of hand-off chips on a narrow portrait render is
@@ -84,18 +85,18 @@ export const css = `
 }
 .mmc-stage-side.end { justify-content: flex-end; }
 .mmc-stage-chip {
-  color: #ededed; border-radius: 999px; padding: 3px 9px;
-  background: rgba(0,0,0,.55); border: 1px solid var(--mmc-line);
+  color: var(--mmc-text); border-radius: 999px; padding: 3px 9px;
+  background: var(--mmc-scrim-2); border: 1px solid var(--mmc-line);
   white-space: nowrap;
 }
 .mmc-stage-chip.warn {
-  color: #e0743c; border-color: rgba(224,116,60,.4);
+  color: var(--mmc-warn); border-color: color-mix(in srgb, var(--mmc-warn) 40%, transparent);
   white-space: normal; text-align: left;
 }
 /* The step count, while there are steps. Scoped to the left side so the accent
    lands on what is counting and not on the clock beside it. */
 .mmc-stage[data-state="sampling"] .mmc-stage-side:not(.end) .mmc-stage-chip:last-child {
-  color: var(--mmc-accent); border-color: rgba(240,166,60,.35);
+  color: var(--mmc-accent); border-color: color-mix(in srgb, var(--mmc-accent) 35%, transparent);
 }
 /* Which segment the steps belong to — first in the row, before the count it is
    the context for. */
@@ -105,14 +106,14 @@ export const css = `
 .mmc-stage-gallery {
   pointer-events: auto; cursor: pointer; font: inherit;
 }
-.mmc-stage-gallery:hover { border-color: #7a7a7a; background: rgba(0,0,0,.75); }
+.mmc-stage-gallery:hover { border-color: var(--mmc-edge-2); background: var(--mmc-scrim-3); }
 
 /* --- the weights control -------------------------------------------------- */
 /* A required file nobody has picked. The same warm orange the resolution slider
    uses past 768 and for the same reason: it is a fact about the render, said
    before you queue instead of after. */
-.mmc-weights.missing { border-color: rgba(224,116,60,.45); color: #e0743c; }
-.mmc-weights.missing:hover:not(:disabled) { border-color: rgba(224,116,60,.75); }
+.mmc-weights.missing { border-color: color-mix(in srgb, var(--mmc-warn) 45%, transparent); color: var(--mmc-warn); }
+.mmc-weights.missing:hover:not(:disabled) { border-color: color-mix(in srgb, var(--mmc-warn) 75%, transparent); }
 /* Wider with a device column: "cuda:0" beside a folder-qualified filename needs
    the room, and a popover that ellipsises both tells you neither. */
 .mmc-weights-pop { width: 380px; padding: 8px; }
@@ -120,10 +121,10 @@ export const css = `
   display: flex; align-items: center; gap: 8px; width: 100%;
   padding: 3px 4px; box-sizing: border-box;
 }
-.mmc-weight-name { flex: none; color: var(--mmc-dim); font-size: 12px; width: 112px; }
+.mmc-weight-name { flex: none; color: var(--mmc-dim); font-size: calc(12px * var(--mmc-type)); width: 112px; }
 .mmc-weight-file, .mmc-weight-device {
   background: none; border: 0; border-radius: 8px; padding: 5px 8px;
-  color: var(--mmc-text); font-family: inherit; font-size: 13px;
+  color: var(--mmc-text); font-family: inherit; font-size: calc(13px * var(--mmc-type));
   text-align: left; cursor: pointer;
 }
 .mmc-weight-file:hover, .mmc-weight-device:hover { background: var(--mmc-surface-2); }
@@ -135,17 +136,17 @@ export const css = `
   text-overflow: ellipsis; direction: rtl;
 }
 .mmc-weight-file.empty { color: var(--mmc-off); direction: ltr; }
-.mmc-weight-row.missing .mmc-weight-file { color: #e0743c; }
+.mmc-weight-row.missing .mmc-weight-file { color: var(--mmc-warn); }
 /* The device this field's weights load on. Quiet at "auto", which is the answer
    on every single-GPU machine and most multi-GPU ones; lit once it is a decision
    somebody made, because which card a thing is on is worth seeing at a glance. */
 .mmc-weight-device {
-  flex: none; width: 72px; text-align: center; font-size: 11px;
+  flex: none; width: 72px; text-align: center; font-size: calc(11px * var(--mmc-type));
   color: var(--mmc-off); border: 1px solid transparent;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 .mmc-weight-device.pinned {
-  color: var(--mmc-blue); border-color: rgba(47,123,246,.35);
+  color: var(--mmc-blue); border-color: color-mix(in srgb, var(--mmc-blue) 35%, transparent);
 }
 /* A standing route, which is a decision rather than a default — and the reason
    the checkpoint below it may be greyed out. */
@@ -156,7 +157,7 @@ export const css = `
 .mmc-weight-row.idle { opacity: .45; }
 /* A route that will be refused: forcing FL2VA on a generation with references.
    Said on the badge rather than at queue time. */
-.mmc-mode.bad { color: #e0743c; border-color: rgba(224,116,60,.45); }
+.mmc-mode.bad { color: var(--mmc-warn); border-color: color-mix(in srgb, var(--mmc-warn) 45%, transparent); }
 .mmc-mode.bad b, .mmc-mode.bad .mmc-pin { color: inherit; }
 
 `;

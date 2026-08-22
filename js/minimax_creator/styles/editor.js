@@ -21,7 +21,7 @@ export const css = `
 .mmc-tool {
   display: flex; flex-direction: column; align-items: center; gap: 6px;
   background: none; border: 0; padding: 0; cursor: pointer;
-  color: var(--mmc-dim); font-size: 12px; font-family: inherit;
+  color: var(--mmc-dim); font-size: calc(12px * var(--mmc-type)); font-family: inherit;
 }
 .mmc-tool-icon {
   width: var(--mmc-tool-tile); height: var(--mmc-tool-tile); border-radius: 14px;
@@ -41,14 +41,14 @@ export const css = `
    as a warning — and it declares itself only under the pointer, in the same red
    the picker's Delete uses for files. Armed, the second press is the one that
    empties the piece, so the tile goes solid and the label asks. */
-.mmc-tool.mmc-tool-danger:hover:not(:disabled) { color: #e0743c; }
+.mmc-tool.mmc-tool-danger:hover:not(:disabled) { color: var(--mmc-warn); }
 .mmc-tool.mmc-tool-danger:hover:not(:disabled) .mmc-tool-icon {
-  background: rgba(224,116,60,.14); border-color: rgba(224,116,60,.45);
+  background: color-mix(in srgb, var(--mmc-warn) 14%, transparent); border-color: color-mix(in srgb, var(--mmc-warn) 45%, transparent);
 }
-.mmc-tool.mmc-tool-danger.armed { color: #f08a55; }
+.mmc-tool.mmc-tool-danger.armed { color: var(--mmc-warn); }
 .mmc-tool.mmc-tool-danger.armed .mmc-tool-icon,
 .mmc-tool.mmc-tool-danger.armed:hover:not(:disabled) .mmc-tool-icon {
-  background: #b03a2a; border-color: #b03a2a; color: #fff;
+  background: var(--mmc-bad-solid); border-color: var(--mmc-bad-solid); color: var(--mmc-strong);
 }
 .mmc-tool:focus-visible { outline: none; }
 .mmc-tool:focus-visible .mmc-tool-icon { border-color: var(--mmc-accent); }
@@ -66,7 +66,7 @@ export const css = `
 .mmc-asset {
   display: flex; align-items: center; gap: 8px; padding: 4px 8px 4px 4px;
   background: var(--mmc-surface-2); border: 1px solid var(--mmc-line);
-  border-radius: 10px; font-size: 12px;
+  border-radius: 10px; font-size: calc(12px * var(--mmc-type));
 }
 .mmc-asset-thumb {
   width: 30px; height: 30px; border-radius: 7px; object-fit: cover;
@@ -103,7 +103,7 @@ export const css = `
    "sound off". Read, not pressed: the four buttons this replaces were four
    places to click on a chip whose name is now the one place. Dim, because the
    handle is what identifies the chip and this is a footnote to it. */
-.mmc-asset-said { color: var(--mmc-dim); font-size: 11px; }
+.mmc-asset-said { color: var(--mmc-dim); font-size: calc(11px * var(--mmc-type)); }
 /* The LoRA chip's name, which is its mute switch. A button that has to keep
    reading as the label it replaced: no chrome, and the pointer plus the hover
    is what says it does something. */
@@ -115,7 +115,7 @@ export const css = `
 .mmc-asset-role { color: var(--mmc-dim); }
 .mmc-asset-x {
   background: none; border: 0; color: var(--mmc-off); cursor: pointer;
-  font-size: 15px; line-height: 1; padding: 2px 3px; font-family: inherit;
+  font-size: calc(15px * var(--mmc-type)); line-height: 1; padding: 2px 3px; font-family: inherit;
 }
 .mmc-asset-x:hover { color: var(--mmc-text); }
 /* A LoRA set to the checkpoint this graph does not route to. Still listed —
@@ -137,11 +137,11 @@ export const css = `
    as intended — but it has to be readable, because the prompt box does not
    show it. */
 .mmc-note {
-  display: flex; gap: 8px; font-size: 11px; color: var(--mmc-dim); line-height: 1.4;
+  display: flex; gap: 8px; font-size: calc(11px * var(--mmc-type)); color: var(--mmc-dim); line-height: 1.4;
 }
 .mmc-note-key {
   color: var(--mmc-off); letter-spacing: .06em; text-transform: uppercase;
-  font-size: 10px; padding-top: 1px; flex: none;
+  font-size: calc(10px * var(--mmc-type)); padding-top: 1px; flex: none;
 }
 
 /* --- prompt + pills ------------------------------------------------------- */
@@ -168,10 +168,10 @@ export const css = `
   color: var(--mmc-off); opacity: .55; transition: opacity .12s ease, color .12s ease;
 }
 .mmc-panel:hover .mmc-expand { opacity: 1; }
-.mmc-expand:hover { color: var(--mmc-text); border-color: rgba(255,255,255,.2); }
+.mmc-expand:hover { color: var(--mmc-text); border-color: var(--mmc-line-2); }
 /* Lit once the text no longer fits: at that point the window is not a shortcut,
    it is where the writing is. */
-.mmc-expand.on { opacity: 1; color: var(--mmc-accent); border-color: rgba(240,166,60,.45); }
+.mmc-expand.on { opacity: 1; color: var(--mmc-accent); border-color: color-mix(in srgb, var(--mmc-accent) 45%, transparent); }
 /* Room for it, so a long first line does not run under the button. */
 .mmc-panel > .mmc-prompt-fold > .mmc-prompt { padding-right: 30px; }
 
@@ -194,7 +194,7 @@ export const css = `
    anything that would grow it. In here it is the thing that grows: the window
    scrolls, so the body is free to be as tall as its content. */
 .mmc-editor-sheet-body .mmc-root { height: auto; overflow: visible; padding: 18px 24px 24px; }
-.mmc-editor-sheet-sub { color: var(--mmc-dim); font-size: 13px; }
+.mmc-editor-sheet-sub { color: var(--mmc-dim); font-size: calc(13px * var(--mmc-type)); }
 .mmc-editor-sheet-body { overflow: auto; flex: 1; min-height: 0; }
 /* In the window the box gets the room the face cannot give it — but still a
    cap, because a pasted log is not a thing to scroll the whole window past. */
@@ -212,12 +212,12 @@ export const css = `
    never registered as overflowing at all. Seven lines is what the face shows;
    the window holds the rest. */
 .mmc-prompt {
-  flex: 1; min-height: 56px; max-height: 168px; background: none; border: 0; outline: none;
-  color: var(--mmc-text); font-family: inherit; font-size: 15px; line-height: 1.6;
+  flex: 1; min-height: calc(56px * var(--mmc-type)); max-height: calc(168px * var(--mmc-type)); background: none; border: 0; outline: none;
+  color: var(--mmc-text); font-family: inherit; font-size: calc(15px * var(--mmc-type)); line-height: 1.6;
   white-space: pre-wrap; word-break: break-word; overflow-y: auto;
 }
 .mmc-prompt:empty::before {
-  content: attr(data-placeholder); color: #6a6a6a; pointer-events: none;
+  content: attr(data-placeholder); color: var(--mmc-off); pointer-events: none;
 }
 /* A rewrite replaces this text rather than joining it, so while one is on the
    box is holding a draft, not the prompt. Dimmed rather than disabled: it is
@@ -261,7 +261,7 @@ export const css = `
 .mmc-prompt-fold.superseded > .mmc-prompt-head {
   display: flex; align-items: center; gap: 7px; min-width: 0;
   padding: 4px 6px; margin: -4px -6px; border-radius: 9px;
-  color: var(--mmc-dim); font-size: 12px; cursor: pointer; list-style: none;
+  color: var(--mmc-dim); font-size: calc(12px * var(--mmc-type)); cursor: pointer; list-style: none;
 }
 .mmc-prompt-head::-webkit-details-marker { display: none; }
 .mmc-prompt-fold.superseded > .mmc-prompt-head:hover { color: var(--mmc-text); background: var(--mmc-surface-2); }
@@ -296,7 +296,7 @@ export const css = `
   display: flex; align-items: center; gap: 7px; width: 100%; text-align: left;
   appearance: none; border: 0; background: none; cursor: pointer;
   padding: 7px 0 0; margin-top: 3px; border-top: 1px solid var(--mmc-line);
-  color: var(--mmc-off); font: inherit; font-size: 11.5px;
+  color: var(--mmc-off); font: inherit; font-size: calc(11.5px * var(--mmc-type));
 }
 .mmc-compiled-rail:hover { color: var(--mmc-text); }
 .mmc-compiled-rail:focus-visible {
@@ -312,9 +312,9 @@ export const css = `
 .mmc-compiled-status {
   margin-left: auto; min-width: 0; overflow: hidden; white-space: nowrap;
   text-overflow: ellipsis; color: var(--mmc-off);
-  font-size: 10px; letter-spacing: .09em; text-transform: uppercase;
+  font-size: calc(10px * var(--mmc-type)); letter-spacing: .09em; text-transform: uppercase;
 }
-.mmc-compiled.problem .mmc-compiled-status { color: #e0743c; }
+.mmc-compiled.problem .mmc-compiled-status { color: var(--mmc-warn); }
 /* Dimmed, never emptied, while a re-read is out: the panel re-reads on every
    keystroke, and replacing prose somebody is reading with a waiting state that
    often is worse than one stale word. */
@@ -345,11 +345,11 @@ export const css = `
    second name for it. */
 .mmc-compiled-key {
   display: flex; align-items: baseline; gap: 7px;
-  color: var(--mmc-off); font-size: 10px; letter-spacing: .04em;
+  color: var(--mmc-off); font-size: calc(10px * var(--mmc-type)); letter-spacing: .04em;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 .mmc-compiled-value {
-  margin: 0; color: var(--mmc-dim); font-size: 12.5px; line-height: 1.6;
+  margin: 0; color: var(--mmc-dim); font-size: calc(12.5px * var(--mmc-type)); line-height: 1.6;
   white-space: pre-wrap; overflow-wrap: anywhere;
 }
 /* The one mark in here, on the one block that is yours. Everything above and
@@ -360,14 +360,14 @@ export const css = `
 }
 .mmc-compiled-block.mine .mmc-compiled-value { color: var(--mmc-text); }
 .mmc-compiled-mine {
-  color: var(--mmc-accent); font-family: inherit; font-size: 10px;
+  color: var(--mmc-accent); font-family: inherit; font-size: calc(10px * var(--mmc-type));
   letter-spacing: .06em; text-transform: uppercase;
 }
 .mmc-compiled-note, .mmc-compiled-empty {
-  margin: 0; color: var(--mmc-off); font-size: 11.5px; line-height: 1.55;
+  margin: 0; color: var(--mmc-off); font-size: calc(11.5px * var(--mmc-type)); line-height: 1.55;
 }
 .mmc-compiled-problem {
-  margin: 0; color: #e0743c; font-size: 12.5px; line-height: 1.6;
+  margin: 0; color: var(--mmc-warn); font-size: calc(12.5px * var(--mmc-type)); line-height: 1.6;
 }
 /* Where the sections will be, while the first answer is outstanding. */
 .mmc-compiled-bar {
@@ -404,12 +404,12 @@ export const css = `
 /* --- @ mention menu ------------------------------------------------------- */
 .mmc-mention {
   position: fixed; z-index: 1350; width: 330px; max-height: 300px; overflow-y: auto;
-  background: #212121; border: 1px solid var(--mmc-line); border-radius: 14px;
-  padding: 6px; box-shadow: 0 20px 50px rgba(0,0,0,.65);
+  background: var(--mmc-surface); border: 1px solid var(--mmc-line); border-radius: 14px;
+  padding: 6px; box-shadow: 0 20px 50px var(--mmc-shadow);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
 }
 .mmc-mention-head {
-  color: #7d7d7d; font-size: 10px; letter-spacing: .09em; text-transform: uppercase;
+  color: var(--mmc-faint); font-size: calc(10px * var(--mmc-type)); letter-spacing: .09em; text-transform: uppercase;
   padding: 10px 10px 6px;
 }
 /* min-width:0 all the way down: a flex item defaults to min-content width, so
@@ -419,23 +419,23 @@ export const css = `
   display: flex; align-items: center; gap: 10px; width: 100%; min-width: 0;
   padding: 7px 8px; background: none; border: 1px solid transparent;
   border-radius: 10px; font-family: inherit; text-align: left; cursor: pointer;
-  color: #ededed; overflow: hidden;
+  color: var(--mmc-text); overflow: hidden;
 }
-.mmc-mention-row[aria-selected="true"] { background: #2e2e2e; border-color: rgba(255,255,255,.13); }
+.mmc-mention-row[aria-selected="true"] { background: var(--mmc-surface-3); border-color: var(--mmc-wash-2); }
 .mmc-mention-thumb {
-  width: 30px; height: 30px; border-radius: 7px; object-fit: cover; flex: none;
-  background: #333; display: flex; align-items: center; justify-content: center;
-  color: #8b8b8b; font-size: 13px;
+  width: calc(30px * var(--mmc-type)); height: calc(30px * var(--mmc-type)); border-radius: 7px; object-fit: cover; flex: none;
+  background: var(--mmc-surface-3); display: flex; align-items: center; justify-content: center;
+  color: var(--mmc-dim); font-size: calc(13px * var(--mmc-type));
 }
 .mmc-mention-text { display: flex; flex-direction: column; min-width: 0; flex: 1; }
 .mmc-mention-handle {
-  color: var(--tag, var(--mmc-accent)); font-size: 14px;
+  color: var(--tag, var(--mmc-accent)); font-size: calc(14px * var(--mmc-type));
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .mmc-mention-sub {
-  color: #7d7d7d; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  color: var(--mmc-faint); font-size: calc(11px * var(--mmc-type)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-.mmc-mention-empty { color: #7d7d7d; font-size: 13px; padding: 14px 10px; }
+.mmc-mention-empty { color: var(--mmc-faint); font-size: calc(13px * var(--mmc-type)); padding: 14px 10px; }
 
 /* --- the / menu's own rows -------------------------------------------------
  *
@@ -444,37 +444,37 @@ export const css = `
  * you can press rather than as a result: the name in the body colour instead of
  * a handle's, and a chevron saying the list goes on behind it.
  */
-.mmc-mention-branch .mmc-mention-handle { color: #ededed; }
+.mmc-mention-branch .mmc-mention-handle { color: var(--mmc-text); }
 /* A look's row is the descriptor, not a handle — it has no name until it is
    cast, so the tag colour every other row wears would be a promise about a
    thing that does not exist yet. Its frame is the picture beside it, and the
    rest of the descriptor is the second line. */
-.mmc-mention-style .mmc-mention-handle { color: #ededed; font-size: 13px; }
+.mmc-mention-style .mmc-mention-handle { color: var(--mmc-text); font-size: calc(13px * var(--mmc-type)); }
 .mmc-mention-style .mmc-mention-thumb { object-fit: cover; }
-.mmc-mention-glyph { color: #8b8b8b; }
-.mmc-mention-more { color: #7d7d7d; font-size: 15px; flex: none; padding-right: 2px; }
+.mmc-mention-glyph { color: var(--mmc-dim); }
+.mmc-mention-more { color: var(--mmc-faint); font-size: calc(15px * var(--mmc-type)); flex: none; padding-right: 2px; }
 /* The way back, above the narrowed list and reading as the thing it undoes.
    Full width so it is a bar rather than a fourth row in the results. */
 .mmc-mention-back {
   display: flex; align-items: center; gap: 8px; width: 100%;
   padding: 6px 10px; margin-bottom: 2px; background: none; border: 0;
   border-bottom: 1px solid var(--mmc-line); border-radius: 0;
-  color: #7d7d7d; font-family: inherit; font-size: 11px; text-align: left; cursor: pointer;
+  color: var(--mmc-faint); font-family: inherit; font-size: calc(11px * var(--mmc-type)); text-align: left; cursor: pointer;
 }
-.mmc-mention-back:hover { color: #ededed; }
+.mmc-mention-back:hover { color: var(--mmc-text); }
 
 .mmc-pills { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .mmc-pill {
   display: flex; align-items: center; gap: 7px; height: var(--mmc-pill-h); padding: 0 14px;
   border-radius: 19px; background: var(--mmc-surface-2); border: 1px solid var(--mmc-line);
-  color: var(--mmc-text); font-size: 13px; font-family: inherit; cursor: pointer;
+  color: var(--mmc-text); font-size: calc(13px * var(--mmc-type)); font-family: inherit; cursor: pointer;
   white-space: nowrap; transition: background .12s ease;
 }
 .mmc-pill:hover:not(:disabled) { background: var(--mmc-surface-3); }
 .mmc-pill:disabled { cursor: not-allowed; color: var(--mmc-off); }
 .mmc-pill svg { width: 16px; height: 16px; stroke: currentColor; fill: none;
   stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-.mmc-pill-sub { color: var(--mmc-dim); font-size: 11px; }
+.mmc-pill-sub { color: var(--mmc-dim); font-size: calc(11px * var(--mmc-type)); }
 .mmc-pill-group { gap: 0; padding: 0 6px; }
 /* Several closely related controls in one pill, divided by hairlines — the two
    ends of the shot, the canvas and its short edge, the sampler and its
@@ -499,15 +499,15 @@ export const css = `
 .mmc-pill-seg {
   display: flex; align-items: center; gap: 5px; height: 100%; padding: 0 12px;
   background: none; border: 0; border-left: 1px solid var(--mmc-line);
-  color: var(--mmc-dim); font-size: 13px; font-family: inherit; cursor: pointer;
+  color: var(--mmc-dim); font-size: calc(13px * var(--mmc-type)); font-family: inherit; cursor: pointer;
 }
 .mmc-pill-seg:first-child { border-left: 0; }
-.mmc-pill-seg:hover { color: #ededed; }
+.mmc-pill-seg:hover { color: var(--mmc-text); }
 .mmc-pill-seg[aria-pressed="true"], .mmc-pill-seg.accel-on {
-  background: rgba(110,190,255,.14); color: #6ebeff;
+  background: color-mix(in srgb, var(--mmc-role-motion) 14%, transparent); color: var(--mmc-role-motion);
 }
 .mmc-pill-seg[aria-pressed="true"] .mmc-pill-sub, .mmc-pill-seg.accel-on .mmc-pill-sub {
-  color: rgba(110,190,255,.75);
+  color: color-mix(in srgb, var(--mmc-role-motion) 75%, transparent);
 }
 /* Lit, a stepper lights through — the rule .mmc-pill.accel-on already follows. */
 .mmc-pill-seg.accel-on .mmc-step:not(:disabled) { color: inherit; }
@@ -520,7 +520,7 @@ export const css = `
 .mmc-pill-seg-group { padding: 0 4px; gap: 0; }
 .mmc-step {
   background: none; border: 0; color: var(--mmc-text); cursor: pointer;
-  font-size: 16px; width: 26px; height: 36px; font-family: inherit;
+  font-size: calc(16px * var(--mmc-type)); width: calc(26px * var(--mmc-type)); height: calc(36px * var(--mmc-type)); font-family: inherit;
 }
 .mmc-step:disabled { color: var(--mmc-off); cursor: not-allowed; }
 /* No text-transform: the socket name has to read exactly as it does on the
@@ -542,7 +542,7 @@ export const css = `
    everything beside it, which read as a fragment of the row rather than the end
    of it. Transparent, so height is all it borrows. */
 .mmc-mode {
-  font-size: 11px; letter-spacing: .04em; color: var(--mmc-dim);
+  font-size: calc(11px * var(--mmc-type)); letter-spacing: .04em; color: var(--mmc-dim);
   display: flex; align-items: center; gap: 6px; height: var(--mmc-pill-h);
   background: none; border: 1px solid transparent; border-radius: 19px;
   padding: 0 12px; font-family: inherit; box-sizing: border-box;
@@ -553,10 +553,10 @@ button.mmc-mode:hover { background: var(--mmc-surface-2); border-color: var(--mm
 .mmc-mode.pinned { border-color: var(--mmc-line); background: var(--mmc-surface-2); }
 .mmc-mode b { color: var(--mmc-accent); font-weight: 600; }
 .mmc-pin {
-  font-size: 10px; letter-spacing: .06em; text-transform: uppercase;
+  font-size: calc(10px * var(--mmc-type)); letter-spacing: .06em; text-transform: uppercase;
   color: var(--mmc-accent); border: 1px solid currentColor; border-radius: 8px;
   padding: 0 5px; opacity: .8;
 }
-.mmc-warn { color: #e0743c; font-size: 12px; }
+.mmc-warn { color: var(--mmc-warn); font-size: calc(12px * var(--mmc-type)); }
 
 `;

@@ -6,7 +6,7 @@ export const css = `
 .mmc-cast { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
 .mmc-cast-head { display: flex; gap: 10px; align-items: center; min-width: 0; }
 .mmc-cast-hint {
-  font-size: 11px; color: var(--mmc-off); flex: 1; min-width: 0;
+  font-size: calc(11px * var(--mmc-type)); color: var(--mmc-off); flex: 1; min-width: 0;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .mmc-cast-new { display: inline-flex; gap: 5px; align-items: center; flex: none; }
@@ -20,9 +20,9 @@ export const css = `
   background: none; color: inherit; font-family: inherit; cursor: pointer;
   text-align: left; width: 100%;
 }
-.mmc-cast-empty:hover { border-color: rgba(255,255,255,.22); background: var(--mmc-surface); }
-.mmc-cast-empty-title { font-size: 12.5px; color: var(--mmc-dim); }
-.mmc-cast-empty-note { font-size: 11px; color: var(--mmc-off); line-height: 1.45; }
+.mmc-cast-empty:hover { border-color: var(--mmc-line-2); background: var(--mmc-surface); }
+.mmc-cast-empty-title { font-size: calc(12.5px * var(--mmc-type)); color: var(--mmc-dim); }
+.mmc-cast-empty-note { font-size: calc(11px * var(--mmc-type)); color: var(--mmc-off); line-height: 1.45; }
 
 /* The shelf is one list rather than a stack of loose cards: a cast is a call
    sheet, and hairlines between the lines of one sheet read as a roster where
@@ -52,7 +52,7 @@ export const css = `
    worth seeing at a glance and not worth shouting about. */
 .mmc-cast-card.idle { border-left-color: var(--mmc-off); }
 .mmc-cast-card.idle .mmc-cast-face { opacity: .62; }
-.mmc-cast-card.bad { border-left-color: #ff8c78; }
+.mmc-cast-card.bad { border-left-color: var(--mmc-bad); }
 
 /* --- shut: one line ------------------------------------------------------- */
 
@@ -73,10 +73,10 @@ export const css = `
 .mmc-cast-line-ident { display: flex; align-items: baseline; gap: 7px; min-width: 0; }
 .mmc-cast-line-name {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 12.5px; color: var(--tag, var(--mmc-text));
+  font-size: calc(12.5px * var(--mmc-type)); color: var(--tag, var(--mmc-text));
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
-.mmc-cast-line-takes { font-size: 11px; color: var(--mmc-off); flex: none; }
+.mmc-cast-line-takes { font-size: calc(11px * var(--mmc-type)); color: var(--mmc-off); flex: none; }
 
 /* Their files as a texture rather than a row of controls — the reading a shut
    line owes is "two pictures and a voice", not "which picture". */
@@ -99,17 +99,17 @@ export const css = `
 .mmc-cast-mini-motion::after { background: var(--mmc-role-motion); }
 .mmc-cast-mini-voice::after { background: var(--mmc-role-voice); }
 .mmc-cast-mini-replaces::after { background: var(--mmc-role-replaces); }
-.mmc-cast-mini.missing .mmc-cast-mini-thumb { box-shadow: 0 0 0 1.5px rgba(255,140,120,.5); }
-.mmc-cast-line-words { font-size: 11px; color: var(--mmc-off); flex: none; }
+.mmc-cast-mini.missing .mmc-cast-mini-thumb { box-shadow: 0 0 0 1.5px color-mix(in srgb, var(--mmc-bad) 50%, transparent); }
+.mmc-cast-line-words { font-size: calc(11px * var(--mmc-type)); color: var(--mmc-off); flex: none; }
 
 /* Where they walk on, or what is wrong with them — the two things a shut line is
    read for, in the place the eye already goes for a status. */
 .mmc-cast-line-state {
-  margin-left: auto; font-size: 11px; color: var(--mmc-dim); flex: none;
+  margin-left: auto; font-size: calc(11px * var(--mmc-type)); color: var(--mmc-dim); flex: none;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 46%;
 }
 .mmc-cast-card.idle .mmc-cast-line-state { color: var(--mmc-off); }
-.mmc-cast-line-state.bad { color: #ff8c78; }
+.mmc-cast-line-state.bad { color: var(--mmc-bad); }
 .mmc-cast-chev { display: flex; color: var(--mmc-off); flex: none; }
 
 /* --- open: the way back out ----------------------------------------------- */
@@ -145,7 +145,7 @@ export const css = `
 .mmc-cast-namerow { display: flex; gap: 8px; align-items: center; min-width: 0; }
 /* The @ belongs to the name, not to the row: it is one token with a gap in it
    otherwise. */
-.mmc-cast-namerow .mmc-asset-handle { font-size: 13px; margin-right: -6px; }
+.mmc-cast-namerow .mmc-asset-handle { font-size: calc(13px * var(--mmc-type)); margin-right: -6px; }
 
 /* The name is monospace and the description is not, deliberately: the name is a
    token you type into a sentence and the description is the sentence. */
@@ -153,7 +153,7 @@ export const css = `
   background: none; border: 0; border-bottom: 1px solid transparent;
   padding: 2px 0; color: var(--tag, var(--mmc-text)); font: inherit;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 13px; font-weight: 500; width: 12ch; min-width: 0; outline: none;
+  font-size: calc(13px * var(--mmc-type)); font-weight: 500; width: 12ch; min-width: 0; outline: none;
 }
 .mmc-cast-name:hover { border-bottom-color: var(--mmc-line); }
 .mmc-cast-name:focus { border-bottom-color: var(--tag, var(--mmc-accent)); }
@@ -164,7 +164,7 @@ export const css = `
    second control of the same weight as the name itself. */
 .mmc-cast-takes {
   background: none; border: 0; padding: 2px 4px; border-radius: 6px;
-  color: var(--mmc-dim); font-family: inherit; font-size: 11.5px; cursor: pointer;
+  color: var(--mmc-dim); font-family: inherit; font-size: calc(11.5px * var(--mmc-type)); cursor: pointer;
 }
 .mmc-cast-takes:hover { background: var(--mmc-surface-2); color: var(--mmc-text); }
 
@@ -172,13 +172,13 @@ export const css = `
   flex: 1; min-width: 120px; width: 100%; box-sizing: border-box;
   background: var(--mmc-surface-2); border: 1px solid transparent;
   border-radius: 8px; padding: 5px 9px; color: inherit; font: inherit;
-  font-size: 12px; outline: none;
+  font-size: calc(12px * var(--mmc-type)); outline: none;
 }
 .mmc-cast-desc:focus { border-color: var(--mmc-line); }
 .mmc-cast-desc::placeholder { color: var(--mmc-off); }
 
 .mmc-cast-side { display: flex; gap: 4px; align-items: center; flex: none; }
-.mmc-cast-where { font-size: 11px; color: var(--mmc-dim); white-space: nowrap; }
+.mmc-cast-where { font-size: calc(11px * var(--mmc-type)); color: var(--mmc-dim); white-space: nowrap; }
 /* The commonest way to lose an afternoon with this feature is to cast somebody
    and never write their name. So the readout that says so is also the button that
    fixes it, and it is dashed to say there is something outstanding here. */
@@ -218,9 +218,9 @@ export const css = `
 /* A handle the shot no longer holds. Not hidden — they still claims it, and the
    card refuses to queue until somebody says otherwise. */
 .mmc-cast-ref.missing .mmc-cast-ref-thumb {
-  box-shadow: 0 0 0 2px rgba(255,140,120,.5); color: #ff8c78;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--mmc-bad) 50%, transparent); color: var(--mmc-bad);
 }
-.mmc-cast-missing { font-size: 15px; }
+.mmc-cast-missing { font-size: calc(15px * var(--mmc-type)); }
 
 /* What the file lends them, in the corner of the file. Small on purpose: the
    picture is the thing you recognise and the badge is the thing you check. */
@@ -240,14 +240,14 @@ export const css = `
 /* The way to hang another file on them: a tile of the same size as the files,
    in the same row, so it reads as the next slot rather than as a control. */
 .mmc-cast-add {
-  width: 38px; height: 38px; box-sizing: border-box; border-radius: 9px; flex: none;
+  width: calc(38px * var(--mmc-type)); height: calc(38px * var(--mmc-type)); box-sizing: border-box; border-radius: 9px; flex: none;
   border: 1px dashed var(--mmc-line); background: none; cursor: pointer;
-  color: var(--mmc-off); font-size: 17px; font-family: inherit; line-height: 1;
+  color: var(--mmc-off); font-size: calc(17px * var(--mmc-type)); font-family: inherit; line-height: 1;
   display: flex; align-items: center; justify-content: center;
 }
 .mmc-cast-add:hover { border-color: var(--mmc-accent); color: var(--mmc-accent); }
 
-.mmc-cast-refs-none { font-size: 11px; color: var(--mmc-off); }
+.mmc-cast-refs-none { font-size: calc(11px * var(--mmc-type)); color: var(--mmc-off); }
 
 /* --- feature by feature ---------------------------------------------------- */
 /* The guide writes a subject as a named list of features and names the same
@@ -265,12 +265,12 @@ export const css = `
   display: flex; align-items: baseline; gap: 10px; min-width: 0; margin-bottom: 1px;
 }
 .mmc-cast-features-title {
-  color: var(--mmc-off); font-size: 10px; letter-spacing: .09em; text-transform: uppercase;
+  color: var(--mmc-off); font-size: calc(10px * var(--mmc-type)); letter-spacing: .09em; text-transform: uppercase;
 }
 .mmc-cast-feature-add {
   margin-left: auto; flex: none; appearance: none; border: 0; background: none;
   padding: 2px 5px; margin-right: -5px; border-radius: 6px; cursor: pointer;
-  color: var(--mmc-off); font: inherit; font-size: 11px; white-space: nowrap;
+  color: var(--mmc-off); font: inherit; font-size: calc(11px * var(--mmc-type)); white-space: nowrap;
 }
 .mmc-cast-feature-add:hover { color: var(--mmc-accent); background: var(--mmc-surface-2); }
 
@@ -287,9 +287,9 @@ export const css = `
 .mmc-cast-feature-is, .mmc-cast-feature-instead {
   flex: 0 1 15em; min-width: 7em; appearance: none; background: none;
   border: 0; border-bottom: 1px solid transparent; outline: none;
-  padding: 3px 0; color: var(--mmc-text); font: inherit; font-size: 12.5px;
+  padding: 3px 0; color: var(--mmc-text); font: inherit; font-size: calc(12.5px * var(--mmc-type));
 }
-.mmc-cast-feature-is::placeholder, .mmc-cast-feature-instead::placeholder { color: #5a5a5a; }
+.mmc-cast-feature-is::placeholder, .mmc-cast-feature-instead::placeholder { color: var(--mmc-off); }
 .mmc-cast-feature-is:hover, .mmc-cast-feature-instead:hover { border-bottom-color: var(--mmc-line); }
 .mmc-cast-feature-is:focus, .mmc-cast-feature-instead:focus {
   border-bottom-color: var(--mmc-accent);
@@ -298,7 +298,7 @@ export const css = `
    the only thing here with horizontal motion in it, and it reads as what it is —
    this, now that. Nothing else is highlighted, boxed or coloured to say so. */
 .mmc-cast-feature-arrow {
-  flex: none; color: var(--mmc-accent); font-size: 13px; line-height: 1;
+  flex: none; color: var(--mmc-accent); font-size: calc(13px * var(--mmc-type)); line-height: 1;
 }
 .mmc-cast-feature.changed .mmc-cast-feature-is { color: var(--mmc-dim); }
 .mmc-cast-feature.changed .mmc-cast-feature-instead { color: var(--mmc-text); }
@@ -307,7 +307,7 @@ export const css = `
 .mmc-cast-feature-kept {
   flex: none; appearance: none; border: 0; background: none; cursor: pointer;
   padding: 3px 6px; border-radius: 6px; color: var(--mmc-off);
-  font: inherit; font-size: 11px; white-space: nowrap;
+  font: inherit; font-size: calc(11px * var(--mmc-type)); white-space: nowrap;
 }
 .mmc-cast-feature-kept:hover { color: var(--mmc-accent); background: var(--mmc-surface-2); }
 .mmc-cast-feature-x {
@@ -327,10 +327,10 @@ export const css = `
 }
 .mmc-cast-marker:hover { background: var(--mmc-surface-2); }
 .mmc-cast-marker-value {
-  color: var(--mmc-dim); font-size: 11px; letter-spacing: .04em;
+  color: var(--mmc-dim); font-size: calc(11px * var(--mmc-type)); letter-spacing: .04em;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
-.mmc-cast-marker-say, .mmc-cast-marker-forced { color: var(--mmc-off); font-size: 10.5px; }
+.mmc-cast-marker-say, .mmc-cast-marker-forced { color: var(--mmc-off); font-size: calc(10.5px * var(--mmc-type)); }
 .mmc-cast-marker.forced .mmc-cast-marker-value { color: var(--mmc-accent); }
 
 .mmc-cast-line { display: flex; gap: 8px; align-items: center; padding-left: 58px; min-width: 0; }
@@ -343,11 +343,11 @@ export const css = `
 .mmc-cast-place-clip {
   flex: none; appearance: none; background: none; cursor: pointer;
   border: 1px solid var(--mmc-line); border-radius: 7px; padding: 3px 8px;
-  color: var(--mmc-dim); font: inherit; font-size: 11.5px; white-space: nowrap;
+  color: var(--mmc-dim); font: inherit; font-size: calc(11.5px * var(--mmc-type)); white-space: nowrap;
 }
 .mmc-cast-place-clip:hover { border-color: var(--mmc-accent); color: var(--mmc-text); }
-.mmc-cast-of { font-size: 11px; color: var(--mmc-dim); white-space: nowrap; }
-.mmc-cast-bad { font-size: 11px; color: #ff8c78; line-height: 1.45; padding-left: 58px; }
+.mmc-cast-of { font-size: calc(11px * var(--mmc-type)); color: var(--mmc-dim); white-space: nowrap; }
+.mmc-cast-bad { font-size: calc(11px * var(--mmc-type)); color: var(--mmc-bad); line-height: 1.45; padding-left: 58px; }
 
 /* On a node face the shelf is bounded, the way the asset row and the prompt box
    are: the face is a preview of one generation, and a cast of nine must not push
@@ -359,7 +359,7 @@ export const css = `
    the only place that says so while the shelf is scrolled out of sight. */
 .mmc-tool.on { color: var(--mmc-text); }
 .mmc-tool.on .mmc-tool-icon {
-  border-color: rgba(240,166,60,.45); color: var(--mmc-accent);
+  border-color: color-mix(in srgb, var(--mmc-accent) 45%, transparent); color: var(--mmc-accent);
 }
 
 /* --- the menus ------------------------------------------------------------- */
@@ -371,12 +371,12 @@ export const css = `
 .mmc-cast-menu .mmc-opt { align-items: flex-start; padding: 8px 10px; }
 .mmc-cast-menu .mmc-opt-label { align-items: flex-start; gap: 9px; min-width: 0; }
 .mmc-cast-menu-head {
-  color: var(--mmc-off); font-size: 10px; letter-spacing: .06em;
+  color: var(--mmc-off); font-size: calc(10px * var(--mmc-type)); letter-spacing: .06em;
   text-transform: uppercase; padding: 8px 10px 4px;
 }
 .mmc-cast-menu-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .mmc-cast-menu-note {
-  color: var(--mmc-off); font-size: 11px; line-height: 1.45;
+  color: var(--mmc-off); font-size: calc(11px * var(--mmc-type)); line-height: 1.45;
   /* A filename with no spaces in it must not push the popover wider. */
   overflow-wrap: anywhere;
 }
@@ -386,10 +386,10 @@ export const css = `
   justify-content: center; color: var(--mmc-dim);
   box-shadow: 0 0 0 2px var(--tag, transparent);
 }
-.mmc-cast-menu-plus { font-size: 16px; line-height: 1; }
+.mmc-cast-menu-plus { font-size: calc(16px * var(--mmc-type)); line-height: 1; }
 /* The label in a menu row is a sentence, not a token, so it must not be pinned
    to one line the way an option's usually is. */
 .mmc-cast-menu .mmc-opt-label > .mmc-cast-menu-text > span:first-child {
-  font-size: 13px; line-height: 1.35;
+  font-size: calc(13px * var(--mmc-type)); line-height: 1.35;
 }
 `;

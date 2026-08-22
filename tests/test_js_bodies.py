@@ -1009,6 +1009,65 @@ try {
   findShown(page);
   out.settings.advancedRows = shown.length;
   out.settings.advancedLeadIn = page.text.includes("Turbo lead-in");
+
+  // The Appearance tab: three sections, in the order they are drawn — four
+  // points on the text scale, two answers on the colour, four on the surface
+  // separation. Each is a number or a class the stylesheet reads, so for each
+  // one the press has to land in two places: on the server, and on the document
+  // element. A setting stored and never drawn is the failure being watched for.
+  tabButtons[3].listeners.click[0]();
+  // The pin lives in styles.js, and it is two facts: the preference from this
+  // page and whether the shell is up. Imported here so the second one can be
+  // said out loud without opening a real fullscreen editor.
+  const packStyles = await import("./js/minimax_creator/styles.js");
+  const setOpts = () => {
+    const found = [];
+    const walk = (node) => {
+      if (node.className === "mmc-opt mmc-set-opt") found.push(node);
+      (node.children ?? []).forEach(walk);
+    };
+    walk(page);
+    return found;
+  };
+  // Rows are counted off in section order. A re-render replaces the nodes, so
+  // this is re-read after every press rather than held.
+  const sizes = setOpts();
+  out.settings.textRows = sizes.slice(0, 4).map((o) => o.getAttribute("aria-checked"));
+  out.settings.themeRows = sizes.slice(4, 6).map((o) => o.getAttribute("aria-checked"));
+  out.settings.liftRows = sizes.slice(6, 10).map((o) => o.getAttribute("aria-checked"));
+  out.settings.textPercents = page.text.includes("92%") && page.text.includes("125%");
+  out.settings.liftPercents = page.text.includes("60%") && page.text.includes("180%");
+  sizes[2].listeners.click[0]();
+  await new Promise((done) => setTimeout(done, 0));
+  out.settings.textPosted = globalThis.__posted.at(-1);
+  out.settings.typeVar = document.documentElement.style["--mmc-type"];
+
+  // Pinning the pack dark is a class rather than a property: what it turns on is
+  // a block of tokens and the light-accent correction it has to turn off. It is
+  // also two facts and not one — the preference *and* an open shell — so setting
+  // it from this page must not by itself darken anything: the node faces behind
+  // this page are part of nodes ComfyUI draws in its own palette.
+  setOpts()[5].listeners.click[0]();
+  await new Promise((done) => setTimeout(done, 0));
+  out.settings.themePosted = globalThis.__posted.at(-1);
+  out.settings.darkClassIdle = document.documentElement.classList.contains("mmc-force-dark");
+  // With the shell up, the same preference does apply.
+  packStyles.noteFullscreen(true);
+  out.settings.darkClassOpen = document.documentElement.classList.contains("mmc-force-dark");
+  packStyles.noteFullscreen(false);
+  out.settings.darkClassShut = document.documentElement.classList.contains("mmc-force-dark");
+  // And going back to following has to leave it off even with the shell up — a
+  // pin that cannot be unpinned is worse than no pin.
+  setOpts()[4].listeners.click[0]();
+  await new Promise((done) => setTimeout(done, 0));
+  packStyles.noteFullscreen(true);
+  out.settings.followClass = document.documentElement.classList.contains("mmc-force-dark");
+  packStyles.noteFullscreen(false);
+
+  setOpts()[8].listeners.click[0]();
+  await new Promise((done) => setTimeout(done, 0));
+  out.settings.liftPosted = globalThis.__posted.at(-1);
+  out.settings.liftVar = document.documentElement.style["--mmc-lift"];
 } catch (error) {
   out.errors.push(`settings page: ${error.message}`);
 }
@@ -2172,12 +2231,12 @@ check("closing gives the picture back to the canvas", full.get("undocked"), True
 check("...and the body back to the node", full.get("cameBack"), True)
 check("...and takes the shell down with it", full.get("closed"), True)
 
-# The settings page owns three questions now — how good the file is, where it
-# goes, and what the node faces offer — so it has three tabs, and the folder
-# fields are the only place the prefixes can be set.
+# The settings page owns four questions now — how good the file is, where it
+# goes, what the node faces offer, and how large they are drawn — so it has four
+# tabs, and the folder fields are the only place the prefixes can be set.
 settings = report.get("settings", {})
-check("the settings page has all three tabs", settings.get("tabs"),
-      ["Quality", "Folders", "Nodes"])
+check("the settings page has all four tabs", settings.get("tabs"),
+      ["Quality", "Folders", "Nodes", "Appearance"])
 # Every row on the tab, in order, with each setting's default checked on a fresh
 # settings file: previews ship playing, and the advanced controls and the shift
 # pills ship off. Advanced leads, because it decides how much of the rest of the
@@ -2200,6 +2259,45 @@ check("the node settings show their defaults checked",
 check("advanced controls bring the turbo lead-in back to the page",
       (settings.get("advancedRows"), settings.get("advancedLeadIn")), (9, True))
 check("the quality tab shows the encoder value", settings.get("quality"), True)
+# The text scale: four points with the drawn sizes checked on a fresh file, each
+# row saying what it is as a percentage the way the quality rows say their crf.
+check("the appearance tab offers four sizes with the default checked",
+      settings.get("textRows"), ["false", "true", "false", "false"])
+check("...each with its multiplier as a percentage", settings.get("textPercents"), True)
+# And the press has to land in two places. The multiplier goes to the server,
+# because it is a per-machine preference like every other one on this page; and
+# it goes onto the document element, because a scale nothing reads is a number
+# in a file. `--mmc-type` on :root is what every rule in styles/ multiplies by.
+check("choosing a size posts the multiplier", settings.get("textPosted"),
+      {"text_scale": 1.12})
+check("...and writes it where the stylesheet reads it",
+      settings.get("typeVar"), "1.12")
+# The colour: two answers, following checked on a fresh file. Following is not a
+# neutral default here — it is the whole of what the stylesheet does unaided, so
+# a fresh file has to land on it.
+check("the appearance tab offers both palettes with following checked",
+      settings.get("themeRows"), ["true", "false"])
+check("pinning the pack dark posts the theme", settings.get("themePosted"),
+      {"theme": "dark"})
+# The pin is where it is *not* applied that matters. A node face is part of a
+# node ComfyUI draws in its own palette, so the preference alone changes nothing.
+check("...but on its own darkens nothing, so no node face becomes an island",
+      settings.get("darkClassIdle"), False)
+check("...and with the fullscreen shell up it takes hold",
+      settings.get("darkClassOpen"), True)
+check("...and leaving the shell puts the palette back",
+      settings.get("darkClassShut"), False)
+check("...and following again stays light even with the shell up",
+      settings.get("followClass"), False)
+# The surface separation: four points, the drawn ladder checked, each row saying
+# what it is as a percentage the way the sizes above do.
+check("the appearance tab offers four separations with the default checked",
+      settings.get("liftRows"), ["false", "true", "false", "false"])
+check("...each with its multiplier as a percentage", settings.get("liftPercents"), True)
+check("choosing a separation posts the multiplier", settings.get("liftPosted"),
+      {"surface_lift": 1.4})
+check("...and writes it where the stylesheet reads it",
+      settings.get("liftVar"), "1.4")
 check("the folders tab carries both stored prefixes", settings.get("fields"),
       ["minimax/renders/H3", "minimax/stills/prestage"])
 check("editing a folder writes it back under the server's own key",

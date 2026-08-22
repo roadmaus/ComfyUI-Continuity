@@ -57,6 +57,7 @@ import { api } from "../../../scripts/api.js";
 import { el, icon, mark } from "./dom.js";
 import { elapsed } from "./stage.js";
 import { t } from "./i18n.js";
+import { noteFullscreen } from "./styles.js";
 
 /** Node classes whose body this editor can host. Kept here rather than imported
  *  from the entry point, because the entry point imports this. */
@@ -366,6 +367,9 @@ class Fullscreen {
     this.setPlate(this.plateScale, { store: false });
     this.mount();
     document.body.appendChild(this.root);
+    // The shell is the only surface the dark pin applies to — see applyTheme()
+    // in styles.js for why a node body is the wrong place for it.
+    noteFullscreen(true);
     this.paint();
   }
 
@@ -721,6 +725,7 @@ class Fullscreen {
     this.hosted = null;
     this.front = null;
     this.root.remove();
+    noteFullscreen(false);
   }
 
   // ---- the queue ------------------------------------------------------------

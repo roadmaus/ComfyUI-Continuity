@@ -11,9 +11,9 @@ export const css = `
 /* Past the ~5-15 s the weights were trained on. The same warm orange the
    resolution slider uses above 768: a statement about distribution, not a
    refusal, so it marks rather than disables. */
-.mmc-pill-group.off-distribution { border-color: rgba(224,116,60,.4); }
-.mmc-pill-group.off-distribution > span { color: #e0743c; }
-.mmc-tl-dur.off-distribution { color: #e0743c; }
+.mmc-pill-group.off-distribution { border-color: color-mix(in srgb, var(--mmc-warn) 40%, transparent); }
+.mmc-pill-group.off-distribution > span { color: var(--mmc-warn); }
+.mmc-tl-dur.off-distribution { color: var(--mmc-warn); }
 
 /* Almost the whole screen, like the shot window: the strip is the one thing in
    this pack that is genuinely wide — a ten-card piece is a metre of film — and
@@ -25,12 +25,12 @@ export const css = `
   padding: 18px 24px 24px; overflow: auto; flex: 1; min-height: 0;
 }
 .mmc-tl-prompt {
-  width: 100%; box-sizing: border-box; min-height: 84px; max-height: 30vh; resize: vertical;
+  width: 100%; box-sizing: border-box; min-height: calc(84px * var(--mmc-type)); max-height: 30vh; resize: vertical;
   background: var(--mmc-surface); border: 1px solid var(--mmc-line); border-radius: 14px;
-  color: var(--mmc-text); font-family: inherit; font-size: 14px; line-height: 1.5;
+  color: var(--mmc-text); font-family: inherit; font-size: calc(14px * var(--mmc-type)); line-height: 1.5;
   padding: 14px 16px; outline: none;
 }
-.mmc-tl-prompt:focus { border-color: rgba(255,255,255,.2); }
+.mmc-tl-prompt:focus { border-color: var(--mmc-line-2); }
 .mmc-tl-prompt::placeholder { color: var(--mmc-off); }
 
 /* The global prompt is the same rich box a segment's is — chips and the @ menu
@@ -42,9 +42,9 @@ export const css = `
   background: var(--mmc-surface); border: 1px solid var(--mmc-line); border-radius: 14px;
   padding: 14px 16px; flex: 0 0 auto;
 }
-.mmc-tl-prompt-frame:focus-within { border-color: rgba(255,255,255,.2); }
+.mmc-tl-prompt-frame:focus-within { border-color: var(--mmc-line-2); }
 .mmc-tl-prompt-frame .mmc-prompt {
-  font-size: 14px; line-height: 1.5; min-height: 56px; max-height: 26vh;
+  font-size: calc(14px * var(--mmc-type)); line-height: 1.5; min-height: calc(56px * var(--mmc-type)); max-height: 26vh;
 }
 
 /* The two Context-IR audio fields, side by side under the prompt. They wrap to
@@ -58,9 +58,9 @@ export const css = `
    should be able to find it by the same word. */
 .mmc-tl-field-name {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 11px; color: var(--mmc-dim); letter-spacing: .02em;
+  font-size: calc(11px * var(--mmc-type)); color: var(--mmc-dim); letter-spacing: .02em;
 }
-.mmc-tl-small { min-height: 64px; font-size: 13px; padding: 10px 12px; }
+.mmc-tl-small { min-height: calc(64px * var(--mmc-type)); font-size: calc(13px * var(--mmc-type)); padding: 10px 12px; }
 
 /* The piece's reference pool: a shelf between the audio fields and the bar.
    Chips reuse the editor's asset row; what is ours here is only the head line
@@ -68,11 +68,11 @@ export const css = `
 .mmc-tl-pool { display: flex; flex-direction: column; gap: 8px; }
 .mmc-tl-pool-head { display: flex; gap: 10px; align-items: center; min-width: 0; }
 .mmc-tl-pool-hint {
-  font-size: 11px; color: var(--mmc-off); flex: 1; min-width: 0;
+  font-size: calc(11px * var(--mmc-type)); color: var(--mmc-off); flex: 1; min-width: 0;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .mmc-tl-pool-add { display: inline-flex; gap: 5px; align-items: center; }
-.mmc-tl-pool-where { font-size: 11px; color: var(--mmc-dim); white-space: nowrap; }
+.mmc-tl-pool-where { font-size: calc(11px * var(--mmc-type)); color: var(--mmc-dim); white-space: nowrap; }
 /* The handle is a button: clicking it writes the citation into the global
    prompt. Reset to read exactly like the editor's handle span. */
 .mmc-tl-pool-cite {
@@ -90,12 +90,12 @@ export const css = `
    and then it must take no room at all, or the bar and the strip sit a gap
    apart for a feature nobody used. */
 .mmc-tl-loras:empty { display: none; }
-.mmc-pill.on { border-color: rgba(255,255,255,.22); }
+.mmc-pill.on { border-color: var(--mmc-line-2); }
 /* An accelerator that is doing something. Lit rather than merely outlined,
    because a render with one on is not a native render and that is worth seeing
    without reading the pill. */
-.mmc-pill.accel-on { border-color: rgba(110,190,255,.45); color: #6ebeff; }
-.mmc-pill.accel-on:hover:not(:disabled) { border-color: rgba(110,190,255,.7); }
+.mmc-pill.accel-on { border-color: color-mix(in srgb, var(--mmc-role-motion) 45%, transparent); color: var(--mmc-role-motion); }
+.mmc-pill.accel-on:hover:not(:disabled) { border-color: color-mix(in srgb, var(--mmc-role-motion) 70%, transparent); }
 /* A lit stepper lights all the way through: the turbo lead-in's +/- are part
    of the same control as the number between them, and .mmc-step's own
    --mmc-text left them reading as two grey buttons flanking a blue value.
@@ -106,17 +106,17 @@ export const css = `
 /* An architecture that is not settled yet. Dashed rather than coloured: this
    says "the output may not be good", which is a different statement from the
    accelerator blue's "this render is not native". */
-.mmc-pill.mmc-experimental { border-style: dashed; border-color: rgba(255,196,110,.5); }
-.mmc-pill.mmc-experimental:hover:not(:disabled) { border-color: rgba(255,196,110,.8); }
+.mmc-pill.mmc-experimental { border-style: dashed; border-color: color-mix(in srgb, var(--mmc-accent) 50%, transparent); }
+.mmc-pill.mmc-experimental:hover:not(:disabled) { border-color: color-mix(in srgb, var(--mmc-accent) 80%, transparent); }
 /* A sweep choice inside the dev popover: the same on/off reading as the turbo
    stops, on ordinary pills because the lists are of no fixed length. */
-.mmc-pill[aria-pressed="true"] { border-color: rgba(110,190,255,.45); color: #6ebeff; }
+.mmc-pill[aria-pressed="true"] { border-color: color-mix(in srgb, var(--mmc-role-motion) 45%, transparent); color: var(--mmc-role-motion); }
 /* The turbo switch: the seed pill's shape — one pill, a big half that throws
    it and a small half that picks what it throws. Both inherit the group's
    colour so the accelerator blue lights the whole pill, chevron included. */
 .mmc-turbo-main {
   display: flex; align-items: center; gap: 7px; height: 100%; padding: 0 2px 0 8px;
-  background: none; border: 0; color: inherit; font-size: 13px;
+  background: none; border: 0; color: inherit; font-size: calc(13px * var(--mmc-type));
   font-family: inherit; cursor: pointer; white-space: nowrap;
 }
 .mmc-turbo-pick {
@@ -134,13 +134,13 @@ export const css = `
 .mmc-turbo-opt {
   display: flex; align-items: center; gap: 5px; height: 100%; padding: 0 12px;
   background: none; border: 0; border-left: 1px solid var(--mmc-line);
-  color: var(--mmc-dim); font-size: 13px; font-family: inherit; cursor: pointer;
+  color: var(--mmc-dim); font-size: calc(13px * var(--mmc-type)); font-family: inherit; cursor: pointer;
 }
 .mmc-turbo-opt:first-child { border-left: 0; }
-.mmc-turbo-opt:hover { color: #ededed; }
-.mmc-turbo-opt[aria-pressed="true"] { background: rgba(110,190,255,.14); color: #6ebeff; }
-.mmc-turbo-opt[aria-pressed="true"] .mmc-pill-sub { color: rgba(110,190,255,.75); }
-.mmc-tl-total { display: flex; gap: 8px; align-items: baseline; margin-left: auto; font-size: 13px; }
+.mmc-turbo-opt:hover { color: var(--mmc-text); }
+.mmc-turbo-opt[aria-pressed="true"] { background: color-mix(in srgb, var(--mmc-role-motion) 14%, transparent); color: var(--mmc-role-motion); }
+.mmc-turbo-opt[aria-pressed="true"] .mmc-pill-sub { color: color-mix(in srgb, var(--mmc-role-motion) 75%, transparent); }
+.mmc-tl-total { display: flex; gap: 8px; align-items: baseline; margin-left: auto; font-size: calc(13px * var(--mmc-type)); }
 .mmc-tl-total span { color: var(--mmc-dim); }
 
 /* Chained / one pass. A segmented control rather than two pills, because they
@@ -156,8 +156,8 @@ export const css = `
    above the two buttons' — which is exactly what it looked like. */
 .mmc-tl-render-opt {
   display: flex; align-items: center; justify-content: center;
-  height: 24px; padding: 0 10px; border: 0; border-radius: 8px; background: none;
-  color: var(--mmc-dim); font-family: inherit; font-size: 12px; line-height: 1; cursor: pointer;
+  height: calc(24px * var(--mmc-type)); padding: 0 10px; border: 0; border-radius: 8px; background: none;
+  color: var(--mmc-dim); font-family: inherit; font-size: calc(12px * var(--mmc-type)); line-height: 1; cursor: pointer;
 }
 .mmc-tl-render-opt:hover { color: var(--mmc-text); }
 .mmc-tl-render-opt.on { background: var(--mmc-surface); color: var(--mmc-text); }
@@ -167,7 +167,7 @@ export const css = `
    switching back to chained makes it correct again. */
 .mmc-tl-problem {
   display: flex; gap: 8px; align-items: baseline;
-  font-size: 11px; line-height: 1.4; color: #e0743c;
+  font-size: calc(11px * var(--mmc-type)); line-height: 1.4; color: var(--mmc-warn);
 }
 .mmc-tl-problem .mmc-note-key { color: inherit; opacity: .8; }
 
@@ -195,16 +195,16 @@ export const css = `
   flex: 0 0 auto; box-sizing: border-box;
   display: flex; flex-direction: column; gap: 8px;
   background: var(--mmc-surface); border: 1px solid var(--mmc-line);
-  border-radius: 14px; padding: 12px; font-size: 12px; cursor: default;
+  border-radius: 14px; padding: 12px; font-size: calc(12px * var(--mmc-type)); cursor: default;
 }
-.mmc-tl-card:hover { border-color: rgba(255,255,255,.18); }
+.mmc-tl-card:hover { border-color: var(--mmc-line-2); }
 .mmc-tl-card-head { display: flex; align-items: center; gap: 8px; }
 .mmc-tl-index {
-  width: 20px; height: 20px; border-radius: 50%; background: var(--mmc-surface-3);
-  display: flex; align-items: center; justify-content: center; font-size: 11px; flex: 0 0 auto;
+  width: calc(20px * var(--mmc-type)); height: calc(20px * var(--mmc-type)); border-radius: 50%; background: var(--mmc-surface-3);
+  display: flex; align-items: center; justify-content: center; font-size: calc(11px * var(--mmc-type)); flex: 0 0 auto;
 }
 .mmc-tl-dur { color: var(--mmc-text); font-weight: 500; }
-.mmc-tl-mode { color: var(--mmc-accent); font-size: 11px; margin-left: auto; }
+.mmc-tl-mode { color: var(--mmc-accent); font-size: calc(11px * var(--mmc-type)); margin-left: auto; }
 .mmc-tl-card-prompt {
   flex: 1; color: var(--mmc-text); line-height: 1.45; overflow: hidden;
   display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;
@@ -214,7 +214,7 @@ export const css = `
    recognised by — dimmed, because it is not what the shot queues. */
 .mmc-tl-card-prompt.superseded { opacity: .42; }
 .mmc-tl-card-meta {
-  color: var(--mmc-dim); font-size: 11px;
+  color: var(--mmc-dim); font-size: calc(11px * var(--mmc-type));
   display: flex; align-items: center; gap: 6px;
 }
 /* This shot's half of the face pass. Unlit while the shot is opted out, so a
@@ -222,31 +222,31 @@ export const css = `
 .mmc-tl-card-face {
   border: 0; padding: 1px 6px; border-radius: 6px; cursor: pointer;
   background: var(--mmc-surface-3); color: var(--mmc-dim);
-  font-size: 10px; font-family: inherit; margin-left: auto;
+  font-size: calc(10px * var(--mmc-type)); font-family: inherit; margin-left: auto;
   /* The narrowest card wraps its meta text onto two lines; the chip is the
      part that must stay readable, so it neither shrinks nor breaks. */
   flex: none; white-space: nowrap;
 }
-.mmc-tl-card-face.on { background: rgba(90, 150, 255, 0.18); color: var(--mmc-blue); }
+.mmc-tl-card-face.on { background: color-mix(in srgb, var(--mmc-blue) 18%, transparent); color: var(--mmc-blue); }
 .mmc-tl-card-face:hover { filter: brightness(1.25); }
 .mmc-tl-card-foot { display: flex; align-items: center; gap: 4px; }
 .mmc-tl-edit {
-  height: 26px; padding: 0 12px; border-radius: 8px; background: var(--mmc-surface-3);
-  border: 0; color: var(--mmc-text); font-size: 12px; font-family: inherit; cursor: pointer;
+  height: calc(26px * var(--mmc-type)); padding: 0 12px; border-radius: 8px; background: var(--mmc-surface-3);
+  border: 0; color: var(--mmc-text); font-size: calc(12px * var(--mmc-type)); font-family: inherit; cursor: pointer;
   margin-right: auto;
 }
-.mmc-tl-edit:hover { background: #3a3a3a; }
-.mmc-tl-card-foot .mmc-ghost { padding: 0 4px; font-size: 12px; }
+.mmc-tl-edit:hover { background: var(--mmc-surface-3); }
+.mmc-tl-card-foot .mmc-ghost { padding: 0 4px; font-size: calc(12px * var(--mmc-type)); }
 .mmc-tl-card-foot button:disabled { opacity: .3; cursor: not-allowed; }
 
 /* The seam between two cards. It is a control, so it is wide enough to hit. */
 .mmc-tl-join {
   display: flex; flex-direction: column; align-items: center; gap: 2px;
   background: none; border: 0; color: var(--mmc-off); cursor: pointer;
-  font-family: inherit; font-size: 10px; line-height: 1.25; padding: 4px 2px;
+  font-family: inherit; font-size: calc(10px * var(--mmc-type)); line-height: 1.25; padding: 4px 2px;
   border-radius: 8px;
 }
-.mmc-tl-join span:first-child { font-size: 15px; line-height: 1; }
+.mmc-tl-join span:first-child { font-size: calc(15px * var(--mmc-type)); line-height: 1; }
 .mmc-tl-join:hover:not(:disabled) { color: var(--mmc-text); background: var(--mmc-surface-2); }
 .mmc-tl-join.on { color: var(--mmc-accent); }
 .mmc-tl-join:disabled { cursor: not-allowed; opacity: .5; }
@@ -271,11 +271,11 @@ export const css = `
 .mmc-tl-cut {
   flex: 0 0 auto; align-self: stretch;
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
-  width: 52px; padding: 0; border: 0; border-left: 1px dashed rgba(240,166,60,.32);
-  background: none; color: rgba(240,166,60,.55); font-family: inherit; font-size: 9px;
+  width: 52px; padding: 0; border: 0; border-left: 1px dashed color-mix(in srgb, var(--mmc-accent) 32%, transparent);
+  background: none; color: color-mix(in srgb, var(--mmc-accent) 55%, transparent); font-family: inherit; font-size: calc(9px * var(--mmc-type));
   font-variant-numeric: tabular-nums; cursor: pointer;
 }
-.mmc-tl-cut span:first-child { font-size: 13px; }
+.mmc-tl-cut span:first-child { font-size: calc(13px * var(--mmc-type)); }
 .mmc-tl-cut:hover { color: var(--mmc-accent); border-left-color: var(--mmc-accent); }
 
 /* --- a piece shot a pass at a time ----------------------------------------
@@ -302,7 +302,7 @@ export const css = `
    set, still readable and still editable, which is the whole of what holding a
    card is for. */
 .mmc-tl-card.mmc-tl-unshot {
-  position: relative; background: none; border-color: rgba(255,255,255,.06);
+  position: relative; background: none; border-color: var(--mmc-wash);
 }
 .mmc-tl-card.mmc-tl-unshot::before {
   content: ""; position: absolute; left: 10px; right: 10px; top: 5px; height: 4px;
@@ -322,12 +322,12 @@ export const css = `
   display: inline-flex; align-items: center; gap: 3px;
   padding: 1px 6px; border-radius: 6px; margin-left: auto;
   background: var(--mmc-surface-3); color: var(--mmc-dim);
-  font-size: 10px; flex: none; white-space: nowrap;
+  font-size: calc(10px * var(--mmc-type)); flex: none; white-space: nowrap;
 }
 /* A take that came back and has not been ruled on. Amber, the strip's own
    colour for what the piece is made of, because an undecided take is the one
    thing here that is waiting on the user. */
-.mmc-tl-card-state.ready { background: rgba(240,166,60,.16); color: var(--mmc-accent); }
+.mmc-tl-card-state.ready { background: color-mix(in srgb, var(--mmc-accent) 16%, transparent); color: var(--mmc-accent); }
 /* ...and the take that has been. Brighter than "not shot" and nothing more:
    this is the state that costs nothing and needs nothing, so it reports and
    gets out of the way. */
@@ -335,7 +335,7 @@ export const css = `
 /* ...and a kept take the card has stopped describing. The warm orange the
    off-distribution marks wear, meaning what it means there: a statement about
    what will happen, not a refusal. The take still plays. */
-.mmc-tl-card-state.stale { background: rgba(224,116,60,.16); color: #e0743c; }
+.mmc-tl-card-state.stale { background: color-mix(in srgb, var(--mmc-warn) 16%, transparent); color: var(--mmc-warn); }
 
 /* Looking at a take and deciding against it is half of shooting a piece in
    parts, and it is the one thing the strip had no word for: the way to reject a
@@ -374,7 +374,7 @@ export const css = `
   padding: 0; transition: background-color .12s ease, color .12s ease;
 }
 .mmc-tl-solo:hover, .mmc-tl-solo:focus-visible {
-  background: var(--mmc-accent); color: #1a1206;
+  background: var(--mmc-accent); color: var(--mmc-on-accent);
 }
 @media (prefers-reduced-motion: reduce) { .mmc-tl-solo { transition: none; } }
 
@@ -460,12 +460,12 @@ export const css = `
 /* The casing: one generation, drawn as one piece of film. The cards inside give
    up their own borders and become panels of it. */
 .mmc-tl-pass.on .mmc-tl-pass-cards {
-  background: var(--mmc-surface-2); border-color: rgba(240,166,60,.32);
+  background: var(--mmc-surface-2); border-color: color-mix(in srgb, var(--mmc-accent) 32%, transparent);
 }
 .mmc-tl-pass.on .mmc-tl-card { background: none; border-color: transparent; }
-.mmc-tl-pass.on .mmc-tl-card:hover { border-color: rgba(255,255,255,.12); }
+.mmc-tl-pass.on .mmc-tl-card:hover { border-color: var(--mmc-wash-2); }
 .mmc-tl-pass-name {
-  display: flex; align-items: center; gap: 5px; color: var(--mmc-accent); font-size: 11px;
+  display: flex; align-items: center; gap: 5px; color: var(--mmc-accent); font-size: calc(11px * var(--mmc-type));
 }
 .mmc-tl-pass-name svg { width: 13px; height: 13px; stroke: currentColor; fill: none;
   stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
@@ -475,12 +475,12 @@ export const css = `
    that is also on the bar. */
 .mmc-tl-pass-name, .mmc-tl-pass-split { flex: 0 0 auto; }
 .mmc-tl-pass-len {
-  color: var(--mmc-dim); font-size: 11px;
+  color: var(--mmc-dim); font-size: calc(11px * var(--mmc-type));
   min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
-.mmc-tl-pass-len.off-distribution { color: #e0743c; }
+.mmc-tl-pass-len.off-distribution { color: var(--mmc-warn); }
 .mmc-tl-pass-head .mmc-tl-mode { margin-left: 0; }
-.mmc-tl-pass-split { margin-left: auto; font-size: 11px; }
+.mmc-tl-pass-split { margin-left: auto; font-size: calc(11px * var(--mmc-type)); }
 /* The refusals compile.py would raise, under the pass they are about. */
 .mmc-tl-pass .mmc-tl-problem { padding: 0 4px; }
 
@@ -491,7 +491,7 @@ export const css = `
   margin-top: auto; padding-top: 6px; border-top: 1px solid var(--mmc-line);
   border-radius: 0 0 8px 8px;
 }
-.mmc-tl-join-merge span:first-child { font-size: 12px; }
+.mmc-tl-join-merge span:first-child { font-size: calc(12px * var(--mmc-type)); }
 .mmc-tl-join-merge:hover:not(:disabled) { color: var(--mmc-accent); }
 
 /* Reported, not offered: some seams merged and some not is a real state of the
@@ -499,7 +499,7 @@ export const css = `
    the selected one of the two answers either — it wears the accent the merged
    passes below it wear, and reads as a readout wedged between them. */
 .mmc-tl-render-opt.mmc-tl-render-mixed {
-  cursor: default; color: var(--mmc-accent); background: rgba(240,166,60,.14);
+  cursor: default; color: var(--mmc-accent); background: color-mix(in srgb, var(--mmc-accent) 14%, transparent);
 }
 
 .mmc-tl-join-sound { padding-top: 0; }
@@ -509,16 +509,16 @@ export const css = `
 /* Where the seam inherits from — one line under the two switches, only shown
    while a seam is live and there is more than one segment to inherit from. */
 .mmc-tl-join-from { padding-top: 0; }
-.mmc-tl-join-from span:first-child { font-size: 10px; }
+.mmc-tl-join-from span:first-child { font-size: calc(10px * var(--mmc-type)); }
 
 .mmc-tl-add {
   width: 108px; box-sizing: border-box; margin: 6px 0 6px 12px;
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
   background: none; border: 1px dashed var(--mmc-line); border-radius: 14px;
-  color: var(--mmc-dim); font-family: inherit; font-size: 12px; cursor: pointer;
+  color: var(--mmc-dim); font-family: inherit; font-size: calc(12px * var(--mmc-type)); cursor: pointer;
 }
-.mmc-tl-add span:first-child { font-size: 20px; }
-.mmc-tl-add:hover:not(:disabled) { color: var(--mmc-text); border-color: rgba(255,255,255,.2); }
+.mmc-tl-add span:first-child { font-size: calc(20px * var(--mmc-type)); }
+.mmc-tl-add:hover:not(:disabled) { color: var(--mmc-text); border-color: var(--mmc-line-2); }
 .mmc-tl-add:disabled { cursor: not-allowed; opacity: .4; }
 
 /* Two ways to fill the next stretch of the piece: write one, or bring one.
@@ -528,7 +528,7 @@ export const css = `
 .mmc-tl-add-pair .mmc-tl-add { margin: 0 0 0 12px; flex: 1; min-height: 0; }
 .mmc-tl-add-pair .mmc-tl-add:first-child { margin-top: 6px; }
 .mmc-tl-add-pair .mmc-tl-add:last-child { margin-bottom: 6px; }
-.mmc-tl-add-pair .mmc-tl-add span:first-child { font-size: 15px; }
+.mmc-tl-add-pair .mmc-tl-add span:first-child { font-size: calc(15px * var(--mmc-type)); }
 .mmc-tl-add-clip { border-style: solid; }
 
 /* The piece-view toggle: which face this node is wearing while it holds one
@@ -540,7 +540,7 @@ export const css = `
 
    Three classes, so it beats that rule wherever the two land in the cascade. */
 .mmc-pill.mmc-piece-toggle.on {
-  border-color: rgba(240,166,60,.45); color: var(--mmc-accent);
+  border-color: color-mix(in srgb, var(--mmc-accent) 45%, transparent); color: var(--mmc-accent);
 }
 .mmc-pill.mmc-piece-toggle.on:hover:not(:disabled) { border-color: var(--mmc-accent); }
 /* Held: the strip is showing and cannot be left while the piece carries
@@ -563,7 +563,7 @@ export const css = `
   position: relative; width: 100%; box-sizing: border-box;
   display: flex; align-items: center; justify-content: center; gap: 7px;
   padding: 13px 2px 3px; background: none; border: 0; border-radius: 8px;
-  color: var(--mmc-dim); font-family: inherit; font-size: 12px; cursor: pointer;
+  color: var(--mmc-dim); font-family: inherit; font-size: calc(12px * var(--mmc-type)); cursor: pointer;
   transition: color .12s ease;
 }
 .mmc-tl-grow::before {
@@ -573,7 +573,7 @@ export const css = `
 }
 .mmc-tl-grow:hover:not(:disabled) { color: var(--mmc-text); }
 .mmc-tl-grow:disabled { cursor: not-allowed; opacity: .4; }
-.mmc-tl-grow-mark { font-size: 14px; line-height: 1; color: var(--mmc-off); }
+.mmc-tl-grow-mark { font-size: calc(14px * var(--mmc-type)); line-height: 1; color: var(--mmc-off); }
 .mmc-tl-grow:hover:not(:disabled) .mmc-tl-grow-mark { color: var(--mmc-accent); }
 
 /* A clip card. Solid where a shot's card is not, because the difference worth
@@ -607,8 +607,8 @@ export const css = `
    max-height is the bound. Six lines at this size and leading is what the
    summary is for; the modal holds the rest. */
 .mmc-tl-summary-prompt {
-  font-size: 13px; line-height: 1.5; color: var(--mmc-text);
-  flex: 1 1 auto; min-height: 40px; max-height: 117px; overflow: hidden; word-break: break-word;
+  font-size: calc(13px * var(--mmc-type)); line-height: 1.5; color: var(--mmc-text);
+  flex: 1 1 auto; min-height: calc(40px * var(--mmc-type)); max-height: calc(117px * var(--mmc-type)); overflow: hidden; word-break: break-word;
   -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 26px), transparent);
   mask-image: linear-gradient(to bottom, #000 calc(100% - 26px), transparent);
 }
@@ -623,11 +623,11 @@ export const css = `
    casing's reading at a tenth the size. A pass of one is just its own tick. */
 .mmc-tl-run { display: flex; gap: 4px; min-width: 0; }
 .mmc-tl-run.on {
-  gap: 0; border: 1px solid rgba(240,166,60,.32); border-radius: 8px; padding: 1px;
-  background: rgba(240,166,60,.08);
+  gap: 0; border: 1px solid color-mix(in srgb, var(--mmc-accent) 32%, transparent); border-radius: 8px; padding: 1px;
+  background: color-mix(in srgb, var(--mmc-accent) 8%, transparent);
 }
 .mmc-tl-run.on .mmc-tl-tick {
-  background: none; border: 0; border-left: 1px dashed rgba(240,166,60,.4); border-radius: 0;
+  background: none; border: 0; border-left: 1px dashed color-mix(in srgb, var(--mmc-accent) 40%, transparent); border-radius: 0;
 }
 .mmc-tl-run.on .mmc-tl-tick:first-child { border-left: 0; }
 .mmc-tl-tick {
@@ -637,9 +637,9 @@ export const css = `
 }
 .mmc-tl-tick svg { width: 13px; height: 13px; stroke: currentColor; fill: none;
   stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; flex: 0 0 auto; }
-.mmc-tl-tick-n { color: var(--mmc-text); font-size: 12px; font-weight: 500; }
-.mmc-tl-tick-s { color: var(--mmc-dim); font-size: 11px; }
-.mmc-tl-lane:hover .mmc-tl-tick { border-color: rgba(255,255,255,.18); }
+.mmc-tl-tick-n { color: var(--mmc-text); font-size: calc(12px * var(--mmc-type)); font-weight: 500; }
+.mmc-tl-tick-s { color: var(--mmc-dim); font-size: calc(11px * var(--mmc-type)); }
+.mmc-tl-lane:hover .mmc-tl-tick { border-color: var(--mmc-line-2); }
 /* Where the shoot has got to, at a tenth the size of the strip's own picture of
    it: a block filled in because that stretch of film exists, hollowed out
    because it has not been shot. Same two readings the cards wear, minus the
@@ -648,7 +648,7 @@ export const css = `
 .mmc-tl-tick.unshot { background: none; border-style: dashed; }
 .mmc-tl-tick.unshot .mmc-tl-tick-n, .mmc-tl-tick.unshot .mmc-tl-tick-s { color: var(--mmc-off); }
 .mmc-tl-tick.on {
-  background: rgba(240,166,60,.13); border-color: rgba(240,166,60,.32); color: var(--mmc-accent);
+  background: color-mix(in srgb, var(--mmc-accent) 13%, transparent); border-color: color-mix(in srgb, var(--mmc-accent) 32%, transparent); color: var(--mmc-accent);
 }
 .mmc-tl-tick.on .mmc-tl-tick-n { color: var(--mmc-accent); }
 
@@ -668,7 +668,7 @@ export const css = `
   gap: 0; border: 1px solid var(--mmc-line); border-radius: 4px;
   /* Lit from the top, so the row of cells reads as one physical strip rather
      than as a grid of empty boxes. */
-  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0) 60%),
+  background: linear-gradient(180deg, var(--mmc-wash), transparent 60%),
               var(--mmc-surface-2);
 }
 .mmc-tl-lane.dense .mmc-tl-run { gap: 0; flex-basis: 0; }
@@ -682,7 +682,7 @@ export const css = `
   flex-basis: 0;
 }
 .mmc-tl-lane.dense .mmc-tl-run:first-child .mmc-tl-tick:first-child { border-left: 0; }
-.mmc-tl-lane.dense .mmc-tl-tick-n { font-size: 11px; color: var(--mmc-dim); }
+.mmc-tl-lane.dense .mmc-tl-tick-n { font-size: calc(11px * var(--mmc-type)); color: var(--mmc-dim); }
 .mmc-tl-lane.dense .mmc-tl-tick.on .mmc-tl-tick-n { color: var(--mmc-dim); }
 /* What a block gives up as it narrows, in order. The length goes first — a band
    drawn to scale is already a picture of the lengths — and the seam glyph goes
@@ -704,7 +704,7 @@ export const css = `
    the film with a bright edge on the far side of it — a splice. */
 .mmc-tl-lane.dense .mmc-tl-tick.cut {
   margin-left: 3px; border-left-color: transparent;
-  box-shadow: inset 2px 0 0 rgba(255,255,255,.34);
+  box-shadow: inset 2px 0 0 var(--mmc-line-3);
 }
 /* A pass keeps its accent — four of them among forty single shots is exactly
    the reading worth spending colour on. Drawn as an inset ring rather than a
@@ -712,13 +712,13 @@ export const css = `
    and quietly bend the proportions the lane exists to show. */
 .mmc-tl-lane.dense .mmc-tl-run.on {
   border: 0; border-radius: 0; padding: 0;
-  background: rgba(240,166,60,.16); box-shadow: inset 0 0 0 1px rgba(240,166,60,.42);
+  background: color-mix(in srgb, var(--mmc-accent) 16%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--mmc-accent) 42%, transparent);
 }
-.mmc-tl-lane.dense .mmc-tl-run.on .mmc-tl-tick { border-left: 1px dashed rgba(240,166,60,.5); }
-.mmc-tl-lane.dense .mmc-tl-tick:hover { background: rgba(255,255,255,.13); }
+.mmc-tl-lane.dense .mmc-tl-run.on .mmc-tl-tick { border-left: 1px dashed color-mix(in srgb, var(--mmc-accent) 50%, transparent); }
+.mmc-tl-lane.dense .mmc-tl-tick:hover { background: var(--mmc-wash-2); }
 /* The band is one click target, so the band as a whole answers the pointer —
    the frame lines inside it are structure, not forty separate buttons. */
-.mmc-tl-lane.dense:hover { border-color: rgba(255,255,255,.20); }
+.mmc-tl-lane.dense:hover { border-color: var(--mmc-line-2); }
 
 /* Edge code: the numerals down the side of the film, not across the frame.
    Placed in pixels by fitLane() against the blocks it measured, so a number
@@ -727,8 +727,8 @@ export const css = `
 .mmc-tl-edge:empty { display: none; }
 .mmc-tl-edge-n {
   position: absolute; top: 0; padding-left: 3px;
-  border-left: 1px solid rgba(255,255,255,.22);
-  font-size: 9px; line-height: 10px; color: var(--mmc-dim);
+  border-left: 1px solid var(--mmc-line-2);
+  font-size: calc(9px * var(--mmc-type)); line-height: 10px; color: var(--mmc-dim);
   font-variant-numeric: tabular-nums; letter-spacing: .04em;
 }
 
@@ -736,9 +736,9 @@ export const css = `
 .mmc-tl-open {
   margin-left: auto; height: var(--mmc-pill-h); padding: 0 14px; display: flex; align-items: center; gap: 8px;
   border-radius: 999px; background: var(--mmc-surface-3); border: 1px solid var(--mmc-line);
-  color: var(--mmc-text); font-family: inherit; font-size: 13px; cursor: pointer;
+  color: var(--mmc-text); font-family: inherit; font-size: calc(13px * var(--mmc-type)); cursor: pointer;
 }
-.mmc-tl-open:hover { background: #3a3a3a; border-color: rgba(255,255,255,.18); }
+.mmc-tl-open:hover { background: var(--mmc-surface-3); border-color: var(--mmc-line-2); }
 .mmc-tl-open svg { width: 16px; height: 16px; stroke: currentColor; fill: none;
   stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 
@@ -779,12 +779,12 @@ export const css = `
   background: none; border: 0; outline: none; color: var(--mmc-text);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-variant-numeric: tabular-nums;
-  font-size: 12.5px; text-align: center; padding: 0;
+  font-size: calc(12.5px * var(--mmc-type)); text-align: center; padding: 0;
   min-width: 5ch; max-width: 21ch;
 }
 /* Dim on "fixed" — the default, and the state where nothing happens to the seed
    between queues. The three that do move it read at full strength. */
-.mmc-seed-mode { font-size: 11px; padding: 0 8px 0 4px; color: var(--mmc-off); }
+.mmc-seed-mode { font-size: calc(11px * var(--mmc-type)); padding: 0 8px 0 4px; color: var(--mmc-off); }
 .mmc-seed-mode.on { color: var(--mmc-text); }
 /* Sampler lists are long; the popover scrolls rather than running off screen. */
 .mmc-pop-scroll { max-height: 320px; overflow-y: auto; min-width: 190px; }

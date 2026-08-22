@@ -1,5 +1,48 @@
 # Changelog
 
+## 2.21
+
+**This pack takes its colours from ComfyUI's palette instead of drawing its own
+dark one over the top of it.** Every colour in the pack was a literal — around
+three hundred of them across the stylesheet — written for a dark desk and drawn
+unchanged on a light one, so the Appearance settings had no say over any node
+this pack puts on the canvas. All of them now derive from two variables ComfyUI
+writes for whatever palette is in force: the ground it draws chrome on and the
+colour it writes text in. Surfaces, borders, the quiet weights of text and the
+films over video are mixed from those two, in oklab rather than sRGB so that a
+step that reads as one step off near-black still reads as one step off
+near-white. Because the palette variables are written for *every* palette and
+not only for light and dark, this is not a light mode — it is Nord, Solarized,
+Github, Arc, and any palette you built yourself. The amber accent, the three
+role hues and the eight reference hues stay the pack's own: they identify
+something rather than describe the palette. The one concession is that the amber
+is drawn a shade deeper on a pale palette, because amber on white is not a
+colour a word can be written in.
+
+**The Appearance tab has a text size.** One multiplier over every size in the
+pack — the node faces, the fullscreen editor, the timeline, the picker, and the
+settings page itself, which is why the words move as you choose. A multiplier
+rather than a set of named sizes because the sizes were never a scale: fifteen
+distinct values, each chosen against the thing beside it. Text and the controls
+that carry it move with it; the room around them and the picture do not, which
+is the line between a text size and a magnifier. Nothing of ComfyUI's own moves
+with it.
+
+**It also has a surface separation.** The surface ladder is proportional to a
+palette's own contrast, and some palettes have very little to be proportional
+to: on Github, Nord and Solarized the four surfaces came out close enough
+together to read as two. One multiplier pushes all four rungs further off the
+ground or pulls them closer, and it works on any palette, including ones that do
+not exist yet.
+
+**And a colour setting, for the one case following the desk gets wrong.** A
+frame judged against white is judged against the wrong thing, which is why the
+tools that cut and grade are dark. "Dark in fullscreen" keeps a dark ground for
+the fullscreen editor whatever the desk is set to. It stops there deliberately:
+a node body sits inside a node ComfyUI draws in its own palette, so pinning the
+body dark on a light desk does not give you a dark editor, it gives you a dark
+island in a white card. Node faces keep following the palette.
+
 ## 2.20
 
 **Casting a look no longer files a copy of its frame in your input folder.** The

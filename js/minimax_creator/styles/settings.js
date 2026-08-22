@@ -14,12 +14,12 @@ export const css = `
   box-shadow: none; padding: 8px 24px 20px;
 }
 .mmc-set-section { padding: 16px 0 4px; display: flex; flex-direction: column; gap: 4px; }
-.mmc-set-title { font-size: 15px; }
+.mmc-set-title { font-size: calc(15px * var(--mmc-type)); }
 /* Measured, not full-bleed: a 600px line of 12px text is a paragraph nobody
    finishes. Wide enough to reach the choice box below it, though — a
    description visibly narrower than the control it describes reads as a
    column that lost its other half. */
-.mmc-set-desc { color: var(--mmc-dim); font-size: 12px; line-height: 1.5; max-width: 62ch; }
+.mmc-set-desc { color: var(--mmc-dim); font-size: calc(12px * var(--mmc-type)); line-height: 1.5; max-width: 62ch; }
 .mmc-set-choices {
   margin-top: 10px; background: var(--mmc-surface); border: 1px solid var(--mmc-line);
   border-radius: 14px; padding: 4px;
@@ -33,10 +33,10 @@ export const css = `
 }
 .mmc-set-opt .mmc-radio { margin-top: 1px; }
 .mmc-set-opt-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
-.mmc-set-opt-label { font-size: 14px; }
-.mmc-set-opt-note { color: var(--mmc-dim); font-size: 11.5px; line-height: 1.45; }
+.mmc-set-opt-label { font-size: calc(14px * var(--mmc-type)); }
+.mmc-set-opt-note { color: var(--mmc-dim); font-size: calc(11.5px * var(--mmc-type)); line-height: 1.45; }
 .mmc-set-value {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11.5px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: calc(11.5px * var(--mmc-type));
   color: var(--mmc-dim); font-variant-numeric: tabular-nums; padding-top: 2px;
 }
 /* The value in force reads as text, the rest as labels. This column is the one
@@ -58,9 +58,9 @@ export const css = `
   border-top: 1px solid var(--mmc-line); margin-top: 10px; padding-top: 16px;
 }
 .mmc-set-dest-head { display: flex; align-items: baseline; gap: 10px; min-width: 0; }
-.mmc-set-dest-name { font-size: 14px; }
+.mmc-set-dest-name { font-size: calc(14px * var(--mmc-type)); }
 .mmc-set-dest-sub {
-  color: var(--mmc-dim); font-size: 11.5px;
+  color: var(--mmc-dim); font-size: calc(11.5px * var(--mmc-type));
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .mmc-set-dest .mmc-out-example { padding: 0 2px; }
@@ -70,12 +70,12 @@ export const css = `
 .mmc-set-dest .mmc-out-tokens { display: none; padding: 2px 0 0; }
 .mmc-set-dest:focus-within .mmc-out-tokens { display: flex; }
 .mmc-set-foot {
-  color: var(--mmc-off); font-size: 11px; line-height: 1.55; padding: 10px 2px 0;
+  color: var(--mmc-off); font-size: calc(11px * var(--mmc-type)); line-height: 1.55; padding: 10px 2px 0;
 }
 .mmc-set-foot code {
-  font-family: ui-monospace, Menlo, monospace; font-size: 10.5px; color: var(--mmc-dim);
+  font-family: ui-monospace, Menlo, monospace; font-size: calc(10.5px * var(--mmc-type)); color: var(--mmc-dim);
 }
-.mmc-set-wait { color: var(--mmc-dim); font-size: 13px; padding: 28px 0 24px; }
-.mmc-set-problem { color: #e0743c; font-size: 12px; line-height: 1.45; padding: 14px 0 0; }
+.mmc-set-wait { color: var(--mmc-dim); font-size: calc(13px * var(--mmc-type)); padding: 28px 0 24px; }
+.mmc-set-problem { color: var(--mmc-warn); font-size: calc(12px * var(--mmc-type)); line-height: 1.45; padding: 14px 0 0; }
 
 `;
