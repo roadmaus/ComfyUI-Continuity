@@ -1135,4 +1135,5 @@ export const ko = {
  "Show what is in {label}": "{label} 안의 항목 보기",
  "everything": "전체",
  "On by default: this clip's soundtrack is bound as a reference audio, taking an <Audio> slot before the video's own label, and needing the audio VAE connected. Off references the picture silently. Sound only references the soundtrack without the picture.": "기본값은 켜짐. 이 클립의 사운드트랙이 참조 오디오로 묶여 영상 자체의 라벨보다 앞선 <Audio> 슬롯을 차지하며, 오디오 VAE 연결이 필요합니다. 끄면 영상만 조용히 참조합니다. '소리만'은 영상 없이 사운드트랙만 참조합니다.",
+ "Attach the frame at its full size as a look to build from, and put the style's own words in its description. It arrives as @{handle} at the front of the prompt — click the name to edit it, delete it to take the look off. Replaces whatever look was there.": "프레임을 원본 크기 그대로 '룩'으로 첨부하고, 스타일 자체의 문구를 설명에 넣습니다. 프롬프트 맨 앞에 @{handle} 로 나타납니다 — 이름을 클릭하면 편집하고, 지우면 룩이 빠집니다. 기존 룩은 대체됩니다.",
 };

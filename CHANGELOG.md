@@ -2,6 +2,24 @@
 
 ## 2.15
 
+**A look you cast is a look you can click.** Three things were wrong with it and
+all three were silent. The atlas was only read when its tab was *pressed*, so
+opening the library straight onto Style — which is what the new `/` door does
+every time — left the grid on its empty line, and that line said "The style atlas
+could not be read" about a read nobody had started. A look is cast under a handle
+that has to open on a letter, and a quarter of the atlas opens on a number, so
+"2D cutout-paper stop-motion" arrived as `@subject` while the button that cast it
+promised `@2d_cutout_paper` in its own tooltip. And nothing wrote the name into
+the sentence: the tooltip told you to go and type it yourself, so there was no
+chip to click even when the name was right.
+
+Now the frame casts itself in: `@look_2d_cutout_paper` leads the prompt as a
+chip, on the prompt the node is actually showing. Click it to edit the look,
+delete it to take the look off the node — picture and all. And casting a second
+look replaces the first rather than stacking on it, which is the promise the old
+descriptor-swap made and this had quietly stopped keeping.
+
+
 **A name is a door, in every box that draws one.** Clicking somebody's name in
 the sentence opens their card — that was true on the Creator's face and nowhere
 else, so the Timeline window's standing prompt and a card of the strip both drew

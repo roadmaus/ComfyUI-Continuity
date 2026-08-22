@@ -1759,6 +1759,71 @@ try {
   out.errors.push(`slash: ${error.stack}`);
 }
 
+// ---- casting a look out of the atlas ----------------------------------------
+//
+// Three bugs in one gesture, all of them silent. The atlas is only read when its
+// tab is *pressed*, so opening the library straight onto it showed the grid's
+// empty line — which said "could not be read" about a read nobody had started.
+// The handle a style is cast under has to satisfy SUBJECT_HANDLE_RE, and a
+// quarter of the atlas opens on a number, so every one of those arrived as
+// `@subject` while the button promised its own name. And nothing wrote the name
+// into the sentence, so there was no chip to click even when it was right.
+try {
+  const { styleRows } = await import("./js/minimax_creator/presets/stylelib.js");
+  const { styleHandle } = await import("./js/minimax_creator/presetlib.js");
+  const P = await import("./js/minimax_creator/presets.js");
+  const rows = styleRows();
+  out.atlas = { rows: rows.length };
+
+  const node = fakeNode("MiniMaxH3Creator", "creator_data", ONE_SHOT);
+  await ext.nodeCreated(node);
+  const piece = node.mmcBody.timeline;
+  const shot = piece.segments[0];
+  shot.prompt = "A woman waits at the gate.";
+
+  // The row whose name opens on a number — the case that produced `@subject`.
+  const numeric = rows.find((row) => /^[0-9]/.test(row.name)) ?? rows[0];
+  out.atlas.rowName = numeric.name;
+  P.applyToPiece({
+    cast: {
+      // The very handle `castStill` passes — not one the test made up, or this
+      // checks a rule nothing follows.
+      handle: styleHandle(numeric.name),
+      takes: "style",
+      description: numeric.data.style.text,
+      files: [{ slot: "from", filename: "style_refs/atlas_000001.webp", kind: "image" }],
+    },
+  }, ["cast"], piece, node.mmcBody.widgetIO?.() ?? { set() {}, value: () => 0 }, { from: "cast" });
+
+  const look = (piece.subjects ?? [])[0] ?? {};
+  out.atlas.handle = look.handle;
+  out.atlas.takes = look.takes;
+  // ...and it leads the prompt that is actually on screen — a piece of one shot
+  // wears that shot's editor, not the standing prompt behind it.
+  out.atlas.leads = shot.prompt;
+  out.atlas.standingLeftAlone = piece.prompt;
+
+  // A second look replaces the first rather than stacking on it — the promise
+  // the descriptor-swap used to make, kept now that a look is a subject.
+  const other = rows.find((row) => /^[A-Za-z]/.test(row.name) && row !== numeric);
+  P.applyToPiece({
+    cast: {
+      handle: styleHandle(other.name), takes: "style",
+      description: other.data.style.text,
+      files: [{ slot: "from", filename: "style_refs/atlas_000002.webp", kind: "image" }],
+    },
+  }, ["cast"], piece, { set() {}, value: () => 0 }, { from: "cast" });
+  out.atlas.afterSecond = {
+    prompt: shot.prompt,
+    cast: (piece.subjects ?? []).map((s) => s.handle).join(","),
+    // ...and the first look's picture goes with it, rather than riding into
+    // every render as an uncited reference.
+    files: (shot.assets ?? []).map((a) => a.filename).join(","),
+  };
+} catch (error) {
+  out.errors.push(`atlas: ${error.stack}`);
+}
+
 console.log(JSON.stringify(out));
 """
 
@@ -2260,5 +2325,21 @@ check("the style branch is a door, because a catalogue of stills has no dropdown
       slash.get("inStyle"), "style")
 check("and the @ menu is untouched by any of it",
       slash.get("mentionStillWorks"), "@")
+
+# ---- casting a look out of the atlas ----------------------------------------
+atlas = report.get("atlas") or {}
+check("the shipped atlas reads", atlas.get("rows"), 941)
+check("a look whose name opens on a number keeps its name",
+      atlas.get("handle"), "look_2d_cutout_paper")
+check("...and is cast as a style", atlas.get("takes"), "style")
+check("...leading the prompt the node is actually showing",
+      atlas.get("leads"), "@look_2d_cutout_paper, a woman waits at the gate.")
+check("...and not the standing one behind it", atlas.get("standingLeftAlone"), "")
+second = atlas.get("afterSecond") or {}
+check("a second look replaces the first in the sentence",
+      second.get("prompt"), "@claymation_animation_with, a woman waits at the gate.")
+check("...and on the piece", second.get("cast"), "claymation_animation_with")
+check("...taking the first one's picture with it",
+      second.get("files"), "style_refs/atlas_000002.webp")
 
 passed(f"the frontend loads and all {len(report['nodes'])} bodies mount")

@@ -1136,4 +1136,5 @@ export const zh = {
  "Show what is in {label}": "显示 {label} 中的内容",
  "everything": "全部",
  "On by default: this clip's soundtrack is bound as a reference audio, taking an <Audio> slot before the video's own label, and needing the audio VAE connected. Off references the picture silently. Sound only references the soundtrack without the picture.": "默认开启：该片段的音轨会被绑定为参考音频，占用排在视频自身标签之前的 <Audio> 槽位，并需要连接音频 VAE。关闭则只静默引用画面。“仅声音”只引用音轨而不带画面。",
+ "Attach the frame at its full size as a look to build from, and put the style's own words in its description. It arrives as @{handle} at the front of the prompt — click the name to edit it, delete it to take the look off. Replaces whatever look was there.": "以原始尺寸将该帧作为“风格”附加，并把风格自身的文字写入其描述。它会以 @{handle} 出现在提示词开头——点击名称可编辑，删除则移除该风格。会替换原有的风格。",
 };

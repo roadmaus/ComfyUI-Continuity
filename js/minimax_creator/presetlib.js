@@ -94,12 +94,23 @@ const STYLE_REF_PREFIX = "atlas_";
  * is what the look is *called* — `@lego_brickfilm`, `@claymation`. Trimmed to
  * three words because the handle is written into a prompt by hand and a
  * forty-character one never will be.
+ *
+ * It has to satisfy `state.SUBJECT_HANDLE_RE`, which every subject's does: a
+ * letter, then letters, digits and underscores, up to 32. A quarter of the
+ * atlas opens on a number — "2D cutout-paper", "1970s educational film", "16 mm
+ * grain" — and `addSubjectToPiece` answers a handle it cannot use by falling
+ * back to the word "subject". So every one of those looks was cast as
+ * `@subject`, while the button that cast it promised `@2d_cutout_paper` in its
+ * own tooltip. A leading digit is kept, not dropped — "2d_cutout_paper" and
+ * "d_cutout_paper" are not the same name — so the prefix goes in front of it.
  */
-function styleHandle(lead) {
+export function styleHandle(lead) {
   const words = String(lead ?? "").toLowerCase()
     .replace(/[^a-z0-9\s-]/g, " ")
     .split(/[\s-]+/).filter(Boolean).slice(0, 3);
-  return words.join("_") || "look";
+  const handle = words.join("_") || "look";
+  return (/^[a-z]/.test(handle) ? handle : `look_${handle}`).slice(0, 32)
+    .replace(/_+$/, "") || "look";
 }
 
 /** mm:ss, which is how a length is read off a strip. */
@@ -133,6 +144,8 @@ class PresetLibrary {
     // `rows` rather than folded into it: nothing that writes a user's library
     // should ever have nine hundred read-only rows in its hands.
     this.styles = [];
+    // Why the catalogue is empty: never asked for, or asked for and refused.
+    this.atlasFailed = null;
     this.stylesLoading = false;
     this.atlas = null;
     // The grid, materialised in batches — see `appendCards`.
@@ -205,6 +218,12 @@ class PresetLibrary {
     this.unmount = mountOverlay(this.overlay, () => this.close());
     this.renderInspector();
     this.load();
+    // Opened straight onto the Style tab — which is what a caller asking for
+    // `scope: "style"` is doing, and what the `/` menu's door does every time.
+    // The atlas used to be read by `selectScope` alone, so arriving on the tab
+    // without pressing it left the grid on its own empty-state line: "The style
+    // atlas could not be read", about a read nobody had started.
+    if (this.scope === "style") this.readAtlas();
   }
 
   /**
@@ -322,6 +341,11 @@ class PresetLibrary {
       this.styles = module.styleRows();
       this.atlas = module.ATLAS;
     } catch (error) {
+      // Remembered, not only announced: the grid's empty line used to read
+      // "could not be read" whenever the catalogue was empty, which was also
+      // true before anybody had asked for it — so a tab that had simply never
+      // started loading reported a failure that had not happened.
+      this.atlasFailed = error.message || true;
       this.say(t("Could not read the style atlas — {error}", { error: error.message }));
     }
     this.stylesLoading = false;
@@ -425,7 +449,11 @@ class PresetLibrary {
     if (this.scope === "style" && this.stylesLoading) return t("Reading the style atlas…");
     if (this.query) return t("Nothing here matches “{query}”.", { query: this.query });
     if (this.shelf === SHELF_FAV) return t("No starred presets yet. The star on a card puts it here.");
-    if (this.scope === "style") return t("The style atlas could not be read.");
+    if (this.scope === "style") {
+      return this.atlasFailed
+        ? t("The style atlas could not be read.")
+        : t("Reading the style atlas…");
+    }
     if (this.scope === "cast") {
       return t("Nobody kept yet. A person, an object, a place or a look that has to be "
              + "the same one shot after shot — make them here, or press the ★ on "
@@ -1313,12 +1341,17 @@ class PresetLibrary {
       // The picture is the half of a style that words cannot carry, and for a
       // medium nobody has a folder of it is the only picture there is. So the
       // frame is offered as plainly as the phrase, right under it.
-      ...(this.target && row.stills?.length ? [el("button", {
+      // Only onto a piece: a look is cast the way anybody is cast, and a card of
+      // a strip has its cast a level up — `applyToPiece` is the only apply that
+      // takes a `cast` section, so pressing this on a shot uploaded a frame and
+      // then quietly did nothing with it.
+      ...(this.target?.scope === "piece" && row.stills?.length ? [el("button", {
         class: "mmc-style-cast",
         disabled: this.busy,
-        title: t("Attach the frame at its full size as a look to build from, and "
-               + "put the style's own words in its description. It arrives as "
-               + "@{handle} — write that into the prompt.",
+        title: t("Attach the frame at its full size as a look to build from, and put the "
+               + "style's own words in its description. It arrives as @{handle} at the "
+               + "front of the prompt — click the name to edit it, delete it to take the "
+               + "look off. Replaces whatever look was there.",
           { handle: styleHandle(row.name) }),
         onclick: () => this.castStill(row, this.stillIndex),
       }, [icon("effect", 13), el("span", { text: t("Cast this frame as a look") })])] : []),

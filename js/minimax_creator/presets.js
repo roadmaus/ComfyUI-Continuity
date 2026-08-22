@@ -899,6 +899,64 @@ export function leadWithStyle(text, phrase) {
   return `${descriptor}, ${tail}`;
 }
 
+/**
+ * Take a look off the piece: the subject, its citations, and the picture it
+ * alone was built out of.
+ *
+ * The same three things deleting its chip does (`editor.dropCited`), done from
+ * the other end — there is no chip to delete when the swap happens inside an
+ * Apply. Written here rather than reused from there because that path starts
+ * from a keystroke in a box and this one starts from a preset.
+ */
+function dropStyle(subject, timeline) {
+  const cast = timeline.subjects ?? [];
+  const orphans = new Set(S.soleClaims(subject, cast));
+  const pattern = S.subjectCitationRe([subject]);
+  // The name, and the comma it was leading with — "@claymation, a woman waits"
+  // must not become ", a woman waits".
+  const scrub = (text) => String(text ?? "")
+    .replace(pattern, "")
+    .replace(/^[\s,;:—-]+/, "")
+    .replace(/\s+,/g, ",")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+  for (const host of [timeline, ...(timeline.segments ?? [])]) {
+    for (const field of ["prompt", "soundscape", "music"]) {
+      if (host[field]) host[field] = scrub(host[field]);
+    }
+  }
+  // Its picture, unless something still writes the handle by hand.
+  const texts = S.allTexts(timeline);
+  const keep = (asset) => !orphans.has(asset.handle) || S.handleWritten(texts, asset.handle);
+  timeline.assets = (timeline.assets ?? []).filter(keep);
+  for (const segment of timeline.segments ?? []) {
+    if (segment.assets) segment.assets = segment.assets.filter(keep);
+  }
+  timeline.subjects = cast.filter((s) => s !== subject);
+}
+
+/**
+ * `text`, opening with `@handle`.
+ *
+ * The same shape `leadWithStyle` writes — a clause, a comma, then the scene —
+ * with a citation in place of the words. Which is the whole difference between
+ * the two ways a look can arrive: as a descriptor typed into the sentence, or as
+ * a subject the sentence names. A name can be clicked open and deleted; a
+ * descriptor is prose, and the only way out of it is to select it and retype.
+ *
+ * Already there, already leading: nothing happens. Applying the same look twice
+ * should not write it twice.
+ */
+export function leadWithName(text, handle) {
+  const name = `@${handle}`;
+  const body = String(text ?? "").trim();
+  if (!handle) return body;
+  if (body === name || body.startsWith(`${name},`) || body.startsWith(`${name} `)) return body;
+  if (!body) return name;
+  const tail = SAFE_LEAD.test(body) ? body[0].toLowerCase() + body.slice(1) : body;
+  return `${name}, ${tail}`;
+}
+
 // ---- apply ------------------------------------------------------------------
 //
 // Never straight into the widget. Everything goes `parse* -> mutate -> sync* ->
@@ -952,7 +1010,19 @@ function freeSubjectHandle(wanted, timeline) {
     ...(timeline.segments ?? []).flatMap((segment) => (segment.assets ?? [])
       .map((asset) => asset.handle)),
   ]);
-  const base = S.SUBJECT_HANDLE_RE.test(wanted) ? wanted : "subject";
+  // Normalised rather than discarded. This used to answer an unusable handle
+  // with the bare word "subject", which is how every atlas look whose name opens
+  // on a number — "2D cutout-paper", "1970s educational film" — arrived as
+  // `@subject` while the button that cast it promised its own name. Losing the
+  // identity is worse than bending it: the handle is what the sentence writes.
+  const cleaned = String(wanted ?? "").replace(/[^A-Za-z0-9_]/g, "_")
+    .replace(/_+$/, "").slice(0, 32);
+  // The format wants a letter in front; a name that opens on a digit gets one
+  // rather than losing the digit. "2d_cutout_paper" and "d_cutout_paper" are
+  // not the same name, and neither of them is "subject".
+  const base = S.SUBJECT_HANDLE_RE.test(cleaned) ? cleaned
+    : S.SUBJECT_HANDLE_RE.test(`s_${cleaned}`) ? `s_${cleaned}`
+    : "subject";
   let handle = base;
   for (let n = 2; taken.has(handle); n += 1) handle = `${base}_${n}`;
   return handle;
@@ -1097,7 +1167,30 @@ export function applyToPiece(body, keys, timeline, io, { from = "piece" } = {}) 
   if (chosen.has("cast")) {
     // Added, never assigned — see `addSubjectToPiece`. Applied after `refs`, so
     // a preset carrying both finds the pool it is meant to look in.
-    addSubjectToPiece(body.cast, timeline);
+    const cast = addSubjectToPiece(body.cast, timeline);
+    // A look casts itself into the sentence. Somebody cast from the roster is
+    // written in by the `@` menu at the caret, because that is where you asked
+    // for them; a style is applied from a window with no caret in it, and the
+    // instruction "now go and type @lego_brickfilm" was the whole of what used
+    // to happen. It leads, which is where a style has always gone — and it is a
+    // chip, so it opens on a click and leaves when it is deleted.
+    if (cast?.takes === "style") {
+      // One look at a time. Applying a style used to swap the descriptor that
+      // was leading the sentence for the new one — try six looks on a shot and
+      // you got six prompts, not six stacked paragraphs — and a look that is a
+      // subject has to keep that promise, or the same six attempts leave six
+      // subjects on the piece and six names at the front of the sentence.
+      for (const other of [...(timeline.subjects ?? [])]) {
+        if (other !== cast && other.takes === "style") dropStyle(other, timeline);
+      }
+      // Onto the prompt that is actually on screen. `addSubjectToPiece` already
+      // draws this line for the look's picture — a piece of one shot keeps its
+      // files on that shot rather than in a pool — and the sentence follows it:
+      // a lone shot's prompt is the node's face, while the standing prompt of a
+      // strip is the one every segment inherits.
+      const host = (timeline.segments ?? []).length === 1 ? timeline.segments[0] : timeline;
+      host.prompt = leadWithName(host.prompt, cast.handle);
+    }
   }
   if (chosen.has("strip")) {
     const strip = body.strip ?? {};
