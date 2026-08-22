@@ -54,10 +54,26 @@ import json
 from dataclasses import dataclass
 from typing import Any, Optional
 
+import comfy.sample
 from comfy_api.latest import io
 from comfy_execution.graph_utils import GraphBuilder
 
 from . import accel, canvas, compile as compiler, media, models, outputs, settings
+
+# Whether this core can start a sampler with the noise switched off on an H3
+# audio+video latent. The lead-in's second sitting does exactly that — the noise
+# is already in the latent the first sitting handed over — and core before
+# 27bca654 (2026-08-11) built that zero noise from `NestedTensor.size()`, which
+# is the *picture's* shape and not the pack's. The sampler then packs a
+# video-shaped noise against a video-and-sound latent and the first step dies on
+# arithmetic nobody can read: "The size of tensor a (56448) must match the size
+# of tensor b (1369792) at non-singleton dimension 2", a hundred seconds into a
+# render, with the lead-in nowhere in the sentence. Reported in #27.
+#
+# Probed off the repair itself rather than a version string, the same way
+# `payload.CORE_ANCHORS_ANYWHERE` is: what matters is whether the empty noise
+# knows about the pack, and the function that knows is the whole of the fix.
+CORE_EMPTY_NOISE_IS_NESTED = hasattr(comfy.sample, "prepare_empty_noise")
 
 SEGMENT_NODE = "MiniMaxH3TimelineSegment"
 REFINE_NODE = "MiniMaxH3RefinePass"
@@ -440,6 +456,20 @@ def emit(payloads, labels, weights, sampling, acceleration, unique_id,
         # answer wires the segment node as well as the sampler, and a graph
         # where those two disagreed would hold a model nothing samples on.
         splits = lead_in.within(sampling, one, payloads[index])
+        if splits and not CORE_EMPTY_NOISE_IS_NESTED:
+            # Said here, before a single model is loaded, because the shape it
+            # saves the user from is thrown after the opening steps have already
+            # been sampled — and says nothing about what asked for them.
+            raise ValueError(
+                "the turbo lead-in needs a ComfyUI from 2026-08-11 or later "
+                "(27bca654, \"Fix KSamplerAdvanced with add_noise disabled on "
+                "nested latents\"): before it, the second half of a split "
+                "schedule builds its noise from the picture alone and H3's "
+                "soundtrack is not in it, so the first step fails on a tensor "
+                "size mismatch. Update ComfyUI, or set the turbo lead-in to 0 "
+                "steps under Settings -> Rendering -> Turbo lead-in, which "
+                "sends the whole schedule to one sampler."
+            )
 
         inputs = {
             "clip": links.clip,

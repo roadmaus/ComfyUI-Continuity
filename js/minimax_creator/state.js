@@ -1204,6 +1204,55 @@ function renameCitations(text, renamed) {
 }
 
 /**
+ * The copies a duplicated card left behind, sent after the files they copy.
+ *
+ * `Timeline.duplicate` copies a card whole, so duplicating the only shot of a
+ * piece hands the new card its own deep copy of every one of the cast's files —
+ * and it is the *original* the promotion above then moves into the pool. What
+ * is left on the clone is the same picture again, under the handle the original
+ * wore, claimed by no subject: invisible in the cast shelf, uncited by anything
+ * the shelf can see, and a second reference the model is billed for at queue
+ * time. It is the copy of a file that has moved, so it follows it.
+ *
+ * Handle *and* filename, which is exactly the clone's signature. A handle is
+ * one card's own vocabulary — `img-1` on card 5 is not the file `img-1` on card
+ * 1 was — and the same picture attached to another card by hand under a handle
+ * of its own is a second reference somebody meant, which `poolDoubles` reports
+ * rather than repairs.
+ *
+ * The card's own prose follows too, for the reason card 1's does: the old name
+ * meant something there and now names nothing.
+ */
+function followPromoted(timeline, moved, renamed) {
+  timeline.segments.forEach((segment, index) => {
+    if (!index || isClip(segment)) return;
+    const dropped = new Map();
+    for (const asset of [...(segment.assets ?? [])]) {
+      if (asset.role !== "reference" || moved.get(asset.handle) !== asset.filename) continue;
+      dropped.set(asset.handle, renamed.get(asset.handle));
+      segment.assets = segment.assets.filter((entry) => entry !== asset);
+    }
+    if (!dropped.size) return;
+    for (const key of ["prompt", "soundscape", "music"]) {
+      if (segment[key]) segment[key] = renameCitations(segment[key], dropped);
+    }
+    const refined = segment.refined;
+    if (refined?.body) refined.body = renameCitations(refined.body, dropped);
+    for (const [name, text] of Object.entries(refined?.sections ?? {})) {
+      refined.sections[name] = renameCitations(text, dropped);
+    }
+    // The piece's aspect source, where it named this card's copy. Card 0 is the
+    // pool, which is where the picture is now — the same move card 1's source
+    // makes at the foot of `promoteCastFiles`.
+    const source = timeline.aspect_source;
+    if (source && typeof source === "object" && Number(source.card) === index + 1
+        && dropped.has(source.handle)) {
+      timeline.aspect_source = { handle: dropped.get(source.handle) };
+    }
+  });
+}
+
+/**
  * A piece of more than one shot keeps its cast's files in the pool.
  *
  * A piece of one shot keeps them on that shot's own row instead — both
@@ -1221,7 +1270,9 @@ function renameCitations(text, renamed) {
  * piece that was grown before this existed, since every load syncs. Handles are
  * reallocated: `ref-N` is what a pool entry is called, and `img-1` on card 1 is
  * not the same file as `img-1` on card 5. Card 1's own prose is rewritten to
- * follow, because it is the only text where the old name ever meant anything.
+ * follow, because that is where the old name meant something — and so is the
+ * prose of a card holding a copy of what moved, which `followPromoted` sends
+ * after it.
  */
 function promoteCastFiles(timeline) {
   const cast = timeline.subjects ?? [];
@@ -1234,6 +1285,8 @@ function promoteCastFiles(timeline) {
   }
   if (!Array.isArray(timeline.assets)) timeline.assets = [];
   const renamed = new Map();
+  // What each promoted handle was a picture of, for the copies below.
+  const moved = new Map();
   for (const asset of [...(segment.assets ?? [])]) {
     // References only. A keyframe a subject claims is refused by
     // `subjectProblem` and by `subjects.check`, and moving it would turn a
@@ -1243,6 +1296,7 @@ function promoteCastFiles(timeline) {
     const was = asset.handle;
     asset.handle = nextPoolHandle(timeline);
     renamed.set(was, asset.handle);
+    moved.set(was, asset.filename);
     timeline.assets.push(asset);
     segment.assets = segment.assets.filter((entry) => entry !== asset);
   }
@@ -1271,6 +1325,7 @@ function promoteCastFiles(timeline) {
   if (source && typeof source === "object" && renamed.has(source.handle)) {
     timeline.aspect_source = { handle: renamed.get(source.handle) };
   }
+  followPromoted(timeline, moved, renamed);
 }
 
 /**

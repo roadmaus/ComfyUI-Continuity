@@ -98,6 +98,25 @@ const twice = {
   subject: grown.subjects[0],
 };
 
+// The strip grown the other way: by duplicating the only card there was.
+// `Timeline.duplicate` copies a card whole, so the clone arrives holding its own
+// deep copy of every file on it — the cast's included, under the handle the
+// original wore, and it is the original the promotion moves. The copy is a
+// second Anna nobody cast, sitting on card 2 where the shelf cannot see it.
+const duplicated = lonePiece();
+const copy = s.cloneSegment(duplicated.segments[0]);
+duplicated.segments.splice(1, 0, copy);
+s.syncTimeline(duplicated);
+const afterDuplicate = {
+  problem: problem(duplicated),
+  pool: duplicated.assets.map((a) => `${a.handle}:${a.filename}`),
+  // What the clone kept: the wall it walks past and the frame it opens on are
+  // the card's own business, and duplicating a card copies them on purpose.
+  clone: duplicated.segments[1].assets.map((a) => `${a.handle}:${a.filename}`),
+  prompt: duplicated.segments[1].prompt,
+  cited: s.citedPool(duplicated.segments[1]).map((a) => a.handle),
+};
+
 // A piece saved in the broken shape, repaired on the way in.
 const loaded = s.parseTimeline(JSON.stringify({
   version: 2, render: "chained", prompt: "", aspect: "16:9", short_edge: 720,
@@ -116,7 +135,7 @@ const repaired = {
   takes: loaded.assets[0].takes,
 };
 
-console.log(JSON.stringify({ beforeGrow, afterGrow, twice, repaired }));
+console.log(JSON.stringify({ beforeGrow, afterGrow, twice, afterDuplicate, repaired }));
 """
 
 proc = subprocess.run(["node", "--input-type=module", "-e", SCRIPT, "--", STATE],
@@ -154,6 +173,17 @@ check("...which makes it a reference generation", after["references"], True)
 twice = got["twice"]
 check("syncing again moves nothing", twice["pool"], ["ref-1", "ref-2"])
 check("...and renames nothing", twice["subject"], after["subject"])
+
+dup = got["afterDuplicate"]
+check("duplicating the only card leaves the cast whole", dup["problem"], "")
+check("...her files are the piece's, once",
+      dup["pool"], ["ref-1:anna.png", "ref-2:walk.mp4"])
+check("...the copy the clone was handed follows them off it",
+      dup["clone"], ["img-10:wall.png", "img-2:opening.png"])
+check("...and the clone's prose follows them too",
+      dup["prompt"],
+      "@anna walks past @img-10, and @ref-1 is where her face comes from")
+check("...which is what carries them into the clone", dup["cited"], ["ref-1", "ref-2"])
 
 repaired = got["repaired"]
 check("a piece grown before this existed is repaired on the way in",

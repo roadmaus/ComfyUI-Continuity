@@ -364,6 +364,26 @@ class Fullscreen {
     };
     api.addEventListener("status", this.onStatus);
 
+    // Whether anything actually reached the queue. ComfyUI's `queuePrompt`
+    // catches a refused prompt itself — it shows the dialog and resolves — so
+    // the promise the press returns never rejects, and the row's optimism is
+    // never spent: "Sampling" stands over a render that was never queued, and
+    // the only way out anybody finds is Cancel, pressed until something
+    // happens. That is the three interrupts in the log of #27, under a button
+    // that had nothing to interrupt.
+    //
+    // `promptQueued` is the one thing the frontend says out loud when a prompt
+    // is accepted — dispatched once per press, and only when a batch went out
+    // — and every frontend that has the editor's aim has it.
+    this.accepted = 0;
+    // How many presses are still waiting on the server. A press made while
+    // another is in flight is pushed onto the queue the first one is draining
+    // and answered immediately, before the batch it joined has gone out, so it
+    // is the last one back that gets to say nothing was accepted.
+    this.inflight = 0;
+    this.onQueued = () => { this.accepted += 1; };
+    api.addEventListener("promptQueued", this.onQueued);
+
     this.setPlate(this.plateScale, { store: false });
     this.mount();
     document.body.appendChild(this.root);
@@ -719,6 +739,7 @@ class Fullscreen {
   unmount() {
     document.removeEventListener("keydown", this.onKey);
     api.removeEventListener("status", this.onStatus);
+    api.removeEventListener("promptQueued", this.onQueued);
     this.release(this.node);
     this.release(this.hosted);
     this.release(this.front);
@@ -749,11 +770,30 @@ class Fullscreen {
     // is left alone. Both nodes are outputs of the same graph and a plain queue
     // runs every output in it, which is why one Render used to make a still
     // nobody had asked for whenever the pre-stage's prompt had been touched.
-    // `queueNodeIds` is ComfyUI's own partial execution; a frontend too old to
-    // know the option ignores it and runs the graph, which is where this started.
+    // ComfyUI's own partial execution; a frontend too old to know the third
+    // argument ignores it and runs the graph, which is where this started.
+    //
+    // A bare array, which is the one shape every frontend that knows the
+    // argument at all reads the same way. `{ queueNodeIds: [...] }` is read by
+    // 1.47 and 1.49+ and is the whole third argument to 1.44, 1.45 and 1.48 —
+    // which forward it verbatim as `partial_execution_targets`, so the server
+    // asks whether the node id is a *key* of `{queueNodeIds: [...]}`, finds it
+    // is not, counts no output nodes and refuses the prompt: "Prompt has no
+    // outputs", from a graph whose output node is sitting right there.
     const target = kind === "pre" ? preStageOf(this.node) : this.node;
-    app.queuePrompt(0, 1, { queueNodeIds: [String(target?.id ?? this.node.id)] })
-      .catch(() => {
+    const before = this.accepted;
+    this.inflight += 1;
+    app.queuePrompt(0, 1, [String(target?.id ?? this.node.id)])
+      // A rejection here is the exception rather than the rule — ComfyUI
+      // swallows the ordinary refusal — and it lands where that one does.
+      .catch(() => {})
+      .finally(() => {
+        this.inflight -= 1;
+        // The press went out and nothing was accepted while it was in the air:
+        // the prompt was refused, and the row goes back to offering the press
+        // rather than reporting a render that is not happening. The dialog
+        // ComfyUI put up says what was wrong with it.
+        if (this.inflight || this.accepted !== before) return;
         run.queued = false;
         this.paint();
       });

@@ -1,5 +1,41 @@
 # Changelog
 
+## 2.22
+
+**Duplicating a card no longer leaves a second copy of a cast member's picture
+behind.** A cast member's files live on the card while a piece is one shot, and
+move into the project references the moment it grows a second one — they have to
+be somewhere every card can see them. Duplicating the only shot does both at
+once: the copy makes the piece a strip, and the move that follows only ever
+looked at card 1. So the original's picture was promoted to `@ref-3` and the
+clone kept a second copy of the same file under the handle the original had
+worn, claimed by no member, invisible in the cast shelf and paid for again at
+queue time. The copy now follows the file it is a copy of, and prose that named
+it follows the rename. Reported in #27.
+
+**The fullscreen editor's Render button reaches its node on every ComfyUI
+frontend.** The button queues one node rather than the whole graph, and the
+argument that says which node means two different things depending on which
+frontend reads it: 1.47 and 1.49 and later take `{queueNodeIds: [...]}`, while
+1.44, 1.45 and 1.48 take the whole argument *as* the list and forward it to the
+server untouched. On those the server looked for the node id among the keys of
+an object, counted no output nodes, and refused the prompt — "The prompt has no
+outputs", about a graph whose output node was on screen. It is sent as a bare
+array now, which is the one shape all of them read alike. Reported in #27.
+
+**And a refused prompt gives the button back.** ComfyUI catches a refusal
+itself — it puts the dialog up and answers as though nothing went wrong — so the
+row went on saying "Sampling" over a render that was never queued, and the only
+thing left to press was Cancel. The row now spends its optimism on the queue
+actually accepting something.
+
+**The turbo lead-in says what it needs instead of failing deep in the sampler.**
+Its second sitting starts with the noise switched off, and ComfyUI before
+2026-08-11 built that noise from the picture alone — H3's soundtrack was not in
+it, and the first step died on a tensor size that named neither the lead-in nor
+the fix. The render now stops before anything loads, with the version to update
+to and the setting to turn off.
+
 ## 2.21
 
 **This pack takes its colours from ComfyUI's palette instead of drawing its own

@@ -84,8 +84,14 @@ STUBS = {
 export const app = {
   registerExtension: (e) => { globalThis.__ext = e; },
   graph: null, canvas: null,
-  async queuePrompt(number, batch, options) {
-    globalThis.__queued = options ?? null;
+  async queuePrompt(number, batch, targets) {
+    // Recorded raw, because the third argument means two different things
+    // depending on which frontend reads it — see the fullscreen block below,
+    // which puts what the pack sends through both.
+    globalThis.__queued = targets ?? null;
+    // A refused prompt is caught by ComfyUI itself: it puts the dialog up and
+    // resolves, exactly as this does. Only an accepted one is announced.
+    if (!globalThis.__refuse) globalThis.__say?.("promptQueued", { batchCount: 1 });
     return this.graphToPrompt();
   },
   async graphToPrompt() { return globalThis.__prompt ?? { output: {} }; },
@@ -97,8 +103,18 @@ export const app = {
 globalThis.__posted = [];
 let stored = { video_crf: 23, video_prefix: "minimax/renders/H3",
                image_prefix: "minimax/stills/prestage" };
+// A real listener table, because the shell now listens for the one thing the
+// frontend says out loud when a prompt is accepted — see `promptQueued` below.
+const listeners = {};
+globalThis.__say = (type, detail) => {
+  for (const fn of [...(listeners[type] ?? [])]) fn({ type, detail });
+};
 export const api = {
-  addEventListener() {}, removeEventListener() {}, apiURL: (u) => u,
+  addEventListener(type, fn) { (listeners[type] ??= []).push(fn); },
+  removeEventListener(type, fn) {
+    listeners[type] = (listeners[type] ?? []).filter((f) => f !== fn);
+  },
+  apiURL: (u) => u,
   interrupt() { globalThis.__interrupted = true; },
   async fetchApi(route, options) {
     if (route.endsWith("/settings") && options?.method === "POST") {
@@ -414,12 +430,45 @@ try {
     hit?.listeners?.click?.forEach((fn) => fn({ stopPropagation() {}, preventDefault() {} }));
     return globalThis.__queued;
   };
-  const shotAim = press(shell, "mmc-fs-run")?.queueNodeIds;
+  const raw = press(shell, "mmc-fs-run");
+  // The same argument, read by both generations of frontend. 1.47 and 1.49+
+  // normalize an array into `{ queueNodeIds }`; 1.44, 1.45 and 1.48 take the
+  // whole argument *as* the id list and forward it verbatim to the server as
+  // `partial_execution_targets`. Reported in #27 as "The prompt has no
+  // outputs": an object reaches the older ones intact, the server asks whether
+  // the node id is one of its *keys*, and a graph whose output node is sitting
+  // right there is refused for having none.
+  const shotAim = Array.isArray(raw) ? raw : raw?.queueNodeIds;
+  // `x in partial_execution_list` as execution.validate_prompt spells it —
+  // over a list it is the ids, over a dict it is the keys.
+  const reaches = (targets) => (Array.isArray(targets)
+    ? targets.includes(String(node.id))
+    : Object.keys(targets ?? {}).includes(String(node.id)));
+  const everyFrontend = reaches(shotAim) && reaches(raw);
+  const settle = () => new Promise((done) => setTimeout(done, 0));
+  const runLabel = () => shell?.querySelectorAll(".mmc-fs-run")[0]?.text ?? "";
+  // The press that was accepted stands as a report of the render it started.
+  await settle();
+  const busyWhenAccepted = runLabel().includes("Sampling");
+  // ...and the press that was refused does not. ComfyUI catches the refusal
+  // itself — dialog up, promise resolved — so nothing here rejects and nothing
+  // is announced, and a row that only ever spends its optimism on success goes
+  // on saying "Sampling" over a render that was never queued. #27, where the
+  // log shows the way out that leaves: Cancel, three times.
+  globalThis.__refuse = true;
+  press(shell, "mmc-fs-run");
+  await settle();
+  const freeAgainWhenRefused = runLabel().includes("Render");
+  globalThis.__refuse = false;
 
   fs.close();
   out.fullscreen = {
     // The queue is aimed, not broadcast.
     rendersOneNode: JSON.stringify(shotAim) === JSON.stringify([String(node.id)]),
+    // ...at a node the server can find, whichever frontend forwards the aim.
+    everyFrontend,
+    busyWhenAccepted,
+    freeAgainWhenRefused,
     // The widget is handed a wrapper, never the body itself.
     widgetHost: node.dom?.className,
     parkedOnTheNode: parked,
@@ -2223,6 +2272,20 @@ check("...with a Render button, since ComfyUI's is behind it", full.get("hasRend
 # the foot of one column. Each press names its own node.
 check("...that queues that node alone, not every output in the graph",
       full.get("rendersOneNode"), True)
+# The aim is sent as a bare array, which is the one shape both generations of
+# frontend read the same way. Wrapped in `{ queueNodeIds }` it survives 1.47 and
+# 1.49+ and reaches 1.44, 1.45 and 1.48 as the id list itself — so the server is
+# asked for a node id among the *keys* of an object, finds none, and refuses the
+# prompt for having no outputs. #27.
+check("...and reaches the node whichever frontend forwards the aim",
+      full.get("everyFrontend"), True)
+check("...and the row reports the render it started",
+      full.get("busyWhenAccepted"), True)
+# ComfyUI catches a refused prompt itself, so the press resolves and the row's
+# optimism was never spent: "Sampling" over a render that was never queued, and
+# Cancel the only thing left to press. #27.
+check("...and offers the press again when the prompt is refused",
+      full.get("freeAgainWhenRefused"), True)
 check("...and a Cancel beside it", full.get("hasCancel"), True)
 check("...but no second Gallery: the rail already has one",
       full.get("barIsNotARail"), True)

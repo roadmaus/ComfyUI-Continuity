@@ -60,6 +60,7 @@ accel_mod = importlib.import_module(f"{PACKAGE}.accel")
 tl = importlib.import_module(f"{PACKAGE}.timeline")
 outputs_mod = importlib.import_module(f"{PACKAGE}.outputs")
 settings_mod = importlib.import_module(f"{PACKAGE}.settings")
+render_mod = importlib.import_module(f"{PACKAGE}.render")
 
 from harness import FAILURES, check
 
@@ -878,5 +879,24 @@ try:
           [len(by_class(build(data=json.dumps(off), steps=6).expand).get(k, []))
            for k in ("KSampler", "KSamplerAdvanced")],
           [1, 0])
+
+    # The second sitting starts with the noise switched off, and a core that
+    # builds that noise from the picture alone leaves H3's soundtrack out of it
+    # — the first step then dies on a tensor size a hundred seconds in, saying
+    # nothing about the lead-in that asked for it (#27). Said here instead,
+    # before anything is loaded, and only where a split is actually on: the
+    # setting is nobody's problem on a render that runs one sampler.
+    core = render_mod.CORE_EMPTY_NOISE_IS_NESTED
+    render_mod.CORE_EMPTY_NOISE_IS_NESTED = False
+    try:
+        expect_error("a core that cannot start a split without noise says so",
+                     lambda: build(data=TURBO_DATA, steps=6).expand,
+                     "2026-08-11")
+        check("...and a render with no split to make is untouched by it",
+              [len(by_class(build(data=DATA).expand).get(k, []))
+               for k in ("KSampler", "KSamplerAdvanced")],
+              [1, 0])
+    finally:
+        render_mod.CORE_EMPTY_NOISE_IS_NESTED = core
 finally:
     settings_mod.turbo_lead_in = was
