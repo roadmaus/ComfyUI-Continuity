@@ -5,6 +5,9 @@ picks files in the UI and the node fetches them here at execute time. That makes
 this the only module that touches disk.
 """
 
+import os
+import re
+
 import av
 import numpy as np
 import torch
@@ -27,8 +30,38 @@ class MediaError(ValueError):
     """A referenced file is missing or cannot be read as its declared kind."""
 
 
+# A cast look's frame, addressed where it already sits: `atlas:000123` names one
+# of the thousand stills this pack ships under `js/minimax_creator/presets/atlas/
+# full/`. Casting a look used to copy the frame into `input/style_refs/` purely so
+# it would have an input-relative path — a file per look ever cast, kept forever,
+# cluttering the picker and every core LoadImage combo. The frontend half of the
+# pair is `js/minimax_creator/presets/atlasref.js`; between the two of them this
+# is the only place on either side that has to know a second kind of path exists.
+ATLAS_SCHEME = "atlas:"
+ATLAS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                         "js", "minimax_creator", "presets", "atlas", "full")
+# The id and nothing else. A reference is built by this pack from the vendored
+# index, never typed, so anything that is not digits is either a corrupted blob
+# or a crafted one — and either way the answer is no, rather than a filename
+# joined onto a path.
+_ATLAS_CLIP = re.compile(r"\A\d+\Z")
+
+
 def resolve(filename):
-    """Filename from the picker -> absolute path, honouring ComfyUI annotations."""
+    """Filename from the picker -> absolute path, honouring ComfyUI annotations.
+
+    A catalogue frame resolves to the file the pack ships; everything else is a
+    path under input/ (or output/, annotated) exactly as before.
+    """
+    name = str(filename)
+    if name.startswith(ATLAS_SCHEME):
+        clip = name[len(ATLAS_SCHEME):]
+        if not _ATLAS_CLIP.match(clip):
+            raise MediaError(f"{name!r} is not a style frame this pack ships")
+        path = os.path.join(ATLAS_DIR, f"{clip}.webp")
+        if not os.path.isfile(path):
+            raise MediaError(f"{name!r} is not a style frame this pack ships")
+        return path
     if not folder_paths.exists_annotated_filepath(filename):
         raise MediaError(f"{filename!r} is not in the input folder any more")
     return folder_paths.get_annotated_filepath(filename)

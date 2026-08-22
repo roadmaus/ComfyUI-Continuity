@@ -35,7 +35,8 @@
 
 import { el, icon, mountOverlay } from "./dom.js";
 import { t } from "./i18n.js";
-import { renderMeta, stillUrl, upload, viewUrl } from "./api.js";
+import { renderMeta, stillUrl, viewUrl } from "./api.js";
+import { atlasRef } from "./presets/atlasref.js";
 import { openPicker } from "./picker.js";
 import { openMenu, MARKER_LABEL, MARKER_NOTE, ROLES, TAKES_NOTE } from "./cast.js";
 import { SUBJECT_TAKES, tagIndex } from "./state.js";
@@ -79,13 +80,6 @@ const CAST_GLYPH = { person: "face", object: "weights", scene: "image", style: "
  *  same words. */
 const ROLE = Object.fromEntries(ROLES.map((role) => [role.key, role]));
 const CAST_SLOT_LABEL = Object.fromEntries(ROLES.map((role) => [role.key, role.label]));
-
-/** Where a style's frame lands under input/, and what it is called there. A
- *  shelf of their own so the picker does not mix nine hundred catalogue frames
- *  into the root, and the clip's own id in the name so the same look used twice
- *  is one file — `framegrab.js` files its own frames the same way. */
-const STYLE_REF_FOLDER = "style_refs";
-const STYLE_REF_PREFIX = "atlas_";
 
 /**
  * A style's opening clauses as something you would type after an `@`.
@@ -134,31 +128,24 @@ function clock(seconds) {
  * and rendering are kept and whose subject and layout are dropped — which is
  * precisely the distinction the descriptor is being cut along.
  *
- * The still is copied into the input folder rather than cited where it sits.
- * Everything downstream of here — the picker, `media.resolve`, the thumb route —
- * addresses a file by an input-relative path, and a path into the extension's
- * own web folder is not one. It is a copy, so a style used in ten pieces is one
- * file: the name is the clip's, and an upload of a name that is already there is
- * the same picture by definition.
+ * The still is cited where it sits — `atlas:000123`, an address of its own that
+ * `api.viewUrl` and `media.resolve` both know. It used to be copied into
+ * `input/style_refs/` instead, on the grounds that an input-relative path was
+ * the only kind of address anything downstream took; the copy was a file per
+ * look ever cast, kept forever, sitting in the picker and in every core
+ * LoadImage combo on the canvas. See `presets/atlasref.js`.
  *
  * Out here rather than on the library, because the `/` menu casts a look too and
  * has no library open to ask.
  */
-export async function styleCastMember(row, index = 0) {
+export function styleCastMember(row, index = 0) {
   const clip = row?.data?.style?.clips?.[index];
-  const still = row?.stills?.[index];
-  if (!clip || !still) throw new Error(t("that style has no frame"));
-  const response = await fetch(still);
-  if (!response.ok) throw new Error(t("the frame is not on disk"));
-  const blob = await response.blob();
-  const asset = await upload(
-    new File([blob], `${STYLE_REF_PREFIX}${clip}.webp`, { type: "image/webp" }),
-    STYLE_REF_FOLDER);
+  if (!clip) throw new Error(t("that style has no frame"));
   return {
     handle: styleHandle(row.name),
     takes: "style",
     description: row.data.style.text,
-    files: [{ slot: "from", filename: asset.path, kind: "image", ref_size: "max" }],
+    files: [{ slot: "from", filename: atlasRef(clip), kind: "image", ref_size: "max" }],
   };
 }
 
@@ -1440,22 +1427,17 @@ class PresetLibrary {
    * palette and rendering are kept and whose subject and layout are dropped —
    * which is precisely the distinction the descriptor is being cut along.
    *
-   * The still is copied into the input folder rather than cited where it sits.
-   * Everything downstream of here — the picker, `media.resolve`, the thumb route
-   * — addresses a file by an input-relative path, and a path into the extension's
-   * own web folder is not one. It is a copy, so a style used in ten pieces is one
-   * file: the name is the clip's, and an upload of a name that is already there
-   * is the same picture by definition.
+   * The still is cited where it sits, not copied into the input folder — see
+   * `presets/atlasref.js`. Which is also why nothing here waits on anything: the
+   * frame is a file the pack already ships, so casting it is a field being
+   * written and the window can close on it.
    */
-  async castStill(row, index) {
+  castStill(row, index) {
     if (this.busy) return;
-    this.busy = true;
-    this.say(t("Attaching the frame…"));
     try {
-      this.target.apply({ cast: await styleCastMember(row, index) }, ["cast"], "cast");
+      this.target.apply({ cast: styleCastMember(row, index) }, ["cast"], "cast");
       this.close();
     } catch (error) {
-      this.busy = false;
       this.say(t("Could not cast that frame — {error}", { error: error.message }));
       this.renderInspector();
     }

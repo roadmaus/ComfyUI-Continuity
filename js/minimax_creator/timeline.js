@@ -296,8 +296,8 @@ class Timeline {
       // It was the one prompt box in the pack whose chips did nothing.
       onCastChip: (handle) => this.openCastMember(handle),
       // A look picked out of the `/` menu, onto this window's own piece.
-      castStyle: async (row) => {
-        const subject = P.castIntoPiece(await styleCastMember(row, 0), this.timeline);
+      castStyle: (row) => {
+        const subject = P.castIntoPiece(styleCastMember(row, 0), this.timeline);
         this.commit();
         return subject?.handle ?? null;
       },

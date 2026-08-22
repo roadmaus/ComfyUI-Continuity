@@ -1987,7 +1987,7 @@ try {
 // into the sentence, so there was no chip to click even when it was right.
 try {
   const { styleRows } = await import("./js/minimax_creator/presets/stylelib.js");
-  const { styleHandle } = await import("./js/minimax_creator/presetlib.js");
+  const { styleCastMember } = await import("./js/minimax_creator/presetlib.js");
   const P = await import("./js/minimax_creator/presets.js");
   const rows = styleRows();
   out.atlas = { rows: rows.length };
@@ -2001,16 +2001,14 @@ try {
   // The row whose name opens on a number — the case that produced `@subject`.
   const numeric = rows.find((row) => /^[0-9]/.test(row.name)) ?? rows[0];
   out.atlas.rowName = numeric.name;
-  P.applyToPiece({
-    cast: {
-      // The very handle `castStill` passes — not one the test made up, or this
-      // checks a rule nothing follows.
-      handle: styleHandle(numeric.name),
-      takes: "style",
-      description: numeric.data.style.text,
-      files: [{ slot: "from", filename: "style_refs/atlas_000001.webp", kind: "image" }],
-    },
-  }, ["cast"], piece, node.mmcBody.widgetIO?.() ?? { set() {}, value: () => 0 }, { from: "cast" });
+  // The very member `castStill` passes — not one the test made up, or this
+  // checks a rule nothing follows. Built without a fetch or an upload, which is
+  // the point of it: a look's frame is a file the pack already ships and is
+  // cited where it sits.
+  const cast = styleCastMember(numeric, 0);
+  out.atlas.cited = cast.files[0].filename;
+  P.applyToPiece({ cast }, ["cast"], piece,
+    node.mmcBody.widgetIO?.() ?? { set() {}, value: () => 0 }, { from: "cast" });
 
   const look = (piece.subjects ?? [])[0] ?? {};
   out.atlas.handle = look.handle;
@@ -2023,19 +2021,16 @@ try {
   // A second look replaces the first rather than stacking on it — the promise
   // the descriptor-swap used to make, kept now that a look is a subject.
   const other = rows.find((row) => /^[A-Za-z]/.test(row.name) && row !== numeric);
-  P.applyToPiece({
-    cast: {
-      handle: styleHandle(other.name), takes: "style",
-      description: other.data.style.text,
-      files: [{ slot: "from", filename: "style_refs/atlas_000002.webp", kind: "image" }],
-    },
-  }, ["cast"], piece, { set() {}, value: () => 0 }, { from: "cast" });
+  const second = styleCastMember(other, 0);
+  P.applyToPiece({ cast: second }, ["cast"], piece,
+                 { set() {}, value: () => 0 }, { from: "cast" });
   out.atlas.afterSecond = {
     prompt: shot.prompt,
     cast: (piece.subjects ?? []).map((s) => s.handle).join(","),
     // ...and the first look's picture goes with it, rather than riding into
     // every render as an uncited reference.
     files: (shot.assets ?? []).map((a) => a.filename).join(","),
+    cited: second.files[0].filename,
   };
 } catch (error) {
   out.errors.push(`atlas: ${error.stack}`);
@@ -2618,6 +2613,10 @@ check("a second look replaces the first in the sentence",
       second.get("prompt"), "@claymation_animation_with, a woman waits at the gate.")
 check("...and on the piece", second.get("cast"), "claymation_animation_with")
 check("...taking the first one's picture with it",
-      second.get("files"), "style_refs/atlas_000002.webp")
+      second.get("files"), second.get("cited"))
+# The frame is cited where the pack ships it, not copied into ComfyUI/input —
+# a copy per look ever cast used to pile up in the picker forever.
+check("...and a look's frame is cited, not copied into the input folder",
+      str(atlas.get("cited") or "").startswith("atlas:"), True)
 
 passed(f"the frontend loads and all {len(report['nodes'])} bodies mount")

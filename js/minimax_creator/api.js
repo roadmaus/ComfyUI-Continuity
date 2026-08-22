@@ -2,6 +2,7 @@
 
 import { api } from "../../../scripts/api.js";
 import { t } from "./i18n.js";
+import { atlasUrl, isAtlasRef } from "./presets/atlasref.js";
 
 const cache = new Map();   // root -> {at, assets}
 const CACHE_MS = 4000;
@@ -380,6 +381,12 @@ export async function renderMeta(path) {
  * survives into creator_data, so a reloaded workflow has nothing else to go on.
  */
 export function viewUrl(path, { preview = false } = {}) {
+  // A cast look's frame is not in the input folder and never was: it is a file
+  // this pack ships, served out of WEB_DIRECTORY. Answered here rather than at
+  // each of the dozen call sites, for the reason `media.resolve` answers it on
+  // the other side — one door in, so a second species of path costs two
+  // branches instead of thirty. See `presets/atlasref.js`.
+  if (isAtlasRef(path)) return atlasUrl(path);
   // A gallery path carries ComfyUI's folder annotation ("clip.mp4 [output]").
   // The servers that take a filename parse it themselves; core's /view takes
   // the folder as a parameter instead, so it is split off here.

@@ -106,6 +106,43 @@ check("the stills are bigger than the card pictures",
           > os.path.getsize(os.path.join(THUMBS, name)) for name in sorted(stills)[:50]),
       True)
 
+# ---- how a cast look addresses its frame ------------------------------------
+#
+# Every other picture in this pack is named by a path under ComfyUI/input. A
+# look's frame is the one that is already on disk before anybody asks for it, so
+# casting one cites it where it sits — `atlas:000123` — rather than copying the
+# file into input/ to give it an address of the expected kind. That copy is what
+# this replaced: one per look ever cast, kept forever, in the picker and in every
+# core LoadImage combo on the canvas.
+#
+# Two resolvers know the address, one per side of the wire and in different
+# languages. Nothing but this check stands between them drifting apart and a cast
+# look that draws a broken thumbnail, or resolves to nothing at execute time.
+
+REF = os.path.join(PRESETS, "atlasref.js")
+with open(REF, encoding="utf-8") as handle:
+    ref_source = handle.read()
+with open(os.path.join(ROOT, "media.py"), encoding="utf-8") as handle:
+    media_source = handle.read()
+
+js_scheme = re.search(r'export const ATLAS_SCHEME = "([^"]*)"', ref_source)
+py_scheme = re.search(r'^ATLAS_SCHEME = "([^"]*)"', media_source, re.M)
+check("the frontend names the scheme", bool(js_scheme), True)
+check("...and so does media.resolve",
+      py_scheme.group(1) if py_scheme else None,
+      js_scheme.group(1) if js_scheme else None)
+
+# Where each side then looks for the file. The browser's is a URL relative to
+# `presets/`; the node's is a join off the repo root. Both have to land on the
+# folder the stills are actually in, which is the one checked above.
+js_dir = re.search(r"new URL\(`\./([\w/]+)/\$\{clip\}\.webp`", ref_source)
+py_dir = re.search(r"^ATLAS_DIR = os\.path\.join\((.*?)\)$", media_source, re.M | re.S)
+check("the frontend serves the frame out of the stills folder",
+      os.path.join(PRESETS, *js_dir.group(1).split("/")) if js_dir else None, STILLS)
+check("...and the node reads it from the same one",
+      os.path.join(ROOT, *re.findall(r'"([^"]+)"', py_dir.group(1))) if py_dir else None,
+      STILLS)
+
 if shutil.which("node") is None:
     skip("node is not installed")
 

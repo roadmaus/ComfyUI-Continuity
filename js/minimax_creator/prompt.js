@@ -148,7 +148,7 @@ export class PromptBox {
    *   sentence was clicked. The name is where a subject is used, so it
    *   is also the obvious place to ask what they are made of — see
    *   `CreatorEditor.openCastMember`, which summons the shelf onto them.
-   * @param {(row:object)=>Promise<string|null>} [hooks.castStyle]  cast one atlas
+   * @param {(row:object)=>string|null} [hooks.castStyle]  cast one atlas
    *   look into the piece and answer with the handle it landed under. Absent
    *   where there is no piece to cast it into — the same rule `castFromLibrary`
    *   follows — and the Style rows are left out of the `/` menu with it.
@@ -1456,12 +1456,12 @@ export class PromptBox {
       return;
     }
     // A look, cast where you asked for it. The same member the library's own
-    // "Cast this frame as a look" builds — the frame is uploaded and the subject
+    // "Cast this frame as a look" builds — the frame is cited and the subject
     // lands on the piece — but the name goes where the caret is instead of at
     // the front of the sentence, because here you said where you wanted it.
     //
     // Measured before anything else, for the reason the roster is: casting
-    // uploads a file and redraws the body, and the box is rebuilt with it.
+    // redraws the body, and the box is rebuilt with it.
     if (option.kind === "style") {
       const spot = this.triggerSpot();
       const before = this.getValue();
@@ -1470,8 +1470,8 @@ export class PromptBox {
         const handle = await this.hooks.castStyle(option.row);
         if (handle) this.writeName(before, spot, handle);
       } catch {
-        // The frame could not be read or uploaded. The typed "/claymation" is
-        // left as it was typed, which is prose and queues as prose.
+        // That style names no frame. The typed "/claymation" is left as it was
+        // typed, which is prose and queues as prose.
       }
       return;
     }

@@ -1,5 +1,20 @@
 # Changelog
 
+## 2.20
+
+**Casting a look no longer files a copy of its frame in your input folder.** The
+style atlas ships its thousand frames inside the pack, but casting one used to
+fetch the picture back out of the browser and upload it into
+`ComfyUI/input/style_refs/` — purely so it would have the kind of address the
+rest of the pack understands, which is a path under input/. The copies were
+permanent and one per look ever cast: a shelf of catalogue frames in the picker,
+and a row in every core LoadImage combo on the canvas, for a file that was
+already on disk twice. A look's frame is now cited where the pack ships it,
+`atlas:000123`, and two resolvers know that address — one for the browser and
+one for the graph. Frames cast before this keep working: they are ordinary input
+files and nothing stopped reading them, so the old `style_refs` folder is yours
+to delete once no saved workflow points into it.
+
 ## 2.19
 
 **The tool rail is a set of columns rather than a row of tiles with a gap

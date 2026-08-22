@@ -300,9 +300,8 @@ export class CreatorEditor {
       // over one image request, which has no cast and no segments, so the Style
       // rows stay out of its menu the way the roster already does.
       castStyle: this.castPiece?.subjects !== undefined || this.nodeId
-        ? async (row) => {
-            const member = await styleCastMember(row, 0);
-            const subject = castIntoPiece(member, this.castPiece);
+        ? (row) => {
+            const subject = castIntoPiece(styleCastMember(row, 0), this.castPiece);
             this.commit();
             return subject?.handle ?? null;
           }
