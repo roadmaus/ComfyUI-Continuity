@@ -1,59 +1,17 @@
 # MiniMax H3 Creator
 
-Write a sentence, attach your media with `@`, press Run. One node holds the whole
-generation and hands back a finished clip with its sound already in it — no
-conditioning sockets, no sampler to re-assemble, no VAE to remember to connect.
+Write a sentence, attach your media with `@`, press Render. One node holds the
+whole generation and hands back a finished clip with its sound already in it —
+no conditioning sockets, no sampler to re-assemble, no VAE to remember to
+connect. Write a second shot on it and the same node is a timeline.
 
-Write a second shot on it and the same node is a timeline.
+Local open weights only, through core's `comfy_extras/nodes_minimax_h3.py`. No
+API key, nothing uploaded.
 
-Local open weights only, through core's `comfy_extras/nodes_minimax_h3.py`. No API
-key, nothing uploaded.
+![A shot sampling, with the render beside it](docs/img/hero.png)
 
-![Sampling, then the finished clip playing beside the node](docs/img/preview.gif)
-
-Release notes live in [CHANGELOG.md](CHANGELOG.md).
-
-## The node
-
-![The Creator node](docs/img/ui_simple.png)
-
-Everything is on it. The rail at the top attaches images, video, audio and LoRAs;
-the box in the middle is your prompt; the pills at the bottom are duration, aspect,
-resolution and the sampler. The badge on the right (`REF2VA → Ref2VA`) tells you
-which checkpoint this render will land on.
-
-That is the whole workflow. Drop the node, type, run.
-
-Under the prompt there is a stretch of unexposed film — **Write the next shot**.
-Click it and the piece has two shots instead of one, the strip opens on the new
-one, and the node's face becomes the timeline described [below](#more-than-one-shot).
-Delete cards back down to one and the face comes back. There is no mode to pick:
-one shot or twenty, it is the same node and the same blob.
-
-The **Timeline** pill shows the piece without adding a shot — the standing prompt
-every shot inherits, the reference pool, and the LoRAs patched onto all of them.
-Click it again to go back to the shot. It is a view, not a setting: nothing about
-the render changes, and the choice is saved with the node rather than in the blob.
-
-### Fullscreen
-
-Turn on **Settings → MiniMax H3 → Editor → Fullscreen** and the node opens as the
-whole window instead of a rectangle on the canvas: the body in a column at its
-own width, the render beside it at its own size rather than scaled to the zoom,
-and the PreStage in a column to its left when one is spawned. `Ctrl+Shift+M`
-toggles it on a node that is already there; `Escape`, or the button in the top
-corner, goes back to the graph.
-
-It is the same node either way. The blob is the same hidden widget, the node
-stays in the graph, and the workflow you save from fullscreen is the workflow you
-always had — so this is a way of looking at the piece, not a second place to keep
-it. The node's title is the piece's name up in the bar, and renaming the node
-(double-click its title on the canvas) renames the piece.
-
-The one thing the canvas was providing that fullscreen has to replace is the
-queue, so there is a **Render** button at the foot of the column, which turns
-into the step count while it samples and grows a **Cancel** beside it. Gallery
-and Settings are where they always were, at the far end of the rail.
+Release notes live in [CHANGELOG.md](CHANGELOG.md). The design decisions, in
+full, are in [docs/PLAN.md](docs/PLAN.md).
 
 ## Install
 
@@ -77,954 +35,151 @@ Then put the weights where ComfyUI already looks:
 | Krea 2 / Ideogram 4.0 (optional) | `models/diffusion_models`, `models/text_encoders`, `models/vae` |
 | single-image H3 VAE (optional) | `models/vae` — [MiniMax-H3-Image-VAE](https://huggingface.co/Mamad8/MiniMax-H3-Image-VAE), for H3 stills |
 
-You pick the files in the node itself, on the **weights** pill. Anything a render
-needs and does not have is refused before the queue starts, naming the field and
-the folder it looks in.
-
-GGUF-quantized checkpoints and text encoders work too, with
-[ComfyUI-GGUF](https://github.com/city96/ComfyUI-GGUF) installed: drop the
-`.gguf` in the same folders and pick it like any other file — the format is read
-off the extension and the right loader is emitted, no setting to switch. The
-precision control does not apply to them (theirs was decided at quantization),
-and picking one without the pack refuses up front naming it.
-
-> The single-image VAE is a merged H3 VAE and loads through the same node as the
-> real one, so nothing downstream can tell them apart. It belongs in the
-> PreStage's VAE slot and nowhere else — in a video workflow it costs multi-frame
-> reconstruction. The weights pill will not auto-fill it as a video VAE, but it
-> will let you pick it, so read the filename.
+You pick the files on the node's **weights** pill. Anything a render needs and
+does not have is refused before the queue starts, naming the field and the
+folder it looks in. GGUF checkpoints and text encoders work with
+[ComfyUI-GGUF](https://github.com/city96/ComfyUI-GGUF) installed — drop the
+`.gguf` in the same folder and pick it like any other file.
 
 Two machine notes. fp8 checkpoints only *speed up* sampling on cards with
 hardware fp8 matmul (RTX 40-series and later); on older cards they still halve
 the memory and change nothing else. And recent ComfyUI streams weights with
 Dynamic VRAM by default — if a long render dies with a
 `HostBuffer.read_file_slice` CUDA OOM, start ComfyUI with
-`--disable-dynamic-vram` (a known core regression as of August 2026,
-[#15255](https://github.com/Comfy-Org/ComfyUI/issues/15255)).
+`--disable-dynamic-vram` ([#15255](https://github.com/Comfy-Org/ComfyUI/issues/15255)).
+
+## The node
+
+![The node in the simple view](docs/img/simple.png)
+
+Everything is on it. The rail attaches images, video, audio and LoRAs; the box in
+the middle is your prompt; the pills under it are duration, aspect, resolution and
+the sampler. The mode badge (`T2VA → FL2VA`) says which checkpoint this render
+will land on — you never pick one.
+
+Drop the node, type, press Render. That is the workflow.
+
+`Ctrl+Shift+M` opens the node as the whole window instead of a rectangle on the
+canvas, with two views over the same state: **Simple** is one column for when the
+piece is one prompt, **Full** puts the pre-stage, the shot and the picture side by
+side for when it is being built out of parts. Switching mid-sentence keeps the
+sentence — it is the same node, the same blob, the same queue.
+
+![The full view](docs/img/full.png)
 
 ## Attaching things
 
-Type `@` anywhere in the prompt. The menu lists what is already attached first, then
-everything in your input folder — pick a file that is not attached yet and it gets
-attached.
+Type `@` anywhere in the prompt. The menu lists what is already attached first,
+then everything in your input folder; pick a file that is not attached yet and it
+gets attached. The rail buttons open the same library with a tab per kind, search,
+shelves, favourites and upload — and a **Renders** tab over `output/`, so a clip
+you just made goes straight back in as a reference.
 
-![The @ menu](docs/img/mention-menu.png)
+![Two references cited in a prompt](docs/img/mentions.png)
 
-The rail buttons open the same library with a tab per kind, search, shelves,
-favourites and upload. The **Renders** tab browses `output/`, so a clip you just
-made can go straight back in as a reference.
+Every attachment gets a colour and its chip in the sentence wears the same one.
 
-![The Renders tab](docs/img/render_gallery.png)
+This matters because H3 does not take free text. It takes a structured
+description where every reference is addressed as `<Picture 1>`, `<Video 2>`,
+`<Audio 1>`. Writing `use @img-1 for their face` assigns those labels for you, in
+the order the tokenizer expects.
 
-**Gallery** on the rail opens straight onto that tab. It is the same picker, so
-renders organize exactly like input files do: make a shelf, drag thumbnails onto
-it, star the keepers, and use **Organize** to move or delete in bulk. Stills and
-finished clips arrive on separate shelves, because videos and stills write to
-separate folders — see below.
+Each reference also gets a **scope dial**, on its chip. An image's reads `full ·
+person · object · scene · style` — on `person`, "them from @img-1" stops dragging
+that image's background, palette and pose along with the face. A clip adds
+`motion`, `camera`, `edit` and `continue`; a sound reads `voice · music ·
+ambience · copy`. H3 has no reference-conditioning input, so each of these is a
+different sentence in the compiled prompt or it is nothing.
 
-Every attachment gets a colour and its chip in the sentence wears the same one, so
-you can match a reference in the prose to a picture without reading.
-
-Why this matters: H3 does not take free text. It takes a structured description
-where every reference is addressed as `<Picture 1>`, `<Video 2>`, `<Audio 1>`.
-Writing `use @img-1 for their face` assigns those labels for you, in the exact order
-the tokenizer expects.
-
-### Trimming
-
-Video and audio get a segment editor — on the picker cell or on the attached chip.
-Scrub, drag the handles, or slide a fixed-length selection along the clip. The range
-sits on the waveform, decoded in the browser, so you can see where the sound is
-before you cut it.
-
-![The segment editor](docs/img/video_and_audio_trim.png)
-
-The three buttons underneath decide what a video reference contributes: **picture +
-sound** brings its soundtrack in as a reference audio too, **picture only**
-references it silently, and **sound only** throws the picture away — which is what
-you want for a voice, a room tone, or scoring that happens to live in an mp4.
-
-Every reference also gets a scope dial. An image's reads `full · person · object ·
-scene · style`; on `person`, "them from @img-1" stops dragging that image's
-background, palette and pose along with the face.
-
-A clip's dial takes the same four and four more, which are the roles H3's
-reference guide gives a video: `motion` lends the action alone and carries it
-onto whoever the prompt puts in the shot, `camera` lends the move, the cuts and
-the pacing with nothing in the clip appearing, `edit` says the clip *is* the
-video being edited — which is how you replace a subject and keep the rest — and
-`continue` picks the video up where the clip ends. Each one is a different label
-in the rewrite: the content takes and `motion` mine the clip for a `<Subject N>`,
-while `camera`, `edit` and `continue` are the whole-video relationships
-`<Video N>` is reserved for. The dial is on the chip, next to the trim.
-
-An audio reference's dial reads `full · voice · music · ambience · copy`, which
-are the roles the guide gives an `<Audio N>`. `voice` carries a timbre and a
-delivery onto whoever speaks without carrying the words, `music` and `ambience`
-reference a style or a room without reusing the recording, and `copy` says the
-signal itself becomes the video's audio. A clip you set to **sound only** scopes
-here rather than with the pictures — it is an audio reference that happens to
-have arrived in an mp4.
-
-None of this reaches the DiT as a switch: H3 has no reference-conditioning
-input, so every one of these distinctions is prose or it is nothing. The
-compiler writes that prose, always — every reference is defined and its scope
-stated, in the guide's own sections, whether or not you refine. Refine writes a
-fuller version of the same thing and replaces it. What is actually sent is
-readable in the prompt box: see [What the model reads](#what-the-model-reads).
-
-The PreStage's style references are cited the same way. Writing `@ref-2` becomes
-`Picture 2` — the label core's Qwen-edit encoder writes in front of that slot, so
-it is the name the model is actually reading. Which slot a reference gets is the
-payload's to decide, not yours to count.
+Video and audio get a segment editor on the chip: scrub, drag the handles, or
+slide a fixed-length selection along the waveform. Three buttons decide what a
+video contributes — picture + sound, picture only, or sound only.
 
 ## The cast
 
 A reference is a file. A *subject* is who is in the video, and H3 keeps the two
-apart: `<Picture 1>` is a picture the tokenizer is shown, `<Subject 1>` is a
-person, an object, a place or a look that the target video actually contains.
-The reference guide is blunt about which of the two a character is — an image
-used only to define somebody gets no picture entry of its own; it is cited
-*inside* that subject's definition.
-
-So people are cast, not attached. **Cast** is on the rail beside Add image; the
-same shelf is in the Timeline window, under the piece references. Press it, give
-the subject a name, and hang files on them.
-
-The shelf is a call sheet: one line each — their face, their name, what they are made
-of, and where they walk on — and the line opens into their card when you click it.
-One is open at a time, so a cast of eight is eight lines you can read at a glance
-rather than eight stacked forms you scroll past.
-
-**Hanging a file on somebody sets its scope dial.** A picture given to @anna as
-their looks *is* a person reference, so it becomes one — the dial on `@img-1` reads
-`person`, and the line the model is handed says their face, hair, build and
-clothing are retained and the picture's background, pose and palette are not. Their
-movement clip becomes `motion`, their voice `voice`, and the clip they take
-somebody's place in `edit`. The two settings were never independent; the second
-one was just being typed twice, and forgetting it told the model the opposite of
-what you meant.
-
-A dial you set by hand is yours and stays put. The only time one moves after that
-is when *they* do: change @anna from a person to a place and their pictures follow
-them from `person` to `scene` — the ones this rule set, not the ones you did. A
-piece written before this landed has their files repaired when it loads.
-
-Each file behind them is a thumbnail on their open card, badged with what it
-lends them. Click a thumbnail to change that, or to take it off; click the dashed tile to
-hang another one on, picking from what is attached or attaching something new.
-
-- **Several pictures, one person.** Four angles of the same face are one subject,
-  not four references that happen to rhyme. Files that lend them their looks wear no
-  badge — they are the common case; the badges mark the three departures from it.
-- **A face from a still, a walk from a clip.** Set one file to *they move like
-  this* and the definition says their appearance comes from the pictures and their
-  motion from the clip.
-- **A voice.** *This is their voice* binds an audio reference as their voice timbre
-  and gives them a speaker ID. IDs run in cast order, so the first speaker is the
-  one at the top of the shelf.
-- **Swapping a person for a person.** *They take somebody's place in this* names
-  a reference clip, and the box under it says who — "the person at the counter". The
-  clip's framing, camera work and action are kept; its occupant is replaced by
-  them. That is the whole gesture, and the one the guide spells as the
-  `attribute_transfer` marker.
-
-  It takes as many clips as you give it. The same person in a medium shot and a
-  close-up is one vacancy filmed twice, so hang both on them: the summary calls
-  the target video an edited version of both, once, and each clip gets its own
-  definition and its own retention line. Citing @anna in any shot carries every
-  clip they stand in for into it.
-- **Nothing behind them at all.** A name and a description is a subject too, and
-  it is the useful one in a prompt with no references in it: it is what keeps
-  them the same person in shot 1 and in shot 9. Their description becomes their whole
-  definition.
-
-Then you write with them. `@anna walks in and looks at @ben` — the same `@` chip
-everything else uses, in the same menu, under **Cast**. Citing a subject is what
-carries their files into that shot, exactly as citing a piece reference carries
-that file: a shot that never names them does not pay for their pictures.
-
-A name is only a name because you declared it. `@anna` in a piece where nobody
-cast Anna is ordinary prose and stays that way — nothing you have already written
-changes meaning because this shelf exists.
-
-A subject nobody has written into a prompt is in no shot, and their card says so —
-click that and it writes their name in for you.
-
-**Their name in the sentence is a door.** Click `@vera` in the prompt and the
-shelf opens on their card; click it again and it shuts. A look cast from the
-style atlas is a cast member too, so `@lego_brickfilm` opens the same way.
-
-### Feature by feature
-
-The reference guide writes a subject as a named list of features, and then names
-those same features again in `retention_analysis`. Its own worked example does it
-four times in a row:
-
-```
-<Subject 2> is the fluffy white Samoyed in <Picture 2>, <Picture 3>, and
-<Picture 4>, with thick white fur, pointed ears, a dark nose, and a curved tail.
-...
-<Subject 2> (appears in [Shot 1], [Shot 2]): fully_preserved - the Samoyed's
-thick white fur, pointed ears, dark nose, and curved tail are retained.
-```
-
-So a card holds a list: **what the reference shows**, one phrase per line. Each
-line is *kept*, or it has an arrow in it and becomes something else in the target
-video.
-
-```
-long dark hair                 kept
-a blue cardigan             →  a red waxed jacket
-a thin silver necklace         kept
-```
-
-That arrow is the answer to the question the node could not answer before — *what
-if the clothing should be different*. Both halves are written out: the cardigan
-is named in the definition, because a characteristic has to be defined before it
-can be changed, and the retention line says the hair and the necklace are
-retained and the cardigan is replaced by a red waxed jacket.
-
-**The relationship marker is derived, not picked.** It sits under the list in the
-guide's own vocabulary. All features kept is `fully_preserved`; any feature
-changed is `partially_preserved`; taking somebody's place in a clip is
-`attribute_transfer`, whatever else moves. Click it to override — which is the
-only way to reach `weak_reference`, since "only broad similarity in style,
-category, composition, or atmosphere" is a judgement about the render that no
-rule can work out for you.
-
-It used to be a picker with four words in it, and picking one changed nothing but
-the word: choosing *partly kept* wrote `partially_preserved` above a sentence
-saying everything was retained. A marker you can set and a sentence that ignores
-you is worse than no marker at all.
-
-### Taking somebody's place
-
-`@vera should replace the bench in @vid-1` is a sentence, and a sentence lands in
-`detailed_description` and nowhere else. Nothing in it tells the model that
-@vera and @vid-1 have anything to do with each other — the retention lines still
-say the subject is preserved whole and the clip is preserved whole, side by side,
-unrelated.
-
-What says it is section 4.1's `attribute_transfer`, and every open card offers it
-as a row whenever the piece holds a clip to edit or continue:
-
-```
-takes the place of   the bench   in  @vid-1
-```
-
-Filled in, the retention line becomes *their features are transferred onto the
-bench in `<Video 1>`, whose framing, camera work and action are kept* — which is
-the whole of "swap this for that, and change nothing else about the shot". Left
-empty it says nothing and costs one dim row.
-
-The clip's own content is not touched. `<Video 1>` keeps the definition an
-unclaimed reference gets and stays the source video; only its occupant moves. And
-several clips can hold the same vacancy — the same role in a medium shot and a
-close-up is one place filmed twice.
-
-### Keeping somebody
-
-Somebody worth casting is usually worth casting again, and rebuilding them by hand
-on the next node is how a character drifts. The **★** on their open card keeps them
-in the cast library — their name, their words, their features, their retention marker, and their files
-*by filename* rather than by handle. **From the library** at the top of the shelf
-brings them back into a piece that never had their pictures attached. Their files
-attach as they land, as ordinary references — an image reference is an image
-reference, and it appears in the reference row under `img-2` like anything else
-you added, sizeable and removable. On a piece of one shot they attach to that
-shot; on a strip they go to the piece's pool, which is the one list several cards
-can cite. A file already attached is used rather than attached twice.
-
-The shortest way back to them is not the shelf at all: type `@ann` in any prompt
-and the roster is in the menu under **Cast library**, under whoever is already
-cast. Picking them there casts them *and* writes their name — their files attach
-as references where you would have attached them by hand, and the name is written
-in at the `@` you typed. That is the whole gesture: you were writing the sentence
-they are in, and now they are in it.
-
-Their name is who they are, so keeping them twice keeps them *over* the standing copy
-rather than beside it. Casting them into a piece that already has an @anna gives
-the arrival `@anna_2` instead — two subjects of one name is a piece where the
-name means neither.
-
-What it produces is the part of the form that could not be written before. At
-queue time the compiler emits `subject_definitions` and `retention_analysis` in
-the guide's own shapes, in the reference form and in the plain modes alike — so a
-`<Subject 1>` is always defined wherever it is written. Every subject is defined
-once and its fate marked with one of the guide's four fixed relationship
-markers — `fully_preserved`, `partially_preserved`, `attribute_transfer` or
-`weak_reference` — worked out from the features above it, with the shots they
-appear in read off the description. Nothing negative is written into that
-section: §4.1 closes by saying not to treat what the target video adds as a loss
-of reference fidelity, and there is not one negative clause in any of the guide's
-own retention examples. What a label does *not* denote is a fact about the label,
-so it lives in `subject_definitions` where the guide puts it. Refine is
-handed the cast as pinned fact: it writes the film around your subjects and is told not to define or
-renumber them.
-
-## LoRAs
-
-![The LoRA manager](docs/img/lora_picker.png)
-
-A full-screen manager over `models/loras`. Cards carry the showcase image or clip,
-the title, base model and trigger words read from whatever is sitting beside the
-file; a LoRA nothing has described still gets a working card from its filename.
-Each card sets a strength, which checkpoint it belongs to, and its trigger words.
-Those words are prefixed to the prompt at compile time and printed under the LoRA
-chips in the node body.
-
-Metadata is read from whichever of these it finds, and merged — later entries only
-fill in what earlier ones left blank, except for the trigger words and the strength,
-where anything *you* wrote outranks anything a website said:
-
-| Written by | Files read |
-| --- | --- |
-| CiviMeta | `{model}.safetensors.civitai/` — `meta.json`, `images.json`, `media/`, `thumbnails/` |
-| ComfyUI-Lora-Manager | `{model}.metadata.json`, and its example-images folder if one is configured |
-| Civitai Helper, CivitAI Browser+ | `{model}.civitai.info`, `{model}.api_info.json`, `{model}_0.jpg`… |
-| A1111, Forge, and downstream | `{model}.json` (activation text, preferred weight), `{model}.txt`, `{model}.description.txt` |
-| ComfyUI core, hayden-fr's manager, pysssss | `{model}.preview.{png,jpg,webp,mp4,webm,…}`, `{model}.{ext}`, `{model}.md` |
-| The file itself | ModelSpec (`modelspec.title`, `.trigger_phrase`, `.thumbnail`) and kohya's embedded `ssmd_cover_images` |
-
-Nothing is written back: every one of these is read-only, and a LoRA the pack cannot
-identify is a card with a filename on it rather than an error. Double-clicking a card
-opens the detail sheet — the showcase with the generation settings recorded for each
-image, and, at the bottom, which of the files above each field was read from. **Rescan**
-re-reads everything, which is what to press after editing a sidecar by hand.
-
-**How they are loaded is not ComfyUI's stock path.** H3 mostly runs quantized, and
-on a quantized checkpoint the stock merge — dequantize, add the delta, requantize
-with a recalculated codebook — injects about 1.5% relative weight noise, where a
-typical H3 LoRA delta is 0.01–0.08% of the weight. The adapter is replaced by
-rounding noise, and the merge is also two orders of magnitude slower than not
-doing it. Two more things go wrong quietly: H3 ships in two adaLN forms and a LoRA
-trained against one has the wrong width for the other, so those pairs are dropped
-— on a distillation LoRA that is most of the adapter — and the five key
-conventions H3 LoRAs ship under do not all resolve by splitting on underscores.
-
-So this pack ships **[ComfyUI-H3-PowerLoraStack](https://github.com/cicalooo/ComfyUI-H3-PowerLoraStack)**'s
-library (Apache-2.0, by cicalooo) and loads through it: quantized layers get an
-exact runtime low-rank branch instead of a merge, adaLN is ported between bases
-rather than dropped, keys resolve against the model's own key set, and a stack of
-several LoRAs fuses into one pair per layer rather than N. Nothing is asked of
-you and there is nothing to install — it is the path. What each file did lands in
-the ComfyUI console: what merged, what branched, what the adaLN port managed, and
-how far each file's real perturbation is from the strength you gave it. Upstream's
-own nodes are worth having on top for what this does not vendor — per-modality
-adaLN, strength schedules, auto-balance.
-
-**turbo** on the sampler row is a switch, not a preset: it adds a distillation LoRA
-(larryvrh's `minimax_h3_turbo_v4_step600_ema`, the lightx2v 4-step distill, or
-Kijai's conversions), moves the sampler to euler + beta, drops the steps to
-4 / 6 / 8, and sets the two **shift** pills to the schedule the picked LoRA's
-card was distilled against (the lightx2v distill runs the video clock at 6;
-larryvrh's keeps the checkpoints' own 12/3). Switching it off puts all of it
-back. The shift pills are ordinary controls the rest of the time — H3 samples
-picture and sound on two flow clocks, and at the default 12/3 the graph carries
-no shift node at all.
-
-**Turbo lead-in** is the answer to the complaint every distillation earns: the
-frames are fine and the model stopped listening. A turbo LoRA buys its speed by
-collapsing the schedule, and the opening steps are where a shot's composition and
-motion are actually decided — so a piece rendered entirely through one follows the
-prompt less closely than H3 does on its own. Under **Settings → Nodes** you can
-hand those opening steps back: one or two of them sample on the checkpoint with
-the distillation held off it, and the rest of the same schedule finishes on the
-distilled model. One seed, one step count, one set of sigmas — the split only
-moves where the LoRA takes over.
-
-While turbo is engaged the sampler row carries it too, as a stepper beside the
-quality stops: `lead 2/8`, the steps given back over the steps the run has. The
-numerator alone would not say much — two of four is half the render on the base
-weights, two of eight a quarter — so the pill always spells the fraction, and it
-sits next to the `good 8` that set the eight. It is the same one answer the
-settings page holds, reachable from the row rather than a second copy of it;
-other open nodes pick a change up the next time they redraw.
-
-They are not extra steps: they come out of the count on the node, so a 6-step
-turbo render with a two-step lead-in is still six, and two of eight costs about a
-quarter of what the distillation saved. It applies only where the turbo switch has
-engaged a LoRA — a checkpoint with the distillation merged into its weights has
-none to hold off — and the refine and face passes are untouched, since they resume
-partway down the schedule and the steps this splits are not in them. Off by
-default, and like the rest of that page it is this machine's answer rather than
-the workflow's.
-
-## Refine
-
-`Refine` rewrites your sentence into the long, sectioned description H3 was actually
-trained to read, using a small local vision model. The result lands in an editable
-box under the prompt — correct it, switch it off without losing it, or revert.
-
-It looks at your attached images, writes real dialogue lines instead of "they say
-something", always writes a soundscape, keeps quoted words exactly, and picks how
-many shots the clip holds and the second each one starts on.
-
-It is a button rather than a queue-time step on purpose: you should see what the
-model will read *before* five minutes of sampling, not infer it from the result.
-
-## Faces
-
-H3 draws a face badly in proportion to how small the head is **in frame**. It is
-not a resolution problem — it is there at 768 and above — so no upscaler reaches
-it: an upscaler re-resolves what was drawn, and what was drawn was a smudge.
-
-The **faces** pill on the sampler row switches on a second, small generation per
-pass. After a pass is rendered, its face is tracked frame by frame, cropped out
-so it fills a 512 px canvas, re-drawn by H3 itself at a low denoise — low enough
-that it stays frame-aligned and keeps the lipsync the soundtrack already has —
-and composited back under a feathered mask. Only the face box is pasted; the
-wider crop is context for the sampler, not content for the composite.
-
-Two knobs, both in the pill's popover:
-
-- **crop at** — the canvas each crop is generated at. 512 by default; the face
-  fills it either way, so most of what a larger one buys is the hair around it.
-- **redraw** — how much of the schedule the crop re-runs. This is a *ceiling*:
-  it is scaled down frame by frame by how large the face already is, so a shot
-  where somebody walks towards the camera is synthesised where the head is tiny
-  and barely touched by the time it is close.
-
-On a timeline every card carries a small **face** chip while the pass is on;
-click it to leave that shot alone. The two knobs stay the piece's — one render
-has one answer for how the pass works, and what a card says is whether this shot
-needs it.
-
-It needs a **SAM3 checkpoint** in `models/checkpoints`, picked in the weights
-control. SAM3 ships with ComfyUI core, so there is nothing to install — it is
-open-vocabulary, so it is simply asked for "face", and it tracks, which is what
-keeps a crop on one person when two are in shot. Nothing else is needed: no
-ultralytics, no insightface, no segmentation pack.
-
-What it costs: one extra generation per pass, at a quarter of a 768 pass's
-pixels, plus loading the detector between passes. Frames where no face is found
-are left exactly as they rendered, and a pass with no face in it at all is left
-alone and says so in the log.
-
-## PreStage
-
-![PreStage feeding a Creator](docs/img/pre-stage.png)
-
-The pipeline eats stills — start frames, end frames, references, storyboards — and
-making one usually means a second workflow, a second tab and a trip through the
-output folder. The PreStage generates them on the same canvas, locally, with Krea 2,
-Ideogram 4.0, or H3 itself.
-
-Spawn it from the **pre-stage** pill; it lands at the left edge of the node it
-belongs to. Its result card has chips that write the finished still straight into
-the peer as a start frame, end frame or reference. The hand-off is by file, so one
-Run does both and an untouched PreStage is a cache hit.
-
-### Stills from H3 itself
-
-Experimental, and the reason to bother: the other two are image models, so a
-keyframe from them means loading a second model family and then matching a look
-across an architecture boundary. Switch the model pill to **MiniMax H3** and the
-still is made by the weights that will render the shot, on the canvas that shot
-will run at.
-
-It is a video generation with one frame kept. The node samples the shortest legal
-clip, takes one temporal slice of the latent, and decodes it with an
-image-specialised H3 VAE —
-[MiniMax-H3-Image-VAE](https://huggingface.co/Mamad8/MiniMax-H3-Image-VAE) by
-Mamad8 (`minimax_h3_t1_image_vae_*`) — whose decoder was
-fine-tuned to turn a single temporal latent into a picture while its encoder was
-left frozen. That is why one file does both jobs here: the encoder that reads your
-references is still the stock H3 one, bit for bit.
-
-The body is the shot editor's, because the request is a shot's — nine reference
-images, three clips, three sounds, a start frame, an end frame, LoRAs, `@`
-mentions, FL2VA/Ref2VA routing, the taeh3 preview. Two pills are its own:
-
-| pill | what it does |
-|---|---|
-| `5f · 2 latent` | how much video is sampled to get the one frame. 5 is cheapest; H3's trained range starts at 124, so longer is more in-distribution and proportionally slower. |
-| `latent 0` | which latent frame becomes the picture. 0 is the causal first frame — the one slice the decoder was fitted to. Negative counts from the end. |
-
-Reconstruction is soft compared to a dedicated image model: fine text, thin
-contours and hair are where it shows first. It is an experiment, marked as one in
-the UI, and the video VAE is not a substitute for it in either direction.
+apart. So people are **cast**, not attached: press Cast on the rail, name them,
+and hang files on them — a face from three stills, a walk from a clip, a voice
+from an mp3, a person they take the place of in some footage.
+
+Hanging a file on somebody sets its scope dial for you, because the two settings
+were never independent. Then write with them: `@anna walks in and looks at @ben`.
+Citing a subject is what carries their files into that shot, so a shot that never
+names them does not pay for their pictures. A name and a description with no files
+behind it is a subject too — and it is what keeps them the same person in shot 1
+and in shot 9.
 
 ## More than one shot
 
-Past one shot the node's face becomes the piece at a glance: the global prompt,
-the shots as a lane strictly proportional to their durations, and the numbers.
-Each card is a whole generation — its own prompt, references and LoRAs, edited in
-the same editor the single-shot face is.
-
-![The node with a strip on it](docs/img/timeline-node.png)
-
-**Edit timeline** opens the strip, which is where the work happens.
-
-![The Timeline strip](docs/img/timeline.png)
-
-**Chained** renders each segment and joins them; a segment can start from an
-earlier segment's last frame and inherit a tail of its sound. The seam continues
-from the previous segment by default, but from segment 3 on a *from* control under
-the seam's two switches lets it name any earlier one — a story that returns to
-segment 1's hallway after an unrelated segment 2 continues from segment 1, while
-segment 2 stays a hard cut.
-
-A continuing seam works in every mode, references included: a Ref2VA segment can
-continue from another Ref2VA segment's last frame, with its `@` references intact.
-The seam's width is adjustable too — the *last frame / blend* control widens it
-from the classic single frame to a 5-, 22- or 39-frame blend. A blended seam pins
-the source's last run as motion context, so the model reads real movement across
-the cut instead of guessing it from a still, and the sound seam is then pinned
-on the new segment's own timeline — continued phase-locked rather than imitated.
-The overlap is re-generated at the segment's head and trimmed off after decode,
-so a blended segment delivers up to 1.6 s less than its card says. **One pass**
-compiles the
-same cards into a *single* generation, since H3's prompt format is already a shot
-list — nothing is decoded and re-encoded mid-clip, so there is no seam and music or
-dialogue carries across a cut. **Refine all** rewrites every card in one call, which
-is the only way a later shot keeps the look an earlier one established.
-
-**Piece references** attach a file to the timeline itself — a character sheet, a
-location plate, a voice — instead of once per segment it appears in. The shelf
-above the strip hands out `@ref-N` handles, and the citation is the attachment:
-write the handle in the **global prompt** (or click the handle on its chip) and
-the reference rides into *every* segment; write it in one segment's prompt and it
-rides into that segment alone. Uncited, it rides into none — so editing an
-unrelated segment re-renders nothing extra. A cited reference rides into a
-start/end-frame segment like any other: the segment becomes a Ref2VA
-generation and its frames ride as pinned guides. The `@` menu
-inside every segment offers the pool under *Piece references*, the refiner is
-shown it once and may cite it where the subject appears — globally included —
-and a reference can be narrowed (*person*, *object*, *scene*, *style*, for a clip
-*motion*, *camera*, *edit*, *continue*, and for a sound *voice*, *music*,
-*ambience*, *copy*) so a sheet contributes the likeness without its background.
-In one pass, all citations of the same piece reference share a single
-`<Picture N>`.
-
-While a chained piece renders, the preview overlay names the pass the sampler is
-on — *Pass 3 of 5* — so a long strip's step count finally says where in the piece
-you are. Cached segments are skipped, so the chip always names the segment
-actually being made.
-
-### Shooting a piece a pass at a time
-
-A long strip does not have to be rendered all at once. Every card carries a
-padlock, at the right of its head: **unlocked** is in the next render, **locked**
-is not. Write all three segments, lock the last two, render — you get segment 1
-alone. Look at it. If it is wrong, render again; if it is right, lock segment 1
-too and unlock segment 2, and the next render generates segment 2 continuing
-from the file segment 1 already made, without sampling segment 1 again.
-
-Nothing on a locked card is lost: its prompt, references, LoRAs, seam and length
-are all still set and still editable, it is simply not generated. What the card
-*looks* like says what the lock is holding — solid because the film already
-exists, perforated because it has not been shot yet — and the chip in its meta
-row names it, **kept** or **not shot**. The bar says what the next queue will
-cost: *6.0 s next*, against the piece's full length.
-
-Every render of more than one pass writes each pass as its own file under
-`takes/`, next to the finished video, and hands it back to the card that made
-it. A card carrying one shows **take ready** until you rule on it. Locking the
-card is what keeps that take; leaving it unlocked is what shoots it again. Edit
-a card whose take is kept and it says **kept · edited** — the take still plays,
-but it is no longer what the card describes.
-
-A lock belongs to a *pass*, not a card: a merged run is one generation and one
-file, so it locks, keeps and draws as one piece of film, with its padlock on the
-pass rail. A strip where every card is locked and kept is not an error — it
-queues the piece written out of the takes it already has, at no sampling cost at
-all.
-
-**A card may also carry its own seed**, on the seed pill in its editor. Absent —
-which is every card until you roll one there — it runs on the number on the
-node, and the piece stays one look under one handle. It is retaking that needs
-the exception: re-rolling the node's seed to shoot segment 2 again would move
-the number that made the take already locked in on segment 1, so a take's seed
-is a fact about the take. The pill says which of the two is in force, and names the
-seed the card's take was made on.
-
-### Upgrading from the two-node version
-
-Through 1.x the Creator and the Timeline were two nodes. As of 2.0 they are one
-— a Creator render was always a one-segment timeline underneath, and the split
-only ever lived in the UI.
-
-Nothing to do, and nothing to migrate. Saved 1.x workflows keep working:
-
-- A **Creator** node opens exactly as it did, on the shot you wrote. Its blob is
-  read as the one-shot piece it always was.
-- A **Timeline** node keeps its own id, which is deprecated rather than removed:
-  it is gone from the node search, it still loads, and it mounts the same body.
-  Only the title on the canvas differs. Copy the JSON into a fresh Creator and
-  delete it if you would rather not keep one around.
-
-The blob's shape is the timeline's either way — a global prompt, one canvas, one
-set of weights and a list of segments — so the right-click **Copy creator_data
-JSON** now hands you a piece rather than a lone request.
-
-## Presets
-
-A preset is a setup you can put back. **Presets** on the rail opens the library —
-beside Gallery and Settings on a Creator, last on a PreStage's single group, and
-in the right-click menu of all three node ids.
-
-What it saves is the blob *and the sampler row*, because the row was never in the
-blob: `steps`, `cfg`, the sampler, the scheduler, the two flow shifts and the
-cache pill are stock widgets the node hides and redraws as pills. A preset holding
-only `creator_data` would drop the turbo schedule and the step count, which is
-most of what anyone actually tunes.
-
-Three things can be saved, and each knows which of them it is:
-
-| scope | saved from | holds |
-|---|---|---|
-| **piece** | a Creator, whatever is on its face | canvas, weights, the sampler row, the writing, LoRAs, the reference pool, the strip |
-| **shot** | one card off a strip | its writing, its references and LoRAs, the row it was dialled at, and how long it runs with the seam in front of it |
-| **prestage** | a PreStage | its architecture, canvas and quality, the writing, references and LoRAs, and the weights for the architecture it runs |
-| **cast** | the ★ on a cast member's card | one person — their name, their words, their retention marker and their references, named as files |
-
-Applying is per-section rather than all-or-nothing, which is the point: tick
-*look* and *speed* to drop a canvas and a step count onto a shot you have already
-written, and the prose stays where it is. A section that cannot cross into the
-target is shown with the reason on it instead of hidden — *Weights: this PreStage
-runs Krea 2, and these are H3 checkpoints* is information, and a missing row is a
-bug report.
-
-Two fields are never captured. The **seed** is the one number that has to be
-different next time, and the **output prefix** is a per-machine preference the
-[folders page](#where-files-go) already draws a line around. Applying runs the
-same normalisers the editor does, so a preset cannot put a node into a state you
-could not have built by hand: seams the restored durations can no longer afford
-are pruned, a checkpoint pin the restored references make illegal is dropped, and
-a piece's nine reference images are cut to the three slots Krea 2's edit path has.
-Ctrl+Z is the undo. A preset naming a LoRA or a checkpoint this machine does not
-have applies anyway and the affected chips render as missing, which is what a
-workflow from someone else's disk already does.
-
-### Taken from a render
-
-By the time you know which render was the good one, you have usually moved on —
-three prompts later, a different LoRA, the strip rebuilt. The setup is not gone,
-though. Both save nodes embed the workflow that made the file, the MP4 in its
-container tags and the PNG in its text chunks, so **From a render** opens the
-gallery and the file you pick becomes a preset. Nothing is stored for this; it was
-in the files all along.
-
-It reads the API-form `prompt` tag and never the canvas `workflow` tag, because
-that one is keyed by name. `workflow` holds `widgets_values`, which is
-*positional*, and this pack has already changed the length of that row once when
-the two flow shifts arrived — a render from before that carries nine entries where
-the node now declares eleven, and everything after the gap reads one slot out with
-no error anywhere. A file saved under `--disable-metadata` carries neither tag,
-and the library says which of those it is rather than failing.
-
-### The card
-
-The hero of a card is the render the preset was saved from. The stage is already
-holding it when you press save, so the cover is the thing you were looking at when
-you decided you liked it — nothing to guess and no best frame to pick. It fills an
-empty cover only, because a card you recognise must not change under you; **Set**
-and **Change** open the same gallery for one chosen by hand, and **Clear** puts the
-card back on the lane.
-
-With no cover the card draws the piece itself: the lane at its real proportions,
-merged shots closed up under one casing, seams between them, and the blocks filled
-with the thumbnails of whatever the preset names. With neither, the flat lane. The
-library stars, shelves and searches the way the picker does.
-
-Seven starters ship with the pack — a native 20-step row and a 4-step draft row, a
-9:16 canvas, a feathered continuation and a hard cut, and a poster and a character
-sheet for the two image architectures. They are the same for everybody, so they
-cannot be renamed or deleted: apply one, change what you want and press **Save
-current setup** to get one that is yours.
-
-Presets live in ComfyUI's user data next to the picker's favourites, as one index
-plus a file per preset. That means they follow the user rather than the workflow,
-which is why **Export** and **Import** hand the library — or one card — over as
-JSON when you move to another machine.
-
-### The cast tab
-
-The library's fourth tab is a roster rather than a shelf of setups: one card per
-person, their own picture as the hero, and *person · 2 pictures · voice* under it.
-Selecting them shows what they are made of — every reference at a size you can
-recognise somebody at, captioned with what it lends them — and **Cast @anna into
-this piece** puts them on the node with their files.
-
-Nothing is captured off a node here, so the tab has no *Save current setup* and no
-*From a render*: a person is kept from their own card, on the shelf where you are
-looking at them. Import and Export work as they do everywhere else, which is how a
-roster moves between machines.
-
-A member is refused by a card and by a PreStage, with the reason on the row —
-a cast belongs to the piece, and a pre-stage has none.
-
-### The style atlas
-
-A fourth tab, and the only one that is a catalogue rather than a shelf of your
-own work. It holds **941 looks** indexed from
-[ostris/minimax_h3_1k](https://huggingface.co/datasets/ostris/minimax_h3_1k) — a
-thousand H3 clips with detailed captions — by
-[hoodtronik's Style Atlas](https://github.com/hoodtronik/minimax-h3-style-atlas),
-grouped into eight media categories with a still off every clip.
-
-What makes them worth having is that they are not adjectives somebody thought of.
-They are the exact strings this model was captioned with, in the position the
-caption puts them: *Claymation with visible fingerprint texture and gently
-stuttering stop-motion movement* is not a description of claymation, it is a
-phrase H3 has seen a thousand frames of.
-
-Applying one **swaps the lead** rather than replacing the prompt. The descriptor
-goes in front, and where the prompt already opens with a descriptor from the
-atlas, that one comes out — so trying six looks on the same shot gives you six
-prompts rather than six stacked paragraphs:
-
-```
-The cat knocks a mug off the table, and it shatters.
-  → Claymation with visible fingerprint texture …, the cat knocks a mug off …
-  → LEGO brickfilm stop motion with bright plastic sheen …, the cat knocks a mug …
-```
-
-Nothing else moves — not the canvas, the strip, the weights, or a card that was
-already written — and it lands on a piece, a card or a PreStage alike.
-
-The atlas is **vendored**: the index and one still per clip, about 5 MB, sitting
-in the pack. No video, nothing downloaded and nothing streamed from Hugging Face,
-so the tab works with the network off and costs the dataset's author nothing. The
-module is fetched the first time you open the tab, never at boot.
-
-Some descriptors run past the look into the setting the clip happened to have —
-upstream reads the *opening* of a caption and H3's captions fuse the two. That is
-not trimmed, because trimming means guessing where a look stops being a look. The
-whole descriptor is in the inspector before you press Apply, and what lands is a
-prompt sitting in the editor, ready to be cut.
-
-Updating the copy is one script: `python3 tools/vendor_style_atlas.py <clone>`
-rewrites the index, drops stills for clips upstream removed, and stamps the
-revision it was taken from. Details in
-[docs/DESIGN-style-atlas.md](docs/DESIGN-style-atlas.md).
-
-## Modes and duration
-
-What you attach picks the mode, and the mode picks the checkpoint — only that one is
-loaded:
-
-| attached | mode | checkpoint |
-|---|---|---|
-| nothing | T2VA | FL2VA |
-| start and/or end frame | I2VA / L2VA / FL2VA | FL2VA |
-| any reference image/video/audio | REF2VA | Ref2VA |
-| frames *and* references | REF2VA | Ref2VA |
-
-Frames and references combine: the frames ride as guides pinned at the clip's
-first and last frame — the same mechanism a timeline seam has always used — and
-the generation runs on Ref2VA, whose training reads keyframes alongside its
-references. Clicking the mode badge forces everything onto one checkpoint
-instead — in either direction, since the slots name what you loaded into them
-and merges of the two checkpoints exist — which is worth it because one
-checkpoint can then cover a whole timeline.
-
-Frame counts must satisfy `n % 17 == 5` at 24 fps, so there is no 6.00-second H3
-video. The pill shows whole seconds and the compiler lands on the nearest legal
-count:
-
-| shown | 5 | 6 | 7 | 8 | 9 | 10 | 12 | 15 |
-|---|---|---|---|---|---|---|---|---|
-| frames | 124 | 141 | 175 | 192 | 209 | 243 | 294 | 362 |
-| real | 5.17 | 5.88 | 7.29 | 8.00 | 8.71 | 10.13 | 12.25 | 15.08 |
-
-The resolution slider sets the **short edge** (384–2048, native 768); both axes snap
-to 32. By default the aspect comes from the start frame when there is one, then
-from supplied footage, then from the ratio pill — but the pill's popover lets
-you take it from *any* attached picture instead: a start or end frame, a
-reference image or video, a clip card's footage, or a pool reference, with the
-presets available to force over all of them.
-
-Past 768 the popover offers a choice, because the open weights were trained at a
-768 px short edge and going above it directly is off-distribution. **Two passes**
-(the default) samples at the first-pass canvas — native, unless the `sampled at`
-stepper lowers it — then a second pass interpolates the video latent up to the
-slider's size, re-noises it partway down the schedule (the `refine` stepper,
-default 0.50) and samples again — against conditioning rebuilt at the target
-size, so keyframes and references are re-encoded to match. The soundtrack is
-never re-noised: the sound you got from the first pass is the sound in the
-file. **Direct** is the old behaviour, one pass at the slider's size, warning
-and all. At or under 768 there is no warning to answer, but the `sampled at`
-stepper is still there: lowering it under the slider buys the first pass's
-speed at any size — sample at 512, refine up to 768 — and is itself the
-two-pass opt-in.
-
-## What the model reads
-
-The sentence you type is not the prompt H3 reads. The model was trained on a
-sectioned intermediate form — a labelled document that defines every reference,
-says what becomes of it, states what kind of job this is, and then gives the
-description — and the compiler builds that form out of what you attached, what
-you set on each chip, and who you cast.
-
-Under the prompt box there is a rail: **What the model reads**. Open it and the
-finished prompt for the pass this shot lands in appears beneath your sentence,
-exactly as it will be queued — section by section, each one under the field name
-the model is handed. It is the compiler's own answer rather than a preview built
-alongside it, so there is no version of this where the two disagree.
-
-It opens *under* the sentence rather than in place of it, because the finished
-prompt contains that sentence: the block holding what you wrote is marked, and
-everything above and below it is what the compiler added. That is the whole
-question the panel answers.
-
-For one cast member replacing somebody across two clips, it looks like this:
-
-```
-subject_definitions: <Subject 1> is the person in <Picture 1>, thirties,
-close-cropped dark hair, grey work coat.
-<Video 1> is a source video for the target video edit.
-<Video 2> is a source video for the target video edit.
-
-summary: [video editing + reference generation] The target video is an edited
-version of <Video 1> and <Video 2>. It runs one shot and features <Subject 1>.
-<Subject 1> takes the place of the barista in <Video 1> and <Video 2>.
-
-retention_analysis: <Subject 1> (appears in [Shot 1]): attribute_transfer - ...
-<Video 1> (source video): partially_preserved - everything this description does
-not change stays as it is in the source video.
-<Video 2> (source video): partially_preserved - ...
-
-detailed_description: [Shot 1] <Subject 1> stands at the counter and turns to
-the camera.
-```
-
-Everything above the description is derived: the task-type prefix from the
-clips' scope dials, the definitions from the chips, the retention markers from
-what each label was declared to lend. Nothing about it is a mode you pick —
-attach the files, set what each one is for, say who is in the shot, and the form
-is written for you.
-
-What it is not is a rewrite. The guide asks for 350–500 words of shot
-description and no rule turns your sentence into that; the prose inside
-`detailed_description` stays yours until [Refine](#refine) writes a fuller one.
-A refined section replaces the derived one and the form is the same either way.
-
-For a shot with no cast and no references there is nothing to define, and the
-panel says so: the compiler wraps your sentence in `integrated_multimodal_description` and adds
-nothing else. That is the correct prompt for that shot,
-not a panel that failed to load.
-
-The rail is a view, not a setting — nothing about the render changes with it,
-and it is read-only, because it is derived from the piece rather than stored. On
-a timeline it follows the merge: cards merged into one pass share one prompt,
-and the panel shows the pass holding the card you have open, captioned with
-which pass that is. A shot that is a clip you attached generates nothing, and it
-says that instead of showing an empty document.
-
-## Where files go
-
-Renders are saved by the node itself, under ComfyUI's output folder. **Settings →
-Folders** sets where — one answer per machine, for every node in the pack:
-
-| | default | lands in |
-|---|---|---|
-| Creator | `minimax/renders/H3` | `output/minimax/renders/H3_00001_.mp4` |
-| PreStage | `minimax/stills/prestage` | `output/minimax/stills/prestage_00001_.png` |
-
-The last segment names the **files**, not a folder: `client-a/hero` writes
-`hero_00001_.mp4` into `output/client-a/`. Ending with a slash keeps the default
-filename, so `client-a/` is usually what you want.
-
-`%year%`, `%month%`, `%day%`, `%hour%`, `%minute%`, `%second%`, `%width%` and
-`%height%` are filled in as each file is written, in a folder as readily as in a
-filename — `minimax/%year%-%month%-%day%/H3` gives you a folder per day. There is
-a button per token, and the field shows the exact path the next file will take.
-
-These are preferences of this ComfyUI, not of the workflow: a `.json` shared with
-someone else writes into *their* folders rather than carrying yours onto their
-disk. A hand-edited blob may still set `output_prefix` for one node, which wins
-over the setting — that is the only way to have two nodes write to different
-places.
-
-### Output quality
-
-**Settings** in the rail opens the page for preferences that belong to this
-ComfyUI rather than to a workflow. The first of them is what the encoder is
-allowed to throw away when it writes an `.mp4`:
-
-| | crf | |
-|---|---|---|
-| Draft | 28 | About half the size of Standard. Banding in dark gradients. |
-| **Standard** | **23** | libx264's own default — what this pack wrote before the setting existed. |
-| Fine | 18 | About twice the size of Standard. |
-| Archival | 14 | About three times. Keeps grain and fine texture H.264 eats first. |
-
-CRF is libx264's quality target: lower is better and larger, and six points is
-roughly double the file. The container is unchanged either way — MP4, H.264,
-8-bit 4:2:0.
-
-This is **not** saved into the workflow. A `.json` shared with someone else makes
-the same shot at whatever quality their ComfyUI is set to, which is the same
-split as the folder pill above: where a file lands is part of the piece, how many
-megabytes it takes is not. The value lives in `user/minimax_creator.settings.json`
-and applies to every video the Creator writes. PreStage stills are PNG and have
-nothing to set.
-
-The page's **Nodes** tab holds the rest. *Advanced controls* comes first, because
-it decides how much of the rest there is: the sampler row has grown a cache,
-Spectrum, an attention backend and a turbo switch with a lead-in inside it, and
-*Standard* draws the part of it most renders use while *Everything* adds the
-turbo lead-in, `low vram` and `fast math` — and the turbo lead-in's own section
-to this page. It hides rather than disables, and it never hides something that
-is on: a control already switched on keeps its pill either way, so turning this
-off cannot change what a render does. *Preview playback*, the only setting on
-the tab that is on by default, decides whether the stage plays a clip the
-moment it has one — set
-it to *Waits for play* and a finished render holds its first frame, still, with
-the browser's controls to start it, which spares a crowded canvas a decoder per
-looping clip. *Flow shift pills* decides whether the sampler row offers H3's
-two schedule clocks — a control over who has to look at them, not over what is
-sampled. Neither changes what is queued, so a workflow renders the same on any
-machine.
-
-Needs ComfyUI 0.29 or newer, which is where `crf` reached core's video writer.
-On an older build anything but Standard is refused at save time rather than
-quietly written at the default.
-
-### Moving the input and output folders themselves
-
-The pill is relative to ComfyUI's output folder and cannot climb out of it. To
-move the folders themselves, use ComfyUI's own flags — this pack reads every path
-through `folder_paths`, so they work here with nothing to configure:
-
-```bash
-python main.py --input-directory /Volumes/Media/comfy-in \
-               --output-directory /Volumes/Media/comfy-out
-# or --base-directory to move input, output, temp, user and models together
-```
-
-Two things worth knowing:
-
-- `extra_model_paths.yaml` **cannot** do this. It only adds model search paths;
-  input and output are not model folders.
-- **Symlinking a folder into `input/` does not work**, and the picker will not
-  list files that resolve outside the folder they appear in. ComfyUI resolves
-  symlinks before checking that a path stays inside the input directory, and that
-  check is what stops a crafted filename reaching the rest of your disk — so it is
-  not something this pack works around. Use `--input-directory` instead.
-
-## Language
-
-The UI speaks English, 日本語, 한국어 and 简体中文. There is no language picker in
-the pack: it follows ComfyUI's own — **Settings → Comfy → Locale** — so the nodes
-and the app around them always agree. Traditional Chinese falls back to
-Simplified until someone contributes it.
-
-Every string the UI shows goes through one gate (`js/minimax_creator/i18n.js`),
-keyed by the English sentence itself. A key with no translation shows the
-English, so a half-finished dictionary degrades to the UI this pack always had
-rather than to bare token names. The dictionaries live in
-`js/minimax_creator/locales/` as plain English → translation pairs a native
-speaker can review without the source open — corrections are one-line edits, and
-pull requests for them (or for new languages) are welcome. Node names and
-descriptions in ComfyUI's own library and search are translated separately, in
-`locales/<lang>/nodeDefs.json` at the pack root, which core merges by itself.
-
-The translations are machine-drafted against a fixed glossary. The short labels
-are safe; the long tooltips would profit from a native speaker's pass.
+Under the prompt there is a stretch of unexposed film — **Write the next shot**.
+Click it and the piece has two shots, and the node's face becomes a lane strictly
+proportional to their durations. Each card is a whole generation with its own
+prompt, references and LoRAs. Delete back down to one and the single-shot face
+comes back. There is no mode to pick.
+
+**Chained** renders each segment and joins them; a seam can continue from any
+earlier segment's last frame, at one frame or a 5/22/39-frame blend that carries
+real motion and phase-locked sound across the cut. **One pass** compiles the same
+cards into a *single* generation, since H3's prompt format is already a shot
+list — no seam at all, and music or dialogue carries across.
+
+**Piece references** attach a file to the timeline itself and hand out `@ref-N`
+handles: cite one in the global prompt and it rides into every segment, cite it in
+one card and it rides into that card alone.
+
+Every card also carries a **padlock**: locked cards are not rendered, so you can
+shoot a long strip one pass at a time, keeping the takes you like — each pass is
+written as its own file under `takes/` — and re-shooting only the card you are
+working on.
+
+## Presets and the style atlas
+
+**Presets** on the rail saves a setup you can put back: a whole piece, one shot
+off a strip, a pre-stage, or one cast member. It saves the sampler row too, which
+was never in the blob. Applying is per-section — tick *look* and *speed* to drop a
+canvas and a step count onto a shot you have already written, and the prose stays
+where it is. **From a render** turns a finished MP4 or PNG back into a preset, out
+of the workflow the file already carries.
+
+![The style atlas](docs/img/style-atlas.png)
+
+The library's last tab is a catalogue rather than a shelf of your own work: **941
+looks** indexed from [ostris/minimax_h3_1k](https://huggingface.co/datasets/ostris/minimax_h3_1k)
+by [hoodtronik's Style Atlas](https://github.com/hoodtronik/minimax-h3-style-atlas),
+with a still off every clip. They are worth having because they are not adjectives
+somebody thought of — they are the exact strings this model was captioned with.
+Applying one *swaps the lead* of your prompt rather than replacing it, so trying
+six looks on one shot gives you six prompts rather than six stacked paragraphs.
+The atlas is vendored (~5 MB of index and stills); nothing is downloaded.
+
+## The rest, briefly
+
+- **Refine** rewrites your sentence into the long sectioned description H3 was
+  trained to read, using a small local vision model, and lands it in an editable
+  box under the prompt. It is a button rather than a queue-time step so you see
+  what the model will read *before* five minutes of sampling.
+- **PreStage** generates the stills the pipeline eats — start frames, end frames,
+  references — on the same canvas, with Krea 2, Ideogram 4.0 or H3 itself. Its
+  result card writes the finished still straight into the peer node.
+- **Faces** runs a second small generation per pass: the face is tracked, cropped
+  to fill 512 px, re-drawn by H3 at a denoise scaled by how big the head already
+  is, and pasted back under a feathered mask. Needs a SAM3 checkpoint, which ships
+  with core.
+- **LoRAs** get a full-screen manager over `models/loras`, with cards built from
+  whatever sidecar metadata is sitting beside the file, per-LoRA strength, and
+  trigger words prefixed at compile time.
+- **Modes** are picked by what you attach, and the mode picks the checkpoint —
+  nothing attached is T2VA, frames are FL2VA, any reference is Ref2VA, and frames
+  *and* references run on Ref2VA with the frames pinned as guides. Clicking the
+  badge forces everything onto one checkpoint.
+- **Duration** must satisfy `n % 17 == 5` at 24 fps, so there is no 6.00-second H3
+  video; the pill shows whole seconds and the compiler lands on the nearest legal
+  count. Resolution sets the short edge (native 768); past 768 it samples native
+  and refines up in a second pass rather than going off-distribution directly.
+- **Where files go** is a per-machine setting (Settings → Folders), not part of
+  the workflow, with `%year%`-style tokens; MP4 quality is a setting too.
+- **Language** follows ComfyUI's own locale — English, 日本語, 한국어, 简体中文.
+  Corrections are one-line edits in `js/minimax_creator/locales/`.
 
 ## Thanks
 
@@ -1094,45 +249,11 @@ This pack is glue. The work underneath it belongs to other people:
 - **larryvrh** and **lightx2v** — the H3 distillation LoRAs behind turbo.
 - **CiviMeta** — the sidecar format the LoRA cards read.
 
-All four packs are optional and none of them is required. If they are installed, the
-matching pills light up.
-
-## Tests
-
-```
-python3 tests/test_compile.py         # canvas math, modes, limits, ordering
-python3 tests/test_faces.py           # face windows, crops, and the piece/shot switch
-python3 tests/test_refine.py
-python3 tests/test_subjects.py       # the cast: citation, labels, and the two sections it writes
-python3 tests/test_assets.py          # what the picker's listing walk finds
-python3 tests/test_outputs.py         # what an output prefix may be
-python3 tests/test_settings.py        # what the settings file may hold, and that a save is a patch
-python3 tests/test_presets.py         # capture, apply per section, and what never crosses
-python3 tests/test_style_atlas.py     # the vendored atlas is whole, and a style leads the prompt
-python3 tests/test_canvas_mirror.py   # canvas.js against canvas.py
-python3 tests/test_piece_mirror.py    # an old creator_data blob lifts to one shot
-python3 tests/test_prestage_mirror.py
-python3 tests/test_cast_mirror.py     # state.js against subjects.py
-python3 tests/test_neutral_copy.py    # nobody in the cast has a gender you did not give them
-python3 tests/test_outputs_mirror.py  # outputs.js against outputs.py
-python3 tests/test_js_bodies.py       # the frontend loads and every node body mounts
-```
-
-Those need neither torch nor ComfyUI (the mirror tests need `node`). The graph tests do, and skip themselves with a
-message when it is not importable:
-
-```
-COMFYUI_PATH=~/ComfyUI <comfy-venv>/bin/python3 tests/test_creator_graph.py
-```
-
-Set `COMFYUI_BASE` as well when `--base-directory` points somewhere else — on a
-Desktop install the running tree and the folder holding `custom_nodes`, `models` and
-`output` are usually two different places.
-
-The design decisions, in full, are in [docs/PLAN.md](docs/PLAN.md).
+Every one of those packs is optional and none of them is required. If they are
+installed, the matching pills light up.
 
 ## License
 
 [MIT](LICENSE). ComfyUI itself is GPL-3.0 and this pack imports it; if you
-redistribute the two together rather than as a node pack people install themselves,
-that combination is what the GPL has an opinion about.
+redistribute the two together rather than as a node pack people install
+themselves, that combination is what the GPL has an opinion about.
