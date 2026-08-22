@@ -1,5 +1,53 @@
 # Changelog
 
+## 2.16
+
+**The picture stopped moving.** The fullscreen editor kept every finished render
+and the live stage in one scrolling column, so where the picture you were waiting
+for sat was a function of how many you had already made: centred while the column
+was empty, shoved to the floor by the first take, further down with every one
+after it. The thing you were watching was the thing that would not hold still.
+
+The two no longer share an axis. The picture region takes the whole height and
+centres what is in it, always, and history runs left to right along a shelf under
+the *window* — under the writing as much as under the picture, which is what keeps
+the two level. A shelf inside the picture's own column would have taken its height
+out of the picture and not out of the card, and they would have sat half a shelf
+apart for as long as there was any history at all. It is reserved from the first
+press rather than grown on the second take, for the same reason.
+
+**And the clock keeps its place when it stops.** The elapsed readout counted up
+through the render and then vanished at the moment it became the answer. It now
+holds the total, in the same corner, in the same type — and every past take on the
+shelf is captioned with what it cost, which is the one thing about a finished
+render you cannot see by looking at it. The filename moved to the tooltip: along
+a row of thumbnails it was the same truncated stem eight times over.
+
+**A corner you can pull.** The live picture has a grip at its top right — drag to
+size it between 40% and full, with a little gravity at 50, 75 and 100; double-click
+for full; arrow keys for five points at a time. It grows and shrinks about its own
+centre, so nothing else in the window moves, and the size is remembered the way the
+Simple/Full switch is. The bottom edge of a render is spoken for three times over —
+the progress rule, the readout, a finished clip's own transport — so the handle is
+at the top, where there was nothing.
+
+**One row, one kind of object.** The readout over the picture used to hold two
+vocabularies: Gallery was a pill and everything beside it was bare text on a
+gradient scrim, so a finished render carried a dark band across its bottom third
+to make three words legible. Every chip now brings its own small ground and the
+scrim is gone — the picture ends where the picture ends. The card the picture sits
+in was carrying a shadow written for the canvas while the card beside it carried
+another, so the two objects in the window sat at two different heights; they
+match now, radius included, and the outline drawn before the first render is the
+same shape as the picture that replaces it.
+
+**Portrait renders got their own shape back.** A card that hugs a contained image
+is not something CSS can work out on its own — a parent's shrink-to-fit width
+comes from the image's intrinsic width and ignores any cap on its height — so a
+portrait render sat in the middle of a box as wide as the file, letterboxed by
+its own frame. The stage now measures the media when it loads and hands the ratio
+over, which is the one fact the stylesheet could not derive.
+
 ## 2.15
 
 **A look you cast is a look you can click.** Three things were wrong with it and

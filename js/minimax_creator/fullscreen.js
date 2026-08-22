@@ -55,6 +55,7 @@
 import { app } from "../../../scripts/app.js";
 import { api } from "../../../scripts/api.js";
 import { el, icon, mark } from "./dom.js";
+import { elapsed } from "./stage.js";
 import { t } from "./i18n.js";
 
 /** Node classes whose body this editor can host. Kept here rather than imported
@@ -71,6 +72,30 @@ let open = null;
  *  that. It survives a reload, which is all it has to do. */
 const VIEW_KEY = "mmc.fullscreen.view";
 const VIEWS = ["full", "simple"];
+
+/** How big the live picture is drawn, as a fraction of the room the plate has.
+ *  Stored beside the view and for the same reason: it is a thing you reach for
+ *  while working — small to see the take beside the writing, full to judge a
+ *  face — not a preference to go and find in a dialog. */
+const PLATE_KEY = "mmc.fullscreen.plate";
+const PLATE_MIN = 0.4;
+const PLATE_MAX = 1;
+/** Sizes the grip catches on the way past, and how near it has to be. Not a
+ *  ratchet: the drag is continuous and these only give the three readings
+ *  anybody actually names a little gravity. */
+const PLATE_DETENTS = [0.5, 0.75, 1];
+const PLATE_CATCH = 0.03;
+
+const clampPlate = (value) => Math.min(PLATE_MAX, Math.max(PLATE_MIN, value));
+
+function storedPlate() {
+  try {
+    const seen = Number(localStorage.getItem(PLATE_KEY));
+    return Number.isFinite(seen) && seen > 0 ? clampPlate(seen) : PLATE_MAX;
+  } catch {
+    return PLATE_MAX;
+  }
+}
 
 /** The pair, in the order the hand-off runs: the pre-stage makes the still the
  *  shot is built on. Labels are the pack's own words for the two nodes. */
@@ -223,11 +248,52 @@ class Fullscreen {
     // One per step. A still and a clip are two different things to have made,
     // and one column alternating between them would be a history you cannot
     // read — so each step keeps its own and the reel shows the one you are on.
-    this.past = { shot: el("div", { class: "mmc-fs-past" }),
-                  pre: el("div", { class: "mmc-fs-past" }) };
+    this.past = { shot: el("div", { class: "mmc-fs-strip-run" }),
+                  pre: el("div", { class: "mmc-fs-strip-run" }) };
     // The result each step's stage is showing, and the only one not in `past`.
     this.shown = { shot: null, pre: null };
-    this.reel = el("div", { class: "mmc-fs-reel" }, [this.past.shot, this.dock]);
+    // The picture region, in two parts that do not share an axis.
+    //
+    // They used to: one scrolling column held the history *and* the live stage,
+    // so where the live picture sat was a function of how many renders there had
+    // been — centred while the column was empty, shoved to the floor by the
+    // first take, and further down with every one after it. The thing you are
+    // waiting for was the thing that would not hold still.
+    //
+    // So the reel takes the whole height and centres what is in it, always, and
+    // history runs left to right along a shelf beneath *the window* — under the
+    // card as much as under the picture. Spanning both is what keeps them level:
+    // a lip inside the picture's own column would have taken its height out of
+    // the picture and not out of the writing, and the two would have sat half a
+    // lip apart for as long as there was any history at all.
+    //
+    // The shelf is reserved for the whole of `working` — empty for exactly one
+    // render — because a shelf that arrived with the second take would move
+    // everything above it, which is the thing all of this is here to stop.
+    // How big the picture is drawn, and the corner you drag to say so. The
+    // handle lives at the *top* right: the bottom edge of a render is spoken
+    // for three times over — the progress rule, the readout, and a finished
+    // clip's own transport — and a control that has to be reached around the
+    // scrub bar is a control nobody uses twice.
+    //
+    // The plate stays centred while it resizes, so the picture grows and
+    // shrinks about its own middle and nothing else in the window moves. That
+    // is the same promise the plate makes about history, kept under a second
+    // kind of change.
+    this.plateScale = storedPlate();
+    this.sizeRead = el("span", { class: "mmc-stage-chip mmc-fs-size" });
+    this.grip = el("button", {
+      class: "mmc-fs-grip",
+      title: t("Drag to resize the picture. Double-click for full size."),
+      "aria-label": t("Picture size"),
+      role: "slider", "aria-valuemin": "40", "aria-valuemax": "100",
+      onpointerdown: (event) => this.gripDown(event),
+      ondblclick: () => this.setPlate(PLATE_MAX),
+      onkeydown: (event) => this.gripKey(event),
+    }, [icon("grip", 15)]);
+    this.sizer = el("div", { class: "mmc-fs-sizer" }, [this.sizeRead, this.grip]);
+    this.reel = el("div", { class: "mmc-fs-reel" }, [this.dock]);
+    this.strip = el("div", { class: "mmc-fs-strip" }, [this.past.shot]);
     this.body = el("div", { class: "mmc-fs-body" }, [this.pre, this.col, this.reel]);
 
     this.root = el("div", { class: "mmc-fs" }, [
@@ -257,6 +323,7 @@ class Fullscreen {
         }, [icon("expand", 15), el("span", { text: t("Back to the graph") })]),
       ]),
       this.body,
+      this.strip,
     ]);
 
     // Escape belongs to whatever is on top, and the shell is the bottom of that
@@ -289,6 +356,7 @@ class Fullscreen {
     };
     api.addEventListener("status", this.onStatus);
 
+    this.setPlate(this.plateScale, { store: false });
     this.mount();
     document.body.appendChild(this.root);
     this.paint();
@@ -337,8 +405,13 @@ class Fullscreen {
       this.keepTake(body.stage, step);
       this.paint();
     };
-    // The reel is the front step's history, and the front step's alone.
-    this.reel.replaceChildren(this.past[step], this.dock);
+    // The lip is the front step's history, and the front step's alone.
+    this.strip.replaceChildren(this.past[step]);
+    // And the grip goes on whatever picture is now on the plate. It lives
+    // inside the stage's own element because that element *is* the picture —
+    // the dock around it is a centring box the size of the whole plate, and a
+    // corner of that is a corner of the room rather than of the render.
+    if (body.stage) body.stage.root.appendChild(this.sizer);
     // The empty frame is drawn from whatever the card is about to make — the
     // shot's canvas and length, or the still's canvas. The body says when it
     // has redrawn.
@@ -445,23 +518,17 @@ class Fullscreen {
       if (this.shown[step]) {
         this.past[step].appendChild(this.take(this.shown[step]));
         this.shown[step] = null;
-        // The newest is at the bottom, so that is where the column stays.
-        this.reel.scrollTop = this.reel.scrollHeight;
+        // The newest is at the end of the lip, so that is where it stays.
+        this.strip.scrollLeft = this.strip.scrollWidth;
       }
       return;
     }
-    if (stage.state === "done" && stage.result) {
-      this.shown[step] = stage.result;
-      // The finished clip is usually taller than the preview it replaced, and a
-      // reel that grew under a fixed scroll would put the answer you waited for
-      // half off the bottom.
-      this.reel.scrollTop = this.reel.scrollHeight;
-    }
+    if (stage.state === "done" && stage.result) this.shown[step] = stage.result;
   }
 
-  /** One finished render, as it sits in the reel. Deliberately not autoplaying:
-   *  the live stage plays itself because it is the answer to what you just
-   *  queued, and ten clips playing at once up the scroll is not history, it is
+  /** One finished render, as it sits on the lip. Deliberately not autoplaying:
+   *  the live plate plays itself because it is the answer to what you just
+   *  queued, and ten clips playing at once along a strip is not history, it is
    *  noise. The media fragment asks for a frame rather than a black rectangle. */
   take(result) {
     const media = result.isImage
@@ -470,9 +537,96 @@ class Fullscreen {
           class: "mmc-fs-take-media", src: `${result.url}#t=0.1`,
           controls: true, loop: true, playsinline: true, preload: "metadata",
         });
-    return el("div", { class: "mmc-fs-take" }, [
-      media, el("div", { class: "mmc-fs-take-name", text: result.name }),
+    return el("div", { class: "mmc-fs-take", title: result.name }, [
+      media,
+      // What it cost, which is the one thing about a past take you cannot see by
+      // looking at it — and the reason the clock on the plate is worth keeping
+      // after the render lands. The filename moved to the tooltip: on a lip of
+      // thumbnails it was a row of identical truncated stems.
+      el("div", { class: "mmc-fs-take-note",
+                  text: result.tookMs ? elapsed(result.tookMs) : "" }),
     ]);
+  }
+
+  // ---- how big the picture is drawn -----------------------------------------
+
+  /**
+   * Set the plate's scale and say so, in the one place that has to know: a
+   * custom property on the shell, which the picture's two maxima are written
+   * in terms of. Nothing is measured and nothing is laid out by hand — the
+   * plate goes on centring whatever is in it, so a change of size is a change
+   * of size and not a change of position.
+   */
+  setPlate(scale, { store = true } = {}) {
+    this.plateScale = clampPlate(scale);
+    this.root.style.setProperty("--mmc-plate-scale", String(this.plateScale));
+    this.sizeRead.textContent = `${Math.round(this.plateScale * 100)}%`;
+    this.grip.setAttribute("aria-valuenow", String(Math.round(this.plateScale * 100)));
+    if (!store) return;
+    try { localStorage.setItem(PLATE_KEY, String(this.plateScale)); }
+    catch { /* private mode; the session still resizes */ }
+  }
+
+  /**
+   * The drag. Pointer capture rather than window listeners, so a pointer that
+   * leaves the picture — which it does immediately, because the plate is
+   * shrinking away from it — keeps steering the thing it grabbed.
+   *
+   * The movement is read as a fraction of the picture's own size rather than in
+   * pixels: dragging an inch has to mean the same amount on a phone-sized
+   * portrait render and on a 4K landscape one. Doubled, because the plate grows
+   * from its centre and the corner therefore only travels half of what the
+   * picture gains.
+   */
+  gripDown(event) {
+    // The card under the shell pans on drag, and the video under this one
+    // scrubs; neither is what a grab on the corner means.
+    event.preventDefault();
+    event.stopPropagation();
+    const box = this.sizer.parentElement?.getBoundingClientRect();
+    if (!box?.width || !box?.height) return;
+    const from = { x: event.clientX, y: event.clientY, scale: this.plateScale };
+    this.sizer.classList.add("dragging");
+    this.grip.setPointerCapture(event.pointerId);
+
+    const move = (moved) => {
+      // Right is wider and up is taller, which is what a handle in the top
+      // right corner means. Averaged over the two axes so a diagonal drag —
+      // which is how anybody actually grabs a corner — moves at the rate the
+      // two edges agree on rather than at their sum.
+      const k = ((moved.clientX - from.x) / box.width
+                 + (from.y - moved.clientY) / box.height) / 2;
+      let next = clampPlate(from.scale * (1 + 2 * k));
+      // A little gravity at the three sizes anybody names, and none anywhere
+      // else: the drag stays continuous, it just does not slide off 100% by a
+      // percent on the way past.
+      for (const stop of PLATE_DETENTS) {
+        if (Math.abs(next - stop) < PLATE_CATCH) next = stop;
+      }
+      this.setPlate(next, { store: false });
+    };
+    const done = () => {
+      this.sizer.classList.remove("dragging");
+      this.grip.removeEventListener("pointermove", move);
+      this.grip.removeEventListener("pointerup", done);
+      this.grip.removeEventListener("pointercancel", done);
+      // Written once, at the end: a drag across the plate is a hundred moves
+      // and localStorage is not a thing to write to a hundred times.
+      this.setPlate(this.plateScale);
+    };
+    this.grip.addEventListener("pointermove", move);
+    this.grip.addEventListener("pointerup", done);
+    this.grip.addEventListener("pointercancel", done);
+  }
+
+  /** The same control without a pointer. It is a button and it takes focus, so
+   *  it has to do something when it has it. */
+  gripKey(event) {
+    const step = { ArrowRight: .05, ArrowUp: .05, "+": .05,
+                   ArrowLeft: -.05, ArrowDown: -.05, "-": -.05 }[event.key];
+    if (step === undefined) return;
+    event.preventDefault();
+    this.setPlate(this.plateScale + step);
   }
 
   /** Give one node's body back to the wrapper the DOM widget positions, and its
@@ -481,6 +635,10 @@ class Fullscreen {
     const body = node?.mmcBody;
     if (!body) return;
     if (body.stage) body.stage.onState = null;
+    // Before the body goes home: the grip is the editor's, and a node dropped
+    // back on the canvas with a resize handle on its satellite would be sizing
+    // a card that is sized by the node.
+    if (body.stage?.root.contains(this.sizer)) this.sizer.remove();
     body.onRender = null;
     body.satellite?.undock();
     node.mmcHost?.appendChild(body.root);
@@ -495,7 +653,10 @@ class Fullscreen {
    * a replaced element carrying the canvas as its intrinsic size letterboxes
    * exactly the way the picture that replaces it will. The stroke is drawn in
    * user units and told not to scale, so the hairline is a hairline at any size
-   * the window gives it.
+   * the window gives it. The corner radius cannot take the same treatment — there
+   * is no non-scaling-radius — so it is written as a fraction of the canvas
+   * instead, which lands near the plate's own 18px at the sizes a frame is
+   * actually drawn at. The outline has to be the shape the picture will be.
    */
   paintFrame() {
     const spec = this.front?.mmcBody?.frame?.();
@@ -504,7 +665,8 @@ class Fullscreen {
     holder.innerHTML = '<svg class="mmc-fs-frame-box" viewBox="0 0 ' + spec.width + ' '
       + spec.height + '" width="' + spec.width + '" height="' + spec.height
       + '"><rect x="0.5" y="0.5" width="' + (spec.width - 1) + '" height="' + (spec.height - 1)
-      + '" rx="16" vector-effect="non-scaling-stroke"/></svg>';
+      + '" rx="' + Math.round(spec.width / 45)
+      + '" vector-effect="non-scaling-stroke"/></svg>';
     this.frame.replaceChildren(
       holder.firstElementChild,
       el("div", {

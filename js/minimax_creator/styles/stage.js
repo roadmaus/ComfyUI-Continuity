@@ -55,31 +55,57 @@ export const css = `
   opacity: 0; transition: transform .3s linear, opacity .2s ease;
   pointer-events: none;
 }
-/* Over the picture, not under it: a caption row would be height the picture
-   could have had. pointer-events off so it never eats a click meant for the
-   video's own transport. */
+/*
+ * Over the picture, not under it: a caption row would be height the picture
+ * could have had.
+ *
+ * **One kind of object across the whole row.** It used to hold two: the Gallery
+ * was a pill and everything beside it was bare text on a gradient scrim, so a
+ * finished render carried a dark band across its bottom third to make three
+ * words legible. Every chip now brings its own small ground, which is what let
+ * the scrim go — the picture ends where the picture ends.
+ *
+ * Two sides, laid out by the row rather than by what happens to be in it: the
+ * left says what this is, the right is the clock. See renderReadout — the point
+ * is that the clock does not move when it stops.
+ */
 .mmc-stage-readout {
   position: absolute; left: 0; right: 0; bottom: 0;
-  display: flex; justify-content: space-between; gap: 10px;
-  padding: 24px 10px 8px; pointer-events: none;
+  display: flex; align-items: flex-end; justify-content: space-between; gap: 10px;
+  padding: 10px; pointer-events: none;
   font-size: 11px; font-variant-numeric: tabular-nums;
-  background: linear-gradient(transparent, rgba(0,0,0,.72));
 }
 .mmc-stage-readout:empty { display: none; }
-.mmc-stage-chip { color: #ededed; text-shadow: 0 1px 3px rgba(0,0,0,.8); }
-.mmc-stage-chip.warn { color: #e0743c; }
-.mmc-stage[data-state="sampling"] .mmc-stage-chip:first-child { color: var(--mmc-accent); }
-/* Which segment the steps belong to — first in the row, so the accent rule
-   above lands on it whenever a timeline render announces one. */
+/* Wrapping, and upwards: a row of hand-off chips on a narrow portrait render is
+   three lines, and they belong above the picture's edge rather than off it. */
+.mmc-stage-side {
+  display: flex; flex-wrap: wrap-reverse; align-items: flex-end; gap: 6px;
+  min-width: 0;
+}
+.mmc-stage-side.end { justify-content: flex-end; }
+.mmc-stage-chip {
+  color: #ededed; border-radius: 999px; padding: 3px 9px;
+  background: rgba(0,0,0,.55); border: 1px solid var(--mmc-line);
+  white-space: nowrap;
+}
+.mmc-stage-chip.warn {
+  color: #e0743c; border-color: rgba(224,116,60,.4);
+  white-space: normal; text-align: left;
+}
+/* The step count, while there are steps. Scoped to the left side so the accent
+   lands on what is counting and not on the clock beside it. */
+.mmc-stage[data-state="sampling"] .mmc-stage-side:not(.end) .mmc-stage-chip:last-child {
+  color: var(--mmc-accent); border-color: rgba(240,166,60,.35);
+}
+/* Which segment the steps belong to — first in the row, before the count it is
+   the context for. */
 .mmc-stage-segment { font-weight: 500; }
 /* The readout swallows the pointer so the finished video's controls stay
    reachable under it; its one real button opts back in. */
 .mmc-stage-gallery {
   pointer-events: auto; cursor: pointer; font: inherit;
-  background: rgba(0,0,0,.55); border: 1px solid var(--mmc-line);
-  border-radius: 999px; padding: 3px 12px;
 }
-.mmc-stage-gallery:hover { border-color: #7a7a7a; }
+.mmc-stage-gallery:hover { border-color: #7a7a7a; background: rgba(0,0,0,.75); }
 
 /* --- the weights control -------------------------------------------------- */
 /* A required file nobody has picked. The same warm orange the resolution slider

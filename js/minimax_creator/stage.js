@@ -95,6 +95,10 @@ export class Stage {
     this.result = null;      // {url, name} of the finished video
     this.error = null;
     this.startedAt = 0;
+    // How long the finished render took, in ms. Held past the run because the
+    // clock is the one reading the readout keeps after the picture lands: the
+    // whole reason you watch it tick is to know what the next one will cost.
+    this.tookMs = 0;
 
     this.media = el("div", { class: "mmc-stage-media" });
     this.rule = el("div", { class: "mmc-stage-rule" });
@@ -113,6 +117,31 @@ export class Stage {
     for (const name of EVENTS) api.removeEventListener(name, this.onEvent);
     this.releaseFrame();
     clearInterval(this.ticker);
+  }
+
+  /**
+   * Tell the card what shape the picture in it is.
+   *
+   * A box that hugs a contained image is not something CSS can work out on its
+   * own: the shrink-to-fit width of a parent comes from the image's *intrinsic*
+   * width, which ignores any cap on its height — so a portrait render in a
+   * height-limited card sat in the middle of a box as wide as the file, with
+   * black down both sides. On a satellite that never showed, because there the
+   * card's height is the node's and width is the only free axis. Docked in the
+   * fullscreen editor, where both axes are bounded, it was the whole shape of
+   * the thing.
+   *
+   * So the one fact CSS cannot derive is measured off the media and handed over,
+   * and `aspect-ratio` does the rest. Called from the media's own load, because
+   * that is the first moment either size is known.
+   */
+  setAspect(width, height) {
+    if (!width || !height) return;
+    this.root.style.setProperty("--mmc-media-ar", `${width} / ${height}`);
+  }
+
+  clearAspect() {
+    this.root.style.removeProperty("--mmc-media-ar");
   }
 
   releaseFrame() {
@@ -241,8 +270,17 @@ export class Stage {
         if (detail.output?.mmc_takes?.length) this.onTakes?.(detail.output.mmc_takes);
         this.state = "done";
         this.progress = null;
+        // The clock stops here rather than on the next tick, so what the readout
+        // shows after the render is the render's own length and not a second of
+        // whatever happened to follow it.
+        this.tookMs = this.startedAt ? Date.now() - this.startedAt : 0;
         this.result = { url: outputUrl(saved), name: saved.filename,
-                        isImage: !detail.output?.mmc_video, saved };
+                        isImage: !detail.output?.mmc_video, saved,
+                        // Carried on the result as well as held here: the
+                        // fullscreen reel keeps finished renders past the run
+                        // that made them, and a take without its cost is a
+                        // picture you can only compare on looks.
+                        tookMs: this.tookMs };
         // The finished clip takes the preview's place, so the last sampled
         // frame is now a picture that can never be shown again — and the clock
         // it was ticking under has stopped.
@@ -299,11 +337,13 @@ export class Stage {
     this.state = "idle";
     this.result = null;
     this.error = null;
+    this.tookMs = 0;
     this.progress = null;
     this.segment = null;
     this.releaseFrame();
     this.frame = null;
     this.frameIsClip = false;
+    this.clearAspect();
     this.render();
   }
 
@@ -351,46 +391,67 @@ export class Stage {
     this.renderReadout();
   }
 
-  /** The overlay. Its own method because the clock ticks it every second, and
-   *  rebuilding the picture for that would restart a playing video. */
+  /**
+   * The overlay. Its own method because the clock ticks it every second, and
+   * rebuilding the picture for that would restart a playing video.
+   *
+   * **Two sides, in every state, so that nothing in the row changes address
+   * when the render lands.** The left says what this is — which segment, which
+   * step, or the way back to the ones before it — and the right is the clock.
+   * It counts while the sampler runs and then holds the total, in the same
+   * place, in the same type: the whole reason you watch it tick is to learn
+   * what the next take will cost, and a number that vanished at the moment it
+   * became the answer was the one reading the row could not give you.
+   */
   renderReadout() {
     if (!this.showing()) return;
+    // Built as two lists and hung on the row at the end, so the empty case is
+    // an empty row — which is what `.mmc-stage-readout:empty` hides, and the
+    // reason a finished still with no chips does not draw a scrim over itself.
+    const left = [];
+    const right = [];
 
     if (this.state === "failed") {
-      this.readout.replaceChildren(el("span", { class: "mmc-stage-chip warn", text: this.error }));
-      return;
-    }
-    if (this.state !== "sampling") {
-      // A finished render is just the picture — plus the way to the ones before
-      // it, plus whatever hand-off chips the owner builds from the result (the
-      // PreStage's "start frame / end frame / reference" row).
-      this.readout.replaceChildren(
-        ...(this.state === "done" && this.onGallery ? [
-          el("button", {
-            class: "mmc-stage-chip mmc-stage-gallery",
-            text: t("Gallery"),
-            title: t("Browse finished renders"),
-            onclick: () => this.onGallery(),
-            onpointerdown: (event) => event.stopPropagation(),
-          }),
-        ] : []),
-        ...(this.state === "done" && this.result?.saved && this.resultChips
-          ? this.resultChips(this.result.saved) : []),
-      );
-      return;
-    }
-    this.readout.replaceChildren(
+      left.push(el("span", { class: "mmc-stage-chip warn", text: this.error }));
+    } else if (this.state === "sampling") {
       // Which segment these steps belong to — announced by the segment node,
       // so it names the one actually being made, cached ones skipped.
-      ...(this.segment ? [el("span", {
+      if (this.segment) left.push(el("span", {
         class: "mmc-stage-chip mmc-stage-segment",
         text: this.segmentLabel?.(this.segment) ?? t("Segment {n}", { n: this.segment }),
-      })] : []),
-      el("span", {
+      }));
+      left.push(el("span", {
         class: "mmc-stage-chip",
         text: this.progress?.total ? `${this.progress.step} / ${this.progress.total}` : t("sampling"),
-      }),
-      el("span", { class: "mmc-stage-chip", text: elapsed(Date.now() - this.startedAt) }),
+      }));
+      right.push(el("span", {
+        class: "mmc-stage-chip mmc-stage-clock",
+        text: elapsed(Date.now() - this.startedAt),
+      }));
+    } else if (this.state === "done") {
+      // A finished render is the picture — plus the way to the ones before it,
+      // plus whatever hand-off chips the owner builds from the result (the
+      // PreStage's "start frame / end frame / reference" row).
+      if (this.onGallery) left.push(el("button", {
+        class: "mmc-stage-chip mmc-stage-gallery",
+        text: t("Gallery"),
+        title: t("Browse finished renders"),
+        onclick: () => this.onGallery(),
+        onpointerdown: (event) => event.stopPropagation(),
+      }));
+      if (this.result?.saved && this.resultChips) left.push(...this.resultChips(this.result.saved));
+      // The same slot the ticking clock had. Titled rather than labelled: the
+      // row is read at a glance and "took" is a word the position already says.
+      if (this.tookMs) right.push(el("span", {
+        class: "mmc-stage-chip mmc-stage-clock",
+        title: t("How long this render took"),
+        text: elapsed(this.tookMs),
+      }));
+    }
+
+    this.readout.replaceChildren(
+      ...(left.length ? [el("div", { class: "mmc-stage-side" }, left)] : []),
+      ...(right.length ? [el("div", { class: "mmc-stage-side end" }, right)] : []),
     );
   }
 
@@ -399,7 +460,11 @@ export class Stage {
    *  latent, not the result, and the result's player is video() below. */
   previewFrame() {
     if (!this.frameIsClip) {
-      return el("img", { class: "mmc-stage-img", src: this.frame, alt: "" });
+      return el("img", {
+        class: "mmc-stage-img", src: this.frame, alt: "",
+        onload: (event) => this.setAspect(event.currentTarget.naturalWidth,
+                                          event.currentTarget.naturalHeight),
+      });
     }
     const clip = el("video", {
       class: "mmc-stage-video",
@@ -408,6 +473,8 @@ export class Stage {
       // told to hold still holds the clip's first frame (preload paints it).
       autoplay: uiSetting("autoplay_previews", true),
       loop: true, playsinline: true, preload: "metadata",
+      onloadedmetadata: (event) => this.setAspect(event.currentTarget.videoWidth,
+                                                  event.currentTarget.videoHeight),
     });
     // The property rather than the attribute: Chromium's autoplay gate reads
     // `muted`, and setAttribute("muted") sets only the attribute.
@@ -422,6 +489,8 @@ export class Stage {
       class: "mmc-stage-img",
       src: this.result.url,
       alt: this.result.name,
+      onload: (event) => this.setAspect(event.currentTarget.naturalWidth,
+                                        event.currentTarget.naturalHeight),
       onpointerdown: (event) => event.stopPropagation(),
     });
   }
@@ -453,6 +522,8 @@ export class Stage {
       src: this.result.url,
       autoplay: uiSetting("autoplay_previews", true),
       controls: true, loop: true, muted: true, playsinline: true, preload: "metadata",
+      onloadedmetadata: (event) => this.setAspect(event.currentTarget.videoWidth,
+                                                  event.currentTarget.videoHeight),
       onmouseenter: (event) => { event.currentTarget.muted = false; },
       onmouseleave: (event) => { event.currentTarget.muted = true; },
       // The canvas pans on drag, and a drag that starts on the scrub bar is a
@@ -463,8 +534,10 @@ export class Stage {
 }
 
 /** `92000` -> `"1:32"`. Minutes only: a render that runs for an hour has bigger
- *  problems than its readout. */
-function elapsed(ms) {
+ *  problems than its readout. Exported because the fullscreen lip captions each
+ *  past take with what it cost, and two clocks in one window that round
+ *  differently is one clock too many. */
+export function elapsed(ms) {
   const total = Math.max(0, Math.round(ms / 1000));
   return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, "0")}`;
 }

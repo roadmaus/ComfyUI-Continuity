@@ -98,6 +98,11 @@ export const ICONS = {
   // was not another rectangle.
   pen: `<path d="M4 20l4.6-1.1 9.6-9.6a2.1 2.1 0 10-3-3L5.6 15.9z"/><path d="M14.4 5.6l4 4"/>`,
   // Out of the box and into the window: the corner control on a node face.
+  // The texture of a corner you can pull, angled to the corner it sits in — the
+  // fullscreen plate's grip, at the top right. Not `expand`: that glyph already
+  // means "back to the graph" in the same window, and one mark cannot be both a
+  // way out and a handle.
+  grip: `<path d="M5 11l8 8"/><path d="M11 5l8 8"/>`,
   expand: `<path d="M14 4h6v6"/><path d="M20 4l-7 7"/><path d="M10 20H4v-6"/><path d="M4 20l7-7"/>`,
   chevron: `<path d="M6 9l6 6 6-6"/>`,
   star: `<path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.9-5.2-2.8-5.2 2.8 1-5.9-4.3-4.1 5.9-.9z"/>`,

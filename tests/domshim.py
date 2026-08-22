@@ -13,7 +13,15 @@ step with the pack.
 DOM = """
 class Node {
   constructor(tag) {
-    this.tagName = tag; this.children = []; this.style = {}; this.attrs = {};
+    // Custom properties go through setProperty, not through the plain assignment
+    // every other style write in the pack uses — the fullscreen plate's size is
+    // one, so the bag needs the two methods as well as the keys.
+    this.style = {
+      setProperty(name, value) { this[name] = String(value); },
+      removeProperty(name) { delete this[name]; },
+      getPropertyValue(name) { return this[name] ?? ""; },
+    };
+    this.tagName = tag; this.children = []; this.attrs = {};
     this.className = ""; this.textContent = ""; this.listeners = {};
     // Backed by className, not stubbed. Half the pack says what state a thing is
     // in by putting a class on it and the other half reads that class back —

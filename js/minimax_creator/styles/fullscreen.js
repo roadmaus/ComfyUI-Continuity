@@ -280,22 +280,28 @@ export const css = `
   background: var(--mmc-surface-3);
 }
 
-/* --- the reel ------------------------------------------------------------- */
+/* --- the picture region: the plate, and the lip under it ------------------- */
 /*
- * Every render this editor has finished, oldest at the top and the live stage
- * at the bottom, so the newest picture is the one nearest the writing and the
- * older ones are up the scroll.
+ * Two parts that do not share an axis, which is the whole of the fix.
  *
- * It exists because the stage is one box and execution_start clears it. That
- * is right on a canvas — a card beside a node still showing last week's render
- * while this week's samples would be a card that lies — and it is exactly wrong
- * in a window with room for both, because the reason you queue a second take is
- * to see it beside the first. Nothing is copied: an entry points at the same
- * file the gallery opens, so closing the editor loses the list and no render.
+ * They used to. One scrolling column held every finished render *and* the live
+ * stage, so where the live picture sat was a function of how many renders there
+ * had been: centred while the column was empty, pushed to the floor by the first
+ * take, further down with every one after it. Two rules did it —
+ * ".mmc-fs-past:empty + .mmc-fs-dock { margin: auto 0 }" and an auto margin on
+ * the oldest take — and no amount of tuning fixes that while history and the
+ * picture are stacked on one axis.
  *
- * Scrolls itself to the bottom on every arrival (see keepTake in fullscreen.js), which is the
- * one behaviour that makes a log readable: what just happened is where you are
- * already looking, and history is a scroll away rather than a mode.
+ * So: the reel takes the whole height and centres what is in it, unconditionally,
+ * and history runs left to right along a shelf beneath the *window* — under the
+ * card as much as under the picture. Spanning both is what keeps them level: a
+ * lip inside the picture's own column takes its height out of the picture and
+ * not out of the writing, and the two then sit half a lip apart for as long as
+ * there is any history at all. The live picture now sits level with the card
+ * beside it on the first press and on the tenth.
+ *
+ * Nothing is copied onto the lip: an entry points at the same file the gallery
+ * opens, so closing the editor loses the list and no render.
  */
 .mmc-fs-reel {
   /* A floor, so the picture is never the region that gives everything up: the
@@ -305,43 +311,63 @@ export const css = `
   /* The one region that still takes the whole height: the cards are as tall as
      their controls, a picture is as tall as there is room for. */
   align-self: stretch;
-  display: flex; flex-direction: column; justify-content: flex-start;
-  gap: 14px; padding: 10px; overflow-y: auto;
+  display: flex; align-items: center; justify-content: center;
+  padding: 10px; min-width: 0;
 }
-/* The takes are the reel's own children for layout — a wrapper between them and
-   the column would have to re-declare the whole of it, and the empty-reel rule
-   below needs the wrapper to still be a sibling in the DOM. */
-.mmc-fs-past { display: contents; }
-/* Packed to the bottom by an auto margin on the oldest take rather than by
-   justify-content: flex-end, for the same reason the simple view centres this
-   way — content packed against the end of a scroll container overflows past the
-   start, where there is nothing to scroll back with. The margin takes the free
-   space when there is any and collapses when there is not. */
-.mmc-fs-past .mmc-fs-take:first-child { margin-top: auto; }
-/* One picture in the room and it sits in the middle of it; a second and the
-   column packs to the bottom and starts scrolling. The auto margins are the
-   whole of that switch — no class, no measurement, and nothing to keep in sync
-   with how many renders there have been. */
-.mmc-fs-past:empty + .mmc-fs-dock { flex: 1; margin: auto 0; }
 
+/*
+ * The shelf: every render this editor has finished, under the whole window.
+ *
+ * Reserved for the whole of "working" rather than grown on the second take — a
+ * shelf that arrived when the first render retired would move everything above
+ * it, which is the thing all of this is here to stop. It is empty for exactly
+ * one render, and while it is empty it is a hairline and a little air, not a box.
+ */
+.mmc-fs-strip {
+  flex: none; height: var(--mmc-fs-lip, 104px); box-sizing: border-box;
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 18px; border-top: 1px solid var(--mmc-line);
+  overflow-x: auto; overflow-y: hidden;
+  scrollbar-width: thin;
+}
+/* The takes are the lip's own children for layout — a wrapper between them and
+   the row would have to re-declare the whole of it. */
+.mmc-fs-strip-run { display: contents; }
+/* Before the first press there is nothing to have a history of, and a hairline
+   across the bottom of an empty region with nothing under it is the void this
+   pack keeps refusing to draw. It arrives with "working" — the same moment the
+   region stops being an outline and starts being a picture — and from then on
+   it is reserved whether or not anything has retired into it. */
+.mmc-fs:not(.working) .mmc-fs-strip { display: none; }
+
+/* A cell the height of the lip and no wider than what is in it. The media takes
+   its height from the row and its width from its own aspect, and the cell hugs
+   that — so a portrait take is a narrow frame beside a wide one rather than a
+   wide frame with a picture stranded in the middle of it, which is what a cell
+   sized off the file's intrinsic width gives you. */
 .mmc-fs-take {
-  flex: none; display: flex; flex-direction: column; align-items: center; gap: 6px;
+  position: relative; flex: none; display: flex; height: 100%;
+  border-radius: 10px; overflow: hidden;
+  background: #000; border: 1px solid var(--mmc-line);
 }
-/* Smaller than the live one, and that is the hierarchy: the picture at the
-   bottom is the answer to what you just queued, and the ones above it are what
-   it is being compared against. At the same size the column held one take and
-   the comparison needed a scroll to make. */
+/* Sized off the lip rather than off the window, so every take is the same height
+   whatever shape it is and the row reads as a strip of frames. Smaller than the
+   live one, and that is the hierarchy: the plate is the answer to what you just
+   queued and these are what it is being compared against. */
 .mmc-fs-take-media {
-  max-width: 100%; max-height: 30vh; width: auto; height: auto; min-width: 0;
-  border-radius: 14px; background: #000; border: 1px solid var(--mmc-line);
-  display: block;
+  display: block; height: 100%; width: auto; max-width: 320px;
+  object-fit: contain;
 }
-/* The filename, which is how a take is found again in the folder. Quiet: the
-   picture is the entry and this is its label, not its title. */
-.mmc-fs-take-name {
-  flex: none; max-width: 100%; overflow: hidden; text-overflow: ellipsis;
-  white-space: nowrap; font-size: 11px; color: var(--mmc-off);
+/* What it cost, on the frame rather than under it: a caption line would have
+   been a row of numbers reading as a second strip. The filename went to the
+   tooltip — along a lip of thumbnails it was the same truncated stem eight
+   times over, which identifies nothing. */
+.mmc-fs-take-note {
+  position: absolute; left: 5px; bottom: 4px;
+  font-size: 10px; color: #ededed; font-variant-numeric: tabular-nums;
+  background: rgba(0,0,0,.55); border-radius: 999px; padding: 1px 6px;
 }
+.mmc-fs-take-note:empty { display: none; }
 
 /* --- where the newest picture lands --------------------------------------- */
 /*
@@ -350,9 +376,14 @@ export const css = `
  * piece's column pinned to the left edge with a border ending in mid-air. It is
  * always here, and holds the frame the piece is about to make until there is a
  * picture to put in it.
+ *
+ * Stretched to the plate rather than hugging its contents, so it is a definite
+ * box: the picture's own maxima are percentages of it, and a percentage against
+ * an auto height resolves to nothing at all. What hugs the picture is the stage
+ * inside, which is where the grip hangs.
  */
 .mmc-fs-dock {
-  display: flex; flex: none; min-width: 0; max-height: 66vh;
+  display: flex; flex: 1 1 auto; min-width: 0; min-height: 0; align-self: stretch;
   align-items: center; justify-content: center;
 }
 .mmc-fs-still { display: none; }
@@ -363,9 +394,34 @@ export const css = `
    and wrong in a column, where a landscape render scaled to the full height is
    wider than the column and the card's overflow:hidden cuts its sides off.
    Here the media is contained by both edges and the card takes its shape from
-   what is inside it. */
-.mmc-fs-dock .mmc-stage, .mmc-fs-still .mmc-stage { max-width: 100%; max-height: 66vh; }
-.mmc-fs-dock .mmc-stage { height: auto; }
+   what is inside it.
+
+   Both maxima carry the plate scale, which is what the corner grip sets: one
+   number, applied to the box rather than to the element, so the picture keeps
+   its aspect and stays centred while it changes size. */
+/* One room, one elevation. The plate carried "0 8px 30px" — a shadow written for
+   a card floating over the canvas at graph scale — while the writing card beside
+   it carries "0 24px 64px", so the two objects in the window sat at two
+   different heights above the same ground. Matched, and a radius to go with it:
+   the picture and the card are the pair this view is made of. */
+.mmc-fs-dock .mmc-stage {
+  max-width: calc(100% * var(--mmc-plate-scale, 1));
+  max-height: calc(100% * var(--mmc-plate-scale, 1));
+  width: auto; height: auto;
+  /* The shape of what is in it, measured off the media and handed over by
+     Stage.setAspect — see there for why CSS cannot work this out for itself.
+     Without it a portrait render sat in the middle of a card as wide as the
+     file, letterboxed by its own frame. "auto" until the media has loaded,
+     which is the same thing as no constraint. */
+  aspect-ratio: var(--mmc-media-ar, auto);
+  /* The 240px floor is the card's answer to having no media at all — an error
+     is a chip of text in an otherwise empty box — and it is the wrong answer for
+     a narrow portrait render, which has media and a shape of its own. */
+  min-width: 0;
+  border-radius: 18px; box-shadow: 0 24px 64px rgba(0,0,0,.5);
+}
+.mmc-fs-dock .mmc-stage[data-state="failed"] { min-width: 240px; }
+.mmc-fs-still .mmc-stage { max-width: 100%; max-height: 66vh; }
 /* The card carries flex-direction but never display:flex — on a satellite it
    does not need it, because the card's height is the node's and the media is
    sized off that height alone. Docked, the card is sized by the *column*, and
@@ -384,8 +440,58 @@ export const css = `
 .mmc-fs-dock .mmc-stage-media, .mmc-fs-still .mmc-stage-media {
   min-width: 0; justify-content: center;
 }
+/* The card is now the picture's own shape, so the media fills it exactly.
+   "contain" is the guard for the moment before the aspect has been measured and
+   for the odd file that reports one size and decodes at another. */
 .mmc-fs-dock .mmc-stage-img, .mmc-fs-dock .mmc-stage-video {
-  width: auto; height: auto; min-width: 0; max-width: 100%; max-height: 66vh;
+  width: 100%; height: 100%; min-width: 0; object-fit: contain;
+}
+
+/* --- the grip ------------------------------------------------------------- */
+/*
+ * How big the picture is drawn, said by dragging its corner.
+ *
+ * The top right, and not the bottom: the bottom edge of a render is spoken for
+ * three times over — the progress rule, the readout with its clock, and a
+ * finished clip's own transport — and a handle you have to reach around a scrub
+ * bar for is a handle nobody uses twice.
+ *
+ * This is the one object in the window with glass in it, and that is deliberate:
+ * everything else here is matte, so the single blurred thing reads as a control
+ * rather than as a theme. Absent until the pointer is on the picture or the
+ * button has focus, because a picture you are judging should have nothing on it.
+ */
+.mmc-fs-sizer {
+  position: absolute; top: 10px; right: 10px; z-index: 2;
+  display: flex; align-items: center; gap: 6px;
+  opacity: 0; transition: opacity .18s ease;
+}
+.mmc-stage:hover .mmc-fs-sizer,
+.mmc-fs-sizer:focus-within, .mmc-fs-sizer.dragging { opacity: 1; }
+.mmc-fs-grip {
+  flex: none; display: flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; padding: 0; border-radius: 9px;
+  background: rgba(255,255,255,.10); border: 1px solid rgba(255,255,255,.22);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  backdrop-filter: blur(14px) saturate(1.4);
+  color: #fff; cursor: nesw-resize; pointer-events: auto;
+  /* A drag on this is a resize, not a scroll and not a pan. */
+  touch-action: none;
+  transition: background .18s ease, transform .18s cubic-bezier(.4,0,.2,1);
+}
+.mmc-fs-grip svg { stroke: currentColor; fill: none; stroke-width: 1.8; }
+.mmc-fs-grip:hover { background: rgba(255,255,255,.18); }
+.mmc-fs-grip:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 2px; }
+.mmc-fs-sizer.dragging .mmc-fs-grip { transform: scale(1.12); background: rgba(255,255,255,.22); }
+/* The reading, and only while the drag is on: a permanent percentage in the
+   corner of every render would be a number nobody asked for. It is a stage chip
+   because it is one — the row along the bottom already established what a small
+   fact on a picture looks like here. */
+.mmc-fs-size { opacity: 0; transition: opacity .12s ease; }
+.mmc-fs-sizer.dragging .mmc-fs-size { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .mmc-fs-sizer, .mmc-fs-grip, .mmc-fs-size { transition: none; }
+  .mmc-fs-sizer.dragging .mmc-fs-grip { transform: none; }
 }
 
 /* --- the frame, before there is a picture --------------------------------- */
@@ -413,9 +519,13 @@ export const css = `
    across a third of a large screen is a line you have to go looking for, and a
    dock that reads as empty is the thing this element exists to prevent. The
    fill is what carries the shape at any size; the stroke only edges it. */
+/* Carrying the plate scale too: the frame's whole job is to stand where the
+   picture will stand, and an outline at full size in front of a plate set to
+   60% would be promising a render twice the size of the one that lands. */
 .mmc-fs-frame-box {
   flex: 0 1 auto; min-height: 0; width: auto; height: auto;
-  max-width: 100%; max-height: 100%;
+  max-width: calc(100% * var(--mmc-plate-scale, 1));
+  max-height: calc(100% * var(--mmc-plate-scale, 1));
   fill: rgba(255,255,255,.028); stroke: rgba(255,255,255,.2); stroke-width: 1;
 }
 .mmc-fs-frame-note {
@@ -576,13 +686,10 @@ export const css = `
    back with the reel, so the first press opens onto the shape the picture is
    about to take and the picture lands in the box that was already there. */
 .mmc-fs.simple:not(.working) .mmc-fs-frame { display: none; }
-.mmc-fs.simple .mmc-fs-dock { max-height: 100%; }
-.mmc-fs.simple .mmc-fs-reel .mmc-stage,
-.mmc-fs.simple .mmc-fs-reel .mmc-stage-img,
-.mmc-fs.simple .mmc-fs-reel .mmc-stage-video {
-  max-width: 100%; max-height: 74vh;
-}
-.mmc-fs.simple .mmc-fs-take-media { max-width: 100%; }
+/* A taller lip here than on the desk: the simple view gives the picture region
+   most of the window, so a strip of takes at desk size would read as a footnote
+   under it. */
+.mmc-fs.simple { --mmc-fs-lip: 124px; }
 /* The reduced-motion answer is the same two positions with nothing between
    them: the reel is open or it is not. */
 @media (prefers-reduced-motion: reduce) {
