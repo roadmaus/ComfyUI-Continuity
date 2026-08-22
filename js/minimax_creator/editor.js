@@ -202,7 +202,7 @@ export class CreatorEditor {
                 routeOf = null, setRoute = null, preStage = null, pieceView = null,
                 durationPill = true, extraPills = null, extraTools = null,
                 settingsTool = true, stage = null, editorTitle = null,
-                piece = null, castPiece = null, afterPanel = null, presetTarget = null,
+                piece = null, castPiece = null, growShot = null, presetTarget = null,
                 clearTool = null, seedTarget = null, compiledPrompt = null,
                 castFromLibrary = null, fullscreen = null }) {
     // The one sampler setting a card may answer for itself — see
@@ -222,7 +222,10 @@ export class CreatorEditor {
     // out of nothing. Defaults to the piece, which is the answer on every body
     // that owns its own cast.
     this.castPiece = castPiece ?? this.piece;
-    this.afterPanel = afterPanel;
+    // The piece's way to grow a shot, when this body's owner has one — a pill
+    // in the tail of the row, beside the other two controls that act on the
+    // piece rather than on this shot. See `renderGrowPill`.
+    this.growShot = growShot;
     // What the window this body opens into is called. A node face is a preview
     // of one generation, and the window is that generation — so the owner names
     // it for what it makes rather than for the control that opened it.
@@ -353,12 +356,6 @@ export class CreatorEditor {
     this.loraHost = el("div");
     this.pillsHost = el("div");
     this.noticeHost = el("div");
-    // Between what is being asked for and how it is run — which is where the
-    // next shot goes, because a second shot is part of the first question and
-    // not of the second. Empty unless an owner has something to put there; the
-    // one that does is a piece of one shot, which puts the unexposed stretch of
-    // film that grows it into a strip. See `TimelineBody.renderGrow`.
-    this.growHost = el("div");
     // Last, the way the Timeline puts it last: the panel says what the piece is
     // and this says how it is run.
     // Named so the fullscreen shell can fold it away in the simple view —
@@ -400,7 +397,6 @@ export class CreatorEditor {
         this.prompt.frame, this.refinePanel.root, this.pillsHost,
       ]),
       this.noticeHost,
-      this.growHost,
       this.samplingHost,
     ]);
 
@@ -1032,7 +1028,6 @@ export class CreatorEditor {
     this.refinePanel.render();
     this.renderExpand();
     this.renderNotices();
-    this.growHost.replaceChildren(...(this.afterPanel?.() ?? []));
     // The window over the same state, if one is open. Render, never commit —
     // this is the end of the chain, not another link in it.
     this.sheetEditor?.render();
@@ -1680,10 +1675,39 @@ export class CreatorEditor {
       // of its own. Grouped, the tail wraps whole or not at all.
       el("div", { class: "mmc-pills-tail" }, [
         this.renderRouting(currentMode),
+        ...(this.growShot ? [this.renderGrowPill()] : []),
         ...(this.pieceView ? [this.renderPieceViewPill()] : []),
         ...(this.preStage ? [this.renderPreStagePill()] : []),
       ]),
     ]);
+  }
+
+  /**
+   * The next shot, from the face.
+   *
+   * A second shot is part of what is being asked for, so the control for it
+   * belongs with the writing rather than with the machine — and this is the one
+   * row of the panel that is about the *piece* and not about this shot: the
+   * route it runs on, the piece behind it, the node feeding it. The pill sits
+   * with them because it is one of them.
+   *
+   * It used to be a dashed rule across the whole body, which is a horizon line
+   * spent on one quiet button, and the fullscreen shell hid it for exactly that
+   * reason. A pill in a row of pills is the same act at its own size, and it is
+   * the same act on both faces.
+   */
+  renderGrowPill() {
+    const full = this.growShot.full();
+    return el("button", {
+      class: "mmc-pill mmc-grow-shot",
+      disabled: full,
+      title: full
+        ? this.growShot.fullTitle()
+        : t("Add a shot after this one and open it. One shot or twenty, it is "
+          + "the same node."),
+      onclick: () => this.growShot.add(),
+    }, [el("span", { class: "mmc-grow-mark", text: "+" }),
+        el("span", { text: t("Add shot") })]);
   }
 
   /** The piece-view toggle. See `options.pieceView` — it is the only way to the

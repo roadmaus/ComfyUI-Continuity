@@ -2,6 +2,15 @@
 
 ## 2.22
 
+**The next shot is a pill in the pill row.** Growing a piece a second shot used
+to be a dashed perforation rail across the whole body — a horizon line spent on
+one quiet button — and the fullscreen editor's simple view answered that by
+hiding it outright, which left the face people write single shots on with no way
+to add a second one short of opening the timeline and appending there. It is a
+`+ Add shot` pill now, in the tail of the pill row beside the route badge and
+Timeline: the one part of the panel that is about the piece rather than about
+this shot. Same control on both faces, so there is nothing left to hide.
+
 **Duplicating a card no longer leaves a second copy of a cast member's picture
 behind.** A cast member's files live on the card while a piece is one shot, and
 move into the project references the moment it grows a second one — they have to

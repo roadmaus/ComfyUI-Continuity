@@ -1148,9 +1148,9 @@ try {
     await ext.nodeCreated(node);
     return {
       wears: node.mmcBody.editor ? "shot" : "strip",
-      // The unexposed stretch of film that grows the piece — only ever on the
-      // one-shot face, because on a strip the way to another card is the strip.
-      grow: has(node.mmcBody.root, "mmc-tl-grow"),
+      // The pill that grows the piece a shot — only ever on the one-shot face,
+      // because on a strip the way to another card is the strip.
+      grow: has(node.mmcBody.root, "mmc-grow-shot"),
     };
   };
 
@@ -1173,7 +1173,7 @@ try {
       }));
       await ext.nodeCreated(node);
       return { wears: node.mmcBody.editor ? "shot" : "strip",
-               grow: has(node.mmcBody.root, "mmc-tl-grow") };
+               grow: has(node.mmcBody.root, "mmc-grow-shot") };
     })(),
   };
 
@@ -1286,7 +1286,7 @@ try {
   const grow = (() => {
     let hit = null;
     const walk = (n) => {
-      if (!hit && String(n.className ?? "").split(" ").includes("mmc-tl-grow")) hit = n;
+      if (!hit && String(n.className ?? "").split(" ").includes("mmc-grow-shot")) hit = n;
       (n.children ?? []).forEach(walk);
     };
     walk(node.mmcBody.root);

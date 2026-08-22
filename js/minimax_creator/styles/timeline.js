@@ -295,10 +295,9 @@ export const css = `
    and what deserves the eye is what is about to run. */
 .mmc-tl-card.mmc-tl-kept { background: var(--mmc-surface-3); }
 
-/* A card that has not been shot yet: raw stock. The perforation rail the grow
-   control wears, which in this pack already means film that has not been
-   through the gate — here across the top of the card instead of across the
-   panel. Emptied of its fill rather than faded out: everything on it is still
+/* A card that has not been shot yet: raw stock. A perforation rail across the
+   top of the card, which in this pack means film that has not been through the
+   gate. Emptied of its fill rather than faded out: everything on it is still
    set, still readable and still editable, which is the whole of what holding a
    card is for. */
 .mmc-tl-card.mmc-tl-unshot {
@@ -548,33 +547,24 @@ export const css = `
    one on screen — but dimmed and dead, with the reason in its tooltip. */
 .mmc-pill.mmc-piece-toggle.on:disabled { opacity: .55; cursor: not-allowed; }
 
-/* --- the stretch after the shot ------------------------------------------- */
-/* Where a piece of one shot grows a second one. The same perforation rail the
-   leader wears, one card later and meaning the same thing: film that has not
-   been shot yet. It sits between the prompt and the sampler row because that is
-   where the next shot goes — part of what is being asked for, not of how it is
-   run.
+/* --- the next shot -------------------------------------------------------- */
+/* Where a piece of one shot grows a second one. It lives in the tail of the
+   pill row, with the route badge and the Timeline pill: the one part of the
+   panel that is about the piece rather than about this shot.
 
-   Quiet, and it has to be: most renders are one shot, so a control that
-   announced itself would be wrong nine times out of ten. It is the only thing
-   between the panel and the sampler pills, which is what makes it findable
-   without being loud. */
-.mmc-tl-grow {
-  position: relative; width: 100%; box-sizing: border-box;
-  display: flex; align-items: center; justify-content: center; gap: 7px;
-  padding: 13px 2px 3px; background: none; border: 0; border-radius: 8px;
-  color: var(--mmc-dim); font-family: inherit; font-size: calc(12px * var(--mmc-type)); cursor: pointer;
+   It was a dashed perforation rail across the whole body — a horizon line spent
+   on one quiet button, which the fullscreen shell then hid outright rather than
+   draw. Quiet is still right (most renders are one shot), so it is quiet the way
+   a pill is quiet: dimmed until you are on it, with only the mark taking the
+   accent. Loud enough to find in a row you already read, small enough to be
+   wrong nine times out of ten without being in the way. */
+.mmc-grow-shot { color: var(--mmc-dim); }
+.mmc-grow-shot:hover:not(:disabled) { color: var(--mmc-text); }
+.mmc-grow-mark {
+  font-size: calc(14px * var(--mmc-type)); line-height: 1; color: var(--mmc-off);
   transition: color .12s ease;
 }
-.mmc-tl-grow::before {
-  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 4px;
-  background-image: repeating-linear-gradient(90deg,
-    var(--mmc-surface-3) 0 8px, transparent 8px 20px);
-}
-.mmc-tl-grow:hover:not(:disabled) { color: var(--mmc-text); }
-.mmc-tl-grow:disabled { cursor: not-allowed; opacity: .4; }
-.mmc-tl-grow-mark { font-size: calc(14px * var(--mmc-type)); line-height: 1; color: var(--mmc-off); }
-.mmc-tl-grow:hover:not(:disabled) .mmc-tl-grow-mark { color: var(--mmc-accent); }
+.mmc-grow-shot:hover:not(:disabled) .mmc-grow-mark { color: var(--mmc-accent); }
 
 /* A clip card. Solid where a shot's card is not, because the difference worth
    seeing at a glance is that this stretch of the piece already exists. */

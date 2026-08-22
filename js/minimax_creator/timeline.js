@@ -2581,35 +2581,17 @@ export class TimelineBody {
       // soundscape and the score to belong to, so the editor keeps its own audio
       // fields and writes them onto the segment. Setting the *piece's* is what
       // the strip face is for, and doing it is what takes you there.
-      afterPanel: () => [this.renderGrow()],
+
+      // The next shot, as a pill in the row that already carries the piece's
+      // other two controls. See `CreatorEditor.renderGrowPill`.
+      growShot: {
+        full: () => this.timeline.segments.length >= S.MAX_SEGMENTS,
+        fullTitle: () => t("This piece is at its limit of {count} shots.",
+                           { count: S.MAX_SEGMENTS }),
+        add: () => this.growIntoStrip(),
+      },
     });
     return this.faceEditor;
-  }
-
-  /**
-   * Unexposed film: the stretch after the shot, where the next one goes.
-   *
-   * The leader is the unexposed head of a reel, and this is the same idea one
-   * card later: a perforation rail across the body, meaning film that has not
-   * been shot. The strip used to draw a leader of its own for a piece with
-   * nothing on it; a piece cannot be empty any more, so this is the only place
-   * the rail is left — and the only place it was ever really needed.
-   *
-   * Quiet on purpose. Most renders are one shot, and a control that announced
-   * itself would be wrong nine times out of ten. It is the only thing between
-   * the prompt and the sampler row, on a face read top to bottom.
-   */
-  renderGrow() {
-    const full = this.timeline.segments.length >= S.MAX_SEGMENTS;
-    return el("button", {
-      class: "mmc-tl-grow",
-      disabled: full,
-      title: full
-        ? t("This piece is at its limit of {count} shots.", { count: S.MAX_SEGMENTS })
-        : t("Add a second shot and open the strip. One shot or twenty, it is the same node."),
-      onclick: () => this.growIntoStrip(),
-    }, [el("span", { class: "mmc-tl-grow-mark", text: "+" }),
-        el("span", { text: t("Write the next shot") })]);
   }
 
   /**
@@ -2716,8 +2698,8 @@ export class TimelineBody {
       const editor = this.faceBody();
       editor.render();
       // The editor's root *is* the body here — it brings its own rail, panel
-      // and sampler row, and its `afterPanel` puts the unexposed film between
-      // the last two.
+      // and sampler row, and its `growShot` puts the next shot in the tail of
+      // the pill row.
       if (this.root.firstChild !== editor.root) this.root.replaceChildren(editor.root);
       // The editor's root is a body in its own right, padding and all. Hosting
       // it inside another one would inset the face twice — which is a narrower

@@ -1061,12 +1061,6 @@ export const css = `
    a hidden row is still a row, and the gap it is paid is the gap it was
    supposed to give back. */
 .mmc-fs.simple .mmc-assets-host:not(:has(.mmc-asset:not(.mmc-asset-cast))) { display: none; }
-/* Growing a second shot is the strip's gesture, and the strip is the full view's
-   half of the pack. The Timeline pill in the shot's own row is still the way
-   there — this is the dashed rule under the card, which is a whole horizon line
-   drawn for one button. */
-.mmc-fs.simple .mmc-tl-grow { display: none; }
-
 /* --- the face's caps, lifted ---------------------------------------------- */
 /*
  * Two rows of chips then scroll; ten lines of prompt then scroll. Both bounds
