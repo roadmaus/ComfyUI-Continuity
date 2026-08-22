@@ -140,6 +140,9 @@ export class PromptBox {
   constructor(hooks) {
     this.hooks = hooks;
     this.menu = null;
+    // Where the typed "@query" that opened the menu sits, as a character offset
+    // into `getValue`. `dismissMenu` erases it; `onEdit` keeps it current.
+    this.typed = null;
     // The handles the box is showing as chips, as of the last time anything
     // wrote to it. `onEdit` diffs against this to find the ones a keystroke just
     // deleted — see `censusChips`.
@@ -166,7 +169,10 @@ export class PromptBox {
     // whole, wrappers and all, into a box whose every other route is plain
     // text. See `onPaste`, which this is the same handler as.
     this.root.addEventListener("drop", (event) => this.onPaste(event));
-    this.root.addEventListener("blur", () => setTimeout(() => this.closeMenu(), 120));
+    // The grace period is for the click that is landing on a menu row: that
+    // closes the menu itself, and a dismissal arriving after it would erase the
+    // name it just wrote. `dismissMenu` no-ops once the menu is gone.
+    this.root.addEventListener("blur", () => setTimeout(() => this.dismissMenu(false), 120));
     // A subject's name, opened on. The chip is contenteditable="false", so a
     // click on it had nowhere to put a caret and did nothing — which makes the
     // gesture free, and it is the right one besides: the name in the sentence is
@@ -446,8 +452,13 @@ export class PromptBox {
     this.syncExcerpt();
     this.reportOverflow();
     const trigger = this.triggerRange();
-    if (trigger) this.openMenu(trigger.query, trigger.mode);
-    else this.closeMenu();
+    if (trigger) {
+      // Measured every keystroke, because dismissal has to erase it and by then
+      // there may be no live selection to measure from — see `dismissMenu`.
+      const spot = this.triggerSpot();
+      this.typed = spot && { ...spot, text: trigger.mode + trigger.query };
+      this.openMenu(trigger.query, trigger.mode);
+    } else this.closeMenu();
   }
 
   /** Text in from outside the box, always plain. Serves both `paste` and
@@ -512,7 +523,7 @@ export class PromptBox {
     if (this.menu && ["ArrowDown", "ArrowUp", "Enter", "Tab", "Escape"].includes(event.key)) {
       event.preventDefault();
       event.stopPropagation();
-      if (event.key === "Escape") this.closeMenu();
+      if (event.key === "Escape") this.dismissMenu();
       else if (event.key === "Enter" || event.key === "Tab") this.choose(this.active);
       else this.move(event.key === "ArrowDown" ? 1 : -1);
       return;
@@ -747,6 +758,36 @@ export class PromptBox {
     if (this.menu) this.renderMenu();
   }
 
+  /**
+   * Close the menu and take the typed "@query" or "/query" with it.
+   *
+   * Dismissing is the answer "none of these": the trigger was the way to ask,
+   * and nothing was cast, so what is left of it is a stray "/" in a sentence
+   * that has to queue as prose. The door option has always erased it for the
+   * same reason — see `choose`. Only an *explicit* dismissal does this. Editing
+   * the trigger away yourself also closes the menu, through `onEdit`, and that
+   * path calls `closeMenu` directly: there is nothing left to erase, and the
+   * text either side of where it was is yours.
+   *
+   * The spot is the offset cached each keystroke rather than a live range: on
+   * blur the selection has already gone, and a DOM range would not survive
+   * `setValue` anyway. Stale offsets are refused by re-reading what sits there.
+   */
+  dismissMenu(refocus = true) {
+    if (!this.menu) return;
+    const spot = this.typed;
+    this.closeMenu();
+    if (!spot) return;
+    const text = this.getValue();
+    if (text.slice(spot.at, spot.at + spot.length) !== spot.text) return;
+    const next = text.slice(0, spot.at) + text.slice(spot.at + spot.length);
+    this.setValue(next);
+    this.hooks.onInput(next);
+    // Not on the blur path: `placeCaret` focuses the box, and pulling focus back
+    // out of whatever the click just went to is worse than a lost caret.
+    if (refocus) this.placeCaret(spot.at);
+  }
+
   closeMenu() {
     this.menu?.remove();
     this.menu = null;
@@ -755,6 +796,7 @@ export class PromptBox {
     this.signature = null;
     this.branch = null;
     this.mode = null;
+    this.typed = null;
   }
 
   place() {
