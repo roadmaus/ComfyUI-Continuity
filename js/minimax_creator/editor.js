@@ -344,10 +344,10 @@ export class CreatorEditor {
     });
 
     this.railHost = el("div");
-    // Named, both of them, because what is in them can be hidden by a view
-    // rather than left out by the body — and a host holding a hidden row is
-    // still a row of the column, costing the gap either side of it. The
-    // stylesheet needs something to fold away. See styles/fullscreen.js.
+    // Named because a host holding a hidden row is still a row of the column,
+    // costing the gap either side of it — the stylesheet needs something to
+    // fold away rather than an empty div to leave standing. See
+    // styles/fullscreen.js, where the cast's host is folded exactly that way.
     this.assetsHost = el("div", { class: "mmc-assets-host" });
     // The cast, under the files it is built out of, because a subject is built
     // out of what is there and reads as nonsense above it. Empty unless this
@@ -677,18 +677,25 @@ export class CreatorEditor {
   }
 
   /**
-   * Chips just deleted out of the sentence: take what they named with them.
+   * Chips just deleted out of the sentence: take what they named out of the run.
    *
    * The @ menu is how a file is attached in this redesign and how somebody is
    * cast — picking one writes the chip and creates the thing at once — so the
-   * chip *is* the attachment, and deleting it has to be the way back out. It was
-   * not: the file stayed on the reference row and the member stayed on the cast
-   * shelf, both invisible to a user who had just taken them out of the shot, and
-   * both still sent. An uncited cast member is cut at queue time (`compile`
-   * does it, and its files with it) but a bare `@img-1` reference is not — it is
-   * in `assets`, and everything in `assets` is encoded and shown to the model.
-   * So deleting the mention left a picture conditioning a render that never
-   * mentions it, which is exactly as strong a conditioning as one that does.
+   * chip *is* the attachment, and deleting it has to mean something. It used to
+   * mean nothing: the file stayed on the reference row and the member stayed on
+   * the cast shelf, both invisible to a user who had just taken them out of the
+   * shot, and both still sent. An uncited cast member is cut at queue time
+   * (`compile` does it, and its files with it) but a bare `@img-1` reference is
+   * not — it is in `assets`, and everything live in `assets` is encoded and
+   * shown to the model. So deleting the mention left a picture conditioning a
+   * render that never mentions it, which is exactly as strong a conditioning as
+   * one that does.
+   *
+   * Then it meant too much: the reference was detached outright, and a mention
+   * deleted while trying a sentence without it cost the file, the handle, the
+   * narrowing and the trim. A member leaves — that is what deleting their name
+   * is for — but their picture is muted rather than binned, which is the state
+   * "out of this shot, still on the node" already had a word for.
    *
    * Only what is no longer written anywhere. A handle the same shot still cites
    * from its soundscape, or another card of the same piece still cites, stays —
@@ -725,18 +732,40 @@ export class CreatorEditor {
       dropped = true;
     }
 
-    // The deleted references themselves, and the cast's leavings with them. Only
-    // this shot's own attachments: a keyframe is a moment of the video being
-    // made rather than a citation, and it keeps its handle whether or not the
-    // prompt ever writes it.
-    const loose = new Set([...handles, ...orphans]);
     const texts = [...this.citingTexts(),
                    ...(this.castPiece === this.state ? [] : S.allTexts(this.castPiece))];
-    const keep = (asset) => asset.role !== "reference" || !loose.has(asset.handle)
-                         || S.handleWritten(texts, asset.handle);
+    const gone = (handle) => !S.handleWritten(texts, handle);
+
+    // A departing member's leavings do go. Their pictures are on this shot
+    // because casting them put them there, so with nobody left to be a picture
+    // *of* there is nothing to mute — see `soleClaims`.
+    const orphaned = new Set(orphans);
     const before = this.state.assets.length;
-    this.state.assets = this.state.assets.filter(keep);
+    this.state.assets = this.state.assets.filter(
+      (asset) => asset.role !== "reference" || !orphaned.has(asset.handle) || !gone(asset.handle));
     if (this.state.assets.length !== before) dropped = true;
+
+    // The reference whose name was deleted is muted, not detached.
+    //
+    // Deleting the mention is how you take a picture out of a shot, and taking
+    // something out of a shot is not the same as throwing it away. It used to
+    // be both, so a mention deleted by accident — or on purpose, while trying a
+    // sentence without it — cost the file, the handle, the narrowing and the
+    // trim, and getting it back meant the picker and setting all of that up
+    // again. Muted it is still in the row, dimmed, one press from live, and it
+    // does not reach the model in the meantime. Which is what the deletion
+    // meant.
+    //
+    // Only this shot's own attachments. A keyframe is where the shot opens or
+    // closes rather than something the prompt reaches for, and keeps its handle
+    // whether or not the text ever writes it; the pool is the piece's, and one
+    // card is not the place a file is taken off every other card.
+    for (const asset of this.state.assets) {
+      if (asset.role !== "reference" || S.muted(asset)) continue;
+      if (!handles.includes(asset.handle) || !gone(asset.handle)) continue;
+      asset.enabled = false;
+      dropped = true;
+    }
 
     // `commit` redraws — the reference row and the cast shelf are both what
     // just changed, and both are what the user is looking at. The box itself is
@@ -1491,10 +1520,12 @@ export class CreatorEditor {
 
   renderAssets() {
     // Whose files these are. Casting somebody attaches their pictures — the
-    // roster does it, `presets.addSubjectToPiece` does it — so a shot with one
-    // person in it grows a reference chip nobody asked for, saying what the
-    // @name in the sentence already says. Marked rather than filtered: the node
-    // face wants them, and the simple view is where the sentence is enough.
+    // roster does it, `presets.addSubjectToPiece` does it — so some of this row
+    // is there because a name in the sentence put it there rather than because
+    // you picked it. Marked, not filtered: the simple view used to leave them
+    // out on the grounds that the @name says it already, and a row drawing only
+    // some of what is attached is a row you cannot trust to be the answer —
+    // which matters now that a file can be sitting there muted.
     const cast = new Set();
     for (const subject of this.castPiece.subjects ?? []) {
       for (const handle of S.subjectFiles(subject)) cast.add(handle);
@@ -1536,13 +1567,23 @@ export class CreatorEditor {
       const said = referenceSummary(asset);
       if (said) parts.push(el("span", { class: "mmc-asset-said", text: said }));
 
+      // The mute, on references only: a keyframe is where the shot opens or
+      // closes rather than something the prompt reaches for, so there is
+      // nothing for it to be out of. The same switch a LoRA carries and the
+      // same word for it — out of the run, kept exactly as you attached it —
+      // because it is the same question asked about a different file.
+      //
+      // Not the name, which is how a LoRA spells this: a reference's name is
+      // already the door onto its card. So it is a glyph beside the ✕, in the
+      // row where the other thing you can do to a whole file lives.
+      if (asset.role === "reference") parts.push(this.muteButton(asset));
       parts.push(el("button", {
         class: "mmc-asset-x", text: "✕", title: t("Remove @{handle}", { handle: asset.handle }),
         onclick: () => this.remove(asset.handle),
       }));
       return el("div", {
         class: `mmc-asset mmc-tag-${S.tagIndex(asset.handle)}${
-          cast.has(asset.handle) ? " mmc-asset-cast" : ""}`,
+          cast.has(asset.handle) ? " mmc-asset-cast" : ""}${S.muted(asset) ? " off" : ""}`,
         title: asset.filename,
       }, parts);
     };
@@ -1550,6 +1591,36 @@ export class CreatorEditor {
     // Bounded on the face (see the stylesheet), so it needs the wheel the way
     // the prompt box does — otherwise the row that scrolls zooms the canvas.
     return keepScroll(el("div", { class: "mmc-assets" }, this.state.assets.map(chip)));
+  }
+
+  /** Take one reference out of the run, or bring it back. Everything about it
+   *  survives — the file, the handle, the narrowing, the trim — because that is
+   *  the whole difference between this and the ✕ beside it. */
+  muteButton(asset) {
+    const off = S.muted(asset);
+    return el("button", {
+      class: `mmc-asset-x mmc-asset-mute${off ? " on" : ""}`,
+      "aria-pressed": off ? "true" : "false",
+      title: off
+        ? t("@{handle} is muted — out of the run, and kept exactly as you attached it. Click to bring it back.",
+            { handle: asset.handle })
+        : t("Mute @{handle}: out of the run, but the file, the handle and the narrowing all stay.",
+            { handle: asset.handle }),
+      onclick: () => {
+        if (off) delete asset.enabled;
+        else asset.enabled = false;
+        // A muted reference is not a reference of this render, so bringing one
+        // back can overrun a limit that was legal while it was off — the same
+        // check a track change answers to, and the same rollback.
+        const problem = off ? S.overflow(this.state) : null;
+        if (problem) {
+          asset.enabled = false;
+          return this.flash(t("@{handle} stays muted — {problem}",
+                              { handle: asset.handle, problem }));
+        }
+        this.commit();
+      },
+    }, [svg(ICONS.mute, 13)]);
   }
 
   renderPills(geometry, currentMode) {

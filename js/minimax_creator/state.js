@@ -708,6 +708,8 @@ function serializeRefined(refined) {
 function serializeAssets(assets) {
   return assets.map((asset) => {
     const out = { handle: asset.handle, kind: asset.kind, role: asset.role, filename: asset.filename };
+    // Absent means live, so nothing that was never muted grows a key.
+    if (asset.enabled === false) out.enabled = false;
     if (asset.kind === "video") out.track = asset.track || DEFAULT_TRACK;
     // Only what departs from the backend's own default for the kind, so the
     // common setting adds nothing and an old blob round-trips unchanged.
@@ -3136,7 +3138,17 @@ export function nextPoolHandle(timeline) {
   }
 }
 
-export const references = (state) => state.assets.filter((a) => a.role === "reference");
+/** Muted: switched off by hand or by the deletion of its last mention, kept
+ *  exactly as it was attached, and out of the run. The same word a LoRA uses,
+ *  and the same key compile.py reads. */
+export const muted = (asset) => asset.enabled === false;
+
+/** The references this generation actually sends. Muted ones are attached and
+ *  drawn — they are the row you put one back from — but they are not references
+ *  of this render in any way that counts, so the mode, the limits, the
+ *  checkpoint pin and the slot counters all read through here. */
+export const references = (state) =>
+  state.assets.filter((a) => a.role === "reference" && !muted(a));
 export const refImages = (state) => references(state).filter((a) => a.kind === "image");
 // The same bucketing compile.py does: a video kept for its soundtrack alone is
 // an audio reference, and never a video one.

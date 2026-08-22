@@ -126,6 +126,32 @@ check("end only", build(assets=[image("img-1", "last_frame")]).mode, "L2VA")
 check("both frames", build(assets=[image("img-1", "first_frame"), image("img-2", "last_frame")]).mode, "FL2VA")
 check("a reference", build(assets=[image("img-1")]).mode, "REF2VA")
 
+# Muted, the way a LoRA is: attached, kept exactly as it was set up, and out of
+# this run. Read here rather than filtered downstream, so the mode, the limits,
+# the plan and the checkpoint pin are all derived from what is actually sent —
+# a shot whose only reference is muted is a text generation, not a reference one
+# that happens to encode nothing.
+check("a muted reference is not a reference of this render",
+      build(assets=[image("img-1", enabled=False)]).mode, "T2VA")
+check("...nor of the checkpoint it would have pinned",
+      build(assets=[image("img-1", enabled=False)]).checkpoint, "fl2va")
+check("...and the live ones beside it still are",
+      build(assets=[image("img-1", enabled=False), image("img-2")]).mode, "REF2VA")
+check("...leaving only themselves out",
+      [a.handle for a in build(assets=[image("img-1", enabled=False),
+                                       image("img-2")]).ref_images], ["img-2"])
+# A muted entry still owns its handle: unmuting it must not collide with a
+# second @img-1 somebody attached while it was off.
+expect_error("a muted handle is still taken",
+             lambda: build(assets=[image("img-1", enabled=False), image("img-1")]),
+             "duplicate asset handle @img-1")
+# A keyframe is where the shot opens or closes rather than something the prompt
+# reaches for, so there is nothing for it to be out of — and a blob that queued
+# quietly without a frame the node still draws would be the worse answer.
+expect_error("a keyframe cannot be muted",
+             lambda: build(assets=[image("img-1", "first_frame", enabled=False)]),
+             "only a reference can be muted")
+
 check("t2va uses the fl2va model", build().checkpoint, "fl2va")
 check("ref2va uses the ref model", build(assets=[image("img-1")]).checkpoint, "ref2va")
 

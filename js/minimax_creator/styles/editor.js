@@ -128,6 +128,16 @@ export const css = `
    and the two have to be tellable apart on a chip that can be both. */
 .mmc-asset.off { opacity: .6; }
 .mmc-asset.off .mmc-asset-name { color: var(--mmc-dim); text-decoration: line-through; }
+/* Muted the other way round: a LoRA spells this on its name, and a reference's
+   name is already the door onto its card — so the switch is a glyph beside the
+   ✕, and the strike-through above has no name to land on. The chip is dimmed
+   instead, and the glyph stays lit while it is the reason. */
+.mmc-asset-mute { display: flex; align-items: center; padding: 2px; }
+.mmc-asset-mute:hover { color: var(--mmc-text); }
+.mmc-asset-mute.on { color: var(--mmc-accent); }
+.mmc-asset.off .mmc-asset-handle { color: var(--mmc-dim); }
+.mmc-asset.off .mmc-asset-thumb { filter: grayscale(1); }
+
 /* The swap button sits in the ✕'s row and wears its colours; the glyph needs
    the extra line-height reset a text button does not. */
 .mmc-asset-shuffle { display: flex; align-items: center; padding: 2px; }
@@ -391,6 +401,14 @@ export const css = `
   color: var(--tag, var(--mmc-accent));
   font-size: .92em; white-space: nowrap; user-select: all;
 }
+/* A name whose file is muted. The tag colour is what says "this is a picture in
+   this shot", so a muted one gives it up and keeps only the shape: the sentence
+   still reads, and the word no longer claims something the render is not doing.
+   Struck through for the same reason a muted LoRA's name is. */
+.mmc-ref.mmc-ref-off {
+  background: var(--mmc-wash); color: var(--mmc-dim); text-decoration: line-through;
+}
+
 /* Somebody's name, where clicking it opens them (see PromptBox's click handler
    and CreatorEditor.openCastMember). Inside a contenteditable the
    cursor is a caret by default, which says "text" about the one thing in the

@@ -556,10 +556,13 @@ export class PromptBox {
    *  never the word "img". A name nobody cast matches the second half, finds no
    *  subject and stays prose — which is the promise the cast is built on. */
   build(text) {
-    const known = new Set([
-      ...this.hooks.getState().assets.map((a) => a.handle),
-      ...(this.hooks.getPool?.() ?? []).map((a) => a.handle),
-    ]);
+    const attached = [...this.hooks.getState().assets,
+                      ...(this.hooks.getPool?.() ?? [])];
+    const known = new Set(attached.map((a) => a.handle));
+    // Muted files, so the chip can say it. A name in the sentence whose picture
+    // is out of the run reads as a picture being used, and the row saying
+    // otherwise is two floors away from the word that is wrong.
+    const off = new Set(attached.filter((a) => a.enabled === false).map((a) => a.handle));
     const cast = new Set((this.hooks.getCast?.() ?? []).map((s) => s.handle));
     const out = [];
     let at = 0;
@@ -569,7 +572,7 @@ export class PromptBox {
       const handle = match[1];
       if (!known.has(handle) && !cast.has(handle)) continue;
       if (match.index > at) out.push(document.createTextNode(text.slice(at, match.index)));
-      out.push(this.chip(handle, cast.has(handle)));
+      out.push(this.chip(handle, cast.has(handle), off.has(handle)));
       at = match.index + match[0].length;
     }
     if (at < text.length) out.push(document.createTextNode(text.slice(at)));
@@ -585,9 +588,9 @@ export class PromptBox {
     return chip && this.root.contains(chip) ? chip : null;
   }
 
-  chip(handle, subject = false) {
+  chip(handle, subject = false, muted = false) {
     return el("span", {
-      class: `mmc-ref${subject ? " mmc-ref-cast" : ""} mmc-tag-${tagIndex(handle)}`,
+      class: `mmc-ref${subject ? " mmc-ref-cast" : ""}${muted ? " mmc-ref-off" : ""} mmc-tag-${tagIndex(handle)}`,
       contenteditable: "false",
       "data-handle": handle,
       // Said on the chip, because a gesture nobody can see is a gesture nobody

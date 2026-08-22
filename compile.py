@@ -415,6 +415,29 @@ def _parse_assets(raw):
         if role != "reference" and kind != "image":
             raise CompileError(f"@{handle}: only images can be a {role}")
 
+        # Muted, the way a LoRA is: attached, kept exactly as it was set up, and
+        # out of this run. Dropped here rather than filtered downstream so the
+        # mode, the limits, the plan, the checkpoint pin and the cache key are
+        # every one of them derived from what is actually being sent.
+        #
+        # After the handle is registered, so a blob carrying a muted @img-1 and
+        # a live one is still a duplicate. Before the rest of the validation,
+        # because a file that is not being sent has nothing to answer for —
+        # which is the same bargain a muted LoRA gets.
+        #
+        # References only. A keyframe is where the shot opens or closes, not
+        # something the prompt reaches for, so there is nothing for it to be out
+        # of; a blob muting one is refused rather than quietly queued without
+        # the frame the user can see on the node.
+        if item.get("enabled") is False:
+            if role != "reference":
+                raise CompileError(
+                    f"@{handle}: only a reference can be muted — a "
+                    f"{role.replace('_', ' ')} is the shot's own opening or "
+                    f"closing frame, so remove it instead"
+                )
+            continue
+
         filename = str(item.get("filename") or "").strip()
         if not filename:
             raise CompileError(f"@{handle}: no filename")

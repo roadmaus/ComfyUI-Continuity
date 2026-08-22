@@ -844,6 +844,10 @@ export class PreStageBody {
   mount() {
     this.editor?.destroy();
     this.editor = S.isStill(this.state) ? this.mountStill() : this.mountImage();
+    // Same hand-off the piece's face makes: the view this body is drawn in is
+    // the body's to remember, because swapping architectures builds a new
+    // editor that was never told. See `Fullscreen.setCastResident`.
+    this.editor.castResident = this.castResident;
     this.host.replaceChildren(this.editor.root);
     // The architecture decides the canvas, so swapping editors is exactly when
     // a host drawing the frame has to redraw it.

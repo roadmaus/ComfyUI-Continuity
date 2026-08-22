@@ -2591,6 +2591,10 @@ export class TimelineBody {
         add: () => this.growIntoStrip(),
       },
     });
+    // Which view this body is drawn in, carried onto the editor that was just
+    // built for it — see `Fullscreen.setCastResident`. Undefined on the canvas,
+    // which is the answer the face wants anyway.
+    this.faceEditor.castResident = this.castResident;
     return this.faceEditor;
   }
 

@@ -1050,17 +1050,13 @@ export const css = `
   background: var(--mmc-surface-2); border: 1px solid var(--mmc-line);
 }
 .mmc-fs.simple .mmc-cast.summoned .mmc-cast-head { display: none; }
-/* And the cast's own pictures out of the reference row entirely. Casting
-   somebody attaches their files, so one person in a shot grew a chip saying
-   what the @name in the sentence already says — and here the sentence is the
-   only place a subject is written, so the chip was a second, worse copy of it.
-   The row is what *you* attached: the frames, the footage, the references.
-   Empty of those, it goes with them rather than leaving a gap where it was. */
-.mmc-fs.simple .mmc-asset-cast { display: none; }
-/* Folded at the host rather than at the row, for the reason the cast's host is:
-   a hidden row is still a row, and the gap it is paid is the gap it was
-   supposed to give back. */
-.mmc-fs.simple .mmc-assets-host:not(:has(.mmc-asset:not(.mmc-asset-cast))) { display: none; }
+/* The reference row is the same row in both views. It used to hide the cast's
+   own pictures here, on the grounds that a chip for @vera's photo says what the
+   @vera in the sentence already says — which was true until a file could be
+   muted. A muted picture is a thing you go and look for, and a row that draws
+   only some of what is attached is a row you cannot trust to be the answer. So
+   both views show everything on the shot, and the chip that is out of the run
+   says so where the file is rather than only in the sentence. */
 /* --- the face's caps, lifted ---------------------------------------------- */
 /*
  * Two rows of chips then scroll; ten lines of prompt then scroll. Both bounds

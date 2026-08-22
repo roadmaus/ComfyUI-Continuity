@@ -674,7 +674,16 @@ class Fullscreen {
    *  answer through the same editor, so this asks the body for it rather than
    *  reaching for a field that may not be there. */
   setCastResident(body, resident) {
-    const editor = body?.editor;
+    if (!body) return;
+    // On the body first, because the body is what outlives the editor. A card's
+    // editor is rebuilt whenever the segment object under it changes — a preset
+    // carrying a strip, the piece cleared, a workflow re-read — and the new one
+    // knew nothing about the view it had been borrowed into. It answered "the
+    // shelf is a row of me", so pressing a name built a resident drawer that
+    // this view's stylesheet hides, and the press looked like it had done
+    // nothing. The body remembers; whoever builds the next editor stamps it.
+    body.castResident = resident;
+    const editor = body.editor;
     if (!editor) return;
     editor.castResident = resident;
     // A drawer put up by a press in the window has no business surviving the

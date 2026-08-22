@@ -293,7 +293,11 @@ try {
     box.root.children.find((n) => n.dataset?.handle === handle)?.remove();
     box.onEdit();
   };
-  const refs = () => (shot.assets ?? []).map((a) => a.handle).join(",");
+  // A muted reference is still attached — that is the whole point of it — so
+  // the readout has to tell the two apart: `img-2!` is on the node and out of
+  // the run, and a handle that is simply gone is gone.
+  const refs = () => (shot.assets ?? [])
+    .map((a) => `${a.handle}${a.enabled === false ? "!" : ""}`).join(",");
   const cast = () => (piece.subjects ?? []).map((s) => s.handle).join(",");
 
   box.setValue(`@${anna} at @${door}, lit by @${lamp}`);
@@ -310,13 +314,59 @@ try {
   out.reap.castUntouched = cast();
   cut(anna);
   out.reap.afterTheName = cast();
-  // Her picture was attached by casting her, so it leaves with her.
+  // Her picture was attached by casting her, so it leaves with her — muting is
+  // for a file you might put back, and there is nobody left to put it back for.
   out.reap.andHerPictures = refs();
   // And all of it is in the blob, which is what queues.
   out.reap.blob = JSON.parse(node.widgets[0].value).segments[0].assets
-    .map((a) => a.handle).join(",");
+    .map((a) => `${a.handle}${a.enabled === false ? "!" : ""}`).join(",");
 } catch (error) {
   out.errors.push(`reap: ${error.stack}`);
+}
+
+// ---- and the switch that does it by hand ------------------------------------
+//
+// The same mute a LoRA carries, on a reference: out of the run, kept exactly as
+// it was attached. It is the other half of the deletion above — that is how you
+// take a picture out of a shot while writing, this is how you do it without
+// touching the sentence, and it is the only way back from either.
+//
+// Not the name, which is how a LoRA spells it: a reference's name is already the
+// door onto its card. So it is a glyph beside the ✕, and this presses it.
+try {
+  const node = fakeNode("MiniMaxH3Creator", "creator_data", ONE_SHOT);
+  await ext.nodeCreated(node);
+  const editor = node.mmcBody.faceBody();
+  const shot = node.mmcBody.timeline.segments[0];
+  editor.prompt.hooks.onAttach({ path: "doors/red.png", kind: "image" });
+  const asset = shot.assets[0];
+  const mute = () => editor.assetsHost.querySelectorAll(".mmc-asset-mute")[0];
+  const press = () => mute()?.listeners?.click?.forEach((fn) => fn({
+    preventDefault() {}, stopPropagation() {},
+  }));
+  const chip = () => String(editor.assetsHost.querySelectorAll(".mmc-asset")[0]?.className ?? "")
+    .split(" ").includes("off");
+
+  const liveMode = S.mode(shot);
+  press();
+  const offMode = S.mode(shot);
+  const dimmedWhileOff = chip();
+  const blob = JSON.parse(node.widgets[0].value).segments[0].assets[0];
+  press();
+  out.mute = {
+    liveMode, offMode, backMode: S.mode(shot),
+    // Attached throughout — that is the whole difference between this and ✕.
+    kept: shot.assets.length,
+    file: shot.assets[0]?.filename,
+    // The blob is what queues, and compile reads exactly this key.
+    written: blob?.enabled,
+    // ...and absent again once it is live, so nothing that was never muted
+    // grows a key.
+    clean: JSON.parse(node.widgets[0].value).segments[0].assets[0]?.enabled === undefined,
+    dimmedWhileOff, dimmedAfter: chip(),
+  };
+} catch (error) {
+  out.errors.push(`mute: ${error.stack}`);
 }
 
 // The face is typed into, and the window is where a prompt goes when it stops
@@ -1461,6 +1511,60 @@ try {
   out.errors.push(`cast card: ${error.stack}`);
 }
 
+// ---- ...and it survives the editor being rebuilt under the open shell -------
+//
+// `castResident` is what the card says about itself, and it lived on the editor
+// — which is not what outlives the view. The face's editor is rebuilt whenever
+// the segment object under it changes: a preset carrying a strip parses new
+// segments, Clear makes one, a re-read of the blob makes all of them. The
+// replacement knew nothing about the shell it was born into, answered "the
+// shelf is a row of me" from its node id alone, and so a press on a name built
+// a resident drawer that the simple view's stylesheet hides. The press looked
+// dead, and the only way out was a round trip through the full view — which
+// calls `setCastResident` again and repairs it by accident.
+//
+// The body remembers now and stamps whoever it builds next. Driven through the
+// real shell, because the hand-off is the thing under test.
+try {
+  const fs = await import("./js/minimax_creator/fullscreen.js");
+  globalThis.localStorage = { getItem: (k) => (k === "mmc.fullscreen.view" ? "simple" : null),
+                              setItem() {}, removeItem() {} };
+  const node = fakeNode("MiniMaxH3Creator", "creator_data", JSON.stringify({
+    version: 2, models: {},
+    subjects: [{ handle: "vera", takes: "person", from: [] }],
+    segments: [{ prompt: "@vera waits", assets: [], loras: [], duration_s: 6 }],
+  }));
+  await ext.nodeCreated(node);
+  node.graph._nodes.push(node);
+  app.graph = node.graph;
+  fs.openFullscreen(node);
+  const simple = String(document.body.children.at(-1)?.className ?? "").includes("simple");
+  const told = node.mmcBody.editor?.castResident === false;
+
+  // What a preset apply carrying a strip does to the face.
+  node.mmcBody.dropFaceEditor();
+  node.mmcBody.render();
+  const editor = node.mmcBody.editor;
+  const box = editor.prompt.root;
+  box.listeners?.click?.forEach((fn) => fn({
+    target: box.querySelectorAll('.mmc-ref-cast[data-handle="vera"]')[0],
+    preventDefault() {}, stopPropagation() {},
+  }));
+  out.castRebuilt = {
+    simple, told,
+    fresh: editor !== undefined && editor.castResident === false,
+    notResident: editor.castResidentHere() === false,
+    // The whole point: the drawer that arrives is the summoned one, which is
+    // the only kind this view draws.
+    summoned: editor.castSummoned === true,
+    marked: String(editor.castShelf?.root?.className ?? "").split(" ").includes("summoned"),
+    onThem: editor.castShelf?.opened?.handle ?? null,
+  };
+  fs.close();
+} catch (error) {
+  out.errors.push(`cast rebuilt: ${error.stack}`);
+}
+
 // ---- and summoned by clicking the name, which is the gesture ----------------
 //
 // The block above drives `openCastMember` directly, on the grounds that the
@@ -2247,13 +2351,27 @@ check("...and the piece's cast", reap.get("cast"), "anna")
 # writes the lamp, so the lamp stays.
 check("a handle still written elsewhere survives losing its chip",
       reap.get("citedElsewhere"), "img-1,img-2,img-3")
-check("a reference whose last mention goes, goes", reap.get("afterTheRef"),
-      "img-1,img-3")
+check("a reference whose last mention goes is muted, not detached",
+      reap.get("afterTheRef"), "img-1,img-2!,img-3")
 check("...and takes nobody out of the cast with it", reap.get("castUntouched"), "anna")
 check("deleting a name takes the member off the shelf", reap.get("afterTheName"), "")
-check("...and the pictures casting her attached", reap.get("andHerPictures"), "img-3")
+check("...and the pictures casting her attached go with her", reap.get("andHerPictures"),
+      "img-2!,img-3")
 check("...and all of it is written through to the blob that queues",
-      reap.get("blob"), "img-3")
+      reap.get("blob"), "img-2!,img-3")
+
+# The same switch by hand: the glyph beside the ✕, which is where the other
+# thing you can do to a whole file already lives.
+mute = report.get("mute", {})
+check("a live reference routes the shot to Ref2VA", mute.get("liveMode"), "REF2VA")
+check("...and muting it takes the shot back to text", mute.get("offMode"), "T2VA")
+check("...and unmuting brings it back", mute.get("backMode"), "REF2VA")
+check("a muted reference is still attached", mute.get("kept"), 1)
+check("...with its file still on it", mute.get("file"), "doors/red.png")
+check("...said in the blob compile reads", mute.get("written"), False)
+check("...and unsaid again once it is live", mute.get("clean"), True)
+check("the chip is dimmed while it is out of the run", mute.get("dimmedWhileOff"), True)
+check("...and lit again after", mute.get("dimmedAfter"), False)
 
 # ---- the body leaves the node, and comes back --------------------------------
 #
@@ -2584,6 +2702,19 @@ check("a face draws the drawer whether or not anybody pressed", card.get("faceRo
 check("...a press opens somebody on it", card.get("faceOn"), "vera")
 check("...and the press that closes them leaves the drawer", card.get("faceKept"), 1)
 check("...with nobody open on it", card.get("faceClosed"), None)
+
+# The same press, after the face's editor was rebuilt under the open shell —
+# which is what applying a preset that carries a strip does. `castResident` used
+# to live on the editor, so the replacement answered from its node id alone and
+# put up a resident drawer the simple view hides. The body remembers it now.
+rebuilt = report.get("castRebuilt", {})
+check("the shell opens on the simple view", rebuilt.get("simple"), True)
+check("...and tells the body's editor it draws no drawer", rebuilt.get("told"), True)
+check("...an editor rebuilt under it is told the same", rebuilt.get("fresh"), True)
+check("...and answers the same", rebuilt.get("notResident"), True)
+check("...so a press on a name summons the drawer", rebuilt.get("summoned"), True)
+check("...marked, which is what the card's stylesheet shows", rebuilt.get("marked"), True)
+check("...on the member whose name was pressed", rebuilt.get("onThem"), "vera")
 
 grew = report.get("grew", {})
 check("writing the next shot adds a card", grew.get("cards"), 2)
