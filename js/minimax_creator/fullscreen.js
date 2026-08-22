@@ -294,7 +294,14 @@ class Fullscreen {
     this.sizer = el("div", { class: "mmc-fs-sizer" }, [this.sizeRead, this.grip]);
     this.reel = el("div", { class: "mmc-fs-reel" }, [this.dock]);
     this.strip = el("div", { class: "mmc-fs-strip" }, [this.past.shot]);
-    this.body = el("div", { class: "mmc-fs-body" }, [this.pre, this.col, this.reel]);
+    // The two control cards are one object: the desk. They are wrapped rather
+    // than laid out beside the reel as three equals so that stretching them to
+    // each other stretches them to *each other* — a flex line takes the height
+    // of its container, and the body is the window. The wrapper is only as tall
+    // as the taller card, so that is the height they both get. In the simple
+    // view it is display:contents and this row does not exist at all.
+    this.desk = el("div", { class: "mmc-fs-desk" }, [this.pre, this.col]);
+    this.body = el("div", { class: "mmc-fs-body" }, [this.desk, this.reel]);
 
     this.root = el("div", { class: "mmc-fs" }, [
       el("div", { class: "mmc-fs-bar" }, [

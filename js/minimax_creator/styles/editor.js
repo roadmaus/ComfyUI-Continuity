@@ -24,7 +24,7 @@ export const css = `
   color: var(--mmc-dim); font-size: 12px; font-family: inherit;
 }
 .mmc-tool-icon {
-  width: 56px; height: 56px; border-radius: 14px;
+  width: var(--mmc-tool-tile); height: var(--mmc-tool-tile); border-radius: 14px;
   background: var(--mmc-surface-2); border: 1px solid var(--mmc-line);
   display: flex; align-items: center; justify-content: center;
   transition: background .12s ease;

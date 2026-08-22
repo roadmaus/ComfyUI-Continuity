@@ -19,6 +19,11 @@ export const css = `
      as a row, and every one of those numbers was set locally by whoever added
      the control. Tokenised so the next one cannot be a fourth. */
   --mmc-pill-h: 38px;
+  /* The rail's tile, and everything positioned against it — the refiner's
+     corner chevron is the one that kept drifting off the box when the shell
+     drew a smaller square. One token, so the shell is a single override
+     rather than a second set of offsets that has to be kept in step. */
+  --mmc-tool-tile: 56px;
   /* What a file lends a subject, as colour. Their looks are the default and
      wear none; these are the three departures from it, and they are worn by the
      shelf's badges and dots and by the library's editor tiles. Tokens rather

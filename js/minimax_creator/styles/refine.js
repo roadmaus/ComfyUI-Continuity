@@ -7,9 +7,13 @@ export const css = `
    alignment and the control cannot be mistaken for a badge on its neighbour. */
 .mmc-refine-split { position: relative; display: flex; }
 /* Anchored off the tile's centre rather than the wrapper's left edge, so a
-   longer label cannot slide it off the corner it belongs in. */
+   longer label cannot slide it off the corner it belongs in — and measured from
+   the tile's own size, because the shell draws a 44px square and the two fixed
+   offsets that suited 56 hung the chevron out past its right edge. */
 .mmc-refine-more {
-  position: absolute; top: 36px; left: 50%; margin-left: 8px; width: 18px; height: 18px;
+  position: absolute; left: 50%; width: 18px; height: 18px;
+  top: calc(var(--mmc-tool-tile) - 20px);
+  margin-left: calc(var(--mmc-tool-tile) / 2 - 20px);
   display: flex; align-items: center; justify-content: center;
   background: none; border: 0; border-radius: 6px; padding: 0;
   color: var(--mmc-off); cursor: pointer; transition: color .12s ease, background .12s ease;

@@ -89,6 +89,30 @@ export const css = `
   align-items: center;
 }
 
+/* The desk: the pre-stage card and the shot card, as one object on the ground.
+ *
+ * It exists for their height. Beside the reel they were three siblings on a
+ * centred line, and a centred line gives every card the height of its own
+ * contents — so the step before the shot ended somewhere up the side of the
+ * shot, two cards of different lengths with no shared edge, which is what made
+ * the desk read as debris rather than as a row. Stretching them against the
+ * body would have been worse: the body is the window, so both cards would run
+ * its full height with the slack falling inside them, under Render.
+ *
+ * Wrapped, the line they stretch against is this one, and it is only as tall as
+ * the taller of them. Same top, same bottom, and the shorter card carries the
+ * difference as room at its foot rather than as a ragged edge.
+ */
+.mmc-fs-desk {
+  display: flex; align-items: stretch; gap: 14px;
+  flex: 0 1 auto; min-width: 0; min-height: 0; max-height: 100%;
+}
+/* And the difference goes above the button, not below it. Both cards end in the
+   one thing that runs them, so on a shared bottom edge the two buttons are a
+   line — slack left under the shorter one would have hung its Render still in
+   the middle of a card with a hole beneath it. */
+.mmc-fs:not(.simple) .mmc-fs-runrow { margin-top: auto; }
+
 /* The column the body lives in. A measure rather than a share of the window: a
    prompt line that runs the full width of a 32-inch screen is a prompt nobody
    can read back. Wider than it was, because a rail of eleven labelled tools and
@@ -153,7 +177,8 @@ export const css = `
 /* Quieter than the shot beside it, in the two ways a column can be quieter:
    smaller tools and less contrast. Nothing is hidden — this is still the node's
    whole face — it just stops competing for the eye. */
-.mmc-fs-pre .mmc-tool-icon { width: 42px; height: 42px; border-radius: 11px; }
+.mmc-fs-pre { --mmc-tool-tile: 42px; }
+.mmc-fs-pre .mmc-tool-icon { border-radius: 11px; }
 .mmc-fs-pre .mmc-tool { font-size: 11px; }
 .mmc-fs-pre .mmc-tool svg { width: 18px; height: 18px; }
 .mmc-fs-pre .mmc-root { opacity: .82; transition: opacity .15s ease; }
@@ -243,15 +268,36 @@ export const css = `
    width and 56px is the only size that reads; in a column with a picture beside
    it, eleven of them wrapped to a second row and the shelf of tools became the
    tallest thing above the writing. */
-.mmc-fs .mmc-tool-icon { width: 48px; height: 48px; border-radius: 13px; }
+.mmc-fs { --mmc-tool-tile: 48px; }
+.mmc-fs .mmc-tool-icon { border-radius: 13px; }
 .mmc-fs .mmc-tool svg { width: 20px; height: 20px; }
-/* Eleven labelled tools do not fit a column narrow enough to read a prompt back
-   in, so the rail wraps here whatever the tile size — and on the node face the
-   machine's pair keeps its own edge, which left the wrapped row hanging off the
-   right with a hole beside it. In the shell the two clusters stay two clusters
-   by the column gap alone and the second row starts where the first did. */
-.mmc-fs .mmc-rail { gap: 10px 20px; justify-content: flex-start; }
-.mmc-fs .mmc-rail-group:last-child { margin-left: 0; }
+/*
+ * Eleven labelled tools do not fit a column narrow enough to read a prompt back
+ * in, so the rail wraps here whatever the tile size — and everything that went
+ * wrong with it went wrong in the wrapping.
+ *
+ * It is a grid, not a wrapping row. Two things follow, and both were the bug.
+ * The track is fixed, so the tools sit on one set of columns instead of each
+ * row spacing its own contents out to whatever it happened to hold — a row of
+ * eight and a row of three, spread by a gap, share no vertical line at all.
+ * And the clusters are set to display:contents, so the rail wraps by tool rather
+ * than by cluster: the machine's three used to be one unbreakable block that
+ * fell to a line of its own the moment the column narrowed, leaving a hole
+ * across the end of the row above it.
+ *
+ * The track is a column rather than a tile with a gap beside it, because the
+ * tile is the narrowest part of a tool: "Add image" is half again as wide as
+ * the square above it, so a gap that looked right under the icons left the
+ * labels a hair apart and the row read as one run of prose with pictures over
+ * it. A column wide enough for the words spaces the words; the squares inside
+ * it keep an even rhythm on their own.
+ */
+.mmc-fs .mmc-rail {
+  display: grid; grid-template-columns: repeat(auto-fill, 76px);
+  gap: 14px 0; justify-content: start; align-items: start;
+}
+.mmc-fs .mmc-rail-group { display: contents; margin-left: 0; }
+.mmc-fs .mmc-tool { width: 100%; line-height: 1.25; text-align: center; }
 
 /* And the same is true of the row under the prompt. A pill row on a node face
    ends with the route badge held against the far edge, because a face is wide,
@@ -659,6 +705,8 @@ export const css = `
   gap: 0; padding: 24px; overflow: hidden;
 }
 .mmc-fs.simple .mmc-fs-pre { display: none; }
+/* No row to make here — one card and the reel, laid out by the body itself. */
+.mmc-fs.simple .mmc-fs-desk { display: contents; }
 /* Closed, and taking part in the row the whole time: a max-width of zero is a
    column that is there, has no width, and can be given one over a third of a
    second. Animating the reel rather than moving the card is what makes the card
@@ -730,12 +778,30 @@ export const css = `
 .mmc-fs.simple .mmc-root:not(.hosting) { padding: 0; gap: 12px; }
 
 /* Centred, and smaller: on the desk the rail is a shelf of tools down one side
-   of the work, and here it is a line of them across the top of one card. */
-.mmc-fs.simple .mmc-rail { justify-content: center; gap: 8px 14px; }
-.mmc-fs.simple .mmc-rail-group:last-child { margin-left: 0; }
-.mmc-fs.simple .mmc-tool-icon { width: 44px; height: 44px; border-radius: 12px; }
-.mmc-fs.simple .mmc-tool { font-size: 11px; gap: 5px; }
+   of the work, and here it is a line of them across the top of one card.
+   Columns rather than tiles-plus-gap for the reason the shell's rail gives, but
+   held by the tools themselves and not by a grid: the card is wide enough that
+   this rail is one line, and a grid would put the cluster's hairline in a whole
+   track of its own — far more room than a seam wants. */
+.mmc-fs.simple { --mmc-tool-tile: 44px; }
+.mmc-fs.simple .mmc-rail { display: flex; justify-content: center; gap: 14px 0; }
+.mmc-fs.simple .mmc-rail-group {
+  display: flex; align-items: flex-start; gap: 14px 0; margin-left: 0;
+}
+.mmc-fs.simple .mmc-tool { width: 68px; font-size: 11px; gap: 6px; }
+.mmc-fs.simple .mmc-tool-icon { border-radius: 12px; }
 .mmc-fs.simple .mmc-tool svg { width: 19px; height: 19px; }
+/* The split the node face makes with the whole width of the node — this
+   generation's tools at one end, the machine's at the other — has no width to
+   make it with here, and a centred line of nine identical squares said nothing
+   about it. A hairline says it instead: left of the rule writes this shot,
+   right of it outlives it. Only on this card, where the rail is one line: in
+   the two-column shell the rail wraps by design, and a rule that lands at the
+   start of a wrapped row reads as a stray tick rather than as a seam. */
+.mmc-fs.simple .mmc-rail-group + .mmc-rail-group::before {
+  content: ""; width: 1px; height: var(--mmc-tool-tile); flex: none;
+  margin: 0 11px; background: var(--mmc-line);
+}
 .mmc-fs.simple .mmc-assets, .mmc-fs.simple .mmc-lora-block { justify-content: center; }
 /* The well is the whole composition here, so it gets the room to be one. */
 .mmc-fs.simple .mmc-panel { border-radius: 24px; padding: 18px; }
@@ -782,6 +848,7 @@ export const css = `
  * way they already do.
  */
 @media (max-width: 720px) {
+  .mmc-fs.simple .mmc-rail-group + .mmc-rail-group::before { display: none; }
   .mmc-fs.simple .mmc-fs-body { padding: 12px; }
   .mmc-fs.simple .mmc-fs-col { padding: 14px; border-radius: 20px; }
   .mmc-fs.simple .mmc-panel { padding: 14px; border-radius: 18px; }
