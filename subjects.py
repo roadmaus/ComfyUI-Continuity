@@ -42,6 +42,8 @@ test.
 
 import re
 
+from . import contextir
+
 
 class SubjectError(ValueError):
     """A cast that cannot be resolved. `compile.py` re-raises it as its own."""
@@ -54,9 +56,16 @@ class SubjectError(ValueError):
 # `<Video N>` is the label reserved for saying them.
 TAKES = ("person", "object", "scene", "style")
 
-# The reference guide's fixed relationship markers, section 4. These are output
-# values, not prose — the guide spells them in English in every language.
-MARKERS = ("fully_preserved", "partially_preserved", "transferred", "reused")
+# The reference guide's fixed relationship markers, section 4.1. These are output
+# values, not prose — the guide spells them in English in every language, and
+# they are the four it spells. Two of them used to be `transferred` and `reused`,
+# which are not in the guide at all: the direct path was writing a token the
+# weights were never trained on into the one field whose vocabulary is fixed,
+# and it was writing it on exactly the case that needs it most — a subject who
+# stands in for somebody. `refine.py` and `prompts/modes/ref2va.txt` always had
+# these four; this is the third copy agreeing with them.
+MARKERS = ("fully_preserved", "partially_preserved", "attribute_transfer",
+           "weak_reference")
 
 # Deliberately not the asset handles' shape. `compile.HANDLE_RE` matches
 # `name-digit` because that is what the handle allocator writes, and a subject is
@@ -65,39 +74,114 @@ MARKERS = ("fully_preserved", "partially_preserved", "transferred", "reused")
 # shapes can never be confused for one another by eye or by pattern.
 HANDLE_RE = re.compile(r"^[A-Za-z][A-Za-z0-9_]{0,31}$")
 
-# `[Shot 3]` and the label whose shots are being counted — see `_appears_in`.
-SHOT_RE = re.compile(r"\[Shot\s+(\d+)\]")
+
+class Feature:
+    """One thing the reference shows, and what becomes of it.
+
+    The guide writes a subject as a named list of features and then names the
+    same features again in `retention_analysis` — section 6's worked example is
+    four subjects in a row built exactly that way:
+
+        <Subject 2> is the fluffy white Samoyed in <Picture 2>, <Picture 3>, and
+        <Picture 4>, with thick white fur, pointed ears, a dark nose, and a
+        curved tail.
+        ...
+        <Subject 2> (appears in [Shot 1], [Shot 2]): fully_preserved - the
+        Samoyed's thick white fur, pointed ears, dark nose, and curved tail are
+        retained.
+
+    So a feature is the unit both sections are made of, and `instead` is the one
+    thing the old shape could not say: this feature is defined, and in the
+    target video it is something else. That is section 4.1's `partially_preserved`
+    to the word — "the referenced content is still used, but some defined
+    characteristics are changed" — and it is why the marker is derived from this
+    list rather than picked off one.
+
+    `text` is written into both sections. `instead` is written into
+    `retention_analysis` only: the definition says what the label denotes, and
+    what the label denotes is what the reference shows. A characteristic has to
+    be defined before it can be changed.
+    """
+
+    __slots__ = ("text", "instead")
+
+    def __init__(self, text, instead=""):
+        self.text = text
+        self.instead = instead
+
+    @property
+    def changed(self):
+        return bool(self.instead)
 
 
 class Subject:
     """One member of the cast. Immutable in practice; a plain class rather than
     a dataclass so the optional halves can carry their own docstrings."""
 
-    __slots__ = ("handle", "sources", "takes", "description",
+    __slots__ = ("handle", "sources", "takes", "description", "features",
                  "motion", "voice", "replaces", "replaces_what", "marker")
 
     def __init__(self, handle, sources, takes="person", description="",
-                 motion=None, voice=None, replaces=None, replaces_what="",
-                 marker=None):
+                 features=(), motion=None, voice=None, replaces=(),
+                 replaces_what="", marker=None):
         self.handle = handle
         self.sources = tuple(sources)      # asset handles defining its appearance
         self.takes = takes                 # one of TAKES
         self.description = description     # the user's own words, folded into the definition
+        self.features = tuple(features)    # what the reference shows, one phrase each
         self.motion = motion               # a reference video its movement comes from
         self.voice = voice                 # an audio reference that is its voice
-        self.replaces = replaces           # a reference video it stands in for someone in
+        # The reference videos it stands in for someone in. A tuple, because one
+        # person can occupy the same role in several clips — a medium shot and a
+        # close-up of the same scene is the ordinary case, and while this held a
+        # single handle the second clip could only be attached and left
+        # undefined. Section 2.1 puts no such limit on a subject: "one reference
+        # asset may provide multiple subjects" and, symmetrically, one subject
+        # may be spread across several assets.
+        self.replaces = tuple(replaces or ())
         self.replaces_what = replaces_what  # who, in that video, in the user's words
         # None means "derive it": a subject that replaces somebody is by
-        # definition `transferred`, and anything else is preserved whole unless
-        # the user says otherwise.
+        # definition `attribute_transfer` — section 4.1's own gloss is
+        # "referenced characteristics are transferred to a different
+        # identifiable target subject", which is the whole of what standing in
+        # for someone is — and anything else is preserved whole unless the user
+        # says otherwise.
         self.marker = marker
 
     @property
+    def changed(self):
+        """The features the target video gives them instead."""
+        return tuple(f for f in self.features if f.changed)
+
+    @property
+    def kept(self):
+        """The features carried over as the reference has them."""
+        return tuple(f for f in self.features if not f.changed)
+
+    @property
     def relationship(self):
-        """The retention marker this subject carries."""
+        """The retention marker this subject carries.
+
+        Derived, and derived from facts the user stated rather than from a
+        picker they could contradict. Standing in for somebody is section 4.1's
+        `attribute_transfer` in as many words — "referenced characteristics are
+        transferred to a different identifiable target subject" — and it outranks
+        the rest, because the transfer is the relationship whatever else changes.
+        A feature the target video gives them instead is `partially_preserved`,
+        again by 4.1's own gloss. Everything else is preserved whole.
+
+        `marker` still wins where it is set. It is the way to reach
+        `weak_reference`, which nothing here can infer: "only broad similarity
+        in style, category, composition, or atmosphere" is a judgement about the
+        render, not a fact about the cast.
+        """
         if self.marker:
             return self.marker
-        return "transferred" if self.replaces else "fully_preserved"
+        if self.replaces:
+            return "attribute_transfer"
+        if self.changed:
+            return "partially_preserved"
+        return "fully_preserved"
 
     @property
     def files(self):
@@ -142,8 +226,18 @@ def parse(raw):
         sources = [str(h).strip() for h in (item.get("from") or []) if str(h).strip()]
         motion = str(item.get("motion") or "").strip() or None
         voice = str(item.get("voice") or "").strip() or None
-        replaces = str(item.get("replaces") or "").strip() or None
+        # A string or a list of them. The scalar form is every blob written
+        # before a person could stand in for somebody twice, and it is read as
+        # the one-element list it always meant — the alternative is a migration
+        # that has to run on every load of every saved workflow, for good.
+        raw_replaces = item.get("replaces")
+        if isinstance(raw_replaces, str):
+            raw_replaces = [raw_replaces]
+        replaces = tuple(h for h in
+                         (str(x).strip() for x in (raw_replaces or []))
+                         if h)
         description = str(item.get("description") or "").strip()
+        features = _parse_features(handle, item.get("features"))
         # A subject with nothing behind it defines nothing: the label would be
         # written into the prompt and the model would be told a name and no
         # appearance. Three things count as something behind it, and a cast entry
@@ -157,11 +251,11 @@ def parse(raw):
         # "@anna is a person in their thirties, close-cropped hair" is the whole of
         # what a name can mean there. That is still worth having, because it is
         # what keeps them the same person across nine shots.
-        if not sources and not motion and not replaces and not description:
+        if not sources and not motion and not replaces and not description and not features:
             raise SubjectError(
                 f"@{handle}: a subject needs something behind it — a picture or "
                 f"a clip to be built out of, a description of what they look "
-                f"like, or the person they stand in for"
+                f"like, a feature of theirs, or the person they stand in for"
             )
 
         marker = item.get("relationship") or None
@@ -175,6 +269,7 @@ def parse(raw):
             sources=sources,
             takes=takes,
             description=description,
+            features=features,
             motion=motion,
             voice=voice,
             replaces=replaces,
@@ -182,6 +277,34 @@ def parse(raw):
             marker=marker,
         ))
     return cast
+
+
+def _parse_features(handle, raw):
+    """The blob's `features` list -> `Feature`s.
+
+    A row with no text is dropped rather than refused: the editor writes an
+    empty row the moment somebody presses "add a feature", and a half-typed cast
+    is a normal thing to be holding — the same reason `compiled_prompt` reports
+    a failed compile as text instead of an error. An `instead` with no feature
+    to be instead *of* has nothing to attach to and goes with it.
+    """
+    out = []
+    for index, item in enumerate(raw or []):
+        if isinstance(item, str):
+            # The scalar form: a feature with nothing to say about it is the
+            # phrase alone. Saves every caller that only wants the list from
+            # writing {"is": ...} around each entry.
+            text, instead = item.strip(), ""
+        elif isinstance(item, dict):
+            text = str(item.get("is") or "").strip()
+            instead = str(item.get("instead") or "").strip()
+        else:
+            raise SubjectError(
+                f"@{handle}: feature #{index + 1} is neither a phrase nor an object")
+        if not text:
+            continue
+        out.append(Feature(text.rstrip("."), instead.rstrip(".")))
+    return tuple(out)
 
 
 def citation_re(cast):
@@ -262,9 +385,9 @@ def check(cast, assets):
         # `<Video N>` definition an unclaimed reference gets, and only its
         # occupant moves. Which means its presence is checked here rather than
         # by the loop above.
-        for handle, what in ((subject.motion, "motion"), (subject.replaces, "place")):
-            if not handle:
-                continue
+        pairs = [(subject.motion, "motion")] if subject.motion else []
+        pairs += [(handle, "place") for handle in subject.replaces]
+        for handle, what in pairs:
             asset = by_handle.get(handle)
             if asset is None:
                 raise SubjectError(
@@ -313,7 +436,7 @@ def claimed(cast):
     twice.
 
     Section 2.2 again: a picture that only says what somebody looks like gets no
-    entry of its own. `contextir.reference_preamble` skips these, and the
+    entry of its own. `contextir.reference_lines` skips these, and the
     definition line below cites them instead.
     """
     return {handle for subject in cast for handle in subject.files}
@@ -332,21 +455,24 @@ _NOUN = {
     "style": "the visual style",
 }
 
-# What a definition claims and what it does not. The DiT is handed the whole
-# file whatever the narrowing says, so the narrowing is prose or it is nothing —
-# and a retention marker can only ever cover what the definition claimed. Same
-# distinctions `contextir._DEFINE` draws for an unclaimed file, said about a
-# subject rather than about a picture.
+# What is carried over, where the user named no features of their own. Positive
+# and only positive: section 4.1 closes with "do not treat newly added actions,
+# backgrounds, or plot events in the target video as losses of reference
+# fidelity", and there is not one negative clause in any of the guide's four
+# retention examples.
+#
+# These lines used to carry a tail — "...and the source picture's background,
+# palette, lighting, pose and action are not" — which is the same tail
+# `contextir._DEFINE` writes for a file, borrowed. It does not belong on a
+# subject, and not only because 4.1 says so: `<Subject N>` *means* "visible
+# content abstracted from reference assets" (2.1), so the abstraction from the
+# file is already in the label. `<Picture N>` is the label that denotes a file
+# and needs saying which parts of it count; this one is not.
 _RETAINED = {
-    "person": "the face, hair, skin, build and clothing are retained, and the "
-              "source picture's background, palette, lighting, pose and action "
-              "are not",
-    "object": "the object itself is retained, and the surroundings, lighting "
-              "and arrangement it sits in are not",
-    "scene": "the environment, its surfaces and its light are retained, and "
-             "anyone standing in it, and its framing, are not",
-    "style": "the medium, palette, light and rendering are retained, and the "
-             "source's own subjects, layout and content are not",
+    "person": "their face, hair, build and clothing",
+    "object": "the object's own form, colour and markings",
+    "scene": "the environment, its surfaces and its light",
+    "style": "the medium, palette, light and rendering",
 }
 
 
@@ -366,7 +492,7 @@ def _cite(handles, asset_labels):
 
 
 def _described(subject):
-    """A subject nothing but words stand behind, said as a noun phrase.
+    """A subject nothing but words stand behind, said as a noun phrase, or "".
 
     The description leads, because it is the whole of what is known; the `takes`
     noun follows it only where the word would otherwise be ambiguous — "the
@@ -374,6 +500,8 @@ def _described(subject):
     a described person reads as a person without being called one.
     """
     described = subject.description.rstrip(".")
+    if not described:
+        return ""
     if subject.takes in ("person", "object"):
         return described
     return f"{_NOUN[subject.takes]}, {described}"
@@ -384,7 +512,7 @@ def definitions(cast, asset_labels, extra_lines=()):
 
     `asset_labels` is `compile`'s handle -> `<Picture N>` map, so a definition
     cites the same ordinal the payload will present. `extra_lines` is what
-    `contextir.reference_preamble` wrote for the files *no* subject claimed —
+    `contextir.reference_lines` wrote for the files *no* subject claimed —
     they belong in this section too rather than in a paragraph of their own,
     because the guide puts every label's meaning here and two places to look is
     one too many.
@@ -409,19 +537,35 @@ def definitions(cast, asset_labels, extra_lines=()):
                     f"{_cite([subject.motion], asset_labels)}")
         elif subject.replaces:
             # The subject is whoever the target video puts there instead, and
-            # the clip is where the vacancy is.
+            # the clips are where the vacancy is. Several of them read as one
+            # list — the same person in a medium shot and a close-up is one
+            # vacancy filmed twice, not two.
             line = (f"{label} is {noun} the target video puts in place of "
                     f"{subject.replaces_what or 'the corresponding subject'} in "
-                    f"{_cite([subject.replaces], asset_labels)}")
+                    f"{_cite(subject.replaces, asset_labels)}")
         else:
             # Words alone, which is what a cast is in a generation with no
             # references in it. The description *is* the definition here, so the
             # noun that stands in for a missing one would only pad it — and the
             # `, description` clause below is skipped for the same reason.
-            lines.append(f"{label} is {_described(subject)}.")
+            described = _described(subject)
+            if subject.features:
+                described = (f"{described}, with {_feature_texts(subject.features)}"
+                             if described else
+                             f"{noun}, {_feature_texts(subject.features)}")
+            lines.append(f"{label} is {described}.")
             continue
         if subject.description:
             line += f", {subject.description.rstrip('.')}"
+        # The features, in the guide's own shape: "<Subject 1> is the young
+        # woman in <Picture 1>, with long dark hair, a blue cardigan, and a thin
+        # silver necklace." All of them, including the ones the target video
+        # changes — 4.1's `partially_preserved` is a defined characteristic
+        # being changed, so it has to be defined here first, and a definition
+        # that quietly dropped the changed ones would leave the retention line
+        # changing something the model was never told about.
+        if subject.features:
+            line += f", with {_feature_texts(subject.features)}"
         lines.append(line + ".")
 
         # The audio line is the guide's own form, and it carries the speaker ID
@@ -438,26 +582,9 @@ def definitions(cast, asset_labels, extra_lines=()):
     return "\n".join(lines)
 
 
-def _appears_in(label, body):
-    """`[Shot 1], [Shot 3]` — where `label` is written, or "" if nowhere.
-
-    Derived from the finished description rather than declared, because it is
-    derivable: the shots are numbered in the text and the label is in it or it
-    is not. A body with no shot markers at all is one shot, and a generation is
-    one shot unless it says otherwise — so the common case answers `[Shot 1]`
-    without anyone having written a marker.
-    """
-    if label not in (body or ""):
-        return ""
-    shots = []
-    current = 1
-    for piece in re.split(r"(\[Shot\s+\d+\])", body):
-        match = SHOT_RE.fullmatch(piece)
-        if match:
-            current = int(match.group(1))
-        elif label in piece and current not in shots:
-            shots.append(current)
-    return ", ".join(f"[Shot {n}]" for n in sorted(shots))
+def _feature_texts(features):
+    """The feature phrases, as the guide punctuates a list of them."""
+    return _english([f.text for f in features])
 
 
 def retention(cast, asset_labels, body):
@@ -465,31 +592,84 @@ def retention(cast, asset_labels, body):
 
     `body` is the finished description, with the labels already substituted into
     it, so the "appears in" half is read off the text rather than guessed.
+
+    Written the way section 6's worked example writes it: the features named in
+    `subject_definitions`, named again here, and said to be retained. Positively
+    — see `_RETAINED` for why the negative half of these lines is gone.
+
+    A feature the target video gives them instead is the one thing that could
+    not be said before. It is a separate clause rather than a missing name,
+    because 4.1's `partially_preserved` is "the referenced content is still
+    used, but some defined characteristics are changed": the characteristic has
+    to still be there to have been changed, so the line names what it was and
+    what it is now.
     """
     subject_labels = labels(cast)
     lines = []
     for subject in cast:
         label = subject_labels[subject.handle]
-        where = _appears_in(label, body)
-        head = f"{label} ({where})" if where else label
-        if subject.sources or subject.motion:
-            retained = _RETAINED[subject.takes]
+        where = contextir.appears_in(label, body)
+        # "appears in" is the guide's own wording for a subject entry (4.1), and
+        # it is worth the two words: a bare `(<Shot 1>)` reads as the parenthetical
+        # a *picture* entry takes, where the guide writes what the frame is for
+        # instead ("[Shot 1] first frame").
+        head = f"{label} (appears in {where})" if where else label
+        clauses_lead = ""
+
+        # What is carried over: the features they were given, or — where nobody
+        # named any — the general claim their `takes` word makes.
+        if subject.kept:
+            carried = _feature_texts(subject.kept)
+        elif subject.features:
+            # Every feature they have is changed. Nothing is carried, and saying
+            # so beats naming the `takes` word's general claim, which the
+            # changes below contradict one by one.
+            carried = ""
+        elif subject.sources or subject.motion:
+            carried = _RETAINED[subject.takes]
         elif subject.replaces:
-            retained = ""
+            carried = ""
         else:
-            # Words alone. There is no source file to say what is carried over
-            # from and what is dropped, so the line says exactly that — the
-            # marker still has to cover something, and what it covers is the
-            # definition.
-            retained = ("the definition above is the whole of what is fixed, and "
-                        "nothing is carried over from a reference file")
+            # Words alone. There is no source file to carry anything over from,
+            # so what the marker covers is the definition itself, and the line
+            # says exactly that rather than claiming a reference it does not have.
+            carried = ""
+            clauses_lead = ("the definition above is the whole of what is fixed, "
+                            "and nothing is carried over from a reference file")
+
+        # One feature is a thing, several are things. The lists here are the
+        # user's own noun phrases, so nothing else in the sentence can carry the
+        # agreement for them.
+        verb = "is" if (len(subject.kept) == 1 if subject.kept else False) else "are"
+        clauses = [clauses_lead] if clauses_lead else []
         if subject.replaces:
+            # The transfer is the relationship, so it leads: what they are made
+            # of lands on somebody else's place, and the clip's own framing,
+            # camera work and action stay where they are. That last half is the
+            # failure this clause exists to prevent — a replacement read as a
+            # new shot rather than as an edit of the old one.
             who = subject.replaces_what or "the corresponding subject"
-            moved = (f"{label} takes the place of {who} in "
-                     f"{_cite([subject.replaces], asset_labels)}, whose framing, "
-                     f"camera work and action are kept")
-            retained = f"{retained}; {moved}" if retained else moved
-        lines.append(f"{head}: {subject.relationship} - {retained}.")
+            # "transferred onto <who>" and not "onto <who>'s place": 4.1's gloss
+            # is "transferred to a different identifiable target subject", and
+            # the man at the counter is that subject. The possessive also breaks
+            # on the phrases people actually type — "the man at the counter's
+            # place" reads as the counter's.
+            lead = (f"{carried} {verb} transferred onto " if carried
+                    else "they take the place of ")
+            clauses.append(
+                f"{lead}{who} in {_cite(subject.replaces, asset_labels)}, "
+                f"whose framing, camera work and action are kept")
+        elif carried:
+            clauses.append(f"{carried} {verb} retained")
+
+        for feature in subject.changed:
+            clauses.append(f"{feature.text} is replaced by {feature.instead}")
+
+        # A subject with nothing to say still has to say something: the marker
+        # is not a sentence and a line that is only a marker claims a scope it
+        # never states.
+        said = "; ".join(clauses) or "the definition above is what is carried over"
+        lines.append(f"{head}: {subject.relationship} - {said}.")
 
         if subject.voice:
             voice_label = _cite([subject.voice], asset_labels)

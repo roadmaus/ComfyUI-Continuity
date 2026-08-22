@@ -84,27 +84,18 @@ DEFAULTS = {
     # where a dozen finished renders is a dozen looping decoders playing for
     # nobody. UI-only like the pills above: nothing queued ever reads it.
     "autoplay_previews": True,
-    # Whether a reference's scope is written into the prompt for the model as
-    # well as into the refiner's glossary. Off by default: it is the behaviour
-    # every render had before it existed, and the sentences cost tokens a
-    # refined piece is already spending better.
-    #
-    # This one does reach the render, which is the line the rest of this file
-    # draws and the reason it is worth naming out loud: two people opening the
-    # same `.json` get the same shot only if they agree about it. It sits here
-    # anyway because it is a statement about how you prompt — some people write
-    # the scope into their own prose and want no second copy of it — and a
-    # per-node copy would make that one answer into a dozen.
-    "define_refs": False,
     # How many of a turbo render's opening steps run on the un-distilled
     # weights — the turbo LoRA held off the model for those steps and patched
     # on for the rest. 0 is off, which is what every render did before this
     # existed. See `render.LeadIn` for what it builds and why.
     #
-    # This reaches the render, like `define_refs` and for a related reason: it
-    # is a statement about how you use a distillation rather than about this
-    # piece. The LoRA, the steps and the schedule are all still the workflow's;
-    # this only says where in that schedule the distillation takes over.
+    # This reaches the render, which is the line the rest of this file draws
+    # and the reason it is worth naming out loud: two people opening the same
+    # `.json` get the same shot only if they agree about it. It sits here
+    # anyway because it is a statement about how you use a distillation rather
+    # than about this piece. The LoRA, the steps and the schedule are all still
+    # the workflow's; this only says where in that schedule the distillation
+    # takes over.
     "turbo_lead_in": 0,
 }
 
@@ -145,7 +136,7 @@ def clean(raw):
         if not 0 <= lead <= MAX_LEAD_IN:
             raise ValueError(f"turbo_lead_in must be between 0 and {MAX_LEAD_IN}")
         clean_settings["turbo_lead_in"] = lead
-    for flag in ("show_shift_pills", "define_refs", "autoplay_previews", "advanced"):
+    for flag in ("show_shift_pills", "autoplay_previews", "advanced"):
         if flag in raw and raw[flag] is not None:
             if not isinstance(raw[flag], bool):
                 raise ValueError(f"{flag} must be true or false")
@@ -222,11 +213,6 @@ def video_prefix():
 def image_prefix():
     """Where pre-stage stills land, unless the blob names somewhere itself."""
     return load()["image_prefix"]
-
-
-def define_refs():
-    """Whether the compiler writes each reference's scope into the prompt."""
-    return load()["define_refs"]
 
 
 def turbo_lead_in():

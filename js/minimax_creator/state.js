@@ -46,8 +46,8 @@ export const sizeable = (asset) =>
  *  the whole file; the others narrow it so "them from @img-1" stops dragging the
  *  picture's background, palette and pose into the video. The DiT gets the same
  *  tensor either way, so this is prose or it is nothing: the refiner's glossary
- *  reads it always, and the prompt itself reads it when the `define_refs`
- *  setting is on. Mirrors compile.TAKES.
+ *  reads it, and so does the prompt the compiler writes — every reference is
+ *  defined and scoped in it, always. Mirrors compile.TAKES.
  *
  *  A clip takes the same four and four more, which are the roles H3's reference
  *  guide gives a video: the content takes and "motion" mine it for a
@@ -138,101 +138,21 @@ export function inheritTakes(subject, assets, { over = null } = {}) {
   for (const handle of subject.from ?? []) {
     moved = inheritTake(subject, "from", find(handle), { over }) || moved;
   }
-  for (const slot of ["motion", "voice", "replaces"]) {
+  for (const slot of ["motion", "voice"]) {
     if (subject[slot]) moved = inheritTake(subject, slot, find(subject[slot])) || moved;
+  }
+  for (const handle of replacesOf(subject)) {
+    moved = inheritTake(subject, "replaces", find(handle)) || moved;
   }
   return moved;
 }
 
-// What each scope says to the model, in the sentence the prompt carries when
-// `define_refs` is on. Mirrors `contextir._DEFINE` — the compiler writes these
-// with the label the tokenizer will see (`<Picture 1>`), and the box shows them
-// with the handle, exactly as it shows every other reference the prompt makes.
-// `%s` is where that name goes.
-//
-// Kept here rather than fetched because the band redraws on every keystroke that
-// changes an asset, and a sentence that arrived a frame late would read as the
-// setting not having taken.
-export const DEFINE = {
-  "image:full": "%s is a reference picture. What the target video takes from it is "
-              + "what the picture actually shows.",
-  "image:person": "%s is a person reference: the face, hair, skin, build and clothing "
-                + "in it are retained, and its background, palette, lighting, pose "
-                + "and action are not.",
-  "image:object": "%s is an object reference: the object itself is retained, and the "
-                + "picture's surroundings, lighting and arrangement are not.",
-  "image:scene": "%s is a scene reference: its environment, surfaces and light are "
-               + "retained, and any people or passing objects in it, and its "
-               + "framing, are not.",
-  "image:style": "%s is a style reference: its medium, palette, light and rendering "
-               + "are retained, and its subjects, layout and content are not.",
-
-  "video:full": "%s is a reference video.",
-  "video:person": "%s is a person reference: the face, hair, build and clothing of "
-                + "the person in it are retained, and the clip's setting, camera "
-                + "work, cuts and action are not.",
-  "video:object": "%s is an object reference: the object itself is retained, and the "
-                + "clip's surroundings, camera work and action are not.",
-  "video:scene": "%s is a scene reference: its environment, surfaces and light are "
-               + "retained, and anyone in it, its framing and its camera work are not.",
-  "video:style": "%s is a style reference: its medium, palette, light and rendering "
-               + "are retained, and its subjects, action and camera work are not.",
-  "video:motion": "%s is a motion reference: the movement in it — its path, its "
-                + "timing and its weight — is carried onto the target video's own "
-                + "subject, and nobody and nothing visible in the clip appears in "
-                + "the target video.",
-  "video:camera": "%s is a camera reference: its camera movement, its shot changes "
-                + "and its pacing are followed, and nobody and nothing visible in "
-                + "the clip appears in the target video.",
-  "video:edit": "The target video is an edited version of %s. Everything this "
-              + "description does not change stays as it is in the source video.",
-  "video:continue": "The target video continues from the end of %s, carrying its "
-                  + "closing subjects, framing and light into the opening of the "
-                  + "new footage.",
-
-  "audio:full": "%s is a reference audio clip.",
-  "audio:voice": "%s is a voice reference: the target speaker follows its timbre and "
-               + "delivery, and its words and its background sound are not copied.",
-  "audio:music": "%s is a music-style reference: its genre, instrumentation and mood "
-               + "guide the target video's score, and the recording itself is not "
-               + "reused.",
-  "audio:ambience": "%s is an ambience reference: its room tone and sound texture "
-                  + "guide the target video's background sound, and the recording "
-                  + "itself is not reused.",
-  "audio:copy": "%s is reused directly: its signal is the target video's own audio.",
-};
-
-// A clip brought in with its soundtrack is two labels for one file. The compiler
-// names the audio one against the clip it came off; here there is one handle for
-// both, so the sentence says the same thing about it.
-const SOUNDTRACK = "The synchronized audio track of %s rides with it.";
-
-/**
- * One sentence per reference, in the order `compile.plan_references` walks them
- * — pictures, then clips, then audio — so the band reads in the order the model
- * is shown them.
- *
- * `%s` is left in place: the caller decides whether the name is a chip or text.
- *
- * @returns {{handle: string, sentence: string}[]}
- */
-export function refDefinitions(assets) {
-  const refs = (assets || []).filter((a) => a?.role === "reference");
-  const of = (kind) => refs.filter((a) => scopeKind(a) === kind && a.kind === kind);
-  const lines = [];
-  const say = (asset, sentence) => lines.push({ handle: asset.handle, sentence });
-
-  for (const asset of of("image")) say(asset, DEFINE[`image:${takes(asset)}`]);
-  for (const asset of of("video")) {
-    if (asset.track === "picture+sound") say(asset, SOUNDTRACK);
-    say(asset, DEFINE[`video:${takes(asset)}`]);
-  }
-  // Audio proper, and the clips that became audio by being taken for their sound.
-  for (const asset of refs.filter((a) => scopeKind(a) === "audio")) {
-    say(asset, DEFINE[`audio:${takes(asset)}`]);
-  }
-  return lines.filter((line) => line.sentence);
-}
+// The sentences that used to live here — one per scope, mirroring
+// `contextir._DEFINE` — are gone. They existed to feed the band above the
+// prompt, and the box shows the compiler's own finished prompt now
+// (`api.compiledPrompt`), so there is nothing left for a copy of them to say
+// that the real thing does not say better. The copy drifted from the compiler
+// twice while it existed, which is the argument against ever keeping one.
 
 // ---- weights ----------------------------------------------------------------
 //
@@ -1310,7 +1230,7 @@ function promoteCastFiles(timeline) {
   const claimed = new Set();
   for (const subject of cast) {
     for (const handle of subjectFiles(subject)) claimed.add(handle);
-    if (subject.replaces) claimed.add(subject.replaces);
+    for (const handle of replacesOf(subject)) claimed.add(handle);
   }
   if (!Array.isArray(timeline.assets)) timeline.assets = [];
   const renamed = new Map();
@@ -1331,9 +1251,11 @@ function promoteCastFiles(timeline) {
     if (Array.isArray(subject.from)) {
       subject.from = subject.from.map((handle) => renamed.get(handle) ?? handle);
     }
-    for (const slot of ["motion", "voice", "replaces"]) {
+    for (const slot of ["motion", "voice"]) {
       if (renamed.has(subject[slot])) subject[slot] = renamed.get(subject[slot]);
     }
+    const stood = replacesOf(subject);
+    if (stood.length) subject.replaces = stood.map((h) => renamed.get(h) ?? h);
   }
   for (const key of ["prompt", "soundscape", "music"]) {
     if (segment[key]) segment[key] = renameCitations(segment[key], renamed);
@@ -1386,7 +1308,7 @@ function collapsePool(timeline) {
   const claimed = new Set();
   for (const subject of cast) {
     for (const handle of subjectFiles(subject)) claimed.add(handle);
-    if (subject.replaces) claimed.add(subject.replaces);
+    for (const handle of replacesOf(subject)) claimed.add(handle);
   }
   if (!Array.isArray(segment.assets)) segment.assets = [];
   const renamed = new Map();
@@ -1405,9 +1327,11 @@ function collapsePool(timeline) {
     if (Array.isArray(subject.from)) {
       subject.from = subject.from.map((handle) => renamed.get(handle) ?? handle);
     }
-    for (const slot of ["motion", "voice", "replaces"]) {
+    for (const slot of ["motion", "voice"]) {
       if (renamed.has(subject[slot])) subject[slot] = renamed.get(subject[slot]);
     }
+    const stood = replacesOf(subject);
+    if (stood.length) subject.replaces = stood.map((h) => renamed.get(h) ?? h);
   }
   // Both scopes' prose. The piece's own text can cite a pool handle, and it
   // still holds the strip open on its own — but a citation left pointing at a
@@ -1662,9 +1586,10 @@ export function parseTimeline(raw) {
           from: Array.isArray(s.from) ? s.from.filter((h) => typeof h === "string") : [],
           takes: SUBJECT_TAKES.includes(s.takes) ? s.takes : "person",
           ...(s.description ? { description: String(s.description) } : {}),
+          ...(subjectFeatures(s).length ? { features: subjectFeatures(s) } : {}),
           ...(s.motion ? { motion: String(s.motion) } : {}),
           ...(s.voice ? { voice: String(s.voice) } : {}),
-          ...(s.replaces ? { replaces: String(s.replaces) } : {}),
+          ...(replacesOf(s).length ? { replaces: replacesOf(s) } : {}),
           ...(s.replaces_what ? { replaces_what: String(s.replaces_what) } : {}),
           ...(SUBJECT_MARKERS.includes(s.relationship) ? { relationship: s.relationship } : {}),
         }));
@@ -2869,7 +2794,7 @@ export const SUBJECT_TAKES = ["person", "object", "scene", "style"];
 /** The reference guide's fixed relationship markers. Mirrors
  *  `subjects.MARKERS`; they are English output values in every language. */
 export const SUBJECT_MARKERS = ["fully_preserved", "partially_preserved",
-                                "transferred", "reused"];
+                                "attribute_transfer", "weak_reference"];
 
 /** A subject's name: letters, digits and underscores, starting with a letter.
  *  No hyphen, which is exactly what tells it from a file's handle. Mirrors
@@ -2879,6 +2804,63 @@ export const SUBJECT_HANDLE_RE = /^[A-Za-z][A-Za-z0-9_]{0,31}$/;
 /** Every file handle a subject claims, in citation order. Mirrors
  *  `subjects.Subject.files` — the clip somebody is replaced *in* is not among
  *  them, because its own content is kept and it keeps its own definition. */
+/** The clips a subject stands in for somebody in, always as a list.
+ *
+ *  One person can occupy the same role in several clips — a medium shot and a
+ *  close-up of one scene is the ordinary case — and while this held a single
+ *  handle the second clip could only be attached and left undefined. Blobs
+ *  written before that carry a bare string, which is read as the one-element
+ *  list it always meant; `subjects.parse` does the same on the other side. */
+export function replacesOf(subject) {
+  const raw = subject?.replaces;
+  if (!raw) return [];
+  return (Array.isArray(raw) ? raw : [raw]).map(String).filter(Boolean);
+}
+
+/**
+ * What the reference shows about a subject, one phrase per feature.
+ *
+ * The unit both of the guide's subject sections are made of: section 6's worked
+ * example defines "<Subject 3> ... with long blonde hair and a light-pink
+ * button-down shirt" and then names those same features again in
+ * `retention_analysis`. `instead` is what the target video gives them in place
+ * of one, which is section 4.1's `partially_preserved` exactly — "some defined
+ * characteristics are changed".
+ *
+ * A bare string is read as a feature with nothing to say about it, and a row
+ * with no text at all is dropped: the editor writes an empty row the moment
+ * somebody presses "add a feature". Mirrors `subjects._parse_features`.
+ */
+export function subjectFeatures(subject) {
+  return (subject?.features ?? [])
+    .map((item) => (typeof item === "string"
+      ? { is: item.trim(), instead: "" }
+      : { is: String(item?.is ?? "").trim(), instead: String(item?.instead ?? "").trim() }))
+    .filter((feature) => feature.is);
+}
+
+/**
+ * The relationship marker a subject carries, derived. Mirrors
+ * `subjects.Subject.relationship`.
+ *
+ * Derived from facts the user stated rather than picked off a list they could
+ * contradict — which is what the picker was, and it wrote `partially_preserved`
+ * over a sentence that said everything was retained. Standing in for somebody
+ * leads, because the transfer is the relationship whatever else changes; a
+ * feature the target video gives them instead is `partially_preserved`; the
+ * rest is preserved whole.
+ *
+ * `relationship` on the blob still wins. It is the only way to reach
+ * `weak_reference`, which nothing here can infer: "only broad similarity in
+ * style, category, composition, or atmosphere" is a judgement about the render.
+ */
+export function subjectMarker(subject) {
+  if (SUBJECT_MARKERS.includes(subject?.relationship)) return subject.relationship;
+  if (replacesOf(subject).length) return "attribute_transfer";
+  if (subjectFeatures(subject).some((feature) => feature.instead)) return "partially_preserved";
+  return "fully_preserved";
+}
+
 export function subjectFiles(subject) {
   const out = [...(subject.from ?? [])];
   for (const extra of [subject.motion, subject.voice]) {
@@ -2905,10 +2887,10 @@ export function soleClaims(subject, cast) {
   for (const other of cast ?? []) {
     if (other === subject) continue;
     for (const handle of subjectFiles(other)) held.add(handle);
-    if (other.replaces) held.add(other.replaces);
+    for (const handle of replacesOf(other)) held.add(handle);
   }
   const mine = new Set(subjectFiles(subject));
-  if (subject.replaces) mine.add(subject.replaces);
+  for (const handle of replacesOf(subject)) mine.add(handle);
   return [...mine].filter((handle) => !held.has(handle));
 }
 
@@ -3002,10 +2984,12 @@ export function subjectProblem(scope, subject) {
   // Described in words alone is a subject: in a generation with no references
   // there is no picture to point at, and the description is the whole of what
   // the name can mean. Mirrors the same relaxation in `subjects.parse`.
-  if (!files.length && !subject.replaces && !String(subject.description ?? "").trim()) {
+  if (!files.length && !replacesOf(subject).length
+      && !String(subject.description ?? "").trim()
+      && !subjectFeatures(subject).length) {
     return "nothing behind them yet — hang a file on them, or describe them in words";
   }
-  const wanted = [...files, subject.replaces].filter(Boolean);
+  const wanted = [...files, ...replacesOf(subject)].filter(Boolean);
   const missing = wanted.filter((h) => !byHandle.has(h));
   if (missing.length) {
     return `built out of ${missing.map((h) => "@" + h).join(", ")}, which is not attached here`;
@@ -3040,7 +3024,7 @@ export function citedPool(state) {
   // same expansion in `compile.cited_pool`.
   for (const subject of citedCast(state)) {
     for (const handle of subjectFiles(subject)) found.add(handle);
-    if (subject.replaces) found.add(subject.replaces);
+    for (const handle of replacesOf(subject)) found.add(handle);
   }
   const own = new Set(state.assets.map((a) => a.handle));
   return pool.filter((asset) => found.has(asset.handle) && !own.has(asset.handle));

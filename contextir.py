@@ -35,28 +35,20 @@ BODY_FIELD = "integrated_multimodal_description"
 SOUNDSCAPE_FIELD = "overall_soundscape"
 MUSIC_FIELD = "non_diegetic_music"
 
-# Ref2VA is a different, six-section form. Its body field is `detailed_description`
-# and it carries four more sections we cannot synthesise from one line of prose —
-# so a reference prompt is never wrapped, only checked for the two audio fields it
-# shares with the base form.
+# Ref2VA is a different, six-section form, and its body field is
+# `detailed_description`. Its other three sections used to be the refiner's
+# alone, so a reference prompt was never wrapped at all; they are derived from
+# the chips and the cast now (see `summary`, `retention_lines` and
+# `subjects.definitions`), so the form is always complete.
 REF_BODY_FIELD = "detailed_description"
 
 BODY_FIELDS = (BODY_FIELD, REF_BODY_FIELD)
 
-# The four sections the reference form has that the base form does not, in the
-# order the guide emits them — the last of them being the body itself. Nothing
-# synthesises these from a sentence; they arrive whole from the refiner or not
-# at all, which is why `compose` only builds this form when it is handed them.
+# The three sections the reference form has that the base form does not, in the
+# order the guide emits them. Each is derivable from what the user declared —
+# the chips say what every file lends, the cast says who is in the video — so
+# `compile_request` builds them and a refiner replaces them.
 REF_SECTIONS = ("subject_definitions", "summary", "retention_analysis")
-
-# The two of those a cast makes derivable, and the only two a *base*-mode prompt
-# can carry. `summary` is the refiner's and is a statement about the whole
-# reference form; these two are written by `subjects.py` out of what the user
-# declared, so they exist wherever a cast does — including in T2VA, where there
-# is no reference form at all. They have to be emitted there for the same reason
-# `AUDIO_SEAM_LINE` does: `<Subject 1>` written into a description the prompt
-# never defines is a label pointing at nothing.
-CAST_SECTIONS = ("subject_definitions", "retention_analysis")
 
 # The modes whose body belongs in `integrated_multimodal_description`.
 BASE_MODES = ("T2VA", "I2VA", "L2VA", "FL2VA")
@@ -137,14 +129,16 @@ _DEFINE = {
                          "shot changes and its pacing are followed, and nobody "
                          "and nothing visible in the clip appears in the target "
                          "video.",
-    # The two whole-video relationships, phrased the way the guide's own summary
-    # line opens.
-    ("video", "edit"): "The target video is an edited version of %s. Everything "
-                       "this description does not change stays as it is in the "
-                       "source video.",
-    ("video", "continue"): "The target video continues from the end of %s, "
-                           "carrying its closing subjects, framing and light "
-                           "into the opening of the new footage.",
+    # The two whole-video relationships. Section 2.3's own phrasing, which is a
+    # statement about what the label *is* — "<Video 1> is the source video for
+    # the target video edit." These used to borrow the summary's opening line
+    # instead ("The target video is an edited version of %s."), which read as
+    # one sentence and was three: two edited clips claimed, twice over, to each
+    # be the whole source of the edit. The summary says that sentence once now,
+    # with every source in it, which is the section the guide puts it in.
+    ("video", "edit"): "%s is a source video for the target video edit.",
+    ("video", "continue"): "%s is the source video the target video continues "
+                           "from.",
 
     ("audio", "full"): "%s is a reference audio clip.",
     ("audio", "voice"): "%s is a voice reference: the target speaker follows "
@@ -219,15 +213,312 @@ def reference_lines(plan, skip=()):
     return lines
 
 
-def reference_preamble(plan, skip=()):
-    """`reference_lines` as the one paragraph the prompt carries when there is no
-    `subject_definitions` section for them to sit in."""
-    return " ".join(reference_lines(plan, skip))
+# ---- what happens to each label ---------------------------------------------
+#
+# Section 4.1 says outright: "Use one line for each reference label." A label
+# that `subject_definitions` defines and `retention_analysis` never scopes is
+# half a declaration — the model is told what a file is and never told what
+# becomes of it.
+#
+# The marker is chosen "only within the reference role already defined for that
+# label", which is what decides most of these: a person reference whose defined
+# role is the likeness alone is `fully_preserved` even though most of the file
+# is dropped, because the *role* is what survives, not the pixels. The two that
+# are not `fully_preserved` are the two that say so in the guide itself — a
+# clip lending only its camera retains "only broad similarity in ... composition"
+# (`weak_reference`), and motion carried onto somebody else is characteristics
+# "transferred to a different identifiable target subject"
+# (`attribute_transfer`).
+#
+# `refine.py`'s glossary tells the rewriter these same markers for these same
+# takes. Two copies of one mapping is one too many, but they are addressed to
+# different readers — one is an instruction to an LLM, this is the output — and
+# `tests/test_ref_form.py` holds them to each other.
+_MARKER = {
+    ("image", "full"): "fully_preserved",
+    ("image", "person"): "fully_preserved",
+    ("image", "object"): "fully_preserved",
+    ("image", "scene"): "fully_preserved",
+    ("image", "style"): "fully_preserved",
+
+    ("video", "full"): "fully_preserved",
+    ("video", "person"): "fully_preserved",
+    ("video", "object"): "fully_preserved",
+    ("video", "scene"): "fully_preserved",
+    ("video", "style"): "fully_preserved",
+    ("video", "motion"): "attribute_transfer",
+    ("video", "camera"): "weak_reference",
+    # An edit keeps everything the description does not change, which is most of
+    # the source and not all of it. `fully_preserved` would claim the target
+    # video changes nothing, which is the one thing an edit never is.
+    ("video", "edit"): "partially_preserved",
+    ("video", "continue"): "partially_preserved",
+
+    ("audio", "full"): "reference",
+    ("audio", "voice"): "reference",
+    ("audio", "music"): "reference",
+    ("audio", "ambience"): "reference",
+    ("audio", "copy"): "fully_copy",
+}
+
+# What the parenthetical after a label says. Section 4.1 gives a picture entry
+# "([Shot 1] first frame)" and a video-structure entry "(cut and pacing
+# structure)" — the parenthetical says what the label is *for*, and only a
+# subject's says where it appears. Absent means no parenthetical at all.
+_SCOPE_NOTE = {
+    ("video", "camera"): "camera and pacing structure",
+    ("video", "edit"): "source video",
+    ("video", "continue"): "continuation point",
+}
+
+# The other half of each retention line: what actually becomes of it. Kept short
+# — `subject_definitions` has already said what the label denotes, and section 4
+# is where it is said what happens to it, not a second place to define it.
+_BECOMES = {
+    ("image", "full"): "what the picture shows is carried into the target video",
+    ("image", "person"): "the likeness is carried onto the target video's own "
+                         "subject and the picture's setting, light and pose are not",
+    ("image", "object"): "the object is carried into the target video and the "
+                         "setting it was photographed in is not",
+    ("image", "scene"): "the place, its surfaces and its light are carried into "
+                        "the target video and whoever stood in it is not",
+    ("image", "style"): "the medium, palette, light and rendering are carried "
+                        "into the target video and the source's own subject is not",
+
+    ("video", "full"): "what the clip shows is carried into the target video",
+    ("video", "person"): "the likeness is carried onto the target video's own "
+                         "subject and the clip's setting, camera work and action are not",
+    ("video", "object"): "the object is carried into the target video and the "
+                         "clip's surroundings and action are not",
+    ("video", "scene"): "the place, its surfaces and its light are carried into "
+                        "the target video and anyone in the clip is not",
+    ("video", "style"): "the medium, palette, light and rendering are carried "
+                        "into the target video and the clip's own subject and action are not",
+    ("video", "motion"): "the movement, its timing and its weight are carried "
+                         "onto the target video's own subject, and nobody visible "
+                         "in the clip appears in it",
+    ("video", "camera"): "the camera move, the shot changes and the pacing are "
+                         "followed, and nothing visible in the clip appears in "
+                         "the target video",
+    ("video", "edit"): "everything this description does not change stays as it "
+                       "is in the source video",
+    ("video", "continue"): "the clip's closing subjects, framing and light carry "
+                           "into the opening of the new footage",
+
+    ("audio", "full"): "the clip guides the target video's sound without being copied",
+    ("audio", "voice"): "its timbre and delivery guide the target speaker, and "
+                        "its words and background sound are not copied",
+    ("audio", "music"): "its genre, instrumentation and mood guide the score, "
+                        "and the recording itself is not reused",
+    ("audio", "ambience"): "its room tone and texture guide the background sound, "
+                           "and the recording itself is not reused",
+    ("audio", "copy"): "its signal is the target video's own audio",
+}
+
+
+def _kind(asset):
+    """The vocabulary an asset's `takes` is drawn from — mirrors `_define`."""
+    return "audio" if (asset.kind == "audio" or asset.track == "sound") else asset.kind
+
+
+def retention_lines(plan, skip=(), body=""):
+    """`plan` -> the `retention_analysis` lines for the labels no subject claimed.
+
+    The mirror of `reference_lines`: whatever that defined, this scopes, so the
+    two sections carry the same set of labels and neither names one the other
+    does not. A claimed file is skipped in both — its subject's own line covers
+    it, and `subjects.retention` writes that one.
+
+    `body` is the finished description, read only to say where a label appears.
+    A label the description never cites still gets its line: it is in the
+    payload either way, and an unscoped label is the thing this exists to
+    prevent.
+    """
+    video_label = {step["asset"].handle: step["label"]
+                   for step in plan if step["op"] == "video"}
+    lines = []
+    for step in plan:
+        asset, label = step["asset"], step["label"]
+        if step["op"] == "soundtrack":
+            if f"{asset.handle}:audio" in skip:
+                continue
+            # A soundtrack has no audio `takes` of its own — the chip it rides on
+            # is scoped with the video vocabulary. Riding along with an edit is
+            # the one case the guide settles outright ("When editing a source
+            # video, use audio reuse as well if its original audio remains
+            # audible"), and everything else is a reference rather than a copy.
+            if asset.takes == "edit":
+                marker, becomes = "fully_copy", (
+                    f"the original audio of {video_label.get(asset.handle, 'the source video')} "
+                    f"remains audible in the target video")
+            else:
+                marker, becomes = "reference", (
+                    "it guides the target video's sound without being copied")
+            lines.append(f"{label}: {marker} - {becomes}.")
+            continue
+        if asset.handle in skip:
+            continue
+        if asset.role != "reference":
+            continue
+        kind = _kind(asset)
+        marker = _MARKER.get((kind, asset.takes)) or _MARKER.get((kind, "full"))
+        becomes = _BECOMES.get((kind, asset.takes)) or _BECOMES.get((kind, "full"))
+        if not marker or not becomes:
+            continue
+        note = _SCOPE_NOTE.get((kind, asset.takes))
+        if not note and kind != "audio":
+            where = appears_in(label, body)
+            note = f"appears in {where}" if where else None
+        head = f"{label} ({note})" if note else label
+        lines.append(f"{head}: {marker} - {becomes}.")
+    return lines
+
+
+# ---- what kind of job this is -----------------------------------------------
+#
+# Section 3's task-type table, read backwards: the prefix is not a judgement
+# about the piece, it is a restatement of what the chips already say. `edit` is
+# the only thing that makes a job `video editing`; a clip lending its camera is
+# `reference generation`, which the guide says in as many words.
+#
+# The order is the guide's own, taken off its two worked examples — "[video
+# editing + reference generation + audio reuse]" and "[video continuation +
+# keyframe completion]". Whole-video relationships lead, then generation, then
+# the frames, then the sound.
+TASK_ORDER = ("video editing", "video continuation", "reference generation",
+              "keyframe completion", "audio reuse", "audio reference")
+
+_VIDEO_TASK = {"edit": "video editing", "continue": "video continuation"}
+
+
+def task_types(plan, has_frames=False):
+    """The task types this generation actually satisfies, in the guide's order.
+
+    Combined with " + " by `summary`, never repeated — section 3 says both.
+    """
+    found = set()
+    if has_frames:
+        found.add("keyframe completion")
+    for step in plan:
+        asset = step["asset"]
+        if step["op"] == "soundtrack":
+            found.add("audio reuse" if asset.takes == "edit" else "audio reference")
+            continue
+        if asset.role != "reference":
+            continue
+        kind = _kind(asset)
+        if kind == "audio":
+            found.add("audio reuse" if asset.takes == "copy" else "audio reference")
+        elif kind == "video":
+            found.add(_VIDEO_TASK.get(asset.takes, "reference generation"))
+        else:
+            found.add("reference generation")
+    return [name for name in TASK_ORDER if name in found]
+
+
+def _count(n, noun):
+    """`2, "shot"` -> `"two shots"`. Small numbers as words, the way the guide
+    writes them ("The three-shot exchange")."""
+    words = ("no", "one", "two", "three", "four", "five", "six", "seven",
+             "eight", "nine", "ten")
+    count = words[n] if n < len(words) else str(n)
+    return f"{count} {noun}" if n == 1 else f"{count} {noun}s"
+
+
+def summary(plan, cast, subject_labels, asset_labels, shots=1, has_frames=False):
+    """The `summary` section, derived rather than written.
+
+    Section 3 wants one short paragraph: the task type, the target video, and
+    the main reference relationships. Two of those three are facts this package
+    already holds — the chips say what each file lends and the cast says who is
+    in it — and the third is a plot summary nothing here can invent. So this
+    writes what it knows and stops, which is a short paragraph about reference
+    relationships and is exactly what the section is for.
+
+    It is a floor like the rest of the module: `compile_request` only reaches
+    for it where the refiner has not supplied a real one, and a refined summary
+    replaces it whole.
+    """
+    types = task_types(plan, has_frames)
+    prefix = f"[{' + '.join(types)}]" if types else ""
+
+    edited = [step["label"] for step in plan
+              if step["op"] == "video" and step["asset"].takes == "edit"]
+    continued = [step["label"] for step in plan
+                 if step["op"] == "video" and step["asset"].takes == "continue"]
+
+    sentences = []
+    # The guide dictates this opening for an editing task, word for word.
+    if edited:
+        sentences.append(f"The target video is an edited version of {_english(edited)}.")
+    if continued:
+        sentences.append(f"The target video continues from the end of {_english(continued)}.")
+
+    opener = "It runs" if sentences else "The target video runs"
+    body = f"{opener} {_count(max(1, int(shots)), 'shot')}"
+    named = [subject_labels[s.handle] for s in cast if s.handle in subject_labels]
+    if named:
+        body += f" and features {_english(named)}"
+    sentences.append(body + ".")
+
+    # The one relationship worth restating up here, because it is the whole job
+    # wherever somebody has it set: who stands in for whom.
+    for subject in cast:
+        if not subject.replaces or subject.handle not in subject_labels:
+            continue
+        who = subject.replaces_what or "the corresponding subject"
+        where = _english([asset_labels.get(h, f"@{h}") for h in subject.replaces])
+        sentences.append(
+            f"{subject_labels[subject.handle]} takes the place of {who} in {where}.")
+
+    return f"{prefix} {' '.join(sentences)}".strip()
+
+
+def _english(items):
+    """`[a, b, c]` -> `"a, b, and c"`. `subjects._english`'s twin; the two
+    modules do not import each other, which is what keeps both unit-testable
+    without the package around them."""
+    items = list(items)
+    if len(items) <= 1:
+        return items[0] if items else ""
+    if len(items) == 2:
+        return f"{items[0]} and {items[1]}"
+    return ", ".join(items[:-1]) + f", and {items[-1]}"
 
 
 def count_shots(body):
     """How many shots a description holds — what `instruction`'s `Shot N` is."""
     return len(SHOT_RE.findall(body or ""))
+
+
+# `[Shot 3]` with its number, for `appears_in`.
+_SHOT_NUMBER_RE = re.compile(r"\[Shot\s+(\d+)\]")
+
+
+def appears_in(label, body):
+    """`"[Shot 1], [Shot 3]"` — where `label` is written, or "" if nowhere.
+
+    Derived from the finished description rather than declared, because it is
+    derivable: the shots are numbered in the text and the label is in it or it
+    is not. A body with no shot markers at all is one shot, and a generation is
+    one shot unless it says otherwise — so the common case answers `[Shot 1]`
+    without anyone having written a marker.
+
+    Lives here rather than in `subjects.py` because both sections need it —
+    a subject's retention line and a bare reference's — and the shot marker is
+    this module's to know.
+    """
+    if label not in (body or ""):
+        return ""
+    shots = []
+    current = 1
+    for piece in re.split(r"(\[Shot\s+\d+\])", body):
+        match = _SHOT_NUMBER_RE.fullmatch(piece)
+        if match:
+            current = int(match.group(1))
+        elif label in piece and current not in shots:
+            shots.append(current)
+    return ", ".join(f"[Shot {n}]" for n in sorted(shots))
 
 
 def has_field(text, name):
@@ -370,7 +661,7 @@ def ref_frame_alignment(first_label, last_label, seconds, shots=1):
 
 
 def compose(mode, body, soundscape="", music="", seconds=0.0, preamble="", shots=1,
-            sections=None, definitions=""):
+            sections=None):
     """The user's prose -> the sectioned prompt the DiT was trained to read.
 
     `body` is what the user wrote, with `@handles` already substituted and any
@@ -383,24 +674,24 @@ def compose(mode, body, soundscape="", music="", seconds=0.0, preamble="", shots
     and a very different one from leaving the box empty, so it stays something
     the user types rather than something inferred from an empty string.
 
-    `sections` is `REF_SECTIONS -> prose`, and only the refiner ever supplies it.
-    Handed them, this builds the reference form's full six sections; handed
-    nothing, a REF2VA body passes through exactly as it always has. The
-    distinction matters: those three sections cannot be derived from a sentence,
-    so wrapping a hand-written reference prompt in `detailed_description:` would
-    claim a form the rest of which is missing.
+    `sections` is `REF_SECTIONS -> prose`. It used to come only from the refiner,
+    and a REF2VA prompt without one was emitted as a bare sentence with
+    `<Picture 1>` substituted into it — no `detailed_description:` wrapper, no
+    labels defined, nothing the reference form has. That was the single largest
+    thing wrong with the direct path: the six-section form is what Ref2VA was
+    trained on, and a piece queued without a rewrite was landing off it
+    entirely. `compile_request` now derives all three from the chips and the
+    cast, so the form is complete whether or not anybody ran a refiner, and a
+    refined section replaces the derived one wherever it exists.
 
-    `definitions` is `reference_preamble`'s output — one sentence per reference
-    label, saying what that file lends. It stands in the same slot as `preamble`
-    and is dropped the moment something better occupies it: a refined reference
-    form defines its labels in `subject_definitions` and states their scope in
-    `retention_analysis`, and a body that carries either section is one somebody
-    has already written by hand. Two descriptions of the same reference is worse
-    than none, because the model has to decide which of them it is being told.
+    What no rule can derive is the guide's 350-500 words of shot description.
+    This builds the document; the prose inside it is still the user's sentence
+    until a refiner writes a better one.
     """
     body = (body or "").strip()
     soundscape = (soundscape or "").strip()
     music = (music or "").strip()
+    sections = sections or {}
 
     out = []
 
@@ -414,26 +705,28 @@ def compose(mode, body, soundscape="", music="", seconds=0.0, preamble="", shots
     if preamble:
         out.append(preamble)
 
-    # The three sections that stand in front of the description in the reference
-    # form. Each is skipped where the body already carries one, so a refined
-    # prompt the user has since hand-edited into full form is not given a second
-    # copy of a section it already has.
-    reference_form = mode == "REF2VA" and bool(sections)
-    # A base-mode prompt with a cast in it. Not the six-section form — the body
-    # is still wrapped in `integrated_multimodal_description` below, because that
-    # is the form these modes were trained on — only the two label-defining
-    # sections in front of it.
-    cast_form = not reference_form and any(
-        str((sections or {}).get(name) or "").strip() for name in CAST_SECTIONS)
+    # Whether this prompt is written in the reference form, decided by whether
+    # there is anything to declare rather than by which mode was derived.
+    #
+    # It used to be `mode == "REF2VA"`, and a cast in a text-only generation got
+    # two of the sections with the base form's body field — a hybrid neither
+    # guide describes. The mode is a statement about which slot the payload
+    # fills, not about how the prompt is written: the two trainings share an
+    # architecture, people run reference-form prompts against T2VA and get what
+    # they asked for, and the weights do not police the field name. So a piece
+    # that has something to define is written in the form built for defining
+    # things, whatever it is about to be encoded as.
+    #
+    # A bare sentence with no cast and no references still gets the base form.
+    # There is nothing to declare there, and `detailed_description:` with no
+    # sections above it would be claiming a form the rest of which is missing —
+    # which is the same mistake in the other direction.
+    reference_form = any(str(sections.get(name) or "").strip() for name in REF_SECTIONS)
 
-    # What each reference is, where nothing else says it. See `definitions`.
-    definitions = (definitions or "").strip()
-    if (definitions and not reference_form and not cast_form
-            and not any(has_field(body, name) for name in REF_SECTIONS)):
-        out.append(definitions)
-
-    for name in (REF_SECTIONS if reference_form
-                 else CAST_SECTIONS if cast_form else ()):
+    # Each is skipped where the body already carries one, so a prompt somebody
+    # has hand-written into full form is not given a second copy of a section it
+    # already has.
+    for name in (REF_SECTIONS if reference_form else ()):
         value = str(sections.get(name) or "").strip()
         if value and not has_field(body, name):
             out.append(f"{name}: {value}")
@@ -441,9 +734,8 @@ def compose(mode, body, soundscape="", music="", seconds=0.0, preamble="", shots
     if body:
         # Only wrapped when the body is plain prose. Anything already sectioned —
         # either form — is its own rewrite already.
-        field = (BODY_FIELD if mode in BASE_MODES else
-                 REF_BODY_FIELD if reference_form else None)
-        if field and not any(has_field(body, f) for f in BODY_FIELDS):
+        field = REF_BODY_FIELD if reference_form else BODY_FIELD
+        if not any(has_field(body, f) for f in BODY_FIELDS):
             # The description is written shot by shot and every example opens on
             # a marker. A segment is one shot, so `[Shot 1]` is the whole of it —
             # unless the body already numbers its own, which is someone writing

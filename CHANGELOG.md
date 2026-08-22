@@ -1,5 +1,162 @@
 # Changelog
 
+## 2.18
+
+**A subject is a list of features now, and each one can be changed on its own.**
+The reference guide writes a subject as a named list — "with thick white fur,
+pointed ears, a dark nose, and a curved tail" — and names those same features
+again in `retention_analysis`. A cast card holds that list, and every line in it
+is either kept or has an arrow in it:
+
+    long dark hair                 kept
+    a blue cardigan             →  a red waxed jacket
+    a thin silver necklace         kept
+
+That is the answer to a question the node had no answer for: what if the clothing
+should be different. The cardigan is named in the definition, because section 4.1
+is "the referenced content is still used, but some defined characteristics are
+changed" and a characteristic has to be defined before it can be changed, and the
+retention line says which are retained and what the changed one became.
+
+**The relationship marker is derived instead of picked.** All features kept is
+`fully_preserved`; any feature changed is `partially_preserved`; taking somebody's
+place is `attribute_transfer`. It was a menu of four words that changed nothing
+but the word — picking *partly kept* wrote `partially_preserved` above a sentence
+saying everything was retained, which is a marker you can set and a sentence that
+ignores you. The override survives as the only way to reach `weak_reference`,
+which nothing can infer from the cast.
+
+**Nothing negative is written into `retention_analysis` any more.** Those lines
+used to end "...and the source picture's background, palette, lighting, pose and
+action are not", which is a sentence borrowed from what the compiler writes for a
+*file*. Section 4.1 closes by saying not to treat what the target video adds as a
+loss of reference fidelity, and there is not one negative clause in any of the
+guide's four retention examples. `<Subject N>` means content abstracted from a
+reference asset — section 2.1 — so the abstraction is already in the label, and
+`<Picture N>` is the label that denotes a file and needs saying which parts of it
+count.
+
+**"Takes the place of" is a row on the card, not a menu item behind a thumbnail.**
+Writing *@vera should replace the bench in @vid-1* in the prompt does nothing
+structural: it lands in `detailed_description` and the two retention lines beside
+it go on saying the subject is preserved whole and the clip is preserved whole,
+with nothing connecting them. The row is offered on every open card whenever the
+piece holds a clip to edit or continue, and filling it in is what produces the
+`attribute_transfer` line — their features transferred onto the bench in
+`<Video 1>`, whose framing, camera work and action are kept.
+
+**A name in the sentence opens, and closes, whoever it names — and this time it
+is tested.** Clicking `@vera` or `@lego_brickfilm` in the prompt has been meant
+to open them on the cast shelf for several releases and has kept coming back
+dead. The handler was never the problem: `PromptBox.refresh` rewrote the box's
+children on every render, so the chip a press started on was detached before the
+browser could finish the click on it. A press is a pointerdown and a click on the
+same element, and any render at all — a pill moved, a probe answered, a commit
+landed — took that element away mid-press. No error, nothing in the console, a
+chip that simply does nothing. The box now leaves itself alone when the chips it
+would build are the ones already in it.
+
+Nothing caught it because the test drove `openCastMember` directly rather than
+performing the press, and because the DOM shim under those tests could not match
+`.mmc-ref-cast[data-handle]` and answered `false` to `contains` — so the two
+guards the real handler runs were both unreachable. Both are fixed, and the
+suite now presses the chip, checks that a render leaves it the same element, and
+checks that a look opens the same way a person does.
+
+Pressing the same name again shuts the card. The press is its own undo, rather
+than leaving you to find the chevron on a card you opened by clicking a name.
+
+And pressing a name no longer selects it. A click on a `contenteditable="false"`
+chip is a node selection as far as the browser is concerned, so the name turned
+into a blue block and stayed one until you clicked somewhere else — a lot of
+noise for a press whose visible result is a panel opening under it. The selection
+is cancelled at mousedown, where it is made, which leaves the click that carries
+the gesture untouched. A file's chip is not a control and goes on selecting
+normally.
+
+Refine is told the features too. Left out, the rewrite would describe the blue
+cardigan the reference has while the retention line beside it says the cardigan
+is a red waxed jacket — two sections of one prompt disagreeing about one person.
+
+## 2.17
+
+**The prompt box shows what is actually sent.** The sentence you type has never
+been the prompt H3 reads — the compiler wraps it in the reference guide's
+sections — and until now the only way to find out what that came to was to read
+the console. There is a rail under the box now — *what the model reads* — and it
+opens onto the finished prompt for the pass this shot lands in, set out section
+by section under the field names the model is handed. It comes from the compiler
+itself rather than being rebuilt in the frontend, so there is no version of this
+where the two disagree. On a timeline it follows the merge — cards merged into
+one pass share one prompt — and it says which pass you are looking at.
+
+It opens *under* your sentence, not in place of it. The first cut of this was a
+pair of tabs that swapped the two, which was wrong three ways: the tabs sat on
+the box's own `<summary>`, so a click that missed one folded the whole prompt
+away; the panel re-read on every render and dropped every answer but the newest,
+which while renders kept arriving was never the one that had landed, so it stayed
+empty; and swapping meant that on a shot with nothing to declare — where the
+compiler correctly adds nothing but a wrapper — the second view looked like the
+first and read as broken. Stacked, the block holding your own sentence is marked
+and everything around it is what the compiler added, which is the question the
+panel exists to answer. A shot with nothing to declare says so in as many words.
+
+This replaces the scope band, and the setting that gated it. *Reference scopes
+in the prompt* is gone: every reference is defined and scoped now, always. It
+was off by default, which meant the ordinary render handed the tokenizer three
+files and told the model what none of them were for — and section 2 of the guide
+is the whole rebuttal, since a label the prompt never defines is a label
+pointing at nothing. There is no reading on which the old default was the better
+prompt, so there is no longer a switch for it.
+
+**A reference generation is written in the reference form, whether or not you
+refine.** The three sections that are not the description — `subject_definitions`,
+`summary`, `retention_analysis` — used to arrive only from a rewrite, so a piece
+queued without one went out as a bare sentence with `<Picture 1>` substituted
+into it: no wrapper, no definitions, nothing saying what kind of job it was. All
+three are derived from what you already declared. The task-type prefix comes off
+the clips' scope dials (`edit` is `video editing`, a camera reference is
+`reference generation`, and the guide says so itself); the definitions come off
+the chips; the retention markers come off what each label was declared to lend.
+Every label defined now gets a retention line, which section 4.1 asks for and
+nothing wrote.
+
+What this does not do is write the guide's 350–500 words of shot description. No
+rule turns one sentence into that. It builds the document; Refine still writes
+the prose, and a refined section replaces the derived one.
+
+**The form follows what the piece holds, not which checkpoint it routed to.** It
+used to be built only for REF2VA, so a cast in a text-only generation got two of
+the sections with the base form's body field — a hybrid neither guide describes.
+People run reference-form prompts against T2VA and get what they asked for; the
+weights do not police the field name. A piece with something to declare is now
+written in the form built for declaring things, whatever it is about to be
+encoded as. A bare sentence with nothing to declare still gets the base form.
+
+**Two of the four retention markers were not in the guide.** The cast path wrote
+`transferred` and `reused`; the guide's fixed set is `fully_preserved`,
+`partially_preserved`, `attribute_transfer` and `weak_reference`. So the one
+field whose vocabulary the guide spells in English in every language was being
+handed a token the weights never saw — and on exactly the case that needs it
+most, since a subject who stands in for somebody derives that marker. The
+refiner's glossary and `prompts/modes/ref2va.txt` always had the right four;
+this is the third copy agreeing with them.
+
+**Somebody can stand in for a person in more than one clip.** *They take
+somebody's place in this* held a single file, so the same person in a medium
+shot and a close-up could not be said: the second clip could only be attached
+and left undefined. Both ways of working around it misfired — left at the
+default scope the clip compiled to "is a reference video" and nothing else, and
+set to `edit` it produced two sentences each claiming to be the whole source of
+the edit. The slot takes a list now, the summary names every source in one
+sentence, and each clip keeps its own definition and retention line. Two related
+fixes fell out of it: the whole-video relationships are defined the way section
+2.3 defines them (`<Video 1> is a source video for the target video edit.`)
+rather than by borrowing the summary's opening line, and citing a subject
+carries every clip they stand in for into that shot — it was adding the list
+itself to a set of handles, so it carried none of them and the generation was
+refused for a file the citation should have brought with it.
+
 ## 2.16
 
 **The picture stopped moving.** The fullscreen editor kept every finished render

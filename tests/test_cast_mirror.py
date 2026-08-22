@@ -63,6 +63,30 @@ CASES = [
     {"handle": "a", "from": [], "replaces": "ref-3"},
     # A file named twice is claimed once, in citation order.
     {"handle": "a", "from": ["ref-1", "ref-1"], "motion": "ref-1"},
+    # ...and the features, which are what the marker is now derived from. Every
+    # arrangement of them, because the derivation is what the two sides have to
+    # agree on: a marker the shelf shows and the compiler does not write is the
+    # same class of lie the picker was.
+    {"handle": "a", "from": ["ref-1"], "features": ["long dark hair"]},
+    {"handle": "a", "from": ["ref-1"],
+     "features": [{"is": "long dark hair"}, {"is": "a blue cardigan"}]},
+    {"handle": "a", "from": ["ref-1"],
+     "features": [{"is": "a blue cardigan", "instead": "a red waxed jacket"}]},
+    {"handle": "a", "from": ["ref-1"],
+     "features": [{"is": "long dark hair"},
+                  {"is": "a blue cardigan", "instead": "a red waxed jacket"}]},
+    # A changed feature and a place taken: the transfer leads, because it is the
+    # relationship whatever else moves.
+    {"handle": "a", "from": ["ref-1"], "replaces": "ref-3",
+     "features": [{"is": "a blue cardigan", "instead": "a red waxed jacket"}]},
+    # An empty row is what the editor writes the moment somebody presses "add a
+    # feature", and an `instead` with no feature to be instead *of* goes with it.
+    {"handle": "a", "from": ["ref-1"],
+     "features": [{"is": "  "}, {"is": "", "instead": "a red waxed jacket"},
+                  {"is": " long dark hair "}]},
+    # The override still wins, and it is the only way to reach weak_reference.
+    {"handle": "a", "from": ["ref-1"], "relationship": "weak_reference",
+     "features": [{"is": "a blue cardigan", "instead": "a red waxed jacket"}]},
 ]
 
 SCRIPT = """
@@ -74,6 +98,8 @@ console.log(JSON.stringify({
   markers: s.SUBJECT_MARKERS,
   names: Object.fromEntries(names.map((n) => [n, s.SUBJECT_HANDLE_RE.test(n)])),
   files: cases.map((c) => s.subjectFiles(c)),
+  features: cases.map((c) => s.subjectFeatures(c).map((f) => [f.is, f.instead])),
+  derived: cases.map((c) => s.subjectMarker(c)),
   // The citation pattern, exercised rather than compared: a regex written twice
   // is never textually equal and the only thing that matters is what it matches.
   cites: [
@@ -162,6 +188,17 @@ for case, files in zip(CASES, mirror["files"]):
     check(f"what {case} claims",
           files, list(subjects.parse([case])[0].files))
 
+# The features, and the marker they decide. The shelf shows the marker while you
+# type the features, and the compiler writes it — so the two deriving it apart
+# is the failure this pair of rows exists for.
+for case, features in zip(CASES, mirror["features"]):
+    check(f"the features of {case}",
+          [tuple(f) for f in features],
+          [(f.text, f.instead) for f in subjects.parse([case])[0].features])
+for case, marker in zip(CASES, mirror["derived"]):
+    check(f"the marker {case} derives",
+          marker, subjects.parse([case])[0].relationship)
+
 # The pattern, by what it does rather than by how it is written.
 cast = subjects.parse([{"handle": "anna", "from": ["ref-1"]},
                        {"handle": "ben", "from": ["ref-2"]}])
@@ -185,4 +222,4 @@ check("a piece written before any of this is repaired on the way in",
 check("an empty cast has no pattern at all",
       mirror["cites"][3], subjects.citation_re([]) is None)
 
-passed("state.js mirrors the cast: takes, markers, names, files and citations")
+passed("state.js mirrors the cast: takes, markers, names, files, features and citations")

@@ -85,16 +85,43 @@ class Node {
     this.parent = null;
   }
   normalize() {}
-  contains() { return false; }
+  /** Real, and it has to be: the prompt box asks whether the chip a click landed
+   *  on is still one of its own, and the cast shelf asks whether the caret is
+   *  inside itself before it redraws. A stub answering "no" turns the first into
+   *  a chip that does nothing and the second into a shelf that always redraws —
+   *  and both of those are shipped bugs this shim used to hide. */
+  contains(node) {
+    for (let at = node; at; at = at.parent) if (at === this) return true;
+    return false;
+  }
   /** Enough of a selector match for what the pack actually asks: a
-   *  comma-separated list of tag names, single class names and bare attribute
-   *  tests. Nothing combines them, so nothing here does either. Used by
-   *  `closest` and by `querySelectorAll` below. */
+   *  comma-separated list of alternatives, each one a tag name and/or any
+   *  number of classes and bare attribute tests joined without a combinator —
+   *  `button`, `.mmc-pills`, `[contenteditable]`, `.mmc-ref-cast[data-handle]`.
+   *  Descendant and child combinators are still not modelled; nothing in the
+   *  pack asks `closest` or `querySelectorAll` for one.
+   *
+   *  The compound form is not decoration. `.mmc-ref-cast[data-handle]` is the
+   *  selector the prompt box uses to decide that a click landed on somebody's
+   *  name, and while this only understood the two halves separately the shim
+   *  answered "no" to it — so the one gesture in the box that opens a cast
+   *  member could not be tested at all, which is why it kept being broken by
+   *  changes elsewhere and nothing noticed. */
   matches(selector) {
-    return selector.split(",").map((s) => s.trim()).some((one) => {
-      if (one.startsWith(".")) return String(this.className).split(" ").includes(one.slice(1));
-      if (one.startsWith("[")) return one.slice(1, -1) in this.attrs;
-      return this.tagName?.toLowerCase() === one;
+    const classes = String(this.className).split(" ");
+    return selector.split(",").map((s) => s.trim()).filter(Boolean).some((one) => {
+      const parts = one.match(/^[a-zA-Z][\\w-]*|\\.[\\w-]+|\\[[^\\]]+\\]/g) ?? [];
+      // A selector this cannot take apart must not match everything.
+      if (!parts.length || parts.join("") !== one) return false;
+      return parts.every((part) => {
+        if (part.startsWith(".")) return classes.includes(part.slice(1));
+        if (part.startsWith("[")) {
+          const [, name, value] = /^\\[([^=\\]]+)(?:=["']?([^"'\\]]*)["']?)?\\]$/.exec(part) ?? [];
+          if (!name) return false;
+          return value === undefined ? name in this.attrs : String(this.attrs[name]) === value;
+        }
+        return this.tagName?.toLowerCase() === part;
+      });
     });
   }
   closest(selector) {

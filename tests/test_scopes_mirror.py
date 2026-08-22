@@ -38,17 +38,17 @@ def _load():
     package.__path__ = [ROOT]
     sys.modules["mmc"] = package
     modules = {}
-    for name in ("canvas", "contextir", "compile"):
+    for name in ("canvas", "contextir", "subjects", "compile"):
         spec = importlib.util.spec_from_file_location(f"mmc.{name}", os.path.join(ROOT, f"{name}.py"))
         module = importlib.util.module_from_spec(spec)
         sys.modules[f"mmc.{name}"] = module
         setattr(package, name, module)
         spec.loader.exec_module(module)
         modules[name] = module
-    return modules["compile"], modules["contextir"]
+    return modules["compile"], modules["contextir"], modules["subjects"]
 
 
-compiler, contextir = _load()
+compiler, contextir, subjects = _load()
 
 SCRIPT = """
 const s = await import(process.argv[1]);
@@ -57,7 +57,6 @@ const asset = (kind, takes, rest = {}) =>
 console.log(JSON.stringify({
   takes: { image: s.IMAGE_TAKES, video: s.VIDEO_TAKES, audio: s.AUDIO_TAKES },
   map: Object.fromEntries(Object.entries(s.TAKES)),
-  define: s.DEFINE,
   // A sound-only clip scopes as audio on both sides, which is the one place the
   // kind on the blob and the vocabulary it may use disagree.
   soundOnly: s.takeOptions(asset("video", "full", { track: "sound" })),
@@ -100,25 +99,31 @@ check("a sound-only clip is offered the audio scopes",
 check("...and so is an audio file", mirror["audioOfAudio"], list(compiler.TAKES["audio"]))
 check("a keyframe is offered nothing", mirror["keyframe"], [])
 
-# ---- and one sentence per entry ---------------------------------------------
+# ---- and every scope says something, in both sections ------------------------
 #
-# Both sides key these the same way; only the separator differs, because a JS
-# object cannot be keyed by a pair.
+# The gap this half exists for: `Asset.takes` never reaches the encode path — the
+# DiT is handed the same tensor whatever the chip says — so the *only* thing a
+# scope does is put words in the prompt. A value the chip offers and `contextir`
+# has no sentence for is a chip you can set that sends nothing at all.
+#
+# Two sentences per scope now, not one. The reference form says what a label
+# denotes (`subject_definitions`) and separately what becomes of it
+# (`retention_analysis`), and section 4.1 asks for one retention line per label —
+# so a scope with a definition and no marker is half-declared, which is the same
+# bug one step further along.
 
 python_define = {f"{kind}:{takes}": text
                  for (kind, takes), text in contextir._DEFINE.items()}
-check("every scope's sentence is written the same way both sides",
-      mirror["define"], python_define)
 
-# The gap this suite exists for: a value with no sentence behind it is a chip
-# that sends nothing at all.
 for kind, values in compiler.TAKES.items():
     for takes in values:
         key = f"{kind}:{takes}"
         if key not in python_define:
             FAILURES.append(f"compile offers {key} but contextir defines no sentence for it")
-        if key not in mirror["define"]:
-            FAILURES.append(f"compile offers {key} but state.js defines no sentence for it")
+        if (kind, takes) not in contextir._MARKER:
+            FAILURES.append(f"compile offers {key} but contextir gives it no retention marker")
+        if (kind, takes) not in contextir._BECOMES:
+            FAILURES.append(f"compile offers {key} but contextir says nothing about what becomes of it")
 
 # ...and the reverse, which is a sentence nothing can ever ask for.
 for key in python_define:
@@ -126,10 +131,32 @@ for key in python_define:
     if takes not in compiler.TAKES.get(kind, ()):
         FAILURES.append(f"contextir defines {key}, which is not a scope compile allows")
 
-# Every sentence has exactly one place for the label to go, or the band and the
-# prompt would name different files.
+# Every definition has exactly one place for the label to go. The two whole-video
+# relationships used to borrow the summary's opening sentence here, which read as
+# a statement about the target video rather than about the label — and said it
+# once per clip, so two edited sources each claimed to be the whole source.
 for key, text in python_define.items():
     if text.count("%s") != 1:
         FAILURES.append(f"{key}: expected one %s, got {text.count('%s')}")
 
-passed("state.js mirrors the scope vocabulary and every sentence in it")
+# The markers are the guide's fixed four, per category. Anything else is a token
+# the weights were never trained on in the one field whose vocabulary is fixed.
+VISIBLE = {"fully_preserved", "partially_preserved", "attribute_transfer", "weak_reference"}
+AUDIO = {"fully_copy", "partially_copy", "reference", "weak_reference"}
+for (kind, takes), marker in contextir._MARKER.items():
+    allowed = AUDIO if kind == "audio" else VISIBLE
+    if marker not in allowed:
+        FAILURES.append(f"{kind}:{takes} is marked {marker}, which is not one of {sorted(allowed)}")
+
+# And the cast's own markers are the visible four, since a subject is visible
+# content by definition.
+if set(subjects.MARKERS) != VISIBLE:
+    FAILURES.append(f"subjects.MARKERS is {list(subjects.MARKERS)}, want {sorted(VISIBLE)}")
+
+# The task-type prefixes are section 3's table and nothing else.
+TASKS = {"keyframe completion", "reference generation", "video editing",
+         "video continuation", "audio reuse", "audio reference"}
+if set(contextir.TASK_ORDER) != TASKS:
+    FAILURES.append(f"TASK_ORDER is {list(contextir.TASK_ORDER)}, want {sorted(TASKS)}")
+
+passed("state.js mirrors the scope vocabulary; every scope is defined and scoped")

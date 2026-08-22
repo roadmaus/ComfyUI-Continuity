@@ -866,8 +866,7 @@ def _check_feather(width, live, what):
 
 def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=None,
                     continues_audio=False, shots=1, feather=1,
-                    ends_on=False, ends_on_audio=False, ends_feather=1,
-                    define_refs=False):
+                    ends_on=False, ends_on_audio=False, ends_feather=1):
     """`creator_data` dict -> `Compiled`.
 
     `image_size_lookup(filename) -> (width, height)` supplies the keyframe
@@ -885,11 +884,12 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     clip: a generated pass after this one has nothing to hand backwards, since
     it does not exist until this one has been sampled.
 
-    `define_refs` writes a sentence per reference into the prompt saying what
-    that file lends — see `contextir.reference_preamble`. Passed in rather than
-    read here: it is a setting on the machine, and this module reaches no disk
-    and imports nothing of ComfyUI's, which is what `tests/test_compile.py`
-    depends on.
+    Every reference is defined and scoped in the prompt unconditionally. That
+    used to be a machine setting (`define_refs`, off by default), which meant
+    the ordinary render told the model nothing about what any of its files were
+    for — see `contextir.compose`. A label the prompt never defines is a label
+    pointing at nothing, and there is no reading of the guide on which that is
+    the better prompt, so there is no longer a switch for it.
     """
     if not isinstance(data, dict):
         raise CompileError("creator_data must be a JSON object")
@@ -1064,21 +1064,49 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
                         cast, subject_labels)
                     for name, text in sections.items()}
 
-    # The two sections a cast makes derivable. They are the compiler's rather
-    # than the refiner's wherever a cast exists: the user pinned who is in the
-    # video, and a rewrite that renumbered or redefined them would be pinning
-    # nothing. The refiner keeps `summary`, which is the film rather than the
-    # cast, and is told as much — see `refine.cast_glossary`.
-    #
     # The files no subject claimed are defined in this same section rather than
     # in a paragraph of their own: the guide puts every label's meaning in
     # `subject_definitions`, and two places to look is one too many.
+    #
+    # `subject_definitions` and `retention_analysis` are the compiler's wherever
+    # a cast exists: the user pinned who is in the video, and a rewrite that
+    # renumbered or redefined them would be pinning nothing. The refiner keeps
+    # `summary`, which is the film rather than the cast, and is told as much —
+    # see `refine.cast_glossary`.
+    #
+    # All three are derived for a reference generation whether or not there is a
+    # cast, because the alternative is what the direct path used to emit: a
+    # sentence with `<Picture 1>` substituted into it and nothing anywhere
+    # saying what `<Picture 1>` is. Section 2 of the guide is the whole
+    # rebuttal — a label the prompt never defines is a label pointing at
+    # nothing — and section 4.1 asks for one retention line per label, which is
+    # what `retention_lines` writes for the files no subject claimed.
+    #
+    # A refined section always wins: `raw_sections` is merged over these, not
+    # under them.
+    claimed = subjects.claimed(cast)
+    derived = {}
     if cast:
-        unclaimed = (contextir.reference_lines(plan, skip=subjects.claimed(cast))
-                     if define_refs and plan else ())
-        sections = dict(sections or {})
-        sections["subject_definitions"] = subjects.definitions(cast, labels, unclaimed)
-        sections["retention_analysis"] = subjects.retention(cast, labels, body)
+        derived["subject_definitions"] = subjects.definitions(
+            cast, labels, contextir.reference_lines(plan, skip=claimed) if plan else ())
+        derived["retention_analysis"] = "\n".join(
+            [subjects.retention(cast, labels, body)]
+            + contextir.retention_lines(plan, skip=claimed, body=body)).strip()
+    elif plan:
+        derived["subject_definitions"] = "\n".join(contextir.reference_lines(plan))
+        derived["retention_analysis"] = "\n".join(
+            contextir.retention_lines(plan, body=body))
+    if derived:
+        derived["summary"] = contextir.summary(
+            plan, cast, subject_labels, labels,
+            shots=max(int(shots or 1), contextir.count_shots(body)),
+            has_frames=bool(first_frame or last_frame))
+    if derived:
+        merged = {name: text for name, text in derived.items() if str(text or "").strip()}
+        for name, text in (sections or {}).items():
+            if str(text or "").strip():
+                merged[name] = text
+        sections = merged
     prompt = contextir.compose(
         mode, body, soundscape, music, canvas.seconds_for_frames(frames),
         # The inherited tail is presented to the tokenizer as <Audio 1>, so the
@@ -1102,15 +1130,6 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
         # wins: a card may write several shots inside the one the timeline
         # allotted it, and the last of those is the one holding the end frame.
         shots=max(int(shots or 1), contextir.count_shots(body)),
-        # What each reference lends, said for the model rather than for the
-        # refiner. Only where there is a plan to read: the keyframe modes label
-        # their pictures through the alignment instruction instead, which
-        # `compose` has already written by the time this lands.
-        definitions=(contextir.reference_preamble(plan)
-                     if define_refs and plan else ""),
-        # Only ever a refiner's: the reference form's other three sections cannot
-        # be derived from a sentence, so without them a REF2VA body is left
-        # exactly as it has always been.
         sections=sections)
 
     # In the image modes the aspect comes from the keyframe (the hosted API calls
@@ -1820,8 +1839,13 @@ def cited_pool(pool, request, extra_texts=(), cast=()):
         for subject in cast:
             if subject.handle in named:
                 found.update(subject.files)
-                if subject.replaces:
-                    found.add(subject.replaces)
+                # `update`, not `add`: this is a list of clips now, and adding
+                # the tuple itself put an object in a set of handles that
+                # matched nothing — so a subject standing in for somebody across
+                # two clips carried neither of them into the segment, and the
+                # generation was refused for a file the citation should have
+                # brought with it.
+                found.update(subject.replaces)
     return [asset for asset in pool if asset.handle in found]
 
 
@@ -2414,7 +2438,7 @@ def _renamed(subject, rename):
         description=subject.description,
         motion=pick(subject.motion),
         voice=pick(subject.voice),
-        replaces=pick(subject.replaces),
+        replaces=[pick(h) for h in subject.replaces],
         replaces_what=subject.replaces_what,
         marker=subject.marker,
     )
@@ -2427,10 +2451,14 @@ def _subject_dict(subject):
     out = {"handle": subject.handle, "from": list(subject.sources)}
     if subject.takes != "person":
         out["takes"] = subject.takes
+    # A list, always, where there is one at all: `subjects.parse` still reads
+    # the scalar a blob written before somebody could stand in for two clips
+    # carries, but nothing writes one any more.
+    if subject.replaces:
+        out["replaces"] = list(subject.replaces)
     for key, value in (("description", subject.description),
                        ("motion", subject.motion),
                        ("voice", subject.voice),
-                       ("replaces", subject.replaces),
                        ("replaces_what", subject.replaces_what),
                        ("relationship", subject.marker)):
         if value:
@@ -2679,11 +2707,11 @@ def single_payload(data):
     return group_payload(data)
 
 
-def compile_segment(payload, image_size_lookup=None, define_refs=False):
+def compile_segment(payload, image_size_lookup=None):
     """One payload from `timeline_payloads` or `single_payload` -> `Compiled`."""
     spec = payload.get("canvas")
     return compile_request(
-        payload["request"], image_size_lookup, define_refs=define_refs,
+        payload["request"], image_size_lookup,
         continues=bool(payload.get("continue")),
         continues_audio=bool(payload.get("continue_audio")),
         shots=int(payload.get("shots", 1)),

@@ -821,7 +821,6 @@ export const css = `
  * dropped from the render: these are display rules over the same bodies, and
  * the blob they are drawing has not moved.
  */
-.mmc-fs.simple .mmc-scopes { display: none; }
 /* The cast, both the tool and the drawer it opens. Not a shortening of it — the
    whole shelf, because in this view everything it does is already somewhere
    else and better placed:

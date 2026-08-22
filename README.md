@@ -167,13 +167,11 @@ here rather than with the pictures — it is an audio reference that happens to
 have arrived in an mp4.
 
 None of this reaches the DiT as a switch: H3 has no reference-conditioning
-input, so every one of these distinctions is prose or it is nothing. Refine
-reads the dial and writes that prose for you. If you queue without refining,
-turn on **Reference scopes in the prompt** under Settings → Nodes and the
-compiler writes it instead — one sentence per reference in front of the
-description, shown in the prompt box above your own text so you can read what is
-being sent. It steps aside for a refined reference form, which says the same
-thing better and in the model's own sections.
+input, so every one of these distinctions is prose or it is nothing. The
+compiler writes that prose, always — every reference is defined and its scope
+stated, in the guide's own sections, whether or not you refine. Refine writes a
+fuller version of the same thing and replaces it. What is actually sent is
+readable in the prompt box: see [What the model reads](#what-the-model-reads).
 
 The PreStage's style references are cited the same way. Writing `@ref-2` becomes
 `Picture 2` — the label core's Qwen-edit encoder writes in front of that slot, so
@@ -229,7 +227,13 @@ hang another one on, picking from what is attached or attaching something new.
   a reference clip, and the box under it says who — "the person at the counter". The
   clip's framing, camera work and action are kept; its occupant is replaced by
   them. That is the whole gesture, and the one the guide spells as the
-  `transferred` marker.
+  `attribute_transfer` marker.
+
+  It takes as many clips as you give it. The same person in a medium shot and a
+  close-up is one vacancy filmed twice, so hang both on them: the summary calls
+  the target video an edited version of both, once, and each clip gets its own
+  definition and its own retention line. Citing @anna in any shot carries every
+  clip they stand in for into it.
 - **Nothing behind them at all.** A name and a description is a subject too, and
   it is the useful one in a prompt with no references in it: it is what keeps
   them the same person in shot 1 and in shot 9. Their description becomes their whole
@@ -247,11 +251,83 @@ changes meaning because this shelf exists.
 A subject nobody has written into a prompt is in no shot, and their card says so —
 click that and it writes their name in for you.
 
+**Their name in the sentence is a door.** Click `@vera` in the prompt and the
+shelf opens on their card; click it again and it shuts. A look cast from the
+style atlas is a cast member too, so `@lego_brickfilm` opens the same way.
+
+### Feature by feature
+
+The reference guide writes a subject as a named list of features, and then names
+those same features again in `retention_analysis`. Its own worked example does it
+four times in a row:
+
+```
+<Subject 2> is the fluffy white Samoyed in <Picture 2>, <Picture 3>, and
+<Picture 4>, with thick white fur, pointed ears, a dark nose, and a curved tail.
+...
+<Subject 2> (appears in [Shot 1], [Shot 2]): fully_preserved - the Samoyed's
+thick white fur, pointed ears, dark nose, and curved tail are retained.
+```
+
+So a card holds a list: **what the reference shows**, one phrase per line. Each
+line is *kept*, or it has an arrow in it and becomes something else in the target
+video.
+
+```
+long dark hair                 kept
+a blue cardigan             →  a red waxed jacket
+a thin silver necklace         kept
+```
+
+That arrow is the answer to the question the node could not answer before — *what
+if the clothing should be different*. Both halves are written out: the cardigan
+is named in the definition, because a characteristic has to be defined before it
+can be changed, and the retention line says the hair and the necklace are
+retained and the cardigan is replaced by a red waxed jacket.
+
+**The relationship marker is derived, not picked.** It sits under the list in the
+guide's own vocabulary. All features kept is `fully_preserved`; any feature
+changed is `partially_preserved`; taking somebody's place in a clip is
+`attribute_transfer`, whatever else moves. Click it to override — which is the
+only way to reach `weak_reference`, since "only broad similarity in style,
+category, composition, or atmosphere" is a judgement about the render that no
+rule can work out for you.
+
+It used to be a picker with four words in it, and picking one changed nothing but
+the word: choosing *partly kept* wrote `partially_preserved` above a sentence
+saying everything was retained. A marker you can set and a sentence that ignores
+you is worse than no marker at all.
+
+### Taking somebody's place
+
+`@vera should replace the bench in @vid-1` is a sentence, and a sentence lands in
+`detailed_description` and nowhere else. Nothing in it tells the model that
+@vera and @vid-1 have anything to do with each other — the retention lines still
+say the subject is preserved whole and the clip is preserved whole, side by side,
+unrelated.
+
+What says it is section 4.1's `attribute_transfer`, and every open card offers it
+as a row whenever the piece holds a clip to edit or continue:
+
+```
+takes the place of   the bench   in  @vid-1
+```
+
+Filled in, the retention line becomes *their features are transferred onto the
+bench in `<Video 1>`, whose framing, camera work and action are kept* — which is
+the whole of "swap this for that, and change nothing else about the shot". Left
+empty it says nothing and costs one dim row.
+
+The clip's own content is not touched. `<Video 1>` keeps the definition an
+unclaimed reference gets and stays the source video; only its occupant moves. And
+several clips can hold the same vacancy — the same role in a medium shot and a
+close-up is one place filmed twice.
+
 ### Keeping somebody
 
 Somebody worth casting is usually worth casting again, and rebuilding them by hand
 on the next node is how a character drifts. The **★** on their open card keeps them
-in the cast library — their name, their words, their retention marker, and their files
+in the cast library — their name, their words, their features, their retention marker, and their files
 *by filename* rather than by handle. **From the library** at the top of the shelf
 brings them back into a piece that never had their pictures attached. Their files
 attach as they land, as ordinary references — an image reference is an image
@@ -276,8 +352,14 @@ What it produces is the part of the form that could not be written before. At
 queue time the compiler emits `subject_definitions` and `retention_analysis` in
 the guide's own shapes, in the reference form and in the plain modes alike — so a
 `<Subject 1>` is always defined wherever it is written. Every subject is defined
-once and its fate marked `fully_preserved`, `partially_preserved`, `transferred`
-or `reused`, with the shots they appear in read off the description. Refine is
+once and its fate marked with one of the guide's four fixed relationship
+markers — `fully_preserved`, `partially_preserved`, `attribute_transfer` or
+`weak_reference` — worked out from the features above it, with the shots they
+appear in read off the description. Nothing negative is written into that
+section: §4.1 closes by saying not to treat what the target video adds as a loss
+of reference fidelity, and there is not one negative clause in any of the guide's
+own retention examples. What a label does *not* denote is a fact about the label,
+so it lives in `subject_definitions` where the guide puts it. Refine is
 handed the cast as pinned fact: it writes the film around your subjects and is told not to define or
 renumber them.
 
@@ -769,6 +851,69 @@ stepper is still there: lowering it under the slider buys the first pass's
 speed at any size — sample at 512, refine up to 768 — and is itself the
 two-pass opt-in.
 
+## What the model reads
+
+The sentence you type is not the prompt H3 reads. The model was trained on a
+sectioned intermediate form — a labelled document that defines every reference,
+says what becomes of it, states what kind of job this is, and then gives the
+description — and the compiler builds that form out of what you attached, what
+you set on each chip, and who you cast.
+
+Under the prompt box there is a rail: **What the model reads**. Open it and the
+finished prompt for the pass this shot lands in appears beneath your sentence,
+exactly as it will be queued — section by section, each one under the field name
+the model is handed. It is the compiler's own answer rather than a preview built
+alongside it, so there is no version of this where the two disagree.
+
+It opens *under* the sentence rather than in place of it, because the finished
+prompt contains that sentence: the block holding what you wrote is marked, and
+everything above and below it is what the compiler added. That is the whole
+question the panel answers.
+
+For one cast member replacing somebody across two clips, it looks like this:
+
+```
+subject_definitions: <Subject 1> is the person in <Picture 1>, thirties,
+close-cropped dark hair, grey work coat.
+<Video 1> is a source video for the target video edit.
+<Video 2> is a source video for the target video edit.
+
+summary: [video editing + reference generation] The target video is an edited
+version of <Video 1> and <Video 2>. It runs one shot and features <Subject 1>.
+<Subject 1> takes the place of the barista in <Video 1> and <Video 2>.
+
+retention_analysis: <Subject 1> (appears in [Shot 1]): attribute_transfer - ...
+<Video 1> (source video): partially_preserved - everything this description does
+not change stays as it is in the source video.
+<Video 2> (source video): partially_preserved - ...
+
+detailed_description: [Shot 1] <Subject 1> stands at the counter and turns to
+the camera.
+```
+
+Everything above the description is derived: the task-type prefix from the
+clips' scope dials, the definitions from the chips, the retention markers from
+what each label was declared to lend. Nothing about it is a mode you pick —
+attach the files, set what each one is for, say who is in the shot, and the form
+is written for you.
+
+What it is not is a rewrite. The guide asks for 350–500 words of shot
+description and no rule turns your sentence into that; the prose inside
+`detailed_description` stays yours until [Refine](#refine) writes a fuller one.
+A refined section replaces the derived one and the form is the same either way.
+
+For a shot with no cast and no references there is nothing to define, and the
+panel says so: the compiler wraps your sentence in `integrated_multimodal_description` and adds
+nothing else. That is the correct prompt for that shot,
+not a panel that failed to load.
+
+The rail is a view, not a setting — nothing about the render changes with it,
+and it is read-only, because it is derived from the piece rather than stored. On
+a timeline it follows the merge: cards merged into one pass share one prompt,
+and the panel shows the pass holding the card you have open, captioned with
+which pass that is. A shot that is a clip you attached generates nothing, and it
+says that instead of showing an empty document.
+
 ## Where files go
 
 Renders are saved by the node itself, under ComfyUI's output folder. **Settings →
@@ -832,11 +977,8 @@ it to *Waits for play* and a finished render holds its first frame, still, with
 the browser's controls to start it, which spares a crowded canvas a decoder per
 looping clip. *Flow shift pills* decides whether the sampler row offers H3's
 two schedule clocks — a control over who has to look at them, not over what is
-sampled. *Reference scopes in the prompt* is the one setting on the page that
-changes what is queued: on, the compiler writes each reference's scope into the
-prompt as prose, and the prompt box shows it above your own text. Worth knowing
-before you share a workflow — someone whose copy is set the other way renders
-the other prose.
+sampled. Neither changes what is queued, so a workflow renders the same on any
+machine.
 
 Needs ComfyUI 0.29 or newer, which is where `crf` reached core's video writer.
 On an older build anything but Standard is refused at save time rather than

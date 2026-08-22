@@ -509,3 +509,51 @@ export async function upload(file, subfolder = "") {
   if (kind) remember("input", asset); else invalidate("input");
   return asset;
 }
+
+// ---- the prompt the model actually reads -------------------------------------
+//
+// The box shows two things: the sentence you typed, and the sectioned prompt the
+// compiler builds out of it. The second one comes from the server because it is
+// the compiler that builds it — a mirror of `contextir.compose` in here would be
+// a second opinion, and it would agree right up until the disagreement was the
+// thing worth seeing. `state.js` used to hold such a mirror for the scope band
+// and it drifted from `contextir._DEFINE` twice.
+//
+// One request at a time, and the caller enforces it — see
+// `PromptBox.refreshCompiled`. This function used to drop every answer but the
+// newest by sequence number, which is the right rule for a racing UI and the
+// wrong one here: the panel asks again on every render, so while renders kept
+// arriving the newest ask was never the one that had landed and the panel stayed
+// empty. Serialising at the caller means there is never a stale answer to drop.
+
+/**
+ * Compile `creatorData` and answer with one entry per pass.
+ *
+ * Never throws and never answers with nothing: a server that is unreachable or
+ * a blob that will not compile comes back as `problem` text for the panel to
+ * show, because an empty panel says the feature is broken when the truth is
+ * that the piece is half-typed.
+ *
+ * @param {object} creatorData  the node's blob, exactly as it is saved
+ * @returns {Promise<{passes: object[], cards?: object, problem?: string}>}
+ */
+export async function compiledPrompt(creatorData) {
+  let body;
+  try {
+    const response = await api.fetchApi("/minimax_creator/compiled_prompt", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ creator_data: creatorData }),
+    });
+    body = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      body = { passes: [], problem: body.error
+               || t("could not compile ({status})", { status: response.status }) };
+    }
+  } catch (problem) {
+    // The server being unreachable is not a fact about the prompt, so it is
+    // reported as a problem in the panel rather than thrown at the editor.
+    body = { passes: [], problem: String(problem?.message || problem) };
+  }
+  return body;
+}

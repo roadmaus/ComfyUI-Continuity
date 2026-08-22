@@ -574,6 +574,15 @@ def describe_cast(cast):
         head = f"@{subject.handle}: {_CAST_WHAT.get(subject.takes, 'a subject')}"
         if subject.description:
             head += f", {subject.description.rstrip('.')}"
+        # Feature by feature, because the refiner is writing the description that
+        # these subjects appear in and a feature the target video changes is a
+        # fact about what to write. Left out, the rewrite describes the blue
+        # cardigan the reference has while the retention line beside it says the
+        # cardigan is a red waxed jacket — two sections of one prompt disagreeing
+        # about the same person.
+        for feature in subject.features:
+            head += (f", {feature.text} — but in the target video {feature.instead}"
+                     if feature.changed else f", {feature.text}")
         made_of = []
         if subject.sources:
             made_of.append("from " + ", ".join("@" + h for h in subject.sources))
@@ -582,9 +591,10 @@ def describe_cast(cast):
         if subject.voice:
             made_of.append(f"speaking with the voice in @{subject.voice}")
         if subject.replaces:
+            where = ", ".join(f"@{h}" for h in subject.replaces)
             made_of.append(
                 f"standing in the place of {subject.replaces_what or 'the corresponding subject'} "
-                f"in @{subject.replaces}")
+                f"in {where}")
         lines.append(head + (" — " + "; ".join(made_of) if made_of else ""))
     return lines
 

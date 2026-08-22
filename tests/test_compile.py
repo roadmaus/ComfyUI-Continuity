@@ -353,13 +353,18 @@ pre_aligned = build("For the target video, at 0.00 seconds into the target video
 check("an instruction the user wrote is not repeated",
       pre_aligned.prompt.count("For the target video,"), 1)
 
-# REF2VA has a different six-section form we cannot synthesise from one line, so
-# the body is never wrapped — only the two audio fields it shares are appended.
+# A reference generation is written in the reference form whether or not anyone
+# ran a refiner: the three sections are derived from the chips, and the body is
+# wrapped in `detailed_description:` rather than in the base form's field.
 ref = build("keep @img-1", [image("img-1")], soundscape="street noise")
-check("a reference body is left as prose",
+check("a reference body is not in the base form's field",
       "integrated_multimodal_description" in ref.prompt, False)
+check("...it is in the reference form's",
+      "detailed_description: [Shot 1] keep <Picture 1>" in ref.prompt, True)
 check("...but still gets its soundscape", "overall_soundscape: street noise" in ref.prompt, True)
-check("...and no keyframe instruction", ref.prompt.startswith("keep <Picture 1>"), True)
+check("...and no keyframe instruction", "For the target video," in ref.prompt, False)
+check("...and the picture it was handed is defined",
+      ref.prompt.startswith("subject_definitions: <Picture 1> is a reference picture."), True)
 
 # The refiner writes `@handles` into the reference sections and the two audio
 # fields exactly as it does into the body — that is how a rewrite survives an
@@ -451,8 +456,9 @@ check("sound-only plan",
       [(s["op"], s["asset"].handle) for s in sound_only.plan],
       [("image", "img-1"), ("audio", "vid-1")])
 check("sound-only substitutes as audio",
-      build("hum like @vid-1", [image("img-1"), video("vid-1", track="sound")]).prompt,
-      "hum like <Audio 1>")
+      "detailed_description: [Shot 1] hum like <Audio 1>"
+      in build("hum like @vid-1", [image("img-1"), video("vid-1", track="sound")]).prompt,
+      True)
 
 # It still cannot stand on its own: a soundtrack with no picture beside it is
 # the same "audio is never a standalone reference" case as a bare .wav.
@@ -568,24 +574,25 @@ expect_error("a keyframe is still refused outright",
 # --- saying what each reference is, for the model -----------------------------
 #
 # `takes` used to be read by the refiner's glossary and by nothing else, so a
-# piece queued without a rewrite had the dial quietly do nothing. Switched on,
-# the same distinction is written into the prompt as prose — the only place H3
-# can carry it, since the DiT is handed the same tensor either way.
+# piece queued without a rewrite had the dial quietly do nothing. It is written
+# into the prompt as prose now — the only place H3 can carry it, since the DiT
+# is handed the same tensor either way — and unconditionally, because a label
+# the prompt never defines is a label pointing at nothing.
 #
-# A floor, like the rest of `contextir`: emitted where nothing better is there,
-# and dropped the moment a refiner has written the real sections.
+# A floor, like the rest of `contextir`: dropped the moment a refiner has
+# written the real sections.
 
 def defined(prompt="", assets=(), **rest):
     data = {"prompt": prompt, "assets": list(assets), "duration_s": 6,
             "aspect": "16:9", "short_edge": 768}
     data.update(rest)
     return compiler.compile_request(
-        data, image_size_lookup=lambda _f: (1500, 1000), define_refs=True)
+        data, image_size_lookup=lambda _f: (1500, 1000))
 
 
-check("off by default, nothing is said about a reference",
+check("a reference's scope is stated without anyone asking for it",
       "is a person reference" in build("a walk", [image("img-1", takes="person")]).prompt,
-      False)
+      True)
 
 person = defined("a walk", [image("img-1", takes="person")])
 check("on, the picture's scope is stated in the prompt",
@@ -608,11 +615,18 @@ check("an un-narrowed picture is still named, so its label points at something",
 check("a camera reference says nobody in the clip appears",
       "nobody and nothing visible in the clip appears in the target video"
       in defined("a walk", [video("vid-1", takes="camera")]).prompt, True)
-check("an edit opens on the guide's own summary sentence",
-      "The target video is an edited version of <Video 1>."
+# Section 2.3's definition form, not the summary's opening sentence. Those are
+# different sections saying different things — what the label *is*, against what
+# the target video is — and borrowing the second for the first said "the target
+# video is an edited version of" once per source clip.
+check("an edit is defined as a source video",
+      "<Video 1> is a source video for the target video edit."
+      in defined("a walk", [video("vid-1", takes="edit")]).prompt, True)
+check("...and the summary is where the target video is called an edit of it",
+      "summary: [video editing] The target video is an edited version of <Video 1>."
       in defined("a walk", [video("vid-1", takes="edit")]).prompt, True)
 check("a continuation names the clip it picks up from",
-      "The target video continues from the end of <Video 1>"
+      "<Video 1> is the source video the target video continues from."
       in defined("a walk", [video("vid-1", takes="continue")]).prompt, True)
 check("a voice reference binds timbre and refuses the words",
       "its words and its background sound are not copied"
@@ -620,6 +634,48 @@ check("a voice reference binds timbre and refuses the words",
 check("a copied signal says it is the target's own audio",
       "<Audio 1> is reused directly" in
       defined("a walk", [image("img-1"), audio("aud-1", takes="copy")]).prompt, True)
+
+# --- the task-type prefix and the summary -------------------------------------
+#
+# Section 3's table, read backwards: the prefix is a restatement of what the
+# chips already say, not a judgement about the piece. It used to be the
+# refiner's alone, so a piece queued without a rewrite shipped five of the six
+# sections and left the model to work out what kind of job it was.
+
+prefix = lambda compiled: compiled.prompt.split("summary: ")[1].split("]")[0] + "]"
+
+check("references alone are a reference generation",
+      prefix(defined("a walk", [image("img-1", takes="person")])), "[reference generation]")
+# The guide says this one outright: a clip lending only its camera is reference
+# generation, not video editing.
+check("a camera reference is still only a reference generation",
+      prefix(defined("a walk", [video("vid-1", takes="camera")])), "[reference generation]")
+check("an edited clip makes it a video edit",
+      prefix(defined("a walk", [video("vid-1", takes="edit")])), "[video editing]")
+check("a continued clip makes it a continuation",
+      prefix(defined("a walk", [video("vid-1", takes="continue")])), "[video continuation]")
+check("a copied signal adds audio reuse",
+      prefix(defined("a walk", [image("img-1"), audio("aud-1", takes="copy")])),
+      "[reference generation + audio reuse]")
+check("...and a referenced one adds audio reference instead",
+      prefix(defined("a walk", [image("img-1"), audio("aud-1", takes="voice")])),
+      "[reference generation + audio reference]")
+# Whole-video relationships lead, then generation, then the frames — the order
+# of the guide's own two worked examples.
+check("several relationships combine in the guide's order, with no repeats",
+      prefix(defined("a walk", [image("img-1", takes="person"),
+                                video("vid-1", takes="edit"),
+                                video("vid-2", takes="camera")])),
+      "[video editing + reference generation]")
+# A frame riding along in a reference generation is keyframe completion too.
+check("a start frame adds keyframe completion",
+      prefix(defined("a walk", [image("img-1", takes="person"),
+                                image("key-1", role="first_frame")])),
+      "[reference generation + keyframe completion]")
+
+check("the summary counts the shots it is summarising",
+      "The target video runs one shot."
+      in defined("a walk", [image("img-1", takes="person")]).prompt, True)
 
 # The ordinals come off `plan_references`, so the prose and the payload cannot
 # disagree about which file is which.
@@ -1249,8 +1305,7 @@ expect_error("a rewrite naming an asset that is gone",
                  {"prompt": "a courier waits", "refined": refined(), "duration_s": 6}),
              "no such asset is attached")
 
-# The reference form's other three sections only exist when a refiner wrote
-# them, and only then is a REF2VA body wrapped in `detailed_description:`.
+# A refined section replaces the derived one; the form is the same either way.
 sectioned = compiler.compile_request(
     {"prompt": "her face is @img-1",
      "refined": {"body": "The woman from @img-1 turns to the window.",
@@ -1262,10 +1317,13 @@ check("a refined reference prompt gets the six-section form",
       [line.split(":")[0] for line in sectioned.prompt.split("\n\n")],
       ["subject_definitions", "summary", "retention_analysis",
        "detailed_description", "overall_soundscape"])
-check("a hand-written reference prompt is still left alone",
-      compiler.compile_request({"prompt": "her face is @img-1",
-                                "assets": [ref("img-1", "her.png")], "duration_s": 6}).prompt,
-      "her face is <Picture 1>")
+check("...and the derived one carries the same sections in the same order",
+      [line.split(":")[0] for line in compiler.compile_request(
+          {"prompt": "her face is @img-1",
+           "assets": [ref("img-1", "her.png")], "duration_s": 6}).prompt.split("\n\n")],
+      ["subject_definitions", "summary", "retention_analysis", "detailed_description"])
+check("...with the refiner's summary kept over the derived one",
+      "[Ref2VA] a portrait" in sectioned.prompt, True)
 
 # In a chained timeline the rewrite has already absorbed the global prompt — the
 # refiner was shown it — so joining it on again would say it twice.

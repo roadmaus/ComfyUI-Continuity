@@ -14,10 +14,14 @@ to be read server-side. What those sidecars *are* is `lorameta.py`'s problem —
 half a dozen tools write half a dozen layouts, and nothing here knows which one
 filled this folder.
 
-The settings pair at the bottom is the one thing here that is not a listing. It
-has to be a route rather than the frontend's userdata API for the reason
-`settings.py` opens with: the save node reads the same file while a prompt runs,
-and only the server can hand both ends the same path.
+The settings pair is the one thing here that is not a listing. It has to be a
+route rather than the frontend's userdata API for the reason `settings.py` opens
+with: the save node reads the same file while a prompt runs, and only the server
+can hand both ends the same path.
+
+`compiled_prompt` at the bottom is not a listing either. It exists so the prompt
+box can show the finished, sectioned prompt beside the sentence you typed, and
+it runs the real compiler to do it — see the route.
 """
 
 import asyncio
@@ -29,7 +33,7 @@ from aiohttp import web
 import folder_paths
 from server import PromptServer
 
-from . import lorameta, models, preview, settings
+from . import compile as compiler, lorameta, media, models, preview, settings
 
 # The picker builds its grid lazily and paginates, so the cap only bounds the
 # listing's JSON payload (~2 MB at this size). Newest first, so when a folder
@@ -620,3 +624,82 @@ async def write_settings(request):
         return web.json_response({"error": f"could not write the settings file: {problem}"},
                                  status=500)
     return web.json_response({"settings": stored})
+
+
+@PromptServer.instance.routes.post("/minimax_creator/compiled_prompt")
+async def compiled_prompt(request):
+    """The prompt the model will actually read, for the blob the editor holds.
+
+    The box shows two things now — what you typed, and what is queued — and this
+    is where the second one comes from. It has to be the compiler rather than a
+    mirror of it in the frontend: the whole point of showing the finished prompt
+    is that it is the finished prompt, and a JS re-implementation of `compose`
+    would be a second opinion that agrees right up until the moment the
+    disagreement is what you needed to see. `state.js` used to hold such a copy
+    for the scope band, and it drifted from `contextir._DEFINE` twice.
+
+    One entry per pass, in play order, because a timeline is not one prompt: the
+    strip's cards are merged into runs and each run is a generation with its own
+    six sections. `cards` maps a card's index to the pass holding it, so the box
+    can show the prompt belonging to the card that is open rather than guessing
+    that the two are numbered alike — on a strip with a merged run in it they
+    are not.
+
+    A blob that does not compile is not an error here. The editor asks on every
+    keystroke and a half-typed piece is a normal thing to be holding — an empty
+    shot, a chip whose file was just detached — so the failure is reported as
+    text for the panel to show in place of the prompt.
+    """
+    try:
+        data = await request.json()
+    except (json.JSONDecodeError, ValueError) as problem:
+        return web.json_response({"error": f"unreadable request: {problem}"}, status=400)
+
+    blob = data.get("creator_data")
+    if not isinstance(blob, dict):
+        return web.json_response({"error": "creator_data must be a JSON object"}, status=400)
+
+    try:
+        # `timeline_payloads` and nothing else: it is what `creator_node.py`
+        # builds the graph from, so it is what the render will actually be, one
+        # entry per pass, merged runs already merged.
+        payloads = compiler.timeline_payloads(blob, media.image_size)
+        # Which pass each card ended up in. A run of merged cards is one
+        # generation with one prompt, so the box has to be able to ask "the pass
+        # holding card 4" rather than "pass 4" — they are only the same number
+        # on a strip nothing merged.
+        piece = compiler.as_piece(blob)
+        segments = compiler.timeline_segments(piece)
+        runs = compiler.timeline_runs(piece, segments)
+        card_pass = {}
+        for position, (start, end) in enumerate(runs):
+            for card in range(start, end):
+                card_pass[card] = position
+
+        passes = []
+        for index, payload in enumerate(payloads):
+            if payload.get("clip"):
+                # Supplied footage. There is nothing to compile and nothing the
+                # model reads, and saying so is better than showing an empty box.
+                passes.append({"index": index, "clip": True, "prompt": "",
+                               "mode": "", "checkpoint": ""})
+                continue
+            compiled = compiler.compile_segment(payload, media.image_size)
+            passes.append({
+                "index": index,
+                "clip": False,
+                "mode": compiled.mode,
+                "checkpoint": compiled.checkpoint,
+                # A hand-written blob may replace the composed prompt outright,
+                # and `timeline.py` swaps it in after compiling. What the model
+                # reads is the override where there is one, so that is what the
+                # box has to show.
+                "prompt": payload.get("prompt_override") or compiled.prompt,
+                "overridden": bool(payload.get("prompt_override")),
+            })
+    except compiler.CompileError as problem:
+        return web.json_response({"passes": [], "problem": str(problem)})
+    except (ValueError, KeyError, TypeError, IndexError) as problem:
+        return web.json_response({"passes": [], "problem": str(problem)})
+
+    return web.json_response({"passes": passes, "cards": card_pass})

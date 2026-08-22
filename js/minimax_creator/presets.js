@@ -451,9 +451,14 @@ export function captureSubject(subject, assets) {
     const asset = byHandle.get(handle);
     if (asset?.filename) files.push(storedFile(asset, "from"));
   }
-  for (const slot of ["motion", "voice", "replaces"]) {
+  for (const slot of ["motion", "voice"]) {
     const asset = byHandle.get(subject[slot]);
     if (asset?.filename) files.push(storedFile(asset, slot));
+  }
+  // Several, where somebody stands in for the same person in more than one clip.
+  for (const handle of S.replacesOf(subject)) {
+    const asset = byHandle.get(handle);
+    if (asset?.filename) files.push(storedFile(asset, "replaces"));
   }
   return {
     data: {
@@ -461,6 +466,11 @@ export function captureSubject(subject, assets) {
         handle: subject.handle || "subject",
         takes: subject.takes ?? "person",
         ...(subject.description ? { description: subject.description } : {}),
+        // What they are, feature by feature. Kept with them, because a member
+        // who comes back out of the library without the features that made them
+        // that person comes back as a name and a photograph.
+        ...(S.subjectFeatures(subject).length
+          ? { features: S.subjectFeatures(subject) } : {}),
         ...(subject.replaces_what ? { replaces_what: subject.replaces_what } : {}),
         ...(subject.relationship ? { relationship: subject.relationship } : {}),
         files,
@@ -482,6 +492,7 @@ export function captureSubject(subject, assets) {
 export function castFactsLine(facts = {}) {
   const pictures = facts.pictures ?? 0;
   const clips = facts.clips ?? 0;
+  const features = facts.features ?? 0;
   const nothing = !pictures && !clips && !facts.motion && !facts.voice && !facts.replaces;
   return [
     t(facts.takes ?? "person"),
@@ -492,7 +503,13 @@ export function castFactsLine(facts = {}) {
     facts.motion ? t("moves") : null,
     facts.voice ? t("voice") : null,
     facts.replaces ? t("their place") : null,
-    nothing && facts.described ? t("described") : null,
+    // How much of them is written down, feature by feature. Worth a card's
+    // width: a member with six features is somebody who will come back the same
+    // person, and one with none is a name over a photograph.
+    features
+      ? t(features === 1 ? "{count} feature" : "{count} features", { count: features })
+      : null,
+    nothing && !features && facts.described ? t("described") : null,
   ].filter(Boolean).join(" · ");
 }
 
@@ -721,6 +738,7 @@ export function factsOf(body, scope) {
       voice: files.some((file) => file.slot === "voice"),
       replaces: files.some((file) => file.slot === "replaces"),
       described: Boolean(String(member.description ?? "").trim()),
+      features: S.subjectFeatures(member).length,
     };
   }
   if (scope === "style") {
@@ -1083,7 +1101,7 @@ export function addSubjectToPiece(stored, timeline) {
   const single = (timeline.segments ?? []).length === 1;
   const host = single ? timeline.segments[0] : timeline;
   if (!Array.isArray(host.assets)) host.assets = [];
-  const slots = { from: [] };
+  const slots = { from: [], replaces: [] };
   for (const file of stored.files ?? []) {
     if (!file?.filename) continue;
     const kind = file.kind ?? "image";
@@ -1103,7 +1121,9 @@ export function addSubjectToPiece(stored, timeline) {
       };
       host.assets.push(asset);
     }
-    if (file.slot === "from") slots.from.push(asset.handle);
+    // Their looks and the place they take hold several files each; the other
+    // two hold one. See `cast.LIST_ROLES`.
+    if (file.slot === "from" || file.slot === "replaces") slots[file.slot].push(asset.handle);
     else if (SUBJECT_SLOTS.includes(file.slot)) slots[file.slot] = asset.handle;
     // Narrowed to what the slot says, exactly as hanging it on them by hand
     // would — a picture that arrives as their looks is a person reference and has
@@ -1117,8 +1137,9 @@ export function addSubjectToPiece(stored, timeline) {
     from: slots.from,
     ...(slots.motion ? { motion: slots.motion } : {}),
     ...(slots.voice ? { voice: slots.voice } : {}),
-    ...(slots.replaces ? { replaces: slots.replaces } : {}),
+    ...(slots.replaces.length ? { replaces: slots.replaces } : {}),
     ...(stored.description ? { description: String(stored.description) } : {}),
+    ...(S.subjectFeatures(stored).length ? { features: S.subjectFeatures(stored) } : {}),
     ...(stored.replaces_what ? { replaces_what: String(stored.replaces_what) } : {}),
     ...(S.SUBJECT_MARKERS.includes(stored.relationship)
       ? { relationship: stored.relationship } : {}),

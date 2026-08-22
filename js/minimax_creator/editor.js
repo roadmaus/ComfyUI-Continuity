@@ -28,7 +28,7 @@ import { samplingBar, segmentSeedPill, widgetIO } from "./sampling.js";
 import { Stage } from "./stage.js";
 import { weightsPill, loadCatalog, catalogFiles } from "./models.js";
 import * as Turbo from "./turbo.js";
-import { viewUrl, probe, probeAudio, uiSetting } from "./api.js";
+import { viewUrl, probe, probeAudio } from "./api.js";
 import * as S from "./state.js";
 import { MIN_SECONDS, MAX_SECONDS, describeRatio, isTrainedLength } from "./canvas.js";
 
@@ -71,13 +71,6 @@ export const AUDIO_TAKES_HELP =
  *  soundtrack alone is explained as the audio it has become. */
 export const takesHelp = (asset) =>
   ({ image: IMAGE_TAKES_HELP, video: VIDEO_TAKES_HELP, audio: AUDIO_TAKES_HELP })[S.scopeKind(asset)];
-
-/** The references this segment will actually queue with, in the order
- *  `compile._inject_pool` merges them: the pool assets it cites go in front, so
- *  a reference shared by several segments keeps the low ordinals. `citedPool`
- *  already drops any handle the segment defines itself, which is that
- *  function's "the more specific entry wins" rule. */
-const mergedRefs = (state) => [...S.citedPool(state), ...(state.assets ?? [])];
 
 /**
  * What somebody has set on a reference, in the fewest words that still say it.
@@ -210,7 +203,7 @@ export class CreatorEditor {
                 durationPill = true, extraPills = null, extraTools = null,
                 settingsTool = true, stage = null, editorTitle = null,
                 piece = null, castPiece = null, afterPanel = null, presetTarget = null,
-                clearTool = null, seedTarget = null, scopesSent = null,
+                clearTool = null, seedTarget = null, compiledPrompt = null,
                 castFromLibrary = null, fullscreen = null }) {
     // The one sampler setting a card may answer for itself — see
     // `segmentSeedPill`. Null on a node body, which owns the whole row.
@@ -238,9 +231,11 @@ export class CreatorEditor {
     this.pieceView = pieceView;
     this.durationPill = durationPill;
     this.settingsTool = settingsTool;
-    // Whether the composed prompt is what the DiT ends up reading. Only the
-    // pre-stage's plain mode says otherwise — see `renderScopes`.
-    this.scopesSent = scopesSent;
+    // The finished, sectioned prompt for whichever pass this body's shot lands
+    // in — what the box's second view shows. Not derivable here: it takes the
+    // whole piece to compile one shot, and this body is handed one card. Absent
+    // where nothing can answer, and the view goes with it.
+    this.compiledPrompt = compiledPrompt;
     this.extraPills = extraPills;
     this.extraTools = extraTools;
     this.clearTool = clearTool;
@@ -274,8 +269,11 @@ export class CreatorEditor {
         this.state.prompt = text;
         this.onCommit?.();
         this.renderNotices();   // dangling-handle warning, without disturbing the caret
-        this.renderScopes();    // citing a pool reference is what attaches it
+        // Citing a pool reference is what attaches it, so the finished prompt
+        // moves on keystrokes that never touch the sentence's own words.
+        this.prompt.refreshCompiled();
       },
+      compiled: this.compiledPrompt ? () => this.compiledPrompt() : null,
       onAttach: (row) => this.attachFromMention(row),
       attachBlocked: (action) => S.blockedReason(this.state, action),
       // The piece's reference pool, where this state is a timeline segment —
@@ -1027,7 +1025,7 @@ export class CreatorEditor {
     })] : []));
     this.prompt.refresh();
     this.syncPrompt();
-    this.renderScopes();
+    this.prompt.refreshCompiled();
     this.refinePanel.render();
     this.renderExpand();
     this.renderNotices();
@@ -1120,7 +1118,7 @@ export class CreatorEditor {
       extraPills: this.extraPills,
       extraTools: this.extraTools,
       settingsTool: this.settingsTool,
-      scopesSent: this.scopesSent,
+      compiledPrompt: this.compiledPrompt,
       refineTarget: this.refineTarget,
       onRefined: this.onRefined,
       onReverted: this.onReverted,
@@ -1165,65 +1163,6 @@ export class CreatorEditor {
   syncPrompt() {
     const refined = this.state.refined;
     this.prompt.setSuperseded(!!refined?.body?.trim() && refined.enabled !== false);
-  }
-
-  /**
-   * The scope band: what the compiler will write in front of the description,
-   * one sentence per reference, above the box and inside its fold.
-   *
-   * Off unless the machine's `define_refs` setting is on, because that is the
-   * setting this is a window onto — a band showing lines nothing will send is
-   * worse than no band. Empty in the keyframe modes too: there is no reference
-   * plan there, the alignment instruction already names the pictures, and
-   * `compile_request` passes no definitions for them either.
-   *
-   * Handles here, `<Picture 1>` in the prompt that is queued — the same trade
-   * the box itself makes, and for the same reason: ordinals are allocated at
-   * queue time and move whenever an asset is added or dropped, so a name shown
-   * here would be stale as often as it was right. The caption says so once.
-   */
-  renderScopes() {
-    const host = this.prompt.scopeHost;
-    if (!host) return;
-    const state = this.state;
-    // A refined reference form defines its own labels in `subject_definitions`
-    // and scopes them in `retention_analysis`, so `contextir.compose` drops
-    // these lines rather than say the same thing twice. Mirrored here so the
-    // band goes when the rewrite that replaces it arrives.
-    const refined = state.refined;
-    const superseded = !!refined?.body?.trim() && refined.enabled !== false
-      && Object.values(refined.sections ?? {}).some((text) => String(text ?? "").trim());
-
-    const lines = uiSetting("define_refs", false) && S.mode(state) === "REF2VA" && !superseded
-      // ...and only where the composed prompt is what the DiT actually reads.
-      // The pre-stage's plain mode swaps the whole composition for the typed
-      // sentence after compiling, so a band there would be showing lines that
-      // are built and then thrown away.
-      && (this.scopesSent?.() ?? true)
-      // In front, the way `compile._inject_pool` merges them: a shared
-      // reference keeps the low ordinals. A handle the segment defines itself
-      // wins, which is the same rule that function applies.
-      ? S.refDefinitions(mergedRefs(state))
-      : [];
-
-    if (!lines.length) return host.replaceChildren();
-    host.replaceChildren(
-      el("div", { class: "mmc-scopes-head" }, [
-        el("span", { text: t("sent to the model with your prompt") }),
-        el("span", {
-          class: "mmc-scopes-why",
-          text: t("each @name is written as its <Picture N> label when you queue"),
-        }),
-      ]),
-      ...lines.map(({ handle, sentence }) => {
-        const [before, after] = sentence.split("%s");
-        return el("p", { class: "mmc-scopes-line" }, [
-          el("span", { text: before }),
-          el("span", { class: `mmc-ref mmc-tag-${S.tagIndex(handle)}`, text: `@${handle}` }),
-          el("span", { text: after ?? "" }),
-        ]);
-      }),
-    );
   }
 
   renderNotices() {
@@ -1348,13 +1287,22 @@ export class CreatorEditor {
     this.castOpen = true;
     this.castSummoned = summoned || !already;
     this.render();
-    if (!this.castShelf?.openMember(handle)) {
+    const what = this.castShelf?.openMember(handle);
+    if (!what) {
       // A chip whose name nobody answers to — a subject deleted out from under
       // a sentence that still writes them. Leave the shelf exactly as it was.
       this.castOpen = already;
       this.castSummoned = summoned;
       this.render();
       return;
+    }
+    // Pressing the name of the member already open shuts them, and a shelf that
+    // was only here for that summons goes with them — the same way their own
+    // chevron takes it away. A resident shelf stays; there was a cast on it
+    // before the press and there is one after.
+    if (what === "shut" && this.castSummoned && !this.nodeId) {
+      this.castSummoned = false;
+      this.castOpen = false;
     }
     this.render();
   }
@@ -1531,7 +1479,7 @@ export class CreatorEditor {
     const cast = new Set();
     for (const subject of this.castPiece.subjects ?? []) {
       for (const handle of S.subjectFiles(subject)) cast.add(handle);
-      if (subject.replaces) cast.add(subject.replaces);
+      for (const handle of S.replacesOf(subject)) cast.add(handle);
     }
     const chip = (asset) => {
       const thumb = asset.kind === "image"

@@ -7,7 +7,7 @@
 // LoRAs, same routing badge. There is no reduced "segment UI" to keep in step
 // with the node's, because there is only one editor.
 
-import { probe, viewUrl } from "./api.js";
+import { compiledPrompt, probe, viewUrl } from "./api.js";
 import { CastShelf } from "./cast.js";
 import { clearButton } from "./clear.js";
 import { el, icon, mountOverlay, swappable } from "./dom.js";
@@ -148,6 +148,57 @@ const cardWidth = (seconds) => 132 + Math.round(Math.sqrt(seconds) * 26);
  *  one back. */
 const holdSkin = (head) => (S.isHeld(head)
   ? (S.takeOn(head) ? " mmc-tl-kept" : " mmc-tl-unshot") : "");
+
+/**
+ * The finished prompt for the pass holding one card of a piece — what the
+ * prompt box's "what the model reads" rail opens onto.
+ *
+ * It takes the whole piece to compile one shot: the global prompt is folded in,
+ * the pool's cited references are merged in front of the card's own, the cast is
+ * the piece's, and a run of merged cards is one generation with one description.
+ * So this serialises the piece exactly as the node saves it and lets the
+ * compiler answer, rather than assembling anything here.
+ *
+ * `cards` is what turns a card's index into a pass's: on a strip with a merged
+ * run in it the two stop being the same number, and showing card 4 the prompt of
+ * pass 4 would be showing it somebody else's shot.
+ *
+ * A function and not a method, because both faces need it and only one of them
+ * had it. It was a method on `Timeline`, and `TimelineBody.faceBody` — the
+ * lone-shot face, which is most of this node's use — handed the box a hook that
+ * looked it up on itself, where it does not exist. Every open of the panel there
+ * threw. Out here neither class can have it and the other not.
+ *
+ * @param {object} timeline  the piece, as the node holds it
+ * @param {number} card      which card's pass to answer for
+ */
+async function compiledFor(timeline, card) {
+  const answer = await compiledPrompt(JSON.parse(S.serializeTimeline(timeline)));
+  if (answer.problem) return { problem: answer.problem };
+
+  const index = answer.cards?.[card] ?? 0;
+  const pass = answer.passes?.[index];
+  if (!pass) return { problem: t("this shot is not in any pass yet") };
+  if (pass.clip) {
+    // `message`, not `text`: this is the panel talking, not a compiled prompt,
+    // and setting it as one would give a sentence of ours a wire key it does
+    // not have.
+    return { note: t("supplied footage"),
+             message: t("This shot is a clip you attached. Nothing is generated for it, so "
+                      + "there is no prompt — it is spliced into the piece as it is.") };
+  }
+
+  const total = answer.passes.length;
+  const held = Object.keys(answer.cards ?? {})
+    .filter((key) => answer.cards[key] === index).length;
+  const note = [
+    total > 1 ? t("pass {n} of {total}", { n: index + 1, total }) : t("one pass"),
+    held > 1 ? t("{n} shots merged", { n: held }) : null,
+    pass.mode,
+    pass.overridden ? t("replaced by hand") : null,
+  ].filter(Boolean).join(" · ");
+  return { note, text: pass.prompt };
+}
 
 class Timeline {
   constructor({ timeline, onCommit, edit = null, io = null }, resolve) {
@@ -605,7 +656,10 @@ class Timeline {
    */
   openCastMember(handle) {
     this.renderCast();
-    if (!this.castShelf?.openMember(handle)) return;
+    // Pressing the name of whoever is already open shuts them — the press is
+    // its own undo. Nothing to scroll to in that case: what was being pointed
+    // at has just gone.
+    if (this.castShelf?.openMember(handle) !== "opened") return;
     this.castHost.scrollIntoView({ block: "nearest", behavior: "smooth" });
   }
 
@@ -2185,6 +2239,7 @@ class Timeline {
     this.commit();
   }
 
+
   /** The segment editor: the node's own body, over the strip. */
   edit(index) {
     const segment = this.timeline.segments[index];
@@ -2209,6 +2264,7 @@ class Timeline {
       // looked the piece's subjects up on the segment, found none, and a name
       // clicked in a card opened nothing while deleting one took nobody out.
       castPiece: this.timeline,
+      compiledPrompt: () => compiledFor(this.timeline, index),
       // Both belong to the timeline rather than to one shot: the canvas because
       // the segments are joined, the continuation because it describes the seam
       // in front of this segment and so does not exist for the first one.
@@ -2492,6 +2548,8 @@ export class TimelineBody {
         return subject.handle;
       },
       onCommit: () => this.commit(),
+      // The face wears the piece's first card, so that is the pass it shows.
+      compiledPrompt: () => compiledFor(this.timeline, 0),
       samplingWidgets: this.widgets,
       onWidgetChange: this.onWidgetChange,
       nodeId: this.nodeId,

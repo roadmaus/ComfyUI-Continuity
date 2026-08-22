@@ -248,19 +248,104 @@ export const css = `
 .mmc-cast-add:hover { border-color: var(--mmc-accent); color: var(--mmc-accent); }
 
 .mmc-cast-refs-none { font-size: 11px; color: var(--mmc-off); }
-/* The retention marker. Last on the row and quiet, because it is the one thing
-   here you set once a year — but a word rather than a code, with the code
-   itself in the menu under it. */
-.mmc-cast-keep {
-  margin-left: auto; background: none; border: 0; padding: 3px 6px;
-  /* Anchored right, away from the tiles: it is a statement about all of them
-     together, not another slot in the row. */
-  border-radius: 6px; color: var(--mmc-off); font-family: inherit;
-  font-size: 11px; cursor: pointer; white-space: nowrap;
+
+/* --- feature by feature ---------------------------------------------------- */
+/* The guide writes a subject as a named list of features and names the same
+   features again in retention_analysis, so this list is the shape of the thing
+   being edited rather than a form invented for the shelf.
+
+   Set as a list and not as a row of fields: every line is one claim about one
+   person, and lines are what you read down. Indented to the tiles' own lane, so
+   the card reads as a column of statements about the same somebody. */
+.mmc-cast-features {
+  display: flex; flex-direction: column; gap: 4px;
+  padding-left: 58px; min-width: 0;
 }
-.mmc-cast-keep:hover { background: var(--mmc-surface-2); color: var(--mmc-dim); }
+.mmc-cast-features-head {
+  display: flex; align-items: baseline; gap: 10px; min-width: 0; margin-bottom: 1px;
+}
+.mmc-cast-features-title {
+  color: var(--mmc-off); font-size: 10px; letter-spacing: .09em; text-transform: uppercase;
+}
+.mmc-cast-feature-add {
+  margin-left: auto; flex: none; appearance: none; border: 0; background: none;
+  padding: 2px 5px; margin-right: -5px; border-radius: 6px; cursor: pointer;
+  color: var(--mmc-off); font: inherit; font-size: 11px; white-space: nowrap;
+}
+.mmc-cast-feature-add:hover { color: var(--mmc-accent); background: var(--mmc-surface-2); }
+
+.mmc-cast-feature {
+  display: flex; align-items: center; gap: 7px; min-width: 0; flex-wrap: wrap;
+}
+/* The fields are the line. No border and no box: a bordered input per feature
+   turns four facts about one person into a form to fill in, and what this is is
+   a sentence somebody is writing. The rule under it is the only edge. */
+/* A fixed lane rather than the whole row: at flex:1 the phrase and the word
+   after it ended up at opposite ends of the card, reading as two unrelated
+   things, and no two rows put their arrows in the same place. Boxed to one
+   width, the arrows line up into a column and each row reads as one phrase. */
+.mmc-cast-feature-is, .mmc-cast-feature-instead {
+  flex: 0 1 15em; min-width: 7em; appearance: none; background: none;
+  border: 0; border-bottom: 1px solid transparent; outline: none;
+  padding: 3px 0; color: var(--mmc-text); font: inherit; font-size: 12.5px;
+}
+.mmc-cast-feature-is::placeholder, .mmc-cast-feature-instead::placeholder { color: #5a5a5a; }
+.mmc-cast-feature-is:hover, .mmc-cast-feature-instead:hover { border-bottom-color: var(--mmc-line); }
+.mmc-cast-feature-is:focus, .mmc-cast-feature-instead:focus {
+  border-bottom-color: var(--mmc-accent);
+}
+/* The one device on the card. A kept feature is a plain line; a changed one is
+   the only thing here with horizontal motion in it, and it reads as what it is —
+   this, now that. Nothing else is highlighted, boxed or coloured to say so. */
+.mmc-cast-feature-arrow {
+  flex: none; color: var(--mmc-accent); font-size: 13px; line-height: 1;
+}
+.mmc-cast-feature.changed .mmc-cast-feature-is { color: var(--mmc-dim); }
+.mmc-cast-feature.changed .mmc-cast-feature-instead { color: var(--mmc-text); }
+/* Kept is the quiet state, so it is a word and not a control: no border, no
+   background, nothing to look at until you go looking for it. */
+.mmc-cast-feature-kept {
+  flex: none; appearance: none; border: 0; background: none; cursor: pointer;
+  padding: 3px 6px; border-radius: 6px; color: var(--mmc-off);
+  font: inherit; font-size: 11px; white-space: nowrap;
+}
+.mmc-cast-feature-kept:hover { color: var(--mmc-accent); background: var(--mmc-surface-2); }
+.mmc-cast-feature-x {
+  flex: none; margin-left: auto; opacity: 0; transition: opacity .12s ease;
+}
+.mmc-cast-feature:hover .mmc-cast-feature-x,
+.mmc-cast-feature:focus-within .mmc-cast-feature-x { opacity: 1; }
+
+/* What the rows add up to, in the guide's own vocabulary. Monospaced, which is
+   the same face the compiled prompt sets its field names in: across both
+   surfaces that face means "this is the word the model is handed". */
+.mmc-cast-marker {
+  display: flex; align-items: baseline; gap: 8px; align-self: flex-start;
+  appearance: none; border: 0; background: none; cursor: pointer;
+  padding: 3px 6px; margin: 6px 0 0 -6px; border-radius: 6px;
+  font: inherit; text-align: left;
+}
+.mmc-cast-marker:hover { background: var(--mmc-surface-2); }
+.mmc-cast-marker-value {
+  color: var(--mmc-dim); font-size: 11px; letter-spacing: .04em;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+.mmc-cast-marker-say, .mmc-cast-marker-forced { color: var(--mmc-off); font-size: 10.5px; }
+.mmc-cast-marker.forced .mmc-cast-marker-value { color: var(--mmc-accent); }
 
 .mmc-cast-line { display: flex; gap: 8px; align-items: center; padding-left: 58px; min-width: 0; }
+/* The place they take, offered rather than hidden behind a thumbnail's menu:
+   this is the one relationship the model cannot infer and the one people most
+   want to state. Dim until it holds something, so a card where nobody takes
+   anyone's place reads as an offer and not as an unanswered question. */
+.mmc-cast-place { opacity: .62; }
+.mmc-cast-place:hover, .mmc-cast-place:focus-within, .mmc-cast-place.on { opacity: 1; }
+.mmc-cast-place-clip {
+  flex: none; appearance: none; background: none; cursor: pointer;
+  border: 1px solid var(--mmc-line); border-radius: 7px; padding: 3px 8px;
+  color: var(--mmc-dim); font: inherit; font-size: 11.5px; white-space: nowrap;
+}
+.mmc-cast-place-clip:hover { border-color: var(--mmc-accent); color: var(--mmc-text); }
 .mmc-cast-of { font-size: 11px; color: var(--mmc-dim); white-space: nowrap; }
 .mmc-cast-bad { font-size: 11px; color: #ff8c78; line-height: 1.45; padding-left: 58px; }
 

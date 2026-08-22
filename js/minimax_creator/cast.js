@@ -97,6 +97,21 @@ export const ROLES = [
 
 const ROLE = Object.fromEntries(ROLES.map((role) => [role.key, role]));
 
+/** The two roles that hold several files rather than one.
+ *
+ *  Their looks, obviously — several pictures of one person are one person. And
+ *  the place they take: the same role in a medium shot and a close-up is one
+ *  vacancy filmed twice, and while this slot held a single handle the second
+ *  clip could only be attached and left saying nothing. The other two are
+ *  genuinely singular — they have one voice, and one way of moving. */
+const LIST_ROLES = new Set(["from", "replaces"]);
+
+/** What `subject` has in `role`, always as a list. */
+const inRole = (subject, role) =>
+  role === "from" ? [...(subject.from ?? [])]
+    : role === "replaces" ? S.replacesOf(subject)
+      : subject[role] ? [subject[role]] : [];
+
 /** What stands in for a face where no picture can supply one. Follows `takes`,
  *  because a person glyph over a described loft says the wrong thing. */
 const BLANK_FACE = { person: "face", object: "weights", scene: "image", style: "effect" };
@@ -123,16 +138,16 @@ export const MARKER_LABEL = {
   derive: "decide for me",
   fully_preserved: "kept whole",
   partially_preserved: "partly kept",
-  transferred: "moved onto them",
-  reused: "reused as is",
+  attribute_transfer: "moved onto them",
+  weak_reference: "loosely followed",
 };
 
 export const MARKER_NOTE = {
   derive: "Kept whole, or moved onto them where they take somebody's place.",
   fully_preserved: "Everything the definition claims is carried into the video.",
   partially_preserved: "Some of it is carried over and the rest is free to change.",
-  transferred: "What they are made of lands on somebody else's place in a clip.",
-  reused: "The reference is used as it stands, not re-interpreted.",
+  attribute_transfer: "What they are made of lands on somebody else's place in a clip.",
+  weak_reference: "Only the broad look or mood is followed, not the specifics.",
 };
 
 /** A popover of rows, each of which may be a picture and two lines rather than
@@ -249,16 +264,32 @@ export class CastShelf {
 
   /**
    * Open one member by name, for a host that was asked about them rather than
-   * about the cast — double-clicking their chip in the prompt. Answers whether
+   * about the cast — clicking their chip in the prompt. Answers whether
    * there was anybody by that name, so a host that put the shelf up to show
    * them can take it back down when there was not.
+   */
+  /**
+   * Open somebody's card, or shut it where it is the card already open.
+   *
+   * The gesture that summons this is a press on their name in the sentence, and
+   * a press that only ever opens is a press with no way back: the way out of a
+   * card you opened by clicking a name was to find the chevron on it. Pressing
+   * the same name again is the obvious undo, so it is the undo.
+   *
+   * @returns {"opened"|"shut"|false} what happened, or false for a name nobody
+   *   answers to — a subject deleted out from under a sentence that still writes
+   *   them, which must leave the shelf exactly as it was.
    */
   openMember(handle) {
     const subject = (this.getCast() ?? []).find((s) => s.handle === handle);
     if (!subject) return false;
-    this.opened = subject;
+    const shutting = this.opened === subject;
+    this.opened = shutting ? null : subject;
+    // `changing` is card-local: a row waiting for an "instead" nobody typed is
+    // not a change, and it must not still be waiting on the next card opened.
+    if (shutting) this.changing = null;
     this.render();
-    return true;
+    return shutting ? "shut" : "opened";
   }
 
   /** A structural change: somebody joined or left, or a file moved between their
@@ -448,9 +479,8 @@ export class CastShelf {
   miniRefs(subject) {
     const assets = this.getAssets();
     const tiles = [];
-    for (const handle of subject.from ?? []) tiles.push([handle, "from"]);
-    for (const key of ["motion", "voice", "replaces"]) {
-      if (subject[key]) tiles.push([subject[key], key]);
+    for (const role of ROLES) {
+      for (const handle of inRole(subject, role.key)) tiles.push([handle, role.key]);
     }
     if (!tiles.length) {
       return el("span", {
@@ -508,7 +538,13 @@ export class CastShelf {
             class: "mmc-cast-shut",
             title: t("Close @{handle}", { handle: subject.handle }),
             "aria-expanded": "true",
-            onclick: () => { this.opened = null; this.renderSoon(); this.onShut?.(); },
+            onclick: () => {
+              this.opened = null;
+              // A row waiting for an "instead" nobody typed is not a change.
+              this.changing = null;
+              this.renderSoon();
+              this.onShut?.();
+            },
           }, [icon("chevron", 14)]),
           el("button", {
             class: "mmc-asset-x", text: "✕",
@@ -521,7 +557,8 @@ export class CastShelf {
         ]),
       ]),
       this.refStrip(subject),
-      ...(subject.replaces ? [this.replacesField(subject)] : []),
+      this.featureBlock(subject),
+      ...this.placeRow(subject),
       ...(problem ? [el("div", { class: "mmc-cast-bad", text: t(problem) })] : []),
       ...(this.note?.subject === subject
         ? [el("div", { class: "mmc-cast-bad", text: this.note.text })] : []),
@@ -613,7 +650,7 @@ export class CastShelf {
   }
 
   descriptionField(subject) {
-    const bare = !S.subjectFiles(subject).length && !subject.replaces;
+    const bare = !S.subjectFiles(subject).length && !S.replacesOf(subject).length;
     const field = el("input", {
       class: "mmc-cast-desc",
       value: subject.description ?? "",
@@ -639,20 +676,221 @@ export class CastShelf {
     return field;
   }
 
-  replacesField(subject) {
+  // ---- feature by feature -----------------------------------------------------
+  //
+  // The guide writes a subject as a named list of features and then names the
+  // same features again in `retention_analysis` — section 6's worked example is
+  // four subjects in a row built that way. So this is not a form we invented for
+  // the shelf: it is the shape of the thing being edited, and the two sections
+  // are two views of this list.
+  //
+  // What it replaces is a menu with four words in it whose prose never moved.
+  // Picking "partly kept" wrote `partially_preserved` over a sentence that said
+  // everything was retained, so the one question a person actually has — what if
+  // the clothing should be different — had no answer anywhere in the node. Here
+  // it is a row with an arrow in it.
+
+  /** The features, one row each, and the marker they add up to. */
+  featureBlock(subject) {
+    const features = subject.features ?? [];
+    const marker = S.subjectMarker(subject);
+    const overridden = S.SUBJECT_MARKERS.includes(subject.relationship);
+    const fromFiles = !!S.subjectFiles(subject).length;
+    return el("div", { class: "mmc-cast-features" }, [
+      el("div", { class: "mmc-cast-features-head" }, [
+        el("span", {
+          class: "mmc-cast-features-title",
+          text: fromFiles ? t("What the reference shows") : t("What they look like"),
+        }),
+        el("button", {
+          class: "mmc-cast-feature-add",
+          title: t("One thing about them — their hair, what they are wearing, the "
+                 + "sign above the door. Named here, named again in the retention "
+                 + "line, and each one can be changed on its own."),
+          text: t("+ add a feature"),
+          onclick: () => this.addFeature(subject),
+        }),
+      ]),
+      ...features.map((feature, index) => this.featureRow(subject, feature, index)),
+      // The value itself, in the same monospace the compiled prompt sets its
+      // wire keys in: across both surfaces that face means "this is what the
+      // model is handed". Derived from the rows above unless somebody overrode
+      // it, and it is a button because the override is the only way to reach
+      // `weak_reference`, which no rule can infer.
+      el("button", {
+        class: `mmc-cast-marker${overridden ? " forced" : ""}`,
+        title: overridden
+          ? t("Set by hand. Click to go back to deciding it from the features above.")
+          : t("The reference guide's own relationship marker, worked out from the "
+            + "features above and written into the retention line. Click to set it "
+            + "by hand instead."),
+        onclick: (event) => this.pickMarker(event.currentTarget, subject),
+      }, [
+        el("span", { class: "mmc-cast-marker-value", text: marker }),
+        el("span", { class: "mmc-cast-marker-say", text: t(MARKER_LABEL[marker]) }),
+        ...(overridden ? [el("span", { class: "mmc-cast-marker-forced", text: t("set by hand") })] : []),
+      ]),
+    ]);
+  }
+
+  /**
+   * One feature: what the reference shows, and what the target video gives them
+   * instead of it.
+   *
+   * Kept is the quiet state and has no control in it at all — a word you can
+   * click, and nothing else. A changed feature is the only row on the card with
+   * an arrow in it, so the eye lands on the ones that move without anything
+   * being highlighted, boxed or coloured to make it.
+   */
+  featureRow(subject, feature, index) {
+    const changing = feature.instead || this.changing?.has(feature);
+    const write = (key, value) => {
+      feature[key] = value;
+      this.touch?.();
+    };
+    const field = (key, placeholder, title) => {
+      const box = el("input", {
+        class: `mmc-cast-feature-${key === "is" ? "is" : "instead"}`,
+        value: feature[key] ?? "", placeholder: t(placeholder), title: t(title),
+        oninput: (event) => write(key, event.target.value),
+        // An empty `is` is a row nobody filled in — dropped on the way out, the
+        // same as `subjects._parse_features` drops it on the way in. An empty
+        // `instead` is a change somebody thought better of, so the row goes back
+        // to being kept rather than disappearing.
+        onblur: () => {
+          if (key === "is" && !String(feature.is ?? "").trim()) return this.dropFeature(subject, feature);
+          if (key === "instead" && !String(feature.instead ?? "").trim()) {
+            this.changing?.delete(feature);
+          }
+          // `renderSoon`, not `save`: the words are already on the blob — that is
+          // what `touch` on every keystroke is for — and this is the same bargain
+          // the description field beside it makes. See `renderSoon`.
+          this.renderSoon();
+        },
+      });
+      box.addEventListener("pointerdown", (event) => event.stopPropagation());
+      return box;
+    };
+    return el("div", { class: `mmc-cast-feature${changing ? " changed" : ""}` }, [
+      field("is", "one thing about them", "Written into their definition, and named "
+            + "again in the retention line as something that is retained."),
+      ...(changing ? [
+        el("span", { class: "mmc-cast-feature-arrow", text: "→" }),
+        field("instead", "what it is instead", "What the target video gives them in "
+              + "place of it. This is what makes the marker partially_preserved."),
+      ] : [
+        el("button", {
+          class: "mmc-cast-feature-kept",
+          title: t("Carried over as the reference has it. Click to change it instead."),
+          text: t("kept"),
+          onclick: (event) => {
+            this.changing ??= new Set();
+            this.changing.add(feature);
+            this.render();
+            // The row has just grown a box; the press was the intent to type in it.
+            event.currentTarget.closest(".mmc-cast-feature")
+              ?.querySelector(".mmc-cast-feature-instead")?.focus();
+          },
+        }),
+      ]),
+      el("button", {
+        class: "mmc-asset-x mmc-cast-feature-x", text: "✕",
+        title: t("Drop this feature"),
+        onclick: () => this.dropFeature(subject, feature),
+      }),
+    ]);
+  }
+
+  addFeature(subject) {
+    subject.features = [...(subject.features ?? []), { is: "", instead: "" }];
+    this.save();
+    // Focused after the render the save triggers, because the box does not exist
+    // until then. Pressing "add a feature" and then having to click the row it
+    // made is the whole of what makes a list like this tiring to fill in.
+    requestAnimationFrame(() => {
+      const rows = this.root?.querySelectorAll?.(".mmc-cast-feature-is") ?? [];
+      rows[rows.length - 1]?.focus?.();
+    });
+  }
+
+  dropFeature(subject, feature) {
+    this.changing?.delete(feature);
+    subject.features = (subject.features ?? []).filter((other) => other !== feature);
+    if (!subject.features.length) delete subject.features;
+    this.save();
+  }
+
+  // ---- the place they take ----------------------------------------------------
+
+  /**
+   * "Takes the place of ⟨who⟩ in ⟨clip⟩" — offered, not hidden.
+   *
+   * This is the one relationship the model cannot infer and the one people most
+   * want: @vera should replace the bench in @vid-1. Writing that sentence in the
+   * prompt does nothing structural — it lands in `detailed_description` and the
+   * retention line still says @vera is preserved whole and the clip is preserved
+   * whole, with nothing saying the two have anything to do with each other. What
+   * says it is section 4.1's `attribute_transfer`, and reaching it used to mean
+   * finding a menu item called "their place" behind a thumbnail.
+   *
+   * So the row is on the card whenever the piece holds a clip that could be
+   * edited or continued. Empty and silent where nobody takes anyone's place,
+   * which is most cards — an offer, not a warning.
+   */
+  placeRow(subject) {
+    const held = S.replacesOf(subject);
+    const clips = this.getAssets().filter(
+      (asset) => asset.kind === "video" && asset.track !== "sound"
+                 && ["edit", "continue"].includes(asset.takes));
+    if (!held.length && !clips.length) return [];
+
     const field = el("input", {
       class: "mmc-cast-desc mmc-cast-replaces",
       value: subject.replaces_what ?? "",
-      placeholder: t("who they replace in that clip — the person at the counter"),
+      placeholder: t("who or what they replace — the person at the counter"),
       title: t("Written into the retention line, so the model knows who is going."),
       oninput: (event) => { subject.replaces_what = event.target.value; this.touch?.(); },
       onblur: () => this.renderSoon(),
     });
     field.addEventListener("pointerdown", (event) => event.stopPropagation());
-    return el("div", { class: "mmc-cast-line" }, [
-      el("span", { class: "mmc-cast-of", text: t("in place of") }),
+
+    return [el("div", { class: `mmc-cast-line mmc-cast-place${held.length ? " on" : ""}` }, [
+      el("span", { class: "mmc-cast-of", text: t("takes the place of") }),
       field,
-    ]);
+      el("span", { class: "mmc-cast-of", text: t("in") }),
+      el("button", {
+        class: "mmc-cast-place-clip",
+        title: t("Which clip they take somebody's place in. The clip's framing, "
+               + "camera work and action are kept; only its occupant moves."),
+        text: held.length ? held.map((handle) => `@${handle}`).join(", ") : t("pick a clip"),
+        onclick: (event) => this.pickPlace(event.currentTarget, subject, clips),
+      }),
+    ])];
+  }
+
+  /** Which clips they stand in for somebody in. Several, because the same role
+   *  in a medium shot and a close-up is one vacancy filmed twice. */
+  pickPlace(anchor, subject, clips) {
+    const held = new Set(S.replacesOf(subject));
+    openMenu(anchor, {
+      title: t("Where @{handle} takes somebody's place", { handle: subject.handle }),
+      sections: [{
+        rows: clips.map((asset) => ({
+          lead: assetThumb(asset, "mmc-cast-menu-thumb"),
+          label: `@${asset.handle}`,
+          note: asset.filename,
+          checked: held.has(asset.handle),
+          onPick: () => {
+            if (held.has(asset.handle)) this.clearRole(subject, asset.handle, "replaces");
+            else {
+              this.addRole(subject, asset.handle, "replaces");
+              S.inheritTake(subject, "replaces", asset);
+            }
+            this.save();
+          },
+        })),
+      }],
+    });
   }
 
   /** Where they walk on. A button rather than a readout when they walk on
@@ -682,11 +920,10 @@ export class CastShelf {
   refStrip(subject) {
     const assets = this.getAssets();
     const tiles = [];
-    for (const handle of subject.from ?? []) {
-      tiles.push(this.refTile(subject, handle, "from", assets));
-    }
-    for (const key of ["motion", "voice", "replaces"]) {
-      if (subject[key]) tiles.push(this.refTile(subject, subject[key], key, assets));
+    for (const role of ROLES) {
+      for (const handle of inRole(subject, role.key)) {
+        tiles.push(this.refTile(subject, handle, role.key, assets));
+      }
     }
     return el("div", { class: "mmc-cast-refs" }, [
       ...tiles,
@@ -701,17 +938,6 @@ export class CastShelf {
         class: "mmc-cast-refs-none",
         text: t("no files — described in words alone"),
       })]),
-      el("button", {
-        class: "mmc-cast-keep",
-        title: t("The reference guide's own relationship marker, written into the "
-               + "retention line. Left to decide, it is kept whole — or moved onto "
-               + "them, where they take somebody's place."),
-        // Prefixed, because "kept whole" alone at the end of a row of pictures
-        // reads as a stray label rather than as a setting with a value.
-        text: t("what is kept: {value}",
-                { value: t(MARKER_LABEL[subject.relationship ?? "derive"]) }),
-        onclick: (event) => this.pickMarker(event.currentTarget, subject),
-      }),
     ]);
   }
 
@@ -758,14 +984,14 @@ export class CastShelf {
     openMenu(anchor, { title: `@${handle}`, sections: [{ rows }] });
   }
 
-  /** Move a handle between slots. `from` is a list and the other three hold one
-   *  each, so taking over one of them displaces whatever was in it — which is
-   *  the truthful outcome: they have one voice. */
+  /** Move a handle between slots. Their looks and the place they take are lists
+   *  and a file joins them; the other two hold one each, so taking over one of
+   *  them displaces whatever was in it — which is the truthful outcome: they
+   *  have one voice, and one way of moving. */
   setRole(subject, handle, current, next) {
     if (current === next) return;
     this.clearRole(subject, handle, current);
-    if (next === "from") subject.from = [...(subject.from ?? []), handle];
-    else subject[next] = handle;
+    this.addRole(subject, handle, next);
     // The file is a different kind of reference now — a clip that was their looks
     // and is now their movement is a motion reference — so the narrowing follows
     // it across, unless somebody set that themselves. See `state.inheritTake`.
@@ -773,10 +999,24 @@ export class CastShelf {
     this.save();
   }
 
+  /** Put a handle in a slot, joining whatever is there where the slot is a list. */
+  addRole(subject, handle, role) {
+    if (!LIST_ROLES.has(role)) { subject[role] = handle; return; }
+    const held = inRole(subject, role);
+    if (!held.includes(handle)) held.push(handle);
+    subject[role] = held;
+  }
+
   clearRole(subject, handle, role) {
-    if (role === "from") subject.from = (subject.from ?? []).filter((h) => h !== handle);
-    else delete subject[role];
-    if (role === "replaces") delete subject.replaces_what;
+    if (!LIST_ROLES.has(role)) { delete subject[role]; }
+    else {
+      const left = inRole(subject, role).filter((h) => h !== handle);
+      if (left.length) subject[role] = left;
+      else delete subject[role];
+    }
+    // The words naming who they stand in for belong to the whole slot, so they
+    // only go when the last clip does.
+    if (role === "replaces" && !S.replacesOf(subject).length) delete subject.replaces_what;
   }
 
   /** The "+" tile: everything attached that is not already on them, then the way
@@ -784,8 +1024,7 @@ export class CastShelf {
    *  a sound is a voice, anything else is their looks — and the tile's own menu is
    *  where that is changed, so the common case is one click. */
   pickReference(anchor, subject) {
-    const used = new Set([...(subject.from ?? []), subject.motion, subject.voice,
-                          subject.replaces].filter(Boolean));
+    const used = new Set(ROLES.flatMap((role) => inRole(subject, role.key)));
     const rows = this.getAssets()
       .filter((asset) => !used.has(asset.handle))
       .map((asset) => ({
@@ -794,8 +1033,7 @@ export class CastShelf {
         note: asset.filename,
         onPick: () => {
           const key = ROLES.find((role) => role.fits(asset))?.key ?? "from";
-          if (key === "from") subject.from = [...(subject.from ?? []), asset.handle];
-          else subject[key] = asset.handle;
+          this.addRole(subject, asset.handle, key);
           // Hung on somebody, so narrowed to what they are — a picture of @anna is
           // a person reference, and the row that says so is the same row the
           // model is handed. See `state.inheritTake`.
@@ -814,8 +1052,7 @@ export class CastShelf {
             const asset = await this.addAsset();
             if (!asset) return;
             const key = ROLES.find((role) => role.fits(asset))?.key ?? "from";
-            if (key === "from") subject.from = [...(subject.from ?? []), asset.handle];
-            else subject[key] = asset.handle;
+            this.addRole(subject, asset.handle, key);
             S.inheritTake(subject, key, asset);
             this.save();
           },

@@ -106,6 +106,17 @@ export const api = {
       globalThis.__posted.push(patch);
       stored = { ...stored, ...patch };
     }
+    // The compiler's answer, in the shape `server_routes.compiled_prompt`
+    // sends it: one entry per pass, and a card -> pass map whose keys are
+    // strings because that is what JSON does to Python's int keys.
+    if (route.endsWith("/compiled_prompt")) {
+      return { ok: true, status: 200, json: async () => ({
+        passes: [{ index: 0, clip: false, mode: "REF2VA", overridden: false,
+                   prompt: "subject_definitions: <Subject 1> is the person in <Picture 1>."
+                         + "\\n\\ndetailed_description: [Shot 1] They turn to the camera." }],
+        cards: { "0": 0 },
+      }) };
+    }
     return { ok: true, status: 200, json: async () => ({ settings: stored }) };
   },
 };
@@ -325,6 +336,45 @@ try {
   };
 } catch (error) {
   out.errors.push(`node face: ${error.message}`);
+}
+
+// ---- what the model reads ---------------------------------------------------
+//
+// The rail under the prompt box, opened. The failure it exists for shipped once
+// and was completely silent: the hook the lone-shot face handed the box called
+// `this.compiledFor`, a method that lives on the other class, so opening the
+// panel threw inside an async function nobody awaited and the box just sat
+// there empty. So this presses the rail for real and reads back what landed —
+// a panel that draws nothing is the bug, whatever the reason.
+try {
+  const first = (root, cls) => root.querySelectorAll("." + cls)[0] ?? null;
+  const node = fakeNode("MiniMaxH3Creator", "creator_data", ONE_SHOT);
+  await ext.nodeCreated(node);
+  const rail = first(node.mmcBody.root, "mmc-compiled-rail");
+  rail?.listeners?.click?.forEach((fn) => fn({ stopPropagation() {}, preventDefault() {} }));
+  // The rail draws its waiting state before it asks, so there is something on
+  // screen either side of this await.
+  const waiting = first(node.mmcBody.root, "mmc-compiled-doc")?.children.length ?? 0;
+  // Let the stubbed fetch and the .json() inside it settle.
+  await new Promise((done) => setTimeout(done, 0));
+  const doc = first(node.mmcBody.root, "mmc-compiled-doc");
+  const keys = (doc?.children ?? [])
+    .map((block) => (first(block, "mmc-compiled-key")?.text ?? "").trim())
+    .filter(Boolean);
+  out.compiled = {
+    settled: doc?.children.length ?? 0,
+    // Not on the fold's <summary>: it was, and every click that missed it
+    // folded the prompt away instead of opening anything.
+    railOutsideTheHead: !!rail && rail.parent?.className !== "mmc-prompt-head",
+    waiting,
+    keys,
+    // The block holding the description is marked, and it is the only one.
+    mine: (doc?.children ?? [])
+      .filter((block) => String(block.className ?? "").split(" ").includes("mine"))
+      .map((block) => (first(block, "mmc-compiled-key")?.text ?? "").trim()),
+  };
+} catch (error) {
+  out.errors.push(`compiled: ${error.stack}`);
 }
 
 // ---- the body leaves the node, and comes back -------------------------------
@@ -1205,9 +1255,9 @@ try {
 // The simple fullscreen view draws neither the Cast tool nor the shelf: casting
 // is the @ menu's roster, building is the library's Cast tab, and removing
 // somebody is deleting their chip. The one thing left over is editing the copy
-// of somebody that lives in *this* piece, and double-clicking their name is
-// what asks for it. Driven through the editor rather than through a synthetic
-// double-click: the gesture is the box's business and this is the hand-off.
+// of somebody that lives in *this* piece, and clicking their name is what asks
+// for it. Driven through the editor here: this block is the hand-off, and the
+// block below it performs the press.
 try {
   const node = fakeNode("MiniMaxH3Creator", "creator_data", JSON.stringify({
     version: 2, models: {},
@@ -1244,6 +1294,98 @@ try {
   };
 } catch (error) {
   out.errors.push(`cast summon: ${error.message}`);
+}
+
+// ---- and summoned by clicking the name, which is the gesture ----------------
+//
+// The block above drives `openCastMember` directly, on the grounds that the
+// gesture is the box's business and the hand-off is what a body test can see.
+// That left the gesture itself — the only part of this a person ever performs —
+// covered by nothing, and it has been broken by unrelated work in the prompt box
+// more than once: the chip stops carrying the class, or the hook stops being
+// passed, or the handler is hung on an element the click never reaches, and
+// every one of those looks exactly like a chip that does nothing.
+//
+// So this clicks it. The listener is delegated to the box, which is where a
+// chip rebuilt on every keystroke has to be listened for, so the press is
+// delivered the way the browser delivers it: to the box, with the chip as the
+// target.
+//
+// A look is a cast member too — `presets.castIntoPiece` makes a style subject —
+// so the same press opens it, and that is checked here rather than assumed.
+try {
+  const first = (root, sel) => root.querySelectorAll(sel)[0] ?? null;
+  const node = fakeNode("MiniMaxH3Creator", "creator_data", JSON.stringify({
+    version: 2, models: {},
+    subjects: [{ handle: "vera", takes: "person", description: "close-cropped hair" },
+               { handle: "lego_brickfilm", takes: "style", description: "a brickfilm look" }],
+    segments: [{ prompt: "@lego_brickfilm, @vera waits by @img-1",
+                 assets: [{ handle: "img-1", kind: "image", filename: "a.png",
+                            role: "reference" }],
+                 loras: [], duration_s: 6 }],
+  }));
+  await ext.nodeCreated(node);
+  const editor = node.mmcBody.editor;
+  const box = editor.prompt.root;
+  const press = (handle) => {
+    const chip = first(box, `.mmc-ref-cast[data-handle="${handle}"]`);
+    if (!chip) return false;
+    box.listeners?.click?.forEach((fn) => fn({
+      target: chip, preventDefault() {}, stopPropagation() {},
+    }));
+    return true;
+  };
+  // What the browser would do with the press if nobody stopped it: select the
+  // whole chip and leave the name sitting in a blue block until you click
+  // elsewhere. Cancelled at mousedown, which is where the selection is made.
+  const held = (root, sel) => root.querySelectorAll(sel)[0] ?? null;
+  const cancelled = (node) => {
+    let stopped = false;
+    box.listeners?.mousedown?.forEach((fn) => fn({
+      target: node, preventDefault() { stopped = true; }, stopPropagation() {},
+    }));
+    return stopped;
+  };
+  const chips = box.querySelectorAll(".mmc-ref").length;
+  // The other way this gesture dies, and the one no click can catch: the body
+  // is rebuilt on a render, so the chip the press started on is detached before
+  // the browser can finish the click on it. A face editor kept across renders is
+  // what makes a chip pressable at all.
+  const beforeEditor = editor;
+  const beforeChip = first(box, `.mmc-ref-cast[data-handle="vera"]`);
+  node.mmcBody.render();
+  node.mmcBody.render();
+  const stable = {
+    editorKept: node.mmcBody.editor === beforeEditor,
+    boxKept: node.mmcBody.editor?.prompt?.root === box,
+    chipKept: first(box, `.mmc-ref-cast[data-handle="vera"]`) === beforeChip,
+  };
+  out.castClick = {
+    ...stable,
+    // Three chips: two names and a file, and only the names are somebody.
+    chips,
+    cast: box.querySelectorAll(".mmc-ref-cast").length,
+    // The affordance: without it the chip is a pointer nobody grows.
+    castable: String(box.className).split(" ").includes("mmc-prompt-castable"),
+    pressedPerson: press("vera"),
+    onPerson: editor.castShelf?.opened?.handle ?? null,
+    pressedStyle: press("lego_brickfilm"),
+    onStyle: editor.castShelf?.opened?.handle ?? null,
+  };
+  out.castClick.noSelectOnName =
+    cancelled(held(box, `.mmc-ref-cast[data-handle="vera"]`));
+  // ...and a file's chip is not a control, so it goes on selecting the way any
+  // other part of the sentence does.
+  out.castClick.fileStillSelects =
+    !cancelled(held(box, `.mmc-ref[data-handle="img-1"]`));
+  // The press is its own undo: the same name again shuts the card it opened.
+  press("lego_brickfilm");
+  out.castClick.shutAgain = editor.castShelf?.opened ?? null;
+  // ...and a third press opens them once more, rather than latching shut.
+  press("lego_brickfilm");
+  out.castClick.reopened = editor.castShelf?.opened?.handle ?? null;
+} catch (error) {
+  out.errors.push(`cast click: ${error.stack}`);
 }
 
 // ---- a popover outlives the row that opened it ------------------------------
@@ -1985,22 +2127,26 @@ settings = report.get("settings", {})
 check("the settings page has all three tabs", settings.get("tabs"),
       ["Quality", "Folders", "Nodes"])
 # Every row on the tab, in order, with each setting's default checked on a fresh
-# settings file: previews ship playing, and the advanced controls, the scopes
-# and the shift pills all ship off. Advanced leads, because it decides how much
-# of the rest of the tab there is — the turbo lead-in is an advanced control and
-# its three rows are simply not on the page while it is off, which is what makes
-# this list four pairs and not four pairs plus a triple. Then preview playback,
-# which governs the biggest thing a node draws, the reference scopes, which
-# change what is queued, and the shift pills last, which change only what is
-# drawn.
+# settings file: previews ship playing, and the advanced controls and the shift
+# pills ship off. Advanced leads, because it decides how much of the rest of the
+# tab there is — the turbo lead-in is an advanced control and its three rows are
+# simply not on the page while it is off, which is what makes this list three
+# pairs and not three pairs plus a triple. Then preview playback, which governs
+# the biggest thing a node draws, and the shift pills last, which change only
+# what is drawn.
+#
+# There used to be a fourth pair here, for whether the compiler wrote each
+# reference's scope into the prompt. It is not a choice any more — a label the
+# prompt never defines is a label pointing at nothing — so the setting is gone
+# and the prompt box shows what is actually sent instead.
 check("the node settings show their defaults checked",
       settings.get("shiftRows"),
-      ["true", "false", "true", "false", "true", "false", "true", "false"])
+      ["true", "false", "true", "false", "true", "false"])
 # And with the advanced controls on, the turbo lead-in is back on the page: the
-# four pairs plus its three rows. That is the whole of what the switch does to
+# three pairs plus its three rows. That is the whole of what the switch does to
 # this tab — it adds a section, it never disables one.
 check("advanced controls bring the turbo lead-in back to the page",
-      (settings.get("advancedRows"), settings.get("advancedLeadIn")), (11, True))
+      (settings.get("advancedRows"), settings.get("advancedLeadIn")), (9, True))
 check("the quality tab shows the encoder value", settings.get("quality"), True)
 check("the folders tab carries both stored prefixes", settings.get("fields"),
       ["minimax/renders/H3", "minimax/stills/prestage"])
@@ -2014,6 +2160,45 @@ check("...and a way into the window", face.get("expand"), True)
 check("clicking it opens the window", face.get("opened"), True)
 check("...with a box of its own in it", face.get("boxInSheet"), True)
 check("...which is not the face's", face.get("sameState"), True)
+
+# The compiled prompt, under the box rather than in place of it.
+compiled = report.get("compiled", {})
+check("the rail is not on the prompt's own fold head", compiled.get("railOutsideTheHead"), True)
+check("opening it draws a waiting state before it asks", compiled.get("waiting"), 3)
+# Every section the compiler wrote, under the field name the model is handed.
+check("...and then a block per section, keyed as the model is given them",
+      (compiled.get("settled"), compiled.get("keys")),
+      (2, ["subject_definitions", "detailed_description yours"]))
+# One mark, on the one block that is yours: that is the whole answer to "what
+# did the compiler add", and a panel that marks everything or nothing gives it
+# back as a question.
+check("the description is marked as yours, and nothing else is",
+      compiled.get("mine"), ["detailed_description yours"])
+
+# Clicking somebody's name in the sentence opens them. The gesture, not the
+# hand-off it ends in — this is the half that keeps being broken by work
+# elsewhere in the box, because nothing performed it.
+click = report.get("castClick", {})
+check("both names and the file are chips", click.get("chips"), 3)
+check("...and both are marked as somebody, a look included", click.get("cast"), 2)
+check("...in a box that says so with the pointer", click.get("castable"), True)
+# A press is a pointerdown and a click on the same element. Rebuild the body
+# between the two and the browser has nothing to fire the click on — which is a
+# chip that does nothing, from an edit nowhere near the prompt box.
+check("a render leaves the face editor where it was", click.get("editorKept"), True)
+check("...the box with it", click.get("boxKept"), True)
+check("...and the chip the press would land on", click.get("chipKept"), True)
+check("clicking a person opens them on the shelf",
+      (click.get("pressedPerson"), click.get("onPerson")), (True, "vera"))
+check("...and clicking a look opens the look",
+      (click.get("pressedStyle"), click.get("onStyle")), (True, "lego_brickfilm"))
+# A press on a name is a command, so the browser must not also turn the name
+# into a blue block — which is what a click on a contenteditable="false" chip
+# does if nobody stops it, and it stays one until you click somewhere else.
+check("pressing a name makes no selection", click.get("noSelectOnName"), True)
+check("...while a file's chip still selects", click.get("fileStillSelects"), True)
+check("clicking the same name again shuts the card", click.get("shutAgain"), None)
+check("...and once more opens it", click.get("reopened"), "lego_brickfilm")
 
 # The rewrite is edited in place. A commit re-renders the body, and the box the
 # rewrite is written in is on the commit path of its own keystrokes — so it has
@@ -2165,7 +2350,7 @@ check("...but a card's editor does not — there is no node to draw over",
 check("the node's own menu carries it too", door.get("inTheMenu"), True)
 
 summon = report.get("castSummon", {})
-check("double-clicking a name puts the shelf up", summon.get("open"), True)
+check("clicking a name puts the shelf up", summon.get("open"), True)
 check("...on that member, and nobody else", summon.get("onThem"), True)
 check("...marked as summoned, so a view that hides the shelf shows this one",
       summon.get("marked"), True)

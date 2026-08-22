@@ -250,7 +250,13 @@ export const css = `
   display: flex; flex-direction: column; flex: 1; min-height: 0;
 }
 /* No disclosure until there is something standing in for the box: with no
-   rewrite this is the prompt, and a prompt does not need announcing. */
+   rewrite this is the prompt, and a prompt does not need announcing.
+
+   Nothing else may live in here. The compiled prompt's control was put on this
+   row for one release and the row is a <summary>: a click anywhere it did not
+   land on the button folded the whole prompt away, which read as the control
+   doing nothing and then showing you your own sentence. It is a rail under the
+   box now — see .mmc-compiled. */
 .mmc-prompt-head { display: none; }
 .mmc-prompt-fold.superseded > .mmc-prompt-head {
   display: flex; align-items: center; gap: 7px; min-width: 0;
@@ -274,36 +280,108 @@ export const css = `
 }
 .mmc-prompt-excerpt.empty { font-style: italic; }
 .mmc-prompt-fold[open] .mmc-prompt-excerpt { display: none; }
-/* --- the scope band ------------------------------------------------------- */
-/* What the compiler writes in front of the description, shown where it lands:
-   inside the prompt's fold, above the box. Generated, so it is not a field —
-   no border, no background of its own, and never focusable. It reads as a note
-   the prompt carries rather than as a second box to write in, which is the one
-   thing it must not be mistaken for.
+/* --- what the model reads -------------------------------------------------- */
+/* The compiled prompt, under the sentence it is built from rather than in place
+   of it. It *contains* that sentence, so a view that swapped the two asked you
+   to hold the first in your head to see what the second added — and on a shot
+   with nothing to declare the two are near enough identical that the panel read
+   as broken. Stacked, the difference is the thing on screen.
 
-   Held off the box by the fold's own 8px gap and separated by a rule, because
-   the two are the same prompt and stacking them with no line between made the
-   sentences read as text somebody had typed. */
-.mmc-scopes:empty { display: none; }
-.mmc-scopes {
-  display: flex; flex-direction: column; gap: 5px; flex: none;
-  padding-bottom: 9px; border-bottom: 1px solid var(--mmc-line);
+   The rail is a button and not a <summary>: this used to sit on the prompt's own
+   fold head, where every click that missed the control folded the prompt away
+   instead. */
+.mmc-compiled { display: flex; flex-direction: column; flex: none; }
+.mmc-compiled:empty { display: none; }
+.mmc-compiled-rail {
+  display: flex; align-items: center; gap: 7px; width: 100%; text-align: left;
+  appearance: none; border: 0; background: none; cursor: pointer;
+  padding: 7px 0 0; margin-top: 3px; border-top: 1px solid var(--mmc-line);
+  color: var(--mmc-off); font: inherit; font-size: 11.5px;
+}
+.mmc-compiled-rail:hover { color: var(--mmc-text); }
+.mmc-compiled-rail:focus-visible {
+  outline: 1px solid var(--mmc-accent); outline-offset: 3px; border-radius: 6px;
+}
+.mmc-compiled-title { flex: none; }
+.mmc-compiled-rail svg {
+  flex: none; transform: rotate(-90deg); transition: transform .14s ease;
+}
+.mmc-compiled.open .mmc-compiled-rail svg { transform: none; }
+/* Which pass this is, and anything true of it the text does not say: a merged
+   run, a prompt replaced by hand, a clip that generates nothing. */
+.mmc-compiled-status {
+  margin-left: auto; min-width: 0; overflow: hidden; white-space: nowrap;
+  text-overflow: ellipsis; color: var(--mmc-off);
+  font-size: 10px; letter-spacing: .09em; text-transform: uppercase;
+}
+.mmc-compiled.problem .mmc-compiled-status { color: #e0743c; }
+/* Dimmed, never emptied, while a re-read is out: the panel re-reads on every
+   keystroke, and replacing prose somebody is reading with a waiting state that
+   often is worse than one stale word. */
+.mmc-compiled.loading .mmc-compiled-doc { opacity: .55; }
+
+.mmc-compiled-doc { display: none; }
+/* Capped and scrolled — a node face is a fixed rectangle, and a twenty-line
+   document opened inside one would push the render button off the bottom of it.
+   A little taller than the box above it, because six sections is a document and
+   four lines of one is a teaser; the wheel scrolls the rest (see keepScroll in dom.js),
+   which on a graph canvas it otherwise would not. */
+.mmc-compiled.open .mmc-compiled-doc {
+  display: flex; flex-direction: column; gap: 11px;
+  max-height: 220px; overflow-y: auto;
+  /* The left inset is the accent rule's lane — see .mine below, which hangs
+     into it. Without it the rule fell outside the scroll box and was clipped
+     away, which took the panel's one mark with it. */
+  padding: 11px 2px 2px 12px;
   user-select: text; cursor: default;
 }
-.mmc-scopes-head {
-  display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;
-  color: var(--mmc-off); font-size: 10px; letter-spacing: .09em; text-transform: uppercase;
+.mmc-editor-sheet-body .mmc-compiled.open .mmc-compiled-doc { max-height: 40vh; }
+
+.mmc-compiled-block { display: flex; flex-direction: column; gap: 3px; }
+/* The wire key, set as a wire key: the one monospaced thing in this pack, which
+   is what says at a glance that this half of the panel is machine-facing and
+   the box above it is not. Left in snake_case and not prettified — it is the
+   field name the model is handed, and renaming it here would be inventing a
+   second name for it. */
+.mmc-compiled-key {
+  display: flex; align-items: baseline; gap: 7px;
+  color: var(--mmc-off); font-size: 10px; letter-spacing: .04em;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
-/* The one thing the band cannot show honestly: ordinals are allocated at queue
-   time, so the names here are handles and the model reads labels. Said once, in
-   the quietest type on the row, rather than in a tooltip nobody opens. */
-.mmc-scopes-why { letter-spacing: 0; text-transform: none; font-size: 10.5px; opacity: .8; }
-.mmc-scopes-line {
-  margin: 0; color: var(--mmc-dim); font-size: 12.5px; line-height: 1.55;
+.mmc-compiled-value {
+  margin: 0; color: var(--mmc-dim); font-size: 12.5px; line-height: 1.6;
+  white-space: pre-wrap; overflow-wrap: anywhere;
+}
+/* The one mark in here, on the one block that is yours. Everything above and
+   below it is what the compiler added, which is the question the panel exists
+   to answer — so it is answered with an accent rather than with a legend. */
+.mmc-compiled-block.mine {
+  border-left: 2px solid var(--mmc-accent); padding-left: 10px; margin-left: -12px;
+}
+.mmc-compiled-block.mine .mmc-compiled-value { color: var(--mmc-text); }
+.mmc-compiled-mine {
+  color: var(--mmc-accent); font-family: inherit; font-size: 10px;
+  letter-spacing: .06em; text-transform: uppercase;
+}
+.mmc-compiled-note, .mmc-compiled-empty {
+  margin: 0; color: var(--mmc-off); font-size: 11.5px; line-height: 1.55;
+}
+.mmc-compiled-problem {
+  margin: 0; color: #e0743c; font-size: 12.5px; line-height: 1.6;
+}
+/* Where the sections will be, while the first answer is outstanding. */
+.mmc-compiled-bar {
+  height: 9px; border-radius: 4px; background: var(--mmc-surface-2);
+  animation: mmc-compiled-pulse 1.2s ease-in-out infinite;
+}
+@keyframes mmc-compiled-pulse { 0%, 100% { opacity: .45; } 50% { opacity: .9; } }
+@media (prefers-reduced-motion: reduce) {
+  .mmc-compiled-bar { animation: none; }
+  .mmc-compiled-rail svg { transition: none; }
 }
 /* Dimmed with the box it belongs to: while a rewrite stands in for the prompt,
    neither of them is what gets queued. */
-.mmc-prompt-fold.superseded > .mmc-scopes { opacity: .42; }
+.mmc-prompt-fold.superseded > .mmc-compiled { opacity: .42; }
 
 /* .mmc-ref, not .mmc-chip: the refiner's language chips own that name, and the
    two rules fighting over it is what once turned these gray. */

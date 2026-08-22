@@ -105,7 +105,7 @@ check("a described environment is named, because the word carries information",
       "<Subject 1> is the environment, a bare concrete loft at dusk.")
 check("her retention line says there is no reference to carry anything over from",
       subjects.retention(described, {}, "<Subject 1> waits."),
-      "<Subject 1> ([Shot 1]): fully_preserved - the definition above is the "
+      "<Subject 1> (appears in [Shot 1]): fully_preserved - the definition above is the "
       "whole of what is fixed, and nothing is carried over from a reference file.")
 expect_error("an unknown take is refused",
              lambda: subjects.parse([{"handle": "anna", "from": ["img-1"], "takes": "camera"}]),
@@ -166,8 +166,8 @@ check("appearance and motion are one subject from two files",
 _swap = subjects.parse([{"handle": "anna", "from": ["img-1"], "replaces": "vid-1",
                          "replaces_what": "the man at the counter"}])
 _swap_labels = {"img-1": "<Picture 1>", "vid-1": "<Video 1>"}
-check("a replacement derives the transferred marker",
-      _swap[0].relationship, "transferred")
+check("a replacement derives the guide's attribute_transfer marker",
+      _swap[0].relationship, "attribute_transfer")
 _ret = subjects.retention(_swap, _swap_labels, "[Shot 1] <Subject 1> pours coffee.")
 check("and says who is going, in the retention line",
       "the man at the counter in <Video 1>" in _ret, True)
@@ -178,18 +178,22 @@ check("where a subject appears is read off the shots she is written into",
       subjects.retention(_where, {"img-1": "<Picture 1>"},
                          "[Shot 1] <Subject 1> walks. [Shot 2] a door. "
                          "[Shot 3] <Subject 1> again.").split(":")[0],
-      "<Subject 1> ([Shot 1], [Shot 3])")
+      "<Subject 1> (appears in [Shot 1], [Shot 3])")
 check("a body with no shot markers at all is one shot",
       subjects.retention(_where, {"img-1": "<Picture 1>"},
                          "<Subject 1> walks.").split(":")[0],
-      "<Subject 1> ([Shot 1])")
+      "<Subject 1> (appears in [Shot 1])")
 
 
 # --- through the compiler ----------------------------------------------------
 
 _plain = compiler.compile_request(request("a woman walks in @img-1", [image("img-1")], []))
-check("a piece with no cast writes no subject_definitions",
-      "subject_definitions" in _plain.prompt, False)
+# The section is still written — the reference in it has to be defined — but
+# nobody is in it, which is what having no cast means.
+check("a piece with no cast defines its files and no subjects",
+      "<Subject" in _plain.prompt, False)
+check("...and the file is defined all the same",
+      "subject_definitions: <Picture 1> is a reference picture." in _plain.prompt, True)
 check("and an undeclared name stays prose",
       "@carol" in compiler.compile_request(
           request("@carol walks in @img-1", [image("img-1")], [])).body, True)
@@ -199,7 +203,7 @@ _cast = compiler.compile_request(request(
     [image("img-1"), image("img-2"), image("img-3"), audio("aud-1", takes="voice")],
     [{"handle": "anna", "from": ["img-1", "img-2"], "description": "a blue cardigan",
       "voice": "aud-1"},
-     {"handle": "ben", "from": ["img-3"]}]), define_refs=True)
+     {"handle": "ben", "from": ["img-3"]}]))
 check("a cited subject becomes its label in the body",
       "<Subject 1> looks at <Subject 2>." in _cast.body, True)
 check("the definitions cite the pictures rather than standing beside them",
@@ -224,7 +228,7 @@ _dropped = compiler.compile_request(request(
     "@anna waits.",
     [image("img-1"), image("img-2"), image("img-3")],
     [{"handle": "anna", "from": ["img-1"]},
-     {"handle": "ben", "from": ["img-2"]}]), define_refs=True)
+     {"handle": "ben", "from": ["img-2"]}]))
 check("an uncited subject's own picture is not sent",
       [a.handle for a in _dropped.ref_images], ["img-1", "img-3"])
 check("...and the labels are numbered off what is left, with no gap in them",
@@ -262,15 +266,23 @@ check("and the label is defined, so it points at something",
       "subject_definitions: <Subject 1> is a woman in her thirties, "
       "close-cropped hair." in _text_only.prompt, True)
 check("retention is written for her as well",
-      "retention_analysis: <Subject 1> ([Shot 1]): fully_preserved"
+      "retention_analysis: <Subject 1> (appears in [Shot 1]): fully_preserved"
       in _text_only.prompt, True)
-check("the base form's own body field is kept — this is not the reference form",
-      "integrated_multimodal_description:" in _text_only.prompt, True)
-check("and the reference form's body field is not claimed",
-      "detailed_description:" in _text_only.prompt, False)
+# The form follows what the piece has to declare, not which mode it derived. A
+# cast is something to declare, so a text-only piece carrying one is written in
+# the reference form too — people run that form against T2VA and the weights do
+# not police the field name, and the alternative was a hybrid of the two forms
+# that neither guide describes.
+check("a cast puts even a text-only piece in the reference form",
+      "detailed_description:" in _text_only.prompt, True)
+check("...so the base form's field is not also claimed",
+      "integrated_multimodal_description:" in _text_only.prompt, False)
 check("the definitions stand in front of the description, as in the guide",
       _text_only.prompt.index("subject_definitions:")
-      < _text_only.prompt.index("integrated_multimodal_description:"), True)
+      < _text_only.prompt.index("detailed_description:"), True)
+check("...and it is summarised, with no task type to claim",
+      "summary: The target video runs one shot and features <Subject 1>."
+      in _text_only.prompt, True)
 
 # ...and a text-only piece with nobody cast is byte-identical to what it always
 # compiled to. The sections exist only where a cast does.
@@ -282,7 +294,7 @@ check("no cast, no sections",
 # inside `subject_definitions` rather than in a paragraph of its own.
 _mixed = compiler.compile_request(request(
     "@anna stands in @img-2.", [image("img-1"), image("img-2", takes="scene")],
-    [{"handle": "anna", "from": ["img-1"]}]), define_refs=True)
+    [{"handle": "anna", "from": ["img-1"]}]))
 check("an unclaimed reference is still defined",
       "<Picture 2> is a scene reference" in _mixed.prompt, True)
 check("and it is defined in the same section as the cast",
@@ -294,7 +306,7 @@ _uncited = compiler.compile_request(request(
     "a room, empty.", [image("img-1")],
     [{"handle": "anna", "from": ["img-9"]}]))
 check("an uncited subject is not resolved and not refused",
-      "subject_definitions" in _uncited.prompt, False)
+      "<Subject" in _uncited.prompt, False)
 
 expect_error("a cited subject whose files are missing is refused",
              lambda: compiler.compile_request(request(
@@ -368,7 +380,7 @@ check("one pass carries the cast too",
       _single.body.count("<Subject 1>"), 2)
 check("and defines her once", _single.prompt.count("<Subject 1> is the person"), 1)
 check("and the retention line names both shots she is in",
-      "<Subject 1> ([Shot 1], [Shot 2])" in _single.prompt, True)
+      "<Subject 1> (appears in [Shot 1], [Shot 2])" in _single.prompt, True)
 
 # A card's own asset is renamed onto the merged list, and the cast is renamed
 # with it — the failure this guards is a subject left pointing at a handle that
@@ -379,4 +391,144 @@ _local = compiler.compile_single(piece(
 check("a subject built out of a card's own file survives the merge",
       "<Subject 1> is the person in <Picture 1>." in _local.prompt, True)
 
-passed("the cast holds: citation, labels, both sections, pool and merge")
+# --- standing in for somebody across more than one clip -----------------------
+#
+# The same person in a medium shot and a close-up is one vacancy filmed twice.
+# While `replaces` held a single handle the second clip could only be attached
+# and left undefined, and the two ways of saying it by hand both misfired: left
+# at the default scope the clip compiled to "is a reference video" and nothing
+# else, and set to `edit` it produced two sentences each claiming to be the
+# whole source of the edit.
+
+_two = compiler.compile_request(request(
+    "@anna stands at the counter.",
+    [image("img-1", takes="person"), video("vid-1", takes="edit"), video("vid-2", takes="edit")],
+    [{"handle": "anna", "from": ["img-1"],
+      "replaces": ["vid-1", "vid-2"], "replaces_what": "the woman at the counter"}]))
+check("one subject stands in across two clips, named as one list",
+      "takes the place of the woman at the counter in <Video 1> and <Video 2>"
+      in _two.prompt, True)
+check("...and the edit is claimed once, over both sources",
+      _two.prompt.count("The target video is an edited version of"), 1)
+check("...with both sources in that one sentence",
+      "an edited version of <Video 1> and <Video 2>." in _two.prompt, True)
+check("...each defined as a source rather than as the whole edit",
+      _two.prompt.count("is a source video for the target video edit."), 2)
+check("...and each given its own retention line",
+      _two.prompt.count("(source video): partially_preserved"), 2)
+
+# The old shape still reads. Every blob written before somebody could stand in
+# for two clips carries a bare string, and it means the one-element list it
+# always meant.
+_scalar = subjects.parse([{"handle": "anna", "from": ["img-1"], "replaces": "vid-1"}])
+check("a blob carrying the old single handle still parses", _scalar[0].replaces, ("vid-1",))
+check("...and is written back out as a list",
+      compiler._subject_dict(_scalar[0])["replaces"], ["vid-1"])
+
+# The bug this guards: `found.add(subject.replaces)` put the tuple itself into a
+# set of handles, so citing @anna carried neither clip into the segment and the
+# generation was refused for a file the citation should have brought with it.
+# Only bites where the clips are in the *pool* — which is where a piece keeps
+# them, and where a two-card edit puts them.
+_split = compiler.compile_single(piece(
+    shot("@anna stands at the counter in @ref-2."),
+    shot("a close-up of @anna in @ref-3.", merge=True),
+    assets=[image("ref-1", takes="person"),
+            video("ref-2", takes="edit"), video("ref-3", takes="edit")],
+    subjects=[{"handle": "anna", "from": ["ref-1"], "replaces": ["ref-2", "ref-3"],
+               "replaces_what": "the woman at the counter"}]))
+check("citing a subject carries every clip they stand in for",
+      "<Video 1> is a source video" in _split.prompt
+      and "<Video 2> is a source video" in _split.prompt, True)
+
+# ---- feature by feature -----------------------------------------------------
+#
+# The guide writes a subject as a named list of features and names the same
+# features again in `retention_analysis` — section 6's worked example is four
+# subjects in a row built that way:
+#
+#   <Subject 2> is the fluffy white Samoyed in <Picture 2>, <Picture 3>, and
+#   <Picture 4>, with thick white fur, pointed ears, a dark nose, and a curved tail.
+#   <Subject 2> (appears in [Shot 1], [Shot 2]): fully_preserved - the Samoyed's
+#   thick white fur, pointed ears, dark nose, and curved tail are retained.
+#
+# What this half exists for is the one thing that shape can say and the old one
+# could not: this feature is defined, and in the target video it is something
+# else. That is 4.1's `partially_preserved` to the word, and before it existed the
+# marker was a picker that wrote `partially_preserved` over a sentence saying
+# everything was retained.
+
+_LAB = {"img-1": "<Picture 1>", "vid-1": "<Video 1>"}
+_feat = subjects.parse([{
+    "handle": "vera", "from": ["img-1"], "takes": "person",
+    "features": ["long dark hair", {"is": "a blue cardigan"},
+                 {"is": "a thin silver necklace"}]}])
+check("the features are named in the definition, the guide's way",
+      subjects.definitions(_feat, _LAB),
+      "<Subject 1> is the person in <Picture 1>, with long dark hair, a blue "
+      "cardigan, and a thin silver necklace.")
+check("...and named again as what is retained",
+      subjects.retention(_feat, _LAB, "[Shot 1] <Subject 1> waits."),
+      "<Subject 1> (appears in [Shot 1]): fully_preserved - long dark hair, a blue "
+      "cardigan, and a thin silver necklace are retained.")
+# Not one negative clause in any of the guide's four retention examples, and 4.1
+# closes by saying not to write them: "do not treat newly added actions,
+# backgrounds, or plot events in the target video as losses of reference
+# fidelity". These lines used to end "...and the source picture's background,
+# palette, lighting, pose and action are not", borrowed from the sentence
+# `contextir._DEFINE` writes for a *file* — where it belongs, because
+# `<Picture N>` denotes the file and `<Subject N>` denotes content abstracted
+# from it (2.1). The abstraction is already in the label.
+check("and says nothing about what is not retained",
+      " are not." in subjects.retention(_feat, _LAB, "[Shot 1] <Subject 1> waits."), False)
+
+_changed = subjects.parse([{
+    "handle": "vera", "from": ["img-1"], "takes": "person",
+    "features": [{"is": "long dark hair"},
+                 {"is": "a blue cardigan", "instead": "a red waxed jacket"}]}])
+# A characteristic has to be defined before it can be changed, so the definition
+# names the cardigan even though the target video does not have one.
+check("a changed feature is still defined",
+      "with long dark hair and a blue cardigan" in subjects.definitions(_changed, _LAB), True)
+check("...derives partially_preserved rather than being picked",
+      _changed[0].relationship, "partially_preserved")
+check("...and the line says what it was and what it is now",
+      subjects.retention(_changed, _LAB, "[Shot 1] <Subject 1> waits."),
+      "<Subject 1> (appears in [Shot 1]): partially_preserved - long dark hair is "
+      "retained; a blue cardigan is replaced by a red waxed jacket.")
+
+# Standing in for somebody outranks it: the transfer is the relationship whatever
+# else moves, and the clip's own work is what a replacement must not disturb.
+_both = subjects.parse([{
+    "handle": "vera", "from": ["img-1"], "takes": "person",
+    "replaces": ["vid-1"], "replaces_what": "the bench",
+    "features": [{"is": "long dark hair"},
+                 {"is": "a blue cardigan", "instead": "a red waxed jacket"}]}])
+check("a place taken outranks a feature changed", _both[0].relationship, "attribute_transfer")
+_line = subjects.retention(_both, _LAB, "[Shot 1] <Subject 1> waits.")
+check("...and the transfer names what lands on whom",
+      "long dark hair is transferred onto the bench in <Video 1>" in _line, True)
+check("...keeps the clip's own work", "framing, camera work and action are kept" in _line, True)
+check("...and still says what changed", "replaced by a red waxed jacket" in _line, True)
+
+# The override is the only way to reach weak_reference — "only broad similarity
+# in style, category, composition, or atmosphere" is a judgement about the
+# render, which no rule here can infer.
+check("a marker set by hand wins over the derivation",
+      subjects.parse([{"handle": "v", "from": ["img-1"], "relationship": "weak_reference",
+                       "features": [{"is": "a hat", "instead": "a cap"}]}])[0].relationship,
+      "weak_reference")
+
+# An empty row is what the editor writes the moment somebody presses "add a
+# feature", and refusing it would make a half-typed cast a compile error.
+check("an unfilled row is dropped rather than refused",
+      [f.text for f in subjects.parse([{"handle": "v", "from": ["img-1"], "features":
+          [{"is": "  "}, {"is": "", "instead": "a cap"}, {"is": " a hat "}]}])[0].features],
+      ["a hat"])
+# ...and features alone are enough to be somebody, in a generation with no
+# references in it at all.
+check("features alone are something behind them",
+      [f.text for f in subjects.parse([{"handle": "v", "features": ["a red coat"]}])[0].features],
+      ["a red coat"])
+
+passed("the cast holds: citation, labels, features, both sections, pool, merge and standing in")

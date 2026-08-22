@@ -199,10 +199,6 @@ def compile_all(payloads, labels):
     played rather than generated" rather than being handed a hollow `Compiled`
     that would have to answer questions it has no answer to.
     """
-    # Read once for the whole render rather than per segment: it is a file on
-    # disk, and a strip whose segments disagreed about it would be a piece
-    # written half one way and half the other.
-    define_refs = settings.define_refs()
     out = []
     for index, payload in enumerate(payloads):
         where = labels[index] if index < len(labels) else f"Segment {index + 1}"
@@ -213,8 +209,7 @@ def compile_all(payloads, labels):
             out.append(None)
             continue
         try:
-            out.append(compiler.compile_segment(payload, media.image_size,
-                                                define_refs=define_refs))
+            out.append(compiler.compile_segment(payload, media.image_size))
         except compiler.CompileError as exc:
             raise ValueError(f"{where}: {exc}") from exc
     return out

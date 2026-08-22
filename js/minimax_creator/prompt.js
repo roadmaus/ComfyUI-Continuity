@@ -25,6 +25,31 @@ const TRIGGER = /@([\w-]*)$/;
 const COMMAND = /\/([\w-]*)$/;
 const MAX_SUGGESTIONS = 40;
 
+/* The two fields a description lands in — `contextir.BODY_FIELDS`. Whichever of
+   them a compiled prompt carries is the block holding what you actually wrote,
+   which is the one thing the panel marks. */
+const BODY_FIELDS = new Set(["integrated_multimodal_description", "detailed_description"]);
+
+/**
+ * A compiled prompt -> the blocks it is made of.
+ *
+ * `contextir.compose` joins its sections with a blank line and writes each one
+ * as `field: prose`; the instruction line is the exception and carries no
+ * field, because it is not a section. Pulling them apart again is presentation
+ * and nothing else — the compiler stays the only thing that decides what goes
+ * in, and this only decides how it is set.
+ */
+export function compiledBlocks(text) {
+  return String(text || "").split(/\n\s*\n/)
+    .map((block) => block.trim())
+    .filter(Boolean)
+    .map((block) => {
+      const named = /^([a-z][a-z_]*):\s*([\s\S]*)$/.exec(block);
+      if (!named) return { key: "", value: block, mine: false };
+      return { key: named[1], value: named[2].trim(), mine: BODY_FIELDS.has(named[1]) };
+    });
+}
+
 /* The three sources `/` offers, in the order a shot is usually built: the look
    it is in, who is in it, then what it points at. `door` is the row that opens
    the window this source really lives in — a catalogue of 941 stills has no
@@ -90,7 +115,8 @@ export function focusEnd(element) {
 // itself, and the two regions of the panel that are not the writing area — the
 // pill row and the rewrite below it, which has boxes of its own.
 const NOT_THE_PROMPT =
-  "button, input, select, textarea, a, summary, [contenteditable], .mmc-pills, .mmc-refined";
+  "button, input, select, textarea, a, summary, [contenteditable], .mmc-pills, .mmc-refined,"
+  + " .mmc-compiled";
 
 export class PromptBox {
   /**
@@ -150,7 +176,7 @@ export class PromptBox {
 
     this.root = el("div", {
       // The second class is the affordance: a cast chip is only worth a pointer
-      // where double-clicking it opens somebody, and that is the host's answer
+      // where clicking it opens somebody, and that is the host's answer
       // rather than the box's.
       class: `mmc-prompt${hooks.onCastChip ? " mmc-prompt-castable" : ""}`,
       contenteditable: "true",
@@ -184,10 +210,28 @@ export class PromptBox {
     // directly above the box. And deleting one is unaffected — a chip is removed
     // with the caret and Backspace, the same as it always was.
     this.root.addEventListener("click", (event) => {
-      const chip = event.target?.closest?.(".mmc-ref-cast[data-handle]");
-      if (!chip || !this.root.contains(chip)) return;
+      const chip = this.castChip(event);
+      if (!chip) return;
       event.preventDefault();
       this.hooks.onCastChip?.(chip.dataset.handle);
+    });
+    // A press on a name is a command, and a command is not a selection. Left to
+    // the browser, a click on a contenteditable="false" chip selects the whole
+    // node — the name turns into a blue block and stays one until you click
+    // somewhere else, which is a lot of noise for a press whose whole visible
+    // result is a panel opening under it.
+    //
+    // Cancelled at mousedown, because that is where the selection is made.
+    // Cancelling it there does not cancel the click, which is what carries the
+    // gesture — see the listener above. It does mean a press on a name no
+    // longer puts the caret beside it; that is the right trade for a chip you
+    // are pressing on purpose, and the text either side of it is a character
+    // away.
+    //
+    // Only the names, and only where they open somebody. A file's chip is not a
+    // control, so selecting it is the ordinary thing to be doing with it.
+    this.root.addEventListener("mousedown", (event) => {
+      if (this.castChip(event)) event.preventDefault();
     });
 
     // The graph canvas swallows keys and drags otherwise, and answers a copy
@@ -210,23 +254,198 @@ export class PromptBox {
     // the editable and nothing about the wrapper.
     this.superseded = false;
     this.excerpt = el("span", { class: "mmc-prompt-excerpt" });
+
+    // ---- what the model reads -----------------------------------------------
+    //
+    // The sentence you write is not the prompt that is queued. The compiler
+    // wraps it in the guide's sections, defines every reference the tokenizer
+    // will be shown, states what becomes of each one and summarises the job —
+    // and none of that was visible anywhere, so the way to find out what had
+    // been sent was to read the console or guess.
+    //
+    // It is shown *under* the sentence rather than in place of it. The first
+    // attempt was a pair of tabs that swapped the two, and swapping was the
+    // mistake: the compiled prompt contains your sentence, so putting them in
+    // the same rectangle one at a time asks you to hold the first in your head
+    // to see what the second added — and for a shot with nothing to declare the
+    // two look near enough identical that the feature reads as broken. Stacked,
+    // the difference is the thing on screen.
+    //
+    // Read-only, and derived: a caret in here would be a caret in something the
+    // next keystroke rewrites. The way to change it is to change the sentence.
+    this.compiledOpen = false;
+    // One request at a time per box. `refreshCompiled` is called on every edit
+    // and on every render, and the first version fired a fetch for each of them
+    // and dropped every answer but the newest — which, while renders kept
+    // arriving, was never any of them, so the panel stayed empty forever. In
+    // flight, a new ask sets `dirty` and is served by one more fetch when the
+    // current one lands.
+    this.compiledBusy = false;
+    this.compiledDirty = false;
+
+    this.compiledStatus = el("span", { class: "mmc-compiled-status" });
+    this.compiledDoc = el("div", { class: "mmc-compiled-doc" });
+    keepScroll(this.compiledDoc);
+    this.compiledRail = el("button", {
+      class: "mmc-compiled-rail", type: "button", "aria-expanded": false,
+      onclick: (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        this.setCompiledOpen(!this.compiledOpen);
+      },
+    }, [
+      icon("chevron", 12),
+      el("span", { class: "mmc-compiled-title", text: t("What the model reads") }),
+      this.compiledStatus,
+    ]);
+    // Only where somebody can answer for the finished prompt. A host that
+    // cannot compile the piece gets the box it always had rather than a rail
+    // that opens onto an apology. Empty, the CSS takes it out of the layout.
+    this.compiled = el("div", { class: "mmc-compiled" },
+                       hooks.compiled ? [this.compiledRail, this.compiledDoc] : []);
+    this.compiled.addEventListener("pointerdown", (event) => event.stopPropagation());
+
     this.head = el("summary", { class: "mmc-prompt-head" }, [
       icon("chevron", 12),
       el("span", { class: "mmc-prompt-head-name", text: t("your prompt") }),
       this.excerpt,
     ]);
-    // What the compiler will write in front of the description, where the
-    // `define_refs` setting is on and this prompt cites references. Inside the
-    // fold and above the box, because it is part of the same prompt: it folds
-    // away with it, and it reads in the order the model reads it. Filled by the
-    // owner — see `CreatorEditor.renderScopes` — and empty otherwise, which is
-    // every prompt on a machine that leaves the setting alone.
-    this.scopeHost = el("div", { class: "mmc-scopes" });
     this.frame = el("details", { class: "mmc-prompt-fold" },
-                    [this.head, this.scopeHost, this.root]);
+                    [this.head, this.root, this.compiled]);
     this.frame.open = true;
     this.frame.addEventListener("toggle", () => this.syncExcerpt());
     this.frame.addEventListener("pointerdown", (event) => event.stopPropagation());
+  }
+
+  /**
+   * Open or close the compiled prompt.
+   *
+   * Opening draws the waiting state first and asks second, so the rail never
+   * expands onto nothing: whatever the fetch does, there is already a shape
+   * under it saying that a shape is coming.
+   */
+  setCompiledOpen(open) {
+    this.compiledOpen = !!open && !!this.hooks.compiled;
+    this.compiled.classList.toggle("open", this.compiledOpen);
+    this.compiledRail.setAttribute("aria-expanded", String(this.compiledOpen));
+    if (!this.compiledOpen) {
+      this.compiledDoc.replaceChildren();
+      this.compiledStatus.textContent = "";
+      this.compiled.classList.remove("problem");
+      return;
+    }
+    this.drawWaiting();
+    this.refreshCompiled();
+  }
+
+  /**
+   * Re-read the finished prompt, if it is open.
+   *
+   * Called by the host whenever the piece changes — a chip attached, somebody
+   * cast, a word typed — because all of those change the prompt without going
+   * anywhere near the box. A no-op while the rail is closed, so the host can
+   * call it on every edit without thinking about it.
+   */
+  async refreshCompiled() {
+    if (!this.compiledOpen || !this.hooks.compiled) return;
+    if (this.compiledBusy) { this.compiledDirty = true; return; }
+    this.compiledBusy = true;
+    this.compiledDirty = false;
+    this.compiled.classList.add("loading");
+
+    let answer;
+    try {
+      answer = await this.hooks.compiled();
+    } catch (problem) {
+      // A host that throws is a fact about this pack, not about the prompt, so
+      // it is reported in the panel rather than left as an unhandled rejection
+      // with an empty box under it — which is what the first version did.
+      answer = { problem: String(problem?.message || problem) };
+    }
+    this.compiledBusy = false;
+    this.compiled.classList.remove("loading");
+    if (!this.compiledOpen) return;
+    if (this.compiledDirty) return this.refreshCompiled();
+    this.drawCompiled(answer || {});
+  }
+
+  /** Three bars where the sections will be. Shown while the first answer is
+   *  outstanding, and again for nothing else — a re-read of an open panel
+   *  keeps the text that is on screen and dims it, because replacing prose you
+   *  are reading with bars on every keystroke is worse than a stale word. */
+  drawWaiting() {
+    this.compiled.classList.remove("problem");
+    this.compiledStatus.textContent = t("compiling…");
+    this.compiledDoc.replaceChildren(...[76, 92, 58].map((width) =>
+      el("div", { class: "mmc-compiled-bar", style: { width: `${width}%` } })));
+  }
+
+  /**
+   * Draw one compiled prompt.
+   *
+   * The text arrives as the compiler wrote it — blank-line separated blocks,
+   * each one `field: prose` bar the instruction line, which has no field
+   * because it is not a section. Splitting it back apart is presentation and
+   * nothing else: the keys are shown as keys and the prose as prose, so a
+   * document is legible as a document instead of as one long paragraph in the
+   * same face and size as the box above it.
+   *
+   * The block holding your own sentence is marked, and it is the only thing in
+   * here that is marked. That is the question the panel exists to answer — what
+   * did the compiler add — and one accent answers it without a legend.
+   */
+  drawCompiled({ problem = "", note = "", text = "", message = "" } = {}) {
+    this.compiled.classList.toggle("problem", !!problem);
+
+    if (problem) {
+      this.compiledStatus.textContent = t("could not compile");
+      this.compiledDoc.replaceChildren(el("p", { class: "mmc-compiled-problem", text: problem }));
+      return;
+    }
+
+    this.compiledStatus.textContent = note;
+    // The panel talking rather than a prompt to show: a clip that generates
+    // nothing has no wire keys, and dressing our sentence in one would be
+    // inventing a field the model is never handed.
+    if (message) {
+      this.compiledDoc.replaceChildren(el("p", { class: "mmc-compiled-note", text: message }));
+      return;
+    }
+
+    const blocks = compiledBlocks(text);
+    if (!blocks.length) {
+      this.compiledDoc.replaceChildren(el("p", {
+        class: "mmc-compiled-empty",
+        text: t("Nothing is queued for this shot yet. Write a sentence above."),
+      }));
+      return;
+    }
+
+    const declared = blocks.filter((block) => block.key && !block.mine).length;
+    this.compiledDoc.replaceChildren(
+      ...blocks.map(({ key, value, mine }) => el("div", {
+        class: `mmc-compiled-block${mine ? " mine" : ""}`,
+      }, [
+        el("div", { class: "mmc-compiled-key" }, [
+          // The blocks with no field are the guide's alignment statements —
+          // `contextir.instruction` and the preamble `ref_frame_alignment`
+          // writes. They carry no wire key because they are not sections, so
+          // the panel names them for what they say.
+          el("span", { text: key || t("frame alignment") }),
+          ...(mine ? [el("span", { class: "mmc-compiled-mine", text: t("yours") })] : []),
+        ]),
+        el("p", { class: "mmc-compiled-value", text: value }),
+      ])),
+      // Said plainly, because "it looks the same as what I typed" is the right
+      // reading of this case and not a bug: a shot with no cast and no
+      // references has nothing to define, so the compiler wraps the sentence
+      // and adds nothing to it.
+      ...(declared ? [] : [el("p", {
+        class: "mmc-compiled-note",
+        text: t("Nothing else is added — this shot has nothing to define, so your "
+              + "sentence is the whole prompt."),
+      })]),
+    );
   }
 
   /**
@@ -353,6 +572,15 @@ export class PromptBox {
     return out;
   }
 
+  /** The cast chip an event landed on, if it landed on one that opens somebody.
+   *  One answer for the two listeners that ask, so a press and the selection it
+   *  must not make can never disagree about what was pressed. */
+  castChip(event) {
+    if (!this.hooks.onCastChip) return null;
+    const chip = event.target?.closest?.(".mmc-ref-cast[data-handle]");
+    return chip && this.root.contains(chip) ? chip : null;
+  }
+
   chip(handle, subject = false) {
     return el("span", {
       class: `mmc-ref${subject ? " mmc-ref-cast" : ""} mmc-tag-${tagIndex(handle)}`,
@@ -416,12 +644,41 @@ export class PromptBox {
    *  so it never yanks the caret mid-sentence. */
   refresh() {
     if (document.activeElement === this.root) return;
-    this.root.replaceChildren(...this.build(this.hooks.getState().prompt ?? ""));
+    const text = this.hooks.getState().prompt ?? "";
+    const built = this.build(text);
+    // Nothing to do where nothing changed, and this is not an optimisation.
+    //
+    // A press is a pointerdown and a click on *the same element*. The host
+    // re-renders for its own reasons — a pill moved, a probe answered, a commit
+    // landed — and every one of those used to replace the box's children, so the
+    // chip a press had started on was detached before the browser could finish
+    // the click on it. No click event, no error, nothing in the console: a name
+    // in the sentence that simply does not open, broken by an edit nowhere near
+    // this file. That is why the gesture has kept coming back broken.
+    //
+    // Compared as the finished nodes rather than as the source text, because
+    // what makes a handle a chip is not in the text: the cast and the pool
+    // decide it, and either can change while the sentence does not.
+    if (!this.sameAs(built)) this.root.replaceChildren(...built);
     // A handle that stopped being a chip because its asset was detached from the
     // asset row is not a deletion the user made *here*, and re-noting the census
     // after the rebuild is what keeps `onEdit` from reporting it as one.
     this.censusChips();
     this.syncExcerpt();
+  }
+
+  /** Whether the box already holds exactly what `built` would put in it: the
+   *  same run of text and chips, in the same order, with the same handles. */
+  sameAs(built) {
+    const have = [...this.root.childNodes];
+    if (have.length !== built.length) return false;
+    return built.every((want, index) => {
+      const got = have[index];
+      if (got.nodeType !== want.nodeType) return false;
+      if (want.nodeType === 3) return got.textContent === want.textContent;
+      return got.className === want.className
+          && got.dataset?.handle === want.dataset?.handle;
+    });
   }
 
   /**
