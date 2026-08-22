@@ -1137,4 +1137,8 @@ export const zh = {
  "everything": "全部",
  "On by default: this clip's soundtrack is bound as a reference audio, taking an <Audio> slot before the video's own label, and needing the audio VAE connected. Off references the picture silently. Sound only references the soundtrack without the picture.": "默认开启：该片段的音轨会被绑定为参考音频，占用排在视频自身标签之前的 <Audio> 槽位，并需要连接音频 VAE。关闭则只静默引用画面。“仅声音”只引用音轨而不带画面。",
  "Attach the frame at its full size as a look to build from, and put the style's own words in its description. It arrives as @{handle} at the front of the prompt — click the name to edit it, delete it to take the look off. Replaces whatever look was there.": "以原始尺寸将该帧作为“风格”附加，并把风格自身的文字写入其描述。它会以 @{handle} 出现在提示词开头——点击名称可编辑，删除则移除该风格。会替换原有的风格。",
+ "941 shipped looks — type to search them": "内置 941 种风格——输入即可搜索",
+ "all 941, with every frame each one was cut from": "全部 941 种，附每种的全部取帧画面",
+ "Cast this look — its frame is attached and its name written here. Replaces whatever look the piece already had.": "选用该风格——其取帧会被附加，名称写在此处。会替换作品中已有的风格。",
+ "that style has no frame": "该风格没有可用的取帧",
 };

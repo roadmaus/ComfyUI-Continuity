@@ -1136,4 +1136,8 @@ export const ja = {
  "everything": "すべて",
  "On by default: this clip's soundtrack is bound as a reference audio, taking an <Audio> slot before the video's own label, and needing the audio VAE connected. Off references the picture silently. Sound only references the soundtrack without the picture.": "既定でオン。このクリップの音声が参照オーディオとして束縛され、映像自身のラベルより前に <Audio> スロットを取り、オーディオ VAE の接続が必要になります。オフでは映像のみを無音で参照します。「音声のみ」は映像を伴わずに音声だけを参照します。",
  "Attach the frame at its full size as a look to build from, and put the style's own words in its description. It arrives as @{handle} at the front of the prompt — click the name to edit it, delete it to take the look off. Replaces whatever look was there.": "フレームを原寸のまま「ルック」として添付し、スタイル自身の言葉を説明に入れます。プロンプト先頭に @{handle} として現れます——名前をクリックで編集、削除でルックを外します。既存のルックは置き換えられます。",
+ "941 shipped looks — type to search them": "同梱の 941 のルック——入力して検索",
+ "all 941, with every frame each one was cut from": "941 すべてと、それぞれの切り出し元フレーム",
+ "Cast this look — its frame is attached and its name written here. Replaces whatever look the piece already had.": "このルックをキャストします——フレームが添付され、名前がここに書き込まれます。作品に既にあるルックは置き換えられます。",
+ "that style has no frame": "そのスタイルにはフレームがありません",
 };

@@ -30,7 +30,8 @@ const MAX_SUGGESTIONS = 40;
    the window this source really lives in — a catalogue of 941 stills has no
    honest 300px version, so the Style branch is that row and nothing else. */
 const SOURCES = [
-  { branch: "style", label: "Style", sub: "the shipped atlas of looks", iconName: "effect" },
+  { branch: "style", label: "Style", sub: "941 shipped looks — type to search them",
+    iconName: "effect" },
   { branch: "cast", label: "Cast", sub: "somebody from the cast library", iconName: "face" },
   { branch: "refs", label: "References", sub: "a picture, a clip or a sound to point at",
     iconName: "image" },
@@ -121,6 +122,10 @@ export class PromptBox {
    *   sentence was clicked. The name is where a subject is used, so it
    *   is also the obvious place to ask what they are made of — see
    *   `CreatorEditor.openCastMember`, which summons the shelf onto them.
+   * @param {(row:object)=>Promise<string|null>} [hooks.castStyle]  cast one atlas
+   *   look into the piece and answer with the handle it landed under. Absent
+   *   where there is no piece to cast it into — the same rule `castFromLibrary`
+   *   follows — and the Style rows are left out of the `/` menu with it.
    * @param {(scope:string)=>void} [hooks.openLibrary]  open the preset library
    *   on a scope — the `/` menu's door onto the style atlas and the cast
    *   library. Absent where there is no node for a preset to land on, and the
@@ -669,6 +674,40 @@ export class PromptBox {
 
   // ---- suggestion menu -----------------------------------------------------
 
+  /**
+   * The style catalogue, read once and shared by every box on the page.
+   *
+   * A sixth of a megabyte of descriptors, so it is not read at boot and not read
+   * on `@` — only when a `/` is actually asking about looks. The module cache
+   * makes every read after the first free, which is why this can be called from
+   * a keystroke.
+   */
+  async readStyles() {
+    if (PromptBox.styles) return PromptBox.styles;
+    PromptBox.styles ??= (async () => {
+      try {
+        const module = await import("./presets/stylelib.js");
+        return module.styleRows();
+      } catch {
+        // The catalogue is vendored, so this is a broken install rather than a
+        // network away. The branch draws its door and nothing else, which is
+        // what it did before the rows existed.
+        return [];
+      }
+    })();
+    const rows = await PromptBox.styles;
+    // Kept where every box can read it without awaiting: `commandOptions` runs
+    // inside a render, and a render cannot wait for a module.
+    PromptBox.loadedStyles = rows;
+    if (this.menu) { this.signature = null; this.renderMenu(); }
+    return rows;
+  }
+
+  /** The looks, if they have arrived. `readStyles` re-renders when they do. */
+  styles() {
+    return PromptBox.loadedStyles;
+  }
+
   async openMenu(query, mode = "@") {
     this.query = query.toLowerCase();
     // Switching openings is switching menus: the branch you had drilled into
@@ -694,6 +733,9 @@ export class PromptBox {
     // is a small file in this user's own data and usually cached, so it is
     // waited for first; the input folder is a walk of a directory and can take
     // as long as it takes.
+    // The looks, as soon as a slash is asking about them: inside the branch, or
+    // against any query at all, since a query searches every source at once.
+    if (mode === "/" && (this.branch === "style" || this.query)) this.readStyles();
     const files = listAssets().catch(() => []);
     const roster = this.hooks.castFromLibrary
       ? listPresets().then((rows) => rows.filter((row) => row.scope === "cast"))
@@ -863,15 +905,27 @@ export class PromptBox {
       }
     }
 
-    // The style branch is a door and nothing else, so it only appears when it is
-    // what was asked for. A door offered against every query would be a row
-    // that never matches anything and never goes away.
-    if (this.hooks.openLibrary && (branch === "style" || (asked && "style".startsWith(asked)))) {
-      groups.push({
-        head: t("Style"),
-        options: [{ kind: "door", door: "style", label: t("Open the style atlas"),
-                    sub: t("941 looks, with the frame each one is cut from") }],
-      });
+    if (wants("style") && this.hooks.castStyle) {
+      // The whole descriptor is searched, not just the lead: "grindhouse",
+      // "needle-felted" and "anamorphic" are all in the middle of one, and the
+      // library's own search reads the same field for the same reason.
+      const looks = (this.styles() ?? [])
+        .filter((row) => !asked
+          || row.name.toLowerCase().includes(asked)
+          || String(row.note ?? "").toLowerCase().includes(asked)
+          || String(row.folder ?? "").toLowerCase().includes(asked))
+        .slice(0, MAX_SUGGESTIONS)
+        .map((row) => ({ kind: "style", handle: null, row }));
+      // The door stays, at the foot of the looks rather than in place of them:
+      // a row here is the descriptor and one frame, and choosing between six
+      // needle-felted entries is still a thing you do by looking at all of them.
+      const doors = this.hooks.openLibrary
+        ? [{ kind: "door", door: "style", label: t("Open the style atlas"),
+             sub: t("all 941, with every frame each one was cut from") }]
+        : [];
+      if (looks.length || branch) {
+        groups.push({ head: t("Style"), options: [...looks, ...doors] });
+      }
     }
 
     return groups;
@@ -906,7 +960,8 @@ export class PromptBox {
     // away the highlight and re-fire mouseenter under a stationary pointer, so
     // only rebuild when the list actually differs.
     const signature = this.flat
-      .map((option) => `${option.kind}:${option.handle ?? option.path ?? option.branch ?? option.door}`)
+      .map((option) => `${option.kind}:${
+        option.handle ?? option.path ?? option.branch ?? option.door ?? option.row?.id}`)
       .join("\u0000");
     if (this.rows?.length && signature === this.signature) return;
     this.signature = signature;
@@ -946,6 +1001,11 @@ export class PromptBox {
       const thumb = option.kind === "branch" || option.kind === "door"
         ? el("span", { class: "mmc-mention-thumb mmc-mention-glyph" },
              [icon(option.iconName ?? "star", 15)])
+        // A look's frame is a file this pack ships out of its own web folder —
+        // there is no output behind it and no thumb route to resolve it
+        // through, so the URL stylelib built is the src.
+        : option.kind === "style"
+        ? el("img", { class: "mmc-mention-thumb", src: option.row.thumbs?.[0] ?? "", alt: "" })
         : option.mediaKind === "image" || face
         ? el("img", {
             class: "mmc-mention-thumb",
@@ -969,17 +1029,26 @@ export class PromptBox {
         : null;
       const title = option.kind === "branch" || option.kind === "door"
         ? t(option.label)
+        // The lead names the medium — "Claymation", "2D cutout-paper stop-motion
+        // animation" — and is what somebody typing "clay" is looking for. The
+        // rest of the descriptor is the second line.
+        : option.kind === "style" ? option.row.lead
         : option.handle ? `@${option.handle}` : option.path.split("/").pop();
       const subtitle = option.kind === "branch" || option.kind === "door" ? t(option.sub)
+        : option.kind === "style" ? (option.row.rest || option.row.folder)
         : option.kind === "cast" ? made
         : option.kind === "roster" ? castFactsLine(option.row.facts)
         : option.handle ? option.path : (option.row?.subfolder || "");
 
       const item = el("button", {
-        class: `mmc-mention-row${option.kind === "branch" ? " mmc-mention-branch" : ""}`,
+        class: `mmc-mention-row${option.kind === "branch" ? " mmc-mention-branch" : ""}${
+          option.kind === "style" ? " mmc-mention-style" : ""}`,
         "aria-selected": here === this.active,
         title: option.kind === "branch"
           ? t("Show what is in {label}", { label: t(option.label) })
+          : option.kind === "style"
+          ? t("Cast this look — its frame is attached and its name written here. "
+            + "Replaces whatever look the piece already had.")
           : option.kind === "door" ? t(option.sub)
           : option.kind === "roster"
           ? t("Cast @{handle} here — their references are attached as they land.",
@@ -1060,6 +1129,10 @@ export class PromptBox {
       this.branch = option.branch;
       this.active = 0;
       this.signature = null;
+      // Entering the Style branch is the other way to ask for the catalogue —
+      // `openMenu` only sees the ones that arrive with a query typed after the
+      // slash, and drilling in with an empty one is the commoner gesture.
+      if (this.branch === "style") this.readStyles();
       this.renderMenu();
       return;
     }
@@ -1077,6 +1150,26 @@ export class PromptBox {
       this.closeMenu();
       if (option.door === "browse") this.hooks.onBrowse?.();
       else this.hooks.openLibrary?.(option.door);
+      return;
+    }
+    // A look, cast where you asked for it. The same member the library's own
+    // "Cast this frame as a look" builds — the frame is uploaded and the subject
+    // lands on the piece — but the name goes where the caret is instead of at
+    // the front of the sentence, because here you said where you wanted it.
+    //
+    // Measured before anything else, for the reason the roster is: casting
+    // uploads a file and redraws the body, and the box is rebuilt with it.
+    if (option.kind === "style") {
+      const spot = this.triggerSpot();
+      const before = this.getValue();
+      this.closeMenu();
+      try {
+        const handle = await this.hooks.castStyle(option.row);
+        if (handle) this.writeName(before, spot, handle);
+      } catch {
+        // The frame could not be read or uploaded. The typed "/claymation" is
+        // left as it was typed, which is prose and queues as prose.
+      }
       return;
     }
     if (option.kind === "roster") {

@@ -119,6 +119,49 @@ function clock(seconds) {
   return `${Math.floor(whole / 60)}:${String(whole % 60).padStart(2, "0")}`;
 }
 
+/**
+ * One of a style's frames, as a cast member ready to be applied.
+ *
+ * The descriptor tells the model what the look is called; the frame shows it
+ * one. For a medium nobody has a folder of — a 1972 educational puppet show, a
+ * needle-felted diorama — the second is the only one you can get, which is why
+ * the full-size frames are vendored at all rather than streamed on demand: a
+ * node that needs the network to hand you a picture is a node that is broken on
+ * half the machines it runs on.
+ *
+ * It is a subject rather than an attachment, because that is what this is:
+ * `takes: "style"` is the pack's own word for a picture whose medium, palette
+ * and rendering are kept and whose subject and layout are dropped — which is
+ * precisely the distinction the descriptor is being cut along.
+ *
+ * The still is copied into the input folder rather than cited where it sits.
+ * Everything downstream of here — the picker, `media.resolve`, the thumb route —
+ * addresses a file by an input-relative path, and a path into the extension's
+ * own web folder is not one. It is a copy, so a style used in ten pieces is one
+ * file: the name is the clip's, and an upload of a name that is already there is
+ * the same picture by definition.
+ *
+ * Out here rather than on the library, because the `/` menu casts a look too and
+ * has no library open to ask.
+ */
+export async function styleCastMember(row, index = 0) {
+  const clip = row?.data?.style?.clips?.[index];
+  const still = row?.stills?.[index];
+  if (!clip || !still) throw new Error(t("that style has no frame"));
+  const response = await fetch(still);
+  if (!response.ok) throw new Error(t("the frame is not on disk"));
+  const blob = await response.blob();
+  const asset = await upload(
+    new File([blob], `${STYLE_REF_PREFIX}${clip}.webp`, { type: "image/webp" }),
+    STYLE_REF_FOLDER);
+  return {
+    handle: styleHandle(row.name),
+    takes: "style",
+    description: row.data.style.text,
+    files: [{ slot: "from", filename: asset.path, kind: "image", ref_size: "max" }],
+  };
+}
+
 class PresetLibrary {
   constructor({ target = null, scope = null }, resolve) {
     this.target = target;
@@ -1382,7 +1425,8 @@ class PresetLibrary {
   }
 
   /**
-   * One of a style's frames, cast as a look to build from.
+   * One of a style's frames, cast as a look to build from — see
+   * `styleCastMember`, which is the half of this that both callers need.
    *
    * The descriptor tells the model what the look is called; the frame shows it
    * one. For a medium nobody has a folder of — a 1972 educational puppet show, a
@@ -1404,26 +1448,11 @@ class PresetLibrary {
    * is the same picture by definition.
    */
   async castStill(row, index) {
-    const clip = row.data?.style?.clips?.[index];
-    const still = row.stills?.[index];
-    if (!clip || !still || this.busy) return;
+    if (this.busy) return;
     this.busy = true;
     this.say(t("Attaching the frame…"));
     try {
-      const response = await fetch(still);
-      if (!response.ok) throw new Error(t("the frame is not on disk"));
-      const blob = await response.blob();
-      const asset = await upload(
-        new File([blob], `${STYLE_REF_PREFIX}${clip}.webp`, { type: "image/webp" }),
-        STYLE_REF_FOLDER);
-      this.target.apply({
-        cast: {
-          handle: styleHandle(row.name),
-          takes: "style",
-          description: row.data.style.text,
-          files: [{ slot: "from", filename: asset.path, kind: "image", ref_size: "max" }],
-        },
-      }, ["cast"], "cast");
+      this.target.apply({ cast: await styleCastMember(row, index) }, ["cast"], "cast");
       this.close();
     } catch (error) {
       this.busy = false;

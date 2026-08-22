@@ -367,6 +367,12 @@ export const css = `
  * a handle's, and a chevron saying the list goes on behind it.
  */
 .mmc-mention-branch .mmc-mention-handle { color: #ededed; }
+/* A look's row is the descriptor, not a handle — it has no name until it is
+   cast, so the tag colour every other row wears would be a promise about a
+   thing that does not exist yet. Its frame is the picture beside it, and the
+   rest of the descriptor is the second line. */
+.mmc-mention-style .mmc-mention-handle { color: #ededed; font-size: 13px; }
+.mmc-mention-style .mmc-mention-thumb { object-fit: cover; }
 .mmc-mention-glyph { color: #8b8b8b; }
 .mmc-mention-more { color: #7d7d7d; font-size: 15px; flex: none; padding-right: 2px; }
 /* The way back, above the narrowed list and reading as the thing it undoes.

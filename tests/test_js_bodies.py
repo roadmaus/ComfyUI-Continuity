@@ -1747,9 +1747,27 @@ try {
   // Drilling into a source narrows what is listed; the way back restores it.
   box.branch = "refs";
   out.slash.inRefs = box.groups().map((g) => g.head).join("|");
+  // The catalogue, searched in the menu rather than behind a door. This is the
+  // thing the branch was missing: typing "claymation" after a slash found
+  // nothing, not even inside the Style branch, because the branch was one row
+  // that opened a window.
   box.branch = "style";
-  out.slash.inStyle = box.groups().flatMap((g) => g.options).map((o) => o.door).join(",");
+  await box.readStyles();
+  const looks = () => box.groups().flatMap((g) => g.options);
+  out.slash.styleRows = looks().filter((o) => o.kind === "style").length;
+  box.query = "claymation";
+  const clay = looks().filter((o) => o.kind === "style");
+  out.slash.clay = clay.length;
+  out.slash.clayFirst = clay[0]?.row?.lead ?? null;
+  // ...and it is found from the top level too, without choosing Style first.
   box.branch = null;
+  out.slash.clayFromEverything =
+    looks().filter((o) => o.kind === "style").length > 0;
+  // The whole descriptor is searched, not only the lead: "needle-felted" is in
+  // the middle of one.
+  box.query = "needle-felted";
+  out.slash.midDescriptor = looks().filter((o) => o.kind === "style").length > 0;
+  box.query = "";
 
   // `@` is untouched by any of it — the two openings share one renderer and
   // this is the half that already worked.
@@ -2321,8 +2339,14 @@ check("typing searches every source at once, with the way to the picker under it
       slash.get("across"), "lamps/brass.png,door:browse")
 check("drilling into references narrows the menu to the input folder",
       slash.get("inRefs"), "Input folder")
-check("the style branch is a door, because a catalogue of stills has no dropdown",
-      slash.get("inStyle"), "style")
+check("the style branch lists the catalogue", slash.get("styleRows"), 40)
+check("...typing finds the claymation entries", (slash.get("clay") or 0) > 0, True)
+check("...by the medium their name opens on",
+      "laymation" in (slash.get("clayFirst") or ""), True)
+check("...and finds them from the top level too, without choosing Style first",
+      slash.get("clayFromEverything"), True)
+check("...searching the whole descriptor, not just its lead",
+      slash.get("midDescriptor"), True)
 check("and the @ menu is untouched by any of it",
       slash.get("mentionStillWorks"), "@")
 

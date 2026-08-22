@@ -900,6 +900,28 @@ export function leadWithStyle(text, phrase) {
 }
 
 /**
+ * Cast somebody into a piece, and where they are a look, take the standing one
+ * off first.
+ *
+ * One look at a time. Applying a style used to swap the descriptor that was
+ * leading the sentence for the new one — try six looks on a shot and you get six
+ * prompts, not six stacked paragraphs — and a look that is a subject has to keep
+ * that promise, or the same six attempts leave six subjects on the piece and six
+ * names in the sentence.
+ *
+ * Everything that casts a look goes through here: the library's Apply and the
+ * `/` menu's own rows.
+ */
+export function castIntoPiece(stored, timeline) {
+  const cast = addSubjectToPiece(stored, timeline);
+  if (cast?.takes !== "style") return cast;
+  for (const other of [...(timeline.subjects ?? [])]) {
+    if (other !== cast && other.takes === "style") dropStyle(other, timeline);
+  }
+  return cast;
+}
+
+/**
  * Take a look off the piece: the subject, its citations, and the picture it
  * alone was built out of.
  *
@@ -1167,22 +1189,15 @@ export function applyToPiece(body, keys, timeline, io, { from = "piece" } = {}) 
   if (chosen.has("cast")) {
     // Added, never assigned — see `addSubjectToPiece`. Applied after `refs`, so
     // a preset carrying both finds the pool it is meant to look in.
-    const cast = addSubjectToPiece(body.cast, timeline);
+    const cast = castIntoPiece(body.cast, timeline);
     // A look casts itself into the sentence. Somebody cast from the roster is
     // written in by the `@` menu at the caret, because that is where you asked
-    // for them; a style is applied from a window with no caret in it, and the
-    // instruction "now go and type @lego_brickfilm" was the whole of what used
-    // to happen. It leads, which is where a style has always gone — and it is a
-    // chip, so it opens on a click and leaves when it is deleted.
+    // for them; a style applied from the library comes from a window with no
+    // caret in it, and the instruction "now go and type @lego_brickfilm" was the
+    // whole of what used to happen. It leads, which is where a style has always
+    // gone — and it is a chip, so it opens on a click and leaves when deleted.
+    // The `/` menu casts the same member and writes the name where you typed it.
     if (cast?.takes === "style") {
-      // One look at a time. Applying a style used to swap the descriptor that
-      // was leading the sentence for the new one — try six looks on a shot and
-      // you got six prompts, not six stacked paragraphs — and a look that is a
-      // subject has to keep that promise, or the same six attempts leave six
-      // subjects on the piece and six names at the front of the sentence.
-      for (const other of [...(timeline.subjects ?? [])]) {
-        if (other !== cast && other.takes === "style") dropStyle(other, timeline);
-      }
       // Onto the prompt that is actually on screen. `addSubjectToPiece` already
       // draws this line for the look's picture — a piece of one shot keeps its
       // files on that shot rather than in a pool — and the sentence follows it:

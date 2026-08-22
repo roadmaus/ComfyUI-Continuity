@@ -17,8 +17,8 @@ import { t } from "./i18n.js";
 import { openPicker } from "./picker.js";
 import { openLoras, loraBlock } from "./loras.js";
 import { openSettings } from "./settings.js";
-import { openPresetLibrary } from "./presetlib.js";
-import { keepSubject } from "./presets.js";
+import { openPresetLibrary, styleCastMember } from "./presetlib.js";
+import { castIntoPiece, keepSubject } from "./presets.js";
 import { openTrim, trimLabel } from "./trim.js";
 import { PromptBox, focusEnd, openEditorSheet } from "./prompt.js";
 import { RefinePanel, refineButton, refine } from "./refine.js";
@@ -293,6 +293,20 @@ export class CreatorEditor {
             const handle = this.castFromLibrary(member);
             if (handle) { this.castOpen = true; this.render(); }
             return handle;
+          }
+        : null,
+      // A look picked out of the `/` menu. Onto the piece, where a cast lives —
+      // the same place `castFromLibrary` puts somebody, and for the same reason:
+      // this body may be one shot of a piece owned a level up. Offered only
+      // where the cast lands on a piece — a pre-stage's body is this same class
+      // over one image request, which has no cast and no segments, so the Style
+      // rows stay out of its menu the way the roster already does.
+      castStyle: this.castPiece?.subjects !== undefined || this.nodeId
+        ? async (row) => {
+            const member = await styleCastMember(row, 0);
+            const subject = castIntoPiece(member, this.castPiece);
+            this.commit();
+            return subject?.handle ?? null;
           }
         : null,
       onOverflow: (over) => this.onPromptOverflow(over),

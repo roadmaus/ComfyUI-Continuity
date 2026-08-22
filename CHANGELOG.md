@@ -39,11 +39,17 @@ same card on a node face and in either fullscreen view.
 
 **`/` — where a thing comes from.** `@` cites what this piece already has. `/`
 is the layer above it: the style atlas, the cast library, the input folder.
-Typing after it searches all three at once, so `/cla` finds Clara and
-clay-turntable.png without choosing a branch first; the arrow keys go in and
-back out. Every branch ends in a chip or in a door. Style is only a door — it is
-941 stills, chosen by looking at them, and a list of descriptors in a dropdown is
-the catalogue with the pictures taken away.
+Typing after it searches all three at once, so `/cla` finds Clara, Claymation
+*and* clay-turntable.png without choosing a branch first; the arrow keys go in
+and back out. Every row ends in a chip.
+
+The Style branch searches all 941 looks by their whole descriptor — so
+"grindhouse", "needle-felted" and "anamorphic" find their entries from the
+middle of one — and each row carries the frame it was cut from, so you are
+still choosing by looking. Picking one uploads that frame, casts the look, and
+writes its name where you typed the slash. The atlas is read the first time a
+slash asks about looks and never again, and the way into the full catalogue is
+still the last row of the branch.
 
 **The Sampling settings toggle works on the Timeline and the pre-stage.** The
 simple view folds the sampler row away by a class on its host, and only the

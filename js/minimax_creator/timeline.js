@@ -15,7 +15,7 @@ import { CreatorEditor, pickTakes, takesHelp } from "./editor.js";
 import { t } from "./i18n.js";
 import { openLoras, loraBlock, loraBase } from "./loras.js";
 import { openPicker } from "./picker.js";
-import { openPresetLibrary } from "./presetlib.js";
+import { openPresetLibrary, styleCastMember } from "./presetlib.js";
 import * as P from "./presets.js";
 import { PromptBox, openEditorSheet } from "./prompt.js";
 import { openSettings } from "./settings.js";
@@ -244,6 +244,12 @@ class Timeline {
       // standing prompt opens the card that is the whole reason it is there.
       // It was the one prompt box in the pack whose chips did nothing.
       onCastChip: (handle) => this.openCastMember(handle),
+      // A look picked out of the `/` menu, onto this window's own piece.
+      castStyle: async (row) => {
+        const subject = P.castIntoPiece(await styleCastMember(row, 0), this.timeline);
+        this.commit();
+        return subject?.handle ?? null;
+      },
       // The `/` menu's doors, onto this window's own piece: a style or a cast
       // member chosen here lands on the piece, which is where both belong.
       openLibrary: (scope) => openPresetLibrary({ target: this.pieceTarget(), scope })
