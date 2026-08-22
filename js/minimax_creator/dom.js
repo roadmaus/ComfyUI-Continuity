@@ -48,13 +48,16 @@ export function drawFrame(canvas, video, maxHeight = 720) {
   canvas.getContext("2d").drawImage(video, 0, 0, width, height);
 }
 
-// The only innerHTML in the package, and it is fed exclusively from the ICONS
-// constants below — never from a filename or anything else off disk. There is
-// deliberately no generic `html` prop on el() for the same reason: asset names
-// are user-controlled and must only ever reach the DOM as text.
-export function svg(paths, size = 22) {
+// Fed exclusively from the ICONS constants below and from `mark` — never from
+// a filename or anything else off disk. There is deliberately no generic `html`
+// prop on el() for the same reason: asset names are user-controlled and must
+// only ever reach the DOM as text.
+//
+// The box is a parameter because the mark is drawn on a 400-unit grid, which is
+// the grid the registry's copy of it is drawn on. Everything else is a 24.
+export function svg(paths, size = 22, box = "0 0 24 24") {
   const holder = document.createElement("span");
-  holder.innerHTML = `<svg viewBox="0 0 24 24" width="${size}" height="${size}">${paths}</svg>`;
+  holder.innerHTML = `<svg viewBox="${box}" width="${size}" height="${size}">${paths}</svg>`;
   return holder.firstElementChild;
 }
 
@@ -135,6 +138,37 @@ export const ICONS = {
 
 export function icon(name, size = 22) {
   return svg(ICONS[name], size);
+}
+
+/**
+ * The pack's own mark, as a tile.
+ *
+ * Not one of `ICONS`: those are single-colour stroke paths that take their
+ * colour from whatever they are put in, and this is artwork — the same file
+ * `pyproject.toml` points the Comfy registry at (docs/img/icon.svg), inlined
+ * so the shell does not fetch its own logo off GitHub to draw a title bar.
+ * Keep the two in step; the registry copy is the original.
+ *
+ * Ids are prefixed because a gradient id is document-wide and this is drawn
+ * inside a page ComfyUI also owns.
+ */
+export function mark(size = 20) {
+  return svg(
+    `<defs>
+       <radialGradient id="mmc-mark-ground" cx="50%" cy="42%" r="65%">
+         <stop offset="0%" stop-color="#1B222E"/><stop offset="100%" stop-color="#0E1116"/>
+       </radialGradient>
+       <linearGradient id="mmc-mark-clip" x1="0%" y1="0%" x2="100%" y2="100%">
+         <stop offset="0%" stop-color="#6EBEFF"/><stop offset="100%" stop-color="#2F7BF6"/>
+       </linearGradient>
+     </defs>
+     <rect width="400" height="400" rx="96" fill="url(#mmc-mark-ground)"/>
+     <path d="M 266.7 133.3 L 266.7 216.7 A 50 50 0 0 0 366.7 216.7 L 366.7 200 A 166.7 166.7 0 1 0 301.4 332.4"
+           fill="none" stroke="#EDF1F0" stroke-width="33" stroke-linecap="round" stroke-linejoin="round"/>
+     <circle cx="200" cy="200" r="83" fill="url(#mmc-mark-clip)"/>
+     <path d="M 180 166 L 238 200 L 180 234 Z"
+           fill="#EDF1F0" stroke="#EDF1F0" stroke-width="18" stroke-linejoin="round"/>`,
+    size, "0 0 400 400");
 }
 
 /**

@@ -1,5 +1,247 @@
 # Changelog
 
+## 2.14
+
+**The node can have the whole window now.** Settings → MiniMax H3 → Editor →
+Fullscreen, or Ctrl+Shift+M, and the Creator's face stops being a rectangle on a
+canvas and becomes the screen: the body in a column at its own width, the picture
+beside it at its own size rather than scaled to the zoom, and the PreStage — when
+one is spawned — in a column of its own to the left, still the direction the
+hand-off runs. Escape and the button in the corner go back to the graph.
+
+Nothing is duplicated to do it. The body is the same element the node mounts, the
+blob is the same hidden widget, and the node stays in the graph the whole time —
+so the piece is still what `graphToPrompt` serializes and still what the server
+runs, and the workflow you save from fullscreen is the workflow you always had.
+The node's own title is the piece's name, because LiteGraph already lets you
+rename it and already saves it, and inventing a second name would have meant two
+that could disagree.
+
+**The title bar wears the pack's own mark.** It was drawing `timeline`, a rail
+glyph that means "the strip" everywhere else it appears, next to the words
+MiniMax H3. It is the icon the Comfy registry lists the pack under now — the
+same artwork, inlined rather than fetched, so the shell does not go to GitHub to
+draw its own corner.
+
+**A Render button, and a Cancel.** ComfyUI's are behind the shell, so the piece
+grows its own at the foot of its column, and the button is the queue readout as
+well — it turns into the step count while it samples and puts a Cancel beside
+itself. Both call exactly what the toolbar calls, `queuePrompt` and `interrupt`;
+neither reimplements a queue. The Gallery and the Settings page are *not* in the
+title bar: they have been in the body's own rail all along, and a second copy
+would be two doors into one room.
+
+**Two views over the one shell.** The switch is in the title bar. *Full* is the
+desk described above — the pre-stage, the shot and the picture side by side,
+which is what a piece built out of parts actually looks like. *Simple* is the
+other half of the day: one card, for when the piece is one prompt and everything
+else is in the way. Nothing that the render reads is hidden in it — the rail,
+the references, the cast and the shot's own pills are all still there; the
+sampler row is folded, because it is the row you set once and then stop looking
+at, and *Sampling settings* beside Render brings it back. Which view you were
+last in survives a reload.
+
+**And the simple view opens as you use it.** The card sits in the middle of an
+empty window while you write, and the moment you press Render the picture column
+opens beside it and the card slides left to make room. It is the same two regions
+the desk has, in the same places — writing on the left, picture on the right —
+with the difference that the right-hand one is not there until there is something
+in it. Nothing appears at a new address, either: the card is on rails between two
+positions in one centred row, so opening the column *is* the movement, and there
+is no second layout to keep in step with the first. Reduced motion gets the two
+positions and nothing between them.
+
+**And it stays simple once you have used it.** Cast somebody, attach a clip,
+narrow a reference, and the card that was one prompt in the middle of a window
+became four rows of chips over a paragraph of explanation. Every one of those is
+right on a node face, where it is the only place the thing can be said, and
+wrong in a view whose whole point is that there is one thing on screen. Three
+things go, and none of them is a control you cannot reach:
+
+*The cast shelf, and the Cast tool with it.* Everything the drawer does is
+already somewhere else and better placed in this view. Casting somebody is the
+@ menu's roster — it reads the cast library, and picking a name there attaches
+their pictures and writes the name into the sentence in one gesture, which is
+shorter than finding them in a drawer, casting them, and then going to cite
+them. Building or editing somebody is the library's Cast tab, which has New cast
+member, the sheet for their description and their files, Export and Delete, and
+sits two tiles along the rail under Presets. And taking somebody out is deleting
+their chip: `compile.py` cuts the cast down to the subjects the text actually
+cites, so a member nobody writes is not in the render. What was left was a
+drawer listing people you can read off the sentence you wrote.
+
+The one thing none of those covers is editing the copy of somebody that lives in
+*this* piece — the library sheet edits the library's copy, and casting them again
+makes a second person rather than updating the first. So **click their name in
+the prompt** and the shelf arrives on them alone, with nobody else open; their
+own chevron takes it away again. The chip is `contenteditable="false"`, so a
+click on it had nowhere to put a caret and did nothing before, which makes the
+gesture free as well as right: the name in the sentence is where somebody is
+used, so it is the shortest way to ask what they are made of. It wears the
+pointer and lifts under it, everywhere the gesture actually lands — a card's
+editor is one shot of a piece whose cast is owned a level up, and there the chip
+stays a chip. Deleting one is unchanged: caret, Backspace.
+
+*And the cast's own pictures stay out of the reference row.* Casting somebody
+attaches their files, so one person in a shot grew a chip saying what the @name
+in the sentence already says — and in this view the sentence is the only place a
+subject is written, which made the chip a second and worse copy of it. The row is
+what *you* attached now: the frames, the footage, the references. Empty of those,
+it goes with them rather than leaving a gap where it was.
+
+*The band that spells out what each reference narrows to*, and the shelf's
+standing sentences with it. They describe what the controls beside them already
+say, and none is the only place a fact is written. (That band is opt-in in
+Settings to begin with.)
+
+*Any narrowing nobody changed.* A reference chip's four — the trim, the
+soundtrack switch, what the file is taken for, the reference canvas — now say
+whether they are still holding their default, and the simple view shows only
+what somebody chose. So `@vid-1 whole sound on full max` is `@vid-1`, and a clip
+you trimmed to eight seconds still says so.
+
+The dashed "write the next shot" rule goes too: growing a strip is the timeline's
+gesture and the Timeline pill is still in the row. Everything dropped is one
+press away in the full view, and none of it is dropped from the render — these
+are display rules over the same bodies, drawing the same blob.
+
+**A pre-stage is a step there, not a second panel.** There is no room beside one
+column for another one, and there should not be — the pair is a sequence, make
+the still and then make the video out of it — so a switch at the top of the card
+says which half you are writing and the card shows it. Both nodes stay in the
+graph; the step changes what is in front of you *and* what Render makes. Grabbing a frame or sending a still to the shot moves the card
+to the shot on its own, because that hand-off is the whole reason the pair
+exists. The switch is also the only pre-stage control the simple view has now:
+pressing *Pre-stage* when there is none spawns one and takes you to it, and the
+✕ on the step you are standing on removes it. The amber pill in the shot's own
+row that used to do the spawning is gone from this view — two controls over one
+node was one place too many to look. The desk keeps it.
+
+**Render makes one thing, not both.** A PreStage is an output node of the same
+graph the shot is in, so queueing the graph runs the pair — which is right for
+ComfyUI's own Run button, and wrong for a button at the foot of one column that
+reads as being about that column. Touching the still's prompt and pressing
+Render made a still nobody had asked for, and there was no way to remake the
+still without also remaking the clip built on it. Each press now names its node,
+through ComfyUI's own partial execution. In the simple view Render runs the step
+you are standing on; on the desk, where both are on screen, the pre-stage column
+grows its own *Render still* under the thing it makes. Queue both and they queue
+in the order you pressed them, which is the order the hand-off runs.
+
+**And the desk itself is laid out again.** Three regions used to be three
+stripes, ruled edge to edge by hairlines and all weighted the same, which is a
+window with no place to start reading. They are cards on a ground now, and only
+one of them is raised: the shot you are writing. The pre-stage sits quieter
+beside it because it is the step before — a card on the ground where the shot is
+lifted onto a surface, rather than a rail, a prompt and a sampler row lying loose
+on the desk with nothing round them — and the picture's dock has room around it
+instead of a border ending in mid-air. Each column says what it is at the top,
+because both faces are built out of the same parts and, unlabelled, the first
+thing the eye met on the left was a second copy of the toolbar it was already
+reading on the right. Read across, the desk is pre-stage, then shot, then the
+picture they make.
+
+The dock's empty frame is also drawn for a Creator and a Timeline now, and not
+only for a pre-stage. It never was: the body those two nodes wear could not
+answer what canvas it was about to render at, so the whole picture column stayed
+blank until the first render landed in it. The box you type into is the one
+recessed surface in the room — cut into the card rather than laid on it — so the
+eye finds the writing without anything having to be coloured to say so.
+
+The pills are the same pills, in the same colours, with two things taken away
+that were only ever noise on a screen: a lit chip keeps its colour in its text
+and its border and gives its tinted fill back, so the one saturated area left in
+the window is Render; and the sampler's numbers are ruled off from the shot's,
+which is most of what made a dozen chips in one heap unreadable. On a node face,
+where two or three are on at once and the rail is most of the width, nothing
+changes.
+
+**Every render this session made, up the scroll.** The stage is one box and
+`execution_start` clears it, which is right on a canvas — a card beside a node
+still showing last week's render while this week's samples would be a card that
+lies — and exactly wrong in a window with room for both, because the reason you
+queue a second take is to look at it beside the first. The picture column is a
+reel now: oldest at the top, the live stage at the bottom nearest the writing,
+and it scrolls itself down whenever something arrives, so what just happened is
+where you were already looking and history is a scroll rather than a mode. Past
+takes do not play themselves — ten clips going at once is not history — and
+nothing is copied: an entry points at the same file the Gallery opens, so
+closing the editor loses the list and not one render.
+
+**A finished video no longer lands on top of the tool rail.** The card is
+`position: relative`, and the writing column below it was not, so anything that
+got out of the picture column was painted over the rail rather than under it.
+The reel's own scroll is the containment; the column is positioned as well, so a
+leak would at worst be visible instead of covering a control.
+
+**Add a card and you can get back.** Growing a strip moves the cast's pictures
+into the reference pool — they are on card 1 otherwise, where no other card can
+see them — and there was no way back down. So a Creator that had ever held two
+cards kept a pool forever, and a pool is one of the fields a shot's face has no
+row for: the node stayed folded into the strip summary with the toggle drawn
+dead over "the reference pool", naming a field nothing on that face could empty.
+Shrinking back to one shot now moves them home, handles and citations and all —
+the promotion run backwards, with the same filter, so a reference attached to the
+whole piece on purpose still belongs to the piece and still holds the strip.
+
+**One height for everything pill-shaped.** The route badge was padding-sized, the
+strip's open button was 32px and the pills around both were 38px, which read as
+three unrelated things in a row rather than as a row. `--mmc-pill-h` is the one
+number now, and the next control cannot quietly be a fourth.
+
+**A docked render is not cut off any more.** The card carries a flex direction
+but never `display: flex` — on a satellite it does not need one, because the
+card's height is the node's and the picture is sized off that height alone. In a
+column the card is sized by the column instead, and without the flex the row
+inside it had an auto height that no percentage could resolve against, so the
+picture went to its own pixel size and the card's `overflow: hidden` took off
+whatever stuck out. The row is a flex row in the dock now, and it is allowed to
+be narrower than what is in it.
+
+The caps the face wears — two rows of chips, then scroll; ten lines of prompt,
+then scroll — lift inside it. They were there because a node face is a preview
+that must not grow the node, which is not true of a screen. And the frame the
+dock draws before the first render is a frame you can see now: a hairline at
+rgba(255,255,255,.16) across a third of a large screen is a line you have to go
+looking for, and a dock that reads as empty is the thing that element exists to
+prevent.
+
+**Render queues; it no longer locks.** The button disabled itself the moment it
+was pressed, so lining up three takes and going to make coffee — the whole reason
+ComfyUI's own Queue button does not do that — was refused. It stays pressable
+while a render runs. What it says meanwhile is a status, not a lock: *Sampling*,
+the step count, and how many are behind it.
+
+**And Cancel is heard.** Interrupting a render left the button reading *Sampling*
+forever, with no way back to a button short of closing the editor. The stage was
+listening for the two ways a run can end, `executed` and `execution_error`, and a
+cancelled one sends neither — it sends `execution_interrupted`, which nothing was
+listening for. It is now, and the stage clears rather than leaving the last
+sampled frame up: that frame is a step of a video that was never finished, and a
+stage still showing it reads as a render that landed.
+
+**Deleting a mention deletes what it named.** The @ menu is how a file is
+attached in this redesign and how somebody is cast — picking one writes the chip
+and creates the thing in one gesture — so the chip *is* the attachment, and
+deleting it has to be the way back out. It was not. The file stayed on the
+reference row and the member stayed on the cast shelf, both of them invisible to
+somebody who had just taken them out of the shot.
+
+Worse for a plain reference: an uncited cast member is cut at queue time and its
+pictures with it, but `@img-1` is in `assets`, and everything in `assets` is
+encoded and shown to the model whether or not a word of the prompt mentions it.
+So deleting the name left a picture conditioning the render exactly as hard as
+one the prompt still named. Both are now taken out with the chip.
+
+Only what is no longer written anywhere: a handle the same shot still cites from
+its soundscape, or another card of the same piece still cites, stays — the
+deletion was of one occurrence, not of the reference. The piece's reference pool
+is untouched by this, because it never needed it: an uncited pool asset is
+already not injected into any generation. And the diff is over *chips* rather
+than over text, so typing your way through a hand-written `@ref-1` never detaches
+anything on the way past — a chip is `contenteditable="false"` and is the one
+thing in the box that can only be deleted whole.
+
 ## 2.13
 
 **A LoRA can be switched off now, instead of only thrown away.** The stack was a

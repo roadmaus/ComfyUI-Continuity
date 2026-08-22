@@ -296,6 +296,15 @@ export const css = `
   color: var(--tag, var(--mmc-accent));
   font-size: .92em; white-space: nowrap; user-select: all;
 }
+/* Somebody's name, where clicking it opens them (see PromptBox's click handler
+   and CreatorEditor.openCastMember). Inside a contenteditable the
+   cursor is a caret by default, which says "text" about the one thing in the
+   box that is not text — so the chip claims the pointer, and lifts under it,
+   the way everything else in the pack that does something does. */
+.mmc-prompt-castable .mmc-ref-cast { cursor: pointer; }
+.mmc-prompt-castable .mmc-ref-cast:hover {
+  background: color-mix(in srgb, var(--tag, var(--mmc-accent)) 26%, transparent);
+}
 
 /* --- @ mention menu ------------------------------------------------------- */
 .mmc-mention {
@@ -335,7 +344,7 @@ export const css = `
 
 .mmc-pills { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .mmc-pill {
-  display: flex; align-items: center; gap: 7px; height: 38px; padding: 0 14px;
+  display: flex; align-items: center; gap: 7px; height: var(--mmc-pill-h); padding: 0 14px;
   border-radius: 19px; background: var(--mmc-surface-2); border: 1px solid var(--mmc-line);
   color: var(--mmc-text); font-size: 13px; font-family: inherit; cursor: pointer;
   white-space: nowrap; transition: background .12s ease;
@@ -346,6 +355,48 @@ export const css = `
   stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .mmc-pill-sub { color: var(--mmc-dim); font-size: 11px; }
 .mmc-pill-group { gap: 0; padding: 0 6px; }
+/* Several closely related controls in one pill, divided by hairlines — the two
+   ends of the shot, the canvas and its short edge, the sampler and its
+   scheduler, Spectrum and its blend. Two loose pills read as two unrelated
+   features; one pill with a divider through it says they are two halves of one
+   setting.
+
+   The body is the turbo switch's quality stops (styles/timeline.js), declaration
+   for declaration, with as many segments as the control has answers. That pill
+   is the prototype and it keeps its own rules: it was right before there was a
+   general one, and anything here that drifted from it would be a second opinion
+   about a question already settled. What is added below is only what a segment
+   that is not one of three stops still needs — a disabled state, a focus ring
+   the clipped corners cannot cut, and room for a stepper.
+
+   Not .mmc-seg: that name is taken twice already — the LoRA card's tri-state
+   and the trim editor's track switch (styles/loras.js, styles/overlays.js) —
+   and both of those are the *container* of a segmented control, bordered and
+   rounded. Both load after this file, so a segment wearing that name was drawn
+   as a pill inside the pill. */
+.mmc-pill-set { gap: 0; padding: 0; overflow: hidden; }
+.mmc-pill-seg {
+  display: flex; align-items: center; gap: 5px; height: 100%; padding: 0 12px;
+  background: none; border: 0; border-left: 1px solid var(--mmc-line);
+  color: var(--mmc-dim); font-size: 13px; font-family: inherit; cursor: pointer;
+}
+.mmc-pill-seg:first-child { border-left: 0; }
+.mmc-pill-seg:hover { color: #ededed; }
+.mmc-pill-seg[aria-pressed="true"], .mmc-pill-seg.accel-on {
+  background: rgba(110,190,255,.14); color: #6ebeff;
+}
+.mmc-pill-seg[aria-pressed="true"] .mmc-pill-sub, .mmc-pill-seg.accel-on .mmc-pill-sub {
+  color: rgba(110,190,255,.75);
+}
+/* Lit, a stepper lights through — the rule .mmc-pill.accel-on already follows. */
+.mmc-pill-seg.accel-on .mmc-step:not(:disabled) { color: inherit; }
+.mmc-pill-seg:disabled { color: var(--mmc-off); cursor: not-allowed; }
+/* The set clips its corners, so a ring drawn outside a segment is cut in half.
+   Inset, and it stays a ring. */
+.mmc-pill-seg:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: -2px; }
+/* A stepper as a segment: the +/- sit as tight against the divider as they do
+   against a standalone group's edge. */
+.mmc-pill-seg-group { padding: 0 4px; gap: 0; }
 .mmc-step {
   background: none; border: 0; color: var(--mmc-text); cursor: pointer;
   font-size: 16px; width: 26px; height: 36px; font-family: inherit;
@@ -353,11 +404,27 @@ export const css = `
 .mmc-step:disabled { color: var(--mmc-off); cursor: not-allowed; }
 /* No text-transform: the socket name has to read exactly as it does on the
    input, and 'model_fl2va' uppercased is not the name of anything. */
+/* The row's tail: the route badge and the pills that say what this shot belongs
+   to. Held against the far end of a row that fits, and wrapped as one thing by a
+   row that does not — see CreatorEditor.renderPills. The auto margin is on the
+   group rather than on the badge for exactly that: an auto margin on a bare
+   badge is inherited by the line it happens to wrap onto, which is how a lone
+   Timeline pill ended up alone against the right edge of the fullscreen card. */
+.mmc-pills-tail {
+  display: flex; align-items: center; gap: 8px; margin-left: auto;
+  /* And if the tail alone outgrows the row, it breaks inside itself rather than
+     off the edge of the card. */
+  flex-wrap: wrap;
+}
+/* The route badge. A readout rather than a control, but it stands in the pill
+   row and takes the row's height — padding-sized, it was two-thirds as tall as
+   everything beside it, which read as a fragment of the row rather than the end
+   of it. Transparent, so height is all it borrows. */
 .mmc-mode {
-  margin-left: auto; font-size: 11px; letter-spacing: .04em; color: var(--mmc-dim);
-  display: flex; align-items: center; gap: 6px;
-  background: none; border: 1px solid transparent; border-radius: 13px;
-  padding: 5px 10px; font-family: inherit;
+  font-size: 11px; letter-spacing: .04em; color: var(--mmc-dim);
+  display: flex; align-items: center; gap: 6px; height: var(--mmc-pill-h);
+  background: none; border: 1px solid transparent; border-radius: 19px;
+  padding: 0 12px; font-family: inherit; box-sizing: border-box;
 }
 /* Only the clickable form gets affordances — as a span it is a plain readout. */
 button.mmc-mode { cursor: pointer; }

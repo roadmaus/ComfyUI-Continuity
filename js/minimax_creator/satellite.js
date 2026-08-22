@@ -35,6 +35,9 @@ export class Satellite {
     this.stage = stage;
     this.side = side;
     this.raf = 0;
+    // The column hosting the picture while the fullscreen editor is up, or null
+    // on the canvas. See `dock`.
+    this.docked = null;
     this.root = el("div", { class: `mmc-satellite${side === "left" ? " mmc-satellite-left" : ""}` }, [stage.root]);
     document.body.appendChild(this.root);
 
@@ -44,7 +47,43 @@ export class Satellite {
     this.setShowing(stage.showing());
   }
 
+  /**
+   * Hand the picture to a host that is not the canvas — the fullscreen editor,
+   * which has a column for it and no node to hang it off.
+   *
+   * The follow loop is the whole of what a satellite is, and there is nothing
+   * for it to follow once the canvas is behind a shell: the node's graph
+   * position says nothing about where a fixed column is. So docking stops the
+   * loop and moves the stage element; the host shows and hides itself off the
+   * same signal the card used, which is why `setShowing` keeps being the one
+   * place that answers "is there a picture".
+   *
+   * @param {HTMLElement} host  where the stage element goes while docked
+   */
+  dock(host) {
+    this.docked = host;
+    cancelAnimationFrame(this.raf);
+    this.root.classList.remove("showing");
+    host.appendChild(this.stage.root);
+    this.setShowing(this.stage.showing());
+  }
+
+  /** Take the picture back onto the canvas. */
+  undock() {
+    if (!this.docked) return;
+    this.docked = null;
+    this.root.appendChild(this.stage.root);
+    this.setShowing(this.stage.showing());
+  }
+
   setShowing(showing) {
+    // Docked, the class belongs to the host column rather than to the card, and
+    // there is nothing to follow — an early return here rather than a branch at
+    // every call site, since the stage goes on reporting exactly as it did.
+    if (this.docked) {
+      this.docked.classList.toggle("showing", showing);
+      return;
+    }
     // Collapsed and subgraph checks live in follow(): both can change without
     // anything telling us, so they are re-read every frame rather than here.
     this.root.classList.toggle("showing", showing);
@@ -89,6 +128,10 @@ export class Satellite {
 
   destroy() {
     cancelAnimationFrame(this.raf);
+    // Docked, the stage is somebody else's child and removing the card would
+    // leave it behind — a picture of a node that no longer exists.
+    this.stage.root.remove();
+    this.docked = null;
     this.root.remove();
   }
 }

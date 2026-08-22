@@ -1352,6 +1352,86 @@ function promoteCastFiles(timeline) {
 }
 
 /**
+ * A piece back down to one shot keeps its references on that shot.
+ *
+ * The exact inverse of `promoteCastFiles`, and it exists for the same sentence
+ * read the other way. Growing a strip moves the cast's files into the pool
+ * because they are somewhere only card 1 can see; a strip that shrinks back to
+ * one card has no second card left to see them from, and the reason for the
+ * pool is gone with it.
+ *
+ * Without this the pool was a one-way door, and an expensive one: the piece
+ * goes on carrying a field a shot's face has no slot for, so `loneShot` stays
+ * false, the node stays folded into the strip summary, and the toggle back is
+ * drawn dead over "the reference pool" — a field nothing on that face can
+ * empty. Add a second card once and the Creator never wears its own face again.
+ *
+ * The cast's files and nothing else, which is the promotion's own filter read
+ * backwards. A pool entry no subject claims was attached to the *piece* on
+ * purpose — from the strip's own bar, where that is the only thing attaching
+ * means — and it holds the strip open by design: the shot's face has no row for
+ * a reference every card shares. Emptying that is the user's to do, and the
+ * dead toggle already names it.
+ *
+ * At one shot the pool and the shot's own row are a single scope already —
+ * `castAssets` reads them as one, and `syncCanvas` mirrors the pool onto the
+ * segment for compile — so what moves changes address, not meaning.
+ */
+function collapsePool(timeline) {
+  const segments = timeline.segments ?? [];
+  const segment = segments[0];
+  const cast = timeline.subjects ?? [];
+  if (segments.length !== 1 || isClip(segment) || !cast.length) return;
+  if (!(timeline.assets ?? []).length) return;
+  const claimed = new Set();
+  for (const subject of cast) {
+    for (const handle of subjectFiles(subject)) claimed.add(handle);
+    if (subject.replaces) claimed.add(subject.replaces);
+  }
+  if (!Array.isArray(segment.assets)) segment.assets = [];
+  const renamed = new Map();
+  for (const asset of [...timeline.assets]) {
+    if (!claimed.has(asset.handle) || asset.role !== "reference") continue;
+    const was = asset.handle;
+    // The shot's vocabulary: img-1, vid-2, aud-1. `ref-N` says "the piece's",
+    // and there is no piece left to say it about.
+    asset.handle = nextHandle(segment, asset.kind);
+    if (was !== asset.handle) renamed.set(was, asset.handle);
+    segment.assets.push(asset);
+    timeline.assets = timeline.assets.filter((entry) => entry !== asset);
+  }
+  if (!renamed.size) return;
+  for (const subject of timeline.subjects ?? []) {
+    if (Array.isArray(subject.from)) {
+      subject.from = subject.from.map((handle) => renamed.get(handle) ?? handle);
+    }
+    for (const slot of ["motion", "voice", "replaces"]) {
+      if (renamed.has(subject[slot])) subject[slot] = renamed.get(subject[slot]);
+    }
+  }
+  // Both scopes' prose. The piece's own text can cite a pool handle, and it
+  // still holds the strip open on its own — but a citation left pointing at a
+  // handle nothing answers to would survive being emptied, which is worse than
+  // the rewrite being redundant here.
+  for (const key of ["prompt", "soundscape", "music"]) {
+    if (timeline[key]) timeline[key] = renameCitations(timeline[key], renamed);
+    if (segment[key]) segment[key] = renameCitations(segment[key], renamed);
+  }
+  for (const holder of [timeline.refined, segment.refined]) {
+    if (holder?.body) holder.body = renameCitations(holder.body, renamed);
+    for (const [name, text] of Object.entries(holder?.sections ?? {})) {
+      holder.sections[name] = renameCitations(text, renamed);
+    }
+  }
+  // The piece's aspect source, in the shape a card's file takes: the pool is
+  // card 0, and the file is on card 1 now.
+  const src = timeline.aspect_source;
+  if (src && typeof src === "object" && renamed.has(src.handle)) {
+    timeline.aspect_source = { handle: renamed.get(src.handle), card: 1 };
+  }
+}
+
+/**
  * Mirror the timeline's canvas onto each segment, so a segment state answers
  * `resolved()` and `mode()` on its own and the editor needs no special case.
  * Stripped again by `serializeTimeline` — the segments do not own it.
@@ -1395,9 +1475,12 @@ function syncCanvas(timeline) {
       if (offset) delete segment.take;
     });
   }
-  // Before the aspect source is pruned, because a promoted file is one of the
-  // things it can name and it must be renamed rather than dropped.
+  // Before the aspect source is pruned, because a promoted or demoted file is
+  // one of the things it can name and it must be renamed rather than dropped.
+  // The two are exclusive by segment count and neither is a toggle: each is
+  // asked on every load and answers about the strip as it stands.
   promoteCastFiles(timeline);
+  collapsePool(timeline);
   // The piece's aspect source, pruned before it is mirrored: a card that was
   // deleted or an asset that was detached leaves a name pointing at nothing,
   // and compile would refuse the strip over it. Cleared here once, like every
@@ -1721,6 +1804,7 @@ export function parseTimeline(raw) {
       // cast's files rather than on the one after. `syncCanvas` runs it again
       // below and has nothing left to do.
       promoteCastFiles(timeline);
+      collapsePool(timeline);
       for (const subject of timeline.subjects) {
         inheritTakes(subject, castAssets(timeline));
       }

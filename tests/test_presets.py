@@ -638,7 +638,11 @@ const CAST_SOURCE = JSON.stringify({
 try {
   const source = S.parseTimeline(CAST_SOURCE);
   S.syncTimeline(source);
-  const captured = P.captureSubject(source.subjects[0], source.assets);
+  // The scope a subject's handles can name — the pool, and a lone shot's own
+  // row, which is where a piece of one shot keeps its cast's pictures. The
+  // shelf that calls this in earnest resolves to exactly that pair, and a
+  // one-shot source is normalized into the second half of it on load.
+  const captured = P.captureSubject(source.subjects[0], S.castAssets(source));
   const member = captured.data.cast;
 
   // A strip that has never seen her, so every file she needs is attached by the
@@ -730,9 +734,9 @@ try {
 try {
   const source = S.parseTimeline(CAST_SOURCE);
   S.syncTimeline(source);
-  const first = await P.keepSubject(source.subjects[0], source.assets);
+  const first = await P.keepSubject(source.subjects[0], S.castAssets(source));
   source.subjects[0].description = "and the cardigan is hers";
-  await P.keepSubject(source.subjects[0], source.assets);
+  await P.keepSubject(source.subjects[0], S.castAssets(source));
   const rows = (await P.listPresets({ force: true })).filter((row) => row.scope === "cast");
   const body = await P.loadBody(rows[0]);
   out.keep = {

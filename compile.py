@@ -896,6 +896,42 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
 
     assets = _parse_assets(data.get("assets"))
 
+    # The cast, cut down to the subjects this generation actually cites. Read
+    # before any substitution, because a citation is `@anna` in what the user
+    # wrote and the labels are what it becomes. An uncited subject is not an
+    # error and costs nothing: the piece holds one cast and a shot carries the
+    # part of it that walks on.
+    try:
+        cast = subjects.parse(data.get("subjects"))
+    except subjects.SubjectError as exc:
+        raise CompileError(str(exc)) from exc
+    raw_body = refined_body(data) or str(data.get("prompt") or "")
+    raw_sections = refined_sections(data)
+    everybody = cast
+    cast = subjects.cited(cast, [raw_body,
+                                 str(data.get("soundscape") or ""),
+                                 str(data.get("music") or "")]
+                          + list((raw_sections or {}).values()))
+
+    # ...and their pictures cut with them.
+    #
+    # Casting somebody attaches their files — that is what makes @anna mean
+    # anything — so a subject who is not in this shot leaves references behind
+    # that exist for no other reason. Encoding those sends the model a picture of
+    # somebody the prompt never mentions, which conditions the render exactly as
+    # hard as one it does mention: taking a member out of a shot by deleting
+    # their name looked like it had worked and had not.
+    #
+    # Sole claims only. A file two subjects share stays while either of them is
+    # cited, and a file the user attached in its own right is nobody's to remove
+    # — it is in `assets` because they put it there, not because casting did.
+    # Before the split below, so the mode, the plan and every limit are derived
+    # from what is actually going to be sent.
+    absent = subjects.claimed(everybody) - subjects.claimed(cast)
+    if absent:
+        assets = [a for a in assets
+                  if a.role != "reference" or a.handle not in absent]
+
     frame_assets = [a for a in assets if a.role in ("first_frame", "last_frame")]
     for role in ("first_frame", "last_frame"):
         if sum(1 for a in frame_assets if a.role == role) > 1:
@@ -945,21 +981,6 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
         plan = []
         labels = _keyframe_labels(first_frame, last_frame, continues)
 
-    # The cast, cut down to the subjects this generation actually cites. Read
-    # before any substitution, because a citation is `@anna` in what the user
-    # wrote and the labels are what it becomes. An uncited subject is not an
-    # error and costs nothing: the piece holds one cast and a shot carries the
-    # part of it that walks on.
-    try:
-        cast = subjects.parse(data.get("subjects"))
-    except subjects.SubjectError as exc:
-        raise CompileError(str(exc)) from exc
-    raw_body = refined_body(data) or str(data.get("prompt") or "")
-    raw_sections = refined_sections(data)
-    cast = subjects.cited(cast, [raw_body,
-                                 str(data.get("soundscape") or ""),
-                                 str(data.get("music") or "")]
-                          + list((raw_sections or {}).values()))
     try:
         subjects.check(cast, assets)
     except subjects.SubjectError as exc:

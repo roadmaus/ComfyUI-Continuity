@@ -214,6 +214,38 @@ check("and the body is wrapped as the reference form's description",
 check("retention is written for every cited subject",
       _cast.prompt.count("fully_preserved"), 2)
 
+# Take somebody out of a shot by deleting their name and their pictures go with
+# them. Casting attaches files — that is what makes @anna mean anything — so a
+# subject nobody cites leaves references behind that exist for no other reason,
+# and encoding those sends the model a picture of somebody the prompt never
+# mentions. Sole claims only: a file two of them share stays while either is
+# cited, and one the user attached in its own right is nobody's to remove.
+_dropped = compiler.compile_request(request(
+    "@anna waits.",
+    [image("img-1"), image("img-2"), image("img-3")],
+    [{"handle": "anna", "from": ["img-1"]},
+     {"handle": "ben", "from": ["img-2"]}]), define_refs=True)
+check("an uncited subject's own picture is not sent",
+      [a.handle for a in _dropped.ref_images], ["img-1", "img-3"])
+check("...and the labels are numbered off what is left, with no gap in them",
+      "<Subject 1> is the person in <Picture 1>." in _dropped.prompt, True)
+
+_shared = compiler.compile_request(request(
+    "@anna waits.",
+    [image("img-1")],
+    [{"handle": "anna", "from": ["img-1"]},
+     {"handle": "ben", "from": ["img-1"]}]))
+check("a picture two of them share stays while either is cited",
+      [a.handle for a in _shared.ref_images], ["img-1"])
+
+_only = compiler.compile_request(request(
+    "a room, empty.",
+    [image("img-1")],
+    [{"handle": "anna", "from": ["img-1"]}]))
+check("a shot whose only reference belonged to somebody absent is text-only",
+      _only.mode, "T2VA")
+check("...and carries no picture at all", [a.handle for a in _only.ref_images], [])
+
 # A cast in a generation with nothing attached to it at all — T2VA, the mode
 # most of this pack's prompts are written in. The two sections a cast makes
 # derivable have to be emitted here too: `<Subject 1>` in a description the

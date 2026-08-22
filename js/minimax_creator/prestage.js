@@ -305,6 +305,15 @@ export class PreStageEditor {
 
   // ---- render ----------------------------------------------------------------
 
+
+  /** The still this editor is about to make. No seconds: a still has no length,
+   *  and the shell's frame draws what it is given. See `CreatorEditor.frame`. */
+  frame() {
+    const { width, height } =
+      S.resolvedPreStage(this.state, this.state.init ? this.sizes.get(this.state.init.filename) : null);
+    return { width, height };
+  }
+
   render() {
     const state = this.state;
     this.railHost.replaceChildren(this.renderRail());
@@ -803,6 +812,14 @@ export class PreStageBody {
   commit() {
     this.onCommit?.();
     this.editor?.render();
+    this.onRender?.();
+  }
+
+  /** The still this node is about to make, from whichever editor is mounted —
+   *  the Krea branch's own, or the H3 branch's Creator body over the still's
+   *  request. For the fullscreen shell's frame; see `CreatorEditor.frame`. */
+  frame() {
+    return this.editor?.frame?.() ?? null;
   }
 
   /** A saved workflow, or a stash restored onto a freshly spawned node. The
@@ -816,6 +833,9 @@ export class PreStageBody {
     this.editor?.destroy();
     this.editor = S.isStill(this.state) ? this.mountStill() : this.mountImage();
     this.host.replaceChildren(this.editor.root);
+    // The architecture decides the canvas, so swapping editors is exactly when
+    // a host drawing the frame has to redraw it.
+    this.onRender?.();
   }
 
   mountImage() {

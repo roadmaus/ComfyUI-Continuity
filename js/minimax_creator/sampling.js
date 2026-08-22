@@ -11,7 +11,7 @@
 
 import { el, icon } from "./dom.js";
 import { t } from "./i18n.js";
-import { openChoicePopover, stepperPill } from "./pills.js";
+import { openChoicePopover, stepperPill, pillSet, pillClass, accelClass } from "./pills.js";
 import { uiSetting } from "./api.js";
 import { lastSeed } from "./seedmemory.js";
 
@@ -283,21 +283,25 @@ export function samplingBar({ widgets, value, set, perSegment = false, turbo = [
     }));
   }
 
-  for (const [name, label] of [["sampler_name", "Sampler"], ["scheduler", "Scheduler"]]) {
-    const widget = widgets[name];
-    if (!widget) continue;
-    const options = widget.options?.values || [];
-    pills.push(el("button", {
-      class: "mmc-pill",
-      title: t(label),
-      onclick: (event) => openChoicePopover(event.currentTarget, {
+  // One pill, divided: a sampler and its scheduler are two halves of one
+  // schedule, and as two loose pills they read as two unrelated lists of names.
+  const schedule = pillSet([["sampler_name", "Sampler"], ["scheduler", "Scheduler"]]
+    .filter(([name]) => widgets[name])
+    .map(([name, label]) => (seg) => {
+      const widget = widgets[name];
+      const options = widget.options?.values || [];
+      return el("button", {
+        class: pillClass(seg),
         title: t(label),
-        options: typeof options === "function" ? options(widget) : options,
-        value: widget.value,
-        onPick: (picked) => set(name, picked),
-      }),
-    }, [el("span", { text: String(widget.value) })]));
-  }
+        onclick: (event) => openChoicePopover(event.currentTarget, {
+          title: t(label),
+          options: typeof options === "function" ? options(widget) : options,
+          value: widget.value,
+          onPick: (picked) => set(name, picked),
+        }),
+      }, [el("span", { text: String(widget.value) })]);
+    }));
+  if (schedule) pills.push(schedule);
 
   // The flow shifts, H3's two clocks. Drawn as one compact stepper pair after
   // the scheduler because they are schedule too: the checkpoints' own values
@@ -315,22 +319,30 @@ export function samplingBar({ widgets, value, set, perSegment = false, turbo = [
   // it does not disable: a control that is *on* keeps its pill whatever this
   // says, so nothing can be switched on and out of sight at the same time.
   const advanced = uiSetting("advanced", false) === true;
-  if (widgets.shift_video && (showShifts || Number(value("shift_video", 12)) !== 12)) {
-    pills.push(stepperPill({
-      value: Number(value("shift_video", 12)), min: 0.01, max: 100, step: 0.5, width: "48px",
-      title: t("The video flow shift. 12 is the checkpoints' own schedule; a turbo LoRA's card may name another."),
-      format: (n) => t("shift {n}", { n: +n.toFixed(2) }),
-      onChange: (next) => set("shift_video", next),
-    }));
-  }
-  if (widgets.shift_audio && (showShifts || Number(value("shift_audio", 3)) !== 3)) {
-    pills.push(stepperPill({
-      value: Number(value("shift_audio", 3)), min: 0.01, max: 100, step: 0.5, width: "48px",
-      title: t("The audio flow shift. 3 is the checkpoints' own schedule. A wrong one distorts the soundtrack before it touches the picture."),
-      format: (n) => t("audio {n}", { n: +n.toFixed(2) }),
-      onChange: (next) => set("shift_audio", next),
-    }));
-  }
+  // The two clocks share a pill — and only sometimes both: either can be on
+  // screen alone, off its schedule while the other is at its default, which is
+  // why they are drawn rather than listed.
+  const shifts = pillSet([
+    widgets.shift_video && (showShifts || Number(value("shift_video", 12)) !== 12)
+      ? (seg) => stepperPill({
+          seg,
+          value: Number(value("shift_video", 12)), min: 0.01, max: 100, step: 0.5, width: "48px",
+          title: t("The video flow shift. 12 is the checkpoints' own schedule; a turbo LoRA's card may name another."),
+          format: (n) => t("shift {n}", { n: +n.toFixed(2) }),
+          onChange: (next) => set("shift_video", next),
+        })
+      : null,
+    widgets.shift_audio && (showShifts || Number(value("shift_audio", 3)) !== 3)
+      ? (seg) => stepperPill({
+          seg,
+          value: Number(value("shift_audio", 3)), min: 0.01, max: 100, step: 0.5, width: "48px",
+          title: t("The audio flow shift. 3 is the checkpoints' own schedule. A wrong one distorts the soundtrack before it touches the picture."),
+          format: (n) => t("audio {n}", { n: +n.toFixed(2) }),
+          onChange: (next) => set("shift_audio", next),
+        })
+      : null,
+  ]);
+  if (shifts) pills.push(shifts);
 
   // The accelerators. Off is the default and reads as off — an unlit pill —
   // because they are other people's nodes and a render with one on is not a
@@ -355,71 +367,84 @@ export function samplingBar({ widgets, value, set, perSegment = false, turbo = [
 
   if (widgets.spectrum) {
     const on = Boolean(value("spectrum", false));
-    pills.push(el("button", {
-      class: `mmc-pill${on ? " accel-on" : ""}`,
-      title: on
-        ? t("Spectrum on — forecasting features across steps.")
-        : t("Spectrum off. Needs ComfyUI-Spectrum-MiniMax-H3 when switched on."),
-      onclick: () => set("spectrum", !on),
-    }, [el("span", { text: on ? t("spectrum") : t("spectrum off") })]));
-
-    // Only worth a control when it is doing something; the blend is ignored
-    // outright while Spectrum is off.
-    if (on && widgets.spectrum_blend) {
-      pills.push(stepperPill({
-        value: Number(value("spectrum_blend", 0.5)), min: 0, max: 1, step: 0.05, width: "52px",
-        title: t("Spectrum's video spectral share — higher is faster and further from a native render"),
-        format: (n) => t("blend {n}", { n: n.toFixed(2) }),
-        onChange: (next) => set("spectrum_blend", next),
-      }));
-    }
+    // The switch and its blend in one pill. The blend is still only drawn while
+    // Spectrum is on — it is ignored outright otherwise — but switching Spectrum
+    // on now *extends the control you just pressed* rather than making a second
+    // pill appear beside it, which is the same event said much more plainly.
+    pills.push(pillSet([
+      (seg) => el("button", {
+        class: accelClass(seg, on),
+        title: on
+          ? t("Spectrum on — forecasting features across steps.")
+          : t("Spectrum off. Needs ComfyUI-Spectrum-MiniMax-H3 when switched on."),
+        onclick: () => set("spectrum", !on),
+      }, [el("span", { text: on ? t("spectrum") : t("spectrum off") })]),
+      on && widgets.spectrum_blend
+        ? (seg) => stepperPill({
+            seg,
+            value: Number(value("spectrum_blend", 0.5)), min: 0, max: 1, step: 0.05, width: "52px",
+            title: t("Spectrum's video spectral share — higher is faster and further from a native render"),
+            format: (n) => t("blend {n}", { n: n.toFixed(2) }),
+            onChange: (next) => set("spectrum_blend", next),
+          })
+        : null,
+    ]));
   }
 
-  // Last of the accelerators, and the two that do not change which steps run —
-  // one changes what an attention call costs and the other what the MLP peaks
-  // at, so they sit with them but rule nothing else out.
-  if (widgets.attention) {
-    adoptSage(widgets, set);
-    const options = widgets.attention.options?.values || [];
-    const current = String(value("attention", "default"));
-    pills.push(el("button", {
-      class: `mmc-pill${current === "default" ? "" : " accel-on"}`,
-      title: t(ATTENTION_TITLE[current] || ATTENTION_TITLE.default),
-      onclick: (event) => openChoicePopover(event.currentTarget, {
-        title: t("Attention"),
-        options: typeof options === "function" ? options(widgets.attention) : options,
-        value: current,
-        onPick: (picked) => set("attention", picked),
-      }),
-    }, [el("span", { text: t(ATTENTION_LABEL[current] || ATTENTION_LABEL.default) })]));
-  }
+  // Last of the accelerators, and the three that do not change which steps run —
+  // they change what an attention call costs, what the MLP peaks at and how a
+  // matmul accumulates, so they sit with them but rule nothing else out.
+  if (widgets.attention) adoptSage(widgets, set);
+  const attention = widgets.attention ? String(value("attention", "default")) : null;
+  const lowVram = Boolean(value("chunk_ffn", false));
+  const fastMath = Boolean(value("fp16_accumulation", false));
 
-  // The last two are named for what you get rather than for how they are
-  // built. "Chunk FFN" and "fp16 accumulation" are what the packs call them and
-  // are in the tooltips, where somebody looking for them will find them; on the
-  // row they are the only pills that would have asked you to know what a
+  // The last two segments are named for what you get rather than for how they
+  // are built. "Chunk FFN" and "fp16 accumulation" are what the packs call them
+  // and are in the tooltips, where somebody looking for them will find them; on
+  // the row they are the only controls that would have asked you to know what a
   // feed-forward is before you could tell whether you wanted one.
-  if (widgets.chunk_ffn && (advanced || Boolean(value("chunk_ffn", false)))) {
-    const on = Boolean(value("chunk_ffn", false));
-    pills.push(el("button", {
-      class: `mmc-pill${on ? " accel-on" : ""}`,
-      title: on
-        ? t("Low VRAM on — H3's feed-forward runs in chunks, so the peak is lower. The frames are the same ones: chunking is a rearrangement, not a trade. Needs ComfyUI-KJNodes.")
-        : t("Low VRAM — run H3's feed-forward in chunks (KJNodes' Chunk FFN). Lowers the peak a render has to fit in, and changes nothing about the frames. Needs ComfyUI-KJNodes."),
-      onclick: () => set("chunk_ffn", !on),
-    }, [el("span", { text: on ? t("low vram") : t("low vram off") })]));
-  }
-
-  if (widgets.fp16_accumulation && (advanced || Boolean(value("fp16_accumulation", false)))) {
-    const on = Boolean(value("fp16_accumulation", false));
-    pills.push(el("button", {
-      class: `mmc-pill${on ? " accel-on" : ""}`,
-      title: on
-        ? t("Fast math on — cuBLAS accumulates fp16 matmuls in fp16 while this model runs (KJNodes' fp16 accumulation). Only fp16 matmuls: a bf16 or quantized H3 has none, and nothing changes there.")
-        : t("Fast math — let cuBLAS accumulate fp16 matmuls in fp16 while this model runs (KJNodes' fp16 accumulation). Faster where the card supports it, at some precision. Only reaches a genuinely fp16 model: the released H3 checkpoints run bf16, and their quantized layers go through comfy-kitchen's own kernels rather than cuBLAS, so on those this does nothing at all. Needs ComfyUI-KJNodes and torch 2.7 or newer."),
-      onclick: () => set("fp16_accumulation", !on),
-    }, [el("span", { text: on ? t("fast math") : t("fast math off") })]));
-  }
+  //
+  // One pill for the three: none of them changes which steps run, and all three
+  // are statements about the machine rather than about the piece. Each is drawn
+  // only when it is on or when the advanced controls are asked for, so the pill
+  // is as long as this install has reason for it to be.
+  const machine = pillSet([
+    widgets.attention
+      ? (seg) => {
+          const options = widgets.attention.options?.values || [];
+          return el("button", {
+            class: accelClass(seg, attention !== "default"),
+            title: t(ATTENTION_TITLE[attention] || ATTENTION_TITLE.default),
+            onclick: (event) => openChoicePopover(event.currentTarget, {
+              title: t("Attention"),
+              options: typeof options === "function" ? options(widgets.attention) : options,
+              value: attention,
+              onPick: (picked) => set("attention", picked),
+            }),
+          }, [el("span", { text: t(ATTENTION_LABEL[attention] || ATTENTION_LABEL.default) })]);
+        }
+      : null,
+    widgets.chunk_ffn && (advanced || lowVram)
+      ? (seg) => el("button", {
+          class: accelClass(seg, lowVram),
+          title: lowVram
+            ? t("Low VRAM on — H3's feed-forward runs in chunks, so the peak is lower. The frames are the same ones: chunking is a rearrangement, not a trade. Needs ComfyUI-KJNodes.")
+            : t("Low VRAM — run H3's feed-forward in chunks (KJNodes' Chunk FFN). Lowers the peak a render has to fit in, and changes nothing about the frames. Needs ComfyUI-KJNodes."),
+          onclick: () => set("chunk_ffn", !lowVram),
+        }, [el("span", { text: lowVram ? t("low vram") : t("low vram off") })])
+      : null,
+    widgets.fp16_accumulation && (advanced || fastMath)
+      ? (seg) => el("button", {
+          class: accelClass(seg, fastMath),
+          title: fastMath
+            ? t("Fast math on — cuBLAS accumulates fp16 matmuls in fp16 while this model runs (KJNodes' fp16 accumulation). Only fp16 matmuls: a bf16 or quantized H3 has none, and nothing changes there.")
+            : t("Fast math — let cuBLAS accumulate fp16 matmuls in fp16 while this model runs (KJNodes' fp16 accumulation). Faster where the card supports it, at some precision. Only reaches a genuinely fp16 model: the released H3 checkpoints run bf16, and their quantized layers go through comfy-kitchen's own kernels rather than cuBLAS, so on those this does nothing at all. Needs ComfyUI-KJNodes and torch 2.7 or newer."),
+          onclick: () => set("fp16_accumulation", !fastMath),
+        }, [el("span", { text: fastMath ? t("fast math") : t("fast math off") })])
+      : null,
+  ]);
+  if (machine) pills.push(machine);
 
   return el("div", { class: "mmc-pills" }, [...pills, ...trailing]);
 }

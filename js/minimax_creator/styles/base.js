@@ -14,6 +14,11 @@ export const css = `
   --mmc-dim: #8b8b8b;
   --mmc-off: #565656;
   --mmc-accent: #f0a63c;
+  /* One height for everything pill-shaped. A row that mixes a 38px control with
+     a 32px one and a 23px readout reads as three unrelated things rather than
+     as a row, and every one of those numbers was set locally by whoever added
+     the control. Tokenised so the next one cannot be a fourth. */
+  --mmc-pill-h: 38px;
   /* What a file lends a subject, as colour. Their looks are the default and
      wear none; these are the three departures from it, and they are worn by the
      shelf's badges and dots and by the library's editor tiles. Tokens rather
@@ -62,6 +67,14 @@ export const css = `
    its own padding, and a second inset here would draw a narrower face than the
    strip's on a node of the same width. */
 .mmc-root.hosting { padding: 0; gap: 0; }
+
+/* What the DOM widget is actually given, on all three nodes. The widget writes
+   left/top/width/height onto whatever element it holds, every frame, so the body
+   itself cannot be that element — it has to be able to leave for the fullscreen
+   editor and come back. This is the part that stays behind and keeps being
+   positioned; see attach() in minimax_creator.js. */
+.mmc-widget-host { height: 100%; }
+.mmc-widget-host > * { height: 100%; }
 
 /* The pre-stage's outer body. It holds whichever editor the architecture calls
    for and is swapped when that changes, so it has to be the full height the DOM

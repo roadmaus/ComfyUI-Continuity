@@ -35,6 +35,26 @@ every shot inherits, the reference pool, and the LoRAs patched onto all of them.
 Click it again to go back to the shot. It is a view, not a setting: nothing about
 the render changes, and the choice is saved with the node rather than in the blob.
 
+### Fullscreen
+
+Turn on **Settings → MiniMax H3 → Editor → Fullscreen** and the node opens as the
+whole window instead of a rectangle on the canvas: the body in a column at its
+own width, the render beside it at its own size rather than scaled to the zoom,
+and the PreStage in a column to its left when one is spawned. `Ctrl+Shift+M`
+toggles it on a node that is already there; `Escape`, or the button in the top
+corner, goes back to the graph.
+
+It is the same node either way. The blob is the same hidden widget, the node
+stays in the graph, and the workflow you save from fullscreen is the workflow you
+always had — so this is a way of looking at the piece, not a second place to keep
+it. The node's title is the piece's name up in the bar, and renaming the node
+(double-click its title on the canvas) renames the piece.
+
+The one thing the canvas was providing that fullscreen has to replace is the
+queue, so there is a **Render** button at the foot of the column, which turns
+into the step count while it samples and grows a **Cancel** beside it. Gallery
+and Settings are where they always were, at the far end of the rail.
+
 ## Install
 
 ```

@@ -101,13 +101,28 @@ export class PromptBox {
    * @param {(over:boolean)=>void} [hooks.onOverflow]  the text stopped fitting
    *   the box, or started fitting it again. What a node face does about that is
    *   its own business — see `CreatorEditor.onPromptOverflow`.
+   * @param {(handle:string)=>void} [hooks.onCastChip]  somebody's name in the
+   *   sentence was clicked. The name is where a subject is used, so it
+   *   is also the obvious place to ask what they are made of — see
+   *   `CreatorEditor.openCastMember`, which summons the shelf onto them.
+   * @param {(handles:string[])=>void} [hooks.onUncited]  chips that were in the
+   *   box a keystroke ago and are not in it now. Deleting a chip is how this
+   *   redesign takes a reference or a cast member out of a shot, so the host has
+   *   to hear about it — see `CreatorEditor.dropCited`.
    */
   constructor(hooks) {
     this.hooks = hooks;
     this.menu = null;
+    // The handles the box is showing as chips, as of the last time anything
+    // wrote to it. `onEdit` diffs against this to find the ones a keystroke just
+    // deleted — see `censusChips`.
+    this.chipped = new Set();
 
     this.root = el("div", {
-      class: "mmc-prompt",
+      // The second class is the affordance: a cast chip is only worth a pointer
+      // where double-clicking it opens somebody, and that is the host's answer
+      // rather than the box's.
+      class: `mmc-prompt${hooks.onCastChip ? " mmc-prompt-castable" : ""}`,
       contenteditable: "true",
       spellcheck: "false",
       role: "textbox",
@@ -125,6 +140,22 @@ export class PromptBox {
     // text. See `onPaste`, which this is the same handler as.
     this.root.addEventListener("drop", (event) => this.onPaste(event));
     this.root.addEventListener("blur", () => setTimeout(() => this.closeMenu(), 120));
+    // A subject's name, opened on. The chip is contenteditable="false", so a
+    // click on it had nowhere to put a caret and did nothing — which makes the
+    // gesture free, and it is the right one besides: the name in the sentence is
+    // where somebody is *used*, so it is the shortest way to ask what they are
+    // made of. One click rather than two, because the chip already wears the
+    // pointer and a pointer that wants two presses is a pointer that lies.
+    //
+    // Only cast chips: a reference's chip has its own row of controls sitting
+    // directly above the box. And deleting one is unaffected — a chip is removed
+    // with the caret and Backspace, the same as it always was.
+    this.root.addEventListener("click", (event) => {
+      const chip = event.target?.closest?.(".mmc-ref-cast[data-handle]");
+      if (!chip || !this.root.contains(chip)) return;
+      event.preventDefault();
+      this.hooks.onCastChip?.(chip.dataset.handle);
+    });
 
     // The graph canvas swallows keys and drags otherwise, and answers a copy
     // or a cut in here by taking one of the graph — the same document listener
@@ -244,6 +275,7 @@ export class PromptBox {
   setValue(text) {
     if (this.getValue() === text) return;
     this.root.replaceChildren(...this.build(text));
+    this.censusChips();
     this.syncExcerpt();
     this.reportOverflow();
   }
@@ -293,6 +325,11 @@ export class PromptBox {
       class: `mmc-ref${subject ? " mmc-ref-cast" : ""} mmc-tag-${tagIndex(handle)}`,
       contenteditable: "false",
       "data-handle": handle,
+      // Said on the chip, because a gesture nobody can see is a gesture nobody
+      // finds. The pointer is the other half of it — see .mmc-prompt-castable.
+      title: subject && this.hooks.onCastChip
+        ? t("Edit @{handle}", { handle })
+        : undefined,
       text: `@${handle}`,
     });
   }
@@ -347,13 +384,38 @@ export class PromptBox {
   refresh() {
     if (document.activeElement === this.root) return;
     this.root.replaceChildren(...this.build(this.hooks.getState().prompt ?? ""));
+    // A handle that stopped being a chip because its asset was detached from the
+    // asset row is not a deletion the user made *here*, and re-noting the census
+    // after the rebuild is what keeps `onEdit` from reporting it as one.
+    this.censusChips();
     this.syncExcerpt();
+  }
+
+  /**
+   * Note which handles the box is currently showing as chips.
+   *
+   * Chips rather than text, and the DOM rather than the string, because a chip
+   * is the only thing in here that is deleted whole: it is contenteditable=false,
+   * so the caret cannot get inside one and a Backspace against it takes the name
+   * with it. Diffing the *text* instead would have called every keystroke in the
+   * middle of a hand-typed "@ref-1" a deletion, and detached the file on the way
+   * past.
+   */
+  censusChips() {
+    this.chipped = new Set(
+      [...this.root.querySelectorAll("[data-handle]")].map((node) => node.dataset.handle));
   }
 
   // ---- editing -------------------------------------------------------------
 
   onEdit() {
+    const before = this.chipped;
+    this.censusChips();
     this.hooks.onInput(this.getValue());
+    // After `onInput`, so the host is asked "is this handle still written
+    // anywhere" about the text as it now stands rather than as it was.
+    const gone = [...before].filter((handle) => !this.chipped.has(handle));
+    if (gone.length) this.hooks.onUncited?.(gone);
     this.syncExcerpt();
     this.reportOverflow();
     const trigger = this.triggerRange();
@@ -533,6 +595,7 @@ export class PromptBox {
     } else {
       this.root.appendChild(this.chip(handle));
       this.root.appendChild(document.createTextNode(" "));
+      this.censusChips();
       this.hooks.onInput(this.getValue());
       return;
     }
@@ -545,6 +608,7 @@ export class PromptBox {
     after.collapse(true);
     selection.removeAllRanges();
     selection.addRange(after);
+    this.censusChips();
     this.hooks.onInput(this.getValue());
   }
 

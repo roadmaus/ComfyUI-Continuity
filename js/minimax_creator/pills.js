@@ -13,6 +13,40 @@ import { UPSCALE_MODES, DEFAULT_REFINE_DENOISE, MIN_REFINE_DENOISE, MAX_REFINE_D
          MIN_FACE_DENOISE, MAX_FACE_DENOISE } from "./state.js";
 
 /**
+ * Closely related controls as one pill, divided by hairlines.
+ *
+ * Two pills side by side read as two independent features; one pill with a
+ * divider through it reads as two halves of the same setting. So the sampler
+ * and its scheduler share a pill, and so do the two ends of a shot, the canvas
+ * and its short edge, and Spectrum and its blend — where the blend joining the
+ * pill it belongs to is also the answer to a control that used to *appear*
+ * beside it when you switched Spectrum on.
+ *
+ * Members are drawn rather than passed, because every one of them has to be
+ * able to stand alone: the shifts are hidden one at a time, the blend only
+ * exists while Spectrum is on, and a set of one is a pill, not a pill with a
+ * divider and nothing on the other side of it.
+ *
+ * @param {Array<((seg:boolean) => HTMLElement)|null|false>} members
+ * @returns {HTMLElement|null} null when nothing is on offer
+ */
+export function pillSet(members, { className = "" } = {}) {
+  const drawn = members.filter(Boolean);
+  if (!drawn.length) return null;
+  if (drawn.length === 1) return drawn[0](false);
+  return el("div", { class: `mmc-pill mmc-pill-set${className ? ` ${className}` : ""}` },
+            drawn.map((draw) => draw(true)));
+}
+
+/** The class a pill wears in either form. `extra` is appended to both — a
+ *  modifier like `accel-on` is styled for the pill and for the segment. */
+export const pillClass = (seg, extra = "") => `${seg ? "mmc-pill-seg" : "mmc-pill"}${extra}`;
+
+/** A control that is switched on or off rather than set to a value. Lit either
+ *  way when it is on — filled as a segment, blue-outlined as a pill. */
+export const accelClass = (seg, on) => pillClass(seg, on ? " accel-on" : "");
+
+/**
  * A −/value/+ pill. The same shape as the duration control, because a number
  * you nudge should look the same everywhere in the node.
  *
@@ -24,14 +58,15 @@ import { UPSCALE_MODES, DEFAULT_REFINE_DENOISE, MIN_REFINE_DENOISE, MAX_REFINE_D
  */
 export function stepperPill({ value, onChange, min = -Infinity, max = Infinity, step = 1,
                               iconName, format = String, title, width = "34px",
-                              className = "" }) {
+                              className = "", seg = false }) {
   const clamp = (next) => Math.min(max, Math.max(min, Math.round(next * 1e6) / 1e6));
   const arrow = (label, delta) => el("button", {
     class: "mmc-step", text: label,
     disabled: clamp(value + delta) === value || undefined,
     onclick: () => onChange(clamp(value + delta)),
   });
-  return el("div", { class: `mmc-pill mmc-pill-group${className ? ` ${className}` : ""}`, title }, [
+  const base = seg ? "mmc-pill-seg mmc-pill-seg-group" : "mmc-pill mmc-pill-group";
+  return el("div", { class: `${base}${className ? ` ${className}` : ""}`, title }, [
     arrow("−", -step),
     ...(iconName ? [icon(iconName, 16)] : []),
     el("span", { text: format(value), style: { minWidth: width, textAlign: "center" } }),

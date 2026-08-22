@@ -41,7 +41,7 @@ import { t } from "./i18n.js";
  *  reached, the moment it starts encoding. */
 const EVENTS = ["progress_state", "b_preview_with_metadata", "b_preview",
                 "kj_preview_override", "executed", "execution_error", "execution_start",
-                "mmc_segment"];
+                "execution_interrupted", "mmc_segment"];
 
 /** A progress report this long is a sampler; the loaders and decoders report a
  *  step or two each. What lets the stage open on progress rather than waiting
@@ -59,6 +59,13 @@ export class Stage {
    *   which shows and hides the floating card off this signal
    */
   /**
+   * @param {(state: string, progress: object|null) => void} [spec.onState]
+   *   fired on every render with the run's state and step count. `onVisibility`
+   *   above answers "is there a picture"; this answers "is it still going",
+   *   which is a different question the moment somebody has to draw a Cancel
+   *   button — the fullscreen editor's, since ComfyUI's own is behind it.
+   */
+  /**
    * @param {(saved: object) => HTMLElement[]} [spec.resultChips]  extra chips
    *   for the finished-render overlay, built by the owner from the `executed`
    *   payload — the PreStage's "start frame / end frame / reference" hand-off.
@@ -68,10 +75,11 @@ export class Stage {
    *   segment is being rendered — the Timeline passes one that knows the strip
    *   ("Segment 2 of 5"); without it the announce's index shows bare.
    */
-  constructor({ nodeId, onVisibility, onGallery, resultChips, segmentLabel,
+  constructor({ nodeId, onVisibility, onState, onGallery, resultChips, segmentLabel,
                 onTakes = null }) {
     this.nodeId = nodeId;
     this.onVisibility = onVisibility;
+    this.onState = onState;
     this.onGallery = onGallery;
     this.resultChips = resultChips;
     this.segmentLabel = segmentLabel;
@@ -255,6 +263,25 @@ export class Stage {
         this.renderReadout();
         break;
 
+      case "execution_interrupted":
+        // Cancelled. There is no `executed` and no `execution_error` coming, so
+        // without this the stage sat on "sampling" forever — and everything that
+        // reads `onState` sat with it: the fullscreen editor's Render button
+        // stayed a readout of a run that had already stopped, with no way back
+        // to a button short of closing the editor.
+        //
+        // Whose run it was is not asked, for the same reason `b_preview` does
+        // not ask: the queue runs one thing at a time, so an interrupt landing
+        // while this stage is sampling is this stage's interrupt. The payload
+        // names the node the executor was inside, which is somewhere in the
+        // expansion and not reliably prefixed with ours.
+        if (this.state !== "sampling") break;
+        // Back to nothing, rather than leaving the last preview frame up: it is
+        // a step of a video that was never finished, and a stage still showing
+        // it reads as a render that landed.
+        this.reset();
+        break;
+
       case "execution_error":
         if (!this.ours(detail.node_id)) break;
         this.state = "failed";
@@ -302,6 +329,10 @@ export class Stage {
     // box was growing into, and it cannot know to do that from a re-render it
     // did not trigger.
     this.onVisibility?.(showing);
+    // Before the early return: a run that has finished or failed is exactly
+    // when the stage stops showing, and that is the transition a Cancel
+    // button most needs to hear.
+    this.onState?.(this.state, this.progress);
     if (!showing) return;
 
     if (this.state === "done" && this.result) {

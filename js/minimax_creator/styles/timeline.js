@@ -125,7 +125,11 @@ export const css = `
 /* The turbo quality stops. One pill holding three mutually exclusive answers,
    like the trim editor's track switch — three loose pills would read as
    independent toggles, and draft/med/good are one dial. Lit in the accelerator
-   blue, because that is the family it belongs to. */
+   blue, because that is the family it belongs to.
+
+   This pill is the prototype the shared segmented pill (.mmc-pill-set, styles/
+   editor.js) is drawn after. It keeps its own rules: it was right before there
+   was a general one and nothing about it is up for negotiation with it. */
 .mmc-pill.mmc-turbo-seg { gap: 0; padding: 0; overflow: hidden; }
 .mmc-turbo-opt {
   display: flex; align-items: center; gap: 5px; height: 100%; padding: 0 12px;
@@ -730,7 +734,7 @@ export const css = `
 
 /* Where the Creator puts its mode badge: the right end of the pill row. */
 .mmc-tl-open {
-  margin-left: auto; height: 32px; padding: 0 14px; display: flex; align-items: center; gap: 8px;
+  margin-left: auto; height: var(--mmc-pill-h); padding: 0 14px; display: flex; align-items: center; gap: 8px;
   border-radius: 999px; background: var(--mmc-surface-3); border: 1px solid var(--mmc-line);
   color: var(--mmc-text); font-family: inherit; font-size: 13px; cursor: pointer;
 }

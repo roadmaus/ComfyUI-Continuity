@@ -240,6 +240,7 @@ class Timeline {
       getCast: () => this.timeline.subjects ?? [],
       onAttach: (row) => this.attachToPool(row),
       castFromLibrary: (member) => this.castFromLibrary(member),
+      onUncited: (handles) => this.dropCitedCast(handles),
     });
     box.frame.classList.add("mmc-tl-prompt-frame");
     box.frame.addEventListener("pointerdown", (event) => event.stopPropagation());
@@ -542,6 +543,41 @@ class Timeline {
    * drew every one of them as a member built out of a file "not attached here",
    * on a piece where the face beside this window shows their photographs.
    */
+  /**
+   * Names just deleted out of the piece's own prompt: take them off the shelf.
+   *
+   * The shelf's ✕ is one way out of a cast and deleting the name is the other,
+   * and it has to be — the @ menu's roster is how somebody is cast, so the
+   * gesture that put them here is writing their name and the one that takes
+   * them back out is deleting it. They were being left on the shelf, in a piece
+   * that no longer mentions them anywhere.
+   *
+   * Piece-wide, because the cast is: a member the global prompt stops naming is
+   * still in the piece while any card names them. Their sole-claimed pictures go
+   * with them on the shelf's own terms — see `dropAssets` below, which this
+   * borrows by going through the shelf's `remove`.
+   *
+   * The pool is left alone. A pool reference the prompt stops citing is already
+   * not injected into any generation (`compile.cited_pool`), and it stays on the
+   * shelf saying so, which is the readout that band exists for.
+   */
+  dropCitedCast(handles) {
+    const cast = this.timeline.subjects ?? [];
+    const leaving = handles
+      .map((handle) => cast.find((s) => s.handle === handle))
+      .filter(Boolean)
+      .filter((subject) => {
+        // `match` rather than `test`: the pattern is global, and a global regex
+        // tested twice answers from wherever the last test left off.
+        const pattern = S.subjectCitationRe([subject]);
+        return !S.allTexts(this.timeline).some((text) => String(text ?? "").match(pattern));
+      });
+    if (!leaving.length) return;
+    this.renderCast();                       // the shelf owns the removal
+    for (const subject of leaving) this.castShelf.remove(subject);
+    this.render();
+  }
+
   renderCast() {
     this.castShelf ??= new CastShelf({
       getCast: () => this.timeline.subjects ?? [],
@@ -750,6 +786,15 @@ class Timeline {
 
   geometry() {
     return timelineGeometry(this.timeline);
+  }
+
+  /** The picture this piece is about to make: the canvas, and how long it runs.
+   *  For a host that has to draw the frame before there is anything in it —
+   *  the fullscreen editor's dock, which is a whole column of nothing until
+   *  the first render lands (see fullscreen.js). */
+  frame() {
+    const { width, height } = this.geometry();
+    return { width, height, seconds: S.timelineSeconds(this.timeline) };
   }
 
   /** The bar's ratio popover: every picture the strip holds is offered as the
@@ -2227,7 +2272,7 @@ export class TimelineBody {
    *  this node rather than anything the render reads, so it lives on the node
    *  and not in the blob. */
   constructor({ read, write, widgets = {}, onWidgetChange, nodeId,
-                preStage = null, face = null }) {
+                preStage = null, face = null, fullscreen = null }) {
     this.read = read;
     this.write = write;
     this.widgets = widgets;
@@ -2235,6 +2280,11 @@ export class TimelineBody {
     this.nodeId = nodeId;
     this.preStage = preStage;
     this.face = face;
+    // The way *into* the shell. The way out is the shell's own corner, and the
+    // command and its keybinding have always existed — but a keystroke nobody
+    // has been told about is not a door, and the setting in ComfyUI's own page
+    // only decides what a *new* node opens as. So the face grows one.
+    this.fullscreen = fullscreen;
     this.timeline = S.parseTimeline(read());
     // The face's editor, when the piece is one shot and the face is wearing
     // one. Null the rest of the time — see `loneShot`.
@@ -2415,6 +2465,7 @@ export class TimelineBody {
       stage: this.stage,
       setRoute: (route) => { this.timeline.models.route = route; this.commit(); },
       preStage: this.preStage,
+      fullscreen: this.fullscreen,
       pieceView: this.pieceView(),
       // The piece's, not this shot's: the face is wearing the only card, but
       // what you save from a node is the node. Growing a second shot changes
@@ -2581,6 +2632,9 @@ export class TimelineBody {
       // sampler pills wrapping a row earlier here than there.
       this.root.classList.add("hosting");
       this.laneFit?.disconnect();
+      // A host drawing something derived from this piece — the editor's empty
+      // frame — has no other way to hear that the canvas or the length changed.
+      this.onRender?.();
       return;
     }
     this.root.classList.remove("hosting");
@@ -2594,6 +2648,22 @@ export class TimelineBody {
     this.laneFit?.disconnect();
     this.laneFit?.observe(this.lane);
     this.fitLane();
+    this.onRender?.();
+  }
+
+  /**
+   * The picture this piece is about to make: the canvas, and how long it runs.
+   *
+   * For a host that has to draw the frame before there is anything in it — the
+   * fullscreen shell's dock, which is a column of nothing until the first
+   * render lands. A lone shot answers through the editor on its face, because
+   * that shot's canvas can be a reference's rather than the piece's; a strip
+   * answers from the geometry its summary already prints.
+   */
+  frame() {
+    if (!this.showsStrip()) return this.faceBody().frame();
+    const { width, height } = timelineGeometry(this.timeline);
+    return { width, height, seconds: S.timelineSeconds(this.timeline) };
   }
 
   /**
@@ -2811,6 +2881,12 @@ export class TimelineBody {
           title: t("Open the timeline: the global prompt, the segments, and what happens between them"),
           onclick: () => this.open(),
         }, [icon("sliders", 16), el("span", { text: t("Edit timeline") })]),
+        ...(this.fullscreen ? [el("button", {
+          class: "mmc-pill mmc-fs-enter",
+          title: t("Draw this piece over the whole window. The node stays in the graph "
+                 + "and is queued exactly as it is now; Escape brings you back."),
+          onclick: () => this.fullscreen(),
+        }, [icon("expand", 16), el("span", { text: t("Fullscreen") })])] : []),
         ...(this.pieceView() ? [this.renderPieceViewPill()] : this.renderHeldPieceViewPill()),
         ...(this.preStage ? [this.renderPreStagePill()] : []),
       ]),

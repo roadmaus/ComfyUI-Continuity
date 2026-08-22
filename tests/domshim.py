@@ -15,7 +15,23 @@ class Node {
   constructor(tag) {
     this.tagName = tag; this.children = []; this.style = {}; this.attrs = {};
     this.className = ""; this.textContent = ""; this.listeners = {};
-    this.classList = { add: () => {}, remove: () => {}, toggle: () => {}, contains: () => false };
+    // Backed by className, not stubbed. Half the pack says what state a thing is
+    // in by putting a class on it and the other half reads that class back —
+    // the fullscreen shell's view and its summoned cast shelf both do — and a
+    // no-op classList made every one of those look like it had never been set.
+    const names = () => String(this.className).split(" ").filter(Boolean);
+    this.classList = {
+      contains: (name) => names().includes(name),
+      add: (...add) => { this.className = [...new Set([...names(), ...add])].join(" "); },
+      remove: (...gone) => {
+        this.className = names().filter((name) => !gone.includes(name)).join(" ");
+      },
+      toggle: (name, force) => {
+        const on = force === undefined ? !names().includes(name) : !!force;
+        if (on) this.classList.add(name); else this.classList.remove(name);
+        return on;
+      },
+    };
     this.dataset = {};
   }
   // A real input takes its starting value from the attribute, and the pack sets
@@ -62,9 +78,10 @@ class Node {
   }
   normalize() {}
   contains() { return false; }
-  /** Enough of a selector match for `PromptBox.claim`, which asks whether a
-   *  click landed on something that answers for itself. Tag names and single
-   *  class names only — the one selector it is given is a list of those. */
+  /** Enough of a selector match for what the pack actually asks: a
+   *  comma-separated list of tag names, single class names and bare attribute
+   *  tests. Nothing combines them, so nothing here does either. Used by
+   *  `closest` and by `querySelectorAll` below. */
   matches(selector) {
     return selector.split(",").map((s) => s.trim()).some((one) => {
       if (one.startsWith(".")) return String(this.className).split(" ").includes(one.slice(1));
@@ -98,15 +115,47 @@ class Node {
   setSelectionRange(start) { this._caret = start; }
   select() {}
   blur() { if (globalThis.document.activeElement === this) globalThis.document.activeElement = null; }
-  querySelector() { return null; }
-  querySelectorAll() { return []; }
+  /** Every descendant matching `selector`, through the same `matches` above.
+   *  Real rather than stubbed, because the pack reads its own rendered DOM back
+   *  in places where the answer is the feature: the prompt box counts the chips
+   *  it is showing to work out which one a keystroke just deleted, and a stub
+   *  answering "none" made every deletion invisible to it. */
+  querySelectorAll(selector) {
+    const found = [];
+    const walk = (node) => {
+      for (const child of node.children ?? []) {
+        if (child.matches?.(selector)) found.push(child);
+        walk(child);
+      }
+    };
+    walk(this);
+    return found;
+  }
+  querySelector(selector) { return this.querySelectorAll(selector)[0] ?? null; }
   getBoundingClientRect() { return { top: 0, left: 0, width: 100, height: 100, bottom: 0, right: 0 }; }
   scrollIntoView() {}
   get firstChild() { return this.children[0] ?? null; }
   get childNodes() { return this.children; }
   get nodeType() { return this.tagName === "#text" ? 3 : 1; }
-  set innerHTML(v) { this._html = v; }
+  /** Enough of a parse for `svg()`, which is how every glyph in the pack is
+   *  made: one element written into a throwaway holder and taken straight back
+   *  out of it. Without a child to take back, `firstElementChild` answered
+   *  undefined and every icon silently became nothing — and the shell's empty
+   *  frame, which hands the same holder's child to `replaceChildren`, threw. */
+  set innerHTML(v) {
+    this._html = String(v);
+    this.children = [];
+    const tag = this._html.trim().match(/^<([a-zA-Z][a-zA-Z0-9-]*)/)?.[1];
+    if (!tag) return;
+    const child = new Node(tag);
+    // The markup as written, kept whole: nothing here parses attributes, and a
+    // harness that serializes this tree back to HTML needs the original.
+    child._outer = this._html;
+    child.parent = this;
+    this.children.push(child);
+  }
   get innerHTML() { return this._html ?? ""; }
+  get firstElementChild() { return this.children.find((c) => c.nodeType === 1) ?? null; }
   // A text node's text, under the name the DOM gives it. `PromptBox.getValue`
   // walks the box with this, which is how what was typed becomes the prompt in
   // the state — without it the box round-trips to `undefined` here.
@@ -129,8 +178,10 @@ globalThis.document = {
   head: new Node("head"),
   documentElement: new Node("html"),
   getElementById: () => null,
-  querySelector: () => null,
-  querySelectorAll: () => [],
+  // The document's own, over the tree that is actually in it. `mountOverlay`
+  // counts the open ones to stack the next; before this it always counted none.
+  querySelector: (selector) => globalThis.document.body.querySelector(selector),
+  querySelectorAll: (selector) => globalThis.document.body.querySelectorAll(selector),
   addEventListener() {}, removeEventListener() {},
 };
 // Ranges and selections: the prompt box places its own caret — putting it at

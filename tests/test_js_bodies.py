@@ -84,7 +84,10 @@ STUBS = {
 export const app = {
   registerExtension: (e) => { globalThis.__ext = e; },
   graph: null, canvas: null,
-  async queuePrompt() { return this.graphToPrompt(); },
+  async queuePrompt(number, batch, options) {
+    globalThis.__queued = options ?? null;
+    return this.graphToPrompt();
+  },
   async graphToPrompt() { return globalThis.__prompt ?? { output: {} }; },
 };
 """,
@@ -96,6 +99,7 @@ let stored = { video_crf: 23, video_prefix: "minimax/renders/H3",
                image_prefix: "minimax/stills/prestage" };
 export const api = {
   addEventListener() {}, removeEventListener() {}, apiURL: (u) => u,
+  interrupt() { globalThis.__interrupted = true; },
   async fetchApi(route, options) {
     if (route.endsWith("/settings") && options?.method === "POST") {
       const patch = JSON.parse(options.body);
@@ -232,6 +236,62 @@ try {
   out.errors.push(`wroteName: ${error.message}`);
 }
 
+// …and deleting a chip takes what it named back out again.
+//
+// The @ menu creates the thing and writes the chip in one gesture, so the chip
+// *is* the attachment and deleting it has to be the way out. The half of that
+// which is not cosmetic: a bare reference sits in `assets`, and everything in
+// `assets` is encoded and shown to the model whether or not a word of the
+// prompt mentions it — so a name deleted out of the sentence left a picture
+// conditioning the render exactly as hard as one still named.
+try {
+  const node = fakeNode("MiniMaxH3Creator", "creator_data", ONE_SHOT);
+  await ext.nodeCreated(node);
+  const editor = node.mmcBody.faceBody();
+  const box = editor.prompt;
+  const piece = node.mmcBody.timeline;
+  const shot = piece.segments[0];
+
+  // Everything arrives the way the redesign makes it arrive: through the menu.
+  const anna = await box.hooks.castFromLibrary({
+    handle: "anna", takes: "person",
+    files: [{ slot: "from", filename: "anna/face.png", kind: "image" }],
+  });
+  const door = box.hooks.onAttach({ path: "doors/red.png", kind: "image" });
+  const lamp = box.hooks.onAttach({ path: "lamps/brass.png", kind: "image" });
+
+  // Backspace against a chip, which is the only way one can be deleted: it is
+  // contenteditable="false", so the caret cannot get inside it.
+  const cut = (handle) => {
+    box.root.children.find((n) => n.dataset?.handle === handle)?.remove();
+    box.onEdit();
+  };
+  const refs = () => (shot.assets ?? []).map((a) => a.handle).join(",");
+  const cast = () => (piece.subjects ?? []).map((s) => s.handle).join(",");
+
+  box.setValue(`@${anna} at @${door}, lit by @${lamp}`);
+  editor.state.prompt = box.getValue();
+  // The lamp is written in the soundscape too, so cutting it out of the prompt
+  // is the deletion of one occurrence and not of the reference.
+  editor.state.soundscape = `a hum off @${lamp}`;
+  out.reap = { chips: box.chipped.size, refs: refs(), cast: cast() };
+
+  cut(lamp);
+  out.reap.citedElsewhere = refs();
+  cut(door);
+  out.reap.afterTheRef = refs();
+  out.reap.castUntouched = cast();
+  cut(anna);
+  out.reap.afterTheName = cast();
+  // Her picture was attached by casting her, so it leaves with her.
+  out.reap.andHerPictures = refs();
+  // And all of it is in the blob, which is what queues.
+  out.reap.blob = JSON.parse(node.widgets[0].value).segments[0].assets
+    .map((a) => a.handle).join(",");
+} catch (error) {
+  out.errors.push(`reap: ${error.stack}`);
+}
+
 // The face is typed into, and the window is where a prompt goes when it stops
 // fitting. The box on the face is the live one — that is the whole point of it
 // being there — and the corner control opens the same body full size.
@@ -265,6 +325,71 @@ try {
   };
 } catch (error) {
   out.errors.push(`node face: ${error.message}`);
+}
+
+// ---- the body leaves the node, and comes back -------------------------------
+//
+// The fullscreen editor borrows the body's element rather than rebuilding one.
+// That only holds if the element can travel: `attach()` gives the DOM widget a
+// wrapper to keep positioning, and the editor moves the body between that
+// wrapper and its own column. What is checked is the round trip, because the
+// failure it guards against is silent — a body that goes fullscreen and does
+// not come back leaves a node with a blank face and no error anywhere.
+try {
+  const fs = await import("./js/minimax_creator/fullscreen.js");
+  const node = fakeNode("MiniMaxH3Creator", "creator_data", ONE_SHOT);
+  await ext.nodeCreated(node);
+  // The editor scans the graph for the piece and its PreStage, so the node has
+  // to actually be in one — `nodeCreated` runs before the frontend adds it.
+  node.graph._nodes.push(node);
+  app.graph = node.graph;
+
+  const body = node.mmcBody;
+  const parked = body.root.parent === node.mmcHost;
+
+  fs.openFullscreen(node);
+  out.__docked = body.satellite?.docked?.className === "mmc-fs-dock";
+  const shell = document.body.children.at(-1);
+  const inShell = body.root.parent?.className === "mmc-fs-col";
+  // Read before the press below, which puts the shell into its working state
+  // and turns the Render label into a progress report.
+  const opened = shell?.className === "mmc-fs";
+  const hasRender = (shell?.text ?? "").includes("Render");
+
+  // Each press names its node. Both bodies are outputs of one graph, so a
+  // plain queue runs the pair — which is what the shell used to do, and why
+  // touching the still's prompt made the next Render remake the still too.
+  const press = (root, cls) => {
+    const hit = root.querySelectorAll("." + cls)[0];
+    hit?.listeners?.click?.forEach((fn) => fn({ stopPropagation() {}, preventDefault() {} }));
+    return globalThis.__queued;
+  };
+  const shotAim = press(shell, "mmc-fs-run")?.queueNodeIds;
+
+  fs.close();
+  out.fullscreen = {
+    // The queue is aimed, not broadcast.
+    rendersOneNode: JSON.stringify(shotAim) === JSON.stringify([String(node.id)]),
+    // The widget is handed a wrapper, never the body itself.
+    widgetHost: node.dom?.className,
+    parkedOnTheNode: parked,
+    opened,
+    bodyMoved: inShell,
+    // The one control the canvas used to provide, and the one that stops it
+    // being provided twice.
+    hasRender,
+    hasCancel: (shell?.text ?? "").includes("Cancel"),
+    // Gallery and Settings stay in the body's rail; the bar does not repeat them.
+    barIsNotARail: !(shell?.children?.[0]?.text ?? "").includes("Gallery"),
+    // The satellite stops following and hands its stage over.
+    dockedWhileOpen: out.__docked,
+    undocked: body.satellite?.docked === null,
+    // …and the body is back where the widget can position it.
+    cameBack: body.root.parent === node.mmcHost,
+    closed: !document.body.children.includes(shell),
+  };
+} catch (error) {
+  out.errors.push(`fullscreen: ${error.message}`);
 }
 
 // The rewrite is edited in place, never rebuilt under the caret.
@@ -1028,6 +1153,99 @@ try {
   out.errors.push(`face rule: ${error.message}`);
 }
 
+// ---- the way into the fullscreen shell --------------------------------------
+//
+// The shell has always had a command and a keybinding, and the setting in
+// ComfyUI's own page decides what a *new* node opens as — none of which is a
+// door you can see. Both faces grow one, and the node's menu carries a third.
+try {
+  const shot = { prompt: "a lighthouse", assets: [], loras: [], duration_s: 6 };
+  const face = (segments) => {
+    const node = fakeNode("MiniMaxH3Creator", "creator_data", JSON.stringify({
+      version: 2, models: {}, segments,
+    }));
+    return node;
+  };
+  const hunt = (root, cls) => {
+    let hit = null;
+    const walk = (n) => {
+      if (!hit && String(n.className ?? "").split(" ").includes(cls)) hit = n;
+      (n.children ?? []).forEach(walk);
+    };
+    walk(root);
+    return hit;
+  };
+  const one = face([{ ...shot }]);
+  await ext.nodeCreated(one);
+  const strip = face([{ ...shot }, { ...shot }]);
+  await ext.nodeCreated(strip);
+  // The window over a card is not a node face and has no node to draw over.
+  const card = new (await import("./js/minimax_creator/editor.js")).CreatorEditor({
+    state: { ...shot }, onCommit: () => {},
+  });
+  // The menu entry is installed on the node *type*, not on an instance, so it
+  // is registered the way ComfyUI registers it and then called off the
+  // prototype with a node as `this`.
+  const nodeType = { prototype: {} };
+  ext.beforeRegisterNodeDef?.(nodeType, { name: "MiniMaxH3Creator" });
+  const menu = [];
+  nodeType.prototype.getExtraMenuOptions?.call(one, null, menu);
+  out.fsDoor = {
+    onShot: !!hunt(one.mmcBody.root, "mmc-tool-expand"),
+    onStrip: !!hunt(strip.mmcBody.root, "mmc-fs-enter"),
+    notInACard: !hunt(card.root, "mmc-tool-expand"),
+    inTheMenu: menu.some((entry) => String(entry.content).toLowerCase().includes("fullscreen")),
+  };
+} catch (error) {
+  out.errors.push(`fullscreen door: ${error.message}`);
+}
+
+// ---- the cast shelf, summoned from a name in the sentence -------------------
+//
+// The simple fullscreen view draws neither the Cast tool nor the shelf: casting
+// is the @ menu's roster, building is the library's Cast tab, and removing
+// somebody is deleting their chip. The one thing left over is editing the copy
+// of somebody that lives in *this* piece, and double-clicking their name is
+// what asks for it. Driven through the editor rather than through a synthetic
+// double-click: the gesture is the box's business and this is the hand-off.
+try {
+  const node = fakeNode("MiniMaxH3Creator", "creator_data", JSON.stringify({
+    version: 2, models: {},
+    subjects: [{ handle: "vera", takes: "person", from: [] }],
+    segments: [{ prompt: "@vera waits", assets: [], loras: [], duration_s: 6 }],
+  }));
+  await ext.nodeCreated(node);
+  const editor = node.mmcBody.editor;
+  const shut = () => {
+    let hit = null;
+    const walk = (n) => {
+      if (!hit && String(n.className ?? "").split(" ").includes("mmc-cast-shut")) hit = n;
+      (n.children ?? []).forEach(walk);
+    };
+    walk(editor.castHost);
+    return hit;
+  };
+  editor.openCastMember("vera");
+  const opened = {
+    open: editor.castOpen === true,
+    summoned: editor.castSummoned === true,
+    onThem: editor.castShelf?.opened?.handle === "vera",
+    marked: String(editor.castShelf?.root?.className ?? "").split(" ").includes("summoned"),
+    hasShut: !!shut(),
+  };
+  shut()?.listeners?.click?.[0]?.();
+  await new Promise((done) => setTimeout(done, 0));
+  // A name nobody answers to leaves the shelf exactly as it was.
+  editor.openCastMember("nobody");
+  out.castSummon = {
+    ...opened,
+    shutClosed: editor.castOpen === false && editor.castSummoned === false,
+    strangerIgnored: editor.castOpen === false,
+  };
+} catch (error) {
+  out.errors.push(`cast summon: ${error.message}`);
+}
+
 // ---- a popover outlives the row that opened it ------------------------------
 //
 // Rows that commit — the face pass's on/off, the two-pass section's — re-render
@@ -1453,6 +1671,54 @@ check("her name lands where the @ was typed, not on a lost caret",
 check("...and reads back off the box as the same sentence",
       wrote.get("value"), "a woman at the door, @anna ")
 
+# ---- ...and deleted it out again ---------------------------------------------
+#
+# The chip is the attachment, so deleting it is the way out. What makes this a
+# contract rather than a tidy-up is the last line: `assets` is what gets encoded
+# and shown to the model, and a reference nobody mentions conditions the render
+# exactly as hard as one they do.
+
+reap = report.get("reap", {})
+check("the box knows which chips it is showing", reap.get("chips"), 3)
+check("...over the shot's own references", reap.get("refs"), "img-1,img-2,img-3")
+check("...and the piece's cast", reap.get("cast"), "anna")
+# One occurrence deleted is not the reference deleted: the soundscape still
+# writes the lamp, so the lamp stays.
+check("a handle still written elsewhere survives losing its chip",
+      reap.get("citedElsewhere"), "img-1,img-2,img-3")
+check("a reference whose last mention goes, goes", reap.get("afterTheRef"),
+      "img-1,img-3")
+check("...and takes nobody out of the cast with it", reap.get("castUntouched"), "anna")
+check("deleting a name takes the member off the shelf", reap.get("afterTheName"), "")
+check("...and the pictures casting her attached", reap.get("andHerPictures"), "img-3")
+check("...and all of it is written through to the blob that queues",
+      reap.get("blob"), "img-3")
+
+# ---- the body leaves the node, and comes back --------------------------------
+#
+# The fullscreen editor is a host, not a second frontend: it moves the body's
+# element into a shell and puts it back. Everything below is that contract.
+
+full = report.get("fullscreen", {})
+check("the DOM widget is handed a wrapper, not the body",
+      full.get("widgetHost"), "mmc-widget-host")
+check("...which is where the body sits on the canvas", full.get("parkedOnTheNode"), True)
+check("the shell opens", full.get("opened"), True)
+check("...and the body moves into its column", full.get("bodyMoved"), True)
+check("...with a Render button, since ComfyUI's is behind it", full.get("hasRender"), True)
+# A pre-stage is an output node of the same graph, so a plain queue runs it
+# alongside the shot — right for the canvas Run button, wrong for a button at
+# the foot of one column. Each press names its own node.
+check("...that queues that node alone, not every output in the graph",
+      full.get("rendersOneNode"), True)
+check("...and a Cancel beside it", full.get("hasCancel"), True)
+check("...but no second Gallery: the rail already has one",
+      full.get("barIsNotARail"), True)
+check("the satellite hands its stage to the dock", full.get("dockedWhileOpen"), True)
+check("closing gives the picture back to the canvas", full.get("undocked"), True)
+check("...and the body back to the node", full.get("cameBack"), True)
+check("...and takes the shell down with it", full.get("closed"), True)
+
 # The settings page owns three questions now — how good the file is, where it
 # goes, and what the node faces offer — so it has three tabs, and the folder
 # fields are the only place the prefixes can be set.
@@ -1631,6 +1897,24 @@ check("clicking it again comes back to the shot",
       (view.get("backAgain") or {}).get("wears"), "shot")
 check("...leaving the property as it found it",
       (view.get("backAgain") or {}).get("pinGone"), True)
+
+door = report.get("fsDoor", {})
+check("the shot face carries a way into the shell", door.get("onShot"), True)
+check("...and so does the strip face", door.get("onStrip"), True)
+check("...but a card's editor does not — there is no node to draw over",
+      door.get("notInACard"), True)
+check("the node's own menu carries it too", door.get("inTheMenu"), True)
+
+summon = report.get("castSummon", {})
+check("double-clicking a name puts the shelf up", summon.get("open"), True)
+check("...on that member, and nobody else", summon.get("onThem"), True)
+check("...marked as summoned, so a view that hides the shelf shows this one",
+      summon.get("marked"), True)
+check("...with the chevron that takes it away", summon.get("hasShut"), True)
+check("closing the card closes the shelf it was summoned into",
+      summon.get("shutClosed"), True)
+check("a name nobody answers to leaves the shelf where it was",
+      summon.get("strangerIgnored"), True)
 
 grew = report.get("grew", {})
 check("writing the next shot adds a card", grew.get("cards"), 2)

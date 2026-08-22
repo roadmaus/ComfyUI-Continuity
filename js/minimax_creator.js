@@ -10,7 +10,10 @@ import { Satellite } from "./minimax_creator/satellite.js";
 import { SAMPLING_WIDGETS } from "./minimax_creator/sampling.js";
 import { rememberQueuedSeeds } from "./minimax_creator/seedmemory.js";
 import { primeSettings } from "./minimax_creator/api.js";
+import { close as closeFullscreen, fullscreenNode, openFullscreen, remount as remountFullscreen,
+         stepToShot, toggleFullscreen } from "./minimax_creator/fullscreen.js";
 import { openPresetLibrary } from "./minimax_creator/presetlib.js";
+import { el } from "./minimax_creator/dom.js";
 import * as S from "./minimax_creator/state.js";
 import { t } from "./minimax_creator/i18n.js";
 
@@ -170,7 +173,14 @@ function togglePreStage(node) {
 /** What the two host editors hand their pre-stage pill. */
 const preStageControls = (node) => ({
   active: () => !!findPreStage(node),
-  toggle: () => togglePreStage(node),
+  toggle: () => {
+    togglePreStage(node);
+    // The pill spawns or removes a whole node, and fullscreen hosts the pair in
+    // two columns — so the editor has to be told the second one arrived. A frame
+    // later: the new node is not in the graph yet, and the scan that finds it
+    // reads the graph.
+    requestAnimationFrame(() => remountFullscreen(node));
+  },
 });
 
 /** What the PreStage's result chips resolve at click time: the peer body and
@@ -183,7 +193,13 @@ const peerOf = (node) => () => {
   if (!body?.attachFromPreStage) return null;
   return {
     label: peer.title || peer.comfyClass,
-    attach: (role, filename) => body.attachFromPreStage({ role, filename }),
+    attach: (role, filename) => {
+      body.attachFromPreStage({ role, filename });
+      // The hand-off is the reason the pair exists, so it is also where the
+      // simple view's card should go: the still is made, and what it was made
+      // for now has it. Ignored by the desk, which shows both at once.
+      stepToShot();
+    },
   };
 };
 
@@ -264,12 +280,21 @@ function attach(node, build) {
   requestAnimationFrame(() => hideWidget(widget));
 
   const body = build(widget);
+  // The DOM widget writes left/top/width/height straight onto the element it is
+  // handed, every frame. The body has to be able to leave the node — the
+  // fullscreen editor hosts this very element (fullscreen.js) — so what the
+  // widget gets is a wrapper it can go on positioning while the body is away.
+  // Empty, the wrapper is a blank box on a node nobody is looking at, which is
+  // cheaper than the alternative: collapsing the node would serialize into the
+  // saved workflow, and a workflow that comes back collapsed is a bug.
+  const host = el("div", { class: "mmc-widget-host" }, [body.root]);
+  node.mmcHost = host;
   // The sampler row reads UI preferences (the shift pills' visibility) from the
   // settings cache, which is empty until the server first answers. Prime it —
   // fetched once, ever — and repaint this body when the answer lands, so a node
   // drawn before the reply shows the row the settings actually ask for.
   primeSettings(() => body.render?.());
-  node.addDOMWidget("mmc_ui", "MMC_CREATOR", body.root, {
+  node.addDOMWidget("mmc_ui", "MMC_CREATOR", host, {
     serialize: false,
     hideOnZoom: false,
     getMinHeight: () => 200,
@@ -283,6 +308,9 @@ function attach(node, build) {
   const satellite = body.stage
     ? new Satellite({ node, stage: body.stage, side: SIDE[node.comfyClass] ?? "right" })
     : null;
+  // On the body rather than local: the fullscreen editor has to dock it, and
+  // the body is what it is given.
+  body.satellite = satellite;
 
   // The body listens on `api` for its own previews, and those listeners outlive
   // the DOM: without this, deleting a node leaves it decoding frames for a
@@ -291,14 +319,64 @@ function attach(node, build) {
   const removed = node.onRemoved;
   node.onRemoved = function () {
     removed?.apply(this, arguments);
+    // Deleting the piece the editor is showing closes it: there is no node left
+    // to put the body back into, and a shell around a destroyed body is a blank
+    // screen with no way out but the keybinding.
+    if (fullscreenNode() === node) closeFullscreen();
     body.destroy?.();
     satellite?.destroy();
   };
   return body;
 }
 
+/** Whether new and selected pieces open in the fullscreen editor.
+ *
+ *  ComfyUI's own store, not `/minimax_creator/settings`: that file is one copy
+ *  for the whole install with, as `api.js` puts it, "no request behind it and
+ *  so no ComfyUI user". Which editor you look at is a preference about a
+ *  person, and this is the store that is per-person and already the place
+ *  people go to change how ComfyUI behaves.
+ *
+ *  English rather than t(): setting definitions are read once, at registration,
+ *  while the frontend is still booting and the locale store has not answered.
+ *  A string translated there would be whatever the boot order gave it, forever.
+ */
+const FULLSCREEN_SETTING = "MiniMax.Creator.Fullscreen";
+
+const wantsFullscreen = () => {
+  try {
+    return app.extensionManager?.setting?.get?.(FULLSCREEN_SETTING) === true;
+  } catch {
+    return false;
+  }
+};
+
 app.registerExtension({
   name: "minimax.creator",
+
+  settings: [{
+    id: FULLSCREEN_SETTING,
+    category: ["MiniMax H3", "Editor", "Fullscreen"],
+    name: "Open the Creator fullscreen",
+    tooltip: "Draw the node's body over the whole window instead of on the canvas. "
+           + "The node stays in the graph and is queued exactly as it always was. "
+           + "Ctrl+Shift+M toggles it; Escape and the button in its corner go back.",
+    type: "boolean",
+    defaultValue: false,
+  }],
+
+  // The way in and, more importantly, the way back: once the shell is up there
+  // is no node to right-click, so the editor cannot be the only thing that
+  // knows how to close itself.
+  commands: [{
+    id: "minimax.toggleFullscreen",
+    label: "MiniMax H3: fullscreen editor",
+    function: toggleFullscreen,
+  }],
+  keybindings: [{
+    commandId: "minimax.toggleFullscreen",
+    combo: { key: "m", ctrl: true, shift: true },
+  }],
 
   setup() {
     // One hook for the whole canvas, installed once — every node's seed row
@@ -321,7 +399,15 @@ app.registerExtension({
         nodeId: () => node.id,
         preStage: preStageControls(node),
         face: faceControls(node),
+        // Deferred a frame for the same reason the setting's path is: this runs
+        // before the node is in the graph, and the editor scans the graph for
+        // the piece and its PreStage.
+        fullscreen: () => requestAnimationFrame(() => openFullscreen(node)),
       }));
+      // Deferred a frame: `nodeCreated` runs before the node is in the graph
+      // and before a pasted one is renumbered, and the editor scans the graph
+      // for the piece and its PreStage.
+      if (wantsFullscreen()) requestAnimationFrame(() => openFullscreen(node));
     } else if (node.comfyClass === PRESTAGE) {
       node.mmcBody = attach(node, (widget) => {
         const state = S.parsePreStage(widget.value);
@@ -375,6 +461,17 @@ app.registerExtension({
     const original = nodeType.prototype.getExtraMenuOptions;
     nodeType.prototype.getExtraMenuOptions = function (canvas, options) {
       original?.apply(this, arguments);
+      // The second way into the shell, and the idiomatic one: a node action
+      // belongs on the node's own menu. The face carries the first — a rail tile
+      // on a shot, a pill on a strip — and Ctrl+Shift+M has always been the
+      // third. Only the pieces: the shell opens on a Creator or a Timeline, and
+      // a PreStage is drawn beside one rather than instead of it.
+      if (PIECE.includes(nodeData.name)) {
+        options.push({
+          content: t("Fullscreen editor"),
+          callback: () => openFullscreen(this),
+        });
+      }
       // The path for a node the user has right-clicked rather than opened. The
       // target is read late, off the mounted body — a node whose body has not
       // been built yet opens the library read-only rather than not at all.

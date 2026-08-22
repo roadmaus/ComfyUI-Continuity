@@ -219,7 +219,7 @@ function assetThumb(asset, className = "mmc-asset-thumb") {
  */
 export class CastShelf {
   constructor({ getCast, setCast, getAssets, addAsset, whereCited, cite, touch, commit,
-                keep = null, library = null, dropAssets = null }) {
+                keep = null, library = null, dropAssets = null, onShut = null }) {
     this.getCast = getCast;
     this.dropAssets = dropAssets;
     this.setCast = setCast;
@@ -231,6 +231,11 @@ export class CastShelf {
     this.commit = commit;
     this.keep = keep;
     this.library = library;
+    // Fired when the open card is closed from its own chevron. A host that put
+    // the shelf on screen *for* one member — the simple view summons it from
+    // their name in the prompt — takes it away again on the same press. Hosts
+    // that keep a standing shelf pass nothing and nothing changes for them.
+    this.onShut = onShut;
     // Which member is open, by reference rather than by name: a name is the one
     // field being typed into while the card is open, and a shelf that tracked it
     // by name would close them on the first keystroke.
@@ -240,6 +245,20 @@ export class CastShelf {
     this.kept = null;
     this.note = null;
     this.root = el("div", { class: "mmc-cast" });
+  }
+
+  /**
+   * Open one member by name, for a host that was asked about them rather than
+   * about the cast — double-clicking their chip in the prompt. Answers whether
+   * there was anybody by that name, so a host that put the shelf up to show
+   * them can take it back down when there was not.
+   */
+  openMember(handle) {
+    const subject = (this.getCast() ?? []).find((s) => s.handle === handle);
+    if (!subject) return false;
+    this.opened = subject;
+    this.render();
+    return true;
   }
 
   /** A structural change: somebody joined or left, or a file moved between their
@@ -489,7 +508,7 @@ export class CastShelf {
             class: "mmc-cast-shut",
             title: t("Close @{handle}", { handle: subject.handle }),
             "aria-expanded": "true",
-            onclick: () => { this.opened = null; this.renderSoon(); },
+            onclick: () => { this.opened = null; this.renderSoon(); this.onShut?.(); },
           }, [icon("chevron", 14)]),
           el("button", {
             class: "mmc-asset-x", text: "✕",

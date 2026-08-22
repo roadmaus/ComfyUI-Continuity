@@ -23,7 +23,7 @@ import { openTrim, trimLabel } from "./trim.js";
 import { PromptBox, focusEnd, openEditorSheet } from "./prompt.js";
 import { RefinePanel, refineButton, refine } from "./refine.js";
 import { openAspectPopover, openResolutionPopover, openChoicePopover, facesPill, aspectGlyph,
-         PILL_GLYPH } from "./pills.js";
+         PILL_GLYPH, pillSet, pillClass } from "./pills.js";
 import { samplingBar, segmentSeedPill, widgetIO } from "./sampling.js";
 import { Stage } from "./stage.js";
 import { weightsPill, loadCatalog, catalogFiles } from "./models.js";
@@ -190,7 +190,7 @@ export class CreatorEditor {
                 settingsTool = true, stage = null, editorTitle = null,
                 piece = null, afterPanel = null, presetTarget = null,
                 clearTool = null, seedTarget = null, scopesSent = null,
-                castFromLibrary = null }) {
+                castFromLibrary = null, fullscreen = null }) {
     // The one sampler setting a card may answer for itself — see
     // `segmentSeedPill`. Null on a node body, which owns the whole row.
     this.seedTarget = seedTarget;
@@ -234,6 +234,10 @@ export class CreatorEditor {
     this.samplingWidgets = samplingWidgets;
     this.onWidgetChange = onWidgetChange;
     this.nodeId = nodeId;
+    // Opens the shell on this piece, where the host has a node to open it on.
+    // Null in a window and in a card's editor: both are already something other
+    // than a node face, and neither has a node of its own to draw over.
+    this.fullscreen = fullscreen;
     this.sizes = new Map();   // filename -> {width,height}, for the adaptive canvas readout
 
     this.prompt = new PromptBox({
@@ -264,6 +268,11 @@ export class CreatorEditor {
           }
         : null,
       onOverflow: (over) => this.onPromptOverflow(over),
+      // Only where there is a shelf for it to summon: a card's editor is one
+      // shot of a piece whose cast is owned a level up, and a chip that changed
+      // the cursor and then did nothing is worse than one that never offered.
+      onCastChip: this.nodeId ? (handle) => this.openCastMember(handle) : null,
+      onUncited: (handles) => this.dropCited(handles),
     });
     // Leaving the box arms the escalation again — see `onPromptOverflow`.
     this.prompt.root.addEventListener("blur", () => { this.overflowWaived = false; });
@@ -298,7 +307,9 @@ export class CreatorEditor {
     this.growHost = el("div");
     // Last, the way the Timeline puts it last: the panel says what the piece is
     // and this says how it is run.
-    this.samplingHost = el("div");
+    // Named so the fullscreen shell can fold it away in the simple view —
+    // see styles/fullscreen.js. Nothing else keys off the class.
+    this.samplingHost = el("div", { class: "mmc-sampling-host" });
 
     // The stage, for a node only. A timeline segment editor is a modal over
     // a node that has its own — two stages listening for the same previews would
@@ -598,6 +609,92 @@ export class CreatorEditor {
     }
   }
 
+  /**
+   * Every text of this shot a citation could be written into.
+   *
+   * The rewrite is in the list because `compile.refined_body` puts it in *place*
+   * of the prompt: a shot whose rewrite is on and still writes `@img-1` cites
+   * `@img-1`, and the sentence it was rewritten from no longer decides anything.
+   * Mirrors `state.poolTexts` and `compile.cited_pool` — the same three fields
+   * and the same rewrite, which is what makes "cited" mean one thing.
+   */
+  citingTexts() {
+    const refined = this.state.refined;
+    const rewrite = refined && refined.enabled !== false
+      ? [refined.body, ...Object.values(refined.sections ?? {})]
+      : [];
+    return [this.state.prompt, this.state.soundscape, this.state.music, ...rewrite];
+  }
+
+  /**
+   * Chips just deleted out of the sentence: take what they named with them.
+   *
+   * The @ menu is how a file is attached in this redesign and how somebody is
+   * cast — picking one writes the chip and creates the thing at once — so the
+   * chip *is* the attachment, and deleting it has to be the way back out. It was
+   * not: the file stayed on the reference row and the member stayed on the cast
+   * shelf, both invisible to a user who had just taken them out of the shot, and
+   * both still sent. An uncited cast member is cut at queue time (`compile`
+   * does it, and its files with it) but a bare `@img-1` reference is not — it is
+   * in `assets`, and everything in `assets` is encoded and shown to the model.
+   * So deleting the mention left a picture conditioning a render that never
+   * mentions it, which is exactly as strong a conditioning as one that does.
+   *
+   * Only what is no longer written anywhere. A handle the same shot still cites
+   * from its soundscape, or another card of the same piece still cites, stays —
+   * the deletion was of one occurrence, not of the reference.
+   *
+   * The pool is not touched. It belongs to the piece, one card is not the place
+   * a file is taken off every other card, and it does not need to be: an uncited
+   * pool asset is already not injected into this generation.
+   */
+  dropCited(handles) {
+    if (!handles?.length) return;
+    let dropped = false;
+
+    // The cast first, so the pictures a departing member alone was built out of
+    // are still findable when the files are swept below.
+    const orphans = [];
+    for (const handle of handles) {
+      const cast = this.piece.subjects ?? [];
+      const subject = cast.find((s) => s.handle === handle);
+      if (!subject) continue;
+      // Piece-wide: a member deleted from shot 3 is still in the piece while
+      // shot 5 writes them. `match` rather than `test`, because the pattern is
+      // global and a global regex tested twice in a row answers from wherever
+      // the first test left off.
+      const pattern = S.subjectCitationRe([subject]);
+      const stillCited = [...this.citingTexts(),
+                          ...(this.piece === this.state ? [] : S.allTexts(this.piece))]
+        .some((text) => String(text ?? "").match(pattern));
+      if (stillCited) continue;
+      orphans.push(...S.soleClaims(subject, cast));
+      // The shelf drops an open card whose member is no longer in the cast on
+      // its next render, so there is nothing to tell it.
+      this.piece.subjects = cast.filter((s) => s !== subject);
+      dropped = true;
+    }
+
+    // The deleted references themselves, and the cast's leavings with them. Only
+    // this shot's own attachments: a keyframe is a moment of the video being
+    // made rather than a citation, and it keeps its handle whether or not the
+    // prompt ever writes it.
+    const loose = new Set([...handles, ...orphans]);
+    const texts = [...this.citingTexts(),
+                   ...(this.piece === this.state ? [] : S.allTexts(this.piece))];
+    const keep = (asset) => asset.role !== "reference" || !loose.has(asset.handle)
+                         || S.handleWritten(texts, asset.handle);
+    const before = this.state.assets.length;
+    this.state.assets = this.state.assets.filter(keep);
+    if (this.state.assets.length !== before) dropped = true;
+
+    // `commit` redraws — the reference row and the cast shelf are both what
+    // just changed, and both are what the user is looking at. The box itself is
+    // left alone: `refresh` stands down while it holds the caret, which it does,
+    // because a keystroke in it is what brought us here.
+    if (dropped) this.commit();
+  }
+
   /** The segment editor, on an already-attached clip. */
   async editSegment(asset) {
     const result = await openTrim({
@@ -664,6 +761,18 @@ export class CreatorEditor {
     }
   }
 
+  /** The picture this editor is about to make: the canvas, and how long it runs.
+   *  For a host that has to draw the frame before there is anything in it — the
+   *  fullscreen editor's dock, which is a column of nothing until the first
+   *  render lands (see fullscreen.js). The same shape `TimelineBody.frame`
+   *  returns, because it is the same question asked of one shot. */
+  frame() {
+    const source = S.aspectSourceAsset(this.state);
+    const { width, height, seconds } =
+      S.resolved(this.state, source ? this.sizes.get(source.filename) : null);
+    return { width, height, seconds };
+  }
+
   flash(message) {
     this.notice = message;
     this.render();
@@ -675,6 +784,7 @@ export class CreatorEditor {
 
   render() {
     const state = this.state;
+    this.onRender?.();
     this.probeKeyframe();
     const source = S.aspectSourceAsset(state);
     const geometry = S.resolved(state, source ? this.sizes.get(source.filename) : null);
@@ -1011,6 +1121,15 @@ export class CreatorEditor {
       },
       touch: () => this.onCommit?.(),
       commit: () => this.commit(),
+      // Closing the card closes the shelf, but only when the shelf was put up
+      // for that card. A face with a standing shelf keeps it — see
+      // `openCastMember` for the other half.
+      onShut: () => {
+        if (!this.castSummoned) return;
+        this.castSummoned = false;
+        this.castOpen = false;
+        this.render();
+      },
     });
     // Mounted once. `replaceChildren` with the same node still detaches and
     // reattaches it, and a detached input loses the caret — which on a host that
@@ -1018,7 +1137,45 @@ export class CreatorEditor {
     if (this.castHost.firstChild !== this.castShelf.root) {
       this.castHost.replaceChildren(this.castShelf.root);
     }
+    // Summoned rather than resident, for the one view that has no Cast tool.
+    // On the element, because what has to know is the stylesheet: a shelf that
+    // is hidden there by default has to come back for exactly this.
+    this.castShelf.root.classList.toggle("summoned", !!this.castSummoned);
     this.castShelf.render();
+  }
+
+  /**
+   * Somebody's name in the sentence was clicked: show what they are made of, and
+   * nothing else.
+   *
+   * The shelf is a permanent fixture on a node face, where there is a Cast tool
+   * to put it there — and in the simple fullscreen view there is neither, because
+   * casting is the @ menu's roster, building is the library's Cast tab and
+   * removing somebody is deleting their chip (compile cuts the cast to the
+   * subjects the text cites). What was missing was the one thing neither of
+   * those covers: editing the copy of somebody that lives in *this* piece,
+   * which is not the library's copy and cannot be reached by casting them again.
+   *
+   * So the shelf is summoned rather than resident. It arrives on the member you
+   * asked about, with nobody else open, and their own chevron takes it away —
+   * see the `onShut` hook above. Nothing is stored: `castSummoned` lasts as long
+   * as the shelf is up.
+   */
+  openCastMember(handle) {
+    if (!this.nodeId) return;
+    const already = this.castOpen;
+    this.castOpen = true;
+    this.render();
+    if (!this.castShelf?.openMember(handle)) {
+      // A chip whose name nobody answers to — a subject deleted out from under
+      // a sentence that still writes them. Leave the shelf exactly as it was.
+      this.castOpen = already;
+      this.render();
+      return;
+    }
+    // Only a shelf this call put up is a shelf this call may take down.
+    this.castSummoned = this.castSummoned || !already;
+    this.render();
   }
 
   /** Open the shelf and cast the first person, in one press of the rail. Once
@@ -1102,7 +1259,7 @@ export class CreatorEditor {
         // — and gating this on having attached something is what made the
         // feature invisible to exactly the prompt that needed it most.
         ...(this.nodeId ? [el("button", {
-          class: `mmc-tool${(this.piece.subjects ?? []).length || this.castOpen ? " on" : ""}`,
+          class: `mmc-tool mmc-tool-cast${(this.piece.subjects ?? []).length || this.castOpen ? " on" : ""}`,
           title: t("Who is in the video: a person, an object, a place or a look that "
                  + "comes back shot after shot. Name them once, write @anna in the "
                  + "prompt, and whatever is behind them rides in with them."),
@@ -1138,6 +1295,18 @@ export class CreatorEditor {
           title: t("Browse, organize and attach finished renders and pre-stage stills"),
           onclick: () => this.openGallery(),
         }, [el("span", { class: "mmc-tool-icon" }, [icon("gallery")]), el("span", { text: t("Gallery") })]),
+        // The way into the shell, with the machine's cluster rather than the
+        // piece's: which window you look at a piece through outlives the
+        // generation, exactly as the gallery and the settings page do. Absent
+        // inside the shell, where "Back to the graph" is the same door from the
+        // other side (styles/fullscreen.js hides it).
+        ...(this.fullscreen ? [el("button", {
+          class: "mmc-tool mmc-tool-expand",
+          title: t("Draw this piece over the whole window. The node stays in the graph "
+                 + "and is queued exactly as it is now; Escape brings you back."),
+          onclick: () => this.fullscreen(),
+        }, [el("span", { class: "mmc-tool-icon" }, [icon("expand")]),
+            el("span", { text: t("Fullscreen") })])] : []),
         // Absent where it would be a control over nothing — see `settingsTool`.
         ...(this.settingsTool ? [el("button", {
           class: "mmc-tool",
@@ -1173,6 +1342,16 @@ export class CreatorEditor {
   }
 
   renderAssets() {
+    // Whose files these are. Casting somebody attaches their pictures — the
+    // roster does it, `presets.addSubjectToPiece` does it — so a shot with one
+    // person in it grows a reference chip nobody asked for, saying what the
+    // @name in the sentence already says. Marked rather than filtered: the node
+    // face wants them, and the simple view is where the sentence is enough.
+    const cast = new Set();
+    for (const subject of this.piece.subjects ?? []) {
+      for (const handle of S.subjectFiles(subject)) cast.add(handle);
+      if (subject.replaces) cast.add(subject.replaces);
+    }
     const chip = (asset) => {
       const thumb = asset.kind === "image"
         ? el("img", { class: "mmc-asset-thumb", src: viewUrl(asset.filename, { preview: true }), alt: asset.filename })
@@ -1188,9 +1367,13 @@ export class CreatorEditor {
       if (asset.role !== "reference") {
         parts.push(el("span", { class: "mmc-asset-role", text: asset.role === "first_frame" ? t("start") : t("end") }));
       }
+      // Each of the four narrowings says what it is, and whether it is still the
+      // answer nobody chose. The simple view keeps only what somebody set — see
+      // styles/fullscreen.js — so a chip there reads as short as the file is
+      // ordinary, and a clip trimmed to eight seconds still says so.
       if (asset.kind !== "image") {
         parts.push(el("button", {
-          class: "mmc-ghost",
+          class: `mmc-ghost mmc-asset-opt mmc-asset-trim${asset.trim ? "" : " plain"}`,
           style: { fontSize: "11px" },
           title: t("Use the whole clip, or only a segment of it"),
           text: trimLabel(asset),
@@ -1200,7 +1383,8 @@ export class CreatorEditor {
       if (asset.kind === "video") {
         const chip = TRACK_CHIP[asset.track] || TRACK_CHIP[S.DEFAULT_TRACK];
         parts.push(el("button", {
-          class: "mmc-ghost",
+          class: `mmc-ghost mmc-asset-opt mmc-asset-track${
+            (asset.track ?? S.DEFAULT_TRACK) === S.DEFAULT_TRACK ? " plain" : ""}`,
           style: { fontSize: "11px" },
           title: t("On by default: this clip's soundtrack is bound as a reference audio, taking an "
                + "<Audio> slot before the video's own label, and needing the audio VAE connected. "
@@ -1212,7 +1396,8 @@ export class CreatorEditor {
       }
       if (S.takeable(asset)) {
         parts.push(el("button", {
-          class: "mmc-ghost",
+          class: `mmc-ghost mmc-asset-opt mmc-asset-takes${
+            S.takes(asset) === "full" ? " plain" : ""}`,
           style: { fontSize: "11px" },
           title: t(takesHelp(asset)),
           text: t(S.takes(asset)),
@@ -1222,7 +1407,8 @@ export class CreatorEditor {
       if (S.sizeable(asset)) {
         const size = S.refSize(asset);
         parts.push(el("button", {
-          class: "mmc-ghost",
+          class: `mmc-ghost mmc-asset-opt mmc-asset-size${
+            size === S.DEFAULT_REF_SIZE[asset.kind] ? " plain" : ""}`,
           style: { fontSize: "11px" },
           title: asset.kind === "video"
             ? t("match: scale to the generation's pixel area. max: core's 768 reference canvas — "
@@ -1240,7 +1426,8 @@ export class CreatorEditor {
         onclick: () => this.remove(asset.handle),
       }));
       return el("div", {
-        class: `mmc-asset mmc-tag-${S.tagIndex(asset.handle)}`,
+        class: `mmc-asset mmc-tag-${S.tagIndex(asset.handle)}${
+          cast.has(asset.handle) ? " mmc-asset-cast" : ""}`,
         title: asset.filename,
       }, parts);
     };
@@ -1258,10 +1445,10 @@ export class CreatorEditor {
       return asset ? `@${asset.handle}` : t(fallback);
     };
 
-    const framePill = (role, label, iconName) => {
+    const framePill = (role, label, iconName) => (seg) => {
       const blocked = S.blockedReason(state, role);
       return el("button", {
-        class: "mmc-pill",
+        class: pillClass(seg),
         disabled: blocked ? true : undefined,
         title: blocked || t("Choose the {label}", { label: t(label).toLowerCase() }),
         onclick: blocked ? undefined : () => this.setFrame(role),
@@ -1309,8 +1496,8 @@ export class CreatorEditor {
     // itself is chosen now — any attached picture, or the preset over them.
     const sourceAsset = S.aspectSourceAsset(state);
     const chosen = (state.aspect_source ?? "auto") !== "auto";
-    const aspectPill = el("button", {
-      class: "mmc-pill",
+    const aspectPill = (seg) => el("button", {
+      class: pillClass(seg),
       title: geometry.fromImage
         ? t("The aspect ratio comes from this picture — the resolution slider still sets the scale. Click to take it from another input, or force a preset.")
         : t("Aspect Ratio"),
@@ -1327,8 +1514,8 @@ export class CreatorEditor {
     // With two passes on, the sub says so in one glance: sampled at the
     // first-pass edge, refined up to the size beside it.
     const refined = S.twoPass(state);
-    const resPill = el("button", {
-      class: "mmc-pill",
+    const resPill = (seg) => el("button", {
+      class: pillClass(seg),
       title: refined
         ? t("Sampled at a {edge} px short edge, refined up to {width} × {height} by a second pass.",
             { edge: S.sampleEdge(state), width: geometry.width, height: geometry.height })
@@ -1344,8 +1531,10 @@ export class CreatorEditor {
 
     return el("div", { class: "mmc-pills" }, [
       ...(this.continuePill ? [this.renderContinue()] : []),
-      framePill("first_frame", "Start frame", "frameIn"),
-      framePill("last_frame", "End frame", "frameOut"),
+      // The two ends of the shot in one pill: they are one question asked twice,
+      // and either of them can be a file, a handle or nothing at all.
+      pillSet([framePill("first_frame", "Start frame", "frameIn"),
+               framePill("last_frame", "End frame", "frameOut")]),
       // A body that is not making a video says how long it runs in its own
       // terms, or not at all — see `extraPills`.
       ...(this.durationPill ? [duration] : []),
@@ -1353,10 +1542,27 @@ export class CreatorEditor {
       // In a timeline the canvas belongs to the timeline, not to one shot: the
       // segments are concatenated at the end and have to come out the same size.
       // The output folder is the timeline's for the same reason — one file.
-      ...(this.canvasPills ? [aspectPill, resPill] : []),
-      this.renderRouting(currentMode),
-      ...(this.pieceView ? [this.renderPieceViewPill()] : []),
-      ...(this.preStage ? [this.renderPreStagePill()] : []),
+      //
+      // Shape and scale share a pill because they are one canvas: the ratio
+      // decides what the short edge is the short edge *of*, and the size on the
+      // second half is the product of the two.
+      ...(this.canvasPills ? [pillSet([aspectPill, resPill])] : []),
+      // The end of the row, and one flex item rather than three. Everything
+      // above says what the shot *is*; these say where it runs and what it
+      // belongs to, and the auto margin that holds them against the far end of
+      // the row lives on this wrapper now rather than on the badge inside it.
+      //
+      // Two reasons, and the second is why it is a wrapper and not a margin
+      // moved. A row that fits is unchanged: the group is pushed right, in the
+      // order it always read in. A row that wraps — which is every row in the
+      // fullscreen card, where the width is a measure and not the node's — used
+      // to break wherever it ran out, stranding a lone Timeline pill on a line
+      // of its own. Grouped, the tail wraps whole or not at all.
+      el("div", { class: "mmc-pills-tail" }, [
+        this.renderRouting(currentMode),
+        ...(this.pieceView ? [this.renderPieceViewPill()] : []),
+        ...(this.preStage ? [this.renderPreStagePill()] : []),
+      ]),
     ]);
   }
 
