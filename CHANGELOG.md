@@ -1,5 +1,39 @@
 # Changelog
 
+## 2.19
+
+**The tool rail is a set of columns rather than a row of tiles with a gap
+between them.** A tool is a square with a label under it, and the label is the
+wider of the two — "Add image" is half again the width of the box above it — so
+a gap tuned to the squares left barely two pixels between one word and the next,
+and the rail read as one run of prose with pictures over it. Every tool now
+occupies a column of the same width, wide enough that the space between two
+labels is space. The squares keep their rhythm; the words get their own.
+
+**In the window the rail is a grid, and it wraps by tool.** Two things were
+wrong with it as a wrapping row. Each row spaced its own contents, so a row of
+eight and a row of three shared no vertical line anywhere. And the two clusters —
+what writes this shot, and what outlives it — were unbreakable blocks, so the
+machine's three fell to a line of their own the moment the column narrowed,
+leaving a hole across the end of the row above them. Fixed tracks and clusters
+set to display:contents answer both. The one-line rail on the simple card keeps
+its hairline between the clusters; a rail that wraps by design cannot mark
+anything with one, so it does not try.
+
+**The refiner's chevron stays in its corner at every tile size.** It was placed
+by two offsets that suited the node face's 56px square, and the window draws a
+44px one — so in the shell it hung out past the tile's right edge, over the gap
+beside it. The tile is a token now (`--mmc-tool-tile`), the chevron is measured
+from it, and the three places that draw a smaller tile set the token rather than
+a width.
+
+**And the pre-stage and the shot are the same height.** They were two cards
+centred on the ground, each as tall as its own contents, so the step before the
+shot ended somewhere up the side of it and the pair read as debris rather than
+as a row. They are wrapped in a row of their own now, which is only as tall as
+the taller of them: same top edge, same bottom edge. The difference goes above
+the button rather than below it, so Render still and Render sit on one line.
+
 ## 2.18
 
 **A subject is a list of features now, and each one can be changed on its own.**

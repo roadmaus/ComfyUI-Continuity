@@ -1,6 +1,6 @@
 [project]
 name = "minimax-creator"
-version = "2.18"
+version = "2.19"
 description = "One node for MiniMax H3 video, one shot or twenty: write a sentence, attach media with @, press Run — get a finished clip with sound. Local open weights only, no API key."
 license = { file = "LICENSE" }
 requires-python = ">=3.10"
