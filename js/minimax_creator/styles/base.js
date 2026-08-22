@@ -60,6 +60,12 @@ export const css = `
 .mmc-tag-6 { --tag: var(--mmc-tag-6); }
 .mmc-tag-7 { --tag: var(--mmc-tag-7); }
 
+/* A body is a column of hosts, and most of them are empty most of the time: no
+   references, no LoRAs, no notice, no next shot. Empty they are still rows of
+   the column, and a flex gap is paid between rows whether or not either has a
+   height — which is how a card with a rail and a prompt on it opened with sixty
+   pixels of nothing stacked between them. Nothing to draw, no row. */
+.mmc-root > div:empty { display: none; }
 .mmc-root {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
   color: var(--mmc-text);

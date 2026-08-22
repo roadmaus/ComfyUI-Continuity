@@ -402,6 +402,13 @@ class Fullscreen {
     this.colHeadName.textContent =
       this.node.mmcBody?.showsStrip?.() ? t("Strip") : t("Shot");
     this.col.replaceChildren(this.colHead, this.stepBar, body.root, this.runRow);
+    // The card the simple view draws has no cast drawer and no Cast tool — see
+    // styles/fullscreen.js for why — so the body it borrows has to be told, or
+    // it goes on answering "the shelf is a row of me" because it still knows
+    // its node id. Everything press-a-name does keys off that answer: whether
+    // the press is what put the shelf up, and so whether the next press takes
+    // it away again. The desk draws the drawer, so there it stays resident.
+    this.setCastResident(body, this.view !== "simple");
     // The stage is the satellite's until it is told otherwise.
     body.satellite?.dock(this.dock);
     // `onVisibility` stays the satellite's — it owns "is there a picture". This
@@ -638,9 +645,27 @@ class Fullscreen {
 
   /** Give one node's body back to the wrapper the DOM widget positions, and its
    *  picture back to the card that follows the node. */
+  /** Whether the view this body is drawn in draws its cast drawer as a row.
+   *  Both bodies an editor can be — the Creator's, and a PreStage's H3 branch —
+   *  answer through the same editor, so this asks the body for it rather than
+   *  reaching for a field that may not be there. */
+  setCastResident(body, resident) {
+    const editor = body?.editor;
+    if (!editor) return;
+    editor.castResident = resident;
+    // A drawer put up by a press in the window has no business surviving the
+    // view it was pressed in.
+    if (!resident || !editor.castSummoned) return;
+    editor.castSummoned = false;
+    editor.castOpen = false;
+    editor.render?.();
+  }
+
   release(node) {
     const body = node?.mmcBody;
     if (!body) return;
+    // Home to the canvas, where the face draws the drawer itself.
+    this.setCastResident(body, true);
     if (body.stage) body.stage.onState = null;
     // Before the body goes home: the grip is the editor's, and a node dropped
     // back on the canvas with a resize handle on its satellite would be sizing

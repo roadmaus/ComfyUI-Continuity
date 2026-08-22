@@ -1266,6 +1266,10 @@ try {
   }));
   await ext.nodeCreated(node);
   const editor = node.mmcBody.editor;
+  // The card, said out loud. The body is the node's own either way — the shell
+  // borrows it — so this is the only thing that tells the two views apart, and
+  // driving the summons without it was driving it on a face.
+  editor.castResident = false;
   const shut = () => {
     let hit = null;
     const walk = (n) => {
@@ -1294,6 +1298,59 @@ try {
   };
 } catch (error) {
   out.errors.push(`cast summon: ${error.message}`);
+}
+
+// ---- the card that draws no shelf: a press puts it up, a press takes it away -
+//
+// The simple fullscreen card has no cast drawer and no Cast tool, so the only
+// shelf it can show is one a press summoned — and the only way to be rid of it
+// is the same press again. That failed for a year of the wrong question: the
+// body the card borrows is the *node's* body, `nodeId` and all, so asking
+// "have I got a node?" answered "the shelf is a row of me" for a card that
+// draws no shelf, and the second press left it standing. The card says which
+// it is now (fullscreen.js sets `castResident`), and this drives both answers.
+try {
+  const first = (root, sel) => root.querySelectorAll(sel)[0] ?? null;
+  const node = fakeNode("MiniMaxH3Creator", "creator_data", JSON.stringify({
+    version: 2, models: {},
+    subjects: [{ handle: "vera", takes: "person", from: [] }],
+    segments: [{ prompt: "@vera waits", assets: [], loras: [], duration_s: 6 }],
+  }));
+  await ext.nodeCreated(node);
+  const editor = node.mmcBody.editor;
+  const box = editor.prompt.root;
+  const press = () => box.listeners?.click?.forEach((fn) => fn({
+    target: first(box, '.mmc-ref-cast[data-handle="vera"]'),
+    preventDefault() {}, stopPropagation() {},
+  }));
+  const rows = () => (editor.castHost.children ?? []).length;
+
+  editor.castResident = false;
+  editor.render();
+  const cardEmpty = rows() === 0;
+  press();
+  const cardOpen = { rows: rows(), on: editor.castShelf?.opened?.handle ?? null,
+                     marked: String(editor.castShelf?.root?.className ?? "")
+                       .split(" ").includes("summoned") };
+  press();
+  const cardShut = rows();
+
+  // And the face, where the drawer *is* a row: the same second press closes the
+  // member without taking the drawer with them.
+  editor.castResident = true;
+  editor.castSummoned = false;
+  editor.castOpen = false;
+  editor.render();
+  const faceRows = rows();
+  press();
+  const faceOn = editor.castShelf?.opened?.handle ?? null;
+  press();
+  out.castCard = {
+    cardEmpty, ...cardOpen, cardShut, faceRows, faceOn,
+    faceKept: rows(), faceClosed: editor.castShelf?.opened ?? null,
+  };
+} catch (error) {
+  out.errors.push(`cast card: ${error.stack}`);
 }
 
 // ---- and summoned by clicking the name, which is the gesture ----------------
@@ -2359,6 +2416,18 @@ check("closing the card closes the shelf it was summoned into",
       summon.get("shutClosed"), True)
 check("a name nobody answers to leaves the shelf where it was",
       summon.get("strangerIgnored"), True)
+
+card = report.get("castCard", {})
+check("the card that draws no shelf opens with none", card.get("cardEmpty"), True)
+check("...a press on a name puts one up", card.get("rows"), 1)
+check("...on that member", card.get("on"), "vera")
+check("...marked summoned, which is what the card's stylesheet shows",
+      card.get("marked"), True)
+check("...and the same press again takes it away entirely", card.get("cardShut"), 0)
+check("a face draws the drawer whether or not anybody pressed", card.get("faceRows"), 1)
+check("...a press opens somebody on it", card.get("faceOn"), "vera")
+check("...and the press that closes them leaves the drawer", card.get("faceKept"), 1)
+check("...with nobody open on it", card.get("faceClosed"), None)
 
 grew = report.get("grew", {})
 check("writing the next shot adds a card", grew.get("cards"), 2)

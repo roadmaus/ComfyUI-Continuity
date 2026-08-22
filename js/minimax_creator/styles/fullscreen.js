@@ -909,6 +909,10 @@ export const css = `
  * thing that still lives there.
  */
 .mmc-fs.simple .mmc-cast, .mmc-fs.simple .mmc-tool-cast { display: none; }
+/* The drawer's host with it. A hidden shelf inside a host that is still a row
+   of the column left the card carrying the gap either side of a drawer nobody
+   can see — which is most of the way to still having the drawer. */
+.mmc-fs.simple .mmc-cast-host:not(:has(> .mmc-cast.summoned)) { display: none; }
 /*
  * ...except summoned, which is the one thing neither the roster nor the library
  * covers: editing the copy of somebody that lives in *this* piece. The library
@@ -934,7 +938,10 @@ export const css = `
    The row is what *you* attached: the frames, the footage, the references.
    Empty of those, it goes with them rather than leaving a gap where it was. */
 .mmc-fs.simple .mmc-asset-cast { display: none; }
-.mmc-fs.simple .mmc-assets:not(:has(.mmc-asset:not(.mmc-asset-cast))) { display: none; }
+/* Folded at the host rather than at the row, for the reason the cast's host is:
+   a hidden row is still a row, and the gap it is paid is the gap it was
+   supposed to give back. */
+.mmc-fs.simple .mmc-assets-host:not(:has(.mmc-asset:not(.mmc-asset-cast))) { display: none; }
 /* Growing a second shot is the strip's gesture, and the strip is the full view's
    half of the pack. The Timeline pill in the shot's own row is still the way
    there — this is the dashed rule under the card, which is a whole horizon line

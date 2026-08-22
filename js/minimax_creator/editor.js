@@ -342,11 +342,15 @@ export class CreatorEditor {
     });
 
     this.railHost = el("div");
-    this.assetsHost = el("div");
+    // Named, both of them, because what is in them can be hidden by a view
+    // rather than left out by the body — and a host holding a hidden row is
+    // still a row of the column, costing the gap either side of it. The
+    // stylesheet needs something to fold away. See styles/fullscreen.js.
+    this.assetsHost = el("div", { class: "mmc-assets-host" });
     // The cast, under the files it is built out of, because a subject is built
     // out of what is there and reads as nonsense above it. Empty unless this
     // body owns the piece's cast — see `renderCastShelf`.
-    this.castHost = el("div");
+    this.castHost = el("div", { class: "mmc-cast-host" });
     this.loraHost = el("div");
     this.pillsHost = el("div");
     this.noticeHost = el("div");
@@ -1191,12 +1195,27 @@ export class CreatorEditor {
    * generations have neither, and a node face is a preview with no room to
    * spend on a shelf nobody opened. The rail is what asks.
    */
+  /**
+   * Does this view draw the shelf as a row of the body?
+   *
+   * A node face does: it owns the piece's cast and has a rail tool to ask for
+   * it. The simple card does not — casting is the @ menu, building is the
+   * library, removing somebody is deleting their chip — and it says so by
+   * setting `castResident` false on the body it borrows (fullscreen.js). Which
+   * matters because the body it borrows is the node's own, `nodeId` and all:
+   * asking `nodeId` alone answered "yes, resident" for a card that draws no
+   * shelf at all, and everything that press-to-open does hung off that answer.
+   */
+  castResidentHere() { return this.castResident !== false && !!this.nodeId; }
+
   renderCastShelf() {
-    // Resident on a node face, which owns the piece's cast and has a rail tool
-    // to ask for it. Everywhere else the shelf is only ever here because a name
-    // was clicked — see `openCastMember` — so it comes with the summons and
-    // goes with it.
-    if (!this.nodeId && !this.castSummoned) { this.castHost.replaceChildren(); return; }
+    // Where the shelf is not a row of the body it is only ever here because a
+    // name was clicked — see `openCastMember` — so it comes with the summons
+    // and goes with it. Not built at all otherwise: a shelf hidden by a
+    // stylesheet is still a row of the column, and the column pays it a gap.
+    if (!this.castResidentHere() && !this.castSummoned) {
+      this.castHost.replaceChildren(); return;
+    }
     const cast = this.castPiece.subjects ?? [];
     if (!cast.length && !this.castOpen) { this.castHost.replaceChildren(); return; }
     this.castShelf ??= new CastShelf({
@@ -1278,8 +1297,14 @@ export class CreatorEditor {
    * as the shelf is up.
    */
   openCastMember(handle) {
-    const already = this.castOpen;
+    // What was on screen before the press. Where the shelf is a row of the body
+    // it is up whenever there is a cast or somebody opened it; where it is not,
+    // a summons is the only thing that can have put it there.
+    const already = this.castResidentHere()
+      ? (this.castOpen || (this.castPiece.subjects ?? []).length > 0)
+      : !!this.castSummoned;
     const summoned = this.castSummoned;
+    const openBefore = this.castOpen;
     // Both raised *before* the render, not after it. On a body with no node the
     // shelf is drawn only for a summons, so a render that ran with the flag
     // still down built no shelf — and the `openMember` below would have been
@@ -1291,7 +1316,7 @@ export class CreatorEditor {
     if (!what) {
       // A chip whose name nobody answers to — a subject deleted out from under
       // a sentence that still writes them. Leave the shelf exactly as it was.
-      this.castOpen = already;
+      this.castOpen = openBefore;
       this.castSummoned = summoned;
       this.render();
       return;
@@ -1300,7 +1325,7 @@ export class CreatorEditor {
     // was only here for that summons goes with them — the same way their own
     // chevron takes it away. A resident shelf stays; there was a cast on it
     // before the press and there is one after.
-    if (what === "shut" && this.castSummoned && !this.nodeId) {
+    if (what === "shut" && this.castSummoned && !this.castResidentHere()) {
       this.castSummoned = false;
       this.castOpen = false;
     }

@@ -27,6 +27,18 @@ beside it. The tile is a token now (`--mmc-tool-tile`), the chevron is measured
 from it, and the three places that draw a smaller tile set the token rather than
 a width.
 
+**On the simple card the cast drawer is gone until you ask for it, and gone
+again when you ask twice.** Clicking a name in the sentence is the only thing
+that puts it there, and clicking the same name takes it away — that second press
+had stopped working. The body the card borrows is the node's own, `nodeId` and
+all, so the question "is the drawer a row of me?" was answered by asking whether
+there was a node behind it, which is yes for both views and true of only one.
+The card says which view it is now, and the answer decides both halves of the
+gesture. While the drawer was up-but-hidden it also kept the gap either side of
+it: a host with a hidden row in it is still a row of the column, so the card
+carried the drawer's space without the drawer. Empty hosts stopped costing a gap
+generally, which is where the rest of the slack over the prompt came from.
+
 **The prompt box says what "/" does.** It answers a slash with the cast
 library, the input folder and the style atlas — somewhere to bring a thing in
 from, where "@" cites what is already attached — and nothing on screen said so.
