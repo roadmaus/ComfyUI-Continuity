@@ -433,7 +433,7 @@ export const zh = {
  "Use this still as the end frame": "把这张静帧用作结束帧",
  "→ ref": "→ 参考",
  "Attach this still as a reference": "把这张静帧附加为参考",
- "Describe your video, use @ to reference images, videos, audio, or elements": "描述你的视频，用 @ 引用图像、视频、音频或元素",
+ "Describe your video — @ cites what is attached, / brings in cast, files and looks": "描述你的视频 — @ 引用已附加的内容，/ 引入角色、文件和风格",
  "Not queued while the rewrite below is on — that is what the model reads. Edit this and refine again, or revert the rewrite, to send it.": "下方的改写开启时此内容不会入队——模型读的是改写。编辑这里并重新润色，或撤销改写，才会发送它。",
  "Nothing matches.": "没有匹配项。",
  "Attached": "已附加",

@@ -183,7 +183,11 @@ export class PromptBox {
       spellcheck: "false",
       role: "textbox",
       "aria-multiline": "true",
-      "data-placeholder": t("Describe your video, use @ to reference images, videos, audio, or elements"),
+      // Both openings, because the second one was invisible: the box answers
+      // "/" with the cast library, the input folder and the style atlas, and
+      // nothing on screen said so — a placeholder that named only "@" read as
+      // the complete list of what the box does.
+      "data-placeholder": t("Describe your video — @ cites what is attached, / brings in cast, files and looks"),
     });
 
     this.root.addEventListener("input", () => this.onEdit());

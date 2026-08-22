@@ -432,7 +432,7 @@ export const ja = {
  "Use this still as the end frame": "このスチルを終了フレームに使用",
  "→ ref": "→ ref",
  "Attach this still as a reference": "このスチルをリファレンスとして添付",
- "Describe your video, use @ to reference images, videos, audio, or elements": "動画を記述してください。@ で画像・動画・音声・要素を参照できます",
+ "Describe your video — @ cites what is attached, / brings in cast, files and looks": "動画を記述してください — @ は添付を参照し、/ はキャスト・ファイル・ルックを持ち込みます",
  "Not queued while the rewrite below is on — that is what the model reads. Edit this and refine again, or revert the rewrite, to send it.": "下のリライトが有効な間、これはキューされません — モデルが読むのはリライトの方です。これを送るには、編集して再リファインするか、リライトを取り消してください。",
  "Nothing matches.": "一致するものがありません。",
  "Attached": "添付済み",

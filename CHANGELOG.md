@@ -27,6 +27,12 @@ beside it. The tile is a token now (`--mmc-tool-tile`), the chevron is measured
 from it, and the three places that draw a smaller tile set the token rather than
 a width.
 
+**The prompt box says what "/" does.** It answers a slash with the cast
+library, the input folder and the style atlas — somewhere to bring a thing in
+from, where "@" cites what is already attached — and nothing on screen said so.
+The placeholder named one opening and read as the complete list of what the box
+does; it names both now.
+
 **And the pre-stage and the shot are the same height.** They were two cards
 centred on the ground, each as tall as its own contents, so the step before the
 shot ended somewhere up the side of it and the pair read as debris rather than

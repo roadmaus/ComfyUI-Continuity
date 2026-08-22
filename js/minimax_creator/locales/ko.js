@@ -432,7 +432,7 @@ export const ko = {
  "Use this still as the end frame": "이 스틸을 끝 프레임으로 사용",
  "→ ref": "→ ref",
  "Attach this still as a reference": "이 스틸을 레퍼런스로 첨부",
- "Describe your video, use @ to reference images, videos, audio, or elements": "비디오를 묘사하고, @로 이미지·비디오·오디오·요소를 참조하세요",
+ "Describe your video — @ cites what is attached, / brings in cast, files and looks": "비디오를 묘사하세요 — @ 는 첨부된 것을 참조하고, / 는 캐스트·파일·룩을 불러옵니다",
  "Not queued while the rewrite below is on — that is what the model reads. Edit this and refine again, or revert the rewrite, to send it.": "아래 리라이트가 켜져 있는 동안은 큐에 들어가지 않습니다 — 모델이 읽는 것은 그쪽입니다. 이것을 편집하고 다시 리파인하거나, 리라이트를 되돌려야 전송됩니다.",
  "Nothing matches.": "일치하는 것이 없습니다.",
  "Attached": "첨부됨",
