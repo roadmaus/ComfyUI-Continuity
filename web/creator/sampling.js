@@ -394,17 +394,25 @@ export function samplingBar({ widgets, value, set, perSegment = false, turbo = [
     .filter(([name]) => widgets[name])
     .map(([name, label]) => (seg) => {
       const widget = widgets[name];
+      // The *options* come off the widget — that list is the node's schema and
+      // is the one thing the blob has no business copying. The **value** does
+      // not: it moved into the blob with the rest of the row, and reading
+      // `widget.value` here was the one place in this file that still reached
+      // around `value()`. It drew the stale widget while `set` wrote the blob,
+      // so picking a sampler on any face changed the render and left the pill
+      // showing the old name — which reads as a control that does nothing.
       const options = widget.options?.values || [];
+      const current = String(value(name, widget.value));
       return el("button", {
         class: pillClass(seg),
         title: t(label),
         onclick: (event) => openChoicePopover(event.currentTarget, {
           title: t(label),
           options: typeof options === "function" ? options(widget) : options,
-          value: widget.value,
+          value: current,
           onPick: (picked) => set(name, picked),
         }),
-      }, [el("span", { text: String(widget.value) })]);
+      }, [el("span", { text: current })]);
     }));
   if (schedule) pills.push(schedule);
 

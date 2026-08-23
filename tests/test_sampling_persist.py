@@ -169,6 +169,39 @@ cycle("prestage_minimax", {
   save: (body) => S.serializePreStage(body.state),
 });
 
+// ---- what the row draws -----------------------------------------------------
+//
+// A separate question from what it stores, and the half that broke: the sampler
+// pill read `widget.value` for its label while `set` wrote the blob, so a pick
+// changed the render and left the pill showing the old name — a control that
+// reads as doing nothing. Asserted against `samplingBar` directly, because the
+// io is the thing under suspicion and asking it would prove nothing.
+{
+  const { samplingBar } = await import("./web/creator/sampling.js");
+  const w = widgets(PRESTAGE_WIDGETS);
+  // The widget still holds what it held before the row moved; the blob holds
+  // the pick. Every face is in this state after a migration.
+  w.sampler_name.value = "res_multistep";
+  w.sampler_name.options = { values: ["res_multistep", "euler", "ddim"] };
+  w.scheduler.value = "simple";
+  w.scheduler.options = { values: ["simple", "beta"] };
+  const block = { sampler_name: "euler", scheduler: "beta" };
+  const bar = samplingBar({
+    widgets: w,
+    value: (name, fallback) => (name in block ? block[name] : fallback),
+    set: () => {},
+  });
+  const texts = [];
+  const walk = (n) => {
+    if (!n) return;
+    if (n.textContent) texts.push(String(n.textContent));
+    (n.children ?? []).forEach(walk);
+  };
+  walk(bar);
+  out.draws = { pick: texts.includes("euler") && texts.includes("beta"),
+                stale: texts.includes("res_multistep") || texts.includes("simple") };
+}
+
 console.log(JSON.stringify(out));
 """
 
@@ -183,3 +216,9 @@ for face in ("timeline", "creator", "prestage_krea2", "prestage_minimax"):
           (got["stored"] or {}).get("cfg"), 3.5)
     check(f"{face}: and it is still there after a reload",
           got["reloaded"], {"cfg": 3.5, "steps": 9, "sampler_name": "euler"})
+
+# The row has to *show* the row it is going to run. Storing the pick and drawing
+# the widget's old name is a control that reads as broken however right the
+# render is.
+check("the schedule pill draws what the blob says", reflected["draws"]["pick"], True)
+check("...and not what the widget still holds", reflected["draws"]["stale"], False)
