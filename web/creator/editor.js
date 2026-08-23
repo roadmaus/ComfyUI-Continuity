@@ -449,7 +449,8 @@ export class CreatorEditor {
    * saves with the workflow and can be overridden by picking something else.
    */
   adoptWeights() {
-    if (S.guessModels(this.piece.models, catalogFiles())) this.commit();
+    if (S.guessModels(this.piece.models, catalogFiles(),
+                      S.pieceFamily(this.piece))) this.commit();
     else this.render();
   }
 
@@ -1080,6 +1081,10 @@ export class CreatorEditor {
       ]));
     }
     else this.samplingHost.replaceChildren(...(this.samplingWidgets ? [samplingBar({
+      // Which family's row to draw. The values still go through the same
+      // `{value, set}` pair — they are in the blob either way — but which
+      // controls exist is the family's, and H3's are not a superset of LTX's.
+      family: S.pieceFamily(this.piece),
       widgets: this.samplingWidgets,
       value: (name, fallback) => {
         const widget = this.samplingWidgets[name];
@@ -1113,6 +1118,7 @@ export class CreatorEditor {
         facesPill({ target: this.piece, commit: () => this.commit() }),
         familyPill({ piece: this.piece, onChange: () => this.commit() }),
         weightsPill({
+          piece: this.piece,
           models: this.piece.models,
           checkpoints: [S.checkpoint(this.state)],
           face: Boolean(this.piece.face?.on),
@@ -1567,14 +1573,16 @@ export class CreatorEditor {
   }
 
   async manageLoras() {
-    await openLoras({ state: this.state, onChange: () => this.commit() });
+    await openLoras({ state: this.state, family: S.pieceFamily(this.piece),
+                      onChange: () => this.commit() });
     this.commit();
   }
 
   /** Try another file in this LoRA's slot — the grid opens as a one-shot
    *  picker and the pick lands where this entry stood. See `state.replaceLora`. */
   async swapLora(entry) {
-    await openLoras({ state: this.state, swapping: entry.name, onChange: () => this.commit() });
+    await openLoras({ state: this.state, family: S.pieceFamily(this.piece),
+                      swapping: entry.name, onChange: () => this.commit() });
     this.commit();
   }
 
@@ -2036,6 +2044,19 @@ export class CreatorEditor {
    */
   renderRouting(currentMode) {
     const state = this.state;
+    const family = S.pieceFamily(this.piece);
+
+    // A family with one transformer has no arrow to draw and nothing to cycle:
+    // the mode still says what this generation is — text-only, a keyframe, a
+    // reference — but there is no second set of weights for it to point at, and
+    // an arrow to the only checkpoint there is would be describing a choice
+    // nobody has.
+    if (!S.routing(family)) {
+      return el("span", { class: "mmc-mode", title: t("What this generation is.") },
+                [el("b", { text: currentMode })]);
+    }
+
+    const label = S.checkpointLabels(family);
     const route = this.routeOf?.() ?? "auto";
     const forced = route !== "auto";
     const routed = forced ? route : S.checkpoint(state);
@@ -2046,7 +2067,7 @@ export class CreatorEditor {
       class: `mmc-mode${forced || pinned ? " pinned" : ""}`,
       title: forced
         ? t("Every generation on this node runs on {label}, whatever the mode derives. Click to change it.",
-            { label: S.CHECKPOINT_LABEL[route] })
+            { label: label[route] })
         : canCycle
           ? t("Following the mode. Click to run everything on one checkpoint instead — "
             + "Ref2VA takes the text-only and keyframe payloads too.")
@@ -2054,7 +2075,7 @@ export class CreatorEditor {
       onclick: canCycle ? () => this.setRoute(S.nextRoute(route)) : undefined,
     });
     badge.appendChild(el("b", { text: currentMode }));
-    badge.appendChild(document.createTextNode(` → ${S.CHECKPOINT_LABEL[routed]}`));
+    badge.appendChild(document.createTextNode(` → ${label[routed]}`));
     if (forced) badge.appendChild(el("span", { class: "mmc-pin", text: t("always") }));
     else if (pinned) badge.appendChild(el("span", { class: "mmc-pin", text: t("pinned") }));
     return badge;

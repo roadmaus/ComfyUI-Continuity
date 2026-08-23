@@ -65,6 +65,16 @@ export const routesOf = (id) => videoFamily(id).routes ?? NO_ROUTING;
 export const modesOf = (id) => videoFamily(id).modes;
 export const turboOf = (id) => videoFamily(id).capabilities.turbo;
 export const stillOf = (id) => videoFamily(id).still;
+
+/** How a family runs a second pass, or a falsy value where it has none.
+ *
+ *  Declared as *what kind* rather than as a flag because the two families do
+ *  genuinely different things: H3 re-encodes the request at the target canvas
+ *  and samples again, so its target is the resolution slider's; LTX runs a
+ *  trained latent upscaler, so its target is the first pass times a factor the
+ *  model fixed. A control that said "refined up to this size" for both would
+ *  be right about one of them. */
+export const refineOf = (id) => videoFamily(id).capabilities?.refine;
 export const widgetsOf = (id) => videoFamily(id).widgets;
 
 /** Whether a family declares a capability at all. Bidirectional by design: a
@@ -387,10 +397,14 @@ export function guessModels(models, files, family = DEFAULT_VIDEO_FAMILY) {
  * passes `timelineCheckpoints(timeline)`, because a chained clip legitimately
  * runs some shots on one checkpoint and some on the other.
  */
-export function requiredModels(checkpoints, face = false) {
+export function requiredModels(checkpoints, face = false,
+                               family = DEFAULT_VIDEO_FAMILY) {
   // The detector only when a pass in this render actually asks for one — a file
-  // nothing loads is not a file anybody has to own. Mirrors `models.check`.
-  return [...ALWAYS_REQUIRED, ...(face ? ["sam3"] : []), ...checkpoints];
+  // nothing loads is not a file anybody has to own. Mirrors `models.check`. And
+  // only where the family has one at all: `sam3` is H3's SAM3 crop detector,
+  // and a family with no face pass has no slot of that name to require.
+  const detector = face && modelFields(family).includes("sam3") ? ["sam3"] : [];
+  return [...alwaysRequired(family), ...detector, ...checkpoints];
 }
 
 /**
@@ -405,10 +419,12 @@ export function routedCheckpoints(models, derived) {
   return route === "auto" ? derived : [route];
 }
 
-/** Which required fields are still empty, in listing order. */
-export function missingModels(models, required) {
+/** Which required fields are still empty, in listing order — the family's own
+ *  slot order, which is the order the popover draws the rows in. */
+export function missingModels(models, required, family = DEFAULT_VIDEO_FAMILY) {
+  const order = modelFields(family);
   return required.filter((field) => !models[field])
-    .sort((a, b) => MODEL_FIELDS.indexOf(a) - MODEL_FIELDS.indexOf(b));
+    .sort((a, b) => order.indexOf(a) - order.indexOf(b));
 }
 
 // ---- turbo ------------------------------------------------------------------
@@ -547,6 +563,17 @@ export function serializeSampling(sampling) {
 export const checkpointsOf = (id) => weightsOf(id).filter((slot) => slot.routed)
                                                   .map((slot) => slot.id);
 export const CHECKPOINTS = checkpointsOf(DEFAULT_VIDEO_FAMILY);
+
+/** What each of a family's routed checkpoints is called, and when it is used.
+ *  Empty for a family that ships one transformer — which is what every reader
+ *  of these should branch on rather than assuming two. */
+export const checkpointLabels = (id) => slotTable(id, "name");
+export const checkpointWhen = (id) => slotTable(id, "when");
+
+/** Whether a family routes at all: two or more checkpoints to choose between.
+ *  A family with one has no route pill, no per-LoRA checkpoint mode and no
+ *  idle marks, because there is nothing for any of the three to say. */
+export const routing = (id) => checkpointsOf(id).length > 1;
 export const CHECKPOINT_LABEL = slotTable(DEFAULT_VIDEO_FAMILY, "name");
 export const CHECKPOINT_WHEN = slotTable(DEFAULT_VIDEO_FAMILY, "when");
 
@@ -571,17 +598,22 @@ export const DEFAULT_REFINE_DENOISE = 0.5;
 export const MIN_REFINE_DENOISE = 0.1;
 export const MAX_REFINE_DENOISE = 0.9;
 
-const clampSampleEdge = (value) => {
+/** `rules` rather than the default family's constants: "native" is where a
+ *  family's weights were trained, and the two this pack ships were trained at
+ *  different sizes. Every caller has the piece, so every caller can say which. */
+const clampSampleEdge = (value, rules) => {
   const n = Number(value);
-  if (!Number.isFinite(n)) return NATIVE_SHORT_EDGE;
-  const snapped = Math.round(n / CANVAS_MULTIPLE) * CANVAS_MULTIPLE;
-  return Math.min(NATIVE_SHORT_EDGE, Math.max(MIN_SHORT_EDGE, snapped));
+  if (!Number.isFinite(n)) return rules.nativeShortEdge;
+  const snapped = Math.round(n / rules.multiple) * rules.multiple;
+  return Math.min(rules.nativeShortEdge, Math.max(rules.minShortEdge, snapped));
 };
 
 /** The short edge the first of two passes samples at: the stored edge, capped
- *  by the slider — at the cap the two passes collapse into one render. */
+ *  by the slider — at the cap the two passes collapse into one render.
+ *  Mirrors `compile.first_pass_edge`, which takes the family for this reason. */
 export const sampleEdge = (target) =>
-  Math.min(clampSampleEdge(target.sample_edge), target.short_edge);
+  Math.min(clampSampleEdge(target.sample_edge, rulesFor(pieceFamily(target))),
+           target.short_edge);
 
 /** Whether this canvas owner renders in two passes. `target` is anything with
  *  `short_edge`, `sample_edge` and `upscale` — a state or a timeline. */
@@ -708,7 +740,8 @@ export function parseState(raw) {
       }
       if (!CHECKPOINT_CHOICES.includes(state.checkpoint)) state.checkpoint = "auto";
       if (!UPSCALE_MODES.includes(state.upscale)) state.upscale = UPSCALE_MODES[0];
-      state.sample_edge = clampSampleEdge(state.sample_edge);
+      state.sample_edge = clampSampleEdge(state.sample_edge,
+                                          rulesFor(pieceFamily(state)));
       state.refine_denoise = clampRefineDenoise(state.refine_denoise);
       state.face = parseFace(state.face);
       state.models = parseModels(state.models);
@@ -1841,7 +1874,8 @@ export function parseTimeline(raw) {
       }
       if (!timeline.refined || typeof timeline.refined !== "object") timeline.refined = null;
       if (!UPSCALE_MODES.includes(timeline.upscale)) timeline.upscale = UPSCALE_MODES[0];
-      timeline.sample_edge = clampSampleEdge(timeline.sample_edge);
+      timeline.sample_edge = clampSampleEdge(timeline.sample_edge,
+                                             rulesFor(pieceFamily(timeline)));
       timeline.refine_denoise = clampRefineDenoise(timeline.refine_denoise);
       timeline.face = parseFace(timeline.face);
       timeline.models = parseModels(timeline.models, timeline.family);

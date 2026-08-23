@@ -460,6 +460,7 @@ class Timeline {
   async swapLora(entry) {
     await openLoras({
       state: this.timeline,
+      family: S.pieceFamily(this.timeline),
       targets: S.timelineCheckpoints(this.timeline),
       swapping: entry.name,
       onChange: () => this.commit(),
@@ -2173,6 +2174,7 @@ class Timeline {
   async openLoras() {
     await openLoras({
       state: this.timeline,
+      family: S.pieceFamily(this.timeline),
       targets: S.timelineCheckpoints(this.timeline),
       onChange: () => this.commit(),
     });
@@ -2485,7 +2487,8 @@ export class TimelineBody {
 
   /** See `CreatorEditor.adoptWeights` — same rescue, same reason. */
   adoptWeights() {
-    if (S.guessModels(this.timeline.models, catalogFiles())) this.commit();
+    if (S.guessModels(this.timeline.models, catalogFiles(),
+                      S.pieceFamily(this.timeline))) this.commit();
     else this.render();
   }
 
@@ -2931,6 +2934,7 @@ export class TimelineBody {
   async manageLoras() {
     await openLoras({
       state: this.timeline,
+      family: S.pieceFamily(this.timeline),
       targets: S.timelineCheckpoints(this.timeline),
       onChange: () => this.commit(),
     });
@@ -3308,6 +3312,8 @@ export class TimelineBody {
    */
   renderSampling() {
     return samplingBar({
+      // See the Creator's own call: which controls the row has is the family's.
+      family: S.pieceFamily(this.timeline),
       widgets: this.widgets,
       value: (name, fallback) => this.value(name, fallback),
       set: (name, value) => this.set(name, value),
@@ -3329,6 +3335,7 @@ export class TimelineBody {
         facesPill({ target: this.timeline, commit: () => this.commit() }),
         familyPill({ piece: this.timeline, onChange: () => this.commit() }),
         weightsPill({
+          piece: this.timeline,
           models: this.timeline.models,
           checkpoints: S.timelineCheckpoints(this.timeline),
           // Only when a shot on the strip actually runs the pass: a piece with

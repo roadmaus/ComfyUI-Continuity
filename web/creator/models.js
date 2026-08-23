@@ -29,9 +29,9 @@ const AUTO = "— auto —";
 /** Said as an instruction rather than as a name: a route *is* a checkpoint
  *  field, and "always Ref2VA" is what choosing it does. The names are the
  *  manifest's; only "auto" has its own sentence. */
-export const routeLabel = (route) =>
+export const routeLabel = (route, family = S.DEFAULT_VIDEO_FAMILY) =>
   route === "auto" ? t("auto — follow the mode")
-    : t("always {name}", { name: S.CHECKPOINT_LABEL[route] });
+    : t("always {name}", { name: S.checkpointLabels(family)[route] ?? route });
 
 // The listing, shared by every node body on the canvas. Fetched once and handed
 // out synchronously afterwards, because the pill is re-rendered on every commit
@@ -94,6 +94,12 @@ export const hasPreviewOverride = () => catalog?.preview_override !== false;
  * for something you look at far more often than you change.
  *
  * @param {object} spec
+ * @param {object} spec.piece       the piece whose weights these are. Read for
+ *   one thing and it decides every other: which family the piece renders with,
+ *   and so which slots exist, what they are called, whether there is a route to
+ *   force and whether a checkpoint can be idle. Every constant this control used
+ *   to read was the default family's, which was right for exactly as long as
+ *   there was one family.
  * @param {object} spec.models       the state's weights block, mutated in place
  * @param {string[]} spec.checkpoints the checkpoints the *modes* derive; a
  *   forced route collapses this to one, so it is passed raw and resolved here
@@ -104,15 +110,18 @@ export const hasPreviewOverride = () => catalog?.preview_override !== false;
  *   timeline that owns the turbo switch, and the widget IO the switch writes
  *   through when its file is swapped while engaged. Absent, no turbo row.
  */
-export function weightsPill({ models, checkpoints, onChange, turbo, face = false }) {
+export function weightsPill({ piece, models, checkpoints, onChange, turbo, face = false }) {
+  const family = S.pieceFamily(piece);
+  const label_ = S.modelLabels(family);
   const routed = S.routedCheckpoints(models, checkpoints);
-  const missing = S.missingModels(models, S.requiredModels(routed, face));
+  const missing = S.missingModels(
+    models, S.requiredModels(routed, face, family), family);
   // What the pill reports when everything is picked, in order of how much it
   // changes about the run: which cards it is spread over first, then precision,
   // then nothing worth saying.
-  const spread = new Set(S.DEVICE_FIELDS.map((f) => models.devices[f]).filter(Boolean));
+  const spread = new Set(S.deviceFields(family).map((f) => models.devices[f]).filter(Boolean));
   const settled = models.route !== "auto"
-    ? t("weights · always {checkpoint}", { checkpoint: S.CHECKPOINT_LABEL[models.route] })
+    ? t("weights · always {checkpoint}", { checkpoint: S.checkpointLabels(family)[models.route] })
     : spread.size
       ? (spread.size > 1
           ? t("weights · {count} devices", { count: spread.size })
@@ -120,7 +129,7 @@ export function weightsPill({ models, checkpoints, onChange, turbo, face = false
       : models.dtype === "default" ? t("weights") : t("weights · {dtype}", { dtype: models.dtype.replace("fp8_", "fp8 ") });
   const label = missing.length
     ? (missing.length === 1
-        ? t("no {model}", { model: t(S.MODEL_LABEL[missing[0]]).toLowerCase() })
+        ? t("no {model}", { model: t(label_[missing[0]]).toLowerCase() })
         : t("{count} weights missing", { count: missing.length }))
     : settled;
 
@@ -128,10 +137,11 @@ export function weightsPill({ models, checkpoints, onChange, turbo, face = false
     class: `mmc-pill mmc-weights${missing.length ? " missing" : ""}`,
     title: missing.length
       ? t("Not picked yet: {models}. The render is refused without them.", {
-          models: missing.map((f) => t(S.MODEL_LABEL[f])).join(", "),
+          models: missing.map((f) => t(label_[f])).join(", "),
         })
       : t("Which checkpoints, text encoder and VAEs this node loads."),
-    onclick: (event) => openWeightsPopover(event.currentTarget, { models, checkpoints, onChange, turbo, face }),
+    onclick: (event) => openWeightsPopover(event.currentTarget,
+      { piece, models, checkpoints, onChange, turbo, face }),
   }, [icon("weights", 16), el("span", { text: label })]);
 }
 
@@ -189,14 +199,27 @@ export function familyPill({ piece, onChange }) {
  * means setting all six, and closing the popover between each one would make
  * that six round trips through a pill.
  */
-export function openWeightsPopover(anchor, { models, checkpoints, onChange, turbo, face = false }) {
+export function openWeightsPopover(anchor, { piece, models, checkpoints, onChange, turbo, face = false }) {
   const pop = el("div", { class: "mmc-pop mmc-weights-pop" });
   const body = el("div");
+
+  // Every list, label and hint below is this family's. Read once, at the top:
+  // the popover is rebuilt in place after each pick, and the family cannot
+  // change under it — the family pill is outside this popover, and switching
+  // families closes it.
+  const family = S.pieceFamily(piece);
+  const fields = S.modelFields(family);
+  const label_ = S.modelLabels(family);
+  const hint_ = S.modelHints(family);
+  const deviceFields = S.deviceFields(family);
+  const routes = S.routeOptions(family);
+  const routedSlots = S.checkpointsOf(family);
 
   // Recomputed inside `render` rather than captured: forcing a route changes
   // which of the two checkpoints is required, and that has to show on the row
   // the moment the route above it is picked.
-  const required = () => new Set(S.requiredModels(S.routedCheckpoints(models, checkpoints), face));
+  const required = () => new Set(S.requiredModels(
+    S.routedCheckpoints(models, checkpoints), face, family));
 
   const render = () => {
     const files = catalogFiles();
@@ -205,7 +228,10 @@ export function openWeightsPopover(anchor, { models, checkpoints, onChange, turb
     // Leads the popover, because it decides which of the two checkpoints below
     // it are used at all. Forced, the other one is never loaded and never
     // required — which is also why `required` is recomputed on every pick.
-    const routeRow = el("div", { class: "mmc-weight-row" }, [
+    // Absent for a family that ships one transformer. A route is a standing
+    // choice *among* a family's checkpoints, and a control offering one option
+    // lies about what it does.
+    const routeRow = !S.routing(family) ? null : el("div", { class: "mmc-weight-row" }, [
       el("span", { class: "mmc-weight-name", text: t("Route") }),
       el("button", {
         class: `mmc-weight-file${models.route === "auto" ? "" : " forced"}`,
@@ -216,13 +242,14 @@ export function openWeightsPopover(anchor, { models, checkpoints, onChange, turb
              + "payloads perfectly well.\n\n"
              + "FL2VA cannot take references at all, so forcing it is refused on a "
              + "generation that has any."),
-        text: routeLabel(models.route),
+        text: routeLabel(models.route, family),
         onclick: (event) => openChoicePopover(event.currentTarget, {
           title: t("Route"),
-          options: S.ROUTES.map(routeLabel),
-          value: routeLabel(models.route),
+          options: routes.map((route) => routeLabel(route, family)),
+          value: routeLabel(models.route, family),
           onPick: (picked) => {
-            models.route = S.ROUTES.find((route) => routeLabel(route) === picked) ?? "auto";
+            models.route = routes.find(
+              (route) => routeLabel(route, family) === picked) ?? "auto";
             onChange();
             render();
           },
@@ -240,7 +267,7 @@ export function openWeightsPopover(anchor, { models, checkpoints, onChange, turb
      * different questions about the same file.
      */
     const devicePill = (field) => {
-      if (!devices.length || !S.DEVICE_FIELDS.includes(field)) return null;
+      if (!devices.length || !deviceFields.includes(field)) return null;
       const pinned = models.devices[field] || "";
       return el("button", {
         class: `mmc-weight-device${pinned ? " pinned" : ""}`,
@@ -250,7 +277,7 @@ export function openWeightsPopover(anchor, { models, checkpoints, onChange, turb
             + "putting the text encoder on a second card frees the first one for the DiT."),
         text: pinned || t("auto"),
         onclick: (event) => openChoicePopover(event.currentTarget, {
-          title: t("{model} — device", { model: t(S.MODEL_LABEL[field]) }),
+          title: t("{model} — device", { model: t(label_[field]) }),
           options: [t(AUTO), ...devices],
           value: pinned || t(AUTO),
           onPick: (picked) => {
@@ -264,7 +291,7 @@ export function openWeightsPopover(anchor, { models, checkpoints, onChange, turb
     };
 
     const needed = required();
-    const rows = S.MODEL_FIELDS.map((field) => {
+    const rows = fields.map((field) => {
       const chosen = models[field];
       const options = files[field] ?? [];
       // The preview is the one field that also needs a pack. Say which half is
@@ -276,20 +303,20 @@ export function openWeightsPopover(anchor, { models, checkpoints, onChange, turb
              // A checkpoint the route has taken out of play: still listed, so
              // the setting is not thrown away, but visibly out of the run — the
              // same treatment an idle LoRA gets.
-             + (S.CHECKPOINTS.includes(field) && !needed.has(field) ? " idle" : ""),
+             + (routedSlots.includes(field) && !needed.has(field) ? " idle" : ""),
       }, [
-        el("span", { class: "mmc-weight-name", text: t(S.MODEL_LABEL[field]) }),
+        el("span", { class: "mmc-weight-name", text: t(label_[field]) }),
         el("button", {
           class: `mmc-weight-file${chosen ? "" : " empty"}`,
           title: unavailable
             ? t("Needs KJNodes' Model Preview Override. Without it the live preview "
               + "falls back to latent2rgb, and the render is unaffected either way.")
-            : t(S.MODEL_HINT[field]),
+            : t(hint_[field]),
           // The tail of a folder-qualified name is the part that identifies it;
           // the button ellipsises from the left so that is what survives.
           text: chosen || (unavailable ? t("unavailable") : t("not set")),
           onclick: (event) => openChoicePopover(event.currentTarget, {
-            title: t(S.MODEL_LABEL[field]),
+            title: t(label_[field]),
             // "none" is a real answer for the optional fields and for a
             // checkpoint this graph does not route to, so it is offered rather
             // than only reachable by clearing the blob by hand.
@@ -327,8 +354,11 @@ export function openWeightsPopover(anchor, { models, checkpoints, onChange, turb
     ]));
 
     // The turbo switch's file, under the files it runs beside. Configuration
-    // like everything above it — the throwing happens on the sampler row.
-    if (turbo) {
+    // like everything above it — the throwing happens on the sampler row. Only
+    // where the family declares one: a distillation LoRA is a thing a
+    // particular set of weights has, and asking a family that has none to pick
+    // a file for it would be offering a row nothing reads.
+    if (turbo && S.turboOf(family)) {
       rows.push(turboRow({
         container: turbo.container,
         widgetIO: turbo.widgetIO,
@@ -336,7 +366,7 @@ export function openWeightsPopover(anchor, { models, checkpoints, onChange, turb
       }));
     }
 
-    body.replaceChildren(routeRow, ...rows);
+    body.replaceChildren(...(routeRow ? [routeRow] : []), ...rows);
   };
 
   pop.append(el("div", { class: "mmc-pop-title", text: t("Weights") }), body);
@@ -351,5 +381,5 @@ export function openWeightsPopover(anchor, { models, checkpoints, onChange, turb
   // fetched here rather than at load because only this popover wants them.
   if (catalog) refreshCatalog(() => pop.isConnected && render());
   else loadCatalog(() => pop.isConnected && render());
-  if (turbo) loadLoraNames(() => pop.isConnected && render());
+  if (turbo && S.turboOf(family)) loadLoraNames(() => pop.isConnected && render());
 }

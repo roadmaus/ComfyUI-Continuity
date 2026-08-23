@@ -243,10 +243,20 @@ check("ltx25 has the duration head H3 has no answer to",
       (True, False))
 check("the duration capability names a real slot",
       lcaps["duration"]["slot"] in lx.SLOTS, True)
-check("ltx25 lacks the two passes H3 has",
-      (lcaps["refine"], lcaps["face"], h3["capabilities"]["refine"],
-       h3["capabilities"]["face"]),
-      (False, False, True, True))
+# Both families refine and neither means the same thing by it: H3 re-encodes
+# the request at a larger canvas and re-samples, LTX runs a trained x2 latent
+# upscaler between two sittings of one schedule. So the capability is declared
+# as *what kind* rather than as a flag, and the frontend's copy reads it.
+check("ltx25 refines through its own latent upscaler",
+      (lcaps["refine"]["kind"], lcaps["refine"]["factor"]),
+      ("latent_upscale", 2))
+check("...and the slot it needs is a real one",
+      lcaps["refine"]["slot"] in lx.SLOTS, True)
+check("...which is optional, because the pass is a choice",
+      lx.SLOTS[lcaps["refine"]["slot"]].optional, True)
+check("ltx25 lacks the face pass H3 has",
+      (lcaps["face"], h3["capabilities"]["refine"], h3["capabilities"]["face"]),
+      (False, True, True))
 check("ltx25 always makes sound", lcaps["audio"], True)
 check("ltx25 has no turbo switch — the distilled file is a pick, not a LoRA",
       "turbo" in lcaps, False)

@@ -39,8 +39,13 @@ const MAX_STRENGTH = 2;
 export const loraBase = (entry) => baseName(entry.name);
 const baseName = (name) => name.split("/").pop().replace(/\.[^.]+$/, "");
 
-const MODE_CHOICES = [
-  ...S.CHECKPOINTS.map((id) => [id, S.CHECKPOINT_LABEL[id], S.CHECKPOINT_WHEN[id]]),
+/** What the per-LoRA checkpoint control offers, for a family that routes.
+ *  Built per family rather than once, because the choices *are* the family's
+ *  routed slots — and a family with one transformer has none, which is why the
+ *  control is dropped rather than drawn with a single option. */
+const modeChoices = (family) => [
+  ...S.checkpointsOf(family).map(
+    (id) => [id, S.checkpointLabels(family)[id], S.checkpointWhen(family)[id]]),
   ["both", "Both", "Patch whichever checkpoint is routed."],
 ];
 
@@ -87,8 +92,10 @@ export function loraBlock(state, spec) {
 }
 
 /** One entry: the mute, the weight, the swap and the ✕. */
-function loraChip(entry, { targets = null, onToggle, onManage, onSwap, onRemove }) {
+function loraChip(entry, { targets = null, family = S.DEFAULT_VIDEO_FAMILY,
+                           onToggle, onManage, onSwap, onRemove }) {
   const modes = S.loraModes(entry);
+  const label = S.checkpointLabels(family);
   // Set to a checkpoint this graph does not route to. Still in the stack —
   // dropping it on a route change would throw the setting away — but out of
   // the run, and said so on the chip rather than only in the manager.
@@ -98,8 +105,8 @@ function loraChip(entry, { targets = null, onToggle, onManage, onSwap, onRemove 
     title: idle
       ? t("{name} — set to {modes}, but this graph routes to {target}.", {
           name: entry.name,
-          modes: modes.map((mode) => S.CHECKPOINT_LABEL[mode]).join(" + "),
-          target: targets.map((mode) => S.CHECKPOINT_LABEL[mode]).join(" + "),
+          modes: modes.map((mode) => label[mode]).join(" + "),
+          target: targets.map((mode) => label[mode]).join(" + "),
         })
       : entry.name,
   }, [
@@ -116,7 +123,7 @@ function loraChip(entry, { targets = null, onToggle, onManage, onSwap, onRemove 
         ? t("Strength, and which checkpoint this LoRA belongs to")
         : t("Strength — edit on the LoRA card"),
       text: targets
-        ? `${Number(entry.strength ?? 1).toFixed(2)} · ${S.claimsBoth(entry) ? t("both") : S.CHECKPOINT_LABEL[modes[0]]}`
+        ? `${Number(entry.strength ?? 1).toFixed(2)} · ${S.claimsBoth(entry) ? t("both") : label[modes[0]]}`
         : Number(entry.strength ?? 1).toFixed(2),
       onclick: () => onManage(entry),
     }),
@@ -177,15 +184,21 @@ class LoraManager {
   /** `checkpointModes: false` drops the FL2VA/Ref2VA segment and the idle
    *  marks — the PreStage's image models have one DiT each, so "which
    *  checkpoint does this LoRA claim" is not a question there. */
-  constructor({ state, onChange, targets, checkpointModes = true, swapping = null }, resolve) {
+  constructor({ state, onChange, targets, family = S.DEFAULT_VIDEO_FAMILY,
+                checkpointModes = true, swapping = null }, resolve) {
     this.state = state;
-    this.checkpointModes = checkpointModes;
+    this.family = family;
+    // ...and dropped for a family that ships one transformer, for the same
+    // reason the PreStage drops it: "which checkpoint does this LoRA claim" is
+    // not a question where there is one. `S.routing` is the whole test.
+    this.checkpointModes = checkpointModes && S.routing(family);
     // Swapping is the same grid asked a different question — "which one
     // instead" rather than "which ones" — so it is a flag on the manager
     // rather than a second browser that would need its own folder memory,
     // chunking, previews and sidecar reading.
     this.swapping = swapping;
-    this.targets = targets ?? (checkpointModes ? [S.checkpoint(state)] : [...S.CHECKPOINTS]);
+    this.targets = targets ?? (this.checkpointModes
+      ? [S.checkpoint(state)] : [...S.checkpointsOf(family)]);
     this.onChange = onChange;
     this.resolve = resolve;
     this.query = "";
@@ -359,7 +372,8 @@ class LoraManager {
   }
 
   setModes(entry, row, choice) {
-    entry.modes = choice === "both" ? [...S.CHECKPOINTS] : [choice];
+    entry.modes = choice === "both"
+      ? [...S.checkpointsOf(this.family)] : [choice];
     this.refreshCard(row);
     this.changed();
   }
@@ -719,7 +733,7 @@ class LoraManager {
     });
 
     const current = S.claimsBoth(entry) ? "both" : S.loraModes(entry)[0];
-    const modes = el("div", { class: "mmc-seg" }, MODE_CHOICES.map(([value, label, hint]) =>
+    const modes = el("div", { class: "mmc-seg" }, modeChoices(this.family).map(([value, label, hint]) =>
       el("button", {
         class: "mmc-seg-btn",
         "aria-pressed": value === current,
@@ -747,13 +761,20 @@ class LoraManager {
     return el("div", { class: "mmc-lora-ctl" }, rows);
   }
 
-  /** Whether this entry lands on anything the caller said is in play. */
+  /** Whether this entry lands on anything the caller said is in play.
+   *
+   *  Always, for a family that does not route: there is one transformer, every
+   *  LoRA is patched onto it, and "idle" would be reporting a distinction the
+   *  family does not have. */
   applies(entry) {
+    if (!this.checkpointModes && !this.targets.length) return true;
     return S.loraModes(entry).some((mode) => this.targets.includes(mode));
   }
 
   routesTo() {
-    return this.targets.map((name) => S.CHECKPOINT_LABEL[name]).join(" + ") || t("nothing");
+    const label = S.checkpointLabels(this.family);
+    return this.targets.map((name) => label[name]).join(" + ")
+      || t(S.FAMILY_LABEL[this.family]);
   }
 
   renderFoot() {

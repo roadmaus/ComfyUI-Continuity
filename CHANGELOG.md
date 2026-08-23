@@ -1,5 +1,44 @@
 # Changelog
 
+## Unreleased
+
+**LTX 2.5 renders.** The second video family samples now, rather than being
+described and refused. Pick it on the model pill in front of the weights and the
+node loads Lightricks' 22B transformer, Gemma 4 with LTX's projections and the
+two VAEs; picture and soundtrack come out of one packed latent, guided apart by
+separate CFG scales. The row is the family's own — 8 steps at cfg 1/1 on the
+distilled transformer, a sigma curve with a stretch and a terminal — because a
+node's widget list is static per class and LTX's controls are not a subset of
+H3's. The frame grid is 8n+1 at 24 fps and the native canvas is 960 × 544, both
+off the model card.
+
+Attach a first or last frame and it becomes a real guide on the 8-frame grid;
+chain shots and the seam's inherited run rides in the same way. **References are
+carried in the prompt text and encoded from nothing** — a guide is a keyframe,
+and pinning a character sheet at frame zero is not what citing a reference means.
+The grammar that replaces H3's ordinal citations here is IC-LoRAs, and choosing
+it is the next phase's work; the render proceeds and says so in the log rather
+than refusing.
+
+**The upscale pill runs Lightricks' own second stage on an LTX piece.** Not the
+H3 refine, which re-encodes the request at a larger canvas: LTX ships a trained
+x2 latent upscaler, so the piece samples at the native edge, the upscaler takes
+the video latent up, and a tail of the schedule runs again. The factor is the
+model's, so the resolution slider chooses *whether* there is a second stage
+rather than how big it is, and the pill says which.
+
+**The controls ask the piece which family it is.** The weights popover, the
+sampler row, the LoRA manager, the resolution and aspect pills and the mode
+badge all read the piece's family instead of the one family this pack used to
+have. A family that ships one transformer draws no route control, no per-LoRA
+checkpoint choice and no mode → checkpoint arrow, because there is nothing for
+any of them to say. Nothing about an H3 piece moves: the graphs it builds are
+byte-identical, and a workflow saved before any of this names no family and is
+H3 for good.
+
+Requires a ComfyUI new enough to ship the LTX-AV nodes; without them the node
+says so by name instead of failing three hooks deep.
+
 ## 2.26
 
 **A long reference does not take the card down with it.** A reference video is

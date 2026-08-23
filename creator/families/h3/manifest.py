@@ -205,8 +205,12 @@ def manifest():
         },
         "prompt": {
             # The shot description is composed into the model's documented
-            # Context-IR form; references are cited by ordinal.
-            "pipeline": "context-ir",
+            # Context-IR form; references are cited by ordinal. Read off the
+            # registry's table rather than spelled here, because `compile.py`
+            # branches on the same value and a manifest saying one thing while
+            # the compiler did another would be a UI describing a prompt nobody
+            # was sent.
+            "pipeline": registry.PROMPT_PIPELINE["h3"],
             "ordinal": "<Picture N>",
         },
         # The pre-stage branch: a still is a video generation whose first

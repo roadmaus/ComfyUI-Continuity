@@ -19,6 +19,7 @@
 import { el, icon } from "./dom.js";
 import { t } from "./i18n.js";
 import { openChoicePopover, stepperPill, pillSet, pillClass, accelClass } from "./pills.js";
+import { DEFAULT_VIDEO_FAMILY, widgetsOf as S_widgetsOf } from "./state.js";
 import { uiSetting } from "./api.js";
 import { lastSeed } from "./seedmemory.js";
 
@@ -300,73 +301,195 @@ export function segmentSeedPill({ own, piece, onChange, taken = null }) {
 }
 
 
-export function samplingBar({ widgets, value, set, perSegment = false, turbo = [], trailing = [] }) {
+/**
+ * The seed, and what happens to it after a queue.
+ *
+ * Shared by every family's row, because the seed is not a family's control: it
+ * is the node's, it is the one field on this row that is still a real widget,
+ * and `control_after_generate` is the frontend's own linked control with
+ * nothing for a JSON field to be. Lifted out of `samplingBar` when a second
+ * family arrived wanting a different row and the same seed.
+ *
+ * -> an array, so a caller can spread it, and an empty one where there is no
+ * seed widget to draw (a timeline segment's own editor).
+ */
+function seedPills({ widgets, value, set, perSegment }) {
+  if (!widgets.seed) return [];
+  const pills = [];
+  const control = value("control_after_generate", "fixed");
+  // What the last queue actually ran on, offered back. Always drawn, beside
+  // the dice it undoes — a control that appears only once it would do
+  // something is a control nobody knows is there, which is the whole of what
+  // was wrong with hiding it. Dimmed and inert until there is a seed to go
+  // back to, and again once the seed already is that one.
+  const last = lastSeed(widgets.seed);
+  const reusable = last !== null && last !== Number(value("seed", 0));
+  const seedText = String(value("seed", 0));
+  pills.push(el("div", { class: "mmc-pill mmc-pill-group" }, [
+    el("button", {
+      class: "mmc-step mmc-seed-dice",
+      title: t("Roll a new seed now"),
+      onclick: () => set("seed", Math.floor(Math.random() * 0xffffffff)),
+    }, [icon("dice", 15)]),
+    el("button", {
+      class: "mmc-step mmc-seed-last",
+      // `.mmc-step:disabled` already dims it and refuses the cursor.
+      disabled: !reusable,
+      title: last === null
+        ? t("Nothing queued yet — after a render this comes back to the seed it ran on")
+        : t("Back to {seed}, the seed the last queue ran on", { seed: last }),
+      onclick: () => { if (reusable) set("seed", last); },
+    }, [icon("rewind", 15)]),
+    el("input", {
+      class: "mmc-seed-input",
+      type: "text",
+      value: seedText,
+      // Sized to the digits it is holding. The field was 92px, which is a
+      // guess that fits about eight digits — and seeds are ten, so the number
+      // that identifies the render was the one thing on the row you could not
+      // read. `ch` is exactly one digit in the mono face the stylesheet gives
+      // this, so the pill breathes with its content instead: tight around a
+      // hand-typed 7, wide enough for anything the dice can roll.
+      style: { width: `${Math.min(21, Math.max(5, seedText.length + 1))}ch` },
+      title: perSegment
+        ? t("The piece's seed: every card runs on this number unless it was given "
+          + "one of its own, which is set on the card.")
+        : t("The seed of the one generation."),
+      onchange: (event) => {
+        const parsed = Number(String(event.target.value).replace(/[^\d]/g, "")) || 0;
+        set("seed", parsed);
+      },
+      onpointerdown: (event) => event.stopPropagation(),
+    }),
+    // Quiet on "fixed", which is now the default and the state where nothing
+    // happens; awake on the three that move the seed between queues. The same
+    // rule the accelerator pills follow — what is doing something to your
+    // render is what is lit — and it hands the digits back the emphasis they
+    // were competing with.
+    ...(widgets.control_after_generate ? [el("button", {
+      class: `mmc-ghost mmc-seed-mode${control === "fixed" ? "" : " on"}`,
+      title: t("What happens to the seed after each queue"),
+      text: control,
+      onclick: (event) => openChoicePopover(event.currentTarget, {
+        title: t("After generate"),
+        options: SEED_CONTROL,
+        value: control,
+        onPick: (picked) => set("control_after_generate", picked),
+      }),
+    })] : []),
+  ]));
+  return pills;
+}
+
+
+/**
+ * One family's sampler row, drawn from what its manifest declares.
+ *
+ * The widget vocabulary is `families/manifest.py`'s — `{id, type, label, group,
+ * default, min, max, step, options, help}`, with `type` one of slider, stepper,
+ * toggle, combo — and this is the renderer for it. A family the frontend has
+ * never heard of gets a working row out of its declarations alone, which is the
+ * whole claim the manifest makes: LTX-AV wanted two CFG scales, a stretched
+ * schedule and a terminal, and none of that is a superset of H3's row.
+ *
+ * Only the `sampler` group. `accel` and `weights` are drawn elsewhere, and a
+ * family that declares neither — LTX declares no accelerators, because every
+ * accelerator this pack knows about is an H3 patch — simply has none on the row.
+ *
+ * A combo with no `options` reads them off the node's own widget of that name,
+ * the same rule the H3 row follows: core's sampler list is the node schema's to
+ * declare and a copy of it in a manifest would go stale the first time core
+ * added one. LTX's `sampler_name` is exactly that case.
+ *
+ * Values go through `value`/`set`, which for these families is the blob — none
+ * of these ids is one of the node's thirteen frozen widget slots, and there is
+ * nowhere else they could live.
+ */
+function declaredRow(family, widgets, value, set) {
+  return S_widgetsOf(family)
+    .filter((w) => w.group === "sampler")
+    .map((w) => declaredPill(w, widgets, value, set))
+    .filter(Boolean);
+}
+
+
+function declaredPill(w, widgets, value, set) {
+  const help = w.help ? t(w.help) : t(w.label);
+  const current = value(w.id, w.default);
+
+  if (w.type === "toggle") {
+    const on = Boolean(current);
+    // Lit when on, quiet when off — the rule every switch on this row follows,
+    // so what is doing something to your render is what you can see.
+    return el("button", {
+      class: `mmc-pill${on ? " accel-on" : ""}`,
+      title: help,
+      onclick: () => set(w.id, !on),
+    }, [el("span", { text: on ? t(w.label) : t("{label} off", { label: t(w.label) }) })]);
+  }
+
+  if (w.type === "combo") {
+    // The node's own widget of the same name, where the manifest declared no
+    // list — core's sampler names are the schema's and a manifest carrying a
+    // copy would go stale the first time core added one. Nothing to offer at
+    // all means no pill, rather than a popover that opens empty.
+    const declared = w.options ?? [];
+    const fromWidget = widgets[w.id]?.options?.values;
+    const options = declared.length
+      ? declared
+      : (typeof fromWidget === "function" ? fromWidget(widgets[w.id]) : fromWidget) || [];
+    if (!options.length) return null;
+    return el("button", {
+      class: "mmc-pill",
+      title: help,
+      onclick: (event) => openChoicePopover(event.currentTarget, {
+        title: t(w.label),
+        options,
+        value: String(current),
+        onPick: (picked) => set(w.id, picked),
+      }),
+    }, [el("span", { text: String(current) })]);
+  }
+
+  // slider and stepper are one control here. The manifest's distinction is
+  // about how much of a range a value sweeps, and the pill this row is built
+  // out of is a stepper with a typed field in it — which serves both, and is
+  // the control every number on H3's row already uses.
+  const step = w.step ?? 1;
+  const decimals = String(step).includes(".") ? String(step).split(".")[1].length : 0;
+  return stepperPill({
+    value: Number(current),
+    min: w.min ?? 0,
+    max: w.max ?? 100,
+    step,
+    width: decimals ? "58px" : "46px",
+    title: help,
+    format: (n) => `${t(w.label)} ${decimals ? n.toFixed(decimals) : n}`,
+    onChange: (next) => set(w.id, next),
+  });
+}
+
+
+export function samplingBar({ widgets, value, set, perSegment = false,
+                              turbo = [], trailing = [], family = DEFAULT_VIDEO_FAMILY }) {
   const pills = [];
 
-  if (widgets.seed) {
-    const control = value("control_after_generate", "fixed");
-    // What the last queue actually ran on, offered back. Always drawn, beside
-    // the dice it undoes — a control that appears only once it would do
-    // something is a control nobody knows is there, which is the whole of what
-    // was wrong with hiding it. Dimmed and inert until there is a seed to go
-    // back to, and again once the seed already is that one.
-    const last = lastSeed(widgets.seed);
-    const reusable = last !== null && last !== Number(value("seed", 0));
-    const seedText = String(value("seed", 0));
-    pills.push(el("div", { class: "mmc-pill mmc-pill-group" }, [
-      el("button", {
-        class: "mmc-step mmc-seed-dice",
-        title: t("Roll a new seed now"),
-        onclick: () => set("seed", Math.floor(Math.random() * 0xffffffff)),
-      }, [icon("dice", 15)]),
-      el("button", {
-        class: "mmc-step mmc-seed-last",
-        // `.mmc-step:disabled` already dims it and refuses the cursor.
-        disabled: !reusable,
-        title: last === null
-          ? t("Nothing queued yet — after a render this comes back to the seed it ran on")
-          : t("Back to {seed}, the seed the last queue ran on", { seed: last }),
-        onclick: () => { if (reusable) set("seed", last); },
-      }, [icon("rewind", 15)]),
-      el("input", {
-        class: "mmc-seed-input",
-        type: "text",
-        value: seedText,
-        // Sized to the digits it is holding. The field was 92px, which is a
-        // guess that fits about eight digits — and seeds are ten, so the number
-        // that identifies the render was the one thing on the row you could not
-        // read. `ch` is exactly one digit in the mono face the stylesheet gives
-        // this, so the pill breathes with its content instead: tight around a
-        // hand-typed 7, wide enough for anything the dice can roll.
-        style: { width: `${Math.min(21, Math.max(5, seedText.length + 1))}ch` },
-        title: perSegment
-          ? t("The piece's seed: every card runs on this number unless it was given "
-            + "one of its own, which is set on the card.")
-          : t("The seed of the one generation."),
-        onchange: (event) => {
-          const parsed = Number(String(event.target.value).replace(/[^\d]/g, "")) || 0;
-          set("seed", parsed);
-        },
-        onpointerdown: (event) => event.stopPropagation(),
-      }),
-      // Quiet on "fixed", which is now the default and the state where nothing
-      // happens; awake on the three that move the seed between queues. The same
-      // rule the accelerator pills follow — what is doing something to your
-      // render is what is lit — and it hands the digits back the emphasis they
-      // were competing with.
-      ...(widgets.control_after_generate ? [el("button", {
-        class: `mmc-ghost mmc-seed-mode${control === "fixed" ? "" : " on"}`,
-        title: t("What happens to the seed after each queue"),
-        text: control,
-        onclick: (event) => openChoicePopover(event.currentTarget, {
-          title: t("After generate"),
-          options: SEED_CONTROL,
-          value: control,
-          onPick: (picked) => set("control_after_generate", picked),
-        }),
-      })] : []),
-    ]));
+  // A family the frontend has never seen draws its row from its own manifest —
+  // see `declaredRow`. H3's row stays handwritten below: it predates the
+  // manifest vocabulary and every one of its controls carries copy about the
+  // checkpoints it belongs to ("the distilled H3 checkpoints want 1.0", "a
+  // wrong audio shift distorts the soundtrack before it touches the picture"),
+  // which is worth more than the uniformity of deriving it. The seed is shared,
+  // because the seed is the node's and not the family's.
+  if (family !== DEFAULT_VIDEO_FAMILY) {
+    return el("div", { class: "mmc-pills" }, [
+      ...seedPills({ widgets, value, set, perSegment }),
+      ...declaredRow(family, widgets, value, set),
+      ...turbo, ...trailing,
+    ]);
   }
+
+  pills.push(...seedPills({ widgets, value, set, perSegment }));
 
   if (widgets.steps) {
     pills.push(stepperPill({

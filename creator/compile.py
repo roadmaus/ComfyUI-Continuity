@@ -853,21 +853,43 @@ def face_label(settings):
     return f"on ({settings['canvas']} px, denoise {settings['denoise']:g})"
 
 
-def first_pass_edge(raw, short_edge):
+def first_pass_edge(raw, short_edge, rules=canvas.H3):
     """The short edge the first of two passes samples at: the blob's
     `sample_edge`, defaulted to the native edge and clamped between the
     canvas floor and the lower of the target and native. The first pass
     exists to stay on-distribution, so above native it buys nothing, and
     above the target there would be nothing left to refine up to.
     """
-    ceiling = min(int(short_edge), canvas.NATIVE_SHORT_EDGE)
+    ceiling = min(int(short_edge), rules.native_short_edge)
     if raw is None:
         return ceiling
     try:
         value = int(raw)
     except (TypeError, ValueError):
         raise CompileError(f"sample_edge must be a number (got {raw!r})")
-    return max(canvas.MIN_SHORT_EDGE, min(ceiling, value))
+    return max(rules.min_short_edge, min(ceiling, value))
+
+
+def plain_prompt(body, soundscape, music):
+    """The whole prompt, for a family whose encoder reads prose.
+
+    Context-IR is H3's: its section headers, its `[Shot 2] At 00:05.000` cut
+    lines, its `<Picture 1>` glossary. Gemma was trained on captions, so what it
+    should be sent is the description the user wrote — already substituted, with
+    the trigger words already in front of it — and the two sound fields appended
+    as the sentences they are written as. Nothing is invented and no format is
+    imposed; a piece with neither sound field is its body, unchanged.
+
+    The `<Picture 1>`-style labels a reference generation substitutes into the
+    body stay in it. They are unexplained here, which is the honest state of the
+    open question the plan records: LTX cites by guide and IC-LoRA rather than by
+    ordinal, and until that grammar is decided a label is at least stable text
+    rather than a dropped citation.
+    """
+    parts = [str(body or "").strip(),
+             str(soundscape or "").strip(),
+             str(music or "").strip()]
+    return " ".join(part for part in parts if part).strip()
 
 
 def _check_feather(width, live, what):
@@ -891,8 +913,17 @@ def _check_feather(width, live, what):
 
 def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=None,
                     continues_audio=False, shots=1, feather=1,
-                    ends_on=False, ends_on_audio=False, ends_feather=1):
+                    ends_on=False, ends_on_audio=False, ends_feather=1,
+                    family=registry.DEFAULT_VIDEO):
     """`creator_data` dict -> `Compiled`.
+
+    `family` is which architecture this generation is for, and it decides two
+    things nothing else in this function can be asked: the canvas and duration
+    arithmetic (`canvas.RULES` — a frame grid and a native edge are the
+    weights', not a taste), and how the prose reaches the model
+    (`registry.PROMPT_PIPELINE`). It defaults to H3 because `data` here is one
+    request rather than a piece, and every caller that had no answer before this
+    existed was compiling for the only family there was.
 
     `image_size_lookup(filename) -> (width, height)` supplies the keyframe
     dimensions for the adaptive canvas in the image modes. It is injected so
@@ -918,6 +949,9 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     """
     if not isinstance(data, dict):
         raise CompileError("creator_data must be a JSON object")
+
+    rules = canvas.RULES[family]
+    pipeline = registry.PROMPT_PIPELINE[family]
 
     assets = _parse_assets(data.get("assets"))
 
@@ -990,12 +1024,12 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     # The piece's tail setting still governs every unblended sound seam; see
     # `timeline.js`, which hides it once there are none left to govern.
     if feather > 1 and continues_audio:
-        audio_tail_s = feather / canvas.FPS
+        audio_tail_s = feather / rules.fps
     # The same rule at the other end: what crosses into the clip is its own
     # opening, and the sound has to cover the instants the pinned frames do.
     ends_tail_s = audio_tail_seconds(data.get("audio_tail_s")) if ends_on_audio else 0.0
     if ends_feather > 1 and ends_on_audio:
-        ends_tail_s = ends_feather / canvas.FPS
+        ends_tail_s = ends_feather / rules.fps
 
     checkpoint, pinned = _resolve_checkpoint(mode, data.get("checkpoint"))
     if mode == "REF2VA":
@@ -1035,8 +1069,8 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
         body = f"{prefix}, {body}" if body.strip() else prefix
 
     seconds_shown = data.get("duration_s", 6)
-    frames = canvas.frames_for_seconds(seconds_shown)
-    short_edge = data.get("short_edge", canvas.NATIVE_SHORT_EDGE)
+    frames = canvas.frames_for_seconds(seconds_shown, rules)
+    short_edge = data.get("short_edge", rules.native_short_edge)
 
     # The inherited run is re-generated at the head of this segment and trimmed
     # off after decode, so it spends this segment's frames without delivering
@@ -1049,7 +1083,7 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     if overlap and frames < 2 * overlap:
         raise CompileError(
             f"a {overlap}-frame blend needs a segment of at least "
-            f"{2 * overlap} frames (~{2 * overlap / canvas.FPS:.1f} s) — the "
+            f"{2 * overlap} frames (~{2 * overlap / rules.fps:.1f} s) — the "
             f"blended run is trimmed off after decode, and this segment has "
             f"only {frames}"
         )
@@ -1066,7 +1100,7 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     mode_raw = str(data.get("upscale") or UPSCALE_MODES[0])
     if mode_raw not in UPSCALE_MODES:
         raise CompileError(f"unknown upscale mode {mode_raw!r}")
-    first_edge = first_pass_edge(data.get("sample_edge"), short_edge)
+    first_edge = first_pass_edge(data.get("sample_edge"), short_edge, rules)
     two_pass = first_edge < short_edge and mode_raw == "two_pass"
     sample_edge = first_edge if two_pass else short_edge
 
@@ -1132,8 +1166,9 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
             if str(text or "").strip():
                 merged[name] = text
         sections = merged
-    prompt = contextir.compose(
-        mode, body, soundscape, music, canvas.seconds_for_frames(frames),
+    prompt = plain_prompt(body, soundscape, music) if pipeline == "plain" else \
+        contextir.compose(
+        mode, body, soundscape, music, canvas.seconds_for_frames(frames, rules),
         # The inherited tail is presented to the tokenizer as <Audio 1>, so the
         # prompt has to say what it is or the label points at nothing. Phrased
         # the way the reference guide defines its own labels. Only on the
@@ -1188,18 +1223,20 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
             raise CompileError(
                 f"@{aspect_source} has no picture to take an aspect ratio from")
         source_w, source_h = image_size_lookup(chosen.filename)
-        width, height, ratio, clamped = canvas.canvas_from_image(source_w, source_h, sample_edge)
+        width, height, ratio, clamped = canvas.canvas_from_image(
+            source_w, source_h, sample_edge, rules)
         ratio_from_image = chosen is anchor
     elif aspect_source == "auto" and anchor is not None and image_size_lookup is not None:
         source_w, source_h = image_size_lookup(anchor.filename)
-        width, height, ratio, clamped = canvas.canvas_from_image(source_w, source_h, sample_edge)
+        width, height, ratio, clamped = canvas.canvas_from_image(
+            source_w, source_h, sample_edge, rules)
         ratio_from_image = True
     else:
         label = data.get("aspect", "16:9")
-        if label not in canvas.ASPECT_PRESETS:
+        if label not in rules.aspects:
             raise CompileError(f"unknown aspect ratio {label!r}")
-        ratio = canvas.ASPECT_PRESETS[label]
-        width, height = canvas.resolve_canvas(ratio, sample_edge)
+        ratio = rules.aspects[label]
+        width, height = canvas.resolve_canvas(ratio, sample_edge, rules)
         clamped = False
         ratio_from_image = False
 
@@ -1208,7 +1245,7 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     # about the shape and disagree only about the scale.
     refine = None
     if two_pass:
-        target = canvas.resolve_canvas(ratio, short_edge)
+        target = canvas.resolve_canvas(ratio, short_edge, rules)
         if target != (width, height):
             refine = Refine(*target, denoise=refine_denoise(data.get("refine_denoise")))
 
@@ -1231,11 +1268,11 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
         soundscape=soundscape,
         music=music,
         frames=frames,
-        seconds=canvas.seconds_for_frames(frames),
+        seconds=canvas.seconds_for_frames(frames, rules),
         width=width,
         height=height,
         ratio=ratio,
-        ratio_label=canvas.describe_ratio(ratio),
+        ratio_label=canvas.describe_ratio(ratio, rules),
         ratio_from_image=ratio_from_image,
         ratio_clamped=clamped,
         first_frame=first_frame,
@@ -1687,6 +1724,7 @@ def timeline_frames(data, segments=None, runs=None):
     if runs is None:
         runs = timeline_runs(data, segments)
 
+    rules = rules_of(data)
     total = 0
     for position, (start, end) in enumerate(runs):
         seconds = sum(_duration_seconds(segment) for segment in segments[start:end])
@@ -1694,9 +1732,9 @@ def timeline_frames(data, segments=None, runs=None):
         # 17n+5 grid to snap it to and snapping would price the strip wrong on
         # the bar. A clip is always a run of one, so this is the whole pass.
         if is_clip(segments[start]):
-            total += round(seconds * canvas.FPS)
+            total += round(seconds * rules.fps)
             continue
-        total += canvas.frames_for_seconds(seconds)
+        total += canvas.frames_for_seconds(seconds, rules)
         # A feathered seam re-generates its inherited run at the head of the pass
         # and trims it off after decode, so those frames are sampled but never
         # delivered. Only between passes: a seam inside one does not exist. Read
@@ -1967,6 +2005,17 @@ def piece_family(data):
     return named if named in registry.video_families() else registry.DEFAULT_VIDEO
 
 
+def rules_of(data):
+    """The canvas and duration arithmetic a piece renders under.
+
+    Every piece-level helper below asks this rather than taking a `rules`
+    argument, because a piece already says which family it is — the argument
+    only exists on `compile_request` and `compile_segment`, whose `data` is one
+    generation's request and carries no family of its own.
+    """
+    return canvas.RULES[piece_family(data)]
+
+
 def timeline_segments(data):
     """The segment list off a timeline blob, validated. Shared by both render modes.
 
@@ -2043,7 +2092,8 @@ def timeline_payloads(data, image_size_lookup=None):
     frames = timeline_frames(data, segments, runs)
     if frames > MAX_TIMELINE_FRAMES:
         raise CompileError(
-            f"this timeline runs to {canvas.seconds_for_frames(frames) / 60:.1f} minutes "
+            f"this timeline runs to "
+            f"{canvas.seconds_for_frames(frames, rules_of(data)) / 60:.1f} minutes "
             f"({frames} frames) and one node will not queue more than "
             f"{MAX_TIMELINE_FRAMES // (60 * canvas.FPS)} — shorten it, or split the piece "
             f"across two Timeline nodes"
@@ -2236,7 +2286,8 @@ def _timeline_canvas(data, segments, payloads, image_size_lookup):
             data, (source.get("source_width"), source.get("source_height")))
 
     try:
-        first = compile_request(payloads[0]["request"], image_size_lookup)
+        first = compile_request(payloads[0]["request"], image_size_lookup,
+                                family=piece_family(data))
     except CompileError as exc:
         raise CompileError(f"segment 1: {exc}") from exc
     if not first.ratio_from_image:
@@ -2265,11 +2316,13 @@ def _clip_canvas(data, size):
     width, height = size
     if not width or not height:
         return _pill_canvas(data)
+    rules = rules_of(data)
     edge = first_pass_edge(data.get("sample_edge"),
-                           data.get("short_edge", canvas.NATIVE_SHORT_EDGE))
-    resolved_w, resolved_h, ratio, clamped = canvas.canvas_from_image(width, height, edge)
+                           data.get("short_edge", rules.native_short_edge), rules)
+    resolved_w, resolved_h, ratio, clamped = canvas.canvas_from_image(
+        width, height, edge, rules)
     return {"width": resolved_w, "height": resolved_h, "ratio": ratio,
-            "label": canvas.describe_ratio(ratio), "from_image": False,
+            "label": canvas.describe_ratio(ratio, rules), "from_image": False,
             "clamped": clamped}
 
 
@@ -2277,13 +2330,14 @@ def _pill_canvas(data):
     """The ratio pill resolved at the first pass's own edge — what a timeline
     with nothing better to consult is held to, and what `aspect_source: "pill"`
     holds it to on purpose."""
+    rules = rules_of(data)
     edge = first_pass_edge(data.get("sample_edge"),
-                           data.get("short_edge", canvas.NATIVE_SHORT_EDGE))
+                           data.get("short_edge", rules.native_short_edge), rules)
     label = data.get("aspect", "16:9")
-    if label not in canvas.ASPECT_PRESETS:
+    if label not in rules.aspects:
         raise CompileError(f"unknown aspect ratio {label!r}")
-    ratio = canvas.ASPECT_PRESETS[label]
-    resolved_w, resolved_h = canvas.resolve_canvas(ratio, edge)
+    ratio = rules.aspects[label]
+    resolved_w, resolved_h = canvas.resolve_canvas(ratio, edge, rules)
     return {"width": resolved_w, "height": resolved_h, "ratio": ratio,
             "label": label, "from_image": False, "clamped": False}
 
@@ -2353,8 +2407,9 @@ def output_canvas(data, spec):
     size, because what it has to match is the frames it is played beside. With
     one pass the two are the same number and this is the identity.
     """
+    rules = rules_of(data)
     return canvas.resolve_canvas(
-        spec["ratio"], data.get("short_edge", canvas.NATIVE_SHORT_EDGE))
+        spec["ratio"], data.get("short_edge", rules.native_short_edge), rules)
 
 
 def _chained_request(data, segment, pool, global_prompt, cast=()):
@@ -2404,7 +2459,7 @@ def _chained_request(data, segment, pool, global_prompt, cast=()):
                               "body": _join_prompt(global_prompt,
                                                    segment["refined"].get("body"))}
     request["aspect"] = data.get("aspect", "16:9")
-    request["short_edge"] = data.get("short_edge", canvas.NATIVE_SHORT_EDGE)
+    request["short_edge"] = data.get("short_edge", rules_of(data).native_short_edge)
     # The two-pass choice travels with the canvas it is a property of.
     for key in ("upscale", "sample_edge", "refine_denoise"):
         request.pop(key, None)
@@ -2695,7 +2750,7 @@ def group_payload(data, start=0, end=None):
         "duration_s": at,
         "aspect": data.get("aspect", "16:9"),
         **({"aspect_source": merged_aspect_source} if merged_aspect_source else {}),
-        "short_edge": data.get("short_edge", canvas.NATIVE_SHORT_EDGE),
+        "short_edge": data.get("short_edge", rules_of(data).native_short_edge),
         # The two-pass choice is the timeline's, like the canvas it belongs to.
         **{key: data[key] for key in ("upscale", "sample_edge", "refine_denoise") if key in data},
     }
@@ -2750,11 +2805,19 @@ def single_payload(data):
     return group_payload(data)
 
 
-def compile_segment(payload, image_size_lookup=None):
-    """One payload from `timeline_payloads` or `single_payload` -> `Compiled`."""
+def compile_segment(payload, image_size_lookup=None, family=registry.DEFAULT_VIDEO):
+    """One payload from `timeline_payloads` or `single_payload` -> `Compiled`.
+
+    `family` is not read off the payload, because it is not in one: a payload is
+    one generation's request and its place in the strip, and which architecture
+    renders it is the *piece's* answer. The two callers that have a piece in hand
+    — the render loop, through `Family.compile`, and each family's own segment
+    node — supply it; everything else is compiling for H3 and says so by
+    default.
+    """
     spec = payload.get("canvas")
     return compile_request(
-        payload["request"], image_size_lookup,
+        payload["request"], image_size_lookup, family=family,
         continues=bool(payload.get("continue")),
         continues_audio=bool(payload.get("continue_audio")),
         shots=int(payload.get("shots", 1)),
@@ -2769,7 +2832,8 @@ def compile_segment(payload, image_size_lookup=None):
 
 def compile_single(data, image_size_lookup=None):
     """`timeline_data` -> the one `Compiled` a one-pass render generates."""
-    return compile_segment(single_payload(data), image_size_lookup)
+    return compile_segment(single_payload(data), image_size_lookup,
+                           family=piece_family(data))
 
 
 def compile_timeline(data, image_size_lookup=None):
@@ -2784,7 +2848,8 @@ def compile_timeline(data, image_size_lookup=None):
     compiled = []
     for index, payload in enumerate(timeline_payloads(data, image_size_lookup)):
         try:
-            compiled.append(compile_segment(payload, image_size_lookup))
+            compiled.append(compile_segment(payload, image_size_lookup,
+                                            family=piece_family(data)))
         except CompileError as exc:
             raise CompileError(f"segment {index + 1}: {exc}") from exc
     return compiled

@@ -335,4 +335,101 @@ check("the canvas is re-clamped to the probe's ceiling, the first pass to its na
 check("the aspect is one the probe lists", switched["aspect"], "21:9")
 check("the switch is written to the blob", probed["roundTrip"], "probe")
 
+# ---- the controls, taught to ask ---------------------------------------------
+#
+# Phase 3's other half. The accessors above existed from phase 1; what was still
+# bound to the default family was the code that *calls* them — the weights
+# popover, the sampler row and the LoRA manager all read a module constant. Two
+# claims are worth pinning, and neither needs a DOM.
+#
+# First, that the constants are gone from those three files. A grep, because the
+# failure mode is a reader that still compiles and quietly answers H3, and the
+# only reliable evidence against it is the absence of the name.
+
+CONTROLS = ("models.js", "sampling.js", "loras.js", "editor.js", "timeline.js")
+BOUND = ("S.MODEL_FIELDS", "S.MODEL_LABEL", "S.MODEL_HINT", "S.CHECKPOINTS",
+         "S.CHECKPOINT_LABEL", "S.CHECKPOINT_WHEN", "S.DEVICE_FIELDS",
+         "S.ROUTES", "S.ALWAYS_REQUIRED")
+for name in CONTROLS:
+    source = open(layout.js(name), encoding="utf-8").read()
+    for bound in BOUND:
+        if bound in source:
+            FAILURES.append(
+                f"{name} still reads {bound}, which is the default family's — "
+                f"take the family off the piece instead")
+
+# Second, that the family-taking versions answer differently for two families,
+# which is the whole of what "reads the piece" buys. The probe's slots are H3's
+# renamed, so a reader still bound to the default answers with H3's ids and is
+# caught by the *values* rather than by the shape.
+
+CONTROLS_JS = """
+const S = await import(process.argv[1]);
+const both = (fn) => [fn("h3"), fn("probe")];
+console.log(JSON.stringify({
+  // What the weights popover draws a row for, and what it calls each row.
+  fields: both(S.modelFields),
+  labels: both((id) => Object.keys(S.modelLabels(id))),
+  devices: both(S.deviceFields),
+  // Whether it draws a route row at all, and a per-LoRA checkpoint control.
+  routing: both(S.routing),
+  // What it refuses a queue over, and what the pill reports as missing. The
+  // probe's ids are H3's prefixed, so an empty block is missing the probe's.
+  required: both((id) => S.requiredModels([], false, id)),
+  missing: both((id) => S.missingModels({}, S.requiredModels([], false, id), id)),
+  // What the sampler row draws, which is the manifest's control list.
+  widgets: both((id) => S.widgetsOf(id).filter((w) => w.group === "sampler")
+                                       .map((w) => w.id)),
+}));
+"""
+
+controls = layout.run(CONTROLS_JS, STATE, catalog=PROBE_CATALOG)
+
+h3_slots = [slot["id"] for slot in catalog["families"][0]["weights"]]
+check("the popover's rows are the piece's family's",
+      controls["fields"], [h3_slots, [f"p_{name}" for name in h3_slots]])
+check("...and so are its labels",
+      controls["labels"], [h3_slots, [f"p_{name}" for name in h3_slots]])
+check("...and which rows may be pinned to a device",
+      controls["devices"][1], [f"p_{name}" for name in controls["devices"][0]])
+check("both families route, so both draw the route row",
+      controls["routing"], [True, True])
+check("what a queue is refused over is the piece's family's",
+      controls["required"][1],
+      [f"p_{name}" for name in controls["required"][0]])
+check("...and so is what the pill calls missing",
+      controls["missing"][1], [f"p_{name}" for name in controls["missing"][0]])
+check("the sampler row is the family's declared controls",
+      controls["widgets"][0], controls["widgets"][1])
+
+# And on the registered second family, where the answers genuinely differ:
+# LTX ships one transformer, so there is no route row and no per-LoRA
+# checkpoint control, and its sampler row is not H3's with pieces missing.
+
+LTX_CONTROLS = """
+const S = await import(process.argv[1]);
+console.log(JSON.stringify({
+  routing: [S.routing("h3"), S.routing("ltx25")],
+  checkpoints: S.checkpointsOf("ltx25"),
+  // An empty LTX block is missing the four a render always loads, and neither
+  // of the two opt-in passes — an unfilled optional slot is an offer.
+  missing: S.missingModels({}, S.requiredModels([], false, "ltx25"), "ltx25"),
+  h3Row: S.widgetsOf("h3").filter((w) => w.group === "sampler").map((w) => w.id),
+  ltxRow: S.widgetsOf("ltx25").filter((w) => w.group === "sampler").map((w) => w.id),
+}));
+"""
+
+ltx_controls = layout.run(LTX_CONTROLS, STATE)
+
+check("LTX routes between nothing, so no route row and no LoRA checkpoint control",
+      (ltx_controls["routing"], ltx_controls["checkpoints"]), ([True, False], []))
+check("an empty LTX block is missing the four every render loads",
+      ltx_controls["missing"], ["dit", "clip", "vae", "audio_vae"])
+check("...and neither opt-in pass, which are offers rather than omissions",
+      [name for name in ("duration_head", "upscaler")
+       if name in ltx_controls["missing"]], [])
+check("the two rows are different controls, not one with pieces missing",
+      sorted(set(ltx_controls["ltxRow"]) - set(ltx_controls["h3Row"])),
+      ["audio_cfg", "base_shift", "max_shift", "stretch", "terminal", "video_cfg"])
+
 passed("the piece names its family, and both halves read it off the piece")

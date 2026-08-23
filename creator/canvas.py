@@ -161,6 +161,13 @@ LTX25 = Rules(
 )
 
 
+# Every family's rules, under the id the registry knows it by. The registry
+# says which families exist; this says what each one's arithmetic is, and
+# `compile.rules_of` is what looks a piece's family up in it. A still-only
+# family has no entry — there is no duration and no frame grid to have one for.
+RULES = {"h3": H3, "ltx25": LTX25}
+
+
 def legal_frame_counts(rules=H3):
     """Every frame count the model accepts, ascending, across the offered range.
 

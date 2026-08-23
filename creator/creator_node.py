@@ -58,7 +58,7 @@ from . import (accel, canvas, compile as compiler, facepass, hires, media,
                models, outputs, prestage, sampling, settings, timeline)
 from .core import emit as loop
 from .families import registry
-from .families.h3.render import LeadIn
+from .families.ltx25 import segment as ltx25_segment
 
 DEFAULT_DATA = json.dumps({
     "version": 2,
@@ -201,10 +201,17 @@ def _render(blob, seed, steps, cfg, sampler_name, scheduler,
     except json.JSONDecodeError as exc:
         raise ValueError(f"the node's data is not valid JSON: {exc}") from exc
 
+    # Which family renders this piece — the blob's own field, defaulting to H3
+    # for every workflow saved before there was a second answer. Resolved first
+    # because the three things below are all *its* shapes: the sampler row, the
+    # weights block and the per-queue context are read by the family, not by
+    # this node, and none of the three is the same object across families.
+    family = registry.video(compiler.piece_family(data))
+
     # How the piece is run, off the blob where the blob says and off the widgets
     # where it does not — which is every field of every workflow saved before the
     # row moved. See `sampling.py`; the widget slots below are frozen, not live.
-    sampler, acceleration = sampling.resolve(data, {
+    sampler, acceleration = family.resolve_sampling(data, {
         "seed": seed, "steps": steps, "cfg": cfg,
         "sampler_name": sampler_name, "scheduler": scheduler,
         "shift_video": shift_video, "shift_audio": shift_audio,
@@ -238,11 +245,9 @@ def _render(blob, seed, steps, cfg, sampler_name, scheduler,
     labels = timeline.labels(runs, segments, whole_piece)
 
     graph = loop.emit(
-        # Which family renders this piece — the blob's own field, defaulting to
-        # H3 for every workflow saved before there was a second answer.
-        registry.video(compiler.piece_family(data)),
+        family,
         payloads, labels,
-        models.Weights.from_blob(data),
+        family.weights_from_blob(data),
         sampler,
         acceleration,
         unique_id,
@@ -262,12 +267,12 @@ def _render(blob, seed, steps, cfg, sampler_name, scheduler,
         # one card of a piece, so the take it makes is worth keeping and the
         # number it announces is worth saying.
         whole_piece=whole_piece,
-        # Read off `data` and not off `piece`: the turbo switch is a property of
-        # the piece as it stands, and a render holding cards back does not
+        # Read off `data` and not off `piece`: H3's turbo switch is a property
+        # of the piece as it stands, and a render holding cards back does not
         # change which LoRA is the distillation. Reading the setting here rather
         # than inside `emit` is the same rule the output prefix follows — the
         # file on disk is consulted once per queue, above the graph.
-        run=LeadIn.of(data))
+        run=family.run_context(data))
     return loop.expanded(graph)
 
 
@@ -340,7 +345,8 @@ class MiniMaxH3Timeline(io.ComfyNode):
 class MiniMaxCreatorExtension(ComfyExtension):
     async def get_node_list(self):
         return [MiniMaxH3Creator, MiniMaxH3Timeline,
-                *timeline.NODES, *prestage.NODES, *hires.NODES, *facepass.NODES]
+                *timeline.NODES, *ltx25_segment.NODES,
+                *prestage.NODES, *hires.NODES, *facepass.NODES]
 
 
 async def comfy_entrypoint() -> MiniMaxCreatorExtension:

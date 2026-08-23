@@ -301,8 +301,8 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
                                      sampling, acceleration, weights,
                                      seed_for(index), run)
         if one.refine:
-            latent = family.emit_refine(graph, links, payloads[index], one,
-                                        weights, seams, latent, sampling,
+            latent = family.emit_refine(graph, links, segment, payloads[index],
+                                        one, weights, seams, latent, sampling,
                                         acceleration, seed_for(index), run)
 
         # Decoded, trimmed, written to disk and added to the reel, all in the
@@ -353,17 +353,21 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
                         "seeds": [seed_for(index) for index in range(len(payloads))]},
                        sort_keys=True) \
         if cards and (len(payloads) > 1 or not whole_piece) else ""
-    emit_tail(graph, reel, unique_id, filename_prefix, takes)
+    emit_tail(graph, reel, unique_id, filename_prefix, takes,
+              fps=float(family.rules.fps))
     return graph
 
 
-def emit_tail(graph, reel, unique_id, filename_prefix=FILENAME_PREFIX, takes=""):
+def emit_tail(graph, reel, unique_id, filename_prefix=FILENAME_PREFIX, takes="",
+              fps=float(canvas.FPS)):
     """Write the reel to a file, and report it against `unique_id`.
 
     An AV family generates picture and sound together and they should leave
     together, which used to mean wiring both outputs into somebody else's save
-    node and getting the frame rate wrong. `canvas.FPS` is the rate the frame
-    counts were snapped to, so it is the only rate this can be.
+    node and getting the frame rate wrong. The rate is the one the frame counts
+    were snapped to and so is the family's, not this module's — it defaults to
+    H3's for the pre-stage callers that write a single frame and have no family
+    in hand.
 
     `MiniMaxH3Save` rather than core's `CreateVideo` + `SaveVideo`: `SaveVideo`'s
     `codec` is a `DynamicCombo`, whose value is assembled from the frontend's
@@ -387,7 +391,7 @@ def emit_tail(graph, reel, unique_id, filename_prefix=FILENAME_PREFIX, takes="")
     and re-queueing writes the files again instead of hitting the cache.
     """
     save = graph.node(SAVE_NODE, reel=reel,
-                      fps=float(canvas.FPS), filename_prefix=filename_prefix,
+                      fps=float(fps), filename_prefix=filename_prefix,
                       crf=settings.video_crf(), takes=takes)
     save.set_override_display_id(unique_id)
     return save

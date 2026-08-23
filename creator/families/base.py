@@ -42,10 +42,40 @@ class Family:
     label = None
     #: which kinds of thing the family renders, e.g. {"video", "still"}.
     produces = frozenset()
+    #: the family's `canvas.Rules` — its frame grid, its rate, its native edge.
+    #: The one thing the loop reads off the family object itself rather than
+    #: through a hook: the finished file is written at a frame rate, and that
+    #: rate is the one the frame counts were snapped to.
+    rules = None
 
     #: the exception type `compile` raises for a request it refuses. The loop
     #: catches exactly this and prefixes the segment's label.
     compile_error = ValueError
+
+    def weights_from_blob(self, data):
+        """The blob's `models` block, as this family's weights object.
+
+        The *keys* of that block are the family's slot ids — a filename under
+        `dit` means nothing to a family whose checkpoint slot is called `fl2va`
+        — so reading it is the family's job and not the node's. What comes back
+        is passed through the loop unread except for `routed(payload)`.
+        """
+        raise NotImplementedError(f"{self.id}.weights_from_blob")
+
+    def resolve_sampling(self, data, widgets):
+        """-> `(sampling, acceleration)` for this queue.
+
+        `widgets` is what the node was called with. A family whose row is the
+        node's thirteen frozen widget slots may fall back to them field by
+        field; a family whose row is a different shape entirely reads the blob
+        and its own defaults, because none of those slots is `video_cfg`.
+        """
+        raise NotImplementedError(f"{self.id}.resolve_sampling")
+
+    def run_context(self, data):
+        """The family's per-queue context, or None — the `run` the loop passes
+        through unread. H3's is the turbo lead-in; most families have none."""
+        return None
 
     def preflight(self, sampling, acceleration):
         """Raise for a run that cannot happen — before anything compiles."""
@@ -93,10 +123,18 @@ class Family:
         """The sampler subgraph over one segment. -> the sampled latent link."""
         raise NotImplementedError(f"{self.id}.emit_sampler")
 
-    def emit_refine(self, graph, links, payload, compiled, weights, seams,
-                    latent, sampling, acceleration, seed, run):
+    def emit_refine(self, graph, links, segment, payload, compiled, weights,
+                    seams, latent, sampling, acceleration, seed, run):
         """The two-pass upscale over a sampled latent. -> the refined latent
-        link. Called only where the compiled payload asks for one."""
+        link. Called only where the compiled payload asks for one.
+
+        `segment` is the node `emit_segment` returned, because the second stage
+        of a two-stage render is a *continuation* of the first and not a second
+        render: LTX's takes its conditioning straight off it, so that the guides
+        stage one applied are the ones stage two crops. H3 re-emits a segment of
+        its own at the larger canvas and ignores this — which is the honest
+        difference between refining a latent and re-encoding a request.
+        """
         raise NotImplementedError(f"{self.id}.emit_refine")
 
     def face_payload(self, payload, face):

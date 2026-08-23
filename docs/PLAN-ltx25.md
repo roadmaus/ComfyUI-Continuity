@@ -103,20 +103,14 @@ Each ends green; goldens are re-recorded only when a phase *adds* graphs.
    frozen by the existing suites.~~ **Done** — see below.
 2. ~~**`families/ltx25/` skeleton**: registry row, slot table, canvas Rules,
    manifest.~~ **Done** — see below.
-3. **The render half**: `render.py` — loaders, segment (prompt through
-   Gemma as plain prose, guides via `LTXVAddGuide`, first/last frames on the
-   8-grid), sampler subgraph, `ModelSamplingLTXV` patch, `LTXVConditioning`
-   with the manifest's fps. Golden graphs for the LTX blobs: text-only,
-   first-frame, guide-with-strength, audio on/off. **And the controls stop
-   reading module constants**: the weights popover, the sampler row and the
-   LoRA manager take the piece's family instead of the default's — the
-   accessors are all in place from phase 1, and phase 2's manifest is the
-   first one whose shape differs enough for a stale reader to show.
-4. **Duration and the second pass**: the duration predictor as the seconds
-   pill's "auto" (capability-gated — H3 simply lacks it), the x2 latent
-   upscaler as this family's `upscale`, and seam/feather verification on the
-   8-grid latent (the reel layer is family-neutral by core's own construction;
-   prove it with a chained golden). Weigh native multishot here too.
+3. ~~**The render half** and the controls reading the piece's family.~~
+   **Done** — see below. The x2 upscaler came forward from phase 4 with it.
+4. **Duration and multishot**: the duration predictor as the seconds pill's
+   "auto" (capability-gated — H3 simply lacks it), and seam/feather
+   verification on the 8-grid latent (the reel layer is family-neutral by
+   core's own construction; prove it with a chained golden). Weigh native
+   multishot here: one pass producing several connected shots competes with
+   the strip's own feathered seams rather than slotting under them.
 5. **Taste guidance**: STG / modality / reference-audio as their own pills
    with honest cost copy — new UI, not the accel row.
 
@@ -242,7 +236,82 @@ and moves numbers this plan had guessed at:
   grammar and is worth weighing in phase 4 — a family that can cut internally
   may want fewer feathered seams, not more.
 
-## Open questions (answer during phase 3)
+## Phase 3, as landed
+
+**The compiler is family-parameterised, and H3 is byte-identical.**
+`canvas.RULES` maps a family id to its `Rules`; `compile.rules_of(piece)` is
+what every piece-level helper asks, and `compile_request` / `compile_segment`
+take a `family=` defaulting to H3 because their `data` is one *request* and
+carries no family of its own. Every `canvas.NATIVE_SHORT_EDGE`-style constant
+inside those functions became a `rules.` read. The one thing that is not canvas
+arithmetic is `registry.PROMPT_PIPELINE`: `"context-ir"` composes H3's documented
+form, `"plain"` is `compile.plain_prompt` — the substituted body plus the two
+sound fields, which is what an encoder trained on captions should be sent. Both
+manifests serve that table's value, so a UI cannot describe a prompt the
+compiler did not write. `tests/golden` is untouched.
+
+**The family contract grew three hooks and lost an assumption.**
+`weights_from_blob`, `resolve_sampling` and `run_context` are the three shapes
+the node used to build itself: the weights block's *keys* are the family's, the
+sampler row is not a superset across families, and the turbo lead-in is H3's.
+`Family.rules` is the fourth thing, read by the loop rather than through a hook,
+because the finished file is written at the rate the frame counts were snapped
+to. And `emit_refine` now receives the segment node: a second stage that
+*continues* the first needs its conditioning, where H3's re-encodes the request
+at a larger canvas and ignores it.
+
+**The sampler is core's LTX nodes, wired.** `LTXVScheduler` → `KSamplerSelect`
+→ `ModelSamplingLTXV` → `LTXVDualCFGGuider` → `SamplerCustomAdvanced`, with the
+scheduler and the patch handed the same latent and the same shift pair — they
+are two readings of one curve. Defaults are the distilled checkpoint's: 8 steps
+at cfg 1/1.
+
+**`MiniMaxLTX25Segment`** is the family's boundary and a genuinely new node id.
+Its fourth output is a real negative rather than H3's held-back lead model,
+because `LTXVDualCFGGuider`'s uncond pass always runs and every LTX guide node
+takes both conditionings and returns both. Lightricks' own
+`DEFAULT_NEGATIVE_PROMPT` is the row's default. The order the latent is built in
+is load-bearing: guides go on the *video* latent and the audio stream is
+concatenated after, because `LTXVAddGuide.append_keyframe` refuses a combined AV
+latent outright.
+
+**Guides are cropped exactly once, and never on the packed latent.**
+`LTXVCropGuides` slices frames in time and the soundtrack shares that axis, so
+the pass is unpacked, cropped and packed again — at the end of `emit_sampler` on
+a one-stage render, and at the *start* of `emit_refine` on a two-stage one, so
+the upscaler is never spent on frames that are about to be thrown away.
+
+**`refine` is Lightricks' second stage, brought forward from phase 4.** Sample
+at the native edge, run the trained x2 latent upscaler on the video latent,
+sample again over a tail of the schedule (`SplitSigmasDenoise`). The factor is
+the model's, so `LTX25.compile` overrides the compiler's slider-derived refine
+target with exactly twice the first pass, and the resolution pill's copy reads
+the capability rather than asserting H3's meaning. The upscaler loader is built
+lazily, on the first `emit_refine`, because it is a pass and not a component.
+
+**The controls ask the piece.** The weights popover, the sampler row, the LoRA
+manager, the resolution and aspect pills and the mode badge all take the
+family off the piece; `test_family_select.py` greps the five files for the
+default-bound constants and drives the family-taking helpers against both the
+probe catalog and LTX. A family that ships one transformer draws no route row,
+no per-LoRA checkpoint control and no mode→checkpoint arrow. A family the
+frontend has never seen gets its sampler row rendered from its declared
+widgets (`declaredRow`); H3's stays handwritten, because its copy is about its
+own checkpoints and that is worth more than uniformity.
+
+**The bug a real machine found immediately.** `models.available()` walked H3's
+folder table, so the listing the popover browses had no `dit`, `upscaler` or
+`duration_head` in it and three correctly-placed files came up as "not set".
+`models.every_slot()` merges every family's table; `tests/test_ltx25_graph.py`
+holds it.
+
+**References are allowed rather than refused.** They ride as their `<Picture N>`
+labels in the prose and are encoded from nothing, and the segment node logs one
+line saying so — a guide is a keyframe, and pinning a character sheet at frame 0
+is not what citing a reference means. Sound seams reach the node and are not
+conditioned on yet. Both are the open question below, not an oversight.
+
+## Open questions (answer during phase 4)
 
 - Whether `refine` has any meaning as *prompt expansion* for a plain-prose
   family (the engine is already split from H3's templates), now that the

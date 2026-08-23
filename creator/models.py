@@ -48,6 +48,7 @@ requests the render cannot honour. `weight_dtype` is a core-loader input and is
 not emitted for GGUF files, whose precision was decided at quantization time.
 """
 
+import importlib
 from dataclasses import dataclass, field
 from typing import Any, Optional
 
@@ -352,13 +353,49 @@ def loader_for(node_id, device, filename=None):
     return wrapper, {"device": device}
 
 
+def every_slot():
+    """`{field: folder}` across every family, not just this module's table.
+
+    The listing is served once for the whole node and the weights popover picks
+    the rows it needs out of it by slot id — so a field this does not carry is a
+    picker that browses nothing, whatever is on disk. That is exactly what
+    happened the day a second family arrived: `dit`, `upscaler` and
+    `duration_head` are LTX's slot names, they are in no table here, and their
+    rows came up empty against correctly-placed files.
+
+    Merged rather than nested by family because slot ids are unique across the
+    pack and the frontend asks by id. Where two families share an id they share
+    a folder too (`clip`, `vae`), so the merge is not a collision.
+
+    Imported inside the function: the families import this module, and reaching
+    back for their slot tables at import time would close the circle.
+    """
+    from .families import registry
+
+    slots = dict(FOLDERS)
+    for family in registry.FAMILIES:
+        try:
+            module = importlib.import_module(
+                f".families.{family}.models", __package__)
+        except ModuleNotFoundError:
+            # A family whose weights are its still branch's — the two image
+            # families pick from folders rather than from a slot table.
+            continue
+        slots.update({name: slot.folder for name, slot in module.SLOTS.items()})
+    return slots
+
+
 def available():
     """`{field: [filenames]}` for every pickable field, plus what is installed.
+
+    Every *family's* fields, not this module's — see `every_slot`.
 
     Walks the model directories, so callers run it off the event loop.
     """
     import folder_paths
     import nodes
+
+    fields = every_slot()
 
     def listing(folder):
         try:
@@ -367,7 +404,7 @@ def available():
             return []
 
     listings = {}
-    for folder in set(FOLDERS.values()):
+    for folder in set(fields.values()):
         # Core's listing filters on its own extensions, which leave `.gguf` out;
         # ComfyUI-GGUF registers keys over the same directories filtered to
         # exactly those. Merged into one list because the pick is one question —
@@ -378,8 +415,8 @@ def available():
         listings[folder] = sorted(names)
 
     return {
-        "files": {name: listings[folder] for name, folder in FOLDERS.items()},
-        "folders": dict(FOLDERS),
+        "files": {name: listings[folder] for name, folder in fields.items()},
+        "folders": dict(fields),
         # The raw per-folder listings. The PreStage's weights control browses
         # folders rather than the video fields above, and it should not have to
         # reach through a field name that happens to share a folder.

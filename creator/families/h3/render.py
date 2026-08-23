@@ -21,7 +21,8 @@ from dataclasses import dataclass
 
 import comfy.sample
 
-from ... import accel, compile as compiler, models, settings
+from ... import (accel, canvas, compile as compiler, models,
+                 sampling as sampling_mod, settings)
 from .. import base
 
 # Whether this core can start a sampler with the noise switched off on an H3
@@ -184,7 +185,17 @@ class H3(base.Family):
     id = "h3"
     label = "MiniMax H3"
     produces = frozenset({"video", "still"})
+    rules = canvas.H3
     compile_error = compiler.CompileError
+
+    def weights_from_blob(self, data):
+        return models.Weights.from_blob(data)
+
+    def resolve_sampling(self, data, widgets):
+        return sampling_mod.resolve(data, widgets)
+
+    def run_context(self, data):
+        return LeadIn.of(data)
 
     def preflight(self, sampling, acceleration):
         # An accelerator whose pack is not installed should say so before
@@ -330,8 +341,11 @@ class H3(base.Family):
                 seed=seed, denoise=1.0, **common)
         return sampled.out(0)
 
-    def emit_refine(self, graph, links, payload, compiled, weights, seams,
-                    latent, sampling, acceleration, seed, run):
+    def emit_refine(self, graph, links, segment, payload, compiled, weights,
+                    seams, latent, sampling, acceleration, seed, run):
+        # `segment` is the first pass's node and is deliberately unused: this
+        # family's second pass re-encodes the request at the target canvas, so
+        # its conditioning is a segment node of its own — see below.
         # The two-pass upscale: the first pass sampled at the smaller
         # first-pass canvas, and this regenerates it at the target size
         # from the same context.

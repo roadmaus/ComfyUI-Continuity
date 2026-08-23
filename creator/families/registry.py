@@ -27,6 +27,22 @@ PRODUCES = {
     "ideogram4": frozenset({"still"}),
 }
 
+# How a family's prose reaches its text encoder, and the one thing about a
+# family `compile.py` has to know that is not canvas arithmetic.
+#
+# "context-ir" is H3's own training: section headers, `[Shot 2] At 00:05.000`
+# cut lines, a `<Picture 1>` glossary defining every attached file. "plain" is
+# the substituted description and nothing else — what an encoder that was
+# trained on captions should be sent, and what putting H3's format in front of
+# Gemma would spoil. The families' manifests serve the same value under
+# `prompt.pipeline`, read off this table so the two cannot disagree.
+PROMPT_PIPELINE = {
+    "h3": "context-ir",
+    "ltx25": "plain",
+    "krea2": "plain",
+    "ideogram4": "plain",
+}
+
 # What the pre-stage blob's `arch` pill calls each still-capable family.
 # "minimax" predates the family ids and is frozen in every saved blob, so the
 # alias is permanent — the id it maps to is the registry's business.

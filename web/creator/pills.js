@@ -7,9 +7,10 @@
 
 import { el, icon, dismissable, placeNear } from "./dom.js";
 import { t } from "./i18n.js";
-import { ASPECT_PRESETS, MIN_SHORT_EDGE, MAX_SHORT_EDGE, NATIVE_SHORT_EDGE, CANVAS_MULTIPLE } from "./canvas.js";
+import { CANVAS_MULTIPLE, rulesFor } from "./canvas.js";
 import { UPSCALE_MODES, DEFAULT_REFINE_DENOISE, MIN_REFINE_DENOISE, MAX_REFINE_DENOISE,
-         twoPass, sampleEdge, emptyFace, MIN_FACE_CANVAS, MAX_FACE_CANVAS,
+         twoPass, sampleEdge, emptyFace, pieceFamily, refineOf,
+         MIN_FACE_CANVAS, MAX_FACE_CANVAS,
          MIN_FACE_DENOISE, MAX_FACE_DENOISE } from "./state.js";
 
 /**
@@ -128,6 +129,10 @@ export const PILL_GLYPH = 16;
  *   frame square and says nothing it does not know.
  */
 export function openAspectPopover(anchor, target, commit, sources = null) {
+  // The ratios this family offers. The same six today for both, and read off
+  // the piece anyway: an aspect envelope is a property of what the weights saw,
+  // and the list is the manifest's to declare.
+  const presets = rulesFor(pieceFamily(target)).aspects;
   const donors = sources?.donors?.length ? sources.donors : null;
   const current = target.aspect_source ?? "auto";
   const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
@@ -178,7 +183,7 @@ export function openAspectPopover(anchor, target, commit, sources = null) {
     pop.appendChild(el("div", { class: "mmc-pop-title", text: t("Preset") }));
   }
 
-  for (const [label, ratio] of ASPECT_PRESETS) {
+  for (const [label, ratio] of presets) {
     pop.appendChild(el("button", {
       class: "mmc-opt",
       "aria-checked": target.aspect === label
@@ -313,6 +318,24 @@ export function edgeSlider({ min, max, step, value, mark, markLabel, apply, desc
  * @param {() => void} commit         called on release, not on every pixel
  */
 export function openResolutionPopover(anchor, target, geometry, commit) {
+  // Every number on this slider is the piece's family's — where native sits,
+  // where the ceiling is, what the axes snap to. They were H3's constants,
+  // which was right while there was one family and is a slider marked "native"
+  // at the wrong place the moment there are two.
+  const rules = rulesFor(pieceFamily(target));
+  const NATIVE_SHORT_EDGE = rules.nativeShortEdge;
+  const MIN_SHORT_EDGE = rules.minShortEdge;
+  const MAX_SHORT_EDGE = rules.maxShortEdge;
+  const CANVAS_MULTIPLE = rules.multiple;
+  // What the second pass *is*, which is not the same thing in both families:
+  // H3 re-encodes the request at the target canvas and samples again, LTX runs
+  // a trained latent upscaler at a factor the model fixed. `factor` is what
+  // separates them — where there is one, the second pass's size is the first
+  // pass's times it and the slider only decides *whether* there is one.
+  const refine = refineOf(pieceFamily(target));
+  const factor = refine && typeof refine === "object" ? refine.factor : null;
+  const secondPass = (edge) => (factor ? edge * factor : target.short_edge);
+
   // The two-pass section. Past the native edge it is the choice the warning
   // asks for — two passes or one, off-distribution. At or under native there
   // is no warning to answer, but the first pass can still be lowered under
@@ -343,8 +366,12 @@ export function openResolutionPopover(anchor, target, geometry, commit) {
     if (over) {
       rows.push(
         option(UPSCALE_MODES[0], t("two passes"),
-               t("{edge} px first, refined up to {width} × {height}",
-                 { edge: sampleEdge(target), width, height })),
+               factor
+                 ? t("{edge} px first, then the ×{factor} latent upscaler to {target} px",
+                     { edge: sampleEdge(target), factor,
+                       target: secondPass(sampleEdge(target)) })
+                 : t("{edge} px first, refined up to {width} × {height}",
+                     { edge: sampleEdge(target), width, height })),
         option("direct", t("direct"),
                t("one pass at {width} × {height} — off-distribution", { width, height })));
     }
@@ -374,8 +401,12 @@ export function openResolutionPopover(anchor, target, geometry, commit) {
         stepperPill({
           value: Number(target.refine_denoise ?? DEFAULT_REFINE_DENOISE),
           min: MIN_REFINE_DENOISE, max: MAX_REFINE_DENOISE, step: 0.05, width: "40px",
-          title: t("How much of the schedule the second pass re-runs. Lower keeps more "
-               + "of the first pass; higher resolves more detail and drifts further from it."),
+          title: factor
+            ? t("How much of the schedule the second pass re-runs over the upscaled "
+              + "latent. Lower keeps more of the first pass; higher resolves more "
+              + "detail and drifts further from it.")
+            : t("How much of the schedule the second pass re-runs. Lower keeps more "
+              + "of the first pass; higher resolves more detail and drifts further from it."),
           format: (n) => n.toFixed(2),
           onChange: (next) => { target.refine_denoise = next; body.repaint(); commit(); },
         }),
@@ -397,8 +428,15 @@ export function openResolutionPopover(anchor, target, geometry, commit) {
         return {
           size: `${width} × ${height}`,
           warn: false,
-          note: t("Sampled at {edge} px, then a second pass refines up to this size.",
-                  { edge: sampleEdge(target) }),
+          // With a fixed factor the slider does not choose the delivered size —
+          // the upscaler does — so the note says what actually comes out rather
+          // than pointing at a number the second pass will overshoot or miss.
+          note: factor
+            ? t("Sampled at {edge} px, then the ×{factor} latent upscaler takes it to {target} px.",
+                { edge: sampleEdge(target), factor,
+                  target: secondPass(sampleEdge(target)) })
+            : t("Sampled at {edge} px, then a second pass refines up to this size.",
+                { edge: sampleEdge(target) }),
         };
       }
       return {

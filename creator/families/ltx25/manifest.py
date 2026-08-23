@@ -150,11 +150,16 @@ def manifest():
             # family-neutral by construction — `LTXVConcatAVLatent`'s own
             # description is what the joint latent was written against.
             "seams": True,
-            # H3's two extra passes, neither of which this family has yet: the
-            # refine engine is written against H3's templates, and the face
-            # pass against its crop-and-repair loop. The x2 latent upscaler is
-            # the natural refine here and is a phase of its own.
-            "refine": False,
+            # The second stage, and it is Lightricks' own rather than H3's:
+            # sample at the native edge, run the trained x2 latent upscaler,
+            # sample again over a tail of the schedule. So the upscale pill
+            # means something different here — the factor is the model's and
+            # not the resolution slider's — and it needs the `upscaler` slot
+            # filled, which is why the slot is optional and this is a choice.
+            "refine": {"kind": "latent_upscale", "factor": 2,
+                       "slot": "upscaler"},
+            # The face pass is H3's crop-and-repair loop, written against its
+            # detector and its re-encode. Untried here, so not offered.
             "face": False,
             # What this family has that H3 does not. `canDo(piece, "duration")`
             # is what gates the seconds pill's "auto" — the capability is asked
@@ -168,7 +173,10 @@ def manifest():
             # Plain prose straight through Gemma. No Context-IR: H3's ordinal
             # citation grammar is a property of its own training, and what
             # replaces it here — guides through `LTXVAddGuide`, IC-LoRA
-            # references — is the render half's to declare.
-            "pipeline": "plain",
+            # references — is still undecided. Read off the registry's table,
+            # which is what `compile.py` branches on: a manifest describing one
+            # prompt while the compiler composed another would be a UI lying
+            # about what the model was sent.
+            "pipeline": registry.PROMPT_PIPELINE["ltx25"],
         },
     }
