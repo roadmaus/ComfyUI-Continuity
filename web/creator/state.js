@@ -476,6 +476,13 @@ export function serializeSampling(sampling) {
 export const CHECKPOINTS = WEIGHT_SLOTS.filter((slot) => slot.routed)
                                        .map((slot) => slot.id);
 export const CHECKPOINT_LABEL = slotTable("name");
+export const CHECKPOINT_WHEN = slotTable("when");
+
+// Which checkpoint the mode implies, and what each payload shape's mode is
+// called — the family's declarations, mirrored from compile.py through the
+// manifest. See `derivedCheckpoint` and `mode`.
+const ROUTED = VIDEO.routes;
+const MODES = VIDEO.modes;
 /** What `state.checkpoint` may hold: follow the mode, or pin one. */
 export const CHECKPOINT_CHOICES = ["auto", ...CHECKPOINTS];
 export const DEFAULT_STRENGTH = 1.0;
@@ -1115,7 +1122,7 @@ export function emptyTimeline() {
     // reference and plain cards runs on one set of weights. The pill still
     // overrides it, and a saved timeline keeps whatever it stored (a blob with
     // a models block and no route reads back as auto, exactly as it ran).
-    models: { ...emptyModels(), route: "ref2va" },
+    models: { ...emptyModels(), route: ROUTED.timeline },
     // The turbo switch. Global like the LoRA it engages: a speed-up belongs to
     // the run, not to shot 3.
     turbo: emptyTurbo(),
@@ -2526,7 +2533,8 @@ export function loraModes(entry) {
 export const claimsBoth = (entry) => loraModes(entry).length === CHECKPOINTS.length;
 
 /** The checkpoint the mode implies, before any pin. */
-export const derivedCheckpoint = (state) => (hasReferences(state) ? "ref2va" : "fl2va");
+export const derivedCheckpoint = (state) =>
+  (hasReferences(state) ? ROUTED.reference : ROUTED.plain);
 
 /** Which checkpoint this state routes to, and so which LoRAs will apply.
  *  Mirrors `compile._resolve_checkpoint`. */
@@ -2541,7 +2549,7 @@ export const checkpointPinned = (state) => canPinCheckpoint(state) && state.chec
 /** A pin only means anything where there is a choice to make. References are
  *  encoded *for* Ref2VA — no other weights can read the blocks — so the
  *  reference modes have none. */
-export const canPinCheckpoint = (state) => derivedCheckpoint(state) === "fl2va";
+export const canPinCheckpoint = (state) => derivedCheckpoint(state) === ROUTED.plain;
 
 /** Drop a pin the mode has moved out from under. Attaching a reference turns a
  *  frame generation into a reference one, and compile.py rejects an fl2va pin on
@@ -2640,9 +2648,9 @@ export function passCheckpoint(segments) {
   // card for the references it has no place to keep.
   if (segments.some(isClip)) return null;
   if (segments.length === 1) return checkpoint(segments[0]);
-  if (segments.some(hasReferences)) return "ref2va";
+  if (segments.some(hasReferences)) return ROUTED.reference;
   const pin = segments.map((s) => s.checkpoint).find((c) => c && c !== "auto");
-  return pin || "fl2va";
+  return pin || ROUTED.plain;
 }
 
 /**
@@ -2655,17 +2663,17 @@ export function passCheckpoint(segments) {
  */
 export function passMode(segments) {
   if (segments.length === 1) return mode(segments[0]);
-  if (segments.some(hasReferences)) return "REF2VA";
+  if (segments.some(hasReferences)) return MODES.reference;
   const head = segments[0] ?? { assets: [] };
   const first = frameAsset(head, "first_frame");
   const last = frameAsset(segments[segments.length - 1] ?? { assets: [] }, "last_frame");
   // The pass's own start frame is the seam's, when it has one — the same rule a
   // lone continuing segment follows, asked of the shot the seam lands on.
-  if (continues(head)) return last ? "FL2VA" : "I2VA";
-  if (first && last) return "FL2VA";
-  if (first) return "I2VA";
-  if (last) return "L2VA";
-  return "T2VA";
+  if (continues(head)) return last ? MODES.opens_closes : MODES.opens;
+  if (first && last) return MODES.opens_closes;
+  if (first) return MODES.opens;
+  if (last) return MODES.closes;
+  return MODES.text;
 }
 
 /**
@@ -3376,14 +3384,14 @@ export function remapContinueFrom(timeline, map) {
 export const continuesAudio = (state) => state.continue_audio === true;
 
 export function mode(state) {
-  if (hasReferences(state)) return "REF2VA";
+  if (hasReferences(state)) return MODES.reference;
   const first = frameAsset(state, "first_frame");
   const last = frameAsset(state, "last_frame");
-  if (continues(state)) return last ? "FL2VA" : "I2VA";
-  if (first && last) return "FL2VA";
-  if (first) return "I2VA";
-  if (last) return "L2VA";
-  return "T2VA";
+  if (continues(state)) return last ? MODES.opens_closes : MODES.opens;
+  if (first && last) return MODES.opens_closes;
+  if (first) return MODES.opens;
+  if (last) return MODES.closes;
+  return MODES.text;
 }
 
 /** What each bucket currently holds. A video with its sound on occupies both a

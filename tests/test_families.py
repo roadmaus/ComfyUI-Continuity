@@ -115,6 +115,14 @@ check("h3 routes are models.ROUTES",
       (h3["routes"]["options"], h3["routes"]["default"]),
       (models.ROUTES, models.DEFAULT_ROUTE))
 
+# The derivation targets are routed slots, and the mode names are compile.py's
+# own vocabulary — the frontend shows exactly what the compiler will say.
+for key in ("reference", "plain", "timeline"):
+    check(f"h3 routes[{key}] is a routed slot",
+          h3["routes"][key] in models.ROUTED_SLOTS, True)
+check("h3 mode names are compile.MODES",
+      sorted(set(h3["modes"].values())), sorted(_pkg.compile.MODES))
+
 frames = h3["canvas"]["frames"]
 legal = canvas.legal_frame_counts()
 check("the manifest's frame grid generates the legal counts",

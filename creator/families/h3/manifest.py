@@ -59,12 +59,15 @@ _UI = {
         "name": "FL2VA",
         "title": "FL2VA checkpoint",
         "help": "Text-only, start/end frame and continuing shots run on these weights.",
+        # What targeting this checkpoint alone means, on a LoRA's mode rows.
+        "when": "Only when generating from text or start/end frames.",
         "hints": ["fl2va", "first_last"],
     },
     "ref2va": {
         "name": "Ref2VA",
         "title": "Ref2VA checkpoint",
         "help": "Anything with an @ reference runs on these weights.",
+        "when": "Only when @ references are attached.",
         "hints": ["ref2va"],
     },
     "clip": {
@@ -115,7 +118,8 @@ def _weights():
         "help": _UI[name]["help"],
         "hints": _UI[name].get("hints", []),
         "avoid": _UI[name].get("avoid", []),
-        **({"name": _UI[name]["name"]} if slot.routed else {}),
+        **({"name": _UI[name]["name"], "when": _UI[name]["when"]}
+           if slot.routed else {}),
     } for name, slot in models.SLOTS.items()]
 
 
@@ -156,9 +160,27 @@ def manifest():
         "widgets": _widgets(),
         "weights": _weights(),
         # The standing route between the family's checkpoints — the control the
-        # weights popover draws beside the slots.
+        # weights popover draws beside the slots — and which checkpoint the
+        # mode implies. References are encoded *for* Ref2VA, so any @ reference
+        # routes there and a pin only exists on the plain side; a timeline
+        # defaults to the reference checkpoint outright, the superset training,
+        # so a strip mixing reference and plain cards runs on one set of
+        # weights. Mirrors `compile._resolve_checkpoint`.
         "routes": {"options": m.value_list(models.ROUTES),
-                   "default": models.DEFAULT_ROUTE},
+                   "default": models.DEFAULT_ROUTE,
+                   "reference": "ref2va",
+                   "plain": "fl2va",
+                   "timeline": "ref2va"},
+        # The payload shape -> the name the mode goes by, on cards and in the
+        # compiled prompt. "opens" is a first frame or a continuation seam,
+        # "closes" a last frame or a cut into a clip — the same reading
+        # `compile._derive_mode` makes; test_families holds the names against
+        # `compile.MODES`.
+        "modes": {"reference": "REF2VA",
+                  "opens_closes": "FL2VA",
+                  "opens": "I2VA",
+                  "closes": "L2VA",
+                  "text": "T2VA"},
         "canvas": _canvas(),
         "capabilities": {
             # The passes the loop may ask this family for.

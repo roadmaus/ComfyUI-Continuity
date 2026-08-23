@@ -40,8 +40,7 @@ export const loraBase = (entry) => baseName(entry.name);
 const baseName = (name) => name.split("/").pop().replace(/\.[^.]+$/, "");
 
 const MODE_CHOICES = [
-  ["fl2va", "FL2VA", "Only when generating from text or start/end frames."],
-  ["ref2va", "Ref2VA", "Only when @ references are attached."],
+  ...S.CHECKPOINTS.map((id) => [id, S.CHECKPOINT_LABEL[id], S.CHECKPOINT_WHEN[id]]),
   ["both", "Both", "Patch whichever checkpoint is routed."],
 ];
 
