@@ -57,9 +57,9 @@ import os
 import re
 from pathlib import Path
 
-from . import contextir
+from .families.h3 import contextir
 
-_PROMPTS = Path(__file__).parent / "prompts"
+_PROMPTS = Path(__file__).parent / "families" / "h3" / "prompts"
 
 # How long a reply may run, in tokens. Not a context size: nothing on this
 # backend has one. `Qwen3VLSDTokenizer` is built with `max_length=99999999` and

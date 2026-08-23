@@ -40,10 +40,15 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PY_ROOT = os.path.join(ROOT, "creator")
 WEB_ROOT = os.path.join(ROOT, "web", "creator")
 
-# Where a module is found when it is not simply `PY_ROOT/<name>.py`. Empty today;
-# this is what lets a module move into a family package without the suites that
-# load it having to learn where it went.
-MODULES = {}
+# Where a module is found when it is not simply `PY_ROOT/<name>.py` — the H3
+# protocol modules live in the family package now. This map is what lets them
+# move without the suites that load them having to learn where they went.
+_H3 = os.path.join(PY_ROOT, "families", "h3")
+MODULES = {
+    "contextir": os.path.join(_H3, "contextir.py"),
+    "subjects": os.path.join(_H3, "subjects.py"),
+    "payload": os.path.join(_H3, "payload.py"),
+}
 
 
 def js(*parts):
@@ -84,6 +89,12 @@ def load(*names, package="mmcpkg"):
         holder = types.ModuleType(package)
         holder.__path__ = [PY_ROOT]
         sys.modules[package] = holder
+        # `from . import contextir` inside a loaded module finds a sibling at
+        # `PY_ROOT` through the path above — but a module in `MODULES` moved off
+        # that path, so the finder below serves those by name. Without it, every
+        # suite would have to know which package a dependency moved into, which
+        # is exactly what this file exists to know instead.
+        sys.meta_path.append(_MovedModules(package))
     holder = sys.modules[package]
 
     for name in names:
@@ -98,6 +109,19 @@ def load(*names, package="mmcpkg"):
             setattr(holder, name, module)
             spec.loader.exec_module(module)
     return holder
+
+
+class _MovedModules:
+    """Resolves `<package>.<name>` for the names `MODULES` relocated."""
+
+    def __init__(self, package):
+        self.package = package
+
+    def find_spec(self, fullname, path=None, target=None):
+        prefix, _, name = fullname.rpartition(".")
+        if prefix != self.package or name not in MODULES:
+            return None
+        return importlib.util.spec_from_file_location(fullname, MODULES[name])
 
 
 def run(script, *args):

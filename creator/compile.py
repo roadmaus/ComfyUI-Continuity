@@ -17,7 +17,8 @@ lists this module produces in exactly that order; the two must be read together.
 import re
 from dataclasses import dataclass, field, replace
 
-from . import canvas, contextir, subjects
+from . import canvas
+from .families.h3 import contextir, subjects
 
 MODES = ("T2VA", "I2VA", "L2VA", "FL2VA", "REF2VA")
 
