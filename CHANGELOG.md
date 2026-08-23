@@ -1,6 +1,40 @@
 # Changelog
 
-## Unreleased
+## 2.26
+
+**A long reference does not take the card down with it.** A reference video is
+`latent_t` copies of its own grid, not one, so ten seconds at `max` is around two
+hundred thousand conditioning tokens — longer than the clip being generated, and
+every row of it rides through every sampling step. At that length the widest
+tensor in the model is the first projection of each block's SwiGLU, gigabytes of
+it, and a branched LoRA held three of them at once: the layer's own output, a
+delta of the same shape, and the sum that allocated a third. That third
+allocation is what ended a render on a 32 GB card, on the second sampler pass
+where the branch bank is attached, having got through the first pass on the same
+shapes. The branch now adds into the tensor the layer already returned, so it
+costs the rank-width intermediate and nothing else. Unscheduled branches stay
+bit-identical; a scheduled one moves by the last bit, because the add happens
+inside the matmul now instead of after it.
+
+What that cannot do is make the sequence shorter, and a long reference at `max`
+still costs what it costs. Accelerators → chunked feed-forward splits the same
+arithmetic over the sequence and is free — it is arithmetic rearrangement, not a
+trade — and `match` on the reference itself is the other half of the answer.
+
+**Recommended: a ComfyUI carrying H3's seven special tokens.** The released
+tokenizer declares `<d>`, `</d>`, `<|cutoff|>`, `<|lyrics_start|>`,
+`<|lyrics_end|>`, `<|caption_start|>` and `<|caption_end|>` in its config and
+nowhere else, and ComfyUI did not add them, so the dialogue tags this pack writes
+were tokenized as two pieces of ordinary text apiece rather than as the token the
+model was trained on. [PR #15808](https://github.com/comfyanonymous/ComfyUI/pull/15808),
+merged 2026-08-22, adds them. Nothing here needs to change to get it — the prompt
+is handed to ComfyUI as text and tokenized there — but it is worth updating for,
+and worth knowing that it changes results: a prompt carrying dialogue or lyrics
+renders differently afterwards on the same seed, in the direction of correctness.
+A prompt with no `<d>` in it is unaffected. There is no minimum version and this
+is not a floor; a ComfyUI without the PR runs everything here correctly, it just
+spells the dialogue tags worse.
+
 
 **A duplicated segment does not copy the cast into the piece's references.** It
 never did — but that is what it looked like, and it was reported twice. A piece
