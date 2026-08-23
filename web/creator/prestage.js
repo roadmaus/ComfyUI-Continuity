@@ -35,7 +35,7 @@ import { CreatorEditor } from "./editor.js";
 import { openPresetLibrary } from "./presetlib.js";
 import * as P from "./presets.js";
 import { PromptBox, focusEnd, openEditorSheet } from "./prompt.js";
-import { blobIO, migrate, samplingBar, SAMPLING_WIDGETS } from "./sampling.js";
+import { blobIO, samplingBar } from "./sampling.js";
 import { Stage } from "./stage.js";
 import { loadCatalog, refreshCatalog, catalogByFolder } from "./models.js";
 import { viewUrl } from "./api.js";
