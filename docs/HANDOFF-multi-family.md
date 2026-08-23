@@ -235,9 +235,10 @@ The plan's per-phase verification list, items 4–6, is what is left:
   2026-08-23 — works. Re-verified there after phase 3 (loop split, slot table,
   refine move, the load-failure fix) and again after phase 5 (the manifest
   route, the drained frontend), same day.
-- **`presets/atlas.js` is probably H3-prompt-shaped.** Whether a preset's prose
-  survives being handed to another family is unanswered and blocks LTX, not
-  phase 3.
+- ~~**`presets/atlas.js` is probably H3-prompt-shaped.**~~ Answered
+  2026-08-23: it is not. A style preset is a text description and optionally
+  an image — family-neutral by construction, no family tag or filtering
+  needed. Nothing blocks LTX.
 - **i18n**: three dictionaries keyed by English string. The manifest path is
   settled (strings travel verbatim, rendered through `t()`), but the accel
   tooltips in `sampling.js` and the pass copy in `pills.js`/`refine.js` are
