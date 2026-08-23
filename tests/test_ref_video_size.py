@@ -35,22 +35,26 @@ BASE = os.environ.get("COMFYUI_BASE", COMFY)
 def _boot():
     sys.path.insert(0, COMFY)
     sys.argv = ["main.py", "--base-directory", BASE]
-    package = types.ModuleType("mmc")
-    package.__path__ = [layout.PY_ROOT]
-    sys.modules["mmc"] = package
-    spec = importlib.util.spec_from_file_location("mmc.encode", layout.py("encode"))
-    module = importlib.util.module_from_spec(spec)
-    sys.modules["mmc.encode"] = module
-    spec.loader.exec_module(module)
     from comfy_extras.nodes_minimax_h3 import CANVAS_MULTIPLE, adapt_canvas
-    return module, adapt_canvas, CANVAS_MULTIPLE
+    return adapt_canvas, CANVAS_MULTIPLE
 
 
 try:
-    encode, adapt_canvas, MULTIPLE = _boot()
+    adapt_canvas, MULTIPLE = _boot()
 except Exception as exc:  # noqa: BLE001
     print(f"skipped: ComfyUI not importable ({type(exc).__name__}: {exc})")
     sys.exit(0)
+
+# The pack's module loads *outside* the skip guard: the guard proves the
+# environment, and a module of ours that will not import is a failure, not a
+# machine allowed to bow out.
+package = types.ModuleType("mmc")
+package.__path__ = [layout.PY_ROOT]
+sys.modules["mmc"] = package
+_spec = importlib.util.spec_from_file_location("mmc.encode", layout.py("encode"))
+encode = importlib.util.module_from_spec(_spec)
+sys.modules["mmc.encode"] = encode
+_spec.loader.exec_module(encode)
 
 from harness import FAILURES, check, passed
 

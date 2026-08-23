@@ -44,24 +44,26 @@ def _boot():
     sys.argv = ["main.py", "--base-directory", BASE]
     import folder_paths  # noqa: F401  (proves the install is usable)
 
-    package = types.ModuleType("mmc")
-    package.__path__ = [layout.PY_ROOT]
-    sys.modules["mmc"] = package
-    spec = importlib.util.spec_from_file_location("mmc.media", layout.py("media"))
-    module = importlib.util.module_from_spec(spec)
-    sys.modules["mmc.media"] = module
-    spec.loader.exec_module(module)
-    return module
-
 
 try:
     import av
     import numpy as np
 
-    media = _boot()
+    _boot()
 except Exception as exc:  # noqa: BLE001
     print(f"skipped: ComfyUI not importable ({type(exc).__name__}: {exc})")
     sys.exit(0)
+
+# The pack's module loads *outside* the skip guard: the guard proves the
+# environment, and a module of ours that will not import is a failure, not a
+# machine allowed to bow out.
+package = types.ModuleType("mmc")
+package.__path__ = [layout.PY_ROOT]
+sys.modules["mmc"] = package
+_spec = importlib.util.spec_from_file_location("mmc.media", layout.py("media"))
+media = importlib.util.module_from_spec(_spec)
+sys.modules["mmc.media"] = media
+_spec.loader.exec_module(media)
 
 from harness import FAILURES, check, passed
 

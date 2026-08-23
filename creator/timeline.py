@@ -48,7 +48,8 @@ import logging
 from comfy_api.latest import io
 
 from . import (canvas, compile as compiler, encode as encoder, lora, media, mux,
-               outputs, payload as payload_repair, settings, spill)
+               outputs, settings, spill)
+from .families.h3 import payload as payload_repair
 
 # The reel's own socket type: the parts of the finished video in play order,
 # each of them a file — a pass `spill.py` wrote, or a clip the user supplied.

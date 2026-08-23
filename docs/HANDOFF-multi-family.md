@@ -92,6 +92,16 @@ manifests describe *controls*, not just values.
 
 ## Things that will bite
 
+- **A suite that can skip can swallow a failure, and exit 0 doing it.** The
+  ComfyUI-booting suites used to import the *pack* inside the same try/except
+  that skips on a machine without ComfyUI — so a pack that failed to import
+  printed "skipped: ComfyUI not importable" and exited green. Eight suites,
+  goldens included, reported green for a whole afternoon on a branch whose
+  node did not load; ComfyUI's own startup log is what said so. The guards now
+  import the pack *outside* the skip; keep it that way, and when a run
+  matters, confirm the booting suites printed their pass line rather than
+  "skipped". A one-line real-load check is opening ComfyUI's newest log under
+  the install's `logs/` and searching for `IMPORT FAILED`.
 - **`node --check` proves nothing about imports.** It is a parse. ES modules
   resolve named imports at *link* time, so one missing export takes down the
   whole extension and every node falls back to raw widgets. `tests/test_js_links.py`

@@ -49,7 +49,6 @@ def _boot():
     loop.run_until_complete(nodes.init_extra_nodes(init_custom_nodes=False))
 
     sys.path.insert(0, os.path.dirname(ROOT))
-    return importlib.import_module(PACKAGE)
 
 
 try:
@@ -57,6 +56,12 @@ try:
 except Exception as exc:  # noqa: BLE001
     print(f"skipped: ComfyUI not importable ({type(exc).__name__}: {exc})")
     sys.exit(0)
+
+# The pack imports *outside* the skip guard. A machine without ComfyUI is
+# allowed to bow out; a pack that will not import is the exact failure this
+# suite exists to catch, and for one afternoon a skip that swallowed it
+# reported eight suites green on a branch whose node did not load.
+importlib.import_module(PACKAGE)
 
 cn = importlib.import_module(f"{PACKAGE}.creator.creator_node")
 media_mod = importlib.import_module(f"{PACKAGE}.creator.media")
