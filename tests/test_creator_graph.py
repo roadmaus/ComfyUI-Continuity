@@ -61,6 +61,9 @@ tl = importlib.import_module(f"{PACKAGE}.creator.timeline")
 outputs_mod = importlib.import_module(f"{PACKAGE}.creator.outputs")
 settings_mod = importlib.import_module(f"{PACKAGE}.creator.settings")
 render_mod = importlib.import_module(f"{PACKAGE}.creator.render")
+# The lead-in's core probe lives with H3's hooks now, and patching a re-export
+# would flip a name the emitting code no longer reads.
+h3_render_mod = importlib.import_module(f"{PACKAGE}.creator.families.h3.render")
 
 from harness import FAILURES, check
 
@@ -886,8 +889,8 @@ try:
     # nothing about the lead-in that asked for it (#27). Said here instead,
     # before anything is loaded, and only where a split is actually on: the
     # setting is nobody's problem on a render that runs one sampler.
-    core = render_mod.CORE_EMPTY_NOISE_IS_NESTED
-    render_mod.CORE_EMPTY_NOISE_IS_NESTED = False
+    core = h3_render_mod.CORE_EMPTY_NOISE_IS_NESTED
+    h3_render_mod.CORE_EMPTY_NOISE_IS_NESTED = False
     try:
         expect_error("a core that cannot start a split without noise says so",
                      lambda: build(data=TURBO_DATA, steps=6).expand,
@@ -897,6 +900,6 @@ try:
                for k in ("KSampler", "KSamplerAdvanced")],
               [1, 0])
     finally:
-        render_mod.CORE_EMPTY_NOISE_IS_NESTED = core
+        h3_render_mod.CORE_EMPTY_NOISE_IS_NESTED = core
 finally:
     settings_mod.turbo_lead_in = was

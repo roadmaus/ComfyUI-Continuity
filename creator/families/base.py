@@ -1,0 +1,98 @@
+"""What a model family is, to the render loop.
+
+The graph-side boundary is the family's segment node: it takes `segment_data`
+plus loader links and returns `(model, positive, latent, lead model)`. That
+tuple is the contract — everything `core/emit.py` does around it (the clip
+branch, seam wiring, the reel, the save node, takes) never looks inside a
+conditioning or a latent, which is what lets it stay one loop for every family.
+
+A family supplies the parts a checkpoint's training decided: how a payload
+compiles, which weights a generation routes to, what the loaders are, how the
+segment node is wired, what a sampler subgraph looks like (H3 emits `KSampler`;
+LTX will emit a scheduler, a guider and `SamplerCustomAdvanced`), and the
+refine and face passes where the family has them.
+
+The hooks receive `sampling`, `acceleration`, `weights` and `run` as the family
+shaped them — the loop passes them through and never reads their fields. Two
+exceptions, and they are the contract's fine print:
+
+- The object `emit_loaders` returns must expose `.vae` and `.audio_vae` links.
+  The reel layer decodes with them, and that layer is family-neutral by
+  construction — core's joint AV latent is what `LTXVConcatAVLatent` calls "any
+  AV model".
+- `weights` must answer `routed(payload)` — the standing route stamped onto a
+  payload before it becomes a cache key, or the payload unchanged.
+
+Hooks that create graph nodes must create them in the order they are called:
+node ids are assigned sequentially, and the golden-graph suite holds every
+family to byte-identical emissions.
+"""
+
+
+class Family:
+    """One model family. Stateless; a singleton per family.
+
+    Subclasses override everything below. The bodies here raise rather than
+    pass so a family that forgets a hook fails by name at the call site.
+    """
+
+    #: "h3" — the id routes, manifests and tests know the family by.
+    id = None
+    #: "MiniMax H3" — what a user reads.
+    label = None
+    #: which kinds of thing the family renders, e.g. {"video", "still"}.
+    produces = frozenset()
+
+    #: the exception type `compile` raises for a request it refuses. The loop
+    #: catches exactly this and prefixes the segment's label.
+    compile_error = ValueError
+
+    def preflight(self, sampling, acceleration):
+        """Raise for a run that cannot happen — before anything compiles."""
+        raise NotImplementedError(f"{self.id}.preflight")
+
+    def compile(self, payload, image_size):
+        """One payload -> the family's compiled form."""
+        raise NotImplementedError(f"{self.id}.compile")
+
+    def routes(self, compiled, labels):
+        """`{weight slot: label of the first generation that routes to it}`."""
+        raise NotImplementedError(f"{self.id}.routes")
+
+    def check(self, weights, where, audio=True, face=False):
+        """Raise if a file this render needs was never picked."""
+        raise NotImplementedError(f"{self.id}.check")
+
+    def emit_loaders(self, graph, weights, routes):
+        """Build the loaders; -> the links object the other hooks receive."""
+        raise NotImplementedError(f"{self.id}.emit_loaders")
+
+    def emit_segment(self, graph, links, payload, compiled, weights, sampling,
+                     seams, run):
+        """The segment node, wired. -> the node whose outs are the contract
+        tuple. `seams` maps the segment's seam input names to links the loop
+        already built; the hook passes them through untouched."""
+        raise NotImplementedError(f"{self.id}.emit_segment")
+
+    def emit_sampler(self, graph, segment, payload, compiled, sampling,
+                     acceleration, weights, seed, run):
+        """The sampler subgraph over one segment. -> the sampled latent link."""
+        raise NotImplementedError(f"{self.id}.emit_sampler")
+
+    def emit_refine(self, graph, links, payload, compiled, weights, seams,
+                    latent, sampling, acceleration, seed, run):
+        """The two-pass upscale over a sampled latent. -> the refined latent
+        link. Called only where the compiled payload asks for one."""
+        raise NotImplementedError(f"{self.id}.emit_refine")
+
+    def face_payload(self, payload, face):
+        """The payload the face pass's conditioning is compiled from."""
+        raise NotImplementedError(f"{self.id}.face_payload")
+
+    def emit_face(self, graph, links, payload, compiled, face, written, weights,
+                  sampling, acceleration, seed):
+        """The face repair over a written pass. `face` is the compiled face
+        spec off the *original* payload; `payload`/`compiled` are the crop's
+        own. -> the node whose out(0) is the reel and out(1) the pass link,
+        the same shape the reel node hands out."""
+        raise NotImplementedError(f"{self.id}.emit_face")

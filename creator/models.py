@@ -412,7 +412,7 @@ def emit_links(graph, weights, checkpoints, audio=True):
     takes the flag: a still decodes no sound, and a loader in the graph is a
     file loaded whether or not anything reads it.
     """
-    from .render import Links
+    from .families.h3.render import Links
 
     def loader(field, node_id, filename, **inputs):
         wrapper, extra = loader_for(node_id, weights.device(field), filename)
