@@ -38,6 +38,13 @@ from comfy_api.latest import io
 from . import (canvas, compile_image, media, outputs, render, render_image,
                sampling, settings)
 from .families.h3 import still
+from .families.ideogram4 import still as ideogram4
+from .families.krea2 import still as krea2
+
+# Which family compiles and renders each of the pill's image architectures.
+# The H3 branch is dispatched apart below: a still from the video model rides
+# the video pipeline, not this shared image flow.
+IMAGE_FAMILIES = {krea2.ARCH: krea2, ideogram4.ARCH: ideogram4}
 
 DEFAULT_DATA = json.dumps({
     "version": 1,
@@ -48,8 +55,8 @@ DEFAULT_DATA = json.dumps({
     "init": None,
     "refs": [],
     "loras": [],
-    "turbo": {"on": False, "quality": compile_image.DEFAULT_TURBO_QUALITY, "saved": None},
-    "quality": compile_image.DEFAULT_IDEOGRAM_QUALITY,
+    "turbo": {"on": False, "quality": krea2.DEFAULT_TURBO_QUALITY, "saved": None},
+    "quality": ideogram4.DEFAULT_IDEOGRAM_QUALITY,
     # Where the still lands under output/. Its own default, so the gallery
     # sorts stills apart from finished renders. See `outputs`.
     "output_prefix": outputs.IMAGE_PREFIX,
@@ -96,12 +103,12 @@ class MiniMaxH3PreStage(io.ComfyNode):
             inputs=[
                 io.String.Input("prestage_data", multiline=True, default=DEFAULT_DATA),
                 io.Int.Input("seed", default=0, min=0, max=0xffffffffffffffff, control_after_generate=True),
-                io.Int.Input("steps", default=compile_image.KREA_RAW["steps"], min=1, max=10000),
-                io.Float.Input("cfg", default=compile_image.KREA_RAW["cfg"], min=0.0, max=100.0, step=0.1, round=0.01),
+                io.Int.Input("steps", default=krea2.KREA_RAW["steps"], min=1, max=10000),
+                io.Float.Input("cfg", default=krea2.KREA_RAW["cfg"], min=0.0, max=100.0, step=0.1, round=0.01),
                 io.Combo.Input("sampler_name", options=comfy.samplers.KSampler.SAMPLERS,
-                               default=compile_image.KREA_RAW["sampler_name"]),
+                               default=krea2.KREA_RAW["sampler_name"]),
                 io.Combo.Input("scheduler", options=comfy.samplers.KSampler.SCHEDULERS,
-                               default=compile_image.KREA_RAW["scheduler"],
+                               default=krea2.KREA_RAW["scheduler"],
                                tooltip="Krea 2 samples on this schedule. Ideogram 4 owns its own resolution-shifted schedule and ignores it."),
             ],
             outputs=[],
@@ -182,16 +189,21 @@ class MiniMaxH3PreStage(io.ComfyNode):
                 filename_prefix=outputs.image(request, settings.image_prefix()))
             return render.expanded(graph)
 
+        arch = data.get("arch", compile_image.DEFAULT_ARCH)
+        family = IMAGE_FAMILIES.get(arch)
+        if family is None:
+            raise ValueError(f"unknown model architecture {arch!r}")
         try:
-            payload = compile_image.compile_prestage(data, media.image_size)
+            payload = compile_image.compile_prestage(data, family, media.image_size)
         except compile_image.CompileError as exc:
             raise ValueError(str(exc)) from exc
 
         graph = render_image.emit(
             payload,
-            render_image.ImageWeights.from_blob(data),
+            render_image.ImageWeights.from_blob(data, family),
             sampler,
             cls.hidden.unique_id,
+            family,
             # Refused before anything is sampled — see MiniMaxH3Creator.execute.
             filename_prefix=outputs.image(data, settings.image_prefix()))
         return render.expanded(graph)

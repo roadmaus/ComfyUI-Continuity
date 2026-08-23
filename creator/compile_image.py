@@ -6,17 +6,12 @@ constants (`state.js`) and the tests can run without a GPU. The blob is the
 frontend's serialised state exactly as `creator_data` is; this validates it and
 reduces it to the payload `render_image.emit` builds a graph from.
 
-Two architectures, both open weights, both native in core:
-
-- **Krea 2** (12.9B DiT, Qwen3-VL-4B text encoder, Qwen Image VAE). RAW is the
-  base checkpoint and samples like an ordinary CFG model; Turbo is an 8-step
-  distillation that runs at cfg 1. Style references go through core's
-  Qwen-edit encoder, which has exactly three image slots — that is where
-  `MAX_STYLE_REFS` comes from, not taste.
-- **Ideogram 4.0** (9.3B single-stream DiT, Qwen3-VL-8B). Sampled on its own
-  resolution-shifted schedule with a *pair* of checkpoints — the unconditional
-  branch is a separate model — so its knobs are the official preset table
-  rather than a steps widget alone.
+This is the *shared* half. What an architecture decides for itself — its
+checkpoint fields, its sampler presets, which files it loads — lives in its
+family package (`families/krea2/still.py`, `families/ideogram4/still.py`), and
+`compile_prestage` takes that module as `family` and reads its declarations.
+What stays here is what every image still shares: the prompt and its triggers,
+the style-reference citations, the init image, and the /16 canvas.
 
 Style references are cited from the prompt the way everything else in this pack
 is: `@ref-1` is written where the reference belongs in the sentence and becomes
@@ -72,29 +67,6 @@ DEFAULT_ASPECT = "16:9"
 # Core's TextEncodeQwenImageEditPlus has three image inputs. The cap is that
 # node's shape, mirrored here so the UI refuses a fourth instead of the graph.
 MAX_STYLE_REFS = 3
-
-# What each Krea 2 checkpoint wants from the sampler row. RAW is undistilled and
-# runs real CFG; Turbo is distilled and runs at 1. These are what the turbo pill
-# writes into the widgets and what a fresh node defaults to.
-KREA_RAW = {"steps": 52, "cfg": 3.5, "sampler_name": "euler", "scheduler": "simple"}
-KREA_TURBO = {"cfg": 1.0, "sampler_name": "euler", "scheduler": "simple"}
-TURBO_STEPS = {"draft": 4, "medium": 6, "good": 8}
-DEFAULT_TURBO_QUALITY = "good"
-
-# Ideogram's official preset table, verbatim from the shipped ComfyUI template
-# (V4_QUALITY_48 / V4_DEFAULT_20 / V4_TURBO_12). mu and std shape the
-# resolution-shifted schedule, so they belong to the preset, not to the user.
-IDEOGRAM_QUALITIES = {
-    "quality": {"steps": 48, "mu": 0.0, "std": 1.5},
-    "default": {"steps": 20, "mu": 0.0, "std": 1.75},
-    "turbo": {"steps": 12, "mu": 0.5, "std": 1.75},
-}
-DEFAULT_IDEOGRAM_QUALITY = "default"
-# The template's guidance: cfg 7 for most of the trajectory, dropped to 3 over
-# the last 30% so the fine steps stop over-sharpening. The 7 is the node's cfg
-# widget; the late drop is constant wiring.
-IDEOGRAM_CFG = 7.0
-IDEOGRAM_CFG_LATE = {"cfg": 3.0, "start_percent": 0.7, "end_percent": 1.0}
 
 # How much of the init image survives by default when one is attached. The same
 # number the img2img tradition has always landed on: enough to keep the
@@ -257,8 +229,14 @@ def _cite_refs(prompt, refs):
     return HANDLE_RE.sub(lambda m: labels.get(m.group(1), m.group(0)), prompt)
 
 
-def compile_prestage(data, image_size_lookup=None):
-    """`prestage_data` dict -> `ImagePayload`.
+def compile_prestage(data, family, image_size_lookup=None):
+    """`prestage_data` dict -> `ImagePayload`, for `family`'s architecture.
+
+    `family` is the architecture's own module — `families/krea2/still.py` or
+    `families/ideogram4/still.py` — and supplies everything the flow below does
+    not decide: whether references are read, and which checkpoint field and
+    schedule shape the blob's arch block resolves to. The caller picked it off
+    the blob's `arch`, so an unknown arch is refused there, not here.
 
     `image_size_lookup(filename) -> (width, height)` supplies the init image's
     dimensions so an img2img render keeps its source's aspect — the same
@@ -267,10 +245,6 @@ def compile_prestage(data, image_size_lookup=None):
     """
     if not isinstance(data, dict):
         raise CompileError("prestage_data must be a JSON object")
-
-    arch = data.get("arch", DEFAULT_ARCH)
-    if arch not in ARCHES:
-        raise CompileError(f"unknown model architecture {arch!r}")
 
     prompt = str(data.get("prompt") or "").strip()
     if not prompt:
@@ -285,18 +259,15 @@ def compile_prestage(data, image_size_lookup=None):
         prompt = f"{', '.join(triggers)}, {prompt}"
 
     refs = _parse_refs(data.get("refs"))
-    # Before the arch check below, so a prompt citing a reference on Ideogram is
-    # refused for the reference rather than for the citation — one mistake, and
-    # the one the user actually made.
+    # Cited before the family check below, so a prompt citing a reference on a
+    # family that reads none is refused for the reference rather than for the
+    # citation — one mistake, and the one the user actually made.
     prompt = _cite_refs(prompt, refs)
-    if refs and arch == "ideogram4":
-        # Refused rather than dropped: Ideogram 4's model reads no reference
-        # conditioning at all, and a render that silently ignored the attached
-        # images is the failure this package exists to avoid.
-        raise CompileError(
-            "Ideogram 4.0 has no local reference conditioning — switch the "
-            "model pill to Krea 2, or clear the style references"
-        )
+    if refs and not family.TAKES_REFS:
+        # Refused rather than dropped, in the family's own words: a render that
+        # silently ignored the attached images is the failure this package
+        # exists to avoid.
+        raise CompileError(family.REFS_REFUSAL)
 
     init = _parse_init(data.get("init"))
 
@@ -313,21 +284,10 @@ def compile_prestage(data, image_size_lookup=None):
             raise CompileError(f"unknown aspect {aspect!r}")
     width, height = resolve_canvas(ratio, short_edge)
 
-    checkpoint_field = "model"
-    mu = std = None
-    if arch == "krea2":
-        turbo = data.get("turbo") or {}
-        if turbo.get("on"):
-            checkpoint_field = "turbo_model"
-    else:
-        quality = data.get("quality", DEFAULT_IDEOGRAM_QUALITY)
-        if quality not in IDEOGRAM_QUALITIES:
-            raise CompileError(f"unknown Ideogram quality preset {quality!r}")
-        preset = IDEOGRAM_QUALITIES[quality]
-        mu, std = preset["mu"], preset["std"]
+    checkpoint_field, mu, std = family.plan(data)
 
     return ImagePayload(
-        arch=arch, prompt=prompt, width=width, height=height,
+        arch=family.ARCH, prompt=prompt, width=width, height=height,
         checkpoint_field=checkpoint_field, loras=loras,
         # Filenames alone from here on: the handles did their work above and the
         # graph loads these by name, in this order, into the encoder's slots.

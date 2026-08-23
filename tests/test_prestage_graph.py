@@ -61,6 +61,8 @@ package = importlib.import_module(PACKAGE)
 ps = importlib.import_module(f"{PACKAGE}.creator.prestage")
 ci = importlib.import_module(f"{PACKAGE}.creator.compile_image")
 cs = importlib.import_module(f"{PACKAGE}.creator.families.h3.still")
+k2 = importlib.import_module(f"{PACKAGE}.creator.families.krea2.still")
+i4 = importlib.import_module(f"{PACKAGE}.creator.families.ideogram4.still")
 outputs = importlib.import_module(f"{PACKAGE}.creator.outputs")
 
 from harness import FAILURES, check
@@ -255,7 +257,7 @@ check("the trigger word rides in front of the prompt",
 
 init_payload = ci.compile_prestage(
     {"arch": "krea2", "prompt": "p", "init": {"filename": "seed.png", "denoise": 0.6},
-     "aspect": "1:1", "short_edge": 1024})
+     "aspect": "1:1", "short_edge": 1024}, k2)
 check("the payload carries the init", init_payload.init,
       {"filename": "seed.png", "denoise": 0.6})
 
@@ -264,7 +266,8 @@ ri = importlib.import_module(f"{PACKAGE}.creator.render_image")
 
 i2i_graph = ri.emit(init_payload, ri.ImageWeights(arch="krea2", files=MODELS["krea2"]),
                     render_mod.Sampling(seed=1, steps=52, cfg=3.5,
-                                        sampler_name="euler", scheduler="simple"), NODE_ID)
+                                        sampler_name="euler", scheduler="simple"),
+                    NODE_ID, k2)
 i2i = by_class(i2i_graph.finalize())
 check("the init is loaded and encoded",
       ("LoadImage" in i2i, "VAEEncode" in i2i, "EmptySD3LatentImage" in i2i),
@@ -282,9 +285,9 @@ check("the sampler starts from the encode at the entry's strength",
 
 refs_payload = ci.compile_prestage(
     {"arch": "krea2", "prompt": "p", "refs": [{"filename": "a.png"}, {"filename": "b.png"}],
-     "aspect": "1:1", "short_edge": 1024})
+     "aspect": "1:1", "short_edge": 1024}, k2)
 refs = by_class(ri.emit(refs_payload, ri.ImageWeights(arch="krea2", files=MODELS["krea2"]),
-                        render_mod.Sampling(), NODE_ID).finalize())
+                        render_mod.Sampling(), NODE_ID, k2).finalize())
 encode = refs["TextEncodeQwenImageEditPlus"][0][1]
 check("both references sit in the encoder's image slots",
       ("image1" in encode, "image2" in encode, "image3" in encode),
@@ -302,7 +305,7 @@ check("no plain text encode on the reference branch", "CLIPTextEncode" in refs, 
 expect_error("a fourth reference is refused",
              lambda: ci.compile_prestage(
                  {"arch": "krea2", "prompt": "p",
-                  "refs": ["a.png", "b.png", "c.png", "d.png"]}),
+                  "refs": ["a.png", "b.png", "c.png", "d.png"]}, k2),
              "three image slots")
 
 # ---- Ideogram 4 --------------------------------------------------------------
@@ -352,11 +355,11 @@ check("one checkpoint is ordinary CFG, not an error",
 # Ideogram i2i truncates the schedule instead of using a denoise widget.
 ideo_i2i_payload = ci.compile_prestage(
     {"arch": "ideogram4", "prompt": "p", "init": {"filename": "seed.png", "denoise": 0.5},
-     "aspect": "1:1", "short_edge": 1024})
+     "aspect": "1:1", "short_edge": 1024}, i4)
 ideo_i2i = by_class(ri.emit(ideo_i2i_payload,
                             ri.ImageWeights(arch="ideogram4", files=MODELS["ideogram4"]),
                             render_mod.Sampling(steps=20, cfg=7.0, sampler_name="euler"),
-                            NODE_ID).finalize())
+                            NODE_ID, i4).finalize())
 check("i2i keeps the tail of the sigmas",
       ideo_i2i["SplitSigmasDenoise"][0][1]["denoise"], 0.5)
 check("the sampler reads the truncated schedule",

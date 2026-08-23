@@ -50,6 +50,8 @@ MODULES = {
     "payload": "families.h3.payload",
     "refine": "families.h3.refine",
     "still": "families.h3.still",
+    "krea2_still": "families.krea2.still",
+    "ideogram4_still": "families.ideogram4.still",
 }
 
 

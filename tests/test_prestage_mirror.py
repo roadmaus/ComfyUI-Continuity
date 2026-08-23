@@ -17,9 +17,12 @@ layout.skip_without_node()
 
 MIRROR = layout.js("state.js")
 
-_pkg = layout.load("canvas", "contextir", "compile", "compile_image", "still")
+_pkg = layout.load("canvas", "contextir", "compile", "compile_image", "still",
+                   "krea2_still", "ideogram4_still")
 ci = _pkg.compile_image
 cs = _pkg.still
+k2 = _pkg.krea2_still
+i4 = _pkg.ideogram4_still
 cv = _pkg.canvas
 
 
@@ -98,10 +101,10 @@ for key, size in reflected["canvases"].items():
     check(key, size, list(ci.resolve_canvas(ci.ASPECT_PRESETS[label], int(edge))))
 
 for quality, steps in reflected["ideogram"].items():
-    check(f"ideogram {quality} steps", steps, ci.IDEOGRAM_QUALITIES[quality]["steps"])
+    check(f"ideogram {quality} steps", steps, i4.IDEOGRAM_QUALITIES[quality]["steps"])
 
-check("turbo steps", reflected["turbo"], ci.TURBO_STEPS)
-check("krea RAW row", reflected["krea_raw"], ci.KREA_RAW)
+check("turbo steps", reflected["turbo"], k2.TURBO_STEPS)
+check("krea RAW row", reflected["krea_raw"], k2.KREA_RAW)
 
 # ---- citing a style reference -----------------------------------------------
 #
@@ -120,24 +123,24 @@ def still(prompt, refs=(), arch="krea2"):
 REFS = (("ref-1", "plate.png"), ("ref-2", "coat.png"))
 
 check("a citation becomes the encoder's own label",
-      ci.compile_prestage(still("the coat from @ref-2, lit like @ref-1", REFS)).prompt,
+      ci.compile_prestage(still("the coat from @ref-2, lit like @ref-1", REFS), k2).prompt,
       "the coat from Picture 2, lit like Picture 1")
 check("...numbered by slot, not by handle",
-      ci.compile_prestage(still("@ref-2", (("ref-2", "a.png"), ("ref-1", "b.png")))).prompt,
+      ci.compile_prestage(still("@ref-2", (("ref-2", "a.png"), ("ref-1", "b.png"))), k2).prompt,
       "Picture 1")
 check("the payload still carries filenames in slot order",
-      ci.compile_prestage(still("@ref-1 and @ref-2", REFS)).refs, ["plate.png", "coat.png"])
+      ci.compile_prestage(still("@ref-1 and @ref-2", REFS), k2).refs, ["plate.png", "coat.png"])
 check("an uncited reference still rides in as a slot",
-      ci.compile_prestage(still("a woman in a red coat", REFS)).refs,
+      ci.compile_prestage(still("a woman in a red coat", REFS), k2).refs,
       ["plate.png", "coat.png"])
 check("ordinary prose is not a citation",
-      ci.compile_prestage(still("meet me @ 5 in the courtyard", REFS)).prompt,
+      ci.compile_prestage(still("meet me @ 5 in the courtyard", REFS), k2).prompt,
       "meet me @ 5 in the courtyard")
 
 # A handle naming nothing is an error rather than prose left alone: it means a
 # reference was removed and the sentence still points at it.
 try:
-    ci.compile_prestage(still("lit like @ref-9", REFS))
+    ci.compile_prestage(still("lit like @ref-9", REFS), k2)
 except ci.CompileError as exc:
     if "@ref-9" not in str(exc):
         FAILURES.append(f"a dangling citation does not name itself: {exc}")
@@ -147,7 +150,7 @@ else:
 # Ideogram reads no references at all, so it is refused for the reference rather
 # than for the citation — one mistake, and the one the user made.
 try:
-    ci.compile_prestage(still("@ref-1", REFS, arch="ideogram4"))
+    ci.compile_prestage(still("@ref-1", REFS, arch="ideogram4"), i4)
 except ci.CompileError as exc:
     if "Ideogram" not in str(exc):
         FAILURES.append(f"a citation on Ideogram is refused for the wrong reason: {exc}")
