@@ -14,18 +14,21 @@ import { t } from "./i18n.js";
 // is what `addSegmentRefusal` weighs against the frame budget.
 export const DEFAULT_DURATION_S = 6;
 
-export const MAX_REF_IMAGES = 9;
-export const MAX_REF_VIDEOS = 3;
-export const MAX_REF_AUDIOS = 3;
-export const MAX_REF_FILES = 12;
+// The family's reference grammar, served next to the compiler's own tables.
+const REFERENCE = VIDEO.reference;
+
+export const MAX_REF_IMAGES = REFERENCE.max.image;
+export const MAX_REF_VIDEOS = REFERENCE.max.video;
+export const MAX_REF_AUDIOS = REFERENCE.max.audio;
+export const MAX_REF_FILES = REFERENCE.max.files;
 
 const PREFIX = { image: "img", video: "vid", audio: "aud" };
 
 /** Which of a reference video's streams are referenced. Mirrors compile.TRACKS.
  *  "sound" drops the picture, so the clip counts as an audio reference and
  *  nothing else. */
-export const TRACKS = ["picture", "picture+sound", "sound"];
-export const DEFAULT_TRACK = "picture";
+export const TRACKS = REFERENCE.tracks;
+export const DEFAULT_TRACK = REFERENCE.default_track;
 
 /** What a reference is encoded at when nobody said. Mirrors compile.DEFAULT_REF_SIZE.
  *
@@ -33,7 +36,7 @@ export const DEFAULT_TRACK = "picture";
  *  reference pipeline's 2048 short edge, a video's is core's 768 reference
  *  canvas, which is already all a video ever gets. Audio has no size and is not
  *  in the table. */
-export const DEFAULT_REF_SIZE = { image: "match", video: "max" };
+export const DEFAULT_REF_SIZE = REFERENCE.sizes;
 
 /** The setting in force for an asset — the stored one, or its kind's default.
  *  Read this rather than `asset.ref_size`, which an older blob simply omits. */
@@ -56,10 +59,10 @@ export const sizeable = (asset) =>
  *  relationships `<Video N>` is reserved for. Audio takes the guide's own audio
  *  roles, whose split is copy against reference — the difference between an
  *  "audio reuse" task-type prefix and an "audio reference" one. */
-export const IMAGE_TAKES = ["full", "person", "object", "scene", "style"];
-export const VIDEO_TAKES = [...IMAGE_TAKES, "motion", "camera", "edit", "continue"];
-export const AUDIO_TAKES = ["full", "voice", "music", "ambience", "copy"];
-export const TAKES = { image: IMAGE_TAKES, video: VIDEO_TAKES, audio: AUDIO_TAKES };
+export const IMAGE_TAKES = REFERENCE.takes.image;
+export const VIDEO_TAKES = REFERENCE.takes.video;
+export const AUDIO_TAKES = REFERENCE.takes.audio;
+export const TAKES = REFERENCE.takes;
 
 /** Which vocabulary an asset scopes with. A clip taken for its soundtrack alone
  *  is an audio reference and scopes as one: it arrives among the audio, takes an

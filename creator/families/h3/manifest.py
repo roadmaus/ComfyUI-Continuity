@@ -9,7 +9,7 @@ strings are the node schema's own (`creator_node._schema`), under the same
 English keys the i18n dictionaries already carry.
 """
 
-from ... import accel, canvas, models, sampling
+from ... import accel, canvas, compile, models, sampling
 from .. import manifest as m
 from . import still
 
@@ -187,6 +187,21 @@ def manifest():
             "refine": True, "face": True, "audio": True,
             # Chained seams with feathering — the strip's whole grammar.
             "seams": True,
+        },
+        # The reference grammar: what an attached file may be narrowed to,
+        # which streams of a clip count, and how many of each the payload
+        # takes — compile.py's own vocabulary, which is what makes the chips
+        # and the compiler unable to disagree.
+        "reference": {
+            "takes": {kind: m.value_list(takes)
+                      for kind, takes in compile.TAKES.items()},
+            "tracks": m.value_list(compile.TRACKS),
+            "default_track": compile.TRACKS[0],
+            "sizes": dict(compile.DEFAULT_REF_SIZE),
+            "max": {"image": compile.MAX_REF_IMAGES,
+                    "video": compile.MAX_REF_VIDEOS,
+                    "audio": compile.MAX_REF_AUDIOS,
+                    "files": compile.MAX_REF_FILES},
         },
         "prompt": {
             # The shot description is composed into the model's documented
