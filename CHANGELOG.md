@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 2.25
 
 **A reference is encoded once, not once per prompt.** Attaching a video or a
 cast member means decoding it and pushing it through the VAE, and on a
