@@ -210,10 +210,12 @@ and the arch pill now says the family label, so `"Ideogram 4"` became
 
 The plan's per-phase verification list, items 4–6, is what is left:
 
-- Load ComfyUI, drop a Creator node, confirm the body mounts, the picker
+- ~~Load ComfyUI, drop a Creator node, confirm the body mounts, the picker
   lists files, the weights popover draws off the manifest, the sampler row
-  draws. (The one-line real-load check: the install's newest log under
-  `logs/`, searched for `IMPORT FAILED`.)
+  draws.~~ Done on the RunPod install, 2026-08-23 — the UI was exercised
+  live there alongside the render, all working. (The one-line real-load
+  check, for next time: the install's newest log under `logs/`, searched
+  for `IMPORT FAILED`.)
 - A workflow saved from `main`: loads, shows the same values, queues to the
   same graph.
 - ~~Push the branch and render on RunPod — this Mac never samples.~~ Pushed
