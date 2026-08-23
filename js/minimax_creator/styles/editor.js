@@ -118,6 +118,16 @@ export const css = `
   font-size: calc(15px * var(--mmc-type)); line-height: 1; padding: 2px 3px; font-family: inherit;
 }
 .mmc-asset-x:hover { color: var(--mmc-text); }
+/* Somebody's picture rather than a file you attached: the cast put it here, and
+   on a strip of more than one card the piece's shelf is where it has to live.
+   The cast card's own device, borrowed — a rule down the left edge in the
+   identity hue — because that is already what "this belongs to a member" looks
+   like everywhere else in the pack, and it is the difference between a shelf
+   that reads as duplicated faces and one that reads as the cast's files. */
+.mmc-asset-cast {
+  border-left: 3px solid var(--tag, var(--mmc-accent)); padding-left: 9px;
+}
+
 /* A LoRA set to the checkpoint this graph does not route to. Still listed —
    removing it on a mode change would throw the setting away — but visibly
    out of the run. */

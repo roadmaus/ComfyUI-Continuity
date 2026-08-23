@@ -3128,6 +3128,25 @@ export function poolDoubles(timeline, asset) {
   return out;
 }
 
+/**
+ * The cast members a pool file belongs to — nobody, for an ordinary reference.
+ *
+ * A pool entry is not always something somebody attached to the piece. Growing
+ * the strip past one card moves the cast's own pictures into the pool
+ * (`promoteCastFiles`), because that is the only scope card 2 can see them
+ * from, so a piece with two cards and two members has two pool entries nobody
+ * put there — and drawn as ordinary references they read as copies of the
+ * shelf right above them, which is what they were reported as.
+ *
+ * Claims, the same pair the promotion filters on: what a member is built out of
+ * and the clips they stand in for.
+ */
+export function assetOwners(timeline, asset) {
+  return (timeline.subjects ?? []).filter((subject) =>
+    subjectFiles(subject).includes(asset.handle)
+    || replacesOf(subject).includes(asset.handle));
+}
+
 /** Next free pool handle: ref-1, ref-2, ... One counter across kinds — the
  *  prefix says "the piece's", not what the file is; the glossary says that. */
 export function nextPoolHandle(timeline) {

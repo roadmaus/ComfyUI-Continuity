@@ -117,6 +117,19 @@ const afterDuplicate = {
   cited: s.citedPool(duplicated.segments[1]).map((a) => a.handle),
 };
 
+// Who each pool entry belongs to, once the strip has grown. This is the
+// question the piece's shelf asks to tell a reference somebody attached from a
+// member's own picture that was moved here — drawn as the same kind of thing,
+// the promoted ones read as duplicates of the cast shelf above them.
+const shelved = lonePiece();
+shelved.segments.splice(1, 0, s.cloneSegment(shelved.segments[0]));
+shelved.assets.push(image("ref-9", "backdrop.png"));
+s.syncTimeline(shelved);
+const owned = shelved.assets.map((a) => ({
+  handle: a.handle,
+  owners: s.assetOwners(shelved, a).map((subject) => subject.handle),
+}));
+
 // A piece saved in the broken shape, repaired on the way in.
 const loaded = s.parseTimeline(JSON.stringify({
   version: 2, render: "chained", prompt: "", aspect: "16:9", short_edge: 720,
@@ -135,7 +148,7 @@ const repaired = {
   takes: loaded.assets[0].takes,
 };
 
-console.log(JSON.stringify({ beforeGrow, afterGrow, twice, afterDuplicate, repaired }));
+console.log(JSON.stringify({ beforeGrow, afterGrow, twice, afterDuplicate, owned, repaired }));
 """
 
 proc = subprocess.run(["node", "--input-type=module", "-e", SCRIPT, "--", STATE],
@@ -184,6 +197,12 @@ check("...and the clone's prose follows them too",
       dup["prompt"],
       "@anna walks past @img-10, and @ref-1 is where her face comes from")
 check("...which is what carries them into the clone", dup["cited"], ["ref-1", "ref-2"])
+
+check("a promoted file is still the member's, and says whose it is",
+      got["owned"],
+      [{"handle": "ref-9", "owners": []},
+       {"handle": "ref-1", "owners": ["anna"]},
+       {"handle": "ref-2", "owners": ["anna"]}])
 
 repaired = got["repaired"]
 check("a piece grown before this existed is repaired on the way in",

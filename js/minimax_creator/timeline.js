@@ -497,7 +497,29 @@ class Timeline {
     );
   }
 
+  /**
+   * One reference on the piece's shelf.
+   *
+   * Two kinds of entry share this row. Most are files somebody attached to the
+   * piece, and the readout is about the citation that carries them into a shot.
+   * The rest belong to the cast: growing the strip past one card moves a
+   * member's own pictures into the pool (`state.promoteCastFiles`), because a
+   * lone shot keeps them on its own row and card 2 cannot see them there.
+   *
+   * Those were being drawn as ordinary references — new handles, "cited nowhere
+   * yet", a ✕ that would take a member's face out from under them — appearing
+   * the moment a segment was duplicated, directly above a shelf showing the
+   * same two photographs. Read as copies, and reported as copies. So they are
+   * marked as the cast's and answer for themselves in the cast's terms: whose
+   * they are, and which shots write that name. Marked rather than hidden, for
+   * the reason the editor's own row marks them — a shelf drawing only some of
+   * what is attached is not an answer to "what does this piece carry".
+   */
   poolChip(asset) {
+    // Whose file this is, if it is anybody's. Their citations are what carries
+    // it into a shot — the handle here is an address, not the name anyone
+    // writes — so the whole readout below branches on this.
+    const owners = S.assetOwners(this.timeline, asset);
     const everywhere = S.poolCitedGlobally(this.timeline, asset);
     const cited = S.poolCitations(this.timeline, asset);
     // Uncited, but the same file is attached to a card under its own handle:
@@ -505,17 +527,35 @@ class Timeline {
     // about it is technically true and useless. Say which card and which handle
     // instead — that is the whole of what happened, and it is enough to decide
     // whether to cite the piece copy or drop it. See `S.poolDoubles`.
-    const doubles = everywhere || cited.length ? [] : S.poolDoubles(this.timeline, asset);
-    const where = everywhere
-      ? t("everywhere — cited in the global prompt")
-      : cited.length
-        ? t(cited.length === 1 ? "in segment {list}" : "in segments {list}", { list: cited.join(", ") })
-        : doubles.length
-          ? t(doubles.length === 1
-                ? "not cited — attached to segment {list} instead"
-                : "not cited — attached to segments {list} instead",
-              { list: doubles.map((d) => `${d.segment} (@${d.handle})`).join(", ") })
-          : t("cited nowhere yet");
+    const doubles = owners.length || everywhere || cited.length
+      ? [] : S.poolDoubles(this.timeline, asset);
+    // A cast file is in the shots that name its owner, which is the shelf's own
+    // question and is asked in the shelf's own words.
+    const ownerShots = owners.map((subject) => {
+      if (S.subjectCitedGlobally(this.timeline, subject)) {
+        return { cited: true, text: t("in every shot") };
+      }
+      const shots = S.subjectCitations(this.timeline, subject);
+      return {
+        cited: shots.length > 0,
+        text: shots.length
+          ? t(shots.length === 1 ? "in shot {list}" : "in shots {list}",
+              { list: shots.join(", ") })
+          : t("in no shot yet"),
+      };
+    });
+    const where = owners.length
+      ? ownerShots.map((shot) => shot.text).join(" · ")
+      : everywhere
+        ? t("everywhere — cited in the global prompt")
+        : cited.length
+          ? t(cited.length === 1 ? "in segment {list}" : "in segments {list}", { list: cited.join(", ") })
+          : doubles.length
+            ? t(doubles.length === 1
+                  ? "not cited — attached to segment {list} instead"
+                  : "not cited — attached to segments {list} instead",
+                { list: doubles.map((d) => `${d.segment} (@${d.handle})`).join(", ") })
+            : t("cited nowhere yet");
     const thumb = asset.kind === "image"
       ? el("img", { class: "mmc-asset-thumb", src: viewUrl(asset.filename, { preview: true }), alt: "" })
       : el("span", { class: "mmc-asset-thumb", text: asset.kind === "video" ? "▶" : "♪" });
@@ -529,9 +569,20 @@ class Timeline {
     });
     return el("div", {
       // Not idle where a double exists: the file is being used, and dimming the
-      // chip that says so would contradict its own text.
-      class: `mmc-asset${everywhere || cited.length || doubles.length ? "" : " idle"}`,
-      title: everywhere || cited.length
+      // chip that says so would contradict its own text. A cast file is idle on
+      // its owner's terms — nobody names them, so it rides into nothing.
+      // The rule down the left edge is painted from the row's own hue, which is
+      // the one the @ref handle beside it already wears.
+      class: `mmc-asset${owners.length ? ` mmc-asset-cast mmc-tag-${S.tagIndex(asset.handle)}` : ""}${
+        (owners.length
+          ? ownerShots.some((shot) => shot.cited)
+          : everywhere || cited.length || doubles.length) ? "" : " idle"}`,
+      title: owners.length
+        ? t("{file} — {who}'s reference, kept with the piece because a strip of more than "
+          + "one segment is the only place every segment can see it. It rides into the "
+          + "segments that write their name; removing it here takes it away from them.",
+            { file: asset.filename, who: owners.map((s) => `@${s.handle}`).join(", ") })
+        : everywhere || cited.length
         ? t("{file} — {where}", { file: asset.filename, where })
         : doubles.length
           ? t("{file} — this same file is attached to segment {list} under its own handle, "
@@ -551,6 +602,13 @@ class Timeline {
                  { handle: asset.handle }),
         onclick: () => this.citeInGlobal(asset),
       }),
+      // Whose it is, in their own hue — the one the shelf below draws them in,
+      // and the one their name wears mid-sentence. The chip is then readable as
+      // what it is at a glance: not a second reference, a member's picture.
+      ...owners.map((subject) => el("span", {
+        class: `mmc-asset-handle mmc-tag-${S.tagIndex(subject.handle || "x")}`,
+        text: `@${subject.handle}`,
+      })),
       el("span", { class: "mmc-tl-pool-where", text: where }),
       // What of the file is the reference — a character sheet is usually the
       // person, not the sheet's background, a clip is as often borrowed for its
@@ -584,10 +642,14 @@ class Timeline {
       })] : []),
       el("button", {
         class: "mmc-asset-x", text: "✕",
-        title: cited.length
-          ? t("Remove @{handle} — segments {list} still cite it and will refuse to queue "
-            + "until the mentions are edited out.", { handle: asset.handle, list: cited.join(", ") })
-          : t("Remove @{handle}", { handle: asset.handle }),
+        title: owners.length
+          ? t("Remove @{handle} — {who} is built out of this file and loses it. Take them "
+            + "off the cast shelf instead to remove both at once.",
+              { handle: asset.handle, who: owners.map((s) => `@${s.handle}`).join(", ") })
+          : cited.length
+            ? t("Remove @{handle} — segments {list} still cite it and will refuse to queue "
+              + "until the mentions are edited out.", { handle: asset.handle, list: cited.join(", ") })
+            : t("Remove @{handle}", { handle: asset.handle }),
         onclick: () => {
           this.timeline.assets = (this.timeline.assets ?? []).filter((a) => a !== asset);
           this.commit();

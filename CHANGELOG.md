@@ -1,5 +1,23 @@
 # Changelog
 
+## Unreleased
+
+**A duplicated segment does not copy the cast into the piece's references.** It
+never did — but that is what it looked like, and it was reported twice. A piece
+of one shot keeps its cast's photographs on that shot's own row; the moment a
+second card exists they move onto the piece, because card 2 cannot see card 1's
+row. Duplicating a segment is the ordinary way to get that second card, so two
+new entries appeared on the reference shelf at the press of the copy button,
+wearing fresh `@ref-N` handles, reading "cited nowhere yet", directly above a
+cast shelf still showing the same two faces. Nothing was duplicated and nothing
+was billed twice, and none of that was visible.
+
+Those entries now say what they are: marked with their own colour down the left
+edge, named for the member they belong to, and reporting which shots write that
+name rather than which prompt writes the handle. Removing one says whose face it
+takes with it. Marked rather than hidden, because a shelf that draws only some
+of what a piece carries is not an answer to what a piece carries.
+
 ## 2.25
 
 **A reference is encoded once, not once per prompt.** Attaching a video or a
