@@ -35,7 +35,7 @@ import re
 import zipfile
 from pathlib import Path
 
-from . import refine
+from .families.h3 import refine
 
 SKILLS_DIR = Path(__file__).parent / "skills"
 

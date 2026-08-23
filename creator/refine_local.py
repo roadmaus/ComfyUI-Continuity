@@ -26,7 +26,7 @@ Everything except the loading is in `refine.py`, unit-tested without torch.
 
 import gc
 
-from . import refine
+from .families.h3 import refine
 
 # What one generation is allowed to cost when the user has not said. Generation
 # is one forward pass per token, so this is the number that decides whether a

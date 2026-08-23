@@ -23,7 +23,8 @@ from aiohttp import web
 
 from server import PromptServer
 
-from . import compile as compiler, media, preview, refine, refine_local, refine_skill
+from . import compile as compiler, media, preview, refine_local, refine_skill
+from .families.h3 import refine
 
 # What one call will look at. Every image rides in the context window for the
 # whole generation, and a 24-card timeline with references on every card would

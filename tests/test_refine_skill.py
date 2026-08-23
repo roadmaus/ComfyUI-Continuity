@@ -22,20 +22,11 @@ import zipfile
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-def _load():
-    package = types.ModuleType("mmc")
-    package.__path__ = [layout.PY_ROOT]
-    sys.modules["mmc"] = package
-    spec = importlib.util.spec_from_file_location(
-        "mmc.refine_skill", layout.py("refine_skill"))
-    module = importlib.util.module_from_spec(spec)
-    sys.modules["mmc.refine_skill"] = module
-    spec.loader.exec_module(module)
-    return module
-
-
-skill = _load()
-refine = sys.modules["mmc.refine"]
+# Through `layout.load`, which knows where a module that moved into a family
+# package went. `refine` is bound off the skill module itself so the exception
+# type this suite catches is the one the skill actually raises.
+skill = layout.load("refine_skill").refine_skill
+refine = skill.refine
 
 from harness import FAILURES, check, passed
 

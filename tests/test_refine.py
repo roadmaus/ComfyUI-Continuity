@@ -24,18 +24,9 @@ import types
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-def _load():
-    package = types.ModuleType("mmc")
-    package.__path__ = [layout.PY_ROOT]
-    sys.modules["mmc"] = package
-    spec = importlib.util.spec_from_file_location("mmc.refine", layout.py("refine"))
-    module = importlib.util.module_from_spec(spec)
-    sys.modules["mmc.refine"] = module
-    spec.loader.exec_module(module)
-    return module
-
-
-refine = _load()
+# Through `layout.load`, which knows where a module that moved into a family
+# package went — the hand-rolled loader this replaces knew only `PY_ROOT`.
+refine = layout.load("refine").refine
 
 from harness import FAILURES, check, passed
 

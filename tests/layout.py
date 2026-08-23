@@ -48,6 +48,7 @@ MODULES = {
     "contextir": os.path.join(_H3, "contextir.py"),
     "subjects": os.path.join(_H3, "subjects.py"),
     "payload": os.path.join(_H3, "payload.py"),
+    "refine": os.path.join(_H3, "refine.py"),
 }
 
 
