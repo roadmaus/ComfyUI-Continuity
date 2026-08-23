@@ -207,7 +207,7 @@ check("the face node's conditioning is the crop segment's",
 # Asserted against `render.face_payload` itself rather than through a build,
 # because a keyframe has to be a file on disk before the canvas can be resolved
 # from it, and what is being checked here is what the payload keeps.
-render_mod = importlib.import_module(f"{PACKAGE}.creator.render")
+render_mod = importlib.import_module(f"{PACKAGE}.creator.families.h3.render")
 compile_mod = importlib.import_module(f"{PACKAGE}.creator.compile")
 keyed = render_mod.face_payload({"request": {
     "prompt": "a woman crossing a market",

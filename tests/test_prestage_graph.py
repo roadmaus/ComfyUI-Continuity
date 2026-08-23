@@ -261,11 +261,11 @@ init_payload = ci.compile_prestage(
 check("the payload carries the init", init_payload.init,
       {"filename": "seed.png", "denoise": 0.6})
 
-render_mod = importlib.import_module(f"{PACKAGE}.creator.render")
+sampling_mod = importlib.import_module(f"{PACKAGE}.creator.sampling")
 ri = importlib.import_module(f"{PACKAGE}.creator.render_image")
 
 i2i_graph = ri.emit(init_payload, ri.ImageWeights(arch="krea2", files=MODELS["krea2"]),
-                    render_mod.Sampling(seed=1, steps=52, cfg=3.5,
+                    sampling_mod.Sampling(seed=1, steps=52, cfg=3.5,
                                         sampler_name="euler", scheduler="simple"),
                     NODE_ID, k2)
 i2i = by_class(i2i_graph.finalize())
@@ -287,7 +287,7 @@ refs_payload = ci.compile_prestage(
     {"arch": "krea2", "prompt": "p", "refs": [{"filename": "a.png"}, {"filename": "b.png"}],
      "aspect": "1:1", "short_edge": 1024}, k2)
 refs = by_class(ri.emit(refs_payload, ri.ImageWeights(arch="krea2", files=MODELS["krea2"]),
-                        render_mod.Sampling(), NODE_ID, k2).finalize())
+                        sampling_mod.Sampling(), NODE_ID, k2).finalize())
 encode = refs["TextEncodeQwenImageEditPlus"][0][1]
 check("both references sit in the encoder's image slots",
       ("image1" in encode, "image2" in encode, "image3" in encode),
@@ -358,7 +358,7 @@ ideo_i2i_payload = ci.compile_prestage(
      "aspect": "1:1", "short_edge": 1024}, i4)
 ideo_i2i = by_class(ri.emit(ideo_i2i_payload,
                             ri.ImageWeights(arch="ideogram4", files=MODELS["ideogram4"]),
-                            render_mod.Sampling(steps=20, cfg=7.0, sampler_name="euler"),
+                            sampling_mod.Sampling(steps=20, cfg=7.0, sampler_name="euler"),
                             NODE_ID, i4).finalize())
 check("i2i keeps the tail of the sigmas",
       ideo_i2i["SplitSigmasDenoise"][0][1]["denoise"], 0.5)

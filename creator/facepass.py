@@ -324,7 +324,7 @@ def _latent_strengths(values, latent_frames):
 class MiniMaxH3FacePass(io.ComfyNode):
     """A decoded pass, with its face re-drawn at a canvas where it is large.
 
-    Written into the graph by `render.emit` after the reel node, when the piece
+    Written into the graph by the render loop (`core/emit.py`) after the reel node, when the piece
     asks for it. See the module docstring for the whole of why.
     """
 

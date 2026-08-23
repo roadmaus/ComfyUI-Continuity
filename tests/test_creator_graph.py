@@ -66,7 +66,6 @@ accel_mod = importlib.import_module(f"{PACKAGE}.creator.accel")
 tl = importlib.import_module(f"{PACKAGE}.creator.timeline")
 outputs_mod = importlib.import_module(f"{PACKAGE}.creator.outputs")
 settings_mod = importlib.import_module(f"{PACKAGE}.creator.settings")
-render_mod = importlib.import_module(f"{PACKAGE}.creator.render")
 # The lead-in's core probe lives with H3's hooks now, and patching a re-export
 # would flip a name the emitting code no longer reads.
 h3_render_mod = importlib.import_module(f"{PACKAGE}.creator.families.h3.render")

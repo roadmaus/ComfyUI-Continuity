@@ -1,7 +1,7 @@
 """The refine pass of a two-pass render: upscale the video latent, re-sample.
 
 Past the native 768 px short edge the weights are off-distribution, so instead
-of sampling there directly, `render.emit` samples at the first-pass edge — the
+of sampling there directly, the render loop samples at the first-pass edge — the
 trained edge by default, lower when the user trades the first pass for speed —
 and hands the result here: the video half of the AV latent is interpolated up to the
 target canvas, re-noised partway down the schedule, and sampled again against

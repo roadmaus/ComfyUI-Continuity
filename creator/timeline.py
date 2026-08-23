@@ -263,7 +263,7 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
         # Which segment the queue has reached, told to the stage the moment
         # this segment starts encoding — the sampler that follows reports steps
         # but not whose they are, and on a long strip "23 / 40" says nothing
-        # about where in the piece you are. `render.emit` stamps the index onto
+        # about where in the piece you are. the render loop stamps the index onto
         # multi-segment payloads only, so a Creator render announces nothing.
         # A cached segment never executes and so never announces, which is
         # right: the stage should name the segment actually being made.
@@ -695,7 +695,7 @@ class MiniMaxH3Save(io.ComfyNode):
     0.29, so a quality setting had to be refused on anything older. Writing the
     container ourselves, it is always honoured.
 
-    It is an output node, and `render.emit_tail` stamps the calling node's id on
+    It is an output node, and `core.emit.emit_tail` stamps the calling node's id on
     it, so what it saves is reported against the Creator or Timeline the user is
     looking at rather than against an expanded node on nobody's canvas.
     """
@@ -717,7 +717,7 @@ class MiniMaxH3Save(io.ComfyNode):
                 # changing the quality and re-queueing actually re-writes the
                 # file: an output node whose inputs are all unchanged is a
                 # cache hit, and the render would keep the quality it had.
-                # `render.emit_tail` is the one place that reads the setting.
+                # `core.emit.emit_tail` is the one place that reads the setting.
                 io.Int.Input("crf", default=settings.DEFAULT_CRF,
                              min=settings.MIN_CRF, max=settings.MAX_CRF),
                 # Which card each part of the reel is and what seed it ran on,

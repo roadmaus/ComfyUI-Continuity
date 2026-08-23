@@ -35,8 +35,8 @@ import json
 
 from comfy_api.latest import io
 
-from . import (canvas, compile_image, media, outputs, render,
-               render_image, sampling)
+from . import canvas, compile_image, media, outputs, render_image, sampling
+from .core import emit as loop
 from .compile import CompileError
 from .families import registry
 from .families.h3 import still
@@ -182,7 +182,7 @@ class MiniMaxH3PreStage(io.ComfyNode):
         # The output prefix is refused before anything is sampled — see
         # MiniMaxH3Creator.execute.
         graph = family.emit_still(data, plan, sampler, cls.hidden.unique_id)
-        return render.expanded(graph)
+        return loop.expanded(graph)
 
 
 class MiniMaxH3SaveImage(io.ComfyNode):

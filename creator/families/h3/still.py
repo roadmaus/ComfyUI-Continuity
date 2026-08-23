@@ -266,24 +266,25 @@ def weights_from_blob(data):
 
 
 def emit(plan, weights, sampling, unique_id, filename_prefix=FILENAME_PREFIX):
-    """-> the graph, which the caller finalizes with `render.expanded`.
+    """-> the graph, which the caller finalizes with `core.emit.expanded`.
 
-    `sampling` is a `render.Sampling`, under the same widget names the two video
-    nodes use.
+    `sampling` is a `sampling.Sampling`, under the same widget names the two
+    video nodes use.
     """
     import json
 
     from comfy_execution.graph_utils import GraphBuilder
 
-    from ... import render
+    from ...core import emit as loop
+    from . import render as h3
 
     labels = ["This still"]
     payloads = [weights.routed(plan.payload)]
-    # `render`'s own two helpers: the same early compile a video render does, so
-    # a request that cannot compile fails before a loader is built, and only the
-    # checkpoint it actually routes to gets one.
-    compiled = render.compile_all(payloads, labels)
-    where = render.routed(compiled, labels)
+    # The loop's own early compile and H3's routing, so a request that cannot
+    # compile fails before a loader is built, and only the checkpoint it
+    # actually routes to gets one.
+    compiled = loop.compile_all(h3.FAMILY, payloads, labels)
+    where = h3.routed(compiled, labels)
     # A still decodes no sound, but it can *cite* some: a reference audio clip,
     # or a reference video taken with its soundtrack, is encoded into the
     # conditioning exactly as it is for a video render. Read off the compiled

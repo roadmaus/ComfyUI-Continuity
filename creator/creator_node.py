@@ -37,10 +37,11 @@ frame, so the chain has a data dependency that only exists downstream of
 sampling. Returning conditioning N times would not express it, and feeding the
 result back into the node's own input would be a cycle the executor refuses to
 run. So `execute` compiles the blob to one payload per pass, hands them to
-`render.emit`, and returns that subgraph through the `expand` mechanism.
+the render loop (`core/emit.py`), and returns that subgraph through the
+`expand` mechanism.
 
 The node is also an *output* node, which is the other half of having no sockets:
-`render.emit_tail` writes the file and stamps this node's id on the save node, so
+`core.emit.emit_tail` writes the file and stamps this node's id on the save node, so
 the result is reported back against the node the user is looking at.
 
 `creator_data` is the UI's serialised state and is managed entirely by `js/`. It
@@ -54,7 +55,10 @@ import json
 from comfy_api.latest import ComfyExtension, io
 
 from . import (accel, canvas, compile as compiler, facepass, hires, media,
-               models, outputs, prestage, render, sampling, settings, timeline)
+               models, outputs, prestage, sampling, settings, timeline)
+from .core import emit as loop
+from .families import registry
+from .families.h3.render import LeadIn
 
 DEFAULT_DATA = json.dumps({
     "version": 2,
@@ -135,10 +139,10 @@ def _schema(node_id, display_name, blob, deprecated=False):
             # renders exactly as it always has. Turbo LoRA cards name the
             # schedule they were distilled against; the turbo switch sets
             # these with the rest of the row and puts them back on release.
-            io.Float.Input("shift_video", default=render.SHIFT_DEFAULTS[0],
+            io.Float.Input("shift_video", default=sampling.SHIFT_DEFAULTS[0],
                 min=0.01, max=100.0, step=0.01,
                 tooltip="The video flow shift. 12 is the checkpoints' own value; a turbo LoRA's card may name another."),
-            io.Float.Input("shift_audio", default=render.SHIFT_DEFAULTS[1],
+            io.Float.Input("shift_audio", default=sampling.SHIFT_DEFAULTS[1],
                 min=0.01, max=100.0, step=0.01,
                 tooltip="The audio flow shift. 3 is the checkpoints' own value. A wrong one distorts the soundtrack before it touches the picture."),
             # Both accelerators are other people's nodes and both are off
@@ -187,8 +191,8 @@ def _fingerprint(blob):
 
 def _render(blob, seed, steps, cfg, sampler_name, scheduler,
             block_cache, spectrum, spectrum_blend, unique_id,
-            shift_video=render.SHIFT_DEFAULTS[0],
-            shift_audio=render.SHIFT_DEFAULTS[1],
+            shift_video=sampling.SHIFT_DEFAULTS[0],
+            shift_audio=sampling.SHIFT_DEFAULTS[1],
             sage=False, attention="default", chunk_ffn=False,
             fp16_accumulation=False):
     """The whole of what either node id does. See the module docstring."""
@@ -219,7 +223,7 @@ def _render(blob, seed, steps, cfg, sampler_name, scheduler,
     # One payload per pass, and a pass is a run of merged segments — usually one
     # segment long, and on a piece of one shot there is exactly one of each. How
     # the piece is *compiled* is the only thing the merging changes; what is
-    # built from the result is the same loop either way. `render.emit` wires each
+    # built from the result is the same loop either way. The loop wires each
     # payload to the one before it, and a pass holding several segments simply
     # has no seam inside it to wire.
     payloads = compiler.timeline_payloads(piece, image_size_lookup=media.image_size)
@@ -233,7 +237,8 @@ def _render(blob, seed, steps, cfg, sampler_name, scheduler,
     whole_piece = len(segments) == len(compiler.timeline_segments(data))
     labels = timeline.labels(runs, segments, whole_piece)
 
-    graph = render.emit(
+    graph = loop.emit(
+        registry.video(),
         payloads, labels,
         models.Weights.from_blob(data),
         sampler,
@@ -251,7 +256,7 @@ def _render(blob, seed, steps, cfg, sampler_name, scheduler,
         cards=[int(segments[start].get("card_no") or start + 1)
                for start, _ in runs],
         seeds=[compiler.segment_seed(segments[start], start) for start, _ in runs],
-        # See `render.emit`: a card shot by itself is one payload and is still
+        # See `core.emit.emit`: a card shot by itself is one payload and is still
         # one card of a piece, so the take it makes is worth keeping and the
         # number it announces is worth saying.
         whole_piece=whole_piece,
@@ -260,8 +265,8 @@ def _render(blob, seed, steps, cfg, sampler_name, scheduler,
         # change which LoRA is the distillation. Reading the setting here rather
         # than inside `emit` is the same rule the output prefix follows — the
         # file on disk is consulted once per queue, above the graph.
-        lead_in=render.LeadIn.of(data))
-    return render.expanded(graph)
+        run=LeadIn.of(data))
+    return loop.expanded(graph)
 
 
 class MiniMaxH3Creator(io.ComfyNode):
@@ -276,8 +281,8 @@ class MiniMaxH3Creator(io.ComfyNode):
     @classmethod
     def execute(cls, creator_data, seed, steps, cfg, sampler_name, scheduler,
                 block_cache="off", spectrum=False, spectrum_blend=0.5,
-                shift_video=render.SHIFT_DEFAULTS[0],
-                shift_audio=render.SHIFT_DEFAULTS[1],
+                shift_video=sampling.SHIFT_DEFAULTS[0],
+                shift_audio=sampling.SHIFT_DEFAULTS[1],
                 sage=False, attention="default", chunk_ffn=False,
                 fp16_accumulation=False) -> io.NodeOutput:
         return _render(creator_data, seed, steps, cfg, sampler_name, scheduler,
@@ -319,8 +324,8 @@ class MiniMaxH3Timeline(io.ComfyNode):
     @classmethod
     def execute(cls, timeline_data, seed, steps, cfg, sampler_name, scheduler,
                 block_cache="off", spectrum=False, spectrum_blend=0.5,
-                shift_video=render.SHIFT_DEFAULTS[0],
-                shift_audio=render.SHIFT_DEFAULTS[1],
+                shift_video=sampling.SHIFT_DEFAULTS[0],
+                shift_audio=sampling.SHIFT_DEFAULTS[1],
                 sage=False, attention="default", chunk_ffn=False,
                 fp16_accumulation=False) -> io.NodeOutput:
         return _render(timeline_data, seed, steps, cfg, sampler_name, scheduler,

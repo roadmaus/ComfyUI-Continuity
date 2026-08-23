@@ -7,7 +7,7 @@ are emitted *inside* the subgraph, next to everything else those nodes already
 build for themselves.
 
 That is not only tidier. Both MODEL sockets had to be connected even though
-`render.emit` uses exactly one of them per generation, so every queue loaded a
+the render loop uses exactly one of them per generation, so every queue loaded a
 checkpoint it was never going to sample with. Emitting the loaders here means
 only the routed one is built at all — `emit_links` is handed the set of
 checkpoints the compiled payloads actually reached for, and builds a loader for
