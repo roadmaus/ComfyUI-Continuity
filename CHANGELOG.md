@@ -18,6 +18,16 @@ name rather than which prompt writes the handle. Removing one says whose face it
 takes with it. Marked rather than hidden, because a shelf that draws only some
 of what a piece carries is not an answer to what a piece carries.
 
+**A cast of five is five colours.** The identity hue — the colour a chip in the
+prompt shares with the file on the asset row and the card on the shelf — is
+worked out from the handle, and it was worked out by counting: `img-2` is the
+second hue, `ref-4` the fourth. A cast member's name counts nothing, so every
+member in every piece fell to the same first colour, and the shelf's five
+coloured edges were one colour five times. Names are now spread over the same
+eight by their letters. Files keep exactly the colours they had, because those
+are in every piece already; only the names move, and a member keeps theirs
+across a reload.
+
 ## 2.25
 
 **A reference is encoded once, not once per prompt.** Attaching a video or a

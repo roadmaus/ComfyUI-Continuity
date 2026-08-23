@@ -2455,8 +2455,27 @@ export function missingPreStageModels(state) {
 const TAG_OFFSET = { img: 0, vid: 1, aud: 2 };
 export function tagIndex(handle) {
   const match = /^([A-Za-z]+)-(\d+)$/.exec(handle || "");
-  if (!match) return 0;
-  return (Number(match[2]) - 1 + (TAG_OFFSET[match[1]] ?? 0)) % 8;
+  if (match) return (Number(match[2]) - 1 + (TAG_OFFSET[match[1]] ?? 0)) % 8;
+  // A name rather than a file's handle, which is what a cast member wears:
+  // `anna` counts nothing, so every one of them used to fall to hue 0 — the
+  // shelf's "a cast of five reads as five colours" was one colour five times,
+  // and a member's chip mid-prompt matched their card only by accident. Spread
+  // over the same eight by the letters themselves: no counter to keep, and a
+  // member keeps their colour across a reload and a rename back.
+  return hue(String(handle ?? ""));
+}
+
+/** A string onto one of the eight hues. FNV-1a, for its spread on short inputs
+ *  — `anna` and `anna_2` have to land apart, and a sum of char codes does not
+ *  do that. `>>> 0` after each step keeps it in 32 unsigned bits, which is
+ *  what makes the answer the same in every browser. */
+function hue(text) {
+  let value = 0x811c9dc5;
+  for (let i = 0; i < text.length; i += 1) {
+    value = (value ^ text.charCodeAt(i)) >>> 0;
+    value = Math.imul(value, 0x01000193) >>> 0;
+  }
+  return value % 8;
 }
 
 /** Next free @handle for a kind: img-1, img-2, ... Stable across deletions. */
