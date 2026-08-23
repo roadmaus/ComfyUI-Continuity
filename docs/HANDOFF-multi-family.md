@@ -3,9 +3,8 @@
 Branch `multi-family`. The plan is `docs/PLAN-multi-family.md`;
 read it first, it holds the reasoning this file assumes.
 
-**Where it is: phases 0–4 are done. Phase 5 (`state.js` drained — the
-frontend reads the manifest instead of holding constants) has not been
-started.**
+**Where it is: phases 0–5 are all done. What remains before merge is
+verification, not construction — see "Before merge" at the bottom.**
 
 ## Run the suite like this
 
@@ -21,7 +20,7 @@ and a JS stack trace contain neither "Traceback" nor "failure(s)", and a loop
 that greps for those reported 43/43 green on a run that contained a hard
 failure. That mistake cost a broken commit — see below.
 
-46 suites, all green, no skips (`node` and the venv are both present here).
+48 suites, all green, no skips (`node` and the venv are both present here).
 
 ## What the three finished phases actually bought
 
@@ -124,15 +123,53 @@ math learns whose numbers it runs"):
 and `load()` imports them at their real place in the package (aliased flat),
 which is what lets a moved module import upward.
 
-## Phase 5 starts here
+## Phase 5 — what was actually built
 
-`state.js` drained: the frontend reads `/minimax_creator/families` instead of
-holding `MODEL_FIELDS`, `ROUTES`, `CHECKPOINTS`, `FOLDER_HINTS`, the take
-vocabularies, the frame grid. The pass condition is the plan's grep. Watch
-the i18n risk the plan names — labels that move into the manifest need a
-translation path — and remember the mirror suites run `state.js` under bare
-`node`: whatever fetches the manifest must be injectable the way
-`CreatorEditor`'s `samplingStore` is.
+Nine commits, each green ("The frontend learns where the families are
+declared" .. "The phase-5 grep becomes a suite").
+
+**`web/creator/manifest.js` is the one file allowed to know.** It loads
+`/minimax_creator/families` with top-level await — importers see a resolved
+catalog or the extension fails its load, loudly — and re-exports `FAMILIES`,
+`STILL_ARCHES`, `VIDEO`, `family(id)`, `stillFamily(arch)`. Under bare `node`
+the catalog is injected: `layout.run` sets `globalThis.__MMC_FAMILIES` from
+the same `manifest.catalog()` the route serves, and `layout.pack`'s api stub
+answers the route from a `families.json` written beside it — so the packed
+suites exercise the fetch path the browser takes. Five suites with bespoke
+stubs (`cast_detach`, `cast_editor`, `js_bodies`, `presets`, `style_atlas`)
+carry the same branch; three that hand-rolled node invocations moved onto
+`layout.run`. `tests/test_manifest_mirror.py` guards both load paths.
+
+**What drained, and off which manifest block:** `canvas.js` rules
+(`VIDEO_RULES` via `rulesFrom(block)`, historic named constants kept as reads);
+the weights popover (`MODEL_FIELDS`/`LABEL`/`HINT`, `DEVICE_FIELDS`,
+`ALWAYS_REQUIRED`, filename hints and `avoid` patterns — the slots grew
+`title`/`help`/`hints`/`avoid`, routed ones also `name`/`when`); routing and
+modes (`routes.{reference,plain,timeline}`, the `modes` table — held against
+`compile.MODES` by `test_families`); the pre-stage (arch pill vocabulary and
+labels off `still_arches` + family labels/descriptions, the still lengths and
+latent grid, image canvas, Krea/Ideogram turbo and quality tables, per-arch
+weight fields); the reference grammar (`reference.{takes,tracks,sizes,max}`);
+and the H3 turbo switch (`capabilities.turbo`: steps, euler+beta row, reset
+row from `sampling.DEFAULTS`, `lead_max` from `settings.MAX_LEAD_IN`, per-file
+presets). Both aspect tables in Python moved into the popovers' real order —
+what shipped is unchanged; the dicts had been lying about the order.
+
+**The audit is `tests/test_family_leaks.py`** — the plan's grep, run over
+*code*: a scanner strips comments and string contents (template `${...}`
+kept), and any surviving family token fails by file and line. Prose is out of
+scope by construction: tooltips and dictionary keys may say "H3", the frozen
+strings (`/minimax_creator/*` routes, `MiniMaxH3*` ids, storage keys) are
+contracts. Excluded wholesale: `manifest.js`, `locales/`, `presets/`, and the
+root `creator.js` (the shell that owns the node-id table). Seen failing on a
+planted `state.minimax` read.
+
+**i18n outcomes:** strings that moved into manifests travelled byte-identical,
+so every translation still resolves through `t()` (manifest strings are
+translation keys — render them through `t()`, always). Two keys changed:
+`"always FL2VA"`/`"always Ref2VA"` became one parameterised `"always {name}"`,
+and the arch pill now says the family label, so `"Ideogram 4"` became
+`"Ideogram 4.0"` — all three dictionaries updated in the same commits.
 
 ## Things that will bite
 
@@ -169,6 +206,18 @@ translation path — and remember the mirror suites run `state.js` under bare
   them), the sampler widget slots and their order, the `/minimax_creator/*`
   routes, and `creator_data` back-compat.
 
+## Before merge
+
+The plan's per-phase verification list, items 4–6, is what is left:
+
+- Load ComfyUI, drop a Creator node, confirm the body mounts, the picker
+  lists files, the weights popover draws off the manifest, the sampler row
+  draws. (The one-line real-load check: the install's newest log under
+  `logs/`, searched for `IMPORT FAILED`.)
+- A workflow saved from `main`: loads, shows the same values, queues to the
+  same graph.
+- Push the branch and render on RunPod — this Mac never samples.
+
 ## Not done, and known
 
 - **Phase 2 is not verified against a workflow saved before this branch.**
@@ -183,5 +232,9 @@ translation path — and remember the mirror suites run `state.js` under bare
 - **`presets/atlas.js` is probably H3-prompt-shaped.** Whether a preset's prose
   survives being handed to another family is unanswered and blocks LTX, not
   phase 3.
-- **i18n**: three dictionaries keyed by English string. Any label that moves into
-  a manifest leaves the dictionary unless a translation path goes with it.
+- **i18n**: three dictionaries keyed by English string. The manifest path is
+  settled (strings travel verbatim, rendered through `t()`), but the accel
+  tooltips in `sampling.js` and the pass copy in `pills.js`/`refine.js` are
+  still H3 prose in shared files — copy, not constants, so the audit permits
+  them, but a second family will want its own words there. Decide then whether
+  they become per-widget manifest help or capability-keyed strings.

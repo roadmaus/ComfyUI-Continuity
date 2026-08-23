@@ -225,6 +225,10 @@ nothing outside `manifest.js` and the frozen node-id constants in `creator.js`.
 Anything the UI branches on that is not in the manifest is a leak, and this grep
 is the audit.
 
+*(As built: the audit is `tests/test_family_leaks.py`, which runs this grep
+over code only — comments and string contents stripped — because prose and the
+frozen strings are not what "the UI branches on". See the handoff.)*
+
 ## Frozen contracts — do not touch
 
 - **The 20 `MiniMaxH3*` node class ids.** They are named in saved workflows on
