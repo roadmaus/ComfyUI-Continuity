@@ -4,17 +4,43 @@ Branch: `ltx25`, cut from `multi-family` (phases 0–5 complete, rendered and
 UI-tested on RunPod 2026-08-23). Not merged through `main`: this branch is
 why the refactor exists, and it starts immediately on top of it.
 
+## The files LTX 2.5 actually ships (the layout the slots must match)
+
+```
+models/
+  diffusion_models/     ltx-2.5-22b-distilled-transformer-…-int8-convrot
+  text_encoders/        gemma4-12b-with-proj-ltx-2.5-…      (the encoder)
+                        gemma4_e2b_it_…                      (optional, smaller)
+  vae/                  ltx-2.5-video-vae-bf16
+                        ltx-2.5-audio-vae-bf16
+  latent_upscale_models/ ltx-2.5-latent-spatial-upscaler-x2-…
+```
+
+The multi-family plan's warnings about a two-file text encoder and an audio
+VAE from `checkpoints` describe the **Gemma-3 recipe**
+(`LTXAVTextEncoderLoader` / `LTXVAudioVAELoader`), which LTX 2.5 does not
+use. Verified in `comfy/sd.py`: the `-with-proj` file carries
+`text_embedding_projection.video_aggregate_embed.weight`, which the
+single-file detection recognises and builds the full LTXAV encoder from
+(`sd.py:1781`) — so the encoder is one pick from `text_encoders` through the
+ordinary `CLIPLoader` type `ltxv`, and the audio VAE is one pick from `vae`
+through the ordinary `VAELoader`, whose generic detection knows the
+Lightricks `audio_vae.` prefix (`sd.py:932`). **The slot table stays one
+file per slot** — the same shape H3's is, two VAEs sharing `vae/` and all.
+
 ## What core provides (verified against the running install)
 
-All read from `~/ComfyUI-Installs/.../comfy_extras/nodes_lt.py` and
-`nodes_lt_audio.py` — the design below binds to these, not to memory:
+All read from `~/ComfyUI-Installs/.../comfy_extras/nodes_lt.py`,
+`nodes_lt_audio.py` and `comfy/sd.py` — the design below binds to these,
+not to memory:
 
-- **Text encoder**: `LTXAVTextEncoderLoader(text_encoder, ckpt_name)` — two
-  files, from `text_encoders` and `checkpoints` (Gemma 3 12B), CLIP type
-  `LTXV`. One loader, two picks: the slot table's "one file per slot" shape
-  meets its first two-file loader here.
-- **Audio VAE**: `LTXVAudioVAELoader` — picked from **`checkpoints`**, not
-  `vae`, exactly as the multi-family plan warned.
+- **Text encoder**: one file, `CLIPLoader` type `ltxv` (see above). The
+  optional `gemma4_e2b_it` is a smaller E2B variant the same detection
+  loads — a second candidate for the slot, not a second slot.
+- **Video and audio VAE**: two `VAELoader` picks from `vae/` (see above).
+- **Upscaler**: `LTXVLatentUpsampler(samples, upscale_model, vae)` with the
+  model from `latent_upscale_models/` — the spatial x2 pass, a natural
+  `hires`-like capability for a later phase, not the first render.
 - **Latents**: `EmptyLTXVLatentVideo` — width/height step **32**, length step
   8 (default 97), latent T = `(length-1)//8 + 1`, default canvas 768×512.
   The frame grid is **8n+1** (the duration head snaps to it too).
@@ -76,10 +102,11 @@ Each ends green; goldens are re-recorded only when a phase *adds* graphs.
 1. **Family selection plumbing** (above). No new family yet; behaviour
    frozen by the existing suites.
 2. **`families/ltx25/` skeleton**: registry row (`PRODUCES = {"video"}`),
-   `models.py` slot table (dit via `UNETLoader`; `text_encoder` +
-   `text_encoder_ckpt` as two slots feeding one loader — the emit half owns
-   that join; `vae`; `audio_vae` from `checkpoints`; `duration_head`
-   optional), `canvas` Rules instance (multiple 32, frames 8n+1, fps 25
+   `models.py` slot table (`dit` from `diffusion_models` via `UNETLoader`;
+   `clip` from `text_encoders` via `CLIPLoader` type `ltxv`; `vae` and
+   `audio_vae` both from `vae/` via `VAELoader`; `duration_head` and
+   `upscaler` optional, from `model_patches`/`latent_upscale_models`),
+   `canvas` Rules instance (multiple 32, frames 8n+1, fps 25
    **fixed=False**), `manifest.py` serving it all. `test_families` grows the
    family; the frontend lists it and can select it — and refuses nothing,
    because compile refuses politely until phase 3 lands.
@@ -97,9 +124,6 @@ Each ends green; goldens are re-recorded only when a phase *adds* graphs.
 
 ## Open questions (answer during phase 2, not before)
 
-- Which loader the LTX 2.5 DiT actually ships for (`UNETLoader` vs a
-  dedicated loader) — read core's model detection when the weights are on
-  disk.
 - Whether `refine` has any meaning for a plain-prose family (probably: the
   same expansion, different template — the refine engine is already split
   from H3's templates).
