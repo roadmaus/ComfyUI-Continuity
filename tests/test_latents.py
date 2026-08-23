@@ -66,6 +66,7 @@ INPUT = tempfile.mkdtemp(prefix="mmc-refs-")
 latents.directory = lambda: STORE
 latents.enabled = lambda: True
 latents.disk_bytes = lambda: 64 * 1024 ** 3
+latents.keep_seconds = lambda: latents.DEFAULT_KEEP_DAYS * 24 * 60 * 60
 media.resolve = lambda filename: os.path.join(INPUT, str(filename))
 
 
@@ -134,10 +135,19 @@ os.makedirs(STORE, exist_ok=True)
 latents.forget()
 for name in ("old", "new"):
     fill(name, 1)
-os.utime(os.path.join(STORE, "old.safetensors"),
-         (time.time() - latents.KEEP_SECONDS - 60,) * 2)
+old_enough = time.time() - latents.DEFAULT_KEEP_DAYS * 24 * 60 * 60 - 60
+os.utime(os.path.join(STORE, "old.safetensors"), (old_enough,) * 2)
 latents.prune()
 check("an entry nothing has read in the keep window goes", entries(), ["new.safetensors"])
+
+# "Forever" on the settings page. The ceiling is then the only bound, which is
+# the whole reason 0 is offered rather than being a way to fill a disk.
+fill("old", 1)
+os.utime(os.path.join(STORE, "old.safetensors"), (old_enough,) * 2)
+latents.prune(keep=None)
+check("kept forever, age stops deciding", entries(), ["new.safetensors", "old.safetensors"])
+latents.prune(keep=None, ceiling=3 * 1024 ** 2 // 2)
+check("...and the ceiling still does, oldest read first", entries(), ["new.safetensors"])
 
 shutil.rmtree(STORE, ignore_errors=True)
 os.makedirs(STORE, exist_ok=True)

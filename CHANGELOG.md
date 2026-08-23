@@ -24,8 +24,12 @@ drops what nothing has read in a month, or whatever is least recently read once
 it passes its ceiling.
 
 It cannot change what a render produces — only how long it takes. Settings →
-General → Reference cache says how much it is holding, empties it, sets the
-ceiling and turns it off.
+General → Reference cache turns it off, empties it, and sets its two limits: how
+long an unread reference is kept, and how large the store may get. Both rails
+travel a list of stops rather than a range, because nobody is choosing between
+30 days and 31 — and the size rail carries a gauge of what the store is actually
+holding, drawn against the thumb, so a ceiling is set against a real number
+instead of a guess. Past the thumb is over, and says what the next render drops.
 
 **Settings' third tab is called General.** It carries a Rendering group as well
 as a Nodes one, so "Nodes" was the name of half of it.

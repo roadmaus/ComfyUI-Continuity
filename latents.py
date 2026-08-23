@@ -52,13 +52,20 @@ import uuid
 # is keyed the same way and kept for the same reason.
 DIR_NAME = os.path.join("minimax_creator", "latents")
 
-# How long an entry nobody has read is kept. Counted from the last read (see
-# `_touch`), not from the write: what makes an entry safe to delete is not its
-# age but that no render has come back for it. A month, because the store now
-# survives restarts and a project is worked on across days — the ceiling below
-# is the bound that actually does the work, and this is only for the reference
-# nobody is ever coming back to.
-KEEP_SECONDS = 30 * 24 * 60 * 60
+# How long an entry nobody has read is kept, when nothing has been set. Counted
+# from the last read (see `_touch`), not from the write: what makes an entry
+# safe to delete is not its age but that no render has come back for it. A month
+# because the store survives restarts and a project is worked on across days —
+# the ceiling is the bound that actually does the work, and ageing is only for
+# the reference nobody is ever coming back to. The settings page moves it, and
+# 0 there means never.
+DEFAULT_KEEP_DAYS = 30
+
+# How long a staging file may sit before it is assumed abandoned. Its own clock,
+# and not the retention above: a `.tmp` is a write in flight, so a day is
+# already several orders of magnitude longer than any of them, and it must be
+# cleaned up even where references are kept forever.
+STAGING_SECONDS = 24 * 60 * 60
 
 # The ceiling on the whole directory. Past it, the least recently read entries
 # go until it fits. A video reference is the large resident here — its 2 fps
@@ -97,8 +104,9 @@ def directory():
     the user directory is on the volume that persists; the render's own
     scratch, which genuinely should not survive, is `spill.py`.
 
-    Nothing wipes this, so the ageing in `prune` is the only thing that does:
-    a month unread, or past the ceiling the settings page sets.
+    Nothing wipes this, so the ageing in `prune` is the only thing that does,
+    and both of its numbers are the settings page's: how long an unread entry is
+    kept, and how large the store may get.
 
     Two files beside each other under `previews/` and `latents/` for one clip,
     keyed by the same (path, mtime, size) identity — `preview._cache_path`
@@ -125,6 +133,14 @@ def disk_bytes():
 
     gigabytes = settings.load().get("latent_cache_gb", DEFAULT_DISK_BYTES / 1024 ** 3)
     return int(float(gigabytes) * 1024 ** 3)
+
+
+def keep_seconds():
+    """How long an unread entry is kept, in seconds -> None for forever."""
+    from . import settings
+
+    days = float(settings.load().get("latent_cache_days", DEFAULT_KEEP_DAYS))
+    return None if days <= 0 else days * 24 * 60 * 60
 
 
 def key(parts):
@@ -223,16 +239,22 @@ def _remember(name, tensors, meta):
         held -= _memory.pop(oldest)[2]
 
 
-def prune(now=None, ceiling=None):
+def prune(now=None, ceiling=None, keep=False):
     """Delete what has aged out, then the least recently read until it fits.
 
     -> how many bytes went. Called when an entry is written rather than when one
     stops being useful, for the reason `spill.prune` is: nothing here knows when
     a project is finished with a reference, and every read pushes the file's
     stamp forward, so what ages out is what nothing has come back for.
+
+    `keep` is the retention window in seconds; None keeps everything the ceiling
+    has room for, which is what the settings page's "Forever" means. It defaults
+    to `False` rather than to None because None is a *setting* here and not an
+    absence — the two have to be tellable apart.
     """
     now = time.time() if now is None else now
     ceiling = disk_bytes() if ceiling is None else ceiling
+    keep = keep_seconds() if keep is False else keep
     freed = 0
     try:
         entries = list(os.scandir(directory()))
@@ -247,12 +269,12 @@ def prune(now=None, ceiling=None):
             stat = entry.stat()
             if entry.name.endswith(".tmp"):
                 # A write another process is mid-flight on, or one that died
-                # before its rename. Only the second is ours to clean up, and
-                # the keep window is far longer than any write.
-                if now - stat.st_mtime > KEEP_SECONDS:
+                # before its rename. Only the second is ours to clean up, and a
+                # day is far longer than any write.
+                if now - stat.st_mtime > STAGING_SECONDS:
                     os.remove(entry.path)
                 continue
-            if now - stat.st_mtime > KEEP_SECONDS:
+            if keep is not None and now - stat.st_mtime > keep:
                 os.remove(entry.path)
                 freed += stat.st_size
                 continue
@@ -389,6 +411,10 @@ def usage():
 
 
 def clear():
-    """Delete every entry. -> how many bytes went."""
+    """Delete every entry. -> how many bytes went.
+
+    A ceiling of nothing, so age does not come into it: this is somebody
+    pressing Clear, not the store tidying up after itself.
+    """
     forget()
-    return prune(now=time.time(), ceiling=0)
+    return prune(ceiling=0, keep=None)

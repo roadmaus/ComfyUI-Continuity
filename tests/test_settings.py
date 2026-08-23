@@ -115,6 +115,31 @@ refuses("a fractional lead-in", {"turbo_lead_in": 1.5}, "whole number")
 # a one-step lead-in nobody picked.
 refuses("a boolean lead-in", {"turbo_lead_in": True}, "whole number")
 
+# The reference cache's two numbers. Both are magnitudes with a meaningful
+# zero, which is the thing to hold down: 0 GB is not "no cache", it is the
+# in-session one with nothing written to disk, and 0 days is not "drop
+# everything", it is forever. A validator that treated either as off would be a
+# settings page whose left-hand stop did the opposite of what it says.
+check("the cache is on by default", settings.clean({})["latent_cache"], True)
+check("its ceiling has a default", settings.clean({})["latent_cache_gb"], 8.0)
+check("so does its retention", settings.clean({})["latent_cache_days"], 30.0)
+check("a zero ceiling is a value, not an absence",
+      settings.clean({"latent_cache_gb": 0})["latent_cache_gb"], 0.0)
+check("so is forever", settings.clean({"latent_cache_days": 0})["latent_cache_days"], 0.0)
+check("both ceilings reach their limits",
+      (settings.clean({"latent_cache_gb": settings.MAX_CACHE_GB})["latent_cache_gb"],
+       settings.clean({"latent_cache_days": settings.MAX_CACHE_DAYS})["latent_cache_days"]),
+      (settings.MAX_CACHE_GB, settings.MAX_CACHE_DAYS))
+refuses("a cache past its ceiling", {"latent_cache_gb": settings.MAX_CACHE_GB + 1}, "between")
+refuses("a negative cache", {"latent_cache_gb": -1}, "between")
+refuses("a retention past a year", {"latent_cache_days": settings.MAX_CACHE_DAYS + 1}, "between")
+refuses("a negative retention", {"latent_cache_days": -1}, "between")
+# `True` is an int in Python, and would sail through as a one-gigabyte store or
+# a one-day retention nobody picked.
+refuses("a boolean ceiling", {"latent_cache_gb": True}, "must be a number")
+refuses("a boolean retention", {"latent_cache_days": True}, "must be a number")
+refuses("a cache switch that is a number", {"latent_cache": 1}, "true or false")
+
 # The text scale: one multiplier over every size the pack draws. A fraction
 # rather than a count, and bounded at both ends — the floor is where the 9px
 # captions stop being legible and the ceiling is where a node face holds one

@@ -155,6 +155,11 @@ DEFAULTS = {
     # in-session cache and writes nothing to disk, which is the setting for a
     # box with no room to spare.
     "latent_cache_gb": 8.0,
+    # How long a reference nothing has read is kept, in days. 0 is forever,
+    # which is a real answer here rather than a footgun: the ceiling above is
+    # what actually bounds the store, and ageing is only for the reference
+    # nobody is ever coming back to. Counted from the last read, not the write.
+    "latent_cache_days": 30.0,
 }
 
 # What the text scale is allowed to be. The floor is where the 9px captions stop
@@ -185,6 +190,11 @@ MAX_LEAD_IN = 4
 # it is the point past which nobody is choosing a cache size any more, and the
 # thing actually wanted is a store somewhere this pack does not put files.
 MAX_CACHE_GB = 256.0
+
+# How long the cache may be told to keep a reference. A year, past which the
+# honest setting is 0 — forever — rather than a larger number pretending to be
+# a policy.
+MAX_CACHE_DAYS = 365.0
 
 
 def clean(raw):
@@ -256,6 +266,16 @@ def clean(raw):
         if not 0 <= size <= MAX_CACHE_GB:
             raise ValueError(f"latent_cache_gb must be between 0 and {MAX_CACHE_GB}")
         clean_settings["latent_cache_gb"] = size
+    if "latent_cache_days" in raw and raw["latent_cache_days"] is not None:
+        days = raw["latent_cache_days"]
+        # `True` is an int in Python and would sail through as one day, the
+        # same trap every count above sets.
+        if isinstance(days, bool) or not isinstance(days, (int, float)):
+            raise ValueError("latent_cache_days must be a number")
+        days = float(days)
+        if not 0 <= days <= MAX_CACHE_DAYS:
+            raise ValueError(f"latent_cache_days must be between 0 and {MAX_CACHE_DAYS}")
+        clean_settings["latent_cache_days"] = days
     for flag in ("show_shift_pills", "autoplay_previews", "advanced", "latent_cache"):
         if flag in raw and raw[flag] is not None:
             if not isinstance(raw[flag], bool):

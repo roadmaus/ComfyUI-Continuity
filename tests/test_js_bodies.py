@@ -1094,6 +1094,38 @@ try {
   findOpts(page);
   out.settings.shiftRows = opts.map((o) => o.getAttribute("aria-checked"));
 
+  // The reference cache's two rails. Read for their stops and their readouts:
+  // a rail is a list of values as much as it is a control, and a stop list that
+  // silently lost its ends would still draw.
+  const rails = [];
+  const findRails = (node) => {
+    if (String(node.className ?? "").split(" ")[0] === "mmc-set-slider") rails.push(node);
+    (node.children ?? []).forEach(findRails);
+  };
+  findRails(page);
+  const railOf = (slider) => {
+    let found = null;
+    const walk = (node) => {
+      if (node.getAttribute?.("type") === "range") found = node;
+      (node.children ?? []).forEach(walk);
+    };
+    walk(slider);
+    return found;
+  };
+  out.settings.cacheStops = rails.map((r) => Number(railOf(r).getAttribute("max")) + 1);
+  const edgeOf = (slider, want) => {
+    let found = "";
+    const walk = (node) => {
+      if (node.className === want) found = node.textContent;
+      (node.children ?? []).forEach(walk);
+    };
+    walk(slider);
+    return found;
+  };
+  out.settings.cacheReads = rails.map(
+    (r) => [edgeOf(r, "mmc-edge"), edgeOf(r, "mmc-edge-unit")].filter(Boolean).join(" "));
+  out.settings.cacheDisabled = rails.map((r) => railOf(r).getAttribute("disabled") != null);
+
   // Then turn the advanced controls on — the first section's second row — and
   // count again. The turbo lead-in's three rows are what should appear: it is
   // an advanced control, and while the switch is off its section is not on the
@@ -2438,6 +2470,17 @@ check("the settings page has all four tabs", settings.get("tabs"),
 check("the node settings show their defaults checked",
       settings.get("shiftRows"),
       ["true", "false", "true", "false", "true", "false", "true", "false"])
+# The reference cache's two limits. Both rails travel a list of stops rather
+# than a range, because nobody is choosing between 30 days and 31 — and the
+# defaults have to land on a named stop, or the page opens showing a value it
+# does not offer.
+check("both cache rails carry their stops", settings.get("cacheStops"), [6, 9])
+check("...opening on the stored month and 8 GB",
+      settings.get("cacheReads"), ["1 month", "8 GB"])
+# The retention rail is live: the ceiling ships at 8 GB, so there is a store for
+# it to age. It goes quiet only when the ceiling is Off.
+check("...both live while there is a store to bound", settings.get("cacheDisabled"), [False, False])
+
 # And with the advanced controls on, the turbo lead-in is back on the page: the
 # four pairs plus its three rows. That is the whole of what the switch does to
 # this tab — it adds a section, it never disables one.

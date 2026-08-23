@@ -141,6 +141,57 @@ function megabytes(bytes) {
   return `${Math.round(mb)} MB`;
 }
 
+// The two numbers the reference cache is bounded by. Both are magnitudes, and
+// both are magnitudes nobody wants to the unit: the difference between keeping
+// a reference 30 days and 31 is not a decision, and neither is 8 GB against 9.
+// So the rails travel a list of stops rather than a range — a week, a month, a
+// year; 8 GB, 16, 32 — and a value typed into the settings file by hand is
+// sorted into the list rather than rounded away, which is the rule the quality
+// tiers and the text scale already live by.
+//
+// Labels on some stops only. A rail carrying nine of them is a rail nobody
+// reads; the unlabelled ones keep their tick, so the grid is still visible and
+// still clickable.
+const KEEP_STOPS = [
+  { value: 1, label: "1d" },
+  { value: 7, label: "1w" },
+  { value: 30, label: "1m" },
+  { value: 90, label: "3m" },
+  { value: 365, label: "1y" },
+  // Last, not first: it is the largest answer to "how long", whatever the
+  // number storing it happens to be.
+  { value: 0, label: "Forever" },
+];
+
+const SIZE_STOPS = [
+  { value: 0, label: "Off" },
+  { value: 1 }, { value: 2, label: "2" }, { value: 4 },
+  { value: 8, label: "8" }, { value: 16 }, { value: 32, label: "32" },
+  { value: 64 }, { value: 128, label: "128" },
+];
+
+/** How long a retention reads. The offered stops have names; a hand-typed
+ *  number is simply a number of days. */
+function keepFor(days) {
+  const named = { 0: "Forever", 1: "1 day", 7: "1 week", 30: "1 month",
+                  90: "3 months", 365: "1 year" };
+  return named[days] ? t(named[days]) : t("{days} days", { days: Number(days) });
+}
+
+/** Where `value` sits along a stop list, as 0..1 — the position a mark on the
+ *  rail has to take. Interpolated between the stops it falls between, because
+ *  the rail is a list of indices and the value is not linear along it. */
+function alongStops(stops, value) {
+  const last = stops.length - 1;
+  if (value <= stops[0].value) return 0;
+  for (let i = 0; i < last; i += 1) {
+    const low = stops[i].value;
+    const high = stops[i + 1].value;
+    if (value <= high) return (i + (value - low) / (high - low)) / last;
+  }
+  return 1;
+}
+
 const TABS = [
   { key: "quality", label: "Quality" },
   { key: "folders", label: "Folders" },
@@ -583,17 +634,11 @@ class SettingsPage {
             el("span", { class: "mmc-set-opt-note", text: t(row.note) }),
           ]),
         ]))),
+        ...(on ? [this.cacheBounds()] : []),
         el("div", { class: "mmc-set-foot" }, [
           el("span", {
-            text: this.cache
-              ? t("Holding {entries} references, {size}. It survives a restart, and "
-                + "drops what it has not read in a month or once it passes {limit}.", {
-                  entries: this.cache.entries ?? 0,
-                  size: megabytes(this.cache.bytes ?? 0),
-                  limit: `${Number(this.settings.latent_cache_gb ?? 8)} GB`,
-                })
-              : t("It lives beside your settings and survives a restart, and drops "
-                + "what it has not read in a month."),
+            text: t("Kept beside your settings, so restarting ComfyUI does not lose "
+                + "them. Only this page and the two limits above ever remove one."),
           }),
           ...(this.cache && this.cache.entries
             ? [el("button", { class: "mmc-opt mmc-set-clear", text: t("Clear"),
@@ -601,6 +646,143 @@ class SettingsPage {
             : []),
         ]),
       ]);
+  }
+
+  /**
+   * The two limits, in the card the typed settings use.
+   *
+   * They are one setting asked twice — how long, and how much — so they share a
+   * card split by a hairline, the way the two output folders do.
+   *
+   * The size rail carries a mark at what the store is *actually* holding, which
+   * is the one thing on this page that is a reading rather than a choice: a
+   * ceiling is a decision about a real number, and asking for it without
+   * showing that number is asking somebody to guess. It is the pack's accent
+   * rather than the rail's blue so it cannot be mistaken for a second thumb.
+   * The retention rail has no such mark, because there is nothing true to put
+   * on it.
+   */
+  cacheBounds() {
+    const gb = Number(this.settings.latent_cache_gb ?? 8);
+    const days = Number(this.settings.latent_cache_days ?? 30);
+    const held = Number(this.cache?.bytes ?? 0);
+
+    const keep = this.stopSlider({
+      stops: KEEP_STOPS,
+      value: days,
+      name: "Keep unread references for",
+      // Off, there is nothing on disk to age, and a live retention rail beside
+      // a store that holds nothing would be a control with no effect.
+      disabled: gb <= 0,
+      read: (value) => ({ value: keepFor(value) }),
+      note: (value) => gb <= 0
+        ? t("Nothing is written to disk to keep.")
+        : value <= 0
+          ? t("Only the size limit below ever drops one.")
+          : t("Dropped once nothing has read it for that long."),
+      apply: (value) => this.set({ latent_cache_days: value }),
+    });
+
+    const size = this.stopSlider({
+      stops: SIZE_STOPS,
+      value: gb,
+      name: "Never grow past",
+      read: (value) => value <= 0
+        ? { value: t("Off") }
+        : { value: String(value), unit: "GB" },
+      note: (value) => {
+        if (value <= 0) return t("Nothing is written to disk — this session only.");
+        const over = held - value * 1024 * 1024 * 1024;
+        if (over > 0) return t("Over by {size}; the next render drops that much.",
+                               { size: megabytes(over) });
+        return held
+          ? t("Holding {size} across {entries} references.",
+              { size: megabytes(held), entries: this.cache.entries })
+          : t("Nothing stored yet.");
+      },
+      warn: (value) => value > 0 && held > value * 1024 * 1024 * 1024,
+      mark: held > 0 ? { at: held / (1024 * 1024 * 1024), label: megabytes(held) } : null,
+      apply: (value) => this.set({ latent_cache_gb: value }),
+    });
+
+    return el("div", { class: "mmc-set-field mmc-set-bounds" }, [keep, size]);
+  }
+
+  /**
+   * One rail over a list of stops. -> the element.
+   *
+   * `input` repaints the readout by hand and `change` writes the setting: a
+   * drag that re-rendered the page would pull the rail out from under the
+   * thumb, which is the deal every other slider in this pack has.
+   */
+  stopSlider({ stops, value, name, read, note, warn, mark, apply, disabled }) {
+    // A value set by hand in the settings file takes its own place on the rail
+    // rather than being rounded onto a neighbour: it is in force, so it has to
+    // be reachable, and moving off it is how you leave it. Sorted by size, with
+    // the "no limit" stop held at the end whatever number stands for it.
+    const offered = stops.some((stop) => stop.value === value)
+      ? stops
+      : [...stops, { value }].sort((a, b) => (a.value || Infinity) - (b.value || Infinity));
+    const index = offered.findIndex((stop) => stop.value === value);
+    const last = offered.length - 1;
+
+    const shown = el("span", { class: "mmc-edge" });
+    const unit = el("span", { class: "mmc-edge-unit" });
+    const said = el("span");
+    // A gauge rather than a tick: "how full" is what a ceiling is set to
+    // answer, and a bar answers it where a point only says where. Drawn in the
+    // rail's own stop space so it lines up with the thumb it is being compared
+    // against — past the thumb is over the limit, and reads as over without
+    // anything having to say so. Built before `paint`, which reaches for it on
+    // its first call.
+    const fill = mark ? el("span") : null;
+    const reading = mark
+      ? el("div", { class: "mmc-set-usage", title: mark.label }, [fill])
+      : null;
+    fill?.style.setProperty("--p", String(alongStops(offered, mark.at)));
+
+    const paint = (at) => {
+      const now = offered[at].value;
+      const showing = read(now);
+      shown.textContent = showing.value;
+      unit.textContent = showing.unit ?? "";
+      said.textContent = note(now);
+      const over = Boolean(warn?.(now));
+      said.classList.toggle("over", over);
+      reading?.classList.toggle("over", over);
+      for (const [position, tick] of ticks.entries()) {
+        tick.classList.toggle("on", position === at);
+      }
+    };
+
+    const rail = el("input", {
+      type: "range", min: 0, max: last, step: 1, value: index,
+      disabled: Boolean(disabled),
+      "aria-label": t(name),
+      oninput: (event) => paint(Number(event.target.value)),
+      onchange: (event) => apply(offered[Number(event.target.value)].value),
+    });
+
+    const ticks = offered.map((stop, position) => {
+      const tick = el("button", {
+        class: "mmc-slider-mark",
+        disabled: Boolean(disabled),
+        title: read(stop.value).value,
+        onclick: () => { rail.value = String(position); paint(position); apply(stop.value); },
+      }, stop.label ? [el("span", { text: t(stop.label) })] : []);
+      // A custom property has to go through setProperty; Object.assign drops it.
+      tick.style.setProperty("--p", String(position / last));
+      return tick;
+    });
+
+    paint(index);
+    return el("div", { class: disabled ? "mmc-set-slider off" : "mmc-set-slider" }, [
+      el("div", { class: "mmc-note-key", text: t(name) }),
+      el("div", { class: "mmc-slider-read" }, [el("span", {}, [shown, unit]), said]),
+      el("div", { class: "mmc-slider-row" }, [
+        el("div", { class: "mmc-slider-track" }, [rail, ...ticks, ...(reading ? [reading] : [])]),
+      ]),
+    ]);
   }
 
   // ---- appearance -------------------------------------------------------------
