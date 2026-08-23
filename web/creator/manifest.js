@@ -54,6 +54,26 @@ export function family(id) {
 /** The family a pre-stage arch resolves to. */
 export const stillFamily = (arch) => family(STILL_ARCHES[arch]);
 
-/** The video family. One today; the timeline binds to it the way the loop
- *  binds to `registry.video()`. */
-export const VIDEO = FAMILIES.find((entry) => entry.produces.includes("video"));
+/** Which families render video, and which one a piece that names none is.
+ *  Both served rather than worked out here: the compiler validates a piece's
+ *  `family` against exactly this list and reads an absent one as exactly this
+ *  default, and a pill offering a different set would offer a choice the
+ *  backend does not accept. Mirrors `registry.video_families()` /
+ *  `registry.DEFAULT_VIDEO`. */
+export const VIDEO_FAMILIES = catalog.video_families;
+export const DEFAULT_VIDEO_FAMILY = catalog.default_video_family;
+
+/** The manifest of the family a piece renders with.
+ *
+ *  Unlike `family()` this forgives: an unknown id is the default, not a throw,
+ *  because the id comes out of a saved blob rather than out of the code, and
+ *  `compile.piece_family` forgives it on the same terms. Call this wherever the
+ *  argument is `piece.family`; call `family()` where it is an id the code
+ *  itself produced. */
+export const videoFamily = (id) =>
+  family(VIDEO_FAMILIES.includes(id) ? id : DEFAULT_VIDEO_FAMILY);
+
+/** The default video family's manifest, under the name every reader bound to
+ *  the one video family this pack shipped still imports. Family-aware readers
+ *  take `videoFamily(piece.family)` instead. */
+export const VIDEO = videoFamily(DEFAULT_VIDEO_FAMILY);

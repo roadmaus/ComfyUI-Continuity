@@ -136,6 +136,53 @@ export function weightsPill({ models, checkpoints, onChange, turbo, face = false
 }
 
 /**
+ * Which architecture renders the piece — the pill in front of the weights,
+ * because it is the question the weights are an answer to: the slots in that
+ * popover are the family's, and so are the checkpoints the routing pill cycles.
+ *
+ * A property of the piece and not of a card, like the canvas: the segments are
+ * concatenated at the end and cannot come out of two architectures. Static
+ * while there is only one family installed — a choice of one is a readout, and
+ * a popover that can only confirm what the pill already says is a click that
+ * does nothing.
+ *
+ * @param {object} spec
+ * @param {object} spec.piece     the timeline or lone-shot piece; `setFamily`
+ *   rewrites its family-shaped fields in place
+ * @param {() => void} spec.onChange after a switch that changed something
+ */
+export function familyPill({ piece, onChange }) {
+  const id = S.pieceFamily(piece);
+  const label = (which) => t(S.FAMILY_LABEL[which]);
+  // The description is the family's own, off its manifest — a translation key
+  // like any string written in source.
+  const says = t(S.FAMILY_DESCRIPTION[id]);
+  const body = [icon("model", 16), el("span", { text: label(id) })];
+
+  // A choice of one is a readout, so it is drawn as one — the static pill the
+  // strip face uses, not a disabled button. `:disabled` is the unavailable
+  // look, and a control greyed out for having nothing to offer reads as broken.
+  if (S.VIDEO_FAMILIES.length < 2) {
+    return el("span", { class: "mmc-pill mmc-pill-static", title: says }, body);
+  }
+  return el("button", {
+    class: "mmc-pill",
+    title: says + "\n" + t("Click to render this piece with another architecture. The "
+      + "prompt, the cast and the strip stay; the weights, the turbo switch and "
+      + "every checkpoint pin are the family's and are reset."),
+    onclick: (event) => openChoicePopover(event.currentTarget, {
+      title: t("Video model"),
+      options: S.VIDEO_FAMILIES.map(label),
+      value: label(id),
+      onPick: (picked) => {
+        const next = S.VIDEO_FAMILIES.find((which) => label(which) === picked);
+        if (next && S.setFamily(piece, next)) onChange?.();
+      },
+    }),
+  }, body);
+}
+
+/**
  * A row per file, each opening the list for its folder.
  *
  * Rebuilt in place after every pick rather than closed: setting up a machine

@@ -420,6 +420,8 @@ export const ja = {
  "MiniMax H3 — experimental. The still is a video generation whose first latent frame is decoded by the single-image H3 VAE, on the weights and the canvas your render already uses. No second model family is loaded.": "MiniMax H3 — 実験的。スチルは動画生成であり、その最初のレイテントフレームを単画像用 H3 VAE がデコードします。レンダリングが既に使っているウェイトとキャンバスをそのまま使い、2 つ目のモデルファミリーは読み込みません。",
  "{arch} Click to switch.": "{arch} クリックで切り替え。",
  "Image model": "画像モデル",
+ "Video model": "動画モデル",
+ "Click to render this piece with another architecture. The prompt, the cast and the strip stay; the weights, the turbo switch and every checkpoint pin are the family's and are reset.": "クリックすると別のアーキテクチャでこのピースをレンダリングします。プロンプト・キャスト・ストリップはそのまま残り、ウェイト、ターボスイッチ、各カードのチェックポイント指定はファミリー固有のためリセットされます。",
  "{frames} frames · {latents} latent": "{frames} フレーム · {latents} レイテント",
  "{frames} frames sampled — {latents} latent frames, of which one is decoded. The shortest clip is the cheapest still; H3's trained range starts at 124 frames, so longer is more in-distribution and proportionally slower.": "{frames} フレームをサンプリング — レイテントフレームは {latents} 個で、そのうち 1 つがデコードされます。最短のクリップが最も安いスチルです。H3 の学習範囲は 124 フレームからなので、長いほど分布内ですが、その分遅くなります。",
  "Sampled length": "サンプリング長",

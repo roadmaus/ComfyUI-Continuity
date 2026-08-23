@@ -99,8 +99,8 @@ nothing before LTX rides in on it.
 
 Each ends green; goldens are re-recorded only when a phase *adds* graphs.
 
-1. **Family selection plumbing** (above). No new family yet; behaviour
-   frozen by the existing suites.
+1. ~~**Family selection plumbing** (above). No new family yet; behaviour
+   frozen by the existing suites.~~ **Done** — see below.
 2. **`families/ltx25/` skeleton**: registry row (`PRODUCES = {"video"}`),
    `models.py` slot table (`dit` from `diffusion_models` via `UNETLoader`;
    `clip` from `text_encoders` via `CLIPLoader` type `ltxv`; `vae` and
@@ -121,6 +121,49 @@ Each ends green; goldens are re-recorded only when a phase *adds* graphs.
    core's own construction; prove it with a chained golden).
 5. **Taste guidance**: STG / modality / reference-audio as their own pills
    with honest cost copy — new UI, not the accel row.
+
+## Phase 1, as landed
+
+The field is `creator_data.family`, at piece level beside the canvas and for
+the same reason. Absent means `h3`, permanently — `compile.piece_family` reads
+it, and so does an unknown id, because a blob naming a family this install has
+not got is a piece to draw rather than a queue to refuse. It is written to the
+blob only when it is *not* the default, the rule `upscale` and `aspect_source`
+already follow, which is what keeps every existing workflow byte-identical.
+
+The catalog gained `video_families` and `default_video_family` off
+`registry.video_families()` / `registry.DEFAULT_VIDEO`, so the pill offers
+exactly the set the compiler accepts and falls back exactly where it does.
+`manifest.js` grew `videoFamily(id)` — the forgiving lookup, `family()` still
+throwing for an id the code produced itself — and `VIDEO` is now the default
+family's manifest rather than "the one that makes video".
+
+`canvas.js` grew `rulesFor(id)`; `state.js` grew `pieceFamily`, `familyOf`,
+`canDo`, and one accessor per block a control reads off a family
+(`referenceOf`, `weightsOf`, `routesOf`, `modesOf`, `turboOf`, `stillOf`,
+`widgetsOf`, plus `modelFields` / `deviceFields` / `checkpointsOf` /
+`routeOptions` / `alwaysRequired` over the slot table). The historic constants
+are still there, bound to the default family — the H3-shaped controls read
+those, and teaching each of them to ask the piece is phase 3's work, not a
+rewrite done blind. `emptyModels`, `parseModels`, `serializeModels` and
+`guessModels` take a family id already, because the weights block's *keys* are
+the family's and that is the one place carrying state across would corrupt it.
+
+`setFamily` is the switch: the writing stays (prompt, cast, pool, strip, seams)
+and everything keyed by the old family's vocabulary goes — the weights block,
+the turbo LoRA, each card's checkpoint pin — while a LoRA is retargeted rather
+than dropped, and the canvas is re-clamped to the new family's grid, ceiling
+and native edge. The pill is `models.familyPill`, in front of the weights pill
+in both faces' trailing group, drawn as a static readout while there is one
+family to choose.
+
+`tests/test_family_select.py` is the proof, and it does the awkward part: since
+one family makes "the control read the piece's family" unprovable, it runs the
+frontend a second time against a **probe** catalog — H3's manifest with its slot
+ids, routes and canvas numbers rewritten — so a reader still bound to a module
+constant answers H3 for a probe piece and is caught. `layout.run` took a
+`catalog=` argument for it. Every suite is green and `tests/golden` is
+untouched.
 
 ## Open questions (answer during phase 2, not before)
 

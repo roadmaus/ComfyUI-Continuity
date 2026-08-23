@@ -99,10 +99,18 @@ def describe(family):
 
 def catalog():
     """Everything the frontend needs to know what exists: every family's
-    manifest in the registry's order, and how the pre-stage's arch pill maps
-    onto them."""
+    manifest in the registry's order, how the pre-stage's arch pill maps onto
+    them, and which of them a piece may be rendered with.
+
+    The video half is served rather than derived on the frontend so the two
+    sides cannot disagree about the default: `compile.piece_family` reads an
+    absent `family` as `default_video_family`, and the pill has to offer the
+    same set the compiler will accept.
+    """
     return {
         "families": [describe(family) for family in registry.FAMILIES],
         "still_arches": dict(registry.STILL_ARCHES),
         "default_still_arch": registry.DEFAULT_STILL_ARCH,
+        "video_families": list(registry.video_families()),
+        "default_video_family": registry.DEFAULT_VIDEO,
     }

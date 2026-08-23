@@ -238,7 +238,9 @@ def _render(blob, seed, steps, cfg, sampler_name, scheduler,
     labels = timeline.labels(runs, segments, whole_piece)
 
     graph = loop.emit(
-        registry.video(),
+        # Which family renders this piece — the blob's own field, defaulting to
+        # H3 for every workflow saved before there was a second answer.
+        registry.video(compiler.piece_family(data)),
         payloads, labels,
         models.Weights.from_blob(data),
         sampler,

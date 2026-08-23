@@ -3,8 +3,10 @@
 // editing rather than at queue time, but compile.py stays authoritative.
 
 import { ASPECT_PRESETS, FPS, MIN_SHORT_EDGE, NATIVE_SHORT_EDGE, CANVAS_MULTIPLE,
-         framesForSeconds, secondsForFrames, matchSeconds, resolveCanvas } from "./canvas.js";
-import { DEFAULT_STILL_ARCH, STILL_ARCHES, VIDEO, stillFamily } from "./manifest.js";
+         framesForSeconds, secondsForFrames, matchSeconds, resolveCanvas,
+         rulesFor } from "./canvas.js";
+import { DEFAULT_STILL_ARCH, DEFAULT_VIDEO_FAMILY, STILL_ARCHES,
+         VIDEO_FAMILIES, stillFamily, videoFamily } from "./manifest.js";
 import { t } from "./i18n.js";
 // Where files land is not in the blob any more — it is a preference of this
 // machine, in `settings.js`, so a shared workflow does not carry one person's
@@ -14,8 +16,58 @@ import { t } from "./i18n.js";
 // is what `addSegmentRefusal` weighs against the frame budget.
 export const DEFAULT_DURATION_S = 6;
 
+// ---- which family renders the piece -----------------------------------------
+//
+// A piece names its family the way it names its canvas: one field, at piece
+// level, because the segments are concatenated at the end and cannot come out
+// of two architectures any more than they can come out two sizes. Mirrors
+// `compile.piece_family` — including its forgiveness, which is `videoFamily`'s.
+//
+// Every block a control reads off a family — the reference grammar, the weight
+// slots, the routing table, the turbo declarations, the pre-stage's still —
+// has an accessor here taking a family id, and a constant beside it bound to
+// the default family under the name the readers already spell. The constants
+// are what the H3-shaped UI still reads; the accessors are what a control
+// becomes when it is taught to ask the piece which family it is drawing.
+
+export { VIDEO_FAMILIES, DEFAULT_VIDEO_FAMILY };
+
+/** The id a piece renders with, validated. An absent or unknown one is the
+ *  default — see `compile.piece_family` for why an unrecognised id is a piece
+ *  to draw rather than a blob to refuse. */
+export const pieceFamily = (piece) =>
+  VIDEO_FAMILIES.includes(piece?.family) ? piece.family : DEFAULT_VIDEO_FAMILY;
+
+/** That family's whole manifest. */
+export const familyOf = (piece) => videoFamily(piece?.family);
+
+/** What the family pill calls each choice, and what it says about it — the
+ *  families' own strings, translation keys like any written in source. */
+export const FAMILY_LABEL = Object.fromEntries(
+  VIDEO_FAMILIES.map((id) => [id, videoFamily(id).label]));
+export const FAMILY_DESCRIPTION = Object.fromEntries(
+  VIDEO_FAMILIES.map((id) => [id, videoFamily(id).description]));
+
+// The blocks, by family id. One line each, so that "what does a control need
+// from a family" stays a list rather than a habit of reaching into `.manifest`
+// from wherever the question came up.
+export const referenceOf = (id) => videoFamily(id).reference;
+export const weightsOf = (id) => videoFamily(id).weights;
+export const routesOf = (id) => videoFamily(id).routes;
+export const modesOf = (id) => videoFamily(id).modes;
+export const turboOf = (id) => videoFamily(id).capabilities.turbo;
+export const stillOf = (id) => videoFamily(id).still;
+export const widgetsOf = (id) => videoFamily(id).widgets;
+
+/** Whether a family declares a capability at all. Bidirectional by design: a
+ *  new family may *have* things H3 lacks (LTX's duration predictor), and H3
+ *  lacks things a later one has, so a capability-gated control asks rather
+ *  than branching on an id. */
+export const canDo = (piece, capability) =>
+  Boolean(familyOf(piece).capabilities?.[capability]);
+
 // The family's reference grammar, served next to the compiler's own tables.
-const REFERENCE = VIDEO.reference;
+const REFERENCE = referenceOf(DEFAULT_VIDEO_FAMILY);
 
 export const MAX_REF_IMAGES = REFERENCE.max.image;
 export const MAX_REF_VIDEOS = REFERENCE.max.video;
@@ -165,18 +217,26 @@ export function inheritTakes(subject, assets, { over = null } = {}) {
 // are the family's — served in its manifest, in the order the weights popover
 // lists them — and the backend reads exactly these keys, because the manifest
 // is built from the same `models.SLOTS` the loaders are.
+//
+// Every reading of the table is a function of the family, because the slot ids
+// *are* the family's — a filename in `dit` means nothing to a family whose
+// checkpoint slot is called `fl2va`. The constants under them are the default
+// family's, which is what the popover and the LoRA manager still read.
 
-const WEIGHT_SLOTS = VIDEO.weights;
-const slotTable = (key) =>
-  Object.fromEntries(WEIGHT_SLOTS.filter((slot) => key in slot)
-                                 .map((slot) => [slot.id, slot[key]]));
+const slotTable = (id, key) =>
+  Object.fromEntries(weightsOf(id).filter((slot) => key in slot)
+                                  .map((slot) => [slot.id, slot[key]]));
 
-export const MODEL_FIELDS = WEIGHT_SLOTS.map((slot) => slot.id);
+export const modelFields = (id) => weightsOf(id).map((slot) => slot.id);
+export const modelLabels = (id) => slotTable(id, "title");
+export const modelHints = (id) => slotTable(id, "help");
+
+export const MODEL_FIELDS = modelFields(DEFAULT_VIDEO_FAMILY);
 
 /** What the popover calls each slot, and what each is for — the family's own
  *  strings, translation keys like any written in source. */
-export const MODEL_LABEL = slotTable("title");
-export const MODEL_HINT = slotTable("help");
+export const MODEL_LABEL = modelLabels(DEFAULT_VIDEO_FAMILY);
+export const MODEL_HINT = modelHints(DEFAULT_VIDEO_FAMILY);
 
 /** UNETLoader's own list. Core's vocabulary, not a family's — applies to any
  *  checkpoint slot on any machine. */
@@ -192,8 +252,9 @@ export const MODEL_DTYPES = ["default", "fp8_e4m3fn", "fp8_e4m3fn_fast", "fp8_e5
  * `normalizeCheckpoint` drops it, and removing the reference leaves you back on
  * auto. A route survives that, and applies to every segment of a timeline.
  */
-export const ROUTES = VIDEO.routes.options;
-const DEFAULT_ROUTE = VIDEO.routes.default;
+export const routeOptions = (id) => routesOf(id).options;
+export const ROUTES = routeOptions(DEFAULT_VIDEO_FAMILY);
+const DEFAULT_ROUTE = routesOf(DEFAULT_VIDEO_FAMILY).default;
 
 /** The next route in the cycle. Here rather than in the badge that cycles it,
  *  so the popover that lists them and the badge that steps through them cannot
@@ -204,46 +265,54 @@ export const nextRoute = (route) => ROUTES[(ROUTES.indexOf(route) + 1) % ROUTES.
  *  `preview` is not one — it is a filename handed to KJNodes' node, which puts
  *  its decoder wherever the sampler is — and neither is `sam3`, which the face
  *  pass loads and releases inside its own node. Mirrors `models.DEVICE_FIELDS`. */
-export const DEVICE_FIELDS = WEIGHT_SLOTS.filter((slot) => slot.device)
-                                         .map((slot) => slot.id);
+export const deviceFields = (id) => weightsOf(id).filter((slot) => slot.device)
+                                                 .map((slot) => slot.id);
+export const DEVICE_FIELDS = deviceFields(DEFAULT_VIDEO_FAMILY);
 
 /** The slots a render can never go without whatever the mode derives: loaders
  *  that are not routed. Of the routed checkpoints, only the one the mode
  *  routes to is needed — `requiredModels` answers that for a given state. */
-export const ALWAYS_REQUIRED = WEIGHT_SLOTS
+export const alwaysRequired = (id) => weightsOf(id)
   .filter((slot) => slot.loads && !slot.routed).map((slot) => slot.id);
+export const ALWAYS_REQUIRED = alwaysRequired(DEFAULT_VIDEO_FAMILY);
 
-export function emptyModels() {
+/** A blank weights block for one family. Family-shaped by construction: the
+ *  keys are that family's slot ids, which is why switching families builds a
+ *  new block rather than carrying the old one across. */
+export function emptyModels(family = DEFAULT_VIDEO_FAMILY) {
   const empty = {
     dtype: "default",
     // Which checkpoint everything runs on whatever the mode derives.
-    route: DEFAULT_ROUTE,
+    route: routesOf(family).default,
     // `{field: "cuda:1"}` for anything pinned to a card of its own, through
     // ComfyUI-MultiGPU. Empty is the normal state and means wherever ComfyUI
     // would have put it.
     devices: {},
   };
-  for (const field of MODEL_FIELDS) empty[field] = "";
+  for (const field of modelFields(family)) empty[field] = "";
   return empty;
 }
 
 /** Coerce whatever was in the blob into a full weights block. Every field may
  *  legitimately be empty: that is what a node nobody has set up yet looks like,
- *  and it is also what a workflow saved when these were sockets loads as. */
-export function parseModels(raw) {
-  const out = emptyModels();
+ *  and it is also what a workflow saved when these were sockets loads as.
+ *
+ *  A block stored under another family's slot ids parses to an empty one, which
+ *  is the honest reading: those filenames named that family's loaders. */
+export function parseModels(raw, family = DEFAULT_VIDEO_FAMILY) {
+  const out = emptyModels(family);
   if (!raw || typeof raw !== "object") return out;
-  for (const field of MODEL_FIELDS) {
+  for (const field of modelFields(family)) {
     if (typeof raw[field] === "string") out[field] = raw[field].trim();
   }
   if (MODEL_DTYPES.includes(raw.dtype)) out.dtype = raw.dtype;
-  if (ROUTES.includes(raw.route)) out.route = raw.route;
+  if (routeOptions(family).includes(raw.route)) out.route = raw.route;
   // Not validated against the machine's device list: the blob may have been
   // saved on a two-card box and opened on a one-card one, and silently dropping
   // the pin would lose the setting rather than report it. `models.loader_for`
   // refuses at queue time, naming the pack.
   if (raw.devices && typeof raw.devices === "object") {
-    for (const field of DEVICE_FIELDS) {
+    for (const field of deviceFields(family)) {
       if (typeof raw.devices[field] === "string" && raw.devices[field].trim()) {
         out.devices[field] = raw.devices[field].trim();
       }
@@ -254,15 +323,15 @@ export function parseModels(raw) {
 
 /** Only what was actually picked, so a blob says nothing about fields nobody
  *  has touched — and a `dtype` left alone adds nothing at all. */
-function serializeModels(models) {
-  const picked = parseModels(models);
+function serializeModels(models, family = DEFAULT_VIDEO_FAMILY) {
+  const picked = parseModels(models, family);
   const out = {};
-  for (const field of MODEL_FIELDS) {
+  for (const field of modelFields(family)) {
     if (picked[field]) out[field] = picked[field];
   }
   if (picked.dtype !== "default") out.dtype = picked.dtype;
   // Absent means "follow the mode", so the common case adds nothing.
-  if (picked.route !== DEFAULT_ROUTE) out.route = picked.route;
+  if (picked.route !== routesOf(family).default) out.route = picked.route;
   // Absent means "wherever ComfyUI would", so a single-GPU blob adds nothing.
   if (Object.keys(picked.devices).length) out.devices = { ...picked.devices };
   return { models: out };
@@ -277,9 +346,9 @@ function serializeModels(models) {
  * exactly one candidate matches — guessing between two is wrong half the time,
  * and the node asks instead. Returns whether it changed anything.
  */
-export function guessModels(models, files) {
+export function guessModels(models, files, family = DEFAULT_VIDEO_FAMILY) {
   let changed = false;
-  for (const slot of WEIGHT_SLOTS) {
+  for (const slot of weightsOf(family)) {
     if (models[slot.id] || !slot.hints.length) continue;
     // A candidate matches on any of the slot's needles and none of its
     // exclusions — the manifest's exclusions are how a slot sharing a folder
@@ -338,7 +407,7 @@ export function missingModels(models, required) {
 // The family's declarations — step counts, the row the switch sets and where
 // it resets to, how far the lead-in stepper reaches (the server refuses
 // anything past it either way), and what a distill file engages at.
-const TURBO = VIDEO.capabilities.turbo;
+const TURBO = turboOf(DEFAULT_VIDEO_FAMILY);
 
 export const TURBO_QUALITIES = Object.keys(TURBO.steps);
 export const TURBO_STEPS = TURBO.steps;
@@ -459,16 +528,17 @@ export function serializeSampling(sampling) {
 
 /** The family's routed slots, which is also the granularity a LoRA belongs
  *  to: every mode a checkpoint answers for runs the same weights. */
-export const CHECKPOINTS = WEIGHT_SLOTS.filter((slot) => slot.routed)
-                                       .map((slot) => slot.id);
-export const CHECKPOINT_LABEL = slotTable("name");
-export const CHECKPOINT_WHEN = slotTable("when");
+export const checkpointsOf = (id) => weightsOf(id).filter((slot) => slot.routed)
+                                                  .map((slot) => slot.id);
+export const CHECKPOINTS = checkpointsOf(DEFAULT_VIDEO_FAMILY);
+export const CHECKPOINT_LABEL = slotTable(DEFAULT_VIDEO_FAMILY, "name");
+export const CHECKPOINT_WHEN = slotTable(DEFAULT_VIDEO_FAMILY, "when");
 
 // Which checkpoint the mode implies, and what each payload shape's mode is
 // called — the family's declarations, mirrored from compile.py through the
 // manifest. See `derivedCheckpoint` and `mode`.
-const ROUTED = VIDEO.routes;
-const MODES = VIDEO.modes;
+const ROUTED = routesOf(DEFAULT_VIDEO_FAMILY);
+const MODES = modesOf(DEFAULT_VIDEO_FAMILY);
 /** What `state.checkpoint` may hold: follow the mode, or pin one. */
 export const CHECKPOINT_CHOICES = ["auto", ...CHECKPOINTS];
 export const DEFAULT_STRENGTH = 1.0;
@@ -1063,6 +1133,10 @@ export function continuingSegment() {
 export function emptyTimeline() {
   return {
     version: 2,
+    // Which architecture renders it. One for the whole piece, like the canvas
+    // and for the same reason; the default is the family this pack shipped
+    // alone, so a fresh node is the node it always was.
+    family: DEFAULT_VIDEO_FAMILY,
     // How the segments become video. Chained by default: it is the mode with no
     // length limit, and it is what every timeline saved before this existed was.
     render: "chained",
@@ -1185,6 +1259,64 @@ export function pieceWritten(timeline) {
 export function clearPiece(timeline) {
   const blank = emptyTimeline();
   for (const key of CLEARED_KEYS) timeline[key] = blank[key];
+}
+
+/**
+ * Render this piece with another family, in place.
+ *
+ * What the writing is stays: the prompt, the cast, the reference pool, the
+ * strip and its seams are a piece, not a checkpoint's idea of one. What goes is
+ * everything keyed by the old family's own vocabulary, because carrying it
+ * across would not be carrying a setting — it would be naming slots and
+ * checkpoints the new family does not have:
+ *
+ * - the weights block, whose keys *are* the old family's slot ids;
+ * - the turbo switch, whose LoRA was distilled against the old weights;
+ * - every card's checkpoint pin, which names a routed slot by id;
+ * - each LoRA's `modes`, for the same reason — the file is left in the stack,
+ *   because a LoRA is the user's and dropping it silently would be losing work,
+ *   and it is retargeted at whatever the new family routes to.
+ *
+ * The canvas survives but is re-clamped: the edges are the new family's, and a
+ * 1024 short edge on a family that stops at 768 is not a canvas.
+ */
+export function setFamily(timeline, id) {
+  const family = VIDEO_FAMILIES.includes(id) ? id : DEFAULT_VIDEO_FAMILY;
+  if (family === pieceFamily(timeline)) return false;
+  timeline.family = family;
+
+  timeline.models = emptyModels(family);
+  timeline.turbo = emptyTurbo();
+
+  const routed = checkpointsOf(family);
+  for (const entry of timeline.loras ?? []) entry.modes = [...routed];
+  for (const segment of timeline.segments ?? []) {
+    delete segment.checkpoint;
+    for (const entry of segment.loras ?? []) entry.modes = [...routed];
+  }
+
+  // The same two clamps `clampSampleEdge` and the resolution slider apply, on
+  // the new family's numbers: the canvas snaps to its grid and stops at its
+  // ceiling, and the first-pass edge stops at its native size — past which
+  // there is no second pass to be the first half of.
+  const rules = rulesFor(family);
+  const edge = (value, ceiling) => {
+    const n = Number(value);
+    if (!Number.isFinite(n)) return rules.nativeShortEdge;
+    const snapped = Math.round(n / rules.multiple) * rules.multiple;
+    return Math.min(ceiling, Math.max(rules.minShortEdge, snapped));
+  };
+  timeline.short_edge = edge(timeline.short_edge, rules.maxShortEdge);
+  timeline.sample_edge = edge(timeline.sample_edge, rules.nativeShortEdge);
+  // An aspect the new family does not list is its nearest listed shape, which
+  // is `describeRatio`'s question asked of the ratio the label stood for.
+  if (!rules.aspects.some(([label]) => label === timeline.aspect)) {
+    const ratio = ASPECT_PRESETS.find(([label]) => label === timeline.aspect)?.[1] ?? 16 / 9;
+    timeline.aspect = rules.aspects.reduce(
+      (best, entry) => Math.abs(entry[1] - ratio) < Math.abs(best[1] - ratio) ? entry : best,
+      rules.aspects[0])[0];
+  }
+  return true;
 }
 
 /**
@@ -1588,9 +1720,10 @@ export { syncCanvas as syncTimeline };
  *
  * Mirrors `compile.PIECE_FIELDS`.
  */
-export const PIECE_FIELDS = ["aspect", "aspect_source", "short_edge", "upscale",
-                             "sample_edge", "refine_denoise", "face", "models",
-                             "turbo", "output_prefix", "subjects", "sampling"];
+export const PIECE_FIELDS = ["family", "aspect", "aspect_source", "short_edge",
+                             "upscale", "sample_edge", "refine_denoise", "face",
+                             "models", "turbo", "output_prefix", "subjects",
+                             "sampling"];
 
 /** What only a lone generation ever carried at the top level. Tells a version-1
  *  `creator_data` blob from a fresh node's "{}" — which is an empty piece and
@@ -1671,6 +1804,10 @@ export function parseTimeline(raw) {
         }
         delete asset.with_audio;
       }
+      // Absent in every workflow saved before a second video family existed,
+      // and anything at all in a hand-edited one. Both read as the default,
+      // which is what `compile.piece_family` will do with them anyway.
+      timeline.family = pieceFamily(timeline);
       if (!RENDER_MODES.includes(timeline.render)) timeline.render = "chained";
       // The piece form is "pill" or {card?, handle?}. A bare handle is a
       // hand-written blob's shorthand for the first card's asset (a lone
@@ -1691,7 +1828,7 @@ export function parseTimeline(raw) {
       timeline.sample_edge = clampSampleEdge(timeline.sample_edge);
       timeline.refine_denoise = clampRefineDenoise(timeline.refine_denoise);
       timeline.face = parseFace(timeline.face);
-      timeline.models = parseModels(timeline.models);
+      timeline.models = parseModels(timeline.models, timeline.family);
       timeline.turbo = parseTurbo(timeline.turbo);
       // No card is invented for a blob that has none: a fresh node's widget is
       // "{}" and the strip it opens is empty on purpose — see `emptyTimeline`.
@@ -1811,6 +1948,10 @@ export function parseTimeline(raw) {
 export function serializeTimeline(timeline) {
   return JSON.stringify({
     version: 2,
+    // Absent means the default, so every piece rendered before a second family
+    // existed round-trips to the bytes it always did — the same rule `upscale`
+    // and `aspect_source` follow, and the one `compile.piece_family` reads.
+    ...(pieceFamily(timeline) !== DEFAULT_VIDEO_FAMILY ? { family: timeline.family } : {}),
     render: timeline.render === "single" ? "single" : "chained",
     prompt: timeline.prompt ?? "",
     // Absent means the field is not emitted at all, which is not the same as
@@ -1845,7 +1986,7 @@ export function serializeTimeline(timeline) {
     // through rather than understood. Dropping it here is what made editing
     // anything on the node quietly move its output back to the default folder.
     ...(timeline.output_prefix ? { output_prefix: timeline.output_prefix } : {}),
-    ...serializeModels(timeline.models),
+    ...serializeModels(timeline.models, pieceFamily(timeline)),
     ...serializeTurbo(timeline.turbo),
     ...serializeSampling(timeline.sampling),
     segments: timeline.segments.map((segment, index) => {
@@ -2126,20 +2267,20 @@ export const PRESTAGE_ARCH_LABEL = Object.fromEntries(
 // sub-block (`state[PRESTAGE_STILL_ARCH].request`) and is driven by
 // CreatorEditor.
 
-export const PRESTAGE_STILL_ARCH = VIDEO.still.arch;
+export const PRESTAGE_STILL_ARCH = stillOf(DEFAULT_VIDEO_FAMILY).arch;
 export const isStill = (state) => state?.arch === PRESTAGE_STILL_ARCH;
 
 /** What the length pill offers, and what a fresh still samples: the family's
  *  declaration, from the cheapest legal clip up to the bottom of its trained
  *  range. */
-export const PRESTAGE_STILL_LENGTHS = VIDEO.still.lengths;
-export const PRESTAGE_STILL_FRAMES = VIDEO.still.default_frames;
-export const PRESTAGE_STILL_INDEX = VIDEO.still.default_index;
-export const PRESTAGE_PROMPT_MODES = VIDEO.still.prompt_modes;
+export const PRESTAGE_STILL_LENGTHS = stillOf(DEFAULT_VIDEO_FAMILY).lengths;
+export const PRESTAGE_STILL_FRAMES = stillOf(DEFAULT_VIDEO_FAMILY).default_frames;
+export const PRESTAGE_STILL_INDEX = stillOf(DEFAULT_VIDEO_FAMILY).default_index;
+export const PRESTAGE_PROMPT_MODES = stillOf(DEFAULT_VIDEO_FAMILY).prompt_modes;
 
 /** Frames -> latent frames, on the manifest's grid. Mirrors the family
  *  still.py's latent_frames, which mirrors core's causal VAE packing. */
-export const stillLatentFrames = (frames, grid = VIDEO.still.latent) =>
+export const stillLatentFrames = (frames, grid = stillOf(DEFAULT_VIDEO_FAMILY).latent) =>
   (frames <= grid.base_frames ? grid.base_latent
     : Math.floor((frames - grid.base_frames) / grid.frame_step)
       * grid.latent_step + grid.base_latent);
@@ -2148,7 +2289,7 @@ export const stillLatentFrames = (frames, grid = VIDEO.still.latent) =>
  *  defaults — the family's sampler widgets — because it is the Creator's
  *  sampler. */
 export const PRESTAGE_STILL_ROW = Object.fromEntries(
-  VIDEO.widgets.filter((w) => ["steps", "cfg", "sampler_name", "scheduler"].includes(w.id))
+  widgetsOf(DEFAULT_VIDEO_FAMILY).filter((w) => ["steps", "cfg", "sampler_name", "scheduler"].includes(w.id))
                .map((w) => [w.id, w.default]));
 
 export function emptyStill() {
@@ -2187,7 +2328,7 @@ function serializeStill(still) {
  *  inside its own request, in `models.Weights`' shape, so it is not one of
  *  these. */
 export const PRESTAGE_IMAGE_ARCHES =
-  Object.keys(STILL_ARCHES).filter((arch) => arch !== VIDEO.still.arch);
+  Object.keys(STILL_ARCHES).filter((arch) => arch !== PRESTAGE_STILL_ARCH);
 
 // The image families' shared canvas — every image family serves the same
 // block, built from compile_image.py, and compile_image stays authoritative

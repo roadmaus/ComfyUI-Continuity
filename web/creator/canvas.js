@@ -5,12 +5,12 @@
 //
 // The math is family-neutral and every function takes the rules that drive it;
 // the numbers are a family's and arrive in its manifest. `rulesFrom` lifts a
-// served canvas block into the shape the functions read, and VIDEO_RULES — the
-// video family's set, the default everywhere — is the same `canvas.py`
-// instance the manifest was built from, having travelled the route instead of
-// being written down twice.
+// served canvas block into the shape the functions read, `rulesFor` names a
+// family instead of a block, and VIDEO_RULES — the default family's set, the
+// fallback everywhere — is the same `canvas.py` instance the manifest was built
+// from, having travelled the route instead of being written down twice.
 
-import { VIDEO } from "./manifest.js";
+import { DEFAULT_VIDEO_FAMILY, videoFamily } from "./manifest.js";
 
 /** A manifest canvas block, in the shape the functions below read. */
 export const rulesFrom = (block) => ({
@@ -39,10 +39,26 @@ export const rulesFrom = (block) => ({
   maxSeconds: block.frames.max_seconds,
 });
 
-export const VIDEO_RULES = rulesFrom(VIDEO.canvas);
+// One `Rules` object per family, built once. Every function below takes rules
+// by identity-free value, but the readouts rebuild on every keystroke and
+// `rulesFrom` would otherwise hand each of them a fresh object to walk.
+const CACHE = new Map();
 
-// The video family's rules under their historic names — what every reader
-// bound to the one video family this pack ships imports today.
+/** The canvas rules of the family a piece renders with — `piece.family`, or
+ *  the default when it names none. The forgiving lookup is `videoFamily`'s;
+ *  see there for why a saved blob's id is not trusted. */
+export function rulesFor(id) {
+  const manifest = videoFamily(id);
+  if (!CACHE.has(manifest.id)) CACHE.set(manifest.id, rulesFrom(manifest.canvas));
+  return CACHE.get(manifest.id);
+}
+
+export const VIDEO_RULES = rulesFor(DEFAULT_VIDEO_FAMILY);
+
+// The default video family's rules under their historic names — what every
+// reader bound to the one video family this pack shipped imports today. A
+// family-aware caller passes `rulesFor(piece.family)` to the functions below
+// instead, which is what they have always taken.
 export const CANVAS_MULTIPLE = VIDEO_RULES.multiple;
 export const FPS = VIDEO_RULES.fps;
 export const NATIVE_SHORT_EDGE = VIDEO_RULES.nativeShortEdge;

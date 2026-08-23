@@ -24,7 +24,7 @@ import { openAspectPopover, openResolutionPopover, openChoicePopover, facesPill,
 import { refine, refineButton, chosenModel as refineModel } from "./refine.js";
 import { adopted, blobIO, samplingBar } from "./sampling.js";
 import { Stage } from "./stage.js";
-import { weightsPill, loadCatalog, catalogFiles } from "./models.js";
+import { familyPill, weightsPill, loadCatalog, catalogFiles } from "./models.js";
 import * as S from "./state.js";
 import * as Turbo from "./turbo.js";
 import {
@@ -3327,6 +3327,7 @@ export class TimelineBody {
       // about one — a Ref2VA it never reaches for is not missing.
       trailing: [
         facesPill({ target: this.timeline, commit: () => this.commit() }),
+        familyPill({ piece: this.timeline, onChange: () => this.commit() }),
         weightsPill({
           models: this.timeline.models,
           checkpoints: S.timelineCheckpoints(this.timeline),

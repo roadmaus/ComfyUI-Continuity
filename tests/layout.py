@@ -168,7 +168,7 @@ _PRELUDE = ("if (process.env.MMC_FAMILIES) "
             "globalThis.__MMC_FAMILIES = JSON.parse(process.env.MMC_FAMILIES);\n")
 
 
-def run(script, *args):
+def run(script, *args, catalog=None):
     """Run `script` as an ES module under node and parse what it prints.
 
     `args` reach it as `process.argv[1]` onwards — the mirror's own path first
@@ -176,15 +176,23 @@ def run(script, *args):
     Anything that is not already a string is encoded here, since every suite was
     calling `json.dumps` on the way in.
 
+    `catalog` serves the frontend a catalog other than this install's. Only one
+    suite wants it and for one reason: the family-selection plumbing has to be
+    provable while there is still one family to select, and the way to prove a
+    control reads the family it is given is to give it a second one. Everything
+    else takes the real catalog, which is the point of building it from the
+    code.
+
     A non-zero exit is fatal and prints node's stderr: a mirror that will not
     even parse is not a disagreement to be collected alongside the others, it is
     a broken file, and reporting it as one failure among twenty buries it.
     """
     argv = [a if isinstance(a, str) else json.dumps(a) for a in args]
+    served = catalog_json() if catalog is None else json.dumps(catalog)
     proc = subprocess.run(
         ["node", "--input-type=module", "--eval", _PRELUDE + script, "--", *argv],
         capture_output=True, text=True,
-        env={**os.environ, "MMC_FAMILIES": catalog_json()})
+        env={**os.environ, "MMC_FAMILIES": served})
     if proc.returncode != 0:
         print(f"node failed:\n{proc.stderr}")
         sys.exit(1)

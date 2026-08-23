@@ -26,7 +26,7 @@ import { openAspectPopover, openResolutionPopover, openChoicePopover, facesPill,
          PILL_GLYPH, pillSet, pillClass } from "./pills.js";
 import { blobIO, samplingBar, segmentSeedPill } from "./sampling.js";
 import { Stage } from "./stage.js";
-import { weightsPill, loadCatalog, catalogFiles } from "./models.js";
+import { familyPill, weightsPill, loadCatalog, catalogFiles } from "./models.js";
 import * as Turbo from "./turbo.js";
 import { viewUrl, probe, probeAudio } from "./api.js";
 import * as S from "./state.js";
@@ -1111,6 +1111,7 @@ export class CreatorEditor {
       // accelerators it sits beside, rather than a file you picked once.
       trailing: this.nodeId ? [
         facesPill({ target: this.piece, commit: () => this.commit() }),
+        familyPill({ piece: this.piece, onChange: () => this.commit() }),
         weightsPill({
           models: this.piece.models,
           checkpoints: [S.checkpoint(this.state)],

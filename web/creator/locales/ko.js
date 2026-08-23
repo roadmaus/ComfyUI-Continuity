@@ -420,6 +420,8 @@ export const ko = {
  "MiniMax H3 — experimental. The still is a video generation whose first latent frame is decoded by the single-image H3 VAE, on the weights and the canvas your render already uses. No second model family is loaded.": "MiniMax H3 — 실험적. 스틸은 영상 생성이며 그 첫 레이턴트 프레임을 단일 이미지 H3 VAE가 디코딩합니다 — 이미 렌더가 쓰는 가중치와 캔버스를 그대로 사용합니다. 두 번째 모델 계열은 로드되지 않습니다.",
  "{arch} Click to switch.": "{arch} 클릭하면 전환됩니다.",
  "Image model": "이미지 모델",
+ "Video model": "비디오 모델",
+ "Click to render this piece with another architecture. The prompt, the cast and the strip stay; the weights, the turbo switch and every checkpoint pin are the family's and are reset.": "클릭하면 다른 아키텍처로 이 작품을 렌더링합니다. 프롬프트, 캐스트, 스트립은 그대로 유지되고 가중치·터보 스위치·각 카드의 체크포인트 고정은 패밀리 고유의 것이라 초기화됩니다.",
  "{frames} frames · {latents} latent": "{frames} 프레임 · 레이턴트 {latents}개",
  "{frames} frames sampled — {latents} latent frames, of which one is decoded. The shortest clip is the cheapest still; H3's trained range starts at 124 frames, so longer is more in-distribution and proportionally slower.": "{frames} 프레임을 샘플링 — 레이턴트 프레임 {latents}개 중 하나가 디코딩됩니다. 가장 짧은 클립이 가장 저렴한 스틸입니다. H3의 학습 범위는 124프레임부터 시작하므로, 길수록 분포에 더 가깝지만 그만큼 느립니다.",
  "Sampled length": "샘플링 길이",

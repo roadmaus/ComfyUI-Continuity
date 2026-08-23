@@ -18,6 +18,7 @@ import re
 from dataclasses import dataclass, field, replace
 
 from . import canvas
+from .families import registry
 from .families.h3 import contextir, subjects
 
 MODES = ("T2VA", "I2VA", "L2VA", "FL2VA", "REF2VA")
@@ -1895,7 +1896,7 @@ def _inject_pool(pool, request, extra_texts=(), cast=()):
 # creator/timeline split, written down as a list. A lone generation kept all of
 # these inline because it had nowhere else to keep them; a piece holds them once
 # and every shot on the strip is held to them. Mirrors `state.PIECE_FIELDS`.
-PIECE_FIELDS = ("aspect", "aspect_source", "short_edge", "upscale",
+PIECE_FIELDS = ("family", "aspect", "aspect_source", "short_edge", "upscale",
                 "sample_edge", "refine_denoise", "face", "models", "turbo",
                 "output_prefix", "subjects", "sampling")
 
@@ -1946,6 +1947,24 @@ def as_piece(data):
             piece[field] = shot.pop(field)
     piece["segments"] = [shot]
     return piece
+
+
+def piece_family(data):
+    """Which family renders this piece.
+
+    A piece names its family the way it names its canvas — one field, at piece
+    level, because the segments are concatenated at the end and cannot come out
+    of two architectures any more than they can come out two sizes.
+
+    Absent means H3, and permanently: every workflow saved before a second video
+    family existed is a piece with no `family` key, and opening one must not
+    change what it renders with. Anything unrecognised reads as the default
+    too — a blob naming a family this install does not have is a blob to render,
+    not a queue to refuse, and the alternative is a hand-edit or a downgrade
+    turning into a crash at graph time.
+    """
+    named = as_piece(data).get("family") if isinstance(data, dict) else None
+    return named if named in registry.video_families() else registry.DEFAULT_VIDEO
 
 
 def timeline_segments(data):

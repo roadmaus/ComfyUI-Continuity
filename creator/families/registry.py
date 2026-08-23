@@ -33,6 +33,21 @@ STILL_ARCHES = {"krea2": "krea2", "ideogram4": "ideogram4", "minimax": "h3"}
 # What a blob with no arch means: the pill's first entry.
 DEFAULT_STILL_ARCH = "krea2"
 
+# What a piece with no `family` means. Every workflow saved before the field
+# existed is one, so like `STILL_ARCHES`' "minimax" alias this default is
+# permanent: it is what "the video node" meant when there was only one answer.
+DEFAULT_VIDEO = "h3"
+
+
+def video_families():
+    """Every family that renders video, in the registry's order.
+
+    What the piece's family pill may hold, and what `compile.piece_family`
+    validates against — asked of the registry rather than written down, so a
+    family becomes selectable by being registered.
+    """
+    return tuple(f for f in FAMILIES if "video" in PRODUCES.get(f, ()))
+
 
 def still(arch):
     """The still module answering for a pre-stage `arch`, or None.
@@ -47,7 +62,7 @@ def still(arch):
     return importlib.import_module(f".{family}.still", __package__)
 
 
-def video(family="h3"):
+def video(family=DEFAULT_VIDEO):
     """The video `Family` singleton (`families/base.py`) for `family`.
 
     Imported on demand because the video hooks pull in ComfyUI — asking for a

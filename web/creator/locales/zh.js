@@ -421,6 +421,8 @@ export const zh = {
  "MiniMax H3 — experimental. The still is a video generation whose first latent frame is decoded by the single-image H3 VAE, on the weights and the canvas your render already uses. No second model family is loaded.": "MiniMax H3——实验性。静帧是一次视频生成，其第一个 latent 帧由单图 H3 VAE 解码，用的正是你的渲染已在用的权重和画布。不加载第二个模型家族。",
  "{arch} Click to switch.": "{arch}点击切换。",
  "Image model": "图像模型",
+ "Video model": "视频模型",
+ "Click to render this piece with another architecture. The prompt, the cast and the strip stay; the weights, the turbo switch and every checkpoint pin are the family's and are reset.": "点击以改用另一种架构渲染此作品。提示词、角色和分镜条保持不变；权重、加速开关和每张卡的检查点固定属于该家族，将被重置。",
  "{frames} frames · {latents} latent": "{frames} 帧 · {latents} 个 latent",
  "{frames} frames sampled — {latents} latent frames, of which one is decoded. The shortest clip is the cheapest still; H3's trained range starts at 124 frames, so longer is more in-distribution and proportionally slower.": "采样 {frames} 帧——{latents} 个 latent 帧，其中一个被解码。最短的剪辑就是最便宜的静帧；H3 的训练范围从 124 帧起，因此更长更贴合分布，也按比例更慢。",
  "Sampled length": "采样长度",
