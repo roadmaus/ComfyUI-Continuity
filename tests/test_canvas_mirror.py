@@ -45,12 +45,20 @@ for (const [label, ratio] of c.ASPECT_PRESETS) {
   }
 }
 for (const n of [5, 107, 124, 192, 362, 379, 1433]) out.trained[n] = c.isTrainedLength(n);
+out.matches = {};
+for (const s of MATCH_CASES) out.matches[s] = c.matchSeconds(s);
 out.presets = c.ASPECT_PRESETS.map(([label]) => label).sort();
 console.log(JSON.stringify(out));
 """
 
+# Reference lengths a card can be matched to: both ends of the clamp, the two
+# whole seconds either side of a legal count, and the 6.6 s case that is the
+# whole reason `match_seconds` does not simply round.
+MATCH_CASES = [0.2, 1, 2.5, 5.88, 6, 6.6, 7.29, 9.33, 15, 15.04, 59.71, 60, 180]
+
 result = subprocess.run(
-    ["node", "--input-type=module", "--eval", SCRIPT, MIRROR],
+    ["node", "--input-type=module", "--eval",
+     f"const MATCH_CASES = {json.dumps(MATCH_CASES)};\n" + SCRIPT, MIRROR],
     capture_output=True, text=True)
 if result.returncode != 0:
     print("failed to read canvas.js:\n" + result.stderr.strip())
@@ -76,6 +84,17 @@ for seconds, frames in mirror["frames"].items():
 for key, size in mirror["canvases"].items():
     label, edge = key.split("@")
     check(key, size, list(canvas.resolve_canvas(canvas.ASPECT_PRESETS[label], int(edge))))
+
+for seconds, matched in mirror["matches"].items():
+    check(f"match {seconds}s", matched, canvas.match_seconds(float(seconds)))
+
+# What the match is for: the two decimals it writes have to compile back to the
+# frame count they were chosen from, or the card silently lands somewhere else.
+for seconds in MATCH_CASES:
+    clamped = min(canvas.MAX_SECONDS, max(canvas.MIN_SECONDS, seconds))
+    check(f"match {seconds}s round-trips",
+          canvas.frames_for_seconds(canvas.match_seconds(seconds)),
+          canvas.frames_for_seconds(clamped))
 
 for frames, trained in mirror["trained"].items():
     check(f"is_trained_length({frames})", trained, canvas.is_trained_length(int(frames)))

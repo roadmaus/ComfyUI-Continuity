@@ -1,5 +1,26 @@
 # Changelog
 
+## 2.24
+
+**A shot can be made as long as the sound or the footage it is generated
+against.** A card's length and a reference's never met: the pill set one, the
+segment editor set the other, and the difference was spent silently — every
+reference video is cut down to the card's own frame count on the way to the
+model, and a music cue longer than the shot is sent whole against a shot that
+ends before it does. The duration pill now says how long the reference runs and
+sets the card to it in one press, the segment editor draws the card's length on
+the clip and cuts to it from the other side, and the reference card says which
+of the two is happening. Every clip counts, a cast member's voice and the clip
+they stand in for included; where a card carries several, the one offered is the
+one its length leads — a line of dialogue over a long plate the shot only takes
+a look from.
+
+**A matched card carries the length the model can actually make.** Frame counts
+come 17 apart, which is 0.708 s, and whole seconds do not cover that grid: the
+nearest card to a 6.6 s cue is 6.58 s, and rounding to 7 lands two thirds of a
+second late. Matching writes the real duration, the pill shows its two decimals,
+and a step from there returns to whole seconds.
+
 ## 2.23
 
 **A reference the sentence stops naming is muted, not binned.** Deleting `@img-1`

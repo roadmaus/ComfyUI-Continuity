@@ -30,7 +30,8 @@ import { weightsPill, loadCatalog, catalogFiles } from "./models.js";
 import * as Turbo from "./turbo.js";
 import { viewUrl, probe, probeAudio } from "./api.js";
 import * as S from "./state.js";
-import { MIN_SECONDS, MAX_SECONDS, describeRatio, isTrainedLength } from "./canvas.js";
+import { FPS, MIN_SECONDS, MAX_SECONDS, describeRatio, framesForSeconds, isTrainedLength,
+         secondsForFrames } from "./canvas.js";
 
 const HANDLE_RE = /@([A-Za-z]+-\d+)/g;
 
@@ -265,6 +266,10 @@ export class CreatorEditor {
     // than a node face, and neither has a node of its own to draw over.
     this.fullscreen = fullscreen;
     this.sizes = new Map();   // filename -> {width,height}, for the adaptive canvas readout
+    // filename -> seconds, null while the probe is out. The other half of the
+    // same header: how long a reference runs, which is what the duration pill
+    // offers to match the card to.
+    this.lengths = new Map();
 
     this.prompt = new PromptBox({
       getState: () => this.state,
@@ -463,6 +468,7 @@ export class CreatorEditor {
   setState(state) {
     this.state = state;
     this.sizes.clear();
+    this.lengths.clear();
     this.prompt.setValue(this.state.prompt ?? "");
     this.refinePanel.problems = [];
     this.render();
@@ -534,6 +540,7 @@ export class CreatorEditor {
       kinds: ["image", "video", "audio", "renders"],
       kind,
       capacity: (k) => S.capacity(this.state, k),
+      cardSeconds: this.cardSeconds(),
     });
     if (!chosen) return;
     await this.attachAssets(chosen);
@@ -550,6 +557,7 @@ export class CreatorEditor {
       kinds: ["renders", "image", "video", "audio"],
       kind: "renders",
       capacity: (k) => S.capacity(this.state, k),
+      cardSeconds: this.cardSeconds(),
     });
     if (!chosen) return;
     const blocked = S.blockedReason(this.state, "reference");
@@ -864,6 +872,12 @@ export class CreatorEditor {
           (key) => { asset.ref_size = key; this.commit(); }));
       }
 
+      const note = asset.kind === "image" ? null : this.lengthNote(asset);
+      if (note) rows.push(el("div", { class: "mmc-refsheet-row mmc-refsheet-len" }, [
+        el("span", { class: "mmc-refsheet-name", text: t("length") }),
+        el("span", { class: "mmc-refsheet-note", text: note }),
+      ]));
+
       const foot = [];
       if (asset.kind !== "image") {
         foot.push(opens(trimLabel(asset), t("Use the whole clip, or only a segment of it"),
@@ -893,6 +907,13 @@ export class CreatorEditor {
     const close = dismissable(pop);
   }
 
+  /** How long this card actually runs — the frame count's own length, not the
+   *  number on the pill. What the segment editor cuts a reference to, and what
+   *  a reference longer than it loses. */
+  cardSeconds() {
+    return secondsForFrames(framesForSeconds(this.state.duration_s));
+  }
+
   /** The segment editor, on an already-attached clip. */
   async editSegment(asset) {
     const result = await openTrim({
@@ -901,6 +922,7 @@ export class CreatorEditor {
       trim: asset.trim ?? null,
       track: asset.track,
       showTrack: asset.kind === "video",
+      cardSeconds: this.cardSeconds(),
     });
     if (!result) return;
     if (result.trim) asset.trim = result.trim;
@@ -959,6 +981,28 @@ export class CreatorEditor {
     }
   }
 
+  /** How long every reference on this card runs, off the same header the sizes
+   *  come from. Stills are not asked, so a card of pictures costs no round
+   *  trips; a trimmed clip is not asked either, because the range is the
+   *  length. */
+  probeLengths() {
+    for (const asset of [...S.references(this.state), ...S.citedPool(this.state)]) {
+      if (asset.kind === "image") continue;
+      if (asset.trim || this.lengths.has(asset.filename)) continue;
+      this.lengths.set(asset.filename, null);
+      probe(asset.filename).then(({ duration }) => {
+        if (!duration) return;
+        this.lengths.set(asset.filename, duration);
+        this.render();
+      });
+    }
+  }
+
+  /** The seconds cache as `S.refSeconds` wants it. */
+  lengthOf(filename) {
+    return this.lengths.get(filename) ?? null;
+  }
+
   /** The picture this editor is about to make: the canvas, and how long it runs.
    *  For a host that has to draw the frame before there is anything in it — the
    *  fullscreen editor's dock, which is a column of nothing until the first
@@ -984,6 +1028,7 @@ export class CreatorEditor {
     const state = this.state;
     this.onRender?.();
     this.probeKeyframe();
+    this.probeLengths();
     const source = S.aspectSourceAsset(state);
     const geometry = S.resolved(state, source ? this.sizes.get(source.filename) : null);
 
@@ -1623,6 +1668,74 @@ export class CreatorEditor {
     }, [svg(ICONS.mute, 13)]);
   }
 
+  /**
+   * What this card does with a reference's length, as one sentence — or null
+   * while the length is not known.
+   *
+   * The fact worth stating is not the number, it is the difference: `load_all`
+   * cuts every reference video down to the card's own frame count, so half of a
+   * long clip can be missing with nothing on screen saying so. Audio is not cut,
+   * which is the opposite surprise and needs saying just as much. Said for every
+   * clip, whatever it is taken for, because the cut happens either way — the
+   * offer to *fix* it is the pill's, and that one is take-gated.
+   */
+  lengthNote(asset) {
+    const seconds = S.refSeconds(asset, (filename) => this.lengthOf(filename));
+    if (seconds === null) return null;
+    const card = secondsForFrames(framesForSeconds(this.state.duration_s));
+    const length = seconds.toFixed(2);
+    if (Math.abs(seconds - card) <= 1 / FPS) {
+      return t("{length} s — the same length as this card.", { length });
+    }
+    if (seconds < card) {
+      return t("{length} s, against a card of {card} s.", { length, card: card.toFixed(2) });
+    }
+    return S.scopeKind(asset) === "audio"
+      ? t("{length} s, against a card of {card} s. Audio is sent whole — the shot ends "
+        + "before the sound does.", { length, card: card.toFixed(2) })
+      : t("{length} s, against a card of {card} s. Only the first {card} s is encoded; "
+        + "the rest of the clip is never read.", { length, card: card.toFixed(2) });
+  }
+
+  /**
+   * The duration pill's tail: how long the reference runs, and one click to
+   * land the card on it.
+   *
+   * On the pill rather than on the reference chip, because it is the card's
+   * length that moves — this is the one control that sets it, and an offer to
+   * set it belongs beside the number it would change. Every clip can be matched
+   * to, a cast member's voice and the clip they stand in for included; where a
+   * card carries several, the one offered is the one its length leads — see
+   * `S.lengthMatch`. Empty for a card of stills, which is most of them.
+   */
+  matchTail() {
+    const match = S.lengthMatch(this.state, (filename) => this.lengthOf(filename));
+    if (!match) return [];
+    const handle = match.asset.handle;
+    const length = match.seconds.toFixed(2);
+    if (match.matched) {
+      return [el("span", {
+        class: "mmc-dur-match on",
+        text: t("matches @{handle}", { handle }),
+        title: t("@{handle} runs {length} s and this card lands on the same frame count.",
+                 { handle, length }),
+      })];
+    }
+    return [el("button", {
+      class: "mmc-dur-match",
+      title: t("@{handle} runs {length} s. Set this card to {target} s, which is the nearest "
+             + "length the model can make — frame counts come 17 apart, so a whole second is "
+             + "often not the closest one.", { handle, length, target: match.duration.toFixed(2) }),
+      onclick: () => {
+        this.state.duration_s = match.duration;
+        this.commit();
+      },
+    }, [
+      el("span", { text: t("match @{handle}", { handle }) }),
+      el("span", { class: "mmc-pill-sub", text: t("{seconds} s", { seconds: length }) }),
+    ])];
+  }
+
   renderPills(geometry, currentMode) {
     const state = this.state;
     const refs = S.hasReferences(state);
@@ -1652,6 +1765,15 @@ export class CreatorEditor {
     // a time is 45 clicks.
     const grain = state.duration_s >= 15 ? 5 : 1;
     const trained = isTrainedLength(geometry.frames);
+    // A card matched to a reference carries a fractional length, so a step from
+    // one lands on the whole second either side of it rather than 0.42 away
+    // from where it started. From a whole second both are the plain step.
+    const stepTo = (delta) => {
+      const from = Number(state.duration_s) || 0;
+      const step = delta < 0 ? (from > 15 ? 5 : 1) : grain;
+      return delta < 0 ? Math.max(MIN_SECONDS, Math.ceil(from) - step)
+                       : Math.min(MAX_SECONDS, Math.floor(from) + step);
+    };
     const duration = el("div", {
       class: `mmc-pill mmc-pill-group${trained ? "" : " off-distribution"}`,
       title: t("{frames} frames · {seconds} s at 24 fps", { frames: geometry.frames, seconds: geometry.seconds.toFixed(2) })
@@ -1662,20 +1784,23 @@ export class CreatorEditor {
       el("button", {
         class: "mmc-step", text: "−", disabled: state.duration_s <= MIN_SECONDS || undefined,
         onclick: () => {
-          const step = state.duration_s > 15 ? 5 : 1;
-          state.duration_s = Math.max(MIN_SECONDS, state.duration_s - step);
+          state.duration_s = stepTo(-1);
           this.commit();
         },
       }),
       icon("clock", 16),
-      el("span", { text: t("{seconds} s", { seconds: state.duration_s }), style: { minWidth: "38px", textAlign: "center" } }),
+      // Room for "9.42 s" as well as "6 s": a matched card carries two decimals,
+      // and at the old width they sat against the clock.
+      el("span", { text: t("{seconds} s", { seconds: S.showSeconds(state.duration_s) }),
+                   style: { minWidth: "38px", padding: "0 5px", textAlign: "center" } }),
       el("button", {
         class: "mmc-step", text: "+", disabled: state.duration_s >= MAX_SECONDS || undefined,
         onclick: () => {
-          state.duration_s = Math.min(MAX_SECONDS, state.duration_s + grain);
+          state.duration_s = stepTo(1);
           this.commit();
         },
       }),
+      ...this.matchTail(),
     ]);
 
     // Live even when a picture decides the ratio: the list is where the source

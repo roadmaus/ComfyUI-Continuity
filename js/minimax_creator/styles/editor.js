@@ -536,6 +536,22 @@ export const css = `
 /* A stepper as a segment: the +/- sit as tight against the divider as they do
    against a standalone group's edge. */
 .mmc-pill-seg-group { padding: 0 4px; gap: 0; }
+/* The duration pill's tail: how long the reference this shot is generated
+   against runs, and one click to land the card on it. Divided off like a
+   segment, because it answers a different question from the stepper beside it —
+   that one sets a length, this one reports one. Agreement wears the same place
+   and the same divider with no affordance at all: there is nothing to press
+   when the two lengths already agree. */
+.mmc-dur-match, .mmc-dur-match.on {
+  display: flex; align-items: center; gap: 6px; height: 100%; margin-left: 6px; padding: 0 10px;
+  background: none; border: 0; border-left: 1px solid var(--mmc-line);
+  color: var(--mmc-dim); font-family: inherit; font-size: calc(12px * var(--mmc-type));
+  white-space: nowrap;
+}
+.mmc-dur-match { cursor: pointer; }
+.mmc-dur-match:hover { color: var(--mmc-text); }
+.mmc-dur-match:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: -2px; }
+.mmc-dur-match.on { color: var(--mmc-off); cursor: default; }
 .mmc-step {
   background: none; border: 0; color: var(--mmc-text); cursor: pointer;
   font-size: calc(16px * var(--mmc-type)); width: calc(26px * var(--mmc-type)); height: calc(36px * var(--mmc-type)); font-family: inherit;

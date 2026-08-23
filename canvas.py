@@ -104,6 +104,25 @@ def seconds_for_frames(frames):
     return frames / FPS
 
 
+def match_seconds(seconds):
+    """A reference's own length -> the card duration that lands nearest it.
+
+    Not `round(seconds)`. Legal frame counts are 17 apart, which is 0.708 s, and
+    whole seconds do not cover that grid evenly — some legal counts are not the
+    nearest to any whole number of seconds at all. A 6.6 s cue's best match is
+    158 frames (6.58 s); rounding to 7 s compiles to 175 (7.29 s), which is two
+    thirds of a second late and audible in exactly the case somebody asked for a
+    match. So this answers in the model's own units and hands back the real
+    duration of the count it picked, which `frames_for_seconds` then round-trips.
+
+    Out-of-range lengths clamp to the pill's range rather than to the frame set:
+    a three-minute music cue matches the longest card there is, not a 60-second
+    one that the UI cannot then show.
+    """
+    clamped = min(MAX_SECONDS, max(MIN_SECONDS, float(seconds)))
+    return round(seconds_for_frames(frames_for_seconds(clamped)), 2)
+
+
 def clamp_ratio(ratio):
     """Clamp an aspect ratio into H3's envelope. Returns (ratio, was_clamped)."""
     if ratio < MIN_RATIO:

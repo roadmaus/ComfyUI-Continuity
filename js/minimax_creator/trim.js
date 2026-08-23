@@ -61,6 +61,9 @@ const TRACK_TITLE = {
  * @param {?{start:number,end:number}} options.trim   current segment, null for whole clip
  * @param {string} options.track       current track choice (video only), undefined if undecided
  * @param {boolean} options.showTrack  offer the track switch at all
+ * @param {?number} options.cardSeconds  how long the shot this file is being
+ *   referenced by actually runs, so the segment can be cut to it. Null where
+ *   there is no card to answer to — a clip card, whose trim *is* its length.
  * @returns {Promise<?{trim:?{start:number,end:number}, track:string}>} null if cancelled
  */
 export function openTrim(options) {
@@ -80,6 +83,11 @@ class Trim {
     // along, but only for a clip that has one, which the probe settles.
     this.track = options.track;
     this.hasAudio = null;
+    // The shot's own length, drawn on the track as the span this reference will
+    // actually be read over. A reference longer than its card is cut down to it
+    // by `media.load_all`, so this is the one place where that cut can be seen
+    // before it happens — and where the segment can be dialled to fit it.
+    this.card = Number(options.cardSeconds) > 0 ? Number(options.cardSeconds) : null;
   }
 
   mount() {
@@ -120,6 +128,12 @@ class Trim {
     // `trackEl` is the scrub bar; `track` is the picture/sound choice. Two very
     // different things that both want to be called "track" — the DOM one takes
     // the suffix.
+    // Behind the selection, so a segment dragged over it still reads as the
+    // selection. It starts where the selection starts: the card reads from the
+    // in point, not from the head of the file.
+    this.cardSpan = this.card ? el("div", { class: "mmc-trim-card" }, [
+      el("span", { text: t("card · {seconds} s", { seconds: this.card.toFixed(2) }) }),
+    ]) : null;
     this.trackEl = el("div", {
       // An audio file has no picture to look at, so its waveform *is* the
       // preview and the track carries it at full height.
@@ -127,7 +141,7 @@ class Trim {
       // Only reached for the bare track: the selection and the handles are
       // grabbable and stop the event where it lands.
       onpointerdown: (event) => this.seek(this.fraction(event) * this.duration),
-    }, [this.wave, this.selection, this.playhead, this.startHandle, this.endHandle]);
+    }, [this.wave, this.cardSpan, this.selection, this.playhead, this.startHandle, this.endHandle]);
 
     this.readout = el("div", { class: "mmc-trim-read" });
     this.fullButton = el("button", {
@@ -135,7 +149,16 @@ class Trim {
       onclick: () => { this.start = 0; this.end = this.duration; this.paint(); },
     });
 
-    const foot = [this.fullButton];
+    // The other half of the pill's "match @vid-1": there, the card grows to the
+    // reference; here, the reference is cut to the card. Which way round is
+    // right is the user's call, so both exist and neither happens on its own.
+    this.fitButton = this.card ? el("button", {
+      class: "mmc-ghost", text: t("Take {seconds} s", { seconds: this.card.toFixed(2) }),
+      title: t("Cut the segment to the length of the shot referencing it, from the in point."),
+      onclick: () => this.fitCard(),
+    }) : null;
+
+    const foot = [this.fullButton, this.fitButton].filter(Boolean);
     if (this.options.showTrack) {
       this.trackButtons = TRACK_ORDER.map((track) => el("button", {
         class: "mmc-seg-opt",
@@ -341,9 +364,30 @@ class Trim {
   setEdge(edge, value) {
     if (this.duration <= MIN_SEGMENT) return;
     if (edge === "start") this.start = Math.min(Math.max(0, value), this.end - MIN_SEGMENT);
-    else this.end = Math.max(Math.min(this.duration, value), this.start + MIN_SEGMENT);
+    else this.end = Math.max(Math.min(this.duration, this.snapCard(value)), this.start + MIN_SEGMENT);
     // Follow the handle being dragged, so the frame under it is visible.
     this.seek(edge === "start" ? this.start : Math.max(this.start, this.end - 1 / 24), { pause: true });
+    this.paint();
+  }
+
+  /** An out point within a couple of frames of the card's length lands on it
+   *  exactly. Dialling 5.88 s by hand on a 200 px track is not a thing anyone
+   *  can do, and being one frame out is the whole difference between a match
+   *  and a cut. */
+  snapCard(value) {
+    if (!this.card) return value;
+    const target = this.start + this.card;
+    return Math.abs(value - target) <= 2 / 24 ? target : value;
+  }
+
+  /** Cut the segment to the card's length, from the in point — sliding the in
+   *  point back only where the tail of the file is too short to hold it. */
+  fitCard() {
+    if (!this.card || !this.duration) return;
+    const length = Math.min(this.card, this.duration);
+    this.start = Math.min(this.start, this.duration - length);
+    this.end = this.start + length;
+    this.seek(this.start, { pause: true });
     this.paint();
   }
 
@@ -394,8 +438,17 @@ class Trim {
     this.endHandle.style.left = `${percent(end)}%`;
     this.playhead.style.left = `${percent(this.media.currentTime || 0)}%`;
 
+    if (this.cardSpan) {
+      const length = Math.min(this.card, this.duration || this.card);
+      this.cardSpan.style.left = `${percent(this.start)}%`;
+      this.cardSpan.style.width = `${percent(length)}%`;
+      // A reference already the card's length has nothing to show: the span
+      // would sit exactly under the selection and read as a drawing artefact.
+      this.cardSpan.style.display = this.fits() ? "none" : "";
+    }
     const whole = this.isWhole();
     this.fullButton.disabled = whole || !this.duration || undefined;
+    if (this.fitButton) this.fitButton.disabled = !this.duration || this.fits() || undefined;
     if (this.trackButtons) {
       const silent = this.hasAudio === false;
       // Until the probe lands nothing has been decided, but the default it will
@@ -420,6 +473,12 @@ class Trim {
       // dead picture above looks like a bug rather than a missing codec.
       ...(this.status ? [el("span", { class: "mmc-trim-note", text: this.status })] : []),
     );
+  }
+
+  /** Whether the segment is already the card's length, to the frame. */
+  fits() {
+    if (!this.card || !this.duration) return false;
+    return Math.abs((this.end - this.start) - Math.min(this.card, this.duration)) <= 1 / 24;
   }
 
   isWhole() {

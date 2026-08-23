@@ -205,6 +205,19 @@ export const css = `
   cursor: grab; touch-action: none; }
 .mmc-trim-sel:active { cursor: grabbing; background: color-mix(in srgb, var(--mmc-blue) 36%, transparent); }
 .mmc-trim-sel:focus-visible { outline: 2px solid var(--mmc-strong); outline-offset: -2px; }
+/* How far into this clip the shot referencing it actually reads — everything
+   past the dashed edge is cut on the way to the model. Under the selection rather
+   than over it: the selection is what you drag, this is the mark you drag it
+   onto. */
+.mmc-trim-card {
+  position: absolute; top: 0; bottom: 0; pointer-events: none;
+  border-right: 1px dashed var(--mmc-strong);
+  background: color-mix(in srgb, var(--mmc-strong) 8%, transparent);
+}
+.mmc-trim-card span {
+  position: absolute; right: 8px; bottom: 4px; color: var(--mmc-dim);
+  font-size: calc(10px * var(--mmc-type)); white-space: nowrap;
+}
 .mmc-trim-head { position: absolute; top: 0; bottom: 0; width: 2px; margin-left: -1px;
   background: var(--mmc-strong); opacity: .8; pointer-events: none; }
 .mmc-trim-handle {

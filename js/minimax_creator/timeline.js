@@ -1923,9 +1923,10 @@ class Timeline {
         // carries it there instead.
         el("span", {
           class: `mmc-tl-dur${shared || isTrainedLength(frames) ? "" : " off-distribution"}`,
-          text: `${segment.duration_s} s`,
+          text: `${S.showSeconds(segment.duration_s)} s`,
           title: shared
-            ? t("{s} s of this pass — the frame count is the pass's.", { s: segment.duration_s })
+            ? t("{s} s of this pass — the frame count is the pass's.",
+                { s: S.showSeconds(segment.duration_s) })
             : isTrainedLength(frames)
               ? t("{frames} frames at 24 fps", { frames })
               : t("{frames} frames — outside the ~5–15 s the weights were trained on.", { frames }),

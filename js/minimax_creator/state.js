@@ -3,7 +3,7 @@
 // editing rather than at queue time, but compile.py stays authoritative.
 
 import { ASPECT_PRESETS, FPS, MIN_SHORT_EDGE, NATIVE_SHORT_EDGE, CANVAS_MULTIPLE,
-         framesForSeconds, secondsForFrames, resolveCanvas } from "./canvas.js";
+         framesForSeconds, secondsForFrames, matchSeconds, resolveCanvas } from "./canvas.js";
 import { t } from "./i18n.js";
 // Where files land is not in the blob any more — it is a preference of this
 // machine, in `settings.js`, so a shared workflow does not carry one person's
@@ -3156,6 +3156,109 @@ export const soundOnly = (asset) => asset.kind === "video" && asset.track === "s
 export const refVideos = (state) => references(state).filter((a) => a.kind === "video" && !soundOnly(a));
 export const refAudios = (state) => references(state).filter((a) => a.kind === "audio" || soundOnly(a));
 export const frameAsset = (state, role) => state.assets.find((a) => a.role === role) || null;
+
+// ---- how long a reference is, against how long the card is ------------------
+//
+// Two lengths that never used to meet. A card's is `duration_s`, set on the
+// pill; a reference's is its trim, or the file's own as the probe read it. The
+// generation has to answer for the difference: `media.load_all` cuts every
+// reference video down to the card's frame count, so a 12-second clip on a
+// 6-second card loses half of itself, and a standalone audio reference is sent
+// whole against a card that is not as long as it is.
+//
+// Every clip has a length and every clip is cut by it, so the offer is made for
+// all of them — how a reference is narrowed does not change what the card does
+// with the time it occupies, and a rule that withheld the offer from some takes
+// only meant the one file somebody wanted to match could not be matched. A
+// cast member's voice is narrowed to "voice" and the clip they stand in for to
+// "edit"; both are ordinary references with a length, and both are exactly the
+// case this exists for.
+//
+// The takes below still decide *which* reference the pill volunteers when a
+// card carries several: these are the ones the length leads — a signal in time,
+// or a whole-clip relationship — against a clip mined for a look, which is a
+// moving still and the last one worth matching to.
+export const LENGTH_LED = {
+  audio: ["full", "copy", "music", "voice", "ambience"],
+  video: ["full", "motion", "camera", "edit", "continue"],
+};
+
+/** Whether this reference has a length at all — every clip does, no picture
+ *  does. Kept as a name because "has a length" is the question three callers
+ *  are asking, and `kind !== "image"` is not what any of them mean. */
+export const timed = (asset) => asset?.kind === "video" || asset?.kind === "audio";
+
+/** Whether the length is what this reference is mainly about — the tiebreak
+ *  when a card carries several. */
+export const lengthLed = (asset) =>
+  (LENGTH_LED[scopeKind(asset)] ?? []).includes(takes(asset));
+
+/**
+ * A reference's own length in seconds, or null while it is not known.
+ *
+ * The trim decides it where there is one — that range *is* the reference. The
+ * whole file's length is not in the blob and never has been: it is a fact about
+ * the file, so it comes from the probe route, and `lengthOf` is the caller's
+ * cache of those answers.
+ */
+export function refSeconds(asset, lengthOf) {
+  const trim = asset?.trim;
+  if (trim && Number.isFinite(trim.start) && Number.isFinite(trim.end) && trim.end > trim.start) {
+    return trim.end - trim.start;
+  }
+  const whole = lengthOf?.(asset?.filename);
+  return Number.isFinite(whole) && whole > 0 ? whole : null;
+}
+
+/** A card length as the UI says it. Whole seconds plain, as they have always
+ *  been read; a matched one to the two decimals `matchSeconds` wrote, because
+ *  the whole point of that number is that it is not a whole second. */
+export const showSeconds = (seconds) => {
+  const value = Number(seconds) || 0;
+  return Number.isInteger(value) ? String(value) : round2(value).toFixed(2);
+};
+
+/** Every reference this card is generated against whose length means something,
+ *  with the length — the card's own and the pool ones its text cites, because
+ *  both ride into this one generation. */
+export function timedRefs(state, lengthOf) {
+  const found = [];
+  for (const asset of [...references(state), ...citedPool(state)]) {
+    if (!timed(asset)) continue;
+    const seconds = refSeconds(asset, lengthOf);
+    if (seconds !== null) found.push({ asset, seconds });
+  }
+  return found;
+}
+
+/**
+ * The offer the duration pill makes, or null when there is nothing to say.
+ *
+ * The longest reference, because that is the one the card is otherwise cutting
+ * — but a clip the length leads beats one mined for a look at any length, so a
+ * shot carrying a line of dialogue and a forty-second style plate offers the
+ * line. `duration` is what the pill would write — `matchSeconds`, not a rounded
+ * second — and `matched` is whether the card already lands on the same frame
+ * count, which is the only sense in which two lengths can agree here.
+ */
+export function lengthMatch(state, lengthOf) {
+  let longest = null;
+  for (const entry of timedRefs(state, lengthOf)) {
+    const better = !longest
+      || (lengthLed(entry.asset) && !lengthLed(longest.asset))
+      || (lengthLed(entry.asset) === lengthLed(longest.asset)
+          && entry.seconds > longest.seconds);
+    if (better) longest = entry;
+  }
+  if (!longest) return null;
+  const duration = matchSeconds(longest.seconds);
+  return {
+    asset: longest.asset,
+    seconds: longest.seconds,
+    duration,
+    matched: framesForSeconds(Number(state.duration_s) || 0) === framesForSeconds(duration),
+  };
+}
 
 export function hasReferences(state) {
   // A cited pool reference is a reference of this generation in every way that

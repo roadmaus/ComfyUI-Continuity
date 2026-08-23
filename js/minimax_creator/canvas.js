@@ -57,6 +57,15 @@ export function secondsForFrames(frames) {
   return frames / FPS;
 }
 
+// A reference's own length -> the card duration that lands nearest it. Not
+// Math.round: legal counts are 0.708 s apart and whole seconds do not cover
+// that grid, so a matched card carries a fractional duration_s — see canvas.py
+// for the arithmetic and the 6.6 s case that argues for it.
+export function matchSeconds(seconds) {
+  const clamped = Math.min(MAX_SECONDS, Math.max(MIN_SECONDS, Number(seconds)));
+  return Math.round(secondsForFrames(framesForSeconds(clamped)) * 100) / 100;
+}
+
 export function clampRatio(ratio) {
   if (ratio < MIN_RATIO) return [MIN_RATIO, true];
   if (ratio > MAX_RATIO) return [MAX_RATIO, true];

@@ -175,6 +175,12 @@ export const css = `
      pack says a word has more behind it. */
   cursor: help;
 }
+/* What this card does with the clip's length — a sentence rather than a
+   choice, so it takes the width the options would have and reads as prose. */
+.mmc-refsheet-len { align-items: flex-start; }
+.mmc-refsheet-note {
+  flex: 1; color: var(--mmc-dim); font-size: calc(11px * var(--mmc-type)); line-height: 1.45;
+}
 .mmc-refsheet-opts { display: flex; flex-wrap: wrap; gap: 4px; flex: 1; }
 .mmc-refsheet-opt {
   padding: 4px 9px; background: var(--mmc-surface-2); border: 1px solid transparent;

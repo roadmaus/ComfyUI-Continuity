@@ -950,6 +950,10 @@ class Picker {
       // the default rather than a stale "picture".
       track: setting.track,
       showTrack: asset.kind === "video",
+      // Passed straight through from whoever opened the picker: a file is
+      // trimmed here before it is attached, and the card it is about to be
+      // attached to is the one it will be read against.
+      cardSeconds: this.options.cardSeconds,
     });
     if (!result) return;
     // Stored even when it matches the default, because "the user looked at this

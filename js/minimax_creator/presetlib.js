@@ -39,7 +39,7 @@ import { renderMeta, stillUrl, viewUrl } from "./api.js";
 import { atlasRef } from "./presets/atlasref.js";
 import { openPicker } from "./picker.js";
 import { openMenu, MARKER_LABEL, MARKER_NOTE, ROLES, TAKES_NOTE } from "./cast.js";
-import { SUBJECT_TAKES, tagIndex } from "./state.js";
+import { SUBJECT_TAKES, showSeconds, tagIndex } from "./state.js";
 import { BUILTIN } from "./presets/builtin.js";
 import * as P from "./presets.js";
 
@@ -1586,7 +1586,7 @@ class PresetLibrary {
       }
       case "shot": {
         const shot = body.shot ?? {};
-        return [t("{n} s", { n: shot.duration_s ?? 0 }),
+        return [t("{n} s", { n: showSeconds(shot.duration_s ?? 0) }),
                 shot.continue ? t("continues") : t("hard cut"),
                 shot.merge ? t("merged") : null].filter(Boolean).join(" · ");
       }
