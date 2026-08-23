@@ -216,7 +216,10 @@ The plan's per-phase verification list, items 4–6, is what is left:
   `logs/`, searched for `IMPORT FAILED`.)
 - A workflow saved from `main`: loads, shows the same values, queues to the
   same graph.
-- Push the branch and render on RunPod — this Mac never samples.
+- ~~Push the branch and render on RunPod — this Mac never samples.~~ Pushed
+  and rendered there after phase 5 (`a415cb6`), 2026-08-23 — works, which
+  also proves `/minimax_creator/families` feeding the whole frontend from a
+  live server.
 
 ## Not done, and known
 
@@ -228,7 +231,8 @@ The plan's per-phase verification list, items 4–6, is what is left:
   a headless API queue both have no `sampling` block.
 - ~~Nothing has been rendered.~~ Rendered on RunPod from the pushed branch,
   2026-08-23 — works. Re-verified there after phase 3 (loop split, slot table,
-  refine move, the load-failure fix), same day.
+  refine move, the load-failure fix) and again after phase 5 (the manifest
+  route, the drained frontend), same day.
 - **`presets/atlas.js` is probably H3-prompt-shaped.** Whether a preset's prose
   survives being handed to another family is unanswered and blocks LTX, not
   phase 3.
