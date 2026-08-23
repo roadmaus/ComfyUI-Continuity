@@ -1,0 +1,289 @@
+{
+  "1": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "h3/fl2va.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "10": {
+    "class_type": "MiniMaxH3PassAudio",
+    "inputs": {
+      "seconds": 0.20833333333333334,
+      "source": [
+        "8",
+        1
+      ]
+    }
+  },
+  "11": {
+    "class_type": "MiniMaxH3TimelineSegment",
+    "inputs": {
+      "audio_vae": [
+        "4",
+        0
+      ],
+      "audio_vae_name": "h3/audio_vae.safetensors",
+      "clip": [
+        "2",
+        0
+      ],
+      "model_fl2va": [
+        "1",
+        0
+      ],
+      "prev_audio": [
+        "10",
+        0
+      ],
+      "prev_image": [
+        "9",
+        0
+      ],
+      "segment_data": "{\"canvas\": {\"clamped\": false, \"from_image\": false, \"height\": 768, \"label\": \"16:9\", \"ratio\": 1.7777777777777777, \"width\": 1344}, \"continue\": true, \"continue_audio\": true, \"feather\": 5, \"progress\": {\"index\": 2}, \"request\": {\"aspect\": \"16:9\", \"audio_tail_s\": 1.0, \"duration_s\": 5, \"loras\": [], \"music\": \"\", \"prompt\": \"a house at dusk\\ncloser\", \"short_edge\": 768, \"soundscape\": \"\"}}",
+      "vae": [
+        "3",
+        0
+      ],
+      "vae_name": "h3/video_vae.safetensors"
+    }
+  },
+  "12": {
+    "class_type": "ConditioningZeroOut",
+    "inputs": {
+      "conditioning": [
+        "11",
+        1
+      ]
+    }
+  },
+  "13": {
+    "class_type": "KSampler",
+    "inputs": {
+      "cfg": 1.0,
+      "denoise": 1.0,
+      "latent_image": [
+        "11",
+        2
+      ],
+      "model": [
+        "11",
+        0
+      ],
+      "negative": [
+        "12",
+        0
+      ],
+      "positive": [
+        "11",
+        1
+      ],
+      "sampler_name": "res_multistep",
+      "scheduler": "simple",
+      "seed": 100,
+      "steps": 20
+    }
+  },
+  "14": {
+    "class_type": "MiniMaxH3Reel",
+    "inputs": {
+      "audio_vae": [
+        "4",
+        0
+      ],
+      "head": 5,
+      "reel": [
+        "8",
+        0
+      ],
+      "samples": [
+        "13",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
+    }
+  },
+  "15": {
+    "class_type": "MiniMaxH3TimelineSegment",
+    "inputs": {
+      "clip": [
+        "2",
+        0
+      ],
+      "model_fl2va": [
+        "1",
+        0
+      ],
+      "segment_data": "{\"canvas\": {\"clamped\": false, \"from_image\": false, \"height\": 768, \"label\": \"16:9\", \"ratio\": 1.7777777777777777, \"width\": 1344}, \"continue\": false, \"continue_audio\": false, \"progress\": {\"index\": 3}, \"request\": {\"aspect\": \"16:9\", \"audio_tail_s\": 1.0, \"duration_s\": 5, \"loras\": [], \"music\": \"\", \"prompt\": \"a house at dusk\\ncut away\", \"short_edge\": 768, \"soundscape\": \"\"}}"
+    }
+  },
+  "16": {
+    "class_type": "ConditioningZeroOut",
+    "inputs": {
+      "conditioning": [
+        "15",
+        1
+      ]
+    }
+  },
+  "17": {
+    "class_type": "KSampler",
+    "inputs": {
+      "cfg": 1.0,
+      "denoise": 1.0,
+      "latent_image": [
+        "15",
+        2
+      ],
+      "model": [
+        "15",
+        0
+      ],
+      "negative": [
+        "16",
+        0
+      ],
+      "positive": [
+        "15",
+        1
+      ],
+      "sampler_name": "res_multistep",
+      "scheduler": "simple",
+      "seed": 100,
+      "steps": 20
+    }
+  },
+  "18": {
+    "class_type": "MiniMaxH3Reel",
+    "inputs": {
+      "audio_vae": [
+        "4",
+        0
+      ],
+      "reel": [
+        "14",
+        0
+      ],
+      "samples": [
+        "17",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
+    }
+  },
+  "19": {
+    "class_type": "MiniMaxH3Save",
+    "inputs": {
+      "crf": 23,
+      "filename_prefix": "minimax/renders/H3",
+      "fps": 24.0,
+      "reel": [
+        "18",
+        0
+      ],
+      "takes": "{\"cards\": [1, 2, 3], \"seeds\": [100, 100, 100]}"
+    }
+  },
+  "2": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "h3/text_encoder.safetensors",
+      "type": "minimax"
+    }
+  },
+  "3": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "h3/video_vae.safetensors"
+    }
+  },
+  "4": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "h3/audio_vae.safetensors"
+    }
+  },
+  "5": {
+    "class_type": "MiniMaxH3TimelineSegment",
+    "inputs": {
+      "clip": [
+        "2",
+        0
+      ],
+      "model_fl2va": [
+        "1",
+        0
+      ],
+      "segment_data": "{\"canvas\": {\"clamped\": false, \"from_image\": false, \"height\": 768, \"label\": \"16:9\", \"ratio\": 1.7777777777777777, \"width\": 1344}, \"continue\": false, \"continue_audio\": false, \"progress\": {\"index\": 1}, \"request\": {\"aspect\": \"16:9\", \"audio_tail_s\": 1.0, \"duration_s\": 5, \"loras\": [], \"music\": \"\", \"prompt\": \"a house at dusk\\nwide\", \"short_edge\": 768, \"soundscape\": \"\"}}"
+    }
+  },
+  "6": {
+    "class_type": "ConditioningZeroOut",
+    "inputs": {
+      "conditioning": [
+        "5",
+        1
+      ]
+    }
+  },
+  "7": {
+    "class_type": "KSampler",
+    "inputs": {
+      "cfg": 1.0,
+      "denoise": 1.0,
+      "latent_image": [
+        "5",
+        2
+      ],
+      "model": [
+        "5",
+        0
+      ],
+      "negative": [
+        "6",
+        0
+      ],
+      "positive": [
+        "5",
+        1
+      ],
+      "sampler_name": "res_multistep",
+      "scheduler": "simple",
+      "seed": 100,
+      "steps": 20
+    }
+  },
+  "8": {
+    "class_type": "MiniMaxH3Reel",
+    "inputs": {
+      "audio_vae": [
+        "4",
+        0
+      ],
+      "samples": [
+        "7",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
+    }
+  },
+  "9": {
+    "class_type": "MiniMaxH3PassFrames",
+    "inputs": {
+      "count": 5,
+      "source": [
+        "8",
+        1
+      ]
+    }
+  }
+}

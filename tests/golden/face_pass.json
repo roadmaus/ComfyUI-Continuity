@@ -1,0 +1,173 @@
+{
+  "1": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "h3/fl2va.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "10": {
+    "class_type": "ConditioningZeroOut",
+    "inputs": {
+      "conditioning": [
+        "9",
+        1
+      ]
+    }
+  },
+  "11": {
+    "class_type": "MiniMaxH3FacePass",
+    "inputs": {
+      "audio_vae": [
+        "4",
+        0
+      ],
+      "cfg": 1.0,
+      "denoise": 0.45,
+      "detector": "sam3.safetensors",
+      "height": 512,
+      "model": [
+        "9",
+        0
+      ],
+      "negative": [
+        "10",
+        0
+      ],
+      "positive": [
+        "9",
+        1
+      ],
+      "reel": [
+        "8",
+        0
+      ],
+      "sampler_name": "res_multistep",
+      "scheduler": "simple",
+      "seed": 100,
+      "source": [
+        "8",
+        1
+      ],
+      "steps": 20,
+      "vae": [
+        "3",
+        0
+      ],
+      "width": 512
+    }
+  },
+  "12": {
+    "class_type": "MiniMaxH3Save",
+    "inputs": {
+      "crf": 23,
+      "filename_prefix": "minimax/renders/H3",
+      "fps": 24.0,
+      "reel": [
+        "11",
+        0
+      ],
+      "takes": ""
+    }
+  },
+  "2": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "h3/text_encoder.safetensors",
+      "type": "minimax"
+    }
+  },
+  "3": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "h3/video_vae.safetensors"
+    }
+  },
+  "4": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "h3/audio_vae.safetensors"
+    }
+  },
+  "5": {
+    "class_type": "MiniMaxH3TimelineSegment",
+    "inputs": {
+      "clip": [
+        "2",
+        0
+      ],
+      "model_fl2va": [
+        "1",
+        0
+      ],
+      "segment_data": "{\"canvas\": {\"clamped\": false, \"from_image\": false, \"height\": 768, \"label\": \"16:9\", \"ratio\": 1.7777777777777777, \"width\": 1344}, \"continue\": false, \"continue_audio\": false, \"request\": {\"aspect\": \"16:9\", \"audio_tail_s\": 1.0, \"duration_s\": 5, \"face\": {\"canvas\": 512, \"denoise\": 0.45, \"on\": true}, \"loras\": [], \"music\": \"\", \"prompt\": \"a woman crossing a market\", \"short_edge\": 768, \"soundscape\": \"\"}}"
+    }
+  },
+  "6": {
+    "class_type": "ConditioningZeroOut",
+    "inputs": {
+      "conditioning": [
+        "5",
+        1
+      ]
+    }
+  },
+  "7": {
+    "class_type": "KSampler",
+    "inputs": {
+      "cfg": 1.0,
+      "denoise": 1.0,
+      "latent_image": [
+        "5",
+        2
+      ],
+      "model": [
+        "5",
+        0
+      ],
+      "negative": [
+        "6",
+        0
+      ],
+      "positive": [
+        "5",
+        1
+      ],
+      "sampler_name": "res_multistep",
+      "scheduler": "simple",
+      "seed": 100,
+      "steps": 20
+    }
+  },
+  "8": {
+    "class_type": "MiniMaxH3Reel",
+    "inputs": {
+      "audio_vae": [
+        "4",
+        0
+      ],
+      "samples": [
+        "7",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
+    }
+  },
+  "9": {
+    "class_type": "MiniMaxH3TimelineSegment",
+    "inputs": {
+      "clip": [
+        "2",
+        0
+      ],
+      "model_fl2va": [
+        "1",
+        0
+      ],
+      "segment_data": "{\"canvas\": {\"clamped\": false, \"from_image\": false, \"height\": 512, \"label\": \"1:1\", \"ratio\": 1.0, \"width\": 512}, \"request\": {\"aspect\": \"16:9\", \"audio_tail_s\": 1.0, \"duration_s\": 5, \"loras\": [], \"music\": \"\", \"prompt\": \"a woman crossing a market\", \"short_edge\": 768, \"soundscape\": \"\"}}"
+    }
+  }
+}
