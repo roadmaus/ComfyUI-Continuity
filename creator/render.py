@@ -17,8 +17,9 @@ from .core.emit import (FILENAME_PREFIX, emit_tail, expanded,  # noqa: F401
                         inherited_audio, inherited_frames, is_clip_source)
 from .families.h3 import render as _h3
 from .families.h3.render import (FACE_NODE, REFINE_NODE,  # noqa: F401
-                                 SEGMENT_NODE, LeadIn, Links, face_payload,
+                                 SEGMENT_NODE, LeadIn, face_payload,
                                  patched, routed)
+from .models import Links  # noqa: F401
 
 # Re-exported, not defined: the row and its defaults are `sampling.py`'s, which
 # is a module with no ComfyUI import in it so that the blob half of the row can

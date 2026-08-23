@@ -83,10 +83,9 @@ def emit(plan, weights, sampling, unique_id, filename_prefix=FILENAME_PREFIX):
         inputs["vae"] = links.vae
     if links.audio_vae is not None and compiled[0].encodes_audio():
         inputs["audio_vae"] = links.audio_vae
-    if links.model_fl2va is not None:
-        inputs["model_fl2va"] = links.model_fl2va
-    if links.model_ref2va is not None:
-        inputs["model_ref2va"] = links.model_ref2va
+    for name in models.ROUTED_SLOTS:
+        if links.get(name) is not None:
+            inputs[f"model_{name}"] = links.get(name)
     segment = graph.node(SEGMENT_NODE, **inputs)
 
     # The distilled H3 checkpoints run at cfg 1.0, where the negative is

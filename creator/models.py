@@ -49,7 +49,7 @@ not emitted for GGUF files, whose precision was decided at quantization time.
 """
 
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import Any, Optional
 
 from . import accel
 
@@ -88,13 +88,66 @@ GGUF_FOLDERS = {
     "text_encoders": "clip_gguf",
 }
 
+# "the pack's own default", which is what passing no `device` at all means.
+DEFAULT_DEVICE = ""
+
+# What CLIPLoader calls the H3 text encoder. Not "minimax_h3": the value is
+# uppercased into `comfy.sd.CLIPType.MINIMAX`, and a name that does not resolve
+# falls back to STABLE_DIFFUSION and tokenizes the prompt with the wrong
+# vocabulary rather than failing.
+CLIP_TYPE = "minimax"
+
+
+@dataclass(frozen=True)
+class Slot:
+    """One named file the family loads, and how.
+
+    The slot table below is the family's whole weights declaration — which
+    folder each pick browses, what an error calls it, and which loader the
+    graph builds for it. `emit_links`, `check`, `available` and the frontend's
+    weights control are all written against the table rather than against five
+    field names, which is what a second family's different slots ride in on.
+    """
+
+    folder: str                 # ComfyUI's folder key the file is picked from
+    label: str                  # what an error calls the field
+    loader: Optional[str] = None  # core loader node id; None is a file some
+                                  # node loads itself (the preview, the detector)
+    input: str = ""             # the loader's filename input
+    extra: Any = None           # fixed loader inputs, e.g. CLIPLoader's type
+    routed: bool = False        # built only when a generation routes to it
+    audio: bool = False         # skipped entirely on a soundless render
+
+
+# Order matters twice: it is the order the loaders are emitted in — which the
+# golden graphs hold — and the order the weights popover lists the fields.
+SLOTS = {
+    "fl2va": Slot("diffusion_models", "the FL2VA checkpoint",
+                  loader="UNETLoader", input="unet_name", routed=True),
+    "ref2va": Slot("diffusion_models", "the Ref2VA checkpoint",
+                   loader="UNETLoader", input="unet_name", routed=True),
+    "clip": Slot("text_encoders", "the text encoder",
+                 loader="CLIPLoader", input="clip_name",
+                 extra={"type": CLIP_TYPE}),
+    "vae": Slot("vae", "the video VAE", loader="VAELoader", input="vae_name"),
+    "audio_vae": Slot("vae", "the audio VAE",
+                      loader="VAELoader", input="vae_name", audio=True),
+    "preview": Slot("vae_approx", "the preview decoder"),
+    # The face pass's detector: a SAM3 checkpoint, which is a fused file — model
+    # and its own text encoder together — and so is picked from `checkpoints`
+    # and loaded by `facepass` itself rather than by a loader emitted here. It
+    # is in the table because it is a file the user picks in the same control,
+    # not because it becomes a link.
+    "sam3": Slot("checkpoints", "the face detector"),
+}
+
+# The slots a generation routes between — H3's two checkpoints.
+ROUTED_SLOTS = [name for name, slot in SLOTS.items() if slot.routed]
+
 # Which fields a device can be chosen for: the five that become a loader.
 # `preview` is not one — it is a filename handed to KJNodes' node, which pins its
 # own decoder to wherever the sampler is running.
-DEVICE_FIELDS = ["fl2va", "ref2va", "clip", "vae", "audio_vae"]
-
-# "the pack's own default", which is what passing no `device` at all means.
-DEFAULT_DEVICE = ""
+DEVICE_FIELDS = [name for name, slot in SLOTS.items() if slot.loader]
 
 # What `route` may hold. "auto" follows the mode, which is what the node has
 # always done; the other two are a standing instruction to run everything on one
@@ -110,33 +163,14 @@ DEFAULT_DEVICE = ""
 ROUTES = ["auto", "fl2va", "ref2va"]
 DEFAULT_ROUTE = "auto"
 
-# Where each file is picked from. These are ComfyUI's own folder keys, and the
-# listing route hands the same map to the frontend so the two cannot disagree
-# about which directory a field browses.
-FOLDERS = {
-    "fl2va": "diffusion_models",
-    "ref2va": "diffusion_models",
-    "clip": "text_encoders",
-    "vae": "vae",
-    "audio_vae": "vae",
-    "preview": "vae_approx",
-    # The face pass's detector: a SAM3 checkpoint, which is a fused file — model
-    # and its own text encoder together — and so is picked from `checkpoints`
-    # and loaded by `facepass` itself rather than by a loader emitted here. It
-    # is in this map because it is a file the user picks in the same control,
-    # not because it becomes a link.
-    "sam3": "checkpoints",
-}
+# Where each file is picked from — the slot table's folder column. These are
+# ComfyUI's own folder keys, and the listing route hands the same map to the
+# frontend so the two cannot disagree about which directory a field browses.
+FOLDERS = {name: slot.folder for name, slot in SLOTS.items()}
 
 # UNETLoader's own list, read rather than invented so a retune of core's dtype
 # options does not leave this carrying a stale copy.
 DEFAULT_DTYPE = "default"
-
-# What CLIPLoader calls the H3 text encoder. Not "minimax_h3": the value is
-# uppercased into `comfy.sd.CLIPType.MINIMAX`, and a name that does not resolve
-# falls back to STABLE_DIFFUSION and tokenizes the prompt with the wrong
-# vocabulary rather than failing.
-CLIP_TYPE = "minimax"
 
 # How many frames of each step's latent the preview decodes. taeh3 is causal —
 # its MemBlocks chain state forward — so KJNodes' evenly-spaced sampling
@@ -151,16 +185,9 @@ PREVIEW_FRAMES = 1024
 # node input, not a computation).
 PREVIEW_FPS = 24
 
-# What each field is called when this has to complain about one being unset.
-LABEL = {
-    "fl2va": "the FL2VA checkpoint",
-    "ref2va": "the Ref2VA checkpoint",
-    "clip": "the text encoder",
-    "vae": "the video VAE",
-    "audio_vae": "the audio VAE",
-    "preview": "the preview decoder",
-    "sam3": "the face detector",
-}
+# What each field is called when this has to complain about one being unset —
+# the slot table's label column.
+LABEL = {name: slot.label for name, slot in SLOTS.items()}
 
 
 @dataclass(frozen=True)
@@ -397,8 +424,43 @@ def check(weights, checkpoints, where, audio=True, face=False):
         )
 
 
+class Links:
+    """The loaders, as links into the graph they were built in, by slot name.
+
+    Links rather than loaded objects throughout: these go into the subgraph, and
+    ComfyUI hashes input *values* for its cache — a model object hashes as
+    `Unhashable`, so passing the real thing would make every expanded node miss
+    on every queue.
+
+    A slot dict rather than a dataclass with a field per loader, because the
+    slots are the family's to declare — the render loop reads exactly two names
+    off this, `.vae` and `.audio_vae`, and everything else is between the
+    family's own hooks and its slot table. Attribute access is kept because
+    those two reads are a contract (`families/base.py`) and `links.vae` is how
+    every reader has always spelled it.
+
+    A checkpoint nothing routes to is absent and has no loader in the graph at
+    all. That is the point of `emit_links` taking the set: both MODEL sockets
+    used to have to be connected even though one generation samples with
+    exactly one of them, so every queue loaded weights it never touched.
+    """
+
+    def __init__(self, slots):
+        self._slots = dict(slots)
+
+    def get(self, name):
+        """The slot's link, or None where this render never built one."""
+        return self._slots.get(name)
+
+    def __getattr__(self, name):
+        try:
+            return self._slots[name]
+        except KeyError:
+            raise AttributeError(name) from None
+
+
 def emit_links(graph, weights, checkpoints, audio=True):
-    """Build the loaders inside `graph` and return them as a `render.Links`.
+    """Build the loaders inside `graph` and return them as a `Links`.
 
     One `UNETLoader` per checkpoint this render reaches for and no more, which is
     the whole reason the set is passed in rather than both being built
@@ -412,30 +474,26 @@ def emit_links(graph, weights, checkpoints, audio=True):
     takes the flag: a still decodes no sound, and a loader in the graph is a
     file loaded whether or not anything reads it.
     """
-    from .families.h3.render import Links
-
-    def loader(field, node_id, filename, **inputs):
-        wrapper, extra = loader_for(node_id, weights.device(field), filename)
+    def loader(field, slot, filename):
+        wrapper, extra = loader_for(slot.loader, weights.device(field), filename)
+        inputs = {slot.input: filename, **(slot.extra or {})}
         # `weight_dtype` is the core loader's input; a GGUF file's precision was
         # decided when it was quantized, and its loader takes no such widget.
-        if not is_gguf(filename) and node_id == "UNETLoader":
+        if not is_gguf(filename) and slot.loader == "UNETLoader":
             inputs["weight_dtype"] = weights.dtype
         return graph.node(wrapper, **inputs, **extra).out(0)
 
-    models = {}
-    for name in sorted(checkpoints):
-        models[name] = loader(name, "UNETLoader", weights.get(name),
-                              unet_name=weights.get(name))
-
-    return Links(
-        clip=loader("clip", "CLIPLoader", weights.clip,
-                    clip_name=weights.clip, type=CLIP_TYPE),
-        vae=loader("vae", "VAELoader", weights.vae, vae_name=weights.vae),
-        audio_vae=loader("audio_vae", "VAELoader", weights.audio_vae,
-                         vae_name=weights.audio_vae) if audio else None,
-        model_fl2va=models.get("fl2va"),
-        model_ref2va=models.get("ref2va"),
-    )
+    links = {}
+    for name, slot in SLOTS.items():
+        if slot.loader is None:
+            continue                    # picked in the control, loaded elsewhere
+        if slot.routed and name not in checkpoints:
+            continue                    # nothing samples on it, so no loader
+        if slot.audio and not audio:
+            links[name] = None          # present but unbuilt, so readers need no
+            continue                    # audio-awareness of their own
+        links[name] = loader(name, slot, weights.get(name))
+    return Links(links)
 
 
 def preview_available(weights):

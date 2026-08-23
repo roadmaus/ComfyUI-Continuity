@@ -18,7 +18,6 @@ nothing outside an expanded graph ever sees.
 
 import json
 from dataclasses import dataclass
-from typing import Any, Optional
 
 import comfy.sample
 
@@ -105,31 +104,6 @@ class LeadIn:
         return any(entry["name"] == self.lora for entry in
                    compiler.active_loras(payload["request"].get("loras"),
                                          compiled.checkpoint))
-
-
-@dataclass(frozen=True)
-class Links:
-    """The loaders, as links into the graph they were built in.
-
-    Links rather than loaded objects throughout: these go into the subgraph, and
-    ComfyUI hashes input *values* for its cache — a model object hashes as
-    `Unhashable`, so passing the real thing would make every expanded node miss
-    on every queue.
-
-    A checkpoint nothing routes to is `None` and has no loader in the graph at
-    all. That is the point of `models.emit_links` taking the set: both MODEL
-    sockets used to have to be connected even though one generation samples with
-    exactly one of them, so every queue loaded weights it never touched.
-    """
-
-    clip: Any
-    vae: Any
-    audio_vae: Any
-    model_fl2va: Optional[Any] = None
-    model_ref2va: Optional[Any] = None
-
-    def model_for(self, checkpoint):
-        return {"fl2va": self.model_fl2va, "ref2va": self.model_ref2va}[checkpoint]
 
 
 def routed(compiled, labels):
@@ -264,10 +238,12 @@ class H3(base.Family):
         if compiled.encodes_audio():
             inputs["audio_vae"] = links.audio_vae
             inputs["audio_vae_name"] = weights.audio_vae or ""
-        if links.model_fl2va is not None:
-            inputs["model_fl2va"] = links.model_fl2va
-        if links.model_ref2va is not None:
-            inputs["model_ref2va"] = links.model_ref2va
+        # The segment node's MODEL input names are its schema and are frozen —
+        # `model_<slot>` happens to spell them, but it is the slot table that
+        # decides which loaders exist to wire.
+        for name in models.ROUTED_SLOTS:
+            if links.get(name) is not None:
+                inputs[f"model_{name}"] = links.get(name)
         inputs.update(seams)
         return inputs
 
@@ -410,10 +386,9 @@ class H3(base.Family):
             face_inputs["vae"] = links.vae
         if compiled.encodes_audio():
             face_inputs["audio_vae"] = links.audio_vae
-        if links.model_fl2va is not None:
-            face_inputs["model_fl2va"] = links.model_fl2va
-        if links.model_ref2va is not None:
-            face_inputs["model_ref2va"] = links.model_ref2va
+        for name in models.ROUTED_SLOTS:
+            if links.get(name) is not None:
+                face_inputs[f"model_{name}"] = links.get(name)
         crop = graph.node(SEGMENT_NODE, **face_inputs)
 
         # Patched exactly as the passes are — the LoRAs come with the
