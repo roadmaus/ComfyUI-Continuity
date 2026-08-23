@@ -26,13 +26,12 @@ import { turboRow, loadLoraNames } from "./turbo.js";
 const NONE = "— none —";
 const AUTO = "— auto —";
 
-/** Said as an instruction rather than as a name: "ref2va" is the field it
- *  writes, and "always Ref2VA" is what choosing it does. */
-export const ROUTE_LABEL = {
-  auto: "auto — follow the mode",
-  fl2va: "always FL2VA",
-  ref2va: "always Ref2VA",
-};
+/** Said as an instruction rather than as a name: a route *is* a checkpoint
+ *  field, and "always Ref2VA" is what choosing it does. The names are the
+ *  manifest's; only "auto" has its own sentence. */
+export const routeLabel = (route) =>
+  route === "auto" ? t("auto — follow the mode")
+    : t("always {name}", { name: S.CHECKPOINT_LABEL[route] });
 
 // The listing, shared by every node body on the canvas. Fetched once and handed
 // out synchronously afterwards, because the pill is re-rendered on every commit
@@ -170,13 +169,13 @@ export function openWeightsPopover(anchor, { models, checkpoints, onChange, turb
              + "payloads perfectly well.\n\n"
              + "FL2VA cannot take references at all, so forcing it is refused on a "
              + "generation that has any."),
-        text: t(ROUTE_LABEL[models.route]),
+        text: routeLabel(models.route),
         onclick: (event) => openChoicePopover(event.currentTarget, {
           title: t("Route"),
-          options: S.ROUTES.map((route) => t(ROUTE_LABEL[route])),
-          value: t(ROUTE_LABEL[models.route]),
+          options: S.ROUTES.map(routeLabel),
+          value: routeLabel(models.route),
           onPick: (picked) => {
-            models.route = S.ROUTES.find((route) => t(ROUTE_LABEL[route]) === picked) ?? "auto";
+            models.route = S.ROUTES.find((route) => routeLabel(route) === picked) ?? "auto";
             onChange();
             render();
           },

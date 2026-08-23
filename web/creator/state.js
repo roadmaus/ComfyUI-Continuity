@@ -4,6 +4,7 @@
 
 import { ASPECT_PRESETS, FPS, MIN_SHORT_EDGE, NATIVE_SHORT_EDGE, CANVAS_MULTIPLE,
          framesForSeconds, secondsForFrames, matchSeconds, resolveCanvas } from "./canvas.js";
+import { VIDEO } from "./manifest.js";
 import { t } from "./i18n.js";
 // Where files land is not in the blob any more — it is a preference of this
 // machine, in `settings.js`, so a shared workflow does not carry one person's
@@ -157,87 +158,70 @@ export function inheritTakes(subject, assets, { over = null } = {}) {
 // ---- weights ----------------------------------------------------------------
 //
 // Which files the node loads. These used to be sockets; they are named in the
-// blob now and `models.py` builds the loaders inside the subgraph. Mirrors
-// `models.Weights` field for field — the backend reads exactly these keys.
+// blob now and `models.py` builds the loaders inside the subgraph. The slots
+// are the family's — served in its manifest, in the order the weights popover
+// lists them — and the backend reads exactly these keys, because the manifest
+// is built from the same `models.SLOTS` the loaders are.
 
-/** In the order the weights popover lists them, which is the order you set them
- *  in: the two checkpoints, then the three things every mode needs, then the
- *  preview decoder, which changes nothing about the render. */
-export const MODEL_FIELDS = ["fl2va", "ref2va", "clip", "vae", "audio_vae",
-                             "preview", "sam3"];
+const WEIGHT_SLOTS = VIDEO.weights;
+const slotTable = (key) =>
+  Object.fromEntries(WEIGHT_SLOTS.filter((slot) => key in slot)
+                                 .map((slot) => [slot.id, slot[key]]));
 
-export const MODEL_LABEL = {
-  fl2va: "FL2VA checkpoint",
-  ref2va: "Ref2VA checkpoint",
-  clip: "Text encoder",
-  vae: "Video VAE",
-  audio_vae: "Audio VAE",
-  preview: "Preview decoder",
-  sam3: "Face detector",
-};
+export const MODEL_FIELDS = WEIGHT_SLOTS.map((slot) => slot.id);
 
-/** What each field is for, said once, in the popover. */
-export const MODEL_HINT = {
-  fl2va: "Text-only, start/end frame and continuing shots run on these weights.",
-  ref2va: "Anything with an @ reference runs on these weights.",
-  clip: "H3's text encoder. Loaded as CLIPLoader type 'minimax'.",
-  vae: "Decodes the picture.",
-  audio_vae: "Decodes the sound. H3 always generates some, so this is never optional.",
-  preview: "taeh3, from models/vae_approx — what the live preview decodes through. "
-         + "Without it the preview is latent2rgb, which is colour without detail.",
-  sam3: "A SAM3 checkpoint, from models/checkpoints — what the face pass asks "
-      + "where the face is. Needed only when the face pass is switched on.",
-};
+/** What the popover calls each slot, and what each is for — the family's own
+ *  strings, translation keys like any written in source. */
+export const MODEL_LABEL = slotTable("title");
+export const MODEL_HINT = slotTable("help");
 
-/** UNETLoader's own list. Applies to both checkpoints — they are the same
- *  architecture at the same precision on any machine that has both. */
+/** UNETLoader's own list. Core's vocabulary, not a family's — applies to any
+ *  checkpoint slot on any machine. */
 export const MODEL_DTYPES = ["default", "fp8_e4m3fn", "fp8_e4m3fn_fast", "fp8_e5m2"];
 
 /**
- * What `models.route` may hold. Mirrors `models.ROUTES`.
- *
- * "auto" follows the mode, which is what the node has always done. The other two
- * are a standing instruction to run everything on one checkpoint whatever the
- * mode works out to — worth having because the two are one architecture trained
- * twice, and Ref2VA handles the keyframe and text-only payloads FL2VA was
- * trained for perfectly well.
+ * What `models.route` may hold — the family's standing instruction to run
+ * everything on one checkpoint whatever the mode works out to. Worth having
+ * because H3's two are one architecture trained twice; see `models.ROUTES`.
  *
  * The per-request `checkpoint` pin could already say that for one generation,
  * but it is not sticky: attaching a reference makes the pin illegal,
  * `normalizeCheckpoint` drops it, and removing the reference leaves you back on
  * auto. A route survives that, and applies to every segment of a timeline.
  */
-export const ROUTES = ["auto", "fl2va", "ref2va"];
+export const ROUTES = VIDEO.routes.options;
+const DEFAULT_ROUTE = VIDEO.routes.default;
 
 /** The next route in the cycle. Here rather than in the badge that cycles it,
  *  so the popover that lists them and the badge that steps through them cannot
  *  disagree about the order. */
 export const nextRoute = (route) => ROUTES[(ROUTES.indexOf(route) + 1) % ROUTES.length];
 
-/** Which fields a device can be pinned for: the five that become a loader.
+/** Which fields a device can be pinned for: the slots that become a loader.
  *  `preview` is not one — it is a filename handed to KJNodes' node, which puts
  *  its decoder wherever the sampler is — and neither is `sam3`, which the face
  *  pass loads and releases inside its own node. Mirrors `models.DEVICE_FIELDS`. */
-export const DEVICE_FIELDS = MODEL_FIELDS.filter(
-  (field) => field !== "preview" && field !== "sam3");
+export const DEVICE_FIELDS = WEIGHT_SLOTS.filter((slot) => slot.device)
+                                         .map((slot) => slot.id);
 
-/** Everything but `preview` is needed to render at all — and of the two
- *  checkpoints, only the one the mode routes to. `requiredModels` answers that
- *  for a given state; this is the part that never depends on the mode. */
-export const ALWAYS_REQUIRED = ["clip", "vae", "audio_vae"];
+/** The slots a render can never go without whatever the mode derives: loaders
+ *  that are not routed. Of the routed checkpoints, only the one the mode
+ *  routes to is needed — `requiredModels` answers that for a given state. */
+export const ALWAYS_REQUIRED = WEIGHT_SLOTS
+  .filter((slot) => slot.loads && !slot.routed).map((slot) => slot.id);
 
 export function emptyModels() {
-  return {
-    fl2va: "", ref2va: "", clip: "", vae: "", audio_vae: "", preview: "",
-    sam3: "",
+  const empty = {
     dtype: "default",
     // Which checkpoint everything runs on whatever the mode derives.
-    route: "auto",
+    route: DEFAULT_ROUTE,
     // `{field: "cuda:1"}` for anything pinned to a card of its own, through
     // ComfyUI-MultiGPU. Empty is the normal state and means wherever ComfyUI
     // would have put it.
     devices: {},
   };
+  for (const field of MODEL_FIELDS) empty[field] = "";
+  return empty;
 }
 
 /** Coerce whatever was in the blob into a full weights block. Every field may
@@ -275,7 +259,7 @@ function serializeModels(models) {
   }
   if (picked.dtype !== "default") out.dtype = picked.dtype;
   // Absent means "follow the mode", so the common case adds nothing.
-  if (picked.route !== "auto") out.route = picked.route;
+  if (picked.route !== DEFAULT_ROUTE) out.route = picked.route;
   // Absent means "wherever ComfyUI would", so a single-GPU blob adds nothing.
   if (Object.keys(picked.devices).length) out.devices = { ...picked.devices };
   return { models: out };
@@ -290,35 +274,19 @@ function serializeModels(models) {
  * exactly one candidate matches — guessing between two is wrong half the time,
  * and the node asks instead. Returns whether it changed anything.
  */
-/** The experimental T=1 image decoder, by name. It is a merged H3 VAE and loads
- *  through the same node as the real one, so nothing downstream can tell them
- *  apart — which is why the guess below has to. In a video workflow it costs
- *  multi-frame reconstruction; on the pre-stage's H3 branch it is the point. */
-export const IMAGE_VAE_RE = /t1[_-]?image|image[_-]vae/i;
-
-const MODEL_HINTS = {
-  fl2va: ["fl2va", "first_last"],
-  ref2va: ["ref2va"],
-  clip: ["minimax"],
-  vae: ["minimax", "h3"],
-  audio_vae: ["audio"],
-  preview: ["taeh3"],
-};
-
 export function guessModels(models, files) {
   let changed = false;
-  for (const field of MODEL_FIELDS) {
-    if (models[field]) continue;
-    const needles = MODEL_HINTS[field];
-    let matched = (files?.[field] ?? []).filter((name) =>
-      needles.some((needle) => name.toLowerCase().includes(needle)));
-    // The two VAEs share a folder and both answer to "minimax": whichever says
-    // "audio" is the audio one, and the video VAE is whatever is left.
-    if (field === "vae") {
-      matched = matched.filter((name) => !IMAGE_VAE_RE.test(name) && !name.toLowerCase().includes("audio"));
-    }
+  for (const slot of WEIGHT_SLOTS) {
+    if (models[slot.id] || !slot.hints.length) continue;
+    // A candidate matches on any of the slot's needles and none of its
+    // exclusions — the manifest's exclusions are how a slot sharing a folder
+    // with another (the two VAEs, the T=1 image decoder) rules out the files
+    // that answer to the shared name but are not it.
+    const matched = (files?.[slot.id] ?? []).filter((name) =>
+      slot.hints.some((needle) => name.toLowerCase().includes(needle))
+      && !slot.avoid.some((pattern) => new RegExp(pattern, "i").test(name)));
     if (matched.length !== 1) continue;
-    models[field] = matched[0];
+    models[slot.id] = matched[0];
     changed = true;
   }
   return changed;
@@ -503,10 +471,11 @@ export function serializeSampling(sampling) {
   return Object.keys(picked).length ? { sampling: picked } : {};
 }
 
-/** The two H3 checkpoints, which is also the granularity a LoRA belongs to:
- *  T2VA, I2VA, L2VA and FL2VA are all the same weights. */
-export const CHECKPOINTS = ["fl2va", "ref2va"];
-export const CHECKPOINT_LABEL = { fl2va: "FL2VA", ref2va: "Ref2VA" };
+/** The family's routed slots, which is also the granularity a LoRA belongs
+ *  to: every mode a checkpoint answers for runs the same weights. */
+export const CHECKPOINTS = WEIGHT_SLOTS.filter((slot) => slot.routed)
+                                       .map((slot) => slot.id);
+export const CHECKPOINT_LABEL = slotTable("name");
 /** What `state.checkpoint` may hold: follow the mode, or pin one. */
 export const CHECKPOINT_CHOICES = ["auto", ...CHECKPOINTS];
 export const DEFAULT_STRENGTH = 1.0;

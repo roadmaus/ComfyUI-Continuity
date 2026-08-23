@@ -47,6 +47,56 @@ def _widgets():
     ]
 
 
+# What the weights popover says about each slot — the strings' single home,
+# under the same English keys the i18n dictionaries carry (the frontend runs
+# them through t() at render). `name` is the short display name a routed slot
+# goes by on badges and LoRA rows; `hints` are the filename needles the
+# frontend's guess fills an empty field from, `avoid` the patterns that rule a
+# candidate out (the two VAEs share a folder and both answer to "minimax", and
+# the T=1 image decoder loads through the same node as the real one).
+_UI = {
+    "fl2va": {
+        "name": "FL2VA",
+        "title": "FL2VA checkpoint",
+        "help": "Text-only, start/end frame and continuing shots run on these weights.",
+        "hints": ["fl2va", "first_last"],
+    },
+    "ref2va": {
+        "name": "Ref2VA",
+        "title": "Ref2VA checkpoint",
+        "help": "Anything with an @ reference runs on these weights.",
+        "hints": ["ref2va"],
+    },
+    "clip": {
+        "title": "Text encoder",
+        "help": "H3's text encoder. Loaded as CLIPLoader type 'minimax'.",
+        "hints": ["minimax"],
+    },
+    "vae": {
+        "title": "Video VAE",
+        "help": "Decodes the picture.",
+        "hints": ["minimax", "h3"],
+        "avoid": ["t1[_-]?image", "image[_-]vae", "audio"],
+    },
+    "audio_vae": {
+        "title": "Audio VAE",
+        "help": "Decodes the sound. H3 always generates some, so this is never optional.",
+        "hints": ["audio"],
+    },
+    "preview": {
+        "title": "Preview decoder",
+        "help": "taeh3, from models/vae_approx — what the live preview decodes through. "
+                "Without it the preview is latent2rgb, which is colour without detail.",
+        "hints": ["taeh3"],
+    },
+    "sam3": {
+        "title": "Face detector",
+        "help": "A SAM3 checkpoint, from models/checkpoints — what the face pass asks "
+                "where the face is. Needed only when the face pass is switched on.",
+    },
+}
+
+
 def _weights():
     return [{
         "id": name,
@@ -59,6 +109,13 @@ def _weights():
         "audio": slot.audio,
         "gguf": slot.folder in models.GGUF_FOLDERS,
         "device": name in models.DEVICE_FIELDS,
+        # KeyError by design: a slot without its popover strings should fail
+        # here, where the family is named, not draw a blank row.
+        "title": _UI[name]["title"],
+        "help": _UI[name]["help"],
+        "hints": _UI[name].get("hints", []),
+        "avoid": _UI[name].get("avoid", []),
+        **({"name": _UI[name]["name"]} if slot.routed else {}),
     } for name, slot in models.SLOTS.items()]
 
 
