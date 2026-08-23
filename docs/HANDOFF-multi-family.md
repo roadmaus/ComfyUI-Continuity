@@ -8,9 +8,9 @@ read it first, it holds the reasoning this file assumes.
 ## Run the suite like this
 
 ```sh
-export COMFYUI_PATH=/Users/felix/ComfyUI-Installs/ComfyUI/ComfyUI
-export COMFYUI_BASE=/Users/felix/Documents/ComfyUI
-PY=/Users/felix/Documents/ComfyUI/.venv/bin/python3
+export COMFYUI_PATH=~/ComfyUI-Installs/ComfyUI/ComfyUI
+export COMFYUI_BASE=~/Documents/ComfyUI
+PY=~/Documents/ComfyUI/.venv/bin/python3
 for t in tests/test_*.py; do $PY "$t" >/dev/null 2>&1 || echo "FAIL $t"; done
 ```
 
@@ -86,12 +86,14 @@ them together. Extend that pattern; do not invent a second one.
 
 ## Not done, and known
 
-- **Phase 2 is not verified against a workflow saved before this branch.** The
-  fallback path is unit-tested and the goldens cover a blob with no `sampling`
-  block, but nobody has opened a real pre-branch `.json` in ComfyUI and queued
-  it. Do that before phase 3 stacks on top.
-- **Nothing has been rendered.** This machine never samples — verify on RunPod
-  from a pushed branch.
+- **Phase 2 is not verified against a workflow saved before this branch.**
+  Deliberate: old-workflow compatibility is not a promise this branch makes and
+  the release notes will say so. Old *presets* open fine
+  (they go through `parseSampling`, not widget restore). The per-field fallback
+  in `sampling.resolve` stays load-bearing regardless — a fresh untuned node and
+  a headless API queue both have no `sampling` block.
+- ~~Nothing has been rendered.~~ Rendered on RunPod from the pushed branch,
+  2026-08-23 — works.
 - **`presets/atlas.js` is probably H3-prompt-shaped.** Whether a preset's prose
   survives being handed to another family is unanswered and blocks LTX, not
   phase 3.
