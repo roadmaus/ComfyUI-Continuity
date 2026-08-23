@@ -5,6 +5,7 @@ picks files in the UI and the node fetches them here at execute time. That makes
 this the only module that touches disk.
 """
 
+import logging
 import os
 import re
 
@@ -351,6 +352,12 @@ def load_all(compiled):
             lambda asset=asset: {"image": load_image(asset.filename)})
     for asset in compiled.ref_videos:
         def decode(asset=asset):
+            # The one decode long enough to be worth announcing. It only runs on
+            # a cache miss (`Deferred`), and on a high-resolution source it is a
+            # real part of the wait before sampling — `encode._cached` has just
+            # said this reference is being encoded, and this says which half of
+            # that is happening now.
+            logging.info("[MiniMax] @%s: decoding %s", asset.handle, asset.filename)
             frames, audio = load_video(
                 asset.filename, want_audio=asset.track == "picture+sound",
                 trim=asset.trim, max_seconds=limit)

@@ -13,7 +13,9 @@ subtly wrong video rather than an exception, so the two sides are built from one
 list instead of two loops that have to be kept in agreement by hand.
 """
 
+import logging
 import math
+import time
 
 import node_helpers
 import torch
@@ -106,7 +108,49 @@ def _restore(vae, latent):
     return latent.to(device, dtype=dtype)
 
 
-def _cached(parts, produce):
+def _megabytes(count):
+    return f"{count / 1024 ** 3:.2f} GB" if count >= 1024 ** 3 else f"{count / 1024 ** 2:.0f} MB"
+
+
+class Tally:
+    """What the references cost this generation, for one line at the end of it.
+
+    The per-reference lines below say what is happening while it happens, which
+    is what a render that sits silent for a minute actually needs. This says
+    whether the thing worked, which is the question you ask once.
+    """
+
+    def __init__(self):
+        self.reused = 0
+        self.encoded = 0
+        self.seconds = 0.0
+        self.saved = 0
+
+    def hit(self, size):
+        self.reused += 1
+        # What the encode would have cost is not knowable on a hit, so this is
+        # bytes served rather than time saved. Time is on the miss lines.
+        self.saved += size
+
+    def miss(self, seconds):
+        self.encoded += 1
+        self.seconds += seconds
+
+    def say(self):
+        if not (self.reused or self.encoded):
+            return
+        if not self.encoded:
+            logging.info("[MiniMax] references: all %d reused (%s) — nothing encoded",
+                         self.reused, _megabytes(self.saved))
+        elif not self.reused:
+            logging.info("[MiniMax] references: %d encoded in %.1f s",
+                         self.encoded, self.seconds)
+        else:
+            logging.info("[MiniMax] references: %d reused (%s), %d encoded in %.1f s",
+                         self.reused, _megabytes(self.saved), self.encoded, self.seconds)
+
+
+def _cached(label, parts, produce, tally=None):
     """`produce()`, unless `latents` already holds what it would return.
 
     -> (tensors, meta). `parts` is everything the encode depended on *except*
@@ -116,15 +160,45 @@ def _cached(parts, produce):
     A store hands back its own CPU copies rather than the tensors it was given,
     so a miss and a hit return the same shapes on the same device and the call
     sites have one path instead of two.
+
+    This is also the only place that knows whether a reference was reused, so it
+    is where that is said out loud. A miss announces itself *before* it runs:
+    decoding a long source and pushing it through the VAE is the wait, and a
+    render that goes quiet for a minute with nothing on the terminal is the
+    complaint this exists to answer.
     """
-    if parts is None or not latents.enabled():
-        return produce()
+    off = not latents.enabled()
+    if parts is None or off:
+        logging.info("[MiniMax] %s: encoding (%s)", label,
+                     "cache off" if off else "nothing to key it on")
+        started = time.monotonic()
+        tensors, meta = produce()
+        spent = time.monotonic() - started
+        logging.info("[MiniMax] %s: encoded in %.1f s", label, spent)
+        if tally is not None:
+            tally.miss(spent)
+        return tensors, meta
+
     name = latents.key(parts)
     found = latents.fetch(name)
     if found is not None:
-        return found
+        tensors, meta, where = found
+        size = latents.size_of(tensors)
+        logging.info("[MiniMax] %s: reused from %s (%s)", label, where, _megabytes(size))
+        if tally is not None:
+            tally.hit(size)
+        return tensors, meta
+
+    logging.info("[MiniMax] %s: encoding, nothing cached", label)
+    started = time.monotonic()
     tensors, meta = produce()
-    return latents.store(name, tensors, meta), meta
+    spent = time.monotonic() - started
+    kept = latents.store(name, tensors, meta)
+    logging.info("[MiniMax] %s: encoded in %.1f s, cached %s",
+                 label, spent, _megabytes(latents.size_of(kept)))
+    if tally is not None:
+        tally.miss(spent)
+    return kept, meta
 
 
 def _ref_key(kind, asset, vae, compiled):
@@ -177,7 +251,7 @@ def _ref_key(kind, asset, vae, compiled):
     return parts
 
 
-def _cached_ref_audio(kind, audio_vae, asset, entry, compiled):
+def _cached_ref_audio(kind, audio_vae, asset, entry, compiled, tally=None):
     """A file-backed audio reference, encoded once. -> (latent, ref_audio_t).
 
     Cached for the decode at least as much as for the encode: a `picture+sound`
@@ -190,8 +264,9 @@ def _cached_ref_audio(kind, audio_vae, asset, entry, compiled):
     `z.shape[-1]`) and two copies of one number is a way for them to disagree.
     """
     tensors, _ = _cached(
-        _ref_key(kind, asset, audio_vae, compiled),
-        lambda: ({"audio_latent": _encode_ref_audio(audio_vae, entry["audio"])[0]}, {}))
+        f"@{asset.handle} {kind}", _ref_key(kind, asset, audio_vae, compiled),
+        lambda: ({"audio_latent": _encode_ref_audio(audio_vae, entry["audio"])[0]}, {}),
+        tally)
     latent = _restore(audio_vae, tensors["audio_latent"])
     return latent, latent.shape[-1]
 
@@ -466,6 +541,7 @@ def _encode_references(clip, vae, audio_vae, compiled, loaded):
     items = []   # tokenizer presentation, in request order
     blocks = []  # DiT payload, same order
     pending_soundtrack = None  # set by a 'soundtrack' step, consumed by the 'video' step after it
+    tally = Tally()  # what the references cost, for one line at the end
 
     for step in compiled.plan:
         asset = step["asset"]
@@ -490,7 +566,9 @@ def _encode_references(clip, vae, audio_vae, compiled, loaded):
                          "presentation": _quantize(resized)},
                         {"latent_h": target_h // 16, "latent_w": target_w // 16})
 
-            tensors, meta = _cached(_ref_key("image", asset, vae, compiled), encode_image)
+            tensors, meta = _cached(
+                f"@{asset.handle} image ({asset.ref_size})",
+                _ref_key("image", asset, vae, compiled), encode_image, tally)
             items.append({"type": "image", "data": _present(tensors["presentation"])})
             blocks.append({
                 "kind": "image",
@@ -501,7 +579,7 @@ def _encode_references(clip, vae, audio_vae, compiled, loaded):
 
         elif step["op"] == "soundtrack":
             pending_soundtrack = _cached_ref_audio(
-                "soundtrack", audio_vae, asset, entry, compiled)
+                "soundtrack", audio_vae, asset, entry, compiled, tally)
             items.append({"type": "audio"})
 
         elif step["op"] == "video":
@@ -534,7 +612,9 @@ def _encode_references(clip, vae, audio_vae, compiled, loaded):
                          "latent_w": canvas_w // 16,
                          "timestamps": [i / 2.0 for i in range(len(sampled))]})
 
-            tensors, meta = _cached(_ref_key("video", asset, vae, compiled), encode_video)
+            tensors, meta = _cached(
+                f"@{asset.handle} video ({asset.ref_size})",
+                _ref_key("video", asset, vae, compiled), encode_video, tally)
 
             audio_latent, ref_audio_t = pending_soundtrack or (None, 0)
             pending_soundtrack = None
@@ -556,7 +636,7 @@ def _encode_references(clip, vae, audio_vae, compiled, loaded):
 
         elif step["op"] == "audio":
             audio_latent, ref_audio_t = _cached_ref_audio(
-                "audio", audio_vae, asset, entry, compiled)
+                "audio", audio_vae, asset, entry, compiled, tally)
             items.append({"type": "audio"})
             blocks.append({"kind": "audio", "ref_audio_t": ref_audio_t, "audio_latent": audio_latent})
 
@@ -621,6 +701,7 @@ def _encode_references(clip, vae, audio_vae, compiled, loaded):
             keyframes.append(_pin({"latent": vae.encode(head[:1])},
                                   frame_count - 1, stock=frame_count - 1))
 
+    tally.say()
     tokens = clip.tokenize(compiled.prompt, minimax_ref_items=items)
     cond = clip.encode_from_tokens_scheduled(tokens)
     if blocks:

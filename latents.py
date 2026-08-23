@@ -207,7 +207,7 @@ def fingerprint(vae):
     return found
 
 
-def _size(tensors):
+def size_of(tensors):
     return sum(t.numel() * t.element_size() for t in tensors.values())
 
 
@@ -225,7 +225,7 @@ def _touch(path):
 
 def _remember(name, tensors, meta):
     """Put an entry in the memory tier, dropping the oldest reads to fit."""
-    total = _size(tensors)
+    total = size_of(tensors)
     if total > MEMORY_BYTES:
         # One entry larger than the whole tier would evict everything and then
         # itself on the next store. It stays on disk, where it fits.
@@ -298,7 +298,12 @@ def prune(now=None, ceiling=None, keep=False):
 
 
 def fetch(name):
-    """-> (tensors, meta) for `name`, or None. Tensors are the caller's to keep.
+    """-> (tensors, meta, where) for `name`, or None. Tensors are the caller's.
+
+    `where` is "memory" or "disk". It is handed back rather than logged here
+    because this module has no idea which reference it is holding — and the
+    difference is worth saying out loud: a disk hit is the store having survived
+    a restart, which is the half of this feature that is otherwise invisible.
 
     A disk hit is promoted into memory, so the second prompt edit costs what the
     first one made cheap, and a memory hit still stamps the file behind it — see
@@ -318,7 +323,8 @@ def fetch(name):
         # answered out of memory all week has been come back for all week.
         # Without this the hottest references are the ones that age off disk.
         _touch(path)
-        return {field: value.clone() for field, value in tensors.items()}, dict(meta)
+        return ({field: value.clone() for field, value in tensors.items()},
+                dict(meta), "memory")
 
     if not os.path.isfile(path):
         return None
@@ -341,7 +347,8 @@ def fetch(name):
 
     _touch(path)
     _remember(name, tensors, meta)
-    return {field: value.clone() for field, value in tensors.items()}, dict(meta)
+    return ({field: value.clone() for field, value in tensors.items()},
+            dict(meta), "disk")
 
 
 def store(name, tensors, meta):

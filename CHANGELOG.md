@@ -31,6 +31,20 @@ travel a list of stops rather than a range, because nobody is choosing between
 holding, drawn against the thumb, so a ceiling is set against a real number
 instead of a guess. Past the thumb is over, and says what the next render drops.
 
+**The terminal says what the references are doing.** A reference being decoded
+and encoded is most of the wait before the first sampling step, and it used to
+happen in silence — which also meant there was no way to tell a working cache
+from a broken one. Each reference now says whether it was reused and from where,
+or that it is about to be encoded and then what that cost, and each generation
+ends with one line saying how many of each. A miss announces itself before it
+runs, not after, because the point is to explain a wait while it is happening:
+
+    [MiniMax] @vid-1 video (max): encoding, nothing cached
+    [MiniMax] @vid-1: decoding beach-plate.mp4
+    [MiniMax] @vid-1 video (max): encoded in 24.3 s, cached 40 MB
+    [MiniMax] @cast-2 image (max): reused from disk (18 MB)
+    [MiniMax] references: 1 reused (18 MB), 1 encoded in 24.3 s
+
 **A fresh node opens on a seed of its own.** The default was 0, and this node
 pins the after-generate control to "fixed" — so 0 was not a starting point, it
 was the seed every first render anyone made ran on. Now a node dropped on a

@@ -88,25 +88,29 @@ latents.forget()
 latents.store("alpha", {"latent": torch.arange(24, dtype=torch.float32).reshape(2, 12)},
               {"latent_h": 3, "note": "kept"})
 
-tensors, meta = latents.fetch("alpha")
+tensors, meta, where = latents.fetch("alpha")
 check("a stored latent comes back", tensors["latent"].tolist(),
       torch.arange(24, dtype=torch.float32).reshape(2, 12).tolist())
 check("...with its metadata", meta, {"latent_h": 3, "note": "kept"})
+check("...and says it came out of memory", where, "memory")
 check("an unknown key is a miss", latents.fetch("nothing-here"), None)
 
 # The memory tier is a convenience over the disk tier, never a second source of
 # truth: dropping it has to change how fast the answer arrives and not the
 # answer. This is the only assertion that proves the file on disk is real.
 latents.forget()
-from_disk, _ = latents.fetch("alpha")
+from_disk, _, where = latents.fetch("alpha")
 check("...off the disk too, once memory has forgotten it",
       from_disk["latent"].tolist(), tensors["latent"].tolist())
+# Said out loud on the terminal, because a disk hit is the store having survived
+# a restart and that is the half of this nobody can otherwise see happening.
+check("...and says so", where, "disk")
 
 # Every handout is a copy. An entry is read by every render that keys onto it,
 # and a conditioning block is not obviously read-only — one caller writing
 # through a cached tensor would be a bug that only shows on the second render.
 from_disk["latent"][0][0] = -999.0
-again, _ = latents.fetch("alpha")
+again, _, _ = latents.fetch("alpha")
 check("a caller cannot write through a cached tensor", float(again["latent"][0][0]), 0.0)
 
 # A key is its parts, not the order they were written in.
@@ -426,6 +430,66 @@ check("...so the clip is never opened", entry.reads, 0)
 check("the block is the one that was encoded", shape_of(again), shape_of(values))
 check("...including how long its sound is",
       [b["ref_audio_t"] for b in blocks(again)], [b["ref_audio_t"] for b in blocks(values)])
+
+
+# ---- what the terminal is told -----------------------------------------------
+#
+# A render that sits silent for a minute is the complaint this answers, so the
+# lines are part of the feature and not decoration around it. Two things have to
+# hold: a miss says it is about to work *before* it does, and a hit says where it
+# came from.
+
+import logging
+
+
+class Heard(logging.Handler):
+    def __init__(self):
+        super().__init__()
+        self.lines = []
+
+    def emit(self, record):
+        self.lines.append(record.getMessage())
+
+
+heard = Heard()
+root = logging.getLogger()
+# The suite's own handlers stand aside for the duration: these lines are the
+# thing under test, not something to read past on the way to the result.
+stood_aside, root.handlers = root.handlers, [heard]
+was = root.level
+root.setLevel(logging.INFO)
+
+latents.clear()
+spoken = Vae()
+run(request(video=False), spoken)
+missed = [line for line in heard.lines if "@img-1" in line]
+check("a miss says it is encoding before it encodes",
+      missed[0], "[MiniMax] @img-1 image (max): encoding, nothing cached")
+check("...and what that cost once it has",
+      missed[1].split(" in ")[0], "[MiniMax] @img-1 image (max): encoded")
+
+heard.lines.clear()
+run(request(video=False, prompt="a different line"), spoken)
+check("a hit says where it came from",
+      [line for line in heard.lines if "@img-1" in line][0].rsplit(" (", 1)[0],
+      "[MiniMax] @img-1 image (max): reused from memory")
+check("...and the render says whether the cache worked at all",
+      [line for line in heard.lines if "references:" in line][0].startswith(
+          "[MiniMax] references: all 1 reused"), True)
+
+# Off, the lines still come — otherwise "no output" would mean both "the cache
+# is off" and "the pack is not loaded", and those need different fixes.
+heard.lines.clear()
+latents.enabled = lambda: False
+try:
+    run(request(video=False), Vae())
+finally:
+    latents.enabled = lambda: True
+check("with the cache off it says that is why it is encoding",
+      [line for line in heard.lines if "@img-1" in line][0],
+      "[MiniMax] @img-1 image (max): encoding (cache off)")
+
+root.handlers, root.level = stood_aside, was
 
 
 # ---- deferred decoding -------------------------------------------------------
