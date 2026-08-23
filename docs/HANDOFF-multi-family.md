@@ -1,9 +1,10 @@
 # Handoff — the multi-family refactor
 
-Branch `multi-family`, seven commits off `main`. The plan is `docs/PLAN-multi-family.md`;
+Branch `multi-family`. The plan is `docs/PLAN-multi-family.md`;
 read it first, it holds the reasoning this file assumes.
 
-**Where it is: phases 0, 1 and 2 are done. Phase 3 has not been started.**
+**Where it is: phases 0–3 are done. Phase 4 (manifest, registry, PreStage
+folded in) has not been started.**
 
 ## Run the suite like this
 
@@ -46,18 +47,48 @@ the widget values **field by field**. That fallback is the migration. All 13
 widget slots stay declared and hidden forever — widget values restore by
 position, and this pack has already shipped that bug once (see the `sage` slot).
 
-## Phase 3 starts here
+## Phase 3 — what was actually built
 
-The family boundary already exists on the graph side and is
-`MiniMaxH3TimelineSegment`: it takes `segment_data` plus loader links and returns
-`(model, positive, latent, lead model)`. That tuple is the contract. `render.emit`
-splits into the generic loop (routing, progress stamping, the clip branch, seam
-wiring, reel/spill/save, takes) and family hooks for loaders, segment, sampler,
-refine, face and patch.
+**The contract is `creator/families/base.py`**, and the loop is
+`creator/core/emit.py`: routing orchestration, progress stamping, the clip
+branch, seam wiring (the loop builds the seam links and hands them to the
+family in a dict), reel/spill/save, takes. `creator/families/h3/render.py` is
+H3's half — loaders, segment, sampler, refine, face, patch — behind the
+segment node's `(model, positive, latent, lead model)` tuple.
+`creator/render.py` is now a thin binding of loop to family, kept because
+every caller spells `render.emit` and there is one family to bind until the
+phase-4 registry; the registry replaces it.
+
+**Moved into `creator/families/h3/`:** `contextir`, `subjects`, `payload`,
+`prompts/`, `refine` (the templates/reply-schema/compose half — the plan's
+"engine", i.e. `refine_local`/`refine_routes`/`refine_skill`, stays outside).
+`tests/layout.py`'s `MODULES` maps the moved names, and a meta-path finder in
+`load()` serves them to flat sibling imports, so suites never learn paths.
+
+**`models.py` is slot-driven:** a `SLOTS` table declares each file's folder,
+label, loader and routing; `FOLDERS`/`LABEL`/`DEVICE_FIELDS` are derived reads
+and `Links` is a slot mapping (attribute spelling kept — `.vae`/`.audio_vae`
+are the loop's contract). LTX is different rows, not different code.
+
+**One deliberate deviation:** the plan's "`Compiled` splits" bullet was
+resolved by contract instead of by nesting. The loop's read surface (seam
+fields, `refine`/`face` truthiness) is documented on `base.Family.compile`;
+the H3-only fields stay flat on `Compiled` because all ~90 readers are
+H3-owned code. If a second family's compiled type ever needs a shared base,
+cut it then, with two implementations to check it against.
 
 `creator/sampling.py` is already the shape a family manifest wants — pure, with
 `DEFAULTS` mirrored by `SAMPLING_FIELDS` in `state.js` and a mirror test holding
 them together. Extend that pattern; do not invent a second one.
+
+## Phase 4 starts here
+
+The manifest (`families/manifest.py` + `routes/families.py`), one registry for
+video and still families, `krea2`/`ideogram4` split out of
+`compile_image.py`/`render_image.py`, `canvas.py` parameterised. The registry
+is what retires the `creator/render.py` binding: callers name a family instead
+of a module. The widget vocabulary the manifest carries is in the plan —
+manifests describe *controls*, not just values.
 
 ## Things that will bite
 

@@ -52,7 +52,21 @@ class Family:
         raise NotImplementedError(f"{self.id}.preflight")
 
     def compile(self, payload, image_size):
-        """One payload -> the family's compiled form."""
+        """One payload -> the family's compiled form.
+
+        The loop treats what comes back as the family's own — with one read
+        surface, which is the shared subset the strip's bookkeeping needs:
+        the seam fields (`continues`, `feather`, `continues_audio`,
+        `audio_tail_s`, `ends_on`, `ends_feather`, `ends_on_audio`,
+        `ends_tail_s`), `refine` and `face` (read only for truthiness — their
+        contents go back to the family's own hooks). Everything else on the
+        object — H3's checkpoint, ordinal labels, reference plan — is protocol
+        the loop must never learn. The plan called for splitting those fields
+        into a nested payload; the boundary is enforced here instead, because
+        every reader of the H3 fields is H3-owned code that moves into this
+        package anyway, and a nesting would have churned ~90 sites to move a
+        line nobody crosses.
+        """
         raise NotImplementedError(f"{self.id}.compile")
 
     def routes(self, compiled, labels):
