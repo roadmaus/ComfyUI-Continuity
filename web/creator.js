@@ -104,9 +104,13 @@ function adoptOrphan(node) {
 }
 
 /** Mirror the PreStage into its mother's stash — the settings' second home, so
- *  removing the node never destroys the only copy. Two halves because the node
- *  keeps them in two places: the blob, and the stock sampler widgets the row
- *  draws from (steps, cfg, seed — none of which the blob carries). */
+ *  removing the node never destroys the only copy.
+ *
+ *  Still two halves, though the second is now nearly vestigial: the sampler row
+ *  moved into the blob (see `sampling.py`) and the blob carries it, so what the
+ *  widget half restores is the fallback and the seed. Kept because the seed is
+ *  genuinely still a widget, and because a stash written by an older build has
+ *  the row only on that side. */
 function stashPreStage(mother, pre) {
   const state = pre?.mmcBody?.state;
   if (!mother || !state) return;

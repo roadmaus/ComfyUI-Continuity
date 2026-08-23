@@ -204,6 +204,7 @@ export class CreatorEditor {
                 durationPill = true, extraPills = null, extraTools = null,
                 settingsTool = true, stage = null, editorTitle = null,
                 piece = null, castPiece = null, growShot = null, presetTarget = null,
+                samplingStore = null,
                 clearTool = null, seedTarget = null, compiledPrompt = null,
                 castFromLibrary = null, fullscreen = null }) {
     // The one sampler setting a card may answer for itself — see
@@ -216,6 +217,17 @@ export class CreatorEditor {
     // `castFromLibrary` hook.
     this.castFromLibrary = castFromLibrary;
     this.piece = piece ?? state;
+    // Where the sampler row is kept, which is not always where the piece is.
+    // The pre-stage's H3 branch mounts this body on a *nested* creator request
+    // (`state.minimax.request`) while the sampler widgets belong to the
+    // pre-stage node itself — one row for all three architectures — so a row
+    // written into the request would be serialized by `serializeStill`, which
+    // does not carry one, and would be gone by the next load. Defaults to the
+    // piece, which is the answer on every body that owns its own row.
+    this.samplingStore = samplingStore ?? {
+      read: () => this.piece.sampling,
+      write: (block) => { this.piece.sampling = block; },
+    };
     // Where the cast lives, which is not always where the piece does. A card of
     // a strip is one shot of a piece whose subjects are kept a level up, and its
     // `piece` is the card itself — so without this, clicking somebody's name in
@@ -454,8 +466,8 @@ export class CreatorEditor {
   widgetIO() {
     return blobIO(
       () => this.samplingWidgets,
-      () => this.piece.sampling,
-      (block) => { this.piece.sampling = block; this.onCommit?.(); },
+      () => this.samplingStore.read(),
+      (block) => { this.samplingStore.write(block); this.onCommit?.(); },
       () => this.onWidgetChange?.());
   }
 

@@ -887,6 +887,12 @@ export class PreStageBody {
     const still = this.state.minimax;
     const editor = new CreatorEditor({
       state: still.request,
+      // The sampler row is the *node's*, not this request's: one row serves all
+      // three architectures, and `serializeStill` carries no row of its own.
+      samplingStore: {
+        read: () => this.state.sampling,
+        write: (block) => { this.state.sampling = block; },
+      },
       onCommit: () => this.onCommit?.(),
       samplingWidgets: this.samplingWidgets,
       onWidgetChange: this.onWidgetChange,
