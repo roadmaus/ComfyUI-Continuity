@@ -194,6 +194,21 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
                 # is missing rather than reaching a None.
                 io.Vae.Input("audio_vae", optional=True),
                 io.String.Input("segment_data", multiline=True),
+                # Which checkpoint is on each VAE socket, for the reference
+                # cache to key on. Names and not the loaded objects: a name is
+                # the same string across restarts, where a live VAE is a bag of
+                # attributes some of which are lambdas whose repr is a memory
+                # address — which is exactly how the cache spent a release never
+                # hitting after a restart. See `latents.fingerprint`.
+                #
+                # Optional, and unread by `fingerprint_inputs`: a graph that does
+                # not write them keys its references off the weights' shape
+                # instead, and no cache key already on disk moves for their being
+                # added.
+                io.String.Input("vae_name", optional=True,
+                    tooltip="The video VAE's filename, so cached references can be keyed to it."),
+                io.String.Input("audio_vae_name", optional=True,
+                    tooltip="The audio VAE's filename, so cached references can be keyed to it."),
                 io.Model.Input("model_fl2va", optional=True),
                 io.Model.Input("model_ref2va", optional=True),
                 io.Image.Input("prev_image", optional=True,
@@ -238,6 +253,7 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
 
     @classmethod
     def execute(cls, clip, segment_data, vae=None, audio_vae=None,
+                vae_name=None, audio_vae_name=None,
                 model_fl2va=None, model_ref2va=None,
                 prev_image=None, prev_audio=None,
                 next_image=None, next_audio=None, hold_lora="") -> io.NodeOutput:
@@ -353,7 +369,9 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
             if lead is not None:
                 lead = payload_repair.repair(lead)
 
-        cond, latent = encoder.encode(clip, vae, audio_vae, compiled, loaded)
+        cond, latent = encoder.encode(
+            clip, vae, audio_vae, compiled, loaded,
+            {"vae": vae_name, "audio_vae": audio_vae_name})
         return io.NodeOutput(model, cond, latent, model if lead is None else lead)
 
 

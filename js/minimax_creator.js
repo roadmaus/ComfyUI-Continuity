@@ -264,6 +264,23 @@ function collectSampling(node) {
   // saying so. Set at creation only: a saved workflow assigns its widget values
   // after `nodeCreated`, so a node that chose otherwise keeps its choice.
   if (widgets.control_after_generate) widgets.control_after_generate.value = "fixed";
+  // The seed a fresh node starts on. Random, and deliberately not a number
+  // picked for being a good one: the only study of "golden" seeds finds them by
+  // ranking a thousand of them on one model's own output, and reports different
+  // winners for SD 2.0 and SDXL Turbo — so a number lifted from an image model
+  // says nothing about H3, and there is no published search for H3 to lift from.
+  // Every seed is one noise sample and none of them is known to be better.
+  //
+  // What was actually wrong with 0 is that it is the same 0 for everybody. It
+  // is the schema's default, this node holds it (`control_after_generate` is
+  // pinned to "fixed" just above), and so every first render anyone makes with
+  // a fresh node is the same noise. A seed per node is the honest answer to
+  // that, and it is the same 32-bit draw the seed row's own dice button makes.
+  //
+  // Set at creation only, like the line above it: a saved or pasted workflow
+  // assigns its widget values after `nodeCreated`, so a node that already has a
+  // seed keeps it.
+  if (widgets.seed) widgets.seed.value = Math.floor(Math.random() * 0xffffffff);
   requestAnimationFrame(() => Object.values(widgets).forEach(hideWidget));
   return widgets;
 }

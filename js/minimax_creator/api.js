@@ -159,6 +159,25 @@ export async function saveSettings(patch) {
   return body.settings ?? {};
 }
 
+/** What the reference cache is holding on disk: `{ entries, bytes }`.
+ *
+ *  Its own route rather than a key in the settings blob, for the reason the
+ *  route says: the settings are what this machine was told, and this is what
+ *  came of it. */
+export async function loadLatentCache() {
+  const response = await api.fetchApi("/minimax_creator/latent_cache");
+  if (!response.ok) throw new Error(t("cache failed ({status})", { status: response.status }));
+  return await response.json();
+}
+
+/** Delete every cached reference; resolves to the emptied `{ entries, bytes }`. */
+export async function clearLatentCache() {
+  const response = await api.fetchApi("/minimax_creator/latent_cache/clear", { method: "POST" });
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(body.error || t("cache failed ({status})", { status: response.status }));
+  return body;
+}
+
 // The settings page re-fetches on every opening — the server is the only copy
 // it trusts. The node bodies cannot do that: the sampler row is drawn
 // synchronously on every render, and some of what it draws (the shift pills'

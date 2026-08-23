@@ -13,10 +13,14 @@ subtly wrong video rather than an exception, so the two sides are built from one
 list instead of two loops that have to be kept in agreement by hand.
 """
 
+import logging
 import math
+import time
 
 import node_helpers
+import torch
 from comfy.ldm.minimax.model import FRAME_PER_TOKEN
+from . import latents, media
 from .payload import AUDIO_END_KEY, CORE_ANCHORS_ANYWHERE, FRAME_INDEX_KEY
 from comfy_extras.nodes_minimax_h3 import (
     CANVAS_MULTIPLE,
@@ -54,6 +58,229 @@ PREV_AUDIO = "__prev_audio__"
 # to this shot, so they have no handle in the user's namespace.
 NEXT_FRAME = "__next__"
 NEXT_AUDIO = "__next_audio__"
+
+
+def _quantize(images):
+    """A presentation tensor -> the 8-bit form it is both sent and cached as.
+
+    The tokenizer's half of a reference is a picture, and a picture is what
+    `latents.py` has to keep if a cache hit is to skip the decode as well as the
+    encode. Eight bits of it, for the reason `spill.py` keeps eight: the source
+    was 8-bit before `_resize` interpolated it, the tokenizer bilinearly
+    resamples whatever it is given all over again (`process_video_block`), and
+    a quarter of the bytes is the difference between a cache that holds a
+    project's references and one that holds four of them.
+
+    Applied on the way *in* as well as the way out — unconditionally, whether
+    the cache is on, off, or missing. That is the point of it being here rather
+    than inside `latents.py`: a hit and a miss send the tokenizer the same
+    tensor, so switching the cache off can only change how long a render takes
+    and never what it produces.
+
+    Two things about a reference's presentation therefore changed when the cache
+    landed, both of them here and both only on the tokenizer's copy — the latent
+    is encoded from the untouched `_resize` output exactly as before. It is
+    rounded to eight bits, and it is clamped to 0..1, which lanczos overshoots
+    at a hard edge. Under a normalisation that already assumes 0..1 and a
+    resample that runs again inside the tokenizer, neither is visible; they are
+    named because "the cache cannot change a render" is a claim, and this is
+    where it is paid for.
+    """
+    return (images * 255.0).round_().clamp_(0, 255).to(torch.uint8)
+
+
+def _present(stored):
+    """The 8-bit form back as the float image the tokenizer is handed."""
+    return stored.to(torch.float32).div_(255.0)
+
+
+def _restore(vae, latent):
+    """A cached latent, back where `vae.encode` would have left it.
+
+    Cached entries are held on the CPU; `vae.encode` returns on the VAE's own
+    output device in its own output dtype. Both are read off the VAE rather than
+    off the fresh tensor so that a hit and a miss are indistinguishable
+    downstream — and because the dtype never changes, the round trip a miss
+    makes through the CPU is bit-exact rather than merely close.
+    """
+    device = getattr(vae, "output_device", None) or latent.device
+    dtype = vae.vae_output_dtype() if hasattr(vae, "vae_output_dtype") else latent.dtype
+    return latent.to(device, dtype=dtype)
+
+
+def _said(count):
+    """A byte count in the unit that makes it legible.
+
+    Down to kilobytes because a reference's soundtrack is a few hundred of them
+    against a video's forty megabytes, and "0 MB" beside "reused" reads as
+    nothing having happened — which is the opposite of what the line is for.
+    """
+    if count >= 1024 ** 3:
+        return f"{count / 1024 ** 3:.2f} GB"
+    if count >= 1024 ** 2:
+        return f"{count / 1024 ** 2:.0f} MB"
+    return f"{count / 1024:.0f} KB"
+
+
+class Tally:
+    """What the references cost this generation, for one line at the end of it.
+
+    The per-reference lines below say what is happening while it happens, which
+    is what a render that sits silent for a minute actually needs. This says
+    whether the thing worked, which is the question you ask once.
+    """
+
+    def __init__(self):
+        self.reused = 0
+        self.encoded = 0
+        self.seconds = 0.0
+        self.saved = 0
+
+    def hit(self, size):
+        self.reused += 1
+        # What the encode would have cost is not knowable on a hit, so this is
+        # bytes served rather than time saved. Time is on the miss lines.
+        self.saved += size
+
+    def miss(self, seconds):
+        self.encoded += 1
+        self.seconds += seconds
+
+    def say(self):
+        if not (self.reused or self.encoded):
+            return
+        if not self.encoded:
+            logging.info("[MiniMax] references: all %d reused (%s) — nothing encoded",
+                         self.reused, _said(self.saved))
+        elif not self.reused:
+            logging.info("[MiniMax] references: %d encoded in %.1f s",
+                         self.encoded, self.seconds)
+        else:
+            logging.info("[MiniMax] references: %d reused (%s), %d encoded in %.1f s",
+                         self.reused, _said(self.saved), self.encoded, self.seconds)
+
+
+def _cached(label, parts, produce, tally=None):
+    """`produce()`, unless `latents` already holds what it would return.
+
+    -> (tensors, meta). `parts` is everything the encode depended on *except*
+    the prompt, which is the whole reason this exists: see `latents.py`. None
+    means this one is not cacheable — see `_ref_key`.
+
+    A store hands back its own CPU copies rather than the tensors it was given,
+    so a miss and a hit return the same shapes on the same device and the call
+    sites have one path instead of two.
+
+    This is also the only place that knows whether a reference was reused, so it
+    is where that is said out loud. A miss announces itself *before* it runs:
+    decoding a long source and pushing it through the VAE is the wait, and a
+    render that goes quiet for a minute with nothing on the terminal is the
+    complaint this exists to answer.
+    """
+    off = not latents.enabled()
+    if parts is None or off:
+        logging.info("[MiniMax] %s: encoding (%s)", label,
+                     "cache off" if off else "nothing to key it on")
+        started = time.monotonic()
+        tensors, meta = produce()
+        spent = time.monotonic() - started
+        logging.info("[MiniMax] %s: encoded in %.1f s", label, spent)
+        if tally is not None:
+            tally.miss(spent)
+        return tensors, meta
+
+    name = latents.key(parts)
+    found = latents.fetch(name)
+    if found is not None:
+        tensors, meta, where = found
+        size = latents.size_of(tensors)
+        logging.info("[MiniMax] %s: reused from %s (%s)", label, where, _said(size))
+        if tally is not None:
+            tally.hit(size)
+        return tensors, meta
+
+    logging.info("[MiniMax] %s: encoding, nothing cached", label)
+    started = time.monotonic()
+    tensors, meta = produce()
+    spent = time.monotonic() - started
+    kept = latents.store(name, tensors, meta)
+    logging.info("[MiniMax] %s: encoded in %.1f s, cached %s",
+                 label, spent, _said(latents.size_of(kept)))
+    if tally is not None:
+        tally.miss(spent)
+    return kept, meta
+
+
+def _ref_key(kind, asset, print_of_vae, compiled):
+    """What a reference's encode depends on — and deliberately not one word more.
+
+    Every term here is something that changes the tensors; nothing that merely
+    changes the *generation* is in it. The prompt is the one the whole exercise
+    is about, but the same goes for the seed, the sampler, the LoRAs, the other
+    references and the order they are cited in.
+
+    The terms that are here, and why each of them is:
+
+    `file`      the source, by path and mtime and size — a clip replaced in
+                place under the same name is a different clip (`media.stamp`).
+    `vae`       the checkpoint doing the encoding, stamped the same way
+                (`latents.fingerprint`). Worked out once per generation and
+                handed in, rather than derived here: it is the same answer for
+                every reference in the request.
+    `ref_size`  which canvas rule applies, `match` or `max`.
+    `gen_w/h`   the generation's canvas — but *only* under `match`, which is the
+                setting that reads it. A `max` reference is sized from its own
+                source alone, so it survives a change of resolution, which is
+                what makes the expensive setting the one worth caching.
+    `gen_frames` the generation's length, for video and for a video's
+                soundtrack: it bounds the decode window (`media.load_all`) and
+                then cuts the clip to the VAE's 17n+5 grid.
+    `trim`      which stretch of the source was asked for.
+
+    Nothing is derived here — not the canvas, not the frame count — because
+    working either of them out means decoding the file, and a key that has to
+    open the clip to be built is a key that cannot save opening the clip. Both
+    are functions of the terms above, and the source's own dimensions are
+    pinned by `file`.
+
+    -> None when the source cannot be stamped, which means this reference is
+    encoded rather than cached. A file that is not there is not this function's
+    to complain about: `media.load_all` will say so, by name, the moment the
+    decode is asked for. A hand-built graph that supplies the media directly is
+    the other caller this reaches, and it has no file to be missing.
+    """
+    try:
+        stamp = media.stamp(asset.filename)
+    except (media.MediaError, OSError):
+        return None
+    parts = {"kind": kind, "file": stamp, "vae": print_of_vae, "trim": asset.trim}
+    if kind in ("image", "video"):
+        parts["ref_size"] = asset.ref_size
+        if asset.ref_size == "match":
+            parts["gen_w"], parts["gen_h"] = compiled.width, compiled.height
+    if kind in ("video", "soundtrack"):
+        parts["gen_frames"] = compiled.frames
+    return parts
+
+
+def _cached_ref_audio(kind, audio_vae, print_of_vae, asset, entry, compiled, tally=None):
+    """A file-backed audio reference, encoded once. -> (latent, ref_audio_t).
+
+    Cached for the decode at least as much as for the encode: a `picture+sound`
+    reference is two plan steps against one file, so if only the picture came
+    back out of the cache the clip would still be opened and decoded for its
+    soundtrack — which is exactly the cost the picture's entry had just avoided.
+
+    `ref_audio_t` is read back off the latent rather than stored beside it,
+    because that is where core reads it from too (`_encode_ref_audio` returns
+    `z.shape[-1]`) and two copies of one number is a way for them to disagree.
+    """
+    tensors, _ = _cached(
+        f"@{asset.handle} {kind}", _ref_key(kind, asset, print_of_vae, compiled),
+        lambda: ({"audio_latent": _encode_ref_audio(audio_vae, entry["audio"])[0]}, {}),
+        tally)
+    latent = _restore(audio_vae, tensors["audio_latent"])
+    return latent, latent.shape[-1]
 
 
 def _pin(keyframe, index, stock=0):
@@ -158,10 +385,19 @@ def _seam_blocks(audio_vae, compiled, loaded, frame_count):
     return blocks
 
 
-def encode(clip, vae, audio_vae, compiled, loaded):
-    """-> (conditioning, latent). `loaded` maps asset handle -> decoded media."""
+def encode(clip, vae, audio_vae, compiled, loaded, checkpoints=None):
+    """-> (conditioning, latent). `loaded` maps asset handle -> decoded media.
+
+    `checkpoints` names the VAE files on `vae` and `audio_vae`, for the
+    reference cache to key on — `{"vae": ..., "audio_vae": ...}`. Names rather
+    than the loaded objects because a name is the same across restarts and a
+    loaded object is not; see `latents.fingerprint`. A caller with no names
+    (a hand-built graph) passes none and the cache identifies the weights by
+    their shape instead.
+    """
     if compiled.mode == "REF2VA":
-        return _encode_references(clip, vae, audio_vae, compiled, loaded)
+        return _encode_references(clip, vae, audio_vae, compiled, loaded,
+                                  checkpoints or {})
     return _encode_frames(clip, vae, audio_vae, compiled, loaded)
 
 
@@ -319,85 +555,114 @@ def video_canvas(source_w, source_h, gen_w, gen_h, ref_size):
     return width, height
 
 
-def _encode_references(clip, vae, audio_vae, compiled, loaded):
+def _encode_references(clip, vae, audio_vae, compiled, loaded, checkpoints=None):
     """REF2VA."""
+    checkpoints = checkpoints or {}
+    # Once per generation, not once per reference: it is a file stamp, and every
+    # reference in the request is encoded by the same two checkpoints.
+    print_of_vae = latents.fingerprint(vae, checkpoints.get("vae"))
+    print_of_audio = latents.fingerprint(audio_vae, checkpoints.get("audio_vae"))
     latent, frame_count = _empty_av_latent(compiled.width, compiled.height, compiled.frames)
 
     items = []   # tokenizer presentation, in request order
     blocks = []  # DiT payload, same order
     pending_soundtrack = None  # set by a 'soundtrack' step, consumed by the 'video' step after it
+    tally = Tally()  # what the references cost, for one line at the end
 
     for step in compiled.plan:
         asset = step["asset"]
         entry = loaded[asset.handle]
 
         if step["op"] == "image":
-            image = entry["image"]
-            height, width = image.shape[1], image.shape[2]
-            if asset.ref_size == "match":
-                # Down-only, to the generation's pixel area.
-                scale = min(1.0, math.sqrt((compiled.width * compiled.height) / (width * height)))
-            else:
-                # 'max': the reference pipeline's own 2048 short edge. Best identity
-                # retention, and several times slower — reference tokens ride through
-                # every sampling step.
-                scale = min(1.0, REF_IMAGE_SHORT_EDGE / min(width, height))
-            target_w, target_h = _snap(width * scale), _snap(height * scale)
-            resized = _resize(image, target_w, target_h, "disabled")
-            items.append({"type": "image", "data": resized})
+            def encode_image(entry=entry, asset=asset):
+                image = entry["image"]
+                height, width = image.shape[1], image.shape[2]
+                if asset.ref_size == "match":
+                    # Down-only, to the generation's pixel area.
+                    scale = min(1.0, math.sqrt(
+                        (compiled.width * compiled.height) / (width * height)))
+                else:
+                    # 'max': the reference pipeline's own 2048 short edge. Best identity
+                    # retention, and several times slower — reference tokens ride through
+                    # every sampling step.
+                    scale = min(1.0, REF_IMAGE_SHORT_EDGE / min(width, height))
+                target_w, target_h = _snap(width * scale), _snap(height * scale)
+                resized = _resize(image, target_w, target_h, "disabled")
+                return ({"latent": vae.encode(resized),
+                         "presentation": _quantize(resized)},
+                        {"latent_h": target_h // 16, "latent_w": target_w // 16})
+
+            tensors, meta = _cached(
+                f"@{asset.handle} image ({asset.ref_size})",
+                _ref_key("image", asset, print_of_vae, compiled), encode_image, tally)
+            items.append({"type": "image", "data": _present(tensors["presentation"])})
             blocks.append({
                 "kind": "image",
-                "latent_h": target_h // 16,
-                "latent_w": target_w // 16,
-                "latent": vae.encode(resized),
+                "latent_h": meta["latent_h"],
+                "latent_w": meta["latent_w"],
+                "latent": _restore(vae, tensors["latent"]),
             })
 
         elif step["op"] == "soundtrack":
-            pending_soundtrack = _encode_ref_audio(audio_vae, entry["audio"])
+            pending_soundtrack = _cached_ref_audio(
+                "soundtrack", audio_vae, print_of_audio, asset, entry, compiled, tally)
             items.append({"type": "audio"})
 
         elif step["op"] == "video":
-            frames = entry["frames"]
-            source_h, source_w = frames.shape[1], frames.shape[2]
-            canvas_w, canvas_h = video_canvas(
-                source_w, source_h, compiled.width, compiled.height, asset.ref_size)
-            frames = _resize(frames, canvas_w, canvas_h, "disabled")
+            def encode_video(entry=entry, asset=asset):
+                frames = entry["frames"]
+                source_h, source_w = frames.shape[1], frames.shape[2]
+                canvas_w, canvas_h = video_canvas(
+                    source_w, source_h, compiled.width, compiled.height, asset.ref_size)
+                frames = _resize(frames, canvas_w, canvas_h, "disabled")
 
-            if frames.shape[0] > frame_count:
-                frames = frames[:frame_count]
-            count = frames.shape[0]
-            if count < 5:
-                raise ValueError(
-                    f"@{asset.handle}: reference videos need at least 5 frames "
-                    f"(~0.2 s at 24 fps), got {count}"
-                )
-            while count % 17 != 5:
-                count -= 1
-            frames = frames[:count]
+                if frames.shape[0] > frame_count:
+                    frames = frames[:frame_count]
+                count = frames.shape[0]
+                if count < 5:
+                    raise ValueError(
+                        f"@{asset.handle}: reference videos need at least 5 frames "
+                        f"(~0.2 s at 24 fps), got {count}"
+                    )
+                while count % 17 != 5:
+                    count -= 1
+                frames = frames[:count]
+
+                # Qwen sees the clip at 2 fps with timestamps, not every frame.
+                sampled = list(range(0, frames.shape[0], FPS // 2))
+                encoded = vae.encode(frames)
+                return ({"latent": encoded,
+                         "presentation": _quantize(frames[sampled])},
+                        {"latent_t": int(encoded.shape[2]),
+                         "latent_h": canvas_h // 16,
+                         "latent_w": canvas_w // 16,
+                         "timestamps": [i / 2.0 for i in range(len(sampled))]})
+
+            tensors, meta = _cached(
+                f"@{asset.handle} video ({asset.ref_size})",
+                _ref_key("video", asset, print_of_vae, compiled), encode_video, tally)
 
             audio_latent, ref_audio_t = pending_soundtrack or (None, 0)
             pending_soundtrack = None
 
-            # Qwen sees the clip at 2 fps with timestamps, not every frame.
-            sampled = list(range(0, frames.shape[0], FPS // 2))
             items.append({
                 "type": "video",
-                "data": frames[sampled],
-                "timestamps": [i / 2.0 for i in range(len(sampled))],
+                "data": _present(tensors["presentation"]),
+                "timestamps": meta["timestamps"],
             })
-            encoded = vae.encode(frames)
             blocks.append({
                 "kind": "video_audio" if ref_audio_t else "video",
-                "latent_t": encoded.shape[2],
-                "latent_h": canvas_h // 16,
-                "latent_w": canvas_w // 16,
+                "latent_t": meta["latent_t"],
+                "latent_h": meta["latent_h"],
+                "latent_w": meta["latent_w"],
                 "ref_audio_t": ref_audio_t,
-                "latent": encoded,
+                "latent": _restore(vae, tensors["latent"]),
                 "audio_latent": audio_latent,
             })
 
         elif step["op"] == "audio":
-            audio_latent, ref_audio_t = _encode_ref_audio(audio_vae, entry["audio"])
+            audio_latent, ref_audio_t = _cached_ref_audio(
+                "audio", audio_vae, print_of_audio, asset, entry, compiled, tally)
             items.append({"type": "audio"})
             blocks.append({"kind": "audio", "ref_audio_t": ref_audio_t, "audio_latent": audio_latent})
 
@@ -462,6 +727,7 @@ def _encode_references(clip, vae, audio_vae, compiled, loaded):
             keyframes.append(_pin({"latent": vae.encode(head[:1])},
                                   frame_count - 1, stock=frame_count - 1))
 
+    tally.say()
     tokens = clip.tokenize(compiled.prompt, minimax_ref_items=items)
     cond = clip.encode_from_tokens_scheduled(tokens)
     if blocks:

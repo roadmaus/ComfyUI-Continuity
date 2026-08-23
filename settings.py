@@ -139,6 +139,27 @@ DEFAULTS = {
     # UI-only. Applies to whatever palette is in force, including the pinned
     # dark one above and any palette that does not exist yet.
     "surface_lift": 1.0,
+    # Whether a reference's latents are kept between renders. On by default:
+    # the segment node caches on its whole payload, so editing one word of the
+    # prompt re-decodes and re-encodes every reference the shot cites, and a
+    # reference does not know the prompt exists. See `latents.py`.
+    #
+    # This reaches the render the way the lead-in does, and like it, it is a
+    # statement about the machine rather than about the piece — off is for a
+    # disk with nothing to spare. It cannot change what a render produces:
+    # `encode._quantize` runs whether this is on or off, so a hit and a miss
+    # send the model the same tensors and this only decides how long the wait is.
+    "latent_cache": True,
+    # How much of ComfyUI's user directory those latents may fill, in
+    # gigabytes. Past it the least recently read entries go. 0 keeps the
+    # in-session cache and writes nothing to disk, which is the setting for a
+    # box with no room to spare.
+    "latent_cache_gb": 8.0,
+    # How long a reference nothing has read is kept, in days. 0 is forever,
+    # which is a real answer here rather than a footgun: the ceiling above is
+    # what actually bounds the store, and ageing is only for the reference
+    # nobody is ever coming back to. Counted from the last read, not the write.
+    "latent_cache_days": 30.0,
 }
 
 # What the text scale is allowed to be. The floor is where the 9px captions stop
@@ -164,6 +185,16 @@ MAX_SURFACE_LIFT = 2.0
 # remaining steps are for, and a render that spends most of its schedule on the
 # base weights at turbo step counts is a bad 20-step render, not a fast one.
 MAX_LEAD_IN = 4
+
+# How large the reference cache may be told to grow. Not a truth about disks —
+# it is the point past which nobody is choosing a cache size any more, and the
+# thing actually wanted is a store somewhere this pack does not put files.
+MAX_CACHE_GB = 256.0
+
+# How long the cache may be told to keep a reference. A year, past which the
+# honest setting is 0 — forever — rather than a larger number pretending to be
+# a policy.
+MAX_CACHE_DAYS = 365.0
 
 
 def clean(raw):
@@ -225,7 +256,27 @@ def clean(raw):
         if theme not in THEMES:
             raise ValueError("theme must be one of: " + ", ".join(THEMES))
         clean_settings["theme"] = theme
-    for flag in ("show_shift_pills", "autoplay_previews", "advanced"):
+    if "latent_cache_gb" in raw and raw["latent_cache_gb"] is not None:
+        size = raw["latent_cache_gb"]
+        # `True` is an int in Python and would sail through as one gigabyte,
+        # the same trap every count above sets.
+        if isinstance(size, bool) or not isinstance(size, (int, float)):
+            raise ValueError("latent_cache_gb must be a number")
+        size = float(size)
+        if not 0 <= size <= MAX_CACHE_GB:
+            raise ValueError(f"latent_cache_gb must be between 0 and {MAX_CACHE_GB}")
+        clean_settings["latent_cache_gb"] = size
+    if "latent_cache_days" in raw and raw["latent_cache_days"] is not None:
+        days = raw["latent_cache_days"]
+        # `True` is an int in Python and would sail through as one day, the
+        # same trap every count above sets.
+        if isinstance(days, bool) or not isinstance(days, (int, float)):
+            raise ValueError("latent_cache_days must be a number")
+        days = float(days)
+        if not 0 <= days <= MAX_CACHE_DAYS:
+            raise ValueError(f"latent_cache_days must be between 0 and {MAX_CACHE_DAYS}")
+        clean_settings["latent_cache_days"] = days
+    for flag in ("show_shift_pills", "autoplay_previews", "advanced", "latent_cache"):
         if flag in raw and raw[flag] is not None:
             if not isinstance(raw[flag], bool):
                 raise ValueError(f"{flag} must be true or false")

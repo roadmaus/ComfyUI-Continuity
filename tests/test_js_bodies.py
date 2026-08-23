@@ -1094,6 +1094,38 @@ try {
   findOpts(page);
   out.settings.shiftRows = opts.map((o) => o.getAttribute("aria-checked"));
 
+  // The reference cache's two rails. Read for their stops and their readouts:
+  // a rail is a list of values as much as it is a control, and a stop list that
+  // silently lost its ends would still draw.
+  const rails = [];
+  const findRails = (node) => {
+    if (String(node.className ?? "").split(" ")[0] === "mmc-set-slider") rails.push(node);
+    (node.children ?? []).forEach(findRails);
+  };
+  findRails(page);
+  const railOf = (slider) => {
+    let found = null;
+    const walk = (node) => {
+      if (node.getAttribute?.("type") === "range") found = node;
+      (node.children ?? []).forEach(walk);
+    };
+    walk(slider);
+    return found;
+  };
+  out.settings.cacheStops = rails.map((r) => Number(railOf(r).getAttribute("max")) + 1);
+  const edgeOf = (slider, want) => {
+    let found = "";
+    const walk = (node) => {
+      if (node.className === want) found = node.textContent;
+      (node.children ?? []).forEach(walk);
+    };
+    walk(slider);
+    return found;
+  };
+  out.settings.cacheReads = rails.map(
+    (r) => [edgeOf(r, "mmc-edge"), edgeOf(r, "mmc-edge-unit")].filter(Boolean).join(" "));
+  out.settings.cacheDisabled = rails.map((r) => railOf(r).getAttribute("disabled") != null);
+
   // Then turn the advanced controls on — the first section's second row — and
   // count again. The turbo lead-in's three rows are what should appear: it is
   // an advanced control, and while the switch is off its section is not on the
@@ -1709,9 +1741,16 @@ try {
   await ext.nodeCreated(node);
   const seed = node.widgets.find((w) => w.name === "seed");
   const backButton = () => first(node.mmcBody.root, "mmc-seed-last");
+  // A second fresh node, only for its seed: the number has to be this node's
+  // and not the schema's, or every first render anyone makes is the same noise.
+  const twin = fakeNode("MiniMaxH3Creator", "creator_data", ONE_SHOT);
+  await ext.nodeCreated(twin);
   out.seed = {
     // Set at creation, over what the frontend handed us.
     control: seed.linkedWidgets[0].value,
+    // Captured before the queue below moves it.
+    fresh: seed.value,
+    twin: twin.widgets.find((w) => w.name === "seed").value,
     // The button is there from the start — it is how anyone finds out the
     // feature exists — but nothing has been queued, so it is inert.
     beforeQueue: !!backButton(),
@@ -2413,19 +2452,23 @@ check("...and the body back to the node", full.get("cameBack"), True)
 check("...and takes the shell down with it", full.get("closed"), True)
 
 # The settings page owns four questions now — how good the file is, where it
-# goes, what the node faces offer, and how large they are drawn — so it has four
-# tabs, and the folder fields are the only place the prefixes can be set.
+# goes, what the node faces offer and what a render does on the way there, and
+# how large they are drawn — so it has four tabs, and the folder fields are the
+# only place the prefixes can be set. The third is "General" rather than
+# "Nodes": it carries a Rendering group as well as a Nodes one, so the old name
+# was the name of half of it.
 settings = report.get("settings", {})
 check("the settings page has all four tabs", settings.get("tabs"),
-      ["Quality", "Folders", "Nodes", "Appearance"])
+      ["Quality", "Folders", "General", "Appearance"])
 # Every row on the tab, in order, with each setting's default checked on a fresh
-# settings file: previews ship playing, and the advanced controls and the shift
-# pills ship off. Advanced leads, because it decides how much of the rest of the
-# tab there is — the turbo lead-in is an advanced control and its three rows are
-# simply not on the page while it is off, which is what makes this list three
-# pairs and not three pairs plus a triple. Then preview playback, which governs
-# the biggest thing a node draws, and the shift pills last, which change only
-# what is drawn.
+# settings file: previews ship playing, the reference cache ships on, and the
+# advanced controls and the shift pills ship off. Advanced leads, because it
+# decides how much of the rest of the tab there is — the turbo lead-in is an
+# advanced control and its three rows are simply not on the page while it is
+# off, which is what makes this list four pairs and not four pairs plus a
+# triple. Then preview playback, which governs the biggest thing a node draws,
+# the reference cache, and the shift pills last, which change only what is
+# drawn.
 #
 # There used to be a fourth pair here, for whether the compiler wrote each
 # reference's scope into the prompt. It is not a choice any more — a label the
@@ -2433,12 +2476,23 @@ check("the settings page has all four tabs", settings.get("tabs"),
 # and the prompt box shows what is actually sent instead.
 check("the node settings show their defaults checked",
       settings.get("shiftRows"),
-      ["true", "false", "true", "false", "true", "false"])
+      ["true", "false", "true", "false", "true", "false", "true", "false"])
+# The reference cache's two limits. Both rails travel a list of stops rather
+# than a range, because nobody is choosing between 30 days and 31 — and the
+# defaults have to land on a named stop, or the page opens showing a value it
+# does not offer.
+check("both cache rails carry their stops", settings.get("cacheStops"), [6, 9])
+check("...opening on the stored month and 8 GB",
+      settings.get("cacheReads"), ["1 month", "8 GB"])
+# The retention rail is live: the ceiling ships at 8 GB, so there is a store for
+# it to age. It goes quiet only when the ceiling is Off.
+check("...both live while there is a store to bound", settings.get("cacheDisabled"), [False, False])
+
 # And with the advanced controls on, the turbo lead-in is back on the page: the
-# three pairs plus its three rows. That is the whole of what the switch does to
+# four pairs plus its three rows. That is the whole of what the switch does to
 # this tab — it adds a section, it never disables one.
 check("advanced controls bring the turbo lead-in back to the page",
-      (settings.get("advancedRows"), settings.get("advancedLeadIn")), (9, True))
+      (settings.get("advancedRows"), settings.get("advancedLeadIn")), (11, True))
 check("the quality tab shows the encoder value", settings.get("quality"), True)
 # The text scale: four points with the drawn sizes checked on a fresh file, each
 # row saying what it is as a percentage the way the quality rows say their crf.
@@ -2799,6 +2853,14 @@ check("...and the popover stays where it was rather than jumping to the corner",
 # The seed: fixed on arrival, and the last queued one always reachable.
 seed = report.get("seed", {})
 check("a fresh node opens on a fixed seed", seed.get("control"), "fixed")
+# Not the schema's 0. There is no seed known to be better for H3 — the one study
+# of "golden" seeds reports different winners per model, and none for this one —
+# so the fix is not a better constant, it is not being a constant: 0 was the same
+# 0 for everybody, and with the control pinned to "fixed" it stays for the whole
+# session. A saved workflow is unaffected, because its widget values land after
+# `nodeCreated`.
+check("...on a seed of its own rather than the schema's",
+      (seed.get("fresh") != 0, seed.get("fresh") != seed.get("twin")), (True, True))
 check("the way back to the last seed is on the row from the start",
       seed.get("beforeQueue"), True)
 check("...inert until something has been queued", seed.get("beforeQueueOff"), True)

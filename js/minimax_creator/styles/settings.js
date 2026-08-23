@@ -75,6 +75,56 @@ export const css = `
 .mmc-set-foot code {
   font-family: ui-monospace, Menlo, monospace; font-size: calc(10.5px * var(--mmc-type)); color: var(--mmc-dim);
 }
+/* The reference cache's two limits: how long, and how much. One card split by
+   the same hairline the two output folders share — they are one setting asked
+   twice, and this page already has a shape for that. */
+.mmc-set-bounds { padding: 14px 14px 6px; }
+.mmc-set-slider { display: flex; flex-direction: column; gap: 2px; }
+.mmc-set-slider + .mmc-set-slider {
+  border-top: 1px solid var(--mmc-line); margin-top: 16px; padding-top: 16px;
+}
+.mmc-set-slider .mmc-slider-read { padding-bottom: 2px; }
+/* The consequence of the value, in the dim column the popover sliders use. It
+   turns warn when the store is already past where the thumb is standing. */
+.mmc-set-slider .mmc-slider-read .over { color: var(--mmc-warn); }
+/* Room above the rail for the gauge, and below it for the stop labels. Tight
+   above: the gauge is read *against* the thumb, and a gap wide enough to read
+   as a separate row is a gap that stops the comparison being made. */
+.mmc-set-slider .mmc-slider-track { padding-top: 3px; padding-bottom: calc(16px * var(--mmc-type)); }
+.mmc-set-slider input[type="range"] {
+  display: block; width: 100%; margin: 0; height: 20px; accent-color: var(--mmc-blue);
+}
+/* Wider than the popover's, because these stops carry words and not just
+   numbers, and a label that wraps is a label that moves the rail. */
+.mmc-set-slider .mmc-slider-mark {
+  width: calc(48px * var(--mmc-type)); margin-left: calc(-24px * var(--mmc-type)); white-space: nowrap;
+}
+/* How full the store actually is, against the ceiling being set. A gauge in the
+   rail's own stop space, so it can be read straight against the thumb below it:
+   longer than the thumb is over the limit. The pack's accent rather than the
+   rail's blue — this is a reading, and a second blue would be a second thumb. */
+.mmc-set-usage {
+  position: absolute; top: 0; left: 8px; right: 8px; height: 3px;
+  border-radius: 2px; background: var(--mmc-wash-2); overflow: hidden;
+}
+.mmc-set-usage > span {
+  display: block; height: 100%; width: calc(var(--p) * 100%);
+  border-radius: 2px; background: var(--mmc-accent);
+}
+.mmc-set-usage.over > span { background: var(--mmc-warn); }
+/* Off, the retention rail has nothing on disk to age. It stays on the page —
+   it is still what would happen once there is — and goes quiet: the value
+   included, or a setting with no effect would be the loudest thing in the card. */
+.mmc-set-slider input[type="range"]:disabled,
+.mmc-set-slider .mmc-slider-mark:disabled { opacity: .4; cursor: default; }
+.mmc-set-slider.off .mmc-edge, .mmc-set-slider.off .mmc-edge-unit { color: var(--mmc-off); }
+
+/* The reference cache's foot carries a control as well as a reading — the only
+   foot on the page that does, which is why the button is styled here rather
+   than by .mmc-set-foot growing a layout every other one would inherit. */
+.mmc-set-clear {
+  margin-top: 9px; padding: 3px 12px; font-size: calc(11.5px * var(--mmc-type));
+}
 .mmc-set-wait { color: var(--mmc-dim); font-size: calc(13px * var(--mmc-type)); padding: 28px 0 24px; }
 .mmc-set-problem { color: var(--mmc-warn); font-size: calc(12px * var(--mmc-type)); line-height: 1.45; padding: 14px 0 0; }
 

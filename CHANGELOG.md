@@ -1,5 +1,73 @@
 # Changelog
 
+## 2.25
+
+**A reference is encoded once, not once per prompt.** Attaching a video or a
+cast member means decoding it and pushing it through the VAE, and on a
+high-resolution source that is most of the wait before the first sampling step.
+None of it depends on the prompt — but a generation caches on its whole request,
+so editing one word paid for all of it again. References are now kept between
+renders, keyed on the file, the canvas they were encoded at and the VAE that
+encoded them; the prompt, the seed, the sampler, the LoRAs and the other
+references are all free to move. A cached reference is never opened, either:
+the decode is deferred, so a hit does not touch the disk the clip is on.
+
+That makes `max` affordable. It was the better-looking setting you paid for on
+every render, and `match` was the answer; now it is paid for once per canvas and
+the choice goes back to being about quality.
+
+The store survives a restart. It lives under ComfyUI's user directory, beside
+the settings file and the picker's thumbnail cache, and not under temp, which
+core empties on startup — a cache wiped by a restart would pay for `max` again
+every morning, and the whole argument is that the reference has not changed. It
+drops what nothing has read in a month, or whatever is least recently read once
+it passes its ceiling.
+
+It cannot change what a render produces — only how long it takes. Settings →
+General → Reference cache turns it off, empties it, and sets its two limits: how
+long an unread reference is kept, and how large the store may get. Both rails
+travel a list of stops rather than a range, because nobody is choosing between
+30 days and 31 — and the size rail carries a gauge of what the store is actually
+holding, drawn against the thumb, so a ceiling is set against a real number
+instead of a guess. Past the thumb is over, and says what the next render drops.
+
+**The terminal says what the references are doing.** A reference being decoded
+and encoded is most of the wait before the first sampling step, and it used to
+happen in silence — which also meant there was no way to tell a working cache
+from a broken one. Each reference now says whether it was reused and from where,
+or that it is about to be encoded and then what that cost, and each generation
+ends with one line saying how many of each. A miss announces itself before it
+runs, not after, because the point is to explain a wait while it is happening:
+
+    [MiniMax] @vid-1 video (max): encoding, nothing cached
+    [MiniMax] @vid-1: decoding beach-plate.mp4
+    [MiniMax] @vid-1 video (max): encoded in 24.3 s, cached 40 MB
+    [MiniMax] @cast-2 image (max): reused from disk (18 MB)
+    [MiniMax] @vid-1 soundtrack: reused from disk (420 KB)
+    [MiniMax] references: 2 reused (18 MB), 1 encoded in 24.3 s
+
+**Cached references survive a restart, which is what they were for.** They did
+not. A reference's key includes the VAE that encoded it, and that was worked out
+by reading the loaded object — including `downscale_ratio`, which on the H3
+video VAE is a tuple holding a lambda. Its text is a memory address, so every
+restart gave every video and image reference a new key and none of them could
+ever come back off the disk. The audio VAE sets that attribute to the plain
+number 800, so reference *sound* hit every time, which is what made the failure
+visible at all. A checkpoint is now identified by its file, stamped like any
+other, and its name travels down the graph beside the socket it is on.
+
+**A fresh node opens on a seed of its own.** The default was 0, and this node
+pins the after-generate control to "fixed" — so 0 was not a starting point, it
+was the seed every first render anyone made ran on. Now a node dropped on a
+canvas draws its own. Not a "better" seed: golden seeds are found by ranking a
+thousand of them against one model's own output and the winners differ from
+model to model, so there is no number to borrow for H3. Every seed is one noise
+sample. What was wrong with 0 is that it was everybody's. A saved workflow is
+untouched — its seed lands after the node is built.
+
+**Settings' third tab is called General.** It carries a Rendering group as well
+as a Nodes one, so "Nodes" was the name of half of it.
+
 ## 2.24
 
 **A shot can be made as long as the sound or the footage it is generated
