@@ -16,31 +16,18 @@ it wrote. `compile.py` is authoritative.
 Skips itself if node is not installed.
 """
 
-import importlib.util
 import json
-import os
-import shutil
-import subprocess
-import sys
-import types
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MIRROR = os.path.join(ROOT, "js", "minimax_creator", "state.js")
+import mirror
 
-if shutil.which("node") is None:
-    print("skipped: node is not installed")
-    sys.exit(0)
+mirror.skip_without_node()
 
-package = types.ModuleType("mmcpkg")
-package.__path__ = [ROOT]
-sys.modules["mmcpkg"] = package
-for name in ("canvas", "contextir", "compile"):
-    spec = importlib.util.spec_from_file_location(f"mmcpkg.{name}", os.path.join(ROOT, f"{name}.py"))
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[f"mmcpkg.{name}"] = module
-    spec.loader.exec_module(module)
-compiler = sys.modules["mmcpkg.compile"]
-canvas_mod = sys.modules["mmcpkg.canvas"]
+MIRROR = mirror.js("state.js")
+
+_pkg = mirror.load("canvas", "contextir", "compile")
+compiler = _pkg.compile
+canvas_mod = _pkg.canvas
+
 
 # Every shape worth asking about, as (render, merge flags). The flags are what a
 # saved blob carries; `render` is what one saved before they existed carries,
@@ -94,13 +81,7 @@ for (const [render, flags, feathers] of JSON.parse(process.argv[2])) {
 console.log(JSON.stringify(out));
 """
 
-result = subprocess.run(
-    ["node", "--input-type=module", "--eval", SCRIPT, MIRROR, json.dumps(CASES)],
-    capture_output=True, text=True)
-if result.returncode != 0:
-    print("failed to read state.js:\n" + result.stderr.strip())
-    sys.exit(1)
-mirror = json.loads(result.stdout)
+reflected = mirror.run(SCRIPT, MIRROR, CASES)
 
 from harness import FAILURES, passed
 
@@ -110,7 +91,7 @@ def check(label, got, want):
         FAILURES.append(f"{label}: state.js says {got!r}, compile.py says {want!r}")
 
 
-for (render, flags, feathers), seen in zip(CASES, mirror):
+for (render, flags, feathers), seen in zip(CASES, reflected):
     name = (f"{render} {''.join('m' if f else '.' for f in flags)}"
             f" {''.join(str(f) if f else '-' for f in feathers)}")
     data = json.loads(seen["blob"])

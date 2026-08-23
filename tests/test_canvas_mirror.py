@@ -10,23 +10,14 @@ too — but it is only safe while the two agree, and nothing else checks that.
 Skips itself if node is not installed.
 """
 
-import importlib.util
 import json
-import os
-import shutil
-import subprocess
-import sys
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MIRROR = os.path.join(ROOT, "js", "minimax_creator", "canvas.js")
+import mirror
 
-if shutil.which("node") is None:
-    print("skipped: node is not installed")
-    sys.exit(0)
+mirror.skip_without_node()
 
-spec = importlib.util.spec_from_file_location("canvas", os.path.join(ROOT, "canvas.py"))
-canvas = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(canvas)
+MIRROR = mirror.js("canvas.js")
+canvas = mirror.load("canvas").canvas
 
 # Everything the mirror is expected to reproduce, dumped in one go rather than
 # one subprocess per question.
@@ -56,14 +47,8 @@ console.log(JSON.stringify(out));
 # whole reason `match_seconds` does not simply round.
 MATCH_CASES = [0.2, 1, 2.5, 5.88, 6, 6.6, 7.29, 9.33, 15, 15.04, 59.71, 60, 180]
 
-result = subprocess.run(
-    ["node", "--input-type=module", "--eval",
-     f"const MATCH_CASES = {json.dumps(MATCH_CASES)};\n" + SCRIPT, MIRROR],
-    capture_output=True, text=True)
-if result.returncode != 0:
-    print("failed to read canvas.js:\n" + result.stderr.strip())
-    sys.exit(1)
-mirror = json.loads(result.stdout)
+reflected = mirror.run(
+    f"const MATCH_CASES = {json.dumps(MATCH_CASES)};\n" + SCRIPT, MIRROR)
 
 from harness import FAILURES, passed
 
@@ -73,19 +58,19 @@ def check(label, got, want):
         FAILURES.append(f"{label}: canvas.js says {got!r}, canvas.py says {want!r}")
 
 
-for name, value in mirror["constants"].items():
+for name, value in reflected["constants"].items():
     check(name, value, getattr(canvas, name))
 
-check("aspect presets", mirror["presets"], sorted(canvas.ASPECT_PRESETS))
+check("aspect presets", reflected["presets"], sorted(canvas.ASPECT_PRESETS))
 
-for seconds, frames in mirror["frames"].items():
+for seconds, frames in reflected["frames"].items():
     check(f"{seconds}s", frames, canvas.frames_for_seconds(int(seconds)))
 
-for key, size in mirror["canvases"].items():
+for key, size in reflected["canvases"].items():
     label, edge = key.split("@")
     check(key, size, list(canvas.resolve_canvas(canvas.ASPECT_PRESETS[label], int(edge))))
 
-for seconds, matched in mirror["matches"].items():
+for seconds, matched in reflected["matches"].items():
     check(f"match {seconds}s", matched, canvas.match_seconds(float(seconds)))
 
 # What the match is for: the two decimals it writes have to compile back to the
@@ -96,8 +81,8 @@ for seconds in MATCH_CASES:
           canvas.frames_for_seconds(canvas.match_seconds(seconds)),
           canvas.frames_for_seconds(clamped))
 
-for frames, trained in mirror["trained"].items():
+for frames, trained in reflected["trained"].items():
     check(f"is_trained_length({frames})", trained, canvas.is_trained_length(int(frames)))
 
-passed(f"canvas.js mirrors canvas.py across {len(mirror['frames'])} durations "
-      f"and {len(mirror['canvases'])} canvases")
+passed(f"canvas.js mirrors canvas.py across {len(reflected['frames'])} durations "
+      f"and {len(reflected['canvases'])} canvases")

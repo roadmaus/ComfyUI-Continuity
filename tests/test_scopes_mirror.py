@@ -16,39 +16,19 @@ band promises and the render never writes.
 Skips itself if node is not installed.
 """
 
-import importlib.util
 import json
-import os
-import shutil
-import subprocess
-import sys
-import types
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MIRROR = os.path.join(ROOT, "js", "minimax_creator", "state.js")
+import mirror
 
-if shutil.which("node") is None:
-    print("skipped: node is not installed")
-    sys.exit(0)
+mirror.skip_without_node()
 
+MIRROR = mirror.js("state.js")
 
-def _load():
-    """`compile` imports its siblings relatively, so it is loaded as a package."""
-    package = types.ModuleType("mmc")
-    package.__path__ = [ROOT]
-    sys.modules["mmc"] = package
-    modules = {}
-    for name in ("canvas", "contextir", "subjects", "compile"):
-        spec = importlib.util.spec_from_file_location(f"mmc.{name}", os.path.join(ROOT, f"{name}.py"))
-        module = importlib.util.module_from_spec(spec)
-        sys.modules[f"mmc.{name}"] = module
-        setattr(package, name, module)
-        spec.loader.exec_module(module)
-        modules[name] = module
-    return modules["compile"], modules["contextir"], modules["subjects"]
+_pkg = mirror.load("canvas", "contextir", "subjects", "compile")
+compiler = _pkg.compile
+contextir = _pkg.contextir
+subjects = _pkg.subjects
 
-
-compiler, contextir, subjects = _load()
 
 SCRIPT = """
 const s = await import(process.argv[1]);
@@ -65,13 +45,7 @@ console.log(JSON.stringify({
 }));
 """
 
-proc = subprocess.run(
-    ["node", "--input-type=module", "-e", SCRIPT, "--", MIRROR],
-    capture_output=True, text=True)
-if proc.returncode != 0:
-    print(f"node failed:\n{proc.stderr}")
-    sys.exit(1)
-mirror = json.loads(proc.stdout)
+reflected = mirror.run(SCRIPT, MIRROR)
 
 from harness import FAILURES, passed
 
@@ -85,9 +59,9 @@ def check(label, got, want):
 
 for kind in ("image", "video", "audio"):
     check(f"the {kind} scopes match",
-          mirror["takes"][kind], list(compiler.TAKES[kind]))
+          reflected["takes"][kind], list(compiler.TAKES[kind]))
 check("...and so does the map they are looked up in",
-      {k: list(v) for k, v in mirror["map"].items()},
+      {k: list(v) for k, v in reflected["map"].items()},
       {k: list(v) for k, v in compiler.TAKES.items()})
 
 # Which vocabulary a file may choose from. The interesting one is the clip taken
@@ -95,9 +69,9 @@ check("...and so does the map they are looked up in",
 # never has its picture encoded, so offering it "camera" would be offering a
 # narrowing of a file that is not there.
 check("a sound-only clip is offered the audio scopes",
-      mirror["soundOnly"], list(compiler.TAKES["audio"]))
-check("...and so is an audio file", mirror["audioOfAudio"], list(compiler.TAKES["audio"]))
-check("a keyframe is offered nothing", mirror["keyframe"], [])
+      reflected["soundOnly"], list(compiler.TAKES["audio"]))
+check("...and so is an audio file", reflected["audioOfAudio"], list(compiler.TAKES["audio"]))
+check("a keyframe is offered nothing", reflected["keyframe"], [])
 
 # ---- and every scope says something, in both sections ------------------------
 #

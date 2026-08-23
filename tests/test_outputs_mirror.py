@@ -15,23 +15,12 @@ one the backend would take makes a legal folder untypeable.
 Skips itself if node is not installed.
 """
 
-import importlib.util
-import json
-import os
-import shutil
-import subprocess
-import sys
+import mirror
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MIRROR = os.path.join(ROOT, "js", "minimax_creator", "outputs.js")
+mirror.skip_without_node()
 
-if shutil.which("node") is None:
-    print("skipped: node is not installed")
-    sys.exit(0)
-
-spec = importlib.util.spec_from_file_location("mmc_outputs", os.path.join(ROOT, "outputs.py"))
-outputs = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(outputs)
+MIRROR = mirror.js("outputs.js")
+outputs = mirror.load("outputs").outputs
 
 # Every string worth asking both sides about, in one subprocess rather than one
 # per case. Legal values, refusals, and the shapes that sit on the boundary.
@@ -61,13 +50,7 @@ out.stems = { "a/b/c": m.stemOf("a/b/c"), "abc": m.stemOf("abc") };
 console.log(JSON.stringify(out));
 """
 
-proc = subprocess.run(
-    ["node", "--input-type=module", "-e", SCRIPT, "--", MIRROR, json.dumps(CASES)],
-    capture_output=True, text=True)
-if proc.returncode != 0:
-    print(f"node failed:\n{proc.stderr}")
-    sys.exit(1)
-mirror = json.loads(proc.stdout)
+reflected = mirror.run(SCRIPT, MIRROR, CASES)
 
 from harness import FAILURES, passed
 
@@ -77,12 +60,12 @@ def check(label, got, want):
         FAILURES.append(f"{label}: js {got!r}, py {want!r}")
 
 
-check("the video default matches", mirror["constants"]["VIDEO_PREFIX"], outputs.VIDEO_PREFIX)
-check("the image default matches", mirror["constants"]["IMAGE_PREFIX"], outputs.IMAGE_PREFIX)
-check("the token list matches", mirror["constants"]["TOKENS"], list(outputs.TOKENS))
+check("the video default matches", reflected["constants"]["VIDEO_PREFIX"], outputs.VIDEO_PREFIX)
+check("the image default matches", reflected["constants"]["IMAGE_PREFIX"], outputs.IMAGE_PREFIX)
+check("the token list matches", reflected["constants"]["TOKENS"], list(outputs.TOKENS))
 
 for raw in CASES:
-    got = mirror["cleaned"][raw]
+    got = reflected["cleaned"][raw]
     try:
         want = {"prefix": outputs.clean(raw, outputs.VIDEO_PREFIX)}
     except outputs.PrefixError:
@@ -91,7 +74,7 @@ for raw in CASES:
 
 # The two splitting helpers exist only in the mirror — the backend gets the same
 # split from `get_save_image_path` — so they are checked against what that does.
-check("folderOf splits at the last separator", mirror["folders"], {"a/b/c": "a/b", "abc": ""})
-check("stemOf is the rest", mirror["stems"], {"a/b/c": "c", "abc": "abc"})
+check("folderOf splits at the last separator", reflected["folders"], {"a/b/c": "a/b", "abc": ""})
+check("stemOf is the rest", reflected["stems"], {"a/b/c": "c", "abc": "abc"})
 
 passed(f"outputs.js mirrors outputs.py across {len(CASES)} prefixes")

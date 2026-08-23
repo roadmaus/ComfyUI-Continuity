@@ -21,31 +21,18 @@ No clip cards here: what a supplied clip does to the arithmetic is
 its terms to both sides at once.
 """
 
-import importlib.util
 import json
-import os
-import shutil
-import subprocess
-import sys
-import types
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MIRROR = os.path.join(ROOT, "js", "minimax_creator", "state.js")
+import mirror
 
-if shutil.which("node") is None:
-    print("skipped: node is not installed")
-    sys.exit(0)
+mirror.skip_without_node()
 
-package = types.ModuleType("mmcpkg")
-package.__path__ = [ROOT]
-sys.modules["mmcpkg"] = package
-for name in ("canvas", "contextir", "compile"):
-    spec = importlib.util.spec_from_file_location(f"mmcpkg.{name}", os.path.join(ROOT, f"{name}.py"))
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[f"mmcpkg.{name}"] = module
-    spec.loader.exec_module(module)
-compiler = sys.modules["mmcpkg.compile"]
-canvas_mod = sys.modules["mmcpkg.canvas"]
+MIRROR = mirror.js("state.js")
+
+_pkg = mirror.load("canvas", "contextir", "compile")
+compiler = _pkg.compile
+canvas_mod = _pkg.canvas
+
 
 # Per card: (merge, hold, has a take, feather). The shapes a piece passes
 # through on the way from "nothing shot" to "all of it kept", plus the ones a
@@ -105,13 +92,7 @@ for (const cards of JSON.parse(process.argv[2])) {
 console.log(JSON.stringify(out));
 """
 
-result = subprocess.run(
-    ["node", "--input-type=module", "--eval", SCRIPT, MIRROR, json.dumps(CASES)],
-    capture_output=True, text=True)
-if result.returncode != 0:
-    print("failed to read state.js:\n" + result.stderr.strip())
-    sys.exit(1)
-mirror = json.loads(result.stdout)
+reflected = mirror.run(SCRIPT, MIRROR, CASES)
 
 from harness import FAILURES, passed
 
@@ -121,7 +102,7 @@ def check(label, got, want):
         FAILURES.append(f"{label}: state.js says {got!r}, compile.py says {want!r}")
 
 
-for cards, seen in zip(CASES, mirror):
+for cards, seen in zip(CASES, reflected):
     name = "".join(("m" if m else ".") + ("h" if h else ".") + ("t" if t else ".")
                    for m, h, t, _ in cards)
     data = json.loads(seen["blob"])
@@ -158,9 +139,9 @@ for cards, seen in zip(CASES, mirror):
 # nothing left to render is one the bar is meant to talk you out of.
 # A strip where every card is kept is the end of a shoot, not a refusal: it
 # samples nothing and writes the piece out of the film it already has.
-finished = json.loads(mirror[4]["blob"])
-check("a fully kept strip samples nothing", mirror[4]["sampled"], 0)
-check("...and is not refused", mirror[4]["problem"], False)
+finished = json.loads(reflected[4]["blob"])
+check("a fully kept strip samples nothing", reflected[4]["sampled"], 0)
+check("...and is not refused", reflected[4]["problem"], False)
 check("...but still writes a piece",
       len(compiler.timeline_payloads(compiler.rendered_piece(finished))), 3)
 
@@ -215,12 +196,7 @@ s.holdAll(timeline, false);  step("unlock all");
 console.log(JSON.stringify(out));
 """
 
-walked = subprocess.run(
-    ["node", "--input-type=module", "--eval", WALK, MIRROR],
-    capture_output=True, text=True)
-if walked.returncode != 0:
-    print("failed to walk state.js:\n" + walked.stderr.strip())
-    sys.exit(1)
+walked = mirror.run(WALK, MIRROR)
 
 
 def sampled_cards(blob):
@@ -256,7 +232,7 @@ WANT = [
     ("discard take 2", [],  [1, 3]),      # ...and card 2 drops out until it is shot again
     ("unlock all",     [1, 2, 3], []),    # everything back in the pot
 ]
-for (name, shot, played), seen in zip(WANT, json.loads(walked.stdout)):
+for (name, shot, played), seen in zip(WANT, walked):
     check(f"{name}: generated", sampled_cards(seen["blob"]), shot)
     check(f"{name}: played from film", played_cards(seen["blob"]), played)
     check(f"{name}: is the step it says", seen["name"], name)

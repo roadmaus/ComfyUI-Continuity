@@ -22,36 +22,16 @@ Two things are worth asserting and nothing else really is:
 Skips itself if node is not installed.
 """
 
-import importlib.util
 import json
-import os
-import shutil
-import subprocess
-import sys
-import types
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MIRROR = os.path.join(ROOT, "js", "minimax_creator", "state.js")
+import mirror
 
-if shutil.which("node") is None:
-    print("skipped: node is not installed")
-    sys.exit(0)
+mirror.skip_without_node()
 
+MIRROR = mirror.js("state.js")
 
-def _load():
-    package = types.ModuleType("mmc")
-    package.__path__ = [ROOT]
-    sys.modules["mmc"] = package
-    for name in ("canvas", "contextir", "compile"):
-        spec = importlib.util.spec_from_file_location(f"mmc.{name}", os.path.join(ROOT, f"{name}.py"))
-        module = importlib.util.module_from_spec(spec)
-        sys.modules[f"mmc.{name}"] = module
-        setattr(package, name, module)
-        spec.loader.exec_module(module)
-    return sys.modules["mmc.compile"]
+compiler = mirror.load("canvas", "contextir", "compile").compile
 
-
-compiler = _load()
 
 # The blobs worth asking both sides about. A real saved Creator, the shapes a
 # hand-edited one arrives in, and — just as important — every shape that must be
@@ -115,22 +95,16 @@ for (const [name, blob] of Object.entries(cases)) out.lifted[name] = s.asPiece(b
 console.log(JSON.stringify(out));
 """
 
-proc = subprocess.run(
-    ["node", "--input-type=module", "-e", SCRIPT, "--", MIRROR, json.dumps(CASES)],
-    capture_output=True, text=True)
-if proc.returncode != 0:
-    print(f"node failed:\n{proc.stderr}")
-    sys.exit(1)
-mirror = json.loads(proc.stdout)
+reflected = mirror.run(SCRIPT, MIRROR, CASES)
 
 from harness import FAILURES, check, passed
 
 
-check("the piece fields match", mirror["fields"], list(compiler.PIECE_FIELDS))
+check("the piece fields match", reflected["fields"], list(compiler.PIECE_FIELDS))
 
 for name, blob in CASES.items():
     check(f"{name} lifts the same on both sides",
-          mirror["lifted"][name], compiler.as_piece(blob))
+          reflected["lifted"][name], compiler.as_piece(blob))
 
 # ---- the direction of each field, asserted against the backend ---------------
 

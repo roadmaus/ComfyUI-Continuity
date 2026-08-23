@@ -16,35 +16,16 @@ decides what you *can* say and the compiler decides what is *sent*:
 Skips itself if node is not installed.
 """
 
-import importlib.util
 import json
-import os
-import shutil
-import subprocess
-import sys
-import types
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MIRROR = os.path.join(ROOT, "js", "minimax_creator", "state.js")
+import mirror
 
-if shutil.which("node") is None:
-    print("skipped: node is not installed")
-    sys.exit(0)
+mirror.skip_without_node()
 
+MIRROR = mirror.js("state.js")
 
-def _load():
-    package = types.ModuleType("mmc")
-    package.__path__ = [ROOT]
-    sys.modules["mmc"] = package
-    spec = importlib.util.spec_from_file_location("mmc.subjects", os.path.join(ROOT, "subjects.py"))
-    module = importlib.util.module_from_spec(spec)
-    sys.modules["mmc.subjects"] = module
-    setattr(package, "subjects", module)
-    spec.loader.exec_module(module)
-    return module
+subjects = mirror.load("subjects").subjects
 
-
-subjects = _load()
 
 # The names put through both sides' pattern are the ones the distinction turns
 # on: a word, a word with a digit, the file shape, the empty string, and the
@@ -160,14 +141,7 @@ console.log(JSON.stringify({
 }));
 """
 
-proc = subprocess.run(
-    ["node", "--input-type=module", "-e", SCRIPT, "--",
-     MIRROR, json.dumps(NAMES), json.dumps(CASES)],
-    capture_output=True, text=True)
-if proc.returncode != 0:
-    print(f"node failed:\n{proc.stderr}")
-    sys.exit(1)
-mirror = json.loads(proc.stdout)
+reflected = mirror.run(SCRIPT, MIRROR, NAMES, CASES)
 
 from harness import FAILURES, passed
 
@@ -177,25 +151,25 @@ def check(label, got, want):
         FAILURES.append(f"{label}: js {got!r}, py {want!r}")
 
 
-check("the subject takes match", mirror["takes"], list(subjects.TAKES))
-check("the relationship markers match", mirror["markers"], list(subjects.MARKERS))
+check("the subject takes match", reflected["takes"], list(subjects.TAKES))
+check("the relationship markers match", reflected["markers"], list(subjects.MARKERS))
 
 for name in NAMES:
     check(f"{name!r} is a name, or is not",
-          mirror["names"][name], bool(subjects.HANDLE_RE.match(name)))
+          reflected["names"][name], bool(subjects.HANDLE_RE.match(name)))
 
-for case, files in zip(CASES, mirror["files"]):
+for case, files in zip(CASES, reflected["files"]):
     check(f"what {case} claims",
           files, list(subjects.parse([case])[0].files))
 
 # The features, and the marker they decide. The shelf shows the marker while you
 # type the features, and the compiler writes it — so the two deriving it apart
 # is the failure this pair of rows exists for.
-for case, features in zip(CASES, mirror["features"]):
+for case, features in zip(CASES, reflected["features"]):
     check(f"the features of {case}",
           [tuple(f) for f in features],
           [(f.text, f.instead) for f in subjects.parse([case])[0].features])
-for case, marker in zip(CASES, mirror["derived"]):
+for case, marker in zip(CASES, reflected["derived"]):
     check(f"the marker {case} derives",
           marker, subjects.parse([case])[0].relationship)
 
@@ -204,12 +178,12 @@ cast = subjects.parse([{"handle": "anna", "from": ["ref-1"]},
                        {"handle": "ben", "from": ["ref-2"]}])
 one = subjects.parse([{"handle": "anna", "from": ["ref-1"]}])
 check("both names are cited",
-      mirror["cites"][0], subjects.citation_re(cast).findall("@anna looks at @ben"))
+      reflected["cites"][0], subjects.citation_re(cast).findall("@anna looks at @ben"))
 check("a name inside a longer word is not",
-      mirror["cites"][1], subjects.citation_re(one).findall("@annabelle walks"))
+      reflected["cites"][1], subjects.citation_re(one).findall("@annabelle walks"))
 check("and neither is an undeclared one",
-      mirror["cites"][2], subjects.citation_re(one).findall("@carol walks"))
-narrowing = mirror["narrowing"]
+      reflected["cites"][2], subjects.citation_re(one).findall("@carol walks"))
+narrowing = reflected["narrowing"]
 check("a file hung on somebody is narrowed to what its slot means",
       narrowing["slots"], "person,motion,voice,edit")
 check("...and a narrowing somebody chose is left alone",
@@ -220,6 +194,6 @@ check("a piece written before any of this is repaired on the way in",
       narrowing["onLoad"], "person")
 
 check("an empty cast has no pattern at all",
-      mirror["cites"][3], subjects.citation_re([]) is None)
+      reflected["cites"][3], subjects.citation_re([]) is None)
 
 passed("state.js mirrors the cast: takes, markers, names, files, features and citations")
