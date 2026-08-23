@@ -52,6 +52,8 @@ MODULES = {
     "still": "families.h3.still",
     "krea2_still": "families.krea2.still",
     "ideogram4_still": "families.ideogram4.still",
+    "registry": "families.registry",
+    "manifest": "families.manifest",
 }
 
 

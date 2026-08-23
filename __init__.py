@@ -16,6 +16,7 @@ whatever the directories do — they are what saved workflows name.
 from .creator import refine_routes  # noqa: F401  (registers /minimax_creator/refine)
 from .creator import server_routes  # noqa: F401  (registers /minimax_creator/assets)
 from .creator.creator_node import comfy_entrypoint  # noqa: F401
+from .creator.routes import families  # noqa: F401  (registers /minimax_creator/families)
 
 WEB_DIRECTORY = "./web"
 

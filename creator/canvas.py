@@ -20,6 +20,11 @@ import math
 CANVAS_MULTIPLE = 32
 FPS = 24
 
+# The temporal packing: legal frame counts are FRAME_STEP*n + FRAME_OFFSET.
+# An architectural constraint of the DiT, not a taste — see `legal_frame_counts`.
+FRAME_STEP = 17
+FRAME_OFFSET = 5
+
 # The open weights are trained with a 768 px short edge and a 768*1344 area cap.
 # Both scale together off the resolution slider so the constraint keeps its
 # shape at every setting (21:9 stays letterboxed the same way at 384 as at 768).
@@ -72,7 +77,7 @@ def legal_frame_counts():
     real set, not a taste. The trained range is a subset of it and is only used
     to warn.
     """
-    return list(range(5, MAX_SECONDS * FPS + 17, 17))
+    return list(range(FRAME_OFFSET, MAX_SECONDS * FPS + FRAME_STEP, FRAME_STEP))
 
 
 def is_trained_length(frames):
