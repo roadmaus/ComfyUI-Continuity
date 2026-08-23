@@ -31,6 +31,15 @@ travel a list of stops rather than a range, because nobody is choosing between
 holding, drawn against the thumb, so a ceiling is set against a real number
 instead of a guess. Past the thumb is over, and says what the next render drops.
 
+**A fresh node opens on a seed of its own.** The default was 0, and this node
+pins the after-generate control to "fixed" — so 0 was not a starting point, it
+was the seed every first render anyone made ran on. Now a node dropped on a
+canvas draws its own. Not a "better" seed: golden seeds are found by ranking a
+thousand of them against one model's own output and the winners differ from
+model to model, so there is no number to borrow for H3. Every seed is one noise
+sample. What was wrong with 0 is that it was everybody's. A saved workflow is
+untouched — its seed lands after the node is built.
+
 **Settings' third tab is called General.** It carries a Rendering group as well
 as a Nodes one, so "Nodes" was the name of half of it.
 

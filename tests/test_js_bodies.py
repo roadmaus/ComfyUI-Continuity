@@ -1741,9 +1741,16 @@ try {
   await ext.nodeCreated(node);
   const seed = node.widgets.find((w) => w.name === "seed");
   const backButton = () => first(node.mmcBody.root, "mmc-seed-last");
+  // A second fresh node, only for its seed: the number has to be this node's
+  // and not the schema's, or every first render anyone makes is the same noise.
+  const twin = fakeNode("MiniMaxH3Creator", "creator_data", ONE_SHOT);
+  await ext.nodeCreated(twin);
   out.seed = {
     // Set at creation, over what the frontend handed us.
     control: seed.linkedWidgets[0].value,
+    // Captured before the queue below moves it.
+    fresh: seed.value,
+    twin: twin.widgets.find((w) => w.name === "seed").value,
     // The button is there from the start — it is how anyone finds out the
     // feature exists — but nothing has been queued, so it is inert.
     beforeQueue: !!backButton(),
@@ -2846,6 +2853,14 @@ check("...and the popover stays where it was rather than jumping to the corner",
 # The seed: fixed on arrival, and the last queued one always reachable.
 seed = report.get("seed", {})
 check("a fresh node opens on a fixed seed", seed.get("control"), "fixed")
+# Not the schema's 0. There is no seed known to be better for H3 — the one study
+# of "golden" seeds reports different winners per model, and none for this one —
+# so the fix is not a better constant, it is not being a constant: 0 was the same
+# 0 for everybody, and with the control pinned to "fixed" it stays for the whole
+# session. A saved workflow is unaffected, because its widget values land after
+# `nodeCreated`.
+check("...on a seed of its own rather than the schema's",
+      (seed.get("fresh") != 0, seed.get("fresh") != seed.get("twin")), (True, True))
 check("the way back to the last seed is on the row from the start",
       seed.get("beforeQueue"), True)
 check("...inert until something has been queued", seed.get("beforeQueueOff"), True)
