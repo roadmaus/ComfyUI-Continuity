@@ -133,12 +133,7 @@ record("cast voice alone", { ...piece, pool: [piece.pool[0]] });
 console.log(JSON.stringify(out));
 """
 
-result = subprocess.run(["node", "--input-type=module", "--eval", SCRIPT, MIRROR],
-                        capture_output=True, text=True)
-if result.returncode != 0:
-    print("failed to read state.js:\n" + result.stderr.strip())
-    sys.exit(1)
-mirror = json.loads(result.stdout)
+mirror = layout.run(SCRIPT, MIRROR)
 
 # The tiebreak names takes that exist, or it silently never fires.
 for kind, takes in mirror["led"].items():

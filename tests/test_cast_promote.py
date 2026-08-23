@@ -153,12 +153,7 @@ const repaired = {
 console.log(JSON.stringify({ beforeGrow, afterGrow, twice, afterDuplicate, owned, repaired }));
 """
 
-proc = subprocess.run(["node", "--input-type=module", "-e", SCRIPT, "--", STATE],
-                      capture_output=True, text=True)
-if proc.returncode != 0:
-    print(f"node failed:\n{proc.stderr}")
-    sys.exit(1)
-got = json.loads(proc.stdout)
+got = layout.run(SCRIPT, STATE)
 
 before = got["beforeGrow"]
 check("a lone shot's cast is whole where it stands", before["problem"], "")

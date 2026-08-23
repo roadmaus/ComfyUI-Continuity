@@ -48,7 +48,15 @@ STUBS = {
 const store = new Map();
 export const api = {
   apiURL: (u) => u,
-  async fetchApi() { return { ok: true, status: 200, json: async () => ({}) }; },
+  async fetchApi(url) {
+    // The family catalog, written beside this stub — manifest.js loads it at
+    // import, the same way the real route serves it.
+    if (String(url).startsWith("/minimax_creator/families")) {
+      const body = (await import("node:fs")).readFileSync(new URL("./families.json", import.meta.url), "utf8");
+      return { ok: true, status: 200, json: async () => JSON.parse(body) };
+    }
+    return { ok: true, status: 200, json: async () => ({}) };
+  },
   async getUserData(file) {
     return store.has(file)
       ? { status: 200, json: async () => JSON.parse(store.get(file)) }
@@ -786,6 +794,8 @@ try:
     for name, source in STUBS.items():
         with open(os.path.join(work, "scripts", name), "w", encoding="utf-8") as handle:
             handle.write(source)
+    with open(os.path.join(work, "scripts", "families.json"), "w", encoding="utf-8") as handle:
+        handle.write(layout.catalog_json())
     with open(os.path.join(pack, "check.mjs"), "w", encoding="utf-8") as handle:
         handle.write(CHECK)
     result = subprocess.run(["node", os.path.join(pack, "check.mjs")],

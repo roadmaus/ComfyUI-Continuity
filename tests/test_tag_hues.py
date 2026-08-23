@@ -46,12 +46,7 @@ console.log(JSON.stringify({
 }));
 """
 
-proc = subprocess.run(["node", "--input-type=module", "-e", SCRIPT, "--", STATE],
-                      capture_output=True, text=True)
-if proc.returncode != 0:
-    print(f"node failed:\n{proc.stderr}")
-    sys.exit(1)
-got = json.loads(proc.stdout)
+got = layout.run(SCRIPT, STATE)
 
 # The counter, minus one, plus the kind's offset — img-1 opens the row, and
 # vid-1 and aud-1 are staggered off it so one of each is three colours.

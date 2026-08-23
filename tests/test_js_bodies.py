@@ -119,6 +119,12 @@ export const api = {
   apiURL: (u) => u,
   interrupt() { globalThis.__interrupted = true; },
   async fetchApi(route, options) {
+    // The family catalog, written beside this stub — manifest.js loads it at
+    // import, the same way the real route serves it.
+    if (String(route).startsWith("/minimax_creator/families")) {
+      const body = (await import("node:fs")).readFileSync(new URL("./families.json", import.meta.url), "utf8");
+      return { ok: true, status: 200, json: async () => JSON.parse(body) };
+    }
     if (route.endsWith("/settings") && options?.method === "POST") {
       const patch = JSON.parse(options.body);
       globalThis.__posted.push(patch);
@@ -2303,6 +2309,8 @@ try:
     for name, source in STUBS.items():
         with open(os.path.join(work, "scripts", name), "w", encoding="utf-8") as handle:
             handle.write(source)
+    with open(os.path.join(work, "scripts", "families.json"), "w", encoding="utf-8") as handle:
+        handle.write(layout.catalog_json())
     for name, source in (("dom.mjs", DOM), ("check.mjs", CHECK)):
         with open(os.path.join(pack, name), "w", encoding="utf-8") as handle:
             handle.write(source)
