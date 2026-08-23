@@ -490,8 +490,15 @@ def emit(payloads, labels, weights, sampling, acceleration, unique_id,
         # the model into per-step recompute for no encode that uses them.
         if one.encodes_video():
             inputs["vae"] = links.vae
+            # The checkpoint's name travels beside the socket, for the reference
+            # cache to key its latents to — a live VAE object cannot be
+            # identified across a restart, and a name can. Written only where
+            # the VAE itself is, so a segment that encodes nothing keeps the
+            # inputs, and the cache key, it had before this existed.
+            inputs["vae_name"] = weights.vae or ""
         if one.encodes_audio():
             inputs["audio_vae"] = links.audio_vae
+            inputs["audio_vae_name"] = weights.audio_vae or ""
         if links.model_fl2va is not None:
             inputs["model_fl2va"] = links.model_fl2va
         if links.model_ref2va is not None:

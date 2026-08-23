@@ -208,10 +208,56 @@ class Vae:
         return torch.full((1, 24, steps, 4, 4), float(image.mean()))
 
 
-check("two VAEs with the same weights fingerprint alike",
-      latents.fingerprint(Vae(1.0)), latents.fingerprint(Vae(1.0)))
-check("different weights fingerprint differently",
-      latents.fingerprint(Vae(1.0)) == latents.fingerprint(Vae(2.0)), False)
+# A checkpoint is identified by its file, and this is the assertion the whole
+# cache rests on: the same checkpoint has to fingerprint the same *in a process
+# that has never seen it before*, or nothing can ever come back off the disk.
+#
+# It did not. `fingerprint` used to fold `str(vae.downscale_ratio)` into the
+# digest, and on the H3 video VAE that attribute is a tuple holding a lambda —
+# so the digest carried a function's memory address, new every restart. Video
+# and image references could never hit; the audio VAE, whose ratios are the
+# plain int 800, hit every time. Nothing raised. A cache that silently never
+# hits is worse than no cache, because it looks like it is working.
+written("h3-video-vae.safetensors")
+sys.modules["folder_paths"] = types.SimpleNamespace(
+    get_full_path=lambda folder, name: os.path.join(INPUT, name))
+
+
+class Lambdas(Vae):
+    """A VAE wearing the attributes the real one wears, freshly built.
+
+    Two of these are what one checkpoint looks like to two different processes:
+    the same file, and every unhashable attribute at a new address.
+    """
+
+    def __init__(self, value=1.0):
+        super().__init__(value)
+        self.downscale_ratio = (lambda a: a, 16, 16)
+        self.upscale_ratio = (lambda a: a, 16, 16)
+
+
+check("one checkpoint fingerprints the same to a process that has never seen it",
+      latents.fingerprint(Lambdas(), "h3-video-vae.safetensors"),
+      latents.fingerprint(Lambdas(), "h3-video-vae.safetensors"))
+check("two checkpoints do not",
+      latents.fingerprint(Lambdas(), "h3-video-vae.safetensors")
+      == latents.fingerprint(Lambdas(), "other-vae.safetensors"), False)
+# The same stamp a reference gets, for the same reason: a checkpoint replaced in
+# place under its own name is a different checkpoint.
+before = latents.fingerprint(Lambdas(), "h3-video-vae.safetensors")
+written("h3-video-vae.safetensors", b"a different checkpoint entirely")
+check("a checkpoint replaced in place is a different one",
+      latents.fingerprint(Lambdas(), "h3-video-vae.safetensors") == before, False)
+
+# Unnamed — a hand-built graph wiring the segment node itself. The weights'
+# shape, and deliberately not their values: reading those means touching tensors
+# an offloading backend may have staged elsewhere, which is the same class of
+# bug in a subtler form. Two same-shaped checkpoints are indistinguishable here,
+# which is the documented cost of a path no graph this pack writes takes.
+check("without a name, weights of the same shape fingerprint alike",
+      latents.fingerprint(Lambdas(1.0)), latents.fingerprint(Lambdas(2.0)))
+check("...and the lambdas still do not move it",
+      latents.fingerprint(Lambdas()), latents.fingerprint(Vae()))
 
 
 # ---- the encoder -------------------------------------------------------------
@@ -278,7 +324,7 @@ SOURCE_IMAGE = torch.rand(1, 512, 512, 3)
 SOURCE_FRAMES = torch.rand(97, 480, 854, 3)
 
 
-def run(compiled, vae, audio_vae=None):
+def run(compiled, vae, audio_vae=None, names=None):
     """-> (the conditioning's values, the deferred entries it did or did not read)."""
     clip = Clip()
     pool = {
@@ -286,7 +332,9 @@ def run(compiled, vae, audio_vae=None):
         "vid-1": Counted(lambda: {"frames": SOURCE_FRAMES.clone(), "audio": None}),
     }
     cond, _ = encoder._encode_references(
-        clip, vae, audio_vae or AudioVae(), compiled, pool)
+        clip, vae, audio_vae or AudioVae(), compiled, pool,
+        names if names is not None else {"vae": "h3-video-vae.safetensors",
+                                         "audio_vae": "h3-audio-vae.safetensors"})
     return cond[0][1], pool, clip
 
 
@@ -351,11 +399,17 @@ written("face.png", b"different bytes entirely")
 run(request(video=False), swapped)
 check("a replaced source re-encodes", swapped.calls, 2)
 
-# Other weights are other latents.
+# Another checkpoint is other latents — and the same checkpoint in a brand new
+# VAE object is not, which is the case a restart makes and the one that was
+# broken.
 latents.clear()
-other = Vae(7.0)
-run(request(video=False), other)
-check("another VAE re-encodes", other.calls, 1)
+swap = Vae()
+run(request(video=False), swap)
+run(request(video=False, prompt="one more"), Vae())
+check("the same checkpoint in a fresh object still hits", swap.calls, 1)
+other = Vae()
+run(request(video=False), other, names={"vae": "some-other-vae.safetensors"})
+check("another checkpoint re-encodes", other.calls, 1)
 
 # Off, the encoder does what it always did — including producing exactly what
 # the cache would have handed back, which is what makes the switch safe.

@@ -78,17 +78,13 @@ DEFAULT_DISK_BYTES = 8 * 1024 ** 3
 # and everything it drops is still on disk.
 MEMORY_BYTES = 2 * 1024 ** 3
 
-# Where a VAE's fingerprint is parked once computed. On the object, because
-# ComfyUI keeps the loaded VAE alive across queued prompts and computing this
-# reads weights — doing it per reference per render would be a real cost for an
-# answer that cannot change while the object exists.
+# Where a nameless VAE's fingerprint is parked once computed. On the object,
+# because ComfyUI keeps the loaded VAE alive across queued prompts and computing
+# it walks the whole state dict — a real cost, per reference per render, for an
+# answer that cannot change while the object exists. A *named* VAE is a file
+# stamp and is not memoised: it is one stat, and caching it would be how a
+# replaced checkpoint went unnoticed.
 _FINGERPRINT_ATTR = "_mmc_latent_fingerprint"
-
-# How many parameters of a VAE are sampled to identify it, and how many values
-# out of each. Enough that two checkpoints of the same architecture cannot
-# collide in practice, few enough that the read is free next to one encode.
-_FINGERPRINT_KEYS = 12
-_FINGERPRINT_VALUES = 64
 
 _memory = {}        # key -> (tensors, meta, bytes); insertion order is read order
 
@@ -155,22 +151,34 @@ def key(parts):
     return hashlib.sha256(blob).hexdigest()[:40]
 
 
-def fingerprint(vae):
+def fingerprint(vae, name=None, folder="vae"):
     """A VAE -> a string that changes when its weights do.
 
-    The segment node is handed a VAE object and never its filename, so this is
-    taken from the weights themselves: shapes and dtypes for every parameter,
-    and the leading values of a spread of them. Sampled rather than hashed
-    whole because the whole thing is gigabytes and this runs on a cache *hit*,
-    where the point is not to touch the model at all.
+    `name` is the checkpoint's filename, which is what actually identifies it.
+    Given one, this is a stamp of that file — path, mtime and size, the same
+    identity `media.stamp` gives a reference — and nothing is read out of the
+    loaded object at all.
 
-    Weights that cannot be read — offloaded to `meta`, or a quantised layout
-    that will not cast — degrade to the shape half alone. That still separates
-    one architecture from another and one quantisation from another; it does not
-    separate two same-shaped checkpoints, which is a real limitation and the
-    reason the shapes are hashed at all rather than being skipped as obvious.
+    **Nothing here may touch the live object's attributes.** That is not fussiness,
+    it is the bug this function shipped with: it used to fold
+    `str(vae.downscale_ratio)` into the digest, and on the H3 *video* VAE that
+    attribute is a tuple holding a lambda (`comfy/sd.py`, the MiniMax H3 video
+    branch), so the string carried a function's memory address. A new address
+    every process meant a new key every restart, and no video or image reference
+    could ever come back off the disk — while the audio VAE, whose ratios are the
+    plain int 800, hit every time. A cache that silently never hits is worse than
+    no cache, because it looks like it is working.
+
+    Without a name — a hand-built graph wiring the segment node itself — it falls
+    back to the shape of the weights: every parameter's key, shape and dtype.
+    Deliberately no *values*: reading them means touching tensors an offloading
+    backend may have staged elsewhere, and a digest that depends on what happened
+    to be resident is the same class of bug in a subtler form. The cost is that
+    two same-shaped checkpoints of the same architecture cannot be told apart on
+    that path. Named VAEs — every graph this pack writes — do not use it.
     """
-    import torch
+    if name:
+        return _named_fingerprint(name, folder)
 
     found = getattr(vae, _FINGERPRINT_ATTR, None)
     if found is not None:
@@ -178,25 +186,14 @@ def fingerprint(vae):
 
     digest = hashlib.sha256()
     digest.update(f"{getattr(vae, 'latent_channels', 0)}|"
-                  f"{getattr(vae, 'vae_dtype', None)}|"
-                  f"{getattr(vae, 'downscale_ratio', None)}|"
-                  f"{getattr(vae, 'upscale_ratio', None)}".encode("utf-8"))
+                  f"{getattr(vae, 'latent_dim', 0)}|"
+                  f"{getattr(vae, 'vae_dtype', None)}".encode("utf-8"))
     try:
         state = vae.first_stage_model.state_dict()
-        names = sorted(state)
-        for name in names:
-            tensor = state[name]
-            digest.update(f"{name}|{tuple(tensor.shape)}|{tensor.dtype}".encode("utf-8"))
-        # A spread rather than a prefix: the leading parameters of a network are
-        # the ones two checkpoints are most likely to share.
-        step = max(1, len(names) // _FINGERPRINT_KEYS)
-        for name in names[::step][:_FINGERPRINT_KEYS]:
-            tensor = state[name]
-            if tensor.device.type == "meta":
-                continue
-            values = tensor.detach().flatten()[:_FINGERPRINT_VALUES]
-            digest.update(values.to("cpu", dtype=torch.float32).numpy().tobytes())
-    except Exception:  # noqa: BLE001 - see the docstring: shapes alone will do
+        for key in sorted(state):
+            tensor = state[key]
+            digest.update(f"{key}|{tuple(tensor.shape)}|{tensor.dtype}".encode("utf-8"))
+    except Exception:  # noqa: BLE001 - a stub VAE in a test, or no state dict
         pass
 
     found = digest.hexdigest()[:32]
@@ -205,6 +202,23 @@ def fingerprint(vae):
     except Exception:  # noqa: BLE001 - a VAE with __slots__; recompute per call
         pass
     return found
+
+
+def _named_fingerprint(name, folder):
+    """The checkpoint file behind `name`, stamped. Falls back to the name alone.
+
+    A name that cannot be resolved still identifies the checkpoint better than
+    nothing does — what the stamp adds is noticing a file replaced in place.
+    """
+    try:
+        import folder_paths
+
+        path = folder_paths.get_full_path(folder, name)
+        info = os.stat(path)
+        seed = f"{path}|{info.st_mtime_ns}|{info.st_size}"
+    except Exception:  # noqa: BLE001
+        seed = str(name)
+    return hashlib.sha256(seed.encode("utf-8")).hexdigest()[:32]
 
 
 def size_of(tensors):

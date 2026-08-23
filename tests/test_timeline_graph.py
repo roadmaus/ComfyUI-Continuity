@@ -458,9 +458,24 @@ for socket in ("clip", "model_fl2va"):
 # wired into the encoder. Both are decode-time loaders here — the reel node above
 # holds them — and wiring them into the segment would load them before the first
 # sampling step for an encode that never touches them.
-for socket in ("vae", "audio_vae"):
+for socket in ("vae", "audio_vae", "vae_name", "audio_vae_name"):
     check(f"a text-only pass leaves {socket!r} off the encoder",
           socket in built["MiniMaxH3TimelineSegment"][0][1], False)
+
+# Where a VAE *is* wired, its filename rides beside it. The reference cache keys
+# its latents to that name, because a name is the same string across restarts
+# where a loaded VAE object is not — without it the cache falls back to
+# identifying the weights by shape, which still works and silently stops telling
+# two checkpoints apart. Silently is the reason this is asserted.
+# A chained segment encodes its inherited frame, so it is wired for both.
+encoding = [i for _, i in build(blob(segments=[
+    {"prompt": "one", "duration_s": 5},
+    {"prompt": "two", "duration_s": 5, "continue": True},
+])).expand.items() if i.get("class_type") == "MiniMaxH3TimelineSegment"]
+seam = [i["inputs"] for i in encoding if "vae" in i["inputs"]]
+check("a pass that encodes carries the VAE's name beside the VAE",
+      [i.get("vae_name") for i in seam], [MODELS["vae"]] * len(seam))
+check("...and there is such a pass to check", len(seam) > 0, True)
 
 # One segment is the degenerate case: nothing to join, nothing to continue from.
 lone = build(blob(segments=[{"prompt": "x", "duration_s": 6}])).expand

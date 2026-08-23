@@ -46,6 +46,16 @@ runs, not after, because the point is to explain a wait while it is happening:
     [MiniMax] @vid-1 soundtrack: reused from disk (420 KB)
     [MiniMax] references: 2 reused (18 MB), 1 encoded in 24.3 s
 
+**Cached references survive a restart, which is what they were for.** They did
+not. A reference's key includes the VAE that encoded it, and that was worked out
+by reading the loaded object — including `downscale_ratio`, which on the H3
+video VAE is a tuple holding a lambda. Its text is a memory address, so every
+restart gave every video and image reference a new key and none of them could
+ever come back off the disk. The audio VAE sets that attribute to the plain
+number 800, so reference *sound* hit every time, which is what made the failure
+visible at all. A checkpoint is now identified by its file, stamped like any
+other, and its name travels down the graph beside the socket it is on.
+
 **A fresh node opens on a seed of its own.** The default was 0, and this node
 pins the after-generate control to "fixed" — so 0 was not a starting point, it
 was the seed every first render anyone made ran on. Now a node dropped on a

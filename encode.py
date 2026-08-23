@@ -211,7 +211,7 @@ def _cached(label, parts, produce, tally=None):
     return kept, meta
 
 
-def _ref_key(kind, asset, vae, compiled):
+def _ref_key(kind, asset, print_of_vae, compiled):
     """What a reference's encode depends on — and deliberately not one word more.
 
     Every term here is something that changes the tensors; nothing that merely
@@ -223,7 +223,10 @@ def _ref_key(kind, asset, vae, compiled):
 
     `file`      the source, by path and mtime and size — a clip replaced in
                 place under the same name is a different clip (`media.stamp`).
-    `vae`       the weights doing the encoding (`latents.fingerprint`).
+    `vae`       the checkpoint doing the encoding, stamped the same way
+                (`latents.fingerprint`). Worked out once per generation and
+                handed in, rather than derived here: it is the same answer for
+                every reference in the request.
     `ref_size`  which canvas rule applies, `match` or `max`.
     `gen_w/h`   the generation's canvas — but *only* under `match`, which is the
                 setting that reads it. A `max` reference is sized from its own
@@ -250,8 +253,7 @@ def _ref_key(kind, asset, vae, compiled):
         stamp = media.stamp(asset.filename)
     except (media.MediaError, OSError):
         return None
-    parts = {"kind": kind, "file": stamp,
-             "vae": latents.fingerprint(vae), "trim": asset.trim}
+    parts = {"kind": kind, "file": stamp, "vae": print_of_vae, "trim": asset.trim}
     if kind in ("image", "video"):
         parts["ref_size"] = asset.ref_size
         if asset.ref_size == "match":
@@ -261,7 +263,7 @@ def _ref_key(kind, asset, vae, compiled):
     return parts
 
 
-def _cached_ref_audio(kind, audio_vae, asset, entry, compiled, tally=None):
+def _cached_ref_audio(kind, audio_vae, print_of_vae, asset, entry, compiled, tally=None):
     """A file-backed audio reference, encoded once. -> (latent, ref_audio_t).
 
     Cached for the decode at least as much as for the encode: a `picture+sound`
@@ -274,7 +276,7 @@ def _cached_ref_audio(kind, audio_vae, asset, entry, compiled, tally=None):
     `z.shape[-1]`) and two copies of one number is a way for them to disagree.
     """
     tensors, _ = _cached(
-        f"@{asset.handle} {kind}", _ref_key(kind, asset, audio_vae, compiled),
+        f"@{asset.handle} {kind}", _ref_key(kind, asset, print_of_vae, compiled),
         lambda: ({"audio_latent": _encode_ref_audio(audio_vae, entry["audio"])[0]}, {}),
         tally)
     latent = _restore(audio_vae, tensors["audio_latent"])
@@ -383,10 +385,19 @@ def _seam_blocks(audio_vae, compiled, loaded, frame_count):
     return blocks
 
 
-def encode(clip, vae, audio_vae, compiled, loaded):
-    """-> (conditioning, latent). `loaded` maps asset handle -> decoded media."""
+def encode(clip, vae, audio_vae, compiled, loaded, checkpoints=None):
+    """-> (conditioning, latent). `loaded` maps asset handle -> decoded media.
+
+    `checkpoints` names the VAE files on `vae` and `audio_vae`, for the
+    reference cache to key on — `{"vae": ..., "audio_vae": ...}`. Names rather
+    than the loaded objects because a name is the same across restarts and a
+    loaded object is not; see `latents.fingerprint`. A caller with no names
+    (a hand-built graph) passes none and the cache identifies the weights by
+    their shape instead.
+    """
     if compiled.mode == "REF2VA":
-        return _encode_references(clip, vae, audio_vae, compiled, loaded)
+        return _encode_references(clip, vae, audio_vae, compiled, loaded,
+                                  checkpoints or {})
     return _encode_frames(clip, vae, audio_vae, compiled, loaded)
 
 
@@ -544,8 +555,13 @@ def video_canvas(source_w, source_h, gen_w, gen_h, ref_size):
     return width, height
 
 
-def _encode_references(clip, vae, audio_vae, compiled, loaded):
+def _encode_references(clip, vae, audio_vae, compiled, loaded, checkpoints=None):
     """REF2VA."""
+    checkpoints = checkpoints or {}
+    # Once per generation, not once per reference: it is a file stamp, and every
+    # reference in the request is encoded by the same two checkpoints.
+    print_of_vae = latents.fingerprint(vae, checkpoints.get("vae"))
+    print_of_audio = latents.fingerprint(audio_vae, checkpoints.get("audio_vae"))
     latent, frame_count = _empty_av_latent(compiled.width, compiled.height, compiled.frames)
 
     items = []   # tokenizer presentation, in request order
@@ -578,7 +594,7 @@ def _encode_references(clip, vae, audio_vae, compiled, loaded):
 
             tensors, meta = _cached(
                 f"@{asset.handle} image ({asset.ref_size})",
-                _ref_key("image", asset, vae, compiled), encode_image, tally)
+                _ref_key("image", asset, print_of_vae, compiled), encode_image, tally)
             items.append({"type": "image", "data": _present(tensors["presentation"])})
             blocks.append({
                 "kind": "image",
@@ -589,7 +605,7 @@ def _encode_references(clip, vae, audio_vae, compiled, loaded):
 
         elif step["op"] == "soundtrack":
             pending_soundtrack = _cached_ref_audio(
-                "soundtrack", audio_vae, asset, entry, compiled, tally)
+                "soundtrack", audio_vae, print_of_audio, asset, entry, compiled, tally)
             items.append({"type": "audio"})
 
         elif step["op"] == "video":
@@ -624,7 +640,7 @@ def _encode_references(clip, vae, audio_vae, compiled, loaded):
 
             tensors, meta = _cached(
                 f"@{asset.handle} video ({asset.ref_size})",
-                _ref_key("video", asset, vae, compiled), encode_video, tally)
+                _ref_key("video", asset, print_of_vae, compiled), encode_video, tally)
 
             audio_latent, ref_audio_t = pending_soundtrack or (None, 0)
             pending_soundtrack = None
@@ -646,7 +662,7 @@ def _encode_references(clip, vae, audio_vae, compiled, loaded):
 
         elif step["op"] == "audio":
             audio_latent, ref_audio_t = _cached_ref_audio(
-                "audio", audio_vae, asset, entry, compiled, tally)
+                "audio", audio_vae, print_of_audio, asset, entry, compiled, tally)
             items.append({"type": "audio"})
             blocks.append({"kind": "audio", "ref_audio_t": ref_audio_t, "audio_latent": audio_latent})
 
