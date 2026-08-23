@@ -282,8 +282,8 @@ export function crossable(key, from, to, { arch = null, targetArch = null } = {}
   // Ideogram 4 — except on its H3 branch, whose `request` *is* a creator request
   // and whose models block is the same block under the same keys.
   if (key === "weights") {
-    const h3 = (from === "prestage" ? arch : targetArch) === S.PRESTAGE_STILL_ARCH;
-    if (!h3) {
+    const stillBranch = (from === "prestage" ? arch : targetArch) === S.PRESTAGE_STILL_ARCH;
+    if (!stillBranch) {
       return { ok: false, why: "These are different model families — only a pre-stage on the H3 branch loads the same files a piece does." };
     }
   }
@@ -389,7 +389,7 @@ export function capturePreStage(state, io) {
       quality: blob.quality,
       models: blob.models ?? {},
       ...(blob[S.PRESTAGE_STILL_ARCH] ? {
-        minimax: {
+        [S.PRESTAGE_STILL_ARCH]: {
           ...pick(blob[S.PRESTAGE_STILL_ARCH], ["frames", "latent_index"]),
           models: blob[S.PRESTAGE_STILL_ARCH].request?.models ?? {},
         },
@@ -555,9 +555,9 @@ export async function keepSubject(subject, assets) {
 
 /** The node ids a render can have come from, and what each calls its blob. */
 export const RENDER_SOURCES = {
-  MiniMaxH3Creator: { scope: "piece", input: "creator_data" },
-  MiniMaxH3Timeline: { scope: "piece", input: "timeline_data" },
-  MiniMaxH3PreStage: { scope: "prestage", input: "prestage_data" },
+  "MiniMaxH3Creator": { scope: "piece", input: "creator_data" },
+  "MiniMaxH3Timeline": { scope: "piece", input: "timeline_data" },
+  "MiniMaxH3PreStage": { scope: "prestage", input: "prestage_data" },
 };
 
 /** A read-only `widgetIO` over an API prompt's `inputs`. A wired input arrives
