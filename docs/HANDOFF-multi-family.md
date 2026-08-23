@@ -134,7 +134,8 @@ manifests describe *controls*, not just values.
   in `sampling.resolve` stays load-bearing regardless — a fresh untuned node and
   a headless API queue both have no `sampling` block.
 - ~~Nothing has been rendered.~~ Rendered on RunPod from the pushed branch,
-  2026-08-23 — works.
+  2026-08-23 — works. Re-verified there after phase 3 (loop split, slot table,
+  refine move, the load-failure fix), same day.
 - **`presets/atlas.js` is probably H3-prompt-shaped.** Whether a preset's prose
   survives being handed to another family is unanswered and blocks LTX, not
   phase 3.
