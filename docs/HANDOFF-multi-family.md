@@ -3,8 +3,9 @@
 Branch `multi-family`. The plan is `docs/PLAN-multi-family.md`;
 read it first, it holds the reasoning this file assumes.
 
-**Where it is: phases 0–3 are done. Phase 4 (manifest, registry, PreStage
-folded in) has not been started.**
+**Where it is: phases 0–4 are done. Phase 5 (`state.js` drained — the
+frontend reads the manifest instead of holding constants) has not been
+started.**
 
 ## Run the suite like this
 
@@ -20,7 +21,7 @@ and a JS stack trace contain neither "Traceback" nor "failure(s)", and a loop
 that greps for those reported 43/43 green on a run that contained a hard
 failure. That mistake cost a broken commit — see below.
 
-45 suites, all green, no skips (`node` and the venv are both present here).
+46 suites, all green, no skips (`node` and the venv are both present here).
 
 ## What the three finished phases actually bought
 
@@ -81,14 +82,57 @@ cut it then, with two implementations to check it against.
 `DEFAULTS` mirrored by `SAMPLING_FIELDS` in `state.js` and a mirror test holding
 them together. Extend that pattern; do not invent a second one.
 
-## Phase 4 starts here
+## Phase 4 — what was actually built
 
-The manifest (`families/manifest.py` + `routes/families.py`), one registry for
-video and still families, `krea2`/`ideogram4` split out of
-`compile_image.py`/`render_image.py`, `canvas.py` parameterised. The registry
-is what retires the `creator/render.py` binding: callers name a family instead
-of a module. The widget vocabulary the manifest carries is in the plan —
-manifests describe *controls*, not just values.
+Six commits, each green ("The still walks into the family" .. "The canvas
+math learns whose numbers it runs"):
+
+- **`families/registry.py` is the one table**: `FAMILIES` order, `PRODUCES`,
+  and `STILL_ARCHES` — the pre-stage blob's `"minimax"` stays the frozen
+  alias for `h3`. `registry.video()` hands the loop its `Family` singleton;
+  `registry.still(arch)` hands the PreStage a family's still module. All
+  resolution is lazy, because h3's video half imports ComfyUI.
+- **Every still family speaks two verbs** — `compile_still(data,
+  image_size_lookup)` and `emit_still(data, plan, sampling, unique_id)` — so
+  `prestage.execute` is one registry dispatch, no arch branch.
+- **`families/krea2/` and `families/ideogram4/`** own their constants, CLIP
+  types, weights fields, core-support probes and sampler branches;
+  `compile_image.py`/`render_image.py` are the *shared* image-still flow,
+  parameterised by a family module (`family.plan`, `family.emit_graph`,
+  `family.FIELDS`…). H3's still is `families/h3/still.py`, compile and graph
+  halves in one module (the emit half imports lazily; the compile half stays
+  pure).
+- **`creator/render.py` is gone.** The nodes call
+  `core.emit.emit(registry.video(), ...)` and normalise the turbo `LeadIn`
+  at the call site; the row is spelled `sampling.Sampling` everywhere. Two
+  node tooltips still say "render.emit" because those strings are i18n keys.
+- **The manifests**: `families/manifest.py` defines the widget vocabulary
+  (`{id, type: slider|toggle|combo|stepper, min, max, step, default, label,
+  help, group}`) and validates; each family's `manifest.py` is built *from*
+  `sampling.DEFAULTS`, `models.SLOTS`, `canvas.H3` and the family stills — no
+  number exists twice. A combo without `options` means the node schema owns
+  the list. `creator/routes/families.py` serves the catalog at
+  `/minimax_creator/families` (registered from the root `__init__.py`).
+  `tests/test_families.py` holds it all together and has been seen failing.
+- **`canvas.py` is parameterised**: family-neutral math over a `Rules`
+  dataclass, `canvas.H3` the one instance, historic module constants kept as
+  reads off it (`fps_fixed` is part of the declaration). `canvas.js` mirrors
+  the shape — `H3_RULES`, every function taking `rules` with H3 defaulted —
+  so phase 5 can hand manifest rules in without touching the math.
+
+`tests/layout.py` grew with it: `MODULES` names moved modules by dotted path
+and `load()` imports them at their real place in the package (aliased flat),
+which is what lets a moved module import upward.
+
+## Phase 5 starts here
+
+`state.js` drained: the frontend reads `/minimax_creator/families` instead of
+holding `MODEL_FIELDS`, `ROUTES`, `CHECKPOINTS`, `FOLDER_HINTS`, the take
+vocabularies, the frame grid. The pass condition is the plan's grep. Watch
+the i18n risk the plan names — labels that move into the manifest need a
+translation path — and remember the mirror suites run `state.js` under bare
+`node`: whatever fetches the manifest must be injectable the way
+`CreatorEditor`'s `samplingStore` is.
 
 ## Things that will bite
 
