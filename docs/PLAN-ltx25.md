@@ -105,14 +105,78 @@ Each ends green; goldens are re-recorded only when a phase *adds* graphs.
    manifest.~~ **Done** — see below.
 3. ~~**The render half** and the controls reading the piece's family.~~
    **Done** — see below. The x2 upscaler came forward from phase 4 with it.
-4. **Duration and multishot**: the duration predictor as the seconds pill's
-   "auto" (capability-gated — H3 simply lacks it), and seam/feather
-   verification on the 8-grid latent (the reel layer is family-neutral by
-   core's own construction; prove it with a chained golden). Weigh native
-   multishot here: one pass producing several connected shots competes with
-   the strip's own feathered seams rather than slotting under them.
+4. **Duration, multishot, and ReDetail**: the duration predictor as the
+   seconds pill's "auto" (capability-gated — H3 simply lacks it), and
+   seam/feather verification on the 8-grid latent (the reel layer is
+   family-neutral by core's own construction; prove it with a chained golden).
+   Weigh native multishot here: one pass producing several connected shots
+   competes with the strip's own feathered seams rather than slotting under
+   them. **And the cross-family upscale** — see below.
 5. **Taste guidance**: STG / modality / reference-audio as their own pills
    with honest cost copy — new UI, not the accel row.
+
+## ReDetail: LTX 2.5 as an upscale pass for *any* family (phase 4)
+
+Bambushu's ReDetail — <https://github.com/Bambushu/redetail>, discussed on
+r/StableDiffusion 2026-08-15 — re-renders a finished H3 clip through LTX 2.5 at
+twice the size. It is the feature this branch's user asked for as "switch to the
+LTX upscaler instead of our MiniMax refiner", and it is **not** the x2 latent
+upscaler phase 3 built. Two different files and two different mechanisms:
+
+| | phase 3's `refine` | ReDetail |
+|---|---|---|
+| file | `latent_upscale_models/ltx-2.5-latent-spatial-upscaler-x2-…` | `loras/ltx-2.5-22b-ic-lora-pixel-spatial-upscaler-x2-1.0` |
+| node | `LTXVLatentUpsampler`, on the latent between two sittings | `GetICLoRAParameters` → `LTXVAddGuide(iclora_parameters=…)` |
+| input | LTX's own stage-one latent | any decoded video, H3's included |
+
+Derived from Lightricks' own
+`example_workflows/2.5/LTX-2.5_V2V_ICLoRA_Single_Stage_Distilled.json`.
+
+**The promise, said plainly, because the pill has to say it too.** This is a
+generative re-render, not restoration and not sharpening: it invents the fine
+detail as it goes. The author's own tests added freckles to a face that had
+none and redrew a motocross jersey's graphic and number plate — stable between
+frames, and not the original markings. So it is right for AI-generated or soft
+footage and wrong wherever a face, a label or a logo has to survive intact. That
+makes it a *different promise* from H3's refine, which resolves what the first
+pass already drew, and it earns its own choice with its own copy rather than a
+silent swap behind the existing pill. The author prefers 1.5× to 2× on faces for
+exactly this reason — most of the extra at 2× is invented rather than recovered.
+
+**What falls out well for this pack.** ReDetail needs the clip to carry a
+soundtrack (the graph encodes A/V jointly, and the author's instructions have
+users muxing a silence track in with ffmpeg first); every pass this pack makes
+has one already. And the shape is one the loop has: a pass is decoded, spilled
+to disk and added to the reel, and `emit_face` already reads one back, re-renders
+part of it and writes a replacement. ReDetail is that, over the whole frame — so
+it belongs *after* the reel node, beside the face pass, not in the latent path
+where phase 3's upscaler sits.
+
+**What is genuinely new.** An H3 render would load a second family's weights:
+the LTX transformer, both LTX VAEs and the IC-LoRA, alongside whatever rendered
+the pass. `emit_loaders` is one call per render today and the links object is one
+family's; this needs a second set, built only when the pass is asked for. Worth
+noting that the text encoder is *not* among them — the graph runs on empty
+prompts, so its conditioning is a constant, and the author ships it pre-computed
+at 26 KB rather than making users download 15 GB to encode two empty strings.
+Doing the same here would need somewhere to keep a cached conditioning tensor and
+a story for invalidating it; loading the encoder is the honest first version.
+
+**The two constraints, and why one is free.** Both output dimensions must divide
+by **64**, not 32 — the IC-LoRA encodes its guide at half the target and dilates
+it onto the target's latent grid, so the latent's own /32 is halved again.
+Exactly 2× off a canvas already snapped to 32 always lands on it, which is why
+the author's sizing table finds 2× clean and 1.5× often unreachable; a factor
+other than 2 has to re-snap and admit it is not the number on the pill. The frame
+count must be `8n+1` or the model silently drops the tail — free for an LTX piece
+and *not* free for an H3 one, whose counts are `17n+5`, so the pass has to snap
+and say what it dropped.
+
+**Cost, from the author's measurements.** 243 frames from 768×1408: 1.5× took
+7 minutes and peaked at 65 GB, 2× took 17 minutes and 80.5 GB. Smaller chunks and
+the GGUF transformer bring that within a 24 GB card; the cached conditioning took
+one reported run from 30.4 GB to 24.8 GB. None of this is measured on our own
+box yet and none of it should be quoted in the UI until it is.
 
 ## Phase 1, as landed
 
