@@ -260,6 +260,56 @@ check("adaLN pairs that cannot be ported are reported as dropped",
       "adaLN dropped" in report.text(), True)
 check("the rest of the file still lands", report.merged > 0, True)
 
+# ---- the branch forward writes into its own accumulator ---------------------
+#
+# `out` at a branched linear is the widest tensor in the model — for H3's SwiGLU
+# MLP it is the fc1 activation, gigabytes of it at video sequence lengths — and
+# the forward used to hold three of them at once (`out`, `delta`, `out + delta`).
+# That third copy is what OOM'd a 32 GB card mid-block. The maths below must
+# still be out + up @ (scale * (down @ x)) + bias_scale @ bias; what is new is
+# that it lands in the tensor the wrapped linear already returned.
+
+branch_mod = sys.modules["mmc.h3lora.branch"]
+schedule_mod = sys.modules["mmc.h3lora.schedule"]
+torch.manual_seed(0)
+D_IN, D_OUT, RANK = 16, 24, 4
+linear = nn.Linear(D_IN, D_OUT, bias=False)
+up, down = torch.randn(D_OUT, RANK), torch.randn(RANK, D_IN)
+curve = schedule_mod.Schedule()
+port = torch.randn(D_OUT)
+bank = branch_mod.LoraBank(
+    {"m": branch_mod.FusedBranch(up, down, [(0, RANK, curve, 2.0)], [(port, curve)])})
+state = schedule_mod.ScheduleState()
+seen = {}
+
+
+def wrapped(value):
+    seen["out"] = linear(value)
+    return seen["out"]
+
+
+forward = branch_mod.LoraBranch(types.SimpleNamespace(model=bank), state, "m", wrapped)
+x = torch.randn(2, 5, D_IN)
+rank_scales, bias_scales = torch.full((RANK,), 0.7), torch.tensor([0.3])
+
+state.clear()
+got = forward(x)
+check("an unscheduled branch is exactly out + up @ down @ x",
+      torch.equal(got, linear(x) + torch.nn.functional.linear(
+          torch.nn.functional.linear(x, down), up)), True)
+check("and it is the wrapped linear's own tensor, not a third copy",
+      got.data_ptr() == seen["out"].data_ptr(), True)
+
+state.set({"m": rank_scales.clone()}, {"m": bias_scales.clone()})
+scaled = torch.nn.functional.linear(x, down) * rank_scales
+want = linear(x) + torch.nn.functional.linear(scaled, up) + bias_scales @ bank.get_bias("m")
+got = forward(x)
+state.clear()
+check("a scheduled branch still scales the rank slice and adds the ported bias",
+      torch.allclose(got, want, atol=1e-5), True)
+check("and it too accumulates in place",
+      got.data_ptr() == seen["out"].data_ptr(), True)
+
 # Every patcher built here is dropped while ComfyUI is still importable.
 # `ModelPatcher.__del__` reaches for `comfy.patcher_extension` on the way out,
 # and at interpreter shutdown that module is already None — which prints a

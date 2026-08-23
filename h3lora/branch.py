@@ -77,22 +77,30 @@ class LoraBranch:
         self.original = original
 
     def __call__(self, input: torch.Tensor, *args, **kwargs):
+        # ``out`` is the widest tensor the branch ever sees -- for the SwiGLU MLP it is
+        # the fc1 activation -- so everything below accumulates into it rather than
+        # materialising a same-shaped delta. A second live copy is an OOM on long
+        # sequences; a third one certainly is. ``out`` is freshly produced by the
+        # wrapped forward, so it is ours to write into.
         out = self.original(input, *args, **kwargs)
         up, down = self.bank.get(self.name)
         h = F.linear(input, comfy.model_management.cast_to_device(down, input.device, input.dtype))
         scales = self.state.scales_for(self.name)
         if scales is not None:
-            h = h * comfy.model_management.cast_to_device(
-                scales, input.device, input.dtype)
-        delta = F.linear(h, comfy.model_management.cast_to_device(up, input.device, input.dtype))
+            h *= comfy.model_management.cast_to_device(scales, input.device, input.dtype)
+        up = comfy.model_management.cast_to_device(up, input.device, input.dtype)
         bias = self.bank.get_bias(self.name)
         bias_scales = self.state.bias_scales_for(self.name)
         if bias is not None and bias_scales is not None:
             bias = comfy.model_management.cast_to_device(bias, input.device, input.dtype)
             bias_scales = comfy.model_management.cast_to_device(
                 bias_scales, input.device, input.dtype)
-            delta = delta + torch.matmul(bias_scales, bias)
-        return out + delta.to(out.dtype)
+            out += torch.matmul(bias_scales, bias).to(out.dtype)
+        if out.dtype == up.dtype and out.is_contiguous():
+            out.view(-1, out.shape[-1]).addmm_(h.reshape(-1, h.shape[-1]), up.t())
+        else:
+            out += F.linear(h, up).to(out.dtype)
+        return out
 
 
 def fuse(contributions, compute_dtype):
