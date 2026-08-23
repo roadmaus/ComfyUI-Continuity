@@ -1,4 +1,4 @@
-"""Canvas, duration and aspect math for MiniMax H3.
+"""Canvas, duration and aspect math, parameterised by family.
 
 Everything in this module is pure: no torch, no ComfyUI, no I/O. The frontend
 mirrors these same rules to draw its live readouts (the resolution pill shows
@@ -6,86 +6,128 @@ the resolved WxH as you drag), so this file is the single source of truth for
 what the sampler will actually receive. Keep it side-effect free and keep the
 JS in `web/creator/canvas.js` in step with it.
 
-Two model constraints drive all of it:
+The *math* is family-neutral — snap to a grid, follow a ratio, cap an area,
+land on a legal frame count — and every function below takes the `Rules` that
+drive it. The *numbers* are a family's: `H3` is MiniMax H3's set, declared
+here and served to the frontend through the family's manifest. LTX brings its
+own (fps 25 carried as conditioning rather than fixed, a different frame
+packing); it will pass its own `Rules` instance and change nothing about the
+functions.
+
+Two model constraints drive H3's numbers:
 
 - The video latent is a /16 downsample and the DiT wants /32 pixel canvases,
   so both axes snap to multiples of 32.
 - Frame counts must satisfy `n % 17 == 5` at 24 fps. There is no such thing as
   a 6.00-second H3 video; the UI shows whole seconds and we land on the nearest
   legal count behind it.
+
+The module-level constants at the bottom are the H3 rules under their historic
+names — every H3-owned caller spells `canvas.FPS`, and until the callers are
+family-parameterised themselves those spellings stay bound to the one family
+this pack ships.
 """
 
 import math
-
-CANVAS_MULTIPLE = 32
-FPS = 24
-
-# The temporal packing: legal frame counts are FRAME_STEP*n + FRAME_OFFSET.
-# An architectural constraint of the DiT, not a taste — see `legal_frame_counts`.
-FRAME_STEP = 17
-FRAME_OFFSET = 5
-
-# The open weights are trained with a 768 px short edge and a 768*1344 area cap.
-# Both scale together off the resolution slider so the constraint keeps its
-# shape at every setting (21:9 stays letterboxed the same way at 384 as at 768).
-NATIVE_SHORT_EDGE = 768
-NATIVE_MAX_PIXELS = 768 * 1344
-
-MIN_SHORT_EDGE = 384
-# The slider's ceiling, not a statement about the weights. `NATIVE_SHORT_EDGE`
-# is what the released checkpoints were trained at and anything above it is
-# off-distribution — the pill says so from 768 up, and that does not change
-# here. What changed is that there is now a reason to go there: the pre-stage's
-# H3 branch decodes one latent frame as a still, where the single-image VAE
-# holds up to around 3 MP, and a 2K checkpoint is expected. A ceiling the
-# hardware and the warning already govern is better than one that has to be
-# raised again the day those weights land.
-MAX_SHORT_EDGE = 2048
-
-# Official H3 aspect envelope: 21:9 through 9:16.
-MIN_RATIO = 9 / 16
-MAX_RATIO = 21 / 9
-
-ASPECT_PRESETS = {
-    "21:9": 21 / 9,
-    "16:9": 16 / 9,
-    "4:3": 4 / 3,
-    "1:1": 1.0,
-    "3:4": 3 / 4,
-    "9:16": 9 / 16,
-}
-
-# What the open weights were *trained* on, ~5.2 s to ~15.1 s. Not a limit: the
-# architecture takes any 17n+5 count, and clips well past the top of this range
-# do come out. Kept so the UI can say when you have left the distribution, which
-# is a different statement from "you cannot".
-TRAINED_MIN_FRAMES = 124
-TRAINED_MAX_FRAMES = 362
-
-# What the pill will offer. The floor is a second because below that there is
-# barely a shot; the ceiling is a minute because that is about as far as anyone
-# has reported getting a coherent single generation, and past it the attention
-# cost stops being worth arguing about.
-MIN_SECONDS = 1
-MAX_SECONDS = 60
+from dataclasses import dataclass
 
 
-def legal_frame_counts():
+@dataclass(frozen=True)
+class Rules:
+    """One family's canvas and duration constraints.
+
+    `frame_step`/`frame_offset` say which frame counts the architecture
+    accepts (`step*n + offset`); the trained range is the subset the weights
+    actually saw, kept apart because "off-distribution" is a different
+    statement from "illegal". `fps_fixed` says whether the rate is a property
+    of the weights (H3) or conditioning the family takes (LTX).
+    """
+
+    multiple: int              # both canvas axes snap to this
+    fps: int
+    fps_fixed: bool
+    native_short_edge: int     # what the weights were trained at
+    native_max_pixels: int     # the trained area cap, at the native edge
+    min_short_edge: int
+    max_short_edge: int
+    min_ratio: float
+    max_ratio: float
+    aspects: dict              # label -> ratio, in the popover's order
+    frame_step: int
+    frame_offset: int
+    trained_min_frames: int
+    trained_max_frames: int
+    min_seconds: int
+    max_seconds: int
+
+
+# MiniMax H3's rules. The provenance of every number:
+#
+# - 768 px short edge and a 768*1344 area cap are what the open weights are
+#   trained with; both scale together off the resolution slider so the
+#   constraint keeps its shape at every setting (21:9 stays letterboxed the
+#   same way at 384 as at 768).
+# - `max_short_edge` is the slider's ceiling, not a statement about the
+#   weights — everything above the native edge is off-distribution and the
+#   pill says so. There is a reason to offer it anyway: the pre-stage's H3
+#   branch decodes one latent frame as a still, where the single-image VAE
+#   holds up to around 3 MP, and a 2K checkpoint is expected. A ceiling the
+#   hardware and the warning already govern is better than one that has to be
+#   raised again the day those weights land.
+# - The 9:16..21:9 ratio envelope is the official H3 aspect range.
+# - The trained frame range is ~5.2 s to ~15.1 s. Not a limit: the
+#   architecture takes any 17n+5 count and clips well past the top do come
+#   out; the pair exists so the UI can say when you have left the
+#   distribution, which is a different statement from "you cannot".
+# - The seconds range is what the pill offers: below a second there is barely
+#   a shot, and a minute is about as far as anyone has reported getting a
+#   coherent single generation — past it the attention cost stops being worth
+#   arguing about.
+H3 = Rules(
+    multiple=32,
+    fps=24,
+    fps_fixed=True,
+    native_short_edge=768,
+    native_max_pixels=768 * 1344,
+    min_short_edge=384,
+    max_short_edge=2048,
+    min_ratio=9 / 16,
+    max_ratio=21 / 9,
+    aspects={
+        "21:9": 21 / 9,
+        "16:9": 16 / 9,
+        "4:3": 4 / 3,
+        "1:1": 1.0,
+        "3:4": 3 / 4,
+        "9:16": 9 / 16,
+    },
+    frame_step=17,
+    frame_offset=5,
+    trained_min_frames=124,
+    trained_max_frames=362,
+    min_seconds=1,
+    max_seconds=60,
+)
+
+
+def legal_frame_counts(rules=H3):
     """Every frame count the model accepts, ascending, across the offered range.
 
-    17n+5 is an architectural constraint — the temporal packing — so this is the
-    real set, not a taste. The trained range is a subset of it and is only used
-    to warn.
+    `step*n + offset` is an architectural constraint — the temporal packing —
+    so this is the real set, not a taste. The trained range is a subset of it
+    and is only used to warn.
     """
-    return list(range(FRAME_OFFSET, MAX_SECONDS * FPS + FRAME_STEP, FRAME_STEP))
+    return list(range(rules.frame_offset,
+                      rules.max_seconds * rules.fps + rules.frame_step,
+                      rules.frame_step))
 
 
-def is_trained_length(frames):
+def is_trained_length(frames, rules=H3):
     """Whether a frame count sits inside what the weights actually saw."""
-    return TRAINED_MIN_FRAMES <= frames <= TRAINED_MAX_FRAMES
+    return rules.trained_min_frames <= frames <= rules.trained_max_frames
 
 
-def frames_for_seconds(seconds):
+def frames_for_seconds(seconds, rules=H3):
     """Whole UI seconds -> nearest legal frame count.
 
     Nearest rather than round-up: the worst drift is 0.35 s, where always
@@ -95,61 +137,64 @@ def frames_for_seconds(seconds):
     Out-of-range input lands on the nearest offered count rather than raising —
     the set is bounded, so this is where a hand-edited blob gets clamped.
     """
-    target = round(float(seconds) * FPS)
-    return min(legal_frame_counts(), key=lambda n: (abs(n - target), n))
+    target = round(float(seconds) * rules.fps)
+    return min(legal_frame_counts(rules), key=lambda n: (abs(n - target), n))
 
 
-def seconds_for_frames(frames):
+def seconds_for_frames(frames, rules=H3):
     """The real duration of a frame count. This is what the prompt refiner needs.
 
     The refiner writes the shot timeline and the `S.SS` keyframe-alignment line
     to fit the video, so it must see the true duration, never the rounded number
     on the pill.
     """
-    return frames / FPS
+    return frames / rules.fps
 
 
-def match_seconds(seconds):
+def match_seconds(seconds, rules=H3):
     """A reference's own length -> the card duration that lands nearest it.
 
-    Not `round(seconds)`. Legal frame counts are 17 apart, which is 0.708 s, and
-    whole seconds do not cover that grid evenly — some legal counts are not the
-    nearest to any whole number of seconds at all. A 6.6 s cue's best match is
-    158 frames (6.58 s); rounding to 7 s compiles to 175 (7.29 s), which is two
-    thirds of a second late and audible in exactly the case somebody asked for a
-    match. So this answers in the model's own units and hands back the real
-    duration of the count it picked, which `frames_for_seconds` then round-trips.
+    Not `round(seconds)`. Legal frame counts are `frame_step` apart — 0.708 s
+    for H3 — and whole seconds do not cover that grid evenly; some legal
+    counts are not the nearest to any whole number of seconds at all. A 6.6 s
+    cue's best match is 158 frames (6.58 s); rounding to 7 s compiles to 175
+    (7.29 s), which is two thirds of a second late and audible in exactly the
+    case somebody asked for a match. So this answers in the model's own units
+    and hands back the real duration of the count it picked, which
+    `frames_for_seconds` then round-trips.
 
-    Out-of-range lengths clamp to the pill's range rather than to the frame set:
-    a three-minute music cue matches the longest card there is, not a 60-second
-    one that the UI cannot then show.
+    Out-of-range lengths clamp to the pill's range rather than to the frame
+    set: a three-minute music cue matches the longest card there is, not a
+    60-second one that the UI cannot then show.
     """
-    clamped = min(MAX_SECONDS, max(MIN_SECONDS, float(seconds)))
-    return round(seconds_for_frames(frames_for_seconds(clamped)), 2)
+    clamped = min(rules.max_seconds, max(rules.min_seconds, float(seconds)))
+    return round(seconds_for_frames(frames_for_seconds(clamped, rules), rules), 2)
 
 
-def clamp_ratio(ratio):
-    """Clamp an aspect ratio into H3's envelope. Returns (ratio, was_clamped)."""
-    if ratio < MIN_RATIO:
-        return MIN_RATIO, True
-    if ratio > MAX_RATIO:
-        return MAX_RATIO, True
+def clamp_ratio(ratio, rules=H3):
+    """Clamp an aspect ratio into the family's envelope. -> (ratio, was_clamped)."""
+    if ratio < rules.min_ratio:
+        return rules.min_ratio, True
+    if ratio > rules.max_ratio:
+        return rules.max_ratio, True
     return ratio, False
 
 
-def _snap(value):
-    return max(CANVAS_MULTIPLE, int(value / CANVAS_MULTIPLE + 0.5) * CANVAS_MULTIPLE)
+def _snap(value, rules):
+    grid = rules.multiple
+    return max(grid, int(value / grid + 0.5) * grid)
 
 
-def resolve_canvas(ratio, short_edge):
+def resolve_canvas(ratio, short_edge, rules=H3):
     """(aspect ratio, slider short edge) -> the (width, height) actually generated.
 
     The area cap scales as the square of the slider, so `short_edge=768` with
-    `ratio=16/9` reproduces the native 1344x768 exactly.
+    `ratio=16/9` reproduces H3's native 1344x768 exactly.
     """
-    ratio, _ = clamp_ratio(float(ratio))
-    short_edge = max(MIN_SHORT_EDGE, min(MAX_SHORT_EDGE, int(short_edge)))
-    max_pixels = NATIVE_MAX_PIXELS * (short_edge / NATIVE_SHORT_EDGE) ** 2
+    ratio, _ = clamp_ratio(float(ratio), rules)
+    short_edge = max(rules.min_short_edge,
+                     min(rules.max_short_edge, int(short_edge)))
+    max_pixels = rules.native_max_pixels * (short_edge / rules.native_short_edge) ** 2
 
     if ratio >= 1.0:
         width, height = short_edge * ratio, float(short_edge)
@@ -160,32 +205,51 @@ def resolve_canvas(ratio, short_edge):
         scale = math.sqrt(max_pixels / (width * height))
         width, height = width * scale, height * scale
 
-    width, height = _snap(width), _snap(height)
+    width, height = _snap(width, rules), _snap(height, rules)
 
     # Snapping rounds each axis independently and can push the area back over
     # the cap. Step the long axis down rather than let the latent exceed what
     # the model was trained to hold.
-    while width * height > max_pixels and max(width, height) > CANVAS_MULTIPLE:
+    while width * height > max_pixels and max(width, height) > rules.multiple:
         if width >= height:
-            width -= CANVAS_MULTIPLE
+            width -= rules.multiple
         else:
-            height -= CANVAS_MULTIPLE
+            height -= rules.multiple
 
     return width, height
 
 
-def canvas_from_image(image_width, image_height, short_edge):
+def canvas_from_image(image_width, image_height, short_edge, rules=H3):
     """Adaptive canvas for the image modes.
 
     In I2VA / L2VA / FL2VA the aspect comes from the keyframe, not the ratio
     pill, matching the hosted API's "adaptive" behaviour. The slider still owns
     the scale. Returns (width, height, ratio, was_clamped).
     """
-    ratio, clamped = clamp_ratio(image_width / image_height)
-    width, height = resolve_canvas(ratio, short_edge)
+    ratio, clamped = clamp_ratio(image_width / image_height, rules)
+    width, height = resolve_canvas(ratio, short_edge, rules)
     return width, height, ratio, clamped
 
 
-def describe_ratio(ratio):
+def describe_ratio(ratio, rules=H3):
     """Nearest preset label for a free-form ratio, for the disabled ratio pill."""
-    return min(ASPECT_PRESETS.items(), key=lambda kv: abs(kv[1] - ratio))[0]
+    return min(rules.aspects.items(), key=lambda kv: abs(kv[1] - ratio))[0]
+
+
+# The H3 rules under their historic names. Every H3-owned caller spells these;
+# they are reads off `H3`, so the family's numbers exist exactly once.
+CANVAS_MULTIPLE = H3.multiple
+FPS = H3.fps
+FRAME_STEP = H3.frame_step
+FRAME_OFFSET = H3.frame_offset
+NATIVE_SHORT_EDGE = H3.native_short_edge
+NATIVE_MAX_PIXELS = H3.native_max_pixels
+MIN_SHORT_EDGE = H3.min_short_edge
+MAX_SHORT_EDGE = H3.max_short_edge
+MIN_RATIO = H3.min_ratio
+MAX_RATIO = H3.max_ratio
+ASPECT_PRESETS = H3.aspects
+TRAINED_MIN_FRAMES = H3.trained_min_frames
+TRAINED_MAX_FRAMES = H3.trained_max_frames
+MIN_SECONDS = H3.min_seconds
+MAX_SECONDS = H3.max_seconds

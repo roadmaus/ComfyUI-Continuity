@@ -63,27 +63,28 @@ def _weights():
 
 
 def _canvas():
+    rules = canvas.H3
     return {
-        "multiple": canvas.CANVAS_MULTIPLE,
+        "multiple": rules.multiple,
         # Fixed: H3 was trained at 24 and takes no rate conditioning. A family
         # that carries fps as conditioning declares fixed=False and the pill
         # becomes a control.
-        "fps": {"value": canvas.FPS, "fixed": True},
-        "min_short_edge": canvas.MIN_SHORT_EDGE,
-        "max_short_edge": canvas.MAX_SHORT_EDGE,
-        "native_short_edge": canvas.NATIVE_SHORT_EDGE,
-        "native_max_pixels": canvas.NATIVE_MAX_PIXELS,
-        "min_ratio": canvas.MIN_RATIO,
-        "max_ratio": canvas.MAX_RATIO,
-        "aspects": dict(canvas.ASPECT_PRESETS),
+        "fps": {"value": rules.fps, "fixed": rules.fps_fixed},
+        "min_short_edge": rules.min_short_edge,
+        "max_short_edge": rules.max_short_edge,
+        "native_short_edge": rules.native_short_edge,
+        "native_max_pixels": rules.native_max_pixels,
+        "min_ratio": rules.min_ratio,
+        "max_ratio": rules.max_ratio,
+        "aspects": dict(rules.aspects),
         "frames": {
             # Legal counts are step*n + offset — the temporal packing.
-            "step": canvas.FRAME_STEP,
-            "offset": canvas.FRAME_OFFSET,
-            "trained_min": canvas.TRAINED_MIN_FRAMES,
-            "trained_max": canvas.TRAINED_MAX_FRAMES,
-            "min_seconds": canvas.MIN_SECONDS,
-            "max_seconds": canvas.MAX_SECONDS,
+            "step": rules.frame_step,
+            "offset": rules.frame_offset,
+            "trained_min": rules.trained_min_frames,
+            "trained_max": rules.trained_max_frames,
+            "min_seconds": rules.min_seconds,
+            "max_seconds": rules.max_seconds,
         },
     }
 
