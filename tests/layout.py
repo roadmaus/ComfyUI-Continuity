@@ -142,6 +142,32 @@ class _MovedModules:
         return importlib.util.spec_from_file_location(fullname, py(name))
 
 
+_CATALOG_JSON = None
+
+
+def catalog_json():
+    """`families/manifest.catalog()`, dumped once — what the server serves at
+    `/minimax_creator/families`, and what `web/creator/manifest.js` loads.
+
+    The frontend's family knowledge lives in this catalog (phase 5), so any
+    suite that imports a frontend module needs it in reach: `run()` injects it
+    as `globalThis.__MMC_FAMILIES`, and `pack()`'s stub serves it through the
+    route so the packed suites exercise the fetch path the browser takes.
+    Building it imports the pure Python side — which is the point: the mirror
+    is held against the code, not against a fixture that can drift.
+    """
+    global _CATALOG_JSON
+    if _CATALOG_JSON is None:
+        _CATALOG_JSON = json.dumps(load("manifest").manifest.catalog())
+    return _CATALOG_JSON
+
+
+# Runs before a suite's script: `web/creator/manifest.js` awaits its catalog at
+# import, and under bare node there is no server to fetch it from.
+_PRELUDE = ("if (process.env.MMC_FAMILIES) "
+            "globalThis.__MMC_FAMILIES = JSON.parse(process.env.MMC_FAMILIES);\n")
+
+
 def run(script, *args):
     """Run `script` as an ES module under node and parse what it prints.
 
@@ -156,8 +182,9 @@ def run(script, *args):
     """
     argv = [a if isinstance(a, str) else json.dumps(a) for a in args]
     proc = subprocess.run(
-        ["node", "--input-type=module", "--eval", script, "--", *argv],
-        capture_output=True, text=True)
+        ["node", "--input-type=module", "--eval", _PRELUDE + script, "--", *argv],
+        capture_output=True, text=True,
+        env={**os.environ, "MMC_FAMILIES": catalog_json()})
     if proc.returncode != 0:
         print(f"node failed:\n{proc.stderr}")
         sys.exit(1)
@@ -171,12 +198,22 @@ def run(script, *args):
 STUBS = {
     "app.js": "export const app = { registerExtension() {}, extensionManager: null };",
     "api.js": """
+import { readFileSync } from "node:fs";
 const store = new Map();
 globalThis.__userdata = store;
 export const api = {
   apiURL: (u) => u,
   addEventListener() {}, removeEventListener() {},
-  async fetchApi() { return { ok: true, status: 200, json: async () => ({}) }; },
+  async fetchApi(url) {
+    // The one route with a real body: the family catalog, written beside this
+    // stub by layout.pack() — so the packed suites take the same load path the
+    // browser does instead of leaning on the __MMC_FAMILIES injection.
+    if (String(url).startsWith("/minimax_creator/families")) {
+      const body = readFileSync(new URL("./families.json", import.meta.url), "utf8");
+      return { ok: true, status: 200, json: async () => JSON.parse(body) };
+    }
+    return { ok: true, status: 200, json: async () => ({}) };
+  },
   async getUserData(file) {
     return store.has(file)
       ? { status: 200, json: async () => JSON.parse(store.get(file)) }
@@ -212,6 +249,9 @@ def pack(extra_stubs=None, skip=None):
         for name, source in {**STUBS, **(extra_stubs or {})}.items():
             with open(os.path.join(scripts, name), "w", encoding="utf-8") as handle:
                 handle.write(source)
+        # What the stub api serves at /minimax_creator/families.
+        with open(os.path.join(scripts, "families.json"), "w", encoding="utf-8") as handle:
+            handle.write(catalog_json())
         yield target
     finally:
         shutil.rmtree(work, ignore_errors=True)
