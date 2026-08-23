@@ -89,6 +89,8 @@ def manifest():
     return {
         "id": "ideogram4",
         "label": "Ideogram 4.0",
+        "description": "Ideogram 4.0 — 9.3B open-weights DiT with its own resolution-shifted schedule "
+                       "and a second checkpoint for the unconditional branch.",
         "produces": sorted(registry.PRODUCES["ideogram4"]),
         "widgets": _widgets(),
         "weights": _weights(),

@@ -88,6 +88,8 @@ def manifest():
     return {
         "id": "krea2",
         "label": "Krea 2",
+        "description": "Krea 2 — 12.9B open-weights DiT. RAW samples at cfg 3.5; the turbo pill swaps in "
+                       "the 8-step Turbo checkpoint.",
         "produces": sorted(registry.PRODUCES["krea2"]),
         "widgets": _widgets(),
         "weights": _weights(),

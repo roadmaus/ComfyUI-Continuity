@@ -388,10 +388,10 @@ export function capturePreStage(state, io) {
       arch: blob.arch,
       quality: blob.quality,
       models: blob.models ?? {},
-      ...(blob.minimax ? {
+      ...(blob[S.PRESTAGE_STILL_ARCH] ? {
         minimax: {
-          ...pick(blob.minimax, ["frames", "latent_index"]),
-          models: blob.minimax.request?.models ?? {},
+          ...pick(blob[S.PRESTAGE_STILL_ARCH], ["frames", "latent_index"]),
+          models: blob[S.PRESTAGE_STILL_ARCH].request?.models ?? {},
         },
       } : {}),
     },
@@ -1186,7 +1186,7 @@ export function applyToPiece(body, keys, timeline, io, { from = "piece" } = {}) 
     // still request, which is where a creator-shaped set of weights lives on that
     // node. `crossable` has already refused every other architecture.
     timeline.models = S.parseModels(from === "prestage"
-      ? (body.weights?.minimax?.models ?? {})
+      ? (body.weights?.[S.PRESTAGE_STILL_ARCH]?.models ?? {})
       : (body.weights ?? {}));
   }
   if (chosen.has("speed")) {
@@ -1315,19 +1315,19 @@ export function applyToPreStage(body, keys, state, io, { from = "prestage" } = {
       if (body.weights?.arch) state.arch = body.weights.arch;
       if (body.weights?.quality) state.quality = body.weights.quality;
       state.models = { ...state.models, ...(body.weights?.models ?? {}) };
-      const still = body.weights?.minimax;
+      const still = body.weights?.[S.PRESTAGE_STILL_ARCH];
       if (still) {
-        if (still.frames !== undefined) state.minimax.frames = still.frames;
-        if (still.latent_index !== undefined) state.minimax.latent_index = still.latent_index;
+        if (still.frames !== undefined) state[S.PRESTAGE_STILL_ARCH].frames = still.frames;
+        if (still.latent_index !== undefined) state[S.PRESTAGE_STILL_ARCH].latent_index = still.latent_index;
         // The H3 branch's checkpoints, which are not in the block above — see
         // `capturePreStage`. Restored through `parseModels` like any other.
-        state.minimax.request.models = S.parseModels(still.models ?? {});
+        state[S.PRESTAGE_STILL_ARCH].request.models = S.parseModels(still.models ?? {});
       }
     } else {
       // A piece's weights only reach the H3 branch, whose request is a creator
       // request — `crossable` has already refused every other case.
       state.arch = S.PRESTAGE_STILL_ARCH;
-      state.minimax.request.models = S.parseModels(body.weights ?? {});
+      state[S.PRESTAGE_STILL_ARCH].request.models = S.parseModels(body.weights ?? {});
     }
   }
   if (chosen.has("speed")) {

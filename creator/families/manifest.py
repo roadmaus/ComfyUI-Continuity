@@ -68,8 +68,8 @@ def check(manifest):
     that forgets a field should fail at `describe`, where the family is named,
     not as a blank control three files away.
     """
-    for key in ("id", "label", "produces", "widgets", "weights", "canvas",
-                "capabilities", "prompt"):
+    for key in ("id", "label", "description", "produces", "widgets", "weights",
+                "canvas", "capabilities", "prompt"):
         if key not in manifest:
             raise ValueError(f"family {manifest.get('id')!r}: manifest has no {key!r}")
     for entry in manifest["widgets"]:

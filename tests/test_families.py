@@ -123,6 +123,15 @@ for key in ("reference", "plain", "timeline"):
 check("h3 mode names are compile.MODES",
       sorted(set(h3["modes"].values())), sorted(_pkg.compile.MODES))
 
+# The turbo switch resets to the node's own defaults, and the lead-in
+# stepper's reach is the server's — the two halves that must not drift.
+_turbo = h3["capabilities"]["turbo"]
+check("h3 turbo reset is sampling.DEFAULTS",
+      _turbo["reset"],
+      {key: sampling.DEFAULTS[key] for key in _turbo["reset"]})
+check("h3 turbo lead max is settings.MAX_LEAD_IN",
+      _turbo["lead_max"], _pkg.settings.MAX_LEAD_IN)
+
 # The served latent grid generates still.latent_frames — over every offered
 # length and one past the base, where the formula's branch flips.
 _grid = h3["still"]["latent"]

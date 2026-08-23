@@ -335,44 +335,27 @@ export function missingModels(models, required) {
 // thrown, so switching off puts the row back rather than guessing at defaults.
 // compile.py never reads it.
 
-/** In effort order. The step counts are the H3 turbo community's numbers: 4 is
- *  the distillation target and the floor, 6 the comfort zone, 8 about as close
- *  to a native 20-step render as the LoRAs get — past 8 they over-sharpen. */
-export const TURBO_QUALITIES = ["draft", "medium", "good"];
-export const TURBO_STEPS = { draft: 4, medium: 6, good: 8 };
+// The family's declarations — step counts, the row the switch sets and where
+// it resets to, how far the lead-in stepper reaches (the server refuses
+// anything past it either way), and what a distill file engages at.
+const TURBO = VIDEO.capabilities.turbo;
 
-/** How far the lead-in stepper may reach, mirrored from `settings.MAX_LEAD_IN`.
- *  The server refuses anything past it either way; this only keeps the pill
- *  from offering a value that would come straight back refused. */
-export const TURBO_LEAD_MAX = 4;
-
-/** What the switch sets the row to. H3 samples picture and sound as one latent
- *  on two flow clocks, and at turbo step counts res_multistep leaves the audio
- *  warbling — euler + beta is the combination the turbo LoRAs were tuned
- *  against and the one that keeps the soundtrack intact. */
-export const TURBO_SAMPLER = "euler";
-export const TURBO_SCHEDULER = "beta";
-
-/** Where the row returns to when the switch is thrown off and nothing was
- *  saved — the node's own declared defaults, mirrored from creator_node.py.
- *  The shifts are the checkpoints' own flow schedules; at exactly these
- *  values the backend emits no shift node at all. */
-export const TURBO_RESET = {
-  steps: 20, sampler_name: "res_multistep", scheduler: "simple",
-  shift_video: 12, shift_audio: 3,
-};
+export const TURBO_QUALITIES = Object.keys(TURBO.steps);
+export const TURBO_STEPS = TURBO.steps;
+export const TURBO_LEAD_MAX = TURBO.lead_max;
+export const TURBO_SAMPLER = TURBO.row.sampler_name;
+export const TURBO_SCHEDULER = TURBO.row.scheduler;
+export const TURBO_RESET = TURBO.reset;
 
 /** What the switch engages a file at — strength and the flow shifts its card
- *  was distilled against. The two families were distilled at different scales
- *  and their cards name different schedules: lightx2v's distill runs at ~0.6
- *  with the video clock at 6, larryvrh's at 1.0 on the checkpoints' own
- *  schedule. A guess off the filename; the manager's slider and the shift
- *  pills override it like any other value. */
+ *  was distilled against, guessed off the filename by the family's preset
+ *  table; the manager's slider and the shift pills override it like any
+ *  other value. */
 export function turboPreset(name) {
-  if (/lightx2v/i.test(name || "")) {
-    return { strength: 0.6, shift_video: 6, shift_audio: 3 };
-  }
-  return { strength: 1.0, shift_video: TURBO_RESET.shift_video, shift_audio: TURBO_RESET.shift_audio };
+  const hit = TURBO.presets.find((p) => new RegExp(p.match, "i").test(name || ""));
+  if (hit) return { strength: hit.strength, shift_video: hit.shift_video, shift_audio: hit.shift_audio };
+  return { strength: TURBO.default_strength,
+           shift_video: TURBO_RESET.shift_video, shift_audio: TURBO_RESET.shift_audio };
 }
 
 export const turboStrength = (name) => turboPreset(name).strength;
@@ -387,7 +370,7 @@ export function emptyTurbo() {
     // at all, the switch owning only the sampler row. Remembered so the pill
     // engages directly on the next press instead of asking again.
     merged: false,
-    quality: "medium",
+    quality: TURBO.default_quality,
     // Whether the switch is thrown. The LoRA entry itself can be removed from
     // two other places — the chip and the manager — which is why this is
     // reconciled against the stack on every commit rather than trusted.

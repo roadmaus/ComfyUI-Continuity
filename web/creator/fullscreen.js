@@ -55,6 +55,7 @@
 import { app } from "../../../scripts/app.js";
 import { api } from "../../../scripts/api.js";
 import { el, icon, mark } from "./dom.js";
+import { VIDEO } from "./manifest.js";
 import { elapsed } from "./stage.js";
 import { t } from "./i18n.js";
 import { noteFullscreen } from "./styles.js";
@@ -311,7 +312,7 @@ class Fullscreen {
         // icon that means "the strip" everywhere else it is drawn.
         el("span", { class: "mmc-fs-mark" }, [
           el("span", { class: "mmc-fs-logo" }, [mark(22)]),
-          el("span", { text: "MiniMax H3" }),
+          el("span", { text: VIDEO.label }),
         ]),
         el("span", { class: "mmc-fs-slash", text: "/" }),
         this.piece,

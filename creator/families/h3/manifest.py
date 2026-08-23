@@ -9,7 +9,7 @@ strings are the node schema's own (`creator_node._schema`), under the same
 English keys the i18n dictionaries already carry.
 """
 
-from ... import accel, canvas, compile, models, sampling
+from ... import accel, canvas, compile, models, sampling, settings
 from .. import manifest as m
 from . import still
 
@@ -156,6 +156,10 @@ def manifest():
     return {
         "id": "h3",
         "label": "MiniMax H3",
+        # What the arch pill's tooltip says this family is.
+        "description": "MiniMax H3 — experimental. The still is a video generation whose first latent "
+                       "frame is decoded by the single-image H3 VAE, on the weights and the canvas your "
+                       "render already uses. No second model family is loaded.",
         "produces": sorted(registry.PRODUCES["h3"]),
         "widgets": _widgets(),
         "weights": _weights(),
@@ -187,6 +191,29 @@ def manifest():
             "refine": True, "face": True, "audio": True,
             # Chained seams with feathering — the strip's whole grammar.
             "seams": True,
+            # The turbo switch: a distillation LoRA over the same checkpoints,
+            # not a checkpoint swap like Krea's. The declarations here are the
+            # H3 turbo community's numbers, said once. `row` is what engaging
+            # the switch sets the sampler to (euler + beta — the joint audio
+            # warbles on res_multistep at turbo step counts); `reset` is where
+            # the row returns when the switch is thrown off and nothing was
+            # saved — the node's own defaults. `presets` name what a distill
+            # file engages at, by filename match: strength and the flow shifts
+            # its card was distilled against — lightx2v's runs at ~0.6 with
+            # the video clock at 6, everything else at 1.0 on the checkpoints'
+            # own schedule.
+            "turbo": {
+                "steps": {"draft": 4, "medium": 6, "good": 8},
+                "default_quality": "medium",
+                "row": {"sampler_name": "euler", "scheduler": "beta"},
+                "reset": {key: sampling.DEFAULTS[key]
+                          for key in ("steps", "sampler_name", "scheduler",
+                                      "shift_video", "shift_audio")},
+                "lead_max": settings.MAX_LEAD_IN,
+                "presets": [{"match": "lightx2v", "strength": 0.6,
+                             "shift_video": 6, "shift_audio": 3}],
+                "default_strength": 1.0,
+            },
         },
         # The reference grammar: what an attached file may be narrowed to,
         # which streams of a clip count, and how many of each the payload

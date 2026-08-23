@@ -27,6 +27,7 @@
 // (Turbo *is* a checkpoint there; Ideogram's speed axis is its preset table).
 
 import { el, icon, ICONS, svg, dismissable, keepScroll, placeNear, swappable } from "./dom.js";
+import { DEFAULT_STILL_ARCH, stillFamily } from "./manifest.js";
 import { openPicker } from "./picker.js";
 import { openLoras, loraBlock } from "./loras.js";
 import { openFrameGrab } from "./framegrab.js";
@@ -884,7 +885,7 @@ export class PreStageBody {
    *  the pre-stage.
    */
   mountStill() {
-    const still = this.state.minimax;
+    const still = this.state[S.PRESTAGE_STILL_ARCH];
     const editor = new CreatorEditor({
       state: still.request,
       // The sampler row is the *node's*, not this request's: one row serves all
@@ -1001,34 +1002,28 @@ export class PreStageBody {
   }
 
   promptOf() {
-    return (S.isStill(this.state) ? this.state.minimax.request.prompt : this.state.prompt) ?? "";
+    return (S.isStill(this.state) ? this.state[S.PRESTAGE_STILL_ARCH].request.prompt : this.state.prompt) ?? "";
   }
 
   setPrompt(text) {
-    if (S.isStill(this.state)) this.state.minimax.request.prompt = text;
+    if (S.isStill(this.state)) this.state[S.PRESTAGE_STILL_ARCH].request.prompt = text;
     else this.state.prompt = text;
   }
 
   renderArchPill() {
     const state = this.state;
-    const ARCH_TITLE = {
-      krea2: "Krea 2 — 12.9B open-weights DiT. RAW samples at cfg 3.5; the turbo pill swaps in "
-           + "the 8-step Turbo checkpoint.",
-      ideogram4: "Ideogram 4.0 — 9.3B open-weights DiT with its own resolution-shifted schedule "
-               + "and a second checkpoint for the unconditional branch.",
-      minimax: "MiniMax H3 — experimental. The still is a video generation whose first latent "
-             + "frame is decoded by the single-image H3 VAE, on the weights and the canvas your "
-             + "render already uses. No second model family is loaded.",
-    };
     return el("button", {
       class: `mmc-pill mmc-prestage-arch${S.isStill(state) ? " mmc-experimental" : ""}`,
-      title: t("{arch} Click to switch.", { arch: t(ARCH_TITLE[state.arch]) }),
+      // The description is the family's own, off its manifest — a translation
+      // key like any string written in source.
+      title: t("{arch} Click to switch.", { arch: t(stillFamily(state.arch).description) }),
       onclick: (event) => openChoicePopover(event.currentTarget, {
         title: t("Image model"),
         options: S.PRESTAGE_ARCHES.map((arch) => S.PRESTAGE_ARCH_LABEL[arch]),
         value: S.PRESTAGE_ARCH_LABEL[state.arch],
         onPick: (picked) => this.setArch(
-          S.PRESTAGE_ARCHES.find((arch) => S.PRESTAGE_ARCH_LABEL[arch] === picked) ?? "krea2"),
+          S.PRESTAGE_ARCHES.find((arch) => S.PRESTAGE_ARCH_LABEL[arch] === picked)
+            ?? DEFAULT_STILL_ARCH),
       }),
     }, [icon("model", 16), el("span", { text: S.PRESTAGE_ARCH_LABEL[state.arch] })]);
   }
@@ -1038,7 +1033,7 @@ export class PreStageBody {
   /** What a still costs and which frame of it is kept — the two things H3 has
    *  that a video render does not, because a video render keeps all of them. */
   renderStillPills() {
-    const still = this.state.minimax;
+    const still = this.state[S.PRESTAGE_STILL_ARCH];
     const latents = S.stillLatentFrames(still.frames);
 
     const lengthLabel = (n) => t("{frames} frames · {latents} latent",
@@ -1093,7 +1088,7 @@ export class PreStageBody {
   }
 
   async grabFrame() {
-    const request = this.state.minimax.request;
+    const request = this.state[S.PRESTAGE_STILL_ARCH].request;
     const blocked = S.blockedReason(request, "first_frame");
     if (blocked) return;
     const clip = await openPicker({
