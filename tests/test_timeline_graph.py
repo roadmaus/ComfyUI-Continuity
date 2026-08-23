@@ -53,13 +53,13 @@ except Exception as exc:  # noqa: BLE001
     print(f"skipped: ComfyUI not importable ({type(exc).__name__}: {exc})")
     sys.exit(0)
 
-tl = importlib.import_module(f"{PACKAGE}.timeline")
+tl = importlib.import_module(f"{PACKAGE}.creator.timeline")
 # The user-facing node moved to `creator_node` when the Creator and the Timeline
 # became one. This id is the retired one, kept loadable for saved workflows, and
 # it runs the same body — so it is still the right thing to drive these through.
-cn = importlib.import_module(f"{PACKAGE}.creator_node")
-accel_mod = importlib.import_module(f"{PACKAGE}.accel")
-outputs_mod = importlib.import_module(f"{PACKAGE}.outputs")
+cn = importlib.import_module(f"{PACKAGE}.creator.creator_node")
+accel_mod = importlib.import_module(f"{PACKAGE}.creator.accel")
+outputs_mod = importlib.import_module(f"{PACKAGE}.creator.outputs")
 
 from harness import FAILURES, check
 
@@ -626,8 +626,8 @@ check("the next seam inherits from the trimmed pass",
 # dictates — and a refusal when the two stop agreeing.
 import torch as _torch
 
-encoder_mod = importlib.import_module(f"{PACKAGE}.encode")
-payload_mod = importlib.import_module(f"{PACKAGE}.payload")
+encoder_mod = importlib.import_module(f"{PACKAGE}.creator.encode")
+payload_mod = importlib.import_module(f"{PACKAGE}.creator.payload")
 
 
 class _FakeVae:
@@ -665,7 +665,7 @@ except ValueError:
 # is the pass that was decoded, that the trim came off the right end of both
 # tracks together, and that the seam nodes read that same file back.
 
-spill_mod = importlib.import_module(f"{PACKAGE}.spill")
+spill_mod = importlib.import_module(f"{PACKAGE}.creator.spill")
 _SPILLS = tempfile.mkdtemp(prefix="mmc-spill-")
 spill_mod.directory = lambda: _SPILLS
 

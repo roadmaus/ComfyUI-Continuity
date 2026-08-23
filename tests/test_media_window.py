@@ -21,6 +21,8 @@ Skips itself with a message if ComfyUI or PyAV cannot be imported.
 import importlib.util
 import os
 import sys
+
+import layout
 import types
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -43,9 +45,9 @@ def _boot():
     import folder_paths  # noqa: F401  (proves the install is usable)
 
     package = types.ModuleType("mmc")
-    package.__path__ = [ROOT]
+    package.__path__ = [layout.PY_ROOT]
     sys.modules["mmc"] = package
-    spec = importlib.util.spec_from_file_location("mmc.media", os.path.join(ROOT, "media.py"))
+    spec = importlib.util.spec_from_file_location("mmc.media", layout.py("media"))
     module = importlib.util.module_from_spec(spec)
     sys.modules["mmc.media"] = module
     spec.loader.exec_module(module)

@@ -15,12 +15,12 @@ one the backend would take makes a legal folder untypeable.
 Skips itself if node is not installed.
 """
 
-import mirror
+import layout
 
-mirror.skip_without_node()
+layout.skip_without_node()
 
-MIRROR = mirror.js("outputs.js")
-outputs = mirror.load("outputs").outputs
+MIRROR = layout.js("outputs.js")
+outputs = layout.load("outputs").outputs
 
 # Every string worth asking both sides about, in one subprocess rather than one
 # per case. Legal values, refusals, and the shapes that sit on the boundary.
@@ -50,7 +50,7 @@ out.stems = { "a/b/c": m.stemOf("a/b/c"), "abc": m.stemOf("abc") };
 console.log(JSON.stringify(out));
 """
 
-reflected = mirror.run(SCRIPT, MIRROR, CASES)
+reflected = layout.run(SCRIPT, MIRROR, CASES)
 
 from harness import FAILURES, passed
 

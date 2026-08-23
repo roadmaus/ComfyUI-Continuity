@@ -12,6 +12,8 @@ import ast
 import os
 import pathlib
 import sys
+
+import layout
 import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -41,7 +43,7 @@ class _FolderPaths:
 
 def _load():
     """`_classify` and `_scan` lifted out of server_routes.py by name."""
-    source = pathlib.Path(ROOT, "server_routes.py").read_text(encoding="utf-8")
+    source = pathlib.Path(layout.py("server_routes")).read_text(encoding="utf-8")
     wanted = {"_classify", "_scan"}
     picked = [n for n in ast.parse(source).body
               if isinstance(n, ast.FunctionDef) and n.name in wanted]

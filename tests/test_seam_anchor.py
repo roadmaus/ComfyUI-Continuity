@@ -19,6 +19,8 @@ Skips itself with a message if ComfyUI core cannot be imported.
 import importlib.util
 import os
 import sys
+
+import layout
 import types
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -36,9 +38,9 @@ except Exception as exc:  # noqa: BLE001
 def _load(name):
     if "mmc" not in sys.modules:
         package = types.ModuleType("mmc")
-        package.__path__ = [ROOT]
+        package.__path__ = [layout.PY_ROOT]
         sys.modules["mmc"] = package
-    spec = importlib.util.spec_from_file_location(f"mmc.{name}", os.path.join(ROOT, f"{name}.py"))
+    spec = importlib.util.spec_from_file_location(f"mmc.{name}", layout.py(name))
     module = importlib.util.module_from_spec(spec)
     sys.modules[f"mmc.{name}"] = module
     spec.loader.exec_module(module)

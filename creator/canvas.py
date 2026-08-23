@@ -4,7 +4,7 @@ Everything in this module is pure: no torch, no ComfyUI, no I/O. The frontend
 mirrors these same rules to draw its live readouts (the resolution pill shows
 the resolved WxH as you drag), so this file is the single source of truth for
 what the sampler will actually receive. Keep it side-effect free and keep the
-JS in `js/minimax_creator/canvas.js` in step with it.
+JS in `web/creator/canvas.js` in step with it.
 
 Two model constraints drive all of it:
 

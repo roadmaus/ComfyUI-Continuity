@@ -14,6 +14,8 @@ import os
 import re
 import sys
 
+import layout
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -25,7 +27,7 @@ ENGLISH = re.compile(r"\b(she|her|hers|herself|he|him|his|himself|woman|women|ma
 # ("other"), which is an ordinary word and all over the Chinese dictionary.
 GENDERED = {"ja": ["彼女", "彼氏"], "zh": ["她", "(?<!其)他"], "ko": ["그녀"]}
 
-SKIP = {os.path.join("js", "minimax_creator", "presets", "atlas.js")}
+SKIP = {os.path.join("web", "creator", "presets", "atlas.js")}
 
 # "man" and "men" are in the pattern for the cast's sake and are ordinary words
 # elsewhere — a *man*ifest, the *men*u. These are the ones this pack means.
@@ -39,7 +41,7 @@ ALLOWED = re.compile(r"man at the counter|<Subject 1> is the young woman", re.IG
 def files():
     for name in ("README.md", "CHANGELOG.md"):
         yield os.path.join(ROOT, name)
-    for base, dirs, names in os.walk(os.path.join(ROOT, "js")):
+    for base, dirs, names in os.walk(os.path.join(ROOT, "web")):
         dirs[:] = [d for d in dirs if d != "atlas"]
         for name in names:
             path = os.path.join(base, name)

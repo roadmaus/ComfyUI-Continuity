@@ -52,10 +52,10 @@ except Exception as exc:  # noqa: BLE001
     print(f"skipped: ComfyUI not importable ({type(exc).__name__}: {exc})")
     sys.exit(0)
 
-ps = importlib.import_module(f"{PACKAGE}.prestage")
-ci = importlib.import_module(f"{PACKAGE}.compile_image")
-cs = importlib.import_module(f"{PACKAGE}.compile_still")
-outputs = importlib.import_module(f"{PACKAGE}.outputs")
+ps = importlib.import_module(f"{PACKAGE}.creator.prestage")
+ci = importlib.import_module(f"{PACKAGE}.creator.compile_image")
+cs = importlib.import_module(f"{PACKAGE}.creator.compile_still")
+outputs = importlib.import_module(f"{PACKAGE}.creator.outputs")
 
 from harness import FAILURES, check
 
@@ -253,8 +253,8 @@ init_payload = ci.compile_prestage(
 check("the payload carries the init", init_payload.init,
       {"filename": "seed.png", "denoise": 0.6})
 
-render_mod = importlib.import_module(f"{PACKAGE}.render")
-ri = importlib.import_module(f"{PACKAGE}.render_image")
+render_mod = importlib.import_module(f"{PACKAGE}.creator.render")
+ri = importlib.import_module(f"{PACKAGE}.creator.render_image")
 
 i2i_graph = ri.emit(init_payload, ri.ImageWeights(arch="krea2", files=MODELS["krea2"]),
                     render_mod.Sampling(seed=1, steps=52, cfg=3.5,
@@ -516,7 +516,7 @@ check("a clip cited for its picture alone loads no audio VAE",
 # canvas adapting to the start frame exactly as a shot's does. The size lookup
 # is stubbed because these two files are not on this machine — it is the only
 # thing on this path that touches the disk.
-media = importlib.import_module(f"{PACKAGE}.media")
+media = importlib.import_module(f"{PACKAGE}.creator.media")
 real_image_size = media.image_size
 media.image_size = lambda filename: (1920, 1080)
 try:

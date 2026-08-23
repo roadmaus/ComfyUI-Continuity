@@ -17,6 +17,8 @@ import importlib.util
 import os
 from fractions import Fraction
 import sys
+
+import layout
 import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -34,12 +36,12 @@ def _load():
     import types
 
     package = types.ModuleType("mmcmux")
-    package.__path__ = [ROOT]
+    package.__path__ = [layout.PY_ROOT]
     sys.modules["mmcmux"] = package
     loaded = []
     for name in ("spill", "mux"):
         spec = importlib.util.spec_from_file_location(
-            f"mmcmux.{name}", os.path.join(ROOT, f"{name}.py"))
+            f"mmcmux.{name}", layout.py(name))
         module = importlib.util.module_from_spec(spec)
         sys.modules[f"mmcmux.{name}"] = module
         spec.loader.exec_module(module)

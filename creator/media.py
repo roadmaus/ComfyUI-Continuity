@@ -32,15 +32,18 @@ class MediaError(ValueError):
 
 
 # A cast look's frame, addressed where it already sits: `atlas:000123` names one
-# of the thousand stills this pack ships under `js/minimax_creator/presets/atlas/
+# of the thousand stills this pack ships under `web/creator/presets/atlas/
 # full/`. Casting a look used to copy the frame into `input/style_refs/` purely so
 # it would have an input-relative path — a file per look ever cast, kept forever,
 # cluttering the picker and every core LoadImage combo. The frontend half of the
-# pair is `js/minimax_creator/presets/atlasref.js`; between the two of them this
+# pair is `web/creator/presets/atlasref.js`; between the two of them this
 # is the only place on either side that has to know a second kind of path exists.
 ATLAS_SCHEME = "atlas:"
-ATLAS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                         "js", "minimax_creator", "presets", "atlas", "full")
+# Out of the package and back down into the frontend: the atlas is shipped as
+# part of `web/` because the picker draws from it, and this is the one place the
+# backend reaches across that line.
+ATLAS_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                         "web", "creator", "presets", "atlas", "full")
 # The id and nothing else. A reference is built by this pack from the vendored
 # index, never typed, so anything that is not digits is either a corrupted blob
 # or a crafted one — and either way the answer is no, rather than a filename

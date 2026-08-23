@@ -24,13 +24,13 @@ Skips itself if node is not installed.
 
 import json
 
-import mirror
+import layout
 
-mirror.skip_without_node()
+layout.skip_without_node()
 
-MIRROR = mirror.js("state.js")
+MIRROR = layout.js("state.js")
 
-compiler = mirror.load("canvas", "contextir", "compile").compile
+compiler = layout.load("canvas", "contextir", "compile").compile
 
 
 # The blobs worth asking both sides about. A real saved Creator, the shapes a
@@ -95,7 +95,7 @@ for (const [name, blob] of Object.entries(cases)) out.lifted[name] = s.asPiece(b
 console.log(JSON.stringify(out));
 """
 
-reflected = mirror.run(SCRIPT, MIRROR, CASES)
+reflected = layout.run(SCRIPT, MIRROR, CASES)
 
 from harness import FAILURES, check, passed
 

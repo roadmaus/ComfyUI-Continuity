@@ -17,6 +17,8 @@ Skips itself with a message if they are not importable.
 import importlib.util
 import os
 import sys
+
+import layout
 import tempfile
 import time
 import types
@@ -28,10 +30,10 @@ def _load():
     """`spill.py` on its own. It imports nothing from the package, and the one
     thing it wants from ComfyUI is `directory()`, which is replaced below."""
     package = types.ModuleType("mmcspill")
-    package.__path__ = [ROOT]
+    package.__path__ = [layout.PY_ROOT]
     sys.modules["mmcspill"] = package
     spec = importlib.util.spec_from_file_location(
-        "mmcspill.spill", os.path.join(ROOT, "spill.py"))
+        "mmcspill.spill", layout.py("spill"))
     module = importlib.util.module_from_spec(spec)
     sys.modules["mmcspill.spill"] = module
     spec.loader.exec_module(module)

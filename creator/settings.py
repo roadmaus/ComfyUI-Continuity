@@ -22,7 +22,7 @@ request behind it and therefore no user. A file that the settings page wrote to
 one place and the node read from another would be a setting that silently does
 nothing. One file beside `user/`, read the same way by both.
 
-This file decides what a setting is *allowed* to be; `js/minimax_creator/
+This file decides what a setting is *allowed* to be; `web/creator/
 settings.js` decides what the page *offers*. They are not mirrors and there is
 no mirror test: the encoder's whole scale is legal here, so a value typed into
 the file by hand is honoured and shown, while the page offers the four points on

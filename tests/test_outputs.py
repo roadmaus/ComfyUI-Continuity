@@ -14,9 +14,11 @@ import importlib.util
 import os
 import sys
 
+import layout
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-spec = importlib.util.spec_from_file_location("mmc_outputs", os.path.join(ROOT, "outputs.py"))
+spec = importlib.util.spec_from_file_location("mmc_outputs", layout.py("outputs"))
 outputs = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(outputs)
 

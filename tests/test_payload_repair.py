@@ -14,6 +14,8 @@ import importlib.util
 import inspect
 import os
 import sys
+
+import layout
 import types
 
 import torch
@@ -31,9 +33,9 @@ except Exception as exc:  # noqa: BLE001
 
 def _load_payload():
     package = types.ModuleType("mmc")
-    package.__path__ = [ROOT]
+    package.__path__ = [layout.PY_ROOT]
     sys.modules["mmc"] = package
-    spec = importlib.util.spec_from_file_location("mmc.payload", os.path.join(ROOT, "payload.py"))
+    spec = importlib.util.spec_from_file_location("mmc.payload", layout.py("payload"))
     module = importlib.util.module_from_spec(spec)
     sys.modules["mmc.payload"] = module
     spec.loader.exec_module(module)

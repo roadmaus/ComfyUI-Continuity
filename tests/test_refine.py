@@ -17,6 +17,8 @@ the prompt still compiles, and points at the wrong tensor.
 import importlib.util
 import os
 import sys
+
+import layout
 import types
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -24,9 +26,9 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def _load():
     package = types.ModuleType("mmc")
-    package.__path__ = [ROOT]
+    package.__path__ = [layout.PY_ROOT]
     sys.modules["mmc"] = package
-    spec = importlib.util.spec_from_file_location("mmc.refine", os.path.join(ROOT, "refine.py"))
+    spec = importlib.util.spec_from_file_location("mmc.refine", layout.py("refine"))
     module = importlib.util.module_from_spec(spec)
     sys.modules["mmc.refine"] = module
     spec.loader.exec_module(module)

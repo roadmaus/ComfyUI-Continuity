@@ -13,6 +13,8 @@ import importlib.util
 import os
 import shutil
 import sys
+
+import layout
 import tempfile
 import types
 import zipfile
@@ -22,10 +24,10 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def _load():
     package = types.ModuleType("mmc")
-    package.__path__ = [ROOT]
+    package.__path__ = [layout.PY_ROOT]
     sys.modules["mmc"] = package
     spec = importlib.util.spec_from_file_location(
-        "mmc.refine_skill", os.path.join(ROOT, "refine_skill.py"))
+        "mmc.refine_skill", layout.py("refine_skill"))
     module = importlib.util.module_from_spec(spec)
     sys.modules["mmc.refine_skill"] = module
     spec.loader.exec_module(module)

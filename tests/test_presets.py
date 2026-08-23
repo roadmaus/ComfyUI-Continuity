@@ -29,6 +29,8 @@ import os
 import shutil
 import subprocess
 import sys
+
+import layout
 import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -60,8 +62,8 @@ export const api = {
 }
 
 CHECK = r"""
-const S = await import("./js/minimax_creator/state.js");
-const P = await import("./js/minimax_creator/presets.js");
+const S = await import("./web/creator/state.js");
+const P = await import("./web/creator/presets.js");
 
 const out = { errors: [] };
 
@@ -754,7 +756,7 @@ try {
 
 // The shipped starters load, describe themselves, and name no files.
 try {
-  const { BUILTIN } = await import("./js/minimax_creator/presets/builtin.js");
+  const { BUILTIN } = await import("./web/creator/presets/builtin.js");
   out.builtin = {
     count: BUILTIN.length,
     allDescribed: BUILTIN.every((row) => !!row.facts && Array.isArray(row.sections)
@@ -779,7 +781,7 @@ console.log(JSON.stringify(out));
 work = tempfile.mkdtemp(prefix="mmc-presets-")
 try:
     pack = os.path.join(work, "pack")
-    shutil.copytree(os.path.join(ROOT, "js"), os.path.join(pack, "js"))
+    shutil.copytree(os.path.join(ROOT, "web"), os.path.join(pack, "web"))
     os.makedirs(os.path.join(work, "scripts"), exist_ok=True)
     for name, source in STUBS.items():
         with open(os.path.join(work, "scripts", name), "w", encoding="utf-8") as handle:

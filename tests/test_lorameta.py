@@ -22,11 +22,13 @@ import json
 import os
 import struct
 import sys
+
+import layout
 import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-spec = importlib.util.spec_from_file_location("lorameta", os.path.join(ROOT, "lorameta.py"))
+spec = importlib.util.spec_from_file_location("lorameta", layout.py("lorameta"))
 lorameta = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(lorameta)
 

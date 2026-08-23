@@ -31,6 +31,8 @@ import os
 import shutil
 import subprocess
 import sys
+
+import layout
 import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -58,8 +60,8 @@ export const api = {
 
 CHECK = r"""
 await import("./dom.mjs");
-const { CastShelf } = await import("./js/minimax_creator/cast.js");
-const S = await import("./js/minimax_creator/state.js");
+const { CastShelf } = await import("./web/creator/cast.js");
+const S = await import("./web/creator/state.js");
 
 const out = { errors: [] };
 
@@ -174,7 +176,7 @@ console.log(JSON.stringify(out));
 work = tempfile.mkdtemp(prefix="mmc-cast-detach-")
 try:
     pack = os.path.join(work, "pack")
-    shutil.copytree(os.path.join(ROOT, "js"), os.path.join(pack, "js"))
+    shutil.copytree(os.path.join(ROOT, "web"), os.path.join(pack, "web"))
     os.makedirs(os.path.join(work, "scripts"), exist_ok=True)
     for name, source in STUBS.items():
         with open(os.path.join(work, "scripts", name), "w", encoding="utf-8") as handle:

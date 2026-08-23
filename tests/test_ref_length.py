@@ -23,17 +23,19 @@ import os
 import shutil
 import subprocess
 import sys
+
+import layout
 import types
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-MIRROR = os.path.join(ROOT, "js", "minimax_creator", "state.js")
+MIRROR = layout.js("state.js")
 
 package = types.ModuleType("mmcref")
-package.__path__ = [ROOT]
+package.__path__ = [layout.PY_ROOT]
 sys.modules["mmcref"] = package
 for name in ("canvas", "contextir", "subjects", "compile"):
-    spec = importlib.util.spec_from_file_location(f"mmcref.{name}", os.path.join(ROOT, f"{name}.py"))
+    spec = importlib.util.spec_from_file_location(f"mmcref.{name}", layout.py(name))
     module = importlib.util.module_from_spec(spec)
     sys.modules[f"mmcref.{name}"] = module
     setattr(package, name, module)

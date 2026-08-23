@@ -18,6 +18,8 @@ sampler, and `_plan` is the whole of what is under test.
 import importlib.util
 import os
 import sys
+
+import layout
 import types
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -44,11 +46,11 @@ def _load():
     sys.modules.setdefault("server", server)
 
     package = types.ModuleType("mmc")
-    package.__path__ = [ROOT]
+    package.__path__ = [layout.PY_ROOT]
     sys.modules["mmc"] = package
     for name in ("canvas", "contextir", "compile", "refine"):
         spec = importlib.util.spec_from_file_location(
-            f"mmc.{name}", os.path.join(ROOT, f"{name}.py"))
+            f"mmc.{name}", layout.py(name))
         module = importlib.util.module_from_spec(spec)
         sys.modules[f"mmc.{name}"] = module
         spec.loader.exec_module(module)
@@ -59,7 +61,7 @@ def _load():
     # because `_plan` passes it into every compile.
     sys.modules["mmc.media"].image_size = None
     spec = importlib.util.spec_from_file_location(
-        "mmc.refine_routes", os.path.join(ROOT, "refine_routes.py"))
+        "mmc.refine_routes", layout.py("refine_routes"))
     module = importlib.util.module_from_spec(spec)
     sys.modules["mmc.refine_routes"] = module
     spec.loader.exec_module(module)

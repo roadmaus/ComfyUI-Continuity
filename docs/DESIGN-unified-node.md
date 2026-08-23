@@ -245,7 +245,7 @@ Not a side effect — this is half the reason to do it.
 | `creator_node.fingerprint_inputs` | Its private mtime walker; `timeline._stamps` is the survivor (~25 lines) |
 | `DEFAULT_DATA` ×2 | One |
 | `state.js` | `serializeState` collapses into the piece-level serializer — it is already `serializeCommon` + canvas + models + turbo, which is what `serializeTimeline` writes. `parseState`/`emptyState` stop being a blob format and become the segment format under their own names |
-| `minimax_creator.js` | Three branches in `nodeCreated` → two; the `CREATOR` and `else` branches of `loadedGraphNode` unify onto `body.reload()`; one entry each out of `MIN_SIZE`/`WIDGET`/`SIDE` |
+| `creator.js` | Three branches in `nodeCreated` → two; the `CREATOR` and `else` branches of `loadedGraphNode` unify onto `body.reload()`; one entry each out of `MIN_SIZE`/`WIDGET`/`SIDE` |
 | `refine_routes.py` | `kind` drops to `segment`/`timeline`; the `kind == "creator"` early return goes. `cuts = shot_limit(seconds) if kind == "creator"` becomes `if len(segments) == 1` — which is *more* correct: a one-card timeline gets no cut request today and should |
 | `tests/test_creator_graph.py` | Its headline assertion ("both nodes emit the same graph") becomes tautological. Replaced by a v1-blob-lifts-to-one-segment test, or the merge silently deletes the coverage that made it safe |
 

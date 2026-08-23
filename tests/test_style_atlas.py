@@ -1,6 +1,6 @@
 """The vendored style atlas is complete, and a style applied leads the prompt.
 
-Two halves, and the first is the one that rots. `js/minimax_creator/presets/`
+Two halves, and the first is the one that rots. `web/creator/presets/`
 holds a generated index and two folders of pictures, written by
 `tools/vendor_style_atlas.py` from upstream's page — and the failure mode of a
 vendored asset tree is not a crash, it is a card with a hole where a picture
@@ -26,10 +26,12 @@ import re
 import shutil
 import subprocess
 import sys
+
+import layout
 import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PRESETS = os.path.join(ROOT, "js", "minimax_creator", "presets")
+PRESETS = layout.js("presets")
 MODULE = os.path.join(PRESETS, "atlas.js")
 THUMBS = os.path.join(PRESETS, "atlas")
 STILLS = os.path.join(THUMBS, "full")
@@ -40,7 +42,7 @@ from harness import FAILURES, check, passed, skip  # noqa: E402
 passed("the style atlas is whole, and a style leads the prompt")
 
 if not os.path.isfile(MODULE):
-    FAILURES.append("js/minimax_creator/presets/atlas.js is missing — run "
+    FAILURES.append("web/creator/presets/atlas.js is missing — run "
                     "tools/vendor_style_atlas.py")
     sys.exit(1)
 
@@ -122,7 +124,7 @@ check("the stills are bigger than the card pictures",
 REF = os.path.join(PRESETS, "atlasref.js")
 with open(REF, encoding="utf-8") as handle:
     ref_source = handle.read()
-with open(os.path.join(ROOT, "media.py"), encoding="utf-8") as handle:
+with open(layout.py("media"), encoding="utf-8") as handle:
     media_source = handle.read()
 
 js_scheme = re.search(r'export const ATLAS_SCHEME = "([^"]*)"', ref_source)
@@ -163,9 +165,9 @@ export const api = {
 }
 
 CHECK = r"""
-const S = await import("./js/minimax_creator/state.js");
-const P = await import("./js/minimax_creator/presets.js");
-const { styleRows, ATLAS } = await import("./js/minimax_creator/presets/stylelib.js");
+const S = await import("./web/creator/state.js");
+const P = await import("./web/creator/presets.js");
+const { styleRows, ATLAS } = await import("./web/creator/presets/stylelib.js");
 
 const out = { errors: [] };
 const rows = styleRows();
@@ -292,7 +294,7 @@ try:
     pack = os.path.join(work, "pack")
     # The stills are half a thousand files this half of the suite never opens —
     # the Python half above is what checks them, off the real tree.
-    shutil.copytree(os.path.join(ROOT, "js"), os.path.join(pack, "js"),
+    shutil.copytree(os.path.join(ROOT, "web"), os.path.join(pack, "web"),
                     ignore=shutil.ignore_patterns("atlas"))
     os.makedirs(os.path.join(work, "scripts"), exist_ok=True)
     for name, stub in STUBS.items():

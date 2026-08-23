@@ -44,7 +44,7 @@ except Exception as exc:  # noqa: BLE001
     print(f"skipped: ComfyUI not importable ({type(exc).__name__}: {exc})")
     sys.exit(0)
 
-cn = importlib.import_module(f"{PACKAGE}.creator_node")
+cn = importlib.import_module(f"{PACKAGE}.creator.creator_node")
 
 from harness import FAILURES, check, passed
 
@@ -201,8 +201,8 @@ check("the face node's conditioning is the crop segment's",
 # Asserted against `render.face_payload` itself rather than through a build,
 # because a keyframe has to be a file on disk before the canvas can be resolved
 # from it, and what is being checked here is what the payload keeps.
-render_mod = importlib.import_module(f"{PACKAGE}.render")
-compile_mod = importlib.import_module(f"{PACKAGE}.compile")
+render_mod = importlib.import_module(f"{PACKAGE}.creator.render")
+compile_mod = importlib.import_module(f"{PACKAGE}.creator.compile")
 keyed = render_mod.face_payload({"request": {
     "prompt": "a woman crossing a market",
     "duration_s": 5,

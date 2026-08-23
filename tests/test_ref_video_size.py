@@ -19,6 +19,8 @@ import importlib.util
 import math
 import os
 import sys
+
+import layout
 import types
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -34,9 +36,9 @@ def _boot():
     sys.path.insert(0, COMFY)
     sys.argv = ["main.py", "--base-directory", BASE]
     package = types.ModuleType("mmc")
-    package.__path__ = [ROOT]
+    package.__path__ = [layout.PY_ROOT]
     sys.modules["mmc"] = package
-    spec = importlib.util.spec_from_file_location("mmc.encode", os.path.join(ROOT, "encode.py"))
+    spec = importlib.util.spec_from_file_location("mmc.encode", layout.py("encode"))
     module = importlib.util.module_from_spec(spec)
     sys.modules["mmc.encode"] = module
     spec.loader.exec_module(module)

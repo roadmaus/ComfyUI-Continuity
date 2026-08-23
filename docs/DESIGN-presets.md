@@ -29,7 +29,7 @@ includes everything" that stored only the blob would drop the turbo schedule, th
 step count and the block cache — which is most of what anyone tunes.
 
 The pack already solved this exact problem once. `stashPreStage` in
-`js/minimax_creator.js` writes `{blob, sampling}` — the serialised state plus a
+`web/creator.js` writes `{blob, sampling}` — the serialised state plus a
 sweep of every non-blob widget by name. **A preset is that pair, named and kept.**
 Nothing new has to be invented for the capture side; it has to be generalised
 from one node to three and given somewhere to live.
@@ -477,7 +477,7 @@ There is no new window in this and nothing new to learn.
   right-hand cluster. That one option covers three cases at once: the piece's own
   face (which passes the *piece's* target, not its one shot's), the strip's card
   editor (which passes that card's), and the pre-stage's H3 branch.
-- **`getExtraMenuOptions`** in `js/minimax_creator.js` already stamps a menu item
+- **`getExtraMenuOptions`** in `web/creator.js` already stamps a menu item
   on all three node ids; **Presets…** joins *Copy JSON* for nearly free, reading
   its target late off the mounted body — so a node whose body has not been built
   opens the library read-only rather than not at all.
@@ -498,21 +498,21 @@ the same remount the pill does.
 
 | New | |
 |---|---|
-| `js/minimax_creator/presets.js` | capture, apply, the section table, the storage pair |
-| `js/minimax_creator/presetlib.js` | the library modal and the inspector |
-| `js/minimax_creator/presets/builtin.js` | the shipped starters |
-| `js/minimax_creator/styles/presets.js` | its stylesheet chunk, registered in `styles.js` |
+| `web/creator/presets.js` | capture, apply, the section table, the storage pair |
+| `web/creator/presetlib.js` | the library modal and the inspector |
+| `web/creator/presets/builtin.js` | the shipped starters |
+| `web/creator/styles/presets.js` | its stylesheet chunk, registered in `styles.js` |
 
 | Touched | |
 |---|---|
-| `js/minimax_creator/timeline.js` | the rail tool, the piece and shot targets, `io` into the modal |
-| `js/minimax_creator/prestage.js` | the rail tool and the pre-stage target |
-| `js/minimax_creator/editor.js` | the `presetTarget` option and its rail tool |
-| `js/minimax_creator.js` | the context-menu item |
-| `js/minimax_creator/styles.js` | the new chunk, after the picker's |
-| `js/minimax_creator/api.js` | `renderMeta`, the one call to the one route |
+| `web/creator/timeline.js` | the rail tool, the piece and shot targets, `io` into the modal |
+| `web/creator/prestage.js` | the rail tool and the pre-stage target |
+| `web/creator/editor.js` | the `presetTarget` option and its rail tool |
+| `web/creator.js` | the context-menu item |
+| `web/creator/styles.js` | the new chunk, after the picker's |
+| `web/creator/api.js` | `renderMeta`, the one call to the one route |
 | `server_routes.py` | `/minimax_creator/render_meta` and its two readers |
-| `js/minimax_creator/locales/{ja,ko,zh}.js` | 81 new strings, in all three |
+| `web/creator/locales/{ja,ko,zh}.js` | 81 new strings, in all three |
 
 One route of Python, and only because a browser cannot open a file. Nothing here
 is read at execute time, nothing here changes what is queued, and the backend has

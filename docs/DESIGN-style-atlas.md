@@ -25,7 +25,7 @@ thousand frames of.
 ## Vendored, and only two thirds of it
 
 `tools/vendor_style_atlas.py` takes the atlas's generated `index.html` apart and
-writes two things into `js/minimax_creator/presets/`:
+writes two things into `web/creator/presets/`:
 
 - **`atlas.js`** — the index. Category, descriptor and clip ids, one style per
   line, plus a header stamping the upstream revision it was taken from. It is a

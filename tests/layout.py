@@ -1,25 +1,26 @@
-"""Where the two sides of a mirrored rule live, and how to run the JS one.
+"""Where this pack's code lives, and how to load either half of it.
 
-Eight suites check that a rule written twice — once in Python because the node
-compiles with it, once in JavaScript because the body draws it live — still says
-the same thing in both places. Every one of them opened with the same forty
-lines: derive the repo root, spell out `js/minimax_creator/<file>.js`, skip if
-`node` is missing, fake a package so the pure modules can be imported without
-ComfyUI, and shell out to `node --input-type=module`.
+Most of the suite needs a path into the package: the pure Python modules, so
+they can be imported without booting ComfyUI, and the frontend modules, so node
+can be pointed at them. Every suite derived the repo root and then spelled the
+layout out again — `os.path.join(ROOT, "compile.py")`, `os.path.join(ROOT,
+"js", "minimax_creator", "state.js")` — which put the directory structure in
+twenty-five files that all had to agree.
 
-Written eight times, it drifted eight ways: three spellings of the node flag
-(`-e`, `--eval`, and `--eval` with the arguments in a different position) and
-four names for the fake package (`mmc`, `mmcpkg`, `mmc_outputs`, and none at
-all). None of that was a decision anybody made.
+They did not. The eight mirror suites alone carried three spellings of node's
+eval flag (`-e`, `--eval`, and `--eval` with the arguments in another position)
+and four names for the fake package they load modules into (`mmc`, `mmcpkg`,
+`mmc_outputs`, and none at all). None of that was a decision anybody made.
 
-It also meant the layout of the repo was written into eight files. That is the
-part this exists to fix: **the paths are here and nowhere else**, so moving the
-frontend or moving a module into a family package is one edit in this file
-rather than eight edits that have to agree.
+**The layout is `PY_ROOT` and `WEB_ROOT` and nothing else.** Moving the
+frontend, or moving a module into a family package, is an edit here rather than
+twenty-five edits that have to be kept in step — which is what makes the
+multi-family refactor a change to the code instead of a change to the code and
+its whole test suite at once.
 
-`skip_without_node()` must be called before anything else — the module-level
-import of a mirror is the point where a machine without `node` should bow out,
-and it exits rather than raising so `harness.py` reports a skip and not a crash.
+`skip_without_node()` must be called before anything else in a suite that shells
+out: the import is the point where a machine without node should bow out, and it
+exits rather than raising so `harness.py` reports a skip and not a crash.
 """
 
 import importlib.util
@@ -32,20 +33,25 @@ import types
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# The frontend, relative to the repo root. One tuple, because the whole reason
-# this module exists is that the tree moves and the suites should not care.
-WEB = ("js", "minimax_creator")
+# The two facts. Everything else in this file, and every suite that imports it,
+# is written in terms of these.
+PY_ROOT = os.path.join(ROOT, "creator")
+WEB_ROOT = os.path.join(ROOT, "web", "creator")
 
-# Where a mirrored Python module is found, by its logical name. Anything absent
-# is looked up beside the repo root, which is where every one of them lives
-# today; the map is what lets a module move into a family package without the
-# suite that mirrors it having to learn where it went.
+# Where a module is found when it is not simply `PY_ROOT/<name>.py`. Empty today;
+# this is what lets a module move into a family package without the suites that
+# load it having to learn where it went.
 MODULES = {}
 
 
-def js(name):
-    """The path to a mirror module, e.g. `js("state.js")`."""
-    return os.path.join(ROOT, *WEB, name)
+def js(*parts):
+    """A path inside the frontend, e.g. `js("state.js")`, `js("styles")`."""
+    return os.path.join(WEB_ROOT, *parts)
+
+
+def py(name):
+    """The file a package module lives in, e.g. `py("compile")`."""
+    return MODULES.get(name, os.path.join(PY_ROOT, f"{name}.py"))
 
 
 def skip_without_node():
@@ -55,11 +61,11 @@ def skip_without_node():
         sys.exit(0)
 
 
-def load(*names, package="mmcmirror"):
+def load(*names, package="mmcpkg"):
     """Import pure package modules without ComfyUI. -> the package holding them.
 
-    The modules mirrored here import each other relatively (`from . import
-    canvas`), so they cannot be loaded as loose files — they need a package to
+    The modules import each other relatively (`from . import canvas`), so they
+    cannot be loaded as loose files — they need a package to
     be relative *to*. That package is faked rather than real because importing
     the real one runs `__init__.py`, which registers the server routes and pulls
     in torch.
@@ -74,14 +80,14 @@ def load(*names, package="mmcmirror"):
     """
     if package not in sys.modules:
         holder = types.ModuleType(package)
-        holder.__path__ = [ROOT]
+        holder.__path__ = [PY_ROOT]
         sys.modules[package] = holder
     holder = sys.modules[package]
 
     for name in names:
         key = f"{package}.{name}"
         if key not in sys.modules:
-            path = MODULES.get(name, os.path.join(ROOT, f"{name}.py"))
+            path = py(name)
             spec = importlib.util.spec_from_file_location(key, path)
             module = importlib.util.module_from_spec(spec)
             # Registered before it is executed: a module that imports a sibling

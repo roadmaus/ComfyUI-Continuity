@@ -7,7 +7,7 @@
 // values off `node.widgets`. A preset that stored only `creator_data` would drop
 // the turbo schedule, the step count and the block cache — which is most of what
 // anyone tunes. So a preset is a blob *and* a widget row, which is the pair
-// `stashPreStage` in `js/minimax_creator.js` already writes for its own reasons.
+// `stashPreStage` in `web/creator.js` already writes for its own reasons.
 //
 // **Cut into sections, because "everything" is the right default and the wrong
 // only option.** A preset that always replaces the whole node stops being used

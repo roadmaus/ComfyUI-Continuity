@@ -18,13 +18,13 @@ Skips itself if node is not installed.
 
 import json
 
-import mirror
+import layout
 
-mirror.skip_without_node()
+layout.skip_without_node()
 
-MIRROR = mirror.js("state.js")
+MIRROR = layout.js("state.js")
 
-subjects = mirror.load("subjects").subjects
+subjects = layout.load("subjects").subjects
 
 
 # The names put through both sides' pattern are the ones the distinction turns
@@ -141,7 +141,7 @@ console.log(JSON.stringify({
 }));
 """
 
-reflected = mirror.run(SCRIPT, MIRROR, NAMES, CASES)
+reflected = layout.run(SCRIPT, MIRROR, NAMES, CASES)
 
 from harness import FAILURES, passed
 

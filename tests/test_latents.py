@@ -21,6 +21,8 @@ import importlib.util
 import os
 import shutil
 import sys
+
+import layout
 import tempfile
 import time
 import types
@@ -39,9 +41,9 @@ except Exception as exc:  # noqa: BLE001
 def _load(name):
     if "mmc" not in sys.modules:
         package = types.ModuleType("mmc")
-        package.__path__ = [ROOT]
+        package.__path__ = [layout.PY_ROOT]
         sys.modules["mmc"] = package
-    spec = importlib.util.spec_from_file_location(f"mmc.{name}", os.path.join(ROOT, f"{name}.py"))
+    spec = importlib.util.spec_from_file_location(f"mmc.{name}", layout.py(name))
     module = importlib.util.module_from_spec(spec)
     sys.modules[f"mmc.{name}"] = module
     spec.loader.exec_module(module)

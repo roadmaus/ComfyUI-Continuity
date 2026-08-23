@@ -179,7 +179,7 @@ The atlas is vendored (~5 MB of index and stills); nothing is downloaded.
 - **Where files go** is a per-machine setting (Settings → Folders), not part of
   the workflow, with `%year%`-style tokens; MP4 quality is a setting too.
 - **Language** follows ComfyUI's own locale — English, 日本語, 한국어, 简体中文.
-  Corrections are one-line edits in `js/minimax_creator/locales/`.
+  Corrections are one-line edits in `web/creator/locales/`.
 
 ## Thanks
 

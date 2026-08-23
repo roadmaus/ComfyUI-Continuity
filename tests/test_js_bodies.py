@@ -7,7 +7,7 @@ and `app.registerExtension` never runs, so every node in the pack renders as its
 raw widgets and nothing says why.
 
 That has now happened twice for reasons no syntax check could catch — the CSS
-lives in template literals (one per module under `js/minimax_creator/styles/`,
+lives in template literals (one per module under `web/creator/styles/`,
 concatenated by `styles.js`), so a backtick inside a CSS comment ends the string
 and turns the rest of the stylesheet into code that still parses. `node --check`
 passes; the extension is dead.
@@ -28,6 +28,8 @@ import os
 import shutil
 import subprocess
 import sys
+
+import layout
 import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -35,7 +37,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 # ---- the stylesheet is one template literal per file ------------------------
 #
-# Every module under js/minimax_creator/styles/ is `export const css = ` and then
+# Every module under web/creator/styles/ is `export const css = ` and then
 # the whole stylesheet, so one stray backtick — in a comment, around a property
 # name, anywhere — closes the literal early and the rest of the file parses as
 # JavaScript. What that costs is not the rule: it is the module, and with it the
@@ -44,7 +46,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 # The run below already catches it, as an import stack twenty frames deep with
 # nothing in it about backticks. This says which file and which line.
 
-STYLES = os.path.join(ROOT, "js", "minimax_creator", "styles")
+STYLES = layout.js("styles")
 stray = []
 for name in sorted(os.listdir(STYLES)):
     if not name.endswith(".js"):
@@ -142,8 +144,8 @@ export const api = {
 
 CHECK = """
 await import("./dom.mjs");
-await import("./js/minimax_creator.js");
-const S = await import("./js/minimax_creator/state.js");
+await import("./web/creator.js");
+const S = await import("./web/creator/state.js");
 const { app } = await import("../scripts/app.js");
 const ext = globalThis.__ext;
 // The seed memory is installed here, the same way the frontend installs it.
@@ -452,7 +454,7 @@ try {
 // failure it guards against is silent — a body that goes fullscreen and does
 // not come back leaves a node with a blank face and no error anywhere.
 try {
-  const fs = await import("./js/minimax_creator/fullscreen.js");
+  const fs = await import("./web/creator/fullscreen.js");
   const node = fakeNode("MiniMaxH3Creator", "creator_data", ONE_SHOT);
   await ext.nodeCreated(node);
   // The editor scans the graph for the piece and its PreStage, so the node has
@@ -630,7 +632,7 @@ try {
   await ext.nodeCreated(node);
   const body = node.mmcBody;
   out.clip = { mounted: !!node.dom, node: body.root.text };
-  const { openTimeline } = await import("./js/minimax_creator/timeline.js");
+  const { openTimeline } = await import("./web/creator/timeline.js");
   openTimeline({ timeline: body.timeline, onCommit: () => body.commit() });
   await new Promise((done) => setTimeout(done, 0));
   out.clip.modal = document.body.children.at(-1).text;
@@ -654,7 +656,7 @@ try {
   const node = fakeNode("MiniMaxH3Timeline", "timeline_data", "{}");
   await ext.nodeCreated(node);
   const body = node.mmcBody;
-  const { openTimeline: openTimelineModal } = await import("./js/minimax_creator/timeline.js");
+  const { openTimeline: openTimelineModal } = await import("./web/creator/timeline.js");
   out.empty = {
     // An empty blob opens as one blank shot, which is the Creator's own default.
     cards: body.timeline.segments.length,
@@ -842,7 +844,7 @@ try {
                { prompt: "shot 2", assets: [], loras: [], duration_s: 5 }],
   }));
   await ext.nodeCreated(strip);
-  const { openTimeline: openStrip } = await import("./js/minimax_creator/timeline.js");
+  const { openTimeline: openStrip } = await import("./web/creator/timeline.js");
   openStrip({ timeline: strip.mmcBody.timeline, onCommit: () => strip.mmcBody.commit() });
   await new Promise((done) => setTimeout(done, 0));
   const sheet = document.body.children.at(-1);
@@ -895,7 +897,7 @@ try {
     version: 2, segments: [{ prompt: "shot 1", duration_s: 5, assets: [], loras: [] }],
   }));
   await ext.nodeCreated(node);
-  const { openTimeline: openTimelineModal } = await import("./js/minimax_creator/timeline.js");
+  const { openTimeline: openTimelineModal } = await import("./web/creator/timeline.js");
   openTimelineModal({ timeline: node.mmcBody.timeline, onCommit: () => node.mmcBody.commit() });
   await new Promise((done) => setTimeout(done, 0));
   const opts = () => all(document.body.children.at(-1), "mmc-tl-render-opt");
@@ -955,7 +957,7 @@ try {
     version: 2, segments: [{ prompt: "shot 1", duration_s: 5, assets: [], loras: [] }],
   }));
   await ext.nodeCreated(node);
-  const { openTimeline: openTimelineModal } = await import("./js/minimax_creator/timeline.js");
+  const { openTimeline: openTimelineModal } = await import("./web/creator/timeline.js");
   openTimelineModal({ timeline: node.mmcBody.timeline, onCommit: () => node.mmcBody.commit() });
   await new Promise((done) => setTimeout(done, 0));
   click(all(document.body.children.at(-1), "mmc-tl-edit")[0]);
@@ -990,7 +992,7 @@ try {
   const node = fakeNode("MiniMaxH3Timeline", "timeline_data", firstBlob);
   await ext.nodeCreated(node);
   const body = node.mmcBody;
-  const { openTimeline: openTimelineModal } = await import("./js/minimax_creator/timeline.js");
+  const { openTimeline: openTimelineModal } = await import("./web/creator/timeline.js");
   openTimelineModal({ timeline: body.timeline, onCommit: () => body.commit() });
   await new Promise((done) => setTimeout(done, 0));
   out.clipFirst = {
@@ -1013,7 +1015,7 @@ try {
   });
   const node = fakeNode("MiniMaxH3Timeline", "timeline_data", poolBlob);
   await ext.nodeCreated(node);
-  const { openTimeline: openTimelineModal } = await import("./js/minimax_creator/timeline.js");
+  const { openTimeline: openTimelineModal } = await import("./web/creator/timeline.js");
   openTimelineModal({ timeline: node.mmcBody.timeline, onCommit: () => {} });
   await new Promise((done) => setTimeout(done, 0));
   const modal = document.body.children.at(-1);
@@ -1050,7 +1052,7 @@ try {
 // — what matters is that the tabs exist, the folder fields carry the stored
 // prefixes, and a committed edit posts the key the server expects.
 try {
-  const { openSettings } = await import("./js/minimax_creator/settings.js");
+  const { openSettings } = await import("./web/creator/settings.js");
   openSettings();
   await new Promise((done) => setTimeout(done, 0));
   const page = document.body.children.at(-1);
@@ -1150,7 +1152,7 @@ try {
   // The pin lives in styles.js, and it is two facts: the preference from this
   // page and whether the shell is up. Imported here so the second one can be
   // said out loud without opening a real fullscreen editor.
-  const packStyles = await import("./js/minimax_creator/styles.js");
+  const packStyles = await import("./web/creator/styles.js");
   const setOpts = () => {
     const found = [];
     const walk = (node) => {
@@ -1420,7 +1422,7 @@ try {
   const strip = face([{ ...shot }, { ...shot }]);
   await ext.nodeCreated(strip);
   // The window over a card is not a node face and has no node to draw over.
-  const card = new (await import("./js/minimax_creator/editor.js")).CreatorEditor({
+  const card = new (await import("./web/creator/editor.js")).CreatorEditor({
     state: { ...shot }, onCommit: () => {},
   });
   // The menu entry is installed on the node *type*, not on an instance, so it
@@ -1558,7 +1560,7 @@ try {
 // The body remembers now and stamps whoever it builds next. Driven through the
 // real shell, because the hand-off is the thing under test.
 try {
-  const fs = await import("./js/minimax_creator/fullscreen.js");
+  const fs = await import("./web/creator/fullscreen.js");
   globalThis.localStorage = { getItem: (k) => (k === "mmc.fullscreen.view" ? "simple" : null),
                               setItem() {}, removeItem() {} };
   const node = fakeNode("MiniMaxH3Creator", "creator_data", JSON.stringify({
@@ -1697,7 +1699,7 @@ try {
 // appear), its ResizeObserver re-places it, and if that measures the *old*
 // button it measures nothing and the popover lands in the top-left corner.
 try {
-  const dom = await import("./js/minimax_creator/dom.js");
+  const dom = await import("./web/creator/dom.js");
   const row = dom.el("div");
   const anchor = dom.el("button", { text: "faces off" });
   row.appendChild(anchor);
@@ -1800,7 +1802,7 @@ try {
   }));
   await ext.nodeCreated(node);
   const timeline = node.mmcBody.timeline;
-  const { openTimeline: openTimelineModal } = await import("./js/minimax_creator/timeline.js");
+  const { openTimeline: openTimelineModal } = await import("./web/creator/timeline.js");
   openTimelineModal({ timeline, onCommit: () => node.mmcBody.commit() });
   await new Promise((done) => setTimeout(done, 0));
   const modal = document.body.children.at(-1);
@@ -1845,7 +1847,7 @@ try {
     }],
   }));
   await ext.nodeCreated(node);
-  const { openTimeline: openTimelineModal } = await import("./js/minimax_creator/timeline.js");
+  const { openTimeline: openTimelineModal } = await import("./web/creator/timeline.js");
   openTimelineModal({ timeline: node.mmcBody.timeline, onCommit: () => {} });
   await new Promise((done) => setTimeout(done, 0));
   const shelf = findAll(document.body.children.at(-1), "mmc-tl-pool")[0]?.text ?? "";
@@ -2042,7 +2044,7 @@ try {
 // invisible from every other test — the chips render, the sentence queues, and
 // only the click is dead.
 try {
-  const { openTimeline: openTimelineModal } = await import("./js/minimax_creator/timeline.js");
+  const { openTimeline: openTimelineModal } = await import("./web/creator/timeline.js");
   const all = (root, cls) => {
     const hits = [];
     const walk = (n) => {
@@ -2237,9 +2239,9 @@ try {
 // `@subject` while the button promised its own name. And nothing wrote the name
 // into the sentence, so there was no chip to click even when it was right.
 try {
-  const { styleRows } = await import("./js/minimax_creator/presets/stylelib.js");
-  const { styleCastMember } = await import("./js/minimax_creator/presetlib.js");
-  const P = await import("./js/minimax_creator/presets.js");
+  const { styleRows } = await import("./web/creator/presets/stylelib.js");
+  const { styleCastMember } = await import("./web/creator/presetlib.js");
+  const P = await import("./web/creator/presets.js");
   const rows = styleRows();
   out.atlas = { rows: rows.length };
 
@@ -2296,7 +2298,7 @@ try:
     # way the frontend serves them — so the copy keeps that shape: the js tree
     # inside a stand-in for the pack, and the stubs beside it.
     pack = os.path.join(work, "pack")
-    shutil.copytree(os.path.join(ROOT, "js"), os.path.join(pack, "js"))
+    shutil.copytree(os.path.join(ROOT, "web"), os.path.join(pack, "web"))
     os.makedirs(os.path.join(work, "scripts"), exist_ok=True)
     for name, source in STUBS.items():
         with open(os.path.join(work, "scripts", name), "w", encoding="utf-8") as handle:

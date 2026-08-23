@@ -20,6 +20,8 @@ import gc
 import importlib.util
 import os
 import sys
+
+import layout
 import types
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -40,13 +42,13 @@ except Exception as exc:  # noqa: BLE001
 
 def _load(name):
     """One vendored module, without importing the pack — `__init__` wants a server."""
-    for parent, path in (("mmc", ROOT), ("mmc.h3lora", os.path.join(ROOT, "h3lora"))):
+    for parent, path in (("mmc", layout.PY_ROOT), ("mmc.h3lora", os.path.join(layout.PY_ROOT, "h3lora"))):
         if parent not in sys.modules:
             package = types.ModuleType(parent)
             package.__path__ = [path]
             sys.modules[parent] = package
     spec = importlib.util.spec_from_file_location(
-        f"mmc.h3lora.{name}", os.path.join(ROOT, "h3lora", f"{name}.py"))
+        f"mmc.h3lora.{name}", os.path.join(layout.PY_ROOT, "h3lora", f"{name}.py"))
     module = importlib.util.module_from_spec(spec)
     sys.modules[f"mmc.h3lora.{name}"] = module
     spec.loader.exec_module(module)

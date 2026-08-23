@@ -11,6 +11,8 @@ actually declare, and that it fails loudly rather than quietly when it does not.
 import importlib.util
 import os
 import sys
+
+import layout
 import types
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -22,9 +24,9 @@ NODES.NODE_CLASS_MAPPINGS = {}
 sys.modules["nodes"] = NODES
 
 package = types.ModuleType("mmc")
-package.__path__ = [ROOT]
+package.__path__ = [layout.PY_ROOT]
 sys.modules["mmc"] = package
-spec = importlib.util.spec_from_file_location("mmc.accel", os.path.join(ROOT, "accel.py"))
+spec = importlib.util.spec_from_file_location("mmc.accel", layout.py("accel"))
 accel = importlib.util.module_from_spec(spec)
 sys.modules["mmc.accel"] = accel
 spec.loader.exec_module(accel)

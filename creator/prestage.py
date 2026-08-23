@@ -21,7 +21,7 @@ and an expanded subgraph that loads, samples, decodes and saves — see
 node. The one difference is social rather than structural: a PreStage is a
 property of the shot being set up, not a node the user hunts the menu for, so
 the frontend spawns and removes it from a pill on the Creator/Timeline body
-(`js/minimax_creator/prestage.js`) rather than expecting it to be placed by
+(`web/creator/prestage.js`) rather than expecting it to be placed by
 hand. It still *is* an ordinary node underneath — placeable, copyable,
 saveable — because anything else would fight LiteGraph for no benefit.
 

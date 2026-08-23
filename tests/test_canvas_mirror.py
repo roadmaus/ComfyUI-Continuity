@@ -12,12 +12,12 @@ Skips itself if node is not installed.
 
 import json
 
-import mirror
+import layout
 
-mirror.skip_without_node()
+layout.skip_without_node()
 
-MIRROR = mirror.js("canvas.js")
-canvas = mirror.load("canvas").canvas
+MIRROR = layout.js("canvas.js")
+canvas = layout.load("canvas").canvas
 
 # Everything the mirror is expected to reproduce, dumped in one go rather than
 # one subprocess per question.
@@ -47,7 +47,7 @@ console.log(JSON.stringify(out));
 # whole reason `match_seconds` does not simply round.
 MATCH_CASES = [0.2, 1, 2.5, 5.88, 6, 6.6, 7.29, 9.33, 15, 15.04, 59.71, 60, 180]
 
-reflected = mirror.run(
+reflected = layout.run(
     f"const MATCH_CASES = {json.dumps(MATCH_CASES)};\n" + SCRIPT, MIRROR)
 
 from harness import FAILURES, passed

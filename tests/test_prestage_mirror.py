@@ -11,13 +11,13 @@ Skips itself if node is not installed.
 
 import json
 
-import mirror
+import layout
 
-mirror.skip_without_node()
+layout.skip_without_node()
 
-MIRROR = mirror.js("state.js")
+MIRROR = layout.js("state.js")
 
-_pkg = mirror.load("canvas", "contextir", "compile", "compile_image", "compile_still")
+_pkg = layout.load("canvas", "contextir", "compile", "compile_image", "compile_still")
 ci = _pkg.compile_image
 cs = _pkg.compile_still
 cv = _pkg.canvas
@@ -55,7 +55,7 @@ for (const n of s.PRESTAGE_STILL_LENGTHS) out.still.latents[n] = s.stillLatentFr
 console.log(JSON.stringify(out));
 """
 
-reflected = mirror.run(SCRIPT, MIRROR)
+reflected = layout.run(SCRIPT, MIRROR)
 
 from harness import FAILURES, passed
 

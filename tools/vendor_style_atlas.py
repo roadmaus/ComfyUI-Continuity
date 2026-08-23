@@ -7,17 +7,17 @@ generated `index.html` holding every distinct style descriptor in ostris's
 inlined as a base64 webp. This script takes that page apart, pulls the clips it
 cites, and writes the three things the Style tab needs:
 
-* `js/minimax_creator/presets/atlas.js` — the index. Category, phrase and clip
+* `web/creator/presets/atlas.js` — the index. Category, phrase and clip
   ids, one line per style, and nothing else. It is a **mirror of upstream**, not
   a design: no titles, no ordering of ours, no editorialising. Everything the
   library decides about how a style is shown lives in `presets/stylelib.js`,
   hand-written, so that re-running this script never clobbers a design decision.
-* `js/minimax_creator/presets/atlas/<clip>.webp` — the card pictures, 192px wide,
+* `web/creator/presets/atlas/<clip>.webp` — the card pictures, 192px wide,
   one per clip. Separate files rather than data URIs in the module: the grid
   lazy-loads, so a library of 941 styles fetches the dozen it is actually showing,
   and the browser caches them like any other image. Inlined they would be five
   megabytes of base64 parsed on every library open.
-* `js/minimax_creator/presets/atlas/full/<clip>.webp` — the same frames at the
+* `web/creator/presets/atlas/full/<clip>.webp` — the same frames at the
   clip's own resolution, ~30 MB for the set. **This is what makes a style usable
   as a reference picture rather than only as a phrase.** A 192px card picture is
   not a reference; the clip is 512 to 1088 across, and `encode.py` scales a

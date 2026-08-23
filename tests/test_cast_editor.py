@@ -23,6 +23,8 @@ import os
 import shutil
 import subprocess
 import sys
+
+import layout
 import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -59,8 +61,8 @@ export const api = {
 
 CHECK = r"""
 await import("./dom.mjs");
-const { openPresetLibrary } = await import("./js/minimax_creator/presetlib.js");
-const P = await import("./js/minimax_creator/presets.js");
+const { openPresetLibrary } = await import("./web/creator/presetlib.js");
+const P = await import("./web/creator/presets.js");
 
 const out = { errors: [] };
 const wait = () => new Promise((r) => setTimeout(r, 0));
@@ -177,7 +179,7 @@ console.log(JSON.stringify(out));
 work = tempfile.mkdtemp(prefix="mmc-cast-editor-")
 try:
     pack = os.path.join(work, "pack")
-    shutil.copytree(os.path.join(ROOT, "js"), os.path.join(pack, "js"))
+    shutil.copytree(os.path.join(ROOT, "web"), os.path.join(pack, "web"))
     os.makedirs(os.path.join(work, "scripts"), exist_ok=True)
     for name, source in STUBS.items():
         with open(os.path.join(work, "scripts", name), "w", encoding="utf-8") as handle:
@@ -186,7 +188,7 @@ try:
     # Two seams the sheet reaches through, stubbed in the copy rather than in the
     # check: the picker is a modal this has no way to drive, and the library
     # instance is otherwise private to `openPresetLibrary`.
-    lib_path = os.path.join(pack, "js", "minimax_creator", "presetlib.js")
+    lib_path = os.path.join(pack, "web", "creator", "presetlib.js")
     with open(lib_path, encoding="utf-8") as handle:
         source = handle.read()
     source = source.replace(

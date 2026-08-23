@@ -58,9 +58,9 @@ except Exception as exc:  # noqa: BLE001
     print(f"skipped: ComfyUI not importable ({type(exc).__name__}: {exc})")
     sys.exit(0)
 
-cn = importlib.import_module(f"{PACKAGE}.creator_node")
-media_mod = importlib.import_module(f"{PACKAGE}.media")
-settings_mod = importlib.import_module(f"{PACKAGE}.settings")
+cn = importlib.import_module(f"{PACKAGE}.creator.creator_node")
+media_mod = importlib.import_module(f"{PACKAGE}.creator.media")
+settings_mod = importlib.import_module(f"{PACKAGE}.creator.settings")
 
 from goldens import compare
 from harness import FAILURES, passed
@@ -81,10 +81,11 @@ settings_mod.load = lambda: dict(settings_mod.DEFAULTS)
 # table instead, so the branch is exercised and the answer is the same wherever
 # it runs. `creator_node._render` reads this off the module at call time, which
 # is what makes patching it here enough.
-# The keyframes are portrait on purpose. A 16:9 picture behind a blob whose
-# pill also says 16:9 derives the canvas the pill would have given anyway, so the
-# golden would look identical whether the derivation ran or not — which is a case
-# that silently tests nothing. Portrait makes the branch visible in the file.
+#
+# The keyframes are portrait on purpose: a 16:9 picture behind a blob whose pill
+# also says 16:9 derives the canvas the pill would have given anyway, so the
+# golden would look identical whether the derivation ran or not. Portrait is what
+# makes that branch visible in the file.
 SIZES = {"a.png": (1080, 1920), "b.png": (1080, 1920), "face.png": (1024, 1024)}
 media_mod.image_size = lambda filename: SIZES.get(filename, (1920, 1080))
 
@@ -281,7 +282,7 @@ class _FakePack:
 
 import nodes as comfy_nodes  # noqa: E402  (only reachable once ComfyUI has booted)
 
-_accel = importlib.import_module(f"{PACKAGE}.accel")
+_accel = importlib.import_module(f"{PACKAGE}.creator.accel")
 comfy_nodes.NODE_CLASS_MAPPINGS[_accel.BLOCK_CACHE_NODE] = _FakePack
 try:
     frozen("block_cache",

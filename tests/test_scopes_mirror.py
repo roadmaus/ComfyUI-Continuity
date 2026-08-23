@@ -18,13 +18,13 @@ Skips itself if node is not installed.
 
 import json
 
-import mirror
+import layout
 
-mirror.skip_without_node()
+layout.skip_without_node()
 
-MIRROR = mirror.js("state.js")
+MIRROR = layout.js("state.js")
 
-_pkg = mirror.load("canvas", "contextir", "subjects", "compile")
+_pkg = layout.load("canvas", "contextir", "subjects", "compile")
 compiler = _pkg.compile
 contextir = _pkg.contextir
 subjects = _pkg.subjects
@@ -45,7 +45,7 @@ console.log(JSON.stringify({
 }));
 """
 
-reflected = mirror.run(SCRIPT, MIRROR)
+reflected = layout.run(SCRIPT, MIRROR)
 
 from harness import FAILURES, passed
 

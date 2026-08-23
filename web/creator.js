@@ -1,21 +1,21 @@
 // Entry point. ComfyUI auto-imports every js/**/*.js as an extension, so this is
 // the only file in the package allowed to have import side effects — everything
-// under js/minimax_creator/ is a plain module it pulls in.
+// under web/creator/ is a plain module it pulls in.
 
 import { app } from "../../scripts/app.js";
-import { installStyles } from "./minimax_creator/styles.js";
-import { TimelineBody } from "./minimax_creator/timeline.js";
-import { PreStageBody } from "./minimax_creator/prestage.js";
-import { Satellite } from "./minimax_creator/satellite.js";
-import { SAMPLING_WIDGETS } from "./minimax_creator/sampling.js";
-import { rememberQueuedSeeds } from "./minimax_creator/seedmemory.js";
-import { primeSettings } from "./minimax_creator/api.js";
+import { installStyles } from "./creator/styles.js";
+import { TimelineBody } from "./creator/timeline.js";
+import { PreStageBody } from "./creator/prestage.js";
+import { Satellite } from "./creator/satellite.js";
+import { SAMPLING_WIDGETS } from "./creator/sampling.js";
+import { rememberQueuedSeeds } from "./creator/seedmemory.js";
+import { primeSettings } from "./creator/api.js";
 import { close as closeFullscreen, fullscreenNode, openFullscreen, remount as remountFullscreen,
-         stepToShot, toggleFullscreen } from "./minimax_creator/fullscreen.js";
-import { openPresetLibrary } from "./minimax_creator/presetlib.js";
-import { el } from "./minimax_creator/dom.js";
-import * as S from "./minimax_creator/state.js";
-import { t } from "./minimax_creator/i18n.js";
+         stepToShot, toggleFullscreen } from "./creator/fullscreen.js";
+import { openPresetLibrary } from "./creator/presetlib.js";
+import { el } from "./creator/dom.js";
+import * as S from "./creator/state.js";
+import { t } from "./creator/i18n.js";
 
 const CREATOR = "MiniMaxH3Creator";
 // The retired Timeline id. One shot and twenty are the same node now, and this

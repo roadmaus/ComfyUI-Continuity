@@ -16,6 +16,8 @@ import importlib.util
 import json
 import os
 import sys
+
+import layout
 import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -26,10 +28,10 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 import types
 
 package = types.ModuleType("mmcpkg")
-package.__path__ = [ROOT]
+package.__path__ = [layout.PY_ROOT]
 sys.modules["mmcpkg"] = package
 for name in ("outputs", "settings"):
-    spec = importlib.util.spec_from_file_location(f"mmcpkg.{name}", os.path.join(ROOT, f"{name}.py"))
+    spec = importlib.util.spec_from_file_location(f"mmcpkg.{name}", layout.py(name))
     module = importlib.util.module_from_spec(spec)
     sys.modules[f"mmcpkg.{name}"] = module
     spec.loader.exec_module(module)

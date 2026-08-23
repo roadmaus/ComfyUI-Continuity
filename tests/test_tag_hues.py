@@ -23,9 +23,11 @@ import shutil
 import subprocess
 import sys
 
+import layout
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-STATE = os.path.join(ROOT, "js", "minimax_creator", "state.js")
+STATE = layout.js("state.js")
 
 from harness import check, passed, skip  # noqa: E402
 

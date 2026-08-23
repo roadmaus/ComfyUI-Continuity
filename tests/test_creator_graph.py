@@ -55,12 +55,12 @@ except Exception as exc:  # noqa: BLE001
     print(f"skipped: ComfyUI not importable ({type(exc).__name__}: {exc})")
     sys.exit(0)
 
-cn = importlib.import_module(f"{PACKAGE}.creator_node")
-accel_mod = importlib.import_module(f"{PACKAGE}.accel")
-tl = importlib.import_module(f"{PACKAGE}.timeline")
-outputs_mod = importlib.import_module(f"{PACKAGE}.outputs")
-settings_mod = importlib.import_module(f"{PACKAGE}.settings")
-render_mod = importlib.import_module(f"{PACKAGE}.render")
+cn = importlib.import_module(f"{PACKAGE}.creator.creator_node")
+accel_mod = importlib.import_module(f"{PACKAGE}.creator.accel")
+tl = importlib.import_module(f"{PACKAGE}.creator.timeline")
+outputs_mod = importlib.import_module(f"{PACKAGE}.creator.outputs")
+settings_mod = importlib.import_module(f"{PACKAGE}.creator.settings")
+render_mod = importlib.import_module(f"{PACKAGE}.creator.render")
 
 from harness import FAILURES, check
 
@@ -384,7 +384,7 @@ check("a forced route does not require the checkpoint it skips",
 # pinning: nothing pinned must emit the *core* loaders, and something pinned
 # without the pack must refuse rather than silently load everything on one card.
 
-models_mod = importlib.import_module(f"{PACKAGE}.models")
+models_mod = importlib.import_module(f"{PACKAGE}.creator.models")
 
 
 def on_device(**pins):
@@ -578,7 +578,7 @@ try:
     # remembered to change — which is exactly how this check came to be here.
     from comfy_extras.nodes_minimax_h3 import video_latent_t
 
-    from Minimax_creator import canvas as canvas_mod
+    from Minimax_creator.creator import canvas as canvas_mod
     longest = video_latent_t(max(canvas_mod.legal_frame_counts()))
     check("and asks for enough to cover the longest generation's latent",
           models_mod.PREVIEW_FRAMES >= longest, True)
@@ -697,8 +697,8 @@ tl_payload = json.loads(tl_segment["segment_data"])
 # writes `[Shot 1]` in, where the Creator hands over the bare sentence and
 # `contextir.compose` marks it during the compile. What has to be identical is
 # what the DiT is actually handed, which is downstream of both.
-compiler = importlib.import_module(f"{PACKAGE}.compile")
-media = importlib.import_module(f"{PACKAGE}.media")
+compiler = importlib.import_module(f"{PACKAGE}.creator.compile")
+media = importlib.import_module(f"{PACKAGE}.creator.media")
 
 creator_compiled = compiler.compile_segment(payload, media.image_size)
 timeline_compiled = compiler.compile_segment(tl_payload, media.image_size)
@@ -759,7 +759,7 @@ for field in ("prompt", "mode", "checkpoint", "frames", "seconds", "width", "hei
 # node pinned to the target canvas, and a MiniMaxH3RefinePass resuming the first
 # sampler's latent. At or under native — every graph above — none of it exists.
 
-canvas_mod = importlib.import_module(f"{PACKAGE}.canvas")
+canvas_mod = importlib.import_module(f"{PACKAGE}.creator.canvas")
 TARGET = canvas_mod.resolve_canvas(16 / 9, 1152)
 
 check("no refine pass at native", "MiniMaxH3RefinePass" in kinds, False)
