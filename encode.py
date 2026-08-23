@@ -108,8 +108,18 @@ def _restore(vae, latent):
     return latent.to(device, dtype=dtype)
 
 
-def _megabytes(count):
-    return f"{count / 1024 ** 3:.2f} GB" if count >= 1024 ** 3 else f"{count / 1024 ** 2:.0f} MB"
+def _said(count):
+    """A byte count in the unit that makes it legible.
+
+    Down to kilobytes because a reference's soundtrack is a few hundred of them
+    against a video's forty megabytes, and "0 MB" beside "reused" reads as
+    nothing having happened — which is the opposite of what the line is for.
+    """
+    if count >= 1024 ** 3:
+        return f"{count / 1024 ** 3:.2f} GB"
+    if count >= 1024 ** 2:
+        return f"{count / 1024 ** 2:.0f} MB"
+    return f"{count / 1024:.0f} KB"
 
 
 class Tally:
@@ -141,13 +151,13 @@ class Tally:
             return
         if not self.encoded:
             logging.info("[MiniMax] references: all %d reused (%s) — nothing encoded",
-                         self.reused, _megabytes(self.saved))
+                         self.reused, _said(self.saved))
         elif not self.reused:
             logging.info("[MiniMax] references: %d encoded in %.1f s",
                          self.encoded, self.seconds)
         else:
             logging.info("[MiniMax] references: %d reused (%s), %d encoded in %.1f s",
-                         self.reused, _megabytes(self.saved), self.encoded, self.seconds)
+                         self.reused, _said(self.saved), self.encoded, self.seconds)
 
 
 def _cached(label, parts, produce, tally=None):
@@ -184,7 +194,7 @@ def _cached(label, parts, produce, tally=None):
     if found is not None:
         tensors, meta, where = found
         size = latents.size_of(tensors)
-        logging.info("[MiniMax] %s: reused from %s (%s)", label, where, _megabytes(size))
+        logging.info("[MiniMax] %s: reused from %s (%s)", label, where, _said(size))
         if tally is not None:
             tally.hit(size)
         return tensors, meta
@@ -195,7 +205,7 @@ def _cached(label, parts, produce, tally=None):
     spent = time.monotonic() - started
     kept = latents.store(name, tensors, meta)
     logging.info("[MiniMax] %s: encoded in %.1f s, cached %s",
-                 label, spent, _megabytes(latents.size_of(kept)))
+                 label, spent, _said(latents.size_of(kept)))
     if tally is not None:
         tally.miss(spent)
     return kept, meta

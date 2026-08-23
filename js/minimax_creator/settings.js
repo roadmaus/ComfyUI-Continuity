@@ -134,11 +134,14 @@ export function openSettings() {
   return new Promise((resolve) => new SettingsPage(resolve).mount());
 }
 
-/** A byte count as the page says it: "820 MB", "4.2 GB". */
-function megabytes(bytes) {
-  const mb = Number(bytes) / (1024 * 1024);
-  if (mb >= 1024) return `${(mb / 1024).toFixed(1)} GB`;
-  return `${Math.round(mb)} MB`;
+/** A byte count in the unit that makes it legible: "640 KB", "820 MB", "4.2 GB".
+ *  Down to kilobytes for the same reason the terminal lines go there — a store
+ *  holding only sound references is not holding "0 MB". */
+function said(bytes) {
+  const kb = Number(bytes) / 1024;
+  if (kb >= 1024 * 1024) return `${(kb / (1024 * 1024)).toFixed(1)} GB`;
+  if (kb >= 1024) return `${Math.round(kb / 1024)} MB`;
+  return `${Math.round(kb)} KB`;
 }
 
 // The two numbers the reference cache is bounded by. Both are magnitudes, and
@@ -694,14 +697,14 @@ class SettingsPage {
         if (value <= 0) return t("Nothing is written to disk — this session only.");
         const over = held - value * 1024 * 1024 * 1024;
         if (over > 0) return t("Over by {size}; the next render drops that much.",
-                               { size: megabytes(over) });
+                               { size: said(over) });
         return held
           ? t("Holding {size} across {entries} references.",
-              { size: megabytes(held), entries: this.cache.entries })
+              { size: said(held), entries: this.cache.entries })
           : t("Nothing stored yet.");
       },
       warn: (value) => value > 0 && held > value * 1024 * 1024 * 1024,
-      mark: held > 0 ? { at: held / (1024 * 1024 * 1024), label: megabytes(held) } : null,
+      mark: held > 0 ? { at: held / (1024 * 1024 * 1024), label: said(held) } : null,
       apply: (value) => this.set({ latent_cache_gb: value }),
     });
 

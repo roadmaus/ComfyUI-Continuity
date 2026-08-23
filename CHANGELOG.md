@@ -43,7 +43,8 @@ runs, not after, because the point is to explain a wait while it is happening:
     [MiniMax] @vid-1: decoding beach-plate.mp4
     [MiniMax] @vid-1 video (max): encoded in 24.3 s, cached 40 MB
     [MiniMax] @cast-2 image (max): reused from disk (18 MB)
-    [MiniMax] references: 1 reused (18 MB), 1 encoded in 24.3 s
+    [MiniMax] @vid-1 soundtrack: reused from disk (420 KB)
+    [MiniMax] references: 2 reused (18 MB), 1 encoded in 24.3 s
 
 **A fresh node opens on a seed of its own.** The default was 0, and this node
 pins the after-generate control to "fixed" — so 0 was not a starting point, it

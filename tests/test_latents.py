@@ -489,6 +489,13 @@ check("with the cache off it says that is why it is encoding",
       [line for line in heard.lines if "@img-1" in line][0],
       "[MiniMax] @img-1 image (max): encoding (cache off)")
 
+# A soundtrack latent is a few hundred kilobytes against a video's forty
+# megabytes. Reported in megabytes it read as "0 MB", which beside the word
+# "reused" says the opposite of what the line is for.
+check("a small entry is not reported as nothing",
+      [encoder._said(n) for n in (400 * 1024, 15 * 1024 ** 2, 2 * 1024 ** 3)],
+      ["400 KB", "15 MB", "2.00 GB"])
+
 root.handlers, root.level = stood_aside, was
 
 
