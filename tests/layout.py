@@ -50,6 +50,8 @@ MODULES = {
     "payload": "families.h3.payload",
     "refine": "families.h3.refine",
     "still": "families.h3.still",
+    "ltx25_models": "families.ltx25.models",
+    "ltx25_sampling": "families.ltx25.sampling",
     "krea2_still": "families.krea2.still",
     "ideogram4_still": "families.ideogram4.still",
     "registry": "families.registry",

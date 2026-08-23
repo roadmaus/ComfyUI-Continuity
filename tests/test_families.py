@@ -18,7 +18,8 @@ from harness import FAILURES, check, passed
 
 _pkg = layout.load("canvas", "accel", "sampling", "contextir", "compile",
                    "compile_image", "models", "registry", "manifest",
-                   "still", "krea2_still", "ideogram4_still")
+                   "still", "krea2_still", "ideogram4_still",
+                   "ltx25_models", "ltx25_sampling")
 canvas = _pkg.canvas
 sampling = _pkg.sampling
 models = _pkg.models
@@ -28,6 +29,8 @@ ci = _pkg.compile_image
 h3s = _pkg.still
 k2 = _pkg.krea2_still
 i4 = _pkg.ideogram4_still
+lx = _pkg.ltx25_models
+lxs = _pkg.ltx25_sampling
 
 catalog = manifest.catalog()
 
@@ -157,6 +160,108 @@ check("h3 still block is families/h3/still.py's",
       (h3["still"]["arch"], h3["still"]["lengths"],
        h3["still"]["prompt_modes"]),
       (h3s.ARCH, list(h3s.STILL_LENGTHS), list(h3s.PROMPT_MODES)))
+
+# ---- LTX 2.5 -----------------------------------------------------------------
+#
+# The second video family, and the first manifest whose shape differs from H3's
+# rather than repeating it. What is checked here is what construction cannot
+# give: that the declarations really are the family's own modules', and that
+# the two families differ where the architectures do — a manifest that quietly
+# inherited H3's frame grid or H3's routing would pass every other suite.
+
+ltx = manifest.describe("ltx25")
+lwidgets = {w["id"]: w for w in ltx["widgets"]}
+
+check("ltx25 renders video only", ltx["produces"], ["video"])
+check("ltx25 declares the sampler row exactly",
+      sorted(lwidgets), sorted(lxs.DEFAULTS))
+for name, entry in lwidgets.items():
+    check(f"ltx25 {name} default is sampling.DEFAULTS'",
+          entry["default"], lxs.DEFAULTS[name])
+check("core-owned combos declare no options — the node schema is the list",
+      "options" in lwidgets["sampler_name"], False)
+
+# The row is the architecture's, not a copy of H3's: two CFG scales for the
+# packed AV latent, no `scheduler` combo (LTXVScheduler *is* the scheduler),
+# and the shift pair the model patch and the schedule must agree on.
+check("ltx25 guides the two modalities apart",
+      ("video_cfg" in lwidgets, "audio_cfg" in lwidgets, "cfg" in lwidgets),
+      (True, True, False))
+check("ltx25 has no scheduler combo — the scheduler is a node",
+      "scheduler" in lwidgets, False)
+
+check("ltx25 weight slots are the family's slot table, in its order",
+      [w["id"] for w in ltx["weights"]], list(lx.SLOTS))
+for entry in ltx["weights"]:
+    slot = lx.SLOTS[entry["id"]]
+    check(f"ltx25 slot {entry['id']} mirrors the table",
+          (entry["folder"], entry["label"], entry["loads"],
+           entry["routed"], entry["audio"], entry["required"]),
+          (slot.folder, slot.label, bool(slot.loader),
+           slot.routed, slot.audio, not slot.optional))
+
+# One transformer, so nothing is routed and there is no route control at all —
+# the shape `state.js`' NO_ROUTING fallback answers for.
+check("ltx25 routes nothing", [w["id"] for w in ltx["weights"] if w["routed"]], [])
+check("ltx25 declares no routing block", "routes" in ltx, False)
+check("ltx25 required slots are the table's",
+      [w["id"] for w in ltx["weights"] if w["required"]], lx.REQUIRED)
+check("both opt-in passes are optional",
+      sorted(w["id"] for w in ltx["weights"] if not w["required"]),
+      ["duration_head", "upscaler"])
+
+# A device can only be pinned where ComfyUI-MultiGPU has a wrapper, which is
+# the four core loaders — not the patch loader, not the upscale loader.
+check("ltx25 pins devices only where a wrapper exists",
+      [w["id"] for w in ltx["weights"] if w["device"]],
+      [name for name, slot in lx.SLOTS.items() if slot.loader in models.MULTIGPU])
+
+# The canvas is canvas.LTX25's, and it is not H3's: an 8n+1 grid against
+# 17n+5, and a rate that is conditioning rather than a property of the weights.
+lframes = ltx["canvas"]["frames"]
+check("ltx25 canvas is canvas.LTX25",
+      ltx["canvas"], manifest.canvas_block(canvas.LTX25))
+check("ltx25 fps is conditioning, H3's is not",
+      (ltx["canvas"]["fps"]["fixed"], h3["canvas"]["fps"]["fixed"]),
+      (False, True))
+check("ltx25 frames are the 8n+1 grid",
+      (lframes["step"], lframes["offset"]), (8, 1))
+llegal = canvas.legal_frame_counts(canvas.LTX25)
+check("the manifest's frame grid generates the legal counts",
+      [lframes["offset"], llegal[1] - llegal[0]], [llegal[0], lframes["step"]])
+for frames in llegal[:200]:
+    if frames % 8 != 1:
+        FAILURES.append(f"ltx25 legal count {frames} is off the 8n+1 grid")
+        break
+check("ltx25 snaps to 32", ltx["canvas"]["multiple"], canvas.LTX25.multiple)
+
+# The capability split, in both directions — the point of asking rather than
+# branching on an id.
+lcaps = ltx["capabilities"]
+check("ltx25 has the duration head H3 has no answer to",
+      (bool(lcaps.get("duration")), bool(h3["capabilities"].get("duration"))),
+      (True, False))
+check("the duration capability names a real slot",
+      lcaps["duration"]["slot"] in lx.SLOTS, True)
+check("ltx25 lacks the two passes H3 has",
+      (lcaps["refine"], lcaps["face"], h3["capabilities"]["refine"],
+       h3["capabilities"]["face"]),
+      (False, False, True, True))
+check("ltx25 always makes sound", lcaps["audio"], True)
+check("ltx25 has no turbo switch — the distilled file is a pick, not a LoRA",
+      "turbo" in lcaps, False)
+check("ltx25 prompts in plain prose", ltx["prompt"]["pipeline"], "plain")
+check("ltx25 has no pre-stage still", "still" in ltx, False)
+
+# The encoder is one file through the ordinary CLIPLoader, and the audio VAE
+# one pick from `vae` — the LTX 2.5 layout, not the Gemma-3 recipe's two-file
+# encoder and `checkpoints` audio VAE.
+check("the encoder is one CLIPLoader pick typed ltxv",
+      (lx.SLOTS["clip"].loader, lx.SLOTS["clip"].input, lx.SLOTS["clip"].extra),
+      ("CLIPLoader", "clip_name", {"type": lx.CLIP_TYPE}))
+check("both VAEs come out of models/vae through VAELoader",
+      [(lx.SLOTS[n].folder, lx.SLOTS[n].loader) for n in ("vae", "audio_vae")],
+      [("vae", "VAELoader"), ("vae", "VAELoader")])
 
 # ---- Krea 2 ------------------------------------------------------------------
 

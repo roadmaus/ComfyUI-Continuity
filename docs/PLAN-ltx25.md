@@ -101,24 +101,22 @@ Each ends green; goldens are re-recorded only when a phase *adds* graphs.
 
 1. ~~**Family selection plumbing** (above). No new family yet; behaviour
    frozen by the existing suites.~~ **Done** — see below.
-2. **`families/ltx25/` skeleton**: registry row (`PRODUCES = {"video"}`),
-   `models.py` slot table (`dit` from `diffusion_models` via `UNETLoader`;
-   `clip` from `text_encoders` via `CLIPLoader` type `ltxv`; `vae` and
-   `audio_vae` both from `vae/` via `VAELoader`; `duration_head` and
-   `upscaler` optional, from `model_patches`/`latent_upscale_models`),
-   `canvas` Rules instance (multiple 32, frames 8n+1, fps 25
-   **fixed=False**), `manifest.py` serving it all. `test_families` grows the
-   family; the frontend lists it and can select it — and refuses nothing,
-   because compile refuses politely until phase 3 lands.
+2. ~~**`families/ltx25/` skeleton**: registry row, slot table, canvas Rules,
+   manifest.~~ **Done** — see below.
 3. **The render half**: `render.py` — loaders, segment (prompt through
    Gemma as plain prose, guides via `LTXVAddGuide`, first/last frames on the
    8-grid), sampler subgraph, `ModelSamplingLTXV` patch, `LTXVConditioning`
    with the manifest's fps. Golden graphs for the LTX blobs: text-only,
-   first-frame, guide-with-strength, audio on/off.
-4. **Duration and the timeline**: the duration predictor as the seconds
-   pill's "auto" (capability-gated — H3 simply lacks it), seam/feather
-   verification on the 8-grid latent (the reel layer is family-neutral by
-   core's own construction; prove it with a chained golden).
+   first-frame, guide-with-strength, audio on/off. **And the controls stop
+   reading module constants**: the weights popover, the sampler row and the
+   LoRA manager take the piece's family instead of the default's — the
+   accessors are all in place from phase 1, and phase 2's manifest is the
+   first one whose shape differs enough for a stale reader to show.
+4. **Duration and the second pass**: the duration predictor as the seconds
+   pill's "auto" (capability-gated — H3 simply lacks it), the x2 latent
+   upscaler as this family's `upscale`, and seam/feather verification on the
+   8-grid latent (the reel layer is family-neutral by core's own construction;
+   prove it with a chained golden). Weigh native multishot here too.
 5. **Taste guidance**: STG / modality / reference-audio as their own pills
    with honest cost copy — new UI, not the accel row.
 
@@ -165,13 +163,94 @@ constant answers H3 for a probe piece and is caught. `layout.run` took a
 `catalog=` argument for it. Every suite is green and `tests/golden` is
 untouched.
 
-## Open questions (answer during phase 2, not before)
+## Phase 2, as landed
 
-- Whether `refine` has any meaning for a plain-prose family (probably: the
-  same expansion, different template — the refine engine is already split
-  from H3's templates).
-- What the negative prompt is for LTX (H3 has none in the row; the guider
-  wants one — possibly a fixed template string, possibly a control).
+`families/ltx25/` is `models.py` (the slot table), `sampling.py` (the row's
+defaults) and `manifest.py` (the declarations), all pure, plus a `render.py`
+holding one `Family` whose `preflight` refuses in a sentence. Refusing from
+`preflight` is what makes it polite: it is the first hook `core/emit.py` calls,
+before a payload compiles or a node is built, so a queued LTX piece stops with
+prose rather than a `NotImplementedError` three hooks deep. Every other hook is
+inherited unimplemented and would raise under its own name.
+
+The slot table is flat, one file per slot, and `test_families` holds it that
+way — the encoder is one `CLIPLoader` pick typed `ltxv` and the audio VAE one
+`VAELoader` pick from `vae/`, not the Gemma-3 recipe's two-file loader pair.
+`Slot` grew one field, `optional`, for the two opt-in passes (`duration_head`,
+`upscaler`); every H3 slot is required, so it defaults off and nothing moved.
+
+`canvas.LTX25` sits beside `canvas.H3`, and the canvas block both manifests
+serve is now `families/manifest.canvas_block(rules)` — the fields are the
+contract `canvas.js` reads and they are the same fields for every family, so
+the second copy was deleted rather than written.
+
+**Two frontend fixes the second family found**, both in `state.js`, both the
+kind only a real second family could surface:
+
+- `routesOf` now falls back to a no-routing block. LTX ships one transformer,
+  so its manifest declares no `routes` at all — a control offering one option
+  is a lie — and `emptyModels`/`setFamily` would have thrown on the absence.
+- `alwaysRequired` filtered on loads-and-not-routed, which made both opt-in
+  passes weights the queue refuses without. It reads `required` now; absent
+  still means required, which is what every family written before the key
+  needs.
+
+The frontend lists LTX 2.5 and selects it: `setFamily` drops the H3 weights
+block, the turbo LoRA and the checkpoint pins, re-clamps the canvas to the new
+grid, and the piece round-trips carrying `family: "ltx25"`. The weights popover
+and the sampler row are still bound to the default family's constants — phase
+3's work, as phase 1 recorded, and the reason the refusal above exists.
+
+## What the model card settled (and where the plan was wrong)
+
+Lightricks' LTX-2.5 card, read during phase 2. It answers both open questions
+and moves numbers this plan had guessed at:
+
+- **fps is 24, not 25.** `LTXVConditioning` defaults to 25.0, but the card's
+  own reference pipeline runs at 24.0 and `LTXVDurationPredictor` clamps
+  against 24.0. Two statements from Lightricks against one Comfy widget
+  default. `canvas.LTX25` pins 24, `fps_fixed=False`.
+- **The native canvas is 544×960**, the resolution the card's two-stage example
+  samples at; the x2 spatial upscaler is what takes it to 1088×1920. So the
+  native edge is stage one's, and `resolve_canvas(16/9, 544)` returns exactly
+  960×544. `frames_for_seconds(5)` returns 121 — the card's own frame count.
+  The area cap keeps H3's shape (960/544 = 1.76 against 1344/768 = 1.75).
+- **The trained frame range is the duration head's default clamp**: 1 s to
+  20 s at 24 fps on the 8n+1 grid, so 25 to 481.
+- **The distilled transformer is the default row**: a fixed 8-step schedule at
+  CFG 1, and the card's reference call passes `guidance_scale=1.0,
+  audio_guidance_scale=1.0`. The `dev` transformer wants the node defaults
+  instead (20 steps, 3.0/7.0). That is a file the user picks in the same slot,
+  so it is a row they change rather than a mode the pack switches.
+- **The negative prompt has a canonical answer**: diffusers ships
+  `DEFAULT_NEGATIVE_PROMPT` for this family. Phase 3 uses it as the row's
+  default rather than inventing a template string.
+- **`refine` has a better answer than a prose template**: the family's second
+  pass is Lightricks' own — sample at the native edge, run the x2 latent
+  upscaler, sample again. That is `upscale`, not the prompt-expansion refine,
+  and it belongs in phase 4 beside the duration head.
+- **Two files this plan's layout missed**: a second video VAE
+  (`-conv-`, the fast one, against the diffusion decoder) sharing the `vae`
+  slot, and `latent_upscale_models/…-temporal-upscaler-x2-…`, which is a
+  second candidate for the `upscaler` slot rather than a slot of its own.
+- **There is a distilled LoRA** (`loras/ltx-2.5-22b-distilled-lora-450`) for
+  dev-transformer workflows — the nearest thing to H3's turbo switch. Not
+  declared: the shipped path is the distilled *checkpoint*, which is a pick,
+  not a switch. Worth revisiting if the dev transformer becomes the default.
+- **Native multishot** is new in 2.5: one pass producing several connected
+  shots that hold identity across cuts. That overlaps the strip's own seam
+  grammar and is worth weighing in phase 4 — a family that can cut internally
+  may want fewer feathered seams, not more.
+
+## Open questions (answer during phase 3)
+
+- Whether `refine` has any meaning as *prompt expansion* for a plain-prose
+  family (the engine is already split from H3's templates), now that the
+  second-pass upscale has its own answer above.
+- What the `@` reference grammar becomes here. H3 cites by ordinal into
+  Context-IR; LTX has `LTXVAddGuide` (per-guide strength, frame_idx on the
+  8-grid, negative indexes from the end) and IC-LoRAs. The manifest declares no
+  `reference` block until this is decided.
 
 ## Frozen, still
 

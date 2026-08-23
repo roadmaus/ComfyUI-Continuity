@@ -61,6 +61,40 @@ def value_list(options):
     return list(options) if options is not None else None
 
 
+def canvas_block(rules):
+    """A `canvas.Rules` as the frontend's canvas declaration.
+
+    Shared rather than written once per family: the *fields* are the contract
+    `canvas.js`'s `rulesFrom` reads, and they are the same fields for every
+    family because the math is. What differs is the numbers, and those are the
+    `Rules` instance's — which is the whole point of the dataclass.
+
+    `fps.fixed` is the one field worth reading twice: H3 was trained at 24 and
+    takes no rate conditioning, so its pill is a readout; LTX carries the rate
+    in `LTXVConditioning`, so its pill is a control.
+    """
+    return {
+        "multiple": rules.multiple,
+        "fps": {"value": rules.fps, "fixed": rules.fps_fixed},
+        "min_short_edge": rules.min_short_edge,
+        "max_short_edge": rules.max_short_edge,
+        "native_short_edge": rules.native_short_edge,
+        "native_max_pixels": rules.native_max_pixels,
+        "min_ratio": rules.min_ratio,
+        "max_ratio": rules.max_ratio,
+        "aspects": dict(rules.aspects),
+        "frames": {
+            # Legal counts are step*n + offset — the temporal packing.
+            "step": rules.frame_step,
+            "offset": rules.frame_offset,
+            "trained_min": rules.trained_min_frames,
+            "trained_max": rules.trained_max_frames,
+            "min_seconds": rules.min_seconds,
+            "max_seconds": rules.max_seconds,
+        },
+    }
+
+
 def check(manifest):
     """Refuse a malformed manifest, naming what is wrong.
 

@@ -117,6 +117,11 @@ class Slot:
     extra: Any = None           # fixed loader inputs, e.g. CLIPLoader's type
     routed: bool = False        # built only when a generation routes to it
     audio: bool = False         # skipped entirely on a soundless render
+    # A file the family can run without: LTX's duration head and its x2 latent
+    # upscaler are both opt-in passes, and a slot nothing has to fill is a
+    # different thing from one whose loader this render happens not to build.
+    # Every H3 slot is required, which is why the flag defaults to off.
+    optional: bool = False
 
 
 # Order matters twice: it is the order the loaders are emitted in — which the

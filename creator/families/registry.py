@@ -14,13 +14,15 @@ time and the pure suites load family modules without a server to boot.
 
 import importlib
 
-# Every family, in the order anything listing them shows them.
-FAMILIES = ("h3", "krea2", "ideogram4")
+# Every family, in the order anything listing them shows them — the video
+# families first, since that is the order the family pill offers.
+FAMILIES = ("h3", "ltx25", "krea2", "ideogram4")
 
 # What each family renders. The manifest serves this; the split between the
 # video loop and the still flow dispatches on it.
 PRODUCES = {
     "h3": frozenset({"video", "still"}),
+    "ltx25": frozenset({"video"}),
     "krea2": frozenset({"still"}),
     "ideogram4": frozenset({"still"}),
 }

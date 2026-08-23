@@ -53,7 +53,15 @@ export const FAMILY_DESCRIPTION = Object.fromEntries(
 // from wherever the question came up.
 export const referenceOf = (id) => videoFamily(id).reference;
 export const weightsOf = (id) => videoFamily(id).weights;
-export const routesOf = (id) => videoFamily(id).routes;
+
+/** What a family with one checkpoint routes between: nothing. A `routes` block
+ *  describes a standing choice among a family's *routed* slots, and LTX 2.5
+ *  ships one transformer, so its manifest declares none rather than a control
+ *  offering a single option. "auto" is what every reader already spells for
+ *  "follow the mode", and with nothing to follow it to it stays there — which
+ *  is why `serializeModels` writes no `route` key for such a family at all. */
+const NO_ROUTING = { options: ["auto"], default: "auto" };
+export const routesOf = (id) => videoFamily(id).routes ?? NO_ROUTING;
 export const modesOf = (id) => videoFamily(id).modes;
 export const turboOf = (id) => videoFamily(id).capabilities.turbo;
 export const stillOf = (id) => videoFamily(id).still;
@@ -270,10 +278,18 @@ export const deviceFields = (id) => weightsOf(id).filter((slot) => slot.device)
 export const DEVICE_FIELDS = deviceFields(DEFAULT_VIDEO_FAMILY);
 
 /** The slots a render can never go without whatever the mode derives: loaders
- *  that are not routed. Of the routed checkpoints, only the one the mode
- *  routes to is needed — `requiredModels` answers that for a given state. */
+ *  that are not routed and not opt-in. Of the routed checkpoints, only the one
+ *  the mode routes to is needed — `requiredModels` answers that for a given
+ *  state.
+ *
+ *  `required` absent means required, which is the reading every family written
+ *  before the key existed needs. A slot that says otherwise is a file the
+ *  family can render without at all — LTX's duration head and latent upscaler
+ *  are each an opt-in pass — and an empty one of those is an offer rather than
+ *  the missing weights that refuse a queue. */
 export const alwaysRequired = (id) => weightsOf(id)
-  .filter((slot) => slot.loads && !slot.routed).map((slot) => slot.id);
+  .filter((slot) => slot.loads && !slot.routed && slot.required !== false)
+  .map((slot) => slot.id);
 export const ALWAYS_REQUIRED = alwaysRequired(DEFAULT_VIDEO_FAMILY);
 
 /** A blank weights block for one family. Family-shaped by construction: the

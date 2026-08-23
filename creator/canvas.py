@@ -9,10 +9,10 @@ JS in `web/creator/canvas.js` in step with it.
 The *math* is family-neutral — snap to a grid, follow a ratio, cap an area,
 land on a legal frame count — and every function below takes the `Rules` that
 drive it. The *numbers* are a family's: `H3` is MiniMax H3's set, declared
-here and served to the frontend through the family's manifest. LTX brings its
-own (fps 25 carried as conditioning rather than fixed, a different frame
-packing); it will pass its own `Rules` instance and change nothing about the
-functions.
+here and served to the frontend through the family's manifest. `LTX25` is LTX
+2.5's — fps carried as conditioning rather than fixed, an 8n+1 frame packing
+instead of 17n+5 — and it passes through the same functions unchanged, which
+is the whole claim this parameterisation makes.
 
 Two model constraints drive H3's numbers:
 
@@ -105,6 +105,57 @@ H3 = Rules(
     frame_offset=5,
     trained_min_frames=124,
     trained_max_frames=362,
+    min_seconds=1,
+    max_seconds=60,
+)
+
+
+# LTX 2.5's rules. The provenance of every number, from Lightricks' own model
+# card and from the nodes core ships for the family:
+#
+# - `multiple=32` and the 8n+1 frame grid are the card's two hard constraints,
+#   and they are what `EmptyLTXVLatentVideo` enforces in its widget steps.
+# - fps is **conditioning**, not architecture — `LTXVConditioning` carries it
+#   into the prompt embedding, so `fps_fixed=False` and the pill is a control.
+#   24 rather than `LTXVConditioning`'s own 25: the card's reference pipeline
+#   runs at 24.0 and `LTXVDurationPredictor` defaults its clamp to 24.0, which
+#   is two statements from Lightricks against one Comfy widget default. One
+#   number, pinned here and passed everywhere the family conditions on a rate.
+# - 544x960 is the resolution the card's own two-stage example samples at; the
+#   x2 spatial upscaler is what takes it to 1088x1920, and that is a pass this
+#   pack does not run yet. So the native edge is stage one's, not the pack
+#   shot's, and everything above it is honestly off-distribution. The area cap
+#   keeps the same shape H3's does (960/544 = 1.76 against 1344/768 = 1.75), so
+#   a 21:9 canvas letterboxes the same way at every slider setting.
+# - `max_short_edge` is the slider's ceiling rather than a claim: 2048 is where
+#   a stage-one render plus the x2 upscaler lands, and the pill warns above the
+#   native edge long before here.
+# - The trained frame range is the duration head's own default clamp — 1 s to
+#   20 s at 24 fps, snapped to the grid — which is Lightricks saying which
+#   durations the weights were taught to hold. The seconds range below it is
+#   what the pill offers, H3's, and a different statement entirely.
+LTX25 = Rules(
+    multiple=32,
+    fps=24,
+    fps_fixed=False,
+    native_short_edge=544,
+    native_max_pixels=544 * 960,
+    min_short_edge=256,
+    max_short_edge=2048,
+    min_ratio=9 / 16,
+    max_ratio=21 / 9,
+    aspects={
+        "16:9": 16 / 9,
+        "4:3": 4 / 3,
+        "1:1": 1.0,
+        "3:4": 3 / 4,
+        "9:16": 9 / 16,
+        "21:9": 21 / 9,
+    },
+    frame_step=8,
+    frame_offset=1,
+    trained_min_frames=25,
+    trained_max_frames=481,
     min_seconds=1,
     max_seconds=60,
 )

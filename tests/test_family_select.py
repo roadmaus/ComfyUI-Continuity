@@ -45,7 +45,8 @@ from harness import FAILURES, check, passed
 
 _pkg = layout.load("canvas", "registry", "manifest", "contextir", "subjects", "compile")
 compiler, registry = _pkg.compile, _pkg.registry
-catalog = _pkg.manifest.catalog()
+canvas, manifest = _pkg.canvas, _pkg.manifest
+catalog = manifest.catalog()
 
 STATE = layout.js("state.js")
 
@@ -69,8 +70,11 @@ CASES = [
     ("a piece that names the default", {"version": 2, "segments": [], "family": "h3"}, "h3"),
     # Not a refusal: a hand-edit, or a workflow off a machine with a family this
     # install has not got, still has a video in it.
+    # Deliberately an id no registry row answers to, and it must stay one: the
+    # first draft of this case said "ltx25", which stopped testing anything the
+    # day LTX 2.5 was registered.
     ("a piece naming a family that is not installed",
-     {"version": 2, "segments": [], "family": "ltx25"}, "h3"),
+     {"version": 2, "segments": [], "family": "not_a_family"}, "h3"),
     ("a piece whose family is not even a string",
      {"version": 2, "segments": [], "family": 7}, "h3"),
     ("something that is not a blob at all", "nonsense", "h3"),
@@ -205,7 +209,8 @@ probed = layout.run(PROBE, STATE, layout.js("canvas.js"),
                     {"version": 2, "family": "probe", "segments": []},
                     catalog=PROBE_CATALOG)
 
-check("the probe is listed", probed["families"], ["h3", "probe"])
+check("the probe is listed alongside the registered families",
+      probed["families"], [*registry.video_families(), "probe"])
 check("...without becoming the default", probed["fallback"], "h3")
 check("a piece on the probe resolves to it", probed["resolved"], "probe")
 
@@ -225,6 +230,85 @@ check("the canvas rules are the probe's",
 check("...and the default family's are untouched",
       probed["defaultRules"], {"multiple": 32, "fps": 24, "fpsFixed": True})
 check("a capability is asked of the piece", probed["hasHead"], [True, False])
+
+# ---- the frontend, on the second real family ---------------------------------
+#
+# The probe above proves a control reads the *piece* rather than a module
+# constant, by being a family shaped so that a stale reader answers H3. This
+# proves the registered second family arrives intact through the same path —
+# and it is where an id-shaped assumption about H3 that the probe inherited
+# (its weights are H3's slots renamed, so every one of them is required) has
+# somewhere to fail.
+
+LTX = """
+const S = await import(process.argv[1]);
+const C = await import(process.argv[2]);
+const piece = S.parseTimeline(JSON.stringify({
+  version: 2, prompt: "a street", aspect: "21:9", short_edge: 1536, sample_edge: 1024,
+  models: { fl2va: "fl2va.safetensors", route: "ref2va" },
+  turbo: { lora: "lightx2v.safetensors", on: true },
+  segments: [{ prompt: "one", checkpoint: "fl2va" }],
+}));
+const changed = S.setFamily(piece, "ltx25");
+const r = C.rulesFor("ltx25");
+console.log(JSON.stringify({
+  changed, family: piece.family,
+  slots: S.modelFields("ltx25"),
+  // A family with one transformer routes between nothing, and its blob says
+  // nothing about a route — the NO_ROUTING fallback, not a control of one.
+  checkpoints: S.checkpointsOf("ltx25"),
+  routes: S.routeOptions("ltx25"),
+  required: S.alwaysRequired("ltx25"),
+  devices: S.deviceFields("ltx25"),
+  // Carried over from the H3 setup: no filename at all, under either family's
+  // slot ids. The block's own scaffolding (dtype, route, devices) is not a
+  // pick and is rebuilt empty.
+  leftover: [...S.modelFields("h3"), ...S.modelFields("ltx25")]
+    .filter((slot) => piece.models[slot]),
+  turboLora: piece.turbo.lora,
+  pinned: "checkpoint" in piece.segments[0],
+  rules: { multiple: r.multiple, fps: r.fps, fpsFixed: r.fpsFixed,
+           step: r.frameStep, offset: r.frameOffset },
+  sample_edge: piece.sample_edge,
+  // The card's own reference numbers, arrived at through the served rules.
+  frames: [C.framesForSeconds(1, r), C.framesForSeconds(5, r), C.framesForSeconds(20, r)],
+  wxh: C.resolveCanvas(16 / 9, r.nativeShortEdge, r),
+  duration: [S.canDo(piece, "duration"), S.canDo({}, "duration")],
+  roundTrip: JSON.parse(S.serializeTimeline(piece)).family,
+}));
+"""
+
+ltx = layout.run(LTX, STATE, layout.js("canvas.js"))
+ltx_manifest = manifest.describe("ltx25")
+
+check("switching to LTX 2.5 changes the piece", (ltx["changed"], ltx["family"]),
+      (True, "ltx25"))
+check("the slot ids are the family's",
+      ltx["slots"], [slot["id"] for slot in ltx_manifest["weights"]])
+check("nothing keyed by H3's vocabulary survives the switch",
+      (ltx["leftover"], ltx["turboLora"], ltx["pinned"]), ([], "", False))
+check("one transformer routes between nothing",
+      (ltx["checkpoints"], ltx["routes"]), ([], ["auto"]))
+# The one that had to be found: `alwaysRequired` filtered on loads-and-not-routed,
+# which made both opt-in passes weights the queue would refuse without.
+check("the opt-in passes are not required weights",
+      ltx["required"],
+      [slot["id"] for slot in ltx_manifest["weights"] if slot["required"]])
+check("a device pins only where MultiGPU has a wrapper",
+      ltx["devices"],
+      [slot["id"] for slot in ltx_manifest["weights"] if slot["device"]])
+check("the canvas rules are LTX 2.5's, off the served manifest",
+      ltx["rules"],
+      {"multiple": 32, "fps": 24, "fpsFixed": False, "step": 8, "offset": 1})
+check("the first-pass edge re-clamps to the new native size",
+      ltx["sample_edge"], canvas.LTX25.native_short_edge)
+# Lightricks' own reference pipeline: 121 frames at 24 fps, sampled at 960x544.
+check("the frame grid lands on the card's numbers", ltx["frames"], [25, 121, 481])
+check("the native canvas is the card's stage one", ltx["wxh"], [960, 544])
+check("the duration head is a capability H3 has not got",
+      ltx["duration"], [True, False])
+check("a piece off the default family keeps its family through a round trip",
+      ltx["roundTrip"], "ltx25")
 
 # ---- the switch --------------------------------------------------------------
 

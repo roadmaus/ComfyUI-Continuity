@@ -1,0 +1,174 @@
+"""LTX 2.5's manifest: the declarations behind every control the frontend draws
+for this family.
+
+The same rule H3's manifest follows — nothing here is a second copy of a
+number. The sampler defaults are `families/ltx25/sampling.py`'s, the slots are
+`families/ltx25/models.py`'s, the canvas is `canvas.LTX25`. The bounds are the
+core nodes' own (`LTXVScheduler`, `LTXVDualCFGGuider`), read off their schemas
+in `comfy_extras/nodes_lt.py`.
+
+What this family declares that H3 does not, and the reverse, is the case
+`families/manifest.py` exists for. There is no `routes` block: one transformer,
+so there is no checkpoint for a payload to be routed between. There is no
+`still` block: LTX 2.5 renders video and the pre-stage never reaches for it.
+And there is a `duration` capability H3 has no answer to at all — the duration
+head predicting a shot's length from its own prompt.
+"""
+
+from ... import canvas, models as core
+from .. import manifest as m
+from . import models, sampling
+
+
+def _widgets():
+    d = sampling.DEFAULTS
+    return [
+        m.widget("steps", "stepper", label="steps", group="sampler",
+                 default=d["steps"], min=1, max=10000, step=1,
+                 help="8 is the distilled transformer's fixed schedule. The dev transformer wants ~20."),
+        m.widget("video_cfg", "slider", label="video cfg", group="sampler",
+                 default=d["video_cfg"], min=0.0, max=100.0, step=0.1,
+                 help="The picture's guidance scale. 1 on the distilled weights, ~3 on the dev transformer."),
+        m.widget("audio_cfg", "slider", label="audio cfg", group="sampler",
+                 default=d["audio_cfg"], min=0.0, max=100.0, step=0.1,
+                 help="The soundtrack's own scale — the AV latent is packed, and the two modalities are guided apart. 1 on the distilled weights, ~7 on the dev transformer."),
+        m.widget("sampler_name", "combo", label="sampler", group="sampler",
+                 default=d["sampler_name"]),
+        m.widget("max_shift", "slider", label="max shift", group="sampler",
+                 default=d["max_shift"], min=0.0, max=100.0, step=0.01,
+                 help="The top of the sigma shift, which the scheduler scales by the latent's token count. The model patch is given the same pair; they are two readings of one curve."),
+        m.widget("base_shift", "slider", label="base shift", group="sampler",
+                 default=d["base_shift"], min=0.0, max=100.0, step=0.01,
+                 help="The bottom of the sigma shift. See 'max shift'."),
+        m.widget("stretch", "toggle", label="stretch sigmas", group="sampler",
+                 default=d["stretch"],
+                 help="Stretch the schedule so its final sigma lands on the terminal value."),
+        m.widget("terminal", "slider", label="terminal", group="sampler",
+                 default=d["terminal"], min=0.0, max=0.99, step=0.01,
+                 help="Where a stretched schedule ends. Ignored when stretch is off."),
+    ]
+
+
+# What the weights popover says about each slot — the strings' single home,
+# under the English keys the i18n dictionaries carry (the frontend runs them
+# through t() at render). `hints` are the filename needles the guess fills an
+# empty field from, `avoid` the patterns that rule a candidate out — the two
+# VAEs share `models/vae`, so each has to say what it is not.
+_UI = {
+    "dit": {
+        "title": "Transformer",
+        "help": "The 22B DiT. The distilled file samples in 8 steps at cfg 1; the 'dev' file is the "
+                "full, trainable one and wants ~20 steps at cfg 3/7. Comfy runs the int8-convrot "
+                "builds; the nvfp4 build needs Blackwell.",
+        "hints": ["ltx-2.5", "ltx2.5"],
+        "avoid": ["upscaler", "duration"],
+    },
+    "clip": {
+        "title": "Text encoder",
+        "help": "Gemma 4 12B with LTX's projections — the '-with-proj' file, which carries the audio "
+                "and video aggregate embeddings. Loaded as CLIPLoader type 'ltxv'.",
+        "hints": ["gemma4-12b-with-proj", "with-proj"],
+    },
+    "vae": {
+        "title": "Video VAE",
+        "help": "Decodes the picture. The plain file is the diffusion decoder — sharper faces, "
+                "text and texture, and heavier; '-conv-' is the fast one.",
+        "hints": ["video-vae", "video_vae"],
+        "avoid": ["audio"],
+    },
+    "audio_vae": {
+        "title": "Audio VAE",
+        "help": "Decodes the sound, vocoder included. LTX 2.5 generates audio with every render, so "
+                "this is never optional.",
+        "hints": ["audio-vae", "audio_vae"],
+    },
+    "duration_head": {
+        "title": "Duration head",
+        "help": "Optional. Predicts how long a shot wants to be from its own prompt, and snaps the "
+                "answer to the frame grid — what the seconds pill's 'auto' asks. Without it the "
+                "duration is yours to set, as it always is on H3.",
+        "hints": ["duration-head", "duration_head"],
+    },
+    "upscaler": {
+        "title": "Latent upscaler",
+        "help": "Optional. The x2 spatial upscaler that is the second stage of Lightricks' own "
+                "pipeline: sample at the native edge, upscale the latent, sample again.",
+        "hints": ["spatial-upscaler", "latent-spatial"],
+        "avoid": ["temporal"],
+    },
+}
+
+
+def _weights():
+    return [{
+        "id": name,
+        "folder": slot.folder,
+        "label": slot.label,
+        # Every slot here becomes a loader; the flag stays because the shape is
+        # the frontend's contract, not this family's.
+        "loads": bool(slot.loader),
+        "routed": slot.routed,
+        "audio": slot.audio,
+        # Whether a render can go without the file at all — the two opt-in
+        # passes. The popover draws a missing required slot in red and an
+        # empty optional one as an offer.
+        "required": not slot.optional,
+        "gguf": slot.folder in core.GGUF_FOLDERS,
+        # Asked of the wrapper table rather than assumed: ComfyUI-MultiGPU
+        # subclasses the four core loaders, and neither `ModelPatchLoader` nor
+        # `LatentUpscaleModelLoader` is one of them.
+        "device": slot.loader in core.MULTIGPU,
+        # KeyError by design: a slot without its popover strings should fail
+        # here, where the family is named, not draw a blank row.
+        "title": _UI[name]["title"],
+        "help": _UI[name]["help"],
+        "hints": _UI[name].get("hints", []),
+        "avoid": _UI[name].get("avoid", []),
+    } for name, slot in models.SLOTS.items()]
+
+
+def manifest():
+    from .. import registry
+
+    return {
+        "id": "ltx25",
+        "label": "LTX 2.5",
+        # What the family pill's tooltip says this family is.
+        "description": "LTX 2.5 — Lightricks' 22B audio-video DiT. Picture and soundtrack come out of one "
+                       "packed latent, guided apart; the frame rate is conditioning rather than a property "
+                       "of the weights, and an optional duration head can pick a shot's length from its "
+                       "own prompt.",
+        "produces": sorted(registry.PRODUCES["ltx25"]),
+        "widgets": _widgets(),
+        "weights": _weights(),
+        "canvas": m.canvas_block(canvas.LTX25),
+        "capabilities": {
+            # The passes the loop may ask this family for. Audio always: LTX
+            # 2.5 samples a packed AV latent and there is no soundless mode.
+            "audio": True,
+            # Chained seams with feathering. Core's reel/spill layer is
+            # family-neutral by construction — `LTXVConcatAVLatent`'s own
+            # description is what the joint latent was written against.
+            "seams": True,
+            # H3's two extra passes, neither of which this family has yet: the
+            # refine engine is written against H3's templates, and the face
+            # pass against its crop-and-repair loop. The x2 latent upscaler is
+            # the natural refine here and is a phase of its own.
+            "refine": False,
+            "face": False,
+            # What this family has that H3 does not. `canDo(piece, "duration")`
+            # is what gates the seconds pill's "auto" — the capability is asked
+            # rather than an id branched on, precisely so a control can be
+            # honest about a family the code predates.
+            "duration": {"slot": "duration_head",
+                         "min_seconds": canvas.LTX25.min_seconds,
+                         "max_seconds": canvas.LTX25.max_seconds},
+        },
+        "prompt": {
+            # Plain prose straight through Gemma. No Context-IR: H3's ordinal
+            # citation grammar is a property of its own training, and what
+            # replaces it here — guides through `LTXVAddGuide`, IC-LoRA
+            # references — is the render half's to declare.
+            "pipeline": "plain",
+        },
+    }

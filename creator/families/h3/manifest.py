@@ -123,33 +123,6 @@ def _weights():
     } for name, slot in models.SLOTS.items()]
 
 
-def _canvas():
-    rules = canvas.H3
-    return {
-        "multiple": rules.multiple,
-        # Fixed: H3 was trained at 24 and takes no rate conditioning. A family
-        # that carries fps as conditioning declares fixed=False and the pill
-        # becomes a control.
-        "fps": {"value": rules.fps, "fixed": rules.fps_fixed},
-        "min_short_edge": rules.min_short_edge,
-        "max_short_edge": rules.max_short_edge,
-        "native_short_edge": rules.native_short_edge,
-        "native_max_pixels": rules.native_max_pixels,
-        "min_ratio": rules.min_ratio,
-        "max_ratio": rules.max_ratio,
-        "aspects": dict(rules.aspects),
-        "frames": {
-            # Legal counts are step*n + offset — the temporal packing.
-            "step": rules.frame_step,
-            "offset": rules.frame_offset,
-            "trained_min": rules.trained_min_frames,
-            "trained_max": rules.trained_max_frames,
-            "min_seconds": rules.min_seconds,
-            "max_seconds": rules.max_seconds,
-        },
-    }
-
-
 def manifest():
     from .. import registry
 
@@ -185,7 +158,7 @@ def manifest():
                   "opens": "I2VA",
                   "closes": "L2VA",
                   "text": "T2VA"},
-        "canvas": _canvas(),
+        "canvas": m.canvas_block(canvas.H3),
         "capabilities": {
             # The passes the loop may ask this family for.
             "refine": True, "face": True, "audio": True,
