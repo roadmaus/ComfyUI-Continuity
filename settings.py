@@ -150,10 +150,10 @@ DEFAULTS = {
     # `encode._quantize` runs whether this is on or off, so a hit and a miss
     # send the model the same tensors and this only decides how long the wait is.
     "latent_cache": True,
-    # How much of ComfyUI's temp directory those latents may fill, in
+    # How much of ComfyUI's user directory those latents may fill, in
     # gigabytes. Past it the least recently read entries go. 0 keeps the
     # in-session cache and writes nothing to disk, which is the setting for a
-    # machine where temp is a ramdisk.
+    # box with no room to spare.
     "latent_cache_gb": 8.0,
 }
 
@@ -181,10 +181,9 @@ MAX_SURFACE_LIFT = 2.0
 # base weights at turbo step counts is a bad 20-step render, not a fast one.
 MAX_LEAD_IN = 4
 
-# How large the reference cache may be told to grow. The ceiling is not a truth
-# about disks — it is the point past which a cache in *temp* is no longer a
-# cache, and the answer is a store that outlives the process rather than a
-# bigger pile in a directory core empties on restart.
+# How large the reference cache may be told to grow. Not a truth about disks —
+# it is the point past which nobody is choosing a cache size any more, and the
+# thing actually wanted is a store somewhere this pack does not put files.
 MAX_CACHE_GB = 256.0
 
 

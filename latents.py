@@ -24,10 +24,12 @@ back entries that decode on first read rather than files it has already read: a
 hit never touches the disk the file is on.
 
 **Two tiers.** In memory for the session, where a prompt edit is a re-queue
-seconds later, and on disk under ComfyUI's temp for anything longer. The disk
-tier is what makes `ref_size: max` affordable — a reference encoded at the full
-canvas once stays encoded at the full canvas, so the setting stops being a
-speed trade and goes back to being a quality one.
+seconds later, and on disk for everything longer — including a restart, a
+rebuild, or a week off. The disk tier is what makes `ref_size: max` affordable:
+a reference encoded at the full canvas once stays encoded at the full canvas,
+so the setting stops being a speed trade and goes back to being a quality one.
+That only holds if the store outlives the process, which is why it is not in
+temp — see `directory`.
 
 **Safetensors, with the shape written into the file.** A spill is named by a
 uuid only its writer knows, so `spill.py` can write raw bytes and a sidecar. An
@@ -46,16 +48,17 @@ import os
 import time
 import uuid
 
-# The subdirectory entries live in, under ComfyUI's temp. Named rather than
-# derived so a stray file in temp is identifiable as ours by looking at it.
-DIR_NAME = "minimax_ref_latents"
+# Where entries live under the user directory, beside the previews cache that
+# is keyed the same way and kept for the same reason.
+DIR_NAME = os.path.join("minimax_creator", "latents")
 
 # How long an entry nobody has read is kept. Counted from the last read (see
 # `_touch`), not from the write: what makes an entry safe to delete is not its
-# age but that no render has come back for it. A week rather than the twelve
-# hours a spill gets — a spill is scaffolding inside one render, this is the
-# reference pool of a project somebody is still working on.
-KEEP_SECONDS = 7 * 24 * 60 * 60
+# age but that no render has come back for it. A month, because the store now
+# survives restarts and a project is worked on across days — the ceiling below
+# is the bound that actually does the work, and this is only for the reference
+# nobody is ever coming back to.
+KEEP_SECONDS = 30 * 24 * 60 * 60
 
 # The ceiling on the whole directory. Past it, the least recently read entries
 # go until it fits. A video reference is the large resident here — its 2 fps
@@ -86,15 +89,24 @@ _memory = {}        # key -> (tensors, meta, bytes); insertion order is read ord
 def directory():
     """Where entries live. Created on demand.
 
-    ComfyUI's temp, which core wipes on startup and on exit. That costs the
-    first render after a restart its encodes and is the right trade for now:
-    temp is the one directory this pack can fill without it being somebody's
-    project folder. This function is the single place to change when these
-    should outlive the process.
+    Under ComfyUI's user directory — the same place the settings file and the
+    picker's thumbnail cache already sit — and deliberately *not* under temp,
+    which core empties on startup and on exit. A store wiped by a restart is a
+    store that pays for `ref_size: max` again every morning, and the argument
+    for caching at all is that the reference has not changed. On a rented box
+    the user directory is on the volume that persists; the render's own
+    scratch, which genuinely should not survive, is `spill.py`.
+
+    Nothing wipes this, so the ageing in `prune` is the only thing that does:
+    a month unread, or past the ceiling the settings page sets.
+
+    Two files beside each other under `previews/` and `latents/` for one clip,
+    keyed by the same (path, mtime, size) identity — `preview._cache_path`
+    builds its name the same way `media.stamp` builds this one's.
     """
     import folder_paths
 
-    path = os.path.join(folder_paths.get_temp_directory(), DIR_NAME)
+    path = os.path.join(folder_paths.get_user_directory(), DIR_NAME)
     os.makedirs(path, exist_ok=True)
     return path
 
@@ -107,7 +119,8 @@ def enabled():
 
 
 def disk_bytes():
-    """The ceiling on the on-disk store, in bytes. 0 disables the disk tier."""
+    """The ceiling on the on-disk store, in bytes. 0 keeps the memory tier and
+    writes nothing, which is the setting for a box with no room to spare."""
     from . import settings
 
     gigabytes = settings.load().get("latent_cache_gb", DEFAULT_DISK_BYTES / 1024 ** 3)

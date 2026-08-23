@@ -564,8 +564,8 @@ class SettingsPage {
             + "was encoded at, or the VAE changes. Editing the prompt, the seed, the "
             + "sampler or the other references reuses it." },
       { value: false, label: "Encoded every time",
-        note: "What every render did before this existed. For a machine where "
-            + "ComfyUI's temp directory has nothing to spare." },
+        note: "What every render did before this existed. For a box with no room "
+            + "to spare." },
     ];
     return this.section("Rendering", "Reference cache",
       "Attaching a video or a cast member means decoding it and pushing it "
@@ -586,15 +586,14 @@ class SettingsPage {
         el("div", { class: "mmc-set-foot" }, [
           el("span", {
             text: this.cache
-              ? t("Holding {entries} references, {size}. It lives in ComfyUI's temp "
-                + "directory, which empties on restart, and drops what it has not "
-                + "read in a week or once it passes {limit}.", {
+              ? t("Holding {entries} references, {size}. It survives a restart, and "
+                + "drops what it has not read in a month or once it passes {limit}.", {
                   entries: this.cache.entries ?? 0,
                   size: megabytes(this.cache.bytes ?? 0),
                   limit: `${Number(this.settings.latent_cache_gb ?? 8)} GB`,
                 })
-              : t("It lives in ComfyUI's temp directory, which empties on restart, "
-                + "and drops what it has not read in a week."),
+              : t("It lives beside your settings and survives a restart, and drops "
+                + "what it has not read in a month."),
           }),
           ...(this.cache && this.cache.entries
             ? [el("button", { class: "mmc-opt mmc-set-clear", text: t("Clear"),
