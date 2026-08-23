@@ -638,7 +638,7 @@ export const zh = {
  "Picture size": "画面尺寸",
  "Drag to resize the picture. Double-click for full size.": "拖动可调整画面大小，双击恢复完整尺寸。",
  "Krea 2": "Krea 2",
- "Ideogram 4": "Ideogram 4",
+ "Ideogram 4.0": "Ideogram 4.0",
  "MiniMax H3": "MiniMax H3",
  "The shots disagree about {what}. One pass has only one.": "各镜头在{what}上不一致。一遍模式只能有一个。",
  "the checkpoint": "检查点",

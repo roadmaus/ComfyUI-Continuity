@@ -4,7 +4,7 @@
 
 import { ASPECT_PRESETS, FPS, MIN_SHORT_EDGE, NATIVE_SHORT_EDGE, CANVAS_MULTIPLE,
          framesForSeconds, secondsForFrames, matchSeconds, resolveCanvas } from "./canvas.js";
-import { VIDEO } from "./manifest.js";
+import { DEFAULT_STILL_ARCH, STILL_ARCHES, VIDEO, stillFamily } from "./manifest.js";
 import { t } from "./i18n.js";
 // Where files land is not in the blob any more — it is a preference of this
 // machine, in `settings.js`, so a shared workflow does not carry one person's
@@ -2126,39 +2126,44 @@ export function addSegmentRefusal(timeline, seconds = DEFAULT_DURATION_S) {
 // and refuses the illegal combinations early, and compile_image.py stays
 // authoritative at queue time.
 
-export const PRESTAGE_ARCHES = ["krea2", "ideogram4", "minimax"];
-export const PRESTAGE_ARCH_LABEL = {
-  krea2: "Krea 2", ideogram4: "Ideogram 4", minimax: "MiniMax H3",
-};
+/** The arch pill's vocabulary and order — the catalog's still_arches, named
+ *  by each family's own label. */
+export const PRESTAGE_ARCHES = Object.keys(STILL_ARCHES);
+export const PRESTAGE_ARCH_LABEL = Object.fromEntries(
+  PRESTAGE_ARCHES.map((arch) => [arch, stillFamily(arch).label]));
 
-// The third architecture is not an image model, and almost nothing below
-// applies to it. A still from H3 is a *video generation* whose first latent
-// frame is decoded as a picture, so its request is an ordinary creator state —
-// same assets, same LoRAs, same weights block, same routing — and every rule
-// for it is the one already written for the video nodes. It lives in its own
-// sub-block (`state.minimax.request`) and is driven by CreatorEditor.
+// The video family's arch is not an image model, and almost nothing below
+// applies to it. Its still is a *video generation* whose first latent frame is
+// decoded as a picture, so its request is an ordinary creator state — same
+// assets, same LoRAs, same weights block, same routing — and every rule for it
+// is the one already written for the video nodes. It lives in its own
+// sub-block (`state[PRESTAGE_STILL_ARCH].request`) and is driven by
+// CreatorEditor.
 
-export const PRESTAGE_STILL_ARCH = "minimax";
+export const PRESTAGE_STILL_ARCH = VIDEO.still.arch;
 export const isStill = (state) => state?.arch === PRESTAGE_STILL_ARCH;
 
-/** What the length pill offers, and what a fresh still samples. Every entry is
- *  a legal 17n+5 count; 5 is the cheapest clip H3 can be asked for and 124 is
- *  the bottom of its trained range. Mirrors families/h3/still.py's STILL_LENGTHS. */
-export const PRESTAGE_STILL_LENGTHS = [5, 22, 39, 56, 90, 124];
-export const PRESTAGE_STILL_FRAMES = 5;
-export const PRESTAGE_STILL_INDEX = 0;
-export const PRESTAGE_PROMPT_MODES = ["context-ir", "plain"];
+/** What the length pill offers, and what a fresh still samples: the family's
+ *  declaration, from the cheapest legal clip up to the bottom of its trained
+ *  range. */
+export const PRESTAGE_STILL_LENGTHS = VIDEO.still.lengths;
+export const PRESTAGE_STILL_FRAMES = VIDEO.still.default_frames;
+export const PRESTAGE_STILL_INDEX = VIDEO.still.default_index;
+export const PRESTAGE_PROMPT_MODES = VIDEO.still.prompt_modes;
 
-/** Frames -> latent frames. Mirrors families/h3/still.py's latent_frames, which mirrors
- *  core: the VAE is causal on the 17k+5 <-> 5k+2 grid. */
-export const stillLatentFrames = (frames) =>
-  (frames <= 5 ? 2 : Math.floor((frames - 5) / 17) * 5 + 2);
+/** Frames -> latent frames, on the manifest's grid. Mirrors the family
+ *  still.py's latent_frames, which mirrors core's causal VAE packing. */
+export const stillLatentFrames = (frames, grid = VIDEO.still.latent) =>
+  (frames <= grid.base_frames ? grid.base_latent
+    : Math.floor((frames - grid.base_frames) / grid.frame_step)
+      * grid.latent_step + grid.base_latent);
 
-/** What the H3 branch writes into the sampler row: the Creator node's own
- *  defaults, because it is the Creator's sampler. */
-export const PRESTAGE_STILL_ROW = {
-  steps: 20, cfg: 1.0, sampler_name: "res_multistep", scheduler: "simple",
-};
+/** What the still branch writes into the sampler row: the Creator node's own
+ *  defaults — the family's sampler widgets — because it is the Creator's
+ *  sampler. */
+export const PRESTAGE_STILL_ROW = Object.fromEntries(
+  VIDEO.widgets.filter((w) => ["steps", "cfg", "sampler_name", "scheduler"].includes(w.id))
+               .map((w) => [w.id, w.default]));
 
 export function emptyStill() {
   return {
@@ -2192,91 +2197,80 @@ function serializeStill(still) {
   return out;
 }
 
-export const PRESTAGE_CANVAS_MULTIPLE = 16;
-export const PRESTAGE_MIN_EDGE = 512;
-export const PRESTAGE_MAX_EDGE = 2048;
-export const PRESTAGE_DEFAULT_EDGE = 1024;
-export const PRESTAGE_MAX_PIXELS = 2048 * 2048;
-export const PRESTAGE_MIN_RATIO = 1 / 3;
-export const PRESTAGE_MAX_RATIO = 3;
+/** The two image architectures. The video family's branch keeps its weights
+ *  inside its own request, in `models.Weights`' shape, so it is not one of
+ *  these. */
+export const PRESTAGE_IMAGE_ARCHES =
+  Object.keys(STILL_ARCHES).filter((arch) => arch !== VIDEO.still.arch);
 
-// Order matters: this is the order the ratio popover lists them in. Wider than
-// the video envelope on purpose — a style sheet is a legitimate still.
-export const PRESTAGE_ASPECTS = [
-  ["16:9", 16 / 9],
-  ["3:2", 3 / 2],
-  ["4:3", 4 / 3],
-  ["1:1", 1],
-  ["3:4", 3 / 4],
-  ["2:3", 2 / 3],
-  ["9:16", 9 / 16],
-  ["21:9", 21 / 9],
-];
+// The image families' shared canvas — every image family serves the same
+// block, built from compile_image.py, and compile_image stays authoritative
+// at queue time. Wider than the video envelope on purpose: a style sheet is a
+// legitimate still. The aspects are [label, ratio] pairs in the popover's
+// order, the declaration's own.
+const IMAGE_CANVAS = stillFamily(DEFAULT_STILL_ARCH).canvas;
+export const PRESTAGE_CANVAS_MULTIPLE = IMAGE_CANVAS.multiple;
+export const PRESTAGE_MIN_EDGE = IMAGE_CANVAS.min_short_edge;
+export const PRESTAGE_MAX_EDGE = IMAGE_CANVAS.max_short_edge;
+export const PRESTAGE_DEFAULT_EDGE = IMAGE_CANVAS.default_short_edge;
+export const PRESTAGE_MAX_PIXELS = IMAGE_CANVAS.max_pixels;
+export const PRESTAGE_MIN_RATIO = IMAGE_CANVAS.min_ratio;
+export const PRESTAGE_MAX_RATIO = IMAGE_CANVAS.max_ratio;
+export const PRESTAGE_ASPECTS = Object.entries(IMAGE_CANVAS.aspects);
+const PRESTAGE_DEFAULT_ASPECT = IMAGE_CANVAS.default_aspect;
 
-/** Core's Qwen-edit encoder has exactly three image slots. */
-export const PRESTAGE_MAX_REFS = 3;
+const IMAGE_FAMILY = Object.fromEntries(
+  PRESTAGE_IMAGE_ARCHES.map((arch) => [arch, stillFamily(arch)]));
+const KREA = IMAGE_FAMILY.krea2;
+const IDEOGRAM = IMAGE_FAMILY.ideogram4;
+const widgetDefaults = (family, ids) => Object.fromEntries(
+  family.widgets.filter((w) => ids.includes(w.id)).map((w) => [w.id, w.default]));
+
+/** How many style references the arch takes — its encoder's own slot count. */
+export const PRESTAGE_MAX_REFS = KREA.prompt.max_refs;
 
 /** What each Krea 2 checkpoint wants from the sampler row — what the arch and
- *  turbo pills write into the widgets, mirrored from compile_image.py. */
-export const PRESTAGE_KREA_RAW = { steps: 52, cfg: 3.5, sampler_name: "euler", scheduler: "simple" };
-export const PRESTAGE_KREA_TURBO = { cfg: 1.0, sampler_name: "euler", scheduler: "simple" };
-export const PRESTAGE_TURBO_QUALITIES = ["draft", "medium", "good"];
-export const PRESTAGE_TURBO_STEPS = { draft: 4, medium: 6, good: 8 };
+ *  turbo pills write into the widgets: the RAW row is the family's own widget
+ *  defaults, the turbo row and step table its turbo capability's. */
+export const PRESTAGE_KREA_RAW =
+  widgetDefaults(KREA, ["steps", "cfg", "sampler_name", "scheduler"]);
+export const PRESTAGE_KREA_TURBO = KREA.capabilities.turbo.row;
+export const PRESTAGE_TURBO_QUALITIES = Object.keys(KREA.capabilities.turbo.steps);
+export const PRESTAGE_TURBO_STEPS = KREA.capabilities.turbo.steps;
 
-/** Ideogram's official preset table (V4_QUALITY_48 / V4_DEFAULT_20 /
- *  V4_TURBO_12). The presets own steps *and* the schedule shape; the widget cfg
- *  feeds the dual-model guider, 7 being the template's number. */
-export const PRESTAGE_IDEOGRAM_QUALITIES = ["quality", "default", "turbo"];
-export const PRESTAGE_IDEOGRAM_STEPS = { quality: 48, default: 20, turbo: 12 };
-export const PRESTAGE_IDEOGRAM_ROW = { cfg: 7.0, sampler_name: "euler" };
+/** Ideogram's official preset table. The presets own steps *and* the schedule
+ *  shape; the widget cfg feeds the dual-model guider. */
+export const PRESTAGE_IDEOGRAM_QUALITIES = Object.keys(IDEOGRAM.capabilities.qualities);
+export const PRESTAGE_IDEOGRAM_STEPS = Object.fromEntries(
+  Object.entries(IDEOGRAM.capabilities.qualities).map(([name, preset]) => [name, preset.steps]));
+export const PRESTAGE_IDEOGRAM_ROW = widgetDefaults(IDEOGRAM, ["cfg", "sampler_name"]);
+const PRESTAGE_DEFAULT_QUALITY = widgetDefaults(IDEOGRAM, ["quality"]).quality;
 
-export const PRESTAGE_DEFAULT_DENOISE = 0.65;
-export const PRESTAGE_MIN_DENOISE = 0.05;
+export const PRESTAGE_DEFAULT_DENOISE = KREA.capabilities.init_image.default_denoise;
+export const PRESTAGE_MIN_DENOISE = KREA.capabilities.init_image.min_denoise;
 
-/** Which weight fields each architecture has, in popover order. Mirrors
- *  render_image.ARCH_FIELDS. */
-export const PRESTAGE_FIELDS = {
-  krea2: ["model", "turbo_model", "clip", "vae"],
-  ideogram4: ["model", "uncond_model", "clip", "vae"],
-};
-export const PRESTAGE_FIELD_LABEL = {
-  model: "Checkpoint",
-  turbo_model: "Turbo checkpoint",
-  uncond_model: "Unconditional checkpoint",
-  clip: "Text encoder",
-  vae: "VAE",
-};
-export const PRESTAGE_FIELD_HINT = {
-  krea2: {
-    model: "Krea 2 RAW — the undistilled base. ~52 steps at cfg 3.5, and the one to train LoRAs against.",
-    turbo_model: "Krea 2 Turbo — the 8-step distillation the turbo pill swaps in. LoRAs trained on RAW apply here too.",
-    clip: "Qwen3-VL 4B, loaded as CLIPLoader type 'krea2'.",
-    vae: "The Qwen image VAE.",
-  },
-  ideogram4: {
-    model: "Ideogram 4.0's conditional branch.",
-    uncond_model: "The unconditional branch — Ideogram ships CFG as a second model. "
-                + "Optional: without it the render runs ordinary CFG on the one checkpoint.",
-    clip: "Qwen3-VL 8B, loaded as CLIPLoader type 'ideogram4'.",
-    vae: "The Flux 2 VAE.",
-  },
-};
+/** Which weight fields each architecture has — its manifest's slots, in
+ *  popover order — and what the popover calls each one. */
+export const PRESTAGE_FIELDS = Object.fromEntries(
+  PRESTAGE_IMAGE_ARCHES.map((arch) => [arch, IMAGE_FAMILY[arch].weights.map((w) => w.id)]));
+export const PRESTAGE_FIELD_LABEL = Object.fromEntries(
+  PRESTAGE_IMAGE_ARCHES.flatMap((arch) =>
+    IMAGE_FAMILY[arch].weights.map((w) => [w.id, w.title])));
+export const PRESTAGE_FIELD_HINT = Object.fromEntries(
+  PRESTAGE_IMAGE_ARCHES.map((arch) => [arch,
+    Object.fromEntries(IMAGE_FAMILY[arch].weights.map((w) => [w.id, w.help]))]));
 
 /** Filename hints for `guessPreStageModels`, per arch per field. */
-const PRESTAGE_HINTS = {
-  krea2: { model: ["krea2_raw"], turbo_model: ["krea2_turbo"], clip: ["qwen3vl_4b"], vae: ["qwen_image_vae"] },
-  ideogram4: {
-    model: ["ideogram4"], uncond_model: ["ideogram4_unconditional"],
-    clip: ["qwen3vl_8b"], vae: ["flux2"],
-  },
-};
+const PRESTAGE_HINTS = Object.fromEntries(
+  PRESTAGE_IMAGE_ARCHES.map((arch) => [arch,
+    Object.fromEntries(IMAGE_FAMILY[arch].weights.map((w) => [w.id, w.hints]))]));
 
 export function emptyPreStage() {
   return {
     version: 1,
-    arch: "krea2",
+    arch: DEFAULT_STILL_ARCH,
     prompt: "",
-    aspect: "16:9",
+    aspect: PRESTAGE_DEFAULT_ASPECT,
     short_edge: PRESTAGE_DEFAULT_EDGE,
     // {"filename", "denoise"} for img2img, or null.
     init: null,
@@ -2286,12 +2280,13 @@ export function emptyPreStage() {
     // The image turbo is a checkpoint swap, not a LoRA — Krea Turbo *is* a
     // distilled checkpoint — but the pill keeps the H3 contract: it saves the
     // sampler row once per throw and puts it back exactly on release.
-    turbo: { on: false, quality: "good", saved: null },
+    turbo: { on: false, quality: KREA.capabilities.turbo.default_quality, saved: null },
     // Ideogram's speed axis: which official preset shapes the schedule.
-    quality: "default",
-    // The H3 branch: its own settings, and its generation in the Creator's
-    // shape. Nothing above it applies to that branch — see `emptyStill`.
-    minimax: emptyStill(),
+    quality: PRESTAGE_DEFAULT_QUALITY,
+    // The video family's branch: its own settings, and its generation in the
+    // Creator's shape. Nothing above it applies to that branch — see
+    // `emptyStill`. The key is the arch's frozen blob name.
+    [PRESTAGE_STILL_ARCH]: emptyStill(),
     // See the piece's: empty until a pill writes one, and an absent field falls
     // back to the widget it always used.
     sampling: {},
@@ -2303,19 +2298,17 @@ export function emptyPreStage() {
 }
 
 export function emptyPreStageModels() {
-  return { krea2: {}, ideogram4: {}, dtype: "default" };
+  const empty = { dtype: "default" };
+  for (const arch of PRESTAGE_IMAGE_ARCHES) empty[arch] = {};
+  return empty;
 }
-
-/** The two image architectures. The H3 branch keeps its weights inside its own
- *  request, in `models.Weights`' shape, so it is not one of these. */
-export const PRESTAGE_IMAGE_ARCHES = PRESTAGE_ARCHES.filter((arch) => arch !== PRESTAGE_STILL_ARCH);
 
 export function parsePreStage(raw) {
   try {
     const parsed = JSON.parse(raw);
     if (parsed && typeof parsed === "object") {
       const state = { ...emptyPreStage(), ...parsed };
-      if (!PRESTAGE_ARCHES.includes(state.arch)) state.arch = "krea2";
+      if (!PRESTAGE_ARCHES.includes(state.arch)) state.arch = DEFAULT_STILL_ARCH;
       if (typeof state.prompt !== "string") state.prompt = "";
       if (!Array.isArray(state.refs)) state.refs = [];
       state.refs = state.refs
@@ -2333,8 +2326,8 @@ export function parsePreStage(raw) {
         state.init.denoise = Number.isFinite(denoise)
           ? Math.min(1, Math.max(PRESTAGE_MIN_DENOISE, denoise)) : PRESTAGE_DEFAULT_DENOISE;
       }
-      if (!PRESTAGE_IDEOGRAM_QUALITIES.includes(state.quality)) state.quality = "default";
-      state.minimax = parseStill(state.minimax);
+      if (!PRESTAGE_IDEOGRAM_QUALITIES.includes(state.quality)) state.quality = PRESTAGE_DEFAULT_QUALITY;
+      state[PRESTAGE_STILL_ARCH] = parseStill(state[PRESTAGE_STILL_ARCH]);
       // The sampler row, on the same terms as the piece's — absent in every
       // blob saved before it moved off the widgets. See `sampling.py`.
       state.sampling = parseSampling(state.sampling);
@@ -2388,7 +2381,7 @@ export function serializePreStage(state) {
                    ...(state.turbo.saved ? { saved: { ...state.turbo.saved } } : {}) } }
       : {}),
     ...(state.quality !== "default" ? { quality: state.quality } : {}),
-    minimax: serializeStill(state.minimax),
+    [PRESTAGE_STILL_ARCH]: serializeStill(state[PRESTAGE_STILL_ARCH]),
     ...serializeSampling(state.sampling),
     ...(Object.keys(models).length ? { models } : {}),
     ...(state.peer != null ? { peer: state.peer } : {}),
@@ -2475,7 +2468,7 @@ export function nextPreStageHandle(state) {
  *  warning — clip, vae and whichever DiT the turbo pill selects. */
 export function missingPreStageModels(state) {
   const side = state.models[state.arch] ?? {};
-  const dit = state.arch === "krea2" && state.turbo.on ? "turbo_model" : "model";
+  const dit = IMAGE_FAMILY[state.arch]?.capabilities.turbo && state.turbo.on ? "turbo_model" : "model";
   return [dit, "clip", "vae"].filter((field) => !side[field]);
 }
 

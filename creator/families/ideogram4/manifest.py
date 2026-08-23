@@ -23,6 +23,32 @@ def _widgets():
     ]
 
 
+# What the weights popover says about each slot — see krea2's table.
+_UI = {
+    "model": {
+        "title": "Checkpoint",
+        "help": "Ideogram 4.0's conditional branch.",
+        "hints": ["ideogram4"],
+    },
+    "uncond_model": {
+        "title": "Unconditional checkpoint",
+        "help": "The unconditional branch — Ideogram ships CFG as a second model. "
+                "Optional: without it the render runs ordinary CFG on the one checkpoint.",
+        "hints": ["ideogram4_unconditional"],
+    },
+    "clip": {
+        "title": "Text encoder",
+        "help": "Qwen3-VL 8B, loaded as CLIPLoader type 'ideogram4'.",
+        "hints": ["qwen3vl_8b"],
+    },
+    "vae": {
+        "title": "VAE",
+        "help": "The Flux 2 VAE.",
+        "hints": ["flux2"],
+    },
+}
+
+
 def _weights():
     return [{
         "id": name,
@@ -36,6 +62,10 @@ def _weights():
         "required": name != "uncond_model",
         "gguf": name in ("model", "uncond_model", "clip"),
         "device": False,
+        "title": _UI[name]["title"],
+        "help": _UI[name]["help"],
+        "hints": _UI[name]["hints"],
+        "avoid": [],
     } for name in still.FIELDS]
 
 
@@ -65,7 +95,8 @@ def manifest():
         "canvas": _canvas(),
         "capabilities": {
             "refine": False, "face": False, "audio": False, "seams": False,
-            "init_image": True,
+            "init_image": {"default_denoise": compile_image.DEFAULT_DENOISE,
+                           "min_denoise": compile_image.MIN_DENOISE},
             "qualities": {name: dict(preset) for name, preset
                           in still.IDEOGRAM_QUALITIES.items()},
         },

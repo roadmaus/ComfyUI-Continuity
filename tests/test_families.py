@@ -123,6 +123,15 @@ for key in ("reference", "plain", "timeline"):
 check("h3 mode names are compile.MODES",
       sorted(set(h3["modes"].values())), sorted(_pkg.compile.MODES))
 
+# The served latent grid generates still.latent_frames — over every offered
+# length and one past the base, where the formula's branch flips.
+_grid = h3["still"]["latent"]
+for frames in list(h3["still"]["lengths"]) + [_grid["base_frames"] + _grid["frame_step"]]:
+    derived = (_grid["base_latent"] if frames <= _grid["base_frames"] else
+               (frames - _grid["base_frames"]) // _grid["frame_step"]
+               * _grid["latent_step"] + _grid["base_latent"])
+    check(f"latent grid at {frames} frames", derived, h3s.latent_frames(frames))
+
 frames = h3["canvas"]["frames"]
 legal = canvas.legal_frame_counts()
 check("the manifest's frame grid generates the legal counts",

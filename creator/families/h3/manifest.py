@@ -202,5 +202,13 @@ def manifest():
             "default_frames": still.DEFAULT_FRAMES,
             "default_index": still.DEFAULT_LATENT_INDEX,
             "prompt_modes": m.value_list(still.PROMPT_MODES),
+            # The VAE's temporal packing: `base_frames` frames land in
+            # `base_latent` latent frames, and each further `frame_step`
+            # (the canvas grid's own) adds `latent_step`. Mirrors
+            # `still.latent_frames`; test_families holds the two together.
+            "latent": {"base_frames": canvas.H3.frame_offset,
+                       "base_latent": still.latent_frames(canvas.H3.frame_offset),
+                       "frame_step": canvas.H3.frame_step,
+                       "latent_step": 5},
         },
     }

@@ -637,7 +637,7 @@ export const ko = {
  "Picture size": "화면 크기",
  "Drag to resize the picture. Double-click for full size.": "드래그하여 화면 크기를 조절합니다. 더블클릭하면 전체 크기로 돌아갑니다.",
  "Krea 2": "Krea 2",
- "Ideogram 4": "Ideogram 4",
+ "Ideogram 4.0": "Ideogram 4.0",
  "MiniMax H3": "MiniMax H3",
  "The shots disagree about {what}. One pass has only one.": "숏들이 {what}에 대해 일치하지 않습니다. 원패스는 하나만 가질 수 있습니다.",
  "the checkpoint": "체크포인트",

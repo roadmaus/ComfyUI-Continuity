@@ -637,7 +637,7 @@ export const ja = {
  "Picture size": "映像のサイズ",
  "Drag to resize the picture. Double-click for full size.": "ドラッグで映像のサイズを変更。ダブルクリックで原寸に戻ります。",
  "Krea 2": "Krea 2",
- "Ideogram 4": "Ideogram 4",
+ "Ideogram 4.0": "Ideogram 4.0",
  "MiniMax H3": "MiniMax H3",
  "The shots disagree about {what}. One pass has only one.": "ショット間で{what}が一致していません。ワンパスでは 1 つしか持てません。",
  "the checkpoint": "チェックポイント",
