@@ -139,6 +139,22 @@ DEFAULTS = {
     # UI-only. Applies to whatever palette is in force, including the pinned
     # dark one above and any palette that does not exist yet.
     "surface_lift": 1.0,
+    # Whether a reference's latents are kept between renders. On by default:
+    # the segment node caches on its whole payload, so editing one word of the
+    # prompt re-decodes and re-encodes every reference the shot cites, and a
+    # reference does not know the prompt exists. See `latents.py`.
+    #
+    # This reaches the render the way the lead-in does, and like it, it is a
+    # statement about the machine rather than about the piece — off is for a
+    # disk with nothing to spare. It cannot change what a render produces:
+    # `encode._quantize` runs whether this is on or off, so a hit and a miss
+    # send the model the same tensors and this only decides how long the wait is.
+    "latent_cache": True,
+    # How much of ComfyUI's temp directory those latents may fill, in
+    # gigabytes. Past it the least recently read entries go. 0 keeps the
+    # in-session cache and writes nothing to disk, which is the setting for a
+    # machine where temp is a ramdisk.
+    "latent_cache_gb": 8.0,
 }
 
 # What the text scale is allowed to be. The floor is where the 9px captions stop
@@ -164,6 +180,12 @@ MAX_SURFACE_LIFT = 2.0
 # remaining steps are for, and a render that spends most of its schedule on the
 # base weights at turbo step counts is a bad 20-step render, not a fast one.
 MAX_LEAD_IN = 4
+
+# How large the reference cache may be told to grow. The ceiling is not a truth
+# about disks — it is the point past which a cache in *temp* is no longer a
+# cache, and the answer is a store that outlives the process rather than a
+# bigger pile in a directory core empties on restart.
+MAX_CACHE_GB = 256.0
 
 
 def clean(raw):
@@ -225,7 +247,17 @@ def clean(raw):
         if theme not in THEMES:
             raise ValueError("theme must be one of: " + ", ".join(THEMES))
         clean_settings["theme"] = theme
-    for flag in ("show_shift_pills", "autoplay_previews", "advanced"):
+    if "latent_cache_gb" in raw and raw["latent_cache_gb"] is not None:
+        size = raw["latent_cache_gb"]
+        # `True` is an int in Python and would sail through as one gigabyte,
+        # the same trap every count above sets.
+        if isinstance(size, bool) or not isinstance(size, (int, float)):
+            raise ValueError("latent_cache_gb must be a number")
+        size = float(size)
+        if not 0 <= size <= MAX_CACHE_GB:
+            raise ValueError(f"latent_cache_gb must be between 0 and {MAX_CACHE_GB}")
+        clean_settings["latent_cache_gb"] = size
+    for flag in ("show_shift_pills", "autoplay_previews", "advanced", "latent_cache"):
         if flag in raw and raw[flag] is not None:
             if not isinstance(raw[flag], bool):
                 raise ValueError(f"{flag} must be true or false")

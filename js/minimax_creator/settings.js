@@ -21,7 +21,7 @@
 // than the workflow's, which is the only reason they share a page.
 
 import { el, mountOverlay } from "./dom.js";
-import { loadSettings, saveSettings, noteSettings } from "./api.js";
+import { loadSettings, saveSettings, noteSettings, loadLatentCache, clearLatentCache } from "./api.js";
 import { t } from "./i18n.js";
 import { TOKENS, cleanPrefix, folderOf, stemOf, examplePath } from "./outputs.js";
 
@@ -134,10 +134,21 @@ export function openSettings() {
   return new Promise((resolve) => new SettingsPage(resolve).mount());
 }
 
+/** A byte count as the page says it: "820 MB", "4.2 GB". */
+function megabytes(bytes) {
+  const mb = Number(bytes) / (1024 * 1024);
+  if (mb >= 1024) return `${(mb / 1024).toFixed(1)} GB`;
+  return `${Math.round(mb)} MB`;
+}
+
 const TABS = [
   { key: "quality", label: "Quality" },
   { key: "folders", label: "Folders" },
-  { key: "nodes", label: "Nodes" },
+  // The key stays "nodes" — it is what `show()` and the tests address the tab
+  // by, and it was never on screen. The label is "General" because the tab
+  // stopped being about node faces when the rendering sections landed on it:
+  // it now holds two groups, and "Nodes" is the name of one of them.
+  { key: "nodes", label: "General" },
   { key: "appearance", label: "Appearance" },
 ];
 
@@ -145,6 +156,7 @@ class SettingsPage {
   constructor(resolve) {
     this.resolve = resolve;
     this.settings = null;   // until the server answers
+    this.cache = null;      // what the reference cache is holding, once asked
     this.problem = null;
     this.tab = TABS[0].key;
   }
@@ -185,6 +197,24 @@ class SettingsPage {
       noteSettings(this.settings);
     } catch (error) {
       this.problem = t("Could not read the settings — {error}", { error: error.message });
+    }
+    this.render();
+    // Separately, and never fatally: how much disk the reference cache is
+    // holding is a thing the page reports, not a thing it needs to draw. An
+    // older build with no such route leaves the line off rather than the page.
+    try {
+      this.cache = await loadLatentCache();
+      this.render();
+    } catch { /* the line stays absent */ }
+  }
+
+  /** Empty the reference cache, and say what that freed. */
+  async clearCache() {
+    this.problem = null;
+    try {
+      this.cache = await clearLatentCache();
+    } catch (error) {
+      this.problem = t("Not cleared — {error}", { error: error.message });
     }
     this.render();
   }
@@ -486,7 +516,7 @@ class SettingsPage {
     // back.
     const leadIn = this.settings.advanced === true || Number(this.settings.turbo_lead_in) > 0
       ? this.renderLeadIn() : [];
-    return [this.renderAdvanced(), this.renderPreviews(), ...leadIn,
+    return [this.renderAdvanced(), this.renderPreviews(), ...leadIn, this.renderRefCache(),
       this.section("Nodes", "Flow shift pills",
       "Whether the sampler row offers H3's two flow shifts — the video and audio "
       + "schedule clocks. The values apply either way; this only decides who has "
@@ -512,6 +542,67 @@ class SettingsPage {
       ])];
   }
 
+
+  /**
+   * Whether a reference's latents are kept between renders.
+   *
+   * A generation caches on its whole request, so editing one word of the prompt
+   * re-decodes and re-encodes every reference the shot cites — and a reference
+   * does not know the prompt exists. Kept, they are encoded once per (file,
+   * canvas, VAE) and the prompt is free to move.
+   *
+   * It cannot change what a render produces, only how long it takes: the
+   * encoder rounds a reference's presentation to 8 bits whether this is on or
+   * off, so a cached reference and a freshly encoded one are the same tensors.
+   * That is what makes this a safe switch rather than a quality decision.
+   */
+  renderRefCache() {
+    const on = this.settings.latent_cache !== false;
+    const rows = [
+      { value: true, label: "Kept",
+        note: "A reference is encoded once and reused until its file, the canvas it "
+            + "was encoded at, or the VAE changes. Editing the prompt, the seed, the "
+            + "sampler or the other references reuses it." },
+      { value: false, label: "Encoded every time",
+        note: "What every render did before this existed. For a machine where "
+            + "ComfyUI's temp directory has nothing to spare." },
+    ];
+    return this.section("Rendering", "Reference cache",
+      "Attaching a video or a cast member means decoding it and pushing it "
+      + "through the VAE, and on a high-resolution source that is most of the "
+      + "wait before sampling starts. None of it depends on the prompt.",
+      [
+        el("div", { class: "mmc-set-choices" }, rows.map((row) => el("button", {
+          class: "mmc-opt mmc-set-opt",
+          "aria-checked": row.value === on,
+          onclick: () => row.value !== on && this.set({ latent_cache: row.value }),
+        }, [
+          el("span", { class: "mmc-radio" }),
+          el("span", { class: "mmc-set-opt-text" }, [
+            el("span", { class: "mmc-set-opt-label", text: t(row.label) }),
+            el("span", { class: "mmc-set-opt-note", text: t(row.note) }),
+          ]),
+        ]))),
+        el("div", { class: "mmc-set-foot" }, [
+          el("span", {
+            text: this.cache
+              ? t("Holding {entries} references, {size}. It lives in ComfyUI's temp "
+                + "directory, which empties on restart, and drops what it has not "
+                + "read in a week or once it passes {limit}.", {
+                  entries: this.cache.entries ?? 0,
+                  size: megabytes(this.cache.bytes ?? 0),
+                  limit: `${Number(this.settings.latent_cache_gb ?? 8)} GB`,
+                })
+              : t("It lives in ComfyUI's temp directory, which empties on restart, "
+                + "and drops what it has not read in a week."),
+          }),
+          ...(this.cache && this.cache.entries
+            ? [el("button", { class: "mmc-opt mmc-set-clear", text: t("Clear"),
+                              onclick: () => this.clearCache() })]
+            : []),
+        ]),
+      ]);
+  }
 
   // ---- appearance -------------------------------------------------------------
 

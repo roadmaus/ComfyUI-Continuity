@@ -1,0 +1,381 @@
+"""Reference latents that outlive the prompt they were encoded beside.
+
+A segment node caches on its whole payload — `render.emit` serialises the
+request into `segment_data` and that string is the node's key — so editing one
+word of the prompt re-executes it, and re-executing it re-decodes every
+reference file and pushes every one of them through the VAE again. That is the
+right key for the *generation*: the prompt is conditioning, and conditioning is
+what the node returns. It is the wrong key for the references, whose latents do
+not know the prompt exists.
+
+So this is a second cache underneath the first, keyed on what a reference latent
+actually depends on: the file, the canvas it is encoded at, and the VAE doing
+the encoding. Not in that list, and therefore free to change: the prompt, the
+seed, the sampler, the LoRAs, the other references, and their order. The seed is
+already kept out of the segment payload for exactly this reason (`render.emit`)
+— this is the same argument made about the reference instead of the sampler.
+
+**What is cached is the pair, not the latent.** `encode._encode_references`
+builds two things out of one decode: the DiT's latent block, and the 2 fps
+presentation the tokenizer is shown. Caching only the latent would leave the
+container decode and the resize to run, and on a high-resolution source that is
+most of the wait. Both go into one entry, which is why `media.load_all` hands
+back entries that decode on first read rather than files it has already read: a
+hit never touches the disk the file is on.
+
+**Two tiers.** In memory for the session, where a prompt edit is a re-queue
+seconds later, and on disk under ComfyUI's temp for anything longer. The disk
+tier is what makes `ref_size: max` affordable — a reference encoded at the full
+canvas once stays encoded at the full canvas, so the setting stops being a
+speed trade and goes back to being a quality one.
+
+**Safetensors, with the shape written into the file.** A spill is named by a
+uuid only its writer knows, so `spill.py` can write raw bytes and a sidecar. An
+entry here is looked up by content from another render, possibly another
+process, so it has to be self-describing and it has to appear atomically:
+written to a temporary and renamed, or a half-flushed file is a corrupt latent
+that reads back as a plausible one.
+
+Nothing here decides *what* is cacheable. `encode.py` builds the keys, because
+it is the file that knows what an encode depended on.
+"""
+
+import hashlib
+import json
+import os
+import time
+import uuid
+
+# The subdirectory entries live in, under ComfyUI's temp. Named rather than
+# derived so a stray file in temp is identifiable as ours by looking at it.
+DIR_NAME = "minimax_ref_latents"
+
+# How long an entry nobody has read is kept. Counted from the last read (see
+# `_touch`), not from the write: what makes an entry safe to delete is not its
+# age but that no render has come back for it. A week rather than the twelve
+# hours a spill gets — a spill is scaffolding inside one render, this is the
+# reference pool of a project somebody is still working on.
+KEEP_SECONDS = 7 * 24 * 60 * 60
+
+# The ceiling on the whole directory. Past it, the least recently read entries
+# go until it fits. A video reference is the large resident here — its 2 fps
+# presentation is tens of megabytes where its latent is single digits — so this
+# is counted in gigabytes and not in entries.
+DEFAULT_DISK_BYTES = 8 * 1024 ** 3
+
+# What the in-memory tier will hold before it starts dropping its oldest reads.
+# Small on purpose: it exists to make the re-queue after a prompt edit instant,
+# and everything it drops is still on disk.
+MEMORY_BYTES = 2 * 1024 ** 3
+
+# Where a VAE's fingerprint is parked once computed. On the object, because
+# ComfyUI keeps the loaded VAE alive across queued prompts and computing this
+# reads weights — doing it per reference per render would be a real cost for an
+# answer that cannot change while the object exists.
+_FINGERPRINT_ATTR = "_mmc_latent_fingerprint"
+
+# How many parameters of a VAE are sampled to identify it, and how many values
+# out of each. Enough that two checkpoints of the same architecture cannot
+# collide in practice, few enough that the read is free next to one encode.
+_FINGERPRINT_KEYS = 12
+_FINGERPRINT_VALUES = 64
+
+_memory = {}        # key -> (tensors, meta, bytes); insertion order is read order
+
+
+def directory():
+    """Where entries live. Created on demand.
+
+    ComfyUI's temp, which core wipes on startup and on exit. That costs the
+    first render after a restart its encodes and is the right trade for now:
+    temp is the one directory this pack can fill without it being somebody's
+    project folder. This function is the single place to change when these
+    should outlive the process.
+    """
+    import folder_paths
+
+    path = os.path.join(folder_paths.get_temp_directory(), DIR_NAME)
+    os.makedirs(path, exist_ok=True)
+    return path
+
+
+def enabled():
+    """Whether references are cached at all. Off means encode every time."""
+    from . import settings
+
+    return bool(settings.load().get("latent_cache", True))
+
+
+def disk_bytes():
+    """The ceiling on the on-disk store, in bytes. 0 disables the disk tier."""
+    from . import settings
+
+    gigabytes = settings.load().get("latent_cache_gb", DEFAULT_DISK_BYTES / 1024 ** 3)
+    return int(float(gigabytes) * 1024 ** 3)
+
+
+def key(parts):
+    """The parts an encode depended on -> the name of its entry.
+
+    A digest rather than a readable name: the parts include absolute paths and a
+    VAE fingerprint, and a filename built out of those is either unreadable or
+    too long for the filesystem. `sort_keys` so a caller that builds the dict in
+    a different order still lands on the same entry.
+    """
+    blob = json.dumps(parts, sort_keys=True, default=str).encode("utf-8")
+    return hashlib.sha256(blob).hexdigest()[:40]
+
+
+def fingerprint(vae):
+    """A VAE -> a string that changes when its weights do.
+
+    The segment node is handed a VAE object and never its filename, so this is
+    taken from the weights themselves: shapes and dtypes for every parameter,
+    and the leading values of a spread of them. Sampled rather than hashed
+    whole because the whole thing is gigabytes and this runs on a cache *hit*,
+    where the point is not to touch the model at all.
+
+    Weights that cannot be read — offloaded to `meta`, or a quantised layout
+    that will not cast — degrade to the shape half alone. That still separates
+    one architecture from another and one quantisation from another; it does not
+    separate two same-shaped checkpoints, which is a real limitation and the
+    reason the shapes are hashed at all rather than being skipped as obvious.
+    """
+    import torch
+
+    found = getattr(vae, _FINGERPRINT_ATTR, None)
+    if found is not None:
+        return found
+
+    digest = hashlib.sha256()
+    digest.update(f"{getattr(vae, 'latent_channels', 0)}|"
+                  f"{getattr(vae, 'vae_dtype', None)}|"
+                  f"{getattr(vae, 'downscale_ratio', None)}|"
+                  f"{getattr(vae, 'upscale_ratio', None)}".encode("utf-8"))
+    try:
+        state = vae.first_stage_model.state_dict()
+        names = sorted(state)
+        for name in names:
+            tensor = state[name]
+            digest.update(f"{name}|{tuple(tensor.shape)}|{tensor.dtype}".encode("utf-8"))
+        # A spread rather than a prefix: the leading parameters of a network are
+        # the ones two checkpoints are most likely to share.
+        step = max(1, len(names) // _FINGERPRINT_KEYS)
+        for name in names[::step][:_FINGERPRINT_KEYS]:
+            tensor = state[name]
+            if tensor.device.type == "meta":
+                continue
+            values = tensor.detach().flatten()[:_FINGERPRINT_VALUES]
+            digest.update(values.to("cpu", dtype=torch.float32).numpy().tobytes())
+    except Exception:  # noqa: BLE001 - see the docstring: shapes alone will do
+        pass
+
+    found = digest.hexdigest()[:32]
+    try:
+        setattr(vae, _FINGERPRINT_ATTR, found)
+    except Exception:  # noqa: BLE001 - a VAE with __slots__; recompute per call
+        pass
+    return found
+
+
+def _size(tensors):
+    return sum(t.numel() * t.element_size() for t in tensors.values())
+
+
+def _path(name):
+    return os.path.join(directory(), f"{name}.safetensors")
+
+
+def _touch(path):
+    """Mark an entry as still in play, so `prune` reaches for another one."""
+    try:
+        os.utime(path, None)
+    except OSError:
+        pass
+
+
+def _remember(name, tensors, meta):
+    """Put an entry in the memory tier, dropping the oldest reads to fit."""
+    total = _size(tensors)
+    if total > MEMORY_BYTES:
+        # One entry larger than the whole tier would evict everything and then
+        # itself on the next store. It stays on disk, where it fits.
+        return
+    _memory.pop(name, None)
+    _memory[name] = (tensors, meta, total)
+    held = sum(entry[2] for entry in _memory.values())
+    for oldest in list(_memory):
+        if held <= MEMORY_BYTES:
+            break
+        held -= _memory.pop(oldest)[2]
+
+
+def prune(now=None, ceiling=None):
+    """Delete what has aged out, then the least recently read until it fits.
+
+    -> how many bytes went. Called when an entry is written rather than when one
+    stops being useful, for the reason `spill.prune` is: nothing here knows when
+    a project is finished with a reference, and every read pushes the file's
+    stamp forward, so what ages out is what nothing has come back for.
+    """
+    now = time.time() if now is None else now
+    ceiling = disk_bytes() if ceiling is None else ceiling
+    freed = 0
+    try:
+        entries = list(os.scandir(directory()))
+    except OSError:
+        return 0
+
+    live = []
+    for entry in entries:
+        try:
+            if not entry.is_file():
+                continue
+            stat = entry.stat()
+            if entry.name.endswith(".tmp"):
+                # A write another process is mid-flight on, or one that died
+                # before its rename. Only the second is ours to clean up, and
+                # the keep window is far longer than any write.
+                if now - stat.st_mtime > KEEP_SECONDS:
+                    os.remove(entry.path)
+                continue
+            if now - stat.st_mtime > KEEP_SECONDS:
+                os.remove(entry.path)
+                freed += stat.st_size
+                continue
+            live.append((stat.st_mtime, stat.st_size, entry.path))
+        except OSError:
+            # Gone under us, or another process's to worry about. Neither is
+            # this render's business to insist on.
+            continue
+
+    held = sum(size for _, size, _ in live)
+    for _, size, path in sorted(live):
+        if held <= ceiling:
+            break
+        try:
+            os.remove(path)
+        except OSError:
+            continue
+        held -= size
+        freed += size
+    return freed
+
+
+def fetch(name):
+    """-> (tensors, meta) for `name`, or None. Tensors are the caller's to keep.
+
+    A disk hit is promoted into memory, so the second prompt edit costs what the
+    first one made cheap, and a memory hit still stamps the file behind it — see
+    `_touch`. Memory hits are handed out as clones: an entry is read
+    by every render that keys onto it and a conditioning block is not obviously
+    read-only, so one caller writing through a cached tensor would be a bug that
+    only appears on the second render.
+    """
+    path = _path(name)
+    found = _memory.get(name)
+    if found is not None:
+        tensors, meta, _ = found
+        # Re-insert so insertion order stays read order for the eviction above.
+        _memory[name] = _memory.pop(name)
+        # And stamp the file, even though it was not the file that answered:
+        # what `prune` deletes is what nothing has come back for, and an entry
+        # answered out of memory all week has been come back for all week.
+        # Without this the hottest references are the ones that age off disk.
+        _touch(path)
+        return {field: value.clone() for field, value in tensors.items()}, dict(meta)
+
+    if not os.path.isfile(path):
+        return None
+    try:
+        from safetensors import safe_open
+        from safetensors.torch import load_file
+
+        with safe_open(path, framework="pt") as handle:
+            raw = (handle.metadata() or {}).get("mmc")
+        meta = json.loads(raw) if raw else {}
+        tensors = load_file(path)
+    except Exception:  # noqa: BLE001
+        # A truncated or unreadable entry is a miss, not a render that stops:
+        # the encode it stands in for is still there to run.
+        try:
+            os.remove(path)
+        except OSError:
+            pass
+        return None
+
+    _touch(path)
+    _remember(name, tensors, meta)
+    return {field: value.clone() for field, value in tensors.items()}, dict(meta)
+
+
+def store(name, tensors, meta):
+    """Keep an encode under `name`. -> the CPU copies it kept.
+
+    Handing the copies back rather than nothing is what lets `encode._cached`
+    have one path: a miss returns the same tensors on the same device a hit
+    does, so the call sites never ask which one they got.
+
+    Never raises. A cache that cannot be written is a slow render, and turning
+    it into a failed one would be the cache deciding that a render it exists to
+    speed up may not happen at all.
+    """
+    tensors = {field: value.detach().to("cpu").contiguous()
+               for field, value in tensors.items()}
+    _remember(name, tensors, meta)
+    # Clones, for the reason `fetch` hands out clones: what the memory tier
+    # holds is private to it, or the second render keys onto whatever the first
+    # one wrote through its copy.
+    handed = {field: value.clone() for field, value in tensors.items()}
+    if disk_bytes() <= 0:
+        return handed
+
+    # A unique temporary rather than `{name}.tmp`: two renders can key onto the
+    # same reference at once, and one flushing into the other's file would
+    # rename a mixture of the two into place.
+    staging = None
+    try:
+        from safetensors.torch import save_file
+
+        path = _path(name)
+        staging = os.path.join(directory(), f"{uuid.uuid4().hex}.tmp")
+        save_file(tensors, staging, metadata={"mmc": json.dumps(meta, sort_keys=True)})
+        os.replace(staging, path)
+    except Exception:  # noqa: BLE001 - see the docstring
+        if staging:
+            try:
+                os.remove(staging)
+            except OSError:
+                pass
+        return handed
+    prune()
+    return handed
+
+
+def forget():
+    """Drop the memory tier. For tests, and for a settings page that turns the
+    cache off — an entry held in RAM would otherwise outlive the switch."""
+    _memory.clear()
+
+
+def usage():
+    """-> (entries, bytes) on disk. What the settings page reports."""
+    count = total = 0
+    try:
+        entries = list(os.scandir(directory()))
+    except OSError:
+        return 0, 0
+    for entry in entries:
+        try:
+            if entry.is_file() and not entry.name.endswith(".tmp"):
+                count += 1
+                total += entry.stat().st_size
+        except OSError:
+            continue
+    return count, total
+
+
+def clear():
+    """Delete every entry. -> how many bytes went."""
+    forget()
+    return prune(now=time.time(), ceiling=0)

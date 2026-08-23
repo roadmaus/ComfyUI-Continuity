@@ -2413,19 +2413,23 @@ check("...and the body back to the node", full.get("cameBack"), True)
 check("...and takes the shell down with it", full.get("closed"), True)
 
 # The settings page owns four questions now — how good the file is, where it
-# goes, what the node faces offer, and how large they are drawn — so it has four
-# tabs, and the folder fields are the only place the prefixes can be set.
+# goes, what the node faces offer and what a render does on the way there, and
+# how large they are drawn — so it has four tabs, and the folder fields are the
+# only place the prefixes can be set. The third is "General" rather than
+# "Nodes": it carries a Rendering group as well as a Nodes one, so the old name
+# was the name of half of it.
 settings = report.get("settings", {})
 check("the settings page has all four tabs", settings.get("tabs"),
-      ["Quality", "Folders", "Nodes", "Appearance"])
+      ["Quality", "Folders", "General", "Appearance"])
 # Every row on the tab, in order, with each setting's default checked on a fresh
-# settings file: previews ship playing, and the advanced controls and the shift
-# pills ship off. Advanced leads, because it decides how much of the rest of the
-# tab there is — the turbo lead-in is an advanced control and its three rows are
-# simply not on the page while it is off, which is what makes this list three
-# pairs and not three pairs plus a triple. Then preview playback, which governs
-# the biggest thing a node draws, and the shift pills last, which change only
-# what is drawn.
+# settings file: previews ship playing, the reference cache ships on, and the
+# advanced controls and the shift pills ship off. Advanced leads, because it
+# decides how much of the rest of the tab there is — the turbo lead-in is an
+# advanced control and its three rows are simply not on the page while it is
+# off, which is what makes this list four pairs and not four pairs plus a
+# triple. Then preview playback, which governs the biggest thing a node draws,
+# the reference cache, and the shift pills last, which change only what is
+# drawn.
 #
 # There used to be a fourth pair here, for whether the compiler wrote each
 # reference's scope into the prompt. It is not a choice any more — a label the
@@ -2433,12 +2437,12 @@ check("the settings page has all four tabs", settings.get("tabs"),
 # and the prompt box shows what is actually sent instead.
 check("the node settings show their defaults checked",
       settings.get("shiftRows"),
-      ["true", "false", "true", "false", "true", "false"])
+      ["true", "false", "true", "false", "true", "false", "true", "false"])
 # And with the advanced controls on, the turbo lead-in is back on the page: the
-# three pairs plus its three rows. That is the whole of what the switch does to
+# four pairs plus its three rows. That is the whole of what the switch does to
 # this tab — it adds a section, it never disables one.
 check("advanced controls bring the turbo lead-in back to the page",
-      (settings.get("advancedRows"), settings.get("advancedLeadIn")), (9, True))
+      (settings.get("advancedRows"), settings.get("advancedLeadIn")), (11, True))
 check("the quality tab shows the encoder value", settings.get("quality"), True)
 # The text scale: four points with the drawn sizes checked on a fresh file, each
 # row saying what it is as a percentage the way the quality rows say their crf.

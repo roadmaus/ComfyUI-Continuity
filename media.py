@@ -67,6 +67,68 @@ def resolve(filename):
     return folder_paths.get_annotated_filepath(filename)
 
 
+def stamp(filename):
+    """A file's identity for a cache key -> (absolute path, mtime_ns, size).
+
+    Content addressing without reading the content: a reference file is a video
+    somebody may have replaced in place under the same name, and a cache that
+    keyed on the name alone would hand back the old clip's latents forever.
+    The same reasoning `timeline.stamps` uses to invalidate the segment node,
+    said about one file instead of a whole request — and like it, mtime rather
+    than a hash, because hashing a gigabyte of source to save one encode is the
+    wrong way round.
+    """
+    path = resolve(filename)
+    try:
+        info = os.stat(path)
+    except OSError as exc:
+        raise MediaError(f"{filename!r} could not be read: {exc}") from exc
+    return path, int(info.st_mtime_ns), int(info.st_size)
+
+
+class Deferred(dict):
+    """A `load_all` entry that decodes the file the first time it is read.
+
+    `load_all` used to decode everything a request named before `encode` was
+    handed any of it, which is the right shape when every decoded file is about
+    to be used. It stopped being right when references started coming back out
+    of `latents.py`: a cached reference needs neither its pixels nor its
+    soundtrack, and decoding a high-resolution source to then throw it away is
+    most of what the cache was built to avoid.
+
+    A dict subclass rather than a wrapper because `encode` reads these as
+    `entry["frames"]` in half a dozen places and a seam assigns a plain dict
+    into the same map — so the lazy ones have to *be* dicts, not stand in for
+    them. Decoded once: the second read is the first read's result, which
+    matters for a `picture+sound` reference whose picture and soundtrack are
+    two plan steps against one file.
+    """
+
+    def __init__(self, decode):
+        super().__init__()
+        self._decode = decode
+
+    def _fill(self):
+        # Cleared only once the decode has actually returned. A file that fails
+        # to open has to fail again on the next read rather than quietly read
+        # as an entry with nothing in it.
+        if self._decode is not None:
+            self.update(self._decode())
+            self._decode = None
+
+    def __getitem__(self, key):
+        self._fill()
+        return super().__getitem__(key)
+
+    def get(self, key, default=None):
+        self._fill()
+        return super().get(key, default)
+
+    def __contains__(self, key):
+        self._fill()
+        return super().__contains__(key)
+
+
 def image_size(filename):
     """(width, height) without decoding pixels — used for the adaptive canvas.
 
@@ -276,19 +338,27 @@ def load_all(compiled):
     # cite.
     limit = align_frame_count(max(5, compiled.frames)) / TARGET_FPS
 
+    # Keyframes are decoded here and now; everything the reference cache can
+    # stand in for is deferred (`Deferred`) so that a hit never reaches the
+    # disk the file is on. A first or last frame is a single still that is
+    # wanted either way, so deferring it would buy nothing and cost a class.
     loaded = {}
     for asset in (compiled.first_frame, compiled.last_frame):
         if asset is not None:
             loaded[asset.handle] = {"image": load_image(asset.filename)}
     for asset in compiled.ref_images:
-        loaded[asset.handle] = {"image": load_image(asset.filename)}
+        loaded[asset.handle] = Deferred(
+            lambda asset=asset: {"image": load_image(asset.filename)})
     for asset in compiled.ref_videos:
-        frames, audio = load_video(
-            asset.filename, want_audio=asset.track == "picture+sound",
-            trim=asset.trim, max_seconds=limit)
-        loaded[asset.handle] = {"frames": frames, "audio": audio}
+        def decode(asset=asset):
+            frames, audio = load_video(
+                asset.filename, want_audio=asset.track == "picture+sound",
+                trim=asset.trim, max_seconds=limit)
+            return {"frames": frames, "audio": audio}
+        loaded[asset.handle] = Deferred(decode)
     # Both real audio files and videos referenced for their sound alone: the
     # decoder reads a soundtrack out of a video container the same way.
     for asset in compiled.ref_audios:
-        loaded[asset.handle] = {"audio": load_audio(asset.filename, trim=asset.trim)}
+        loaded[asset.handle] = Deferred(
+            lambda asset=asset: {"audio": load_audio(asset.filename, trim=asset.trim)})
     return loaded

@@ -1,5 +1,28 @@
 # Changelog
 
+## Unreleased
+
+**A reference is encoded once, not once per prompt.** Attaching a video or a
+cast member means decoding it and pushing it through the VAE, and on a
+high-resolution source that is most of the wait before the first sampling step.
+None of it depends on the prompt — but a generation caches on its whole request,
+so editing one word paid for all of it again. References are now kept between
+renders, keyed on the file, the canvas they were encoded at and the VAE that
+encoded them; the prompt, the seed, the sampler, the LoRAs and the other
+references are all free to move. A cached reference is never opened, either:
+the decode is deferred, so a hit does not touch the disk the clip is on.
+
+That makes `max` affordable. It was the better-looking setting you paid for on
+every render, and `match` was the answer; now it is paid for once per canvas and
+the choice goes back to being about quality.
+
+It cannot change what a render produces — only how long it takes. Settings →
+General → Reference cache says how much of ComfyUI's temp directory it is
+holding, empties it, and turns it off.
+
+**Settings' third tab is called General.** It carries a Rendering group as well
+as a Nodes one, so "Nodes" was the name of half of it.
+
 ## 2.24
 
 **A shot can be made as long as the sound or the footage it is generated

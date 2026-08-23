@@ -75,6 +75,12 @@ export const css = `
 .mmc-set-foot code {
   font-family: ui-monospace, Menlo, monospace; font-size: calc(10.5px * var(--mmc-type)); color: var(--mmc-dim);
 }
+/* The reference cache's foot carries a control as well as a reading — the only
+   foot on the page that does, which is why the button is styled here rather
+   than by .mmc-set-foot growing a layout every other one would inherit. */
+.mmc-set-clear {
+  margin-top: 9px; padding: 3px 12px; font-size: calc(11.5px * var(--mmc-type));
+}
 .mmc-set-wait { color: var(--mmc-dim); font-size: calc(13px * var(--mmc-type)); padding: 28px 0 24px; }
 .mmc-set-problem { color: var(--mmc-warn); font-size: calc(12px * var(--mmc-type)); line-height: 1.45; padding: 14px 0 0; }
 

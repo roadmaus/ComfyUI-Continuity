@@ -33,7 +33,7 @@ from aiohttp import web
 import folder_paths
 from server import PromptServer
 
-from . import compile as compiler, lorameta, media, models, preview, settings
+from . import compile as compiler, latents, lorameta, media, models, preview, settings
 
 # The picker builds its grid lazily and paginates, so the cap only bounds the
 # listing's JSON payload (~2 MB at this size). Newest first, so when a folder
@@ -624,6 +624,34 @@ async def write_settings(request):
         return web.json_response({"error": f"could not write the settings file: {problem}"},
                                  status=500)
     return web.json_response({"settings": stored})
+
+
+@PromptServer.instance.routes.get("/minimax_creator/latent_cache")
+async def read_latent_cache(request):
+    """How much of the disk the reference cache is holding. See `latents.py`.
+
+    Not part of the settings blob: `settings.clean` describes what this machine
+    was *told*, and this is what happened as a result. A number the settings
+    page could write would be a number somebody could set.
+    """
+    count, size = latents.usage()
+    return web.json_response({"entries": count, "bytes": size})
+
+
+@PromptServer.instance.routes.post("/minimax_creator/latent_cache/clear")
+async def clear_latent_cache(request):
+    """Delete every cached reference. -> what was freed, so the page can say so.
+
+    Safe at any moment, including mid-render: everything here is derived, and
+    an entry deleted out from under a queued generation is an entry that
+    generation encodes instead.
+    """
+    try:
+        freed = latents.clear()
+    except OSError as problem:
+        return web.json_response({"error": f"could not clear the cache: {problem}"},
+                                 status=500)
+    return web.json_response({"freed": freed, "entries": 0, "bytes": 0})
 
 
 @PromptServer.instance.routes.post("/minimax_creator/compiled_prompt")
