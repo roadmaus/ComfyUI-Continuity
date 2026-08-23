@@ -10,6 +10,8 @@ behind `DualModelGuider`, and its schedule is `Ideogram4Scheduler`'s — which i
 why this branch samples through `SamplerCustomAdvanced` rather than `KSampler`.
 """
 
+import sys
+
 ARCH = "ideogram4"
 
 # Which weights fields this architecture has. No distilled checkpoint — the
@@ -108,3 +110,23 @@ def emit_graph(graph, payload, sampling, weights, clip, vae, model, unique_id,
         sigmas=sigmas, latent_image=latent,
     )
     render_image.emit_tail(graph, sampled.out(0), vae, unique_id, filename_prefix)
+
+
+def compile_still(data, image_size_lookup=None):
+    """The uniform still surface — see `families/registry.py`. The flow is the
+    shared `compile_image.compile_prestage`, handed this module as the family."""
+    from ... import compile_image
+
+    return compile_image.compile_prestage(data, sys.modules[__name__],
+                                          image_size_lookup)
+
+
+def emit_still(data, plan, sampling, unique_id):
+    """The uniform still surface over the shared `render_image.emit`."""
+    from ... import outputs, render_image, settings
+
+    weights = render_image.ImageWeights.from_blob(data, sys.modules[__name__])
+    return render_image.emit(plan, weights, sampling, unique_id,
+                             sys.modules[__name__],
+                             filename_prefix=outputs.image(
+                                 data, settings.image_prefix()))

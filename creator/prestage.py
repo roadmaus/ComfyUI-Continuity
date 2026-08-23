@@ -35,20 +35,17 @@ import json
 
 from comfy_api.latest import io
 
-from . import (canvas, compile_image, media, outputs, render, render_image,
-               sampling, settings)
+from . import (canvas, compile_image, media, outputs, render,
+               render_image, sampling)
+from .compile import CompileError
+from .families import registry
 from .families.h3 import still
 from .families.ideogram4 import still as ideogram4
 from .families.krea2 import still as krea2
 
-# Which family compiles and renders each of the pill's image architectures.
-# The H3 branch is dispatched apart below: a still from the video model rides
-# the video pipeline, not this shared image flow.
-IMAGE_FAMILIES = {krea2.ARCH: krea2, ideogram4.ARCH: ideogram4}
-
 DEFAULT_DATA = json.dumps({
     "version": 1,
-    "arch": compile_image.DEFAULT_ARCH,
+    "arch": registry.DEFAULT_STILL_ARCH,
     "prompt": "",
     "aspect": compile_image.DEFAULT_ASPECT,
     "short_edge": compile_image.DEFAULT_SHORT_EDGE,
@@ -169,43 +166,22 @@ class MiniMaxH3PreStage(io.ComfyNode):
             "sampler_name": sampler_name, "scheduler": scheduler,
         })
 
-        # The H3 branch is a video render that keeps one latent frame, so it
-        # compiles and emits through the video path rather than through the
-        # image models' — see `families/h3/still`. Same widgets, same blob, same
-        # save node; everything between them is the other pipeline.
-        if data.get("arch") == still.ARCH:
-            try:
-                plan = still.compile_still(data)
-            except compile_image.CompileError as exc:
-                raise ValueError(str(exc)) from exc
-            # The request owns the weights, because it is an ordinary creator
-            # request — see `families/h3/still`.
-            request = plan.request
-            graph = still.emit(
-                plan,
-                still.weights_from_blob(request),
-                sampler,
-                cls.hidden.unique_id,
-                filename_prefix=outputs.image(request, settings.image_prefix()))
-            return render.expanded(graph)
-
-        arch = data.get("arch", compile_image.DEFAULT_ARCH)
-        family = IMAGE_FAMILIES.get(arch)
+        # One dispatch for all three pills: the registry answers the arch with
+        # the family's still module, and every family speaks the same two
+        # verbs. H3's answer is a video render that keeps one latent frame —
+        # same widgets, same blob, same save node; everything between them is
+        # the other pipeline (`families/h3/still.py`).
+        arch = data.get("arch", registry.DEFAULT_STILL_ARCH)
+        family = registry.still(arch)
         if family is None:
             raise ValueError(f"unknown model architecture {arch!r}")
         try:
-            payload = compile_image.compile_prestage(data, family, media.image_size)
-        except compile_image.CompileError as exc:
+            plan = family.compile_still(data, media.image_size)
+        except CompileError as exc:
             raise ValueError(str(exc)) from exc
-
-        graph = render_image.emit(
-            payload,
-            render_image.ImageWeights.from_blob(data, family),
-            sampler,
-            cls.hidden.unique_id,
-            family,
-            # Refused before anything is sampled — see MiniMaxH3Creator.execute.
-            filename_prefix=outputs.image(data, settings.image_prefix()))
+        # The output prefix is refused before anything is sampled — see
+        # MiniMaxH3Creator.execute.
+        graph = family.emit_still(data, plan, sampler, cls.hidden.unique_id)
         return render.expanded(graph)
 
 

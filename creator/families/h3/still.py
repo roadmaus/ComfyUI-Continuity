@@ -202,8 +202,12 @@ def _plain_prompt(request, checkpoint):
     return prompt
 
 
-def compile_still(data):
+def compile_still(data, image_size_lookup=None):
     """A pre-stage blob (arch 'minimax') -> `StillPlan`.
+
+    `image_size_lookup` is the uniform still-family surface's argument and is
+    unused here: an H3 still's canvas is resolved where a shot's is, by the
+    segment node compiling the request it is handed.
 
     The request inside the blob is already in `compile.compile_request`'s shape —
     the pre-stage's H3 branch is driven by the Creator's own editor, which writes
@@ -335,3 +339,17 @@ def emit(plan, weights, sampling, unique_id, filename_prefix=FILENAME_PREFIX):
     save.set_override_display_id(unique_id)
 
     return graph
+
+
+def emit_still(data, plan, sampling, unique_id):
+    """The uniform still surface over `emit` — see `families/registry.py`.
+
+    The request owns the weights and the output prefix, because it is an
+    ordinary creator request; `data` — the pre-stage blob around it — has
+    nothing this branch reads.
+    """
+    from ... import outputs, settings
+
+    return emit(plan, weights_from_blob(plan.request), sampling, unique_id,
+                filename_prefix=outputs.image(plan.request,
+                                              settings.image_prefix()))
