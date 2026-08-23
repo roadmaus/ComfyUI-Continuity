@@ -36,7 +36,7 @@ import json
 from comfy_api.latest import io
 
 from . import (canvas, compile_image, compile_still, media, outputs, render,
-               render_image, render_still, settings)
+               render_image, render_still, sampling, settings)
 
 DEFAULT_DATA = json.dumps({
     "version": 1,
@@ -149,6 +149,18 @@ class MiniMaxH3PreStage(io.ComfyNode):
         except json.JSONDecodeError as exc:
             raise ValueError(f"prestage_data is not valid JSON: {exc}") from exc
 
+        # The row off the blob, falling back to the widgets — see `sampling.py`.
+        # This node is the case that argues for the move most plainly: its three
+        # architectures want three different rows (Krea at 52 steps and cfg 3.5,
+        # Ideogram at 7.0, H3 at 20 and 1.0) and there is one static schema
+        # underneath them wearing Krea's numbers. The accelerator half comes back
+        # off and is dropped: no image branch emits a patch, so there is nothing
+        # here for one to sit between.
+        sampler, _ = sampling.resolve(data, {
+            "seed": seed, "steps": steps, "cfg": cfg,
+            "sampler_name": sampler_name, "scheduler": scheduler,
+        })
+
         # The H3 branch is a video render that keeps one latent frame, so it
         # compiles and emits through the video path rather than through the
         # image models' — see `compile_still`. Same widgets, same blob, same
@@ -164,8 +176,7 @@ class MiniMaxH3PreStage(io.ComfyNode):
             graph = render_still.emit(
                 plan,
                 render_still.weights_from_blob(request),
-                render.Sampling(seed=seed, steps=steps, cfg=cfg,
-                                sampler_name=sampler_name, scheduler=scheduler),
+                sampler,
                 cls.hidden.unique_id,
                 filename_prefix=outputs.image(request, settings.image_prefix()))
             return render.expanded(graph)
@@ -178,8 +189,7 @@ class MiniMaxH3PreStage(io.ComfyNode):
         graph = render_image.emit(
             payload,
             render_image.ImageWeights.from_blob(data),
-            render.Sampling(seed=seed, steps=steps, cfg=cfg,
-                            sampler_name=sampler_name, scheduler=scheduler),
+            sampler,
             cls.hidden.unique_id,
             # Refused before anything is sampled — see MiniMaxH3Creator.execute.
             filename_prefix=outputs.image(data, settings.image_prefix()))

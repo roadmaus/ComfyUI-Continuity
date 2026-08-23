@@ -54,7 +54,7 @@ import json
 from comfy_api.latest import ComfyExtension, io
 
 from . import (accel, canvas, compile as compiler, facepass, hires, media,
-               models, outputs, prestage, render, settings, timeline)
+               models, outputs, prestage, render, sampling, settings, timeline)
 
 DEFAULT_DATA = json.dumps({
     "version": 2,
@@ -185,19 +185,6 @@ def _fingerprint(blob):
         return (blob, ())
 
 
-def _attention(attention, sage):
-    """Which backend the row is asking for, across the rename.
-
-    `sage` was a switch before `attention` was a list, and a workflow saved with
-    it on has to keep running sage. It is read only while `attention` is still
-    at its default, so picking a backend on the list is what settles it — up to
-    and including picking `default` on a node whose old switch was on.
-    """
-    if attention == "default" and sage:
-        return "sage"
-    return attention
-
-
 def _render(blob, seed, steps, cfg, sampler_name, scheduler,
             block_cache, spectrum, spectrum_blend, unique_id,
             shift_video=render.SHIFT_DEFAULTS[0],
@@ -209,6 +196,18 @@ def _render(blob, seed, steps, cfg, sampler_name, scheduler,
         data = compiler.as_piece(json.loads(blob))
     except json.JSONDecodeError as exc:
         raise ValueError(f"the node's data is not valid JSON: {exc}") from exc
+
+    # How the piece is run, off the blob where the blob says and off the widgets
+    # where it does not — which is every field of every workflow saved before the
+    # row moved. See `sampling.py`; the widget slots below are frozen, not live.
+    sampler, acceleration = sampling.resolve(data, {
+        "seed": seed, "steps": steps, "cfg": cfg,
+        "sampler_name": sampler_name, "scheduler": scheduler,
+        "shift_video": shift_video, "shift_audio": shift_audio,
+        "block_cache": block_cache, "spectrum": spectrum,
+        "spectrum_blend": spectrum_blend, "sage": sage, "attention": attention,
+        "chunk_ffn": chunk_ffn, "fp16_accumulation": fp16_accumulation,
+    })
 
     # The piece as this queue will make it, which is not always the piece on the
     # strip: a card held back is not sampled, and a card playing a kept take is
@@ -237,14 +236,8 @@ def _render(blob, seed, steps, cfg, sampler_name, scheduler,
     graph = render.emit(
         payloads, labels,
         models.Weights.from_blob(data),
-        render.Sampling(seed=seed, steps=steps, cfg=cfg,
-                        sampler_name=sampler_name, scheduler=scheduler,
-                        shift_video=shift_video, shift_audio=shift_audio),
-        accel.Settings(block_cache=block_cache, spectrum=spectrum,
-                       spectrum_blend=spectrum_blend,
-                       attention=_attention(attention, sage),
-                       chunk_ffn=chunk_ffn,
-                       fp16_accumulation=fp16_accumulation),
+        sampler,
+        acceleration,
         unique_id,
         # Resolved here rather than inside the save node: a prefix that cannot be
         # used should stop the queue before anything is sampled, not after —

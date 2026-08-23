@@ -58,7 +58,8 @@ import comfy.sample
 from comfy_api.latest import io
 from comfy_execution.graph_utils import GraphBuilder
 
-from . import accel, canvas, compile as compiler, media, models, outputs, settings
+from . import (accel, canvas, compile as compiler, media, models, outputs,
+               sampling, settings)
 
 # Whether this core can start a sampler with the noise switched off on an H3
 # audio+video latent. The lead-in's second sitting does exactly that — the noise
@@ -93,27 +94,13 @@ SAVE_NODE = "MiniMaxH3Save"
 FILENAME_PREFIX = outputs.VIDEO_PREFIX
 
 
-# The H3 checkpoints' own flow shifts — `MiniMaxH3Model.__init__`'s
-# `sigma_shift_video` / `sigma_shift_audio` defaults. At exactly these values
-# no shift node is emitted, so a graph whose pills were never touched stays
-# byte-identical to what this pack always built.
-SHIFT_DEFAULTS = (12.0, 3.0)
-
-
-@dataclass(frozen=True)
-class Sampling:
-    """The sampler settings both nodes expose under the same widget names."""
-
-    seed: int = 0
-    steps: int = 20
-    cfg: float = 1.0
-    sampler_name: str = "res_multistep"
-    scheduler: str = "simple"
-    shift_video: float = SHIFT_DEFAULTS[0]
-    shift_audio: float = SHIFT_DEFAULTS[1]
-
-    def shifted(self):
-        return (self.shift_video, self.shift_audio) != SHIFT_DEFAULTS
+# Re-exported, not defined: the row and its defaults are `sampling.py`'s, which
+# is a module with no ComfyUI import in it so that the blob half of the row can
+# be read — and mirrored, and one day declared by a family manifest — without
+# booting a server. Named here as well because everything downstream of `emit`
+# has always spelled them `render.Sampling` / `render.SHIFT_DEFAULTS`.
+SHIFT_DEFAULTS = sampling.SHIFT_DEFAULTS
+Sampling = sampling.Sampling
 
 
 @dataclass(frozen=True)

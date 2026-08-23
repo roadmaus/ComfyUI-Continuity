@@ -463,6 +463,46 @@ export function serializeTurbo(turbo) {
   return { turbo: out };
 }
 
+/** Every field the sampler row keeps in the blob, and what each has to be.
+ *
+ *  Mirrors `sampling.py`'s `DEFAULTS`, and `tests/test_sampling_mirror.py` is
+ *  what stops the two drifting. The seed is not here: it stays a widget, for the
+ *  reason `sampling.WIDGET_ONLY` gives.
+ *
+ *  The *values* are deliberately not mirrored. A default here would be a second
+ *  place the row's numbers live, and the whole point of the move is that the
+ *  backend resolves an absent field against the node's own schema — so this says
+ *  what a field is, and says nothing about what it should be. */
+export const SAMPLING_FIELDS = {
+  steps: "number", cfg: "number", sampler_name: "string", scheduler: "string",
+  shift_video: "number", shift_audio: "number",
+  block_cache: "string", spectrum: "boolean", spectrum_blend: "number",
+  attention: "string", chunk_ffn: "boolean", fp16_accumulation: "boolean",
+};
+
+/** The row as stored. Unknown keys and wrong types dropped, the rest kept as
+ *  written — this is not the place that decides what a legal step count is,
+ *  because a blob queued without ever being opened here never passes through
+ *  it and `sampling.py` has to decide that anyway. */
+export function parseSampling(raw) {
+  const out = {};
+  if (!raw || typeof raw !== "object") return out;
+  for (const [name, kind] of Object.entries(SAMPLING_FIELDS)) {
+    const value = raw[name];
+    if (value === undefined || value === null) continue;
+    if (typeof value === kind) out[name] = value;
+  }
+  return out;
+}
+
+/** Absent until something is in it, like the turbo block above: a piece nobody
+ *  has tuned says nothing about how it is sampled, and queues off the node's
+ *  widgets exactly as every piece did before the row moved. */
+export function serializeSampling(sampling) {
+  const picked = parseSampling(sampling);
+  return Object.keys(picked).length ? { sampling: picked } : {};
+}
+
 /** The two H3 checkpoints, which is also the granularity a LoRA belongs to:
  *  T2VA, I2VA, L2VA and FL2VA are all the same weights. */
 export const CHECKPOINTS = ["fl2va", "ref2va"];
@@ -1110,6 +1150,11 @@ export function emptyTimeline() {
     // The turbo switch. Global like the LoRA it engages: a speed-up belongs to
     // the run, not to shot 3.
     turbo: emptyTurbo(),
+    // How the piece is sampled. Empty on a fresh node and empty in every blob
+    // saved before the row moved off the widgets: an absent field falls back to
+    // the widget it always used, so a piece that says nothing here samples the
+    // way it always did. See `sampling.py`.
+    sampling: {},
     // One blank shot, because that is what this node is when you drop it. It
     // was empty while the strip was a node of its own: a new timeline was a
     // reel with nothing on it and two equally good ways to begin, and an
@@ -1583,7 +1628,7 @@ export { syncCanvas as syncTimeline };
  */
 export const PIECE_FIELDS = ["aspect", "aspect_source", "short_edge", "upscale",
                              "sample_edge", "refine_denoise", "face", "models",
-                             "turbo", "output_prefix", "subjects"];
+                             "turbo", "output_prefix", "subjects", "sampling"];
 
 /** What only a lone generation ever carried at the top level. Tells a version-1
  *  `creator_data` blob from a fresh node's "{}" — which is an empty piece and
@@ -1631,6 +1676,9 @@ export function parseTimeline(raw) {
       // hand-edited blob can have the wrong type in it.
       if (!Array.isArray(timeline.loras)) timeline.loras = [];
       if (!Array.isArray(timeline.assets)) timeline.assets = [];
+      // Absent in every blob saved before the sampler row moved, and anything
+      // at all in a hand-edited one.
+      timeline.sampling = parseSampling(timeline.sampling);
       // The cast. Absent in every workflow saved before it existed, and a
       // hand-edited blob can hold anything; kept as written otherwise, because
       // whether a subject's files are still attached is the band's readout
@@ -1837,6 +1885,7 @@ export function serializeTimeline(timeline) {
     ...(timeline.output_prefix ? { output_prefix: timeline.output_prefix } : {}),
     ...serializeModels(timeline.models),
     ...serializeTurbo(timeline.turbo),
+    ...serializeSampling(timeline.sampling),
     segments: timeline.segments.map((segment, index) => {
       if (isClip(segment)) {
         return {
@@ -2267,6 +2316,9 @@ export function emptyPreStage() {
     // The H3 branch: its own settings, and its generation in the Creator's
     // shape. Nothing above it applies to that branch — see `emptyStill`.
     minimax: emptyStill(),
+    // See the piece's: empty until a pill writes one, and an absent field falls
+    // back to the widget it always used.
+    sampling: {},
     models: emptyPreStageModels(),
     // A hint for peer discovery, never authoritative — ids renumber on paste,
     // so the pre-stage pill re-derives the pairing by scan.
@@ -2307,6 +2359,9 @@ export function parsePreStage(raw) {
       }
       if (!PRESTAGE_IDEOGRAM_QUALITIES.includes(state.quality)) state.quality = "default";
       state.minimax = parseStill(state.minimax);
+      // The sampler row, on the same terms as the piece's — absent in every
+      // blob saved before it moved off the widgets. See `sampling.py`.
+      state.sampling = parseSampling(state.sampling);
       const turbo = state.turbo && typeof state.turbo === "object" ? state.turbo : {};
       state.turbo = {
         on: turbo.on === true,
@@ -2358,6 +2413,7 @@ export function serializePreStage(state) {
       : {}),
     ...(state.quality !== "default" ? { quality: state.quality } : {}),
     minimax: serializeStill(state.minimax),
+    ...serializeSampling(state.sampling),
     ...(Object.keys(models).length ? { models } : {}),
     ...(state.peer != null ? { peer: state.peer } : {}),
   }, null, 2);

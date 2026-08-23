@@ -1896,7 +1896,7 @@ def _inject_pool(pool, request, extra_texts=(), cast=()):
 # and every shot on the strip is held to them. Mirrors `state.PIECE_FIELDS`.
 PIECE_FIELDS = ("aspect", "aspect_source", "short_edge", "upscale",
                 "sample_edge", "refine_denoise", "face", "models", "turbo",
-                "output_prefix", "subjects")
+                "output_prefix", "subjects", "sampling")
 
 # What only a lone generation ever carried at the top level. Used to tell a
 # version-1 `creator_data` blob from a fresh node's "{}" — which is an empty

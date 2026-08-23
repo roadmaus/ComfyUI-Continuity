@@ -5,9 +5,16 @@
 // outside the panel on either node because the panel says what the piece *is*
 // and this says how it is run.
 //
-// The widgets are the real ComfyUI ones, hidden by the entry point and re-drawn
-// here: `graphToPrompt` reads values off `node.widgets`, so these pills write
-// through to them rather than holding state of their own.
+// **The values are in the blob, not on the widgets.** They were widgets until a
+// second model family made that untenable — a node's widget list is static per
+// class, and LTX-AV wants a different row rather than a longer one — so the row
+// moved into `creator_data` where the rest of the piece already lives. The
+// thirteen widgets stay declared and stay hidden, as the fallback that carries
+// every workflow saved before the move; see `sampling.py` and `blobIO` below.
+//
+// The seed is the exception and is still a widget, because
+// `control_after_generate` is the frontend's own linked control and there is
+// nothing for a JSON field to be.
 
 import { el, icon } from "./dom.js";
 import { t } from "./i18n.js";
@@ -107,6 +114,104 @@ export function widgetIO(widgets, onChange) {
       onChange?.();
     },
   };
+}
+
+/** The fields that stay on the node's widgets whatever else moves into the blob.
+ *
+ *  `control_after_generate` is not a declared input at all — the frontend
+ *  attaches it to the seed and names it itself — so there is nothing for a JSON
+ *  field to be. And the seed rides with it: they are one control, the number and
+ *  what happens to it after a queue, and splitting them across two stores would
+ *  mean a saved piece whose seed and its after-generate disagreed about which
+ *  run they described.
+ *
+ *  `sage` is here for the opposite reason: it is the retired switch, and the one
+ *  thing `adoptSage` does with it is *clear* it. A clear that landed in the blob
+ *  would leave the widget still on, so the switch would be adopted again on
+ *  every mount and could never be put down. It predates the list, no pill writes
+ *  one, and `sampling.py` reads it off the widgets for the same reason. */
+export const WIDGET_ONLY = ["seed", "control_after_generate", "sage"];
+
+/**
+ * The row, over the blob — with the seed still over the widgets.
+ *
+ * Everything that draws this row (`samplingBar`, the turbo switch, the preset
+ * capture and apply) already talks to a `{value, set}` pair and has never known
+ * where the values were kept. That is what makes moving them a change to one
+ * function rather than to the row: the pair still answers to the same names, and
+ * `sampling.py` reads the same block on the other side.
+ *
+ * Why they moved is in `sampling.py`'s docstring — briefly, a node's widget list
+ * is static per class and a second model family does not want this one.
+ *
+ * @param {object} widgets   name -> real ComfyUI widget, for the seed
+ * @param {() => object} read   the blob's `sampling` block, possibly undefined
+ * @param {(block: object) => void} write   store an updated block
+ * @param {() => void} [onChange]  the node needs redrawing
+ */
+export function blobIO(widgets, read, write, onChange) {
+  const widgets_ = widgetIO(widgets, onChange);
+  return {
+    value: (name, fallback) => {
+      if (WIDGET_ONLY.includes(name)) return widgets_.value(name, fallback);
+      const stored = read()?.[name];
+      return stored === undefined || stored === null ? fallback : stored;
+    },
+    set: (name, value) => {
+      if (WIDGET_ONLY.includes(name)) { widgets_.set(name, value); return; }
+      write({ ...(read() || {}), [name]: value });
+      onChange?.();
+    },
+  };
+}
+
+/**
+ * Move a pre-blob sampler row into the blob, once. -> new blob text, or null.
+ *
+ * The migration, and the only place either half of the row is copied. A
+ * workflow saved before the move has no `sampling` block and its widgets hold
+ * the real values, so the first time a body mounts one it writes them across;
+ * from then on the blob is what is read, saved and queued.
+ *
+ * **Called once the graph has finished configuring, never at construction.** A
+ * saved workflow assigns its widget values *after* `nodeCreated`, so a body that
+ * migrated early would copy the schema's defaults over the user's row — which is
+ * the one way this could do real damage.
+ *
+ * Read off the raw text rather than off parsed state, because `parseSampling`
+ * cannot tell an absent block from an empty one and that difference is the whole
+ * question: `{}` is what a body writes for a piece nobody has tuned, and reading
+ * it as "unmigrated" would put the widgets back on top of a row somebody had
+ * deliberately cleared.
+ *
+ * Nothing is lost by declining: `sampling.py` falls back per field, so a blob
+ * this never runs on queues off its widgets exactly as it always did.
+ *
+ * @param {string} raw        the blob as stored
+ * @param {object} widgets    name -> real ComfyUI widget
+ * @param {(raw: string) => object} parse
+ * @param {(state: object) => string} serialize
+ */
+export function adopted(raw, widgets, parse, serialize) {
+  let stored;
+  try {
+    stored = JSON.parse(raw)?.sampling;
+  } catch {
+    return null;   // an unparseable blob is the state module's problem, not this one
+  }
+  if (stored && typeof stored === "object") return null;
+
+  const block = {};
+  for (const name of SAMPLING_WIDGETS) {
+    if (WIDGET_ONLY.includes(name)) continue;
+    const widget = widgets?.[name];
+    if (widget && widget.value !== undefined) block[name] = widget.value;
+  }
+  if (!Object.keys(block).length) return null;
+
+  const state = parse(raw);
+  state.sampling = block;
+  return serialize(state);
 }
 
 /**

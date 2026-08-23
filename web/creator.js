@@ -7,7 +7,7 @@ import { installStyles } from "./creator/styles.js";
 import { TimelineBody } from "./creator/timeline.js";
 import { PreStageBody } from "./creator/prestage.js";
 import { Satellite } from "./creator/satellite.js";
-import { SAMPLING_WIDGETS } from "./creator/sampling.js";
+import { adopted, SAMPLING_WIDGETS } from "./creator/sampling.js";
 import { rememberQueuedSeeds } from "./creator/seedmemory.js";
 import { primeSettings } from "./creator/api.js";
 import { close as closeFullscreen, fullscreenNode, openFullscreen, remount as remountFullscreen,
@@ -461,6 +461,13 @@ app.registerExtension({
     if (!body) return;
     if (node.comfyClass === PRESTAGE) {
       const widget = node.widgets?.find((w) => w.name === WIDGET[PRESTAGE]);
+      // The sampler row moved off the widgets into the blob; this is where a
+      // pre-stage saved before that crosses over. Here rather than in
+      // `nodeCreated` because widget values are assigned after it, which is the
+      // same reason this hook exists at all. See `sampling.adopted`.
+      const carried = adopted(widget.value, collectSampling(node),
+                              S.parsePreStage, S.serializePreStage);
+      if (carried) widget.value = carried;
       const state = S.parsePreStage(widget.value);
       body.onCommit = () => {
         widget.value = S.serializePreStage(state);

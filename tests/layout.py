@@ -23,12 +23,14 @@ out: the import is the point where a machine without node should bow out, and it
 exits rather than raising so `harness.py` reports a skip and not a crash.
 """
 
+import contextlib
 import importlib.util
 import json
 import os
 import shutil
 import subprocess
 import sys
+import tempfile
 import types
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -114,6 +116,72 @@ def run(script, *args):
     proc = subprocess.run(
         ["node", "--input-type=module", "--eval", script, "--", *argv],
         capture_output=True, text=True)
+    if proc.returncode != 0:
+        print(f"node failed:\n{proc.stderr}")
+        sys.exit(1)
+    return json.loads(proc.stdout)
+
+
+# The ComfyUI modules the frontend imports but a bare node has no idea about.
+# The pack's own files reach them as `../../scripts/app.js` from `web/creator.js`
+# and `../../../scripts/api.js` from a module under `web/creator/`, so both land
+# in one `scripts/` directory beside the copied tree.
+STUBS = {
+    "app.js": "export const app = { registerExtension() {}, extensionManager: null };",
+    "api.js": """
+const store = new Map();
+globalThis.__userdata = store;
+export const api = {
+  apiURL: (u) => u,
+  addEventListener() {}, removeEventListener() {},
+  async fetchApi() { return { ok: true, status: 200, json: async () => ({}) }; },
+  async getUserData(file) {
+    return store.has(file)
+      ? { status: 200, json: async () => JSON.parse(store.get(file)) }
+      : { status: 404, json: async () => null };
+  },
+  async storeUserData(file, value) { store.set(file, JSON.stringify(value)); return { status: 200 }; },
+  async deleteUserData(file) { store.delete(file); return { status: 204 }; },
+};
+""",
+    "widgets.js": "export const ComfyWidgets = {};",
+}
+
+
+@contextlib.contextmanager
+def pack(extra_stubs=None, skip=None):
+    """The frontend in a temp tree it can actually be imported from. -> its dir.
+
+    Modules under `web/creator/` import ComfyUI's own `scripts/api.js` by
+    relative path, so `node` cannot load one out of the checkout — there is no
+    `scripts/` two directories up from it. The tree is copied somewhere that has
+    one, stubbed.
+
+    `skip` is passed to `shutil.ignore_patterns`; the style atlas's half a
+    thousand stills are the reason it exists.
+    """
+    work = tempfile.mkdtemp(prefix="mmc-pack-")
+    try:
+        target = os.path.join(work, "pack")
+        shutil.copytree(os.path.join(ROOT, "web"), os.path.join(target, "web"),
+                        ignore=shutil.ignore_patterns(*skip) if skip else None)
+        scripts = os.path.join(work, "scripts")
+        os.makedirs(scripts, exist_ok=True)
+        for name, source in {**STUBS, **(extra_stubs or {})}.items():
+            with open(os.path.join(scripts, name), "w", encoding="utf-8") as handle:
+                handle.write(source)
+        yield target
+    finally:
+        shutil.rmtree(work, ignore_errors=True)
+
+
+def in_pack(script, target, *args):
+    """Run `script` with `target` as the working directory, so its relative
+    imports of `./web/creator/…` resolve against the copied tree."""
+    argv = [a if isinstance(a, str) else json.dumps(a) for a in args]
+    proc = subprocess.run(
+        ["node", "--input-type=module", "--eval", script, "--", *argv],
+        capture_output=True, text=True, cwd=target)
     if proc.returncode != 0:
         print(f"node failed:\n{proc.stderr}")
         sys.exit(1)

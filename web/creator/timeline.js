@@ -22,7 +22,7 @@ import { openSettings } from "./settings.js";
 import { openTrim } from "./trim.js";
 import { openAspectPopover, openResolutionPopover, openChoicePopover, facesPill, stepperPill, aspectGlyph, PILL_GLYPH } from "./pills.js";
 import { refine, refineButton, chosenModel as refineModel } from "./refine.js";
-import { samplingBar, widgetIO } from "./sampling.js";
+import { adopted, blobIO, samplingBar } from "./sampling.js";
 import { Stage } from "./stage.js";
 import { weightsPill, loadCatalog, catalogFiles } from "./models.js";
 import * as S from "./state.js";
@@ -2414,11 +2414,12 @@ class Timeline {
  * step. What the node shows is the global prompt, the segments at their real
  * relative lengths, and the numbers.
  *
- * The sampler widgets are ComfyUI's own, hidden and re-drawn as pills. This node
- * owns the sampler because it writes the KSampler into the graph, but that is no
- * reason for half the node to be stock widgets and half of it to be this. The
- * widgets still hold the values — they are what `graphToPrompt` reads — so the
- * pills only read and write `widget.value`, exactly as the JSON blob does.
+ * The sampler row is drawn as pills like everything else, and its values are in
+ * the blob like everything else — `piece.sampling`, read and written through
+ * `sampling.blobIO`. It was thirteen stock widgets until a second model family
+ * made a static widget list untenable; those widgets are still declared, still
+ * hidden, and now only the fallback that carries a workflow saved before the
+ * move. The seed alone is still really a widget.
  */
 export class TimelineBody {
   /** `preStage` and `face` are wiring the node supplies — see minimax_creator.js.
@@ -2491,6 +2492,12 @@ export class TimelineBody {
   /** Re-read the widget. Loading a saved workflow assigns widget values after
    *  the node is created, so the body built in `nodeCreated` saw the default. */
   reload() {
+    // The sampler row moved off the widgets into the blob, and this is where a
+    // workflow saved before that crosses over — here rather than in the
+    // constructor, because that is the point at which both halves are final.
+    // See `sampling.adopted`.
+    const adopted_ = adopted(this.read(), this.widgets, S.parseTimeline, S.serializeTimeline);
+    if (adopted_) this.write(adopted_);
     this.timeline = S.parseTimeline(this.read());
     // The face editor closes over the segment object it was handed, and this is
     // a different one. Dropped rather than re-pointed: `render` builds another
@@ -2741,9 +2748,22 @@ export class TimelineBody {
     return widget ? widget.value : fallback;
   }
 
-  /** See `sampling.widgetIO`. */
+  /** The sampler row's `{value, set}` pair.
+   *
+   *  Still called `widgetIO` everywhere that draws the row, and still answers to
+   *  the same names, but the values live in the piece now rather than on the
+   *  node — see `sampling.blobIO`. The seed is the exception and stays a widget.
+   */
   widgetIO() {
-    return widgetIO(() => this.widgets, () => this.onWidgetChange?.());
+    return blobIO(
+      () => this.widgets,
+      () => this.timeline.sampling,
+      // Written straight out rather than through `commit`: commit calls
+      // `Turbo.sync`, which sets pills, which would come back here — and the
+      // pair would bounce between them. Nothing else in commit applies to a
+      // sampler setting anyway; `syncCanvas` is about the strip.
+      (block) => { this.timeline.sampling = block; this.write(S.serializeTimeline(this.timeline)); },
+      () => this.onWidgetChange?.());
   }
 
   /** Write through to the real widget, callback included — some of them (the

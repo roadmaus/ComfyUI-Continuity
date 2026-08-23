@@ -290,3 +290,45 @@ try:
            block_cache="fast")
 finally:
     del comfy_nodes.NODE_CLASS_MAPPINGS[_accel.BLOCK_CACHE_NODE]
+
+
+# ---- the row in the blob -----------------------------------------------------
+#
+# `sampling.py` moved the row off the widgets and into `creator_data`, and the
+# widgets stayed declared as the fallback. Three things have to be true of that,
+# and none of them is a golden — they are claims about two graphs being the same
+# rather than about one graph being what it was, so they are checked here
+# directly and the goldens above go on covering the shape.
+
+from goldens import canonical  # noqa: E402
+
+SHOT = {"prompt": "a red room", "duration_s": 6}
+ROW = {"steps": 7, "cfg": 2.5, "sampler_name": "euler", "scheduler": "beta"}
+
+# 1. The two roads reach the same graph. A blob that names the row and a node
+#    whose widgets name it must emit the identical thing, or the migration is
+#    not a migration.
+by_widget = graph_of(piece(segments=[SHOT]), **ROW)
+by_blob = graph_of(piece(segments=[SHOT], sampling=ROW))
+if canonical(by_widget) != canonical(by_blob):
+    FAILURES.append("a sampling block does not emit what the same widgets emit")
+
+# 2. The blob wins where both speak. Otherwise a workflow whose widgets still
+#    hold pre-migration values would quietly render at them forever.
+contested = graph_of(piece(segments=[SHOT], sampling=ROW),
+                     steps=99, cfg=9.9, sampler_name="ddim", scheduler="karras")
+if canonical(contested) != canonical(by_blob):
+    FAILURES.append("the widgets outrank the blob's sampling block")
+
+
+def _segment_data(graph):
+    return [node["inputs"]["segment_data"] for node in graph.values()
+            if node["class_type"] == "MiniMaxH3TimelineSegment"][0]
+
+
+# 3. And none of it reaches the segment node's cache key. The row is not
+#    conditioning: re-rolling the step count must not re-encode a reference, and
+#    the only thing standing between those two facts is that `compile.py` builds
+#    payloads out of named keys. This is what says so out loud.
+if _segment_data(graph_of(piece(segments=[SHOT]))) != _segment_data(by_blob):
+    FAILURES.append("a sampling block changed segment_data — the row is now a cache key")

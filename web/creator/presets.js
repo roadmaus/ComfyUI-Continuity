@@ -1,13 +1,16 @@
 // A preset is a setup you can put back: what was captured, where it is kept, and
 // what happens when it is applied.
 //
-// **The sampler row is not in the blob.** `steps`, `cfg`, `sampler_name`,
-// `scheduler`, the two flow shifts and the accelerators are stock ComfyUI widgets
-// that `sampling.js` hides and re-draws as pills, and `graphToPrompt` reads their
-// values off `node.widgets`. A preset that stored only `creator_data` would drop
-// the turbo schedule, the step count and the block cache — which is most of what
-// anyone tunes. So a preset is a blob *and* a widget row, which is the pair
-// `stashPreStage` in `web/creator.js` already writes for its own reasons.
+// **A preset is a blob and a row.** `steps`, `cfg`, `sampler_name`, `scheduler`,
+// the two flow shifts and the accelerators were stock ComfyUI widgets when this
+// was written, so a preset that stored only `creator_data` would have dropped
+// the turbo schedule, the step count and the block cache — most of what anyone
+// tunes. The row lives in the blob now (see `sampling.py`), which makes the pair
+// redundant on paper and load-bearing in practice: presets already in the
+// library were captured off widgets, so both halves are still read and applied.
+//
+// The seed is the one field still genuinely on a widget, and the one this never
+// captures anyway — a preset is a setup, not a take.
 //
 // **Cut into sections, because "everything" is the right default and the wrong
 // only option.** A preset that always replaces the whole node stops being used
@@ -560,9 +563,17 @@ export const RENDER_SOURCES = {
 /** A read-only `widgetIO` over an API prompt's `inputs`. A wired input arrives
  *  as a `[nodeId, slot]` pair rather than a value, and is no more a sampler
  *  setting than an empty socket is. */
-function promptIO(inputs) {
+function promptIO(inputs, sampling) {
   return {
     value: (name, fallback) => {
+      // The blob first, exactly as `sampling.resolve` reads it on the other
+      // side. The widgets are still in `inputs` and still carry *a* value — the
+      // node declares them and always will — but on any render made since the
+      // row moved they carry whatever was on the node before it moved, which is
+      // not what sampled. Reading them first would take a preset off a render
+      // and quietly capture somebody else's step count.
+      const stored = sampling?.[name];
+      if (stored !== undefined && stored !== null) return stored;
       const value = inputs?.[name];
       return value === undefined || Array.isArray(value) ? fallback : value;
     },
@@ -625,7 +636,8 @@ export function captureFromRender(meta, asset) {
 
   let data;
   if (source.scope === "prestage") {
-    data = capturePreStage(S.parsePreStage(source.blob), promptIO(source.inputs));
+    const state = S.parsePreStage(source.blob);
+    data = capturePreStage(state, promptIO(source.inputs, state.sampling));
   } else {
     // Through the same normalise-then-serialise path a live node's capture goes
     // through, rather than treating the stored blob as already canonical: the
@@ -633,7 +645,7 @@ export function captureFromRender(meta, asset) {
     // `syncTimeline` is what decides what this one means by it.
     const timeline = S.parseTimeline(source.blob);
     S.syncTimeline(timeline);
-    data = capturePiece(timeline, promptIO(source.inputs));
+    data = capturePiece(timeline, promptIO(source.inputs, timeline.sampling));
   }
 
   const stem = String(asset?.name ?? asset?.path ?? "").split("/").pop()

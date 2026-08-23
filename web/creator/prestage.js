@@ -35,7 +35,7 @@ import { CreatorEditor } from "./editor.js";
 import { openPresetLibrary } from "./presetlib.js";
 import * as P from "./presets.js";
 import { PromptBox, focusEnd, openEditorSheet } from "./prompt.js";
-import { samplingBar, widgetIO } from "./sampling.js";
+import { blobIO, migrate, samplingBar, SAMPLING_WIDGETS } from "./sampling.js";
 import { Stage } from "./stage.js";
 import { loadCatalog, refreshCatalog, catalogByFolder } from "./models.js";
 import { viewUrl } from "./api.js";
@@ -161,9 +161,17 @@ export class PreStageEditor {
     else this.render();
   }
 
-  /** See `sampling.widgetIO`. */
+  /** The sampler row's `{value, set}` pair, over the pre-stage's own blob.
+   *
+   *  Same move as the piece's — see `sampling.blobIO`. This node is the one that
+   *  wanted it most: its three architectures want three different rows and there
+   *  is one static widget schema underneath them, wearing Krea's numbers. */
   widgetIO() {
-    return widgetIO(() => this.samplingWidgets, () => this.onWidgetChange?.());
+    return blobIO(
+      () => this.samplingWidgets,
+      () => this.state.sampling,
+      (block) => { this.state.sampling = block; this.onCommit?.(); },
+      () => this.onWidgetChange?.());
   }
 
   commit() {
@@ -902,9 +910,17 @@ export class PreStageBody {
     return editor;
   }
 
-  /** See `sampling.widgetIO`. */
+  /** The sampler row's `{value, set}` pair, over the pre-stage's own blob.
+   *
+   *  Same move as the piece's — see `sampling.blobIO`. This node is the one that
+   *  wanted it most: its three architectures want three different rows and there
+   *  is one static widget schema underneath them, wearing Krea's numbers. */
   widgetIO() {
-    return widgetIO(() => this.samplingWidgets, () => this.onWidgetChange?.());
+    return blobIO(
+      () => this.samplingWidgets,
+      () => this.state.sampling,
+      (block) => { this.state.sampling = block; this.onCommit?.(); },
+      () => this.onWidgetChange?.());
   }
 
   /**

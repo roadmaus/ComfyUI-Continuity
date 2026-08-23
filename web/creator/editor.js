@@ -24,7 +24,7 @@ import { PromptBox, focusEnd, openEditorSheet } from "./prompt.js";
 import { RefinePanel, refineButton, refine } from "./refine.js";
 import { openAspectPopover, openResolutionPopover, openChoicePopover, facesPill, aspectGlyph,
          PILL_GLYPH, pillSet, pillClass } from "./pills.js";
-import { samplingBar, segmentSeedPill, widgetIO } from "./sampling.js";
+import { blobIO, samplingBar, segmentSeedPill } from "./sampling.js";
 import { Stage } from "./stage.js";
 import { weightsPill, loadCatalog, catalogFiles } from "./models.js";
 import * as Turbo from "./turbo.js";
@@ -442,9 +442,21 @@ export class CreatorEditor {
   }
 
 
-  /** See `sampling.widgetIO`. */
+  /** The sampler row's `{value, set}` pair — the piece's, not the card's.
+   *
+   *  Still spelled `widgetIO` at every call site and still keyed by the same
+   *  names, but the values are in `piece.sampling` now rather than on the node's
+   *  widgets; the seed is the exception. See `sampling.blobIO`.
+   *
+   *  `onCommit` rather than `commit`: commit calls `Turbo.sync`, which sets
+   *  pills, which would come back through here.
+   */
   widgetIO() {
-    return widgetIO(() => this.samplingWidgets, () => this.onWidgetChange?.());
+    return blobIO(
+      () => this.samplingWidgets,
+      () => this.piece.sampling,
+      (block) => { this.piece.sampling = block; this.onCommit?.(); },
+      () => this.onWidgetChange?.());
   }
 
   commit() {
