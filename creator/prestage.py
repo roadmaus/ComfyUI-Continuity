@@ -6,9 +6,9 @@ generates them locally with Krea 2, Ideogram 4.0 (both open weights, both native
 in core) or MiniMax H3 itself, and saves them where the picker already looks, so
 a finished still is one chip away from being the next render's keyframe.
 
-The third of those is a different animal and lives in `compile_still.py` /
-`render_still.py`: H3 is a video model, so a still from it is a video generation
-whose first latent frame is decoded as a picture, through an experimental T=1
+The third of those is a different animal and lives in `families/h3/still.py`:
+H3 is a video model, so a still from it is a video generation whose first
+latent frame is decoded as a picture, through an experimental T=1
 image VAE. It reuses the video pipeline outright — the same segment node, the
 same checkpoints, the same canvas — which is the point of having it: no second
 model family loaded, and a keyframe made by the weights that will render the
@@ -35,8 +35,9 @@ import json
 
 from comfy_api.latest import io
 
-from . import (canvas, compile_image, compile_still, media, outputs, render,
-               render_image, render_still, sampling, settings)
+from . import (canvas, compile_image, media, outputs, render, render_image,
+               sampling, settings)
+from .families.h3 import still
 
 DEFAULT_DATA = json.dumps({
     "version": 1,
@@ -54,10 +55,10 @@ DEFAULT_DATA = json.dumps({
     "output_prefix": outputs.IMAGE_PREFIX,
     # The H3 branch: how long a clip it samples and which of that clip's latent
     # frames becomes the picture, plus the generation itself in the Creator's
-    # own shape — because it is one. See `compile_still`.
+    # own shape — because it is one. See `families/h3/still`.
     "minimax": {
-        "frames": compile_still.DEFAULT_FRAMES,
-        "latent_index": compile_still.DEFAULT_LATENT_INDEX,
+        "frames": still.DEFAULT_FRAMES,
+        "latent_index": still.DEFAULT_LATENT_INDEX,
         "request": {"prompt": "", "assets": [], "loras": [],
                     "aspect": "16:9", "short_edge": canvas.NATIVE_SHORT_EDGE,
                     "output_prefix": outputs.IMAGE_PREFIX, "models": {}},
@@ -125,9 +126,9 @@ class MiniMaxH3PreStage(io.ComfyNode):
             if isinstance(init, dict):
                 names.append(init.get("filename"))
             # The H3 branch keeps its media in a creator-shaped request.
-            still = (data.get("minimax") or {}).get("request") or {}
-            names.extend(asset.get("filename") for asset in still.get("assets") or [])
-            entries = list(data.get("loras") or []) + list(still.get("loras") or [])
+            request = (data.get("minimax") or {}).get("request") or {}
+            names.extend(asset.get("filename") for asset in request.get("assets") or [])
+            entries = list(data.get("loras") or []) + list(request.get("loras") or [])
             for name in names:
                 try:
                     stamps.append(os.path.getmtime(media.resolve(name or "")))
@@ -163,19 +164,19 @@ class MiniMaxH3PreStage(io.ComfyNode):
 
         # The H3 branch is a video render that keeps one latent frame, so it
         # compiles and emits through the video path rather than through the
-        # image models' — see `compile_still`. Same widgets, same blob, same
+        # image models' — see `families/h3/still`. Same widgets, same blob, same
         # save node; everything between them is the other pipeline.
-        if data.get("arch") == compile_still.ARCH:
+        if data.get("arch") == still.ARCH:
             try:
-                plan = compile_still.compile_still(data)
+                plan = still.compile_still(data)
             except compile_image.CompileError as exc:
                 raise ValueError(str(exc)) from exc
             # The request owns the weights, because it is an ordinary creator
-            # request — see `compile_still`.
+            # request — see `families/h3/still`.
             request = plan.request
-            graph = render_still.emit(
+            graph = still.emit(
                 plan,
-                render_still.weights_from_blob(request),
+                still.weights_from_blob(request),
                 sampler,
                 cls.hidden.unique_id,
                 filename_prefix=outputs.image(request, settings.image_prefix()))

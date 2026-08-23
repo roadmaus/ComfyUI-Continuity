@@ -17,9 +17,9 @@ layout.skip_without_node()
 
 MIRROR = layout.js("state.js")
 
-_pkg = layout.load("canvas", "contextir", "compile", "compile_image", "compile_still")
+_pkg = layout.load("canvas", "contextir", "compile", "compile_image", "still")
 ci = _pkg.compile_image
-cs = _pkg.compile_still
+cs = _pkg.still
 cv = _pkg.canvas
 
 
@@ -79,7 +79,7 @@ for name, value in reflected["constants"].items():
     check(name, value, PY_CONSTANTS[name])
 
 # The pill offers the two image architectures `compile_image` owns plus the H3
-# branch, which is a video generation and is compiled by `compile_still`.
+# branch, which is a video generation and is compiled by `families/h3/still.py`.
 check("arches", reflected["arches"], [*ci.ARCHES, cs.ARCH])
 check("image arches", reflected["image_arches"], list(ci.ARCHES))
 check("still lengths", reflected["still"]["lengths"], list(cs.STILL_LENGTHS))

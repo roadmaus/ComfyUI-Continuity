@@ -2167,13 +2167,13 @@ export const isStill = (state) => state?.arch === PRESTAGE_STILL_ARCH;
 
 /** What the length pill offers, and what a fresh still samples. Every entry is
  *  a legal 17n+5 count; 5 is the cheapest clip H3 can be asked for and 124 is
- *  the bottom of its trained range. Mirrors compile_still.STILL_LENGTHS. */
+ *  the bottom of its trained range. Mirrors families/h3/still.py's STILL_LENGTHS. */
 export const PRESTAGE_STILL_LENGTHS = [5, 22, 39, 56, 90, 124];
 export const PRESTAGE_STILL_FRAMES = 5;
 export const PRESTAGE_STILL_INDEX = 0;
 export const PRESTAGE_PROMPT_MODES = ["context-ir", "plain"];
 
-/** Frames -> latent frames. Mirrors compile_still.latent_frames, which mirrors
+/** Frames -> latent frames. Mirrors families/h3/still.py's latent_frames, which mirrors
  *  core: the VAE is causal on the 17k+5 <-> 5k+2 grid. */
 export const stillLatentFrames = (frames) =>
   (frames <= 5 ? 2 : Math.floor((frames - 5) / 17) * 5 + 2);

@@ -60,7 +60,7 @@ package = importlib.import_module(PACKAGE)
 
 ps = importlib.import_module(f"{PACKAGE}.creator.prestage")
 ci = importlib.import_module(f"{PACKAGE}.creator.compile_image")
-cs = importlib.import_module(f"{PACKAGE}.creator.compile_still")
+cs = importlib.import_module(f"{PACKAGE}.creator.families.h3.still")
 outputs = importlib.import_module(f"{PACKAGE}.creator.outputs")
 
 from harness import FAILURES, check

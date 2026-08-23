@@ -317,7 +317,7 @@ class Compiled:
         True for a continuing sound seam, a reference-audio block, or a reference
         video cited with its soundtrack — the three things the encoder turns into
         an audio latent (`_encode_ref_audio`). A picture-only video reference does
-        not count, which is the same line `render_still` draws when it decides
+        not count, which is the same line `families/h3/still.py` draws when it decides
         whether to build the audio loader at all. Otherwise the audio VAE is a
         decode-time loader only — the counterpart to `encodes_video`, gated the
         same way for the same reason.

@@ -7,32 +7,13 @@ ordering assertions are the important ones: if they drift out of step with
 raises.
 """
 
-import importlib.util
 import os
-import sys
 
 import layout
-import types
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-
-def _load():
-    package = types.ModuleType("mmc")
-    package.__path__ = [layout.PY_ROOT]
-    sys.modules["mmc"] = package
-    modules = {}
-    for name in ("canvas", "contextir", "subjects", "compile", "compile_still"):
-        spec = importlib.util.spec_from_file_location(f"mmc.{name}", layout.py(name))
-        module = importlib.util.module_from_spec(spec)
-        sys.modules[f"mmc.{name}"] = module
-        setattr(package, name, module)
-        spec.loader.exec_module(module)
-        modules[name] = module
-    return modules["canvas"], modules["compile"], modules["compile_still"]
-
-
-canvas, compiler, still = _load()
+_pkg = layout.load("canvas", "contextir", "subjects", "compile", "still",
+                   package="mmc")
+canvas, compiler, still = _pkg.canvas, _pkg.compile, _pkg.still
 
 from harness import FAILURES, check, passed
 
