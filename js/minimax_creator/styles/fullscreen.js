@@ -768,12 +768,26 @@ export const css = `
   background: var(--mmc-surface); border: 1px solid var(--mmc-line);
   box-shadow: 0 24px 64px var(--mmc-shadow-soft);
 }
-/* On the desk the body fills a column and scrolls inside it. Here the body is
-   as tall as what is in it and the *window* is what scrolls, so the group can
-   be centred as one thing — a column pinned to full height cannot be. Both
-   roots, wrapper and shot alike, or the wrapper goes on clipping the body it
-   was only ever holding. */
-.mmc-fs.simple .mmc-fs-col > .mmc-root { flex: none; }
+/* On the desk the body fills a column and scrolls inside it. Here it is as tall
+   as what is in it — so a short shot is a small card centred on the ground,
+   which a body pinned to full height could never be — and no taller than the
+   card, which is no taller than the window. Shrinkable rather than fixed is the
+   whole of that second half: with flex:none a long prompt grew the body past the
+   screen, and the pill row, the sampler row and Render went off the bottom of it
+   with the card's own scrollbar the only way back to them. The room has to come
+   out of something, and the writing well is the one part of the card that
+   already scrolls on its own. Both roots, wrapper and shot alike, or the wrapper
+   caps the body it was only ever holding. */
+.mmc-fs.simple .mmc-fs-col .mmc-root { flex: 0 1 auto; min-height: 0; }
+/* And it stops where the well does. Every box between the body and the box you
+   type into carries min-height:0, so that they could fill a card of a fixed
+   height; asked to give room back instead, a chain of zero floors goes on
+   shrinking the panel past the rows inside it and the sentence is painted over
+   the pills. The floor is the well's own minimum plus the rails that live in the
+   panel with it — the compiled row and the two lines of pills. Under that there
+   is nothing left to give and the card scrolls, which is what it did before any
+   of this and is the only honest answer for a window that short. */
+.mmc-fs.simple .mmc-panel { min-height: calc(210px * var(--mmc-type)); }
 .mmc-fs.simple .mmc-root { height: auto; overflow: visible; }
 .mmc-fs.simple .mmc-root:not(.hosting) { padding: 0; gap: 12px; }
 
@@ -784,7 +798,7 @@ export const css = `
    this rail is one line, and a grid would put the cluster's hairline in a whole
    track of its own — far more room than a seam wants. */
 .mmc-fs.simple { --mmc-tool-tile: calc(44px * var(--mmc-type)); }
-.mmc-fs.simple .mmc-rail { display: flex; justify-content: center; gap: 14px 0; }
+.mmc-fs.simple .mmc-rail { display: flex; justify-content: space-between; gap: 14px 0; }
 .mmc-fs.simple .mmc-rail-group {
   display: flex; align-items: flex-start; gap: 14px 0; margin-left: 0;
 }
@@ -792,20 +806,23 @@ export const css = `
 .mmc-fs.simple .mmc-tool-icon { border-radius: 12px; }
 .mmc-fs.simple .mmc-tool svg { width: 19px; height: 19px; }
 /* The split the node face makes with the whole width of the node — this
-   generation's tools at one end, the machine's at the other — has no width to
-   make it with here, and a centred line of nine identical squares said nothing
-   about it. A hairline says it instead: left of the rule writes this shot,
-   right of it outlives it. Only on this card, where the rail is one line: in
-   the two-column shell the rail wraps by design, and a rule that lands at the
-   start of a wrapped row reads as a stray tick rather than as a seam. */
-.mmc-fs.simple .mmc-rail-group + .mmc-rail-group::before {
-  content: ""; width: 1px; height: var(--mmc-tool-tile); flex: none;
-  margin: 0 11px; background: var(--mmc-line);
-}
+   generation's tools at one end, the machine's at the other — is the split this
+   card makes too, and it makes it the same way: the two groups go to the two
+   ends and the room between them is the seam. Centred, they were one line of
+   nine identical squares that said nothing about it, and the hairline drawn
+   between them said it in a mark where the card had a whole edge to say it
+   with. */
 .mmc-fs.simple .mmc-assets, .mmc-fs.simple .mmc-lora-block { justify-content: center; }
 /* The well is the whole composition here, so it gets the room to be one. */
 .mmc-fs.simple .mmc-panel { border-radius: 24px; padding: 18px; }
-.mmc-fs.simple .mmc-prompt { font-size: calc(17px * var(--mmc-type)); min-height: calc(84px * var(--mmc-type)); }
+/* And no share-of-the-window cap on it here, unlike the desk (see the foot of
+   this file): the card is already bounded by the window, so the well is bounded
+   by whatever is left of the card once the rail, the references and the rows
+   under the sentence have taken theirs. A cap on top of that is a second,
+   smaller bound, and on a tall screen it is a hole under the box. */
+.mmc-fs.simple .mmc-prompt {
+  font-size: calc(17px * var(--mmc-type)); min-height: calc(84px * var(--mmc-type)); max-height: none;
+}
 
 /* Every row on this card is centred on the column — the rail, the step switch,
    the references — and the pill row is the one that was not.
@@ -950,7 +967,6 @@ export const css = `
  * way they already do.
  */
 @media (max-width: 720px) {
-  .mmc-fs.simple .mmc-rail-group + .mmc-rail-group::before { display: none; }
   /* Written once per view rather than once for the shell, because the two
      blocks above each set this at a specificity a bare ".mmc-fs" cannot reach —
      and a rule that loses is worse than one that was never written. */
