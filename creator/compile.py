@@ -905,6 +905,53 @@ def plain_prompt(body, soundscape, music):
     return " ".join(part for part in parts if part).strip()
 
 
+def plain_shot_body(shots):
+    """`[(at_seconds, text), ...]` -> one paragraph, for a family with no markup.
+
+    The other half of the split `plain_prompt` makes. `contextir.shot_body` is
+    H3's — `[Shot 2] At 00:05.000,` in front of every cut — and it was being run
+    for every family, so a merged LTX pass reached Gemma as
+    `[Shot 1] ... [Shot 2] At 00:05.000, ...`.
+
+    That is not a stylistic quibble. Lightricks' own trainer captions multi-shot
+    footage as "a single continuous paragraph ... if the video contains multiple
+    shots, describe each one in turn", with "no section headers, bullet points,
+    or labels like 'Audio:' / 'Visual:' / 'Shot:'" — so a bracketed shot marker
+    is a token sequence the weights were trained never to see, sitting exactly
+    where a cut is meant to be described. The cut is prose to this family: their
+    prompting guide asks for "A hard cut transitions to…", "A match cut
+    connects…", named in the sentence itself.
+
+    So the shots are simply run together in the order they play, with a full
+    stop inserted where one is missing. No timestamp — the model has no cut-time
+    grammar to read one with — and no transition verb invented, for the reason
+    `shot_body` gives: which cut this is belongs to the description the user
+    wrote, and their guide lists several to choose between.
+
+    A shot that carries `[Shot n]` markers of its own is left exactly as typed.
+    That is `plain_prompt`'s standing rule — nothing invented, no format
+    imposed — and it is the honest one here too: the markers are the user's
+    prose, and stripping them would be editing what they wrote on a guess about
+    where it came from.
+    """
+    out = []
+    for position, (_at, text) in enumerate(shots, start=1):
+        text = (text or "").strip()
+        if not text:
+            raise ValueError(
+                f"shot {position} has no prompt — the shots of one pass are a "
+                f"single description with cuts in it, so an empty one would leave "
+                f"a cut with nothing on the far side of it"
+            )
+        # Joined as sentences, because that is what the paragraph is. Only where
+        # the shot does not end in its own terminal mark; a description ending
+        # in a quoted line of dialogue closes on the quote and is left alone.
+        if out and out[-1][-1] not in ".!?…\"'”’":
+            out[-1] += "."
+        out.append(text)
+    return " ".join(out)
+
+
 def _check_feather(width, live, what, rules=canvas.H3):
     """A blend's width, validated against the seam it belongs to.
 
@@ -2764,8 +2811,16 @@ def group_payload(data, start=0, end=None):
 
         stack = merge_loras(stack, segment.get("loras"))
 
+    # How the shots of one pass become one description, which is the family's:
+    # H3 marks its cuts (`[Shot 2] At 00:05.000,`) because Context-IR is what it
+    # was trained on, and LTX 2.5 must not, because Lightricks' captions carry
+    # no labels at all. Same table the prompt pipeline is read off, so a family
+    # cannot compose a body one way and be described the other.
+    join = (contextir.shot_body
+            if registry.PROMPT_PIPELINE[piece_family(data)] == "context-ir"
+            else plain_shot_body)
     try:
-        body = contextir.shot_body(shots)
+        body = join(shots)
     except ValueError as exc:
         raise CompileError(str(exc)) from exc
 
@@ -2819,7 +2874,15 @@ def group_payload(data, start=0, end=None):
     # No canvas and no seam flags: both are facts about this pass's place among
     # the others, which is `timeline_payloads`' to say. A pass compiled alone —
     # `compile_single` — is the whole timeline and has neither.
-    return {"request": request, "shots": contextir.count_shots(body),
+    # How many shots this pass holds. Counted off the finished description for
+    # a family that numbers them — a card may write several of its own — and
+    # simply the cards for one that does not, since there is nothing in a prose
+    # paragraph to count. Only H3 reads the number (the end frame is reached by
+    # the last shot, and `contextir.instruction` says which); it rides on the
+    # payload either way so the pass can describe itself.
+    return {"request": request,
+            "shots": (contextir.count_shots(body)
+                      if join is contextir.shot_body else len(group)),
             "continue": False, "continue_audio": False}
 
 

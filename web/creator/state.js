@@ -2220,6 +2220,21 @@ export function timelineFrames(timeline) {
   }, 0);
 }
 
+/** How many shots this piece's family advises putting in one generation, or
+ *  null where its guidance gives no number. Advice rather than a limit: a
+ *  longer pass is marked, never refused. */
+export const advisedShots = (piece) =>
+  familyOf(piece).capabilities?.multishot?.advised_max ?? null;
+
+/** Whether a pass holds more cuts than its family advises. What LTX 2.5's own
+ *  prompting guide says is "prefer 2-4 shots in one generation; more cuts
+ *  usually need clearer, shorter beats per shot" — so this is the same kind of
+ *  statement `isTrainedLength` makes about a duration, and wears the same mark. */
+export function overAdvisedShots(timeline, pass) {
+  const advised = advisedShots(timeline);
+  return advised !== null && pass.segments.length > advised;
+}
+
 /** Whether any card on this strip has its length picked by the model, which
  *  makes every total above an estimate rather than a count. The readouts say so
  *  with a "~"; see `_predicted_frames` for why no better number exists before

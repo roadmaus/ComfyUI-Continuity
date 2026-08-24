@@ -1294,6 +1294,7 @@ class Timeline {
     const frames = framesForSeconds(S.cutTimes(pass.segments).total, passRules);
     const seconds = secondsForFrames(frames, passRules);
     const problem = S.passProblem(this.timeline, pass);
+    const manyShots = S.overAdvisedShots(this.timeline, pass);
     // A pass is one generation, so it is held or shot as one and its take is
     // the pass's. The casing wears the skin the card wears alone — solid
     // because the film exists, perforated because it does not — and the rail
@@ -1306,13 +1307,24 @@ class Timeline {
           icon("timeline", 13), el("span", { text: t("one pass") }),
         ]),
         el("span", {
-          class: `mmc-tl-pass-len${isTrainedLength(frames) ? "" : " off-distribution"}`,
+          class: `mmc-tl-pass-len${isTrainedLength(frames, passRules) && !manyShots
+                                   ? "" : " off-distribution"}`,
           text: t("{count} shots · {s} s", { count, s: seconds.toFixed(1) }),
-          title: isTrainedLength(frames)
-            ? t("{frames} frames at 24 fps, generated in one go.", { frames })
-            : t("{frames} frames in one generation — outside the ~5-15 s the weights "
+          // Two things put a pass outside what its weights like, and they are
+          // different statements: how long it runs, and how many cuts are in
+          // it. The length is checked for every family; the cut count only
+          // where the family's own guidance gives a number to check against.
+          title: !isTrainedLength(frames, passRules)
+            ? t("{frames} frames in one generation — outside the ~5-15 s the weights "
               + "were trained on. Split the pass to bring each side back inside it.",
-                { frames }),
+                { frames })
+            : manyShots
+            ? t("{count} cuts in one generation. This family's own guidance prefers at "
+              + "most {advised} — past that each shot has fewer frames to establish "
+              + "itself, and identity across the cuts holds less well. Split the pass, "
+              + "or give each shot a shorter, clearer beat.",
+                { count, advised: S.advisedShots(this.timeline) })
+            : t("{frames} frames at 24 fps, generated in one go.", { frames }),
         }),
         el("span", { class: "mmc-tl-mode", text: S.passMode(pass.segments) }),
         ...(chip ? [chip] : []),

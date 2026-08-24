@@ -161,6 +161,16 @@ def manifest():
             # The face pass is H3's crop-and-repair loop, written against its
             # detector and its re-encode. Untried here, so not offered.
             "face": False,
+            # Several shots out of one generation, which 2.5 holds identity
+            # across. This pack already has the control for it — merging cards
+            # into one pass — so what a family declares is not *whether* it can
+            # but how many cuts its own guidance advises: Lightricks says
+            # "prefer 2-4 shots in one generation; more cuts usually need
+            # clearer, shorter beats per shot". Advice, so the strip marks a
+            # longer pass rather than refusing it, exactly as it marks a
+            # duration outside the trained range. H3 declares no number because
+            # nothing in its guide gives one.
+            "multishot": {"advised_max": 4},
             # What this family has that H3 does not. `canDo(piece, "duration")`
             # is what gates the seconds pill's "auto" — the capability is asked
             # rather than an id branched on, precisely so a control can be

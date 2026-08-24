@@ -55,6 +55,18 @@ that had quietly stopped being a seam. The strip's length readouts, the queue
 guard and the reference-length match now all ask the piece which family it is,
 for the same reason.
 
+**Merging cards on LTX 2.5 is native multishot, and now reads like it.** One
+generation holding several shots is what Lightricks means by multishot — this
+pack has always had the control, as `merge` and one-pass mode. What it did not
+have was the right *description*: every family's merged pass was assembled in
+H3's Context-IR form, so LTX received `[Shot 1] … [Shot 2] At 00:05.000, …`,
+which is markup its captions are defined by never containing. A merged LTX pass
+is one flowing paragraph now, its shots in play order, with nothing invented —
+you name the cut yourself ("a hard cut transitions to…"), which is what the
+model was taught to read. Nothing about an H3 pass changes. Past four cuts in
+one generation the pass wears the same off-distribution mark a too-long
+duration does, because four is what Lightricks' guidance prefers.
+
 Requires a ComfyUI new enough to ship the LTX-AV nodes; without them the node
 says so by name instead of failing three hooks deep.
 

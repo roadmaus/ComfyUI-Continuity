@@ -471,6 +471,29 @@ check("switching to a family that cannot predict drops it", auto["dropped"], Fal
 check("the strip calls its totals estimates only where one is live",
       auto["estimate"], [False, True])
 
+# ---- multishot advice ----------------------------------------------------------
+#
+# Both families cut inside one generation; what differs is the number each one's
+# own guidance advises, and H3's gives none. So the strip marks a long pass only
+# where there is a number to mark it against — a capability that is a *value*
+# rather than a boolean, which is the case the manifest's shape has to survive.
+
+SHOTS_JS = """
+const S = await import(process.argv[1]);
+const pass = (n) => ({ segments: Array.from({ length: n }, () => S.emptySegment()) });
+const piece = (family) => { const t = S.emptyTimeline(); t.family = family; return t; };
+console.log(JSON.stringify({
+  advised: [S.advisedShots(piece("h3")), S.advisedShots(piece("ltx25"))],
+  marked: [4, 5].map((n) => [S.overAdvisedShots(piece("h3"), pass(n)),
+                             S.overAdvisedShots(piece("ltx25"), pass(n))]),
+}));
+"""
+
+shots = layout.run(SHOTS_JS, STATE)
+check("only LTX's guidance gives a number", shots["advised"], [None, 4])
+check("a pass is marked past it, and never on a family with no number",
+      shots["marked"], [[False, False], [False, True]])
+
 check("LTX routes between nothing, so no route row and no LoRA checkpoint control",
       (ltx_controls["routing"], ltx_controls["checkpoints"]), ([True, False], []))
 check("an empty LTX block is missing the four every render loads",

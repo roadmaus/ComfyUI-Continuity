@@ -296,6 +296,59 @@ expect_error("a seam width H3's VAE encodes and LTX's does not is refused",
              ])),
              "a seam can inherit 1, 9, 17, 25 frames")
 
+# ---- multishot ---------------------------------------------------------------
+#
+# LTX 2.5 cuts inside one generation, and this pack already had the control for
+# it: merging cards makes one pass whose description holds several shots. What
+# it did not have was a *body* for a family that marks no shots.
+#
+# `contextir.shot_body` ran for every family, so a merged LTX pass reached Gemma
+# as "[Shot 1] ... [Shot 2] At 00:05.000, ...". Lightricks' own trainer captions
+# multi-shot footage as "a single continuous paragraph ... if the video contains
+# multiple shots, describe each one in turn", with "no section headers, bullet
+# points, or labels like ... 'Shot:'" — so a bracketed marker is a token
+# sequence the weights were trained never to see, sitting where the cut belongs.
+# Their prompting guide asks for the cut in prose instead: "A hard cut
+# transitions to...". So the join is the family's, off the same table the prompt
+# pipeline is.
+
+SHOTS = [
+    {"prompt": "A wide shot frames a rainy city intersection at dusk",
+     "duration_s": 5, "assets": [], "loras": []},
+    {"prompt": "A hard cut transitions to a medium close-up of her face.",
+     "duration_s": 5, "assets": [], "loras": [], "merge": True},
+    {"prompt": "Another hard cut jumps to a low-angle shot of scuffed boots.",
+     "duration_s": 5, "assets": [], "loras": [], "merge": True},
+]
+
+merged = by_class(build(piece(render="single", segments=SHOTS)).expand)
+check("three shots are one generation", len(merged["MiniMaxLTX25Segment"]), 1)
+check("...and one sampler", len(merged["SamplerCustomAdvanced"]), 1)
+
+merged_prompt = compiler.compile_segment(
+    json.loads(merged["MiniMaxLTX25Segment"][0][1]["segment_data"]),
+    family="ltx25").prompt
+check("no shot markers reach Gemma", "[Shot" in merged_prompt, False)
+check("...and no cut timestamps either", "00:05" in merged_prompt, False)
+check("the shots are one paragraph, in play order", merged_prompt,
+      "A wide shot frames a rainy city intersection at dusk. "
+      "A hard cut transitions to a medium close-up of her face. "
+      "Another hard cut jumps to a low-angle shot of scuffed boots.")
+
+# ...and the same strip on H3 still gets H3's marked-up body, which is the
+# whole reason the join is the family's rather than a rewrite.
+h3_merged = compiler.compile_single({
+    "version": 2, "prompt": "", "aspect": "16:9", "short_edge": 768,
+    "render": "single", "segments": SHOTS})
+check("H3 still marks its cuts", "[Shot 2] At 00:05.000," in h3_merged.prompt, True)
+
+# The pass says how many shots it holds either way — counted off the markers
+# where there are markers, and off the cards where a paragraph has nothing to
+# count.
+check("a prose pass counts its shots as its cards",
+      compiler.group_payload({"version": 2, "family": "ltx25", "aspect": "16:9",
+                              "segments": SHOTS})["shots"], 3)
+
 # ---- the duration head -------------------------------------------------------
 #
 # The one capability H3 has no answer to at all. It cannot be asked before a

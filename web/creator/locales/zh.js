@@ -840,6 +840,7 @@ export const zh = {
  "{count} shots · {s} s": "{count} 个镜头 · {s} 秒",
  "{frames} frames at 24 fps, generated in one go.": "24 fps 下 {frames} 帧，一次生成完成。",
  "{frames} frames in one generation — outside the ~5-15 s the weights were trained on. Split the pass to bring each side back inside it.": "一次生成 {frames} 帧 — 超出权重训练时的约 5–15 秒范围。拆分这一遍可让两侧都回到范围内。",
+ "{count} cuts in one generation. This family's own guidance prefers at most {advised} — past that each shot has fewer frames to establish itself, and identity across the cuts holds less well. Split the pass, or give each shot a shorter, clearer beat.": "一次生成中有 {count} 个镜头切换。该系列自身的建议是最多 {advised} 个 — 超过之后每个镜头可用于建立的帧数变少，跨镜头的一致性也更难保持。可拆分该 pass，或让每个镜头更短、更明确。",
  "Split": "拆分",
  "Generate these {count} shots separately again. Every cut between them becomes a seam you can set, and each shot gets its own mode, checkpoint and length back — nothing written is lost either way.": "让这 {count} 个镜头重新分别生成。它们之间的每个切点都会变成可设置的接缝，每个镜头也会拿回各自的模式、检查点和时长 — 写下的内容在两种状态下都不会丢失。",
  "Generate segment {n} in the same pass as the one before it: one generation, with this cut written into its description for the model to draw. Nothing is decoded and re-encoded here, so there is no seam to cross — in exchange the two shots share one mode, one checkpoint and one LoRA stack. Everything you set here is kept, and comes back if you split the pass again.": "让片段 {n} 与它前面的片段在同一遍中生成：一次生成，这个切点写进描述里交给模型自己画。这里不会解码再编码，所以没有需要跨越的接缝 — 代价是两个镜头共用一套模式、检查点和 LoRA 栈。你在这里设置的一切都会保留，重新拆分这一遍时会回来。",

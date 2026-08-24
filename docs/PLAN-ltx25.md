@@ -111,9 +111,10 @@ Each ends green; goldens are re-recorded only when a phase *adds* graphs.
    ~~seam/feather verification on the 8-grid latent (the reel layer is
    family-neutral by core's own construction; prove it with a chained
    golden)~~ **done — see "Phase 4: the seams" below**.
-   Weigh native multishot here: one pass producing several connected shots
+   ~~Weigh native multishot here: one pass producing several connected shots
    competes with the strip's own feathered seams rather than slotting under
-   them. **And the cross-family upscale** — see below.
+   them.~~ **Weighed — see "Phase 4: multishot" below.**
+   **And the cross-family upscale** — see below.
 5. **Taste guidance**: STG / modality / reference-audio as their own pills
    with honest cost copy — new UI, not the accel row.
 
@@ -456,6 +457,81 @@ wires no input, so its graph is byte-identical to one built before any of this.
 Asking for auto with the slot empty refuses by naming the pill to change.
 `test_ltx25_graph.py` holds all of that; `test_family_select.py` holds the
 capability gate and the round trip.
+
+## Phase 4: multishot, weighed
+
+The question was whether native multishot "competes with the strip's own
+feathered seams rather than slotting under them". It does neither, because
+**the pack already had the control and did not know it.**
+
+### What multishot actually is (official sources only)
+
+- **There is no node, no pipeline and no argument.** ComfyUI core's
+  `comfy_extras/nodes_lt.py`, `nodes_lt_audio.py` and `comfy/ldm/lightricks/`
+  contain no mention of it. `Lightricks/LTX-2` ships thirteen pipelines and
+  none of them is a multishot pipeline; there is no `num_shots` anywhere in the
+  repo. It is a property of the **caption**, and of nothing else.
+- **The captions carry no markers.** `ltx-trainer`'s captioning instruction:
+  "Narrate strictly in chronological order; if the video contains multiple
+  shots, describe each one in turn. … Write everything as a single continuous
+  paragraph of prose. Do not use section headers, bullet points, or labels like
+  `Audio:` / `Visual:` / `Shot:`." The Gemma T2V system prompt says the same,
+  and adds that the shot-type/camera-motion/viewpoint triple must be "woven
+  naturally into the prose (never as tags or labels)".
+- **The cut is named in the sentence.** The 2.5 prompting guide: "Name the
+  transition in natural language — 'A hard cut transitions to…', 'The view cuts
+  to a close-up of…', 'A match cut connects…', 'The image dissolves into…'."
+  Each cut must also re-establish shot scale, angle, who is in frame and
+  lighting; identity is held by reusing the same visual identifiers; and audio
+  continuity must be **stated** ("the piano score continues across the cut").
+- **Two to four shots per generation**, "more cuts usually need clearer,
+  shorter beats per shot". And a warning worth repeating: for image-to-video
+  from a first frame, "prefer a single continuous take unless you intentionally
+  describe a cut away from that opening image."
+
+### So it does not compete with the seams — it is the other pill
+
+A strip already renders two ways, and they are exactly the two things being
+compared. `render: "chained"` is one generation per card joined by feathered
+seams — real frames inherited across the cut, identity carried by pixels.
+`render: "single"`, and any `merge` run inside a chain, is **one generation
+whose description holds several shots** — which is native multishot, under a
+name this pack chose before the model had one. Nothing needed building; the
+choice between them is already a control the user has, and it is now a real
+choice on this family rather than one of two spellings of the same thing.
+
+### What it did find
+
+`group_payload` called `contextir.shot_body` for **every** family, so a merged
+LTX pass reached Gemma as
+
+    [Shot 1] A wide shot frames … [Shot 2] At 00:05.000, A hard cut …
+
+— H3's Context-IR markup, sent to an encoder whose training captions are
+defined by never containing it, sitting precisely where the cut is supposed to
+be described. Same class of bug as the feather grid, and found the same way.
+
+The join is the family's now, off `registry.PROMPT_PIPELINE` — the same table
+`plain_prompt` is chosen by, so a family cannot compose a body one way and be
+described the other. `compile.plain_shot_body` runs the shots together in play
+order as one paragraph, inserting a full stop where one is missing, and
+inventing **nothing**: no timestamp (the model has no cut-time grammar), no
+transition verb (whose cut it is belongs to the description the user wrote),
+and no stripping of `[Shot n]` markers a user typed themselves, which is
+`plain_prompt`'s standing rule about not editing prose on a guess.
+
+The 2–4 advice is a manifest capability with a *value* rather than a boolean —
+`multishot: {advised_max: 4}` — and the pass casing wears the same
+off-distribution mark for too many cuts that it already wears for a duration
+outside the trained range. H3 declares no number, because nothing in its guide
+gives one, and so is never marked. Advice, so nothing is refused.
+
+**Not done, and deliberately.** Nothing rewrites a user's shots into named
+transitions, re-established framing or stated audio continuity. That is the
+prompt refiner's job, not the compiler's — the compiler assembles what was
+written and does not author it — and teaching the refiner LTX's multi-shot
+form is a natural piece of the reference-grammar work below, where its prompt
+templates are being split from H3's anyway.
 
 ## Open questions (answer during phase 4)
 
