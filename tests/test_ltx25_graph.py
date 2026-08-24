@@ -296,6 +296,62 @@ expect_error("a seam width H3's VAE encodes and LTX's does not is refused",
              ])),
              "a seam can inherit 1, 9, 17, 25 frames")
 
+# ---- the duration head -------------------------------------------------------
+#
+# The one capability H3 has no answer to at all. It cannot be asked before a
+# queue — `LTXVDurationPredictor` runs the transformer's caption connectors over
+# the encoded prompt, so it needs the loaded 22B DiT — so what the graph has to
+# show is that the head reaches the segment node when a card asks for it, is
+# absent when none does, and is loaded exactly once however many cards ask.
+
+MODELS_WITH_HEAD = {**MODELS, "duration_head": "ltx/ltx-2.5-duration-head.safetensors"}
+
+check("a piece with no auto card loads no head",
+      "ModelPatchLoader" in kinds, False)
+check("...and its segment node has no head wired",
+      "duration_head" in kinds["MiniMaxLTX25Segment"][0][1], False)
+
+auto = by_class(build(piece(
+    models=MODELS_WITH_HEAD,
+    segments=[
+        {"prompt": "wide", "duration_s": 5, "assets": [], "loras": [],
+         "auto_duration": True},
+        {"prompt": "closer", "duration_s": 5, "assets": [], "loras": []},
+        {"prompt": "last", "duration_s": 5, "assets": [], "loras": [],
+         "auto_duration": True},
+    ],
+)).expand)
+
+check("one head loader for the whole strip", len(auto["ModelPatchLoader"]), 1)
+check("...loading the picked file",
+      auto["ModelPatchLoader"][0][1]["name"], MODELS_WITH_HEAD["duration_head"])
+wired = [i for _, i in auto["MiniMaxLTX25Segment"] if "duration_head" in i]
+check("both auto cards get it, and the third does not", len(wired), 2)
+check("...from that one loader",
+      {tuple(i["duration_head"]) for i in wired},
+      {(auto["ModelPatchLoader"][0][0], 0)})
+
+# The estimate still reaches the payload: it is what the strip's bar counts and
+# what the queue guard is checked against, and the node is the only place the
+# head's answer replaces it.
+auto_payload = json.loads(auto["MiniMaxLTX25Segment"][0][1]["segment_data"])
+auto_one = compiler.compile_segment(auto_payload, family="ltx25")
+check("the card still compiles to an estimate",
+      (auto_one.auto_duration, auto_one.frames), (True, 121))
+
+# And it is a capability, not a flag anybody can set: the same blob on H3 is a
+# card of a fixed length, because H3 has no weights that could answer.
+h3_auto = compiler.compile_segment(
+    {"request": {"prompt": "wide", "duration_s": 5, "assets": [], "loras": [],
+                 "auto_duration": True}}, family="h3")
+check("H3 reads the flag as the 'no' it is", h3_auto.auto_duration, False)
+
+expect_error("an auto card with no head picked says which pill to change",
+             lambda: build(piece(segments=[
+                 {"prompt": "wide", "duration_s": 5, "assets": [], "loras": [],
+                  "auto_duration": True}])),
+             "no duration head has been picked")
+
 # ---- what is refused ---------------------------------------------------------
 
 expect_error("a two-stage piece with no upscaler says which pill to change",

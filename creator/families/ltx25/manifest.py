@@ -165,9 +165,21 @@ def manifest():
             # is what gates the seconds pill's "auto" — the capability is asked
             # rather than an id branched on, precisely so a control can be
             # honest about a family the code predates.
-            "duration": {"slot": "duration_head",
-                         "min_seconds": canvas.LTX25.min_seconds,
-                         "max_seconds": canvas.LTX25.max_seconds},
+            # The slot is the registry's, not a second spelling of it: the
+            # compiler reads that table to decide whether a card's
+            # `auto_duration` means anything, and a manifest naming a different
+            # slot would be a pill pointing at a file nothing loads.
+            #
+            # The seconds are the *trained* range rather than the pill's, which
+            # is the one place the two differ on purpose: this is the clamp
+            # handed to `LTXVDurationPredictor`, and what it bounds is what
+            # Lightricks taught the head to say, not what the pill will let a
+            # user set by hand.
+            "duration": {"slot": registry.DURATION_HEAD["ltx25"],
+                         "min_seconds": round(canvas.LTX25.trained_min_frames
+                                              / canvas.LTX25.fps, 4),
+                         "max_seconds": round(canvas.LTX25.trained_max_frames
+                                              / canvas.LTX25.fps, 4)},
         },
         "prompt": {
             # Plain prose straight through Gemma. No Context-IR: H3's ordinal

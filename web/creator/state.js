@@ -705,6 +705,11 @@ export function emptyState() {
     assets: [],
     loras: [],
     duration_s: DEFAULT_DURATION_S,
+    // Whether the model picks the length instead. Only a family with a
+    // duration head can — see `canDo(piece, "duration")` — and `duration_s`
+    // stays what it is while auto is on, because it is the estimate the strip
+    // counts with and what the card falls back to when auto goes off again.
+    auto_duration: false,
     aspect: "16:9",
     short_edge: NATIVE_SHORT_EDGE,
     // The two-pass choice and its two knobs. Owned wherever the canvas is
@@ -739,6 +744,11 @@ export function parseState(raw) {
         if (typeof state[key] !== "string") state[key] = "";
       }
       if (!CHECKPOINT_CHOICES.includes(state.checkpoint)) state.checkpoint = "auto";
+      // A hand-edited blob can hold anything, and a card carrying the flag
+      // from a piece that has since been switched to a family with no duration
+      // head means "the number beside it" — the same reading `compile_request`
+      // gives it, so the pill and the queue agree.
+      state.auto_duration = state.auto_duration === true;
       if (!UPSCALE_MODES.includes(state.upscale)) state.upscale = UPSCALE_MODES[0];
       state.sample_edge = clampSampleEdge(state.sample_edge,
                                           rulesFor(pieceFamily(state)));
@@ -863,6 +873,10 @@ function serializeCommon(state) {
     assets: serializeAssets(state.assets),
     loras: serializeLoras(state.loras),
     duration_s: state.duration_s,
+    // Only the deliberate state is written: absent is "the length is the
+    // number beside it", which is what every blob written before the head
+    // existed says and means.
+    ...(state.auto_duration ? { auto_duration: true } : {}),
     // Absent means "follow the mode", so the common case adds nothing.
     ...(state.checkpoint && state.checkpoint !== "auto" ? { checkpoint: state.checkpoint } : {}),
   };
@@ -1291,6 +1305,7 @@ const segmentWritten = (segment) =>
     || segment.loras?.length
     || isClip(segment)
     || segment.duration_s !== DEFAULT_DURATION_S
+    || segment.auto_duration
     || (segment.checkpoint && segment.checkpoint !== "auto")
     || faceOverride(segment));
 
@@ -1351,9 +1366,15 @@ export function setFamily(timeline, id) {
   const nearest = (width) => grid.reduce(
     (best, f) => (Math.abs(f - width) < Math.abs(best - width) ? f : best), grid[0]);
   for (const entry of timeline.loras ?? []) entry.modes = [...routed];
+  const predicts = Boolean(videoFamily(family).capabilities?.duration);
   for (const segment of timeline.segments ?? []) {
     delete segment.checkpoint;
     if (segment.feather > 1) segment.feather = nearest(segment.feather);
+    // Unlike the blend, this is dropped rather than retargeted: there is no
+    // nearest answer to "let the model choose" on a family whose weights
+    // cannot. The card falls back to the length beside the pill, which is what
+    // `duration_s` has been holding all along.
+    if (!predicts) segment.auto_duration = false;
     for (const entry of segment.loras ?? []) entry.modes = [...routed];
   }
 
@@ -1742,7 +1763,13 @@ function syncCanvas(timeline) {
   // read, so reordering and deleting cannot leave a stale source behind.
   const rules = rulesFor(pieceFamily(timeline));
   const grid = featherGrid(rules);
+  // "Let the model choose" is meaningless on a family with no weights that
+  // can. Cleared here, like every other stale flag, so a hand-edited blob and
+  // a piece switched away from LTX arrive in the same shape — and so the flag
+  // is never written where `compile_request` would read it as a no anyway.
+  const predicts = canDo(timeline, "duration");
   timeline.segments.forEach((segment, index) => {
+    if (!predicts) segment.auto_duration = false;
     const from = segment.continue_from;
     if (!Number.isInteger(from) || from < 1 || from >= index) delete segment.continue_from;
     // A feather the duration can no longer afford — the overlap is trimmed
@@ -2192,6 +2219,14 @@ export function timelineFrames(timeline) {
     return total + own - overlap - runs;
   }, 0);
 }
+
+/** Whether any card on this strip has its length picked by the model, which
+ *  makes every total above an estimate rather than a count. The readouts say so
+ *  with a "~"; see `_predicted_frames` for why no better number exists before
+ *  the render. */
+export const hasAutoDuration = (timeline) =>
+  canDo(timeline, "duration")
+  && (timeline.segments ?? []).some((segment) => segment.auto_duration === true);
 
 /** What the finished clip will run to. */
 export function timelineSeconds(timeline) {
@@ -3514,7 +3549,11 @@ export function timedRefs(state, lengthOf) {
  * second — and `matched` is whether the card already lands on the same frame
  * count, which is the only sense in which two lengths can agree here.
  */
-export function lengthMatch(state, lengthOf) {
+export function lengthMatch(state, lengthOf, piece = null) {
+  // The grid the offer lands on is the piece's family's: `matchSeconds` answers
+  // in the model's own units precisely because whole seconds do not cover the
+  // frame grid evenly, and which grid that is differs by family.
+  const rules = rulesFor(pieceFamily(piece));
   let longest = null;
   for (const entry of timedRefs(state, lengthOf)) {
     const better = !longest
@@ -3524,12 +3563,13 @@ export function lengthMatch(state, lengthOf) {
     if (better) longest = entry;
   }
   if (!longest) return null;
-  const duration = matchSeconds(longest.seconds);
+  const duration = matchSeconds(longest.seconds, rules);
   return {
     asset: longest.asset,
     seconds: longest.seconds,
     duration,
-    matched: framesForSeconds(Number(state.duration_s) || 0) === framesForSeconds(duration),
+    matched: framesForSeconds(Number(state.duration_s) || 0, rules)
+             === framesForSeconds(duration, rules),
   };
 }
 

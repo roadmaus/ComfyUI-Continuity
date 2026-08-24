@@ -426,6 +426,51 @@ console.log(JSON.stringify({
 
 ltx_controls = layout.run(LTX_CONTROLS, STATE)
 
+# ---- the duration head, as a capability ---------------------------------------
+#
+# The one thing LTX has that H3 does not. The control is gated on
+# `canDo(piece, "duration")` rather than on the id, and the blob's flag means
+# nothing on a family with no weights to answer it — both halves have to agree
+# about that or the pill offers a length nobody predicts.
+
+AUTO_JS = """
+const S = await import(process.argv[1]);
+const piece = (family) => {
+  const t = S.emptyTimeline();
+  t.family = family;
+  t.segments = [S.emptySegment()];
+  t.segments[0].auto_duration = true;
+  return t;
+};
+const roundTrip = (family) => {
+  const t = piece(family);
+  S.syncTimeline(t);
+  return JSON.parse(S.serializeTimeline(t)).segments[0].auto_duration ?? false;
+};
+console.log(JSON.stringify({
+  canDo: [S.canDo(piece("h3"), "duration"), S.canDo(piece("ltx25"), "duration")],
+  written: [roundTrip("h3"), roundTrip("ltx25")],
+  // Switching away from the family that can predict drops the flag rather than
+  // retargeting it: there is no nearest answer to "let the model choose".
+  dropped: (() => {
+    const t = piece("ltx25");
+    S.setFamily(t, "h3");
+    return t.segments[0].auto_duration;
+  })(),
+  // ...and the strip's totals say they are estimates while one is on.
+  estimate: [S.hasAutoDuration(piece("h3")), S.hasAutoDuration(piece("ltx25"))],
+}));
+"""
+
+auto = layout.run(AUTO_JS, STATE)
+
+check("only the family with a duration head offers auto", auto["canDo"], [False, True])
+check("the flag survives only on the family that can answer it",
+      auto["written"], [False, True])
+check("switching to a family that cannot predict drops it", auto["dropped"], False)
+check("the strip calls its totals estimates only where one is live",
+      auto["estimate"], [False, True])
+
 check("LTX routes between nothing, so no route row and no LoRA checkpoint control",
       (ltx_controls["routing"], ltx_controls["checkpoints"]), ([True, False], []))
 check("an empty LTX block is missing the four every render loads",

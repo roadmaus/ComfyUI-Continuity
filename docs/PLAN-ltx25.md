@@ -105,8 +105,9 @@ Each ends green; goldens are re-recorded only when a phase *adds* graphs.
    manifest.~~ **Done** — see below.
 3. ~~**The render half** and the controls reading the piece's family.~~
    **Done** — see below. The x2 upscaler came forward from phase 4 with it.
-4. **Duration, multishot, and ReDetail**: the duration predictor as the
-   seconds pill's "auto" (capability-gated — H3 simply lacks it), and
+4. **Duration, multishot, and ReDetail**: ~~the duration predictor as the
+   seconds pill's "auto" (capability-gated — H3 simply lacks it)~~ **done —
+   see "Phase 4: auto duration" below**, and
    ~~seam/feather verification on the 8-grid latent (the reel layer is
    family-neutral by core's own construction; prove it with a chained
    golden)~~ **done — see "Phase 4: the seams" below**.
@@ -416,6 +417,45 @@ family in `test_canvas_mirror.py`, the chained-strip section of
 `test_ltx25_graph.py` (which pins the trim, the sound tail's span and the
 refusal of a width off the grid), and `S.FEATHER_GRID` joining the grep in
 `test_family_select.py`. `tests/golden` gained two files and changed none.
+
+## Phase 4: auto duration, as landed
+
+**The plan was wrong about where this runs, and `Links`' docstring said so out
+loud.** It called the duration head "a question the seconds pill asks before a
+queue", which would have made it a route. It cannot be: `LTXVDurationPredictor`
+runs the transformer's own caption connectors over the *encoded* prompt, so it
+needs the loaded 22B DiT and the 12B encoder — the two most expensive things a
+render does, asked while somebody is typing. There is no cheap route.
+
+So auto is resolved **inside the segment node**, which already has the model,
+the clip and the latent it builds in Python. `compile_request` still works the
+pill's number out and `Compiled.frames` still carries it: it is what the strip's
+bar counts, what `MAX_TIMELINE_FRAMES` is checked against, and what the card
+falls back to when auto goes off. It is now an *estimate*, and that is said
+three times rather than hidden — `Compiled.auto_duration` flags it, the pill
+draws `~5 s` dimmed, and the strip's totals wear the same `~` with a tooltip.
+
+**The clamp is the seams'.** The head's own range is Lightricks' 1–20 s; what
+is passed is that range with the floor raised to `2 × the segment's blends`,
+because a pass shorter than twice its overlap delivers less than it re-made.
+`compile_request` refuses exactly that for a length the user set, and this is
+the same rule said to the model as a bound instead of to the user as an error.
+
+**It is a capability, not an id.** `registry.DURATION_HEAD` maps a family to
+the slot that answers — `None` for H3, and the manifest's `duration` capability
+reads that table rather than spelling the slot again. `compile_request` reads a
+card's `auto_duration` through it, so the flag on an H3 piece is the "no" it
+is; `syncCanvas` and `setFamily` clear it rather than retargeting, because
+there is no nearest answer to "let the model choose". The pill's switch appears
+only where `canDo(piece, "duration")`, and `matchTail` stands down while it is
+on — "matches @vid-1" would be a claim about a frame count that does not exist.
+
+The head is loaded lazily and once, like the upscaler: a strip with three auto
+cards builds one `ModelPatchLoader` and a strip with none builds no loader and
+wires no input, so its graph is byte-identical to one built before any of this.
+Asking for auto with the slot empty refuses by naming the pill to change.
+`test_ltx25_graph.py` holds all of that; `test_family_select.py` holds the
+capability gate and the round trip.
 
 ## Open questions (answer during phase 4)
 

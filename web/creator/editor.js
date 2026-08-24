@@ -1746,7 +1746,13 @@ export class CreatorEditor {
    * `S.lengthMatch`. Empty for a card of stills, which is most of them.
    */
   matchTail() {
-    const match = S.lengthMatch(this.state, (filename) => this.lengthOf(filename));
+    // Nothing to offer while the model is choosing the length: "matches
+    // @vid-1" would be a claim about a frame count that does not exist yet,
+    // and the offer to set one is an offer to do what auto is already doing.
+    // Turning auto off brings both back.
+    if (this.state.auto_duration) return [];
+    const match = S.lengthMatch(this.state, (filename) => this.lengthOf(filename),
+                                this.piece);
     if (!match) return [];
     const handle = match.asset.handle;
     const length = match.seconds.toFixed(2);
@@ -1761,8 +1767,10 @@ export class CreatorEditor {
     return [el("button", {
       class: "mmc-dur-match",
       title: t("@{handle} runs {length} s. Set this card to {target} s, which is the nearest "
-             + "length the model can make — frame counts come 17 apart, so a whole second is "
-             + "often not the closest one.", { handle, length, target: match.duration.toFixed(2) }),
+             + "length the model can make — frame counts come {step} apart, so a whole second is "
+             + "often not the closest one.",
+               { handle, length, target: match.duration.toFixed(2),
+                 step: rulesFor(S.pieceFamily(this.piece)).frameStep }),
       onclick: () => {
         this.state.duration_s = match.duration;
         this.commit();
@@ -1811,15 +1819,33 @@ export class CreatorEditor {
       return delta < 0 ? Math.max(MIN_SECONDS, Math.ceil(from) - step)
                        : Math.min(MAX_SECONDS, Math.floor(from) + step);
     };
+    // Whether this family can be asked how long the shot wants to be. A
+    // capability, not an id: H3 has no such weights, and a later family might.
+    const predicts = S.canDo(this.piece, "duration");
+    const auto = predicts && state.auto_duration === true;
+    const setAuto = (on) => { state.auto_duration = on; this.commit(); };
+    const rules = rulesFor(S.pieceFamily(this.piece));
     const duration = el("div", {
-      class: `mmc-pill mmc-pill-group${trained ? "" : " off-distribution"}`,
-      title: t("{frames} frames · {seconds} s at 24 fps", { frames: geometry.frames, seconds: geometry.seconds.toFixed(2) })
-           + (trained ? "" : "\n" + t("Outside the ~5–15 s the open weights were trained on. It will "
+      class: `mmc-pill mmc-pill-group${trained || auto ? "" : " off-distribution"}`,
+      title: (auto
+        // Deliberately not a frame count: on auto there isn't one yet. The
+        // number the pill shows is what the strip's bar counts with and what
+        // the card falls back to, and saying so is the whole honesty of it.
+        ? t("The model picks this shot's length when it renders, from the prompt "
+          + "itself. {seconds} s is the estimate everything before the render "
+          + "counts with — the bar, the queue guard — and the length this card "
+          + "goes back to if you turn auto off.",
+            { seconds: S.showSeconds(state.duration_s) })
+        : t("{frames} frames · {seconds} s at {fps} fps",
+            { frames: geometry.frames, seconds: geometry.seconds.toFixed(2),
+              fps: rules.fps }))
+           + (trained || auto ? "" : "\n" + t("Outside the ~5–15 s the open weights were trained on. It will "
                            + "generate, but coherence and motion are on their own past here — "
                            + "and cost rises with the square of the length.")),
     }, [
       el("button", {
-        class: "mmc-step", text: "−", disabled: state.duration_s <= MIN_SECONDS || undefined,
+        class: "mmc-step", text: "−",
+        disabled: auto || state.duration_s <= MIN_SECONDS || undefined,
         onclick: () => {
           state.duration_s = stepTo(-1);
           this.commit();
@@ -1827,16 +1853,39 @@ export class CreatorEditor {
       }),
       icon("clock", 16),
       // Room for "9.42 s" as well as "6 s": a matched card carries two decimals,
-      // and at the old width they sat against the clock.
-      el("span", { text: t("{seconds} s", { seconds: S.showSeconds(state.duration_s) }),
-                   style: { minWidth: "38px", padding: "0 5px", textAlign: "center" } }),
+      // and at the old width they sat against the clock. On auto the same slot
+      // holds the estimate with a "~" in front of it, because the number is
+      // still the one everything else in the UI is counting with.
+      el("span", { text: auto
+                     ? t("~{seconds} s", { seconds: S.showSeconds(state.duration_s) })
+                     : t("{seconds} s", { seconds: S.showSeconds(state.duration_s) }),
+                   style: { minWidth: "38px", padding: "0 5px", textAlign: "center",
+                            ...(auto ? { opacity: "0.6" } : {}) } }),
       el("button", {
-        class: "mmc-step", text: "+", disabled: state.duration_s >= MAX_SECONDS || undefined,
+        class: "mmc-step", text: "+",
+        disabled: auto || state.duration_s >= MAX_SECONDS || undefined,
         onclick: () => {
           state.duration_s = stepTo(1);
           this.commit();
         },
       }),
+      // The switch, only on a family that has the weights to answer. It is the
+      // last thing in the group rather than a pill of its own because it is
+      // the same question the steppers ask — how long is this shot — answered
+      // by somebody else.
+      ...(predicts ? [el("button", {
+        class: `mmc-step${auto ? " on" : ""}`,
+        text: t("auto"),
+        style: { padding: "0 6px" },
+        title: auto
+          ? t("The duration head is picking this shot's length. Click to set it yourself.")
+          : t("Let the model pick this shot's length from its prompt, between "
+            + "{min} and {max} s — the range its duration head was trained on. "
+            + "Needs the duration head picked under 'weights'.",
+              { min: Math.round(S.familyOf(this.piece).capabilities.duration.min_seconds),
+                max: Math.round(S.familyOf(this.piece).capabilities.duration.max_seconds) }),
+        onclick: () => setAuto(!auto),
+      })] : []),
       ...this.matchTail(),
     ]);
 

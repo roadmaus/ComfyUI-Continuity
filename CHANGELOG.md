@@ -36,6 +36,25 @@ any of them to say. Nothing about an H3 piece moves: the graphs it builds are
 byte-identical, and a workflow saved before any of this names no family and is
 H3 for good.
 
+**A shot on LTX 2.5 can be as long as it wants to be.** The seconds pill grows
+an "auto" switch on a family that has weights to answer with — LTX's duration
+head, picked in the weights popover — and the model reads the shot's own prompt
+and chooses its length while it renders, inside the trained 1–20 s. It cannot be
+asked any earlier: the prediction runs the transformer's caption connectors over
+the encoded prompt, so it needs the whole model loaded. So the number on the
+pill becomes an estimate while auto is on, wears a `~`, and is what the strip's
+bar and the queue's length guard go on counting with. H3 has no such weights and
+so is not offered the switch.
+
+**A seam blends at the width its own model can encode.** The picker's short,
+medium and long are the runs a family's video VAE takes standalone, which on H3
+is 5, 22 and 39 frames and on LTX 2.5 is 9, 17 and 25. This matters more than it
+sounds: LTX crops a guide to its own grid silently, so an H3-shaped blend
+reached it as a single frame while the strip went on subtracting five — a seam
+that had quietly stopped being a seam. The strip's length readouts, the queue
+guard and the reference-length match now all ask the piece which family it is,
+for the same reason.
+
 Requires a ComfyUI new enough to ship the LTX-AV nodes; without them the node
 says so by name instead of failing three hooks deep.
 

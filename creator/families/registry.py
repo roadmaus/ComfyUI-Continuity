@@ -43,6 +43,21 @@ PROMPT_PIPELINE = {
     "ideogram4": "plain",
 }
 
+# Which families can be asked to pick a shot's own length, and the weight slot
+# that does it. `None` where the family has no answer at all — H3 does not, and
+# a control that offered "auto" there would be offering nothing.
+#
+# Here rather than in the manifests for the same reason `PROMPT_PIPELINE` is:
+# `compile.py` has to know whether a card's `auto_duration` means anything
+# before any manifest is built, and the family's own capability block reads
+# this table, so a UI cannot offer a length nobody will predict.
+DURATION_HEAD = {
+    "h3": None,
+    "ltx25": "duration_head",
+    "krea2": None,
+    "ideogram4": None,
+}
+
 # What the pre-stage blob's `arch` pill calls each still-capable family.
 # "minimax" predates the family ids and is frozen in every saved blob, so the
 # alias is permanent — the id it maps to is the registry's business.

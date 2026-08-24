@@ -267,6 +267,14 @@ class Compiled:
     plan: list[dict] = field(default_factory=list)         # REF2VA only; see plan_references
     triggers: list[str] = field(default_factory=list)      # already prefixed onto `prompt`
     checkpoint_pinned: bool = False                        # the user chose it; not derived
+    # Whether this generation's length is the model's to pick. `frames` above
+    # is still filled in — it is what the strip's bar counts and what the queue
+    # guard is checked against — but on a family with a duration head the
+    # segment node replaces it with the head's answer, which cannot be known
+    # until the prompt has been encoded and the transformer loaded. So this is
+    # the one number in `Compiled` that is an estimate rather than a fact, and
+    # it is flagged here rather than left for a reader to discover.
+    auto_duration: bool = False
     # Timeline only: the first frame is the previous segment's last frame, which
     # is a tensor produced mid-graph and so has no Asset and no filename.
     continues: bool = False
@@ -1081,6 +1089,16 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     frames = canvas.frames_for_seconds(seconds_shown, rules)
     short_edge = data.get("short_edge", rules.native_short_edge)
 
+    # Whether the model picks this shot's length. Only where the family has
+    # weights that can — H3 has none, and a blob carrying the flag from a piece
+    # that was switched back is read as the "no" it is rather than refused, the
+    # same forgiveness `piece_family` extends to an id this install has not got.
+    # `frames` above stays the estimate: it is what the bar counts and what the
+    # queue guard is checked against, and the segment node is where the head's
+    # answer replaces it.
+    auto_duration = (bool(data.get("auto_duration"))
+                     and registry.DURATION_HEAD.get(family) is not None)
+
     # The inherited run is re-generated at the head of this segment and trimmed
     # off after decode, so it spends this segment's frames without delivering
     # any. It must stay a small fraction of the clip: at half or more, what is
@@ -1294,6 +1312,7 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
         subject_labels=subject_labels,
         plan=plan,
         triggers=triggers,
+        auto_duration=auto_duration,
         continues=continues,
         continues_audio=continues_audio,
         audio_tail_s=audio_tail_s,

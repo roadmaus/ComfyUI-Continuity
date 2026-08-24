@@ -94,6 +94,47 @@ def _empty_video_latent(width, height, length):
         "downscale_ratio_spacial": 32}
 
 
+def _predicted_frames(model, positive, duration_head, compiled, rules):
+    """How long this shot wants to be, asked of the model. -> a frame count.
+
+    **Why this cannot happen before the queue.** `LTXVDurationPredictor` runs
+    the transformer's own caption connectors over the encoded prompt, so it
+    needs the loaded 22B DiT and the encoded conditioning — the two most
+    expensive things a render does. There is no cheap route a pill could call
+    to fill a number in while somebody types. So "auto" is resolved *here*, and
+    the count `compile_request` worked out from the pill stays what the strip's
+    bar counts: an estimate, and labelled one.
+
+    **The clamp is not the head's default.** Its own is 1–20 s, which is what
+    Lightricks trained; what is passed is that range with the floor raised to
+    fit this segment's seams. A feathered seam re-generates its inherited run at
+    the head of the pass and the reel trims it off after decode, so a pass
+    shorter than twice its blend delivers less than it re-made — `compile_request`
+    refuses that outright for a length the user set, and this is the same rule
+    said to the model as a bound instead of to the user as an error.
+    """
+    if duration_head is None:
+        raise ValueError(
+            "This shot's length is set to 'auto', which asks LTX's duration "
+            "head how long it wants to be — and no duration head has been "
+            "picked. Choose one under the node's 'weights' control "
+            "(models/model_patches), or set the seconds pill to a length."
+        )
+    overlap = ((compiled.feather if compiled.feather > 1 else 0)
+               + (compiled.ends_feather if compiled.ends_feather > 1 else 0))
+    floor = max(rules.trained_min_frames / rules.fps,
+                2 * overlap / rules.fps)
+    frames, seconds = _core("LTXVDurationPredictor").execute(
+        model, positive, duration_head, float(rules.fps),
+        floor, rules.trained_max_frames / rules.fps)[:2]
+    logging.info(
+        "[MiniMax] LTX 2.5: the duration head asked for %.2f s; rendering %d "
+        "frames (%.2f s at %d fps). The strip's bar showed %d — it is an "
+        "estimate whenever a card is on auto.",
+        seconds, frames, frames / rules.fps, rules.fps, compiled.frames)
+    return int(frames)
+
+
 class MiniMaxLTX25Segment(io.ComfyNode):
     """One segment of an LTX 2.5 piece. Written into the graph by the loop."""
 
@@ -116,6 +157,13 @@ class MiniMaxLTX25Segment(io.ComfyNode):
                 io.Vae.Input("vae"),
                 io.Vae.Input("audio_vae"),
                 io.String.Input("segment_data", multiline=True),
+                # The duration head, wired only when this card's length is the
+                # model's to pick. A `MODEL_PATCH` like any other, loaded
+                # through core's `ModelPatchLoader` — see `render.Links`, which
+                # builds it lazily for the same reason it builds the upscaler
+                # lazily: it is a pass, not a component.
+                io.Custom("MODEL_PATCH").Input("duration_head", optional=True,
+                    tooltip="LTX's duration head, when this shot's length is the model's to pick."),
                 io.Image.Input("prev_image", optional=True,
                     tooltip="An earlier segment's last frame, when this segment continues from it."),
                 io.Audio.Input("prev_audio", optional=True,
@@ -147,7 +195,7 @@ class MiniMaxLTX25Segment(io.ComfyNode):
 
     @classmethod
     def execute(cls, model, clip, vae, audio_vae, segment_data,
-                prev_image=None, prev_audio=None,
+                duration_head=None, prev_image=None, prev_audio=None,
                 next_image=None, next_audio=None) -> io.NodeOutput:
         from ... import timeline
 
@@ -169,11 +217,15 @@ class MiniMaxLTX25Segment(io.ComfyNode):
         positive = _encode(clip, compiled.prompt)
         negative = _encode(clip, DEFAULT_NEGATIVE)
 
-        latent = _empty_video_latent(compiled.width, compiled.height,
-                                     compiled.frames)
+        rules = canvas.RULES["ltx25"]
+        frames = compiled.frames
+        if compiled.auto_duration:
+            frames = _predicted_frames(model, positive, duration_head, compiled,
+                                       rules)
+
+        latent = _empty_video_latent(compiled.width, compiled.height, frames)
 
         add_guide = _core("LTXVAddGuide")
-        rules = canvas.RULES["ltx25"]
 
         def guide(image, frame_idx, strength=1.0):
             nonlocal positive, negative, latent
@@ -245,7 +297,7 @@ class MiniMaxLTX25Segment(io.ComfyNode):
         # for this many frames at this rate, then packed with the picture. After
         # the guides, always: `append_keyframe` refuses a combined AV latent.
         audio_latent = _core("LTXVEmptyLatentAudio").execute(
-            compiled.frames, float(rules.fps), 1, audio_vae)[0]
+            frames, float(rules.fps), 1, audio_vae)[0]
         latent = _core("LTXVConcatAVLatent").execute(latent, audio_latent)[0]
 
         # The rate, as conditioning. Last, so both conditionings carry it

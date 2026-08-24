@@ -104,6 +104,13 @@ class LTX25(base.Family):
             segment_node.SEGMENT_NODE,
             model=links.dit, clip=links.clip,
             vae=links.vae, audio_vae=links.audio_vae,
+            # Only where this card's length is the model's to pick. The input is
+            # optional so a graph without it is byte-identical to one built
+            # before the head existed, and the loader is built on the first ask
+            # — a strip with one auto card loads the file once, and a strip with
+            # none never loads it at all.
+            **({"duration_head": links.duration_head}
+               if compiled.auto_duration else {}),
             # sort_keys so an unchanged payload serialises identically every
             # time — this string is the segment node's cache key.
             segment_data=json.dumps(payload, sort_keys=True),
@@ -227,15 +234,18 @@ class Links:
     So it is built the first time `emit_refine` asks, once, and a render with
     several refined passes shares the one loader.
 
-    The duration head has no entry at all. It answers a question the seconds
-    pill asks before a queue rather than one a render asks during it, so it has
-    no place in a render graph.
+    The duration head is the other one, and it is lazy for a reason worth
+    stating: the prediction needs the loaded transformer and the encoded prompt
+    (see `segment._predicted_frames`), so it cannot be answered before a queue
+    — but a strip where no card is on auto must not load a second file for a
+    question nobody asked.
     """
 
     def __init__(self, graph, weights):
         self._graph = graph
         self._weights = weights
         self._upscaler = None
+        self._duration_head = None
         self._slots = {name: self._loader(name)
                        for name, slot in models.SLOTS.items()
                        if slot.loader and not slot.optional}
@@ -263,6 +273,20 @@ class Links:
                 )
             self._upscaler = self._loader("upscaler")
         return self._upscaler
+
+    @property
+    def duration_head(self):
+        if self._duration_head is None:
+            if not self._weights.get("duration_head"):
+                raise ValueError(
+                    "A shot on this strip has its length set to 'auto', which "
+                    "asks LTX's duration head how long it wants to be — and no "
+                    "duration head has been picked. Choose one under the node's "
+                    "'weights' control (models/model_patches), or set that "
+                    "shot's seconds pill to a length."
+                )
+            self._duration_head = self._loader("duration_head")
+        return self._duration_head
 
     def get(self, name):
         return self._slots.get(name)

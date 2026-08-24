@@ -1045,6 +1045,7 @@ class Timeline {
     const { width, height, ratio, fromInput } = this.geometry();
     const seconds = S.timelineSeconds(this.timeline);
     const frames = S.timelineFrames(this.timeline);
+    const auto = S.hasAutoDuration(this.timeline);
     const count = this.timeline.segments.length;
     // What the queue costs and what a seam sits between: the generations, not
     // the cards. They are the same number until a pass holds more than one.
@@ -1166,7 +1167,12 @@ class Timeline {
                    { s: S.sampledSeconds(this.timeline).toFixed(1),
                      total: seconds.toFixed(1) }),
         })] : []),
-        el("b", { text: `${seconds.toFixed(1)} s` }),
+        el("b", {
+          text: auto ? `~${seconds.toFixed(1)} s` : `${seconds.toFixed(1)} s`,
+          ...(auto ? { title: t("An estimate: a shot on auto is measured by the model "
+                              + "while it renders, so the finished length is not known "
+                              + "until it has.") } : {}),
+        }),
         el("span", { text: single
           ? t(count === 1 ? "{count} shot · {frames} frames" : "{count} shots · {frames} frames",
               { count, frames })
@@ -3023,9 +3029,15 @@ export class TimelineBody {
               : t(segments.length === 1 ? "{count} segment" : "{count} segments", { count: segments.length }),
           }),
         ]),
-        el("span", { class: "mmc-pill mmc-pill-static", title: t("The finished clip's length at 24 fps") }, [
+        el("span", { class: "mmc-pill mmc-pill-static",
+                     title: S.hasAutoDuration(this.timeline)
+                       ? t("An estimate: a shot on auto is measured by the model "
+                         + "while it renders, so the finished length is not known "
+                         + "until it has.")
+                       : t("The finished clip's length at 24 fps") }, [
           icon("clock", 16),
-          el("span", { text: `${seconds.toFixed(1)} s` }),
+          el("span", { text: S.hasAutoDuration(this.timeline)
+            ? `~${seconds.toFixed(1)} s` : `${seconds.toFixed(1)} s` }),
         ]),
         el("span", {
           class: "mmc-pill mmc-pill-static",
