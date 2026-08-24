@@ -248,6 +248,65 @@ frozen("face_pass", json.dumps({
     "segments": [{"prompt": "a woman crossing a market", "duration_s": 5}],
 }))
 
+# ---- the second family --------------------------------------------------------
+#
+# The claim phase 4 makes is that core's reel and seam layer is family-neutral —
+# that a strip of LTX passes chains, spills, trims and muxes through exactly the
+# nodes an H3 strip does, with only the sampler and the segment node differing.
+# A property suite cannot say that: it can only check the nodes it thinks to
+# look at, and "nothing else changed" is the whole assertion. So the same strip
+# `chained_seam` freezes is frozen again on the other family, and the two files
+# side by side are what the claim is worth reading in.
+#
+# The blend is the family's own width — 17 frames, where H3's medium is 22 — for
+# the reason `canvas.feather_grid` gives: `LTXVAddGuide` crops a guide to the
+# nearest 8n+1 without saying so, and a golden recorded at 22 would be freezing
+# a seam that had quietly stopped being feathered.
+
+LTX_MODELS = {
+    "dit": "ltx/ltx-2.5-22b-distilled.safetensors",
+    "clip": "ltx/gemma4-12b-with-proj.safetensors",
+    "vae": "ltx/ltx-2.5-video-vae-bf16.safetensors",
+    "audio_vae": "ltx/ltx-2.5-audio-vae-bf16.safetensors",
+    "upscaler": "ltx/ltx-2.5-latent-spatial-upscaler-x2.safetensors",
+}
+
+canvas_mod = importlib.import_module(f"{PACKAGE}.creator.canvas")
+
+
+def ltx_piece(**fields):
+    """The same helper as `piece`, on the second family's weights and canvas."""
+    return json.dumps({
+        "version": 2,
+        "family": "ltx25",
+        "prompt": "",
+        "aspect": "16:9",
+        "short_edge": canvas_mod.LTX25.native_short_edge,
+        "models": LTX_MODELS,
+        **fields,
+    })
+
+
+frozen("ltx_chained_seam", ltx_piece(
+    prompt="a house at dusk",
+    audio_tail_s=1.0,
+    segments=[
+        {"prompt": "wide", "duration_s": 5},
+        {"prompt": "closer", "duration_s": 5, "continue": True,
+         "feather": canvas_mod.feather_grid(canvas_mod.LTX25)[2],
+         "continue_audio": True},
+        {"prompt": "cut away", "duration_s": 5},
+    ],
+))
+
+# And the two-stage render, which on this family is Lightricks' x2 latent
+# upscaler rather than H3's re-sample at a larger canvas — the one place the
+# `refine` capability means something structurally different.
+frozen("ltx_refine_two_pass", ltx_piece(
+    short_edge=canvas_mod.LTX25.native_short_edge * 2,
+    segments=[{"prompt": "a red room", "duration_s": 6}],
+))
+
 # ---- the model patches ------------------------------------------------------
 #
 # What `render.patched` puts between the segment node and the sampler. The

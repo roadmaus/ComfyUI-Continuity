@@ -70,13 +70,18 @@ DEFAULT_AUDIO_TAIL_S = 1.0
 MAX_AUDIO_TAIL_S = 4.0
 
 # How many of the source segment's last frames a seam may inherit — the counts
-# the H3 video VAE can encode standalone. Its temporal grid compresses runs of
-# (1, 4, 4, 4, 4) pixel frames per latent step, so only a run ending on a
-# whole cycle boundary encodes to steps that cover exactly the frames given:
-# 1, 5, 22 and 39 frames. Anything else would pin a run ending short of the
-# source's last frame, and the join would jump by the difference. Mirrored by
-# the seam's feather picker in `timeline.js`.
-FEATHER_GRID = (1, 5, 22, 39)
+# the family's video VAE can encode standalone. H3's temporal grid compresses
+# runs of (1, 4, 4, 4, 4) pixel frames per latent step, so only a run ending on
+# a whole cycle boundary encodes to steps that cover exactly the frames given:
+# 1, 5, 22 and 39. Anything else would pin a run ending short of the source's
+# last frame, and the join would jump by the difference.
+#
+# Which is the same constraint the whole generation's frame count answers to, so
+# the set is derived from the family's grid rather than written twice — see
+# `canvas.feather_grid`, which is also what says why LTX cannot borrow H3's.
+# This spelling stays bound to H3 for the callers that predate the argument.
+# Mirrored by the seam's feather picker in `timeline.js`.
+FEATHER_GRID = canvas.FEATHER_GRID
 
 HANDLE_RE = re.compile(r"@([A-Za-z]+-\d+)")
 
@@ -892,16 +897,20 @@ def plain_prompt(body, soundscape, music):
     return " ".join(part for part in parts if part).strip()
 
 
-def _check_feather(width, live, what):
+def _check_feather(width, live, what, rules=canvas.H3):
     """A blend's width, validated against the seam it belongs to.
 
     The same check at both ends of a segment: only the runs the video VAE can
     encode standalone, and only where there is a live seam for them to cross.
+    The grid is the family's — a width off it is a seam that would silently
+    stop being feathered, which is the whole reason `canvas.feather_grid`
+    derives it rather than the two families sharing H3's numbers.
     """
+    grid = canvas.feather_grid(rules)
     width = int(width or 1)
-    if width not in FEATHER_GRID:
+    if width not in grid:
         raise CompileError(
-            f"a seam can inherit {', '.join(map(str, FEATHER_GRID))} frames — "
+            f"a seam can inherit {', '.join(map(str, grid))} frames — "
             f"the runs the video VAE's temporal grid can encode — not {width}"
         )
     if width > 1 and not live:
@@ -1010,8 +1019,8 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     mode = _derive_mode(first_frame, last_frame, ref_images, ref_videos, ref_audios,
                         continues, ends_on)
 
-    feather = _check_feather(feather, continues, "continue from an earlier one")
-    ends_feather = _check_feather(ends_feather, ends_on, "run into a clip")
+    feather = _check_feather(feather, continues, "continue from an earlier one", rules)
+    ends_feather = _check_feather(ends_feather, ends_on, "run into a clip", rules)
     audio_tail_s = audio_tail_seconds(data.get("audio_tail_s")) if continues_audio else 0.0
     # A feathered seam pins the tail end-aligned with the inherited frames on
     # this segment's own timeline, and the two are the tail of the same source:

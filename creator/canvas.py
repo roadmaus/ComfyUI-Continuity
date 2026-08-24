@@ -180,6 +180,29 @@ def legal_frame_counts(rules=H3):
                       rules.frame_step))
 
 
+def feather_grid(rules=H3):
+    """The seam widths a family can inherit as motion. -> a tuple, ascending.
+
+    A feathered seam hands the pass in front's last run to the next one as a
+    multi-frame guide, so the run has to be a length the family's temporal
+    packing encodes standalone — which is the same `step*n + offset` grid a
+    whole generation's frame count lands on, for the same reason: the video
+    VAE's cycle. A run ending short of a boundary pins frames that stop before
+    the source's last one, and the join jumps by the difference.
+
+    The single frame is always offered — the classic seam, and on an 8n+1
+    family it is the grid's own first member — and three widths above it is
+    what the picker has room for. H3's set is (1, 5, 22, 39), which is 0.21 s,
+    0.92 s and 1.63 s of inherited motion; LTX 2.5's is (1, 9, 17, 25).
+
+    That difference is not cosmetic. `LTXVAddGuide` crops a guide to the
+    nearest 8n+1 itself, so H3's 5-frame blend handed to LTX reaches the model
+    as a *single* frame while the strip goes on subtracting five — a seam that
+    silently stops being feathered, with nothing in the log.
+    """
+    return (1, *[n for n in legal_frame_counts(rules) if n > 1][:3])
+
+
 def is_trained_length(frames, rules=H3):
     """Whether a frame count sits inside what the weights actually saw."""
     return rules.trained_min_frames <= frames <= rules.trained_max_frames
@@ -311,3 +334,4 @@ TRAINED_MIN_FRAMES = H3.trained_min_frames
 TRAINED_MAX_FRAMES = H3.trained_max_frames
 MIN_SECONDS = H3.min_seconds
 MAX_SECONDS = H3.max_seconds
+FEATHER_GRID = feather_grid(H3)

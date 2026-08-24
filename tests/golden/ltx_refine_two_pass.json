@@ -1,0 +1,344 @@
+{
+  "1": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "ltx/ltx-2.5-22b-distilled.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "10": {
+    "class_type": "KSamplerSelect",
+    "inputs": {
+      "sampler_name": "euler"
+    }
+  },
+  "11": {
+    "class_type": "SamplerCustomAdvanced",
+    "inputs": {
+      "guider": [
+        "8",
+        0
+      ],
+      "latent_image": [
+        "5",
+        2
+      ],
+      "noise": [
+        "9",
+        0
+      ],
+      "sampler": [
+        "10",
+        0
+      ],
+      "sigmas": [
+        "6",
+        0
+      ]
+    }
+  },
+  "12": {
+    "class_type": "LTXVSeparateAVLatent",
+    "inputs": {
+      "av_latent": [
+        "11",
+        0
+      ]
+    }
+  },
+  "13": {
+    "class_type": "LTXVCropGuides",
+    "inputs": {
+      "latent": [
+        "12",
+        0
+      ],
+      "negative": [
+        "5",
+        3
+      ],
+      "positive": [
+        "5",
+        1
+      ]
+    }
+  },
+  "14": {
+    "class_type": "LTXVConcatAVLatent",
+    "inputs": {
+      "audio_latent": [
+        "12",
+        1
+      ],
+      "video_latent": [
+        "13",
+        2
+      ]
+    }
+  },
+  "15": {
+    "class_type": "LTXVSeparateAVLatent",
+    "inputs": {
+      "av_latent": [
+        "14",
+        0
+      ]
+    }
+  },
+  "16": {
+    "class_type": "LatentUpscaleModelLoader",
+    "inputs": {
+      "model_name": "ltx/ltx-2.5-latent-spatial-upscaler-x2.safetensors"
+    }
+  },
+  "17": {
+    "class_type": "LTXVLatentUpsampler",
+    "inputs": {
+      "samples": [
+        "15",
+        0
+      ],
+      "upscale_model": [
+        "16",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
+    }
+  },
+  "18": {
+    "class_type": "LTXVConcatAVLatent",
+    "inputs": {
+      "audio_latent": [
+        "15",
+        1
+      ],
+      "video_latent": [
+        "17",
+        0
+      ]
+    }
+  },
+  "19": {
+    "class_type": "LTXVScheduler",
+    "inputs": {
+      "base_shift": 0.95,
+      "latent": [
+        "18",
+        0
+      ],
+      "max_shift": 2.05,
+      "steps": 8,
+      "stretch": true,
+      "terminal": 0.1
+    }
+  },
+  "2": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "ltx/gemma4-12b-with-proj.safetensors",
+      "type": "ltxv"
+    }
+  },
+  "20": {
+    "class_type": "SplitSigmasDenoise",
+    "inputs": {
+      "denoise": 0.5,
+      "sigmas": [
+        "19",
+        0
+      ]
+    }
+  },
+  "21": {
+    "class_type": "ModelSamplingLTXV",
+    "inputs": {
+      "base_shift": 0.95,
+      "latent": [
+        "18",
+        0
+      ],
+      "max_shift": 2.05,
+      "model": [
+        "5",
+        0
+      ]
+    }
+  },
+  "22": {
+    "class_type": "LTXVDualCFGGuider",
+    "inputs": {
+      "audio_cfg": 1.0,
+      "model": [
+        "21",
+        0
+      ],
+      "negative": [
+        "13",
+        1
+      ],
+      "positive": [
+        "13",
+        0
+      ],
+      "video_cfg": 1.0
+    }
+  },
+  "23": {
+    "class_type": "RandomNoise",
+    "inputs": {
+      "noise_seed": 100
+    }
+  },
+  "24": {
+    "class_type": "KSamplerSelect",
+    "inputs": {
+      "sampler_name": "euler"
+    }
+  },
+  "25": {
+    "class_type": "SamplerCustomAdvanced",
+    "inputs": {
+      "guider": [
+        "22",
+        0
+      ],
+      "latent_image": [
+        "18",
+        0
+      ],
+      "noise": [
+        "23",
+        0
+      ],
+      "sampler": [
+        "24",
+        0
+      ],
+      "sigmas": [
+        "20",
+        1
+      ]
+    }
+  },
+  "26": {
+    "class_type": "MiniMaxH3Reel",
+    "inputs": {
+      "audio_vae": [
+        "4",
+        0
+      ],
+      "samples": [
+        "25",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
+    }
+  },
+  "27": {
+    "class_type": "MiniMaxH3Save",
+    "inputs": {
+      "crf": 23,
+      "filename_prefix": "minimax/renders/H3",
+      "fps": 24.0,
+      "reel": [
+        "26",
+        0
+      ],
+      "takes": ""
+    }
+  },
+  "3": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "ltx/ltx-2.5-video-vae-bf16.safetensors"
+    }
+  },
+  "4": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "ltx/ltx-2.5-audio-vae-bf16.safetensors"
+    }
+  },
+  "5": {
+    "class_type": "MiniMaxLTX25Segment",
+    "inputs": {
+      "audio_vae": [
+        "4",
+        0
+      ],
+      "clip": [
+        "2",
+        0
+      ],
+      "model": [
+        "1",
+        0
+      ],
+      "segment_data": "{\"canvas\": {\"clamped\": false, \"from_image\": false, \"height\": 544, \"label\": \"16:9\", \"ratio\": 1.7777777777777777, \"width\": 960}, \"continue\": false, \"continue_audio\": false, \"request\": {\"aspect\": \"16:9\", \"audio_tail_s\": 1.0, \"duration_s\": 6, \"loras\": [], \"music\": \"\", \"prompt\": \"a red room\", \"short_edge\": 1088, \"soundscape\": \"\"}}",
+      "vae": [
+        "3",
+        0
+      ]
+    }
+  },
+  "6": {
+    "class_type": "LTXVScheduler",
+    "inputs": {
+      "base_shift": 0.95,
+      "latent": [
+        "5",
+        2
+      ],
+      "max_shift": 2.05,
+      "steps": 8,
+      "stretch": true,
+      "terminal": 0.1
+    }
+  },
+  "7": {
+    "class_type": "ModelSamplingLTXV",
+    "inputs": {
+      "base_shift": 0.95,
+      "latent": [
+        "5",
+        2
+      ],
+      "max_shift": 2.05,
+      "model": [
+        "5",
+        0
+      ]
+    }
+  },
+  "8": {
+    "class_type": "LTXVDualCFGGuider",
+    "inputs": {
+      "audio_cfg": 1.0,
+      "model": [
+        "7",
+        0
+      ],
+      "negative": [
+        "5",
+        3
+      ],
+      "positive": [
+        "5",
+        1
+      ],
+      "video_cfg": 1.0
+    }
+  },
+  "9": {
+    "class_type": "RandomNoise",
+    "inputs": {
+      "noise_seed": 100
+    }
+  }
+}

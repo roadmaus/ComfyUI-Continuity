@@ -3,8 +3,8 @@
 // editing rather than at queue time, but compile.py stays authoritative.
 
 import { ASPECT_PRESETS, FPS, MIN_SHORT_EDGE, NATIVE_SHORT_EDGE, CANVAS_MULTIPLE,
-         framesForSeconds, secondsForFrames, matchSeconds, resolveCanvas,
-         rulesFor } from "./canvas.js";
+         featherGrid, framesForSeconds, secondsForFrames, matchSeconds,
+         resolveCanvas, rulesFor } from "./canvas.js";
 import { DEFAULT_STILL_ARCH, DEFAULT_VIDEO_FAMILY, STILL_ARCHES,
          VIDEO_FAMILIES, stillFamily, videoFamily } from "./manifest.js";
 import { t } from "./i18n.js";
@@ -1171,11 +1171,14 @@ export function emptySegment() {
  *  cut — the settings a hard cut would make the user click on every card. The
  *  first segment has no seam and stays `emptySegment`, and a loaded timeline
  *  keeps exactly what it stored. */
-export function continuingSegment() {
+export function continuingSegment(piece) {
   const state = emptySegment();
   state.continue = true;
   state.continue_audio = true;
-  state.feather = FEATHER_GRID[2]; // Medium — 0.9 s of motion at 24 fps
+  // Medium — the third of the family's four widths, which is ~0.9 s of
+  // inherited motion on H3 and ~0.7 s on LTX 2.5. The position in the grid
+  // rather than the number, because the number is the family's.
+  state.feather = featherGridOf(piece)[2];
   return state;
 }
 
@@ -1338,9 +1341,19 @@ export function setFamily(timeline, id) {
   timeline.turbo = emptyTurbo();
 
   const routed = checkpointsOf(family);
+  // A seam's width is retargeted rather than dropped, for the same reason a
+  // LoRA is: the user asked for a blend of about that length and the new
+  // family can make one, just not out of the same number of frames. The
+  // nearest width its video VAE can encode standalone is what they meant —
+  // H3's medium 22 becomes LTX's 25. `syncCanvas` drops anything that is
+  // still off the grid or that the card can no longer afford.
+  const grid = featherGrid(rulesFor(family));
+  const nearest = (width) => grid.reduce(
+    (best, f) => (Math.abs(f - width) < Math.abs(best - width) ? f : best), grid[0]);
   for (const entry of timeline.loras ?? []) entry.modes = [...routed];
   for (const segment of timeline.segments ?? []) {
     delete segment.checkpoint;
+    if (segment.feather > 1) segment.feather = nearest(segment.feather);
     for (const entry of segment.loras ?? []) entry.modes = [...routed];
   }
 
@@ -1727,6 +1740,8 @@ function syncCanvas(timeline) {
   // previous one included, which is what absence already means — is dropped.
   // Same policy as the flags: pruned here once rather than guarded at every
   // read, so reordering and deleting cannot leave a stale source behind.
+  const rules = rulesFor(pieceFamily(timeline));
+  const grid = featherGrid(rules);
   timeline.segments.forEach((segment, index) => {
     const from = segment.continue_from;
     if (!Number.isInteger(from) || from < 1 || from >= index) delete segment.continue_from;
@@ -1738,10 +1753,16 @@ function syncCanvas(timeline) {
     // clip — is dropped the same way, rather than left to fail at queue time.
     // For a clip card the blend is spent by the card *before* it, since that
     // is the generation re-making those frames.
+    // A width off this family's own grid goes with it: the run a seam inherits
+    // has to be one its video VAE can encode standalone, and a strip switched
+    // between families carries the old family's numbers until something drops
+    // them. `compile_request` refuses them, so this is what keeps the pill and
+    // the queue saying the same thing.
     if (segment.feather) {
       const paying = isClip(segment) ? timeline.segments[index - 1] : segment;
       if (!paying || isClip(paying)
-          || 2 * segment.feather > framesForSeconds(paying.duration_s)) {
+          || !grid.includes(segment.feather)
+          || 2 * segment.feather > framesForSeconds(paying.duration_s, rules)) {
         delete segment.feather;
       }
     }
@@ -1909,7 +1930,7 @@ export function parseTimeline(raw) {
           segment.continue = raw.continue === true;
           segment.continue_audio = raw.continue_audio === true;
           const width = Number(raw.feather);
-          if (FEATHER_GRID.includes(width) && width > 1) segment.feather = width;
+          if (featherGridOf(timeline).includes(width) && width > 1) segment.feather = width;
           return segment;
         }
         const segment = parseState(JSON.stringify(raw ?? {}));
@@ -1936,7 +1957,7 @@ export function parseTimeline(raw) {
         // which is also what absence means.
         delete segment.feather;
         const width = Number(raw?.feather);
-        if (FEATHER_GRID.includes(width) && width > 1) segment.feather = width;
+        if (featherGridOf(timeline).includes(width) && width > 1) segment.feather = width;
         // Whether this card is in the next render, and the render it already
         // has. Both survive a reload for the same reason the prompt does: a
         // piece shot a pass at a time is shot over days, and a strip that
@@ -2057,8 +2078,8 @@ export function serializeTimeline(timeline) {
           // nothing in front of it to run into this one.
           ...(index > 0 && segment.continue ? { continue: true } : {}),
           ...(index > 0 && segment.continue_audio ? { continue_audio: true } : {}),
-          ...(index > 0 && segment.continue && feather(segment) > 1
-            ? { feather: feather(segment) } : {}),
+          ...(index > 0 && segment.continue && feather(segment, timeline) > 1
+            ? { feather: feather(segment, timeline) } : {}),
         };
       }
       const out = serializeCommon(segment);
@@ -2083,7 +2104,7 @@ export function serializeTimeline(timeline) {
       }
       // The seam's width — only on a live picture seam, and only past the
       // classic single frame, which absence already says.
-      if (out.continue && feather(segment) > 1) out.feather = feather(segment);
+      if (out.continue && feather(segment, timeline) > 1) out.feather = feather(segment, timeline);
       // Out of the next render, and the render it already has. Only the
       // deliberate states are written: a card nobody has held and nothing has
       // rendered writes exactly what it always did.
@@ -2142,6 +2163,11 @@ export function shotTime(seconds) {
  */
 export function timelineFrames(timeline) {
   const all = passes(timeline);
+  // The piece's own family's: the grid a pass snaps to and the rate a clip's
+  // seconds become frames at are both the weights', and this readout is the
+  // number on the strip's bar. Mirrors `compile.timeline_frames`, which asks
+  // `rules_of(data)` for exactly the same two things.
+  const rules = rulesFor(pieceFamily(timeline));
   return all.reduce((total, pass, index) => {
     const head = pass.segments[0];
     // A blended seam re-generates its inherited run at the pass's head and
@@ -2151,24 +2177,26 @@ export function timelineFrames(timeline) {
     // Never on a clip: its seam flags describe the blend running *backwards*
     // into it, which is paid for by the pass in front and is subtracted there.
     // Read here as well, they would take it off the strip twice.
-    const overlap = index > 0 && !isClip(head) && continues(head) && feather(head) > 1
-      ? feather(head) : 0;
+    const overlap = index > 0 && !isClip(head) && continues(head) && feather(head, timeline) > 1
+      ? feather(head, timeline) : 0;
     // ...and the same at the far end, where a clip in front of the next pass
     // owns the blend: those frames are re-generated at *this* pass's tail.
     const after = all[index + 1]?.segments[0];
-    const runs = after && isClip(after) && continues(after) && feather(after) > 1
-      ? feather(after) : 0;
+    const runs = after && isClip(after) && continues(after) && feather(after, timeline) > 1
+      ? feather(after, timeline) : 0;
     // A clip is played, not sampled, so its length is its own — there is no
-    // 17n+5 grid to snap it to. Mirrors `compile.timeline_frames`.
+    // frame grid to snap it to. Mirrors `compile.timeline_frames`.
     const seconds = cutTimes(pass.segments).total;
-    const own = isClip(head) ? Math.round(seconds * FPS) : framesForSeconds(seconds);
+    const own = isClip(head) ? Math.round(seconds * rules.fps)
+      : framesForSeconds(seconds, rules);
     return total + own - overlap - runs;
   }, 0);
 }
 
 /** What the finished clip will run to. */
 export function timelineSeconds(timeline) {
-  return secondsForFrames(timelineFrames(timeline));
+  return secondsForFrames(timelineFrames(timeline),
+                          rulesFor(pieceFamily(timeline)));
 }
 
 /**
@@ -2182,20 +2210,23 @@ export function timelineSeconds(timeline) {
  */
 export function sampledFrames(timeline) {
   const all = passes(timeline);
+  const rules = rulesFor(pieceFamily(timeline));
   return all.reduce((total, pass, index) => {
     if (!passShot(pass)) return total;
     const head = pass.segments[0];
-    const overlap = index > 0 && continues(head) && feather(head) > 1 ? feather(head) : 0;
+    const overlap = index > 0 && continues(head) && feather(head, timeline) > 1
+      ? feather(head, timeline) : 0;
     const after = all[index + 1]?.segments[0];
-    const runs = after && isClip(after) && continues(after) && feather(after) > 1
-      ? feather(after) : 0;
-    return total + framesForSeconds(cutTimes(pass.segments).total) - overlap - runs;
+    const runs = after && isClip(after) && continues(after) && feather(after, timeline) > 1
+      ? feather(after, timeline) : 0;
+    return total + framesForSeconds(cutTimes(pass.segments).total, rules) - overlap - runs;
   }, 0);
 }
 
 /** ...in seconds of finished video. */
 export function sampledSeconds(timeline) {
-  return secondsForFrames(sampledFrames(timeline));
+  return secondsForFrames(sampledFrames(timeline),
+                          rulesFor(pieceFamily(timeline)));
 }
 
 /**
@@ -2288,10 +2319,11 @@ export function addSegmentRefusal(timeline, seconds = DEFAULT_DURATION_S) {
   if (timeline.segments.length >= MAX_SEGMENTS) {
     return t("A timeline holds at most {max} segments.", { max: MAX_SEGMENTS });
   }
-  if (timelineFrames(timeline) + framesForSeconds(seconds) > MAX_TIMELINE_FRAMES) {
+  const rules = rulesFor(pieceFamily(timeline));
+  if (timelineFrames(timeline) + framesForSeconds(seconds, rules) > MAX_TIMELINE_FRAMES) {
     return t("A timeline holds at most {minutes} minutes of finished video. "
            + "Shorten it, or split the piece across two Timeline nodes.",
-             { minutes: Math.round(MAX_TIMELINE_FRAMES / (60 * FPS)) });
+             { minutes: Math.round(MAX_TIMELINE_FRAMES / (60 * rules.fps)) });
   }
   return null;
 }
@@ -3514,19 +3546,28 @@ export const continues = (state) => state.continue === true;
 /** Mirrors compile.FEATHER_GRID: the seam widths the video VAE's temporal
  *  grid can encode standalone. 1 is the classic single-frame seam; more pins
  *  the source's last run as motion context, re-generated at this segment's
- *  head and trimmed off after decode. */
-export const FEATHER_GRID = [1, 5, 22, 39];
+ *  head and trimmed off after decode. The default family's, for the readers
+ *  that predate the argument; `featherGridOf` is the one to reach for. */
+export const FEATHER_GRID = featherGrid();
+
+/** The widths the seams of *this* piece may be. A family's own grid, because
+ *  the run a seam inherits has to be one its video VAE can encode standalone —
+ *  H3 takes 5 frames where LTX 2.5 would crop the same run to 1 and go on
+ *  claiming a feathered seam. See `canvas.feather_grid`. */
+export const featherGridOf = (piece) => featherGrid(rulesFor(pieceFamily(piece)));
 
 /** The seam's width in frames — a valid grid value, or the classic 1. */
-export function feather(segment) {
-  return FEATHER_GRID.includes(segment.feather) && segment.feather > 1 ? segment.feather : 1;
+export function feather(segment, piece) {
+  const grid = piece ? featherGridOf(piece) : FEATHER_GRID;
+  return grid.includes(segment.feather) && segment.feather > 1 ? segment.feather : 1;
 }
 
 /** The widest feather this segment's duration allows. Mirrors compile: the
  *  overlap is trimmed off after decode, so it must stay under half the clip. */
-export function maxFeather(segment) {
-  const frames = framesForSeconds(segment.duration_s);
-  return FEATHER_GRID.filter((f) => 2 * f <= frames).pop() ?? 1;
+export function maxFeather(segment, piece) {
+  const rules = rulesFor(pieceFamily(piece));
+  const frames = framesForSeconds(segment.duration_s, rules);
+  return featherGrid(rules).filter((f) => 2 * f <= frames).pop() ?? 1;
 }
 
 /** The 1-based number of the segment the seam in front of `index` inherits
@@ -3626,17 +3667,23 @@ export function aspectSourceAsset(state) {
 
 /** The resolved geometry and duration shown on the pills. `sourceSize` is the
  *  pixel size of `aspectSourceAsset`'s answer, when the caller has probed it —
- *  the keyframe under the auto rule, any chosen picture otherwise. */
-export function resolved(state, sourceSize = null) {
-  const frames = framesForSeconds(state.duration_s);
-  let ratio = ASPECT_PRESETS.find(([label]) => label === state.aspect)?.[1] ?? 16 / 9;
+ *  the keyframe under the auto rule, any chosen picture otherwise.
+ *
+ *  `piece` is where the family lives: the frame grid, the rate and the area cap
+ *  are the weights' and a card carries none of them. Absent means the default
+ *  family, which is what every caller meant before there were two. */
+export function resolved(state, sourceSize = null, piece = null) {
+  const rules = rulesFor(pieceFamily(piece));
+  const frames = framesForSeconds(state.duration_s, rules);
+  let ratio = rules.aspects.find(([label]) => label === state.aspect)?.[1] ?? 16 / 9;
   let fromImage = false;
   if (sourceSize && sourceSize.width && sourceSize.height) {
     ratio = sourceSize.width / sourceSize.height;
     fromImage = true;
   }
-  const [width, height] = resolveCanvas(ratio, state.short_edge);
-  return { frames, seconds: secondsForFrames(frames), width, height, ratio, fromImage };
+  const [width, height] = resolveCanvas(ratio, state.short_edge, rules);
+  return { frames, seconds: secondsForFrames(frames, rules),
+           width, height, ratio, fromImage };
 }
 
 /**
@@ -3767,5 +3814,5 @@ export function timelineAspectSize(timeline, sizeOf, { ignoreChoice = false } = 
 export function maxClipFeather(timeline, index) {
   const before = index > 0 ? timeline.segments[index - 1] : null;
   if (!before || isClip(before)) return 1;
-  return maxFeather(before);
+  return maxFeather(before, timeline);
 }

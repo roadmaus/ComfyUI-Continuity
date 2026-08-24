@@ -1,0 +1,567 @@
+{
+  "1": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "ltx/ltx-2.5-22b-distilled.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "10": {
+    "class_type": "KSamplerSelect",
+    "inputs": {
+      "sampler_name": "euler"
+    }
+  },
+  "11": {
+    "class_type": "SamplerCustomAdvanced",
+    "inputs": {
+      "guider": [
+        "8",
+        0
+      ],
+      "latent_image": [
+        "5",
+        2
+      ],
+      "noise": [
+        "9",
+        0
+      ],
+      "sampler": [
+        "10",
+        0
+      ],
+      "sigmas": [
+        "6",
+        0
+      ]
+    }
+  },
+  "12": {
+    "class_type": "LTXVSeparateAVLatent",
+    "inputs": {
+      "av_latent": [
+        "11",
+        0
+      ]
+    }
+  },
+  "13": {
+    "class_type": "LTXVCropGuides",
+    "inputs": {
+      "latent": [
+        "12",
+        0
+      ],
+      "negative": [
+        "5",
+        3
+      ],
+      "positive": [
+        "5",
+        1
+      ]
+    }
+  },
+  "14": {
+    "class_type": "LTXVConcatAVLatent",
+    "inputs": {
+      "audio_latent": [
+        "12",
+        1
+      ],
+      "video_latent": [
+        "13",
+        2
+      ]
+    }
+  },
+  "15": {
+    "class_type": "MiniMaxH3Reel",
+    "inputs": {
+      "audio_vae": [
+        "4",
+        0
+      ],
+      "samples": [
+        "14",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
+    }
+  },
+  "16": {
+    "class_type": "MiniMaxH3PassFrames",
+    "inputs": {
+      "count": 17,
+      "source": [
+        "15",
+        1
+      ]
+    }
+  },
+  "17": {
+    "class_type": "MiniMaxH3PassAudio",
+    "inputs": {
+      "seconds": 0.7083333333333334,
+      "source": [
+        "15",
+        1
+      ]
+    }
+  },
+  "18": {
+    "class_type": "MiniMaxLTX25Segment",
+    "inputs": {
+      "audio_vae": [
+        "4",
+        0
+      ],
+      "clip": [
+        "2",
+        0
+      ],
+      "model": [
+        "1",
+        0
+      ],
+      "prev_audio": [
+        "17",
+        0
+      ],
+      "prev_image": [
+        "16",
+        0
+      ],
+      "segment_data": "{\"canvas\": {\"clamped\": false, \"from_image\": false, \"height\": 544, \"label\": \"16:9\", \"ratio\": 1.7777777777777777, \"width\": 960}, \"continue\": true, \"continue_audio\": true, \"feather\": 17, \"progress\": {\"index\": 2}, \"request\": {\"aspect\": \"16:9\", \"audio_tail_s\": 1.0, \"duration_s\": 5, \"loras\": [], \"music\": \"\", \"prompt\": \"a house at dusk\\ncloser\", \"short_edge\": 544, \"soundscape\": \"\"}}",
+      "vae": [
+        "3",
+        0
+      ]
+    }
+  },
+  "19": {
+    "class_type": "LTXVScheduler",
+    "inputs": {
+      "base_shift": 0.95,
+      "latent": [
+        "18",
+        2
+      ],
+      "max_shift": 2.05,
+      "steps": 8,
+      "stretch": true,
+      "terminal": 0.1
+    }
+  },
+  "2": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "ltx/gemma4-12b-with-proj.safetensors",
+      "type": "ltxv"
+    }
+  },
+  "20": {
+    "class_type": "ModelSamplingLTXV",
+    "inputs": {
+      "base_shift": 0.95,
+      "latent": [
+        "18",
+        2
+      ],
+      "max_shift": 2.05,
+      "model": [
+        "18",
+        0
+      ]
+    }
+  },
+  "21": {
+    "class_type": "LTXVDualCFGGuider",
+    "inputs": {
+      "audio_cfg": 1.0,
+      "model": [
+        "20",
+        0
+      ],
+      "negative": [
+        "18",
+        3
+      ],
+      "positive": [
+        "18",
+        1
+      ],
+      "video_cfg": 1.0
+    }
+  },
+  "22": {
+    "class_type": "RandomNoise",
+    "inputs": {
+      "noise_seed": 100
+    }
+  },
+  "23": {
+    "class_type": "KSamplerSelect",
+    "inputs": {
+      "sampler_name": "euler"
+    }
+  },
+  "24": {
+    "class_type": "SamplerCustomAdvanced",
+    "inputs": {
+      "guider": [
+        "21",
+        0
+      ],
+      "latent_image": [
+        "18",
+        2
+      ],
+      "noise": [
+        "22",
+        0
+      ],
+      "sampler": [
+        "23",
+        0
+      ],
+      "sigmas": [
+        "19",
+        0
+      ]
+    }
+  },
+  "25": {
+    "class_type": "LTXVSeparateAVLatent",
+    "inputs": {
+      "av_latent": [
+        "24",
+        0
+      ]
+    }
+  },
+  "26": {
+    "class_type": "LTXVCropGuides",
+    "inputs": {
+      "latent": [
+        "25",
+        0
+      ],
+      "negative": [
+        "18",
+        3
+      ],
+      "positive": [
+        "18",
+        1
+      ]
+    }
+  },
+  "27": {
+    "class_type": "LTXVConcatAVLatent",
+    "inputs": {
+      "audio_latent": [
+        "25",
+        1
+      ],
+      "video_latent": [
+        "26",
+        2
+      ]
+    }
+  },
+  "28": {
+    "class_type": "MiniMaxH3Reel",
+    "inputs": {
+      "audio_vae": [
+        "4",
+        0
+      ],
+      "head": 17,
+      "reel": [
+        "15",
+        0
+      ],
+      "samples": [
+        "27",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
+    }
+  },
+  "29": {
+    "class_type": "MiniMaxLTX25Segment",
+    "inputs": {
+      "audio_vae": [
+        "4",
+        0
+      ],
+      "clip": [
+        "2",
+        0
+      ],
+      "model": [
+        "1",
+        0
+      ],
+      "segment_data": "{\"canvas\": {\"clamped\": false, \"from_image\": false, \"height\": 544, \"label\": \"16:9\", \"ratio\": 1.7777777777777777, \"width\": 960}, \"continue\": false, \"continue_audio\": false, \"progress\": {\"index\": 3}, \"request\": {\"aspect\": \"16:9\", \"audio_tail_s\": 1.0, \"duration_s\": 5, \"loras\": [], \"music\": \"\", \"prompt\": \"a house at dusk\\ncut away\", \"short_edge\": 544, \"soundscape\": \"\"}}",
+      "vae": [
+        "3",
+        0
+      ]
+    }
+  },
+  "3": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "ltx/ltx-2.5-video-vae-bf16.safetensors"
+    }
+  },
+  "30": {
+    "class_type": "LTXVScheduler",
+    "inputs": {
+      "base_shift": 0.95,
+      "latent": [
+        "29",
+        2
+      ],
+      "max_shift": 2.05,
+      "steps": 8,
+      "stretch": true,
+      "terminal": 0.1
+    }
+  },
+  "31": {
+    "class_type": "ModelSamplingLTXV",
+    "inputs": {
+      "base_shift": 0.95,
+      "latent": [
+        "29",
+        2
+      ],
+      "max_shift": 2.05,
+      "model": [
+        "29",
+        0
+      ]
+    }
+  },
+  "32": {
+    "class_type": "LTXVDualCFGGuider",
+    "inputs": {
+      "audio_cfg": 1.0,
+      "model": [
+        "31",
+        0
+      ],
+      "negative": [
+        "29",
+        3
+      ],
+      "positive": [
+        "29",
+        1
+      ],
+      "video_cfg": 1.0
+    }
+  },
+  "33": {
+    "class_type": "RandomNoise",
+    "inputs": {
+      "noise_seed": 100
+    }
+  },
+  "34": {
+    "class_type": "KSamplerSelect",
+    "inputs": {
+      "sampler_name": "euler"
+    }
+  },
+  "35": {
+    "class_type": "SamplerCustomAdvanced",
+    "inputs": {
+      "guider": [
+        "32",
+        0
+      ],
+      "latent_image": [
+        "29",
+        2
+      ],
+      "noise": [
+        "33",
+        0
+      ],
+      "sampler": [
+        "34",
+        0
+      ],
+      "sigmas": [
+        "30",
+        0
+      ]
+    }
+  },
+  "36": {
+    "class_type": "LTXVSeparateAVLatent",
+    "inputs": {
+      "av_latent": [
+        "35",
+        0
+      ]
+    }
+  },
+  "37": {
+    "class_type": "LTXVCropGuides",
+    "inputs": {
+      "latent": [
+        "36",
+        0
+      ],
+      "negative": [
+        "29",
+        3
+      ],
+      "positive": [
+        "29",
+        1
+      ]
+    }
+  },
+  "38": {
+    "class_type": "LTXVConcatAVLatent",
+    "inputs": {
+      "audio_latent": [
+        "36",
+        1
+      ],
+      "video_latent": [
+        "37",
+        2
+      ]
+    }
+  },
+  "39": {
+    "class_type": "MiniMaxH3Reel",
+    "inputs": {
+      "audio_vae": [
+        "4",
+        0
+      ],
+      "reel": [
+        "28",
+        0
+      ],
+      "samples": [
+        "38",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
+    }
+  },
+  "4": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "ltx/ltx-2.5-audio-vae-bf16.safetensors"
+    }
+  },
+  "40": {
+    "class_type": "MiniMaxH3Save",
+    "inputs": {
+      "crf": 23,
+      "filename_prefix": "minimax/renders/H3",
+      "fps": 24.0,
+      "reel": [
+        "39",
+        0
+      ],
+      "takes": "{\"cards\": [1, 2, 3], \"seeds\": [100, 100, 100]}"
+    }
+  },
+  "5": {
+    "class_type": "MiniMaxLTX25Segment",
+    "inputs": {
+      "audio_vae": [
+        "4",
+        0
+      ],
+      "clip": [
+        "2",
+        0
+      ],
+      "model": [
+        "1",
+        0
+      ],
+      "segment_data": "{\"canvas\": {\"clamped\": false, \"from_image\": false, \"height\": 544, \"label\": \"16:9\", \"ratio\": 1.7777777777777777, \"width\": 960}, \"continue\": false, \"continue_audio\": false, \"progress\": {\"index\": 1}, \"request\": {\"aspect\": \"16:9\", \"audio_tail_s\": 1.0, \"duration_s\": 5, \"loras\": [], \"music\": \"\", \"prompt\": \"a house at dusk\\nwide\", \"short_edge\": 544, \"soundscape\": \"\"}}",
+      "vae": [
+        "3",
+        0
+      ]
+    }
+  },
+  "6": {
+    "class_type": "LTXVScheduler",
+    "inputs": {
+      "base_shift": 0.95,
+      "latent": [
+        "5",
+        2
+      ],
+      "max_shift": 2.05,
+      "steps": 8,
+      "stretch": true,
+      "terminal": 0.1
+    }
+  },
+  "7": {
+    "class_type": "ModelSamplingLTXV",
+    "inputs": {
+      "base_shift": 0.95,
+      "latent": [
+        "5",
+        2
+      ],
+      "max_shift": 2.05,
+      "model": [
+        "5",
+        0
+      ]
+    }
+  },
+  "8": {
+    "class_type": "LTXVDualCFGGuider",
+    "inputs": {
+      "audio_cfg": 1.0,
+      "model": [
+        "7",
+        0
+      ],
+      "negative": [
+        "5",
+        3
+      ],
+      "positive": [
+        "5",
+        1
+      ],
+      "video_cfg": 1.0
+    }
+  },
+  "9": {
+    "class_type": "RandomNoise",
+    "inputs": {
+      "noise_seed": 100
+    }
+  }
+}

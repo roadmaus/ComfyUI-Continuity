@@ -107,8 +107,9 @@ Each ends green; goldens are re-recorded only when a phase *adds* graphs.
    **Done** — see below. The x2 upscaler came forward from phase 4 with it.
 4. **Duration, multishot, and ReDetail**: the duration predictor as the
    seconds pill's "auto" (capability-gated — H3 simply lacks it), and
-   seam/feather verification on the 8-grid latent (the reel layer is
-   family-neutral by core's own construction; prove it with a chained golden).
+   ~~seam/feather verification on the 8-grid latent (the reel layer is
+   family-neutral by core's own construction; prove it with a chained
+   golden)~~ **done — see "Phase 4: the seams" below**.
    Weigh native multishot here: one pass producing several connected shots
    competes with the strip's own feathered seams rather than slotting under
    them. **And the cross-family upscale** — see below.
@@ -374,6 +375,47 @@ labels in the prose and are encoded from nothing, and the segment node logs one
 line saying so — a guide is a keyframe, and pinning a character sheet at frame 0
 is not what citing a reference means. Sound seams reach the node and are not
 conditioned on yet. Both are the open question below, not an oversight.
+
+## Phase 4: the seams, as landed
+
+The claim was that core's reel layer is family-neutral by construction and
+needed only proving. It is — every node from `MiniMaxH3Reel` to the save is
+byte-identical between `chained_seam` and the new `ltx_chained_seam` golden,
+and the two files side by side are what that is worth reading in. What was
+*not* neutral was one number in front of it.
+
+**`FEATHER_GRID` was H3's, and silently wrong on LTX.** A feathered seam hands
+the pass in front's last run over as a multi-frame guide, and the widths H3
+offers — 1, 5, 22, 39 — are the counts its video VAE encodes standalone.
+`LTXVAddGuide` crops a guide to the nearest 8n+1 *without saying so*, so H3's
+5-frame blend reached the model as a single frame while the reel went on
+trimming five off the head of the pass: four frames of drift, a join that is
+not a join, and nothing in the log. 22 became 17 and 39 became 33 the same way.
+
+The fix is that the set is derived rather than written: `canvas.feather_grid`
+is `(1,) + the first three legal frame counts`, which is H3's tuple exactly —
+the seam grid and the frame grid answer to the same VAE cycle, and having them
+be one derivation is what makes a family unable to get this wrong. LTX's is
+(1, 9, 17, 25). `_check_feather` takes the rules; the picker's Short/Medium/Long
+now names a *position* in the grid rather than a frame count, because 22 was a
+key in a lookup table that answered "Blend" for every LTX width.
+
+**And the strip's arithmetic asked H3 about an LTX piece.** Chasing the grid
+through the frontend turned up the rest of the same cluster, all of it phase 3
+work that only a second family with a different frame rate and grid could
+surface: `timelineFrames`, `sampledFrames`, `addSegmentRefusal`, `resolved`,
+the pass and card readouts in `timeline.js`, and the card-length reads in
+`editor.js` all snapped to H3's grid and divided by H3's rate. They take the
+piece now. `setFamily` retargets a seam's width to the nearest the new family
+can encode — the same courtesy a LoRA already got — and `syncCanvas` drops
+what is still off the grid.
+
+The proof is `tests/test_passes_mirror.py` run over **both** families with the
+widths written as grid positions, `canvas.js`'s `featherGrid` mirrored per
+family in `test_canvas_mirror.py`, the chained-strip section of
+`test_ltx25_graph.py` (which pins the trim, the sound tail's span and the
+refusal of a width off the grid), and `S.FEATHER_GRID` joining the grep in
+`test_family_select.py`. `tests/golden` gained two files and changed none.
 
 ## Open questions (answer during phase 4)
 

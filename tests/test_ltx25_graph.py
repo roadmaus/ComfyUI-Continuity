@@ -218,6 +218,84 @@ check("stage one samples at the native edge",
 check("stage two is exactly twice it",
       (two_one.refine.width, two_one.refine.height), (1920, 1088))
 
+# ---- the seams, on the 8-grid ------------------------------------------------
+#
+# The reel and seam layer is core's and family-neutral by construction, which is
+# a claim worth one chained strip rather than a comment. What is LTX's about it
+# is the *width*: a seam hands the pass in front's last run over as a multi-frame
+# guide, and `LTXVAddGuide` crops a guide to the nearest 8n+1 silently — so H3's
+# 5-frame blend would arrive as one frame while the reel went on trimming five
+# off the head. `canvas.feather_grid` is what stops that, and this is what says
+# the graph got the grid's numbers rather than H3's.
+
+FEATHER = canvas.feather_grid(canvas.LTX25)
+check("LTX's seam widths are its own frame grid", FEATHER, (1, 9, 17, 25))
+check("...and every one of them is a legal guide length",
+      [n % 8 for n in FEATHER], [1, 1, 1, 1])
+
+chained = by_class(build(piece(
+    prompt="a house at dusk",
+    audio_tail_s=1.0,
+    segments=[
+        {"prompt": "wide", "duration_s": 5, "assets": [], "loras": []},
+        {"prompt": "closer", "duration_s": 5, "assets": [], "loras": [],
+         "continue": True, "feather": FEATHER[2], "continue_audio": True},
+        {"prompt": "cut away", "duration_s": 5, "assets": [], "loras": []},
+    ],
+)).expand)
+
+check("three passes, three segment nodes", len(chained["MiniMaxLTX25Segment"]), 3)
+check("...one sampler each", len(chained["SamplerCustomAdvanced"]), 3)
+# The whole strip is one reel: each pass adds itself to the one before it, and
+# only the last is handed to the save node.
+check("one reel node per pass", len(chained["MiniMaxH3Reel"]), 3)
+
+seamed = [inputs for _, inputs in chained["MiniMaxLTX25Segment"]
+          if "prev_image" in inputs]
+check("exactly one segment inherits a seam", len(seamed), 1)
+check("...and it inherits sound as well as picture",
+      "prev_audio" in seamed[0], True)
+# The frames come off the *spill*, not out of a second decode — the pass was
+# written to disk the moment it decoded, and a seam reads back only its own
+# width. Family-neutral: this is core's node either way.
+frames = {node_id: inputs for node_id, inputs in chained["MiniMaxH3PassFrames"]}
+check("the inherited run is read back off the spill", len(frames), 1)
+check("...at the family's own medium width",
+      list(frames.values())[0]["count"], FEATHER[2])
+check("the segment reads that run", seamed[0]["prev_image"][0] in frames, True)
+
+# ...and the same width is trimmed off the head of the pass that re-generated
+# it, so the blended moment plays once.
+trimmed = [inputs for _, inputs in chained["MiniMaxH3Reel"] if "head" in inputs]
+check("one pass has its head trimmed", len(trimmed), 1)
+check("...by exactly what it inherited", trimmed[0]["head"], FEATHER[2])
+
+# The sound crosses on the same instants the picture does: a blended seam sets
+# the tail outright rather than taking the piece's setting, which on this family
+# is the blend at *its* rate and not H3's.
+audio = {node_id: inputs for node_id, inputs in chained["MiniMaxH3PassAudio"]}
+check("the sound tail is the blend's own span",
+      round(list(audio.values())[0]["seconds"], 4),
+      round(FEATHER[2] / canvas.LTX25.fps, 4))
+
+# And the arithmetic underneath: each pass still lands on 8n+1, and the strip
+# delivers what it samples less the blend it re-generates.
+chained_payloads = [json.loads(inputs["segment_data"])
+                    for _, inputs in chained["MiniMaxLTX25Segment"]]
+counts = [compiler.compile_segment(p, family="ltx25").frames for p in chained_payloads]
+check("every pass is on the grid", sorted(set(n % 8 for n in counts)), [1])
+check("...and the strip is the three passes less the blend",
+      sum(counts) - FEATHER[2], 3 * 121 - FEATHER[2])
+
+# A width off this family's grid is refused rather than silently cropped to 1.
+expect_error("a seam width H3's VAE encodes and LTX's does not is refused",
+             lambda: build(piece(segments=[
+                 {"prompt": "wide", "duration_s": 5, "assets": [], "loras": []},
+                 {"prompt": "closer", "duration_s": 5, "assets": [], "loras": [],
+                  "continue": True, "feather": 22},
+             ])),
+             "a seam can inherit 1, 9, 17, 25 frames")
+
 # ---- what is refused ---------------------------------------------------------
 
 expect_error("a two-stage piece with no upscaler says which pill to change",
@@ -270,4 +348,4 @@ listed = models_mod.available()
 check("every slot gets a file list, even an empty one",
       sorted(listed["files"]), sorted(served))
 
-passed("LTX 2.5 expands to its own sampler, crops its guides once, and upscales natively")
+passed("LTX 2.5 expands to its own sampler, crops its guides once, upscales natively, and seams on its own grid")

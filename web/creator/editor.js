@@ -31,7 +31,7 @@ import * as Turbo from "./turbo.js";
 import { viewUrl, probe, probeAudio } from "./api.js";
 import * as S from "./state.js";
 import { FPS, MIN_SECONDS, MAX_SECONDS, describeRatio, framesForSeconds, isTrainedLength,
-         secondsForFrames } from "./canvas.js";
+         rulesFor, secondsForFrames } from "./canvas.js";
 
 const HANDLE_RE = /@([A-Za-z]+-\d+)/g;
 
@@ -936,7 +936,10 @@ export class CreatorEditor {
    *  number on the pill. What the segment editor cuts a reference to, and what
    *  a reference longer than it loses. */
   cardSeconds() {
-    return secondsForFrames(framesForSeconds(this.state.duration_s));
+    // The piece's family's grid and rate: the count this snaps to is the
+    // weights', and a card carries neither.
+    const rules = rulesFor(S.pieceFamily(this.piece));
+    return secondsForFrames(framesForSeconds(this.state.duration_s, rules), rules);
   }
 
   /** The segment editor, on an already-attached clip. */
@@ -1036,7 +1039,7 @@ export class CreatorEditor {
   frame() {
     const source = S.aspectSourceAsset(this.state);
     const { width, height, seconds } =
-      S.resolved(this.state, source ? this.sizes.get(source.filename) : null);
+      S.resolved(this.state, source ? this.sizes.get(source.filename) : null, this.piece);
     return { width, height, seconds };
   }
 
@@ -1055,7 +1058,7 @@ export class CreatorEditor {
     this.probeKeyframe();
     this.probeLengths();
     const source = S.aspectSourceAsset(state);
-    const geometry = S.resolved(state, source ? this.sizes.get(source.filename) : null);
+    const geometry = S.resolved(state, source ? this.sizes.get(source.filename) : null, this.piece);
 
     this.railHost.replaceChildren(this.renderRail());
     this.assetsHost.replaceChildren(...(state.assets.length ? [this.renderAssets()] : []));
@@ -1715,9 +1718,10 @@ export class CreatorEditor {
   lengthNote(asset) {
     const seconds = S.refSeconds(asset, (filename) => this.lengthOf(filename));
     if (seconds === null) return null;
-    const card = secondsForFrames(framesForSeconds(this.state.duration_s));
+    const rules = rulesFor(S.pieceFamily(this.piece));
+    const card = secondsForFrames(framesForSeconds(this.state.duration_s, rules), rules);
     const length = seconds.toFixed(2);
-    if (Math.abs(seconds - card) <= 1 / FPS) {
+    if (Math.abs(seconds - card) <= 1 / rules.fps) {
       return t("{length} s — the same length as this card.", { length });
     }
     if (seconds < card) {
@@ -2127,14 +2131,14 @@ export class CreatorEditor {
       donors,
       auto: anchorAsset
         ? { ratio: ratioOf(anchorAsset), sub: `@${anchorAsset.handle}` }
-        : { ratio: S.resolved(this.state).ratio, sub: this.state.aspect },
+        : { ratio: S.resolved(this.state, null, this.piece).ratio, sub: this.state.aspect },
     } : null);
   }
 
   openResolution(anchor) {
     openResolutionPopover(anchor, this.piece, () => {
       const asset = S.aspectSourceAsset(this.state);
-      return S.resolved(this.state, asset ? this.sizes.get(asset.filename) : null);
+      return S.resolved(this.state, asset ? this.sizes.get(asset.filename) : null, this.piece);
     }, () => this.commit());
   }
 }

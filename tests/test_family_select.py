@@ -349,7 +349,12 @@ check("the switch is written to the blob", probed["roundTrip"], "probe")
 CONTROLS = ("models.js", "sampling.js", "loras.js", "editor.js", "timeline.js")
 BOUND = ("S.MODEL_FIELDS", "S.MODEL_LABEL", "S.MODEL_HINT", "S.CHECKPOINTS",
          "S.CHECKPOINT_LABEL", "S.CHECKPOINT_WHEN", "S.DEVICE_FIELDS",
-         "S.ROUTES", "S.ALWAYS_REQUIRED")
+         "S.ROUTES", "S.ALWAYS_REQUIRED",
+         # Phase 4's addition. The seam widths are the family's video VAE's —
+         # H3's 5-frame blend reaches LTX as a single frame, silently — so a
+         # control reading the module constant draws a picker whose options the
+         # queue will refuse. `featherGridOf(piece)` is the one to reach for.
+         "S.FEATHER_GRID")
 for name in CONTROLS:
     source = open(layout.js(name), encoding="utf-8").read()
     for bound in BOUND:

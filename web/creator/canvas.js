@@ -83,6 +83,16 @@ export function legalFrameCounts(rules = VIDEO_RULES) {
 export const isTrainedLength = (frames, rules = VIDEO_RULES) =>
   frames >= rules.trainedMinFrames && frames <= rules.trainedMaxFrames;
 
+// Mirrors canvas.feather_grid: the seam widths this family's video VAE can
+// encode standalone, which is the frame grid again for the same reason — the
+// VAE's temporal cycle. The single frame is always offered; three widths above
+// it is what the picker has room for. H3's set is [1, 5, 22, 39] and LTX 2.5's
+// is [1, 9, 17, 25], and borrowing one for the other is a seam that quietly
+// stops being feathered — see canvas.py for the whole of why.
+export function featherGrid(rules = VIDEO_RULES) {
+  return [1, ...legalFrameCounts(rules).filter((n) => n > 1).slice(0, 3)];
+}
+
 // Whole UI seconds -> nearest legal frame count. There is no 6.00 s H3 video;
 // the pill lies pleasantly and this is where the truth is recovered.
 export function framesForSeconds(seconds, rules = VIDEO_RULES) {

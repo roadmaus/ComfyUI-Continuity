@@ -39,6 +39,10 @@ for (const n of [5, 107, 124, 192, 362, 379, 1433]) out.trained[n] = c.isTrained
 out.matches = {};
 for (const s of MATCH_CASES) out.matches[s] = c.matchSeconds(s);
 out.presets = c.ASPECT_PRESETS.map(([label]) => label).sort();
+// Per family, because this is the one derived set whose numbers differ: the
+// seam widths a video VAE can encode standalone are its frame grid again.
+out.feathers = {};
+for (const id of FAMILIES) out.feathers[id] = c.featherGrid(c.rulesFor(id));
 console.log(JSON.stringify(out));
 """
 
@@ -47,8 +51,11 @@ console.log(JSON.stringify(out));
 # whole reason `match_seconds` does not simply round.
 MATCH_CASES = [0.2, 1, 2.5, 5.88, 6, 6.6, 7.29, 9.33, 15, 15.04, 59.71, 60, 180]
 
+FAMILIES = ["h3", "ltx25"]
+
 reflected = layout.run(
-    f"const MATCH_CASES = {json.dumps(MATCH_CASES)};\n" + SCRIPT, MIRROR)
+    f"const MATCH_CASES = {json.dumps(MATCH_CASES)};\n"
+    f"const FAMILIES = {json.dumps(FAMILIES)};\n" + SCRIPT, MIRROR)
 
 from harness import FAILURES, passed
 
@@ -62,6 +69,10 @@ for name, value in reflected["constants"].items():
     check(name, value, getattr(canvas, name))
 
 check("aspect presets", reflected["presets"], sorted(canvas.ASPECT_PRESETS))
+
+for family, grid in reflected["feathers"].items():
+    check(f"{family} feather grid", grid,
+          list(canvas.feather_grid(canvas.RULES[family])))
 
 for seconds, frames in reflected["frames"].items():
     check(f"{seconds}s", frames, canvas.frames_for_seconds(int(seconds)))

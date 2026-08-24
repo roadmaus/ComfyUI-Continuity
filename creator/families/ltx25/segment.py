@@ -196,9 +196,12 @@ class MiniMaxLTX25Segment(io.ComfyNode):
                     "reached it — the render loop should have wired one.")
             # The inherited run, pinned at the head on this segment's own
             # timeline. `feather` frames of it, which the loop has already
-            # trimmed to; `LTXVAddGuide` crops a multi-frame guide to 8n+1
-            # itself, so a 5- or 22-frame blend lands on the grid without this
-            # having to know the packing.
+            # trimmed to — and which is already on the 8n+1 grid, because
+            # `canvas.feather_grid` derives the widths this family offers from
+            # the same packing. That matters: `LTXVAddGuide` crops a guide to
+            # the nearest 8n+1 *silently*, so H3's 5-frame blend would arrive
+            # here, leave as one frame, and still have five trimmed off the
+            # head of the decoded pass.
             guide(prev_image[-compiled.feather:], 0)
         elif compiled.first_frame is not None:
             guide(media.load_image(compiled.first_frame.filename), 0)

@@ -29,16 +29,27 @@ import * as S from "./state.js";
 import * as Turbo from "./turbo.js";
 import {
   FPS, framesForSeconds, secondsForFrames, resolveCanvas, ASPECT_PRESETS, describeRatio, isTrainedLength,
+  rulesFor,
 } from "./canvas.js";
 
-/** A seam blend's width as the user reads it: seconds, one decimal. */
-const blendSeconds = (frames) => (frames / FPS).toFixed(1);
+/** What the seam picker calls each width, by its place in the family's grid
+ *  rather than by the number of frames. The frame counts are the video VAE's
+ *  and differ between families — H3's medium blend is 22 frames and LTX 2.5's
+ *  is 17 — but "short, medium, long" is what the user is choosing between
+ *  either way, and the seconds beside it say what it costs. Keyed on the
+ *  numbers, this read "Blend" for every LTX width. */
+const BLEND_NAMES = ["None", "Short", "Medium", "Long"];
+
+/** A seam blend's width as the user reads it: seconds, one decimal. At the
+ *  piece's own rate — the frames were snapped to it. */
+const blendSeconds = (frames, rules) => (frames / (rules ?? { fps: FPS }).fps).toFixed(1);
 
 /** Whether a seam's sound tail is decided by its blend rather than by the
  *  piece's setting. Mirrors `compile.compile_request`: a blended seam's sound
  *  and frames are the tail of one source and cover the same instants, so the
  *  blend sets the tail outright. */
-const blendSetsTail = (segment) => S.continuesAudio(segment) && S.feather(segment) > 1;
+const blendSetsTail = (segment, piece) =>
+  S.continuesAudio(segment) && S.feather(segment, piece) > 1;
 
 /** filename -> {width, height}, null while a probe is out. Module-level so the
  *  modal bar and the node face — two views of the same strip — measure a file
@@ -1095,7 +1106,7 @@ class Timeline {
       // is a control for a feature not in use — which includes all of one-pass
       // mode, where there are no seams to carry anything.
       ...(passes.slice(1).map((pass) => pass.segments[0]).some(
-        (head) => S.continuesAudio(head) && !blendSetsTail(head)) ? [stepperPill({
+        (head) => S.continuesAudio(head) && !blendSetsTail(head, this.timeline)) ? [stepperPill({
         value: Number(this.timeline.audio_tail_s), min: 0.1, max: S.MAX_AUDIO_TAIL_S,
         step: 0.1, width: "52px", iconName: "audio",
         title: t("How much of the previous segment's sound an unblended seam inherits. "
@@ -1273,8 +1284,9 @@ class Timeline {
     }
 
     const count = pass.segments.length;
-    const frames = framesForSeconds(S.cutTimes(pass.segments).total);
-    const seconds = secondsForFrames(frames);
+    const passRules = rulesFor(S.pieceFamily(this.timeline));
+    const frames = framesForSeconds(S.cutTimes(pass.segments).total, passRules);
+    const seconds = secondsForFrames(frames, passRules);
     const problem = S.passProblem(this.timeline, pass);
     // A pass is one generation, so it is held or shot as one and its take is
     // the pass's. The casing wears the skin the card wears alone — solid
@@ -1371,7 +1383,8 @@ class Timeline {
     const sound = S.continuesAudio(clip);
     const blocked = S.clipSeamBlocked(this.timeline, index, "continue");
     const soundBlocked = S.clipSeamBlocked(this.timeline, index, "continue_audio");
-    const width = S.feather(clip);
+    const width = S.feather(clip, this.timeline);
+    const rules = rulesFor(S.pieceFamily(this.timeline));
 
     return el("div", { class: "mmc-tl-seam mmc-tl-seam-clip" }, [
       el("button", {
@@ -1404,13 +1417,13 @@ class Timeline {
           ? t("The clip's first {s} s are blended across the end of segment {n}, so its motion "
             + "runs into the footage instead of stopping at it. That blended moment is "
             + "re-generated and removed, so segment {n} plays about {s} s shorter.",
-              { s: blendSeconds(width), n: index })
+              { s: blendSeconds(width, rules), n: index })
           : t("Segment {n} arrives on the clip's first frame. Click to blend a moment of the "
             + "clip's opening across the end of it instead — a smoother handoff, in exchange "
             + "for segment {n} playing slightly shorter.", { n: index }),
         onclick: (event) => this.pickClipFeather(event.currentTarget, clip, index),
       }, [el("span", {
-        text: width > 1 ? t("blend {s} s", { s: blendSeconds(width) }) : t("no blend"),
+        text: width > 1 ? t("blend {s} s", { s: blendSeconds(width, rules) }) : t("no blend"),
       })])] : []),
     ]);
   }
@@ -1419,15 +1432,17 @@ class Timeline {
    *  the segment that pays for it. */
   pickClipFeather(anchor, clip, index) {
     const max = S.maxClipFeather(this.timeline, index);
+    const grid = S.featherGridOf(this.timeline);
+    const rules = rulesFor(S.pieceFamily(this.timeline));
     const label = (f) => (f === 1 ? t("None — arrive on the clip's first frame")
       : t("{name} · {s} s of motion",
-          { name: t({ 5: "Short", 22: "Medium", 39: "Long" }[f] ?? "Blend"), s: blendSeconds(f) }));
+          { name: t(BLEND_NAMES[grid.indexOf(f)] ?? "Blend"), s: blendSeconds(f, rules) }));
     openChoicePopover(anchor, {
       title: t("Blend into this clip"),
-      options: S.FEATHER_GRID.filter((f) => f <= max).map(label),
-      value: label(Math.min(S.feather(clip), max)),
+      options: grid.filter((f) => f <= max).map(label),
+      value: label(Math.min(S.feather(clip, this.timeline), max)),
       onPick: (choice) => {
-        const width = S.FEATHER_GRID.find((f) => label(f) === choice) ?? 1;
+        const width = grid.find((f) => label(f) === choice) ?? 1;
         if (width > 1) clip.feather = width;
         else delete clip.feather;
         this.commit();
@@ -1495,31 +1510,35 @@ class Timeline {
       // last-frame seam is what it says until widened. The chip and its picker
       // speak in seconds of motion — the frame counts are the encoder's
       // business, not the user's.
-      ...(on ? [el("button", {
-        class: `mmc-tl-join mmc-tl-join-from${S.feather(segment) > 1 ? " on" : ""}`,
-        title: (S.feather(segment) > 1
+      ...(on ? [(() => {
+        const width = S.feather(segment, this.timeline);
+        const rules = rulesFor(S.pieceFamily(this.timeline));
+        return el("button", {
+        class: `mmc-tl-join mmc-tl-join-from${width > 1 ? " on" : ""}`,
+        title: (width > 1
           ? t("The last {s} s of segment {from}'s motion "
             + "carries across this cut, so the movement flows through instead of restarting "
             + "from a still. That blended moment is redone at the start of segment {n} "
             + "and removed from the final video, so it plays about "
             + "{s} s shorter than its set length.",
-              { s: blendSeconds(S.feather(segment)), from, n: index + 1 })
+              { s: blendSeconds(width, rules), from, n: index + 1 })
           : t("This cut picks up from segment {from}'s last frame. Click to blend a moment "
             + "of its motion across instead — a smoother handoff, in exchange for segment "
             + "{n} playing slightly shorter.", { from, n: index + 1 }))
           // The sound rides the same inherited instants as the frames, so the
           // blend sets the tail rather than the piece's setting. Said here
           // because this chip is where the number that wins is on screen.
-          + (blendSetsTail(segment)
+          + (blendSetsTail(segment, this.timeline)
             ? " " + t("Its sound carries the same {s} s, so the soundtrack and the "
                     + "picture cross the seam on the same instants.",
-                      { s: blendSeconds(S.feather(segment)) })
+                      { s: blendSeconds(width, rules) })
             : ""),
         onclick: (event) => this.pickFeather(event.currentTarget, segment, index),
       }, [el("span", {
-        text: S.feather(segment) > 1
-          ? t("blend {s} s", { s: blendSeconds(S.feather(segment)) }) : t("no blend"),
-      })])] : []),
+        text: width > 1
+          ? t("blend {s} s", { s: blendSeconds(width, rules) }) : t("no blend"),
+      })]);
+      })()] : []),
       // The third answer to what happens here, and the only structural one: no
       // seam at all, because the two sides are one generation. Kept apart from
       // the two switches above rather than folded in as a third state of the
@@ -1586,16 +1605,18 @@ class Timeline {
    *  standalone (state.FEATHER_GRID), named by what the user hears and sees:
    *  how long a moment of motion crosses the cut. */
   pickFeather(anchor, segment, index) {
-    const max = S.maxFeather(segment);
+    const max = S.maxFeather(segment, this.timeline);
+    const grid = S.featherGridOf(this.timeline);
+    const rules = rulesFor(S.pieceFamily(this.timeline));
     const label = (f) => (f === 1 ? t("None — start from the last frame")
       : t("{name} · {s} s of motion",
-          { name: t({ 5: "Short", 22: "Medium", 39: "Long" }[f] ?? "Blend"), s: blendSeconds(f) }));
+          { name: t(BLEND_NAMES[grid.indexOf(f)] ?? "Blend"), s: blendSeconds(f, rules) }));
     openChoicePopover(anchor, {
       title: t("Blend into segment {n}", { n: index + 1 }),
-      options: S.FEATHER_GRID.filter((f) => f <= max).map(label),
-      value: label(Math.min(S.feather(segment), max)),
+      options: grid.filter((f) => f <= max).map(label),
+      value: label(Math.min(S.feather(segment, this.timeline), max)),
       onPick: (choice) => {
-        const width = S.FEATHER_GRID.find((f) => label(f) === choice) ?? 1;
+        const width = grid.find((f) => label(f) === choice) ?? 1;
         if (width > 1) segment.feather = width;
         else delete segment.feather;
         this.commit();
@@ -1922,8 +1943,10 @@ class Timeline {
     // In a pass the shot does not snap to the grid on its own — the pass's
     // total does — so the card shows what the user set and the rail above it
     // shows the truth.
-    const frames = framesForSeconds(segment.duration_s);
-    const seconds = shared ? Number(segment.duration_s) || 0 : secondsForFrames(frames);
+    const cardRules = rulesFor(S.pieceFamily(this.timeline));
+    const frames = framesForSeconds(segment.duration_s, cardRules);
+    const seconds = shared ? Number(segment.duration_s) || 0
+      : secondsForFrames(frames, cardRules);
     // The segment's own references plus the piece references its text cites —
     // both ride into this generation, so the card counts both.
     const refs = S.references(segment).length + S.citedPool(segment).length;
@@ -2051,7 +2074,7 @@ class Timeline {
 
   add() {
     if (S.addSegmentRefusal(this.timeline)) return;
-    this.timeline.segments.push(S.continuingSegment());
+    this.timeline.segments.push(S.continuingSegment(this.timeline));
     this.commit();
   }
 
@@ -2688,7 +2711,7 @@ export class TimelineBody {
    */
   growIntoStrip() {
     if (this.timeline.segments.length >= S.MAX_SEGMENTS) return;
-    this.timeline.segments.push(S.continuingSegment());
+    this.timeline.segments.push(S.continuingSegment(this.timeline));
     this.commit();
     this.open({ edit: this.timeline.segments.length - 1 });
   }
