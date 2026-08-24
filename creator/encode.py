@@ -434,11 +434,20 @@ def _encode_frames(clip, vae, audio_vae, compiled, loaded):
         # — the timeline pins one geometry across every segment — so the resize
         # is a no-op that exists only so a hand-built request cannot skip it.
         tail = _resize(loaded[PREV_FRAME]["image"], compiled.width, compiled.height, "center")
-        # What Qwen sees is the last frame either way: the feather's extra
-        # frames are motion context for the DiT, not something the prompt
-        # names, so the presentation — and with it the prompt cache — does not
-        # change with the seam's width.
-        images.append(tail[-1:])
+        # What Qwen is shown, and it is no longer "the last frame either way".
+        # On the classic seam the boundary frame is the whole seam, so it is
+        # presented and the prompt names it. On a blended one the run goes to
+        # the DiT as pinned guides and Qwen is told nothing unless the user
+        # asked — presenting it said "this exact still is <Picture 1>" while
+        # the DiT was reading a run of motion that merely ends on that still,
+        # which is a pin arguing with the blend. `_encode_references` has never
+        # presented a seam; this is the two roads agreeing at last.
+        #
+        # `compiled.presents_head_frame` rather than the test spelled out here:
+        # `_keyframe_labels` and the prompt's alignment line ask the same
+        # question, and them each answering it separately is how they drifted.
+        if compiled.presents_head_frame:
+            images.append(tail[-1:])
         if compiled.feather > 1:
             keyframes.extend(_context_keyframes(vae, tail[-compiled.feather:], compiled.feather))
         else:
@@ -469,10 +478,11 @@ def _encode_frames(clip, vae, audio_vae, compiled, loaded):
         # timeline's canvas on its way into the file and the frames pinned here
         # have to be the same picture.
         head = _resize(loaded[NEXT_FRAME]["image"], compiled.width, compiled.height, "center")
-        # What Qwen sees is the frame the shot arrives on, blended or not —
-        # the same rule the head seam follows, so widening the blend does not
-        # change the presentation or the prompt cache.
-        images.append(head[:1])
+        # The same rule the head seam follows, for the same reason: the frame
+        # the shot arrives on is presented when it is the whole seam, and on a
+        # blended one only when asked for.
+        if compiled.presents_tail_frame:
+            images.append(head[:1])
         if compiled.ends_feather > 1:
             # End-aligned: the clip's first frames occupy this segment's last
             # ones, so the motion runs through the cut instead of stopping at

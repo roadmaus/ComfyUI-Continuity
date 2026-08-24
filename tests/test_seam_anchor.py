@@ -251,6 +251,91 @@ loaded = {
 values = encoder._encode_frames(clip, vae, AudioVae(), compiled, loaded)[0][0][1]
 check("a start frame beside a sound seam stays on frame 0", anchors(values), [0.0])
 
+# ---- what the text encoder is shown ------------------------------------------
+#
+# The other half of a seam, and the half the two encode roads used to disagree
+# about. `_encode_references` has never presented a seam's boundary frame — it
+# has no handle and the prompt never cites it — while `_encode_frames` presented
+# it unconditionally. So the same seam was conditioned two different ways
+# depending on whether the card happened to carry a reference, and on a blended
+# one the keyframe road told the encoder "this exact still is <Picture 1>" while
+# the DiT was reading a run of motion that merely ends on that still.
+#
+# The rule now: the boundary frame is presented when it *is* the seam (width 1),
+# and on a blended seam only when the user pins it.
+
+
+def presented(compiled, **loaded_extra):
+    """The pictures the tokenizer was shown, for this compiled seam."""
+    clip, vae = Clip(), Vae()
+    loaded = {encoder.PREV_FRAME: {"image": torch.zeros(64, 768, 1344, 3)},
+              **loaded_extra}
+    encoder._encode_frames(clip, vae, AudioVae(), compiled, loaded)
+    kwargs = clip.tokenized
+    # Two roads to the same list: `images=` normally, and `minimax_ref_items=`
+    # when there is an unpinned audio block to send alongside. Both are the
+    # presentation, so both count here.
+    items = kwargs.get("images")
+    if items is None:
+        items = [i["data"] for i in kwargs.get("minimax_ref_items", [])
+                 if i["type"] == "image"]
+    return len(items)
+
+
+classic = compiled_segment(**{"continue": True})
+check("an unblended seam shows its frame — it is the whole seam",
+      presented(classic), 1)
+
+for width in (5, 22, 39):
+    blended = compiled_segment(**{"continue": True, "feather": width})
+    check(f"a {width}-frame blend shows nothing by default",
+          presented(blended), 0)
+    check(f"...and still pins the whole run for the DiT",
+          len(encode(blended).get("minimax_keyframes") or []) > 1, True)
+
+    pinned = compiled_segment(**{"continue": True, "feather": width,
+                                 "feather_pin": True})
+    check(f"a pinned {width}-frame blend shows it after all",
+          presented(pinned), 1)
+    check("...and the run is unchanged by the pin",
+          [pin(k) for k in (encode(pinned).get("minimax_keyframes") or [])],
+          [pin(k) for k in (encode(blended).get("minimax_keyframes") or [])])
+
+# The ordinal that used to be reserved for a picture nobody sent. A blended seam
+# with an end frame attached sends exactly one picture, so that picture is
+# <Picture 1> — it was labelled <Picture 2> while the prompt claimed two.
+END = {"handle": "img-9", "kind": "image", "role": "last_frame", "filename": "b.png"}
+
+with_end = compiler.compile_segment(compiler.timeline_payloads({
+    "version": 2, "render": "chained", "prompt": "", "aspect": "16:9",
+    "short_edge": 768,
+    "segments": [{"duration_s": 6, "prompt": "one"},
+                 {"duration_s": 6, "prompt": "two", "continue": True,
+                  "feather": 22, "assets": [END]}],
+})[1])
+check("an unpinned blend leaves the end frame as the only picture",
+      with_end.labels, {"img-9": "<Picture 1>"})
+check("...and the prompt names one picture, not two",
+      "Picture 2" in with_end.prompt, False)
+
+pinned_end = compiler.compile_segment(compiler.timeline_payloads({
+    "version": 2, "render": "chained", "prompt": "", "aspect": "16:9",
+    "short_edge": 768,
+    "segments": [{"duration_s": 6, "prompt": "one"},
+                 {"duration_s": 6, "prompt": "two", "continue": True,
+                  "feather": 22, "feather_pin": True, "assets": [END]}],
+})[1])
+check("pinning the seam puts the end frame back at <Picture 2>",
+      pinned_end.labels, {"img-9": "<Picture 2>"})
+check("...and the prompt names both", "Picture 2" in pinned_end.prompt, True)
+
+# The switch says nothing without a blend behind it: at width 1 the boundary
+# frame is presented regardless, and the two ways of saying so must not differ.
+check("the pin is inert on an unblended seam",
+      compiler.compile_segment({"request": {"prompt": "x", "duration_s": 6},
+                                "continue": True, "feather_pin": True}).feather_pin,
+      False)
+
 # ---- a segment's own frames beside references --------------------------------
 #
 # The combination the two checkpoints used to refuse: references in the layout

@@ -1768,6 +1768,7 @@ function syncCanvas(timeline) {
   // a piece switched away from LTX arrive in the same shape — and so the flag
   // is never written where `compile_request` would read it as a no anyway.
   const predicts = canDo(timeline, "duration");
+  const pins = canDo(timeline, "seam_pin");
   timeline.segments.forEach((segment, index) => {
     if (!predicts) segment.auto_duration = false;
     const from = segment.continue_from;
@@ -1793,6 +1794,10 @@ function syncCanvas(timeline) {
         delete segment.feather;
       }
     }
+    // The pin goes with the blend it modifies — on an unblended seam the
+    // boundary frame is the seam and is named whatever this says, and on a
+    // family with one conditioning channel there is nothing to pin twice.
+    if (segment.feather_pin && (!segment.feather || !pins)) delete segment.feather_pin;
     // Nothing runs into a clip that has no generation in front of it — two
     // clips end to end have no sampler between them to condition.
     if (isClip(segment) && (!index || isClip(timeline.segments[index - 1]))) {
@@ -1958,6 +1963,7 @@ export function parseTimeline(raw) {
           segment.continue_audio = raw.continue_audio === true;
           const width = Number(raw.feather);
           if (featherGridOf(timeline).includes(width) && width > 1) segment.feather = width;
+          if (raw.feather_pin === true) segment.feather_pin = true;
           return segment;
         }
         const segment = parseState(JSON.stringify(raw ?? {}));
@@ -1983,8 +1989,10 @@ export function parseTimeline(raw) {
         // The seam's width. Off the grid means the classic single frame,
         // which is also what absence means.
         delete segment.feather;
+        delete segment.feather_pin;
         const width = Number(raw?.feather);
         if (featherGridOf(timeline).includes(width) && width > 1) segment.feather = width;
+        if (raw?.feather_pin === true) segment.feather_pin = true;
         // Whether this card is in the next render, and the render it already
         // has. Both survive a reload for the same reason the prompt does: a
         // piece shot a pass at a time is shot over days, and a strip that
@@ -2107,6 +2115,8 @@ export function serializeTimeline(timeline) {
           ...(index > 0 && segment.continue_audio ? { continue_audio: true } : {}),
           ...(index > 0 && segment.continue && feather(segment, timeline) > 1
             ? { feather: feather(segment, timeline) } : {}),
+          ...(index > 0 && segment.continue && featherPin(segment, timeline)
+            ? { feather_pin: true } : {}),
         };
       }
       const out = serializeCommon(segment);
@@ -2131,7 +2141,13 @@ export function serializeTimeline(timeline) {
       }
       // The seam's width — only on a live picture seam, and only past the
       // classic single frame, which absence already says.
-      if (out.continue && feather(segment, timeline) > 1) out.feather = feather(segment, timeline);
+      if (out.continue && feather(segment, timeline) > 1) {
+        out.feather = feather(segment, timeline);
+        // Only alongside the blend, and only the deliberate state — absent is
+        // "the blend speaks for itself", which is the default and what every
+        // blob written before the switch existed says.
+        if (featherPin(segment, timeline)) out.feather_pin = true;
+      }
       // Out of the next render, and the render it already has. Only the
       // deliberate states are written: a card nobody has held and nothing has
       // rendered writes exactly what it always did.
@@ -3610,6 +3626,17 @@ export const FEATHER_GRID = featherGrid();
  *  H3 takes 5 frames where LTX 2.5 would crop the same run to 1 and go on
  *  claiming a feathered seam. See `canvas.feather_grid`. */
 export const featherGridOf = (piece) => featherGrid(rulesFor(pieceFamily(piece)));
+
+/** Whether this seam also names its boundary frame to the text encoder, on
+ *  top of the run it pins for the DiT. Only meaningful on a blended seam and
+ *  on a family that presents pictures at all — an unblended seam's boundary
+ *  frame *is* the seam and is always named, and a family with one conditioning
+ *  channel has nothing to say twice. Mirrors `Compiled.feather_pin`. */
+export function featherPin(segment, piece) {
+  return segment.feather_pin === true
+    && feather(segment, piece) > 1
+    && canDo(piece, "seam_pin");
+}
 
 /** The seam's width in frames — a valid grid value, or the classic 1. */
 export function feather(segment, piece) {

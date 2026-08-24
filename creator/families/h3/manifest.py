@@ -164,6 +164,18 @@ def manifest():
             "refine": True, "face": True, "audio": True,
             # Chained seams with feathering — the strip's whole grammar.
             "seams": True,
+            # Whether a blended seam can *also* name its boundary frame to the
+            # text encoder, on top of the run it pins for the DiT. Off by
+            # default and offered as a switch; see `Compiled.feather_pin`.
+            #
+            # A capability rather than a control every family draws, because it
+            # is a fact about how this family conditions: H3 presents pictures
+            # to Qwen alongside the prompt, so there is a second channel to say
+            # it in. LTX 2.5 sends Gemma text and hands the run to
+            # `LTXVAddGuide` — one channel, and the boundary frame is already
+            # the run's last element — so there is nothing there to pin twice
+            # and no switch worth drawing.
+            "seam_pin": True,
             # The turbo switch: a distillation LoRA over the same checkpoints,
             # not a checkpoint swap like Krea's. The declarations here are the
             # H3 turbo community's numbers, said once. `row` is what engaging

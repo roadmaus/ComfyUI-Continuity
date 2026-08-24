@@ -67,6 +67,19 @@ model was taught to read. Nothing about an H3 pass changes. Past four cuts in
 one generation the pass wears the same off-distribution mark a too-long
 duration does, because four is what Lightricks' guidance prefers.
 
+**A blended seam no longer pins the frame it lands on.** Blending a seam hands
+the previous shot's last run of motion to the model as context; on top of that,
+the text encoder was also being shown that run's final frame and told to arrive
+at it exactly — a still pinned against the motion meant to carry through. Worse,
+it only happened on shots without references, so the same seam behaved
+differently depending on what else was attached to the card. A blend now speaks
+for itself. If you want the old behaviour — the blend *and* a hard statement
+about where it lands — the seam's blend picker has a switch for it, and an
+unblended seam is unchanged, since there the frame is the whole seam.
+
+One knock-on worth knowing about: a blended seam with an end frame attached now
+correctly describes one picture to the model instead of claiming two.
+
 Requires a ComfyUI new enough to ship the LTX-AV nodes; without them the node
 says so by name instead of failing three hooks deep.
 

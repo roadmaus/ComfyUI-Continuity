@@ -285,6 +285,26 @@ class Compiled:
     # still; those frames are re-generated and trimmed off after decode. Only
     # the counts the video VAE's temporal grid can encode standalone.
     feather: int = 1
+    # Whether the seam's *boundary* frame — the source segment's last one — is
+    # also presented to the text encoder as a picture, on top of the inherited
+    # run going to the DiT as pinned guides.
+    #
+    # Off by default on a blended seam, and that is a correction. It used to be
+    # unconditional on the keyframe road: the encoder was told "this exact still
+    # is <Picture 1>" while the DiT was handed a run of motion ending on that
+    # still — a pin arguing with the blend. The reference road never did it
+    # (`_encode_references` leaves a seam unpresented and says so), so the same
+    # seam conditioned the model two different ways depending on whether the
+    # card happened to carry a reference. It does not any more.
+    #
+    # Still worth being able to ask for: naming the arrival frame is the whole
+    # point of an unblended seam, and wanting the blend *and* the hard statement
+    # about where it lands is a legitimate thing to want.
+    #
+    # Meaningless on an unblended seam, where the boundary frame is the entire
+    # seam and is always presented; normalised to False there so the two ways of
+    # saying the same thing cannot disagree.
+    feather_pin: bool = False
     # Timeline only: the previous segment's audio tail rides in as a reference so
     # the sound carries across the seam. Independent of `continues` — a hard cut
     # whose music keeps playing is an ordinary thing to want.
@@ -299,6 +319,8 @@ class Compiled:
     # head feather's are trimmed off the front.
     ends_on: bool = False
     ends_feather: int = 1
+    # The same switch at the other end. See `feather_pin`.
+    ends_feather_pin: bool = False
     ends_on_audio: bool = False
     ends_tail_s: float = 0.0
     # The two-pass upscale, when the resolution slider is past the native edge
@@ -324,6 +346,25 @@ class Compiled:
         """
         return bool(self.continues or self.ends_on or self.first_frame
                     or self.last_frame or self.ref_images or self.ref_videos)
+
+    @property
+    def presents_head_frame(self):
+        """Whether the head seam's boundary frame is sent to the text encoder.
+
+        Always on the classic single-frame seam — the frame *is* the seam, and
+        there is nothing else to present. On a blended one only when asked for.
+
+        Read in three places: by `encode.py` for what to present, by
+        `_keyframe_labels` for whether the ordinal is consumed, and by the
+        prompt mode for whether the alignment line has a picture to name. Those
+        three each decided it separately, which is how they came to disagree.
+        """
+        return self.continues and (self.feather == 1 or self.feather_pin)
+
+    @property
+    def presents_tail_frame(self):
+        """The same, for the seam running into a supplied clip."""
+        return self.ends_on and (self.ends_feather == 1 or self.ends_feather_pin)
 
     def encodes_audio(self):
         """Whether building this segment's conditioning calls `audio_vae.encode`.
@@ -668,17 +709,27 @@ def _trailing_frame_labels(plan, first_frame, last_frame):
     return labels
 
 
-def _keyframe_labels(first_frame, last_frame, continues=False):
+def _keyframe_labels(first_frame, last_frame, seam_presented=False):
     """handle -> `<Picture N>` for the keyframe modes.
 
     A continuing segment's start frame is a tensor from the previous segment, so
-    it has no handle to map — but it is still presented to the tokenizer first
-    and still consumes `<Picture 1>`. Counting it without keying it is what keeps
+    it has no handle to map — but where it is presented it goes to the tokenizer
+    first and consumes `<Picture 1>`. Counting it without keying it is what keeps
     an end frame in the same segment correctly labelled `<Picture 2>`.
+
+    `seam_presented` rather than `continues`, because a blended seam presents
+    nothing unless it is pinned (`Compiled.presents_head_frame`) — and counting
+    an ordinal for a picture nobody sent would label the end frame
+    `<Picture 2>` in a prompt holding one picture.
+
+    The seam's own presentation and nothing else: an attached first frame is
+    counted *and keyed* by the branch below, and folding the two into one
+    "something opens this segment" flag swallows that branch — which is exactly
+    what `test_compile.py` caught when this first went in.
     """
     labels = {}
     ordinal = 0
-    if continues:
+    if seam_presented:
         ordinal += 1
     elif first_frame is not None:
         ordinal += 1
@@ -976,9 +1027,9 @@ def _check_feather(width, live, what, rules=canvas.H3):
 
 
 def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=None,
-                    continues_audio=False, shots=1, feather=1,
+                    continues_audio=False, shots=1, feather=1, feather_pin=False,
                     ends_on=False, ends_on_audio=False, ends_feather=1,
-                    family=registry.DEFAULT_VIDEO):
+                    ends_feather_pin=False, family=registry.DEFAULT_VIDEO):
     """`creator_data` dict -> `Compiled`.
 
     `family` is which architecture this generation is for, and it decides two
@@ -1076,6 +1127,13 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
 
     feather = _check_feather(feather, continues, "continue from an earlier one", rules)
     ends_feather = _check_feather(ends_feather, ends_on, "run into a clip", rules)
+    # Only a blended seam has anything to pin *in addition*: on the classic
+    # single-frame one the boundary frame is the seam, and `presents_head_frame`
+    # answers True whatever this says. Normalised rather than refused, because a
+    # card whose blend was narrowed back to 1 is carrying a leftover, not making
+    # a mistake — the same reading the seam flags on segment 1 get.
+    feather_pin = bool(feather_pin) and feather > 1
+    ends_feather_pin = bool(ends_feather_pin) and ends_feather > 1
     audio_tail_s = audio_tail_seconds(data.get("audio_tail_s")) if continues_audio else 0.0
     # A feathered seam pins the tail end-aligned with the inherited frames on
     # this segment's own timeline, and the two are the tail of the same source:
@@ -1095,6 +1153,21 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     if ends_feather > 1 and ends_on_audio:
         ends_tail_s = ends_feather / rules.fps
 
+    # Which of this segment's boundary frames actually reach the tokenizer as
+    # pictures. The mode says how the request is *encoded* and which weights it
+    # runs on; this says what the prompt may name, and on a blended seam whose
+    # frame is not pinned the two differ. Worked out once here and read by the
+    # label map, the alignment line and the encoder alike — three readers that
+    # each decided it for themselves until they disagreed.
+    # The seams' own, kept apart from the attached frames': a seam's picture is
+    # counted without being keyed (it has no handle), where an attached frame is
+    # both — so `_keyframe_labels` needs the seam alone, and the prompt's
+    # alignment line needs either.
+    head_seam_shown = continues and (feather == 1 or feather_pin)
+    tail_seam_shown = ends_on and (ends_feather == 1 or ends_feather_pin)
+    opens_presented = first_frame is not None or head_seam_shown
+    closes_presented = last_frame is not None or tail_seam_shown
+
     checkpoint, pinned = _resolve_checkpoint(mode, data.get("checkpoint"))
     if mode == "REF2VA":
         plan = plan_references(ref_images, ref_videos, ref_audios)
@@ -1102,7 +1175,7 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
         labels.update(_trailing_frame_labels(plan, first_frame, last_frame))
     else:
         plan = []
-        labels = _keyframe_labels(first_frame, last_frame, continues)
+        labels = _keyframe_labels(first_frame, last_frame, head_seam_shown)
 
     try:
         subjects.check(cast, assets)
@@ -1240,9 +1313,19 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
             if str(text or "").strip():
                 merged[name] = text
         sections = merged
+    # The mode as far as the *prompt* is concerned. `contextir.instruction`
+    # quotes the guide's alignment line by mode — I2VA names <Picture 1> at
+    # 0.00 s, FL2VA names two — and a blended seam whose frame is not pinned
+    # sends no picture for that slot to name. So the line is chosen by what was
+    # presented, while `mode` goes on deciding the checkpoint and the encode
+    # path, which are still right: the run is pinned as latent guides either
+    # way, and it is only the tokenizer's picture list that changed.
+    prompt_mode = ("FL2VA" if opens_presented and closes_presented else
+                   "I2VA" if opens_presented else
+                   "L2VA" if closes_presented else "T2VA")
     prompt = plain_prompt(body, soundscape, music) if pipeline == "plain" else \
         contextir.compose(
-        mode, body, soundscape, music, canvas.seconds_for_frames(frames, rules),
+        prompt_mode, body, soundscape, music, canvas.seconds_for_frames(frames, rules),
         # The inherited tail is presented to the tokenizer as <Audio 1>, so the
         # prompt has to say what it is or the label points at nothing. Phrased
         # the way the reference guide defines its own labels. Only on the
@@ -1359,6 +1442,8 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
         subject_labels=subject_labels,
         plan=plan,
         triggers=triggers,
+        feather_pin=feather_pin,
+        ends_feather_pin=ends_feather_pin,
         auto_duration=auto_duration,
         continues=continues,
         continues_audio=continues_audio,
@@ -2254,6 +2339,10 @@ def timeline_payloads(data, image_size_lookup=None):
                                    f"number of frames") from exc
             if feather > 1:
                 payload["feather"] = feather
+                # Only alongside a blend, because that is the only place it
+                # says anything — see `Compiled.feather_pin`.
+                if head.get("feather_pin"):
+                    payload["feather_pin"] = True
 
     # One pass over the whole strip has nothing to be concatenated with, so
     # there is nothing to hold to one geometry and a start frame sets the aspect
@@ -2310,6 +2399,8 @@ def _stamp_clip_seams(segments, runs, payloads):
             width = int(head.get("feather") or 1)
             if width > 1:
                 before["ends_feather"] = width
+                if head.get("feather_pin"):
+                    before["ends_feather_pin"] = True
         if head.get("continue_audio"):
             before["ends_on_audio"] = True
 
@@ -2502,6 +2593,7 @@ def _chained_request(data, segment, pool, global_prompt, cast=()):
     request.pop("continue_audio", None)
     request.pop("continue_from", None)
     request.pop("feather", None)
+    request.pop("feather_pin", None)
     request.pop("merge", None)
     # ...and the bookkeeping the strip keeps about a card, which describes what
     # has been *done* with the generation rather than what it is. This request
@@ -2913,11 +3005,13 @@ def compile_segment(payload, image_size_lookup=None, family=registry.DEFAULT_VID
         continues_audio=bool(payload.get("continue_audio")),
         shots=int(payload.get("shots", 1)),
         feather=int(payload.get("feather", 1)),
+        feather_pin=bool(payload.get("feather_pin")),
         # The seam on this pass's *far* side, stamped on by `timeline_payloads`
         # when the pass after it is supplied footage.
         ends_on=bool(payload.get("ends_on")),
         ends_on_audio=bool(payload.get("ends_on_audio")),
         ends_feather=int(payload.get("ends_feather", 1)),
+        ends_feather_pin=bool(payload.get("ends_feather_pin")),
         canvas_spec=CanvasSpec(**spec) if spec else None)
 
 

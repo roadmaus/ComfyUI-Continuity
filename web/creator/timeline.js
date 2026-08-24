@@ -51,6 +51,44 @@ const blendSeconds = (frames, rules) => (frames / (rules ?? { fps: FPS }).fps).t
 const blendSetsTail = (segment, piece) =>
   S.continuesAudio(segment) && S.feather(segment, piece) > 1;
 
+/** The seam's boundary-frame switch, drawn under the width list.
+ *
+ * A blended seam hands the run in front of it to the DiT as pinned frames; this
+ * says whether the *last* of them is also named to the text encoder as a
+ * picture. Off by default, because naming it says "arrive at exactly this
+ * still" while the run says "carry this motion through" — but naming it is the
+ * whole point of an unblended seam, so wanting both is legitimate.
+ *
+ * Only where the family has a second conditioning channel to say it in
+ * (`seam_pin`), and only alongside a blend: at width 1 the boundary frame is
+ * the seam and is always named.
+ */
+function seamPinRow(piece, segment, width, commit) {
+  if (width <= 1 || !S.canDo(piece, "seam_pin")) return null;
+  return (close) => {
+    const on = S.featherPin(segment, piece);
+    return el("div", { class: "mmc-twopass" }, [
+      el("button", {
+        class: "mmc-opt",
+        "aria-checked": on,
+        onclick: () => {
+          if (on) delete segment.feather_pin; else segment.feather_pin = true;
+          close();
+          commit();
+        },
+      }, [
+        el("span", { class: "mmc-opt-label mmc-opt-col" }, [
+          el("span", { text: t("Also pin the frame it lands on") }),
+          el("span", { class: "mmc-opt-sub",
+                       text: t("Names the boundary frame to the text encoder as well. "
+                             + "Sharper arrival, less carried motion.") }),
+        ]),
+        el("span", { class: "mmc-radio" }),
+      ]),
+    ]);
+  };
+}
+
 /** filename -> {width, height}, null while a probe is out. Module-level so the
  *  modal bar and the node face — two views of the same strip — measure a file
  *  once between them. Clip cards never land here: they store their own size. */
@@ -1459,10 +1497,12 @@ class Timeline {
       title: t("Blend into this clip"),
       options: grid.filter((f) => f <= max).map(label),
       value: label(Math.min(S.feather(clip, this.timeline), max)),
+      extra: seamPinRow(this.timeline, clip, S.feather(clip, this.timeline),
+                        () => this.commit()),
       onPick: (choice) => {
         const width = grid.find((f) => label(f) === choice) ?? 1;
         if (width > 1) clip.feather = width;
-        else delete clip.feather;
+        else { delete clip.feather; delete clip.feather_pin; }
         this.commit();
       },
     });
@@ -1550,6 +1590,11 @@ class Timeline {
             ? " " + t("Its sound carries the same {s} s, so the soundtrack and the "
                     + "picture cross the seam on the same instants.",
                       { s: blendSeconds(width, rules) })
+            : "")
+          // Only when it is on: off is the default and the sentence above
+          // already describes it.
+          + (S.featherPin(segment, this.timeline)
+            ? " " + t("The frame it lands on is named to the text encoder as well.")
             : ""),
         onclick: (event) => this.pickFeather(event.currentTarget, segment, index),
       }, [el("span", {
@@ -1633,10 +1678,12 @@ class Timeline {
       title: t("Blend into segment {n}", { n: index + 1 }),
       options: grid.filter((f) => f <= max).map(label),
       value: label(Math.min(S.feather(segment, this.timeline), max)),
+      extra: seamPinRow(this.timeline, segment, S.feather(segment, this.timeline),
+                        () => this.commit()),
       onPick: (choice) => {
         const width = grid.find((f) => label(f) === choice) ?? 1;
         if (width > 1) segment.feather = width;
-        else delete segment.feather;
+        else { delete segment.feather; delete segment.feather_pin; }
         this.commit();
       },
     });

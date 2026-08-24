@@ -909,9 +909,37 @@ check("the seam line rides a classic sound seam's prompt",
       "<Audio 1> is the end of the preceding shot's soundtrack"
       in timeline([segment(), segment(**{"continue": True, "continue_audio": True})])[1].prompt,
       True)
+# A blended sound seam pins its tail on this segment's own timeline instead of
+# sending it as a reference, so it takes no <Audio N> and the prompt carries no
+# line naming one. Asserted about the line itself: this used to compare the
+# whole prompt against an unblended seam's, which stopped being one difference
+# the moment a blended seam also stopped presenting its boundary picture.
 check("a feathered seam's tail rides unlabelled — no seam line",
-      timeline([segment(), segment(**{"continue": True, "continue_audio": True, "feather": 22})])[1].prompt,
-      timeline([segment(), segment(**{"continue": True})])[1].prompt)
+      "<Audio 1> is the end of the preceding shot's soundtrack"
+      in timeline([segment(), segment(**{"continue": True, "continue_audio": True,
+                                         "feather": 22})])[1].prompt,
+      False)
+
+# And the picture half of the same rule. An unblended seam's boundary frame *is*
+# the seam, so it is presented and the alignment line names it; a blended one
+# hands the run to the DiT and tells the text encoder nothing, unless asked.
+# Presenting it said "arrive at exactly this still" over a run of motion that
+# merely ends on it — and `_encode_references` never did, so the two encode
+# roads conditioned the same seam differently.
+blended = timeline([segment(), segment(**{"continue": True, "feather": 22})])[1]
+classic = timeline([segment(), segment(**{"continue": True})])[1]
+pinned = timeline([segment(), segment(**{"continue": True, "feather": 22,
+                                         "feather_pin": True})])[1]
+check("an unblended seam names its frame", classic.presents_head_frame, True)
+check("...and the prompt says where it aligns",
+      "<Picture 1>" in classic.prompt, True)
+check("a blended seam names nothing by default", blended.presents_head_frame, False)
+check("...so the prompt claims no picture", "Picture 1" in blended.prompt, False)
+check("...and pinning it puts both back",
+      (pinned.presents_head_frame, "<Picture 1>" in pinned.prompt), (True, True))
+check("the pin is inert without a blend to modify",
+      timeline([segment(), segment(**{"continue": True, "feather_pin": True})])[1].feather_pin,
+      False)
 expect_error("a feather off the VAE grid",
              lambda: timeline([segment(), segment(**{"continue": True, "feather": 10})]),
              "not 10")

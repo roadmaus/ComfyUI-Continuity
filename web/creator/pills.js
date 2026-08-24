@@ -80,7 +80,7 @@ export function stepperPill({ value, onChange, min = -Infinity, max = Infinity, 
  * from the backend — samplers, schedulers — where there is nothing to draw but
  * the name.
  */
-export function openChoicePopover(anchor, { title, options, value, onPick }) {
+export function openChoicePopover(anchor, { title, options, value, onPick, extra }) {
   const pop = el("div", { class: "mmc-pop mmc-pop-scroll" },
     title ? [el("div", { class: "mmc-pop-title", text: title })] : []);
   for (const option of options) {
@@ -93,6 +93,11 @@ export function openChoicePopover(anchor, { title, options, value, onPick }) {
       el("span", { class: "mmc-radio" }),
     ]));
   }
+  // A section under a rule for a switch that modifies the choice above rather
+  // than being one of them — the seam's boundary pin is the case it exists
+  // for. `extra` is built by the caller and closes the popover itself, which
+  // is what every option row does.
+  if (extra) pop.appendChild(extra(() => close()));
   document.body.appendChild(pop);
   placeNear(pop, anchor);
   const close = dismissable(pop);

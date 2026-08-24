@@ -471,6 +471,58 @@ check("switching to a family that cannot predict drops it", auto["dropped"], Fal
 check("the strip calls its totals estimates only where one is live",
       auto["estimate"], [False, True])
 
+# ---- the seam's boundary pin ----------------------------------------------------
+#
+# The third capability gate, and the one whose absence is the interesting case:
+# H3 presents pictures to its text encoder alongside the prompt, so a blended
+# seam can be asked to name the frame it lands on there as well. LTX 2.5 sends
+# Gemma text and hands the run to `LTXVAddGuide` — one channel, and the boundary
+# frame is already the run's last element — so there is nothing to pin twice and
+# no switch to draw.
+
+PIN_JS = """
+const S = await import(process.argv[1]);
+const strip = (family, extra) => {
+  const t = S.emptyTimeline();
+  t.family = family;
+  const grid = S.featherGridOf(t);
+  t.segments = [S.emptySegment(), S.emptySegment()];
+  Object.assign(t.segments[1], { continue: true, feather: grid[2], ...extra });
+  S.syncTimeline(t);
+  return t;
+};
+const written = (family, extra) =>
+  JSON.parse(S.serializeTimeline(strip(family, extra))).segments[1];
+console.log(JSON.stringify({
+  canDo: [S.canDo(strip("h3", {}), "seam_pin"),
+          S.canDo(strip("ltx25", {}), "seam_pin")],
+  // Set on both; only the family with a second channel keeps it.
+  kept: [S.featherPin(strip("h3", { feather_pin: true }).segments[1],
+                      strip("h3", { feather_pin: true })),
+         S.featherPin(strip("ltx25", { feather_pin: true }).segments[1],
+                      strip("ltx25", { feather_pin: true }))],
+  written: [written("h3", { feather_pin: true }).feather_pin ?? false,
+            written("ltx25", { feather_pin: true }).feather_pin ?? false],
+  // ...and the pin goes with the blend it modifies.
+  unblended: (() => {
+    const t = strip("h3", { feather_pin: true });
+    delete t.segments[1].feather;
+    S.syncTimeline(t);
+    return t.segments[1].feather_pin ?? false;
+  })(),
+  // Absent is the default on a plain blended seam, which is the whole fix.
+  byDefault: written("h3", {}).feather_pin ?? false,
+}));
+"""
+
+pins = layout.run(PIN_JS, STATE)
+check("only a family that presents pictures offers the pin", pins["canDo"], [True, False])
+check("...and only there does the flag mean anything", pins["kept"], [True, False])
+check("...or get written to the blob", pins["written"], [True, False])
+check("the pin is dropped with the blend it modifies", pins["unblended"], False)
+check("a blended seam does not pin its boundary frame by default",
+      pins["byDefault"], False)
+
 # ---- multishot advice ----------------------------------------------------------
 #
 # Both families cut inside one generation; what differs is the number each one's

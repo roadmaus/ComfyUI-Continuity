@@ -533,6 +533,47 @@ written and does not author it — and teaching the refiner LTX's multi-shot
 form is a natural piece of the reference-grammar work below, where its prompt
 templates are being split from H3's anyway.
 
+## Phase 4: what a blended seam tells the text encoder
+
+Answering "does LTX still feather like H3" turned up a third bug of the same
+family, and this one predates the branch.
+
+**The two H3 encode roads conditioned the same seam differently.**
+`_encode_frames` presented the seam's boundary frame to Qwen unconditionally —
+`images.append(tail[-1:])`, defended by a comment about keeping the prompt cache
+stable across feather widths. `_encode_references` never did, and said so:
+"like it unpresented: the clip's opening frames have no handle and the prompt
+never cites them." So whether a seam told the text encoder "this exact still is
+`<Picture 1>`" depended on whether the card happened to carry a reference —
+`I2VA` versus `REF2VA`, decided by something with nothing to do with the seam.
+
+And on a blended seam the keyframe road's version is wrong on its own terms: the
+DiT is handed a run of motion that merely *ends* on that still, and the encoder
+is simultaneously told to arrive at it exactly. A pin arguing with its own blend.
+
+**The rule now**: the boundary frame is presented when it *is* the seam — width
+1, where there is nothing else to present — and on a blended seam only when the
+user asks. `Compiled.feather_pin` / `ends_feather_pin` is the switch, off by
+default, offered under the width picker on a family that declares `seam_pin`.
+H3 does; LTX 2.5 does not, and cannot meaningfully: Gemma is sent text, the run
+goes to `LTXVAddGuide` as one guide, and the boundary frame is already that
+run's last element. One channel, nothing to say twice.
+
+**Two readers had to be corrected with it, or the prompt would have lied.**
+`_keyframe_labels` reserved `<Picture 1>` for any continuing segment; unreserved
+now unless the seam is actually presented, so a blended seam with an end frame
+attached sends one picture and labels it `<Picture 1>` — it used to say
+`<Picture 2>`. And `contextir.instruction` quotes the alignment line by mode, so
+a `prompt_mode` is derived from what was *presented* while `mode` goes on
+deciding the checkpoint and the encode path. All three used to answer "is there
+an opening picture" separately, which is how they drifted; `presents_head_frame`
+/ `presents_tail_frame` on `Compiled` is now the single answer.
+
+The trap worth recording: folding "an attached first frame" and "a presented
+seam" into one flag swallows the branch that *keys* the first frame's label —
+a seam's picture is counted without being keyed, an attached frame is both.
+`test_compile.py` caught it within one run.
+
 ## Open questions (answer during phase 4)
 
 - Whether `refine` has any meaning as *prompt expansion* for a plain-prose
