@@ -382,6 +382,13 @@ def every_slot():
             # families pick from folders rather than from a slot table.
             continue
         slots.update({name: slot.folder for name, slot in module.SLOTS.items()})
+
+    # And the upscale backends', which belong to no family at all: ReDetail
+    # renders an H3 pass through LTX 2.5's weights, so its files are pickable on
+    # a piece whose family has never heard of them. Four of its five ids are LTX
+    # 2.5's own and merge onto the same folders; `ic_lora` is its own.
+    from . import redetail
+    slots.update({name: slot.folder for name, slot in redetail.SLOTS.items()})
     return slots
 
 

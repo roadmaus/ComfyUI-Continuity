@@ -55,7 +55,8 @@ import json
 from comfy_api.latest import ComfyExtension, io
 
 from . import (accel, canvas, compile as compiler, facepass, hires, media,
-               models, outputs, prestage, sampling, settings, timeline)
+               models, outputs, prestage, redetail, redetailpass, sampling,
+               settings, timeline)
 from .core import emit as loop
 from .families import registry
 from .families.ltx25 import segment as ltx25_segment
@@ -272,7 +273,12 @@ def _render(blob, seed, steps, cfg, sampler_name, scheduler,
         # change which LoRA is the distillation. Reading the setting here rather
         # than inside `emit` is the same rule the output prefix follows — the
         # file on disk is consulted once per queue, above the graph.
-        run=family.run_context(data))
+        run=family.run_context(data),
+        # The upscale backend's own files, read off the blob like the family's
+        # and for the same reason: this node is where a blob becomes objects.
+        # They belong to no family — ReDetail re-renders an H3 pass through LTX
+        # 2.5's weights — so they are their own block and their own reader.
+        upscaler=redetail.Weights.from_blob(data))
     return loop.expanded(graph)
 
 
@@ -346,7 +352,8 @@ class MiniMaxCreatorExtension(ComfyExtension):
     async def get_node_list(self):
         return [MiniMaxH3Creator, MiniMaxH3Timeline,
                 *timeline.NODES, *ltx25_segment.NODES,
-                *prestage.NODES, *hires.NODES, *facepass.NODES]
+                *prestage.NODES, *hires.NODES, *facepass.NODES,
+                *redetailpass.NODES]
 
 
 async def comfy_entrypoint() -> MiniMaxCreatorExtension:

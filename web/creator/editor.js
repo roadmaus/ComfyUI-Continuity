@@ -23,12 +23,13 @@ import { openTrim, trimLabel } from "./trim.js";
 import { PromptBox, focusEnd, openEditorSheet } from "./prompt.js";
 import { RefinePanel, refineButton, refine } from "./refine.js";
 import { openAspectPopover, openResolutionPopover, openChoicePopover, facesPill, aspectGlyph,
+         resolutionPillText,
          PILL_GLYPH, pillSet, pillClass } from "./pills.js";
 import { blobIO, samplingBar, segmentSeedPill } from "./sampling.js";
 import { Stage } from "./stage.js";
-import { familyPill, weightsPill, loadCatalog, catalogFiles } from "./models.js";
+import { familyPill, weightsPill, loadCatalog, adoptWeights } from "./models.js";
 import * as Turbo from "./turbo.js";
-import { viewUrl, probe, probeAudio } from "./api.js";
+import { viewUrl, probe, probeAudio, primeSettings } from "./api.js";
 import * as S from "./state.js";
 import { FPS, MIN_SECONDS, MAX_SECONDS, describeRatio, framesForSeconds, isTrainedLength,
          rulesFor, secondsForFrames } from "./canvas.js";
@@ -428,7 +429,13 @@ export class CreatorEditor {
     // one shot — the owner is already watching the catalog for the same weights
     // block, and two watchers guess at it twice and redraw twice for the one
     // answer.
-    if (this.nodeId && this.piece === this.state) loadCatalog(() => this.adoptWeights());
+    // Both answers the rescue draws on arrive asynchronously — the folder
+    // listing and this machine's remembered picks — so it is run behind each of
+    // them rather than behind whichever happens to land second.
+    if (this.nodeId && this.piece === this.state) {
+      loadCatalog(() => this.adoptWeights());
+      primeSettings(() => this.adoptWeights());
+    }
 
     this.prompt.setValue(this.state.prompt ?? "");
     this.render();
@@ -449,8 +456,7 @@ export class CreatorEditor {
    * saves with the workflow and can be overridden by picking something else.
    */
   adoptWeights() {
-    if (S.guessModels(this.piece.models, catalogFiles(),
-                      S.pieceFamily(this.piece))) this.commit();
+    if (adoptWeights(this.piece)) this.commit();
     else this.render();
   }
 
@@ -475,7 +481,7 @@ export class CreatorEditor {
   commit() {
     // Before notifying, because attaching a reference can invalidate a
     // checkpoint pin that was legal when it was made.
-    S.normalizeCheckpoint(this.state);
+    S.normalizeCheckpoint(this.state, S.pieceFamily(this.piece));
     // Same timing, same reason: removing or disabling the turbo LoRA anywhere —
     // the chip's ✕, the manager — is switching turbo off, and the sampler row
     // has to come back before this state is serialized with `on` still in it.
@@ -1107,8 +1113,9 @@ export class CreatorEditor {
       // seed across.
       perSegment: false,
       // The turbo switch, for a node body only: a timeline segment has no
-      // sampler of its own to throw it on.
-      turbo: this.nodeId ? Turbo.turboPills({
+      // sampler of its own to throw it on — and only for a family that declares
+      // a distillation, since every number the switch throws is that family's.
+      turbo: this.nodeId && S.turboOf(S.pieceFamily(this.piece)) ? Turbo.turboPills({
         container: this.piece,
         ...this.widgetIO(),
         onCommit: () => this.commit(),
@@ -1123,7 +1130,7 @@ export class CreatorEditor {
         weightsPill({
           piece: this.piece,
           models: this.piece.models,
-          checkpoints: [S.checkpoint(this.state)],
+          checkpoints: S.checkpointsFor(this.state, S.pieceFamily(this.piece)),
           face: Boolean(this.piece.face?.on),
           onChange: () => this.commit(),
           turbo: { container: this.piece, widgetIO: this.widgetIO() },
@@ -1591,7 +1598,8 @@ export class CreatorEditor {
 
   renderLoras() {
     return loraBlock(this.state, {
-      targets: [S.checkpoint(this.state)],
+      family: S.pieceFamily(this.piece),
+      targets: S.checkpointsFor(this.state, S.pieceFamily(this.piece)),
       onToggle: (entry) => { S.toggleLora(this.state, entry.name); this.commit(); },
       onManage: () => this.manageLoras(),
       onSwap: (entry) => this.swapLora(entry),
@@ -1872,11 +1880,13 @@ export class CreatorEditor {
       // The switch, only on a family that has the weights to answer. It is the
       // last thing in the group rather than a pill of its own because it is
       // the same question the steppers ask — how long is this shot — answered
-      // by somebody else.
+      // by somebody else. A word behind a hairline, which is the shape this
+      // group already uses for one: `matchTail` sits in the same slot and says
+      // its piece the same way. Not a `.mmc-step` — that is a 26px box sized
+      // for one glyph, and "auto" spilled straight out of it.
       ...(predicts ? [el("button", {
-        class: `mmc-step${auto ? " on" : ""}`,
+        class: `mmc-dur-auto${auto ? " on" : ""}`,
         text: t("auto"),
-        style: { padding: "0 6px" },
         title: auto
           ? t("The duration head is picking this shot's length. Click to set it yourself.")
           : t("Let the model pick this shot's length from its prompt, between "
@@ -1908,22 +1918,18 @@ export class CreatorEditor {
                       text: chosen ? `@${sourceAsset.handle}` : t("from image") })]
       : [aspectGlyph(geometry.ratio, PILL_GLYPH), el("span", { text: state.aspect })]);
 
-    // With two passes on, the sub says so in one glance: sampled at the
-    // first-pass edge, refined up to the size beside it.
-    const refined = S.twoPass(state);
+    // The sub says the whole answer in one glance: what was sampled, and what
+    // comes out of it. Written in `pills.js` because the two hosts that draw
+    // this pill were answering the same three-way question separately.
+    const res = resolutionPillText(state, geometry);
     const resPill = (seg) => el("button", {
       class: pillClass(seg),
-      title: refined
-        ? t("Sampled at a {edge} px short edge, refined up to {width} × {height} by a second pass.",
-            { edge: S.sampleEdge(state), width: geometry.width, height: geometry.height })
-        : t("Short edge. Lower is faster; 768 is what the open weights were trained at."),
+      title: res.title,
       onclick: (event) => this.openResolution(event.currentTarget),
     }, [
       icon("res", 16),
       el("span", { text: `${state.short_edge}p` }),
-      el("span", { class: "mmc-pill-sub", text: refined
-        ? `${S.sampleEdge(state)} → ${geometry.width} × ${geometry.height}`
-        : `${geometry.width} × ${geometry.height}` }),
+      el("span", { class: "mmc-pill-sub", text: res.sub }),
     ]);
 
     return el("div", { class: "mmc-pills" }, [
@@ -2112,8 +2118,8 @@ export class CreatorEditor {
     const label = S.checkpointLabels(family);
     const route = this.routeOf?.() ?? "auto";
     const forced = route !== "auto";
-    const routed = forced ? route : S.checkpoint(state);
-    const pinned = !forced && S.checkpointPinned(state);
+    const routed = forced ? route : S.checkpoint(state, family);
+    const pinned = !forced && S.checkpointPinned(state, family);
     const canCycle = !!this.setRoute;
 
     const badge = el(canCycle ? "button" : "span", {

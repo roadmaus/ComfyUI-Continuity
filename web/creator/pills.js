@@ -9,9 +9,10 @@ import { el, icon, dismissable, placeNear } from "./dom.js";
 import { t } from "./i18n.js";
 import { CANVAS_MULTIPLE, rulesFor } from "./canvas.js";
 import { UPSCALE_MODES, DEFAULT_REFINE_DENOISE, MIN_REFINE_DENOISE, MAX_REFINE_DENOISE,
-         twoPass, sampleEdge, emptyFace, pieceFamily, refineOf,
-         MIN_FACE_CANVAS, MAX_FACE_CANVAS,
+         twoPass, sampleEdge, emptyFace, isClip, pieceFamily, refineOf,
+         redetailTarget, MIN_FACE_CANVAS, MAX_FACE_CANVAS,
          MIN_FACE_DENOISE, MAX_FACE_DENOISE } from "./state.js";
+import { UPSCALERS } from "./manifest.js";
 
 /**
  * Closely related controls as one pill, divided by hairlines.
@@ -317,6 +318,44 @@ export function edgeSlider({ min, max, step, value, mark, markLabel, apply, desc
 }
 
 /**
+ * What the resolution pill says, for the two hosts that draw one.
+ *
+ * Written once because the two hosts were drawing the same three-way answer
+ * separately and had to be told about the backend twice. The sub-line's shape
+ * is the honest one in all three cases: what was sampled, an arrow, and what
+ * comes out — with the arrow left off only where those are the same number.
+ *
+ * @param {object} target  the piece or timeline
+ * @param {{width:number, height:number, ratio:number}} geometry  the resolved canvas
+ * @returns {{title: string, sub: string}}
+ */
+export function resolutionPillText(target, geometry) {
+  const finished = redetailTarget(target, geometry.ratio);
+  if (finished) {
+    return {
+      title: t("Sampled at a {edge} px short edge, then re-rendered ×{factor} to "
+             + "{width} × {height}. Fine detail is invented rather than recovered.",
+               { edge: sampleEdge(target), factor: finished.scale,
+                 width: finished.width, height: finished.height }),
+      sub: `${sampleEdge(target)} → ${finished.width} × ${finished.height}`,
+    };
+  }
+  if (twoPass(target)) {
+    return {
+      title: t("Sampled at a {edge} px short edge, refined up to {width} × {height} "
+             + "by a second pass.",
+               { edge: sampleEdge(target), width: geometry.width,
+                 height: geometry.height }),
+      sub: `${sampleEdge(target)} → ${geometry.width} × ${geometry.height}`,
+    };
+  }
+  return {
+    title: t("Short edge. Lower is faster; 768 is what the open weights were trained at."),
+    sub: `${geometry.width} × ${geometry.height}`,
+  };
+}
+
+/**
  * @param {HTMLElement} anchor
  * @param {object} target             anything with a `short_edge` field
  * @param {() => {width:number, height:number}} geometry  recomputed as the slider moves
@@ -341,32 +380,50 @@ export function openResolutionPopover(anchor, target, geometry, commit) {
   const factor = refine && typeof refine === "object" ? refine.factor : null;
   const secondPass = (edge) => (factor ? edge * factor : target.short_edge);
 
-  // The two-pass section. Past the native edge it is the choice the warning
-  // asks for — two passes or one, off-distribution. At or under native there
-  // is no warning to answer, but the first pass can still be lowered under
-  // the slider, which is the same trade at a smaller size: faster sampling,
-  // refined up. Lowering the edge there *is* choosing two passes.
+  // The upscale backends that are not the family's own — one entry today,
+  // ReDetail. A backend re-renders the *finished* pass rather than refining a
+  // latent, which is why it can carry an H3 render through LTX 2.5's weights,
+  // and why the size it delivers is the model's factor rather than the slider's
+  // number. `UPSCALERS` is empty on an install serving no backend, and this
+  // whole row goes with it.
+  const backend = UPSCALERS[0] ?? null;
+  // Explicitly `backend` and not the piece's own choice: the row offering the
+  // finish has to print the size before it is chosen, and asking for the size
+  // of a backend nobody has picked is how this returned null and took the
+  // whole popover down with it.
+  const finish = (which = null) => redetailTarget(target, geometry().ratio,
+                                                  which ?? undefined);
+
+  // The finish section. Past the native edge it is the choice the warning asks
+  // for — two passes, one off-distribution pass, or a backend. At or under
+  // native there is no warning to answer, but there is still a choice worth
+  // offering: the first pass can be lowered under the slider (faster sampling,
+  // refined up — lowering the edge there *is* choosing two passes), and a
+  // backend can take the render past what this family samples at all.
   const section = el("div");
 
   const renderSection = () => {
     const { width, height } = geometry();
     const over = target.short_edge > NATIVE_SHORT_EDGE;
     const cap = Math.min(NATIVE_SHORT_EDGE, target.short_edge);
-    const option = (mode, label, sub) => el("button", {
-      class: "mmc-opt",
-      "aria-checked": target.upscale === mode,
-      onclick: () => {
-        target.upscale = mode;
-        body.repaint();          // redraws this section and the note above it
-        commit();
-      },
-    }, [
-      el("span", { class: "mmc-opt-label mmc-opt-col" }, [
-        el("span", { text: label }),
-        el("span", { class: "mmc-opt-sub", text: sub }),
-      ]),
-      el("span", { class: "mmc-radio" }),
-    ]);
+    const option = (mode, label, sub,
+                    { checked = null, pick = null, disabled = false } = {}) =>
+      el("button", {
+        class: "mmc-opt",
+        disabled,
+        "aria-checked": checked ?? target.upscale === mode,
+        onclick: () => {
+          (pick ?? (() => { target.upscale = mode; }))();
+          body.repaint();          // redraws this section and the note above it
+          commit();
+        },
+      }, [
+        el("span", { class: "mmc-opt-label mmc-opt-col" }, [
+          el("span", { text: label }),
+          el("span", { class: "mmc-opt-sub", text: sub }),
+        ]),
+        el("span", { class: "mmc-radio" }),
+      ]);
     const rows = [];
     if (over) {
       rows.push(
@@ -379,6 +436,53 @@ export function openResolutionPopover(anchor, target, geometry, commit) {
                      { edge: sampleEdge(target), width, height })),
         option("direct", t("direct"),
                t("one pass at {width} × {height} — off-distribution", { width, height })));
+    } else if (backend) {
+      // Under native the two family modes deliver the same picture — the slider
+      // is reachable in one pass — so offering both would be two names for one
+      // thing. What is worth contrasting here is the render against the
+      // backend, and the row keeps whichever of the two the blob already holds.
+      rows.push(option(UPSCALE_MODES[0],
+                       twoPass(target) ? t("two passes") : t("one pass"),
+                       twoPass(target)
+                         ? t("{edge} px first, refined up to {width} × {height}",
+                             { edge: sampleEdge(target), width, height })
+                         : t("{width} × {height}, as sampled", { width, height }),
+                       { checked: target.upscale !== "redetail",
+                         pick: () => {
+                           if (target.upscale === "redetail") {
+                             target.upscale = UPSCALE_MODES[0];
+                           }
+                         } }));
+    }
+    if (backend) {
+      const target_size = finish(backend);
+      // Supplied footage is spliced at the size it already is and is never
+      // decoded, so a strip carrying any cannot have its passes doubled — the
+      // muxer holds a reel's parts to one geometry. `compile.timeline_payloads`
+      // refuses it; the row says so first, because finding out at queue time
+      // costs a click and an error message to learn something the strip already
+      // knew.
+      const spliced = (target.segments ?? []).some(isClip);
+      rows.push(option("redetail", t(backend.label),
+                       spliced
+                         ? t("not while the strip carries a clip — spliced footage is "
+                           + "not re-rendered")
+                         : t("×{factor} to {width} × {height} — re-rendered, not sharpened",
+                             { factor: target_size.scale, width: target_size.width,
+                               height: target_size.height }),
+                       { disabled: spliced,
+                         pick: () => {
+                           target.upscale = "redetail";
+                           // The slider becomes the *sampled* edge under a
+                           // backend, and the backend never samples past
+                           // native — so a slider left above it would be a
+                           // control doing nothing. Snapping it down is what
+                           // keeps every other readout on the strip meaning
+                           // the canvas that was actually rendered.
+                           if (target.short_edge > NATIVE_SHORT_EDGE) {
+                             target.short_edge = NATIVE_SHORT_EDGE;
+                           }
+                         } }));
     }
     // The first-pass edge, whenever there is room under the slider for one and
     // the mode is not pinned to a single pass.
@@ -429,6 +533,20 @@ export function openResolutionPopover(anchor, target, geometry, commit) {
       renderSection();
       const { width, height } = geometry();
       const over = target.short_edge > NATIVE_SHORT_EDGE;
+      // A backend delivers twice what was sampled, so the slider is no longer
+      // the size that comes out — the readout shows what does. The note carries
+      // one thing and only one: this is a repaint, and a face or a logo does
+      // not survive one. What was sampled and by how much it grew are the row's
+      // job below, and saying either twice would cost the warning its line.
+      const finished = finish();
+      if (finished) {
+        return {
+          size: `${finished.width} × ${finished.height}`,
+          warn: false,
+          note: t("Fine detail is invented rather than recovered — faces and logos "
+                + "come back changed."),
+        };
+      }
       if (twoPass(target)) {
         return {
           size: `${width} × ${height}`,

@@ -8,7 +8,7 @@ the other one is routed. What a file *is* is the user's call: whether it keyed
 onto anything is not second-guessed here — the stack reports what it placed and
 what it could not, and that report is the whole story when one does nothing.
 
-**Loading does not go through the stock path any more.** `comfy.sd.load_lora_for_models`
+**H3's loading does not go through the stock path.** `comfy.sd.load_lora_for_models`
 is correct on a bf16 checkpoint and wrong on the quantized ones nearly everybody
 runs H3 on, in three separate ways — a merge that requantizes the adapter into
 rounding noise, adaLN pairs dropped for a basis mismatch, and key conventions
@@ -19,6 +19,21 @@ call, with the files this pack already has in memory.
 One call and not one per LoRA, because a stack fuses: several adapters on one
 layer concatenate along the rank axis into a single pair, so ten LoRAs cost one
 extra matmul per layer rather than ten.
+
+**Every other family goes through core's loader**, which is `registry.LORA_STACK`'s
+whole content: the vendored stack is an argument about H3's weights, not about
+LoRAs, and a second family's adapters are core's to place. Which is also the
+right answer for keeping up — LTX 2.5 takes LTX 2.3's LoRAs, and the key
+conventions those were written in are ComfyUI's business to track, not this
+pack's.
+
+**A file pointed at the wrong weights is the user's mistake, and is raised as
+one.** Nothing here inspects a LoRA to decide whether it belongs: what it is
+trained for is not knowable from the file with any confidence, and refusing a
+file on a guess would be refusing the one that works. What *is* knowable is
+whether it landed — a stack that placed no key at all patched nothing, and
+saying so beats a render that comes out looking exactly as it would have with
+no LoRA at all.
 """
 
 import logging
@@ -27,6 +42,7 @@ import os
 import folder_paths
 
 from .compile import active_loras
+from .families import registry
 
 LOG = logging.getLogger("minimax_creator")
 
@@ -57,8 +73,8 @@ def _load(path):
     return weights
 
 
-def stack(entries, target, without=""):
-    """The rows `h3lora` takes: every enabled LoRA claiming `target`, in order.
+def stack(entries, target, without="", family=registry.DEFAULT_VIDEO):
+    """The rows the stack takes: every enabled LoRA claiming `target`, in order.
 
     `without` names one file to leave off — the turbo lead-in's, and nothing
     else so far. It is a name and not an index because the stack a payload
@@ -72,7 +88,7 @@ def stack(entries, target, without=""):
     six times.
     """
     rows = []
-    for entry in active_loras(entries, target):
+    for entry in active_loras(entries, target, family):
         if without and entry["name"] == without:
             continue
         path = resolve(entry["name"])
@@ -82,12 +98,26 @@ def stack(entries, target, without=""):
     return rows
 
 
-def apply(model, entries, target, without=""):
+def apply(model, entries, target, without="", family=registry.DEFAULT_VIDEO):
     """Patch `model` with every enabled LoRA that claims the `target` checkpoint.
 
     Returns the model untouched when the stack is empty — a piece with no LoRAs
     must not pay for a clone, and must not depend on any of this being
     importable either.
+
+    Which stack does the patching is the family's, off `registry.LORA_STACK`;
+    see this module's own docstring for the whole of the argument.
+    """
+    rows = stack(entries, target, without=without, family=family)
+    if not rows:
+        return model
+    if registry.LORA_STACK.get(family) == "h3lora":
+        return _apply_h3(model, rows)
+    return _apply_core(model, rows)
+
+
+def _apply_h3(model, rows):
+    """The vendored stack, in one call.
 
     The report goes to the log rather than to the user: it is per-layer
     accounting — what merged, what ran as a live branch, what the adaLN port
@@ -95,12 +125,43 @@ def apply(model, entries, target, without=""):
     — and the place to read that is the console, beside the load lines it
     explains. What a *user* has to be told is said by raising.
     """
-    rows = stack(entries, target, without=without)
-    if not rows:
-        return model
-
     from .h3lora import apply as h3lora
 
     patched, report = h3lora.apply_stack(model, rows)
     LOG.info("MiniMax Creator LoRAs:\n%s", report.text())
+    return patched
+
+
+def _apply_core(model, rows):
+    """ComfyUI's own loader, one file at a time — `LoraLoaderModelOnly` written
+    out, so the already-loaded file is reused instead of read again.
+
+    Model only, no CLIP half: these families' LoRAs are transformer adapters,
+    which is also how their official workflows patch them.
+
+    A file that placed no key is raised on. Core logs a `NOT LOADED` line per
+    unmatched key and carries on, which is right for the ordinary case of an
+    adapter that covers some layers and not others, and wrong for the case that
+    actually happens to people — an H3 LoRA left in the stack of a piece that
+    has been switched to another family, quietly doing nothing to a render they
+    are waiting on.
+    """
+    import comfy.lora
+    import comfy.lora_convert
+
+    patched = model
+    for row in rows:
+        key_map = comfy.lora.model_lora_keys_unet(patched.model, {})
+        loaded = comfy.lora.load_lora(comfy.lora_convert.convert_lora(row["weights"]),
+                                      key_map)
+        patched = patched.clone()
+        placed = patched.add_patches(loaded, row["strength"])
+        if not placed:
+            raise ValueError(
+                f"{row['name']} patched nothing: none of its keys belong to "
+                f"the transformer this piece renders with. It is a LoRA for "
+                f"other weights — take it out of the stack, or switch the "
+                f"piece back to the family it was trained against.")
+        LOG.info("MiniMax Creator LoRA: %s at %.2f — %d keys patched",
+                 row["name"], row["strength"], len(set(placed)))
     return patched

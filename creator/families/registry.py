@@ -43,6 +43,30 @@ PROMPT_PIPELINE = {
     "ideogram4": "plain",
 }
 
+# How a family's LoRAs reach its transformer.
+#
+# "h3lora" is the vendored stack in `h3lora/`, and it exists because the stock
+# path is wrong on the quantized checkpoints nearly everybody runs H3 on — a
+# merge that requantizes the adapter into rounding noise, adaLN pairs dropped
+# for a basis mismatch, key conventions resolved by guesswork. That argument is
+# about H3's weights and nobody else's.
+#
+# "core" is ComfyUI's own loader, which is what every other family wants: it is
+# what the official workflows use, its key mapping is core's to keep current,
+# and a family whose LoRAs it cannot place is a family core will learn about
+# before this pack would. LTX 2.5 takes LTX 2.3 LoRAs — Lightricks' own word —
+# and that is the path they arrive on.
+#
+# A file that has nothing to do with the weights it is pointed at is the user's
+# mistake and is reported as one: `lora.apply` raises when a stack places
+# nothing at all rather than rendering as though it had.
+LORA_STACK = {
+    "h3": "h3lora",
+    "ltx25": "core",
+    "krea2": "core",
+    "ideogram4": "core",
+}
+
 # Which families can be asked to pick a shot's own length, and the weight slot
 # that does it. `None` where the family has no answer at all — H3 does not, and
 # a control that offered "auto" there would be offering nothing.
@@ -56,6 +80,25 @@ DURATION_HEAD = {
     "ltx25": "duration_head",
     "krea2": None,
     "ideogram4": None,
+}
+
+# The checkpoints each family routes a generation between, in the order
+# anything listing them shows them. A family that ships one transformer routes
+# between nothing and declares `()`: there is no second set of weights for a
+# payload to be sent to, so nothing derives one, no pin may name one, and a
+# LoRA on such a piece claims nothing because there is nothing to claim
+# between — `compile.active_loras` patches every enabled entry.
+#
+# Here rather than read off each family's slot table for the reason
+# `PROMPT_PIPELINE` is here: `compile.py` has to know before any family module
+# is imported, and importing one pulls in that family's whole render half. The
+# manifests' `routed` flags are the same answer served to the frontend, and
+# `tests/test_families.py` holds the two together.
+ROUTED = {
+    "h3": ("fl2va", "ref2va"),
+    "ltx25": (),
+    "krea2": (),
+    "ideogram4": (),
 }
 
 # What the pre-stage blob's `arch` pill calls each still-capable family.

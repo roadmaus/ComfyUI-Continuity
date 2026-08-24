@@ -156,6 +156,19 @@ check("the sound is the same file, not a copy of it",
       repaired["audio_path"], spec["audio_path"])
 expect_error("a rewrite that does not cover the pass",
              lambda: spill.rewrite(spec, [ramp(4)]), "as long as the one it replaces")
+expect_error("...or does not come back the size it was",
+             lambda: spill.rewrite(spec, [ramp(30, 12, 16)]), "the size its spec says")
+
+# The re-detail pass hands back the same frames at twice the canvas, and the
+# spec has to say so: `open_frames` shapes its memmap from these three numbers,
+# so a spec that disagreed with the bytes would read back as garbage.
+bigger = spill.rewrite(spec, [ramp(30, 12, 16) * 0 + 0.25], geometry=(16, 12))
+check("a pass can come back at a new size", (bigger["width"], bigger["height"]), (16, 12))
+check("...and reads back at it", tuple(spill.open_frames(bigger).shape), (30, 12, 16, 3))
+check("...still as long as it was", bigger["frames"], spec["frames"])
+expect_error("...and the new size is measured, not taken on trust",
+             lambda: spill.rewrite(spec, [ramp(30)], geometry=(16, 12)),
+             "the size its spec says")
 
 # ---- the failures a spill has that a tensor did not -------------------------
 

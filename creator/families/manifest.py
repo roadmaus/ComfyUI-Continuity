@@ -140,9 +140,16 @@ def catalog():
     sides cannot disagree about the default: `compile.piece_family` reads an
     absent `family` as `default_video_family`, and the pill has to offer the
     same set the compiler will accept.
+
+    `upscalers` are the backends that belong to no family — ReDetail re-renders
+    a finished pass through LTX 2.5's weights whatever family made it, so its
+    files and its copy are served beside the families rather than inside one.
     """
+    from .. import redetail
+
     return {
         "families": [describe(family) for family in registry.FAMILIES],
+        "upscalers": [redetail.manifest()],
         "still_arches": dict(registry.STILL_ARCHES),
         "default_still_arch": registry.DEFAULT_STILL_ARCH,
         "video_families": list(registry.video_families()),

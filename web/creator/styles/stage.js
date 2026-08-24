@@ -155,6 +155,20 @@ export const css = `
    not thrown away, but visibly out of the run — the same treatment an idle LoRA
    gets on the asset row. */
 .mmc-weight-row.idle { opacity: .45; }
+/* The heading over an upscale backend's files. A hairline and a name, because
+   what follows is a second architecture's weights rather than more of the
+   piece's own — the rule is the whole of the device, and the note beside it
+   says why the rows are there in one clause. */
+.mmc-weight-group {
+  display: flex; align-items: baseline; gap: 8px;
+  margin: 8px 0 2px; padding: 8px 4px 0;
+  border-top: 1px solid var(--mmc-line);
+}
+.mmc-weight-group-name { color: var(--mmc-text); font-size: calc(12px * var(--mmc-type)); }
+.mmc-weight-group-note {
+  color: var(--mmc-off); font-size: calc(11px * var(--mmc-type));
+  min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+}
 /* A route that will be refused: forcing FL2VA on a generation with references.
    Said on the badge rather than at queue time. */
 .mmc-mode.bad { color: var(--mmc-warn); border-color: color-mix(in srgb, var(--mmc-warn) 45%, transparent); }

@@ -211,8 +211,11 @@ class MiniMaxLTX25Segment(io.ComfyNode):
         if override:
             compiled.prompt = override
 
+        # Through core's loader, which is what `registry.LORA_STACK` says this
+        # family's adapters take — and what makes LTX 2.3's LoRAs work here,
+        # since Lightricks kept 2.5 compatible with them.
         model = lora.apply(model, payload["request"].get("loras"),
-                           compiled.checkpoint)
+                           compiled.checkpoint, family="ltx25")
 
         positive = _encode(clip, compiled.prompt)
         negative = _encode(clip, DEFAULT_NEGATIVE)

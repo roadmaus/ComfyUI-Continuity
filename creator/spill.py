@@ -180,13 +180,21 @@ def write(images, audio, fps, name=None):
     return spec
 
 
-def rewrite(spec, blocks, name=None):
+def rewrite(spec, blocks, name=None, geometry=None):
     """The same pass with new pictures: -> a spec for the rewritten one.
 
     `blocks` yields IMAGE batches in play order, together as long as the source
-    and the same size — a caller that repairs a pass a chunk at a time, so the
-    rewritten pass is never held whole any more than the original was. What
-    comes back is the source spec with a new frames file under it.
+    — a caller that repairs a pass a chunk at a time, so the rewritten pass is
+    never held whole any more than the original was. What comes back is the
+    source spec with a new frames file under it.
+
+    `geometry` is `(width, height)` for a pass that comes back at a *different*
+    size — the re-detail pass, which re-renders a finished pass at twice the
+    canvas. Absent means the size it already was, which is every repair that
+    works in place. Either way the blocks are measured rather than trusted: the
+    spec is what `open_frames` shapes its memmap from, so a spec that disagrees
+    with the bytes on disk is a pass that reads back as garbage rather than as
+    an error.
 
     **The sound is not rewritten, and not copied either: the new spec points at
     the same file.** A pass that has been repaired in the picture has the
@@ -195,11 +203,18 @@ def rewrite(spec, blocks, name=None):
     nobody asked to change. Two specs naming one audio file is safe: spills are
     deleted by age, never by whoever is finished with them.
     """
+    width, height = geometry or (int(spec["width"]), int(spec["height"]))
     frames_path, _, meta_path = _paths(name or uuid.uuid4().hex)
     written = 0
     try:
         with open(frames_path, "wb") as handle:
             for block in blocks:
+                shape = (int(block.shape[2]), int(block.shape[1]))
+                if shape != (width, height):
+                    raise SpillError(
+                        f"a rewritten pass has to be the size its spec says: "
+                        f"{shape[0]}x{shape[1]} written where the spec says "
+                        f"{width}x{height}")
                 handle.write((block * 255).clamp(0, 255).byte().cpu().numpy().tobytes())
                 written += int(block.shape[0])
     except OSError as exc:
@@ -210,7 +225,8 @@ def rewrite(spec, blocks, name=None):
             f"a rewritten pass has to be as long as the one it replaces: "
             f"{written} frames written over {spec['frames']}")
 
-    out = {**spec, "frames_path": frames_path, "frames": written}
+    out = {**spec, "frames_path": frames_path, "frames": written,
+           "width": width, "height": height}
     with open(meta_path, "w", encoding="utf-8") as handle:
         json.dump(out, handle, sort_keys=True)
     prune()

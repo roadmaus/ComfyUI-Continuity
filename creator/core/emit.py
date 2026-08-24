@@ -147,7 +147,7 @@ def inherited_audio(graph, source, seconds):
 
 def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
          filename_prefix=FILENAME_PREFIX, cards=None, seeds=None,
-         whole_piece=True, run=None):
+         whole_piece=True, run=None, upscaler=None):
     """-> the graph, which the caller finalizes. Nothing comes back out of it.
 
     `labels[i]` names payload i in any error raised about it — "Segment 2", or
@@ -169,6 +169,12 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
     things the loop does read are the contract's fine print in
     `families/base.py`: `weights.routed(payload)` and the `.vae`/`.audio_vae`
     links on what `emit_loaders` returns.
+
+    `upscaler` is the blob's upscale-backend weights, read by the caller the
+    same way the family's are and passed through unread unless a compiled
+    payload asks for the pass. It belongs to no family — ReDetail re-renders an
+    H3 pass through LTX 2.5's files — which is exactly why it arrives beside
+    `weights` rather than inside it.
 
     `whole_piece` is whether this render covers the strip the user is looking
     at. Everything below that used to ask "is there only one payload" is really
@@ -338,6 +344,19 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
 
         reel = source.out(0)
         decoded.append(("pass", source.out(1)))
+
+    # The re-detail pass, on the finished reel. After the loop and not inside it,
+    # which is the opposite of where the face pass goes and for the same reason
+    # the face pass goes where it does: what comes back is a *different size*,
+    # and a seam that inherited it would hand the next segment a guide at twice
+    # the canvas it is about to sample at. Every part is re-rendered or none is —
+    # the muxer holds a reel's parts to one geometry, and `timeline_payloads`
+    # has already refused a strip carrying footage this cannot re-render.
+    if any(one is not None and one.redetail for one in compiled):
+        from .. import redetailpass
+
+        reel = redetailpass.emit(graph, family, links, upscaler, compiled, reel,
+                                 seed_for(0))
 
     # What the save node needs to write each pass out as its own file: which
     # card it is and what seed it ran on. Not where the render is the whole

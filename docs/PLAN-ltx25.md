@@ -114,7 +114,8 @@ Each ends green; goldens are re-recorded only when a phase *adds* graphs.
    ~~Weigh native multishot here: one pass producing several connected shots
    competes with the strip's own feathered seams rather than slotting under
    them.~~ **Weighed — see "Phase 4: multishot" below.**
-   **And the cross-family upscale** — see below.
+   ~~And the cross-family upscale.~~ **Done — see "Phase 4: ReDetail, as
+   landed" below.**
 5. **Taste guidance**: STG / modality / reference-audio as their own pills
    with honest cost copy — new UI, not the accel row.
 
@@ -583,6 +584,117 @@ a seam's picture is counted without being keyed, an attached frame is both.
   Context-IR; LTX has `LTXVAddGuide` (per-guide strength, frame_idx on the
   8-grid, negative indexes from the end) and IC-LoRAs. The manifest declares no
   `reference` block until this is decided.
+
+## Phase 4: ReDetail, as landed
+
+**The plan called it a pass beside the face pass, and that was the one thing
+worth changing.** The face pass runs *inside* the loop — between a pass being
+written and the next being emitted — precisely so a seam inherits the repaired
+frames. ReDetail is the opposite case: what comes back is a different size, and
+a seam that inherited it would hand the next segment a guide at twice the canvas
+it is about to sample at. So it runs once, at the end, over the finished reel —
+one node, `MiniMaxReDetailPass`, walking the parts in play order. That also
+makes ReDetail's own hardest job free: its CLI splits a long clip on its cuts to
+fit VRAM, and a reel is already one part per shot.
+
+**It needs no third-party pack.** The shipped workflow uses three nodes from
+Lightricks' `ComfyUI-LTXVideo` — `LTXICLoRALoaderModelOnly`,
+`LTXAddVideoICLoRAGuide`, `LTXVSetAudioRefTokens` — and core has an equivalent
+for each: `LoraLoaderModelOnly` + `GetICLoRAParameters`,
+`LTXVAddGuide(iclora_parameters=...)` (whose `dilate_latent` *is* the 2x2 path),
+and `LTXVReferenceAudio` with the identity guidance at 0. The sampler is not
+ours either and not the family's: a plain `CFGGuider` at cfg 1, `euler_ancestral`,
+and the distilled upscaler's fixed eight-step curve as a constant
+(`redetail.SIGMAS`). None of the sampler row's widgets says anything about it.
+
+**Two constraints, one of them free, and the other made free.** Both output
+dimensions must divide by 64, which doubling a /32 canvas always does — that is
+why the factor is the model's rather than a number on a slider, and why 1.5x is
+not offered: it lands off the grid for most shapes and would have to re-snap and
+admit the pill's number was not the one it ran. The `8n+1` length is free for an
+LTX piece and not for an H3 one, so `redetail.padded_frames` pads *up* with the
+pass's own last frame and drops the padding after decode: at most seven frames
+of sampling, nothing lost, rather than the plan's "snap and say what it dropped".
+
+**The pill asks one question with three answers.** `upscale` gains `"redetail"`
+beside `two_pass` and `direct`; an absent key still means `two_pass`, so every
+saved workflow is byte-identical. Under a backend the slider is the *sampled*
+edge and the readout is the finished size — twice it — which is the one place
+the three answers differ, and picking the backend snaps a slider left above
+native back down to it rather than leaving a control that does nothing. The
+note under the readout carries one thing only: fine detail is invented rather
+than recovered. What was sampled and by how much it grew are the row's job.
+
+**The weights are their own block.** `creator_data.upscale_models`, mirroring
+`redetail.Weights`, because four of the backend's five slot ids are LTX 2.5's
+own — the same files from the same folders — and `vae` on an H3 piece is H3's
+video VAE. A piece rendering on LTX 2.5 borrows the render's own links and fills
+only the IC-LoRA, which is what stops a 21.5 GB transformer being loaded twice.
+The popover draws them under a heading naming the backend, because a user
+picking an LTX transformer on an H3 piece should be able to see that is what
+they are doing.
+
+**What it refuses, and where.** A strip carrying supplied footage:
+`mux.reel_geometry` holds a reel's parts to one geometry and a clip is spliced
+at the size it already is, so `timeline_payloads` says so off the blob and the
+pill draws the row disabled with the reason. `spill.rewrite` grew a `geometry`
+argument and now *measures* the blocks it is handed rather than trusting them —
+the spec is what `open_frames` shapes its memmap from, and a spec that disagreed
+with the bytes would read back as garbage rather than as an error.
+
+**What is not solved.** Each part is anchored on its own first frame, which is
+what ReDetail does per chunk and is exactly right across a hard cut. Across a
+*feathered* seam the two parts invent their detail independently and the join
+can show it — the one thing the pass does not yet answer, and the hook for it is
+the 0.7 first-frame anchor already in the graph. Nor is the conditioning cached:
+the pass runs on empty prompts, so the encoder computes the same 26 KB constant
+every time, and loading it is the honest first version. No cost figure is quoted
+in the UI, because none has been measured on our own box.
+
+## Phase 4: the routing layer, and whose loader a LoRA takes
+
+Three faults reported off one branch, and two of them were one defect. Phase 1
+taught the *weights* layer which family a piece renders with — `modelFields`,
+`requiredModels`, `emptyModels` all take a family id — and left the *routing*
+layer bound to H3: `state.checkpoint`, `timelineCheckpoints`, `loraModes` and
+`compile._resolve_checkpoint` each answered `fl2va`/`ref2va` whatever the piece
+said. On an LTX piece that meant two things at once. The weights pill required
+a slot called `fl2va` that this family has no name for, so a fully-picked piece
+read "2 weights missing" (two, because a strip with a reference anywhere routes
+to both). And a LoRA whose `modes` LTX cannot parse fell back to "claims both of
+H3's", so the H3 distillation the turbo switch had thrown went on being patched
+onto a 22B LTX transformer — with the switch itself hidden, since the weights
+popover draws its file row only for a family that declares one.
+
+**A family that ships one transformer routes between nothing.** `registry.ROUTED`
+declares it, the manifests' `routed` slot flags serve the same answer to the
+frontend, and `tests/test_family_switch.py` holds the two together. Nothing is
+derived, nothing may be pinned, nothing is required, and a LoRA claims nothing —
+which `compile.active_loras` reads as "there is one set of weights, patch every
+enabled entry". A stale pin from the family a piece was switched off is ignored
+rather than refused, on the same terms `auto_duration` is.
+
+**Whose loader.** `registry.LORA_STACK` says which stack a family's LoRAs take:
+`h3lora` for H3, `core` for everyone else. The vendored stack is an argument
+about H3's quantized checkpoints, not about LoRAs, and LTX 2.5 takes LTX 2.3's
+adapters (Lightricks' own word) which core already knows how to place. Nothing
+inspects a file to decide whether it belongs — what a LoRA was trained for is
+not knowable from it with confidence, and refusing on a guess would refuse the
+one that works — but a stack that places *no* key raises, naming the file, since
+the alternative is a render that comes out as though the LoRA were not there.
+
+**What a switch keeps.** The weights and the sampler row are set aside per
+family on the piece (`models_spare`, `sampling_spare`) and handed back on
+return, and this machine remembers the last block picked for each family in
+`settings.weights` so a node that has never been switched still comes up filled.
+A remembered file only ever fills an empty row. The row needed the same
+treatment as the weights for a sharper reason than convenience: `steps` and
+`sampler_name` are spelled the same on both families and mean different things,
+so a row carried across was H3's 20 res_multistep steps quietly in force on a
+transformer distilled to want 8 euler ones. The turbo switch is released into
+the row before it is stashed — switching a family off is switching its turbo
+off, and that means putting back the row it overwrote — and its own LoRA leaves
+the stack with it.
 
 ## Frozen, still
 

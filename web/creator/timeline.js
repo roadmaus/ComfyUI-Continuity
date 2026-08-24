@@ -7,7 +7,7 @@
 // LoRAs, same routing badge. There is no reduced "segment UI" to keep in step
 // with the node's, because there is only one editor.
 
-import { compiledPrompt, probe, viewUrl } from "./api.js";
+import { compiledPrompt, probe, viewUrl, primeSettings } from "./api.js";
 import { CastShelf } from "./cast.js";
 import { clearButton } from "./clear.js";
 import { el, icon, mountOverlay, swappable } from "./dom.js";
@@ -20,11 +20,12 @@ import * as P from "./presets.js";
 import { PromptBox, openEditorSheet } from "./prompt.js";
 import { openSettings } from "./settings.js";
 import { openTrim } from "./trim.js";
-import { openAspectPopover, openResolutionPopover, openChoicePopover, facesPill, stepperPill, aspectGlyph, PILL_GLYPH } from "./pills.js";
+import { openAspectPopover, openResolutionPopover, openChoicePopover, facesPill, stepperPill,
+         aspectGlyph, resolutionPillText, PILL_GLYPH } from "./pills.js";
 import { refine, refineButton, chosenModel as refineModel } from "./refine.js";
 import { adopted, blobIO, samplingBar } from "./sampling.js";
 import { Stage } from "./stage.js";
-import { familyPill, weightsPill, loadCatalog, catalogFiles } from "./models.js";
+import { familyPill, weightsPill, loadCatalog, adoptWeights } from "./models.js";
 import * as S from "./state.js";
 import * as Turbo from "./turbo.js";
 import {
@@ -491,6 +492,7 @@ class Timeline {
   renderLoras() {
     const entries = this.timeline.loras ?? [];
     this.loraHost.replaceChildren(...(entries.length ? [loraBlock(this.timeline, {
+      family: S.pieceFamily(this.timeline),
       targets: S.timelineCheckpoints(this.timeline),
       // Not the trigger note: a global LoRA's words are prefixed onto each
       // segment's own prompt, so one line here would have to say "in front of
@@ -1080,7 +1082,9 @@ class Timeline {
   renderBar() {
     const single = S.isSingle(this.timeline);
     probeAspectSizes(this.timeline, () => this.renderBar(), { all: true });
-    const { width, height, ratio, fromInput } = this.geometry();
+    const geometry = this.geometry();
+    const { width, height, ratio, fromInput } = geometry;
+    const res = resolutionPillText(this.timeline, geometry);
     const seconds = S.timelineSeconds(this.timeline);
     const frames = S.timelineFrames(this.timeline);
     const auto = S.hasAutoDuration(this.timeline);
@@ -1110,19 +1114,15 @@ class Timeline {
            el("span", { class: "mmc-pill-sub", text: describeRatio(ratio) })]),
       el("button", {
         class: "mmc-pill",
-        title: S.twoPass(this.timeline)
-          ? t("Sampled at a {edge} px short edge, refined up to "
-            + "{width} × {height} by a second pass — every segment alike.",
-              { edge: S.sampleEdge(this.timeline), width, height })
-          : t("Short edge. Lower is faster; 768 is what the open weights were trained at."),
+        // "every segment alike" is the strip's own footnote on the shared
+        // answer: one canvas holds the whole piece, whichever way it reaches it.
+        title: `${res.title} ${t("Every segment alike.")}`,
         onclick: (event) => openResolutionPopover(
           event.currentTarget, this.timeline, () => this.geometry(), () => this.commit()),
       }, [
         icon("res", 16),
         el("span", { text: `${this.timeline.short_edge}p` }),
-        el("span", { class: "mmc-pill-sub", text: S.twoPass(this.timeline)
-          ? `${S.sampleEdge(this.timeline)} → ${width} × ${height}`
-          : `${width} × ${height}` }),
+        el("span", { class: "mmc-pill-sub", text: res.sub }),
       ]),
       // Global LoRAs sit on the bar with the canvas rather than inside a
       // segment, because that is what they are: patched onto every segment,
@@ -2015,7 +2015,7 @@ class Timeline {
     // The segment's own references plus the piece references its text cites —
     // both ride into this generation, so the card counts both.
     const refs = S.references(segment).length + S.citedPool(segment).length;
-    const loras = S.activeLoras(segment).length;
+    const loras = S.activeLoras(segment, S.pieceFamily(this.timeline)).length;
     const typed = (segment.prompt || "").trim();
     const rewrite = segment.refined?.body?.trim();
     const using = rewrite && segment.refined.enabled !== false;
@@ -2564,6 +2564,9 @@ export class TimelineBody {
       }),
     });
     loadCatalog(() => this.adoptWeights());
+    // ...and again behind the settings, which carry the other half of the
+    // rescue: this machine's remembered picks. See `CreatorEditor`.
+    primeSettings(() => this.adoptWeights());
     this.render();
   }
 
@@ -2575,8 +2578,7 @@ export class TimelineBody {
 
   /** See `CreatorEditor.adoptWeights` — same rescue, same reason. */
   adoptWeights() {
-    if (S.guessModels(this.timeline.models, catalogFiles(),
-                      S.pieceFamily(this.timeline))) this.commit();
+    if (adoptWeights(this.timeline)) this.commit();
     else this.render();
   }
 
@@ -3416,12 +3418,16 @@ export class TimelineBody {
       // generations, whatever the cards look like.
       perSegment: S.passes(this.timeline).length > 1,
       // The turbo switch, on the timeline's global stack: a speed-up belongs to
-      // the run, which is the whole reason the global stack exists.
-      turbo: Turbo.turboPills({
+      // the run, which is the whole reason the global stack exists. Only where
+      // the family declares a distillation at all — every number the switch
+      // throws (the step counts, euler + beta, the flow shifts a distill was
+      // trained against) is that family's, and a pill offering H3's on another
+      // family's row is a shortcut into weights nobody has.
+      turbo: S.turboOf(S.pieceFamily(this.timeline)) ? Turbo.turboPills({
         container: this.timeline,
         ...this.widgetIO(),
         onCommit: () => this.commit(),
-      }),
+      }) : [],
       // A chained timeline legitimately runs some shots on one checkpoint and
       // some on the other, so the pill is asked about the set rather than
       // about one — a Ref2VA it never reaches for is not missing.

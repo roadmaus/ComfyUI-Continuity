@@ -97,6 +97,22 @@ DEFAULTS = {
     # the workflow's; this only says where in that schedule the distillation
     # takes over.
     "turbo_lead_in": 0,
+    # The weight files this machine last picked, by family: `{family: {slot:
+    # filename, dtype, route, devices}}` — the same block a piece carries, in
+    # the same shape.
+    #
+    # Which checkpoints are on this disk is the definition of a per-machine
+    # setting, and it is the one this pack kept asking for twice: every new node
+    # started with six empty rows, and switching a piece between architectures
+    # threw away the files picked for the one being left. A node fills an
+    # *empty* row from this and never overrides one the blob answered, so a
+    # workflow still says what it rendered on.
+    #
+    # Nothing queued reads it — a render loads what the piece names. The blocks
+    # are not checked against this install's families or folders either: the
+    # frontend reads each one back through that family's own slot table, where a
+    # key it does not have is dropped.
+    "weights": {},
     # How large this pack draws its own text, as a multiplier on every size in
     # it. 1 is what those sizes were written to be; the Appearance tab offers
     # four points and this file will hold anything between MIN and MAX_TEXT_SCALE
@@ -276,6 +292,8 @@ def clean(raw):
         if not 0 <= days <= MAX_CACHE_DAYS:
             raise ValueError(f"latent_cache_days must be between 0 and {MAX_CACHE_DAYS}")
         clean_settings["latent_cache_days"] = days
+    if "weights" in raw and raw["weights"] is not None:
+        clean_settings["weights"] = clean_weights(raw["weights"])
     for flag in ("show_shift_pills", "autoplay_previews", "advanced", "latent_cache"):
         if flag in raw and raw[flag] is not None:
             if not isinstance(raw[flag], bool):
@@ -292,6 +310,38 @@ def clean(raw):
             except outputs.PrefixError as exc:
                 raise ValueError(f"{key}: {exc}") from exc
     return clean_settings
+
+
+def clean_weights(raw):
+    """The remembered weights, as this file will store them.
+
+    Structural only: family -> slot -> filename, plus the `devices` map and the
+    two scalars a block carries. What a slot id *means* is the family's, and the
+    frontend resolves that against the family's own table on the way back in —
+    so a block naming a slot this install has never heard of is stored as
+    written rather than refused. What is enforced is that it is a nest of
+    strings, because that is what makes the file safe to read back.
+    """
+    if not isinstance(raw, dict):
+        raise ValueError("weights must be an object")
+    out = {}
+    for family, block in raw.items():
+        if not isinstance(family, str) or not isinstance(block, dict):
+            raise ValueError("weights must map a family id to a block of files")
+        kept = {}
+        for key, value in block.items():
+            if not isinstance(key, str):
+                raise ValueError("weights: a slot id must be a string")
+            if isinstance(value, str):
+                kept[key] = value
+            elif key == "devices" and isinstance(value, dict):
+                kept[key] = {slot: device for slot, device in value.items()
+                             if isinstance(slot, str) and isinstance(device, str)}
+            else:
+                raise ValueError(f"weights: {family}.{key} must be a filename")
+        if kept:
+            out[family] = kept
+    return out
 
 
 def path():

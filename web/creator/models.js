@@ -16,7 +16,7 @@
 import { el, icon, dismissable, placeNear } from "./dom.js";
 import { t } from "./i18n.js";
 import { openChoicePopover } from "./pills.js";
-import { listModels } from "./api.js";
+import { listModels, uiSetting, patchSettings } from "./api.js";
 import * as S from "./state.js";
 import { turboRow, loadLoraNames } from "./turbo.js";
 
@@ -114,8 +114,16 @@ export function weightsPill({ piece, models, checkpoints, onChange, turbo, face 
   const family = S.pieceFamily(piece);
   const label_ = S.modelLabels(family);
   const routed = S.routedCheckpoints(models, checkpoints);
-  const missing = S.missingModels(
-    models, S.requiredModels(routed, face, family), family);
+  // Both sets at once, as labels rather than slot ids: a piece finishing
+  // through an upscale backend loads that backend's files too, and a pill that
+  // counted only the family's would read "weights" over a render the queue is
+  // about to refuse. The ids cannot be merged — four of the backend's are the
+  // family's own spelled the same way — but the labels are what is shown.
+  const missing = [
+    ...S.missingModels(models, S.requiredModels(routed, face, family), family)
+      .map((field) => t(label_[field])),
+    ...missingUpscalerLabels(piece),
+  ];
   // What the pill reports when everything is picked, in order of how much it
   // changes about the run: which cards it is spread over first, then precision,
   // then nothing worth saying.
@@ -129,7 +137,7 @@ export function weightsPill({ piece, models, checkpoints, onChange, turbo, face 
       : models.dtype === "default" ? t("weights") : t("weights · {dtype}", { dtype: models.dtype.replace("fp8_", "fp8 ") });
   const label = missing.length
     ? (missing.length === 1
-        ? t("no {model}", { model: t(label_[missing[0]]).toLowerCase() })
+        ? t("no {model}", { model: missing[0].toLowerCase() })
         : t("{count} weights missing", { count: missing.length }))
     : settled;
 
@@ -137,12 +145,36 @@ export function weightsPill({ piece, models, checkpoints, onChange, turbo, face 
     class: `mmc-pill mmc-weights${missing.length ? " missing" : ""}`,
     title: missing.length
       ? t("Not picked yet: {models}. The render is refused without them.", {
-          models: missing.map((f) => t(label_[f])).join(", "),
+          models: missing.join(", "),
         })
       : t("Which checkpoints, text encoder and VAEs this node loads."),
     onclick: (event) => openWeightsPopover(event.currentTarget,
       { piece, models, checkpoints, onChange, turbo, face }),
   }, [icon("weights", 16), el("span", { text: label })]);
+}
+
+/**
+ * The upscale backend's slots this piece has not filled, as labels.
+ *
+ * Empty unless the piece is actually finishing through a backend: these files
+ * are a second family's, they are only loaded by that pass, and a pill
+ * reporting them missing on a render that never reaches them would be asking
+ * for a 21.5 GB download nothing was going to open.
+ */
+function missingUpscalerLabels(piece) {
+  const backend = S.upscalerOf(piece);
+  if (!backend) return [];
+  const picked = piece.upscale_models ?? {};
+  return S.upscalerFields(backend, S.pieceFamily(piece))
+    .filter((id) => !picked[id])
+    // Qualified, because the popover's group heading is not here to do it: the
+    // backend's rows are called "Transformer" and "Text encoder" under a
+    // heading that says ReDetail, and both names also belong to the family's
+    // own slots. In a flat list they have to carry it themselves.
+    .map((id) => t("{backend} {model}", {
+      backend: t(backend.label),
+      model: t(backend.weights.find((slot) => slot.id === id).title).toLowerCase(),
+    }));
 }
 
 /**
@@ -178,18 +210,69 @@ export function familyPill({ piece, onChange }) {
   return el("button", {
     class: "mmc-pill",
     title: says + "\n" + t("Click to render this piece with another architecture. The "
-      + "prompt, the cast and the strip stay; the weights, the turbo switch and "
-      + "every checkpoint pin are the family's and are reset."),
+      + "prompt, the cast and the strip stay; the turbo switch and every "
+      + "checkpoint pin are the family's and are reset. The weights are not "
+      + "lost — each family's files are remembered and come back with it."),
     onclick: (event) => openChoicePopover(event.currentTarget, {
       title: t("Video model"),
       options: S.VIDEO_FAMILIES.map(label),
       value: label(id),
       onPick: (picked) => {
         const next = S.VIDEO_FAMILIES.find((which) => label(which) === picked);
-        if (next && S.setFamily(piece, next)) onChange?.();
+        // The machine's memory is the fallback the piece's own stash does not
+        // cover: the first time this piece is switched to a family there is
+        // nothing set aside for it, and the files are still the same six on
+        // this disk as the last node that picked them.
+        if (!next || !S.setFamily(piece, next, rememberedWeights())) return;
+        // Nothing set aside and nothing remembered for the family being
+        // switched to: the folder listing is the last thing left that knows
+        // anything about its files.
+        adoptWeights(piece);
+        onChange?.();
       },
     }),
   }, body);
+}
+
+/**
+ * The weights this machine last picked, by family — `settings.weights`.
+ *
+ * Which files are on this disk is a property of the machine, not of a piece:
+ * one person's `models/` is the same six answers whatever workflow is open, and
+ * re-picking them for every new node (and every trip between two families) is
+ * the chore this remembers away. The piece's own block still wins — it is what
+ * the blob says the render used — and this only fills what nothing has said.
+ *
+ * Stored beside the lead-in for the same reason it is: per-machine, one file,
+ * written straight through rather than by a settings page nobody would think to
+ * open for this.
+ */
+const rememberedWeights = () => uiSetting("weights", {}) ?? {};
+
+/**
+ * Fill a piece's empty weight rows from what is already known. -> changed.
+ *
+ * Two answers, best first: what this machine last picked for the family, then
+ * an unambiguous filename match in the folder listing. Both only ever fill an
+ * empty row, so neither can talk over a piece that says what it rendered on.
+ *
+ * The rescue every node body runs once its catalog and settings have landed,
+ * and what a family switch falls back to when neither the piece's stash nor the
+ * machine's memory has heard of the family being switched to.
+ */
+export function adoptWeights(piece) {
+  const family = S.pieceFamily(piece);
+  const remembered = S.adoptRemembered(piece.models, rememberedWeights(), family);
+  const guessed = S.guessModels(piece.models, catalogFiles(), family);
+  return remembered || guessed;
+}
+
+/** Record this family's block as the machine's, after a pick. Fire and forget:
+ *  the piece already has the answer, and a memory that failed to write is next
+ *  time's problem rather than this click's. */
+function rememberWeights(family, models) {
+  const block = S.serializedModels(models, family);
+  patchSettings({ weights: { ...rememberedWeights(), [family]: block } });
 }
 
 /**
@@ -208,6 +291,12 @@ export function openWeightsPopover(anchor, { piece, models, checkpoints, onChang
   // change under it — the family pill is outside this popover, and switching
   // families closes it.
   const family = S.pieceFamily(piece);
+  // Every pick of the family's own files is also this machine's answer about
+  // them, so it is remembered as one: the next node, and the next switch back
+  // to this family, start from what was chosen here rather than from six empty
+  // rows. The backend's slots and the turbo file below are not the family's and
+  // go through `onChange` alone.
+  const commit = () => { rememberWeights(family, models); onChange(); };
   const fields = S.modelFields(family);
   const label_ = S.modelLabels(family);
   const hint_ = S.modelHints(family);
@@ -250,7 +339,7 @@ export function openWeightsPopover(anchor, { piece, models, checkpoints, onChang
           onPick: (picked) => {
             models.route = routes.find(
               (route) => routeLabel(route, family) === picked) ?? "auto";
-            onChange();
+            commit();
             render();
           },
         }),
@@ -283,7 +372,7 @@ export function openWeightsPopover(anchor, { piece, models, checkpoints, onChang
           onPick: (picked) => {
             if (picked === t(AUTO)) delete models.devices[field];
             else models.devices[field] = picked;
-            onChange();
+            commit();
             render();
           },
         }),
@@ -324,7 +413,7 @@ export function openWeightsPopover(anchor, { piece, models, checkpoints, onChang
             value: chosen || t(NONE),
             onPick: (picked) => {
               models[field] = picked === t(NONE) ? "" : picked;
-              onChange();
+              commit();
               render();
             },
           }),
@@ -348,10 +437,57 @@ export function openWeightsPopover(anchor, { piece, models, checkpoints, onChang
           title: t("Precision"),
           options: catalog?.dtypes ?? S.MODEL_DTYPES,
           value: models.dtype,
-          onPick: (picked) => { models.dtype = picked; onChange(); render(); },
+          onPick: (picked) => { models.dtype = picked; commit(); render(); },
         }),
       }),
     ]));
+
+    // The upscale backend's own files, in a group of their own under the
+    // family's. A group and not a mixed-in row, because that is what they are:
+    // a second architecture's weights, loaded for one pass at the end of the
+    // render, and a user picking an LTX transformer on an H3 piece should be
+    // able to see that is what they are doing. Only where the piece is actually
+    // finishing through one — otherwise the pass never runs and the rows would
+    // be asking for files nothing opens.
+    const backend = S.upscalerOf(piece);
+    if (backend) {
+      const picked = piece.upscale_models ?? (piece.upscale_models = {});
+      const backendFields = S.upscalerFields(backend, family);
+      const shared = backend.shares_with === family;
+      rows.push(
+        el("div", { class: "mmc-weight-group" }, [
+          el("span", { class: "mmc-weight-group-name", text: t(backend.label) }),
+          el("span", { class: "mmc-weight-group-note",
+                       text: shared
+                         ? t("runs on this piece's own weights")
+                         : t("a second architecture, for the finishing pass") }),
+        ]),
+        ...backendFields.map((id) => {
+          const slot = backend.weights.find((entry) => entry.id === id);
+          const chosen = picked[id] ?? "";
+          return el("div", {
+            class: `mmc-weight-row${chosen ? "" : " missing"}`,
+          }, [
+            el("span", { class: "mmc-weight-name", text: t(slot.title) }),
+            el("button", {
+              class: `mmc-weight-file${chosen ? "" : " empty"}`,
+              title: t(slot.help),
+              text: chosen || t("not set"),
+              onclick: (event) => openChoicePopover(event.currentTarget, {
+                title: t(slot.title),
+                options: [t(NONE), ...(files[id] ?? [])],
+                value: chosen || t(NONE),
+                onPick: (choice) => {
+                  if (choice === t(NONE)) delete picked[id];
+                  else picked[id] = choice;
+                  onChange();
+                  render();
+                },
+              }),
+            }),
+          ]);
+        }));
+    }
 
     // The turbo switch's file, under the files it runs beside. Configuration
     // like everything above it — the throwing happens on the sampler row. Only

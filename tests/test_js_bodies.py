@@ -1728,6 +1728,37 @@ try {
   out.errors.push(`placement: ${error.message}`);
 }
 
+// ---- the resolution popover opens on every finish it offers -----------------
+//
+// It threw and never appeared, for one afternoon, because the row offering the
+// re-detail finish asked for the size of a backend the piece had not chosen —
+// which is null everywhere except on the piece that already chose it. A popover
+// that throws is a pill that does nothing, with nothing on screen to say why,
+// so the check is the crude one: click it in each mode and see it land.
+try {
+  const dom = await import("./web/creator/dom.js");
+  const opened = {};
+  for (const mode of ["two_pass", "direct", "redetail"]) {
+    const node = fakeNode("MiniMaxH3Creator", "creator_data", ONE_SHOT);
+    await ext.nodeCreated(node);
+    const editor = node.mmcBody.faceBody();
+    // Past native, where the section has every row it can have.
+    editor.piece.short_edge = 1088;
+    editor.piece.upscale = mode;
+    const anchor = dom.el("button");
+    document.body.appendChild(anchor);
+    editor.openResolution(anchor);
+    const pop = document.body.children.at(-1);
+    opened[mode] = {
+      appeared: String(pop?.className ?? "").includes("mmc-slider"),
+      rows: (pop?.querySelectorAll(".mmc-opt") ?? []).length,
+    };
+  }
+  out.resolutionPopover = opened;
+} catch (error) {
+  out.errors.push(`resolutionPopover: ${error.message}`);
+}
+
 // ---- the seed does not move on its own, and the last one is reachable -------
 //
 // A render here is minutes, and the seed widget is hidden — so the frontend's
@@ -2887,6 +2918,14 @@ check("the shelf is hidden until it is asked for", cast.get("beforePress"), 0)
 check("one press of the rail casts the first person", cast.get("afterPress"), 1)
 check("a subject nobody cites says so", cast.get("idleBefore"), 1)
 check("and clicking that is what cites her", cast.get("idleAfter"), 0)
+pop = report.get("resolutionPopover") or {}
+for mode in ("two_pass", "direct", "redetail"):
+    check(f"the resolution popover opens on {mode}",
+          (pop.get(mode) or {}).get("appeared"), True)
+# Two family rows past native, plus the backend's own.
+check("...offering all three finishes",
+      (pop.get("two_pass") or {}).get("rows"), 3)
+
 check("the shelf does not redraw under the caret", cast.get("survived"), True)
 check("and redraws once the field is left", cast.get("rebuilt"), True)
 check("the citation lands in the prompt",

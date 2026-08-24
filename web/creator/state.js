@@ -6,7 +6,7 @@ import { ASPECT_PRESETS, FPS, MIN_SHORT_EDGE, NATIVE_SHORT_EDGE, CANVAS_MULTIPLE
          featherGrid, framesForSeconds, secondsForFrames, matchSeconds,
          resolveCanvas, rulesFor } from "./canvas.js";
 import { DEFAULT_STILL_ARCH, DEFAULT_VIDEO_FAMILY, STILL_ARCHES,
-         VIDEO_FAMILIES, stillFamily, videoFamily } from "./manifest.js";
+         UPSCALERS, VIDEO_FAMILIES, stillFamily, upscaler, videoFamily } from "./manifest.js";
 import { t } from "./i18n.js";
 // Where files land is not in the blob any more — it is a preference of this
 // machine, in `settings.js`, so a shared workflow does not carry one person's
@@ -347,6 +347,80 @@ export function parseModels(raw, family = DEFAULT_VIDEO_FAMILY) {
   return out;
 }
 
+/**
+ * The weights this piece picked for the families it is not on — `{family:
+ * block}`, each block in that family's own slot ids.
+ *
+ * Set aside by `setFamily` and read back by it, so a piece that has been tried
+ * on two architectures remembers both sets of files. Kept per family and not
+ * merged into one block, for the reason `parseModels` gives: `vae` means a
+ * different file to each of them.
+ *
+ * Only known video families are kept. A block for a family this install has
+ * not got is dropped rather than carried, because there is no slot table to
+ * read it against and nothing that could ever hand it back.
+ */
+export function parseSpareModels(raw) {
+  const out = {};
+  if (!raw || typeof raw !== "object") return out;
+  for (const family of VIDEO_FAMILIES) {
+    const block = serializeModels(parseModels(raw[family], family), family).models;
+    if (Object.keys(block).length) out[family] = block;
+  }
+  return out;
+}
+
+/** Absent when nothing is set aside, so every piece that has never switched
+ *  families round-trips to the bytes it always did. */
+function serializeSpareModels(raw) {
+  const spare = parseSpareModels(raw);
+  return Object.keys(spare).length ? { models_spare: spare } : {};
+}
+
+// ---- the upscale backend's own weights ---------------------------------------
+//
+// Its own block beside `models`, mirroring `redetail.Weights`. Four of its five
+// slot ids are LTX 2.5's own — they are the same files from the same folders —
+// which is exactly why they cannot share a block with the piece's: `vae` on an
+// H3 piece is H3's video VAE, and two files cannot live under one key.
+
+/** Which of a backend's slots a piece rendering on `family` has to fill. The
+ *  backend declares the family whose weights are already these, and there the
+ *  render's own loaders answer — see `redetail.needed`. */
+export function upscalerFields(backend, family = DEFAULT_VIDEO_FAMILY) {
+  if (!backend) return [];
+  return backend.weights
+    .filter((slot) => backend.shares_with !== family || !slot.loads)
+    .map((slot) => slot.id);
+}
+
+export function emptyUpscalerModels() {
+  return {};
+}
+
+/** Whatever was in the blob, as a block of filenames. Every backend's slots at
+ *  once rather than the active one's: a piece that has been switched between
+ *  backends should not lose the files it picked for the other. */
+export function parseUpscalerModels(raw) {
+  const out = emptyUpscalerModels();
+  if (!raw || typeof raw !== "object") return out;
+  for (const backend of UPSCALERS) {
+    for (const slot of backend.weights) {
+      if (typeof raw[slot.id] === "string" && raw[slot.id].trim()) {
+        out[slot.id] = raw[slot.id].trim();
+      }
+    }
+  }
+  return out;
+}
+
+/** Absent when nothing was picked, so every piece that never touched a backend
+ *  round-trips to the bytes it always did. */
+function serializeUpscalerModels(models) {
+  const picked = parseUpscalerModels(models);
+  return Object.keys(picked).length ? { upscale_models: picked } : {};
+}
+
 /** Only what was actually picked, so a blob says nothing about fields nobody
  *  has touched — and a `dtype` left alone adds nothing at all. */
 function serializeModels(models, family = DEFAULT_VIDEO_FAMILY) {
@@ -361,6 +435,35 @@ function serializeModels(models, family = DEFAULT_VIDEO_FAMILY) {
   // Absent means "wherever ComfyUI would", so a single-GPU blob adds nothing.
   if (Object.keys(picked.devices).length) out.devices = { ...picked.devices };
   return { models: out };
+}
+
+/** One weights block as a blob writes it: only what was picked. The machine's
+ *  own memory of a family's files stores exactly this shape — see
+ *  `models.rememberWeights` — so the two cannot drift apart. */
+export const serializedModels = (models, family = DEFAULT_VIDEO_FAMILY) =>
+  serializeModels(models, family).models;
+
+/**
+ * Fill empty fields from what this machine last picked for the family, in
+ * place. -> whether it changed anything.
+ *
+ * The same rescue `guessModels` performs and a better-informed one, so it runs
+ * first: a filename guess is this pack reading a folder listing, and this is
+ * the answer the user gave the last time they were asked. Only ever fills an
+ * empty field — a piece that says which transformer it rendered on is not
+ * corrected by a memory of a later pick — and only fields the family has.
+ */
+export function adoptRemembered(models, remembered, family = DEFAULT_VIDEO_FAMILY) {
+  const block = remembered?.[family];
+  if (!block || typeof block !== "object") return false;
+  const stored = parseModels(block, family);
+  let changed = false;
+  for (const field of modelFields(family)) {
+    if (models[field] || !stored[field]) continue;
+    models[field] = stored[field];
+    changed = true;
+  }
+  return changed;
 }
 
 /**
@@ -558,6 +661,32 @@ export function serializeSampling(sampling) {
   return Object.keys(picked).length ? { sampling: picked } : {};
 }
 
+/**
+ * The rows this piece dialled for the families it is not on — `{family: row}`.
+ *
+ * The weights' stash, for the sampler row, and for the same reason: the row is
+ * the family's. Two of its fields are spelled the same on both — `steps` and
+ * `sampler_name` — and mean different things, so a row carried across a switch
+ * puts H3's 20 res_multistep steps on a transformer distilled to want 8 euler
+ * ones, quietly, on a piece nobody touched the row of. `setFamily` sets it
+ * aside instead, and hands it back on the way home.
+ */
+export function parseSamplingSpare(raw) {
+  const out = {};
+  if (!raw || typeof raw !== "object") return out;
+  for (const family of VIDEO_FAMILIES) {
+    const row = parseSampling(raw[family]);
+    if (Object.keys(row).length) out[family] = row;
+  }
+  return out;
+}
+
+/** Absent when nothing is set aside — every piece that never switched. */
+function serializeSamplingSpare(raw) {
+  const spare = parseSamplingSpare(raw);
+  return Object.keys(spare).length ? { sampling_spare: spare } : {};
+}
+
 /** The family's routed slots, which is also the granularity a LoRA belongs
  *  to: every mode a checkpoint answers for runs the same weights. */
 export const checkpointsOf = (id) => weightsOf(id).filter((slot) => slot.routed)
@@ -587,13 +716,19 @@ export const CHECKPOINT_CHOICES = ["auto", ...CHECKPOINTS];
 export const DEFAULT_STRENGTH = 1.0;
 
 /** Mirrors compile.UPSCALE_MODES, first_pass_edge and the refine-denoise
- *  clamp. A render whose first pass sits under the slider goes one of two
- *  ways: sample at the first-pass edge and refine up ("two_pass", the
- *  default), or one pass at the slider's size ("direct" — past native,
- *  off-distribution). The first-pass edge is native unless lowered, so past
- *  native two passes happen on their own, and under it only when the user
- *  lowers the edge — a blob without the key keeps meaning what it meant. */
-export const UPSCALE_MODES = ["two_pass", "direct"];
+ *  clamp. How a piece reaches the size it is finished at, asked once: sample
+ *  at the first-pass edge and refine up ("two_pass", the default), one pass at
+ *  the slider's size ("direct" — past native, off-distribution), or hand the
+ *  finished pass to a backend that is not the family's own ("redetail" — one
+ *  pass at the native edge, then a generative x2 re-render). The first-pass
+ *  edge is native unless lowered, so past native two passes happen on their
+ *  own, and under it only when the user lowers the edge — a blob without the
+ *  key keeps meaning what it meant.
+ *
+ *  "redetail" is the one whose finished size is not the slider's: it is twice
+ *  what was sampled, which is also the only way any of the three reaches past
+ *  the family's own edge. `redetailTarget` is what says so on the pill. */
+export const UPSCALE_MODES = ["two_pass", "direct", "redetail"];
 export const DEFAULT_REFINE_DENOISE = 0.5;
 export const MIN_REFINE_DENOISE = 0.1;
 export const MAX_REFINE_DENOISE = 0.9;
@@ -616,9 +751,39 @@ export const sampleEdge = (target) =>
            target.short_edge);
 
 /** Whether this canvas owner renders in two passes. `target` is anything with
- *  `short_edge`, `sample_edge` and `upscale` — a state or a timeline. */
+ *  `short_edge`, `sample_edge` and `upscale` — a state or a timeline.
+ *
+ *  A backend mode is not two passes: "redetail" samples once and then re-renders
+ *  what came out, which is a different thing from refining a latent up. */
 export const twoPass = (target) =>
-  sampleEdge(target) < target.short_edge && target.upscale !== "direct";
+  sampleEdge(target) < target.short_edge
+  && target.upscale !== "direct" && !upscalerOf(target);
+
+/** The backend this piece finishes through, or undefined where the mode is a
+ *  pass the family makes on its own. Mirrors what `compile_request` does with
+ *  the same field: `two_pass` and `direct` name no backend. */
+export const upscalerOf = (target) => upscaler(target?.upscale);
+
+/** What a piece finishing through a backend is finished at: the canvas as
+ *  sampled, times the backend's own factor. `null` where no backend is in play.
+ *
+ *  The slider is the *sampled* size under a backend and the finished size under
+ *  the other two, which is the one thing the pill has to say out loud — see
+ *  `pills.js`. Mirrors `redetail.target`: doubling a canvas already on the /32
+ *  grid is what puts it on the /64 grid the guide's dilation needs, which is why
+ *  the factor is the model's and not a number anyone gets to set.
+ *
+ *  `backend` is passed explicitly by the one caller that has to ask about a
+ *  finish the piece has *not* chosen: the option row offering it, which has to
+ *  print the size you would get before you get it. Default is the piece's own
+ *  choice, which is what every readout wants. */
+export function redetailTarget(target, ratio, backend = upscalerOf(target)) {
+  if (!backend) return null;
+  const rules = rulesFor(pieceFamily(target));
+  const [width, height] = resolveCanvas(ratio, sampleEdge(target), rules);
+  return { sampled: { width, height }, scale: backend.scale,
+           width: width * backend.scale, height: height * backend.scale };
+}
 
 /**
  * The face pass. Mirrors `compile.face_piece` / `compile.face_for`.
@@ -725,6 +890,9 @@ export function emptyState() {
     // Which files to load. Owned by the node, not by a segment — a timeline
     // segment inherits the timeline's and never carries its own.
     models: emptyModels(),
+    // And the upscale backend's own, on the same terms. Empty until a piece
+    // asks to finish through one.
+    upscale_models: emptyUpscalerModels(),
     // The turbo switch. Owned by the node for the same reason the weights are.
     turbo: emptyTurbo(),
   };
@@ -755,6 +923,7 @@ export function parseState(raw) {
       state.refine_denoise = clampRefineDenoise(state.refine_denoise);
       state.face = parseFace(state.face);
       state.models = parseModels(state.models);
+      state.upscale_models = parseUpscalerModels(state.upscale_models);
       state.turbo = parseTurbo(state.turbo);
       normalizeCheckpoint(state);
       for (const asset of state.assets) {
@@ -777,15 +946,17 @@ export function parseState(raw) {
 /** LoRA entries, stripped to what compile.py reads. Shared by a segment's own
  *  list and the timeline's global one — they are the same kind of entry and are
  *  merged into one stack by `compile.merge_loras`. */
-function serializeLoras(entries) {
+function serializeLoras(entries, family = DEFAULT_VIDEO_FAMILY) {
   return entries.map((entry) => {
     const out = { name: entry.name, strength: round2(entry.strength) };
     if (entry.enabled === false) out.enabled = false;
     // The literal words, not a pointer at the sidecar: creator_data has to
     // still say what it means on a machine where that LoRA is missing.
     if (entry.triggers?.length) out.triggers = [...entry.triggers];
-    // Absent means both checkpoints, so the common case adds nothing.
-    if (!claimsBoth(entry)) out.modes = [...entry.modes];
+    // Absent means both checkpoints, so the common case adds nothing — and on
+    // a family that routes between none, `modes` means nothing at all and is
+    // never written.
+    if (!claimsBoth(entry, family)) out.modes = [...entry.modes];
     return out;
   });
 }
@@ -860,8 +1031,10 @@ function serializeAssets(assets) {
   });
 }
 
-/** The parts of a state every generation has, timeline segment or not. */
-function serializeCommon(state) {
+/** The parts of a state every generation has, timeline segment or not.
+ *  `family` is the *piece's* — a segment carries none of its own — and only
+ *  decides what a LoRA's checkpoint claim is worth. */
+function serializeCommon(state, family = DEFAULT_VIDEO_FAMILY) {
   return {
     prompt: state.prompt ?? "",
     ...serializeRefined(state.refined),
@@ -871,7 +1044,7 @@ function serializeCommon(state) {
     ...(state.soundscape?.trim() ? { soundscape: state.soundscape } : {}),
     ...(state.music?.trim() ? { music: state.music } : {}),
     assets: serializeAssets(state.assets),
-    loras: serializeLoras(state.loras),
+    loras: serializeLoras(state.loras, family),
     duration_s: state.duration_s,
     // Only the deliberate state is written: absent is "the length is the
     // number beside it", which is what every blob written before the head
@@ -897,6 +1070,7 @@ export function serializeState(state) {
     // Not in serializeCommon: the weights belong to the node, and a timeline
     // segment goes through that function too. The turbo switch likewise.
     ...serializeModels(state.models),
+    ...serializeUpscalerModels(state.upscale_models),
     ...serializeTurbo(state.turbo),
   }, null, 2);
 }
@@ -1249,9 +1423,16 @@ export function emptyTimeline() {
     // overrides it, and a saved timeline keeps whatever it stored (a blob with
     // a models block and no route reads back as auto, exactly as it ran).
     models: { ...emptyModels(), route: ROUTED.timeline },
+    // The weights this piece picked for the families it is not on. Empty until
+    // it has been switched at least once — see `setFamily`.
+    models_spare: {},
+    // The upscale backend's own files, when the piece finishes through one.
+    upscale_models: emptyUpscalerModels(),
     // The turbo switch. Global like the LoRA it engages: a speed-up belongs to
     // the run, not to shot 3.
     turbo: emptyTurbo(),
+    // The rows dialled for the families this piece is not on. See `setFamily`.
+    sampling_spare: {},
     // How the piece is sampled. Empty on a fresh node and empty in every blob
     // saved before the row moved off the widgets: an absent field falls back to
     // the widget it always used, so a piece that says nothing here samples the
@@ -1338,21 +1519,72 @@ export function clearPiece(timeline) {
  * checkpoints the new family does not have:
  *
  * - the weights block, whose keys *are* the old family's slot ids;
- * - the turbo switch, whose LoRA was distilled against the old weights;
+ * - the turbo switch, whose LoRA was distilled against the old weights — and
+ *   the LoRA with it: the switch owns that entry, and a distill left in the
+ *   stack after its switch is gone is a file patched onto weights it was never
+ *   trained against, with no control left that admits to owning it;
  * - every card's checkpoint pin, which names a routed slot by id;
  * - each LoRA's `modes`, for the same reason — the file is left in the stack,
  *   because a LoRA is the user's and dropping it silently would be losing work,
  *   and it is retargeted at whatever the new family routes to.
  *
+ * **The weights are set aside rather than thrown away.** They are not writing,
+ * they are which files this machine has, and re-picking six of them for every
+ * trip between two families is the kind of chore that makes a switch not worth
+ * making. The outgoing block is stashed on the piece under its family's id and
+ * the incoming one comes back from that stash — and failing that from
+ * `remembered`, the last block this machine picked for the family it is going
+ * to (`settings.weights`, which the pill supplies because this module holds no
+ * machine settings of its own).
+ *
  * The canvas survives but is re-clamped: the edges are the new family's, and a
  * 1024 short edge on a family that stops at 768 is not a canvas.
  */
-export function setFamily(timeline, id) {
+export function setFamily(timeline, id, remembered = null) {
   const family = VIDEO_FAMILIES.includes(id) ? id : DEFAULT_VIDEO_FAMILY;
-  if (family === pieceFamily(timeline)) return false;
+  const was = pieceFamily(timeline);
+  if (family === was) return false;
   timeline.family = family;
 
-  timeline.models = emptyModels(family);
+  // Set aside under the family it belongs to, so coming back is free. Only
+  // what was picked — an untouched block stashes nothing, and the stash a
+  // piece never fills is never written to its blob.
+  const spare = parseSpareModels(timeline.models_spare);
+  const incoming = spare[family] ?? remembered?.[family];
+  const outgoing = serializeModels(timeline.models, was).models;
+  if (Object.keys(outgoing).length) spare[was] = outgoing;
+  else delete spare[was];
+  // The family being switched *to* keeps nothing in the stash: its block is
+  // about to be the live one, and two copies of it would be one to go stale.
+  delete spare[family];
+  timeline.models_spare = spare;
+
+  timeline.models = parseModels(incoming, family);
+  // The sampler row, on the same terms and for a sharper reason: `steps` and
+  // `sampler_name` are spelled the same on both families and mean different
+  // things, so a row left in place is H3's 20 res_multistep steps quietly in
+  // force on a transformer distilled to want 8 euler ones.
+  //
+  // The turbo switch is released into it first. Switching off *is* putting the
+  // row back — that is the whole bargain the switch strikes — and a switch
+  // reset without it would set aside a row that is a distillation's step count
+  // rather than the one the user dialled.
+  if (timeline.turbo?.on && timeline.turbo.saved) {
+    timeline.sampling = { ...(timeline.sampling ?? {}), ...timeline.turbo.saved };
+  }
+  const rows = parseSamplingSpare(timeline.sampling_spare);
+  const row = rows[family];
+  const dialled = parseSampling(timeline.sampling);
+  if (Object.keys(dialled).length) rows[was] = dialled;
+  else delete rows[was];
+  delete rows[family];
+  timeline.sampling_spare = rows;
+  timeline.sampling = row ?? {};
+
+  // The switch's own entry goes with the switch. Every other LoRA stays: it is
+  // the user's file and theirs to keep or remove, and the chip is where that is
+  // said. See the note above.
+  if (timeline.turbo?.lora) removeLora(timeline, timeline.turbo.lora);
   timeline.turbo = emptyTurbo();
 
   const routed = checkpointsOf(family);
@@ -1824,8 +2056,9 @@ export { syncCanvas as syncTimeline };
  */
 export const PIECE_FIELDS = ["family", "aspect", "aspect_source", "short_edge",
                              "upscale", "sample_edge", "refine_denoise", "face",
-                             "models", "turbo", "output_prefix", "subjects",
-                             "sampling"];
+                             "models", "models_spare", "upscale_models", "turbo",
+                             "output_prefix", "subjects", "sampling",
+                             "sampling_spare"];
 
 /** What only a lone generation ever carried at the top level. Tells a version-1
  *  `creator_data` blob from a fresh node's "{}" — which is an empty piece and
@@ -1932,6 +2165,9 @@ export function parseTimeline(raw) {
       timeline.refine_denoise = clampRefineDenoise(timeline.refine_denoise);
       timeline.face = parseFace(timeline.face);
       timeline.models = parseModels(timeline.models, timeline.family);
+      timeline.models_spare = parseSpareModels(timeline.models_spare);
+      timeline.sampling_spare = parseSamplingSpare(timeline.sampling_spare);
+      timeline.upscale_models = parseUpscalerModels(timeline.upscale_models);
       timeline.turbo = parseTurbo(timeline.turbo);
       // No card is invented for a blob that has none: a fresh node's widget is
       // "{}" and the strip it opens is empty on purpose — see `emptyTimeline`.
@@ -2078,7 +2314,7 @@ export function serializeTimeline(timeline) {
     ...(timeline.refine_denoise !== DEFAULT_REFINE_DENOISE
       ? { refine_denoise: timeline.refine_denoise } : {}),
     ...serializeFace(timeline.face),
-    loras: serializeLoras(timeline.loras ?? []),
+    loras: serializeLoras(timeline.loras ?? [], pieceFamily(timeline)),
     // The reference pool. Absent when empty, so a timeline that never used one
     // round-trips exactly as it always did.
     ...(timeline.assets?.length ? { assets: serializeAssets(timeline.assets) } : {}),
@@ -2093,8 +2329,11 @@ export function serializeTimeline(timeline) {
     // anything on the node quietly move its output back to the default folder.
     ...(timeline.output_prefix ? { output_prefix: timeline.output_prefix } : {}),
     ...serializeModels(timeline.models, pieceFamily(timeline)),
+    ...serializeSpareModels(timeline.models_spare),
+    ...serializeUpscalerModels(timeline.upscale_models),
     ...serializeTurbo(timeline.turbo),
     ...serializeSampling(timeline.sampling),
+    ...serializeSamplingSpare(timeline.sampling_spare),
     segments: timeline.segments.map((segment, index) => {
       if (isClip(segment)) {
         return {
@@ -2119,7 +2358,7 @@ export function serializeTimeline(timeline) {
             ? { feather_pin: true } : {}),
         };
       }
-      const out = serializeCommon(segment);
+      const out = serializeCommon(segment, pieceFamily(timeline));
       // Which pass this segment belongs to, said as "the same one as the
       // segment before me" — so a pass survives inserting, moving and deleting
       // with no numbers to keep in step. Never on the first segment, which is
@@ -2792,38 +3031,66 @@ export function nextHandle(state, kind) {
 
 const round2 = (value) => Math.round((Number(value) || 0) * 100) / 100;
 
-/** The checkpoints an entry claims. Missing or nonsense means both. */
-export function loraModes(entry) {
-  const claimed = (entry.modes || []).filter((m) => CHECKPOINTS.includes(m));
-  return claimed.length ? claimed : [...CHECKPOINTS];
+/**
+ * The checkpoints an entry claims. Missing or nonsense means every one of them.
+ *
+ * Empty on a family that routes between none: a LoRA there claims nothing
+ * because there is nothing to claim between, and every reader below treats an
+ * empty claim on such a family as "applies to the one set of weights". Which is
+ * why the family has to be passed — the old reading, "unrecognised means both",
+ * is H3's answer to a question LTX 2.5 does not ask, and it is what put an H3
+ * distill on an LTX transformer.
+ */
+export function loraModes(entry, family = DEFAULT_VIDEO_FAMILY) {
+  const all = checkpointsOf(family);
+  if (!all.length) return [];
+  const claimed = (entry.modes || []).filter((m) => all.includes(m));
+  return claimed.length ? claimed : [...all];
 }
 
-export const claimsBoth = (entry) => loraModes(entry).length === CHECKPOINTS.length;
+/** Whether an entry claims everything there is to claim — which is vacuously
+ *  true on a family with nothing, and is what keeps `modes` out of its blobs. */
+export const claimsBoth = (entry, family = DEFAULT_VIDEO_FAMILY) =>
+  loraModes(entry, family).length === checkpointsOf(family).length;
 
-/** The checkpoint the mode implies, before any pin. */
-export const derivedCheckpoint = (state) =>
-  (hasReferences(state) ? ROUTED.reference : ROUTED.plain);
+/** The checkpoint the mode implies, before any pin. Null on a family that
+ *  routes between none: "which of them" has no answer where there is one. */
+export const derivedCheckpoint = (state, family = DEFAULT_VIDEO_FAMILY) => {
+  if (!routing(family)) return null;
+  const routed = routesOf(family);
+  return hasReferences(state) ? routed.reference : routed.plain;
+};
 
 /** Which checkpoint this state routes to, and so which LoRAs will apply.
- *  Mirrors `compile._resolve_checkpoint`. */
-export function checkpoint(state) {
+ *  Mirrors `compile._resolve_checkpoint`, null included. */
+export function checkpoint(state, family = DEFAULT_VIDEO_FAMILY) {
+  if (!routing(family)) return null;
   const pin = state.checkpoint;
-  return !pin || pin === "auto" ? derivedCheckpoint(state) : pin;
+  return !pin || pin === "auto" ? derivedCheckpoint(state, family) : pin;
 }
 
+/** The same answer as a list, which is the shape `requiredModels` and the LoRA
+ *  chips' `targets` want: one checkpoint, or none at all. */
+export const checkpointsFor = (state, family = DEFAULT_VIDEO_FAMILY) => {
+  const routed = checkpoint(state, family);
+  return routed ? [routed] : [];
+};
+
 /** Whether the routing is the user's choice rather than the mode's. */
-export const checkpointPinned = (state) => canPinCheckpoint(state) && state.checkpoint !== "auto";
+export const checkpointPinned = (state, family = DEFAULT_VIDEO_FAMILY) =>
+  canPinCheckpoint(state, family) && state.checkpoint !== "auto";
 
 /** A pin only means anything where there is a choice to make. References are
  *  encoded *for* Ref2VA — no other weights can read the blocks — so the
- *  reference modes have none. */
-export const canPinCheckpoint = (state) => derivedCheckpoint(state) === ROUTED.plain;
+ *  reference modes have none, and neither has a family with one transformer. */
+export const canPinCheckpoint = (state, family = DEFAULT_VIDEO_FAMILY) =>
+  routing(family) && derivedCheckpoint(state, family) === routesOf(family).plain;
 
 /** Drop a pin the mode has moved out from under. Attaching a reference turns a
  *  frame generation into a reference one, and compile.py rejects an fl2va pin on
  *  that outright; clearing it here keeps the blob queueable. */
-export function normalizeCheckpoint(state) {
-  if (!canPinCheckpoint(state)) state.checkpoint = "auto";
+export function normalizeCheckpoint(state, family = DEFAULT_VIDEO_FAMILY) {
+  if (!canPinCheckpoint(state, family)) state.checkpoint = "auto";
 }
 
 /** The refiner's prose for a state, or "" when there is none in play. Mirrors
@@ -2836,11 +3103,15 @@ export function refinedBody(state) {
 
 export const findLora = (state, name) => state.loras.find((l) => l.name === name) || null;
 
-/** Applied to the routed checkpoint on the next queue, in patch order. */
-export function activeLoras(state) {
-  const target = checkpoint(state);
+/** Applied to the routed checkpoint on the next queue, in patch order. With
+ *  nothing to route between, every enabled entry is applied — there is one set
+ *  of weights and they are what a LoRA on this piece patches. Mirrors
+ *  `compile.active_loras`. */
+export function activeLoras(state, family = DEFAULT_VIDEO_FAMILY) {
+  const target = checkpoint(state, family);
   return state.loras.filter((entry) =>
-    entry.enabled !== false && loraModes(entry).includes(target) && round2(entry.strength) !== 0);
+    entry.enabled !== false && round2(entry.strength) !== 0
+    && (!target || loraModes(entry, family).includes(target)));
 }
 
 /** `triggers` seeds from the sidecar's trained words, which is the only moment
@@ -2853,15 +3124,16 @@ export function activeLoras(state) {
  *  that is not a distill, and the number that distill's author published for the
  *  ones that are, so engaging one from the manager lands where the switch would
  *  have put it. */
-export function addLora(state, name, triggers = [], strength = null) {
+export function addLora(state, name, triggers = [], strength = null,
+                        family = DEFAULT_VIDEO_FAMILY) {
   if (findLora(state, name)) return null;
-  const entry = newLora(name, triggers, strength);
+  const entry = newLora(name, triggers, strength, family);
   state.loras.push(entry);
   return entry;
 }
 
 /** One entry, as the file and its sidecar describe it. */
-function newLora(name, triggers, strength) {
+function newLora(name, triggers, strength, family = DEFAULT_VIDEO_FAMILY) {
   // A file with no sidecar arrives as `strength: null`, and `Number(null)` is 0
   // — a weight, and a legal one, so it has to be ruled out before the cast.
   const preferred = typeof strength === "number" ? strength : NaN;
@@ -2870,7 +3142,9 @@ function newLora(name, triggers, strength) {
     strength: Number.isFinite(preferred) && preferred >= -1 && preferred <= 2
       ? preferred : turboStrength(name),
     enabled: true,
-    modes: [...CHECKPOINTS], triggers: [...triggers],
+    // The family's routed slots — none, on a family that ships one
+    // transformer, where a claim would name a checkpoint nothing routes to.
+    modes: [...checkpointsOf(family)], triggers: [...triggers],
   };
 }
 
@@ -2880,10 +3154,10 @@ function newLora(name, triggers, strength) {
  * same reason canvas.js mirrors canvas.py: the node has to show the composed
  * prompt before anything is queued. compile.py stays authoritative.
  */
-export function promptTriggers(state) {
+export function promptTriggers(state, family = DEFAULT_VIDEO_FAMILY) {
   const out = [];
   const seen = new Set();
-  for (const entry of activeLoras(state)) {
+  for (const entry of activeLoras(state, family)) {
     for (const raw of entry.triggers || []) {
       const word = String(raw).trim();
       if (!word || seen.has(word.toLowerCase())) continue;
@@ -2901,24 +3175,33 @@ export function promptTriggers(state) {
  * a reference shot runs on Ref2VA and a text one on FL2VA in the same piece. So
  * "will this LoRA do anything" is a question about a set rather than about one
  * checkpoint, which is what the manager is handed instead of `checkpoint()`.
+ *
+ * Empty on a family that routes between none — and that empty list is the
+ * answer every caller wants: no checkpoint is required of the weights popover,
+ * no LoRA is idle for claiming the wrong one, and nothing is asked of a
+ * `models` block that has no such slot in it.
  */
 export function timelineCheckpoints(timeline) {
-  const routed = new Set(passes(timeline).map((pass) => passCheckpoint(pass.segments)));
-  return CHECKPOINTS.filter((name) => routed.has(name));
+  const family = pieceFamily(timeline);
+  const routed = new Set(passes(timeline)
+    .map((pass) => passCheckpoint(pass.segments, family)));
+  return checkpointsOf(family).filter((name) => routed.has(name));
 }
 
 /** The one checkpoint a pass runs on. Its shots are merged into a single
  *  request, so a reference in any of them makes the whole pass Ref2VA. */
-export function passCheckpoint(segments) {
+export function passCheckpoint(segments, family = DEFAULT_VIDEO_FAMILY) {
   // Supplied footage is played rather than sampled, so it routes to no
   // checkpoint at all — and a clip is never merged, so a pass holding one
   // holds nothing else. Answered before `checkpoint()`, which would ask a clip
   // card for the references it has no place to keep.
   if (segments.some(isClip)) return null;
-  if (segments.length === 1) return checkpoint(segments[0]);
-  if (segments.some(hasReferences)) return ROUTED.reference;
+  if (!routing(family)) return null;
+  if (segments.length === 1) return checkpoint(segments[0], family);
+  const routed = routesOf(family);
+  if (segments.some(hasReferences)) return routed.reference;
   const pin = segments.map((s) => s.checkpoint).find((c) => c && c !== "auto");
-  return pin || ROUTED.plain;
+  return pin || routed.plain;
 }
 
 /**
@@ -3063,12 +3346,16 @@ export function passProblem(timeline, pass) {
   return null;
 }
 
-/** The global LoRAs that will be patched onto at least one segment. */
+/** The global LoRAs that will be patched onto at least one segment. On a
+ *  family that routes between nothing, every enabled entry is one — the same
+ *  reading `activeLoras` gives. */
 export function activeGlobalLoras(timeline) {
+  const family = pieceFamily(timeline);
   const targets = timelineCheckpoints(timeline);
   return (timeline.loras ?? []).filter((entry) =>
     entry.enabled !== false && round2(entry.strength) !== 0
-    && loraModes(entry).some((mode) => targets.includes(mode)));
+    && (!routing(family)
+        || loraModes(entry, family).some((mode) => targets.includes(mode))));
 }
 
 export function removeLora(state, name) {
@@ -3106,7 +3393,8 @@ export function toggleLora(state, name) {
  * same LoRA cannot be patched twice — so the old slot goes and the entry that
  * was already there is left exactly as it stands.
  */
-export function replaceLora(state, name, next, triggers = [], strength = null) {
+export function replaceLora(state, name, next, triggers = [], strength = null,
+                            family = DEFAULT_VIDEO_FAMILY) {
   const at = state.loras.findIndex((entry) => entry.name === name);
   if (at < 0 || next === name) return null;
   const was = state.loras[at];
@@ -3116,8 +3404,8 @@ export function replaceLora(state, name, next, triggers = [], strength = null) {
     return already;
   }
   state.loras[at] = {
-    ...newLora(next, triggers, strength),
-    modes: [...loraModes(was)],
+    ...newLora(next, triggers, strength, family),
+    modes: [...loraModes(was, family)],
     ...(was.enabled === false ? { enabled: false } : {}),
   };
   return state.loras[at];

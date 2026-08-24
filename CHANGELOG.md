@@ -2,6 +2,68 @@
 
 ## Unreleased
 
+**Switching families keeps the weights, and only H3 routes.** Three faults, one
+root: the weights layer knew which family a piece renders with and the routing
+layer did not. A piece moved to LTX 2.5 reported two weights missing when every
+file it loads had been picked — it was being asked for `fl2va` and `ref2va`,
+which are H3's checkpoints and not slots LTX has — and a LoRA whose checkpoint
+claim LTX cannot read was taken to claim both of them, so the H3 distillation
+the turbo switch had thrown went on being patched onto a 22B LTX transformer
+with no switch left on the row that owned it. A family that ships one
+transformer now routes between nothing, on both sides of the pack: nothing is
+derived, nothing may be pinned, nothing is required, and a LoRA claims nothing —
+which means every enabled entry is patched onto the one set of weights there is.
+The turbo switch's own LoRA leaves with the switch when the family changes, and
+the switch is drawn only for a family that declares a distillation.
+
+**LoRAs on LTX 2.5.** Which loader patches a family's LoRAs is now the family's
+own: H3 keeps the vendored stack it needs — the stock loader is wrong on the
+quantized checkpoints most people run it on — and every other family goes
+through ComfyUI's own, which is what LTX's adapters want. LTX 2.5 takes LTX
+2.3's LoRAs, so those work here. Nothing checks a file to decide whether it
+belongs, because that is not knowable from the file; but a LoRA that patched
+nothing at all now says so and stops the render, instead of leaving you to
+wonder why it made no difference.
+
+**The sampler row is the family's too.** `steps` and `sampler` are spelled the
+same on both families and mean different things — 20 res_multistep steps is H3's
+row and 8 euler ones is the distilled LTX transformer's — so a row left in place
+across a switch was quietly sampling the new family at the old one's numbers. It
+is now set aside with the weights and handed back the same way, and the turbo
+switch is released into it on the way out: switching a family off is switching
+its turbo off, and that means putting the row it overwrote back.
+
+**The weights are remembered, per family.** Picking six files was a chore paid
+twice — once per new node, and once more every time a piece was switched between
+architectures, which threw away the block for the family being left. A piece now
+sets that block aside under its family's id and takes it back on return, and
+this machine remembers the last block picked for each family beside its other
+preferences. A node fills an *empty* row from that memory and never a row the
+workflow answered, so a saved piece still says what it rendered on.
+
+**The upscale pill has a third answer, and it is not the family's own.**
+ReDetail finishes a piece by re-rendering every decoded pass through LTX 2.5's
+pixel spatial upscaler at twice the canvas — an H3 render included, which is the
+point: the backend is the piece's choice and the family is not. Pick it on the
+resolution popover and the render samples once at the native edge and comes out
+at double it, past anything either family samples at on its own.
+
+It is a repaint rather than a polish. The model invents the fine detail as it
+goes, so it is right for soft or generated footage and wrong wherever a face has
+to stay the same person or a logo the same logo — the popover says so where the
+choice is made, not in a release note. The pass runs after the whole reel, so a
+seam still inherits the frames that were rendered rather than the ones that were
+re-invented; a strip carrying supplied footage is refused, because a clip is
+spliced at the size it already is and the parts of one reel have to match.
+
+Its weights are their own block under the weights popover, headed by the backend
+that loads them: a second architecture beside the one the piece renders with. A
+piece already rendering on LTX 2.5 fills one row rather than five — the render's
+own transformer, encoder and VAEs answer, and only the IC-LoRA is new. Nothing
+is loaded until a render actually reaches the pass. Built from ComfyUI's own LTX
+nodes, so no third-party pack is needed; the graph and its measurements come
+from [Bambushu's ReDetail](https://github.com/Bambushu/redetail).
+
 **LTX 2.5 renders.** The second video family samples now, rather than being
 described and refused. Pick it on the model pill in front of the weights and the
 node loads Lightricks' 22B transformer, Gemma 4 with LTX's projections and the

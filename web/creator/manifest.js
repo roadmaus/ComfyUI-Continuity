@@ -77,3 +77,14 @@ export const videoFamily = (id) =>
  *  the one video family this pack shipped still imports. Family-aware readers
  *  take `videoFamily(piece.family)` instead. */
 export const VIDEO = videoFamily(DEFAULT_VIDEO_FAMILY);
+
+/** The upscale backends that belong to no family — ReDetail re-renders a
+ *  finished pass through LTX 2.5's weights whatever family made it. Served
+ *  beside the families for exactly that reason: listing its files inside H3's
+ *  manifest would read as H3 having grown a transformer. */
+export const UPSCALERS = catalog.upscalers ?? [];
+
+/** One backend's manifest, by the id `piece.upscale` names. Undefined where
+ *  the mode is a family's own pass — `two_pass` and `direct` are not
+ *  backends, they are what the family does by itself. */
+export const upscaler = (id) => UPSCALERS.find((entry) => entry.id === id);

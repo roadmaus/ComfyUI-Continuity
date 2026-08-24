@@ -562,6 +562,20 @@ export const css = `
 .mmc-dur-match:hover { color: var(--mmc-text); }
 .mmc-dur-match:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: -2px; }
 .mmc-dur-match.on { color: var(--mmc-off); cursor: default; }
+/* The duration group's other tail: the switch that hands the length to the
+   model. Same shape as the match above — a word behind a hairline at the end of
+   the group — because it is the same slot answering the same question. It is a
+   switch rather than a readout, so it lights in the accent when it is the one
+   deciding, and the seconds beside it go dim and grow a "~" to match. */
+.mmc-dur-auto {
+  display: flex; align-items: center; height: 100%; margin-left: 6px; padding: 0 10px;
+  background: none; border: 0; border-left: 1px solid var(--mmc-line);
+  color: var(--mmc-dim); font-family: inherit; font-size: calc(12px * var(--mmc-type));
+  white-space: nowrap; cursor: pointer;
+}
+.mmc-dur-auto:hover { color: var(--mmc-text); }
+.mmc-dur-auto:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: -2px; }
+.mmc-dur-auto.on { color: var(--mmc-accent); }
 .mmc-step {
   background: none; border: 0; color: var(--mmc-text); cursor: pointer;
   font-size: calc(16px * var(--mmc-type)); width: calc(26px * var(--mmc-type)); height: calc(36px * var(--mmc-type)); font-family: inherit;

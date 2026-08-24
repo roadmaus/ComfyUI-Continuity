@@ -78,7 +78,8 @@ export function loraBlock(state, spec) {
   // Trigger words go in front of the prompt at compile time. Showing the
   // prefix is the difference between that and the prompt quietly not being
   // what the box says it is.
-  const triggers = spec.triggers === false ? [] : S.promptTriggers(state);
+  const triggers = spec.triggers === false
+    ? [] : S.promptTriggers(state, spec.family ?? S.DEFAULT_VIDEO_FAMILY);
   if (triggers.length) {
     parts.push(el("div", {
       class: "mmc-note",
@@ -94,12 +95,17 @@ export function loraBlock(state, spec) {
 /** One entry: the mute, the weight, the swap and the ✕. */
 function loraChip(entry, { targets = null, family = S.DEFAULT_VIDEO_FAMILY,
                            onToggle, onManage, onSwap, onRemove }) {
-  const modes = S.loraModes(entry);
+  const modes = S.loraModes(entry, family);
   const label = S.checkpointLabels(family);
+  // Whether this chip has a checkpoint to say anything about at all. A family
+  // that ships one transformer has none — every LoRA is patched onto it — so
+  // the chip wears its strength alone, which is also what the PreStage's
+  // single-DiT stacks have always done (`targets: null`).
+  const routes = Boolean(targets?.length) && S.routing(family);
   // Set to a checkpoint this graph does not route to. Still in the stack —
   // dropping it on a route change would throw the setting away — but out of
   // the run, and said so on the chip rather than only in the manager.
-  const idle = targets ? !modes.some((mode) => targets.includes(mode)) : false;
+  const idle = routes ? !modes.some((mode) => targets.includes(mode)) : false;
   return el("div", {
     class: `mmc-asset${idle ? " idle" : ""}${entry.enabled === false ? " off" : ""}`,
     title: idle
@@ -119,11 +125,11 @@ function loraChip(entry, { targets = null, family = S.DEFAULT_VIDEO_FAMILY,
     el("button", {
       class: "mmc-ghost",
       style: { fontSize: "11px" },
-      title: targets
+      title: routes
         ? t("Strength, and which checkpoint this LoRA belongs to")
         : t("Strength — edit on the LoRA card"),
-      text: targets
-        ? `${Number(entry.strength ?? 1).toFixed(2)} · ${S.claimsBoth(entry) ? t("both") : label[modes[0]]}`
+      text: routes
+        ? `${Number(entry.strength ?? 1).toFixed(2)} · ${S.claimsBoth(entry, family) ? t("both") : label[modes[0]]}`
         : Number(entry.strength ?? 1).toFixed(2),
       onclick: () => onManage(entry),
     }),
@@ -198,7 +204,7 @@ class LoraManager {
     // chunking, previews and sidecar reading.
     this.swapping = swapping;
     this.targets = targets ?? (this.checkpointModes
-      ? [S.checkpoint(state)] : [...S.checkpointsOf(family)]);
+      ? S.checkpointsFor(state, family) : [...S.checkpointsOf(family)]);
     this.onChange = onChange;
     this.resolve = resolve;
     this.query = "";
@@ -340,7 +346,8 @@ class LoraManager {
     // triggers become chips that can be switched off, the strength a slider
     // that can be dragged. Starting from what the file's author chose is only
     // a better guess than 1.00, not a decision.
-    else S.addLora(this.state, row.name, row.trained_words || [], row.strength);
+    else S.addLora(this.state, row.name, row.trained_words || [], row.strength,
+                   this.family);
     this.refreshCard(row);
     this.changed();
   }
@@ -349,7 +356,8 @@ class LoraManager {
    *  one pick is the whole errand, and staying open would ask a question — which
    *  of these two is the swap — that the grid can no longer answer. */
   swapTo(row) {
-    S.replaceLora(this.state, this.swapping, row.name, row.trained_words || [], row.strength);
+    S.replaceLora(this.state, this.swapping, row.name, row.trained_words || [],
+                  row.strength, this.family);
     this.changed();
     this.close();
   }
@@ -732,7 +740,8 @@ class LoraManager {
       onpointerdown: (event) => event.stopPropagation(),
     });
 
-    const current = S.claimsBoth(entry) ? "both" : S.loraModes(entry)[0];
+    const current = S.claimsBoth(entry, this.family)
+      ? "both" : S.loraModes(entry, this.family)[0];
     const modes = el("div", { class: "mmc-seg" }, modeChoices(this.family).map(([value, label, hint]) =>
       el("button", {
         class: "mmc-seg-btn",
@@ -768,7 +777,7 @@ class LoraManager {
    *  family does not have. */
   applies(entry) {
     if (!this.checkpointModes && !this.targets.length) return true;
-    return S.loraModes(entry).some((mode) => this.targets.includes(mode));
+    return S.loraModes(entry, this.family).some((mode) => this.targets.includes(mode));
   }
 
   routesTo() {

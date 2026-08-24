@@ -18,6 +18,7 @@ import re
 from dataclasses import dataclass, field, replace
 
 from . import canvas
+from . import redetail
 from .families import registry
 from .families.h3 import contextir, subjects
 
@@ -85,12 +86,18 @@ FEATHER_GRID = canvas.FEATHER_GRID
 
 HANDLE_RE = re.compile(r"@([A-Za-z]+-\d+)")
 
-# Whether a render whose first pass sits under the slider's canvas gets the
-# second, refining pass. "two_pass" samples at `sample_edge` — the trained
+# How a piece reaches the size it is finished at — one choice, three answers,
+# and the pill asks it once. "two_pass" samples at `sample_edge` — the trained
 # 768 px edge unless the blob lowers it — and refines up to the slider;
 # "direct" is the old behaviour, one pass at the slider's size, which past
-# native is off-distribution. Mirrored by the resolution popover in `pills.js`.
-UPSCALE_MODES = ("two_pass", "direct")
+# native is off-distribution. "redetail" hands the finished pass to an upscale
+# backend that is not the family's own: one sampling pass, never above the
+# native edge, then a generative x2 re-render through LTX 2.5's IC-LoRA
+# (`redetail.py`). It is the only one of the three whose finished size is not
+# the slider's — it is twice what was sampled, which is the only way any of
+# them reaches past the family's own edge. Mirrored by the resolution popover
+# in `pills.js`.
+UPSCALE_MODES = ("two_pass", "direct", "redetail")
 
 # How much of the schedule the refine pass runs. 0.5 keeps the first pass's
 # composition and motion while re-resolving the detail the interpolation
@@ -132,7 +139,11 @@ MAX_FACE_DENOISE = 0.9
 # whether this shot is one of the ones that needs it.
 FACE_OVERRIDES = ("on", "off")
 
-CHECKPOINTS = ("fl2va", "ref2va")
+# H3's pair, which is what every reader that predates a second family spells.
+# `registry.ROUTED` is the family-aware answer and is what the functions below
+# ask; this stays because H3's own modules (`families/h3/still.py`) mean these
+# two and nothing else.
+CHECKPOINTS = registry.ROUTED[registry.DEFAULT_VIDEO]
 
 # Which of a reference video's streams are actually referenced. "sound" drops the
 # picture entirely: the file becomes an audio reference like any other, which is
@@ -236,6 +247,23 @@ class Face:
     denoise: float
 
 
+@dataclass(frozen=True)
+class ReDetail:
+    """The re-detail pass: the canvas the finished pass is re-rendered at.
+
+    On `Compiled` when the upscale pill says "redetail". Unlike `Refine` it
+    changes nothing about what the sampler is handed — it happens after the pass
+    is decoded and written, like `Face` — and unlike `Face` it hands back a pass
+    at a *different size*, which is why every part of the reel has to be running
+    it and why a strip carrying supplied footage cannot.
+
+    No denoise: the schedule is the model's own eight steps and there is no
+    partial version of it (`redetail.SIGMAS`).
+    """
+    width: int
+    height: int
+
+
 @dataclass
 class Compiled:
     mode: str
@@ -333,6 +361,10 @@ class Compiled:
     # after this pass is decoded and written, which is why it carries only its
     # own canvas and denoise.
     face: Face | None = None
+    # The re-detail pass, when the upscale pill named a backend that is not this
+    # family's own. `width`/`height` above are what was sampled; this is what the
+    # finished file is, and it is the one upscale mode where those differ.
+    redetail: ReDetail | None = None
 
     def encodes_video(self):
         """Whether building this segment's conditioning calls `vae.encode`.
@@ -381,25 +413,34 @@ class Compiled:
                     or any(v.track == "picture+sound" for v in self.ref_videos))
 
 
-def lora_modes(entry):
-    """The checkpoints a LoRA entry claims. Missing or unrecognised means both."""
-    claimed = tuple(m for m in (entry.get("modes") or ()) if m in CHECKPOINTS)
-    return claimed or CHECKPOINTS
+def lora_modes(entry, family=registry.DEFAULT_VIDEO):
+    """The checkpoints a LoRA entry claims. Missing or unrecognised means all of
+    the family's — and none at all where the family routes between none, which
+    is what `active_loras` reads as "patch it, there is one set of weights"."""
+    routed = registry.ROUTED.get(family, ())
+    claimed = tuple(m for m in (entry.get("modes") or ()) if m in routed)
+    return claimed or routed
 
 
-def active_loras(entries, checkpoint):
+def active_loras(entries, checkpoint, family=registry.DEFAULT_VIDEO):
     """The entries that will actually be patched onto `checkpoint`, in order.
 
     Lives here rather than in `lora.py` so that the trigger words and the weights
     can never disagree about which LoRAs are in the run — `lora.py` imports this.
     This module stays free of torch and ComfyUI, which is also what keeps it
     testable.
+
+    A falsy `checkpoint` is a family that routes between none: there is one
+    transformer, every enabled entry is patched onto it, and a claim is not
+    consulted because there is nothing for one to select. Reading it the other
+    way round — an empty claim as "both of H3's" — is what put an H3
+    distillation on an LTX 2.5 render.
     """
     active = []
     for entry in entries or []:
         if not entry.get("name") or entry.get("enabled") is False:
             continue
-        if checkpoint not in lora_modes(entry):
+        if checkpoint and checkpoint not in lora_modes(entry, family):
             continue
         try:
             if float(entry.get("strength", 1.0)) == 0.0:
@@ -621,7 +662,7 @@ def _derive_mode(first_frame, last_frame, ref_images, ref_videos, ref_audios,
     return "T2VA"
 
 
-def _resolve_checkpoint(mode, raw):
+def _resolve_checkpoint(mode, raw, family=registry.DEFAULT_VIDEO):
     """Which weights the generation runs on, given the mode and the user's pin.
 
     The mode says how the request is *encoded*; the checkpoint says which weights
@@ -637,8 +678,15 @@ def _resolve_checkpoint(mode, raw):
     an explicit statement about those weights, so it is honoured and flagged
     (`pinned`) rather than second-guessed here.
     """
+    routed = registry.ROUTED.get(family, ())
+    # A family that ships one transformer routes between nothing, and a pin left
+    # on a card by a family that did is not an error — it is a field the piece
+    # has since stopped having a use for, exactly like `auto_duration` on a
+    # family with no duration head.
+    if not routed:
+        return "", False
     choice = raw or "auto"
-    if choice not in ("auto",) + CHECKPOINTS:
+    if choice not in ("auto",) + routed:
         raise CompileError(f"unknown checkpoint {choice!r}")
     derived = "ref2va" if mode == "REF2VA" else "fl2va"
     if choice == "auto":
@@ -1168,7 +1216,7 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     opens_presented = first_frame is not None or head_seam_shown
     closes_presented = last_frame is not None or tail_seam_shown
 
-    checkpoint, pinned = _resolve_checkpoint(mode, data.get("checkpoint"))
+    checkpoint, pinned = _resolve_checkpoint(mode, data.get("checkpoint"), family)
     if mode == "REF2VA":
         plan = plan_references(ref_images, ref_videos, ref_audios)
         labels = _labels_from_plan(plan)
@@ -1200,7 +1248,7 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     # In front of the *body*, not of the finished prompt: the keyframe-alignment
     # instruction has to be the prompt's first line, so words prefixed above it
     # would push it out of position.
-    triggers = collect_triggers(active_loras(data.get("loras"), checkpoint))
+    triggers = collect_triggers(active_loras(data.get("loras"), checkpoint, family))
     if triggers:
         prefix = ", ".join(triggers)
         body = f"{prefix}, {body}" if body.strip() else prefix
@@ -1244,12 +1292,18 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     # setting existed keeps meaning what it meant. The still branch pins
     # "direct": it upscales through the single-image VAE instead and has no
     # refine pass to hand this to.
+    # A third answer, which is the backend one: "redetail" samples once and
+    # never above the native edge — going off-distribution and then asking a
+    # second family to invent detail on top of the result is two ways of being
+    # wrong about the same frame — and the finished size is twice what was
+    # sampled rather than the slider's. So the slider stops being the target
+    # here, and the pill is what says so.
     mode_raw = str(data.get("upscale") or UPSCALE_MODES[0])
     if mode_raw not in UPSCALE_MODES:
         raise CompileError(f"unknown upscale mode {mode_raw!r}")
     first_edge = first_pass_edge(data.get("sample_edge"), short_edge, rules)
     two_pass = first_edge < short_edge and mode_raw == "two_pass"
-    sample_edge = first_edge if two_pass else short_edge
+    sample_edge = first_edge if two_pass or mode_raw == "redetail" else short_edge
 
     # The instruction line carries the real duration to two decimals, so this has
     # to come after the frame count and never off `duration_s`.
@@ -1406,6 +1460,14 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
         if target != (width, height):
             refine = Refine(*target, denoise=refine_denoise(data.get("refine_denoise")))
 
+    # The re-detail pass takes the canvas as sampled and doubles it. No ratio to
+    # re-resolve and no snapping: doubling a canvas already on the /32 grid puts
+    # it on the /64 one the IC-LoRA needs, which is the whole reason the factor
+    # is the model's rather than a number on a slider (`redetail.target`).
+    redetail_pass = None
+    if mode_raw == "redetail":
+        redetail_pass = ReDetail(*redetail.target(width, height))
+
     # The face pass, read off the same key the piece writes: `timeline_payloads`
     # has already resolved the piece setting against this shot's own switch, so
     # what arrives here is either the settings this pass runs or nothing at all.
@@ -1455,6 +1517,7 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
         ends_tail_s=ends_tail_s,
         refine=refine,
         face=face,
+        redetail=redetail_pass,
     )
 
 
@@ -2094,9 +2157,16 @@ def _inject_pool(pool, request, extra_texts=(), cast=()):
 # creator/timeline split, written down as a list. A lone generation kept all of
 # these inline because it had nowhere else to keep them; a piece holds them once
 # and every shot on the strip is held to them. Mirrors `state.PIECE_FIELDS`.
+# `models_spare` and `sampling_spare` are the odd ones out and are here for one
+# reason: they are fields of the piece, so a v1 blob being lifted must carry
+# them up with the rest. They are the weights and the sampler row this piece has
+# for the families it is *not* on — the node's memory, so switching
+# architectures does not mean re-picking six files and re-dialling a row each
+# way — and nothing on this side ever reads either.
 PIECE_FIELDS = ("family", "aspect", "aspect_source", "short_edge", "upscale",
-                "sample_edge", "refine_denoise", "face", "models", "turbo",
-                "output_prefix", "subjects", "sampling")
+                "sample_edge", "refine_denoise", "face", "models",
+                "models_spare", "upscale_models", "turbo",
+                "output_prefix", "subjects", "sampling", "sampling_spare")
 
 # What only a lone generation ever carried at the top level. Used to tell a
 # version-1 `creator_data` blob from a fresh node's "{}" — which is an empty
@@ -2257,6 +2327,22 @@ def timeline_payloads(data, image_size_lookup=None):
             f"({frames} frames) and one node will not queue more than "
             f"{MAX_TIMELINE_FRAMES // (60 * canvas.FPS)} — shorten it, or split the piece "
             f"across two Timeline nodes"
+        )
+
+    # The re-detail pass hands every generated pass back at twice the canvas,
+    # and supplied footage is spliced at the size it already is — it is never
+    # decoded, which is the whole reason a clip costs nothing to carry. So a
+    # strip with both in it would reach the muxer as parts that do not match
+    # (`mux.reel_geometry`), and the honest place to say so is here, off the
+    # blob, rather than after the last pass has sampled.
+    if str(data.get("upscale") or "") == "redetail" \
+            and any(is_clip(segment) for segment in segments):
+        raise CompileError(
+            "this piece is set to finish through ReDetail, which re-renders "
+            "every pass at twice the canvas — and the strip has supplied "
+            "footage on it, which is spliced in at the size it already is. "
+            "Take the clip off the strip, or set the upscale pill back to a "
+            "pass this family makes on its own."
         )
 
     payloads = []
