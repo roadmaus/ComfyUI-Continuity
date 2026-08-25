@@ -575,6 +575,35 @@ seam" into one flag swallows the branch that *keys* the first frame's label —
 a seam's picture is counted without being keyed, an attached frame is both.
 `test_compile.py` caught it within one run.
 
+## Phase 4: what the node body shows while it samples
+
+Reported off a real LTX render: no preview at all, ten minutes of step counter.
+The cause is a gate written when there was one family and one decoder.
+`graph_preview` emitted KJNodes' override **only if `weights.preview` named a
+file**, which reads as "taeh3 is what turns the preview on". It is not. The
+decoder is a quality setting inside that node; the node is the whole mechanism.
+
+Core cannot stand in for it, and trying is worse than the gap. ComfyUI's own
+default is `--preview-method none` and the frontend setting that overrides it
+defaults to "the server's", so a stock install previews nothing anywhere — and
+when previews *are* on, core's frames are broadcast against the expansion's
+`parent_node_id`, which the frontend paints onto the canvas node, over the top
+of the node body. That is what `suppress_default_preview` has always been for.
+
+So the override is emitted whenever the pack is installed, decoder or not, and
+LTX 2.5 emits it too — in `_sampled`, so both stages get one, outside
+`ModelSamplingLTXV` because it wraps OUTER_SAMPLE. With `tiny_vae` left at its
+own "none" KJNodes decodes latent2rgb itself, animated across the clip rather
+than core's single first frame; and on an LTX latent format it uses its own LTX
+previewer, which reads `keyframe_idxs` off the conditioning and crops the guide
+frames `LTXVAddGuide` appended — the thing our `LTXVCropGuides` does to the
+finished latent, done to the preview. LTX declares no `preview` slot: there is
+nothing it would improve that the family does not already get for free.
+
+Not covered, and worth saying: the ReDetail pass samples in Python through
+`latent_preview.prepare_callback`, so it previews only if the user has core's
+previews on. Wrapping it the same way is a separate piece of work.
+
 ## Open questions (answer during phase 4)
 
 - Whether `refine` has any meaning as *prompt expansion* for a plain-prose

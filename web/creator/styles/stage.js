@@ -21,9 +21,17 @@ export const css = `
 
 .mmc-stage {
   /* The card's own floor matters when there is no media to size it — a failed
-     render is a chip of text in an otherwise empty box. */
+     render is a chip of text in an otherwise empty box.
+
+     A column, and it has to say display: the media row below is flex 1, and
+     that is what stretches it to the card's height — the height the picture then
+     fills. Without it the row is auto-height, the media's height 100% resolves
+     against nothing and falls back to the file's own size, and the preview sits
+     in the corner at whatever the decoder happened to produce. taeh3 decodes at
+     ~480px and hid that for as long as it was the only preview there was;
+     latent2rgb decodes the latent itself, which is 30x17 on an LTX canvas. */
   position: relative; height: 100%; min-width: 240px;
-  flex-direction: column; min-height: 0;
+  display: flex; flex-direction: column; min-height: 0;
   border-radius: 16px; overflow: hidden;
   background: var(--mmc-media-bg); border: 1px solid var(--mmc-line);
   box-shadow: 0 8px 30px var(--mmc-shadow-soft);
@@ -37,6 +45,15 @@ export const css = `
    its edge, so this wants the colour behind the card rather than a colour of its
    own. It was a literal black for as long as that ground was black. */
 .mmc-stage[data-state="sampling"] { outline: 3px solid var(--mmc-bg); outline-offset: 4.5px; }
+/* The card's *width* is the picture's shape at the node's height. Shrink-to-fit
+   cannot work it out — a parent's max-content width comes from the image's
+   intrinsic width and ignores any cap on its height — so the one fact CSS cannot
+   derive is measured off the media by Stage.setAspect and handed back here.
+   Without it the card sat at its 240px floor whatever it held and letterboxed
+   the picture inside, which is invisible while the preview decodes at roughly
+   the render's own shape and glaring the moment it decodes a 30x17 latent. The
+   dock states this for itself, on its own terms — this one is the satellite's. */
+.mmc-satellite .mmc-stage { aspect-ratio: var(--mmc-media-ar, auto); }
 .mmc-stage-media { flex: 1; min-height: 0; display: flex; }
 .mmc-stage-img, .mmc-stage-video {
   height: 100%; width: auto; min-height: 0; object-fit: contain;

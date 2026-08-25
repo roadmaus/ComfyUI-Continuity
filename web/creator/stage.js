@@ -134,14 +134,25 @@ export class Stage {
    * So the one fact CSS cannot derive is measured off the media and handed over,
    * and `aspect-ratio` does the rest. Called from the media's own load, because
    * that is the first moment either size is known.
+   *
+   * **Twice, in two forms, because the ratio and the number are not the same
+   * thing to CSS.** `aspect-ratio` takes `w / h`, which cannot be multiplied by
+   * anything; the docked card has to work out which of its two bounds it hits
+   * first and that is arithmetic, so it gets the number as well. `data-sized`
+   * says the measurement has happened at all — the card has no shape to hug
+   * before a picture lands, and a failed render never gets one.
    */
   setAspect(width, height) {
     if (!width || !height) return;
     this.root.style.setProperty("--mmc-media-ar", `${width} / ${height}`);
+    this.root.style.setProperty("--mmc-media-arn", `${width / height}`);
+    this.root.dataset.sized = "1";
   }
 
   clearAspect() {
     this.root.style.removeProperty("--mmc-media-ar");
+    this.root.style.removeProperty("--mmc-media-arn");
+    delete this.root.dataset.sized;
   }
 
   releaseFrame() {

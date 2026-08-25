@@ -22,10 +22,18 @@ madebyollin's `taeh3` goes. So this wires that node up exactly the way `accel.py
 wires up the two accelerator packs: read the installed class's own defaults,
 override the handful we mean, never reimplement.
 
-Unlike an accelerator, though, a missing preview is not worth an error. The
-generation is identical either way, and core's own previews already carry our
-node id, so `graph_preview` quietly returns the model untouched and the node body
-fills up with latent2rgb instead of taeh3.
+Unlike an accelerator, though, a missing pack is not worth an error: the
+generation is identical either way, so `graph_preview` quietly returns the model
+untouched and the node body shows a step count and no picture.
+
+**A decoder is a quality setting inside that node, not the reason for it.** With
+none picked KJNodes decodes latent2rgb itself — animated across the clip, and on
+LTX through its own LTX previewer — and broadcasts it under our node's id, which
+is the whole preview story on a family that has no taeh released for it. Core
+cannot stand in for that: its previews are off in a stock install
+(`--preview-method none`), and when they are on the frontend paints them onto the
+canvas node over the top of the node body, which is what `suppress_default_preview`
+is for.
 
 **ComfyUI-MultiGPU gets the same treatment, and costs even less.** It registers a
 subclass of each core loader that takes the identical inputs plus an optional
@@ -545,22 +553,55 @@ def emit_links(graph, weights, checkpoints, audio=True):
     return Links(links)
 
 
-def preview_available(weights):
-    """Whether a taeh3 preview can be built: a file picked and the pack present."""
+def preview_available():
+    """Whether KJNodes' override node is installed."""
     import nodes
 
-    return bool(weights.preview) and PREVIEW_NODE in nodes.NODE_CLASS_MAPPINGS
+    return PREVIEW_NODE in nodes.NODE_CLASS_MAPPINGS
+
+
+def picked_preview(weights):
+    """The tiny decoder this render was pointed at, or None.
+
+    Asked through `get` and defended, because the slot is a family's own: H3
+    declares `preview`, and LTX 2.5 declares nothing of the kind because the
+    override node already knows how to preview an LTX latent without one.
+    """
+    try:
+        picked = weights.get("preview")
+    except AttributeError:
+        return None
+    return picked if isinstance(picked, str) and picked else None
 
 
 def graph_preview(graph, model, weights):
     """Patch the preview override onto a MODEL link. Returns the new link.
 
+    Emitted whenever the pack is installed, whether or not a tiny decoder was
+    picked — **the decoder is a quality setting inside this node, not the reason
+    for it**. Without one the node draws the same latent2rgb core would draw,
+    except animated across the whole clip and, on LTX, through KJNodes' own LTX
+    previewer, which knows to crop the guide frames `LTXVAddGuide` appended.
+
+    That distinction is what the node body actually depends on. ComfyUI ships
+    with previews off (`--preview-method none`, and the frontend's own setting
+    defaults to that), so core draws nothing at all in a stock install — this
+    node is the only thing that previews a render of ours, since it decodes and
+    broadcasts on its own terms rather than through `latent_preview`. Gating it
+    on a decoder nobody has downloaded meant a family with no taeh released for
+    it — every family but H3 — sampled for ten minutes behind an empty box.
+
+    And it is still the only thing that *may* preview: core's own frames are
+    painted onto the canvas node by the frontend, over the top of the node body,
+    which is why `suppress_default_preview` is on and why turning core's
+    previews on instead is not the answer.
+
     Returns `model` untouched, adding nothing to the graph, when the pack is not
-    installed or no decoder was picked. Deliberately not an error, unlike
-    `accel.plan`: an accelerator that cannot run changes what you asked for, and
-    a preview that cannot run changes only what you watch while it happens.
+    installed. Deliberately not an error, unlike `accel.plan`: an accelerator
+    that cannot run changes what you asked for, and a preview that cannot run
+    changes only what you watch while it happens.
     """
-    if not preview_available(weights):
+    if not preview_available():
         return model
 
     import nodes
@@ -571,8 +612,12 @@ def graph_preview(graph, model, weights):
     # `accel.py` does it: hardcoding them here means they go stale silently the
     # first time the pack retunes one.
     kwargs = accel.node_defaults(node)
+    picked = picked_preview(weights)
+    if picked:
+        # Optional, so it is not in the defaults above and is passed only when
+        # there is one — the node's own "none" is the latent2rgb path.
+        kwargs["tiny_vae"] = picked
     kwargs.update({
-        "tiny_vae": weights.preview,
         "preview_frames": PREVIEW_FRAMES,
         "preview_fps": PREVIEW_FPS,
         # The sampler node inside our subgraph is not on anyone's canvas, so its

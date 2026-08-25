@@ -431,6 +431,12 @@ export const css = `
 .mmc-fs-dock {
   display: flex; flex: 1 1 auto; min-width: 0; min-height: 0; align-self: stretch;
   align-items: center; justify-content: center;
+  /* And it is the box the card measures itself against: cqw/cqh below are this
+     element's, which is the only way to say "as large as fits in both axes"
+     when the two bounds live on different percentage bases. Size containment is
+     free here — the dock is stretched by its column and never took its size
+     from its contents anyway. */
+  container-type: size;
 }
 .mmc-fs-still { display: none; }
 .mmc-fs-still.showing { display: flex; flex: none; padding: 14px 14px 0; }
@@ -439,8 +445,13 @@ export const css = `
    satellite, whose height is the node's and whose width the picture decides,
    and wrong in a column, where a landscape render scaled to the full height is
    wider than the column and the card's overflow:hidden cuts its sides off.
-   Here the media is contained by both edges and the card takes its shape from
-   what is inside it.
+   Here the media is contained by both edges and the card takes its *shape* from
+   what is inside it — its shape, and no longer its size. It used to take both,
+   which is a different rule that agreed with this one for as long as every
+   picture was bigger than the dock: width auto against a contained image is the
+   image's own pixels, and a latent2rgb preview is the latent, 30x17 on an LTX
+   canvas. The full-size frame the dock holds until a picture lands would hand
+   over to a postage stamp adrift in the middle of the column.
 
    Both maxima carry the plate scale, which is what the corner grip sets: one
    number, applied to the box rather than to the element, so the picture keeps
@@ -466,15 +477,28 @@ export const css = `
   min-width: 0;
   border-radius: 18px; box-shadow: 0 24px 64px var(--mmc-shadow-soft);
 }
+/* Once the media has been measured, the card is the largest box of that shape
+   the dock will hold: the width it wants is the column's, unless the height that
+   implies is taller than the column, in which case the height decides and the
+   width follows it. That is the arithmetic the ratio alone cannot do, which is
+   why Stage.setAspect hands over the number as well. Both bounds carry the plate
+   scale — the grip's one number — and the maxima above stay as the guard for the
+   moment between the picture arriving and being measured. */
+.mmc-fs-dock .mmc-stage[data-sized] {
+  width: min(calc(100cqw * var(--mmc-plate-scale, 1)),
+             calc(100cqh * var(--mmc-plate-scale, 1) * var(--mmc-media-arn, 1)));
+  height: auto;
+}
 .mmc-fs-dock .mmc-stage[data-state="failed"] { min-width: 240px; }
 .mmc-fs-still .mmc-stage { max-width: 100%; max-height: 66vh; }
-/* The card carries flex-direction but never display:flex — on a satellite it
-   does not need it, because the card's height is the node's and the media is
-   sized off that height alone. Docked, the card is sized by the *column*, and
-   without the flex the row inside it has an auto height, which is a height no
-   percentage can resolve against: the media went to its intrinsic size and the
-   card's overflow:hidden took whatever stuck out. */
-.mmc-fs-dock .mmc-stage, .mmc-fs-still .mmc-stage { display: flex; }
+/* The card used to carry flex-direction but never display:flex, and this is
+   where the flex was put back on — which read as a fact about being docked and
+   was not one. A row with an auto height is a height no percentage can resolve
+   against wherever it is: on the satellite too the media went to its intrinsic
+   size, which nobody saw while the only preview there was decoded at roughly the
+   render's shape, and which put a 30x17 latent2rgb frame in the corner of a
+   full-height card the moment a second family had no taeh to decode through.
+   The card carries the display itself now (styles/stage.js). */
 /* And the row may be narrower than what is in it. A flex item's automatic
    minimum size is its own intrinsic width, so a 1024-wide render simply refused
    to shrink into a narrower column however the card above it was clamped — and

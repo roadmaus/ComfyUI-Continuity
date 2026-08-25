@@ -539,9 +539,9 @@ expect_error("a .gguf VAE is refused as unloadable",
 # ---- the preview override ---------------------------------------------------
 #
 # KJNodes' node is optional in the way the accelerators are optional, except that
-# a missing one is not even a warning: the render is identical and core's own
-# previews still carry this node's id. The harness boots with custom nodes off,
-# so the absent path is the one that runs here unaided.
+# a missing one is not even a warning: the render is identical, and what is lost
+# is the picture in the node body rather than anything sampled. The harness boots
+# with custom nodes off, so the absent path is the one that runs here unaided.
 
 check("no preview node when the pack is not installed",
       "ModelPreviewOverrideKJ" in kinds, False)
@@ -599,9 +599,15 @@ try:
     check("the sampler reads the patch",
           preview_kinds["KSampler"][0][1]["model"][0], patches[0][0])
 
-    # No decoder picked is the same as no pack installed: nothing is emitted.
-    check("no preview node without a decoder to use",
-          "ModelPreviewOverrideKJ" in by_class(build(without("preview")).expand), False)
+    # No decoder picked is not the same as no pack installed: the node still
+    # goes on, and previews latent2rgb from inside itself. It is the only thing
+    # that previews these renders at all — core's previews are off in a stock
+    # install, and would land on the canvas node rather than in the body — so
+    # gating it on a file most people have not downloaded is an empty box.
+    bare = by_class(build(without("preview")).expand)["ModelPreviewOverrideKJ"]
+    check("the preview node is emitted without a decoder to use", len(bare), 1)
+    check("...and the decoder input is left at the node's own 'none'",
+          "tiny_vae" in bare[0][1], False)
 finally:
     comfy_nodes.NODE_CLASS_MAPPINGS.clear()
     comfy_nodes.NODE_CLASS_MAPPINGS.update(_restore)

@@ -2,6 +2,36 @@
 
 ## Unreleased
 
+**Every render has a live preview again, not just an H3 one pointed at taeh3.**
+The preview override was only ever emitted when a tiny decoder had been picked,
+which made a decoder look like the thing that turns previews on. It is not: it
+is a quality setting *inside* KJNodes' node, and the node itself is the only
+thing that previews these renders at all — ComfyUI ships with previews off, and
+where they are switched on the frontend paints them onto the canvas node rather
+than into the body. So an LTX 2.5 piece, and any H3 piece whose owner had not
+downloaded taeh3, sampled for ten minutes behind an empty box. The node is now
+emitted whenever KJNodes is installed, on both families and on both of LTX's
+sampling stages. Without a decoder it draws latent2rgb — colour without detail,
+animated across the clip — and on LTX through KJNodes' own LTX previewer, which
+knows to crop off the guide frames the sampler appended. Picking taeh3 still
+does what it always did, on the family that has one.
+
+**And the stage card holds the picture at the card's size, whatever size the
+picture is.** The card declared a column but never `display: flex`, so the media
+row had an automatic height, the picture's `height: 100%` had nothing to resolve
+against, and it fell back to the decoded file's own size — while the card's
+width sat on its 240px floor because shrink-to-fit reads an image's intrinsic
+width and ignores any cap on its height. Neither showed while the only preview
+in the pack decoded at roughly the render's own shape. A latent2rgb frame is the
+latent — 30×17 on an LTX canvas — and it landed in the corner of a full-height
+card as a postage stamp. The card is a flex column now and takes its shape from
+the media it was handed, which is the mechanism `Stage.setAspect` already fed the
+fullscreen dock. The dock had the other half of the same fault: it took the
+picture's shape *and its size* from what was inside it, so the full-size frame it
+holds while you wait handed over to a 30×17 card adrift in the column. It is the
+largest box of the picture's shape the column will hold now, at whatever the
+corner grip is set to.
+
 **The sampler row a pill writes is the one the render reads.** Two faults with
 one shape. The store's field list was H3's, written down, so an LTX 2.5 piece
 kept `steps` and lost the rest of its row on the way through — `video_cfg`, the

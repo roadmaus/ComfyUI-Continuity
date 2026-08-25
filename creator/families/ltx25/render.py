@@ -16,7 +16,10 @@ stage that is a *latent upscaler* rather than a re-sample at a bigger canvas.
     RandomNoise(seed)                                                      -> NOISE
                                                      -> SamplerCustomAdvanced
 
-— and the scheduler and the model patch are both handed the latent, because the
+— with KJNodes' preview override wrapped outside the lot where it is installed,
+so a render of this family is watchable at all (`models.graph_preview`).
+
+The scheduler and the model patch are both handed the latent, because the
 shift they compute is a function of its token count. They must be given the same
 shift pair: they are two readings of one curve, and letting them disagree is a
 quality bug with nothing in the log.
@@ -117,13 +120,22 @@ class LTX25(base.Family):
             **seams)
 
     def _sampled(self, graph, model, positive, negative, latent, sampling, seed,
-                 sigmas):
+                 sigmas, weights):
         """One custom-sampling pass over `latent`. -> the sampled latent link.
 
         The four nodes that differ between the two stages are the caller's
         (`sigmas` above, and the model it hands in); everything here is the same
         both times, which is the whole reason it is written once.
+
+        The preview override goes on last, outside `ModelSamplingLTXV`, because
+        it wraps OUTER_SAMPLE and wants to be the outermost thing on the model —
+        the same place H3's `render.patched` puts it. This family picks no tiny
+        decoder, and does not need to: KJNodes recognises an LTX latent format
+        and previews it through its own LTX previewer, guide frames cropped off.
+        Without the pack installed this adds nothing and there is no preview,
+        which is the one case worth a line in the log rather than an error.
         """
+        model = core.graph_preview(graph, model, weights)
         guider = graph.node(
             "LTXVDualCFGGuider", model=model,
             positive=positive, negative=negative,
@@ -180,7 +192,7 @@ class LTX25(base.Family):
         sigmas, patch = self._schedule(graph, latent, sampling)
         sampled = self._sampled(graph, patch(segment.out(0)),
                                 segment.out(1), segment.out(3), latent,
-                                sampling, seed, sigmas)
+                                sampling, seed, sigmas, weights)
         if compiled.refine is not None:
             # Left packed and uncropped on purpose: the second stage crops
             # before it upscales, so cropping here would be the same slice done
@@ -220,7 +232,7 @@ class LTX25(base.Family):
         # some would have the model looking for picture that is not there.
         return self._sampled(graph, patch(segment.out(0)),
                              crop.out(0), crop.out(1), packed,
-                             sampling, seed, tail)
+                             sampling, seed, tail, weights)
 
 
 class Links:

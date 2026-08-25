@@ -433,6 +433,58 @@ check("a piece naming no family is still H3's",
       ("MiniMaxH3TimelineSegment" in h3, "KSampler" in h3), (True, True))
 check("...and is saved at H3's rate", h3["MiniMaxH3Save"][0][1]["fps"], 24.0)
 
+# ---- the preview override -----------------------------------------------------
+#
+# This family picks no tiny decoder and needs none: KJNodes recognises an LTX
+# latent format and previews it through its own LTX previewer. What it does need
+# is the node, because nothing else previews a render of ours — core's previews
+# are off in a stock install, and where they are on the frontend paints them onto
+# the canvas node instead of into the body. Before this, an LTX piece sampled for
+# ten minutes behind an empty box.
+
+
+class _FakePreview:
+    FUNCTION = "execute"
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {"required": {
+            "model": ("MODEL",),
+            "max_resolution": ("INT", {"default": 1024}),
+            "jpeg_quality": ("INT", {"default": 80}),
+            "suppress_default_preview": ("BOOLEAN", {"default": True}),
+            "preview_frames": ("INT", {"default": 1}),
+            "preview_fps": ("INT", {"default": 12}),
+        }}
+
+
+check("nothing is emitted with the pack absent", "ModelPreviewOverrideKJ" in kinds, False)
+
+_restore = dict(comfy_nodes.NODE_CLASS_MAPPINGS)
+comfy_nodes.NODE_CLASS_MAPPINGS["ModelPreviewOverrideKJ"] = _FakePreview
+try:
+    previewed = by_class(build(piece()).expand)
+    patches = previewed["ModelPreviewOverrideKJ"]
+    check("one preview patch on a one-stage render", len(patches), 1)
+    check("no decoder is asked for", "tiny_vae" in patches[0][1], False)
+    check("...and the default preview is suppressed, ours being the only one",
+          patches[0][1]["suppress_default_preview"], True)
+    # Outermost on the model: the override wraps OUTER_SAMPLE, so it reads the
+    # sigma-shifted model rather than the other way round.
+    check("it wraps the shift patch",
+          patches[0][1]["model"][0] in
+          [node_id for node_id, _ in previewed["ModelSamplingLTXV"]], True)
+    check("and the guider reads the wrapped model",
+          previewed["LTXVDualCFGGuider"][0][1]["model"][0], patches[0][0])
+    # Two stages are two sampling passes, and a second pass nobody can watch is
+    # the same empty box as the first one.
+    both = by_class(build(piece(short_edge=1088)).expand)
+    check("one per sampling pass on a two-stage render",
+          len(both["ModelPreviewOverrideKJ"]), len(both["SamplerCustomAdvanced"]))
+finally:
+    comfy_nodes.NODE_CLASS_MAPPINGS.clear()
+    comfy_nodes.NODE_CLASS_MAPPINGS.update(_restore)
+
 # ---- the listing --------------------------------------------------------------
 #
 # The weights popover browses one listing for the whole node and picks its rows
