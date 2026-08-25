@@ -59,9 +59,7 @@ from . import (accel, canvas, compile as compiler, media,
                settings, timeline)
 from .core import emit as loop
 from .families import registry
-from .families.h3 import (declare as h3, facepass, hires,
-                          segment as h3_segment)
-from .families.ltx25 import segment as ltx25_segment
+from .families.h3 import declare as h3, facepass, hires
 
 DEFAULT_DATA = json.dumps({
     "version": 2,
@@ -352,8 +350,11 @@ class MiniMaxH3Timeline(io.ComfyNode):
 
 class MiniMaxCreatorExtension(ComfyExtension):
     async def get_node_list(self):
+        # The families' segment nodes are asked of the registry rather than
+        # imported here: a family registers its own node by being a family, and
+        # this list stops being a place anyone has to remember to edit.
         return [MiniMaxH3Creator, MiniMaxH3Timeline,
-                *timeline.NODES, *h3_segment.NODES, *ltx25_segment.NODES,
+                *timeline.NODES, *registry.segment_nodes(),
                 *prestage.NODES, *hires.NODES, *facepass.NODES,
                 *redetailpass.NODES]
 

@@ -919,3 +919,22 @@ try:
         h3_render_mod.CORE_EMPTY_NOISE_IS_NESTED = core
 finally:
     settings_mod.turbo_lead_in = was
+
+
+# ---- the node list is asked of the families ----------------------------------
+#
+# A family's segment node reaches ComfyUI's registry by being the family's, not
+# by being named in `creator_node.py`. That was the last edit outside a family
+# package that adding a family required, so it is worth a case: the extension's
+# list has to carry every video family's declared node id and nothing has to be
+# added here for a new one.
+
+_registry = importlib.import_module(f"{PACKAGE}.creator.families.registry")
+_extension = asyncio.new_event_loop().run_until_complete(
+    cn.MiniMaxCreatorExtension().get_node_list())
+_listed = {node.define_schema().node_id for node in _extension}
+for _family in _registry.DECLARED:
+    if "video" not in _family.PRODUCES:
+        continue
+    check(f"{_family.ID}'s segment node is registered",
+          _family.SEGMENT_NODE in _listed, True)

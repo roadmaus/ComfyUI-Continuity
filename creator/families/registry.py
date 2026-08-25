@@ -156,6 +156,25 @@ def still(arch):
     return importlib.import_module(f".{family}.still", __package__)
 
 
+def segment_nodes():
+    """Every video family's segment node, for the pack's ComfyUI extension.
+
+    Asked of the families rather than listed by the extension, which is what
+    makes registering one the family's own business: a new package used to need
+    a line in `creator_node.py` before its node existed at all — the last edit
+    outside a family package that adding a family still required.
+
+    Imported here and not at module scope, for the reason everything else in
+    this module is lazy: a segment node pulls in ComfyUI and the pure suites
+    load declarations without a server.
+    """
+    nodes = []
+    for family in video_families():
+        module = importlib.import_module(f".{family}.segment", __package__)
+        nodes.extend(module.NODES)
+    return nodes
+
+
 def video(family=DEFAULT_VIDEO):
     """The video `Family` singleton (`families/base.py`) for `family`.
 
