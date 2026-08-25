@@ -758,6 +758,10 @@ class PresetLibrary {
     return P.crossable(key, row.scope, this.target.scope, {
       arch: row.facts?.arch ?? null,
       targetArch: this.target.arch?.() ?? null,
+      // Off the index row, so which sections can land is answerable before the
+      // body is fetched — the same reason `arch` is a fact.
+      family: row.facts?.family ?? null,
+      targetFamily: this.target.family?.() ?? null,
     });
   }
 
@@ -1513,7 +1517,7 @@ class PresetLibrary {
         disabled: !cross.ok,
         // A section that cannot cross is shown and disabled with the reason on
         // it, never hidden: a missing row is a bug the user reports.
-        title: cross.ok ? "" : t(cross.why),
+        title: cross.ok ? "" : t(cross.why, cross.params),
         onclick: () => {
           if (on) this.keys.delete(key); else this.keys.add(key);
           this.renderInspector();

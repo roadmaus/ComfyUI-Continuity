@@ -86,13 +86,19 @@ function fakeIO(initial = {}) {
   };
 }
 
+// Every field H3 declares, because the list a preset carries is derived from
+// exactly that. It was written down instead, and the three at the end are what
+// that cost: `attention`, `chunk_ffn` and `fp16_accumulation` arrived after the
+// list was written and no preset ever kept them.
 const ROW = {
   steps: 7, cfg: 2.5, sampler_name: "euler", scheduler: "beta",
   shift_video: 6, shift_audio: 4, block_cache: "fast",
   spectrum: true, spectrum_blend: 0.75,
+  attention: "sage", chunk_ffn: true, fp16_accumulation: true,
   // Not a preset's business, and the check below proves it is not carried.
   seed: 4471,
 };
+const ROW_FIELDS = Object.keys(ROW).filter((name) => name !== "seed");
 
 // A piece with something in every section, so nothing can pass by being empty.
 const SOURCE = JSON.stringify({
@@ -146,8 +152,8 @@ try {
 
   out.roundTrip = {
     blob: S.serializeTimeline(target) === captured,
-    // Every widget the row carries, at the value it was captured at.
-    row: P.SPEED_WIDGETS.every((name) => targetIO.values[name] === ROW[name]),
+    // Every field the family declares, at the value it was captured at.
+    row: ROW_FIELDS.every((name) => targetIO.values[name] === ROW[name]),
     // …and the seed left exactly as the target had it.
     seedUntouched: targetIO.values.seed === 99,
   };
@@ -276,8 +282,68 @@ try {
   // explanation on it, which is the failure mode this design set out to avoid.
   out.everyRefusalExplained = Object.values(reasons)
     .every((why) => why === true || (typeof why === "string" && why.length > 12));
+
+  // The crossing that is not about scope at all: two pieces, two families. The
+  // row and the weights are the family's — both spell `steps` and
+  // `sampler_name` and mean different things by them, and no slot id is shared
+  // — so those two sections refuse and everything else crosses freely.
+  const across = (key) => P.crossable(key, "piece", "piece",
+                                      { family: "h3", targetFamily: "ltx25" });
+  out.families = {
+    speed: across("speed").ok === false && !!across("speed").why,
+    weights: across("weights").ok === false,
+    // The reason names both of them rather than saying "different families".
+    named: ["h3", "ltx25"].every((id) =>
+      Object.values(across("speed").params ?? {}).includes(S.FAMILY_LABEL[id])),
+    // Same family, same everything: nothing here narrows an ordinary crossing.
+    same: P.crossable("speed", "piece", "piece",
+                      { family: "ltx25", targetFamily: "ltx25" }).ok,
+    // A card's row is the piece's, so it crosses on the same terms.
+    shot: P.crossable("speed", "shot", "piece",
+                      { family: "h3", targetFamily: "ltx25" }).ok === false,
+    // Sections that are not the family's are untouched by any of it.
+    others: ["prompt", "loras", "refs", "look"].every((key) =>
+      P.crossable(key, "piece", "piece", { family: "h3", targetFamily: "ltx25" }).ok),
+    // A pre-stage on the H3 branch *is* a creator request, so its weights are
+    // H3's and land on an H3 piece and on no other.
+    stillBranchToH3: P.crossable("weights", "prestage", "piece",
+                                 { arch: "minimax", targetFamily: "h3" }).ok,
+    stillBranchToLtx: P.crossable("weights", "prestage", "piece",
+                                  { arch: "minimax", targetFamily: "ltx25" }).ok === false,
+  };
 } catch (error) {
   out.errors.push(`cross: ${error.stack}`);
+}
+
+// ---- a family's own row, kept whole -----------------------------------------
+//
+// The list a preset carries used to be H3's, written down. On LTX 2.5 that kept
+// `steps` and `sampler_name` — the two names both rows happen to spell — and
+// dropped the cfg pair, the sigma curve, the stretch and the guidance.
+try {
+  const source = S.parseTimeline(JSON.stringify({
+    version: 2, family: "ltx25", prompt: "a red room", aspect: "16:9",
+    segments: [{ prompt: "a", assets: [], loras: [], duration_s: 5 }],
+  }));
+  S.syncTimeline(source);
+  const LTX_ROW = { steps: 8, video_cfg: 3, audio_cfg: 7, sampler_name: "euler",
+                    max_shift: 2.4, base_shift: 0.9, stretch: false, terminal: 0.2,
+                    stg_scale: 1, stg_blocks: "29,30", modality_scale: 3 };
+  const body = P.capturePiece(source, fakeIO({ ...LTX_ROW, seed: 12 }));
+  const target = S.parseTimeline(JSON.stringify({
+    version: 2, family: "ltx25", prompt: "b",
+    segments: [{ prompt: "c", assets: [], loras: [], duration_s: 5 }],
+  }));
+  const targetIO = fakeIO({});
+  P.applyToPiece(body, ["speed"], target, targetIO);
+  out.ltxRow = {
+    family: body.speed?.family,
+    whole: Object.entries(LTX_ROW).every(([name, value]) => targetIO.values[name] === value),
+    // None of H3's, which this family does not have.
+    noH3: !("cfg" in body.speed.row) && !("shift_video" in body.speed.row),
+  };
+} catch (error) {
+  out.errors.push(`ltx row: ${error.stack}`);
 }
 
 // A pre-stage's init becomes a card's start frame — the direction the whole
@@ -403,7 +469,11 @@ try {
   out.preRoundTrip = {
     blob: S.serializePreStage(target) === captured,
     arch: target.arch === "ideogram4",
-    row: targetIO.values.steps === 48 && targetIO.values.cfg === 7,
+    // Ideogram 4's row is a quality, a cfg and a sampler — no steps and no
+    // scheduler at all. So the cfg crosses and the step count does not: the
+    // target keeps its own 52, because a preset off this architecture has no
+    // opinion about a control this architecture does not have.
+    row: targetIO.values.cfg === 7 && targetIO.values.steps === 52,
   };
   if (!out.preRoundTrip.blob) {
     out.preRoundTrip.got = JSON.parse(S.serializePreStage(target));
@@ -891,6 +961,23 @@ if not pre_trip.get("blob"):
                     f"    got  {json.dumps(pre_trip.get('got'), sort_keys=True)[:400]}")
 check("the architecture comes with it", pre_trip.get("arch"), True)
 check("and so does its shorter row", pre_trip.get("row"), True)
+
+families = report.get("families", {})
+check("a row does not cross between model families", families.get("speed"), True)
+check("...nor do the weights", families.get("weights"), True)
+check("...and the reason names both families", families.get("named"), True)
+check("...while the same family crosses as it always did", families.get("same"), True)
+check("...a card's row is the piece's, and refuses the same way", families.get("shot"), True)
+check("...and nothing else on the preset is narrowed", families.get("others"), True)
+check("an H3 pre-stage's weights reach an H3 piece",
+      families.get("stillBranchToH3"), True)
+check("...and not one on another family", families.get("stillBranchToLtx"), True)
+
+ltx_row = report.get("ltxRow", {})
+check("a preset off an LTX 2.5 piece says whose row it holds",
+      ltx_row.get("family"), "ltx25")
+check("...carries the whole of it", ltx_row.get("whole"), True)
+check("...and none of H3's", ltx_row.get("noH3"), True)
 
 # ---- the card ---------------------------------------------------------------
 

@@ -652,13 +652,25 @@ const SAMPLING_FIELD_CACHE = new Map();
  *  backend resolves an absent field against its own defaults — so this says
  *  what a field is, and says nothing about what it should be. */
 export function samplingFields(family = DEFAULT_VIDEO_FAMILY) {
-  let fields = SAMPLING_FIELD_CACHE.get(family);
+  return rowFields(videoFamily(family));
+}
+
+/** The same, for a pre-stage's architecture. Its row is a family's row too —
+ *  Krea 2 declares four controls and Ideogram 4 declares three *different*
+ *  ones — and the only thing that differs is which manifest answers. */
+export const stillRowFields = (arch) => rowFields(stillFamily(arch));
+
+/** The list itself, off one manifest. Keyed on the manifest object rather than
+ *  on an id, because the two callers above address a family by two different
+ *  vocabularies and there is one answer per manifest either way. */
+function rowFields(manifest) {
+  let fields = SAMPLING_FIELD_CACHE.get(manifest);
   if (!fields) {
-    fields = Object.fromEntries(widgetsOf(family)
+    fields = Object.fromEntries(manifest.widgets
       .filter((w) => w.group === "sampler" || w.group === "accel"
                      || w.group === "guidance")
       .map((w) => [w.id, FIELD_KIND[w.type]]));
-    SAMPLING_FIELD_CACHE.set(family, fields);
+    SAMPLING_FIELD_CACHE.set(manifest, fields);
   }
   return fields;
 }

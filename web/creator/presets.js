@@ -252,6 +252,11 @@ export const SCOPE_SECTIONS = {
 };
 
 export const SCOPES = ["piece", "shot", "prestage", "cast", "style"];
+
+/** The scopes that are a video piece, and so have a video family. A pre-stage
+ *  has an *arch* instead — its own vocabulary, and the crossing `crossable`
+ *  already answers for it below. */
+const VIDEO_SCOPES = ["piece", "shot"];
 export const SCOPE_LABEL = { piece: "Piece", shot: "Shot", prestage: "Pre-stage",
                              cast: "Cast", style: "Style" };
 
@@ -262,8 +267,13 @@ export const SCOPE_LABEL = { piece: "Piece", shot: "Shot", prestage: "Pre-stage"
  * A section that cannot cross is shown and disabled with the reason on it, never
  * hidden: "this pre-stage runs Krea 2, and these are H3 checkpoints" is
  * information, where a missing row is a bug the user reports.
+ *
+ * `why` is a translation key and `params` what fills it, so a reason can name
+ * the two things it is about without any of it being assembled from fragments
+ * a translator cannot reorder.
  */
-export function crossable(key, from, to, { arch = null, targetArch = null } = {}) {
+export function crossable(key, from, to, { arch = null, targetArch = null,
+                                           family = null, targetFamily = null } = {}) {
   if (!SCOPE_SECTIONS[to]?.includes(key)) {
     if (key === "strip") return { ok: false, why: "Only a piece has a strip." };
     if (key === "shot") return { ok: false, why: "Only a card has a duration and a seam." };
@@ -275,6 +285,37 @@ export function crossable(key, from, to, { arch = null, targetArch = null } = {}
     if (key === "look" && to === "shot") return { ok: false, why: "The piece owns the canvas, not the shot." };
     if (key === "weights" && to === "shot") return { ok: false, why: "The piece owns the weights, not the shot." };
     return { ok: false, why: "Not something this node holds." };
+  }
+  // Two video families, and the sections that are one family's. This is the
+  // crossing `from === to` cannot answer, because it is not about scope: a
+  // piece is a piece either way, and what differs is what its row and its
+  // weights *mean*. Both families spell `steps` and `sampler_name`, so H3's
+  // twenty res_multistep steps land on a transformer distilled to want eight
+  // euler ones without a single unknown key to notice; the weights are worse,
+  // since the slot ids are the family's and none of one family's is any of the
+  // other's. `setFamily` sets both aside per family on a piece for exactly this
+  // reason — a preset is the same crossing arriving from outside.
+  //
+  // A pre-stage has an arch rather than a family, and only its H3 branch has a
+  // family at all: that branch's `request` *is* a creator request, so its row
+  // and its files are H3's. The image arches answer `null` and are governed by
+  // the arch rule below instead, which is the one they have always been under.
+  const sideFamily = (scope, ownArch, ownFamily) =>
+    (scope === "prestage"
+      ? (ownArch === S.PRESTAGE_STILL_ARCH ? S.DEFAULT_VIDEO_FAMILY : null)
+      : (VIDEO_SCOPES.includes(scope) ? ownFamily : null));
+  const fromFamily = sideFamily(from, arch, family);
+  const toFamily = sideFamily(to, targetArch, targetFamily);
+  if ((key === "speed" || key === "weights")
+      && fromFamily && toFamily && fromFamily !== toFamily) {
+    return {
+      ok: false,
+      why: key === "speed"
+        ? "This row is {from}'s and this one renders on {to}. The two spell some of the same settings and mean different things by them."
+        : "These are {from}'s files and this one renders on {to}, which loads a different set.",
+      params: { from: t(S.FAMILY_LABEL[fromFamily] ?? fromFamily),
+                to: t(S.FAMILY_LABEL[toFamily] ?? toFamily) },
+    };
   }
   if (from === to) return { ok: true };
   // The one genuinely awkward crossing. The two node families name different
@@ -298,17 +339,35 @@ export function crossable(key, from, to, { arch = null, targetArch = null } = {}
 // and a capture that read the state directly would be a second opinion about all
 // of it.
 
-/** The sampler widgets a preset carries, by node family. The seed is not one of
- *  them and never will be: it is the one number that has to be different next
- *  time, and `control_after_generate` exists to make sure of it — a preset that
- *  restored one would turn "run it again" into "run the same frame again". */
-export const SPEED_WIDGETS = ["steps", "cfg", "sampler_name", "scheduler",
-                              "shift_video", "shift_audio",
-                              "block_cache", "spectrum", "spectrum_blend", "sage"];
+/**
+ * The row a preset carries, off the family whose row it is.
+ *
+ * Derived rather than written down, for the reason the store's own field list
+ * is (`state.samplingFields`): a list here is one family's, and this one was
+ * H3's. It carried neither the attention list nor the two machine switches that
+ * arrived after it, so three settings a user had dialled were dropped by every
+ * preset that claimed to keep the row; it carried `sage`, which is not a blob
+ * field at all but the retired switch `adoptSage` exists to *clear*; and on a
+ * family that is not H3 it carried `steps` and `sampler_name` — the two names
+ * both rows happen to spell the same — and nothing else. An LTX 2.5 piece kept
+ * as a preset came back with its cfg pair, its sigma curve, its stretch and its
+ * guidance gone.
+ *
+ * The seed is in none of them and never will be: it is the one number that has
+ * to be different next time, and `control_after_generate` exists to make sure
+ * of it — a preset that restored one would turn "run it again" into "run the
+ * same frame again". It is not in `samplingFields` either, for the same reason
+ * it is not in the blob.
+ */
+const speedNames = (family) => Object.keys(S.samplingFields(family));
 
-/** What a pre-stage's row actually has. Its node declares five widgets; the
- *  shifts and the accelerators belong to the video sampler alone. */
-export const PRESTAGE_SPEED_WIDGETS = ["steps", "cfg", "sampler_name", "scheduler"];
+/** The same, for a pre-stage: its row belongs to the architecture it is set to.
+ *  Krea 2 declares steps, cfg, a sampler and a scheduler; Ideogram 4 declares a
+ *  quality, a cfg and a sampler, and has no steps at all — so the written list
+ *  dropped the one control Ideogram's row is mostly about. An unrecognised arch
+ *  reads as the default, the way every other reader of a stored arch does. */
+const stillSpeedNames = (arch) => Object.keys(S.stillRowFields(
+  S.PRESTAGE_ARCHES.includes(arch) ? arch : S.PRESTAGE_ARCHES[0]));
 
 function readRow(io, names) {
   const row = {};
@@ -330,11 +389,17 @@ const pick = (source, keys) => Object.fromEntries(
  */
 export function capturePiece(timeline, io) {
   const blob = JSON.parse(S.serializeTimeline(timeline));
+  const family = S.pieceFamily(blob);
   return {
     look: pick(blob, ["aspect", "short_edge", "upscale", "sample_edge", "refine_denoise",
                       "face"]),
     weights: blob.models ?? {},
-    speed: { turbo: blob.turbo ?? null, row: readRow(io, SPEED_WIDGETS) },
+    // The family rides with the row, because the row is only meaningful under
+    // it: `steps` and `sampler_name` are spelled the same on both video
+    // families and mean different things, so a row that did not say whose it
+    // was could be applied to the other one and quietly change the render.
+    // `crossable` is what reads it.
+    speed: { turbo: blob.turbo ?? null, family, row: readRow(io, speedNames(family)) },
     prompt: pick(blob, ["prompt", "soundscape", "music", "refined"]),
     loras: blob.loras ?? [],
     refs: blob.assets ?? [],
@@ -357,6 +422,9 @@ export function capturePiece(timeline, io) {
 export function captureShot(timeline, index, io) {
   const blob = JSON.parse(S.serializeTimeline(timeline));
   const segment = blob.segments?.[index] ?? {};
+  // The piece's, not the card's: a card has no row of its own, and the row this
+  // carries is the one the whole strip runs on.
+  const family = S.pieceFamily(blob);
   return {
     prompt: pick(segment, ["prompt", "soundscape", "music", "refined"]),
     refs: segment.assets ?? [],
@@ -364,7 +432,7 @@ export function captureShot(timeline, index, io) {
     shot: pick(segment, ["duration_s", "checkpoint", "continue", "continue_audio",
                          "continue_from", "feather", "merge", "kind", "filename",
                          "sound", "width", "height", "trim"]),
-    speed: { row: readRow(io, SPEED_WIDGETS) },
+    speed: { family, row: readRow(io, speedNames(family)) },
   };
 }
 
@@ -395,7 +463,8 @@ export function capturePreStage(state, io) {
         },
       } : {}),
     },
-    speed: { turbo: blob.turbo ?? null, row: readRow(io, PRESTAGE_SPEED_WIDGETS) },
+    speed: { turbo: blob.turbo ?? null,
+             row: readRow(io, stillSpeedNames(blob.arch)) },
     prompt: pick(blob, ["prompt"]),
     loras: blob.loras ?? [],
     refs: {
@@ -772,6 +841,11 @@ export function factsOf(body, scope) {
       clip: shot.kind === "clip",
       feather: shot.feather ?? null,
       checkpoint: shot.checkpoint ?? "auto",
+      // Which family's row and weights this holds — read by `crossable` off the
+      // index row, so deciding whether a section can land costs no body fetch.
+      // A preset saved before the field reads as the default, which is what
+      // every piece was when it was written.
+      family: body.speed?.family ?? S.DEFAULT_VIDEO_FAMILY,
     };
   }
   const segments = body.strip?.segments ?? [];
@@ -786,6 +860,7 @@ export function factsOf(body, scope) {
     aspect: body.look?.aspect ?? "16:9",
     short_edge: body.look?.short_edge ?? NATIVE_SHORT_EDGE,
     route: body.weights?.route ?? "auto",
+    family: body.speed?.family ?? S.DEFAULT_VIDEO_FAMILY,
   };
 }
 
@@ -1185,9 +1260,16 @@ export function applyToPiece(body, keys, timeline, io, { from = "piece" } = {}) 
     // From a pre-stage this reads the H3 branch's own block — the one inside its
     // still request, which is where a creator-shaped set of weights lives on that
     // node. `crossable` has already refused every other architecture.
+    //
+    // Read as the *target's* family, not as the default. The slot ids are the
+    // family's, so a block parsed through H3's table onto an LTX 2.5 piece
+    // comes back empty — every file the preset was keeping, dropped. From a
+    // pre-stage it is the H3 branch's block by construction, which `crossable`
+    // has already refused every other case of.
     timeline.models = S.parseModels(from === "prestage"
       ? (body.weights?.[S.PRESTAGE_STILL_ARCH]?.models ?? {})
-      : (body.weights ?? {}));
+      : (body.weights ?? {}),
+      from === "prestage" ? S.DEFAULT_VIDEO_FAMILY : S.pieceFamily(timeline));
   }
   if (chosen.has("speed")) {
     timeline.turbo = S.parseTurbo(body.speed?.turbo ?? null);

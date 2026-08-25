@@ -2,6 +2,28 @@
 
 ## Unreleased
 
+**A preset keeps the whole sampler row, whichever family's row it is.** The list
+of settings a preset carried was written down rather than read off the family,
+and it was H3's list from before three of H3's own controls existed: the
+attention pick, low VRAM and fast math were dropped by every preset that
+claimed to keep the row, and it carried the retired `sage` switch, which is the
+one thing the pack exists to *clear*. On LTX 2.5 it kept `steps` and the sampler
+name — the two settings both families spell the same — and dropped the cfg pair,
+the sigma curve, the stretch and the new guidance. On an Ideogram 4 pre-stage it
+carried a step count that architecture does not have and missed the quality that
+is most of what its row is. All four lists are one derivation now, off the same
+manifest the controls are drawn from.
+
+**And a preset no longer quietly puts one family's settings on another's piece.**
+A row and a set of weights belong to the family they were captured on — both
+video families spell `steps` and `sampler_name` and mean different things by
+them, and no weight slot is shared at all — so those two sections are now
+refused across families, with a reason naming both. Everything else on the
+preset crosses as it always did. Applying a preset's weights also reads them
+under the target piece's own slot names, where before it read them under H3's:
+on an LTX 2.5 piece that meant every file the preset was keeping came back
+empty.
+
 **LTX 2.5 renders can be guided for detail and for lip-sync, and the pills say
 what that costs.** Two of Lightricks' own patches, off by default and drawn in
 their own group beside the sampler row rather than among the accelerators —

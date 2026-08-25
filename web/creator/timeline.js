@@ -868,6 +868,9 @@ class Timeline {
     return {
       scope: "piece",
       label: t("this piece"),
+      // Which family a preset's row and weights would be landing on. Read by
+      // `crossable`, which refuses those two sections across families.
+      family: () => S.pieceFamily(this.timeline),
       capture: () => ({
         data: P.capturePiece(this.timeline, this.io()),
         defaultName: (this.timeline.prompt || this.timeline.segments?.[0]?.prompt || "")
@@ -2461,6 +2464,8 @@ class Timeline {
       presetTarget: () => ({
         scope: "shot",
         label: t(shared ? "Shot {n}" : "Segment {n}", { n: index + 1 }),
+        // The piece's family: a card has no row and no weights of its own.
+        family: () => S.pieceFamily(this.timeline),
         capture: () => ({
           data: P.captureShot(this.timeline, index, this.io()),
           defaultName: (segment.prompt || "").trim().split("\n")[0].slice(0, 48),
@@ -2810,6 +2815,7 @@ export class TimelineBody {
     return {
       scope: "piece",
       label: t("this piece"),
+      family: () => S.pieceFamily(this.timeline),
       capture: () => ({
         data: P.capturePiece(this.timeline, this.widgetIO()),
         cover: P.coverFromResult(this.stage?.result),
