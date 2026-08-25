@@ -69,10 +69,12 @@ export const ICONS = {
   clock: `<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 1.9"/>`,
   frameIn: `<rect x="3" y="4" width="18" height="16" rx="3"/><path d="M8 12h8M12 8v8"/>`,
   frameOut: `<rect x="3" y="4" width="18" height="16" rx="3"/><path d="M8 12h8"/>`,
-  model: `<circle cx="12" cy="12" r="9"/><path d="M12 7a5 5 0 015 5 3 3 0 01-3 3h-1.5a1.5 1.5 0 000 3H12a8 8 0 110-11z"/>`,
-  // The weights on disk: a stack of files. `model` above is a palette, which is
-  // a fine 22px rail glyph and an unreadable blob at the 16px a pill draws it
-  // at — which is the size this one has to work at and the only size it is used.
+  // Which architecture family renders this piece: a family of distinct forms,
+  // pick one. Three solid silhouettes, so it still reads at the 16px a pill
+  // draws it at.
+  model: `<path d="M8.3 10a.7.7 0 0 1-.626-1.079L11.4 3a.7.7 0 0 1 1.198-.043L16.3 8.9a.7.7 0 0 1-.572 1.1Z"/><rect x="3" y="14" width="7" height="7" rx="1"/><circle cx="17.5" cy="17.5" r="3.5"/>`,
+  // The weights on disk: a stack of files — the file the family loads, not the
+  // family itself, which is why it is a separate glyph from `model` above.
   weights: `<path d="M12 3l8 4.2-8 4.2-8-4.2z"/><path d="M4 12l8 4.2 8-4.2"/><path d="M4 16.6l8 4.2 8-4.2"/>`,
   res: `<path d="M4 8V5a1 1 0 011-1h3M16 4h3a1 1 0 011 1v3M20 16v3a1 1 0 01-1 1h-3M8 20H5a1 1 0 01-1-1v-3"/>`,
   play: `<path d="M8 5.5l11 6.5-11 6.5z"/>`,
