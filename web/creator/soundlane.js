@@ -28,7 +28,7 @@
 // dragging the second would silently turn "sound like this" into "this is the
 // sound".
 
-import { el } from "./dom.js";
+import { el, icon } from "./dom.js";
 import { probe } from "./api.js";
 import { t } from "./i18n.js";
 import { peaks, draw } from "./waveform.js";
@@ -831,16 +831,21 @@ export class SoundLane {
    * Delete and Backspace have always done it on a focused block, and a
    * keystroke nobody has been told about is not a control: laying three tracks
    * down and then finding no way to take one back off is the whole complaint
-   * this answers. So it is a ✕, the glyph that removes things everywhere else
-   * in this pack, drawn at rest like the grips beside it and for the same
-   * reason — a handle you only meet once you are on top of it says it too late.
+   * this answers. So it is a ✕, the mark that removes things everywhere else in
+   * this pack, drawn at rest like the grips beside it and for the same reason —
+   * a handle you only meet once you are on top of it says it too late.
+   *
+   * Drawn rather than typed, unlike every other ✕ here. The others sit in a row
+   * of text where a glyph on the text's own baseline is exactly right; this one
+   * sits on a waveform, where a bare glyph is a mark with no box to aim at and
+   * no size of its own. So it is the stroke, in a target the pointer can find.
    *
    * `pointerdown` stops here or the press starts a drag of the block under it,
    * and the ✕ moves out from under the pointer before it can be let go on.
    */
   dropper(block, name) {
     return el("button", {
-      class: "mmc-snd-drop", text: "✕",
+      class: "mmc-snd-drop",
       "aria-label": t("Take this track off the lane"),
       title: t("Take {name} off the lane. The file itself is not touched.", { name }),
       onpointerdown: (event) => { event.preventDefault(); event.stopPropagation(); },
@@ -848,7 +853,7 @@ export class SoundLane {
         event.stopPropagation();
         this.remove(block.index);
       },
-    });
+    }, [icon("close", 12)]);
   }
 
   /** A stretch nobody covered. Perforated, and labelled where there is room —

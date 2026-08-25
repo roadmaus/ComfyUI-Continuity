@@ -104,6 +104,13 @@ export const ICONS = {
   // way out and a handle.
   grip: `<path d="M5 11l8 8"/><path d="M11 5l8 8"/>`,
   expand: `<path d="M14 4h6v6"/><path d="M20 4l-7 7"/><path d="M10 20H4v-6"/><path d="M4 20l7-7"/>`,
+  // The pack writes "remove" as a ✕ in text, and in a row of text that is the
+  // right ✕: it sits on the same baseline as the name it takes away. Drawn on a
+  // waveform it is not — a glyph has no box, so there is nothing to aim at, and
+  // it inherits whatever the shell's UI font thinks a cross is. This is that
+  // same mark with a box round it, for the one place removing is done to a
+  // picture rather than to a line of writing.
+  close: `<path d="M6 6l12 12M18 6L6 18"/>`,
   chevron: `<path d="M6 9l6 6 6-6"/>`,
   star: `<path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.9-5.2-2.8-5.2 2.8 1-5.9-4.3-4.1 5.9-.9z"/>`,
   folder: `<path d="M3 7.5A2.5 2.5 0 015.5 5h3.8l2 2.2h7.2A2.5 2.5 0 0121 9.7v6.8a2.5 2.5 0 01-2.5 2.5h-13A2.5 2.5 0 013 16.5z"/>`,

@@ -975,18 +975,40 @@ export const css = `
    top and the grips hold both ends — this is the one corner of a block nothing
    else is using, on a block as narrow as the shortest one the lane allows.
    Drawn at rest on the grips' terms and faint like them, so a lane of six
-   tracks is not a row of crosses. */
+   tracks is not a row of crosses.
+
+   The box is always this size and only ever paints when the block is under the
+   pointer. That split is the whole control: the target has to be constant or
+   the press lands on a cross that grew after the aim, and the chrome has to be
+   conditional or every block wears a button it is not being asked about. What
+   is left at rest is a faint mark, which is all the resting state has to say —
+   there is something here — and what arrives on hover is a chip solid enough to
+   read over a waveform's loudest stretch, which is what this corner is. */
 .mmc-snd-drop {
-  position: absolute; right: 13px; bottom: 2px; z-index: 2;
-  border: 0; padding: 0 3px; background: none; cursor: pointer;
-  color: var(--mmc-text); opacity: .45; font-family: inherit;
-  font-size: calc(11px * var(--mmc-type)); line-height: 1;
-  text-shadow: 0 1px 3px var(--mmc-bg), 0 0 6px var(--mmc-bg);
-  transition: opacity .12s ease;
+  position: absolute; right: 11px; bottom: 3px; z-index: 2;
+  display: grid; place-items: center; width: 18px; height: 18px;
+  border: 1px solid transparent; border-radius: 5px; padding: 0;
+  background: none; cursor: pointer; color: var(--mmc-text); opacity: .5;
+  transition: opacity .12s ease, background .12s ease, border-color .12s ease;
 }
-.mmc-snd-block:hover .mmc-snd-drop, .mmc-snd-drop:focus-visible { opacity: 1; }
-.mmc-snd-drop:hover { color: var(--mmc-warn); opacity: 1; }
-.mmc-snd-drop:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: -2px; }
+.mmc-snd-drop svg {
+  width: 11px; height: 11px; stroke: currentColor; fill: none;
+  stroke-width: 2; stroke-linecap: round;
+  /* The mark carries its own legibility at rest, when it has no chip behind it
+     and the peaks it is drawn over are whatever the file happens to be loud at. */
+  filter: drop-shadow(0 1px 2px var(--mmc-bg)) drop-shadow(0 0 4px var(--mmc-bg));
+}
+.mmc-snd-block:hover .mmc-snd-drop, .mmc-snd-drop:focus-visible {
+  opacity: 1; background: var(--mmc-scrim-2);
+  border-color: color-mix(in srgb, var(--mmc-blue) 55%, transparent);
+}
+.mmc-snd-block:hover .mmc-snd-drop svg, .mmc-snd-drop:focus-visible svg { filter: none; }
+.mmc-snd-drop:hover {
+  color: var(--mmc-warn);
+  background: color-mix(in srgb, var(--mmc-warn) 18%, var(--mmc-scrim-2));
+  border-color: color-mix(in srgb, var(--mmc-warn) 65%, transparent);
+}
+.mmc-snd-drop:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 1px; }
 /* Nothing to remove mid-drag, and a cross under the pointer during one is a
    target the gesture can end on by accident. */
 .mmc-snd-block.dragging .mmc-snd-drop { opacity: 0; pointer-events: none; }
