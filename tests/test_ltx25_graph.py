@@ -6,12 +6,15 @@ Nothing is sampled: the expansion can be read without a model, which is the
 whole reason the render loop builds a graph instead of doing the work. What is
 worth pinning here is the shape H3's suite cannot see —
 
-- the family's own five sampler nodes rather than one `KSampler`, with the
-  scheduler and the model patch fed the same latent and the same shift pair,
+- the family's own sampler nodes rather than one `KSampler`, and *which* ones:
+  the trained curve as a constant by default, the computed one and the model
+  patch that must agree with it where the row asks for them,
 - guides cropped exactly once, and on the *unpacked* video latent, because
   slicing frames off a packed AV latent would take them off the soundtrack,
 - one transformer and no routing,
 - the second stage as Lightricks' x2 latent upscaler rather than a re-sample,
+- a still compressed before it conditions anything, which is what this model
+  was trained to continue from,
 - and the frame grid: 8n+1 at 24 fps, against H3's 17n+5.
 
 Skips itself with a message if ComfyUI cannot be imported.
@@ -53,8 +56,8 @@ except Exception as exc:  # noqa: BLE001
 package = importlib.import_module(PACKAGE)
 cn = importlib.import_module(f"{PACKAGE}.creator.creator_node")
 canvas = importlib.import_module(f"{PACKAGE}.creator.canvas")
-LTX25 = importlib.import_module(
-    f"{PACKAGE}.creator.families.ltx25.declare").RULES
+ltx_declare = importlib.import_module(f"{PACKAGE}.creator.families.ltx25.declare")
+LTX25 = ltx_declare.RULES
 compiler = importlib.import_module(f"{PACKAGE}.creator.compile")
 
 from harness import FAILURES, check, passed
@@ -129,7 +132,7 @@ check("one segment node, and it is LTX's", len(kinds["MiniMaxLTX25Segment"]), 1)
 check("...and H3's is nowhere in it", "MiniMaxH3TimelineSegment" in kinds, False)
 check("no KSampler — this family samples through a guider",
       "KSampler" in kinds, False)
-for node in ("LTXVScheduler", "KSamplerSelect", "ModelSamplingLTXV",
+for node in ("ManualSigmas", "KSamplerSelect",
              "LTXVDualCFGGuider", "RandomNoise", "SamplerCustomAdvanced"):
     check(f"one {node}", len(kinds.get(node, [])), 1)
 
@@ -148,22 +151,51 @@ check("both VAEs are loaded",
 check("no upscaler loader on a one-stage render",
       "LatentUpscaleModelLoader" in kinds, False)
 
-# The scheduler and the model patch are two readings of one curve and must be
-# given the same numbers off the same latent — letting them disagree is a
-# quality bug with nothing in the log to find it by.
-sched = kinds["LTXVScheduler"][0][1]
-patch = kinds["ModelSamplingLTXV"][0][1]
+# **An untouched piece samples on the curve the checkpoint was distilled
+# against, and on nothing computed.** Both of Lightricks' 2.5 workflows and
+# ComfyUI's own template feed these nine numbers through `ManualSigmas` and emit
+# neither `LTXVScheduler` nor `ModelSamplingLTXV`; a schedule of the same length
+# through the same endpoints is not a substitute, because the distillation was
+# done against this trajectory and not against that shape.
+check("the trained curve, verbatim",
+      kinds["ManualSigmas"][0][1]["sigmas"], ltx_declare.DISTILLED_SIGMAS)
+check("no computed schedule beside it", "LTXVScheduler" in kinds, False)
+check("...and no sigma-shift patch under it", "ModelSamplingLTXV" in kinds, False)
+# Ancestral, in both stages, which is what those same workflows pick: the noise
+# an ancestral step adds back is part of what eight steps were distilled with.
+check("the trained sampler", kinds["KSamplerSelect"][0][1]["sampler_name"],
+      ltx_declare.DISTILLED_SAMPLER)
+
+# The distilled row is what an untouched piece runs: cfg 1/1.
+guider = kinds["LTXVDualCFGGuider"][0][1]
+check("the distilled scales", (guider["video_cfg"], guider["audio_cfg"]), (1.0, 1.0))
+
+# ---- the scheduler route -----------------------------------------------------
+#
+# The other file in the `dit` slot. The full dev transformer is sampled the way
+# LTX 2.3 was — a curve built from the row, and the model patch that reads the
+# same one — so picking that route brings both nodes back and takes the constant
+# away.
+
+dev = by_class(build(piece(sampling={"schedule": "scheduler", "steps": 20,
+                                     "video_cfg": 3.0, "audio_cfg": 7.0})).expand)
+check("the scheduler route builds a curve", len(dev["LTXVScheduler"]), 1)
+check("...and patches the model to match", len(dev["ModelSamplingLTXV"]), 1)
+check("...with no constant left over", "ManualSigmas" in dev, False)
+# The two are readings of one curve and must be given the same numbers off the
+# same latent — letting them disagree is a quality bug with nothing in the log.
+sched = dev["LTXVScheduler"][0][1]
+patch = dev["ModelSamplingLTXV"][0][1]
 check("the schedule and the patch share a shift pair",
       (sched["max_shift"], sched["base_shift"]),
       (patch["max_shift"], patch["base_shift"]))
 check("...and measure the same latent", sched["latent"], patch["latent"])
-segment_id = kinds["MiniMaxLTX25Segment"][0][0]
-check("...which is the segment's", sched["latent"], [segment_id, 2])
-
-# The distilled row is what an untouched piece runs: 8 steps at cfg 1/1.
-guider = kinds["LTXVDualCFGGuider"][0][1]
-check("the distilled schedule", sched["steps"], 8)
-check("the distilled scales", (guider["video_cfg"], guider["audio_cfg"]), (1.0, 1.0))
+check("...which is the segment's",
+      sched["latent"], [dev["MiniMaxLTX25Segment"][0][0], 2])
+check("the row's steps reach the scheduler", sched["steps"], 20)
+check("the dev transformer's scales",
+      (dev["LTXVDualCFGGuider"][0][1]["video_cfg"],
+       dev["LTXVDualCFGGuider"][0][1]["audio_cfg"]), (3.0, 7.0))
 
 # The crop, exactly once and on the unpacked video latent — slicing frames off
 # a packed AV latent would take them off the sound as well.
@@ -198,8 +230,26 @@ check("one upscaler loader", len(two["LatentUpscaleModelLoader"]), 1)
 check("...loading the picked file",
       two["LatentUpscaleModelLoader"][0][1]["model_name"], MODELS["upscaler"])
 check("one upsampler", len(two["LTXVLatentUpsampler"]), 1)
-check("the second stage runs a tail of the schedule",
-      len(two["SplitSigmasDenoise"]), 1)
+# The second stage's curve is a constant too, and it is a tail already: 0.85 is
+# where the upscaled latent re-enters, and the three values after it are the
+# first stage's own trained tail. So nothing is split — there is no fraction to
+# take of a schedule whose every value the distillation fixed.
+check("both stages sample on a trained curve", len(two["ManualSigmas"]), 2)
+check("...the second on the refine tail",
+      sorted(i["sigmas"] for _, i in two["ManualSigmas"]),
+      sorted([ltx_declare.DISTILLED_SIGMAS, ltx_declare.DISTILLED_REFINE_SIGMAS]))
+check("...and the refine pill is not read on this route",
+      "SplitSigmasDenoise" in two, False)
+
+# On the scheduler route it is: a computed curve is where a partial pass can be
+# expressed, and `refine denoise` is the fraction of it the second stage runs.
+dev_two = by_class(build(piece(short_edge=1088,
+                               sampling={"schedule": "scheduler"})).expand)
+check("the scheduler route splits its curve for the second stage",
+      len(dev_two["SplitSigmasDenoise"]), 1)
+check("...at the piece's refine denoise",
+      dev_two["SplitSigmasDenoise"][0][1]["denoise"],
+      compiler.DEFAULT_REFINE_DENOISE)
 # Still exactly one crop: the guides come off between the stages, so the x2
 # pass is never spent on frames that are about to be thrown away.
 check("the guides are cropped once, before the upscale",
@@ -244,8 +294,10 @@ check("...across the whole schedule",
 check("...and it is what the guider guides",
       stg["LTXVDualCFGGuider"][0][1]["model"][0],
       stg["LTXVSpatioTemporalGuidance"][0][0])
-check("...patched after ModelSamplingLTXV",
-      stg_inputs["model"][0], stg["ModelSamplingLTXV"][0][0])
+# On the trained curve there is no shift patch to sit after, so the hook goes
+# straight onto the segment node's model — which is the one the LoRAs are on.
+check("...installed on the segment's model",
+      stg_inputs["model"][0], stg["MiniMaxLTX25Segment"][0][0])
 check("a scale without blocks is not a node",
       "LTXVSpatioTemporalGuidance" in
       by_class(build(piece(sampling={"stg_scale": 1.0, "stg_blocks": ""})).expand),
@@ -530,11 +582,16 @@ try:
     check("no decoder is asked for", "tiny_vae" in patches[0][1], False)
     check("...and the default preview is suppressed, ours being the only one",
           patches[0][1]["suppress_default_preview"], True)
-    # Outermost on the model: the override wraps OUTER_SAMPLE, so it reads the
-    # sigma-shifted model rather than the other way round.
-    check("it wraps the shift patch",
-          patches[0][1]["model"][0] in
-          [node_id for node_id, _ in previewed["ModelSamplingLTXV"]], True)
+    # Outermost on the model: the override wraps OUTER_SAMPLE, so everything the
+    # sampling does to the model is inside it. On the trained curve nothing is,
+    # so what it wraps is the segment's own model; on the scheduler route it is
+    # the shift patch, and it is still the outermost thing.
+    check("it wraps whatever the sampling patched",
+          patches[0][1]["model"][0], previewed["MiniMaxLTX25Segment"][0][0])
+    shifted = by_class(build(piece(sampling={"schedule": "scheduler"})).expand)
+    check("...the shift patch, where there is one",
+          shifted["ModelPreviewOverrideKJ"][0][1]["model"][0],
+          shifted["ModelSamplingLTXV"][0][0])
     check("and the guider reads the wrapped model",
           previewed["LTXVDualCFGGuider"][0][1]["model"][0], patches[0][0])
     # Two stages are two sampling passes, and a second pass nobody can watch is
@@ -545,6 +602,53 @@ try:
 finally:
     comfy_nodes.NODE_CLASS_MAPPINGS.clear()
     comfy_nodes.NODE_CLASS_MAPPINGS.update(_restore)
+
+# ---- the conditioning still ---------------------------------------------------
+#
+# The one part of this family that is not a graph: `LTXVAddGuide` is called
+# inside the segment node, so what a still looks like by the time it reaches the
+# VAE is decided in Python and nothing above can see it. Every official LTX 2.5
+# image-to-video graph resizes the frame to a 1536 px longest edge and runs it
+# through `LTXVPreprocess` before conditioning on it — the compression is what
+# makes it look like the guide frames the model was trained on, all of which
+# came out of compressed clips. A clean still is off-distribution, and a first
+# second that sits still is what that costs.
+
+ltx_segment = importlib.import_module(f"{PACKAGE}.creator.families.ltx25.segment")
+media = importlib.import_module(f"{PACKAGE}.creator.media")
+
+import torch  # noqa: E402
+
+_source = torch.rand(1, 400, 900, 3)
+_loaded = media.load_image
+media.load_image = lambda filename: _source
+try:
+    still = ltx_segment._still("a-still.png")
+finally:
+    media.load_image = _loaded
+
+check("a still is resized to the longest edge the workflows use",
+      max(still.shape[1], still.shape[2]), ltx_segment.GUIDE_LONGEST_EDGE)
+# Kept rather than cropped: the guide node does its own resample to the latent's
+# size, and cropping here would be deciding the framing of a chosen picture.
+check("...with its aspect kept and nothing cropped",
+      round(still.shape[2] / still.shape[1], 2),
+      round(_source.shape[2] / _source.shape[1], 2))
+check("...and compressed, not merely resampled",
+      torch.equal(still, torch.nn.functional.interpolate(
+          _source.movedim(-1, 1), size=still.shape[1:3],
+          mode="bilinear").movedim(1, -1)), False)
+check("...still an IMAGE in 0..1",
+      (still.dtype, bool(still.min() >= 0), bool(still.max() <= 1)),
+      (_source.dtype, True, True))
+
+# A seam is not a still and is left alone: the frames it inherits are the pass
+# in front's own, already at this canvas and already out of this VAE, and the
+# shot has to resume from exactly them. Putting encode artefacts into a
+# continuation would be inventing damage rather than matching training.
+check("a still is conditioned softly, a seam is pinned",
+      (ltx_segment.STILL_STRENGTH, ltx_segment.SEAM_STRENGTH), (0.7, 1.0))
+
 
 # ---- the listing --------------------------------------------------------------
 #

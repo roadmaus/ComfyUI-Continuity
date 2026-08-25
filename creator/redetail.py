@@ -61,13 +61,14 @@ GRID = ltx25.RULES.multiple * 2
 RULES = ltx25.RULES
 
 # The schedule, which is the model's rather than ours. Eight steps at cfg 1 on a
-# curve that spends its first four almost in place — the distilled upscaler's
-# own, lifted from Lightricks'
-# `example_workflows/2.5/LTX-2.5_V2V_ICLoRA_Single_Stage_Distilled.json` by way
-# of ReDetail. Not `LTXVScheduler`'s: this pass has no shift pair and no
-# terminal to stretch to, and the sampler row's widgets say nothing about it.
-SIGMAS = "1.0, 0.99375, 0.9875, 0.98125, 0.975, 0.909375, 0.725, 0.421875, 0.0"
-SAMPLER = "euler_ancestral"
+# curve that spends its first four almost in place — the distilled transformer's
+# own, and the same one the family samples on: this pass runs LTX 2.5's weights,
+# so it runs LTX 2.5's trajectory. Named through `declare` rather than spelled
+# again here, because a second copy of nine numbers is a second thing to get
+# wrong. Not `LTXVScheduler`'s: this pass has no shift pair and no terminal to
+# stretch to, and the sampler row's widgets say nothing about it.
+SIGMAS = ltx25.DISTILLED_SIGMAS
+SAMPLER = ltx25.DISTILLED_SAMPLER
 CFG = 1.0
 
 # How hard the pass's own first frame is pinned before the guide goes on.

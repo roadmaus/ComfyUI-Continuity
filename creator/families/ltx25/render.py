@@ -7,11 +7,10 @@ count, two CFG scales for the two modalities of a packed AV latent, and a second
 stage that is a *latent upscaler* rather than a re-sample at a bigger canvas.
 
 **The sampler is core's LTX nodes, wired, not reimplemented.** H3 emits one
-`KSampler`; this emits the five that make a custom sampling pass —
+`KSampler`; this emits the four or five that make a custom sampling pass —
 
-    LTXVScheduler(steps, max_shift, base_shift, stretch, terminal, latent) -> SIGMAS
+    ManualSigmas(sigmas)                                                   -> SIGMAS
     KSamplerSelect(sampler_name)                                           -> SAMPLER
-    ModelSamplingLTXV(model, max_shift, base_shift, latent)                -> MODEL
     LTXVDualCFGGuider(model, positive, negative, video_cfg, audio_cfg)     -> GUIDER
     RandomNoise(seed)                                                      -> NOISE
                                                      -> SamplerCustomAdvanced
@@ -19,10 +18,21 @@ stage that is a *latent upscaler* rather than a re-sample at a bigger canvas.
 — with KJNodes' preview override wrapped outside the lot where it is installed,
 so a render of this family is watchable at all (`models.graph_preview`).
 
-The scheduler and the model patch are both handed the latent, because the
-shift they compute is a function of its token count. They must be given the same
-shift pair: they are two readings of one curve, and letting them disagree is a
-quality bug with nothing in the log.
+**Which SIGMAS node, and whether there is a model patch beside it, is the row's
+`schedule`.** The distilled transformer has one trained trajectory and it is a
+constant (`declare.DISTILLED_SIGMAS`), so that route emits `ManualSigmas` and
+no `ModelSamplingLTXV` — which is what both of Lightricks' 2.5 workflows and
+ComfyUI's own templates do, and what this family got wrong until it was
+measured against them. The `scheduler` route is the other two nodes,
+
+    LTXVScheduler(steps, max_shift, base_shift, stretch, terminal, latent) -> SIGMAS
+    ModelSamplingLTXV(model, max_shift, base_shift, latent)                -> MODEL
+
+which is LTX 2.3's recipe and what the full `dev` transformer wants. Both are
+handed the latent there, because the shift they compute is a function of its
+token count, and both must be given the same shift pair: they are two readings
+of one curve, and letting them disagree is a quality bug with nothing in the
+log. See `sampling.py` for why the default is the trained curve.
 
 **Guides are cropped exactly once.** `LTXVAddGuide` appends each guide's
 condition latent past the end of the sequence, so a sampled latent is longer
@@ -45,6 +55,12 @@ re-encodes the conditioning at a larger canvas and re-samples: LTX ships a
 trained x2 latent upscaler, so the pipeline is sample at the native edge, run
 the upscaler on the video latent, and sample again over a tail of the schedule.
 That is what the model card describes and it is what the pill runs.
+
+Which tail, again, is the row's `schedule`. On the trained curve it is another
+constant — `declare.DISTILLED_REFINE_SIGMAS`, three steps from 0.85 — so the
+resolution pill's `refine denoise` is not read: there is no fraction to take of
+a curve whose every value the distillation fixed. It is read on the `scheduler`
+route, where a tail of a computed schedule is exactly what it names.
 """
 
 from ... import canvas
@@ -205,13 +221,27 @@ class LTX25(base.Family):
             sigmas=sigmas,
             latent_image=latent).out(0)
 
-    def _schedule(self, graph, latent, sampling):
+    def _schedule(self, graph, latent, sampling, trained):
         """The sigma curve for a latent, and the model patch that matches it.
 
         -> `(sigmas link, a function taking a model link to the patched one)`.
-        Both read the same token count off the same latent and are given the
-        same shift pair, which is the invariant this pairing exists to keep.
+        `trained` is the constant this stage samples on where the row is on the
+        distilled route — a different string for the first stage and the second,
+        and both of them the checkpoint's rather than ours.
+
+        On that route the patch is identity: `ModelSamplingLTXV` rewrites the
+        model's sigma-to-timestep mapping to a shift computed from the token
+        count, and a curve the distillation fixed is already expressed in the
+        mapping the checkpoint shipped with. Patching it there would be moving
+        the trajectory out from under the numbers that were trained against it.
+
+        On the `scheduler` route both nodes read the same token count off the
+        same latent and are given the same shift pair, which is the invariant
+        that pairing exists to keep.
         """
+        if sampling.manual:
+            return graph.node("ManualSigmas", sigmas=trained).out(0), lambda model: model
+
         sigmas = graph.node(
             "LTXVScheduler", steps=sampling.steps,
             max_shift=sampling.max_shift, base_shift=sampling.base_shift,
@@ -245,7 +275,8 @@ class LTX25(base.Family):
     def emit_sampler(self, graph, segment, payload, compiled, sampling,
                      acceleration, weights, seed, run):
         latent = segment.out(2)
-        sigmas, patch = self._schedule(graph, latent, sampling)
+        sigmas, patch = self._schedule(graph, latent, sampling,
+                                       declare.DISTILLED_SIGMAS)
         sampled = self._sampled(graph, patch(segment.out(0)),
                                 segment.out(1), segment.out(3), latent,
                                 sampling, seed, sigmas, weights)
@@ -276,13 +307,20 @@ class LTX25(base.Family):
                             audio_latent=split.out(1)).out(0)
 
         # A new canvas is a new token count, so the curve is rebuilt rather
-        # than reused — that is the whole reason both nodes take the latent.
-        sigmas, patch = self._schedule(graph, packed, sampling)
-        # ...and only its tail is run. `SamplerCustomAdvanced` has no `denoise`
-        # of its own; the schedule is where a partial pass is expressed, which
-        # is what `SplitSigmasDenoise` is for.
-        tail = graph.node("SplitSigmasDenoise", sigmas=sigmas,
-                          denoise=compiled.refine.denoise).out(1)
+        # than reused — that is the whole reason both `scheduler`-route nodes
+        # take the latent. On the trained curve the second stage's is its own
+        # constant, already a tail: three steps from 0.85, which is where the
+        # upscaled latent re-enters the trajectory the first stage left.
+        sigmas, patch = self._schedule(graph, packed, sampling,
+                                       declare.DISTILLED_REFINE_SIGMAS)
+        # Where the curve was computed, only its tail is run.
+        # `SamplerCustomAdvanced` has no `denoise` of its own; the schedule is
+        # where a partial pass is expressed, which is what `SplitSigmasDenoise`
+        # is for. Nothing splits a constant — see the module docstring for why
+        # the refine pill is not read on that route.
+        tail = sigmas if sampling.manual else graph.node(
+            "SplitSigmasDenoise", sigmas=sigmas,
+            denoise=compiled.refine.denoise).out(1)
         # The cropped conditioning, not the segment node's: stage two samples a
         # latent with no guide frames in it, and conditioning that still claimed
         # some would have the model looking for picture that is not there.

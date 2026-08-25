@@ -28,9 +28,19 @@ from . import declare, grammar, models, sampling
 def _widgets():
     d = sampling.DEFAULTS
     return [
+        # First on the row, because it is what the four scheduler controls
+        # after it belong to. The options are this family's own closed list
+        # rather than a core node's, so the manifest carries them.
+        m.widget("schedule", "combo", label="schedule", group="sampler",
+                 default=d["schedule"], options=sampling.SCHEDULES,
+                 help="Which curve the render samples on. 'distilled' is the trained one the "
+                      "distilled transformer was made against — nine fixed sigmas, and the steps, "
+                      "shift and terminal controls say nothing about it. 'scheduler' builds a curve "
+                      "from those controls instead, which is what the full dev transformer wants."),
         m.widget("steps", "stepper", label="steps", group="sampler",
                  default=d["steps"], min=1, max=10000, step=1,
-                 help="8 is the distilled transformer's fixed schedule. The dev transformer wants ~20."),
+                 help="How many steps the 'scheduler' curve is built with — the dev transformer "
+                      "wants ~20. The distilled curve carries its own eight and ignores this."),
         m.widget("video_cfg", "slider", label="video cfg", group="sampler",
                  default=d["video_cfg"], min=0.0, max=100.0, step=0.1,
                  help="The picture's guidance scale. 1 on the distilled weights, ~3 on the dev transformer."),
@@ -38,19 +48,22 @@ def _widgets():
                  default=d["audio_cfg"], min=0.0, max=100.0, step=0.1,
                  help="The soundtrack's own scale — the AV latent is packed, and the two modalities are guided apart. 1 on the distilled weights, ~7 on the dev transformer."),
         m.widget("sampler_name", "combo", label="sampler", group="sampler",
-                 default=d["sampler_name"]),
+                 default=d["sampler_name"],
+                 help="Ancestral is what Lightricks' own workflows pick in both stages — the noise "
+                      "an ancestral step adds back is part of what the distilled curve was made "
+                      "against, and plain euler over it comes out flat."),
         m.widget("max_shift", "slider", label="max shift", group="sampler",
                  default=d["max_shift"], min=0.0, max=100.0, step=0.01,
-                 help="The top of the sigma shift, which the scheduler scales by the latent's token count. The model patch is given the same pair; they are two readings of one curve."),
+                 help="On 'scheduler': the top of the sigma shift, which the scheduler scales by the latent's token count. The model patch is given the same pair; they are two readings of one curve."),
         m.widget("base_shift", "slider", label="base shift", group="sampler",
                  default=d["base_shift"], min=0.0, max=100.0, step=0.01,
-                 help="The bottom of the sigma shift. See 'max shift'."),
+                 help="On 'scheduler': the bottom of the sigma shift. See 'max shift'."),
         m.widget("stretch", "toggle", label="stretch sigmas", group="sampler",
                  default=d["stretch"],
-                 help="Stretch the schedule so its final sigma lands on the terminal value."),
+                 help="On 'scheduler': stretch the schedule so its final sigma lands on the terminal value."),
         m.widget("terminal", "slider", label="terminal", group="sampler",
                  default=d["terminal"], min=0.0, max=0.99, step=0.01,
-                 help="Where a stretched schedule ends. Ignored when stretch is off."),
+                 help="On 'scheduler': where a stretched schedule ends. Ignored when stretch is off."),
 
         # Taste guidance. Its own group because it is its own kind of control:
         # nothing here changes the schedule, and each of them buys picture with
@@ -218,6 +231,11 @@ def manifest():
             # means something different here — the factor is the model's and
             # not the resolution slider's — and it needs the `upscaler` slot
             # filled, which is why the slot is optional and this is a choice.
+            #
+            # The pill's `refine denoise` reaches the second stage only on the
+            # `scheduler` route. On the trained curve the tail is its own
+            # constant, three steps from 0.85, and there is no fraction to take
+            # of a schedule the distillation fixed — see `render.emit_refine`.
             "refine": {"kind": "latent_upscale", "factor": 2,
                        "slot": "upscaler"},
             # The face pass is H3's crop-and-repair loop, written against its

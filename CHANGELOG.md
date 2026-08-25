@@ -2,6 +2,46 @@
 
 ## Unreleased
 
+**LTX 2.5 now samples on the curve its checkpoint was distilled against, and
+renders come out a different class of picture for it.** The family was building
+its schedule with `LTXVScheduler` and pairing it with the `ModelSamplingLTXV`
+patch — the recipe LTX 2.3 shipped, and the wrong one here. A step-distilled
+transformer is not merely a model that takes fewer steps: the distillation is
+done against one trajectory, and 2.5's is a constant Lightricks ships rather
+than a curve anybody computes. Both of their own 2.5 workflows and ComfyUI's own
+template feed nine fixed sigmas through `ManualSigmas` and emit neither of those
+two nodes. What this pack was computing instead descended evenly and then jumped
+0.572 straight to 0.1, skipping the stretch below 0.42 where the picture's
+detail resolves; the trained curve spends four of its eight steps almost in
+place at the top and does the whole denoise in four large drops. The second
+stage was wrong the same way, and is now the tail Lightricks ships for it —
+three steps from 0.85, where the upscaled latent re-enters the trajectory the
+first stage left. The sampler default moves to `euler_ancestral` with them,
+which is what both stages of both official graphs select: the noise an ancestral
+step adds back is part of what eight steps were distilled with.
+
+Which of the two curves a piece is on is a new `schedule` control at the head of
+the LTX sampler row, because it is genuinely a choice — the `dev` transformer in
+the same slot *is* sampled the old way, at ~20 steps and cfg 3/7, and picking
+`scheduler` brings `LTXVScheduler`, the shift pair and the model patch back. The
+steps, shift, stretch and terminal pills describe that route and say so; on the
+trained curve they are not read, and neither is the resolution popover's refine
+denoise, there being no fraction to take of a schedule whose every value the
+distillation fixed. Nothing about H3 moved — its goldens are byte-identical.
+
+**A still handed to LTX 2.5 is compressed before it conditions anything.** Every
+official image-to-video graph for this model resizes the frame to a 1536 px
+longest edge and runs it through `LTXVPreprocess` on the way to the guide, and
+conditions it at 0.7 rather than pinning it at 1.0. This pack was passing the
+image through clean and pinned. The compression is the load-bearing half: it is
+what makes a still look like the guide frames the model was trained to continue
+from, every one of which came out of a compressed clip, and a clean one is
+off-distribution in a way that shows up as an opening second that sits still and
+a pass that drifts soft behind it. Seams are untouched at full strength — the
+frames a continuing shot inherits are the pass in front's own, already at this
+canvas and already out of this VAE, and putting encode artefacts into them would
+be inventing damage rather than matching training.
+
 **A take on the editor's shelf goes up on the picture, and the newest one is
 nearest it.** The shelf under the fullscreen editor grew left to right, so the
 render you had just made was at the far end of a row that only ever got longer —

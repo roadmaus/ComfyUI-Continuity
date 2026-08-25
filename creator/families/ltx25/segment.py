@@ -50,6 +50,39 @@ SEGMENT_NODE = declare.SEGMENT_NODE
 # spelled here and not hidden behind a setting nobody would find.
 DEFAULT_NEGATIVE = "worst quality, inconsistent motion, blurry, jittery, distorted"
 
+# **A still handed to this model is compressed first, and that is the model's
+# ask rather than a taste.** Every official LTX 2.5 image-to-video graph —
+# Lightricks' two-stage workflow and ComfyUI's own template alike — routes the
+# conditioning image through `ResizeImageMaskNode(longest edge 1536, lanczos)`
+# and then `LTXVPreprocess(18)` before it reaches a guide, and conditions it at
+# 0.7 rather than 1.0.
+#
+# The compression is the load-bearing half. `LTXVPreprocess` runs the frame
+# through a real video encode at that CRF and back, which is what the guide
+# frames the model was *trained* on look like: every one of them came out of a
+# compressed clip. A clean still is off-distribution in a way that shows up as a
+# first second that sits still and a pass that drifts soft after it — the model
+# is being asked to continue from a frame unlike any it has continued from.
+#
+# 1536 is a stop on the way rather than a target: `LTXVAddGuide` bilinearly
+# resamples whatever it is given down to the latent's own pixel size, so the
+# resize decides what gets compressed and at what scale, not what is encoded.
+GUIDE_LONGEST_EDGE = 1536
+GUIDE_COMPRESSION = 18
+
+# How hard a still is pinned. `LTXVAddGuide` masks the guide's latent frames at
+# `1 - strength`, so 0.7 leaves 0.3 of them for the model to move — which is
+# what the official graphs give a first frame, through `LTXVImgToVideoInplace`
+# at the same number. A still is a *description* of where the shot starts.
+#
+# A seam is not, and keeps 1.0: the frames it inherits are the pass in front's
+# own, already at this canvas and already out of this VAE, and the shot has to
+# resume from exactly them or the join shows. They skip the compression for the
+# same reason — they were never a still, and putting encode artefacts into a
+# continuation is inventing damage rather than matching training.
+STILL_STRENGTH = 0.7
+SEAM_STRENGTH = 1.0
+
 
 def _core(node_id):
     """One of core's LTX nodes, by registry key.
@@ -76,6 +109,26 @@ def _encode(clip, text):
     """One prompt through Gemma. Plain prose — see `compile.plain_prompt`."""
     tokens = clip.tokenize(text)
     return clip.encode_from_tokens_scheduled(tokens)
+
+
+def _still(filename):
+    """A still off disk, as this model takes a conditioning frame.
+
+    Resized so its longest edge is `GUIDE_LONGEST_EDGE` and run through
+    `LTXVPreprocess` — see the constants above for why a clean image is the
+    wrong thing to hand LTX. Aspect is kept and nothing is cropped: the guide
+    node does its own resample to the latent's size, and cropping here would
+    decide the framing of a picture the user chose.
+    """
+    import comfy.utils
+
+    image = media.load_image(filename)
+    height, width = image.shape[1], image.shape[2]
+    scale = GUIDE_LONGEST_EDGE / max(height, width)
+    image = comfy.utils.common_upscale(
+        image.movedim(-1, 1), max(1, round(width * scale)),
+        max(1, round(height * scale)), "lanczos", "disabled").movedim(1, -1)
+    return _core("LTXVPreprocess").execute(image, GUIDE_COMPRESSION)[0]
 
 
 def _empty_video_latent(width, height, length):
@@ -231,7 +284,7 @@ class MiniMaxLTX25Segment(io.ComfyNode):
 
         add_guide = _core("LTXVAddGuide")
 
-        def guide(image, frame_idx, strength=1.0):
+        def guide(image, frame_idx, strength=SEAM_STRENGTH):
             nonlocal positive, negative, latent
             positive, negative, latent = add_guide.execute(
                 positive, negative, vae, latent, image, frame_idx, strength)
@@ -260,7 +313,7 @@ class MiniMaxLTX25Segment(io.ComfyNode):
             # head of the decoded pass.
             guide(prev_image[-compiled.feather:], 0)
         elif compiled.first_frame is not None:
-            guide(media.load_image(compiled.first_frame.filename), 0)
+            guide(_still(compiled.first_frame.filename), 0, STILL_STRENGTH)
 
         if compiled.ends_on:
             if next_image is None:
@@ -272,7 +325,7 @@ class MiniMaxLTX25Segment(io.ComfyNode):
             # this having to know the latent length.
             guide(next_image[:compiled.ends_feather], -compiled.ends_feather)
         elif compiled.last_frame is not None:
-            guide(media.load_image(compiled.last_frame.filename), -1)
+            guide(_still(compiled.last_frame.filename), -1, STILL_STRENGTH)
 
         # References are carried by the prompt and by nothing else, and that is
         # a real limitation rather than an oversight. A guide is a keyframe: it

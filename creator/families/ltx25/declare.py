@@ -32,6 +32,40 @@ LORA_STACK = "core"
 # for before it can.
 DURATION_HEAD = "duration_head"
 
+# **The distilled transformer's own sigma curve, and it is a constant rather
+# than a schedule.** Both of Lightricks' 2.5 workflows and ComfyUI's own
+# `video_ltx2_5_i2v.json` template feed these numbers through `ManualSigmas`,
+# and neither emits `LTXVScheduler` or `ModelSamplingLTXV` at all. That is the
+# whole difference between a step-distilled checkpoint and a full one: the
+# distillation was done *against this trajectory*, so a curve of the same length
+# through the same endpoints is not a substitute for it. `LTXVScheduler(8, 2.05,
+# 0.95, stretch, 0.1)` over a 960x544x121 latent gives
+#
+#     1.0, 0.9779, 0.9486, 0.9083, 0.8489, 0.753, 0.5718, 0.1, 0.0
+#
+# — an even descent that jumps 0.572 -> 0.1, skipping the 0.42 -> 0 stretch
+# where the picture's detail resolves. The trained curve below instead spends
+# four of its eight steps almost in place at the top and does the denoise in
+# four large drops. It is not a tuning difference; sampling off it is what makes
+# an LTX 2.5 render come out a magnitude softer than the same prompt through
+# Lightricks' own API.
+#
+# The dev transformer is the case `LTXVScheduler` was written for, and the row's
+# `schedule` field is which of the two a piece is on — see `sampling.py`.
+DISTILLED_SIGMAS = "1.0, 0.99375, 0.9875, 0.98125, 0.975, 0.909375, 0.725, 0.421875, 0.0"
+
+# The second stage's, and it is the same curve read differently: 0.85 is where
+# the upscaled latent re-enters, and the three values after it are the trained
+# tail above, unchanged. So a partial pass is expressed here as its own constant
+# rather than as a fraction of the first — there is no `denoise` to take of a
+# curve whose every value the distillation fixed.
+DISTILLED_REFINE_SIGMAS = "0.85, 0.7250, 0.4219, 0.0"
+
+# What both official workflows select, in both stages. Ancestral rather than
+# plain euler: the noise each step adds back is part of what eight steps were
+# distilled against.
+DISTILLED_SAMPLER = "euler_ancestral"
+
 # The graph node that is this family's boundary. See `h3/declare.py`. A new id
 # rather than a reuse of H3's, because it is a genuinely new node: a different
 # conditioning, a different latent, and a fourth output that is a real negative.

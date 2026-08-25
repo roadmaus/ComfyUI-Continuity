@@ -7,16 +7,10 @@
     }
   },
   "10": {
-    "class_type": "KSamplerSelect",
-    "inputs": {
-      "sampler_name": "euler"
-    }
-  },
-  "11": {
     "class_type": "SamplerCustomAdvanced",
     "inputs": {
       "guider": [
-        "8",
+        "7",
         0
       ],
       "latent_image": [
@@ -24,11 +18,11 @@
         2
       ],
       "noise": [
-        "9",
+        "8",
         0
       ],
       "sampler": [
-        "10",
+        "9",
         0
       ],
       "sigmas": [
@@ -37,20 +31,20 @@
       ]
     }
   },
-  "12": {
+  "11": {
     "class_type": "LTXVSeparateAVLatent",
     "inputs": {
       "av_latent": [
-        "11",
+        "10",
         0
       ]
     }
   },
-  "13": {
+  "12": {
     "class_type": "LTXVCropGuides",
     "inputs": {
       "latent": [
-        "12",
+        "11",
         0
       ],
       "negative": [
@@ -63,43 +57,43 @@
       ]
     }
   },
-  "14": {
+  "13": {
     "class_type": "LTXVConcatAVLatent",
     "inputs": {
       "audio_latent": [
-        "12",
+        "11",
         1
       ],
       "video_latent": [
-        "13",
+        "12",
         2
       ]
     }
   },
-  "15": {
+  "14": {
     "class_type": "LTXVSeparateAVLatent",
     "inputs": {
       "av_latent": [
-        "14",
+        "13",
         0
       ]
     }
   },
-  "16": {
+  "15": {
     "class_type": "LatentUpscaleModelLoader",
     "inputs": {
       "model_name": "ltx/ltx-2.5-latent-spatial-upscaler-x2.safetensors"
     }
   },
-  "17": {
+  "16": {
     "class_type": "LTXVLatentUpsampler",
     "inputs": {
       "samples": [
-        "15",
+        "14",
         0
       ],
       "upscale_model": [
-        "16",
+        "15",
         0
       ],
       "vae": [
@@ -108,31 +102,42 @@
       ]
     }
   },
-  "18": {
+  "17": {
     "class_type": "LTXVConcatAVLatent",
     "inputs": {
       "audio_latent": [
-        "15",
+        "14",
         1
       ],
       "video_latent": [
-        "17",
+        "16",
         0
       ]
     }
   },
-  "19": {
-    "class_type": "LTXVScheduler",
+  "18": {
+    "class_type": "ManualSigmas",
     "inputs": {
-      "base_shift": 0.95,
-      "latent": [
-        "18",
+      "sigmas": "0.85, 0.7250, 0.4219, 0.0"
+    }
+  },
+  "19": {
+    "class_type": "LTXVDualCFGGuider",
+    "inputs": {
+      "audio_cfg": 1.0,
+      "model": [
+        "5",
         0
       ],
-      "max_shift": 2.05,
-      "steps": 8,
-      "stretch": true,
-      "terminal": 0.1
+      "negative": [
+        "12",
+        1
+      ],
+      "positive": [
+        "12",
+        0
+      ],
+      "video_cfg": 1.0
     }
   },
   "2": {
@@ -143,87 +148,43 @@
     }
   },
   "20": {
-    "class_type": "SplitSigmasDenoise",
-    "inputs": {
-      "denoise": 0.5,
-      "sigmas": [
-        "19",
-        0
-      ]
-    }
-  },
-  "21": {
-    "class_type": "ModelSamplingLTXV",
-    "inputs": {
-      "base_shift": 0.95,
-      "latent": [
-        "18",
-        0
-      ],
-      "max_shift": 2.05,
-      "model": [
-        "5",
-        0
-      ]
-    }
-  },
-  "22": {
-    "class_type": "LTXVDualCFGGuider",
-    "inputs": {
-      "audio_cfg": 1.0,
-      "model": [
-        "21",
-        0
-      ],
-      "negative": [
-        "13",
-        1
-      ],
-      "positive": [
-        "13",
-        0
-      ],
-      "video_cfg": 1.0
-    }
-  },
-  "23": {
     "class_type": "RandomNoise",
     "inputs": {
       "noise_seed": 100
     }
   },
-  "24": {
+  "21": {
     "class_type": "KSamplerSelect",
     "inputs": {
-      "sampler_name": "euler"
+      "sampler_name": "euler_ancestral"
     }
   },
-  "25": {
+  "22": {
     "class_type": "SamplerCustomAdvanced",
     "inputs": {
       "guider": [
-        "22",
+        "19",
         0
       ],
       "latent_image": [
-        "18",
+        "17",
         0
       ],
       "noise": [
-        "23",
+        "20",
         0
       ],
       "sampler": [
-        "24",
+        "21",
         0
       ],
       "sigmas": [
-        "20",
-        1
+        "18",
+        0
       ]
     }
   },
-  "26": {
+  "23": {
     "class_type": "MiniMaxH3Reel",
     "inputs": {
       "audio_vae": [
@@ -232,7 +193,7 @@
       ],
       "fps": 24.0,
       "samples": [
-        "25",
+        "22",
         0
       ],
       "vae": [
@@ -241,14 +202,14 @@
       ]
     }
   },
-  "27": {
+  "24": {
     "class_type": "MiniMaxH3Save",
     "inputs": {
       "crf": 23,
       "filename_prefix": "minimax/renders/H3",
       "fps": 24.0,
       "reel": [
-        "26",
+        "23",
         0
       ],
       "takes": ""
@@ -289,40 +250,17 @@
     }
   },
   "6": {
-    "class_type": "LTXVScheduler",
+    "class_type": "ManualSigmas",
     "inputs": {
-      "base_shift": 0.95,
-      "latent": [
-        "5",
-        2
-      ],
-      "max_shift": 2.05,
-      "steps": 8,
-      "stretch": true,
-      "terminal": 0.1
+      "sigmas": "1.0, 0.99375, 0.9875, 0.98125, 0.975, 0.909375, 0.725, 0.421875, 0.0"
     }
   },
   "7": {
-    "class_type": "ModelSamplingLTXV",
-    "inputs": {
-      "base_shift": 0.95,
-      "latent": [
-        "5",
-        2
-      ],
-      "max_shift": 2.05,
-      "model": [
-        "5",
-        0
-      ]
-    }
-  },
-  "8": {
     "class_type": "LTXVDualCFGGuider",
     "inputs": {
       "audio_cfg": 1.0,
       "model": [
-        "7",
+        "5",
         0
       ],
       "negative": [
@@ -336,10 +274,16 @@
       "video_cfg": 1.0
     }
   },
-  "9": {
+  "8": {
     "class_type": "RandomNoise",
     "inputs": {
       "noise_seed": 100
+    }
+  },
+  "9": {
+    "class_type": "KSamplerSelect",
+    "inputs": {
+      "sampler_name": "euler_ancestral"
     }
   }
 }

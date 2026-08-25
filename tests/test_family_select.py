@@ -579,6 +579,7 @@ check("...and neither opt-in pass, which are offers rather than omissions",
        if name in ltx_controls["missing"]], [])
 check("the two rows are different controls, not one with pieces missing",
       sorted(set(ltx_controls["ltxRow"]) - set(ltx_controls["h3Row"])),
-      ["audio_cfg", "base_shift", "max_shift", "stretch", "terminal", "video_cfg"])
+      ["audio_cfg", "base_shift", "max_shift", "schedule", "stretch",
+       "terminal", "video_cfg"])
 
 passed("the piece names its family, and both halves read it off the piece")

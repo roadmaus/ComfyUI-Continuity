@@ -4,22 +4,34 @@ The row is a different shape from H3's, which is the reason `families/manifest.p
 describes controls instead of shipping a bag of values. H3 emits a `KSampler`
 and its row is that node's inputs. LTX emits three nodes:
 
-    LTXVScheduler(steps, max_shift, base_shift, stretch, terminal, latent) -> SIGMAS
+    ManualSigmas(sigmas) | LTXVScheduler(steps, ..., latent)               -> SIGMAS
     KSamplerSelect(sampler_name)                                           -> SAMPLER
     LTXVDualCFGGuider(model, positive, negative, video_cfg, audio_cfg)     -> GUIDER
                                                     -> SamplerCustomAdvanced
 
-so there is no `scheduler` combo at all (the scheduler *is* a node, and its
-shift pair rides the token count of the latent handed to it), and one `cfg`
-becomes two — the packed AV latent takes a separate scale per modality.
+so there is no `scheduler` combo at all, and one `cfg` becomes two — the packed
+AV latent takes a separate scale per modality.
 
-**The defaults are the distilled checkpoint's**, because the distilled
-transformer is what the family ships: Lightricks' card pins it to a fixed
-8-step schedule at CFG 1, and their own reference pipeline runs
-`guidance_scale=1.0, audio_guidance_scale=1.0`. The full `dev` transformer
-wants the node defaults instead — 20 steps at 3.0/7.0 — which is a file the
-user picks in the same slot, so it is a row they change rather than a mode the
-pack switches. The bounds below are wide enough for both.
+**`schedule` is which of the two SIGMAS nodes the render emits, and it is the
+field the rest of the row hangs off.** The two transformers in the `dit` slot
+are sampled differently rather than merely at different settings:
+
+- `distilled` feeds `declare.DISTILLED_SIGMAS` through `ManualSigmas` and emits
+  no `ModelSamplingLTXV` at all. Neither number is ours and neither is a
+  default — the curve is what the checkpoint was distilled against, so `steps`,
+  `max_shift`, `base_shift`, `stretch` and `terminal` describe nothing on this
+  route and are not read. This is what both of Lightricks' 2.5 workflows and
+  ComfyUI's own LTX 2.5 templates do.
+- `scheduler` is `LTXVScheduler` with the shift pair and the terminal, paired
+  with the `ModelSamplingLTXV` patch that reads the same curve — the recipe LTX
+  2.3 shipped, and what the full `dev` transformer wants, at ~20 steps and
+  3.0/7.0 rather than 8 at 1/1.
+
+Distilled is the default because the distilled transformer is what a piece
+loads unless someone picks otherwise, and because the trained curve is the one
+thing about this family that a wrong guess costs the whole render — see
+`declare.DISTILLED_SIGMAS` for the two curves side by side. The bounds below
+stay wide enough for both routes.
 
 `max_shift`, `base_shift`, `stretch` and `terminal` are `LTXVScheduler`'s own
 numbers, unchanged: they describe the sigma curve the architecture was trained
@@ -38,6 +50,10 @@ from dataclasses import dataclass
 
 from ... import accel
 from .. import row as base_row
+from . import declare
+
+#: Which SIGMAS node the render emits. See the module docstring.
+SCHEDULES = ("distilled", "scheduler")
 
 
 @dataclass(frozen=True)
@@ -54,10 +70,11 @@ class Sampling:
     """
 
     seed: int = 0
+    schedule: str = SCHEDULES[0]
     steps: int = 8
     video_cfg: float = 1.0
     audio_cfg: float = 1.0
-    sampler_name: str = "euler"
+    sampler_name: str = declare.DISTILLED_SAMPLER
     max_shift: float = 2.05
     base_shift: float = 0.95
     stretch: bool = True
@@ -66,6 +83,16 @@ class Sampling:
     stg_scale: float = 0.0
     stg_blocks: str = "29"
     modality_scale: float = 1.0
+
+    @property
+    def manual(self):
+        """Whether the render samples on the checkpoint's trained curve.
+
+        The one thing outside this module that has to ask: `render._schedule`
+        emits a different SIGMAS node either way, and on this route it emits no
+        `ModelSamplingLTXV` either.
+        """
+        return self.schedule == "distilled"
 
     @property
     def stg(self):
@@ -83,8 +110,13 @@ class Sampling:
 
 
 DEFAULTS = {
-    # The distilled schedule. `LTXVScheduler`'s own default is 20, which is the
-    # dev transformer's.
+    # The trained curve, which is what the file in the `dit` slot is unless a
+    # user went and picked the dev transformer. See the module docstring.
+    "schedule": SCHEDULES[0],
+    # `LTXVScheduler`'s step count, and the `scheduler` route's alone — the
+    # distilled curve carries its own eight and reads nothing from here. 8
+    # rather than the node's own 20 so that switching routes lands on the
+    # distilled row's shape rather than the dev transformer's.
     "steps": 8,
     # One scale per modality of the packed AV latent. Both 1.0 is the distilled
     # checkpoint's; the dev transformer's are the guider's own 3.0 / 7.0.
@@ -98,8 +130,11 @@ DEFAULTS = {
     "stretch": True,
     "terminal": 0.1,
     # `KSamplerSelect`'s list, which is core's to declare — the manifest's combo
-    # carries no options for the same reason H3's does not.
-    "sampler_name": "euler",
+    # carries no options for the same reason H3's does not. Ancestral, which is
+    # what both official workflows pick in both stages: the noise an ancestral
+    # step adds back is part of what eight steps were distilled against, and
+    # plain euler over the same curve comes out flat.
+    "sampler_name": declare.DISTILLED_SAMPLER,
     # Taste guidance, off. `LTXVSpatioTemporalGuidance` returns the unmodified
     # prediction at 0 and `LTXVModalityGuidance` at 1.0 — these are core's own
     # off values rather than a timid setting, which is why the pills read them
@@ -119,6 +154,10 @@ _WHOLE = ("steps",)
 _NUMBER = ("video_cfg", "audio_cfg", "max_shift", "base_shift", "terminal",
            "stg_scale", "modality_scale")
 _FLAG = ("stretch",)
+# The one field with a closed list. A misspelt route would otherwise pass as a
+# name and sample on the wrong curve, which is the failure this whole field
+# exists to make impossible.
+_CHOICE = {"schedule": SCHEDULES}
 
 
 class SamplingError(ValueError):
@@ -156,7 +195,8 @@ def _blocks(value):
 
 
 ROW = base_row.Row(DEFAULTS, error=SamplingError, whole=_WHOLE, number=_NUMBER,
-                   flag=_FLAG, floors=_FLOOR, custom={"stg_blocks": _blocks})
+                   flag=_FLAG, choice=_CHOICE, floors=_FLOOR,
+                   custom={"stg_blocks": _blocks})
 
 
 def resolve(data, widgets):
@@ -188,7 +228,7 @@ def resolve(data, widgets):
     return (
         Sampling(
             seed=int(widgets.get("seed", 0)),
-            steps=pick("steps"),
+            schedule=pick("schedule"), steps=pick("steps"),
             video_cfg=pick("video_cfg"), audio_cfg=pick("audio_cfg"),
             sampler_name=pick("sampler_name"),
             max_shift=pick("max_shift"), base_shift=pick("base_shift"),
