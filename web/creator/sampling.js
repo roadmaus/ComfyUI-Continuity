@@ -407,10 +407,63 @@ function seedPills({ widgets, value, set, perSegment }) {
  * nowhere else they could live.
  */
 function declaredRow(family, widgets, value, set) {
-  return S_widgetsOf(family)
-    .filter((w) => w.group === "sampler")
-    .map((w) => declaredPill(w, widgets, value, set))
-    .filter(Boolean);
+  const all = S_widgetsOf(family);
+  const drawn = all.filter((w) => w.group === "sampler" && shown(w, all, value));
+
+  // Controls sharing a `pill` are one control asked twice — the sigma shift's
+  // two ends, the stretch and where it stops — so they are drawn as one
+  // divided pill, in declaration order, at the position of the first of them.
+  // The same act `samplingBar` performs by hand for H3's sampler/scheduler and
+  // its two flow shifts, said in the vocabulary so a declared row can have it.
+  const seen = new Set();
+  return drawn.map((w) => {
+    if (!w.pill) return declaredPill(w, widgets, value, set);
+    if (seen.has(w.pill)) return null;
+    seen.add(w.pill);
+    const members = drawn.filter((other) => other.pill === w.pill);
+    return pillSet(members.map((other) =>
+      (seg) => declaredPill(other, widgets, value, set, seg, active(other, value))));
+  }).filter(Boolean);
+}
+
+
+/** Whether a control is doing something — declared `off` value, and away from
+ *  it. A control that declares no `off` has no answer to this and is never
+ *  "doing something"; `manifest.check` refuses a `requires` that asks. */
+function active(w, value) {
+  return w.off !== undefined && value(w.id, w.default) !== w.off;
+}
+
+
+/**
+ * Whether this control is drawn at all: every `requires` condition satisfied,
+ * and — for one marked `advanced` — either the setting asking for everything
+ * or a value away from its default.
+ *
+ * **In force means visible.** The advanced flag is a length control and not a
+ * permission, so a number somebody set, a preset that threw one, a loaded
+ * workflow carrying one, keeps its pill whatever the setting says. That is what
+ * makes turning the setting off a safe thing to do without first checking what
+ * you had switched on — the rule `settings.js` states and the one the shift
+ * pills and the custom quality row already live under.
+ *
+ * `requires` is not softened the same way, and the difference is the point: an
+ * advanced control that is set is still describing the render, while a control
+ * whose condition fails is not read at all. A terminal of 0.10 on the distilled
+ * curve is not a setting in force, it is a leftover — and drawing it is how a
+ * row ends up with five live-looking pills the render never hears.
+ */
+function shown(w, all, value) {
+  for (const cond of w.requires ?? []) {
+    const target = all.find((other) => other.id === cond.id);
+    if (!target) return false;
+    if ("value" in cond) {
+      if (String(value(target.id, target.default)) !== String(cond.value)) return false;
+    } else if (!active(target, value)) return false;
+  }
+  if (!w.advanced) return true;
+  return uiSetting("advanced", false) === true
+      || value(w.id, w.default) !== w.default;
 }
 
 
@@ -430,16 +483,13 @@ function declaredRow(family, widgets, value, set) {
  * sampling is this piece willing to pay for.
  */
 function guidanceRow(family, widgets, value, set) {
-  const declared = S_widgetsOf(family).filter((w) => w.group === "guidance");
+  const all = S_widgetsOf(family);
+  const declared = all.filter((w) => w.group === "guidance");
   if (!declared.length) return [];
-  const active = (w) => w.off !== undefined && value(w.id, w.default) !== w.off;
-  const pill = pillSet(declared.map((w) => {
-    if (w.requires) {
-      const on = declared.find((other) => other.id === w.requires);
-      if (!on || !active(on)) return null;
-    }
-    return (seg) => declaredPill(w, widgets, value, set, seg, active(w));
-  }));
+  const pill = pillSet(declared.map((w) =>
+    shown(w, all, value)
+      ? (seg) => declaredPill(w, widgets, value, set, seg, active(w, value))
+      : null));
   return pill ? [pill] : [];
 }
 
@@ -489,6 +539,15 @@ function declaredPill(w, widgets, value, set, seg = false, lit = false) {
       ? declared
       : (typeof fromWidget === "function" ? fromWidget(widgets[w.id]) : fromWidget) || [];
     if (!options.length) return null;
+    // Noun first — "recipe built-in", "sampler res_multistep" — the rule the
+    // attention pill already reads by. A bare value says what it is *called*
+    // and never what it is a choice about, and `res_multistep` standing alone
+    // on the row is nothing at all to somebody who has not read core's sampler
+    // list. `names` renames the value for the pill and the popover; what is
+    // stored and sent is still the option itself. A renamed option is a written
+    // string like any other and goes through `t()`; a bare one is a value off a
+    // node's schema and does not.
+    const shownName = (option) => (w.names?.[option] ? t(w.names[option]) : String(option));
     return el("button", {
       class: accelClass(seg, lit),
       title: help,
@@ -496,9 +555,10 @@ function declaredPill(w, widgets, value, set, seg = false, lit = false) {
         title: t(w.label),
         options,
         value: String(current),
+        label: shownName,
         onPick: (picked) => set(w.id, picked),
       }),
-    }, [el("span", { text: String(current) })]);
+    }, [el("span", { text: `${t(w.label)} ${shownName(current)}` })]);
   }
 
   // slider and stepper are one control here. The manifest's distinction is
@@ -507,6 +567,15 @@ function declaredPill(w, widgets, value, set, seg = false, lit = false) {
   // the control every number on H3's row already uses.
   const step = w.step ?? 1;
   const decimals = String(step).includes(".") ? String(step).split(".")[1].length : 0;
+  // A number that is switched off says so, the way every switch on this row
+  // does. The toggles have always read "cache off", "faces off", "spectrum
+  // off"; the sliders that are equally off at a particular value read
+  // "detail guidance 0.0" and "a/v sync 1.0", which look like settings
+  // somebody dialled in rather than passes nobody asked for — and neither
+  // number is guessable as the off one from the range beside it. Only where a
+  // manifest declared what off *is*: everything else here is a plain quantity
+  // with no such value.
+  const off = w.off !== undefined && !lit;
   return stepperPill({
     seg,
     className: lit ? "accel-on" : "",
@@ -516,7 +585,9 @@ function declaredPill(w, widgets, value, set, seg = false, lit = false) {
     step,
     width: decimals ? "58px" : "46px",
     title: help,
-    format: (n) => `${t(w.label)} ${decimals ? n.toFixed(decimals) : n}`,
+    format: (n) => (off
+      ? t("{label} off", { label: t(w.label) })
+      : `${t(w.label)} ${decimals ? n.toFixed(decimals) : n}`),
     onChange: (next) => set(w.id, next),
   });
 }
@@ -533,6 +604,12 @@ export function samplingBar({ widgets, value, set, perSegment = false,
   // wrong audio shift distorts the soundtrack before it touches the picture"),
   // which is worth more than the uniformity of deriving it. The seed is shared,
   // because the seed is the node's and not the family's.
+  //
+  // Settings → Nodes reaches both rows, and for a while it reached only the
+  // handwritten one: the advanced flag is read past this return, so a declared
+  // family drew every control it had whatever the setting said. `shown` reads
+  // it now, off each control's own `advanced` — so which controls are advanced
+  // is a family's statement in its manifest rather than a list kept here.
   if (family !== DEFAULT_VIDEO_FAMILY) {
     return el("div", { class: "mmc-pills" }, [
       ...seedPills({ widgets, value, set, perSegment }),

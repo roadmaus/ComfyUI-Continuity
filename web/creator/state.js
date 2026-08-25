@@ -3297,6 +3297,34 @@ export function passCheckpoint(segments, family = DEFAULT_VIDEO_FAMILY) {
   return pin || routed.plain;
 }
 
+/** What a family calls a payload shape, back to the shape itself — the modes
+ *  table read the other way. */
+export const modeShape = (piece, named) =>
+  Object.entries(modesOf(pieceFamily(piece))).find(([, label]) => label === named)?.[0] ?? null;
+
+/**
+ * A payload shape in plain words, for a readout that has no checkpoint to name.
+ *
+ * The families' own mode labels are their trainings' vocabulary — H3's
+ * `FL2VA`, Lightricks' `FL2V` — and on H3 they earn their place, because the
+ * badge that shows one is naming which of two checkpoint files the generation
+ * routes to and the file is called that. On a family with one transformer
+ * there is no second set of weights and nothing to route: the badge is a
+ * readout of what this generation *is*, and "FL2V" is a codename for
+ * "start → end" that a person has to already know to read.
+ *
+ * Keyed by the shape rather than by the label, so it is the same six words for
+ * every family that ever declares one — the shapes are `grammar.py`'s
+ * vocabulary and the labels are each family's.
+ */
+export const MODE_SHAPE_LABEL = {
+  opens_closes: "start → end",
+  opens: "from start frame",
+  closes: "to end frame",
+  text: "from text",
+  reference: "from references",
+};
+
 /**
  * The mode a pass's merged request will compile to.
  *

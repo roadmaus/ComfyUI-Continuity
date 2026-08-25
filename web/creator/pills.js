@@ -80,8 +80,15 @@ export function stepperPill({ value, onChange, min = -Infinity, max = Infinity, 
  * A pill that opens a list of choices. Used for anything whose options come
  * from the backend — samplers, schedulers — where there is nothing to draw but
  * the name.
+ *
+ * `label` renames an option for the list without touching it, for the case
+ * where the option *is* a wire value: a family's manifest may say that
+ * `distilled` reads "built-in", and what is picked and stored is still
+ * `distilled`. Identity by default, so a caller with nothing to rename passes
+ * nothing.
  */
-export function openChoicePopover(anchor, { title, options, value, onPick, extra }) {
+export function openChoicePopover(anchor, { title, options, value, onPick, extra,
+                                            label = String }) {
   const pop = el("div", { class: "mmc-pop mmc-pop-scroll" },
     title ? [el("div", { class: "mmc-pop-title", text: title })] : []);
   for (const option of options) {
@@ -90,7 +97,7 @@ export function openChoicePopover(anchor, { title, options, value, onPick, extra
       "aria-checked": option === value,
       onclick: () => { close(); onPick(option); },
     }, [
-      el("span", { class: "mmc-opt-label" }, [el("span", { text: option })]),
+      el("span", { class: "mmc-opt-label" }, [el("span", { text: label(option) })]),
       el("span", { class: "mmc-radio" }),
     ]));
   }

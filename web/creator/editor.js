@@ -1131,7 +1131,20 @@ export class CreatorEditor {
       // The family pill used to stand between them, and does not any more: it
       // leads the pill row above instead — see `familyPill`.
       trailing: this.nodeId ? [
-        facesPill({ target: this.piece, commit: () => this.commit() }),
+        // Only where there is a face pass to switch on. It is H3's crop-and-
+        // repair loop, written against its detector and its re-encode, and a
+        // family that declares `face: false` has no such pass — so the pill was
+        // a switch for something that could never run, sitting on the row
+        // saying "faces off" as though the choice were yours.
+        //
+        // Or where one is already on, which is a piece carried onto such a
+        // family with the pass switched on behind it. In force means visible,
+        // and here it is not a nicety: `emit.py` asks the family for a
+        // `face_payload` the moment it sees one, and a family that has no such
+        // method raises. A pill you can switch off is the difference between a
+        // render that says what is wrong and one that stops.
+        ...(S.canDo(this.piece, "face") || this.piece.face?.on
+          ? [facesPill({ target: this.piece, commit: () => this.commit() })] : []),
         weightsPill({
           piece: this.piece,
           models: this.piece.models,
@@ -2125,8 +2138,18 @@ export class CreatorEditor {
     // an arrow to the only checkpoint there is would be describing a choice
     // nobody has.
     if (!S.routing(family)) {
-      return el("span", { class: "mmc-mode", title: t("What this generation is.") },
-                [el("b", { text: currentMode })]);
+      // And with no checkpoint to name, the badge says the shape in words
+      // rather than in the family's codename for it — see `MODE_SHAPE_LABEL`.
+      // The codename stays in the tooltip, where somebody reading Lightricks'
+      // own docs will find it.
+      const shape = S.MODE_SHAPE_LABEL[S.modeShape(this.piece, currentMode)];
+      return el("span", {
+        class: "mmc-mode",
+        title: shape
+          ? t("What this generation is. {family} calls it {mode}.",
+              { family: S.FAMILY_LABEL[S.pieceFamily(this.piece)], mode: currentMode })
+          : t("What this generation is."),
+      }, [el("b", { text: shape ? t(shape) : currentMode })]);
     }
 
     const label = S.checkpointLabels(family);

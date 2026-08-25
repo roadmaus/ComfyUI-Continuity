@@ -16,13 +16,36 @@ of them here would go stale the first time core added one (the same rule
 `accel` the accelerator pills, `guidance` the taste-guidance pills beside them,
 `weights` the weights popover.
 
-Two optional keys say what a value *means* rather than how it is drawn. `off`
-is the value at which the control does nothing, which is what lets a pill be
-lit only while it is costing something — LTX's STG is off at 0 and its modality
-guidance at 1.0, and neither number is guessable from a range. `requires` names
-another control this one modifies, so it is drawn only while that one is doing
-something: the same rule Spectrum's blend follows on H3's handwritten row, said
-in the vocabulary so a declared row can follow it too.
+Four optional keys say what a value *means* rather than how it is drawn.
+
+`off` is the value at which the control does nothing, which is what lets a pill
+be lit only while it is costing something — LTX's STG is off at 0 and its
+modality guidance at 1.0, and neither number is guessable from a range. It is
+also what a pill reads *out* at that value: a slider sitting on its `off` says
+"detail guidance off" rather than "detail guidance 0.0", so a feature nobody
+switched on does not read as a number somebody dialled.
+
+`requires` is the conditions under which the control is drawn at all — a name,
+a `(name, value)` pair, or a list of either, all satisfied or the pill does not
+appear. A bare name means "that control is doing something", the rule Spectrum's
+blend follows on H3's handwritten row; a pair means "that control is set to
+this". Both forms exist because both cases are real on one family: LTX's
+terminal modifies its stretch (a name), and neither of them describes the
+render at all unless `schedule` is `scheduler` (a pair). The distilled curve is
+nine fixed sigmas, and drawing five live-looking pills that nothing reads is
+the one thing a declared row can get worse than H3's handwritten one.
+
+`advanced` marks a control most rows never touch, which the node draws only
+when Settings → Nodes asks for everything. A length control and not a
+permission: a value away from its `default` keeps its pill whatever the setting
+says — in force means visible, the rule `settings.py`'s flag is documented by
+and the rule the shift pills and the custom quality row already live under.
+
+`names` renames a combo's *values* for the pill without touching them. The
+options are the wire — `distilled` and `scheduler` are which SIGMAS node the
+render emits — and the pill saying "recipe built-in" is a display, so the two
+are separate keys rather than one list the frontend would have to translate
+back before it could be sent anywhere.
 
 Beyond widgets a manifest declares: **weight slots** (which files the family
 loads, from which folders, and how — mirrored off the family's own slot
@@ -49,7 +72,8 @@ WIDGET_GROUPS = ("sampler", "accel", "guidance", "weights", "reference")
 
 
 def widget(id, type, *, label, group, default=None, min=None, max=None,
-           step=None, options=None, help="", off=None, requires=None):
+           step=None, options=None, help="", off=None, requires=None,
+           advanced=False, names=None, pill=None):
     """One control, in the vocabulary above. Keys with nothing to say are
     omitted rather than carried as nulls, so the frontend reads presence."""
     if type not in WIDGET_TYPES:
@@ -60,10 +84,35 @@ def widget(id, type, *, label, group, default=None, min=None, max=None,
              "default": default, "help": help}
     for key, value in (("min", min), ("max", max), ("step", step),
                        ("options", value_list(options)),
-                       ("off", off), ("requires", requires)):
+                       ("off", off), ("requires", conditions(requires)),
+                       ("advanced", advanced or None),
+                       ("names", dict(names) if names else None),
+                       ("pill", pill)):
         if value is not None:
             entry[key] = value
     return entry
+
+
+def conditions(requires):
+    """`requires` in its one stored shape: a list of `{id}` / `{id, value}`.
+
+    Three spellings reach this — a name, a `(name, value)` pair, or a list of
+    either — and one comes out, because the frontend asks "is every condition
+    satisfied" and a renderer that had to sniff which of three shapes it was
+    holding would be answering a question this function can answer once.
+    """
+    if requires is None:
+        return None
+    if isinstance(requires, str) or isinstance(requires, tuple):
+        requires = [requires]
+    out = []
+    for entry in requires:
+        if isinstance(entry, str):
+            out.append({"id": entry})
+        else:
+            id, value = entry
+            out.append({"id": id, "value": value})
+    return out
 
 
 def value_list(options):
@@ -126,15 +175,29 @@ def check(manifest):
             raise ValueError(
                 f"family {manifest['id']!r}: widget {entry['id']!r} has "
                 f"unknown type {entry['type']!r}")
-    # `requires` names a control this one modifies, and a name that is not a
+    # `requires` names controls this one depends on, and a name that is not a
     # control is a pill that never draws — silently, which is the one failure
-    # worth catching here rather than in a browser.
-    declared = {entry["id"] for entry in manifest["widgets"]}
+    # worth catching here rather than in a browser. A bare condition also has
+    # to name a control that declares an `off`, or "is it doing something" has
+    # no answer and the pill is again invisible for a reason nothing states.
+    by_id = {entry["id"]: entry for entry in manifest["widgets"]}
     for entry in manifest["widgets"]:
-        if "requires" in entry and entry["requires"] not in declared:
-            raise ValueError(
-                f"family {manifest['id']!r}: widget {entry['id']!r} requires "
-                f"{entry['requires']!r}, which this family does not declare")
+        for cond in entry.get("requires", []):
+            target = by_id.get(cond["id"])
+            if target is None:
+                raise ValueError(
+                    f"family {manifest['id']!r}: widget {entry['id']!r} requires "
+                    f"{cond['id']!r}, which this family does not declare")
+            if "value" not in cond and "off" not in target:
+                raise ValueError(
+                    f"family {manifest['id']!r}: widget {entry['id']!r} requires "
+                    f"{cond['id']!r} to be doing something, but {cond['id']!r} "
+                    f"declares no 'off' value to be doing something against")
+        for value in entry.get("names", {}):
+            if value not in entry.get("options", [value]):
+                raise ValueError(
+                    f"family {manifest['id']!r}: widget {entry['id']!r} renames "
+                    f"{value!r}, which is not one of its options")
     for entry in manifest["weights"]:
         for key in ("id", "folder", "label"):
             if key not in entry:

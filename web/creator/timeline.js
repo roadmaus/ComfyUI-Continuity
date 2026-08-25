@@ -3487,7 +3487,10 @@ export class TimelineBody {
       // The family that decides which files these are leads the bar above
       // instead of standing here — see `familyPill`.
       trailing: [
-        facesPill({ target: this.timeline, commit: () => this.commit() }),
+        // Only where the family has the pass, or where one is already on —
+        // see the same gate, and the same reason, on the Creator's own row.
+        ...(S.canDo(this.timeline, "face") || S.faceAnywhere(this.timeline)
+          ? [facesPill({ target: this.timeline, commit: () => this.commit() })] : []),
         weightsPill({
           piece: this.timeline,
           models: this.timeline.models,

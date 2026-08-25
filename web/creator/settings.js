@@ -519,13 +519,14 @@ class SettingsPage {
     const on = this.settings.advanced === true;
     const rows = [
       { value: false, label: "Standard",
-        note: "The sampler row as most renders use it: the seed, the schedule, the "
-            + "caches and the attention backend. A control you have already switched "
-            + "on still shows its pill — it is in force, so it stays visible." },
+        note: "The sampler row as most renders use it: the seed, the recipe, the step "
+            + "count and the strengths. A control you have already set still shows its "
+            + "pill — it is in force, so it stays visible." },
       { value: true, label: "Everything",
-        note: "Adds the turbo lead-in, low VRAM and fast math to the sampler row, and "
-            + "the turbo lead-in to this page. For the rows where the last few percent "
-            + "of speed or of VRAM is worth a decision." },
+        note: "Adds each family's own last few controls — H3's low VRAM, fast math and "
+            + "turbo lead-in, LTX's sampler pick and its noise curve — and the turbo "
+            + "lead-in to this page. For the rows where the last few percent of speed, "
+            + "of VRAM or of curve is worth a decision." },
     ];
     return this.section("Nodes", "Advanced controls",
       "How much of the sampler row a node draws. Everything here is available "

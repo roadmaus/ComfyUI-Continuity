@@ -27,43 +27,74 @@ from . import declare, grammar, models, sampling
 
 def _widgets():
     d = sampling.DEFAULTS
+    # Every control below that only describes the built-from-controls curve.
+    # Declared once because it is one fact — `render.py` reads none of them on
+    # the distilled route — and five copies of it would be five chances to
+    # leave a pill behind saying something the render never hears.
+    custom_curve = ("schedule", sampling.SCHEDULES[1])
     return [
         # First on the row, because it is what the four scheduler controls
         # after it belong to. The options are this family's own closed list
-        # rather than a core node's, so the manifest carries them.
-        m.widget("schedule", "combo", label="schedule", group="sampler",
+        # rather than a core node's, so the manifest carries them — under
+        # display names, because `distilled` and `scheduler` say which node is
+        # emitted and neither says which one a person wants.
+        m.widget("schedule", "combo", label="recipe", group="sampler",
                  default=d["schedule"], options=sampling.SCHEDULES,
-                 help="Which curve the render samples on. 'distilled' is the trained one the "
-                      "distilled transformer was made against — nine fixed sigmas, and the steps, "
-                      "shift and terminal controls say nothing about it. 'scheduler' builds a curve "
-                      "from those controls instead, which is what the full dev transformer wants."),
+                 names={"distilled": "built-in", "scheduler": "custom"},
+                 help="Which curve the render samples on. 'built-in' (distilled) is the trained one "
+                      "the distilled transformer was made against — nine fixed sigmas, and the steps, "
+                      "noise curve and stop-early controls say nothing about it, so they are not "
+                      "drawn. 'custom' (scheduler) builds a curve from those controls instead, which "
+                      "is what the full dev transformer wants."),
         m.widget("steps", "stepper", label="steps", group="sampler",
                  default=d["steps"], min=1, max=10000, step=1,
-                 help="How many steps the 'scheduler' curve is built with — the dev transformer "
-                      "wants ~20. The distilled curve carries its own eight and ignores this."),
-        m.widget("video_cfg", "slider", label="video cfg", group="sampler",
+                 requires=custom_curve,
+                 help="How many steps the custom curve is built with — the dev transformer "
+                      "wants ~20. The built-in curve carries its own eight and ignores this."),
+        # `cfg` is the term of art and it is in the help, where somebody who
+        # knows it will find it. On the row it is how hard the render is pushed
+        # toward what you wrote, which is the thing being set.
+        m.widget("video_cfg", "slider", label="prompt strength", group="sampler",
                  default=d["video_cfg"], min=0.0, max=100.0, step=0.1,
-                 help="The picture's guidance scale. 1 on the distilled weights, ~3 on the dev transformer."),
-        m.widget("audio_cfg", "slider", label="audio cfg", group="sampler",
+                 help="How closely the picture follows the prompt — classifier-free guidance (cfg) "
+                      "for the video half. 1 on the distilled weights, ~3 on the dev transformer."),
+        m.widget("audio_cfg", "slider", label="sound strength", group="sampler",
                  default=d["audio_cfg"], min=0.0, max=100.0, step=0.1,
-                 help="The soundtrack's own scale — the AV latent is packed, and the two modalities are guided apart. 1 on the distilled weights, ~7 on the dev transformer."),
+                 help="How closely the soundtrack follows the prompt — the audio half's own cfg. The "
+                      "AV latent is packed and the two modalities are guided apart, so this is a "
+                      "separate number rather than the same one twice. 1 on the distilled weights, "
+                      "~7 on the dev transformer."),
         m.widget("sampler_name", "combo", label="sampler", group="sampler",
-                 default=d["sampler_name"],
+                 default=d["sampler_name"], advanced=True,
                  help="Ancestral is what Lightricks' own workflows pick in both stages — the noise "
                       "an ancestral step adds back is part of what the distilled curve was made "
                       "against, and plain euler over it comes out flat."),
-        m.widget("max_shift", "slider", label="max shift", group="sampler",
-                 default=d["max_shift"], min=0.0, max=100.0, step=0.01,
-                 help="On 'scheduler': the top of the sigma shift, which the scheduler scales by the latent's token count. The model patch is given the same pair; they are two readings of one curve."),
-        m.widget("base_shift", "slider", label="base shift", group="sampler",
+        # The sigma shift's two ends, in one pill and in reading order: "noise
+        # curve 0.95 to 2.05". As two loose pills they were two unrelated
+        # numbers with no hint that either was half of the other.
+        m.widget("base_shift", "slider", label="noise curve", group="sampler",
                  default=d["base_shift"], min=0.0, max=100.0, step=0.01,
-                 help="On 'scheduler': the bottom of the sigma shift. See 'max shift'."),
-        m.widget("stretch", "toggle", label="stretch sigmas", group="sampler",
-                 default=d["stretch"],
-                 help="On 'scheduler': stretch the schedule so its final sigma lands on the terminal value."),
-        m.widget("terminal", "slider", label="terminal", group="sampler",
+                 requires=custom_curve, advanced=True, pill="curve",
+                 help="The bottom of the sigma shift — how much noise the curve starts down at. "
+                      "The scheduler and the model patch are given the same pair; they are two "
+                      "readings of one curve. (LTXVScheduler's base_shift.)"),
+        m.widget("max_shift", "slider", label="to", group="sampler",
+                 default=d["max_shift"], min=0.0, max=100.0, step=0.01,
+                 requires=custom_curve, advanced=True, pill="curve",
+                 help="The top of the sigma shift, which the scheduler scales by the latent's token "
+                      "count. See 'noise curve'. (LTXVScheduler's max_shift.)"),
+        # Stretch and its terminal are one question — where does the schedule
+        # finish — so they are one pill: "stop early | at 0.10". `off=False` is
+        # what lets the terminal ask whether the stretch is doing anything.
+        m.widget("stretch", "toggle", label="stop early", group="sampler",
+                 default=d["stretch"], off=False,
+                 requires=custom_curve, advanced=True, pill="stop",
+                 help="Stretch the schedule so its final sigma lands on the value beside this "
+                      "rather than on zero. (LTXVScheduler's stretch.)"),
+        m.widget("terminal", "slider", label="at", group="sampler",
                  default=d["terminal"], min=0.0, max=0.99, step=0.01,
-                 help="On 'scheduler': where a stretched schedule ends. Ignored when stretch is off."),
+                 requires=[custom_curve, "stretch"], advanced=True, pill="stop",
+                 help="Where a stretched schedule ends. (LTXVScheduler's terminal.)"),
 
         # Taste guidance. Its own group because it is its own kind of control:
         # nothing here changes the schedule, and each of them buys picture with

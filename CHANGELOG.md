@@ -2,6 +2,41 @@
 
 ## Unreleased
 
+**The LTX 2.5 sampler row is five pills at rest instead of thirteen, and it is
+written in words rather than in the names of the nodes behind it.** Settings →
+Nodes → Advanced controls never reached this row: the flag was read past the
+point where a declared family peels off to its own renderer, so "Standard" and
+"Everything" drew the same thing. It is read per control now, off an `advanced`
+key each family sets in its own manifest — so which controls are the last few
+percent is that family's statement rather than a list in the frontend. The rule
+the H3 row already lived by holds: a control you have set keeps its pill
+whatever the setting says, because in force means visible.
+
+Separately, and worth more: on the trained curve the row was drawing five pills
+the render does not read, one of them lit. `requires` grew a value form, so
+`steps`, the noise curve and the stop-early pair appear only on the `custom`
+recipe that builds a schedule out of them. A control that is not read is not a
+setting in force, it is a leftover, and the one pill that looked switched on was
+the one that could not be doing anything.
+
+The names go with it. `video cfg` and `audio cfg` are **prompt strength** and
+**sound strength**; `max shift`/`base shift` are one pill reading **noise curve
+0.95 to 2.05**; `stretch sigmas` and `terminal` are **stop early at 0.10**;
+`schedule: distilled` is **recipe built-in**. Combos say what they are a choice
+about instead of showing a bare value — `sampler res_multistep`, not
+`res_multistep` alone. A guidance slider sitting on the value at which it does
+nothing reads **detail guidance off** rather than `detail guidance 0.0`, the way
+every switch on the row already read. And the `FL2V` badge says **start → end**;
+Lightricks' codename moves to the tooltip, since with one transformer there is
+no checkpoint for it to be naming. Every technical term stays in the help text,
+where somebody searching for it will find it. Nothing on the wire changed: the
+options a family stores and sends are the options, renamed only for the pill.
+
+The face pass pill no longer appears on a family that declares no such pass —
+it is H3's crop-and-repair loop, and on LTX 2.5 it was a switch for something
+that could never run. A piece that somehow carries one switched on keeps the
+pill, so it can be switched off.
+
 **LTX 2.5 now samples on the curve its checkpoint was distilled against, and
 renders come out a different class of picture for it.** The family was building
 its schedule with `LTXVScheduler` and pairing it with the `ModelSamplingLTXV`
@@ -20,14 +55,14 @@ first stage left. The sampler default moves to `euler_ancestral` with them,
 which is what both stages of both official graphs select: the noise an ancestral
 step adds back is part of what eight steps were distilled with.
 
-Which of the two curves a piece is on is a new `schedule` control at the head of
+Which of the two curves a piece is on is a new **recipe** control at the head of
 the LTX sampler row, because it is genuinely a choice — the `dev` transformer in
 the same slot *is* sampled the old way, at ~20 steps and cfg 3/7, and picking
-`scheduler` brings `LTXVScheduler`, the shift pair and the model patch back. The
-steps, shift, stretch and terminal pills describe that route and say so; on the
-trained curve they are not read, and neither is the resolution popover's refine
-denoise, there being no fraction to take of a schedule whose every value the
-distillation fixed. Nothing about H3 moved — its goldens are byte-identical.
+`custom` brings `LTXVScheduler`, the shift pair and the model patch back along
+with the pills that describe them. On the trained curve none of those are read,
+and neither is the resolution popover's refine denoise, there being no fraction
+to take of a schedule whose every value the distillation fixed. Nothing about H3
+moved — its goldens are byte-identical.
 
 **A still handed to LTX 2.5 is compressed before it conditions anything.** Every
 official image-to-video graph for this model resizes the frame to a 1536 px
