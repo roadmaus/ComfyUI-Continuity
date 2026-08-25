@@ -262,7 +262,7 @@ def weights_from_blob(data):
     video nodes' does — checkpoints, text encoder, VAEs, precision, devices, and
     the standing route.
     """
-    return models.Weights.from_blob(data)
+    return models.weights_from_blob(data)
 
 
 def emit(plan, weights, sampling, unique_id, filename_prefix=FILENAME_PREFIX):
@@ -292,10 +292,10 @@ def emit(plan, weights, sampling, unique_id, filename_prefix=FILENAME_PREFIX):
     # actually reach for. Nothing attached, nothing loaded.
     audio = any(one.ref_audios or any(v.track == "picture+sound" for v in one.ref_videos)
                 for one in compiled)
-    models.check(weights, set(where), where, audio=audio)
+    models.check(weights, models.needs(where, audio=audio), where)
 
     graph = GraphBuilder()
-    links = models.emit_links(graph, weights, set(where), audio=audio)
+    links = models.Links(graph, weights, set(where), audio=audio)
 
     inputs = {
         "clip": links.clip,

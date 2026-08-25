@@ -2,7 +2,7 @@
 
 One node, one prompt box, one video — and no sockets at all. Media is chosen in
 the UI and loaded from ComfyUI/input by filename; the weights are chosen the same
-way and loaded by `models.emit_links` inside the subgraph; and the finished clip
+way and loaded by `models.Links` inside the subgraph; and the finished clip
 is muxed, saved and played in the node body rather than handed to whatever the
 user wired downstream. What the user attaches decides the mode, and the mode
 decides which of the two checkpoints is loaded — FL2VA and Ref2VA are separate
@@ -113,7 +113,7 @@ def _schema(node_id, display_name, blob, deprecated=False):
         is_deprecated=deprecated,
         inputs=[
             # No model sockets. The weights are named in the blob and
-            # `models.emit_links` builds the loaders inside the subgraph —
+            # `models.Links` builds the loaders inside the subgraph —
             # see that module for why that is better than five wires.
             io.String.Input(blob, multiline=True, default=DEFAULT_DATA),
             io.Int.Input("seed", default=0, min=0, max=0xffffffffffffffff, control_after_generate=True,
@@ -278,7 +278,7 @@ def _render(blob, seed, steps, cfg, sampler_name, scheduler,
         # and for the same reason: this node is where a blob becomes objects.
         # They belong to no family — ReDetail re-renders an H3 pass through LTX
         # 2.5's weights — so they are their own block and their own reader.
-        upscaler=redetail.Weights.from_blob(data))
+        upscaler=redetail.weights_from_blob(data))
     return loop.expanded(graph)
 
 

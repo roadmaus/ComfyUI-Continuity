@@ -9,9 +9,9 @@ build for themselves.
 That is not only tidier. Both MODEL sockets had to be connected even though
 the render loop uses exactly one of them per generation, so every queue loaded a
 checkpoint it was never going to sample with. Emitting the loaders here means
-only the routed one is built at all — `emit_links` is handed the set of
-checkpoints the compiled payloads actually reached for, and builds a loader for
-each of those and nothing else.
+only the routed one is built at all — `Links` is handed the set of checkpoints
+the compiled payloads actually reached for, and builds a loader for each of
+those and nothing else.
 
 **The preview override is somebody else's node and is treated as such.** Core
 picks a previewer off `latent_format.taesd_decoder_name` (`latent_preview.py`),
@@ -113,9 +113,12 @@ class Slot:
 
     The slot table below is the family's whole weights declaration — which
     folder each pick browses, what an error calls it, and which loader the
-    graph builds for it. `emit_links`, `check`, `available` and the frontend's
-    weights control are all written against the table rather than against five
-    field names, which is what a second family's different slots ride in on.
+    A family's whole weights declaration is its table of these — which folder
+    each pick browses, what an error calls it, and which loader the graph builds
+    for it. `Weights`, `Links`, `check`, `available` and the frontend's weights
+    control are all written against a table rather than against a field list,
+    which is what a second family's different slots ride in on and what stopped
+    a third bringing a third copy of all four.
     """
 
     folder: str                 # ComfyUI's folder key the file is picked from
@@ -131,6 +134,13 @@ class Slot:
     # different thing from one whose loader this render happens not to build.
     # Every H3 slot is required, which is why the flag defaults to off.
     optional: bool = False
+    # What to say when an optional slot is asked for and nobody filled it.
+    # Only optional slots need one: a required slot is refused by `check` before
+    # a node is emitted, naming the field and its folder, while an optional one
+    # is not missing until a *pass* reaches for it — and at that point the
+    # useful sentence names the pass, not the field. Hence the family's own
+    # words rather than a generated line.
+    missing: str = ""
 
 
 # Order matters twice: it is the order the loaders are emitted in — which the
@@ -204,80 +214,131 @@ PREVIEW_FPS = 24
 LABEL = {name: slot.label for name, slot in SLOTS.items()}
 
 
-@dataclass(frozen=True)
-class Weights:
-    """The files the node was pointed at. Every one of them may be unset.
+def weights_from_blob(data):
+    """H3's picks, read against the table above. See `Weights`."""
+    return Weights.from_blob(data, SLOTS, routes=tuple(ROUTED_SLOTS))
 
-    Unset is the normal state of a node that has just been dropped on the canvas,
-    and it is also the state a workflow saved before this existed loads in — the
-    sockets it used to carry are gone and nothing can recover the filenames from
-    the links ComfyUI dropped. So this validates at emit time and says which
-    field is empty, rather than assuming a blob is complete.
+
+def needs(where, audio=True, face=False):
+    """The slots an H3 render must have a file for. See `check`.
+
+    The family's own reading of its table, which is what makes the check itself
+    family-neutral: the encoder and the video VAE always, the audio VAE unless
+    this is the PreStage's still branch decoding picture only, the detector only
+    when a pass in this render actually asks for the face pass, and exactly the
+    checkpoints the compiled payloads route to — a text-only render never asks
+    for the reference weights.
+    """
+    return ["clip", "vae",
+            *(["audio_vae"] if audio else []),
+            *(["sam3"] if face else []),
+            *sorted(where)]
+
+
+class Weights:
+    """The files a piece was pointed at, read against a slot table.
+
+    Every one of them may be unset. Unset is the normal state of a node that has
+    just been dropped on the canvas, and it is also the state a workflow saved
+    before the loaders moved inside the subgraph loads in — the sockets it used
+    to carry are gone and nothing can recover the filenames from the links
+    ComfyUI dropped. So this validates at emit time and says which field is
+    empty, rather than assuming a blob is complete.
+
+    **Against the table rather than against a field list**, which is the whole
+    reason there is one of these instead of one per family. This was a dataclass
+    with a field per H3 slot, and it was the right shape for exactly as long as
+    there was one family: the *keys* of the block are the family's — a filename
+    under `dit` means nothing to a family whose checkpoint slot is `fl2va` — so
+    a second family had to bring a second reader, and a third brought a third.
+    They differed in nothing but their tables.
+
+    `block` is which key of the blob holds the picks. Normally `models`, the
+    piece's own; ReDetail keeps `upscale_models` because its slot ids are LTX
+    2.5's on purpose and a piece rendering on H3 has an H3 file under `vae` —
+    two files cannot live under one key.
+
+    `routes` is the slots a generation may be routed between, in the order
+    anything listing them shows them. A family shipping one transformer passes
+    `()`: there is nothing to choose, so there is no `route` to store and
+    `routed` hands the payload straight back.
     """
 
-    fl2va: Optional[str] = None
-    ref2va: Optional[str] = None
-    clip: Optional[str] = None
-    vae: Optional[str] = None
-    audio_vae: Optional[str] = None
-    preview: Optional[str] = None
-    # The face pass's SAM3 detector. Unlike the five above it never becomes a
-    # loader in the graph: `facepass` loads it, uses it and gives its VRAM back
-    # inside one node. Only a render with the face pass switched on needs it.
-    sam3: Optional[str] = None
-    dtype: str = DEFAULT_DTYPE
-    # Which checkpoint everything runs on, whatever the mode derives. "auto"
-    # leaves each generation's own `checkpoint` pin alone.
-    route: str = DEFAULT_ROUTE
-    # `{field: "cuda:1"}` for anything pinned to a particular card. Empty is the
-    # normal state and means "wherever ComfyUI would have put it".
-    devices: dict = field(default_factory=dict)
+    def __init__(self, slots, picked=None, dtype=DEFAULT_DTYPE, route=DEFAULT_ROUTE,
+                 devices=None, routes=()):
+        self.slots = dict(slots)
+        self.routes = tuple(routes)
+        self._picked = {name: (picked or {}).get(name) for name in self.slots}
+        self.dtype = dtype
+        self.route = route
+        self.devices = dict(devices or {})
 
     @classmethod
-    def from_blob(cls, data):
-        """The `models` block of a creator_data / timeline_data blob.
+    def from_blob(cls, data, slots, routes=(), block="models"):
+        """The blob's weights block, as this table's picks.
 
-        A missing block is every field unset rather than an error: the blob is
-        the frontend's, hand-editing it is supported, and a node with no weights
-        chosen yet is a node someone is still setting up.
+        A missing or partial block is every field unset rather than an error:
+        the blob is the frontend's, hand-editing it is supported, a node nobody
+        has set up yet is the normal state of a fresh one, and a piece switched
+        to this family from another arrives carrying the previous family's keys,
+        which are not these and read as nothing picked.
         """
-        block = (data or {}).get("models")
-        if not isinstance(block, dict):
-            block = {}
-        picked = {name: _clean(block.get(name)) for name in FOLDERS}
-        dtype = block.get("dtype")
-        raw_devices = block.get("devices")
+        raw = (data or {}).get(block)
+        if not isinstance(raw, dict):
+            raw = {}
+        picked = {name: _clean(raw.get(name)) for name in slots}
+        dtype = raw.get("dtype")
         devices = {}
-        if isinstance(raw_devices, dict):
-            for name in DEVICE_FIELDS:
-                chosen = _clean(raw_devices.get(name))
+        pinned = raw.get("devices")
+        if isinstance(pinned, dict):
+            for name, slot in slots.items():
+                # Only the slots that become a loader something can move. Asked
+                # of the wrapper table rather than assumed: ComfyUI-MultiGPU
+                # subclasses the core loaders and neither `ModelPatchLoader` nor
+                # `LatentUpscaleModelLoader` is one of them.
+                if slot.loader not in MULTIGPU:
+                    continue
+                chosen = _clean(pinned.get(name))
                 if chosen:
                     devices[name] = chosen
-        route = block.get("route")
-        return cls(**picked,
+        route = raw.get("route")
+        return cls(slots, picked,
                    dtype=dtype if isinstance(dtype, str) and dtype else DEFAULT_DTYPE,
-                   route=route if route in ROUTES else DEFAULT_ROUTE,
-                   devices=devices)
+                   route=route if route in (DEFAULT_ROUTE, *routes) else DEFAULT_ROUTE,
+                   devices=devices, routes=tuple(routes))
 
     def routed(self, payload):
-        """`payload` with the route stamped onto its request, or unchanged.
+        """`payload` with the standing route stamped onto its request, or
+        unchanged.
 
         Applied to the payload rather than anywhere downstream because that dict
         is serialised into the segment node's cache key: changing the route has
         to re-run the generation, exactly as editing the prompt does.
+
+        Unchanged on a family that routes between nothing — there is no second
+        set of weights for a payload to be sent to.
         """
-        if self.route == DEFAULT_ROUTE:
+        if not self.routes or self.route == DEFAULT_ROUTE:
             return payload
         request = dict(payload.get("request") or {})
         request["checkpoint"] = self.route
         return {**payload, "request": request}
 
     def get(self, name):
-        return getattr(self, name)
+        return self._picked.get(name)
 
     def device(self, name):
         """Where `name` should be loaded, or None for wherever ComfyUI would."""
         return self.devices.get(name) or None
+
+    def __getattr__(self, name):
+        # Attribute access is kept for the slot names because `weights.vae` is
+        # how every reader spells it. Through `__dict__` rather than `self.` so
+        # a lookup during __init__ cannot recurse.
+        try:
+            return self.__dict__["_picked"][name]
+        except KeyError:
+            raise AttributeError(name) from None
 
 
 def _clean(value):
@@ -286,6 +347,29 @@ def _clean(value):
         return None
     value = value.strip()
     return value or None
+
+
+def check(weights, needed, where=None):
+    """Refuse now if a file this render needs was never picked.
+
+    `needed` is the slot names *this* render must have filled, which is the
+    family's own reading of its table: a text-only render never asks for the
+    reference weights, a soundless one never asks for the audio VAE, and a
+    detector nothing runs is a file nobody has to own.
+
+    `where[slot]` names the first generation that reached for a routed slot, so
+    the sentence says which segment is asking rather than only what is missing.
+    """
+    for name in needed:
+        if weights.get(name):
+            continue
+        slot = weights.slots[name]
+        blame = f"{where[name]} routes to it — " if where and name in where else ""
+        raise ValueError(
+            f"{blame}{slot.label.capitalize()} has not been picked. "
+            f"Open the node's 'weights' control and choose a file from "
+            f"models/{slot.folder}."
+        )
 
 
 def device_options():
@@ -451,106 +535,91 @@ def available():
     }
 
 
-def check(weights, checkpoints, where, audio=True, face=False):
-    """Refuse now if a file this render needs was never picked.
-
-    `checkpoints` is the set the compiled payloads actually route to, so a
-    text-only render never asks for the reference weights. `where[checkpoint]`
-    names the first generation that reached for one, the same way
-    `render.compile_all` labels a segment.
-
-    `audio=False` is the PreStage's still branch, which decodes picture only —
-    asking it for an audio VAE would be demanding a file the render will never
-    open.
-    """
-    needed = ["clip", "vae", *(["audio_vae"] if audio else []),
-              # Only when a pass in this render actually asks for the face pass:
-              # a detector nothing runs is a file nobody has to own.
-              *(["sam3"] if face else []),
-              *sorted(checkpoints)]
-    for name in needed:
-        if weights.get(name):
-            continue
-        blame = ""
-        if name in checkpoints:
-            blame = f"{where[name]} routes to it — "
-        raise ValueError(
-            f"{blame}{LABEL[name].capitalize()} has not been picked. "
-            f"Open the node's 'weights' control and choose a file from "
-            f"models/{FOLDERS[name]}."
-        )
-
-
 class Links:
-    """The loaders, as links into the graph they were built in, by slot name.
+    """The loaders a render builds, as links into the graph, by slot name.
 
     Links rather than loaded objects throughout: these go into the subgraph, and
     ComfyUI hashes input *values* for its cache — a model object hashes as
     `Unhashable`, so passing the real thing would make every expanded node miss
     on every queue.
 
-    A slot dict rather than a dataclass with a field per loader, because the
-    slots are the family's to declare — the render loop reads exactly two names
-    off this, `.vae` and `.audio_vae`, and everything else is between the
-    family's own hooks and its slot table. Attribute access is kept because
-    those two reads are a contract (`families/base.py`) and `links.vae` is how
-    every reader has always spelled it.
+    A slot dict rather than a field per loader, because the slots are the
+    family's to declare — the render loop reads exactly two names off this,
+    `.vae` and `.audio_vae`, and everything else is between the family's own
+    hooks and its table. Attribute access is kept because those two reads are a
+    contract (`families/base.py`) and `links.vae` is how every reader spells it.
 
-    A checkpoint nothing routes to is absent and has no loader in the graph at
-    all. That is the point of `emit_links` taking the set: both MODEL sockets
-    used to have to be connected even though one generation samples with
-    exactly one of them, so every queue loaded weights it never touched.
+    **Which loaders exist is the table's answer, not the caller's.** Four rules,
+    and every one of them is a file this render would otherwise load and never
+    open:
+
+    - A routed slot is built only where a generation actually routes to it.
+      Both of H3's MODEL sockets used to have to be connected even though one
+      generation samples with exactly one of them, so every queue loaded a
+      checkpoint it never touched.
+    - An audio slot is skipped on a soundless render — the PreStage's still
+      branch — and left present as `None`, so readers need no audio-awareness
+      of their own.
+    - A slot with no loader is a file some node opens itself (H3's preview
+      decoder, its detector, ReDetail's IC-LoRA) and never becomes a link.
+    - **An optional slot is built the first time it is asked for.** It is a
+      *pass* rather than a component: LTX's x2 upscaler is the second stage and
+      its duration head answers a question the seconds pill asks, and a piece
+      running neither must not load either. Built once, so a render with
+      several refined passes shares the one loader, and asked for while unset it
+      raises the slot's own sentence — which names the pass, not the field.
+
+    Each loader is emitted on the device its slot was pinned to, which on a
+    two-card machine is the difference between the text encoder sharing VRAM
+    with the DiT and not. Nothing pinned is the core loader unchanged.
     """
 
-    def __init__(self, slots):
-        self._slots = dict(slots)
+    def __init__(self, graph, weights, routes=(), audio=True):
+        self._graph = graph
+        self._weights = weights
+        self._table = dict(weights.slots)
+        self._built = {}
+        links = {}
+        for name, slot in self._table.items():
+            if slot.loader is None or slot.optional:
+                continue
+            if slot.routed and name not in routes:
+                continue
+            if slot.audio and not audio:
+                links[name] = None
+                continue
+            links[name] = self._loader(name)
+        self._slots = links
+
+    def _loader(self, name):
+        slot = self._table[name]
+        filename = self._weights.get(name)
+        wrapper, extra = loader_for(slot.loader, self._weights.device(name), filename)
+        inputs = {slot.input: filename, **(slot.extra or {})}
+        # `weight_dtype` is the core loader's input; a GGUF file's precision was
+        # decided when it was quantized, and its loader takes no such widget.
+        if not is_gguf(filename) and slot.loader == "UNETLoader":
+            inputs["weight_dtype"] = self._weights.dtype
+        return self._graph.node(wrapper, **inputs, **extra).out(0)
 
     def get(self, name):
         """The slot's link, or None where this render never built one."""
         return self._slots.get(name)
 
     def __getattr__(self, name):
-        try:
-            return self._slots[name]
-        except KeyError:
-            raise AttributeError(name) from None
-
-
-def emit_links(graph, weights, checkpoints, audio=True):
-    """Build the loaders inside `graph` and return them as a `Links`.
-
-    One `UNETLoader` per checkpoint this render reaches for and no more, which is
-    the whole reason the set is passed in rather than both being built
-    unconditionally.
-
-    Each loader is emitted on the device its field was pinned to, which on a
-    two-card machine is the difference between the text encoder sharing VRAM with
-    the DiT and not. Nothing pinned is the core loader unchanged.
-
-    `audio=False` leaves the audio VAE unbuilt, for the same reason `check`
-    takes the flag: a still decodes no sound, and a loader in the graph is a
-    file loaded whether or not anything reads it.
-    """
-    def loader(field, slot, filename):
-        wrapper, extra = loader_for(slot.loader, weights.device(field), filename)
-        inputs = {slot.input: filename, **(slot.extra or {})}
-        # `weight_dtype` is the core loader's input; a GGUF file's precision was
-        # decided when it was quantized, and its loader takes no such widget.
-        if not is_gguf(filename) and slot.loader == "UNETLoader":
-            inputs["weight_dtype"] = weights.dtype
-        return graph.node(wrapper, **inputs, **extra).out(0)
-
-    links = {}
-    for name, slot in SLOTS.items():
-        if slot.loader is None:
-            continue                    # picked in the control, loaded elsewhere
-        if slot.routed and name not in checkpoints:
-            continue                    # nothing samples on it, so no loader
-        if slot.audio and not audio:
-            links[name] = None          # present but unbuilt, so readers need no
-            continue                    # audio-awareness of their own
-        links[name] = loader(name, slot, weights.get(name))
-    return Links(links)
+        built = self.__dict__["_slots"]
+        if name in built:
+            return built[name]
+        lazy = self.__dict__["_built"]
+        if name in lazy:
+            return lazy[name]
+        slot = self.__dict__["_table"].get(name)
+        if slot is None or not slot.optional or slot.loader is None:
+            raise AttributeError(name)
+        if not self.__dict__["_weights"].get(name):
+            raise ValueError(slot.missing)
+        lazy[name] = self._loader(name)
+        return lazy[name]
 
 
 def preview_available():

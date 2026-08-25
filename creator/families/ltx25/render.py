@@ -50,8 +50,7 @@ That is what the model card describes and it is what the pill runs.
 from ... import canvas
 from ... import models as core
 from .. import base
-from . import (models, sampling as sampling_mod, segment as segment_node,
-               weights as weights_mod)
+from . import models, sampling as sampling_mod, segment as segment_node
 
 
 class LTX25(base.Family):
@@ -66,7 +65,7 @@ class LTX25(base.Family):
     rules = canvas.LTX25
 
     def weights_from_blob(self, data):
-        return weights_mod.Weights.from_blob(data)
+        return core.Weights.from_blob(data, models.SLOTS)
 
     def resolve_sampling(self, data, widgets):
         return sampling_mod.resolve(data, widgets)
@@ -100,10 +99,18 @@ class LTX25(base.Family):
         return {}
 
     def check(self, weights, where, audio=True, face=False):
-        weights_mod.check(weights, audio=audio)
+        # The slots a render can never go without: every loader that is not
+        # optional, less the audio VAE on a soundless render — which this family
+        # has no such thing as, but the rule is the table's rather than this
+        # family's. The two opt-in slots are deliberately absent: they are
+        # passes, not components, and `models.Links` refuses each in its own
+        # words at the moment something reaches for it.
+        core.check(weights, [name for name, slot in models.SLOTS.items()
+                             if slot.loader and not slot.optional
+                             and (audio or not slot.audio)])
 
     def emit_loaders(self, graph, weights, routes):
-        return Links(graph, weights)
+        return core.Links(graph, weights, routes)
 
     def emit_segment(self, graph, links, payload, compiled, weights, sampling,
                      seams, run):
@@ -281,81 +288,6 @@ class LTX25(base.Family):
         return self._sampled(graph, patch(segment.out(0)),
                              crop.out(0), crop.out(1), packed,
                              sampling, seed, tail, weights)
-
-
-class Links:
-    """The loaders, built on demand.
-
-    Four of the six slots are built at once, because every LTX render loads all
-    four — the family has no soundless mode and every guide goes through the
-    video VAE. The upscaler is the exception and is why this is a class rather
-    than `models.emit_links`: it is a *pass*, not a component, and a piece that
-    is not running the second stage should not load a file it will never call.
-    So it is built the first time `emit_refine` asks, once, and a render with
-    several refined passes shares the one loader.
-
-    The duration head is the other one, and it is lazy for a reason worth
-    stating: the prediction needs the loaded transformer and the encoded prompt
-    (see `segment._predicted_frames`), so it cannot be answered before a queue
-    — but a strip where no card is on auto must not load a second file for a
-    question nobody asked.
-    """
-
-    def __init__(self, graph, weights):
-        self._graph = graph
-        self._weights = weights
-        self._upscaler = None
-        self._duration_head = None
-        self._slots = {name: self._loader(name)
-                       for name, slot in models.SLOTS.items()
-                       if slot.loader and not slot.optional}
-
-    def _loader(self, name):
-        slot = models.SLOTS[name]
-        filename = self._weights.get(name)
-        wrapper, extra = core.loader_for(slot.loader,
-                                         self._weights.device(name), filename)
-        inputs = {slot.input: filename, **(slot.extra or {})}
-        if not core.is_gguf(filename) and slot.loader == "UNETLoader":
-            inputs["weight_dtype"] = self._weights.dtype
-        return self._graph.node(wrapper, **inputs, **extra).out(0)
-
-    @property
-    def upscaler(self):
-        if self._upscaler is None:
-            if not self._weights.get("upscaler"):
-                raise ValueError(
-                    "This piece is set to render in two stages, which on LTX 2.5 "
-                    "means Lightricks' x2 latent upscaler — and no upscaler has "
-                    "been picked. Choose one under the node's 'weights' control "
-                    "(models/latent_upscale_models), or set the upscale pill to "
-                    "'direct' to sample at one size."
-                )
-            self._upscaler = self._loader("upscaler")
-        return self._upscaler
-
-    @property
-    def duration_head(self):
-        if self._duration_head is None:
-            if not self._weights.get("duration_head"):
-                raise ValueError(
-                    "A shot on this strip has its length set to 'auto', which "
-                    "asks LTX's duration head how long it wants to be — and no "
-                    "duration head has been picked. Choose one under the node's "
-                    "'weights' control (models/model_patches), or set that "
-                    "shot's seconds pill to a length."
-                )
-            self._duration_head = self._loader("duration_head")
-        return self._duration_head
-
-    def get(self, name):
-        return self._slots.get(name)
-
-    def __getattr__(self, name):
-        try:
-            return self.__dict__["_slots"][name]
-        except KeyError:
-            raise AttributeError(name) from None
 
 
 FAMILY = LTX25()

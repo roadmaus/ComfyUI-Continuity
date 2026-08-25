@@ -37,7 +37,7 @@ One consequence worth knowing before reading further: **editing a segment only
 re-runs that segment and the ones after it.** What buys that is easy to lose:
 each segment node is handed its own payload rather than the whole piece, so a
 payload changes only when its own segment does. Hand a segment the whole blob and
-editing the last shot re-generates all of them. The loaders `models.emit_links`
+editing the last shot re-generates all of them. The loaders `models.Links`
 writes are ordinary nodes keyed on their filenames, so they cache the same way
 and are built once for the whole chain.
 """

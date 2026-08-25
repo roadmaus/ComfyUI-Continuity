@@ -43,6 +43,7 @@ every reference, and `tests/test_golden_graph.py` is what holds it to it.
 from dataclasses import dataclass
 
 from . import accel
+from .families import row
 
 # The H3 checkpoints' own flow shifts — `MiniMaxH3Model.__init__`'s
 # `sigma_shift_video` / `sigma_shift_audio` defaults. At exactly these values no
@@ -108,34 +109,10 @@ class SamplingError(ValueError):
     """A `sampling` block this pack will not run."""
 
 
-def _checked(name, value):
-    if name in _WHOLE:
-        # `True` is an int in Python and would sail through as one step.
-        if isinstance(value, bool) or not isinstance(value, (int, float)) or value != int(value):
-            raise SamplingError(f"sampling.{name} must be a whole number")
-        if int(value) < 1:
-            raise SamplingError(f"sampling.{name} must be at least 1")
-        return int(value)
-    if name in _NUMBER:
-        if isinstance(value, bool) or not isinstance(value, (int, float)):
-            raise SamplingError(f"sampling.{name} must be a number")
-        return float(value)
-    if name in _FLAG:
-        if not isinstance(value, bool):
-            raise SamplingError(f"sampling.{name} must be true or false")
-        return value
-    if name in _CHOICE:
-        if value not in _CHOICE[name]:
-            offered = ", ".join(_CHOICE[name])
-            raise SamplingError(f"sampling.{name} must be one of: {offered}")
-        return value
-    # The sampler and scheduler names. Not checked against core's lists here:
-    # those are what the widget offers and what `KSampler` will refuse by name,
-    # and a copy of them in this module would go stale the first time core added
-    # one.
-    if not isinstance(value, str) or not value:
-        raise SamplingError(f"sampling.{name} must be a name")
-    return value
+# The row itself, as kinds — see `families/row.py`. What is left here is the
+# field lists, which are the only part that is H3's.
+ROW = row.Row(DEFAULTS, error=SamplingError, whole=_WHOLE, number=_NUMBER,
+              flag=_FLAG, choice=_CHOICE)
 
 
 def block(data):
@@ -144,14 +121,7 @@ def block(data):
     An absent block is the ordinary state of every workflow saved before this
     existed, so it is not an error — it means every field falls back.
     """
-    raw = data.get("sampling")
-    if raw is None:
-        return {}
-    if not isinstance(raw, dict):
-        raise SamplingError("sampling must be an object")
-    return {name: _checked(name, value)
-            for name, value in raw.items()
-            if name in DEFAULTS and value is not None}
+    return ROW.stored(data)
 
 
 def resolve(data, widgets):

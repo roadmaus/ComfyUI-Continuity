@@ -156,49 +156,14 @@ def frame_megapixels(frames, width, height):
     return int(frames) * (int(width) * int(height) / 1_000_000)
 
 
-class Weights:
+def weights_from_blob(data):
     """The blob's `upscale_models` block, read against the table above.
 
     Its own block rather than the piece's `models`: the slot ids are shared with
     LTX 2.5 by design, and a piece rendering on H3 has an H3 file under `vae`.
     Two files cannot live under one key, so the backend keeps its own.
     """
-
-    def __init__(self, picked=None, dtype=core.DEFAULT_DTYPE):
-        self._picked = {name: picked.get(name) if picked else None
-                        for name in SLOTS}
-        self.dtype = dtype
-
-    @classmethod
-    def from_blob(cls, data):
-        """A missing or partial block is every field unset. A node nobody has
-        set this up on is the normal state of one, and the check below is what
-        turns that into a sentence at queue time."""
-        block = (data or {}).get("upscale_models")
-        if not isinstance(block, dict):
-            block = {}
-        picked = {name: _clean(block.get(name)) for name in SLOTS}
-        dtype = block.get("dtype")
-        return cls(picked,
-                   dtype=dtype if isinstance(dtype, str) and dtype
-                   else core.DEFAULT_DTYPE)
-
-    def get(self, name):
-        return self._picked.get(name)
-
-    def __getattr__(self, name):
-        try:
-            return self.__dict__["_picked"][name]
-        except KeyError:
-            raise AttributeError(name) from None
-
-
-def _clean(value):
-    """A filename, or None. Blank and non-string both mean unset."""
-    if not isinstance(value, str):
-        return None
-    value = value.strip()
-    return value or None
+    return core.Weights.from_blob(data, SLOTS, block="upscale_models")
 
 
 def needed(family):
@@ -214,7 +179,13 @@ def needed(family):
 
 
 def check(weights, family):
-    """Refuse now if a file this pass needs was never picked."""
+    """Refuse now if a file this pass needs was never picked.
+
+    Its own sentence rather than `models.check`'s: this backend belongs to no
+    family, its files are picked in a section of the popover of their own, and
+    the escape hatch is a pill rather than another file — none of which the
+    generic line has any way to say.
+    """
     for name in needed(family):
         if weights.get(name):
             continue

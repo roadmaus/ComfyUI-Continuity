@@ -37,6 +37,7 @@ leaving a user to find out from the step timer. See `render._guided`.
 from dataclasses import dataclass
 
 from ... import accel
+from .. import row as base_row
 
 
 @dataclass(frozen=True)
@@ -139,6 +140,9 @@ def _blocks(value):
     off however high its scale is. What is refused is text with no number in it
     at all, which is the typo case: it would sample at full cost with the
     perturbation switched off, and say nothing.
+
+    A `custom` field on the row below rather than a kind of its own, because
+    nothing else in this pack has an opinion like it.
     """
     if not isinstance(value, str):
         raise SamplingError("sampling.stg_blocks must be a list of block "
@@ -151,36 +155,8 @@ def _blocks(value):
     return value
 
 
-def _checked(name, value):
-    if name == "stg_blocks":
-        return _blocks(value)
-    if name in _WHOLE:
-        # `True` is an int in Python and would sail through as one step.
-        if isinstance(value, bool) or not isinstance(value, (int, float)) or value != int(value):
-            raise SamplingError(f"sampling.{name} must be a whole number")
-        if int(value) < 1:
-            raise SamplingError(f"sampling.{name} must be at least 1")
-        return int(value)
-    if name in _NUMBER:
-        if isinstance(value, bool) or not isinstance(value, (int, float)):
-            raise SamplingError(f"sampling.{name} must be a number")
-        floor = _FLOOR.get(name)
-        if floor is not None and value < floor:
-            raise SamplingError(
-                f"sampling.{name} must be at least {floor} — that is the value "
-                f"at which it does nothing, and below it the guidance runs "
-                f"backwards")
-        return float(value)
-    if name in _FLAG:
-        if not isinstance(value, bool):
-            raise SamplingError(f"sampling.{name} must be true or false")
-        return value
-    # `sampler_name`. Not checked against core's list here: that is what
-    # `KSamplerSelect` will refuse by name, and a copy of it in this module
-    # would go stale the first time core added one.
-    if not isinstance(value, str) or not value:
-        raise SamplingError(f"sampling.{name} must be a name")
-    return value
+ROW = base_row.Row(DEFAULTS, error=SamplingError, whole=_WHOLE, number=_NUMBER,
+                   flag=_FLAG, floors=_FLOOR, custom={"stg_blocks": _blocks})
 
 
 def resolve(data, widgets):
@@ -204,14 +180,7 @@ def resolve(data, widgets):
     model patch nobody has verified is how a render comes out subtly wrong with
     nothing in the log. Off is the honest answer until someone measures.
     """
-    raw = data.get("sampling")
-    if raw is None:
-        stored = {}
-    elif not isinstance(raw, dict):
-        raise SamplingError("sampling must be an object")
-    else:
-        stored = {name: _checked(name, value) for name, value in raw.items()
-                  if name in DEFAULTS and value is not None}
+    stored = ROW.stored(data)
 
     def pick(name):
         return stored[name] if name in stored else DEFAULTS[name]

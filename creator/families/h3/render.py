@@ -189,7 +189,7 @@ class H3(base.Family):
     compile_error = compiler.CompileError
 
     def weights_from_blob(self, data):
-        return models.Weights.from_blob(data)
+        return models.weights_from_blob(data)
 
     def resolve_sampling(self, data, widgets):
         return sampling_mod.resolve(data, widgets)
@@ -209,10 +209,10 @@ class H3(base.Family):
         return routed(compiled, labels)
 
     def check(self, weights, where, audio=True, face=False):
-        models.check(weights, set(where), where, audio=audio, face=face)
+        models.check(weights, models.needs(where, audio=audio, face=face), where)
 
     def emit_loaders(self, graph, weights, routes):
-        return models.emit_links(graph, weights, routes)
+        return models.Links(graph, weights, routes)
 
     def _segment_inputs(self, links, payload, compiled, weights, seams, splits, run):
         """The segment node's inputs, shared by the pass and its refine.

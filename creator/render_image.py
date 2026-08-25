@@ -111,7 +111,7 @@ def check(weights, payload):
 
 
 def emit_unet(graph, weights, name):
-    """One DiT loader, GGUF-aware the way `models.emit_links` is: a `.gguf`
+    """One DiT loader, GGUF-aware the way `models.Links` is: a `.gguf`
     filename swaps the class through `loader_for`, and `weight_dtype` is only a
     core-loader input — a quantized file's precision is already decided."""
     filename = weights.get(name)

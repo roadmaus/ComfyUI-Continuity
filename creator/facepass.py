@@ -92,7 +92,7 @@ def _detector(name):
     a detector that is finished after this call has no business staying resident
     until the save node runs. The second is that SAM3 is a fused checkpoint —
     model and text encoder in one file — which is not the split
-    `UNETLoader`/`CLIPLoader` shape `models.emit_links` builds.
+    `UNETLoader`/`CLIPLoader` shape `models.Links` builds.
     """
     if not str(name or "").strip():
         raise FacePassError(

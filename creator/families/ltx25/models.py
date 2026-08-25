@@ -58,13 +58,27 @@ SLOTS = {
     # Both opt-in, and both a pass rather than a component: the head answers
     # "how long should this shot be" for the seconds pill's auto, and the
     # upscaler is the second stage of Lightricks' own two-stage pipeline.
-    # A render that asks for neither never loads either.
-    "duration_head": core.Slot("model_patches", "the duration head",
-                               loader=PATCH_LOADER, input="name",
-                               optional=True),
-    "upscaler": core.Slot("latent_upscale_models", "the latent upscaler",
-                          loader=UPSCALE_LOADER, input="model_name",
-                          optional=True),
+    # A render that asks for neither never loads either — `models.Links` builds
+    # an optional slot the first time something reaches for it, and `missing` is
+    # what it says when nothing was picked. The sentence names the pass rather
+    # than the field, because by then the field is not what the user has to
+    # decide about.
+    "duration_head": core.Slot(
+        "model_patches", "the duration head",
+        loader=PATCH_LOADER, input="name", optional=True,
+        missing="A shot on this strip has its length set to 'auto', which asks "
+                "LTX's duration head how long it wants to be — and no duration "
+                "head has been picked. Choose one under the node's 'weights' "
+                "control (models/model_patches), or set that shot's seconds "
+                "pill to a length."),
+    "upscaler": core.Slot(
+        "latent_upscale_models", "the latent upscaler",
+        loader=UPSCALE_LOADER, input="model_name", optional=True,
+        missing="This piece is set to render in two stages, which on LTX 2.5 "
+                "means Lightricks' x2 latent upscaler — and no upscaler has "
+                "been picked. Choose one under the node's 'weights' control "
+                "(models/latent_upscale_models), or set the upscale pill to "
+                "'direct' to sample at one size."),
 }
 
 # Where each file is picked from — the slot table's folder column.

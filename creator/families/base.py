@@ -26,6 +26,16 @@ exceptions, and they are the contract's fine print:
 Hooks that create graph nodes must create them in the order they are called:
 node ids are assigned sequentially, and the golden-graph suite holds every
 family to byte-identical emissions.
+
+**Most of the hooks below have an answer already written.** A family declares a
+slot table (`models.Slot`) and gets four of them nearly free: `models.Weights`
+reads the blob against that table, `models.Links` builds exactly the loaders
+this render will open, `models.check` refuses a slot nobody filled, and
+`row.Row` validates the sampler row by declared field kinds. Each family used to
+carry its own copy of all four, differing in nothing but its field names. What
+is left in a family package after that is what the architecture actually
+decided — how a payload becomes conditioning and a latent, and what a sampler
+subgraph looks like — which is the part that cannot be a declaration.
 """
 
 
