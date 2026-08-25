@@ -1,9 +1,17 @@
 // The refine button, its settings, and the panel the rewrite lands in.
 //
-// H3-Base reads an expanded, sectioned description rather than a sentence, and
-// `contextir.py` can only put the *skeleton* of one back — the field names, the
-// instruction line, the shot markers. The prose is what a local vision model is
-// for, and `refine.py` is the half of this that talks to it.
+// No video model reads a one-line request the way its own guide says a prompt
+// should be written — one wants an expanded, sectioned description whose
+// skeleton alone can be assembled mechanically, another wants a flowing
+// present-tense caption with the shot established before the scene. Expanding
+// what the user typed into either is what a local vision model is for, and
+// `refine_routes.py` is the half of this that talks to it.
+//
+// Which of those a press produces is the piece's family's answer, and this
+// file never decides it: the templates the settings popover offers come off
+// the family's manifest, and the server resolves the same field to pick the
+// refiner that writes the prose. Everything below is about the button, the
+// panel and the draft.
 //
 // The rewrite is fetched here, on a click, and stored in the blob. It is not
 // done at queue time on purpose: what the model will actually read has to be
@@ -18,6 +26,7 @@
 import { el, icon, dismissable, keepScroll, placeNear } from "./dom.js";
 import { stepperPill } from "./pills.js";
 import { t } from "./i18n.js";
+import { DEFAULT_VIDEO_FAMILY, pieceFamily, templatesOf } from "./state.js";
 import { api } from "../../../scripts/api.js";
 
 // Machine-level, not workflow-level. Which text encoder is on this disk is a
@@ -40,13 +49,16 @@ const DEFAULTS = {
   // Empty is the built-in harness; a name is a `.skill` under the node's
   // skills/ folder, handed to the model whole as its only instruction.
   skill: "",
-  // Which of the built-in per-mode templates writes the rewrite. "auto"
-  // follows the request's derived mode — frames pick I2VA/L2VA/FL2VA,
-  // @ references pick REF2VA, nothing picks T2VA — exactly as the weights
-  // pill's route does. A pinned name overrides everywhere, REF2VA included;
-  // a pin across the reference boundary comes back with a quality hint in
-  // the reply's problems rather than a refusal.
-  template: "auto",
+  // Which of the built-in per-mode templates writes the rewrite, per family.
+  // "auto" — the absent value — follows the request's derived mode exactly as
+  // the weights pill's route does; a pinned name overrides everywhere, and a
+  // pin the family thinks costs something comes back as a hint in the reply's
+  // problems rather than as a refusal.
+  //
+  // Keyed by family because a template name only means anything to the family
+  // that declares it: pinning `REF2VA` and then moving the piece's model pill
+  // would otherwise send a name the new family's refiner has never heard of.
+  templates: {},
   // How long the reply may run, in tokens — not a context size. There is no
   // context setting on this backend: ComfyUI's Qwen3-VL tokenizer never
   // truncates, so the prompt is embedded whole however long it gets, and the
@@ -86,6 +98,14 @@ export function settings() {
     const { temperature, ...rest } = stored;
     stored = rest;
   }
+  // A pin written while the template was one setting rather than one per
+  // family. It was made against the only family there was, so that is the one
+  // it is kept for; every other family reads "auto" and is offered its own list.
+  if (typeof stored.template === "string") {
+    const { template, ...rest } = stored;
+    stored = { ...rest, templates: { [DEFAULT_VIDEO_FAMILY]: template,
+                                     ...(stored.templates ?? {}) } };
+  }
   return { ...DEFAULTS, ...stored };
 }
 
@@ -98,6 +118,26 @@ export function saveSettings(patch) {
 /** The text encoder the refiner is set to. Empty means nothing is chosen. */
 export function chosenModel(current = settings()) {
   return current.model || "";
+}
+
+/**
+ * Which template writes this family's rewrites — "auto" unless one is pinned.
+ *
+ * Resolved against what the family actually offers rather than trusted: a pin
+ * survives in localStorage across an update that renamed a template, and a name
+ * the family no longer declares would come back from the server as an error on
+ * every press. Falling through to "auto" is the same answer that name meant
+ * when it was pinned, minus the pin.
+ */
+export function chosenTemplate(family, current = settings()) {
+  const pinned = current.templates?.[family];
+  const offered = templatesOf(family).some((entry) => entry.name === pinned);
+  return offered ? pinned : "auto";
+}
+
+/** Pin a template for one family, leaving the other families' pins alone. */
+export function saveTemplate(family, name) {
+  return saveSettings({ templates: { ...settings().templates, [family]: name } });
 }
 
 // ---- the server -------------------------------------------------------------
@@ -149,7 +189,13 @@ export async function listSkills({ force = false } = {}) {
  *   like typed text; chained reference cards carry their own `sections`.
  */
 export async function refine(payload) {
-  const { model, temperature, seed, language, maxTokens, skill, template } = settings();
+  const current = settings();
+  const { model, temperature, seed, language, maxTokens, skill } = current;
+  // Read off the blob being sent rather than passed in, because it is a fact
+  // about that blob: the server resolves the same field to decide which
+  // family's refiner writes the rewrite, and a template pinned for another
+  // one must not ride along with it.
+  const template = chosenTemplate(pieceFamily(payload.data), current);
   const response = await api.fetchApi("/minimax_creator/refine", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -215,7 +261,7 @@ function collect(job) {
  * form — a `<select>` and two number inputs would be the only browser chrome in
  * the entire node.
  */
-export function openSettings(anchor, onChange) {
+export function openSettings(anchor, onChange, family = DEFAULT_VIDEO_FAMILY) {
   const pop = el("div", { class: "mmc-pop mmc-refine-pop" });
   const modelHost = el("div", { class: "mmc-refine-models" });
   const skillHost = el("div", { class: "mmc-refine-models" });
@@ -224,35 +270,27 @@ export function openSettings(anchor, onChange) {
 
   const changed = () => { onChange?.(); drawTemplate(); drawMore(); };
 
-  // What each template is for, in the words the pill and the panel share.
-  const TEMPLATES = [
-    ["auto", "follows what is attached: frames pick I2VA / L2VA / FL2VA, "
-             + "@ references pick REF2VA, a bare prompt picks T2VA."],
-    ["T2VA", "text only — the video is described from nothing."],
-    ["I2VA", "first frame — the rewrite opens on the attached image and develops forward."],
-    ["L2VA", "last frame — the rewrite converges on the attached image at the end."],
-    ["FL2VA", "first and last frame — the rewrite is the motion path between the two."],
-    ["REF2VA", "@ references — the six-section form that defines and tracks them. "
-               + "Pinnable on any request, but without references it may degrade quality."],
-  ];
+  // What this family's templates are and what each is for — the family's own
+  // strings, travelling in its manifest and translated like any other copy.
+  const TEMPLATES = templatesOf(family);
 
   /** Which per-mode template writes the rewrite. Hidden while a skill is
    *  chosen — a skill replaces the built-in prompting whole, templates
    *  included, and a dial that does nothing should not be shown doing it. */
   function drawTemplate() {
-    if (settings().skill) {
+    if (settings().skill || !TEMPLATES.length) {
       templateHost.replaceChildren();
       return;
     }
-    const chosen = settings().template || "auto";
+    const chosen = chosenTemplate(family);
     templateHost.replaceChildren(
       el("span", { class: "mmc-note-key", text: t("template") }),
-      el("div", { class: "mmc-chips" }, TEMPLATES.map(([name, why]) => el("button", {
+      el("div", { class: "mmc-chips" }, TEMPLATES.map(({ name, help }) => el("button", {
         class: "mmc-chip",
         "aria-checked": name === chosen,
         text: name === "auto" ? "auto" : name.toLowerCase(),
-        title: t(why),
-        onclick: () => { saveSettings({ template: name }); changed(); },
+        title: t(help),
+        onclick: () => { saveTemplate(family, name); changed(); },
       }))),
       el("div", { class: "mmc-refine-hint",
                   text: t("Which of the built-in prompt templates writes the rewrite. "
@@ -785,8 +823,14 @@ export class RefinePanel {
  *
  * `run` does the work and reports back; this only handles the two states the
  * button itself has — idle, and waiting on a model that may take a minute.
+ *
+ * `family` is a getter for the id of the family the piece renders with, asked
+ * when the settings open so the template chips are that family's own. Absent —
+ * a caller with no piece in hand — falls back to the default family, which is
+ * what the whole pill was hardcoded to before it was asked at all.
  */
-export function refineButton({ run, label = "Refine", title, className = "mmc-tool" }) {
+export function refineButton({ run, family = null, label = "Refine", title,
+                               className = "mmc-tool" }) {
   let busy = false;
   const text = el("span", { text: t(label) });
   // The generation ticks ComfyUI's own progress channel once per token, under
@@ -799,8 +843,8 @@ export function refineButton({ run, label = "Refine", title, className = "mmc-to
   };
   const button = el("button", {
     class: className,
-    title: title || t("Rewrite this prompt into the expanded description H3 was trained to read, "
-                  + "keeping everything you wrote and expanding it."),
+    title: title || t("Rewrite this prompt into the description this piece's model was trained "
+                  + "to read, keeping everything you wrote and expanding it."),
     onclick: async () => {
       if (busy) return;
       busy = true;
@@ -827,11 +871,14 @@ export function refineButton({ run, label = "Refine", title, className = "mmc-to
       : t("Choose a model"),
     onclick: (event) => {
       event.stopPropagation();
+      // Asked at the press, not captured when the button was built: the piece's
+      // model pill can move while this tile sits on the rail, and the templates
+      // the popover offers have to be the ones the next press would use.
       openSettings(event.currentTarget, () => {
         more.title = chosenModel()
           ? t("{model} — click to change the model, template, language or sampling", { model: chosenModel() })
           : t("Choose a model");
-      });
+      }, family?.() ?? DEFAULT_VIDEO_FAMILY);
     },
   }, [icon("chevron", 12)]);
 

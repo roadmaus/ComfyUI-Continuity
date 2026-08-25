@@ -2,6 +2,38 @@
 
 ## Unreleased
 
+**The refiner writes the prompt this piece's model was trained to read, not
+always H3's.** The Refine button was written when H3 was the only family, and it
+stayed H3's after there were two: whatever the piece's model pill said, the
+route compiled the request as H3, derived an H3 mode name for it, and rewrote
+the prose into Context-IR — section headers, `[Shot 2]` markers, cut timestamps
+and `<Picture 1>` ordinals. On LTX 2.5 every one of those is a token sequence
+Lightricks trained the weights never to see, sitting exactly where a description
+belongs, so refining a piece on that family made its prompt worse rather than
+better.
+
+The refiner has come apart into the half that is the harness and the half that
+is a statement about a checkpoint. The harness — `@handle` storage, the citation
+and quoted-span checks, the ChatML turns, the reply budget, the grounding pass
+over attached pictures — is shared and unchanged. Each family now brings its own
+templates, mode names, reply contract and glossary, and the button follows the
+piece's model pill the moment it moves.
+
+LTX 2.5's is written from Lightricks' own prompting guide: one flowing
+present-tense paragraph with no headers, labels or markers of any kind; the shot
+established before the scene and the scene before the people; emotion as a
+physical cue; camera movement said relative to the subject and resolved after
+the move; dialogue in quotation marks in the sentence that speaks it; sound as
+heard events. A cut is prose here — "A hard cut transitions to…", the framing
+re-established after it, the sound said to continue or drop — so this family is
+never asked for cut times, and a lone card that wants several shots writes them
+into its one description.
+
+The template pill offers each family's own list, and a pin is kept per family: a
+`REF2VA` pinned on an H3 piece no longer rides along into an LTX request as a
+name its refiner has never heard of. An existing pin is kept for the family it
+was made against.
+
 **Clear empties the sound lane, and a track can be taken back off by hand.** A
 laid track is the piece's own sound — the shots under it are generated against
 it — so a Clear that left it behind handed the next scene the last one's

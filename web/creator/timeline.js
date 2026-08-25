@@ -1202,13 +1202,15 @@ class Timeline {
       // is only kept by a rewrite that wrote both sides of it.
       refineButton({
         run: () => this.refineAll(),
+        family: () => S.pieceFamily(this.timeline),
         label: refined ? t("Refine again") : t("Refine all"),
         className: "mmc-pill mmc-tl-refine",
-        title: t("Rewrite {what} into the expanded "
-             + "description H3 was trained to read, in one pass so the later shots keep what the "
-             + "first establishes. The global prompt is rewritten too, in its own box, and still "
-             + "stands in front of every shot. Everything you wrote is kept and expanded. A "
-             + "rewrite is queued in place of the card's own prompt, not alongside it.",
+        title: t("Rewrite {what} into the "
+             + "description this piece's model was trained to read, in one pass so the later "
+             + "shots keep what the first establishes. The global prompt is rewritten too, in "
+             + "its own box, and still stands in front of every shot. Everything you wrote is "
+             + "kept and expanded. A rewrite is queued in place of the card's own prompt, not "
+             + "alongside it.",
              { what: count === 1 ? t("the shot") : t("all {count} shots", { count }) }),
       }),
       // The way back from that one press. Without it, undoing a whole-strip

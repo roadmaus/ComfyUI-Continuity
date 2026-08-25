@@ -1559,7 +1559,12 @@ export class CreatorEditor {
         // After the adds because it is the step after them: the rewrite is
         // written against the references and the duration, so it wants them
         // settled first.
-        ...(this.refineTarget ? [refineButton({ run: () => this.refine() })] : []),
+        ...(this.refineTarget ? [refineButton({
+          run: () => this.refine(),
+          // Off the same blob the press sends, so the templates the popover
+          // offers cannot disagree with the refiner that will write the prose.
+          family: () => S.pieceFamily(this.refineTarget().data),
+        })] : []),
         // Then the end of the cluster, and the end of the piece: everything to
         // its left writes the scene, and this is the one that takes it back.
         ...(this.clearTool?.() ?? []),

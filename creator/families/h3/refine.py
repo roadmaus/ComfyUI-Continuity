@@ -1,5 +1,11 @@
 """The local stand-in for H3's hosted Context-IR rewriter.
 
+This is H3's half of the refiner. The harness half — the `@handle`
+representation, the citation and quoted-span checks, the ChatML turns, the
+reply budget, the two fields that are this pack's own questions rather than any
+model's training — is `families/refine.py`, and `refine_routes.py` reaches this
+module only through the `PROMPTING` singleton at the bottom.
+
 H3 is two models. The hosted half rewrites what the user typed into a labelled,
 sectioned intermediate representation, and the open weights were only ever
 trained on that output. `contextir.py` puts the *skeleton* back — the field
@@ -52,46 +58,21 @@ data and are unit-tested that way. `refine_local.py` is what loads the model and
 `refine_routes.py` is what knows about disk.
 """
 
-import json
 import os
 import re
 from pathlib import Path
 
+from .. import refine as harness
+from ..refine import (
+    # The harness half, re-exported because they are this module's own working
+    # vocabulary and it reads better than qualifying every use — see
+    # `families/refine.py` for what is shared and why.
+    CONTINUES_NOTE, MIN_SHOT_S, PIECE_FIELD, RefineError, SEEN_FIELD,
+    describe_slots, json_object, plan_cuts, shot_limit,
+)
 from . import contextir
 
 _PROMPTS = Path(__file__).parent / "prompts"
-
-# How long a reply may run, in tokens. Not a context size: nothing on this
-# backend has one. `Qwen3VLSDTokenizer` is built with `max_length=99999999` and
-# `pad_to_max_length=False`, so the prompt is never truncated however long it
-# gets, and `BaseGenerate.generate` sizes its KV cache as `len(prompt) + this`.
-# So this is purely the output budget — what decides whether a twelve-card
-# rewrite finishes its last body or stops mid-sentence, and how much of the KV
-# cache is reserved for text that has not been written yet.
-NUM_PREDICT = 6144
-
-# What the setting may be moved to. The floor is one short single-shot rewrite;
-# the ceiling is where the cache reservation starts costing real VRAM for a
-# reply no model is going to fill.
-MIN_PREDICT = 1024
-MAX_PREDICT = 32768
-
-
-def reply_tokens(value):
-    """The user's reply-length setting, made usable. Junk falls back to default."""
-    try:
-        return max(MIN_PREDICT, min(MAX_PREDICT, int(value)))
-    except (TypeError, ValueError):
-        return NUM_PREDICT
-
-# Long side of an image handed to the LLM. It is looking at the picture to say
-# what is in it, not to reproduce it, and a 4000px reference costs seconds of
-# transfer and encode for nothing.
-IMAGE_LONG_EDGE = 1024
-
-
-class RefineError(RuntimeError):
-    """The refiner could not produce a usable rewrite."""
 
 
 # ---- the templates ----------------------------------------------------------
@@ -279,13 +260,6 @@ MODE_NOTES = {
               "across all of them.",
 }
 
-CONTINUES_NOTE = (
-    "This shot continues straight out of the previous shot in the finished clip: "
-    "its first frame is the previous one's last frame. Open in that same place, "
-    "with the same subjects, light and framing, and move on from there."
-)
-
-
 def choose_template(choice, mode):
     """Which template the rewrite is written in -> `(template, forced)`.
 
@@ -315,73 +289,6 @@ def choose_template(choice, mode):
 # ---- the JSON contract ------------------------------------------------------
 
 _REF_SECTIONS = ("subject_definitions", "summary", "retention_analysis")
-
-# The first thing the model writes when anything is attached, and the only field
-# here that is not part of the prompt.
-#
-# Reasoning is suppressed and the reply is prefilled with `{`, so without this
-# the very first token generated is already the rewrite: the model can write a
-# whole description having never attended to the pictures, and on a 4B one it
-# does. Asking it to say what is in them first is a grounding pass paid for in
-# about fifty tokens, and it happens *inside* the JSON object rather than before
-# it so the prefill still holds.
-#
-# It is read back and shown in the panel rather than dropped, because "did it
-# actually look at my images" is the question this whole field exists to answer.
-SEEN_FIELD = "what_i_see"
-
-# The piece's standing description, rewritten. Only a whole-timeline refine asks
-# for it: the global prompt is placed ahead of every shot's own description at
-# generation time, so what the shots share — the style, the world, the cast —
-# belongs in it, said once, rather than copied into every body. It is written
-# right after `SEEN_FIELD` so the establishing pass comes before the shots that
-# inherit from it, and it is stored back into the same editable box it came
-# from: the join stays a compile-time fact, not something baked into the prose.
-PIECE_FIELD = "global_prompt"
-
-# The shortest a shot may be, and the most a rewrite may hold. The floor is what
-# turns a duration into a shot ceiling: a six-second clip cannot be five cuts,
-# and saying so in the grammar is better than clamping it afterwards.
-MIN_SHOT_S = 2.0
-MAX_SHOTS = 6
-
-
-def shot_limit(seconds):
-    """How many shots a clip of `seconds` may be cut into. 1 means "do not ask".
-
-    Below two shots' worth of time there is no choice to offer, and the request
-    falls back to the fixed single body every other path uses.
-    """
-    return max(1, min(MAX_SHOTS, int(float(seconds or 0) // MIN_SHOT_S)))
-
-
-def plan_cuts(bodies, cuts, seconds):
-    """`([body], [at]), duration -> [(at, body)]` — the model's cuts, made to fit.
-
-    The model picks the times and this fixes them up: the first shot starts at 0
-    whatever it said, every later cut is at least `MIN_SHOT_S` past the one
-    before it, and the last one leaves that much video after it. A shot with no
-    room left is merged into the shot before it rather than dropped, because its
-    prose is the only copy of that part of the description — a truncated rewrite
-    would lose a paragraph the user never sees go.
-    """
-    seconds = float(seconds or 0)
-    out = []
-    for index, body in enumerate(bodies):
-        if not out:
-            out.append([0.0, body])
-            continue
-        floor = out[-1][0] + MIN_SHOT_S
-        ceiling = seconds - MIN_SHOT_S
-        if floor > ceiling:
-            out[-1][1] = f"{out[-1][1]} {body}".strip()
-            continue
-        try:
-            at = float(cuts[index])
-        except (TypeError, ValueError, IndexError):
-            at = floor
-        out.append([max(floor, min(at, ceiling)), body])
-    return [(at, body) for at, body in out]
 
 
 def join_shots(bodies, cuts, seconds):
@@ -524,29 +431,6 @@ def system_prompt(mode, language="English", shape=None, cuts=0):
 
 
 # ---- the user message -------------------------------------------------------
-
-
-def describe_slots(slots):
-    """The handle glossary, one line per attached asset.
-
-    Both forms are given — the handle to write and the label it becomes — because
-    the guide the model has just read is written entirely in labels, and a model
-    that reaches for `<Picture 2>` anyway is then at least reaching for the right
-    one. `normalize_handles` converts those back.
-
-    A slot that has a picture in the message carries `image`, its position among
-    them, and says so. Only some assets have one — an audio reference has none, a
-    video taken for its soundtrack alone has none — so "the Nth picture is the
-    Nth line" is wrong the moment one of those is attached, and the number is
-    what ties each picture to the handle it is actually of.
-    """
-    lines = []
-    for slot in slots:
-        label = f" (becomes {slot['label']})" if slot.get("label") else ""
-        where = f" [image {slot['image']}]" if slot.get("image") else ""
-        extra = f" — {slot['note']}" if slot.get("note") else ""
-        lines.append(f"@{slot['handle']}{label}{where}: {slot['what']}{extra}")
-    return lines
 
 
 # What a subject is, in one noun. The glossary's job is to say who is in the
@@ -978,206 +862,15 @@ def user_message(shots, seconds=None, images=0, mode=None, piece=None, pool=None
     return "\n".join(lines).strip()
 
 
-# ---- the ChatML form --------------------------------------------------------
-#
-# `CLIP.tokenize` gets one string, and a Qwen tokenizer that sees it begin with
-# `<|im_start|>` passes it through verbatim rather than wrapping it in the
-# single-user-turn template it would otherwise use. So the turns are written
-# here, which is also what makes room for the two things that template has no
-# slot for: a system turn, and a prefilled reply.
-
-VISION_BLOCK = "<|vision_start|><|image_pad|><|vision_end|>"
-
-# The reply opens mid-JSON. Nothing constrains the sampler to a shape, and the
-# failure that actually happens is not malformed JSON — it is a model that
-# answers "Here is the rewrite:" first and fences the object afterwards.
-# Starting its turn inside the object removes the place where that goes, and
-# `parse_reply` is handed the brace back.
-PREFILL = "{"
-
-
-def chatml(system, message, images=0, prefill=PREFILL):
-    """system + user + an assistant turn already begun, as one Qwen prompt.
-
-    `images` vision blocks are placed at the head of the user turn, in the order
-    the images are passed alongside it — the tokenizer binds the Nth
-    `<|image_pad|>` to the Nth image, and the glossary in `message` names them in
-    that same order.
-
-    The empty `<think>` block is Qwen3's convention for "answer without
-    reasoning". It has to be written by hand here for the same reason the turns
-    do: skipping the template skips that too, and a reasoning model with no
-    suppression spends the whole token budget thinking and returns nothing.
-    """
-    return (
-        "<|im_start|>system\n" + system + "<|im_end|>\n"
-        "<|im_start|>user\n" + VISION_BLOCK * int(images) + message + "<|im_end|>\n"
-        "<|im_start|>assistant\n<think>\n\n</think>\n\n" + prefill
-    )
-
-
-# ---- handles and labels -----------------------------------------------------
-
-LABEL_RE = re.compile(r"<\s*(Picture|Video|Audio)\s+(\d+)\s*>")
-
-# The same with `<Subject N>` in it. Kept apart because the two are only the
-# same question where a cast exists: without one, every `<Subject N>` in a reply
-# is the model's own invention, defined inside its `subject_definitions` and
-# pointing at nothing outside the rewrite — so reporting them as stray or
-# rewriting them to a handle would both be wrong. With a cast, they are pinned
-# labels like any other and are read back the same way.
-ANY_LABEL_RE = re.compile(r"<\s*(Picture|Video|Audio|Subject)\s+(\d+)\s*>")
-
-
-def _pinned_subjects(labels):
-    """Whether this label map carries a cast — see `ANY_LABEL_RE`."""
-    return any(str(label).startswith("<Subject") for label in (labels or {}).values())
-HANDLE_RE = re.compile(r"@([A-Za-z]+-\d+)")
-
-
-def normalize_handles(text, labels):
-    """`<Picture 2>` -> `@img-3`, using the label map this request will produce.
-
-    The model is asked for handles and shown the mapping, and mostly complies —
-    but it has just read a guide written entirely in labels, so the other form
-    turns up. Converting it back here means one representation reaches storage
-    and `compile._substitute` stays the only thing that writes an ordinal.
-
-    A label with no asset behind it is left exactly as written: it is a real
-    mistake and `check` is what reports it, so silently deleting it here would
-    hide the one failure that produces a wrong video rather than an error.
-
-    `<Subject N>` is untouched where the piece has no cast — those are the
-    reference guide's own invention, defined inside the rewrite and pointing at
-    nothing outside it. Where there *is* a cast the label is pinned and means a
-    subject the user declared, so it reads back to that subject's name exactly
-    as a picture's ordinal reads back to its handle.
-    """
-    back = {label: handle for handle, label in (labels or {}).items() if ":" not in handle}
-    if not back:
-        return text
-
-    def swap(match):
-        canonical = f"<{match.group(1)} {int(match.group(2))}>"
-        handle = back.get(canonical)
-        return f"@{handle}" if handle else match.group(0)
-
-    pattern = ANY_LABEL_RE if _pinned_subjects(labels) else LABEL_RE
-    return pattern.sub(swap, text)
-
-
-def check(text, handles, labels):
-    """What is wrong with a rewrite, as messages. Empty means nothing is.
-
-    Advisory rather than fatal: the panel shows these next to the text the user
-    can edit, which is a better place to resolve them than a queue-time refusal
-    on prose that is one word away from being right.
-    """
-    problems = []
-
-    unknown = sorted({h for h in HANDLE_RE.findall(text) if h not in handles})
-    if unknown:
-        problems.append(
-            "refers to " + ", ".join("@" + h for h in unknown)
-            + ", which is not attached — edit it out before queueing"
-        )
-
-    # A video's soundtrack has a label but no handle of its own, so `<Audio 1>`
-    # written for it is correct as it stands and must not be reported.
-    known = set((labels or {}).values())
-    pattern = ANY_LABEL_RE if _pinned_subjects(labels) else LABEL_RE
-    stray = sorted({f"<{kind} {int(n)}>" for kind, n in
-                    (m.groups() for m in pattern.finditer(text))} - known)
-    if stray:
-        problems.append(
-            "writes " + ", ".join(stray) + ", which no attached asset will be given"
-        )
-    return problems
-
-
-def uncited(text, handles, labels, cast=()):
-    """Attached references the rewrite never cites, as handles. Empty means none.
-
-    `text` is everything the model wrote joined together — the bodies, the
-    reference sections, the two audio fields — because a reference legitimately
-    lives in only one of them: the reference form defines an image inside
-    `subject_definitions`, folds it into a `<Subject N>`, and never names it
-    again. A handle counts as cited when it appears as `@handle` or as any label
-    it will be given, a video's soundtrack label included.
-
-    Only for the references: a keyframe is bound by the instruction line, so a
-    body that never says `@img-1` about its own start frame is correct.
-    """
-    written_handles = set(HANDLE_RE.findall(text))
-    # Writing `@anna` cites every file they are made of: they were pulled into
-    # this generation *because* they were cited, and the rewrite naming them is the
-    # citation that keeps them there. Reporting them as unmentioned would be
-    # asking for exactly the doubled naming `CAST_NOTE` forbids.
-    for subject in cast or ():
-        if subject.handle in re.findall(r"@([A-Za-z][A-Za-z0-9_]*)", text):
-            written_handles.update(subject.files)
-    written_labels = {f"<{kind} {int(n)}>" for kind, n in
-                      (m.groups() for m in LABEL_RE.finditer(text))}
-    missing = []
-    for handle in sorted(handles):
-        if handle in written_handles:
-            continue
-        own = {label for key, label in (labels or {}).items()
-               if key == handle or key.startswith(handle + ":")}
-        if own & written_labels:
-            continue
-        missing.append(handle)
-    return missing
-
-
-_QUOTED_RE = re.compile(r'"([^"\n]{2,120})"|“([^”\n]{2,120})”')
-
-
-def _plain(text):
-    """Text made comparable: one spacing, one apostrophe, one case."""
-    text = text.replace("’", "'").replace("‘", "'").replace("“", '"').replace("”", '"')
-    return re.sub(r"\s+", " ", text).lower()
-
-
-def quoted(text):
-    """The spans the request itself puts in quotation marks, in order."""
-    return [a or b for a, b in _QUOTED_RE.findall(text or "")]
-
-
-def dropped_quotes(requests, written):
-    """Quoted request text the rewrite does not carry, verbatim-ish. Empty is good.
-
-    Quotation marks in a request are the user dictating exact words — a spoken
-    line, an on-screen sign — and both rules and guide demand they survive
-    letter for letter. This is the code-side check on the one fidelity promise
-    that *can* be checked mechanically: prose fidelity is a judgement, but a
-    quoted span either appears in the rewrite or it does not. Advisory like
-    `check`, because the panel beside editable text is the right place for it.
-
-    The comparison forgives what the craft rules themselves change — casing,
-    curly quotes, spacing, terminal punctuation — and nothing else.
-    """
-    haystack = _plain(written or "")
-    missing = []
-    for request in requests:
-        for span in quoted(request):
-            needle = _plain(span).strip(" .!?,;:")
-            if needle and needle not in haystack and span not in missing:
-                missing.append(span)
-    return missing
-
-
 # ---- the reply --------------------------------------------------------------
 
-_FENCE_RE = re.compile(r"^```(?:\w+)?\s*(.*?)\s*```$", re.DOTALL)
-_THINK_RE = re.compile(r"<think>.*?</think>", re.DOTALL)
 
 
 def parse_reply(content, mode, shots, cuts=0, piece=False, ref_shots=()):
     """The model's content string -> `{"shots": [str], "soundscape", "music", ...}`.
 
-    Tolerant on the way in — reasoning models leak a `<think>` block, chat models
-    wrap JSON in a fence — and strict about the shape once parsed, because a
+    `json_object` is tolerant about transport — a leaked `<think>` block, a
+    markdown fence — and this is strict about the shape once parsed, because a
     short `shots` array means a timeline card would silently keep its old text.
 
     `cuts` (from `shot_limit`) relaxes exactly that count check, and only where
@@ -1192,22 +885,7 @@ def parse_reply(content, mode, shots, cuts=0, piece=False, ref_shots=()):
     bodies — a shot that was not asked for any, or skipped its own, holds None
     there, which the caller reports rather than papers over.
     """
-    text = _THINK_RE.sub("", content).strip()
-    fenced = _FENCE_RE.match(text)
-    if fenced:
-        text = fenced.group(1).strip()
-    if not text.startswith("{"):
-        at = text.find("{")
-        if at < 0:
-            raise RefineError(f"the model did not return JSON: {content[:300]}")
-        text = text[at:text.rfind("}") + 1]
-
-    try:
-        data = json.loads(text)
-    except ValueError as exc:
-        raise RefineError(f"the model's JSON could not be read ({exc}): {text[:300]}") from exc
-    if not isinstance(data, dict):
-        raise RefineError("the model returned JSON, but not an object")
+    data = json_object(content)
 
     written = []
     for item in data.get("shots") or []:
@@ -1251,3 +929,112 @@ def parse_reply(content, mode, shots, cuts=0, piece=False, ref_shots=()):
     elif mode == "REF2VA":
         out["sections"] = {name: str(data.get(name) or "").strip() for name in _REF_SECTIONS}
     return out
+
+
+# ---- the family's half of the refiner ---------------------------------------
+
+
+class H3Prompting(harness.Prompting):
+    """H3's answers to `families/refine.Prompting`.
+
+    A thin adapter over the module functions above rather than a rewrite of
+    them: those functions are the unit-tested surface (`tests/test_refine.py`
+    drives them directly, with no family object in sight), and the class is the
+    seam `refine_routes.py` reaches them through. What is written out here
+    rather than delegated is the handful of answers that used to live in the
+    route as `if mode == "REF2VA"` — which is exactly the family knowledge the
+    seam exists to take out of it.
+    """
+
+    id = "h3"
+
+    # "auto" first, then the five modes, in the order the pill offers them:
+    # the shapes a request can be, from nothing attached to everything.
+    templates = ("auto",) + tuple(MODE_TEMPLATE)
+
+    # The two a declared cast writes for itself. `compile.compile_request`
+    # writes both from the cast and would override whatever the model returned,
+    # so a stored copy would show the user a definition of Anna that is not the
+    # one the model will be handed.
+    cast_sections = ("subject_definitions", "retention_analysis")
+
+    def choose_template(self, choice, mode):
+        return choose_template(choice, mode)
+
+    def representative(self, modes):
+        """The mode the system prompt is written for, across a strip.
+
+        The four keyframe modes share one guide and one reply shape, so a strip
+        that mixes them needs nothing special — each card's own note goes in the
+        message beside its text. A strip with references anywhere is written
+        under the REF2VA template: the reference form is the superset, and
+        Ref2VA is the stronger checkpoint, a superset of what FL2VA was trained
+        for. Each reference card carries its own analysis sections inside its
+        shot entry (`reply_shape`'s `ref_shots`) and each plain card keeps its
+        own mode note beside its text, so neither a mixed strip nor a chained
+        strip of reference segments needs refusing.
+        """
+        modes = list(modes)
+        if "REF2VA" in modes:
+            return "REF2VA"
+        return modes[0] if modes else "T2VA"
+
+    def shot_limit(self, seconds):
+        """H3 numbers its cuts, so a lone card may be divided — see `shot_limit`."""
+        return shot_limit(seconds)
+
+    def ref_shots(self, kind, mode, shots, single):
+        """Chained, every segment is its own generation over its own reference
+        pool, so each reference card gets its own analysis inside its shot entry
+        — which is also what lets a strip mix reference and plain cards under
+        one template. One pass keeps the top-level set: its shots share one
+        merged pool."""
+        if kind != "timeline" or single or mode != "REF2VA":
+            return ()
+        return tuple(n for n, shot in enumerate(shots) if shot["mode"] == "REF2VA")
+
+    def pin_note(self, mode, derived):
+        """What crossing the reference boundary costs.
+
+        The base templates swapping among themselves need no note: they are one
+        form at different levels of framing. Crossing into or out of the
+        reference form is different — the prose and the attachments stop
+        describing each other — and a pin is honoured either way, so this is a
+        quality hint rather than a refusal.
+        """
+        if (mode == "REF2VA") == (derived == "REF2VA"):
+            return None
+        if mode == "REF2VA":
+            return ("the REF2VA template is pinned but this request has no @ references "
+                    "— the six-section form will define subjects no asset backs, which "
+                    "may degrade the result. The pinned template was honoured; set it "
+                    "to auto if that is not what you wanted.")
+        return (f"this request has @ references but the {mode} template is pinned — "
+                f"the rewrite has no six-section form to define the handles in, "
+                f"which may degrade the result. The pinned template was honoured; "
+                f"set it to auto if that is not what you wanted.")
+
+    def reply_shape(self, mode, shots, cuts=0, images=0, piece=False, ref_shots=()):
+        return reply_shape(mode, shots, cuts=cuts, images=images, piece=piece,
+                           ref_shots=ref_shots)
+
+    def system_prompt(self, mode, language="English", shape=None, cuts=0):
+        return system_prompt(mode, language, shape=shape, cuts=cuts)
+
+    def user_message(self, shots, seconds=None, images=0, mode=None, piece=None,
+                     pool=None, footage=(), cast=()):
+        return user_message(shots, seconds=seconds, images=images, mode=mode,
+                            piece=piece, pool=pool, footage=footage, cast=cast)
+
+    def parse_reply(self, content, mode, shots, cuts=0, piece=False, ref_shots=()):
+        return parse_reply(content, mode, shots, cuts=cuts, piece=piece,
+                           ref_shots=ref_shots)
+
+    def join_shots(self, bodies, cuts, seconds):
+        return join_shots(bodies, cuts, seconds)
+
+    def slot_row(self, asset, label=None, show_label=False):
+        return slot_row(asset, label, show_label)
+
+
+PROMPTING = H3Prompting()

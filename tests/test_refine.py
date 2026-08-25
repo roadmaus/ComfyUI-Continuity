@@ -26,7 +26,11 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Through `layout.load`, which knows where a module that moved into a family
 # package went — the hand-rolled loader this replaces knew only `PY_ROOT`.
-refine = layout.load("refine").refine
+pkg = layout.load("prompting", "refine")
+# The two halves the refiner came apart into: `prompting` is the harness —
+# handles, checks, the ChatML turns, the reply budget — and `refine` is H3's
+# own templates, contract and glossary. See `families/refine.py`.
+prompting, refine = pkg.prompting, pkg.refine
 
 from harness import FAILURES, check, passed
 
@@ -34,7 +38,7 @@ from harness import FAILURES, check, passed
 def expect_error(label, fn, fragment):
     try:
         fn()
-    except refine.RefineError as exc:
+    except prompting.RefineError as exc:
         if fragment not in str(exc):
             FAILURES.append(f"{label}: raised {exc!r}, wanted it to mention {fragment!r}")
         return
@@ -62,9 +66,9 @@ for mode in ("T2VA", "I2VA", "L2VA", "FL2VA", "REF2VA"):
 
 for mode in ("I2VA", "L2VA", "FL2VA", "REF2VA"):
     check(f"the {mode} example demonstrates looking at the pictures first",
-          refine.SEEN_FIELD in refine.MODE_TEMPLATE[mode], True)
+          prompting.SEEN_FIELD in refine.MODE_TEMPLATE[mode], True)
 check("the text-only mode is not shown a field it will never be asked for",
-      refine.SEEN_FIELD in refine.MODE_TEMPLATE["T2VA"], False)
+      prompting.SEEN_FIELD in refine.MODE_TEMPLATE["T2VA"], False)
 
 check("the reference template teaches the six-section form",
       "retention_analysis" in refine.MODE_TEMPLATE["REF2VA"], True)
@@ -138,31 +142,31 @@ LABELS = {"img-1": "<Picture 1>", "img-2": "<Picture 2>", "vid-1": "<Video 1>",
           "vid-1:audio": "<Audio 1>"}
 
 check("an ordinal the model wrote becomes the handle behind it",
-      refine.normalize_handles("<Picture 2> shows her face, cut against <Video 1>.", LABELS),
+      prompting.normalize_handles("<Picture 2> shows her face, cut against <Video 1>.", LABELS),
       "@img-2 shows her face, cut against @vid-1.")
 check("a handle it wrote correctly is left alone",
-      refine.normalize_handles("@img-1 opens the shot", LABELS), "@img-1 opens the shot")
+      prompting.normalize_handles("@img-1 opens the shot", LABELS), "@img-1 opens the shot")
 check("spacing inside the label does not hide it",
-      refine.normalize_handles("<Picture  2>", LABELS), "@img-2")
+      prompting.normalize_handles("<Picture  2>", LABELS), "@img-2")
 # A video's soundtrack has a label but no handle of its own — `<Audio 1>` is
 # already the only way to name it, and rewriting it to `@vid-1` would move it
 # from the sound slot into the picture one.
 check("a soundtrack's label stays a label",
-      refine.normalize_handles("<Audio 1> carries the room tone", LABELS),
+      prompting.normalize_handles("<Audio 1> carries the room tone", LABELS),
       "<Audio 1> carries the room tone")
 # Left exactly as written rather than deleted: it is the one mistake that would
 # otherwise produce a wrong video instead of an error, so `check` reports it.
 check("an ordinal nothing backs is left for the check to find",
-      refine.normalize_handles("<Picture 9> is empty", LABELS), "<Picture 9> is empty")
+      prompting.normalize_handles("<Picture 9> is empty", LABELS), "<Picture 9> is empty")
 check("nothing attached means nothing to convert",
-      refine.normalize_handles("<Picture 1>", {}), "<Picture 1>")
+      prompting.normalize_handles("<Picture 1>", {}), "<Picture 1>")
 
 check("a clean rewrite has nothing to report",
-      refine.check("@img-1 and <Audio 1>", {"img-1", "vid-1"}, LABELS), [])
+      prompting.check("@img-1 and <Audio 1>", {"img-1", "vid-1"}, LABELS), [])
 check("an invented handle is reported",
-      any("@img-7" in p for p in refine.check("@img-7 waves", {"img-1"}, LABELS)), True)
+      any("@img-7" in p for p in prompting.check("@img-7 waves", {"img-1"}, LABELS)), True)
 check("an invented ordinal is reported",
-      any("<Picture 9>" in p for p in refine.check("<Picture 9>", {"img-1"}, LABELS)), True)
+      any("<Picture 9>" in p for p in prompting.check("<Picture 9>", {"img-1"}, LABELS)), True)
 
 # The one failure `check` cannot see: a rewrite that simply never mentions an
 # attached reference. It compiles, it queues, and the file conditions nothing.
@@ -170,14 +174,14 @@ check("an invented ordinal is reported",
 # picture in `subject_definitions` and nowhere else — a citation anywhere is a
 # citation.
 check("a reference cited by handle is not missing",
-      refine.uncited("@img-1 opens", {"img-1"}, LABELS), [])
+      prompting.uncited("@img-1 opens", {"img-1"}, LABELS), [])
 check("a reference cited by its label is not missing",
-      refine.uncited("<Picture 1> opens", {"img-1"}, LABELS), [])
+      prompting.uncited("<Picture 1> opens", {"img-1"}, LABELS), [])
 check("a soundtrack cited by its audio label covers its video's handle",
-      refine.uncited("<Audio 1> carries the tone", {"vid-1"}, LABELS), [])
+      prompting.uncited("<Audio 1> carries the tone", {"vid-1"}, LABELS), [])
 check("a reference the rewrite never names is missing",
-      refine.uncited("a woman sings", {"img-1", "vid-1"}, LABELS), ["img-1", "vid-1"])
-check("nothing attached, nothing missing", refine.uncited("a walk", set(), {}), [])
+      prompting.uncited("a woman sings", {"img-1", "vid-1"}, LABELS), ["img-1", "vid-1"])
+check("nothing attached, nothing missing", prompting.uncited("a walk", set(), {}), [])
 
 
 # ---- the reply --------------------------------------------------------------
@@ -241,12 +245,12 @@ check("a strip is asked for as one piece", "2 shots of one piece" in message, Tr
 check("a shot whose mode differs says so", refine.MODE_NOTES["T2VA"] in message, True)
 check("the mode already in the system prompt is not repeated",
       message.count(refine.MODE_NOTES["I2VA"]), 0)
-check("a continuing shot is told what it opens on", refine.CONTINUES_NOTE in message, True)
+check("a continuing shot is told what it opens on", prompting.CONTINUES_NOTE in message, True)
 
 # Only some attached assets have a picture in the message — an audio reference
 # has none, a video taken for its soundtrack alone has none — so the Nth image is
 # not the Nth line, and the number is what says which line it is of.
-numbered = refine.describe_slots([
+numbered = prompting.describe_slots([
     {"handle": "img-1", "what": "the target video's first frame (a.png)",
      "label": "<Picture 1>", "image": 1},
     {"handle": "aud-1", "what": "a reference audio clip (b.wav)",
@@ -362,20 +366,20 @@ check("the base form is not asked for them", "retention_analysis" in refine.repl
 check("the shape reaches the system prompt when it is handed one",
       "Return exactly this JSON object" in refine.system_prompt("T2VA", shape=shape), True)
 
-prompt = refine.chatml("RULES", "REQUEST", images=2)
+prompt = prompting.chatml("RULES", "REQUEST", images=2)
 check("the system turn carries the guide", "<|im_start|>system\nRULES<|im_end|>" in prompt, True)
-check("one vision block per image", prompt.count(refine.VISION_BLOCK), 2)
+check("one vision block per image", prompt.count(prompting.VISION_BLOCK), 2)
 check("the images come before the text they are described by",
-      prompt.index(refine.VISION_BLOCK) < prompt.index("REQUEST"), True)
+      prompt.index(prompting.VISION_BLOCK) < prompt.index("REQUEST"), True)
 check("reasoning is suppressed", "<think>\n\n</think>" in prompt, True)
-check("the reply is already begun", prompt.endswith("\n\n" + refine.PREFILL), True)
-check("a text-only call has no vision block", refine.VISION_BLOCK in refine.chatml("R", "M"), False)
+check("the reply is already begun", prompt.endswith("\n\n" + prompting.PREFILL), True)
+check("a text-only call has no vision block", prompting.VISION_BLOCK in prompting.chatml("R", "M"), False)
 
 # The prefill is why: what an unconstrained model actually does is answer "Here
 # is the rewrite:" first. Starting its turn inside the object removes the place
 # that goes — and `parse_reply` has to be given the brace back.
 check("a reply that continues the prefill parses",
-      refine.parse_reply(refine.PREFILL + GOOD[1:], "FL2VA", 1)["shots"], ["a courier waits"])
+      refine.parse_reply(prompting.PREFILL + GOOD[1:], "FL2VA", 1)["shots"], ["a courier waits"])
 
 # ---- the cuts ---------------------------------------------------------------
 #
@@ -385,10 +389,10 @@ check("a reply that continues the prefill parses",
 # ask, and everything here is what happens when the answer is not usable: the
 # times are the model's, the ordering and the fit are not.
 
-check("a clip too short to cut is not asked to", refine.shot_limit(3), 1)
-check("a longer one is, up to what fits", refine.shot_limit(10), 5)
-check("...and never past the ceiling", refine.shot_limit(600), refine.MAX_SHOTS)
-check("no duration is no choice", refine.shot_limit(0), 1)
+check("a clip too short to cut is not asked to", prompting.shot_limit(3), 1)
+check("a longer one is, up to what fits", prompting.shot_limit(10), 5)
+check("...and never past the ceiling", prompting.shot_limit(600), prompting.MAX_SHOTS)
+check("no duration is no choice", prompting.shot_limit(0), 1)
 
 TIMED = ('{"shots": [{"at_seconds": 0, "body": "a"}, {"at_seconds": 4, "body": "b"}], '
          '"overall_soundscape": "rain", "non_diegetic_music": ""}')
@@ -443,11 +447,11 @@ check("...and a timeline, whose cuts are the cards', never sees it",
 # grounding pass, and it is asked for only where there is something to see.
 
 with_images = refine.reply_shape("I2VA", 1, images=2)
-check("a picture buys a field to describe it in", refine.SEEN_FIELD in with_images, True)
+check("a picture buys a field to describe it in", prompting.SEEN_FIELD in with_images, True)
 check("...and it is the first thing written",
-      with_images.index(refine.SEEN_FIELD) < with_images.index('"shots"'), True)
+      with_images.index(prompting.SEEN_FIELD) < with_images.index('"shots"'), True)
 check("a text-only request is not asked for one",
-      refine.SEEN_FIELD in refine.reply_shape("T2VA", 1), False)
+      prompting.SEEN_FIELD in refine.reply_shape("T2VA", 1), False)
 
 SEEN = ('{"what_i_see": "@img-1 is a red door.", "shots": [{"body": "a courier waits"}], '
         '"overall_soundscape": "rain", "non_diegetic_music": ""}')
@@ -480,21 +484,21 @@ check("a shot with nothing attached is not", "Look at [image" in refine.user_mes
 # marks, spacing, terminal punctuation — and nothing else.
 
 check("a quoted line that survives is not reported",
-      refine.dropped_quotes(['she says "hold the line"'],
+      prompting.dropped_quotes(['she says "hold the line"'],
                             "She (S1) says: <d>[English] Hold the line.</d>"), [])
 check("a quoted line the rewrite dropped is",
-      refine.dropped_quotes(['a sign reading "OPEN ALL NIGHT"'], "a sign glows above"),
+      prompting.dropped_quotes(['a sign reading "OPEN ALL NIGHT"'], "a sign glows above"),
       ["OPEN ALL NIGHT"])
 check("curly quotation marks in the request still count",
-      refine.dropped_quotes(["she says “over the hills”"], "nothing survives"),
+      prompting.dropped_quotes(["she says “over the hills”"], "nothing survives"),
       ["over the hills"])
 check("a curly apostrophe in the reply still matches a straight one",
-      refine.dropped_quotes(['says "let\'s go home"'],
+      prompting.dropped_quotes(['says "let\'s go home"'],
                             "she says: <d>[English] Let’s go home!</d>"), [])
 check("several requests are checked together",
-      refine.dropped_quotes(['a "red" door', 'a "blue" door'], "the red door opens"),
+      prompting.dropped_quotes(['a "red" door', 'a "blue" door'], "the red door opens"),
       ["blue"])
-check("no quotes means nothing to report", refine.dropped_quotes(["a dog runs"], ""), [])
+check("no quotes means nothing to report", prompting.dropped_quotes(["a dog runs"], ""), [])
 
 
 # ---- the reply's length -----------------------------------------------------
@@ -503,13 +507,13 @@ check("no quotes means nothing to report", refine.dropped_quotes(["a dog runs"],
 # and never truncates, so the prompt is embedded whole however long it runs and
 # the only budget that exists is the one on the answer.
 
-check("the default is what it always was", refine.reply_tokens(None), refine.NUM_PREDICT)
-check("a number the user set is kept", refine.reply_tokens(8192), 8192)
+check("the default is what it always was", prompting.reply_tokens(None), prompting.NUM_PREDICT)
+check("a number the user set is kept", prompting.reply_tokens(8192), 8192)
 check("...clamped to what is worth reserving a cache for",
-      (refine.reply_tokens(1), refine.reply_tokens(10 ** 9)),
-      (refine.MIN_PREDICT, refine.MAX_PREDICT))
+      (prompting.reply_tokens(1), prompting.reply_tokens(10 ** 9)),
+      (prompting.MIN_PREDICT, prompting.MAX_PREDICT))
 check("junk falls back rather than failing a refine",
-      refine.reply_tokens("lots"), refine.NUM_PREDICT)
+      prompting.reply_tokens("lots"), prompting.NUM_PREDICT)
 
 
 # ---- the piece --------------------------------------------------------------
@@ -524,7 +528,7 @@ check("junk falls back rather than failing a refine",
 
 piece_shape = refine.reply_shape("REF2VA", 3, piece=True, ref_shots=(1,))
 check("a whole-timeline shape asks for the global prompt",
-      '"%s": "...",' % refine.PIECE_FIELD in piece_shape, True)
+      '"%s": "...",' % prompting.PIECE_FIELD in piece_shape, True)
 check("the marked entries carry their own sections",
       '{"subject_definitions": "...", "summary": "...", "retention_analysis": "...", '
       '"body": "..."}' in piece_shape, True)
@@ -563,7 +567,7 @@ piece_msg = refine.user_message(
     seconds=12, mode="T2VA", piece={"text": "Live-action, 16mm.", "rewrite": True})
 check("the piece is shown once, fenced",
       "<global>\nLive-action, 16mm.\n</global>" in piece_msg, True)
-check("...and asked for as its own field", refine.PIECE_FIELD in piece_msg, True)
+check("...and asked for as its own field", prompting.PIECE_FIELD in piece_msg, True)
 check("...with the no-references rule beside it", "no @handle" in piece_msg, True)
 check("the shots' own requests stay their own",
       ("<request>\na courier waits\n</request>" in piece_msg
@@ -577,7 +581,7 @@ context_msg = refine.user_message([{"text": "her hands", "seconds": 6}], seconds
                                   mode="T2VA", piece={"text": "Live-action.", "rewrite": False})
 check("a single-card refine shows the piece as context",
       "It is context, not material" in context_msg, True)
-check("...and does not ask for the field", refine.PIECE_FIELD in context_msg, False)
+check("...and does not ask for the field", prompting.PIECE_FIELD in context_msg, False)
 check("an empty global with nothing to rewrite adds no block",
       "THE PIECE" in refine.user_message([{"text": "x"}],
                                          piece={"text": "", "rewrite": False}), False)

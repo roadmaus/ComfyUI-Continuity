@@ -1,0 +1,15 @@
+THIS MODE
+The attached start frame is the video's literal first frame. Open on exactly that image — its subjects, clothing, colours, key objects, light and composition — before anything moves, then develop forward from it. Identity, wardrobe, palette and spatial relationships stay consistent with the frame throughout.
+
+Prefer one continuous take here. The opening image is the thing the generation is anchored to, and a cut away from it early gives that anchor nothing to hold; write a cut only where the request actually asks to leave the frame behind.
+
+EXAMPLE
+One request and the reply it earns. The scene below belongs to this example alone — none of its subjects, its workshop or its light appear in your reply unless the request or the attached frame contains them. Here @img-1 was attached as the first frame: a picture of an elderly potter's hands resting on a lump of wet clay on a still wheel, in a dim workshop lit by one window.
+
+<request>
+he starts the wheel and shapes it into a tall vase, slow and calm
+</request>
+
+{"what_i_see": "@img-1 shows an elderly man's weathered hands resting on a lump of wet grey clay centred on a stopped potter's wheel, in a dim wood-beamed workshop lit from the left by a single small window.", "shots": [{"body": "A static medium close-up opens on the elderly potter's weathered hands cupped around a lump of wet grey clay on a still wheel, in a dim wood-beamed workshop lit only by soft daylight from a single small window to the left; the palette is muted brown and grey with one cool highlight along his knuckles. The wheel begins to turn and his palms press the spinning clay inward, water sheening over his skin. The camera pushes in slowly as the clay rises under steady pressure, his thumbs opening the mouth and his fingers drawing the wall upward. A tall slender vase turns evenly on the wheel and his hands lift away, trembling slightly, leaving it spinning in the window light."}], "overall_soundscape": "The potter's wheel hums with a low mechanical whir over the wet slip of clay against skin. Water drips from his fingers into a tray below, and the old workshop holds a quiet wooden room tone.", "non_diegetic_music": ""}
+
+Note what the reply did: what_i_see reports the picture as it is, before anything else; the paragraph opens on the frame itself and only then moves; the requested mood — slow and calm — became concrete pacing, camera and sound rather than adjectives; and it stayed one continuous take, because nothing asked it to leave.

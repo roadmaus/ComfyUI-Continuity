@@ -22,7 +22,7 @@ cost.
 
 from ... import canvas, compile, models as core
 from .. import manifest as m
-from . import declare, grammar, models, sampling
+from . import declare, grammar, models, refine, sampling
 
 
 def _widgets():
@@ -199,6 +199,19 @@ def _weights():
     } for name, slot in models.SLOTS.items()]
 
 
+# What each refine template is for, in the words the pill and the panel share.
+# Keyed by `refine.PROMPTING.templates`, so a template with no line here fails
+# at `describe` — where the family is named — rather than drawing a bare chip.
+_TEMPLATE_HELP = {
+    "auto": "follows the card's guides: a start frame picks I2V, an end frame L2V, "
+            "both FL2V, neither T2V.",
+    "T2V": "text only — the scene is described from nothing.",
+    "I2V": "first frame — the caption opens on the attached image and develops forward.",
+    "L2V": "last frame — the caption arrives at the attached image at the end.",
+    "FL2V": "first and last frame — the caption is the path between the two.",
+}
+
+
 def manifest():
     from .. import registry
 
@@ -319,5 +332,12 @@ def manifest():
             # prompt while the compiler composed another would be a UI lying
             # about what the model was sent.
             "pipeline": declare.PROMPT_PIPELINE,
+            # What the refiner's template pill offers. The four guide
+            # configurations and nothing else: there is no reference form to
+            # pin, because there is no reference grammar to write one against.
+            "templates": [
+                {"name": name, "help": _TEMPLATE_HELP[name]}
+                for name in refine.PROMPTING.templates
+            ],
         },
     }

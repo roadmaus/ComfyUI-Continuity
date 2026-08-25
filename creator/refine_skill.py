@@ -1,14 +1,19 @@
 """An agent skill, run as the refiner's whole instruction.
 
-The built-in refiner is a harness: `refine.py` writes the rules, strips the
-guides, dictates a JSON reply and lets `contextir.py` assemble the prompt around
-the model's prose. A skill is the opposite bet — a `.skill` package written for
-an agentic model (SKILL.md plus reference files) handed over verbatim, so that
-the skill's own instructions are the only prompting there is and the model
-writes the *finished* prompt document itself, instruction line, shot markers,
-timestamps and all. Whether a locally-run Qwen3-VL can carry that without the
-harness is exactly what this mode exists to find out, so nothing from
-`refine._RULES` and no reply contract may leak into it.
+The built-in refiner is a harness: a family's own `refine.py` writes the rules,
+strips the guides and dictates a JSON reply, and the family assembles the prompt
+around the model's prose. A skill is the opposite bet — a `.skill` package
+written for an agentic model (SKILL.md plus reference files) handed over
+verbatim, so that the skill's own instructions are the only prompting there is
+and the model writes the *finished* prompt document itself, instruction line,
+shot markers, timestamps and all. Whether a locally-run Qwen3-VL can carry that without the
+harness is exactly what this mode exists to find out, so none of a family's
+rules and no reply contract may leak into it.
+
+Skills are written against H3's document form, which is what makes this an H3
+mode in practice however family-neutral the transport is: the loader hands the
+package over whole and judges nothing, so a skill pinned on a piece whose
+encoder reads captions will hand that encoder a sectioned document.
 
 Skills are built for a runtime this backend does not have. Claude reads
 SKILL.md's frontmatter, then the body, then opens each reference file the body
@@ -27,15 +32,16 @@ around the document. What the model writes in labels (`<Picture 1>`) is mapped
 back to `@handles` by `refine.normalize_handles` exactly as the harness's
 output is, because storage is storage whichever mode wrote it.
 
-No torch, no ComfyUI: like `refine.py`, everything here is ordinary data and is
-unit-tested that way.
+No torch, no ComfyUI: like the families' own halves, everything here is ordinary
+data and is unit-tested that way. `families/refine.py` is the shared harness the
+few functions used below come from.
 """
 
 import re
 import zipfile
 from pathlib import Path
 
-from .families.h3 import refine
+from .families import refine
 
 SKILLS_DIR = Path(__file__).parent / "skills"
 

@@ -56,6 +56,7 @@ MODULES = {
     "hires": "families.h3.hires",
     "h3_segment": "families.h3.segment",
     "refine": "families.h3.refine",
+    "ltx25_refine": "families.ltx25.refine",
     "still": "families.h3.still",
     "ltx25_models": "families.ltx25.models",
     "ltx25_sampling": "families.ltx25.sampling",
@@ -69,6 +70,7 @@ MODULES = {
     "registry": "families.registry",
     "manifest": "families.manifest",
     "grammar": "families.grammar",
+    "prompting": "families.refine",
 }
 
 

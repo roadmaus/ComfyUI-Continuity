@@ -1,0 +1,28 @@
+CUTS INSIDE ONE DESCRIPTION
+
+LTX 2.5 can hold several distinct shots in one generation. There is no cut
+grammar to write them with: a cut is prose here, named in the sentence itself,
+and the whole scene stays one chronological paragraph.
+
+Where the request asks for more than one place, viewpoint, subject or moment in
+time, write the cut rather than eliding it. Four things go in at every cut:
+
+1. Name the transition in natural language — "A hard cut transitions to…",
+   "The view cuts to a close-up of…", "A match cut connects…", "The image
+   dissolves into…".
+2. Re-establish the new shot — its scale, its camera angle, who or what is in
+   frame, and the lighting if it changed.
+3. Keep identity consistent — reuse the same visual identifier for anyone or
+   anything that comes back: "the woman in the yellow raincoat, earlier at the
+   table, now…".
+4. Say what happens to the sound — "the piano score continues across the cut",
+   "the dialogue drops; only wind remains".
+
+Two to four shots in one generation is what Lightricks advise; more cuts than
+that need shorter, clearer beats to survive. Give each shot a job — establish,
+then detail, then reaction; or wide, then medium, then close-up. Keep the
+geography and the costumes consistent across a cut unless the cut is meant to
+jump time or place and you say so.
+
+One sustained action, one held moment, one unbroken movement is one continuous
+shot, and stays one. Do not invent cuts a request did not ask for.

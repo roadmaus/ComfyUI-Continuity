@@ -13,6 +13,13 @@ find out what the request actually is — the mode, the reference slots, the
 ordinals each handle will be given — asks the model, and hands back prose the
 frontend writes into the same blob. Nothing here is on the queue path; by the
 time the node runs, the rewrite is an ordinary field in `creator_data`.
+
+**What kind of prose that is, is the family's.** This module knows about the
+blob, the pictures and the job queue, and nothing about how any checkpoint wants
+to be written to: the templates, the mode names, the reply contract and the
+glossary vocabulary all come off `families.refine.of(family)`, resolved from the
+piece's own model pill. It used to import H3's module directly, which is why the
+button rewrote every family's prompt into Context-IR.
 """
 
 import asyncio
@@ -24,7 +31,7 @@ from aiohttp import web
 from server import PromptServer
 
 from . import compile as compiler, media, preview, refine_local, refine_skill
-from .families.h3 import refine
+from .families import refine
 
 # What one call will look at. Every image rides in the context window for the
 # whole generation, and a 24-card timeline with references on every card would
@@ -93,14 +100,14 @@ def _sighted(slot, asset, picture):
     return slot
 
 
-def _look(compiled, show_labels):
+def _look(prompting, compiled, show_labels):
     """The glossary and the pictures for one shot."""
     slots, images = [], []
     ordered = [a for a in (compiled.first_frame, compiled.last_frame) if a is not None]
     ordered += compiled.ref_images + compiled.ref_videos + compiled.ref_audios
 
     for asset in ordered:
-        slot = refine.slot_row(asset, compiled.labels.get(asset.handle), show_labels)
+        slot = prompting.slot_row(asset, compiled.labels.get(asset.handle), show_labels)
         picture = _picture(asset)
         if picture is not None:
             images.append(picture)
@@ -108,7 +115,7 @@ def _look(compiled, show_labels):
     return slots, images
 
 
-def _look_pool(pool):
+def _look_pool(prompting, pool):
     """The piece's own reference pool, as glossary lines and pictures.
 
     No labels: a pool asset's ordinal depends on which segment cites it, so
@@ -117,7 +124,7 @@ def _look_pool(pool):
     """
     slots, images = [], []
     for asset in pool:
-        slot = refine.slot_row(asset)
+        slot = prompting.slot_row(asset)
         picture = _picture(asset)
         if picture is not None:
             images.append(picture)
@@ -125,8 +132,8 @@ def _look_pool(pool):
     return slots, images
 
 
-def _shot(compiled, text, seconds, continues, show_labels):
-    slots, images = _look(compiled, show_labels)
+def _shot(prompting, compiled, text, seconds, continues, show_labels):
+    slots, images = _look(prompting, compiled, show_labels)
     assets = [a for a in [compiled.first_frame, compiled.last_frame] if a is not None]
     assets += compiled.ref_images + compiled.ref_videos + compiled.ref_audios
     return {
@@ -168,11 +175,18 @@ def _target(body):
 
 
 def _plan(body):
-    """The request -> (mode, shots, images, piece, single, pool, footage).
+    """The request -> (prompting, mode, shots, images, piece, single, pool, footage).
 
     One shot for the Creator node and for a single timeline card; every card at
     once for a whole-timeline refine, which is the only way shot 4 can be written
     knowing what shot 1 established.
+
+    `prompting` is the piece's family's half of the refiner, and it is resolved
+    here because this is where the piece is read. Everything the compile does
+    below is that family's too: what may be attached, what a payload's mode is
+    called, which weights it implies. Compiling for H3 whatever the pill said
+    was the shape of the old bug — an LTX card came back as `T2VA` and was
+    rewritten into Context-IR.
 
     `piece` is the timeline's global prompt, or None on the Creator node, which
     has no such field. It is handed to the model once, beside the shots, rather
@@ -193,6 +207,9 @@ def _plan(body):
     # lifted read would hand the model the same sentence twice: once as the
     # description this card inherits, and once as the card.
     data = compiler.as_piece(data)
+
+    family = compiler.piece_family(data)
+    prompting = refine.of(family)
 
     segments = compiler.timeline_segments(data)
     payloads = compiler.timeline_payloads(data, media.image_size)
@@ -219,7 +236,7 @@ def _plan(body):
     pool_assets = compiler.timeline_pool(data)
     pool = None
     if pool_assets:
-        slots, pictures = _look_pool(pool_assets)
+        slots, pictures = _look_pool(prompting, pool_assets)
         pool = {"slots": slots, "images": pictures,
                 "handles": {a.handle for a in pool_assets}}
 
@@ -256,10 +273,12 @@ def _plan(body):
         start, end = runs[position]
         payload = payloads[position]
         if position not in compiled_of:
-            compiled_of[position] = compiler.compile_segment(payload, media.image_size)
+            compiled_of[position] = compiler.compile_segment(
+                payload, media.image_size, family=family)
         compiled = compiled_of[position]
         merged = end - start > 1
         shot, pictures = _shot(
+            prompting,
             compiled,
             # The segment's own text, not the payload's join: the global prompt
             # rides beside the shots as THE PIECE, said once, and stays a
@@ -306,30 +325,15 @@ def _plan(body):
     # in this piece, and any shot may put any of them on screen — the citation
     # is what casts them into that generation, exactly as it is for the pool.
     cast = compiler.timeline_cast(data)
-    return _representative(shots), shots, images, piece, single, pool, footage, cast
-
-
-def _representative(shots):
-    """The mode the system prompt is written for.
-
-    The four keyframe modes share one guide and one reply shape, so a strip that
-    mixes them needs nothing special — each card's own note goes in the message
-    beside its text. A strip with references anywhere is written under the
-    REF2VA template — the reference form is the superset, and Ref2VA is the
-    stronger checkpoint, a superset of what FL2VA was trained for — with each
-    reference card carrying its own analysis sections inside its shot entry
-    (`reply_shape`'s `ref_shots`) and each plain card keeping its own mode note
-    beside its text. So neither a mixed strip nor a chained strip of reference
-    segments needs refusing any more.
-
-    A card's mode is its pass's — every member of a merged run is compiled from
-    the one payload that will be encoded — so a one-pass strip needs no separate
-    branch here: its cards already all report the merged request's mode.
-    """
-    modes = [shot["mode"] for shot in shots]
-    if "REF2VA" in modes:
-        return "REF2VA"
-    return modes[0] if modes else "T2VA"
+    # Which of the strip's modes the system prompt is written for is the
+    # family's answer — H3 reaches for its reference form because that is the
+    # superset of everything else it can be asked, and a family with no such
+    # form takes the first card's. A card's mode is its *pass*'s, every member
+    # of a merged run being compiled from the one payload that will be encoded,
+    # so a one-pass strip needs no separate branch: its cards already all report
+    # the merged request's mode.
+    derived = prompting.representative(shot["mode"] for shot in shots)
+    return prompting, derived, shots, images, piece, single, pool, footage, cast
 
 
 def _number(groups, images, limit, shared=frozenset()):
@@ -481,7 +485,7 @@ def _run(body):
     """The blocking half: compile, look, ask, parse. Runs on a thread."""
     body = _target(body)
     kind = body.get("kind")
-    derived, shots, pictures, piece_text, single, pool, footage, cast = _plan(body)
+    prompting, derived, shots, pictures, piece_text, single, pool, footage, cast = _plan(body)
 
     seconds = sum(float(s.get("seconds") or 0) for s in shots)
 
@@ -509,7 +513,7 @@ def _run(body):
     # including each shot's own mode note, so the message cannot contradict the
     # system prompt about what kind of request this is. What is *attached* is
     # untouched: the glossary and the queue-time alignment line stay real.
-    mode, forced = refine.choose_template(body.get("template"), derived)
+    mode, forced = prompting.choose_template(body.get("template"), derived)
     if forced:
         for shot in shots:
             shot["mode"] = mode
@@ -526,9 +530,10 @@ def _run(body):
     # what it used to be. That was the same question while a lone generation was
     # its own node; it stopped being the same question the moment a piece could
     # hold one card, and a one-card strip has been getting no cuts asked for it
-    # ever since.
+    # ever since. Whether the family has cut times to ask *for* is its own
+    # answer: LTX writes its cuts as sentences and returns 1 here always.
     lone = len(compiler.timeline_segments(body.get("data") or {})) == 1
-    cuts = refine.shot_limit(seconds) if lone else 0
+    cuts = prompting.shot_limit(seconds) if lone else 0
 
     # Who owns the global prompt. A whole-timeline refine rewrites it — it is
     # the piece's standing description and the shots are written to inherit
@@ -541,23 +546,18 @@ def _run(body):
     elif kind == "segment" and (piece_text or "").strip():
         piece = {"text": piece_text, "rewrite": False}
 
-    # Which shots carry their own reference sections in the reply. Chained,
-    # every segment is its own generation over its own reference pool, so each
-    # reference card gets its own analysis inside its shot entry — which is
-    # also what lets a strip mix reference and plain cards under one template.
-    # One pass keeps the top-level set: its shots share one merged pool.
-    ref_shots = ()
-    if kind == "timeline" and not single and mode == "REF2VA":
-        ref_shots = tuple(n for n, s in enumerate(shots) if s["mode"] == "REF2VA")
+    # Which shots carry their own reference sections in the reply — empty on a
+    # family with no reference form at all.
+    ref_shots = prompting.ref_shots(kind, mode, shots, single)
 
     # ComfyUI's generation loop samples plain logits — nothing constrains the
     # reply to a shape — so the shape is written into the instruction as words
     # and the reply is started mid-object.
-    shape = refine.reply_shape(mode, len(shots), cuts=cuts, images=len(pictures),
-                               piece=ask_piece, ref_shots=ref_shots)
-    system = refine.system_prompt(mode, body.get("language") or "English",
-                                  shape=shape, cuts=cuts)
-    message = refine.user_message(
+    shape = prompting.reply_shape(mode, len(shots), cuts=cuts, images=len(pictures),
+                                  piece=ask_piece, ref_shots=ref_shots)
+    system = prompting.system_prompt(mode, body.get("language") or "English",
+                                     shape=shape, cuts=cuts)
+    message = prompting.user_message(
         shots,
         seconds=seconds,
         images=len(pictures),
@@ -576,33 +576,22 @@ def _run(body):
         seed=body.get("seed", -1),
         max_tokens=body.get("max_tokens"),
     )
-    parsed = refine.parse_reply(content, mode, len(shots), cuts=cuts,
-                                piece=ask_piece, ref_shots=ref_shots)
+    parsed = prompting.parse_reply(content, mode, len(shots), cuts=cuts,
+                                   piece=ask_piece, ref_shots=ref_shots)
 
     # Several shots came back where one card was asked about, which is the whole
     # point of `cuts` — they are one description with cuts in it, assembled here
     # the way `compile.compile_single` assembles a one-pass timeline, and stored
     # as the single body the card has room for.
     if "cuts" in parsed:
-        parsed["shots"] = [refine.join_shots(parsed["shots"], parsed["cuts"], seconds)]
+        parsed["shots"] = [prompting.join_shots(parsed["shots"], parsed["cuts"], seconds)]
 
     problems = []
-    # A pin across the reference boundary is honoured, not refused — but the
-    # form and the attachments no longer describe each other, so say what that
-    # costs. The base templates swapping among themselves need no note: they
-    # are one form at different levels of framing.
-    if forced and (mode == "REF2VA") != (derived == "REF2VA"):
-        problems.append(
-            "the REF2VA template is pinned but this request has no @ references "
-            "— the six-section form will define subjects no asset backs, which "
-            "may degrade the result. The pinned template was honoured; set it "
-            "to auto if that is not what you wanted."
-            if mode == "REF2VA" else
-            f"this request has @ references but the {mode} template is pinned — "
-            f"the rewrite has no six-section form to define the handles in, "
-            f"which may degrade the result. The pinned template was honoured; "
-            f"set it to auto if that is not what you wanted."
-        )
+    # A pin is honoured, never refused — but where the pinned form and the
+    # attachments stop describing each other, the family says what that costs.
+    note = prompting.pin_note(mode, derived) if forced else None
+    if note:
+        problems.append(note)
     if dropped:
         problems.append(
             f"{dropped} attached file{'s were' if dropped != 1 else ' was'} not shown to "
@@ -644,7 +633,7 @@ def _run(body):
                         problems.append(f"{where.rstrip()}'s {name} {problem}")
                 if cast:
                     own = {name: text for name, text in own.items()
-                           if name not in ("subject_definitions", "retention_analysis")}
+                           if name not in prompting.cast_sections}
                 entry["sections"] = own
             else:
                 problems.append(
@@ -690,7 +679,7 @@ def _run(body):
         # when the model writes them regardless.
         if cast:
             sections = {name: text for name, text in sections.items()
-                        if name not in ("subject_definitions", "retention_analysis")}
+                        if name not in prompting.cast_sections}
         parsed["sections"] = sections
 
     # The rewritten global prompt. Never normalized: it is joined in front of

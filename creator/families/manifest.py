@@ -52,8 +52,8 @@ loads, from which folders, and how — mirrored off the family's own slot
 table); **canvas rules** (snap multiple, the frame grid, fps and whether fps
 is fixed or conditioning, native edges and area caps); **capabilities**
 (bidirectional — a new family may *have* things H3 lacks); and the **prompt
-pipeline** (how prose reaches the model, and what an attached reference is
-called in it).
+pipeline** (how prose reaches the model, what an attached reference is called in
+it, and which templates the refiner offers for it — see `families/refine.py`).
 
 Everything here is pure and built from the same modules the compile already
 reads — `sampling.DEFAULTS`, `models.SLOTS`, `canvas.py`, the family
@@ -204,6 +204,24 @@ def check(manifest):
                 raise ValueError(
                     f"family {manifest['id']!r}: weight slot "
                     f"{entry.get('id')!r} has no {key!r}")
+    # The refiner's template pill, on the families that have a refiner. It
+    # rewrites a shot's description, so a still-only family declares none and
+    # the pill never draws for one. `auto` is what every reader spells for
+    # "follow the request", and a list that did not open with it would draw a
+    # pill whose first chip pins something — so the position is checked rather
+    # than assumed. Each chip carries its own copy, because a chip named `FL2V`
+    # says nothing to anyone who has not read the family's model card.
+    if "video" in manifest["produces"]:
+        templates = manifest["prompt"].get("templates")
+        if not templates or templates[0].get("name") != "auto":
+            raise ValueError(
+                f"family {manifest['id']!r}: prompt.templates must list the "
+                f"refiner's templates with 'auto' first")
+        for entry in templates:
+            if not entry.get("name") or not entry.get("help"):
+                raise ValueError(
+                    f"family {manifest['id']!r}: refine template "
+                    f"{entry.get('name')!r} has no help text")
     return manifest
 
 

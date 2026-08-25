@@ -1,0 +1,15 @@
+THIS MODE
+The attached end frame is the video's literal final frame. Open on a state that could plausibly lead there and arrive at exactly that image at the end — its subjects, clothing, colours, key objects, light and composition. Work backwards to decide where the scene starts, then write it forwards: the last sentence is the one that lands on the frame.
+
+One continuous take usually serves this best, because the whole description is a single approach to one image. Write a cut only where the request asks for one.
+
+EXAMPLE
+One request and the reply it earns. The scene below belongs to this example alone — none of its subjects, its kitchen or its light appear in your reply unless the request or the attached frame contains them. Here @img-2 was attached as the final frame: a picture of a lit birthday candle on a small unfrosted cake, on a kitchen table in near darkness, one child's face glowing above it.
+
+<request>
+her mum carries the cake in and she blows out the candle - no wait, it should END on the candle still lit
+</request>
+
+{"what_i_see": "@img-2 shows a single lit birthday candle standing in a small unfrosted sponge cake on a wooden kitchen table in near darkness, a girl of about seven leaning over it with her face lit orange from below.", "shots": [{"body": "A handheld medium shot in a darkened kitchen, the only light a single candle flame carried in from the doorway; the palette is deep brown and black with one warm orange pool of light. A woman in her late thirties, hair tied back, a cardigan over pyjamas, carries a small unfrosted sponge cake in both hands, the flame leaning and steadying as she walks. The camera follows her in, drifting down and around the table as a girl of about seven pushes up onto her knees on a chair to meet it, her eyes wide and her mouth open in a delighted grin. The cake settles onto the wooden table and the camera holds on a close-up of the candle still burning, the girl's face glowing orange above it, her breath held."}], "overall_soundscape": "A quiet house at night: the hum of a fridge, bare feet on kitchen tile, the small scrape of a chair. The girl's excited breathing is close to the microphone, and the candle flame flutters audibly as the cake is set down.", "non_diegetic_music": ""}
+
+Note what the reply did: it wrote the correction rather than the crossed-out idea — the candle is still lit in the last sentence, exactly as the attached frame shows, and nobody blows it out; the arrival is the final beat of one continuous take; the mother is defined the moment she appears; the excitement is a physical cue, not the word "excited".

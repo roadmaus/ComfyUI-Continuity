@@ -45,15 +45,12 @@ def _load():
     sys.modules.setdefault("aiohttp.web", web)
     sys.modules.setdefault("server", server)
 
-    package = types.ModuleType("mmc")
-    package.__path__ = [layout.PY_ROOT]
-    sys.modules["mmc"] = package
-    for name in ("canvas", "contextir", "compile", "refine"):
-        spec = importlib.util.spec_from_file_location(
-            f"mmc.{name}", layout.py(name))
-        module = importlib.util.module_from_spec(spec)
-        sys.modules[f"mmc.{name}"] = module
-        spec.loader.exec_module(module)
+    # Through `layout.load`, which builds the fake package and knows where a
+    # module that lives in a family package went. Loading them flat by filename
+    # worked while the refiner was one file; it stopped the day that file grew
+    # an upward relative import to the harness half it shares with LTX 2.5.
+    layout.load("canvas", "contextir", "compile", "prompting", "refine",
+                package="mmc")
     for name in ("media", "preview", "refine_local", "refine_skill"):
         stub = types.ModuleType(f"mmc.{name}")
         sys.modules[f"mmc.{name}"] = stub
@@ -91,8 +88,9 @@ def plan(flags, kind="timeline", index=None, render="chained"):
     body = {"kind": kind, "data": strip(flags, render=render)}
     if index is not None:
         body["index"] = index
-    mode, shots, images, piece, single, pool, footage, cast = routes._plan(body)
-    return {"mode": mode, "shots": shots, "piece": piece, "single": single}
+    prompting, mode, shots, images, piece, single, pool, footage, cast = routes._plan(body)
+    return {"family": prompting.id, "mode": mode, "shots": shots,
+            "piece": piece, "single": single}
 
 
 # ---- one shot per card, whatever the passes are ------------------------------
@@ -140,7 +138,7 @@ check("lone card is the sampled length", 5.0 < lone[0]["seconds"] < 5.5, True)
 
 seamed = strip([False, True, False])
 seamed["segments"][2]["continue"] = True
-_, shots, _, _, _, _, _, _ = routes._plan({"kind": "timeline", "data": seamed})
+_, _, shots, _, _, _, _, _, _ = routes._plan({"kind": "timeline", "data": seamed})
 check("seam on the pass head", [s["continues"] for s in shots], [False, False, True])
 
 # The flag on a merged card describes a seam that no longer exists: it was
@@ -148,7 +146,7 @@ check("seam on the pass head", [s["continues"] for s in shots], [False, False, T
 # a frame the sampler will never hand it.
 inner = strip([False, True, True])
 inner["segments"][1]["continue"] = True
-_, shots, _, _, _, _, _, _ = routes._plan({"kind": "timeline", "data": inner})
+_, _, shots, _, _, _, _, _, _ = routes._plan({"kind": "timeline", "data": inner})
 check("no seam inside a pass", [s["continues"] for s in shots], [False, False, False])
 
 # ---- one card at a time, at any index --------------------------------------
@@ -196,7 +194,7 @@ check("mode", got["mode"], "T2VA")
 legacy = {"kind": "creator", "data": {
     "version": 1, "prompt": "a lighthouse", "duration_s": 6,
     "aspect": "16:9", "short_edge": 768, "assets": [], "loras": [], "models": {}}}
-mode, shots, _, piece, single, pool, footage, _ = routes._plan(routes._target(legacy))
+_, mode, shots, _, piece, single, pool, footage, _ = routes._plan(routes._target(legacy))
 check("a retired creator target is one card of a piece", len(shots), 1)
 check("...carrying the blob's own prompt", shots[0]["text"], "a lighthouse")
 # Empty rather than the shot's own sentence: on a lifted blob the prompt sits

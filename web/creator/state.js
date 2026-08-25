@@ -74,6 +74,17 @@ export const stillOf = (id) => videoFamily(id).still;
  *  model fixed. A control that said "refined up to this size" for both would
  *  be right about one of them. */
 export const refineOf = (id) => videoFamily(id).capabilities?.refine;
+
+/** What the prompt refiner's template pill offers for a family, as
+ *  `{name, help}` in the order the chips are drawn, "auto" first.
+ *
+ *  The pill used to carry one hardcoded list, which was the default family's
+ *  five modes — so a piece on any other family was offered templates its
+ *  refiner does not have and, worse, was rewritten into that family's prompt
+ *  form. What a rewrite looks like is a statement about what a checkpoint was
+ *  trained to read, so the names and the copy travel in the manifest and the
+ *  server resolves a pin against the same list. */
+export const templatesOf = (id) => videoFamily(id).prompt?.templates ?? [];
 export const widgetsOf = (id) => videoFamily(id).widgets;
 
 /** Whether a family declares a capability at all. Bidirectional by design: a

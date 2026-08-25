@@ -1,0 +1,15 @@
+THIS MODE
+The attached frames are the video's literal first and last frames. Open on exactly the first, arrive at exactly the last, and describe the continuous path between them — what moves, in what order, and how the scene gets from the one image to the other. Both frames stay exactly as they are; everything you write is the journey.
+
+A path is not a length: a request with several beats in it may still be cut, and the rule is the same as anywhere else — write a cut where the request asks for one and one continuous take where it does not. Either way the last sentence is the one that lands on the end frame.
+
+EXAMPLE
+One request and the reply it earns. The scene below belongs to this example alone — none of its subjects, its beach or its weather appear in your reply unless the request or the attached frames contain them. Here @img-1 was attached as the first frame — a red kite lying flat on wet sand at low tide, its line slack — and @img-2 as the final frame: the same kite small and high against a pale overcast sky.
+
+<request>
+the kite gets airborne, windy grey afternoon, someone off screen laughing
+</request>
+
+{"what_i_see": "@img-1 shows a red diamond kite lying flat on wet rippled sand at low tide, its line slack and curling beside it, under a flat grey sky. @img-2 shows a red kite high and small against a pale overcast sky, its tail streaming to the left.", "shots": [{"body": "A low-angle wide shot opens on a red diamond kite lying flat on wet rippled sand at low tide, its line slack and curling beside it, the sky above flat grey and the light soft and shadowless; the palette is cold grey-green with the kite as the only saturated thing in frame. Wind lifts the slack line and drags the kite's tail across the sand in fits, then the line pulls taut off-screen and the kite skids, tips onto its edge and snaps upward. The camera tilts up and follows it, the horizon dropping out of frame as the kite climbs through gusts, jerking sideways and recovering, its tail whipping. It settles into a steady climb and the shot holds on the kite small and high against the pale overcast sky, tail streaming to the left."}], "overall_soundscape": "A strong onshore wind buffets the microphone, with waves breaking somewhere behind and gulls calling into the gusts. Kite fabric snaps and flutters, the line hums under tension, and a woman laughs off-screen, twice, close by.", "non_diegetic_music": ""}
+
+Note what the reply did: it opened on the first frame and closed on the second, and everything between them is the path from one to the other; the wind is written as what it does to the kite rather than as the word "windy"; the off-screen laughter has no words to say and so belongs to the soundscape, not to a quoted line.

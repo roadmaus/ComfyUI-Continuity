@@ -11,7 +11,7 @@ English keys the i18n dictionaries already carry.
 
 from ... import accel, canvas, compile, models as core, sampling, settings
 from .. import manifest as m
-from . import declare, grammar, models as slots, still
+from . import declare, grammar, models as slots, refine, still
 
 
 def _widgets():
@@ -126,6 +126,21 @@ def _weights():
     } for name, slot in slots.SLOTS.items()]
 
 
+# What each refine template is for, in the words the pill and the panel share.
+# Keyed by `refine.PROMPTING.templates`, so a template with no line here fails
+# at `describe` — where the family is named — rather than drawing a bare chip.
+_TEMPLATE_HELP = {
+    "auto": "follows what is attached: frames pick I2VA / L2VA / FL2VA, "
+            "@ references pick REF2VA, a bare prompt picks T2VA.",
+    "T2VA": "text only — the video is described from nothing.",
+    "I2VA": "first frame — the rewrite opens on the attached image and develops forward.",
+    "L2VA": "last frame — the rewrite converges on the attached image at the end.",
+    "FL2VA": "first and last frame — the rewrite is the motion path between the two.",
+    "REF2VA": "@ references — the six-section form that defines and tracks them. "
+              "Pinnable on any request, but without references it may degrade quality.",
+}
+
+
 def manifest():
     from .. import registry
 
@@ -238,6 +253,16 @@ def manifest():
             # was sent.
             "pipeline": declare.PROMPT_PIPELINE,
             "ordinal": "<Picture N>",
+            # What the refiner's template pill offers, and what each choice is
+            # for. The names are the prompting's own — a pin is sent back to
+            # `Prompting.choose_template`, which is the thing that knows them —
+            # and the copy is here because the manifest is where a family's
+            # strings live. The pill used to carry this list hardcoded in
+            # `refine.js`, which meant every family was offered H3's modes.
+            "templates": [
+                {"name": name, "help": _TEMPLATE_HELP[name]}
+                for name in refine.PROMPTING.templates
+            ],
         },
         # The pre-stage branch: a still is a video generation whose first
         # latent frame is decoded as a picture.

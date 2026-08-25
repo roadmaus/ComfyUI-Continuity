@@ -1,0 +1,79 @@
+HOW LTX 2.5 IS WRITTEN
+
+One flowing paragraph. No headers, no bullet points, no numbered beats, no
+labels such as "Audio:", "Visual:", "Shot:" or "Camera:". Lightricks caption
+their training footage as continuous prose, so a bracketed marker or a field
+name standing where a description should be is a token sequence these weights
+were trained never to see. Everything below is written *into* the sentences.
+
+Present tense throughout, for action, camera and sound alike.
+
+Say it in this order, and let it flow rather than listing it:
+
+ESTABLISH THE SHOT
+Open with the framing, in the vocabulary a crew would use: wide establishing
+shot, medium close-up, low-angle shot, over-the-shoulder, overhead view,
+static frame, handheld. Name the category where the request implies one —
+stop-motion, claymation, 2D animation, film noir, documentary, 8-bit pixel,
+period drama — and then describe the look it actually has rather than trusting
+the name to carry it.
+
+SET THE SCENE
+Lighting, colour palette, surface texture, atmosphere. Keep one coherent light
+logic per shot: one source and what it does, not three that contradict each
+other. Fog, rain, dust, smoke and particles belong here.
+
+DEFINE THE PEOPLE
+Age, hair, clothing, build, distinguishing features, in the sentence they first
+appear in. Emotion is written as a physical cue — a jaw tightening, shoulders
+dropping, a hand hesitating on a door — never as an abstract label. Reuse the
+same identifiers every time someone reappears, so a later sentence says "the
+woman in the yellow raincoat" rather than "she".
+
+DESCRIBE THE ACTION
+As a sequence that runs from beginning to end: what starts, what changes, what
+it settles into. Order it in words — "initially", "a moment later",
+"simultaneously" — rather than by timestamps. One sustained action reads better
+than four crowded ones.
+
+MOVE THE CAMERA
+Say how and when it moves, relative to the subject: follows, tracks, pans
+across, circles around, tilts upward, pushes in, pulls back. Then say what is
+in frame *after* the move — describing the subject as it ends up is what lets
+the model complete the movement.
+
+SPEECH
+Whenever anyone in the request speaks, talks, says something, asks, answers,
+shouts, whispers, narrates, sings, argues or reads aloud, write the words they
+actually say, inside double quotation marks, in the sentence that describes
+them saying it: `She whispers, "He's late."` When the request quotes the words,
+use those words exactly. When it only says that someone speaks, write lines
+that fit the character, the scene and the time available — roughly two to three
+words per second of screen time, so the line finishes inside the shot. Name the
+language and the accent where it is not plain English.
+
+MATCH LENGTH TO COMPLEXITY
+A single continuous take is roughly four to eight sentences. Add detail as the
+shot scale demands it: a close-up wants more than a wide.
+
+TWO THINGS THE MODEL HANDLES UNEVENLY
+On-screen text comes out unreliably, so keep any lettering short and prominent
+rather than long or fine. Highly chaotic motion introduces artifacts; prefer
+motion that is plausible and readable.
+
+THE SOUND FIELDS
+Two fields sit outside the paragraph and are appended to it as the sentences
+they are written as.
+
+`overall_soundscape` is always written, in one to four sentences: the ambience
+of the place, the surfaces and objects the action touches, clothing, footsteps,
+breathing, weather, machinery, animals, crowd. Describe them as heard events.
+Where the request mentions sound, expand what it names. Spoken lines and
+singing stay in the paragraph with the person saying them.
+
+`non_diegetic_music` is written only when the request asks for music — a score,
+a soundtrack, a song, a genre, an instrument playing over the scene. Then give
+instrumentation, tempo, rhythm and how it changes. Otherwise it is an empty
+string, which leaves the choice to the video model. Music the characters can
+hear — a radio, a band on stage, a phone speaker — is part of the scene and
+belongs in the paragraph instead.
