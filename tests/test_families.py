@@ -11,7 +11,9 @@ Runs standalone, no torch and no ComfyUI — the manifests are pure, which is
 the property that lets the frontend's mirror suites read them later.
 """
 
+import glob
 import json
+import os
 
 import layout
 from harness import FAILURES, check, passed
@@ -19,7 +21,10 @@ from harness import FAILURES, check, passed
 _pkg = layout.load("canvas", "accel", "sampling", "contextir", "compile",
                    "compile_image", "models", "registry", "manifest",
                    "still", "krea2_still", "ideogram4_still",
+                   "h3_declare", "ltx25_declare",
                    "ltx25_models", "ltx25_sampling")
+H3 = _pkg.h3_declare.RULES
+LTX25 = _pkg.ltx25_declare.RULES
 canvas = _pkg.canvas
 sampling = _pkg.sampling
 models = _pkg.models
@@ -33,6 +38,40 @@ lx = _pkg.ltx25_models
 lxs = _pkg.ltx25_sampling
 
 catalog = manifest.catalog()
+
+# ---- discovery ---------------------------------------------------------------
+#
+# The registry walks `families/` for declarations rather than carrying tables
+# keyed by id. What that buys is that a family becomes real by existing; what it
+# costs is that a declaration missing a field fails somewhere downstream instead
+# of at the family. So this is the field list, checked at the source.
+
+DECLARES = ("ID", "LABEL", "ORDER", "PRODUCES", "STILL_ARCH", "PROMPT_PIPELINE",
+            "LORA_STACK", "DURATION_HEAD", "ROUTED", "RULES")
+
+check("every family package was discovered",
+      sorted(registry.FAMILIES),
+      sorted(os.path.basename(os.path.dirname(path))
+             for path in glob.glob(os.path.join(layout.PY_ROOT, "families",
+                                                "*", "declare.py"))))
+
+for family in registry.FAMILIES:
+    module = registry.DECLARATION[family]
+    missing = [field for field in DECLARES if not hasattr(module, field)]
+    check(f"{family} declares every field", missing, [])
+    check(f"{family}'s declaration names itself", module.ID, family)
+    # A video family has canvas arithmetic and a still-only family has none.
+    # `registry.RULES` keys off exactly that, and `compile.rules_of` would hand
+    # back None to arithmetic that cannot use it.
+    check(f"{family} declares rules iff it renders video",
+          module.RULES is not None, "video" in module.PRODUCES)
+
+check("the families are ordered by their own ORDER",
+      list(registry.FAMILIES),
+      [m.ID for m in sorted(registry.DECLARED, key=lambda m: (m.ORDER, m.ID))])
+check("the frame grids are the declarations'",
+      registry.RULES,
+      {m.ID: m.RULES for m in registry.DECLARED if m.RULES})
 
 # ---- the catalog is a route body ---------------------------------------------
 
@@ -145,17 +184,17 @@ for frames in list(h3["still"]["lengths"]) + [_grid["base_frames"] + _grid["fram
     check(f"latent grid at {frames} frames", derived, h3s.latent_frames(frames))
 
 frames = h3["canvas"]["frames"]
-legal = canvas.legal_frame_counts(canvas.H3)
+legal = canvas.legal_frame_counts(H3)
 check("the manifest's frame grid generates the legal counts",
       [frames["offset"], legal[1] - legal[0]],
       [legal[0], frames["step"]])
 check("h3 canvas carries the trained range and the snap",
       (h3["canvas"]["multiple"], frames["trained_min"], frames["trained_max"],
        h3["canvas"]["fps"]),
-      (canvas.H3.multiple, canvas.H3.trained_min_frames,
-       canvas.H3.trained_max_frames, {"value": canvas.H3.fps, "fixed": True}))
+      (H3.multiple, H3.trained_min_frames,
+       H3.trained_max_frames, {"value": H3.fps, "fixed": True}))
 check("h3 aspects are the presets", h3["canvas"]["aspects"],
-      canvas.H3.aspects)
+      H3.aspects)
 check("h3 still block is families/h3/still.py's",
       (h3["still"]["arch"], h3["still"]["lengths"],
        h3["still"]["prompt_modes"]),
@@ -216,24 +255,24 @@ check("ltx25 pins devices only where a wrapper exists",
       [w["id"] for w in ltx["weights"] if w["device"]],
       [name for name, slot in lx.SLOTS.items() if slot.loader in models.MULTIGPU])
 
-# The canvas is canvas.LTX25's, and it is not H3's: an 8n+1 grid against
+# The canvas is LTX25's, and it is not H3's: an 8n+1 grid against
 # 17n+5, and a rate that is conditioning rather than a property of the weights.
 lframes = ltx["canvas"]["frames"]
-check("ltx25 canvas is canvas.LTX25",
-      ltx["canvas"], manifest.canvas_block(canvas.LTX25))
+check("ltx25 canvas is LTX25",
+      ltx["canvas"], manifest.canvas_block(LTX25))
 check("ltx25 fps is conditioning, H3's is not",
       (ltx["canvas"]["fps"]["fixed"], h3["canvas"]["fps"]["fixed"]),
       (False, True))
 check("ltx25 frames are the 8n+1 grid",
       (lframes["step"], lframes["offset"]), (8, 1))
-llegal = canvas.legal_frame_counts(canvas.LTX25)
+llegal = canvas.legal_frame_counts(LTX25)
 check("the manifest's frame grid generates the legal counts",
       [lframes["offset"], llegal[1] - llegal[0]], [llegal[0], lframes["step"]])
 for frames in llegal[:200]:
     if frames % 8 != 1:
         FAILURES.append(f"ltx25 legal count {frames} is off the 8n+1 grid")
         break
-check("ltx25 snaps to 32", ltx["canvas"]["multiple"], canvas.LTX25.multiple)
+check("ltx25 snaps to 32", ltx["canvas"]["multiple"], LTX25.multiple)
 
 # The capability split, in both directions — the point of asking rather than
 # branching on an id.

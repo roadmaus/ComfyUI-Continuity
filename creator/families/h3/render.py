@@ -24,6 +24,7 @@ import comfy.sample
 from ... import (accel, canvas, compile as compiler, models,
                  sampling as sampling_mod, settings)
 from .. import base
+from . import declare
 
 # Whether this core can start a sampler with the noise switched off on an H3
 # audio+video latent. The lead-in's second sitting does exactly that — the noise
@@ -185,7 +186,7 @@ class H3(base.Family):
     id = "h3"
     label = "MiniMax H3"
     produces = frozenset({"video", "still"})
-    rules = canvas.H3
+    rules = declare.RULES
     compile_error = compiler.CompileError
 
     def weights_from_blob(self, data):

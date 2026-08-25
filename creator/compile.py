@@ -20,7 +20,7 @@ from dataclasses import dataclass, field, replace
 from . import canvas
 from . import redetail
 from .families import registry
-from .families.h3 import contextir, subjects
+from .families.h3 import contextir, declare as h3, subjects
 
 MODES = ("T2VA", "I2VA", "L2VA", "FL2VA", "REF2VA")
 
@@ -121,8 +121,8 @@ MAX_REFINE_DENOISE = 0.9
 # frame grid and its re-encode, and every other family declares `face: False`.
 # A family that grows a face pass brings its own bounds with it.
 DEFAULT_FACE_CANVAS = 512
-MIN_FACE_CANVAS = canvas.H3.min_short_edge
-MAX_FACE_CANVAS = canvas.H3.native_short_edge
+MIN_FACE_CANVAS = h3.RULES.min_short_edge
+MAX_FACE_CANVAS = h3.RULES.native_short_edge
 
 # How much of the schedule the face pass runs. Not an SDXL number and not
 # comparable to one: H3 is flow matching under a large sigma shift, so at the
@@ -924,7 +924,7 @@ def face_piece(data):
     edge = min(MAX_FACE_CANVAS, max(MIN_FACE_CANVAS, edge))
     # The same /32 snap every other canvas takes, so the crop latent is a shape
     # the DiT accepts without anybody having to think about it.
-    edge = canvas.resolve_canvas(1.0, edge, canvas.H3)[0]
+    edge = canvas.resolve_canvas(1.0, edge, h3.RULES)[0]
     # `on` is kept in the returned shape so a resolved setting is still the same
     # kind of object the blob wrote, and a payload carrying one can be read back
     # by this very function — which is what `compile_request` does with it.
@@ -1082,7 +1082,7 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
 
     `family` is which architecture this generation is for, and it decides two
     things nothing else in this function can be asked: the canvas and duration
-    arithmetic (`canvas.RULES` — a frame grid and a native edge are the
+    arithmetic (`registry.RULES` — a frame grid and a native edge are the
     weights', not a taste), and how the prose reaches the model
     (`registry.PROMPT_PIPELINE`). It defaults to H3 because `data` here is one
     request rather than a piece, and every caller that had no answer before this
@@ -1113,7 +1113,7 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     if not isinstance(data, dict):
         raise CompileError("creator_data must be a JSON object")
 
-    rules = canvas.RULES[family]
+    rules = registry.RULES[family]
     pipeline = registry.PROMPT_PIPELINE[family]
 
     assets = _parse_assets(data.get("assets"))
@@ -2243,7 +2243,7 @@ def rules_of(data):
     only exists on `compile_request` and `compile_segment`, whose `data` is one
     generation's request and carries no family of its own.
     """
-    return canvas.RULES[piece_family(data)]
+    return registry.RULES[piece_family(data)]
 
 
 def timeline_segments(data):

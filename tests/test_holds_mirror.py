@@ -29,7 +29,8 @@ layout.skip_without_node()
 
 MIRROR = layout.js("state.js")
 
-_pkg = layout.load("canvas", "contextir", "compile")
+_pkg = layout.load("canvas", "h3_declare", "contextir", "compile")
+H3 = _pkg.h3_declare.RULES
 compiler = _pkg.compile
 canvas_mod = _pkg.canvas
 
@@ -126,7 +127,7 @@ for cards, seen in zip(CASES, reflected):
     # mirror does over the whole strip, restricted to what is sampled: a
     # feathered seam re-generates its inherited run and the reel node drops it.
     check(f"{name}: sampled frames", seen["sampled"],
-          sum(canvas_mod.frames_for_seconds(payload["request"]["duration_s"], canvas_mod.H3)
+          sum(canvas_mod.frames_for_seconds(payload["request"]["duration_s"], H3)
               - (payload.get("feather", 1) if payload.get("continue")
                  and payload.get("feather", 1) > 1 else 0)
               for payload in sampled))

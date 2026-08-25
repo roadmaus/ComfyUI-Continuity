@@ -59,6 +59,7 @@ from . import (accel, canvas, compile as compiler, facepass, hires, media,
                settings, timeline)
 from .core import emit as loop
 from .families import registry
+from .families.h3 import declare as h3
 from .families.ltx25 import segment as ltx25_segment
 
 DEFAULT_DATA = json.dumps({
@@ -68,7 +69,7 @@ DEFAULT_DATA = json.dumps({
     # writing happens on the card.
     "prompt": "",
     "aspect": "16:9",
-    "short_edge": canvas.H3.native_short_edge,
+    "short_edge": h3.RULES.native_short_edge,
     # Where the finished clip lands under output/. See `outputs`.
     "output_prefix": outputs.VIDEO_PREFIX,
     # Which files to load. Empty here rather than guessed: a fresh node has no

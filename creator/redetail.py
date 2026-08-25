@@ -46,6 +46,7 @@ None of it is measured on our own box, so none of it is quoted in the UI.
 
 from . import canvas
 from . import models as core
+from .families.ltx25 import declare as ltx25
 
 # The trained factor, and the only one offered. See the module docstring: it is
 # the one that lands on the /64 grid for free.
@@ -54,10 +55,10 @@ SCALE = 2
 # What both output dimensions must divide by. Derived rather than written: it is
 # the canvas multiple halved a second time by the guide's 2x2 dilation, which is
 # the same statement `LTXVAddGuide` makes in `dilate_latent`.
-GRID = canvas.LTX25.multiple * 2
+GRID = ltx25.RULES.multiple * 2
 
 # The pass's own grid, which is LTX 2.5's whatever family rendered the pass.
-RULES = canvas.LTX25
+RULES = ltx25.RULES
 
 # The schedule, which is the model's rather than ours. Eight steps at cfg 1 on a
 # curve that spends its first four almost in place — the distilled upscaler's

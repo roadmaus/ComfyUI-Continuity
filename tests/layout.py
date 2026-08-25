@@ -54,6 +54,8 @@ MODULES = {
     "ltx25_sampling": "families.ltx25.sampling",
     "krea2_still": "families.krea2.still",
     "ideogram4_still": "families.ideogram4.still",
+    "h3_declare": "families.h3.declare",
+    "ltx25_declare": "families.ltx25.declare",
     "registry": "families.registry",
     "manifest": "families.manifest",
 }

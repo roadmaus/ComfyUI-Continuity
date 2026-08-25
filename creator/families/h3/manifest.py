@@ -11,7 +11,7 @@ English keys the i18n dictionaries already carry.
 
 from ... import accel, canvas, compile, models, sampling, settings
 from .. import manifest as m
-from . import still
+from . import declare, still
 
 
 def _widgets():
@@ -127,13 +127,15 @@ def manifest():
     from .. import registry
 
     return {
-        "id": "h3",
-        "label": "MiniMax H3",
+        # Both the declaration's, so the id a route answers to and the name a
+        # pill shows have one home apiece.
+        "id": declare.ID,
+        "label": declare.LABEL,
         # What the arch pill's tooltip says this family is.
         "description": "MiniMax H3 — experimental. The still is a video generation whose first latent "
                        "frame is decoded by the single-image H3 VAE, on the weights and the canvas your "
                        "render already uses. No second model family is loaded.",
-        "produces": sorted(registry.PRODUCES["h3"]),
+        "produces": sorted(declare.PRODUCES),
         "widgets": _widgets(),
         "weights": _weights(),
         # The standing route between the family's checkpoints — the control the
@@ -158,7 +160,7 @@ def manifest():
                   "opens": "I2VA",
                   "closes": "L2VA",
                   "text": "T2VA"},
-        "canvas": m.canvas_block(canvas.H3),
+        "canvas": m.canvas_block(declare.RULES),
         "capabilities": {
             # The passes the loop may ask this family for.
             "refine": True, "face": True, "audio": True,
@@ -222,7 +224,7 @@ def manifest():
             # branches on the same value and a manifest saying one thing while
             # the compiler did another would be a UI describing a prompt nobody
             # was sent.
-            "pipeline": registry.PROMPT_PIPELINE["h3"],
+            "pipeline": declare.PROMPT_PIPELINE,
             "ordinal": "<Picture N>",
         },
         # The pre-stage branch: a still is a video generation whose first
@@ -237,9 +239,9 @@ def manifest():
             # `base_latent` latent frames, and each further `frame_step`
             # (the canvas grid's own) adds `latent_step`. Mirrors
             # `still.latent_frames`; test_families holds the two together.
-            "latent": {"base_frames": canvas.H3.frame_offset,
-                       "base_latent": still.latent_frames(canvas.H3.frame_offset),
-                       "frame_step": canvas.H3.frame_step,
+            "latent": {"base_frames": declare.RULES.frame_offset,
+                       "base_latent": still.latent_frames(declare.RULES.frame_offset),
+                       "frame_step": declare.RULES.frame_step,
                        "latent_step": 5},
         },
     }

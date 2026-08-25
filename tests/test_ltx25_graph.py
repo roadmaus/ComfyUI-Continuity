@@ -53,6 +53,8 @@ except Exception as exc:  # noqa: BLE001
 package = importlib.import_module(PACKAGE)
 cn = importlib.import_module(f"{PACKAGE}.creator.creator_node")
 canvas = importlib.import_module(f"{PACKAGE}.creator.canvas")
+LTX25 = importlib.import_module(
+    f"{PACKAGE}.creator.families.ltx25.declare").RULES
 compiler = importlib.import_module(f"{PACKAGE}.creator.compile")
 
 from harness import FAILURES, check, passed
@@ -74,7 +76,7 @@ def piece(**overrides):
         "family": "ltx25",
         "prompt": "",
         "aspect": "16:9",
-        "short_edge": canvas.LTX25.native_short_edge,
+        "short_edge": LTX25.native_short_edge,
         "models": dict(MODELS),
         "segments": [{"prompt": "a red room", "assets": [], "loras": [],
                       "duration_s": 5}],
@@ -287,7 +289,7 @@ expect_error("modality guidance below its off value",
 # off the head. `canvas.feather_grid` is what stops that, and this is what says
 # the graph got the grid's numbers rather than H3's.
 
-FEATHER = canvas.feather_grid(canvas.LTX25)
+FEATHER = canvas.feather_grid(LTX25)
 check("LTX's seam widths are its own frame grid", FEATHER, (1, 9, 17, 25))
 check("...and every one of them is a legal guide length",
       [n % 8 for n in FEATHER], [1, 1, 1, 1])
@@ -335,7 +337,7 @@ check("...by exactly what it inherited", trimmed[0]["head"], FEATHER[2])
 audio = {node_id: inputs for node_id, inputs in chained["MiniMaxH3PassAudio"]}
 check("the sound tail is the blend's own span",
       round(list(audio.values())[0]["seconds"], 4),
-      round(FEATHER[2] / canvas.LTX25.fps, 4))
+      round(FEATHER[2] / LTX25.fps, 4))
 
 # And the arithmetic underneath: each pass still lands on 8n+1, and the strip
 # delivers what it samples less the blend it re-generates.

@@ -272,6 +272,8 @@ LTX_MODELS = {
 }
 
 canvas_mod = importlib.import_module(f"{PACKAGE}.creator.canvas")
+LTX25 = importlib.import_module(
+    f"{PACKAGE}.creator.families.ltx25.declare").RULES
 
 
 def ltx_piece(**fields):
@@ -281,7 +283,7 @@ def ltx_piece(**fields):
         "family": "ltx25",
         "prompt": "",
         "aspect": "16:9",
-        "short_edge": canvas_mod.LTX25.native_short_edge,
+        "short_edge": LTX25.native_short_edge,
         "models": LTX_MODELS,
         **fields,
     })
@@ -293,7 +295,7 @@ frozen("ltx_chained_seam", ltx_piece(
     segments=[
         {"prompt": "wide", "duration_s": 5},
         {"prompt": "closer", "duration_s": 5, "continue": True,
-         "feather": canvas_mod.feather_grid(canvas_mod.LTX25)[2],
+         "feather": canvas_mod.feather_grid(LTX25)[2],
          "continue_audio": True},
         {"prompt": "cut away", "duration_s": 5},
     ],
@@ -303,7 +305,7 @@ frozen("ltx_chained_seam", ltx_piece(
 # upscaler rather than H3's re-sample at a larger canvas — the one place the
 # `refine` capability means something structurally different.
 frozen("ltx_refine_two_pass", ltx_piece(
-    short_edge=canvas_mod.LTX25.native_short_edge * 2,
+    short_edge=LTX25.native_short_edge * 2,
     segments=[{"prompt": "a red room", "duration_s": 6}],
 ))
 

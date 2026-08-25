@@ -430,8 +430,9 @@ class MiniMaxH3Reel(io.ComfyNode):
                 # H3's 24 whatever family sampled — which both video families
                 # happen to agree on, so the error would have been invisible
                 # until a family that does not.
-                io.Float.Input("fps", default=float(canvas.H3.fps),
-                               min=1.0, max=120.0),
+                # The default is a schema placeholder and nothing more —
+                # every graph this pack builds writes the family's own rate.
+                io.Float.Input("fps", default=24.0, min=1.0, max=120.0),
                 # The runs this pass shares with its neighbours, dropped before
                 # anything is written: a blend re-generates the moment it
                 # inherited, and an untrimmed pass would play it twice. `head`
@@ -722,7 +723,7 @@ class MiniMaxH3Save(io.ComfyNode):
             is_output_node=True,
             inputs=[
                 io.Custom(REEL_TYPE).Input("reel"),
-                io.Float.Input("fps", default=float(canvas.H3.fps), min=1.0, max=120.0),
+                io.Float.Input("fps", default=24.0, min=1.0, max=120.0),
                 io.String.Input("filename_prefix", default="minimax/H3"),
                 # An input rather than a read of `settings.py` here, so that
                 # changing the quality and re-queueing actually re-writes the

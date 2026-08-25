@@ -51,6 +51,7 @@ from ... import canvas
 from ... import models as core
 from .. import base
 from . import models, sampling as sampling_mod, segment as segment_node
+from . import declare
 
 
 class LTX25(base.Family):
@@ -62,7 +63,7 @@ class LTX25(base.Family):
     #: The canvas and duration arithmetic this family renders under. Read by
     #: `core/emit.py` for the rate the finished file is written at, which used
     #: to be H3's `canvas.FPS` because there was one family to have one.
-    rules = canvas.LTX25
+    rules = declare.RULES
 
     def weights_from_blob(self, data):
         return core.Weights.from_blob(data, models.SLOTS)

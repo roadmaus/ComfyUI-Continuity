@@ -17,7 +17,8 @@ import layout
 layout.skip_without_node()
 
 MIRROR = layout.js("canvas.js")
-canvas = layout.load("canvas").canvas
+_pkg = layout.load("canvas", "registry")
+canvas, registry = _pkg.canvas, _pkg.registry
 
 # Everything the mirror is expected to reproduce, dumped in one go rather than
 # one subprocess per question — and asked of **every family**, not of the one
@@ -55,9 +56,9 @@ MATCH_CASES = [0.2, 1, 2.5, 5.88, 6, 6.6, 7.29, 9.33, 15, 15.04, 59.71, 60, 180]
 EDGES = [384, 512, 640, 768, 896, 1024, 1536, 2048]
 TRAINED_CASES = [5, 107, 124, 192, 362, 379, 1433]
 
-# Every family with a frame grid — `canvas.RULES` is the table, so a family
+# Every family with a frame grid — `registry.RULES` is the table, so a family
 # added there is checked here without this list being touched.
-FAMILIES = sorted(canvas.RULES)
+FAMILIES = sorted(registry.RULES)
 
 # `rulesFrom`'s field names against the dataclass's. The mirror is a
 # transliteration, and this is the one place the two spellings meet.
@@ -86,7 +87,7 @@ def check(label, got, want):
 
 
 for family in FAMILIES:
-    rules = canvas.RULES[family]
+    rules = registry.RULES[family]
     served = reflected["rules"][family]
 
     for mirrored, field in FIELDS.items():

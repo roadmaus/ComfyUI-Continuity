@@ -43,7 +43,9 @@ layout.skip_without_node()
 
 from harness import FAILURES, check, passed
 
-_pkg = layout.load("canvas", "registry", "manifest", "contextir", "subjects", "compile")
+_pkg = layout.load("canvas", "registry", "manifest", "contextir", "subjects",
+                   "compile", "ltx25_declare")
+LTX25 = _pkg.ltx25_declare.RULES
 compiler, registry = _pkg.compile, _pkg.registry
 canvas, manifest = _pkg.canvas, _pkg.manifest
 catalog = manifest.catalog()
@@ -301,7 +303,7 @@ check("the canvas rules are LTX 2.5's, off the served manifest",
       ltx["rules"],
       {"multiple": 32, "fps": 24, "fpsFixed": False, "step": 8, "offset": 1})
 check("the first-pass edge re-clamps to the new native size",
-      ltx["sample_edge"], canvas.LTX25.native_short_edge)
+      ltx["sample_edge"], LTX25.native_short_edge)
 # Lightricks' own reference pipeline: 121 frames at 24 fps, sampled at 960x544.
 check("the frame grid lands on the card's numbers", ltx["frames"], [25, 121, 481])
 check("the native canvas is the card's stage one", ltx["wxh"], [960, 544])

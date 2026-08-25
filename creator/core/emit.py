@@ -381,16 +381,15 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
     return graph
 
 
-def emit_tail(graph, reel, unique_id, filename_prefix=FILENAME_PREFIX, takes="",
-              fps=float(canvas.H3.fps)):
+def emit_tail(graph, reel, unique_id, filename_prefix, takes, fps):
     """Write the reel to a file, and report it against `unique_id`.
 
     An AV family generates picture and sound together and they should leave
     together, which used to mean wiring both outputs into somebody else's save
     node and getting the frame rate wrong. The rate is the one the frame counts
-    were snapped to and so is the family's, not this module's — it defaults to
-    H3's for the pre-stage callers that write a single frame and have no family
-    in hand.
+    were snapped to and so is the family's, not this module's — required rather
+    than defaulted, because there is no rate this module could pick that is not
+    some other family's.
 
     `MiniMaxH3Save` rather than core's `CreateVideo` + `SaveVideo`: `SaveVideo`'s
     `codec` is a `DynamicCombo`, whose value is assembled from the frontend's

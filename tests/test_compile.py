@@ -11,8 +11,12 @@ import os
 
 import layout
 
-_pkg = layout.load("canvas", "contextir", "subjects", "compile", "still",
-                   package="mmc")
+_pkg = layout.load("canvas", "h3_declare", "contextir", "subjects", "compile",
+                   "still", package="mmc")
+
+# The family whose arithmetic these cases are written in. Its own declaration,
+# not a default: every call below says which family it means.
+H3 = _pkg.h3_declare.RULES
 canvas, compiler, still = _pkg.canvas, _pkg.compile, _pkg.still
 
 from harness import FAILURES, check, passed
@@ -33,53 +37,53 @@ def expect_error(label, fn, fragment):
 # --- canvas ------------------------------------------------------------------
 
 # The native stop must reproduce core's own numbers exactly.
-check("16:9 @768", canvas.resolve_canvas(16 / 9, 768, canvas.H3), (1344, 768))
-check("4:3 @768", canvas.resolve_canvas(4 / 3, 768, canvas.H3), (1024, 768))
-check("1:1 @768", canvas.resolve_canvas(1.0, 768, canvas.H3), (768, 768))
-check("9:16 @768", canvas.resolve_canvas(9 / 16, 768, canvas.H3), (768, 1344))
+check("16:9 @768", canvas.resolve_canvas(16 / 9, 768, H3), (1344, 768))
+check("4:3 @768", canvas.resolve_canvas(4 / 3, 768, H3), (1024, 768))
+check("1:1 @768", canvas.resolve_canvas(1.0, 768, H3), (768, 768))
+check("9:16 @768", canvas.resolve_canvas(9 / 16, 768, H3), (768, 1344))
 
-for label, ratio in canvas.H3.aspects.items():
+for label, ratio in H3.aspects.items():
     for edge in (384, 512, 640, 768, 896, 1024, 1536, 2048):
-        width, height = canvas.resolve_canvas(ratio, edge, canvas.H3)
-        cap = canvas.H3.native_max_pixels * (edge / canvas.H3.native_short_edge) ** 2
+        width, height = canvas.resolve_canvas(ratio, edge, H3)
+        cap = H3.native_max_pixels * (edge / H3.native_short_edge) ** 2
         if width % 32 or height % 32:
             FAILURES.append(f"{label} @{edge}: {width}x{height} is not a multiple of 32")
         if width * height > cap:
             FAILURES.append(f"{label} @{edge}: {width}x{height} exceeds the area cap")
 
 # Ratios outside 21:9..9:16 clamp rather than stretch.
-check("3:1 clamps", canvas.canvas_from_image(3000, 1000, 768, canvas.H3)[3], True)
-check("1:3 clamps", canvas.canvas_from_image(1000, 3000, 768, canvas.H3)[3], True)
-check("3:2 adaptive", canvas.canvas_from_image(1500, 1000, 768, canvas.H3)[:2], (1152, 768))
+check("3:1 clamps", canvas.canvas_from_image(3000, 1000, 768, H3)[3], True)
+check("1:3 clamps", canvas.canvas_from_image(1000, 3000, 768, H3)[3], True)
+check("3:2 adaptive", canvas.canvas_from_image(1500, 1000, 768, H3)[:2], (1152, 768))
 
 # --- duration ----------------------------------------------------------------
 
-for seconds in range(canvas.H3.min_seconds, canvas.H3.max_seconds + 1):
-    frames = canvas.frames_for_seconds(seconds, canvas.H3)
+for seconds in range(H3.min_seconds, H3.max_seconds + 1):
+    frames = canvas.frames_for_seconds(seconds, H3)
     if frames % 17 != 5:
         FAILURES.append(f"{seconds}s -> {frames} frames is not on the 17n+5 grid")
-    if abs(canvas.seconds_for_frames(frames, canvas.H3) - seconds) > 0.36:
+    if abs(canvas.seconds_for_frames(frames, H3) - seconds) > 0.36:
         FAILURES.append(f"{seconds}s -> {frames} frames drifts too far")
 
-check("8s is exact", canvas.frames_for_seconds(8, canvas.H3), 192)
-check("6s", canvas.frames_for_seconds(6, canvas.H3), 141)
+check("8s is exact", canvas.frames_for_seconds(8, H3), 192)
+check("6s", canvas.frames_for_seconds(6, H3), 141)
 
 # The offered range is wider than the trained one on purpose: 17n+5 is the only
 # hard rule, and clips well past 15 s do generate. The pill says so; it does not
 # refuse. So the ends have to be reachable and still legal.
-check("a one-second shot is offered", canvas.frames_for_seconds(1, canvas.H3) % 17, 5)
-check("...and is about a second", round(canvas.seconds_for_frames(canvas.frames_for_seconds(1, canvas.H3), canvas.H3), 2), 0.92)
+check("a one-second shot is offered", canvas.frames_for_seconds(1, H3) % 17, 5)
+check("...and is about a second", round(canvas.seconds_for_frames(canvas.frames_for_seconds(1, H3), H3), 2), 0.92)
 check("a minute is reachable",
-      round(canvas.seconds_for_frames(canvas.frames_for_seconds(60, canvas.H3), canvas.H3)), 60)
+      round(canvas.seconds_for_frames(canvas.frames_for_seconds(60, H3), H3)), 60)
 # Out of range clamps rather than raising — this is where a hand-edited blob and
 # a workflow saved against an older ceiling both land somewhere legal.
 check("past the ceiling clamps to the top",
-      canvas.frames_for_seconds(999, canvas.H3), max(canvas.legal_frame_counts(canvas.H3)))
-check("under the floor clamps to the bottom", canvas.frames_for_seconds(0, canvas.H3), 5)
+      canvas.frames_for_seconds(999, H3), max(canvas.legal_frame_counts(H3)))
+check("under the floor clamps to the bottom", canvas.frames_for_seconds(0, H3), 5)
 
 check("the trained range is a subset, not the limit",
-      (canvas.is_trained_length(124, canvas.H3), canvas.is_trained_length(362, canvas.H3),
-       canvas.is_trained_length(107, canvas.H3), canvas.is_trained_length(379, canvas.H3)),
+      (canvas.is_trained_length(124, H3), canvas.is_trained_length(362, H3),
+       canvas.is_trained_length(107, H3), canvas.is_trained_length(379, H3)),
       (True, True, False, False))
 
 # --- mode routing ------------------------------------------------------------
@@ -864,7 +868,7 @@ check("the inherited frame consumes <Picture 1>",
 # defined if they all came out the same size.
 wide = timeline([segment(), segment(), segment()], aspect="9:16", short_edge=512)
 check("one canvas across the timeline",
-      {(c.width, c.height) for c in wide}, {canvas.resolve_canvas(9 / 16, 512, canvas.H3)})
+      {(c.width, c.height) for c in wide}, {canvas.resolve_canvas(9 / 16, 512, H3)})
 
 # A continuing segment with references: the seam rides as pinned guides that
 # payload.py places on the segment's own timeline, so the checkpoint choice no
@@ -968,23 +972,23 @@ merged_run = {"segments": [segment(**{"duration_s": 5}),
                            segment(**{"duration_s": 5, "merge": True}),
                            segment(**{"duration_s": 5, "merge": True})]}
 check("a merged pass is snapped once, not per card",
-      compiler.timeline_frames(merged_run), canvas.frames_for_seconds(15, canvas.H3))
+      compiler.timeline_frames(merged_run), canvas.frames_for_seconds(15, H3))
 check("...which is not what the cards sum to",
-      compiler.timeline_frames(merged_run) == 3 * canvas.frames_for_seconds(5, canvas.H3), False)
+      compiler.timeline_frames(merged_run) == 3 * canvas.frames_for_seconds(5, H3), False)
 
 check("an unmerged strip snaps every card",
       compiler.timeline_frames({"segments": [segment(**{"duration_s": 5})] * 3}),
-      3 * canvas.frames_for_seconds(5, canvas.H3))
+      3 * canvas.frames_for_seconds(5, H3))
 
 # A feathered seam re-generates its inherited run and the reel node drops it, so those
 # frames are sampled but never delivered — and the finished length has to say so.
 feathered = {"segments": [segment(),
                           segment(**{"continue": True, "feather": 22})]}
 check("a feathered seam costs the finished clip its overlap",
-      compiler.timeline_frames(feathered), 2 * canvas.frames_for_seconds(6, canvas.H3) - 22)
+      compiler.timeline_frames(feathered), 2 * canvas.frames_for_seconds(6, H3) - 22)
 check("...and an unfeathered one costs nothing",
       compiler.timeline_frames({"segments": [segment(), segment(**{"continue": True})]}),
-      2 * canvas.frames_for_seconds(6, canvas.H3))
+      2 * canvas.frames_for_seconds(6, H3))
 
 # The work bound itself. Long cards rather than many, precisely because the old
 # cap could not see this case: well inside MAX_SEGMENTS, hours of video.
@@ -1443,15 +1447,15 @@ check("no refine at native even when asked", build(upscale="two_pass").refine, N
 
 over = build(short_edge=1152)
 check("past native, pass one samples at the native canvas",
-      (over.width, over.height), canvas.resolve_canvas(16 / 9, 768, canvas.H3))
+      (over.width, over.height), canvas.resolve_canvas(16 / 9, 768, H3))
 check("...and the refine target is the slider's canvas",
-      (over.refine.width, over.refine.height), canvas.resolve_canvas(16 / 9, 1152, canvas.H3))
+      (over.refine.width, over.refine.height), canvas.resolve_canvas(16 / 9, 1152, H3))
 check("...at the default denoise", over.refine.denoise, compiler.DEFAULT_REFINE_DENOISE)
 
 direct = build(short_edge=1152, upscale="direct")
 check("direct keeps the one-pass canvas and carries no refine",
       ((direct.width, direct.height), direct.refine),
-      (canvas.resolve_canvas(16 / 9, 1152, canvas.H3), None))
+      (canvas.resolve_canvas(16 / 9, 1152, H3), None))
 expect_error("an unknown upscale mode", lambda: build(upscale="bigger"), "unknown upscale mode")
 
 check("refine_denoise clamps rather than raising",
@@ -1465,17 +1469,17 @@ expect_error("a non-number refine_denoise",
 # stays both the default and the ceiling, and the target can be anywhere above.
 low = build(short_edge=1152, sample_edge=512)
 check("a lowered sample_edge moves pass one under native",
-      (low.width, low.height), canvas.resolve_canvas(16 / 9, 512, canvas.H3))
+      (low.width, low.height), canvas.resolve_canvas(16 / 9, 512, H3))
 check("...and still refines to the slider's canvas",
-      (low.refine.width, low.refine.height), canvas.resolve_canvas(16 / 9, 1152, canvas.H3))
+      (low.refine.width, low.refine.height), canvas.resolve_canvas(16 / 9, 1152, H3))
 under = build(short_edge=768, sample_edge=512)
 check("under native, sample_edge is what turns two passes on",
       ((under.width, under.height), (under.refine.width, under.refine.height)),
-      (canvas.resolve_canvas(16 / 9, 512, canvas.H3), canvas.resolve_canvas(16 / 9, 768, canvas.H3)))
+      (canvas.resolve_canvas(16 / 9, 512, H3), canvas.resolve_canvas(16 / 9, 768, H3)))
 check("sample_edge clamps to native and to the canvas floor",
       (build(short_edge=1152, sample_edge=2000).width,
        build(short_edge=768, sample_edge=100).width),
-      (canvas.resolve_canvas(16 / 9, 768, canvas.H3)[0], canvas.resolve_canvas(16 / 9, 384, canvas.H3)[0]))
+      (canvas.resolve_canvas(16 / 9, 768, H3)[0], canvas.resolve_canvas(16 / 9, 384, H3)[0]))
 check("a sample_edge at the slider is the one-pass render",
       build(short_edge=512, sample_edge=512).refine, None)
 check("direct ignores sample_edge",
@@ -1485,27 +1489,27 @@ expect_error("a non-number sample_edge", lambda: build(sample_edge="small"), "sa
 # The adaptive canvas: the keyframe still owns the ratio, and both passes share it.
 adaptive = build(assets=[image("img-1", "first_frame")], short_edge=1152)
 check("adaptive two-pass samples at native with the keyframe's ratio",
-      (adaptive.width, adaptive.height), canvas.canvas_from_image(1500, 1000, 768, canvas.H3)[:2])
+      (adaptive.width, adaptive.height), canvas.canvas_from_image(1500, 1000, 768, H3)[:2])
 check("...and refines to the same ratio at the slider",
       (adaptive.refine.width, adaptive.refine.height),
-      canvas.resolve_canvas(1500 / 1000, 1152, canvas.H3))
+      canvas.resolve_canvas(1500 / 1000, 1152, H3))
 
 # A timeline holds every segment to the pass-one canvas, and every segment
 # refines to the same target — the concatenation happens after both passes.
 two_pass_tl = timeline([segment(), segment()], short_edge=1152)
 check("a two-pass timeline pins pass one at native",
-      {(c.width, c.height) for c in two_pass_tl}, {canvas.resolve_canvas(16 / 9, 768, canvas.H3)})
+      {(c.width, c.height) for c in two_pass_tl}, {canvas.resolve_canvas(16 / 9, 768, H3)})
 check("...and refines every segment to the same target",
       {(c.refine.width, c.refine.height) for c in two_pass_tl},
-      {canvas.resolve_canvas(16 / 9, 1152, canvas.H3)})
+      {canvas.resolve_canvas(16 / 9, 1152, H3)})
 low_tl = timeline([segment()], short_edge=1152, sample_edge=512)[0]
 check("a timeline's sample_edge reaches its segments",
       ((low_tl.width, low_tl.height), (low_tl.refine.width, low_tl.refine.height)),
-      (canvas.resolve_canvas(16 / 9, 512, canvas.H3), canvas.resolve_canvas(16 / 9, 1152, canvas.H3)))
+      (canvas.resolve_canvas(16 / 9, 512, H3), canvas.resolve_canvas(16 / 9, 1152, H3)))
 direct_tl = timeline([segment()], short_edge=1152, upscale="direct")[0]
 check("a direct timeline is the old render",
       ((direct_tl.width, direct_tl.height), direct_tl.refine),
-      (canvas.resolve_canvas(16 / 9, 1152, canvas.H3), None))
+      (canvas.resolve_canvas(16 / 9, 1152, H3), None))
 
 check("one pass inherits the timeline's two-pass choice",
       single([segment("a shot")], short_edge=1152).refine is not None, True)
@@ -1690,14 +1694,14 @@ check("a trimmed clip plays its window",
       (trimmed[0]["clip"]["start"], trimmed[0]["clip"]["duration"]), (2.0, 4.5))
 check("...and that is the length the budget counts",
       compiler.timeline_frames({"segments": [clip(duration_s=30, trim={"start": 2.0, "end": 6.5})]}),
-      round(4.5 * canvas.H3.fps))
+      round(4.5 * H3.fps))
 # Nothing samples a clip, so there is no 17n+5 grid for it to land on — a
 # generated card of the same length is snapped and this one is not.
 check("a clip is counted at its own length, unsnapped",
       compiler.timeline_frames({"segments": [clip(duration_s=3)]}), 72)
 check("...where a generated card of the same length is snapped",
       compiler.timeline_frames({"segments": [segment("x", duration_s=3)]}),
-      canvas.frames_for_seconds(3, canvas.H3))
+      canvas.frames_for_seconds(3, H3))
 expect_error("a clip with no length is refused",
              lambda: clip_payloads([clip()]), "needs its length")
 expect_error("...and one with no file",

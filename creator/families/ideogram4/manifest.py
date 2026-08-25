@@ -4,7 +4,7 @@ the shared image-still constants; this module only puts controls behind them.
 
 from ... import compile_image, render_image
 from .. import manifest as m
-from . import still
+from . import declare, still
 
 
 def _widgets():
@@ -87,11 +87,13 @@ def manifest():
     from .. import registry
 
     return {
-        "id": "ideogram4",
-        "label": "Ideogram 4.0",
+        # Both the declaration's, so the id a route answers to and the name a
+        # pill shows have one home apiece.
+        "id": declare.ID,
+        "label": declare.LABEL,
         "description": "Ideogram 4.0 — 9.3B open-weights DiT with its own resolution-shifted schedule "
                        "and a second checkpoint for the unconditional branch.",
-        "produces": sorted(registry.PRODUCES["ideogram4"]),
+        "produces": sorted(declare.PRODUCES),
         "widgets": _widgets(),
         "weights": _weights(),
         "canvas": _canvas(),

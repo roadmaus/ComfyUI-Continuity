@@ -4,7 +4,7 @@ shared image-still constants; this module only puts controls behind them.
 
 from ... import compile_image, render_image
 from .. import manifest as m
-from . import still
+from . import declare, still
 
 
 def _widgets():
@@ -86,11 +86,13 @@ def manifest():
     from .. import registry
 
     return {
-        "id": "krea2",
-        "label": "Krea 2",
+        # Both the declaration's, so the id a route answers to and the name a
+        # pill shows have one home apiece.
+        "id": declare.ID,
+        "label": declare.LABEL,
         "description": "Krea 2 — 12.9B open-weights DiT. RAW samples at cfg 3.5; the turbo pill swaps in "
                        "the 8-step Turbo checkpoint.",
-        "produces": sorted(registry.PRODUCES["krea2"]),
+        "produces": sorted(declare.PRODUCES),
         "widgets": _widgets(),
         "weights": _weights(),
         "canvas": _canvas(),

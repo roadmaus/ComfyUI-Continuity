@@ -3,7 +3,7 @@ for this family.
 
 The same rule H3's manifest follows — nothing here is a second copy of a
 number. The sampler defaults are `families/ltx25/sampling.py`'s, the slots are
-`families/ltx25/models.py`'s, the canvas is `canvas.LTX25`. The bounds are the
+`families/ltx25/models.py`'s, the canvas is `declare.RULES`. The bounds are the
 core nodes' own (`LTXVScheduler`, `LTXVDualCFGGuider`), read off their schemas
 in `comfy_extras/nodes_lt.py`.
 
@@ -23,6 +23,7 @@ cost.
 from ... import canvas, models as core
 from .. import manifest as m
 from . import models, sampling
+from . import declare
 
 
 def _widgets():
@@ -159,17 +160,19 @@ def manifest():
     from .. import registry
 
     return {
-        "id": "ltx25",
-        "label": "LTX 2.5",
+        # Both the declaration's, so the id a route answers to and the name a
+        # pill shows have one home apiece.
+        "id": declare.ID,
+        "label": declare.LABEL,
         # What the family pill's tooltip says this family is.
         "description": "LTX 2.5 — Lightricks' 22B audio-video DiT. Picture and soundtrack come out of one "
                        "packed latent, guided apart; the frame rate is conditioning rather than a property "
                        "of the weights, and an optional duration head can pick a shot's length from its "
                        "own prompt.",
-        "produces": sorted(registry.PRODUCES["ltx25"]),
+        "produces": sorted(declare.PRODUCES),
         "widgets": _widgets(),
         "weights": _weights(),
-        "canvas": m.canvas_block(canvas.LTX25),
+        "canvas": m.canvas_block(declare.RULES),
         "capabilities": {
             # The passes the loop may ask this family for. Audio always: LTX
             # 2.5 samples a packed AV latent and there is no soundless mode.
@@ -213,11 +216,11 @@ def manifest():
             # handed to `LTXVDurationPredictor`, and what it bounds is what
             # Lightricks taught the head to say, not what the pill will let a
             # user set by hand.
-            "duration": {"slot": registry.DURATION_HEAD["ltx25"],
-                         "min_seconds": round(canvas.LTX25.trained_min_frames
-                                              / canvas.LTX25.fps, 4),
-                         "max_seconds": round(canvas.LTX25.trained_max_frames
-                                              / canvas.LTX25.fps, 4)},
+            "duration": {"slot": declare.DURATION_HEAD,
+                         "min_seconds": round(declare.RULES.trained_min_frames
+                                              / declare.RULES.fps, 4),
+                         "max_seconds": round(declare.RULES.trained_max_frames
+                                              / declare.RULES.fps, 4)},
         },
         "prompt": {
             # Plain prose straight through Gemma. No Context-IR: H3's ordinal
@@ -227,6 +230,6 @@ def manifest():
             # which is what `compile.py` branches on: a manifest describing one
             # prompt while the compiler composed another would be a UI lying
             # about what the model was sent.
-            "pipeline": registry.PROMPT_PIPELINE["ltx25"],
+            "pipeline": declare.PROMPT_PIPELINE,
         },
     }

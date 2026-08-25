@@ -40,6 +40,7 @@ from .core import emit as loop
 from .compile import CompileError
 from .families import registry
 from .families.h3 import still
+from .families.h3 import declare as h3_rules
 from .families.ideogram4 import still as ideogram4
 from .families.krea2 import still as krea2
 
@@ -64,7 +65,7 @@ DEFAULT_DATA = json.dumps({
         "frames": still.DEFAULT_FRAMES,
         "latent_index": still.DEFAULT_LATENT_INDEX,
         "request": {"prompt": "", "assets": [], "loras": [],
-                    "aspect": "16:9", "short_edge": canvas.H3.native_short_edge,
+                    "aspect": "16:9", "short_edge": h3_rules.RULES.native_short_edge,
                     "output_prefix": outputs.IMAGE_PREFIX, "models": {}},
     },
     # Per-arch sub-blocks, so switching the model pill never forgets the other

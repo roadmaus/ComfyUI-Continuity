@@ -1,26 +1,23 @@
 """Canvas, duration and aspect math, parameterised by family.
 
-Everything in this module is pure: no torch, no ComfyUI, no I/O. The frontend
-mirrors these same rules to draw its live readouts (the resolution pill shows
-the resolved WxH as you drag), so this file is the single source of truth for
-what the sampler will actually receive. Keep it side-effect free and keep the
-JS in `web/creator/canvas.js` in step with it.
+Everything in this module is pure: no torch, no ComfyUI, no I/O — and no
+family. The frontend mirrors these same rules to draw its live readouts (the
+resolution pill shows the resolved WxH as you drag), so this file is the single
+source of truth for what the sampler will actually receive. Keep it side-effect
+free and keep the JS in `web/creator/canvas.js` in step with it.
 
 The *math* is family-neutral — snap to a grid, follow a ratio, cap an area,
 land on a legal frame count — and every function below takes the `Rules` that
-drive it. The *numbers* are a family's: `H3` is MiniMax H3's set, declared
-here and served to the frontend through the family's manifest. `LTX25` is LTX
-2.5's — fps carried as conditioning rather than fixed, an 8n+1 frame packing
-instead of 17n+5 — and it passes through the same functions unchanged, which
-is the whole claim this parameterisation makes.
+drive it. The *numbers* are a family's and live with the family, in its
+`declare.py`: H3's 17n+5 grid at a fixed 24 fps, LTX 2.5's 8n+1 with the rate
+carried as conditioning. Both pass through these functions unchanged, which is
+the whole claim this parameterisation makes, and `registry.rules(family)` is
+where a caller gets the set it needs.
 
-Two model constraints drive H3's numbers:
-
-- The video latent is a /16 downsample and the DiT wants /32 pixel canvases,
-  so both axes snap to multiples of 32.
-- Frame counts must satisfy `n % 17 == 5` at 24 fps. There is no such thing as
-  a 6.00-second H3 video; the UI shows whole seconds and we land on the nearest
-  legal count behind it.
+They were declared here, two `Rules` literals and a table mapping ids to them,
+which meant a new family edited this file to say something about itself that
+this file has no other use for. `Rules` is the contract; the numbers are not
+its business.
 
 **Every function here takes its rules and none of them defaults.** They used to
 default to `H3`, and there were module constants beside them — `canvas.FPS`,
@@ -29,8 +26,9 @@ under historic names. Both were how the one family this pack shipped reached its
 own arithmetic without saying so, and both are exactly the wrong shape for a
 second: a caller that forgot to thread the piece's rules through did not fail,
 it silently ran H3's grid over somebody else's weights. A required argument is
-the only version of this that fails loudly, and `canvas.H3` spelled out at an
-H3-owned call site is a leak anyone can grep for.
+the only version of this that fails loudly, and a family's own
+`declare.RULES` spelled out at a call site that belongs to it is a leak anyone
+can grep for.
 """
 
 import math
@@ -64,113 +62,6 @@ class Rules:
     trained_max_frames: int
     min_seconds: int
     max_seconds: int
-
-
-# MiniMax H3's rules. The provenance of every number:
-#
-# - 768 px short edge and a 768*1344 area cap are what the open weights are
-#   trained with; both scale together off the resolution slider so the
-#   constraint keeps its shape at every setting (21:9 stays letterboxed the
-#   same way at 384 as at 768).
-# - `max_short_edge` is the slider's ceiling, not a statement about the
-#   weights — everything above the native edge is off-distribution and the
-#   pill says so. There is a reason to offer it anyway: the pre-stage's H3
-#   branch decodes one latent frame as a still, where the single-image VAE
-#   holds up to around 3 MP, and a 2K checkpoint is expected. A ceiling the
-#   hardware and the warning already govern is better than one that has to be
-#   raised again the day those weights land.
-# - The 9:16..21:9 ratio envelope is the official H3 aspect range.
-# - The trained frame range is ~5.2 s to ~15.1 s. Not a limit: the
-#   architecture takes any 17n+5 count and clips well past the top do come
-#   out; the pair exists so the UI can say when you have left the
-#   distribution, which is a different statement from "you cannot".
-# - The seconds range is what the pill offers: below a second there is barely
-#   a shot, and a minute is about as far as anyone has reported getting a
-#   coherent single generation — past it the attention cost stops being worth
-#   arguing about.
-H3 = Rules(
-    multiple=32,
-    fps=24,
-    fps_fixed=True,
-    native_short_edge=768,
-    native_max_pixels=768 * 1344,
-    min_short_edge=384,
-    max_short_edge=2048,
-    min_ratio=9 / 16,
-    max_ratio=21 / 9,
-    aspects={
-        "16:9": 16 / 9,
-        "4:3": 4 / 3,
-        "1:1": 1.0,
-        "3:4": 3 / 4,
-        "9:16": 9 / 16,
-        "21:9": 21 / 9,
-    },
-    frame_step=17,
-    frame_offset=5,
-    trained_min_frames=124,
-    trained_max_frames=362,
-    min_seconds=1,
-    max_seconds=60,
-)
-
-
-# LTX 2.5's rules. The provenance of every number, from Lightricks' own model
-# card and from the nodes core ships for the family:
-#
-# - `multiple=32` and the 8n+1 frame grid are the card's two hard constraints,
-#   and they are what `EmptyLTXVLatentVideo` enforces in its widget steps.
-# - fps is **conditioning**, not architecture — `LTXVConditioning` carries it
-#   into the prompt embedding, so `fps_fixed=False` and the pill is a control.
-#   24 rather than `LTXVConditioning`'s own 25: the card's reference pipeline
-#   runs at 24.0 and `LTXVDurationPredictor` defaults its clamp to 24.0, which
-#   is two statements from Lightricks against one Comfy widget default. One
-#   number, pinned here and passed everywhere the family conditions on a rate.
-# - 544x960 is the resolution the card's own two-stage example samples at; the
-#   x2 spatial upscaler is what takes it to 1088x1920, and that is a pass this
-#   pack does not run yet. So the native edge is stage one's, not the pack
-#   shot's, and everything above it is honestly off-distribution. The area cap
-#   keeps the same shape H3's does (960/544 = 1.76 against 1344/768 = 1.75), so
-#   a 21:9 canvas letterboxes the same way at every slider setting.
-# - `max_short_edge` is the slider's ceiling rather than a claim: 2048 is where
-#   a stage-one render plus the x2 upscaler lands, and the pill warns above the
-#   native edge long before here.
-# - The trained frame range is the duration head's own default clamp — 1 s to
-#   20 s at 24 fps, snapped to the grid — which is Lightricks saying which
-#   durations the weights were taught to hold. The seconds range below it is
-#   what the pill offers, H3's, and a different statement entirely.
-LTX25 = Rules(
-    multiple=32,
-    fps=24,
-    fps_fixed=False,
-    native_short_edge=544,
-    native_max_pixels=544 * 960,
-    min_short_edge=256,
-    max_short_edge=2048,
-    min_ratio=9 / 16,
-    max_ratio=21 / 9,
-    aspects={
-        "16:9": 16 / 9,
-        "4:3": 4 / 3,
-        "1:1": 1.0,
-        "3:4": 3 / 4,
-        "9:16": 9 / 16,
-        "21:9": 21 / 9,
-    },
-    frame_step=8,
-    frame_offset=1,
-    trained_min_frames=25,
-    trained_max_frames=481,
-    min_seconds=1,
-    max_seconds=60,
-)
-
-
-# Every family's rules, under the id the registry knows it by. The registry
-# says which families exist; this says what each one's arithmetic is, and
-# `compile.rules_of` is what looks a piece's family up in it. A still-only
-# family has no entry — there is no duration and no frame grid to have one for.
-RULES = {"h3": H3, "ltx25": LTX25}
 
 
 def legal_frame_counts(rules):

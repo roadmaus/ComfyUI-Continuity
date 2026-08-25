@@ -31,8 +31,12 @@ modelled here at all.
 from dataclasses import dataclass, field
 
 from .compile import HANDLE_RE, CompileError, collect_triggers
+from .families import registry
 
-ARCHES = ("krea2", "ideogram4")
+# The architectures this shared half serves: the families that render nothing
+# but stills, asked of the registry rather than written down — H3's still branch
+# rides the video compiler instead and so is not one of these.
+ARCHES = registry.IMAGE_FAMILIES
 DEFAULT_ARCH = "krea2"
 
 # The image DiTs take /16 canvases (their latent is a /8 downsample and both

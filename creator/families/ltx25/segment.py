@@ -38,6 +38,7 @@ from comfy_api.latest import io
 
 from ... import canvas, compile as compiler, lora, media
 from . import models as slots
+from . import declare
 
 SEGMENT_NODE = "MiniMaxLTX25Segment"
 
@@ -220,7 +221,7 @@ class MiniMaxLTX25Segment(io.ComfyNode):
         positive = _encode(clip, compiled.prompt)
         negative = _encode(clip, DEFAULT_NEGATIVE)
 
-        rules = canvas.RULES["ltx25"]
+        rules = declare.RULES
         frames = compiled.frames
         if compiled.auto_duration:
             frames = _predicted_frames(model, positive, duration_head, compiled,
