@@ -19,15 +19,8 @@ from dataclasses import dataclass, field, replace
 
 from . import canvas
 from . import redetail
-from .families import registry
+from .families import grammar, registry
 from .families.h3 import contextir, declare as h3, subjects
-
-MODES = ("T2VA", "I2VA", "L2VA", "FL2VA", "REF2VA")
-
-MAX_REF_IMAGES = 9
-MAX_REF_VIDEOS = 3
-MAX_REF_AUDIOS = 3
-MAX_REF_FILES = 12
 
 # Two bounds, on two different quantities, and only the second one is about work.
 #
@@ -600,8 +593,15 @@ def _parse_track(handle, kind, item):
     return track
 
 
-def _derive_mode(first_frame, last_frame, ref_images, ref_videos, ref_audios,
-                 continues=False, ends_on=False):
+def _derive_mode(grammar, first_frame, last_frame, ref_images, ref_videos,
+                 ref_audios, continues=False, ends_on=False):
+    """What this payload is, in the family's own name for it.
+
+    The *shape* is read here — something opens, something closes, something is
+    cited — because that is bookkeeping about the strip and the attachments.
+    The name, the caps and whether references are a shape at all are the
+    family's, and are asked of its grammar: `families/grammar.py` says why.
+    """
     has_refs = bool(ref_images or ref_videos or ref_audios)
 
     # Continuing *is* having a start frame — it is the source segment's last
@@ -630,39 +630,22 @@ def _derive_mode(first_frame, last_frame, ref_images, ref_videos, ref_audios,
     # road: Ref2VA is the superset training, and it is what a mixed segment
     # runs on.
     if has_refs:
-        if len(ref_images) > MAX_REF_IMAGES:
-            raise CompileError(f"at most {MAX_REF_IMAGES} reference images ({len(ref_images)} given)")
-        if len(ref_videos) > MAX_REF_VIDEOS:
-            raise CompileError(f"at most {MAX_REF_VIDEOS} reference videos ({len(ref_videos)} given)")
-        total_audio = len(ref_audios) + sum(1 for v in ref_videos if v.track == "picture+sound")
-        if total_audio > MAX_REF_AUDIOS:
-            raise CompileError(
-                f"at most {MAX_REF_AUDIOS} reference audio clips, counting video "
-                f"soundtracks ({total_audio} given)"
-            )
-        total = len(ref_images) + len(ref_videos) + total_audio
-        if total > MAX_REF_FILES:
-            raise CompileError(f"at most {MAX_REF_FILES} reference files total ({total} given)")
-        if not ref_images and not ref_videos:
-            # Per the model card: audio is never a standalone reference.
-            raise CompileError("reference audio needs at least one reference image or video alongside it")
-        return "REF2VA"
+        # Which list a clip's soundtrack lands in is this module's bookkeeping,
+        # so the count is worked out here and the family is asked only whether
+        # it is too many.
+        total_audio = len(ref_audios) + sum(1 for v in ref_videos
+                                            if v.track == "picture+sound")
+        grammar.refuse(CompileError, ref_images, ref_videos, total_audio)
 
     # The inherited frame fills the first slot and the clip after this one
-    # fills the last, so both roads land on the same four modes as a pair of
+    # fills the last, so both roads land on the same shapes as a pair of
     # attached stills would.
-    opens = continues or first_frame is not None
-    closes = ends_on or last_frame is not None
-    if opens and closes:
-        return "FL2VA"
-    if opens:
-        return "I2VA"
-    if closes:
-        return "L2VA"
-    return "T2VA"
+    return grammar.mode(cited=has_refs,
+                        opens=continues or first_frame is not None,
+                        closes=ends_on or last_frame is not None)
 
 
-def _resolve_checkpoint(mode, raw, family=registry.DEFAULT_VIDEO):
+def _resolve_checkpoint(grammar, mode, raw, family=registry.DEFAULT_VIDEO):
     """Which weights the generation runs on, given the mode and the user's pin.
 
     The mode says how the request is *encoded*; the checkpoint says which weights
@@ -688,7 +671,7 @@ def _resolve_checkpoint(mode, raw, family=registry.DEFAULT_VIDEO):
     choice = raw or "auto"
     if choice not in ("auto",) + routed:
         raise CompileError(f"unknown checkpoint {choice!r}")
-    derived = "ref2va" if mode == "REF2VA" else "fl2va"
+    derived = grammar.checkpoint(mode)
     if choice == "auto":
         return derived, False
     return choice, choice != derived
@@ -1083,8 +1066,9 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     `family` is which architecture this generation is for, and it decides two
     things nothing else in this function can be asked: the canvas and duration
     arithmetic (`registry.RULES` — a frame grid and a native edge are the
-    weights', not a taste), and how the prose reaches the model
-    (`registry.PROMPT_PIPELINE`). It defaults to H3 because `data` here is one
+    weights', not a taste), and how it reads a request at all
+    (`families/grammar.py` — the caps, the mode names, the routing rule and what
+    the encoder is sent). It defaults to H3 because `data` here is one
     request rather than a piece, and every caller that had no answer before this
     existed was compiling for the only family there was.
 
@@ -1114,7 +1098,9 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
         raise CompileError("creator_data must be a JSON object")
 
     rules = registry.RULES[family]
-    pipeline = registry.PROMPT_PIPELINE[family]
+    # How this family reads a request — its caps, its mode names, its routing
+    # rule and what its encoder is sent. See `families/grammar.py`.
+    family_grammar = grammar.of(family)
 
     assets = _parse_assets(data.get("assets"))
 
@@ -1170,8 +1156,8 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     ref_videos = [a for a in refs if a.kind == "video" and a.track != "sound"]
     ref_audios = [a for a in refs if a.kind == "audio" or (a.kind == "video" and a.track == "sound")]
 
-    mode = _derive_mode(first_frame, last_frame, ref_images, ref_videos, ref_audios,
-                        continues, ends_on)
+    mode = _derive_mode(family_grammar, first_frame, last_frame,
+                        ref_images, ref_videos, ref_audios, continues, ends_on)
 
     feather = _check_feather(feather, continues, "continue from an earlier one", rules)
     ends_feather = _check_feather(ends_feather, ends_on, "run into a clip", rules)
@@ -1216,8 +1202,9 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     opens_presented = first_frame is not None or head_seam_shown
     closes_presented = last_frame is not None or tail_seam_shown
 
-    checkpoint, pinned = _resolve_checkpoint(mode, data.get("checkpoint"), family)
-    if mode == "REF2VA":
+    checkpoint, pinned = _resolve_checkpoint(family_grammar, mode,
+                                             data.get("checkpoint"), family)
+    if mode == family_grammar.modes.get("reference"):
         plan = plan_references(ref_images, ref_videos, ref_audios)
         labels = _labels_from_plan(plan)
         labels.update(_trailing_frame_labels(plan, first_frame, last_frame))
@@ -1344,64 +1331,53 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     #
     # A refined section always wins: `raw_sections` is merged over these, not
     # under them.
-    claimed = subjects.claimed(cast)
-    derived = {}
-    if cast:
-        derived["subject_definitions"] = subjects.definitions(
-            cast, labels, contextir.reference_lines(plan, skip=claimed) if plan else ())
-        derived["retention_analysis"] = "\n".join(
-            [subjects.retention(cast, labels, body)]
-            + contextir.retention_lines(plan, skip=claimed, body=body)).strip()
-    elif plan:
-        derived["subject_definitions"] = "\n".join(contextir.reference_lines(plan))
-        derived["retention_analysis"] = "\n".join(
-            contextir.retention_lines(plan, body=body))
-    if derived:
-        derived["summary"] = contextir.summary(
-            plan, cast, subject_labels, labels,
-            shots=max(int(shots or 1), contextir.count_shots(body)),
-            has_frames=bool(first_frame or last_frame))
+    # The sections themselves are the family's to derive — H3 writes
+    # `subject_definitions`, `retention_analysis` and `summary` in its guide's
+    # own forms, and a family with no such document has none to write. A refined
+    # section always wins: `raw_sections` is merged over these, not under them.
+    derived = family_grammar.sections(
+        cast=cast, labels=labels, subject_labels=subject_labels, plan=plan,
+        body=body, shots=shots, framed=bool(first_frame or last_frame))
     if derived:
         merged = {name: text for name, text in derived.items() if str(text or "").strip()}
         for name, text in (sections or {}).items():
             if str(text or "").strip():
                 merged[name] = text
         sections = merged
-    # The mode as far as the *prompt* is concerned. `contextir.instruction`
+    # The mode as far as the *prompt* is concerned. H3's `contextir.instruction`
     # quotes the guide's alignment line by mode — I2VA names <Picture 1> at
     # 0.00 s, FL2VA names two — and a blended seam whose frame is not pinned
     # sends no picture for that slot to name. So the line is chosen by what was
     # presented, while `mode` goes on deciding the checkpoint and the encode
     # path, which are still right: the run is pinned as latent guides either
     # way, and it is only the tokenizer's picture list that changed.
-    prompt_mode = ("FL2VA" if opens_presented and closes_presented else
-                   "I2VA" if opens_presented else
-                   "L2VA" if closes_presented else "T2VA")
-    prompt = plain_prompt(body, soundscape, music) if pipeline == "plain" else \
-        contextir.compose(
-        prompt_mode, body, soundscape, music, canvas.seconds_for_frames(frames, rules),
-        # The inherited tail is presented to the tokenizer as <Audio 1>, so the
-        # prompt has to say what it is or the label points at nothing. Phrased
-        # the way the reference guide defines its own labels. Only on the
-        # classic seam: a REF2VA segment's references own the audio numbering,
-        # and a feathered seam pins the tail on this segment's own timeline —
-        # in both, the tail rides unlabelled and the line would point at
-        # nothing.
-        preamble=(contextir.ref_frame_alignment(
-                      labels.get(first_frame.handle) if first_frame else None,
-                      labels.get(last_frame.handle) if last_frame else None,
-                      canvas.seconds_for_frames(frames, rules), shots)
-                  if mode == "REF2VA" else
-                  contextir.AUDIO_SEAM_LINE
-                  if continues_audio and feather == 1 else ""),
-        # Which shot the end frame is reached by. A one-pass render says so
-        # outright — it assembled the description and counted the cards' shots —
-        # and any body that numbers its own shots says so by carrying them, which
-        # is a refined Creator prompt with the model's cuts in it. The larger
-        # wins: a card may write several shots inside the one the timeline
-        # allotted it, and the last of those is the one holding the end frame.
-        shots=max(int(shots or 1), contextir.count_shots(body)),
-        sections=sections)
+    #
+    # Read through the family's own names, because that is what the shape is
+    # being spelled in — a family that does not distinguish these gets its own
+    # answer out of the same three booleans.
+    prompt_mode = family_grammar.mode(cited=False, opens=opens_presented,
+                                      closes=closes_presented)
+    # And what the encoder is actually sent. Everything above assembled the
+    # parts; which of them reach the model, and in what form, is the family's —
+    # H3 was trained on its own Context-IR and an encoder trained on captions
+    # was not. See `families/grammar.py`.
+    #
+    # The parts are named rather than pre-composed, which is what stopped this
+    # being an H3 shape with a `pipeline` switch across it: the alignment line
+    # and the seam sentence used to be built here, out of `contextir`, and
+    # handed in as a finished `preamble` that only one family could have used.
+    prompt = family_grammar.compose(
+        mode=prompt_mode, encode_mode=mode, body=body,
+        soundscape=soundscape, music=music,
+        frames=frames, seconds=canvas.seconds_for_frames(frames, rules),
+        # The labels this generation assigned, and the two frames that may hold
+        # one. A family that cites by ordinal has to say what the ordinals are;
+        # one that does not has no use for either.
+        labels=labels, first_frame=first_frame, last_frame=last_frame,
+        # Whether the sound crosses the cut unlabelled — the case where a
+        # family citing by ordinal has a label with nothing defining it.
+        audio_seam=continues_audio and feather == 1,
+        shots=shots, sections=sections)
 
     # In the image modes the aspect comes from the keyframe (the hosted API calls
     # this "adaptive"); the slider still owns the scale. The first frame wins
@@ -2990,16 +2966,13 @@ def group_payload(data, start=0, end=None):
 
         stack = merge_loras(stack, segment.get("loras"))
 
-    # How the shots of one pass become one description, which is the family's:
-    # H3 marks its cuts (`[Shot 2] At 00:05.000,`) because Context-IR is what it
-    # was trained on, and LTX 2.5 must not, because Lightricks' captions carry
-    # no labels at all. Same table the prompt pipeline is read off, so a family
-    # cannot compose a body one way and be described the other.
-    join = (contextir.shot_body
-            if registry.PROMPT_PIPELINE[piece_family(data)] == "context-ir"
-            else plain_shot_body)
+    # How the shots of one pass become one description, which is the family's —
+    # see `Grammar.join_shots`. The same grammar that composes the finished
+    # prompt, so a family cannot join its shots one way and be described the
+    # other.
+    family_grammar = grammar.of(piece_family(data))
     try:
-        body = join(shots)
+        body = family_grammar.join_shots(shots)
     except ValueError as exc:
         raise CompileError(str(exc)) from exc
 
@@ -3053,15 +3026,13 @@ def group_payload(data, start=0, end=None):
     # No canvas and no seam flags: both are facts about this pass's place among
     # the others, which is `timeline_payloads`' to say. A pass compiled alone —
     # `compile_single` — is the whole timeline and has neither.
-    # How many shots this pass holds. Counted off the finished description for
-    # a family that numbers them — a card may write several of its own — and
-    # simply the cards for one that does not, since there is nothing in a prose
-    # paragraph to count. Only H3 reads the number (the end frame is reached by
-    # the last shot, and `contextir.instruction` says which); it rides on the
-    # payload either way so the pass can describe itself.
+    # How many shots this pass holds — the family's count, since only a family
+    # that numbers its shots has anything in the text to count. Only H3 reads
+    # the number (the end frame is reached by the last shot, and
+    # `contextir.instruction` says which); it rides on the payload either way so
+    # the pass can describe itself.
     return {"request": request,
-            "shots": (contextir.count_shots(body)
-                      if join is contextir.shot_body else len(group)),
+            "shots": family_grammar.count_shots(body, len(group)),
             "continue": False, "continue_audio": False}
 
 

@@ -61,9 +61,12 @@ MODULES = {
     "ideogram4_still": "families.ideogram4.still",
     "h3_declare": "families.h3.declare",
     "h3_models": "families.h3.models",
+    "h3_grammar": "families.h3.grammar",
+    "ltx25_grammar": "families.ltx25.grammar",
     "ltx25_declare": "families.ltx25.declare",
     "registry": "families.registry",
     "manifest": "families.manifest",
+    "grammar": "families.grammar",
 }
 
 

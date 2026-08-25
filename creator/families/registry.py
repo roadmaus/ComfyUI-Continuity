@@ -75,10 +75,10 @@ DECLARATION = {module.ID: module for module in DECLARED}
 # video loop and the still flow dispatches on it.
 PRODUCES = {module.ID: module.PRODUCES for module in DECLARED}
 
-# How a family's prose reaches its text encoder, and the one thing about a
-# family `compile.py` has to know that is not canvas arithmetic. The families'
-# manifests serve the same value under `prompt.pipeline`, read off the same
-# declaration, so the two cannot disagree.
+# How a family's prose reaches its text encoder, as one word. Descriptive now
+# rather than load-bearing: `compile.py` used to branch on it, and asks the
+# family's grammar instead (`families/grammar.py`), so this is what the manifest
+# tells the UI about the family rather than what decides the prompt.
 PROMPT_PIPELINE = {module.ID: module.PROMPT_PIPELINE for module in DECLARED}
 
 # How a family's LoRAs reach its transformer. A file that has nothing to do with

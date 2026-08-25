@@ -11,7 +11,7 @@ English keys the i18n dictionaries already carry.
 
 from ... import accel, canvas, compile, models as core, sampling, settings
 from .. import manifest as m
-from . import declare, models as slots, still
+from . import declare, grammar, models as slots, still
 
 
 def _widgets():
@@ -150,19 +150,23 @@ def manifest():
         # weights. Mirrors `compile._resolve_checkpoint`.
         "routes": {"options": m.value_list(slots.ROUTES),
                    "default": core.DEFAULT_ROUTE,
-                   "reference": "ref2va",
-                   "plain": "fl2va",
-                   "timeline": "ref2va"},
+                   # Which checkpoint each side of the split implies — the
+                   # grammar's own routing rule, so the badge the frontend draws
+                   # and the checkpoint the compiler derives cannot disagree.
+                   "reference": grammar.GRAMMAR.checkpoint(
+                       grammar.GRAMMAR.modes["reference"]),
+                   "plain": grammar.GRAMMAR.default_route,
+                   # A new timeline pins its route to the reference checkpoint
+                   # outright: the superset training, so a strip mixing
+                   # reference and plain cards runs on one set of weights.
+                   "timeline": grammar.GRAMMAR.checkpoint(
+                       grammar.GRAMMAR.modes["reference"])},
         # The payload shape -> the name the mode goes by, on cards and in the
         # compiled prompt. "opens" is a first frame or a continuation seam,
         # "closes" a last frame or a cut into a clip — the same reading
         # `compile._derive_mode` makes; test_families holds the names against
         # `compile.MODES`.
-        "modes": {"reference": "REF2VA",
-                  "opens_closes": "FL2VA",
-                  "opens": "I2VA",
-                  "closes": "L2VA",
-                  "text": "T2VA"},
+        "modes": dict(grammar.GRAMMAR.modes),
         "canvas": m.canvas_block(declare.RULES),
         "capabilities": {
             # The passes the loop may ask this family for.
@@ -215,10 +219,10 @@ def manifest():
             "tracks": m.value_list(compile.TRACKS),
             "default_track": compile.TRACKS[0],
             "sizes": dict(compile.DEFAULT_REF_SIZE),
-            "max": {"image": compile.MAX_REF_IMAGES,
-                    "video": compile.MAX_REF_VIDEOS,
-                    "audio": compile.MAX_REF_AUDIOS,
-                    "files": compile.MAX_REF_FILES},
+            "max": {"image": grammar.GRAMMAR.max_images,
+                    "video": grammar.GRAMMAR.max_videos,
+                    "audio": grammar.GRAMMAR.max_audios,
+                    "files": grammar.GRAMMAR.max_files},
         },
         "prompt": {
             # The shot description is composed into the model's documented

@@ -43,8 +43,14 @@ layout.skip_without_node()
 from harness import FAILURES, check, passed
 
 _pkg = layout.load("canvas", "registry", "manifest", "contextir", "subjects",
-                   "compile", "settings")
+                   "compile", "settings", "h3_grammar", "ltx25_grammar")
 compiler, registry, settings = _pkg.compile, _pkg.registry, _pkg.settings
+
+# The two grammars, since `_resolve_checkpoint` asks one rather than knowing
+# H3's rule — which is the whole of what a family that routes between nothing
+# has to be able to say.
+h3_grammar = _pkg.h3_grammar.GRAMMAR
+ltx_grammar = _pkg.ltx25_grammar.GRAMMAR
 
 STATE = layout.js("state.js")
 
@@ -87,16 +93,19 @@ STACK = [
 ]
 
 check("an LTX generation routes to no checkpoint",
-      compiler._resolve_checkpoint("T2VA", "auto", "ltx25"), ("", False))
+      compiler._resolve_checkpoint(ltx_grammar, "T2V", "auto", "ltx25"),
+      ("", False))
 # A pin is a field the piece has stopped having a use for, not an error: the
 # card kept it from when the piece was on H3, exactly as it keeps `auto_duration`
 # on a family with no duration head.
 check("...and a pin left over from the family it was switched off is ignored",
-      compiler._resolve_checkpoint("T2VA", "fl2va", "ltx25"), ("", False))
-check("H3 still derives its own", compiler._resolve_checkpoint("T2VA", "auto", "h3"),
+      compiler._resolve_checkpoint(ltx_grammar, "T2V", "fl2va", "ltx25"),
+      ("", False))
+check("H3 still derives its own",
+      compiler._resolve_checkpoint(h3_grammar, "T2VA", "auto", "h3"),
       ("fl2va", False))
 try:
-    compiler._resolve_checkpoint("T2VA", "nonsense", "h3")
+    compiler._resolve_checkpoint(h3_grammar, "T2VA", "nonsense", "h3")
     FAILURES.append("H3 should still refuse a checkpoint that is not one of its two")
 except compiler.CompileError:
     pass

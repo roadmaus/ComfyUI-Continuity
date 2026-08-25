@@ -21,7 +21,8 @@ from harness import FAILURES, check, passed
 _pkg = layout.load("canvas", "accel", "sampling", "contextir", "compile",
                    "compile_image", "models", "registry", "manifest",
                    "still", "krea2_still", "ideogram4_still",
-                   "h3_declare", "h3_models", "ltx25_declare",
+                   "grammar", "h3_declare", "h3_models", "h3_grammar",
+                   "ltx25_declare",
                    "ltx25_models", "ltx25_sampling")
 H3 = _pkg.h3_declare.RULES
 h3slots = _pkg.h3_models
@@ -31,6 +32,7 @@ sampling = _pkg.sampling
 models = _pkg.models
 registry = _pkg.registry
 manifest = _pkg.manifest
+grammar = _pkg.grammar
 ci = _pkg.compile_image
 h3s = _pkg.still
 k2 = _pkg.krea2_still
@@ -87,6 +89,45 @@ check("the families are ordered by their own ORDER",
 check("the frame grids are the declarations'",
       registry.RULES,
       {m.ID: m.RULES for m in registry.DECLARED if m.RULES})
+
+# ---- the grammars ------------------------------------------------------------
+#
+# How a family reads a request — its caps, its mode names, its routing rule,
+# what its encoder is sent. All four were `compile.py`'s, answered H3's way for
+# every family; they are the family's now, and the manifest serves what the
+# compiler will actually use rather than a second copy of it.
+
+for family in registry.video_families():
+    g = grammar.of(family)
+    served = next(m for m in catalog["families"] if m["id"] == family)
+
+    check(f"{family}'s served modes are its grammar's", served["modes"],
+          dict(g.modes))
+    check(f"{family}'s served caps are its grammar's",
+          served["reference"]["max"],
+          {"image": g.max_images, "video": g.max_videos,
+           "audio": g.max_audios, "files": g.max_files})
+
+    # Every shape has a name, so `Grammar.mode` cannot reach for a missing key
+    # — `reference` excepted, which a family may decline to distinguish.
+    missing = [shape for shape in ("opens_closes", "opens", "closes", "text")
+               if shape not in g.modes]
+    check(f"{family} names every payload shape", missing, [])
+    # ...and no two shapes share a name, or a card would say one thing about two
+    # different payloads.
+    check(f"{family}'s mode names are distinct",
+          len(set(g.modes.values())), len(g.modes))
+
+    # What routes, and what it routes to. A family that routes between nothing
+    # answers "" and means it; one that does must name slots it actually has.
+    if registry.ROUTED[family]:
+        for name in g.modes.values():
+            check(f"{family}'s mode {name} routes to a slot it declares",
+                  g.checkpoint(name) in registry.ROUTED[family], True)
+    else:
+        check(f"{family} routes nowhere",
+              [g.checkpoint(name) for name in g.modes.values()],
+              [""] * len(g.modes))
 
 # ---- the catalog is a route body ---------------------------------------------
 
@@ -177,8 +218,16 @@ check("h3 routes are the family's own ROUTES",
 for key in ("reference", "plain", "timeline"):
     check(f"h3 routes[{key}] is a routed slot",
           h3["routes"][key] in h3slots.ROUTED_SLOTS, True)
-check("h3 mode names are compile.MODES",
-      sorted(set(h3["modes"].values())), sorted(_pkg.compile.MODES))
+# The names the manifest serves are the grammar's own — which is what the
+# compiler stamps on the payload, so the card and the encode path cannot say
+# different things about what a generation is.
+check("h3 mode names are the grammar's",
+      h3["modes"], dict(_pkg.h3_grammar.GRAMMAR.modes))
+check("...and its caps are too",
+      (h3["reference"]["max"]["image"], h3["reference"]["max"]["video"],
+       h3["reference"]["max"]["audio"], h3["reference"]["max"]["files"]),
+      (_pkg.h3_grammar.GRAMMAR.max_images, _pkg.h3_grammar.GRAMMAR.max_videos,
+       _pkg.h3_grammar.GRAMMAR.max_audios, _pkg.h3_grammar.GRAMMAR.max_files))
 
 # The turbo switch resets to the node's own defaults, and the lead-in
 # stepper's reach is the server's — the two halves that must not drift.

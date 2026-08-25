@@ -24,10 +24,10 @@ PRODUCES = frozenset({"video", "still"})
 # permanent — the id it maps to is the registry's business.
 STILL_ARCH = "minimax"
 
-# How the prose reaches the text encoder. H3's own training: section headers,
-# `[Shot 2] At 00:05.000` cut lines, a `<Picture 1>` glossary defining every
-# attached file. The manifest serves the same value, read off here, so the two
-# cannot disagree about what the model was sent.
+# How the prose reaches the text encoder, as one word for the UI to show. H3's
+# own training: section headers, `[Shot 2] At 00:05.000` cut lines, a
+# `<Picture 1>` glossary defining every attached file. What actually composes it
+# is `grammar.py` in this package; this is the label on it.
 PROMPT_PIPELINE = "context-ir"
 
 # How LoRAs reach the transformer. The vendored stack in `h3lora/`, which exists

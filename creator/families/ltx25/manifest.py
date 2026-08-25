@@ -22,8 +22,7 @@ cost.
 
 from ... import canvas, compile, models as core
 from .. import manifest as m
-from . import models, sampling
-from . import declare
+from . import declare, grammar, models, sampling
 
 
 def _widgets():
@@ -185,10 +184,7 @@ def manifest():
         # says what its guides make it, which is the truth about what will be
         # sampled, and `state.mode` falls through to the frames when a family
         # declares no reference mode.
-        "modes": {"opens_closes": "FL2V",
-                  "opens": "I2V",
-                  "closes": "L2V",
-                  "text": "T2V"},
+        "modes": dict(grammar.GRAMMAR.modes),
         # The reference grammar. The same numbers and the same vocabulary H3
         # declares, because they are the same code: `compile._derive_mode` and
         # `_parse_assets` are shared, so what a piece on this family may attach
@@ -202,10 +198,10 @@ def manifest():
             "tracks": m.value_list(compile.TRACKS),
             "default_track": compile.TRACKS[0],
             "sizes": dict(compile.DEFAULT_REF_SIZE),
-            "max": {"image": compile.MAX_REF_IMAGES,
-                    "video": compile.MAX_REF_VIDEOS,
-                    "audio": compile.MAX_REF_AUDIOS,
-                    "files": compile.MAX_REF_FILES},
+            "max": {"image": grammar.GRAMMAR.max_images,
+                    "video": grammar.GRAMMAR.max_videos,
+                    "audio": grammar.GRAMMAR.max_audios,
+                    "files": grammar.GRAMMAR.max_files},
         },
         "canvas": m.canvas_block(declare.RULES),
         "capabilities": {
