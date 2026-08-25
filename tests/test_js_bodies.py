@@ -157,7 +157,7 @@ const ext = globalThis.__ext;
 // The seed memory is installed here, the same way the frontend installs it.
 await ext.setup?.();
 
-const out = { registered: ext?.name ?? null, nodes: {}, still: null, errors: [] };
+const out = { registered: ext?.name ?? null, nodes: {}, still: null, leads: {}, errors: [] };
 
 const fakeNode = (comfyClass, widgetName, blob) => ({
   comfyClass, id: 3, size: [400, 300], pos: [0, 0], title: comfyClass,
@@ -205,6 +205,20 @@ for (const [cls, widget, blob] of [
                           ?? node.mmcBody?.constructor.name };
     if (cls === "MiniMaxH3PreStage" && blob !== "{}") out.still = node.mmcBody.root.text;
     if (cls === "MiniMaxH3Creator") out.creator = node.mmcBody.root.text;
+    // Which architecture renders this is the choice every other pill is read
+    // against, so it leads the piece's row on every face — the shot's, the
+    // strip's summary, both pre-stages. It used to sit in the sampler row,
+    // behind a disclosure, which is the one place a decision that governs the
+    // whole body must not be. Read as "first pill of the first row", because
+    // that is the promise; the label itself is the family's and moves.
+    const rows = [];
+    const findRows = (n) => {
+      if (String(n.className ?? "").split(" ")[0] === "mmc-pills") rows.push(n);
+      (n.children ?? []).forEach(findRows);
+    };
+    findRows(node.mmcBody.root);
+    out.leads[key] = String(rows[0]?.children?.[0]?.className ?? "")
+      .split(" ").includes("mmc-pill-model");
   } catch (error) {
     out.errors.push(`${cls}: ${error.message}`);
   }
@@ -2381,6 +2395,13 @@ check("the image pre-stage mounts", report["nodes"].get("MiniMaxH3PreStage"),
 check("the H3 pre-stage mounts the Creator's body",
       report["nodes"].get("MiniMaxH3PreStage (H3 still)"),
       {"mounted": True, "body": "CreatorEditor"})
+
+# The model leads the piece's row on every face. Four bodies, one slot: the
+# shot's editor and the strip's summary name a video family, both pre-stages
+# name an image architecture, and all four put it first — see `familyPill`.
+check("the model pill leads every piece's row", report["leads"],
+      {"MiniMaxH3Creator": True, "MiniMaxH3Timeline": True,
+       "MiniMaxH3PreStage": True, "MiniMaxH3PreStage (H3 still)": True})
 
 # What a still is set up with. Every one of these is the video nodes' own
 # control, reached by being a video request rather than by being re-described.

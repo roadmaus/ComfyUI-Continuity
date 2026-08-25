@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+**The model leads every node's pill row.** Which architecture renders a piece
+was in two different places and neither was findable: on the pre-stage it stood
+mid-row between the frame pills and the canvas, and on the video nodes it was
+inside the sampler row, behind the Sampling settings disclosure, between the
+face pass and the weights. It is a sampler setting nowhere — it decides what
+every other pill on the body *means*: which routes exist, what the seconds round
+to, which checkpoints the routing pill cycles. So it now opens the row that says
+what the render is, in the same slot on all four faces — a shot, a strip's
+summary, the strip window's bar, and both pre-stages, where the slot names an
+image architecture instead of a video family. The weights pill stays on the
+sampler row: those are file paths, set once when a checkpoint is installed.
+
 **A preset keeps the whole sampler row, whichever family's row it is.** The list
 of settings a preset carried was written down rather than read off the family,
 and it was H3's list from before three of H3's own controls existed: the

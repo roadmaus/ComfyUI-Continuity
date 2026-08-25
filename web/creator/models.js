@@ -178,9 +178,19 @@ function missingUpscalerLabels(piece) {
 }
 
 /**
- * Which architecture renders the piece — the pill in front of the weights,
- * because it is the question the weights are an answer to: the slots in that
- * popover are the family's, and so are the checkpoints the routing pill cycles.
+ * Which architecture renders the piece — the pill that leads the piece's row.
+ *
+ * It used to sit in the sampler row, in front of the weights, because the
+ * weights are an answer to it: the slots in that popover are the family's, and
+ * so are the checkpoints the routing pill cycles. But the sampler row is behind
+ * a disclosure, and the family is not a sampler setting — it decides what every
+ * pill above the row *means*: the routes, the frame step, the lengths a
+ * duration head can be asked for. A choice nothing else in the body reads
+ * without cannot be the one thing you have to open a panel to find, so it leads
+ * the row that answers "what is this render", on every surface that has one —
+ * the shot's, the strip's bar, the pre-stage's, which spells it as its own
+ * architecture pill. The weights stay on the sampler row: they are file paths,
+ * set once when a checkpoint is installed.
  *
  * A property of the piece and not of a card, like the canvas: the segments are
  * concatenated at the end and cannot come out of two architectures. Static
@@ -199,16 +209,17 @@ export function familyPill({ piece, onChange }) {
   // The description is the family's own, off its manifest — a translation key
   // like any string written in source.
   const says = t(S.FAMILY_DESCRIPTION[id]);
-  const body = [icon("model", 16), el("span", { text: label(id) })];
+  const body = [icon("model", 16),
+                el("span", { class: "mmc-model-name", text: label(id) })];
 
   // A choice of one is a readout, so it is drawn as one — the static pill the
   // strip face uses, not a disabled button. `:disabled` is the unavailable
   // look, and a control greyed out for having nothing to offer reads as broken.
   if (S.VIDEO_FAMILIES.length < 2) {
-    return el("span", { class: "mmc-pill mmc-pill-static", title: says }, body);
+    return el("span", { class: "mmc-pill mmc-pill-static mmc-pill-model", title: says }, body);
   }
   return el("button", {
-    class: "mmc-pill",
+    class: "mmc-pill mmc-pill-model",
     title: says + "\n" + t("Click to render this piece with another architecture. The "
       + "prompt, the cast and the strip stay; the turbo switch and every "
       + "checkpoint pin are the family's and are reset. The weights are not "

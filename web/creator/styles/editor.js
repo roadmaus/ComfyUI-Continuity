@@ -503,6 +503,12 @@ export const css = `
 .mmc-pill svg { width: 16px; height: 16px; stroke: currentColor; fill: none;
   stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .mmc-pill-sub { color: var(--mmc-dim); font-size: calc(11px * var(--mmc-type)); }
+/* The pill that leads a piece's row: which architecture renders it. No fill and
+   no accent — both are taken, and neither is what this says. A model is a name,
+   not a state, so the only mark it gets is the weight a name is set in. That is
+   enough to make the row read as "MiniMax H3: these frames, this long, this
+   canvas" rather than as five equal settings. */
+.mmc-pill-model .mmc-model-name { color: var(--mmc-strong); font-weight: 500; }
 .mmc-pill-group { gap: 0; padding: 0 6px; }
 /* Several closely related controls in one pill, divided by hairlines — the two
    ends of the shot, the canvas and its short edge, the sampler and its

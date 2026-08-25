@@ -1101,6 +1101,10 @@ class Timeline {
     const problem = S.stripProblem(this.timeline);
 
     this.barHost.replaceChildren(
+      // Ahead of the mode, which leads everything else: the family decides what
+      // a mode can even be — the routes, the frame step the cut times round to,
+      // the checkpoints a pass may chain between. See `familyPill`.
+      familyPill({ piece: this.timeline, onChange: () => this.commit() }),
       this.renderMode(),
       el("button", {
         class: "mmc-pill",
@@ -3070,8 +3074,13 @@ export class TimelineBody {
       // the time anything gets here there are at least two cards to draw.
       this.renderLane(passes),
       el("div", { class: "mmc-pills" }, [
-        // The render mode leads, because it is the one thing about this node
-        // that changes what all the other numbers mean.
+        // The model leads even the render mode, which is the one thing about
+        // this node that changes what all the other numbers mean — because the
+        // family is what decides which modes there are. The one control in a row
+        // of readouts, and deliberately: it is the same slot in the same place
+        // as on the strip's bar and on a shot's face, so switching architecture
+        // never depends on which of the three you happen to be looking at.
+        familyPill({ piece: this.timeline, onChange: () => this.commit() }),
         el("span", {
           class: "mmc-pill mmc-pill-static",
           title: single
@@ -3433,9 +3442,11 @@ export class TimelineBody {
       // A chained timeline legitimately runs some shots on one checkpoint and
       // some on the other, so the pill is asked about the set rather than
       // about one — a Ref2VA it never reaches for is not missing.
+      //
+      // The family that decides which files these are leads the bar above
+      // instead of standing here — see `familyPill`.
       trailing: [
         facesPill({ target: this.timeline, commit: () => this.commit() }),
-        familyPill({ piece: this.timeline, onChange: () => this.commit() }),
         weightsPill({
           piece: this.timeline,
           models: this.timeline.models,

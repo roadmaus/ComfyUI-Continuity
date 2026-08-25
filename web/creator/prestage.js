@@ -907,7 +907,11 @@ export class PreStageBody {
       // this node, and on the H3 branch the request is only where it keeps its
       // files. Same reasoning as the piece's face wearing its one shot.
       presetTarget: () => this.presetTarget(),
-      extraPills: () => [this.renderArchPill(), ...this.renderStillPills()],
+      // The arch pill takes the video family's slot at the head of the row —
+      // same question, a different list of answers. The still's own two pills
+      // stay where a video's duration would be, because that is what they say.
+      modelPill: () => [this.renderArchPill()],
+      extraPills: () => this.renderStillPills(),
       extraTools: () => [this.renderFrameGrabTool()],
       setRoute: (route) => {
         still.request.models.route = route;
@@ -1013,7 +1017,7 @@ export class PreStageBody {
   renderArchPill() {
     const state = this.state;
     return el("button", {
-      class: `mmc-pill mmc-prestage-arch${S.isStill(state) ? " mmc-experimental" : ""}`,
+      class: `mmc-pill mmc-pill-model mmc-prestage-arch${S.isStill(state) ? " mmc-experimental" : ""}`,
       // The description is the family's own, off its manifest — a translation
       // key like any string written in source.
       title: t("{arch} Click to switch.", { arch: t(stillFamily(state.arch).description) }),
@@ -1025,7 +1029,8 @@ export class PreStageBody {
           S.PRESTAGE_ARCHES.find((arch) => S.PRESTAGE_ARCH_LABEL[arch] === picked)
             ?? DEFAULT_STILL_ARCH),
       }),
-    }, [icon("model", 16), el("span", { text: S.PRESTAGE_ARCH_LABEL[state.arch] })]);
+    }, [icon("model", 16),
+        el("span", { class: "mmc-model-name", text: S.PRESTAGE_ARCH_LABEL[state.arch] })]);
   }
 
   // ---- the H3 branch's own pills ---------------------------------------------

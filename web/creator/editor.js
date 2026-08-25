@@ -161,6 +161,11 @@ export class CreatorEditor {
    * @param {() => Element[]} [options.extraPills]  pills for the row, in the
    *   duration pill's place. What a caller that is *not* rendering a video
    *   needs to say about the generation.
+   * @param {() => Element[]} [options.modelPill]  what to put in the row's first
+   *   slot instead of the video family pill. Supplied by a body whose model is
+   *   not one of the video families — the pre-stage names an image architecture
+   *   there — so the slot holds the same question on every surface even where
+   *   the answer comes from a different list.
    * @param {() => Element[]} [options.extraTools]  extra rail tools, after the
    *   gallery. What a body needs that a Creator does not — the pre-stage's
    *   frame grabber is the only one.
@@ -202,7 +207,7 @@ export class CreatorEditor {
                 refineTarget = null, onRefined = null, onReverted = null,
                 samplingWidgets = null, onWidgetChange = null, nodeId = null,
                 routeOf = null, setRoute = null, preStage = null, pieceView = null,
-                durationPill = true, extraPills = null, extraTools = null,
+                durationPill = true, extraPills = null, modelPill = null, extraTools = null,
                 settingsTool = true, stage = null, editorTitle = null,
                 piece = null, castPiece = null, growShot = null, presetTarget = null,
                 samplingStore = null,
@@ -254,6 +259,7 @@ export class CreatorEditor {
     // where nothing can answer, and the view goes with it.
     this.compiledPrompt = compiledPrompt;
     this.extraPills = extraPills;
+    this.modelPill = modelPill;
     this.extraTools = extraTools;
     this.clearTool = clearTool;
     this.state = state;
@@ -1120,9 +1126,11 @@ export class CreatorEditor {
       // install a checkpoint rather than when you write a prompt. The face pass
       // goes in front of it: it is a thing done to the render, like the
       // accelerators it sits beside, rather than a file you picked once.
+      //
+      // The family pill used to stand between them, and does not any more: it
+      // leads the pill row above instead — see `familyPill`.
       trailing: this.nodeId ? [
         facesPill({ target: this.piece, commit: () => this.commit() }),
-        familyPill({ piece: this.piece, onChange: () => this.commit() }),
         weightsPill({
           piece: this.piece,
           models: this.piece.models,
@@ -1929,6 +1937,15 @@ export class CreatorEditor {
     ]);
 
     return el("div", { class: "mmc-pills" }, [
+      // The model leads, because it is the one thing here that changes what
+      // everything after it means — the route the badge at the end names, the
+      // step the seconds round to, the sizes the canvas offers. Node bodies
+      // only, like the weights and the sampler row: the family belongs to the
+      // piece, so a card of a strip would be drawing its neighbour's answer,
+      // and the prompt window deliberately leaves the node's own settings on
+      // the node. See `familyPill`.
+      ...(this.modelPill?.() ?? (this.nodeId
+        ? [familyPill({ piece: this.piece, onChange: () => this.commit() })] : [])),
       ...(this.continuePill ? [this.renderContinue()] : []),
       // The two ends of the shot in one pill: they are one question asked twice,
       // and either of them can be a file, a handle or nothing at all.
