@@ -621,31 +621,53 @@ export function serializeTurbo(turbo) {
   return { turbo: out };
 }
 
-/** Every field the sampler row keeps in the blob, and what each has to be.
+/** What a declared control carries in the blob, by widget type. The manifest's
+ *  vocabulary is about how a value is *drawn*; this is the JSON type behind it,
+ *  and it is the only thing the store needs to know. */
+const FIELD_KIND = { stepper: "number", slider: "number",
+                     toggle: "boolean", combo: "string" };
+
+const SAMPLING_FIELD_CACHE = new Map();
+
+/** Every field this family's sampler row keeps in the blob, and what each has
+ *  to be.
  *
- *  Mirrors `sampling.py`'s `DEFAULTS`, and `tests/test_sampling_mirror.py` is
- *  what stops the two drifting. The seed is not here: it stays a widget, for the
- *  reason `sampling.WIDGET_ONLY` gives.
+ *  Derived from the family's own widget declarations, because a list written
+ *  down here is one family's: this was H3's, and an LTX 2.5 piece lost every
+ *  field of its row but `steps` on the way through — `video_cfg` and the sigma
+ *  pair dropped on load and on save both, so the pills wrote a store that
+ *  forgot them and the render ran the distilled defaults whatever the row said.
+ *  `tests/test_sampling_mirror.py` holds each family's list against the
+ *  `DEFAULTS` its own backend module resolves against. The seed is in neither:
+ *  it stays a widget, for the reason `sampling.WIDGET_ONLY` gives.
+ *
+ *  Both groups, because the accelerators are row too — they are declared apart
+ *  because they are *drawn* apart, lit rather than dialled. A family that has
+ *  not tried them declares none, and then it has none.
  *
  *  The *values* are deliberately not mirrored. A default here would be a second
  *  place the row's numbers live, and the whole point of the move is that the
- *  backend resolves an absent field against the node's own schema — so this says
+ *  backend resolves an absent field against its own defaults — so this says
  *  what a field is, and says nothing about what it should be. */
-export const SAMPLING_FIELDS = {
-  steps: "number", cfg: "number", sampler_name: "string", scheduler: "string",
-  shift_video: "number", shift_audio: "number",
-  block_cache: "string", spectrum: "boolean", spectrum_blend: "number",
-  attention: "string", chunk_ffn: "boolean", fp16_accumulation: "boolean",
-};
+export function samplingFields(family = DEFAULT_VIDEO_FAMILY) {
+  let fields = SAMPLING_FIELD_CACHE.get(family);
+  if (!fields) {
+    fields = Object.fromEntries(widgetsOf(family)
+      .filter((w) => w.group === "sampler" || w.group === "accel")
+      .map((w) => [w.id, FIELD_KIND[w.type]]));
+    SAMPLING_FIELD_CACHE.set(family, fields);
+  }
+  return fields;
+}
 
-/** The row as stored. Unknown keys and wrong types dropped, the rest kept as
- *  written — this is not the place that decides what a legal step count is,
- *  because a blob queued without ever being opened here never passes through
- *  it and `sampling.py` has to decide that anyway. */
-export function parseSampling(raw) {
+/** The row as stored, for the family whose row it is. Unknown keys and wrong
+ *  types dropped, the rest kept as written — this is not the place that decides
+ *  what a legal step count is, because a blob queued without ever being opened
+ *  here never passes through it and the backend has to decide that anyway. */
+export function parseSampling(raw, family = DEFAULT_VIDEO_FAMILY) {
   const out = {};
   if (!raw || typeof raw !== "object") return out;
-  for (const [name, kind] of Object.entries(SAMPLING_FIELDS)) {
+  for (const [name, kind] of Object.entries(samplingFields(family))) {
     const value = raw[name];
     if (value === undefined || value === null) continue;
     if (typeof value === kind) out[name] = value;
@@ -654,10 +676,10 @@ export function parseSampling(raw) {
 }
 
 /** Absent until something is in it, like the turbo block above: a piece nobody
- *  has tuned says nothing about how it is sampled, and queues off the node's
- *  widgets exactly as every piece did before the row moved. */
-export function serializeSampling(sampling) {
-  const picked = parseSampling(sampling);
+ *  has tuned says nothing about how it is sampled, and queues off the family's
+ *  own defaults exactly as every piece did before the row moved. */
+export function serializeSampling(sampling, family = DEFAULT_VIDEO_FAMILY) {
+  const picked = parseSampling(sampling, family);
   return Object.keys(picked).length ? { sampling: picked } : {};
 }
 
@@ -675,7 +697,9 @@ export function parseSamplingSpare(raw) {
   const out = {};
   if (!raw || typeof raw !== "object") return out;
   for (const family of VIDEO_FAMILIES) {
-    const row = parseSampling(raw[family]);
+    // Each stashed row read as its own family's — that is the whole point of
+    // the stash, and reading LTX's aside through H3's list would empty it.
+    const row = parseSampling(raw[family], family);
     if (Object.keys(row).length) out[family] = row;
   }
   return out;
@@ -1574,7 +1598,7 @@ export function setFamily(timeline, id, remembered = null) {
   }
   const rows = parseSamplingSpare(timeline.sampling_spare);
   const row = rows[family];
-  const dialled = parseSampling(timeline.sampling);
+  const dialled = parseSampling(timeline.sampling, was);
   if (Object.keys(dialled).length) rows[was] = dialled;
   else delete rows[was];
   delete rows[family];
@@ -2108,7 +2132,7 @@ export function parseTimeline(raw) {
       if (!Array.isArray(timeline.assets)) timeline.assets = [];
       // Absent in every blob saved before the sampler row moved, and anything
       // at all in a hand-edited one.
-      timeline.sampling = parseSampling(timeline.sampling);
+      timeline.sampling = parseSampling(timeline.sampling, pieceFamily(timeline));
       // The cast. Absent in every workflow saved before it existed, and a
       // hand-edited blob can hold anything; kept as written otherwise, because
       // whether a subject's files are still attached is the band's readout
@@ -2332,7 +2356,7 @@ export function serializeTimeline(timeline) {
     ...serializeSpareModels(timeline.models_spare),
     ...serializeUpscalerModels(timeline.upscale_models),
     ...serializeTurbo(timeline.turbo),
-    ...serializeSampling(timeline.sampling),
+    ...serializeSampling(timeline.sampling, pieceFamily(timeline)),
     ...serializeSamplingSpare(timeline.sampling_spare),
     segments: timeline.segments.map((segment, index) => {
       if (isClip(segment)) {
@@ -2844,6 +2868,11 @@ export function parsePreStage(raw) {
       state[PRESTAGE_STILL_ARCH] = parseStill(state[PRESTAGE_STILL_ARCH]);
       // The sampler row, on the same terms as the piece's — absent in every
       // blob saved before it moved off the widgets. See `sampling.py`.
+      //
+      // Read through the default family's list, which is deliberate: this node
+      // samples stills, and every one of its five widgets is named in that
+      // list. A still architecture that wants a row of its own would ask for it
+      // here, the way `parseTimeline` asks for the piece's family's.
       state.sampling = parseSampling(state.sampling);
       const turbo = state.turbo && typeof state.turbo === "object" ? state.turbo : {};
       state.turbo = {

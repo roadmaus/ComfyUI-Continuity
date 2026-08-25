@@ -1095,20 +1095,16 @@ export class CreatorEditor {
       // controls exist is the family's, and H3's are not a superset of LTX's.
       family: S.pieceFamily(this.piece),
       widgets: this.samplingWidgets,
-      value: (name, fallback) => {
-        const widget = this.samplingWidgets[name];
-        return widget ? widget.value : fallback;
-      },
-      // Write through to the real widget, callback included — some of them (the
-      // seed's after-generate control) hang behaviour off it.
-      set: (name, value) => {
-        const widget = this.samplingWidgets[name];
-        if (!widget) return;
-        widget.value = value;
-        widget.callback?.(value);
-        this.onWidgetChange?.();
-        this.render();
-      },
+      // The piece's pair, not a second one over the widgets: the row moved into
+      // the blob and this call site did not follow it. Every pill went on
+      // drawing and writing widgets nothing else reads, so the turbo switch put
+      // its six steps and euler + beta in the blob — where the render takes
+      // them from — while the row kept showing twenty and res_multistep, and a
+      // step count dialled afterwards was overruled by the blob it never wrote.
+      ...this.widgetIO(),
+      // `blobIO` does not redraw on write, by design; a body that wants the
+      // redraw does it in its own `set`. See `sampling.widgetIO`.
+      set: (name, value) => { this.widgetIO().set(name, value); this.render(); },
       // One generation, always: a Creator render has no segments to spread a
       // seed across.
       perSegment: false,

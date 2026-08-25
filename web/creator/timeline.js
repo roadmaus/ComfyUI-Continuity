@@ -2837,8 +2837,7 @@ export class TimelineBody {
   }
 
   value(name, fallback) {
-    const widget = this.widgets[name];
-    return widget ? widget.value : fallback;
+    return this.widgetIO().value(name, fallback);
   }
 
   /** The sampler row's `{value, set}` pair.
@@ -2859,14 +2858,11 @@ export class TimelineBody {
       () => this.onWidgetChange?.());
   }
 
-  /** Write through to the real widget, callback included — some of them (the
-   *  seed's after-generate control) hang behaviour off it. */
+  /** Write the row. Through the same pair as the turbo switch and the preset
+   *  menu — the values are in the blob, and the seed rides on to its widget from
+   *  there. `blobIO` does not redraw on write; this body does. */
   set(name, value) {
-    const widget = this.widgets[name];
-    if (!widget) return;
-    widget.value = value;
-    widget.callback?.(value);
-    this.onWidgetChange?.();
+    this.widgetIO().set(name, value);
     this.render();
   }
 

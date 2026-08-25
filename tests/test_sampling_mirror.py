@@ -27,13 +27,37 @@ from harness import FAILURES, check, passed
 layout.skip_without_node()
 passed("the sampler row agrees across both halves")
 
-sampling_py = layout.load("accel", "sampling").sampling
+_pkg = layout.load("accel", "sampling", "ltx25_sampling")
+sampling_py = _pkg.sampling
+
+# Each family's row against its own backend module. The list the browser derives
+# is the family's manifest widgets, and `test_families.py` holds those against
+# these `DEFAULTS` — this closes the loop from the other end, where the bug
+# actually was: the browser carried one written-down list, H3's, and an LTX 2.5
+# piece lost `video_cfg` and the sigma pair on the way through it.
+BACKENDS = {"h3": sampling_py, "ltx25": _pkg.ltx25_sampling}
 
 SCRIPT = """
 const S = await import("./web/creator/state.js");
 const M = await import("./web/creator/sampling.js");
 
-const out = { fields: Object.keys(S.SAMPLING_FIELDS).sort(), widgetOnly: M.WIDGET_ONLY };
+const out = { widgetOnly: M.WIDGET_ONLY };
+
+// Every family's row, derived from its own declarations rather than written
+// down here — which is the point: a family added to the pack turns up in this
+// object without anyone editing the browser half.
+out.perFamily = Object.fromEntries(S.VIDEO_FAMILIES.map(
+  (id) => [id, S.samplingFields(id)]));
+
+// And a row of a family that is not the default survives the store. The old
+// list dropped every LTX field but `steps`, on load and on save both, so the
+// pills wrote a block that forgot them.
+{
+  const raw = JSON.stringify({ version: 2, prompt: "x", family: "ltx25",
+                               sampling: { steps: 8, video_cfg: 3, stretch: false,
+                                           shift_video: 6 } });
+  out.ltxRoundTrip = JSON.parse(S.serializeTimeline(S.parseTimeline(raw))).sampling;
+}
 
 /** A stand-in for the node's real widgets: `{value}` is all either io reads. */
 const fakeWidgets = (values) =>
@@ -102,10 +126,31 @@ with layout.pack(skip=["atlas"]) as target:
 
 # ---- the field list ----------------------------------------------------------
 #
-# Both ways round. A name only the frontend knows is a pill that changes nothing;
-# a name only the backend knows is a setting nothing can reach.
-check("the two halves carry the same fields",
-      reflected["fields"], sorted(sampling_py.DEFAULTS))
+# Every family, both ways round. A name only the frontend knows is a pill that
+# changes nothing; a name only the backend knows is a setting nothing can reach, against the module that resolves its row. The
+# kinds too: a field the browser stores as a string and Python reads as a number
+# is a pill that writes a block the first queue refuses.
+KIND = {"number": "number", "boolean": "boolean", "string": "string"}
+for family, module in BACKENDS.items():
+    fields = reflected["perFamily"].get(family)
+    if fields is None:
+        FAILURES.append(f"{family} declares no sampler row in the browser")
+        continue
+    check(f"{family}: the two halves carry the same fields",
+          sorted(fields), sorted(module.DEFAULTS))
+    for name, kind in sorted(fields.items()):
+        want = ("number" if name in module._WHOLE + module._NUMBER
+                else "boolean" if name in module._FLAG else "string")
+        check(f"{family}: {name} is a {want} on both sides", kind, want)
+
+# A family the catalog offers and this suite has never heard of is a row nobody
+# is holding to anything.
+for family in reflected["perFamily"]:
+    if family not in BACKENDS:
+        FAILURES.append(f"{family} has a sampler row and no backend module here")
+
+check("a non-default family's row survives parse and serialize",
+      reflected["ltxRoundTrip"], {"steps": 8, "video_cfg": 3, "stretch": False})
 
 # The seed and its after-generate stay on the widgets, and so does the retired
 # `sage` switch — `sampling.py` reads all three off the node for the same reason.

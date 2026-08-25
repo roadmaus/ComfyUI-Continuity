@@ -202,6 +202,86 @@ cycle("prestage_minimax", {
                 stale: texts.includes("res_multistep") || texts.includes("simple") };
 }
 
+// ---- a family whose row is not H3's ------------------------------------------
+//
+// The store's field list is the family's own, derived from its manifest. When
+// it was H3's written down, an LTX 2.5 piece kept `steps` and lost the rest of
+// its row — `video_cfg`, the sigma pair, the stretch — on load and on save
+// both, so a pill moved here changed the render until the workflow was saved
+// and then quietly stopped.
+{
+  const store = { value: JSON.stringify({ version: 2, prompt: "x", family: "ltx25",
+                                          segments: [{ prompt: "a", duration_s: 5 }] }) };
+  const body = new TimelineBody({
+    read: () => store.value, write: (next) => { store.value = next; },
+    widgets: widgets(PIECE_WIDGETS), nodeId: () => 1 });
+  body.widgetIO().set("video_cfg", 3.0);
+  body.widgetIO().set("max_shift", 2.4);
+  body.widgetIO().set("stretch", false);
+  const second = new TimelineBody({
+    read: () => store.value, write: () => {},
+    widgets: widgets(PIECE_WIDGETS), nodeId: () => 1 });
+  out.ltx25 = {
+    stored: JSON.parse(store.value).sampling ?? null,
+    reloaded: { video_cfg: second.widgetIO().value("video_cfg", null),
+                max_shift: second.widgetIO().value("max_shift", null),
+                stretch: second.widgetIO().value("stretch", null) },
+  };
+}
+
+// ---- the row the body itself draws ------------------------------------------
+//
+// The one the `io` cases above cannot see. Every check so far asks the body for
+// its pair and drives that, but the row is drawn with whatever pair `render`
+// hands `samplingBar` — and for a year that was a second pair over the node's
+// widgets, left behind when the row moved into the blob. So the turbo switch
+// wrote six steps and euler into the blob, the render read them, and the row
+// went on showing twenty and res_multistep: a switch that looked inert and a
+// step count dialled afterwards that the blob quietly overruled.
+{
+  const stale = (names) => Object.fromEntries(names.map((n) => [n, {
+    name: n, callback() {},
+    value: n === "steps" ? 20 : n === "sampler_name" ? "res_multistep"
+         : n === "scheduler" ? "simple" : null,
+    options: { values: ["res_multistep", "euler", "simple", "beta"] },
+  }]));
+  // What the turbo switch leaves behind it, on a node whose widgets still hold
+  // the pre-migration row.
+  const thrown = { steps: 6, sampler_name: "euler" };
+  const drawn = (host) => {
+    const seen = [];
+    const walk = (n) => {
+      if (!n) return;
+      if (n.textContent) seen.push(String(n.textContent));
+      (n.children ?? []).forEach(walk);
+    };
+    walk(host);
+    return { thrown: seen.includes("6 steps") && seen.includes("euler"),
+             stale: seen.includes("20 steps") || seen.includes("res_multistep") };
+  };
+
+  const piece = S.parseTimeline(JSON.stringify({
+    version: 2, prompt: "x", segments: [{ prompt: "a", duration_s: 5 }], sampling: thrown }));
+  const editor = new CreatorEditor({
+    state: piece.segments[0], piece,
+    samplingWidgets: stale(PIECE_WIDGETS), nodeId: () => 1 });
+  editor.render();
+  out.body_creator = drawn(editor.samplingHost);
+
+  const store = { value: JSON.stringify({
+    version: 2, prompt: "x",
+    segments: [{ prompt: "a", duration_s: 5 }, { prompt: "b", duration_s: 5 }],
+    sampling: thrown }) };
+  const body = new TimelineBody({
+    read: () => store.value, write: (next) => { store.value = next; },
+    widgets: stale(PIECE_WIDGETS), nodeId: () => 1 });
+  body.render();
+  // The strip mounts its bar inside a wrapper rather than on a host of its own
+  // — the fullscreen shell folds the row away by that class — so the whole root
+  // is what is walked. Nothing else on it says "6 steps".
+  out.body_timeline = drawn(body.root);
+}
+
 console.log(JSON.stringify(out));
 """
 
@@ -216,6 +296,17 @@ for face in ("timeline", "creator", "prestage_krea2", "prestage_minimax"):
           (got["stored"] or {}).get("cfg"), 3.5)
     check(f"{face}: and it is still there after a reload",
           got["reloaded"], {"cfg": 3.5, "steps": 9, "sampler_name": "euler"})
+
+check("ltx25: the blob carries the family's own row",
+      reflected["ltx25"]["stored"],
+      {"video_cfg": 3.0, "max_shift": 2.4, "stretch": False})
+check("...and it is still there after a reload",
+      reflected["ltx25"]["reloaded"],
+      {"video_cfg": 3.0, "max_shift": 2.4, "stretch": False})
+
+for face in ("body_creator", "body_timeline"):
+    check(f"{face}: the drawn row is the blob's, not the widgets'",
+          reflected[face], {"thrown": True, "stale": False})
 
 # The row has to *show* the row it is going to run. Storing the pick and drawing
 # the widget's old name is a control that reads as broken however right the

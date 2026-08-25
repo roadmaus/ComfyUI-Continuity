@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+**The sampler row a pill writes is the one the render reads.** Two faults with
+one shape. The store's field list was H3's, written down, so an LTX 2.5 piece
+kept `steps` and lost the rest of its row on the way through — `video_cfg`, the
+sigma pair, the stretch — dropped on load and on save both, which meant a pill
+moved on that family changed the render until the workflow was saved and then
+quietly stopped. The list is each family's own declarations now, derived from
+the manifest, so a family added to the pack turns up in the store without
+anyone editing the browser half. And the row on the piece's face was drawn
+against a second `{value, set}` pair over the node's widgets, left behind when
+the row moved into the blob: the turbo switch wrote its six steps and euler
+where the render takes them from while the row went on showing twenty and
+res_multistep, so the switch looked inert and a step count dialled after it was
+overruled by a blob it never wrote. One pair now, the blob's.
+
 **Switching families keeps the weights, and only H3 routes.** Three faults, one
 root: the weights layer knew which family a piece renders with and the routing
 layer did not. A piece moved to LTX 2.5 reported two weights missing when every
