@@ -653,6 +653,8 @@ export const zh = {
  "the render failed": "渲染失败",
  "Browse finished renders": "浏览已完成的渲染",
  "How long this render took": "本次渲染耗时",
+ "Show this render on the picture": "在画面中显示这次渲染",
+ "Back to the render": "返回本次渲染",
  "Picture size": "画面尺寸",
  "Drag to resize the picture. Double-click for full size.": "拖动可调整画面大小，双击恢复完整尺寸。",
  "Krea 2": "Krea 2",

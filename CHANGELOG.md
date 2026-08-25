@@ -2,6 +2,28 @@
 
 ## Unreleased
 
+**A take on the editor's shelf goes up on the picture, and the newest one is
+nearest it.** The shelf under the fullscreen editor grew left to right, so the
+render you had just made was at the far end of a row that only ever got longer —
+the one take anybody reaches for was the one that kept moving away. It reads
+outward from the plate now: leftmost is what was on the picture a moment ago,
+and the further right you look the older it gets. Each thumbnail also carried a
+transport of its own, which is eight scrub bars over eight pictures too small to
+scrub; the whole cell is the press instead, and pressing it puts that render on
+the plate at full size. Nothing is still until it is pointed at, and then it
+plays — along a shelf of takes of the same shot, with the same truncated
+filename, motion is what tells one from another.
+
+The take is shown in a layer *over* the plate rather than written into it, which
+is why this works in the middle of a render: the sampler goes on sampling
+underneath at full speed, and when it lands it lands on the picture you will
+come back to instead of over the thing you were looking at. The way back is the
+room around the picture, the same thumbnail again, the chip in the corner, or
+Escape — which now dismisses the take before it closes the editor. The take
+travels between its cell and the plate rather than cross-fading, so which one is
+up is said by the movement instead of by a label; a system set to reduced motion
+gets the fade.
+
 **A render whose sound does not land on the audio encoder's frame boundary now
 writes.** AAC's frame is a fixed 1024 samples and libavcodec refuses any other
 length anywhere but the end of the stream — as a bare `avcodec_send_frame()

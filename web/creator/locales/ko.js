@@ -652,6 +652,8 @@ export const ko = {
  "the render failed": "렌더가 실패했습니다",
  "Browse finished renders": "완성된 렌더 탐색",
  "How long this render took": "이 렌더에 걸린 시간",
+ "Show this render on the picture": "이 렌더를 화면에 표시",
+ "Back to the render": "렌더로 돌아가기",
  "Picture size": "화면 크기",
  "Drag to resize the picture. Double-click for full size.": "드래그하여 화면 크기를 조절합니다. 더블클릭하면 전체 크기로 돌아갑니다.",
  "Krea 2": "Krea 2",

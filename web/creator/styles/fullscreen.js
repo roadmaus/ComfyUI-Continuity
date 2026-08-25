@@ -390,11 +390,32 @@ export const css = `
    its height from the row and its width from its own aspect, and the cell hugs
    that — so a portrait take is a narrow frame beside a wide one rather than a
    wide frame with a picture stranded in the middle of it, which is what a cell
-   sized off the file's intrinsic width gives you. */
+   sized off the file's intrinsic width gives you.
+
+   A button, because the whole cell is the press: the thumbnail carries no
+   transport of its own (see take() in fullscreen.js) and the one thing it does
+   is go up on the picture. Everything below undoes what a <button> assumes —
+   its padding, its own background, its font — and none of the geometry above
+   changed with it. */
 .mmc-fs-take {
   position: relative; flex: none; display: flex; height: 100%;
   border-radius: 10px; overflow: hidden;
   background: var(--mmc-media-bg); border: 1px solid var(--mmc-line);
+  padding: 0; margin: 0; font: inherit; color: inherit; cursor: pointer;
+  transition: border-color 140ms ease, opacity 200ms ease;
+}
+.mmc-fs-take:hover { border-color: var(--mmc-line-3); }
+.mmc-fs-take:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 2px; }
+/* The cell of the take that is currently on the picture. It keeps its width —
+   a lip that reflowed when a take was picked up would move every other take out
+   from under the pointer — and gives up its picture, because the picture is
+   somewhere else. The accent is the same one the sampling step count uses: it
+   means "this one", here as there. */
+.mmc-fs-take.up { border-color: var(--mmc-accent); }
+.mmc-fs-take.up .mmc-fs-take-media { opacity: .22; }
+.mmc-fs-take.up .mmc-fs-take-note { opacity: .5; }
+@media (prefers-reduced-motion: reduce) {
+  .mmc-fs-take, .mmc-fs-take-media { transition: none; }
 }
 /* Sized off the lip rather than off the window, so every take is the same height
    whatever shape it is and the row reads as a strip of frames. Smaller than the
@@ -402,7 +423,7 @@ export const css = `
    queued and these are what it is being compared against. */
 .mmc-fs-take-media {
   display: block; height: 100%; width: auto; max-width: 320px;
-  object-fit: contain;
+  object-fit: contain; transition: opacity 200ms ease;
 }
 /* What it cost, on the frame rather than under it: a caption line would have
    been a row of numbers reading as a second strip. The filename went to the
@@ -431,6 +452,9 @@ export const css = `
 .mmc-fs-dock {
   display: flex; flex: 1 1 auto; min-width: 0; min-height: 0; align-self: stretch;
   align-items: center; justify-content: center;
+  /* And the ground a reviewed take stands on: the layer is inset to this box
+     because this box is the plate, whatever is currently in it. */
+  position: relative;
   /* And it is the box the card measures itself against: cqw/cqh below are this
      element's, which is the only way to say "as large as fits in both axes"
      when the two bounds live on different percentage bases. Size containment is
@@ -491,6 +515,82 @@ export const css = `
 }
 .mmc-fs-dock .mmc-stage[data-state="failed"] { min-width: 240px; }
 .mmc-fs-still .mmc-stage { max-width: 100%; max-height: 66vh; }
+
+/* --- an earlier take, on the picture --------------------------------------- */
+/*
+ * A layer over the plate rather than a picture written into it.
+ *
+ * The stage owns the render that is happening and redraws itself on every frame
+ * the sampler sends, so an older file handed to it is a picture the next preview
+ * erases — and a run to put back afterwards. In front of it there is nothing to
+ * put back: the sampler goes on sampling underneath, at full speed, and pressing
+ * a take mid-render costs that render nothing. That is why there is no rule here
+ * about being busy. There was never a case to write.
+ *
+ * It fills the dock and swallows the pointer, which is deliberate on both counts.
+ * A layer that let clicks through would put the scrub bar of a video you cannot
+ * see under the picture you can, and the room around the card is the way out —
+ * so every part of this box has a job.
+ */
+.mmc-fs-review {
+  /* Over the size grip as well as over the picture: the grip sizes the plate,
+     and while the plate is lent out there is nothing under the corner to size. */
+  position: absolute; inset: 0; z-index: 3;
+  display: flex; align-items: center; justify-content: center;
+  /* The room dims on its own clock; the take crosses it. Two movements, because
+     they are two things: where you are, and what you are looking at. */
+  background: transparent; transition: background-color 220ms ease;
+}
+.mmc-fs-review.lit { background: var(--mmc-scrim-2); }
+
+/* The same box the docked stage is, by the same arithmetic and off the same
+   plate scale — a take on the picture has to stand exactly where the picture
+   stands, or the flight lands somewhere the eye has to re-find. Its own
+   custom properties rather than the stage's: both are on screen at once and
+   the one underneath is still describing its own render. */
+.mmc-fs-review-card {
+  position: relative; display: block; overflow: hidden;
+  max-width: calc(100% * var(--mmc-plate-scale, 1));
+  max-height: calc(100% * var(--mmc-plate-scale, 1));
+  width: auto; height: auto;
+  aspect-ratio: var(--mmc-review-ar, auto);
+  background: var(--mmc-media-bg);
+  border-radius: 18px; box-shadow: 0 24px 64px var(--mmc-shadow-soft);
+  /* The one thing that says this is not the live plate, and it is a hairline:
+     the label in the corner does the saying, and the flight already did. */
+  outline: 1px solid color-mix(in srgb, var(--mmc-accent) 45%, transparent);
+  outline-offset: -1px;
+}
+.mmc-fs-review-card[data-sized] {
+  width: min(calc(100cqw * var(--mmc-plate-scale, 1)),
+             calc(100cqh * var(--mmc-plate-scale, 1) * var(--mmc-review-arn, 1)));
+  height: auto;
+}
+/* Held back until the shape is known — the moment between the element existing
+   and its aspect being measured is the moment it is at the file's own pixel
+   size, and a 896-wide frame flashing at full size inside a 500-wide plate is
+   the flicker this hides. The card itself stays visible throughout, so the way
+   back is on screen even if the file never loads at all. */
+.mmc-fs-review-media {
+  display: block; width: 100%; height: 100%; object-fit: contain;
+  opacity: 0; transition: opacity 120ms ease;
+}
+.mmc-fs-review-card[data-sized] .mmc-fs-review-media { opacity: 1; }
+
+/* In the readout's left slot, where the stage puts Gallery — and opting back
+   into the pointer the row gives up, exactly as that button does. */
+.mmc-fs-review-back {
+  pointer-events: auto; cursor: pointer; font: inherit;
+  display: inline-flex; align-items: center; gap: 5px;
+  color: var(--mmc-accent);
+  border-color: color-mix(in srgb, var(--mmc-accent) 35%, transparent);
+}
+.mmc-fs-review-back:hover { background: var(--mmc-scrim-3); }
+.mmc-fs-review-back:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mmc-fs-review, .mmc-fs-review-media { transition: none; }
+}
 /* The card used to carry flex-direction but never display:flex, and this is
    where the flex was put back on — which read as a fact about being docked and
    was not one. A row with an auto height is a height no percentage can resolve

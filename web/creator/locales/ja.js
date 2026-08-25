@@ -652,6 +652,8 @@ export const ja = {
  "the render failed": "レンダリングに失敗しました",
  "Browse finished renders": "完成したレンダリングを閲覧",
  "How long this render took": "このレンダリングにかかった時間",
+ "Show this render on the picture": "このレンダリングを映像に表示",
+ "Back to the render": "レンダリングに戻る",
  "Picture size": "映像のサイズ",
  "Drag to resize the picture. Double-click for full size.": "ドラッグで映像のサイズを変更。ダブルクリックで原寸に戻ります。",
  "Krea 2": "Krea 2",

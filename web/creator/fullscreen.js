@@ -99,6 +99,26 @@ function storedPlate() {
   }
 }
 
+/** How the take crosses between the lip and the plate. Long enough to be read
+ *  as one object moving rather than two objects swapping, short enough that a
+ *  second press does not have to be waited for. The fade is the answer for the
+ *  cases with no rectangle to fly between. */
+const REVIEW_FLIGHT = { duration: 280, easing: "cubic-bezier(.2,.75,.25,1)" };
+const REVIEW_FADE = { duration: 160, easing: "ease-out" };
+
+/** Asked at the moment of the animation rather than cached: this is a system
+ *  setting and it can change under a window that is already open. */
+const reduced = () =>
+  globalThis.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+
+/** The transform that puts a box laid out at `to` over the rectangle `from`.
+ *  Both boxes hold the same picture at the same aspect, so the two scales agree
+ *  to within a border and nothing is stretched on the way. */
+const flipFrom = (from, to) =>
+  `translate(${(from.left + from.width / 2) - (to.left + to.width / 2)}px, `
+  + `${(from.top + from.height / 2) - (to.top + to.height / 2)}px) `
+  + `scale(${from.width / to.width}, ${from.height / to.height})`;
+
 /** The pair, in the order the hand-off runs: the pre-stage makes the still the
  *  shot is built on. Labels are the pack's own words for the two nodes. */
 const STEPS = [["pre", "Pre-stage"], ["shot", "Shot"]];
@@ -254,6 +274,10 @@ class Fullscreen {
                   pre: el("div", { class: "mmc-fs-strip-run" }) };
     // The result each step's stage is showing, and the only one not in `past`.
     this.shown = { shot: null, pre: null };
+    // The take the plate has been borrowed for, or null. See `review`: an older
+    // render is shown in a layer *over* the stage rather than written into it,
+    // so the run underneath goes on running and there is nothing to put back.
+    this.reviewing = null;
     // The picture region, in two parts that do not share an axis.
     //
     // They used to: one scrolling column held the history *and* the live stage,
@@ -294,7 +318,15 @@ class Fullscreen {
       onkeydown: (event) => this.gripKey(event),
     }, [icon("grip", 15)]);
     this.sizer = el("div", { class: "mmc-fs-sizer" }, [this.sizeRead, this.grip]);
-    this.reel = el("div", { class: "mmc-fs-reel" }, [this.dock]);
+    // The room around the picture is the way out of a review — see `review`.
+    // On the reel rather than on the dock so the margin the plate is centred in
+    // counts as empty space too, which is what it looks like.
+    this.reel = el("div", {
+      class: "mmc-fs-reel",
+      onclick: (event) => {
+        if (event.target === this.reel || event.target === this.dock) this.endReview();
+      },
+    }, [this.dock]);
     this.strip = el("div", { class: "mmc-fs-strip" }, [this.past.shot]);
     // The two control cards are one object: the desk. They are wrapped rather
     // than laid out beside the reel as three equals so that stretching them to
@@ -348,8 +380,14 @@ class Fullscreen {
     // a race that registration order decides — and the shell registers first,
     // so it would have won every time and closed the editor out from under an
     // open picker.
+    // A review is the one thing this pack puts over the shell that the shell
+    // itself owns, so it takes Escape here rather than through `dismissable`:
+    // the layer is not a popover and has nothing to register. Same rule either
+    // way — the topmost thing goes first, and the second press closes the
+    // editor.
     this.onKey = (event) => {
       if (event.key !== "Escape") return;
+      if (this.reviewing) { this.endReview(); return; }
       close();
     };
     document.addEventListener("keydown", this.onKey);
@@ -448,7 +486,10 @@ class Fullscreen {
       this.keepTake(body.stage, step);
       this.paint();
     };
-    // The lip is the front step's history, and the front step's alone.
+    // The lip is the front step's history, and the front step's alone — so a
+    // review borrowed from the lip we are about to swap out has to go first,
+    // and without the flight home: the cell it would fly back to is leaving.
+    this.endReview({ animate: false });
     this.strip.replaceChildren(this.past[step]);
     // And the grip goes on whatever picture is now on the plate. It lives
     // inside the stage's own element because that element *is* the picture —
@@ -559,28 +600,60 @@ class Fullscreen {
   keepTake(stage, step) {
     if (stage.state === "sampling") {
       if (this.shown[step]) {
-        this.past[step].appendChild(this.take(this.shown[step]));
+        // Newest first. The lip reads outward from the plate: the take nearest
+        // the left edge is the one that was on the picture a moment ago, and
+        // the further right you look the older it gets. Appending put the
+        // newest at the far end of a row that only grows, so the one thing you
+        // reach for was the one thing that kept moving away and had to be
+        // scrolled back to.
+        this.past[step].prepend(this.take(this.shown[step]));
         this.shown[step] = null;
-        // The newest is at the end of the lip, so that is where it stays.
-        this.strip.scrollLeft = this.strip.scrollWidth;
+        this.strip.scrollLeft = 0;
       }
       return;
     }
     if (stage.state === "done" && stage.result) this.shown[step] = stage.result;
   }
 
-  /** One finished render, as it sits on the lip. Deliberately not autoplaying:
-   *  the live plate plays itself because it is the answer to what you just
-   *  queued, and ten clips playing at once along a strip is not history, it is
-   *  noise. The media fragment asks for a frame rather than a black rectangle. */
+  /**
+   * One finished render, as it sits on the lip.
+   *
+   * **No transport.** A thumbnail is not a player: eight scrub bars along a
+   * shelf are eight rows of chrome over eight pictures too small to scrub, and
+   * the one gesture the lip actually wants — press it, look at it big — was
+   * competing with a play button for the same twelve pixels. The whole cell is
+   * the button now, and the picture it holds is undecorated.
+   *
+   * **Still at rest, moving under the pointer.** Ten clips looping at once is
+   * not history, it is noise, so nothing plays until it is pointed at — and
+   * then it plays, because along a lip of takes of the same shot, with the same
+   * truncated filename stem, motion is the only thing that tells one from
+   * another. Off the pointer it winds back to its first frame, so the shelf is
+   * the same shelf you left.
+   */
   take(result) {
     const media = result.isImage
-      ? el("img", { class: "mmc-fs-take-media", src: result.url, alt: result.name })
+      ? el("img", { class: "mmc-fs-take-media", src: result.url, alt: "" })
+      // The media fragment asks for a frame rather than a black rectangle.
       : el("video", {
           class: "mmc-fs-take-media", src: `${result.url}#t=0.1`,
-          controls: true, loop: true, playsinline: true, preload: "metadata",
+          loop: true, playsinline: true, preload: "metadata",
         });
-    return el("div", { class: "mmc-fs-take", title: result.name }, [
+    // The property, not the attribute: the attribute is only read as the
+    // autoplay gate at parse time, and this clip is started by hand.
+    if (media.tagName === "VIDEO") media.muted = true;
+    const tile = el("button", {
+      class: "mmc-fs-take", title: result.name,
+      "aria-label": t("Show this render on the picture"),
+      onclick: () => this.review(result, tile),
+      onkeydown: (event) => this.takeKey(event, tile),
+      onpointerenter: () => media.play?.().catch(() => {}),
+      onpointerleave: () => {
+        if (!media.pause) return;
+        media.pause();
+        media.currentTime = 0.1;
+      },
+    }, [
       media,
       // What it cost, which is the one thing about a past take you cannot see by
       // looking at it — and the reason the clock on the plate is worth keeping
@@ -589,6 +662,183 @@ class Fullscreen {
       el("div", { class: "mmc-fs-take-note",
                   text: result.tookMs ? elapsed(result.tookMs) : "" }),
     ]);
+    return tile;
+  }
+
+  /** Along the lip without a pointer. The cells are buttons, so Tab already
+   *  reaches them; this is the other half of a row — the arrows walk it. */
+  takeKey(event, tile) {
+    const next = { ArrowRight: "nextElementSibling",
+                   ArrowLeft: "previousElementSibling" }[event.key];
+    if (!next) return;
+    const target = tile[next];
+    if (!target) return;
+    event.preventDefault();
+    target.focus();
+  }
+
+  // ---- looking at an earlier take -------------------------------------------
+
+  /**
+   * Put a take from the lip on the picture.
+   *
+   * **A layer over the stage, not a picture written into it.** The stage owns
+   * exactly one render — the one that is happening — and rebuilds itself on
+   * every frame the sampler sends; handing it an older file would be a picture
+   * the next preview erases, and a run to put back afterwards. So the take is
+   * shown in front of the stage and the stage is left entirely alone. That is
+   * also the whole of why this works mid-render: there is no special case for
+   * "while sampling", because nothing about the run is being interrupted to
+   * show you something else. The progress under the layer goes on being made,
+   * and when it lands it lands — on the plate you will come back to, not over
+   * the thing you were looking at.
+   *
+   * @param {object} result  the retired render, as `keepTake` recorded it
+   * @param {HTMLElement} tile  the cell on the lip it flies out of
+   */
+  review(result, tile) {
+    // The same press again is the way back — a take already on the picture has
+    // nowhere further to go, and pressing it a second time is what people try.
+    if (this.reviewing?.tile === tile) { this.endReview(); return; }
+    this.endReview({ animate: false });
+
+    const media = result.isImage
+      ? el("img", {
+          class: "mmc-fs-review-media", src: result.url, alt: result.name,
+          onload: (event) => this.reviewSized(event.currentTarget.naturalWidth,
+                                              event.currentTarget.naturalHeight),
+        })
+      // Everything the plate's own finished player is, by the same argument
+      // made in stage.js: the transport is the browser's, it loops, it starts
+      // silent because no browser would start it otherwise, and the sound
+      // follows the pointer. One video, one set of manners, in one window.
+      : el("video", {
+          class: "mmc-fs-review-media", src: result.url,
+          autoplay: true, controls: true, loop: true, playsinline: true,
+          preload: "metadata",
+          onloadedmetadata: (event) => this.reviewSized(event.currentTarget.videoWidth,
+                                                        event.currentTarget.videoHeight),
+          onmouseenter: (event) => { event.currentTarget.muted = false; },
+          onmouseleave: (event) => { event.currentTarget.muted = true; },
+        });
+    if (media.tagName === "VIDEO") media.muted = true;
+
+    this.reviewCard = el("div", { class: "mmc-fs-review-card" }, [
+      media,
+      // The plate's own readout grammar, in the plate's own two slots: the way
+      // out on the left where the stage puts Gallery, the clock on the right
+      // where the stage puts the clock. A take on the picture has to say it is
+      // not the render — and saying it here means the picture never has to be
+      // taken away from you to make the point.
+      el("div", { class: "mmc-stage-readout" }, [
+        el("div", { class: "mmc-stage-side" }, [
+          el("button", {
+            class: "mmc-stage-chip mmc-fs-review-back",
+            onclick: () => this.endReview(),
+          }, [icon("rewind", 13), el("span", { text: t("Back to the render") })]),
+        ]),
+        result.tookMs
+          ? el("div", { class: "mmc-stage-side end" }, [
+              el("span", { class: "mmc-stage-chip mmc-stage-clock",
+                           title: t("How long this render took"),
+                           text: elapsed(result.tookMs) }),
+            ])
+          : null,
+      ]),
+    ]);
+    this.reviewLayer = el("div", {
+      class: "mmc-fs-review",
+      // The room around the card, which is the same gesture as the room around
+      // the plate: press where the picture is not.
+      onclick: (event) => { if (event.target === this.reviewLayer) this.endReview(); },
+    }, [this.reviewCard]);
+
+    tile.classList.add("up");
+    this.dock.appendChild(this.reviewLayer);
+    // The scrim arrives on its own clock rather than as part of the flight: it
+    // is the room dimming, and the take is the thing crossing it.
+    requestAnimationFrame(() => this.reviewLayer?.classList.add("lit"));
+    this.reviewing = { result, tile, media, from: tile.getBoundingClientRect() };
+  }
+
+  /**
+   * The card has a shape, so it has a size — and only now can the flight be
+   * measured. The same two custom properties the stage hands its own dock, for
+   * the same reason: which of the two bounds a picture hits first is arithmetic
+   * CSS will not do from a ratio alone.
+   */
+  reviewSized(width, height) {
+    if (!width || !height || !this.reviewCard) return;
+    this.reviewCard.style.setProperty("--mmc-review-ar", `${width} / ${height}`);
+    this.reviewCard.style.setProperty("--mmc-review-arn", `${width / height}`);
+    this.reviewCard.dataset.sized = "1";
+    this.flyIn();
+  }
+
+  /**
+   * The take travels out of its cell onto the plate.
+   *
+   * A FLIP: the cell's rectangle was taken at the press, the card's is taken
+   * once it has been laid out, and the difference between them is played as a
+   * transform on the card. Nothing is laid out twice and nothing animates a
+   * width, so the picture is never reflowed mid-flight.
+   *
+   * It is worth the machinery for one reason: it says which take is on the
+   * picture without printing a label saying so. The cell it left is still on
+   * the lip, dimmed and holding its own footprint, and the line between the two
+   * was drawn by the movement.
+   */
+  flyIn() {
+    const state = this.reviewing;
+    if (!state || state.flown) return;
+    state.flown = true;
+    const to = this.reviewCard.getBoundingClientRect();
+    const flight = reduced() || !to.width || !state.from?.width
+      ? this.reviewCard.animate([{ opacity: 0 }, { opacity: 1 }], REVIEW_FADE)
+      : this.reviewCard.animate([{ transform: flipFrom(state.from, to), borderRadius: "10px" },
+                                 { transform: "none", borderRadius: "18px" }], REVIEW_FLIGHT);
+    // A press that comes back before the take has finished arriving cancels
+    // this, and a cancelled animation rejects. Nothing is waiting on it.
+    flight.finished.catch(() => {});
+  }
+
+  /**
+   * Give the picture back. The take flies home to the cell it came from, which
+   * is the same sentence read backwards and the reason the lip never has to be
+   * searched for where the thing you were looking at went.
+   *
+   * `animate: false` for the cases where there is no home to fly to: the lip
+   * being swapped for the other step's, or the whole editor going away.
+   */
+  endReview({ animate = true } = {}) {
+    const state = this.reviewing;
+    if (!state) return;
+    this.reviewing = null;
+    const { tile } = state;
+    const layer = this.reviewLayer;
+    const card = this.reviewCard;
+    this.reviewLayer = null;
+    this.reviewCard = null;
+    // Before anything is measured: a clip left playing behind a fade is a clip
+    // still talking after it is gone.
+    state.media.pause?.();
+    tile.classList.remove("up");
+    layer.classList.remove("lit");
+
+    // The flight out may still be running, and a rectangle read off a card
+    // mid-transform is not the rectangle the card is laid out at. Cancelling
+    // puts it back where CSS says it is, this frame, before it is measured.
+    for (const running of card.getAnimations()) running.cancel();
+    const home = tile.isConnected ? tile.getBoundingClientRect() : null;
+    const from = card.getBoundingClientRect();
+    const flight = animate && !reduced() && home?.width && from.width
+      ? card.animate([{ transform: "none", borderRadius: "18px" },
+                      { transform: flipFrom(home, from), borderRadius: "10px" }],
+                     REVIEW_FLIGHT)
+      : card.animate([{ opacity: 1 }, { opacity: 0 }],
+                     animate ? REVIEW_FADE : { duration: 0 });
+    const done = () => layer.remove();
+    flight.finished.then(done, done);
   }
 
   // ---- how big the picture is drawn -----------------------------------------
@@ -751,6 +1001,10 @@ class Fullscreen {
 
   /** Put everything back where the canvas expects it. */
   unmount() {
+    // The layer hangs off the dock, which is the shell's, so it would go with
+    // it — but the clip inside it would keep playing until the object was
+    // collected. Stopped rather than dropped.
+    this.endReview({ animate: false });
     document.removeEventListener("keydown", this.onKey);
     api.removeEventListener("status", this.onStatus);
     api.removeEventListener("promptQueued", this.onQueued);
