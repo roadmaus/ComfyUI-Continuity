@@ -83,7 +83,18 @@ export const widgetsOf = (id) => videoFamily(id).widgets;
 export const canDo = (piece, capability) =>
   Boolean(familyOf(piece).capabilities?.[capability]);
 
-// The family's reference grammar, served next to the compiler's own tables.
+// The reference grammar — what may be attached, how much of it, and what a
+// chip may narrow it to.
+//
+// **Read off the default family, and that is checked rather than assumed.**
+// Every video family declares this block from the same `compile.py` constants,
+// because `_derive_mode` and `_parse_assets` are shared: what a piece may
+// attach is what the one compiler will accept from it, whichever family renders
+// it. So threading the piece through the twenty-odd readers below would be
+// twenty arguments that cannot change an answer. `test_family_select` holds the
+// declarations identical across the video families; the day one of them differs
+// — which is the day `compile.py` learns families — that suite fails and these
+// become `referenceOf(pieceFamily(piece))`.
 const REFERENCE = referenceOf(DEFAULT_VIDEO_FAMILY);
 
 export const MAX_REF_IMAGES = REFERENCE.max.image;
@@ -270,13 +281,16 @@ export const MODEL_DTYPES = ["default", "fp8_e4m3fn", "fp8_e4m3fn_fast", "fp8_e5
  * auto. A route survives that, and applies to every segment of a timeline.
  */
 export const routeOptions = (id) => routesOf(id).options;
-export const ROUTES = routeOptions(DEFAULT_VIDEO_FAMILY);
 const DEFAULT_ROUTE = routesOf(DEFAULT_VIDEO_FAMILY).default;
 
-/** The next route in the cycle. Here rather than in the badge that cycles it,
- *  so the popover that lists them and the badge that steps through them cannot
+/** The next route in the cycle — the *family's* cycle, since what a route may
+ *  name is its routed slots. Here rather than in the badge that cycles it, so
+ *  the popover that lists them and the badge that steps through them cannot
  *  disagree about the order. */
-export const nextRoute = (route) => ROUTES[(ROUTES.indexOf(route) + 1) % ROUTES.length];
+export function nextRoute(route, family = DEFAULT_VIDEO_FAMILY) {
+  const options = routeOptions(family);
+  return options[(options.indexOf(route) + 1) % options.length];
+}
 
 /** Which fields a device can be pinned for: the slots that become a loader.
  *  `preview` is not one — it is a filename handed to KJNodes' node, which puts
@@ -554,16 +568,24 @@ export const TURBO_RESET = TURBO.reset;
  *  was distilled against, guessed off the filename by the family's preset
  *  table; the manager's slider and the shift pills override it like any
  *  other value. */
-export function turboPreset(name) {
+export function turboPreset(name, family = DEFAULT_VIDEO_FAMILY) {
+  const TURBO = turboOf(family) ?? turboOf(DEFAULT_VIDEO_FAMILY);
   const hit = TURBO.presets.find((p) => new RegExp(p.match, "i").test(name || ""));
   if (hit) return { strength: hit.strength, shift_video: hit.shift_video, shift_audio: hit.shift_audio };
   return { strength: TURBO.default_strength,
            shift_video: TURBO_RESET.shift_video, shift_audio: TURBO_RESET.shift_audio };
 }
 
-export const turboStrength = (name) => turboPreset(name).strength;
+export const turboStrength = (name, family = DEFAULT_VIDEO_FAMILY) =>
+  turboPreset(name, family).strength;
 
-export function emptyTurbo() {
+/** The switch's block, off. `family` decides only the quality it starts on —
+ *  a family with no turbo switch never draws the pill, and the block rides its
+ *  blob inert. Written per family rather than off the default's because
+ *  `setFamily` resets the switch on a switch, and the default family's "medium"
+ *  in another family's blob is a number from a step table it does not have. */
+export function emptyTurbo(family = DEFAULT_VIDEO_FAMILY) {
+  const TURBO = turboOf(family);
   return {
     // The file the switch engages, relative to models/loras. Picked in the
     // weights popover, because it is machine configuration like the files above
@@ -573,7 +595,7 @@ export function emptyTurbo() {
     // at all, the switch owning only the sampler row. Remembered so the pill
     // engages directly on the next press instead of asking again.
     merged: false,
-    quality: TURBO.default_quality,
+    quality: TURBO?.default_quality ?? "",
     // Whether the switch is thrown. The LoRA entry itself can be removed from
     // two other places — the chip and the manager — which is why this is
     // reconciled against the stack on every commit rather than trusted.
@@ -748,8 +770,14 @@ export const CHECKPOINT_WHEN = slotTable(DEFAULT_VIDEO_FAMILY, "when");
 // called — the family's declarations, mirrored from compile.py through the
 // manifest. See `derivedCheckpoint` and `mode`.
 const ROUTED = routesOf(DEFAULT_VIDEO_FAMILY);
-const MODES = modesOf(DEFAULT_VIDEO_FAMILY);
-/** What `state.checkpoint` may hold: follow the mode, or pin one. */
+/** What `state.checkpoint` may hold: follow the mode, or pin one.
+ *
+ *  The default family's names, and deliberately: this is reached on parse,
+ *  where a segment does not yet know whose strip it is on. Nothing downstream
+ *  reads a pin the family cannot honour — `checkpoint()` answers null on a
+ *  family that routes between nothing, `setFamily` deletes every pin on a
+ *  switch, and `compile._resolve_checkpoint` ignores one for the same stated
+ *  reason. So the worst this does is keep a string nobody asks for. */
 export const CHECKPOINT_CHOICES = ["auto", ...CHECKPOINTS];
 export const DEFAULT_STRENGTH = 1.0;
 
@@ -1631,7 +1659,7 @@ export function setFamily(timeline, id, remembered = null) {
   // the user's file and theirs to keep or remove, and the chip is where that is
   // said. See the note above.
   if (timeline.turbo?.lora) removeLora(timeline, timeline.turbo.lora);
-  timeline.turbo = emptyTurbo();
+  timeline.turbo = emptyTurbo(family);
 
   const routed = checkpointsOf(family);
   // A seam's width is retargeted rather than dropped, for the same reason a
@@ -3277,19 +3305,20 @@ export function passCheckpoint(segments, family = DEFAULT_VIDEO_FAMILY) {
  * them at once — a reference anywhere makes it REF2VA, and the keyframes are
  * the first shot's start and the last shot's end.
  */
-export function passMode(segments) {
-  if (segments.length === 1) return mode(segments[0]);
-  if (segments.some(hasReferences)) return MODES.reference;
+export function passMode(segments, piece) {
+  if (segments.length === 1) return mode(segments[0], piece);
+  const modes = modesOf(pieceFamily(piece));
+  if (modes.reference && segments.some(hasReferences)) return modes.reference;
   const head = segments[0] ?? { assets: [] };
   const first = frameAsset(head, "first_frame");
   const last = frameAsset(segments[segments.length - 1] ?? { assets: [] }, "last_frame");
   // The pass's own start frame is the seam's, when it has one — the same rule a
   // lone continuing segment follows, asked of the shot the seam lands on.
-  if (continues(head)) return last ? MODES.opens_closes : MODES.opens;
-  if (first && last) return MODES.opens_closes;
-  if (first) return MODES.opens;
-  if (last) return MODES.closes;
-  return MODES.text;
+  if (continues(head)) return last ? modes.opens_closes : modes.opens;
+  if (first && last) return modes.opens_closes;
+  if (first) return modes.opens;
+  if (last) return modes.closes;
+  return modes.text;
 }
 
 /**
@@ -4035,15 +4064,27 @@ export function remapContinueFrom(timeline, map) {
 /** ...and one whose sound carries on from it. Not implied by the above. */
 export const continuesAudio = (state) => state.continue_audio === true;
 
-export function mode(state) {
-  if (hasReferences(state)) return MODES.reference;
+/** What this generation is, in the piece's family's own names.
+ *
+ *  The vocabulary is the family's — H3 names the payload forms its training
+ *  distinguishes (`T2VA`, `REF2VA`), LTX 2.5 names the guides its segment node
+ *  builds — so a card read the default family's list said `T2VA` over an LTX
+ *  piece, which is the name of something that family has never heard of.
+ *
+ *  **A family may declare no reference mode**, and LTX 2.5 does not: attaching
+ *  a file changes nothing its segment node builds, so a card carrying one still
+ *  says what its frames make it. Absent, this falls through to them. Mirrors
+ *  `compile._derive_mode`, whose reference arm is H3's checkpoint split. */
+export function mode(state, piece) {
+  const modes = modesOf(pieceFamily(piece));
+  if (modes.reference && hasReferences(state)) return modes.reference;
   const first = frameAsset(state, "first_frame");
   const last = frameAsset(state, "last_frame");
-  if (continues(state)) return last ? MODES.opens_closes : MODES.opens;
-  if (first && last) return MODES.opens_closes;
-  if (first) return MODES.opens;
-  if (last) return MODES.closes;
-  return MODES.text;
+  if (continues(state)) return last ? modes.opens_closes : modes.opens;
+  if (first && last) return modes.opens_closes;
+  if (first) return modes.opens;
+  if (last) return modes.closes;
+  return modes.text;
 }
 
 /** What each bucket currently holds. A video with its sound on occupies both a

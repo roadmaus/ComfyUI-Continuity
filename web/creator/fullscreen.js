@@ -55,10 +55,10 @@
 import { app } from "../../../scripts/app.js";
 import { api } from "../../../scripts/api.js";
 import { el, icon, mark } from "./dom.js";
-import { VIDEO } from "./manifest.js";
 import { elapsed } from "./stage.js";
 import { t } from "./i18n.js";
 import { noteFullscreen } from "./styles.js";
+import * as S from "./state.js";
 
 /** Node classes whose body this editor can host. Kept here rather than imported
  *  from the entry point, because the entry point imports this. */
@@ -312,7 +312,10 @@ class Fullscreen {
         // icon that means "the strip" everywhere else it is drawn.
         el("span", { class: "mmc-fs-mark" }, [
           el("span", { class: "mmc-fs-logo" }, [mark(22)]),
-          el("span", { text: VIDEO.label }),
+          // Named on mount rather than here: the bar says which family this
+          // piece renders with, and the shell is built before it is holding
+          // one. Read off the default family it named H3 over an LTX 2.5 piece.
+          this.markName = el("span"),
         ]),
         el("span", { class: "mmc-fs-slash", text: "/" }),
         this.piece,
@@ -426,6 +429,7 @@ class Fullscreen {
     this.front = front;
     this.colHeadName.textContent =
       this.node.mmcBody?.showsStrip?.() ? t("Strip") : t("Shot");
+    this.markName.textContent = t(S.familyOf(this.node.mmcBody?.state).label);
     this.col.replaceChildren(this.colHead, this.stepBar, body.root, this.runRow);
     // The card the simple view draws has no cast drawer and no Cast tool — see
     // styles/fullscreen.js for why — so the body it borrows has to be told, or

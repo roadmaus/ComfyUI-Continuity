@@ -1170,7 +1170,7 @@ class Timeline {
         class: "mmc-pill mmc-pill-static",
         title: t("What the merged request compiles to — every shot's references and "
              + "keyframes are one pool, so this is asked of the whole timeline at once."),
-      }, [el("span", { text: S.passMode(this.timeline.segments) })])] : []),
+      }, [el("span", { text: S.passMode(this.timeline.segments, this.timeline) })])] : []),
       // One call for the whole strip, not one per card: continuity across a cut
       // is only kept by a rewrite that wrote both sides of it.
       refineButton({
@@ -1375,7 +1375,8 @@ class Timeline {
             : t("{frames} frames at {fps} fps, generated in one go.",
                   { frames, fps: rulesFor(S.pieceFamily(this.timeline)).fps }),
         }),
-        el("span", { class: "mmc-tl-mode", text: S.passMode(pass.segments) }),
+        el("span", { class: "mmc-tl-mode",
+                     text: S.passMode(pass.segments, this.timeline) }),
         ...(chip ? [chip] : []),
         el("button", {
           class: "mmc-ghost mmc-tl-pass-split",
@@ -2127,7 +2128,8 @@ class Timeline {
         }),
         // The mode is a property of the generation, and a pass holding several
         // shots has one of those for all of them — so it moves to the rail.
-        ...(shared ? [] : [el("span", { class: "mmc-tl-mode", text: S.mode(segment) })]),
+        ...(shared ? [] : [el("span", { class: "mmc-tl-mode",
+                                       text: S.mode(segment, this.timeline) })]),
         // Whether this card is in the next render. On the head rather than in
         // the foot because it says what the card *is* to this queue, which is
         // the question the rest of this row answers — and because a pass of
@@ -3288,7 +3290,7 @@ export class TimelineBody {
         // A clip's length is the window that plays, not the file's, and it has
         // no mode: nothing is sampled, so there is no route to name.
         const seconds = S.segmentSeconds(segment);
-        const what = S.isClip(segment) ? t("clip") : S.mode(segment);
+        const what = S.isClip(segment) ? t("clip") : S.mode(segment, this.timeline);
         // A seam only exists in front of a pass. Inside one the cut is a line
         // of the description, so the block reads as a shot rather than a join.
         const continues = !offset && index > 0 && S.continues(segment);

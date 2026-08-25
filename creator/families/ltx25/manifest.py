@@ -20,7 +20,7 @@ quality, so they are drawn apart from the accelerator row and say what they
 cost.
 """
 
-from ... import canvas, models as core
+from ... import canvas, compile, models as core
 from .. import manifest as m
 from . import models, sampling
 from . import declare
@@ -172,6 +172,41 @@ def manifest():
         "produces": sorted(declare.PRODUCES),
         "widgets": _widgets(),
         "weights": _weights(),
+        # The payload shape -> the name it goes by on a card. Lightricks' own
+        # vocabulary rather than H3's protocol names: this family conditions
+        # through `LTXVAddGuide`, so what a card is is which guides its segment
+        # node builds.
+        #
+        # **No `reference` entry, and that is the declaration.** On H3 a
+        # reference is a different payload — a different checkpoint, a different
+        # encode — so it is a mode. Here it changes nothing the segment node
+        # builds: the files ride as `<Picture N>` labels in the prose and
+        # nothing is encoded from them (see `segment.py`). A card carrying one
+        # says what its guides make it, which is the truth about what will be
+        # sampled, and `state.mode` falls through to the frames when a family
+        # declares no reference mode.
+        "modes": {"opens_closes": "FL2V",
+                  "opens": "I2V",
+                  "closes": "L2V",
+                  "text": "T2V"},
+        # The reference grammar. The same numbers and the same vocabulary H3
+        # declares, because they are the same code: `compile._derive_mode` and
+        # `_parse_assets` are shared, so what a piece on this family may attach
+        # is what the compiler will accept from it. That the files then reach
+        # the model as prose alone is this family's limitation, said in
+        # `segment.py` and in the log — not a different set of caps. When the
+        # compiler learns families this block is where the difference lands.
+        "reference": {
+            "takes": {kind: m.value_list(takes)
+                      for kind, takes in compile.TAKES.items()},
+            "tracks": m.value_list(compile.TRACKS),
+            "default_track": compile.TRACKS[0],
+            "sizes": dict(compile.DEFAULT_REF_SIZE),
+            "max": {"image": compile.MAX_REF_IMAGES,
+                    "video": compile.MAX_REF_VIDEOS,
+                    "audio": compile.MAX_REF_AUDIOS,
+                    "files": compile.MAX_REF_FILES},
+        },
         "canvas": m.canvas_block(declare.RULES),
         "capabilities": {
             # The passes the loop may ask this family for. Audio always: LTX

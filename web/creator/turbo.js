@@ -91,6 +91,10 @@ const engaged = (container) => {
  *  `value(name, fallback)` and `set(name, value)` over the real ComfyUI widgets. */
 
 function throwOn(container, { value, set }) {
+  // The switch's numbers are the piece's family's — the step table, the row it
+  // writes and the strengths its presets guess are all declarations of the
+  // family that has a turbo switch at all.
+  const family = S.pieceFamily(container);
   const turbo = container.turbo;
   // No file is the merged-checkpoint mode: the distillation is already in the
   // weights, so the switch touches nothing but the sampler row.
@@ -98,10 +102,12 @@ function throwOn(container, { value, set }) {
     const entry = entryOf(container);
     if (entry) {
       entry.enabled = true;
-      if (Math.round((Number(entry.strength) || 0) * 100) === 0) entry.strength = S.turboStrength(turbo.lora);
+      if (Math.round((Number(entry.strength) || 0) * 100) === 0) {
+        entry.strength = S.turboStrength(turbo.lora, family);
+      }
     } else {
       const added = S.addLora(container, turbo.lora, []);
-      if (added) added.strength = S.turboStrength(turbo.lora);
+      if (added) added.strength = S.turboStrength(turbo.lora, family);
     }
   }
   // Saved once per throw, not per quality change: the row being remembered is
@@ -124,7 +130,7 @@ function throwOn(container, { value, set }) {
   // the row. Merged-checkpoint mode keeps the row's own values: the schedule
   // is the checkpoint's business and the user picked it.
   if (turbo.lora) {
-    const preset = S.turboPreset(turbo.lora);
+    const preset = S.turboPreset(turbo.lora, family);
     set("shift_video", preset.shift_video);
     set("shift_audio", preset.shift_audio);
   }

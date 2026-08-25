@@ -1076,7 +1076,8 @@ export class CreatorEditor {
     this.assetsHost.replaceChildren(...(state.assets.length ? [this.renderAssets()] : []));
     this.renderCastShelf();
     this.loraHost.replaceChildren(...(state.loras.length ? [this.renderLoras()] : []));
-    this.pillsHost.replaceChildren(this.renderPills(geometry, S.mode(state)));
+    this.pillsHost.replaceChildren(
+      this.renderPills(geometry, S.mode(state, this.piece)));
     // A card's own seed, where the sampler row belongs to the node above it.
     // It takes the row's place on the body, holding the one pill of that row
     // this card is entitled to set.
@@ -2144,7 +2145,7 @@ export class CreatorEditor {
           ? t("Following the mode. Click to run everything on one checkpoint instead — "
             + "Ref2VA takes the text-only and keyframe payloads too.")
           : t("Following the timeline's route."),
-      onclick: canCycle ? () => this.setRoute(S.nextRoute(route)) : undefined,
+      onclick: canCycle ? () => this.setRoute(S.nextRoute(route, family)) : undefined,
     });
     badge.appendChild(el("b", { text: currentMode }));
     badge.appendChild(document.createTextNode(` → ${label[routed]}`));

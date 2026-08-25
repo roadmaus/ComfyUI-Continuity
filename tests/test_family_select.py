@@ -348,6 +348,28 @@ check("the switch is written to the blob", probed["roundTrip"], "probe")
 # failure mode is a reader that still compiles and quietly answers H3, and the
 # only reliable evidence against it is the absence of the name.
 
+# The reference grammar is read off the default family in `state.js`, on the
+# stated grounds that every video family declares the same one: it comes from
+# `compile.py`'s own constants, and that compiler is shared. That is a claim
+# about the manifests, so it is checked against them rather than trusted — the
+# day a family's block differs, the readers have to take the piece.
+_video = [m for m in catalog["families"] if "video" in m["produces"]]
+_grammars = [m.get("reference") for m in _video]
+check("every video family declares a reference grammar",
+      [m["id"] for m in _video if m.get("reference") is None], [])
+for entry in _grammars[1:]:
+    check("the video families' reference grammars are identical",
+          entry, _grammars[0])
+
+# ...and the mode vocabulary is *not* shared, which is why `mode()` takes the
+# piece. Each family names the payload shapes its own segment node builds.
+_modes = [m.get("modes") for m in _video]
+check("every video family names its modes",
+      [m["id"] for m in _video if not m.get("modes")], [])
+check("the mode names are the family's own, not one shared list",
+      len({tuple(sorted(m.items())) for m in _modes}), len(_modes))
+
+
 CONTROLS = ("models.js", "sampling.js", "loras.js", "editor.js", "timeline.js")
 BOUND = ("S.MODEL_FIELDS", "S.MODEL_LABEL", "S.MODEL_HINT", "S.CHECKPOINTS",
          "S.CHECKPOINT_LABEL", "S.CHECKPOINT_WHEN", "S.DEVICE_FIELDS",
