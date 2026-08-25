@@ -431,25 +431,34 @@ export class PreStageEditor {
       class: "mmc-tool", title, onclick,
     }, [el("span", { class: "mmc-tool-icon" }, [icon(iconName)]), el("span", { text: label })]);
 
+    // Two groups, like the Creator's rail and the Timeline's: `.mmc-rail` is a
+    // space-between row, and the seam between the groups is what puts this
+    // render's tools at one end and the machine's at the other. Bare tools on
+    // the rail get spread across the whole card instead, each one an equal
+    // sibling of the next, which says nothing about which is which.
     return el("div", { class: "mmc-rail" }, [
-      tool(t("Init image"), "frameIn",
-           t("Start from an image instead of noise — img2img. The strength pill says how much of it survives."),
-           () => this.setInit(false)),
-      tool(t("Style refs"), "image",
-           this.state.arch === "ideogram4"
-             ? t("Ideogram 4.0 has no local reference conditioning — style references are a Krea 2 feature.")
-             : t("Up to three images whose look this render should carry. Encoded through the Qwen edit "
-               + "path Krea 2 was post-trained against; the krea2_style_reference LoRA strengthens it."),
-           () => this.addRefs(false)),
-      tool(t("From video"), "video",
-           t("Pull a single frame off a video's playhead — as the init image, saved as a PNG in the input folder."),
-           () => this.setInit(true)),
-      tool(t("Add LoRA"), "effect",
-           t("Manage the LoRAs patched onto the image model. Krea LoRAs train on RAW and apply on Turbo too."),
-           () => this.manageLoras()),
-      tool(t("Presets"), "star",
-           t("Save this setup so you can put it back, or apply one you saved before"),
-           () => openPresetLibrary({ target: this.presetTarget?.() ?? null })),
+      el("div", { class: "mmc-rail-group" }, [
+        tool(t("Init image"), "frameIn",
+             t("Start from an image instead of noise — img2img. The strength pill says how much of it survives."),
+             () => this.setInit(false)),
+        tool(t("Style refs"), "image",
+             this.state.arch === "ideogram4"
+               ? t("Ideogram 4.0 has no local reference conditioning — style references are a Krea 2 feature.")
+               : t("Up to three images whose look this render should carry. Encoded through the Qwen edit "
+                 + "path Krea 2 was post-trained against; the krea2_style_reference LoRA strengthens it."),
+             () => this.addRefs(false)),
+        tool(t("From video"), "video",
+             t("Pull a single frame off a video's playhead — as the init image, saved as a PNG in the input folder."),
+             () => this.setInit(true)),
+        tool(t("Add LoRA"), "effect",
+             t("Manage the LoRAs patched onto the image model. Krea LoRAs train on RAW and apply on Turbo too."),
+             () => this.manageLoras()),
+      ]),
+      el("div", { class: "mmc-rail-group" }, [
+        tool(t("Presets"), "star",
+             t("Save this setup so you can put it back, or apply one you saved before"),
+             () => openPresetLibrary({ target: this.presetTarget?.() ?? null })),
+      ]),
     ]);
   }
 
