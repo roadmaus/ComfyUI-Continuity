@@ -631,7 +631,8 @@ export class SoundLane {
         // when there is something to drag — on an empty lane the invitation
         // above is the whole message.
         ...(blocks.length
-          ? [el("span", { class: "mmc-snd-how", text: t("Drag to move · an end to trim") })]
+          ? [el("span", { class: "mmc-snd-how",
+                          text: t("Drag to move · an end to trim · ✕ to take off") })]
           : []),
         // No icon, matching the strip's own inline ghosts ("Split"): in this
         // pack an icon means the rail, where a tool is a thing you reach for,
@@ -761,6 +762,7 @@ export class SoundLane {
       ]),
       this.grip(block, "head"),
       this.grip(block, "tail"),
+      this.dropper(block, name),
     ]);
 
     this.waves.set(node, block.filename);
@@ -821,6 +823,32 @@ export class SoundLane {
       if (now) this.rematch(was, now.frames / this.rules().fps);
     });
     return node;
+  }
+
+  /**
+   * Take this block off the lane.
+   *
+   * Delete and Backspace have always done it on a focused block, and a
+   * keystroke nobody has been told about is not a control: laying three tracks
+   * down and then finding no way to take one back off is the whole complaint
+   * this answers. So it is a ✕, the glyph that removes things everywhere else
+   * in this pack, drawn at rest like the grips beside it and for the same
+   * reason — a handle you only meet once you are on top of it says it too late.
+   *
+   * `pointerdown` stops here or the press starts a drag of the block under it,
+   * and the ✕ moves out from under the pointer before it can be let go on.
+   */
+  dropper(block, name) {
+    return el("button", {
+      class: "mmc-snd-drop", text: "✕",
+      "aria-label": t("Take this track off the lane"),
+      title: t("Take {name} off the lane. The file itself is not touched.", { name }),
+      onpointerdown: (event) => { event.preventDefault(); event.stopPropagation(); },
+      onclick: (event) => {
+        event.stopPropagation();
+        this.remove(block.index);
+      },
+    });
   }
 
   /** A stretch nobody covered. Perforated, and labelled where there is room —

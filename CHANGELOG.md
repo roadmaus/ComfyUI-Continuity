@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+**Clear empties the sound lane, and a track can be taken back off by hand.** A
+laid track is the piece's own sound — the shots under it are generated against
+it — so a Clear that left it behind handed the next scene the last one's
+soundtrack, and did it silently: nothing on the emptied piece said where that
+music was coming from. It also meant a piece with only a lane on it read as
+nothing to clear. The files themselves are untouched; what goes is where they
+were laid, which is writing like the rest of it.
+
+Taking one off was a keystroke — Delete on a focused block — and a keystroke
+nobody has been told about is not a control. Every block now carries a ✕ in its
+bottom-right corner, drawn at rest and faint like the trim grips beside it, for
+the same reason those are: a handle you only meet once you are on top of it says
+it too late.
+
 **A card opened from the strip is a card of *that piece*.** The segment editor
 was built without being told which piece it belonged to, so it fell back to the
 card itself — and a card carries no family. Every family-derived control in that

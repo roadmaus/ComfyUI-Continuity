@@ -1552,8 +1552,13 @@ export function emptyTimeline() {
  * What "Clear" empties: the piece as it was written.
  *
  * The standing prompt, the two Context-IR audio fields, the rewrite over them,
- * the reference pool, the cast, and the strip — which goes back to one blank
- * shot, the same thing a piece is when you drop the node.
+ * the reference pool, the cast, the sound lane, and the strip — which goes back
+ * to one blank shot, the same thing a piece is when you drop the node.
+ *
+ * The lane goes because a laid track is the piece's own sound: the shots under
+ * it are generated against it, and leaving it behind hands the next scene a
+ * soundtrack somebody wrote for the one before it. The files are untouched —
+ * what is cleared is where they were laid, which is writing like the rest.
  *
  * The cast goes with the prose that cites it. Left behind, it is a set of
  * subjects no `@handle` in the piece names any more: they draw a shelf, they
@@ -1567,7 +1572,8 @@ export function emptyTimeline() {
  * scene. The sampler row is not in the blob at all and so is untouched by
  * construction.
  */
-export const CLEARED_KEYS = ["prompt", "soundscape", "music", "refined", "assets", "subjects", "segments"];
+export const CLEARED_KEYS = ["prompt", "soundscape", "music", "refined", "assets", "subjects",
+                             "sound", "segments"];
 
 /** The shot's own writing — everything on a card that is not mirrored down onto
  *  it by `syncCanvas`, which is where the canvas and the pool arrive from. */
@@ -1592,6 +1598,7 @@ export function pieceWritten(timeline) {
   if (timeline.refined) return true;
   if (timeline.assets?.length) return true;
   if (timeline.subjects?.length) return true;
+  if (timeline.sound?.length) return true;
   const segments = timeline.segments ?? [];
   return segments.length !== 1 || segmentWritten(segments[0]);
 }

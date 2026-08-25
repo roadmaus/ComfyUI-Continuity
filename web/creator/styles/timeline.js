@@ -971,6 +971,26 @@ export const css = `
 }
 .mmc-snd-grip:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: -2px; }
 
+/* Takes the track off the lane. Bottom right, because the label runs along the
+   top and the grips hold both ends — this is the one corner of a block nothing
+   else is using, on a block as narrow as the shortest one the lane allows.
+   Drawn at rest on the grips' terms and faint like them, so a lane of six
+   tracks is not a row of crosses. */
+.mmc-snd-drop {
+  position: absolute; right: 13px; bottom: 2px; z-index: 2;
+  border: 0; padding: 0 3px; background: none; cursor: pointer;
+  color: var(--mmc-text); opacity: .45; font-family: inherit;
+  font-size: calc(11px * var(--mmc-type)); line-height: 1;
+  text-shadow: 0 1px 3px var(--mmc-bg), 0 0 6px var(--mmc-bg);
+  transition: opacity .12s ease;
+}
+.mmc-snd-block:hover .mmc-snd-drop, .mmc-snd-drop:focus-visible { opacity: 1; }
+.mmc-snd-drop:hover { color: var(--mmc-warn); opacity: 1; }
+.mmc-snd-drop:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: -2px; }
+/* Nothing to remove mid-drag, and a cross under the pointer during one is a
+   target the gesture can end on by accident. */
+.mmc-snd-block.dragging .mmc-snd-drop { opacity: 0; pointer-events: none; }
+
 /* Where the block has got to, while it is being moved or trimmed. The piece's
    clock, not the file's: a drag is a question about the cut. Clamped off the
    lane's own edges so a block at 0:00 still reads its numbers in full. */

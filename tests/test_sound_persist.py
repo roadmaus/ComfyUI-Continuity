@@ -192,6 +192,35 @@ const grip = (lane, edge) =>
   out.forward = order(right.piece);
 }
 
+// ---- taking one back off ----------------------------------------------------
+//
+// Delete on a focused block has always done this, and a keystroke nobody has
+// been told about is not a control: the lane took tracks and had no visible way
+// to give one back. The ✕ is that way, and what it must not do is start the
+// drag under it — a cross that moves out from under the pointer as it is
+// pressed cannot be let go on.
+{
+  const two = [{ filename: "score.wav", at_s: 0, in_s: 0, out_s: 5 },
+               { filename: "voice.wav", at_s: 5, in_s: 0, out_s: 3 }];
+  const { piece, lane, commits } = laid(two);
+  const crosses = lane.host.querySelectorAll(".mmc-snd-drop").length;
+  const cross = lane.host.querySelectorAll(".mmc-snd-drop")[1];
+  let started = false;
+  const node = lane.host.querySelectorAll(".mmc-snd-block")[1];
+  const before = node.listeners.pointerdown.length;
+  cross.listeners.pointerdown.forEach((fn) =>
+    fn({ clientX: 60, pointerId: 1, preventDefault() { started = true; },
+         stopPropagation() {} }));
+  cross.listeners.click[0]({ stopPropagation() {} });
+  out.drop = {
+    crosses,
+    left: piece.sound.map((entry) => entry.filename),
+    commits: commits(),
+    // The press was swallowed rather than passed to the block behind it.
+    dragArmed: before, swallowed: started,
+  };
+}
+
 // ---- and it is still there tomorrow -----------------------------------------
 {
   const { piece, lane } = laid();
@@ -256,6 +285,12 @@ check("the tail moves the file's out point", reflected["tail"],
 # two seconds into the file, and the block is that much shorter.
 check("the head moves the piece and the file together", reflected["head"],
       {"at_s": 2, "in_s": 2, "out_s": 5})
+
+drop = reflected["drop"]
+check("every block carries a way off the lane", drop["crosses"], 2)
+check("the ✕ takes its own track off", drop["left"], ["score.wav"])
+check("...in one write", drop["commits"], 1)
+check("...and the press never reaches the block under it", drop["swallowed"], True)
 
 check("the lane reaches the blob", reflected["reload"]["stored"],
       [{"filename": "score.wav", "at_s": 5.167, "in_s": 0.0, "out_s": 5.0}])

@@ -750,6 +750,10 @@ try {
     // the next scene never asked for, still riding down onto every card.
     subjects: [{ handle: "anna", from: ["ref-1"], takes: "person" }],
     loras: [{ name: "style.safetensors", strength: 0.8 }],
+    // A track laid on the lane. The piece's own sound: the shots under it are
+    // generated against it, so leaving it behind hands the next scene the last
+    // one's soundtrack.
+    sound: [{ filename: "score.wav", at_s: 0, in_s: 0, out_s: 4 }],
     models: { fl2va: "fl2va.safetensors", clip: "clip.safetensors", vae: "vae.safetensors" },
     turbo: { lora: "turbo.safetensors" },
     segments,
@@ -783,6 +787,7 @@ try {
     cast: after.subjects.length,
     cards: after.segments.length,
     cardPrompt: after.segments[0].prompt,
+    lane: (after.sound ?? []).length,
   };
   // ...and in the widget, which is what actually queues.
   out.clear.blob = JSON.parse(strip.mmcBody.read());
@@ -2710,10 +2715,11 @@ check("clearing keeps the machine",
 check("...and empties the piece",
       clear.get("emptied"),
       {"prompt": "", "soundscape": "", "music": "", "assets": 0, "cast": 0,
-       "cards": 1, "cardPrompt": ""})
+       "cards": 1, "cardPrompt": "", "lane": 0})
 check("...leaving nobody mirrored onto the blank card", clear.get("cardCast"), 0)
 check("...in the blob the node queues", (clear.get("blob") or {}).get("prompt"), "")
 check("...which casts nobody", (clear.get("blob") or {}).get("subjects"), None)
+check("...and lays no sound", (clear.get("blob") or {}).get("sound"), None)
 check("...which keeps its weights", ((clear.get("blob") or {}).get("models") or {}).get("fl2va"),
       "fl2va.safetensors")
 check("an emptied piece has nothing left to clear", clear.get("disabledAfter"), True)
