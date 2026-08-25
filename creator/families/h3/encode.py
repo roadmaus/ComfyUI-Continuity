@@ -20,8 +20,8 @@ import time
 import node_helpers
 import torch
 from comfy.ldm.minimax.model import FRAME_PER_TOKEN
-from . import latents, media
-from .families.h3.payload import AUDIO_END_KEY, CORE_ANCHORS_ANYWHERE, FRAME_INDEX_KEY
+from ... import latents, media
+from .payload import AUDIO_END_KEY, CORE_ANCHORS_ANYWHERE, FRAME_INDEX_KEY
 from comfy_extras.nodes_minimax_h3 import (
     CANVAS_MULTIPLE,
     FPS,

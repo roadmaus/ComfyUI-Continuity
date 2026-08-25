@@ -561,7 +561,8 @@ ltx_slots = importlib.import_module(f"{PACKAGE}.creator.families.ltx25.models")
 served = models_mod.every_slot()
 for name, slot in ltx_slots.SLOTS.items():
     check(f"the listing carries the {name} slot", served.get(name), slot.folder)
-check("...and still carries H3's", set(models_mod.FOLDERS) <= set(served), True)
+h3_slots = importlib.import_module(f"{PACKAGE}.creator.families.h3.models")
+check("...and still carries H3's", set(h3_slots.FOLDERS) <= set(served), True)
 check("the folders are the ones the model card names",
       [served["dit"], served["clip"], served["vae"], served["upscaler"]],
       ["diffusion_models", "text_encoders", "vae", "latent_upscale_models"])

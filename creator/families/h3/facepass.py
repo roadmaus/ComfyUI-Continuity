@@ -57,8 +57,9 @@ import folder_paths
 import latent_preview
 from comfy_api.latest import io
 
-from . import canvas, faces, spill
-from .timeline import PASS_TYPE, REEL_TYPE
+from ... import canvas, spill
+from . import faces
+from ...timeline import PASS_TYPE, REEL_TYPE
 
 # What the detector is asked for. SAM3 is open-vocabulary, so this is a prompt
 # and not a class id — and it is the whole of what this pack needs from it.

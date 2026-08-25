@@ -191,7 +191,7 @@ class LTX25(base.Family):
         which is the one case worth a line in the log rather than an error.
         """
         model = core.graph_preview(graph, self._guided(graph, model, sampling),
-                                   weights)
+                                   weights, declare.RULES.fps)
         guider = graph.node(
             "LTXVDualCFGGuider", model=model,
             positive=positive, negative=negative,

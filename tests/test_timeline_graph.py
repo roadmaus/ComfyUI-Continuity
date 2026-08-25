@@ -632,7 +632,7 @@ check("the next seam inherits from the trimmed pass",
 # dictates — and a refusal when the two stop agreeing.
 import torch as _torch
 
-encoder_mod = importlib.import_module(f"{PACKAGE}.creator.encode")
+encoder_mod = importlib.import_module(f"{PACKAGE}.creator.families.h3.encode")
 payload_mod = importlib.import_module(f"{PACKAGE}.creator.families.h3.payload")
 
 

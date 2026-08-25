@@ -21,10 +21,10 @@ from dataclasses import dataclass
 
 import comfy.sample
 
-from ... import (accel, canvas, compile as compiler, models,
+from ... import (accel, canvas, compile as compiler, models as core,
                  sampling as sampling_mod, settings)
 from .. import base
-from . import declare
+from . import declare, models as slots
 
 # Whether this core can start a sampler with the noise switched off on an H3
 # audio+video latent. The lead-in's second sitting does exactly that — the noise
@@ -41,7 +41,7 @@ from . import declare
 # knows about the pack, and the function that knows is the whole of the fix.
 CORE_EMPTY_NOISE_IS_NESTED = hasattr(comfy.sample, "prepare_empty_noise")
 
-SEGMENT_NODE = "MiniMaxH3TimelineSegment"
+SEGMENT_NODE = declare.SEGMENT_NODE
 REFINE_NODE = "MiniMaxH3RefinePass"
 FACE_NODE = "MiniMaxH3FacePass"
 
@@ -147,7 +147,7 @@ def patched(graph, model, sampling, acceleration, weights):
             shift_video=sampling.shift_video,
             shift_audio=sampling.shift_audio).out(0)
     model = accel.graph_apply(graph, model, acceleration, sampling.steps)
-    return models.graph_preview(graph, model, weights)
+    return core.graph_preview(graph, model, weights, declare.RULES.fps)
 
 
 def face_payload(payload, face):
@@ -190,7 +190,7 @@ class H3(base.Family):
     compile_error = compiler.CompileError
 
     def weights_from_blob(self, data):
-        return models.weights_from_blob(data)
+        return slots.weights_from_blob(data)
 
     def resolve_sampling(self, data, widgets):
         return sampling_mod.resolve(data, widgets)
@@ -210,10 +210,10 @@ class H3(base.Family):
         return routed(compiled, labels)
 
     def check(self, weights, where, audio=True, face=False):
-        models.check(weights, models.needs(where, audio=audio, face=face), where)
+        core.check(weights, slots.needs(where, audio=audio, face=face), where)
 
     def emit_loaders(self, graph, weights, routes):
-        return models.Links(graph, weights, routes)
+        return core.Links(graph, weights, routes)
 
     def _segment_inputs(self, links, payload, compiled, weights, seams, splits, run):
         """The segment node's inputs, shared by the pass and its refine.
@@ -253,7 +253,7 @@ class H3(base.Family):
         # The segment node's MODEL input names are its schema and are frozen —
         # `model_<slot>` happens to spell them, but it is the slot table that
         # decides which loaders exist to wire.
-        for name in models.ROUTED_SLOTS:
+        for name in slots.ROUTED_SLOTS:
             if links.get(name) is not None:
                 inputs[f"model_{name}"] = links.get(name)
         inputs.update(seams)
@@ -401,7 +401,7 @@ class H3(base.Family):
             face_inputs["vae"] = links.vae
         if compiled.encodes_audio():
             face_inputs["audio_vae"] = links.audio_vae
-        for name in models.ROUTED_SLOTS:
+        for name in slots.ROUTED_SLOTS:
             if links.get(name) is not None:
                 face_inputs[f"model_{name}"] = links.get(name)
         crop = graph.node(SEGMENT_NODE, **face_inputs)

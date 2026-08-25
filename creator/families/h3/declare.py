@@ -42,6 +42,12 @@ LORA_STACK = "h3lora"
 # would be offering nothing.
 DURATION_HEAD = None
 
+# The graph node that is this family's boundary: one self-contained payload in,
+# `(model, positive, latent, lead model)` out. A ComfyUI registry key named in
+# saved workflows, and frozen for it — the module it is defined in has moved and
+# the id has not.
+SEGMENT_NODE = "MiniMaxH3TimelineSegment"
+
 # The checkpoints a generation routes between, in the order anything listing
 # them shows them. One architecture trained twice, so a payload picks between
 # them; a family shipping one transformer declares `()`.

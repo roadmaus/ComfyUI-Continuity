@@ -6,6 +6,13 @@ five loaders in front of it. The files are named in the blob now and the loaders
 are emitted *inside* the subgraph, next to everything else those nodes already
 build for themselves.
 
+**Which slots exist is not this module's business.** A family declares its own
+table of `Slot`s — `families/h3/models.py`, `families/ltx25/models.py` — and
+everything here reads a table rather than knowing one: `Weights` reads the blob
+against it, `Links` builds the loaders, `check` refuses a slot nobody filled.
+H3's table was in this file, which made the shared machinery and one family's
+declaration indistinguishable by looking.
+
 That is not only tidier. Both MODEL sockets had to be connected even though
 the render loop uses exactly one of them per generation, so every queue loaded a
 checkpoint it was never going to sample with. Emitting the loaders here means
@@ -100,13 +107,6 @@ GGUF_FOLDERS = {
 # "the pack's own default", which is what passing no `device` at all means.
 DEFAULT_DEVICE = ""
 
-# What CLIPLoader calls the H3 text encoder. Not "minimax_h3": the value is
-# uppercased into `comfy.sd.CLIPType.MINIMAX`, and a name that does not resolve
-# falls back to STABLE_DIFFUSION and tokenizes the prompt with the wrong
-# vocabulary rather than failing.
-CLIP_TYPE = "minimax"
-
-
 @dataclass(frozen=True)
 class Slot:
     """One named file the family loads, and how.
@@ -143,58 +143,14 @@ class Slot:
     missing: str = ""
 
 
-# Order matters twice: it is the order the loaders are emitted in — which the
-# golden graphs hold — and the order the weights popover lists the fields.
-SLOTS = {
-    "fl2va": Slot("diffusion_models", "the FL2VA checkpoint",
-                  loader="UNETLoader", input="unet_name", routed=True),
-    "ref2va": Slot("diffusion_models", "the Ref2VA checkpoint",
-                   loader="UNETLoader", input="unet_name", routed=True),
-    "clip": Slot("text_encoders", "the text encoder",
-                 loader="CLIPLoader", input="clip_name",
-                 extra={"type": CLIP_TYPE}),
-    "vae": Slot("vae", "the video VAE", loader="VAELoader", input="vae_name"),
-    "audio_vae": Slot("vae", "the audio VAE",
-                      loader="VAELoader", input="vae_name", audio=True),
-    "preview": Slot("vae_approx", "the preview decoder"),
-    # The face pass's detector: a SAM3 checkpoint, which is a fused file — model
-    # and its own text encoder together — and so is picked from `checkpoints`
-    # and loaded by `facepass` itself rather than by a loader emitted here. It
-    # is in the table because it is a file the user picks in the same control,
-    # not because it becomes a link.
-    "sam3": Slot("checkpoints", "the face detector"),
-}
-
-# The slots a generation routes between — H3's two checkpoints.
-ROUTED_SLOTS = [name for name, slot in SLOTS.items() if slot.routed]
-
-# Which fields a device can be chosen for: the five that become a loader.
-# `preview` is not one — it is a filename handed to KJNodes' node, which pins its
-# own decoder to wherever the sampler is running.
-DEVICE_FIELDS = [name for name, slot in SLOTS.items() if slot.loader]
-
-# What `route` may hold. "auto" follows the mode, which is what the node has
-# always done; the other two are a standing instruction to run everything on one
-# checkpoint whatever the mode works out to.
-#
-# Worth having because the two are one architecture trained twice, and Ref2VA
-# turns out to be perfectly capable of the keyframe and text-only payloads FL2VA
-# was trained for. The per-request `checkpoint` pin could already say that for one
-# generation, but it is not sticky — attaching a reference makes the pin illegal,
-# `normalizeCheckpoint` drops it, and removing the reference leaves you back on
-# auto. A route survives all of that and applies to every segment of a timeline
-# at once.
-ROUTES = ["auto", "fl2va", "ref2va"]
-DEFAULT_ROUTE = "auto"
-
-# Where each file is picked from — the slot table's folder column. These are
-# ComfyUI's own folder keys, and the listing route hands the same map to the
-# frontend so the two cannot disagree about which directory a field browses.
-FOLDERS = {name: slot.folder for name, slot in SLOTS.items()}
-
 # UNETLoader's own list, read rather than invented so a retune of core's dtype
 # options does not leave this carrying a stale copy.
 DEFAULT_DTYPE = "default"
+
+# What a `route` holds when the piece has not asked for one: "follow the mode",
+# which is what every family without routed slots means all the time. The values
+# beside it are a family's — its own routed slot ids — and live with the family.
+DEFAULT_ROUTE = "auto"
 
 # How many frames of each step's latent the preview decodes. taeh3 is causal —
 # its MemBlocks chain state forward — so KJNodes' evenly-spaced sampling
@@ -204,35 +160,6 @@ DEFAULT_DTYPE = "default"
 # preview becomes the whole video. 1024 is the node's input maximum and is above
 # any latent length this node can produce.
 PREVIEW_FRAMES = 1024
-# Playback at the render's own rate, so the preview loop is the video at speed
-# rather than a slow-motion pass (`canvas.FPS`, kept literal because this is a
-# node input, not a computation).
-PREVIEW_FPS = 24
-
-# What each field is called when this has to complain about one being unset —
-# the slot table's label column.
-LABEL = {name: slot.label for name, slot in SLOTS.items()}
-
-
-def weights_from_blob(data):
-    """H3's picks, read against the table above. See `Weights`."""
-    return Weights.from_blob(data, SLOTS, routes=tuple(ROUTED_SLOTS))
-
-
-def needs(where, audio=True, face=False):
-    """The slots an H3 render must have a file for. See `check`.
-
-    The family's own reading of its table, which is what makes the check itself
-    family-neutral: the encoder and the video VAE always, the audio VAE unless
-    this is the PreStage's still branch decoding picture only, the detector only
-    when a pass in this render actually asks for the face pass, and exactly the
-    checkpoints the compiled payloads route to — a text-only render never asks
-    for the reference weights.
-    """
-    return ["clip", "vae",
-            *(["audio_vae"] if audio else []),
-            *(["sam3"] if face else []),
-            *sorted(where)]
 
 
 class Weights:
@@ -446,14 +373,14 @@ def loader_for(node_id, device, filename=None):
 
 
 def every_slot():
-    """`{field: folder}` across every family, not just this module's table.
+    """`{field: folder}` across every family.
 
     The listing is served once for the whole node and the weights popover picks
     the rows it needs out of it by slot id — so a field this does not carry is a
     picker that browses nothing, whatever is on disk. That is exactly what
     happened the day a second family arrived: `dit`, `upscaler` and
-    `duration_head` are LTX's slot names, they are in no table here, and their
-    rows came up empty against correctly-placed files.
+    `duration_head` are LTX's slot names, nothing had them, and their rows came
+    up empty against correctly-placed files.
 
     Merged rather than nested by family because slot ids are unique across the
     pack and the frontend asks by id. Where two families share an id they share
@@ -464,7 +391,7 @@ def every_slot():
     """
     from .families import registry
 
-    slots = dict(FOLDERS)
+    slots = {}
     for family in registry.FAMILIES:
         try:
             module = importlib.import_module(
@@ -530,7 +457,6 @@ def available():
         # off: no pack, no device control, rather than a control that offers one
         # choice and does nothing.
         "devices": device_options(),
-        "device_fields": list(DEVICE_FIELDS),
         "multigpu_source": MULTIGPU_SOURCE,
     }
 
@@ -643,7 +569,7 @@ def picked_preview(weights):
     return picked if isinstance(picked, str) and picked else None
 
 
-def graph_preview(graph, model, weights):
+def graph_preview(graph, model, weights, fps):
     """Patch the preview override onto a MODEL link. Returns the new link.
 
     Emitted whenever the pack is installed, whether or not a tiny decoder was
@@ -688,7 +614,11 @@ def graph_preview(graph, model, weights):
         kwargs["tiny_vae"] = picked
     kwargs.update({
         "preview_frames": PREVIEW_FRAMES,
-        "preview_fps": PREVIEW_FPS,
+        # The family's own rate, so the loop plays at speed. Read off a constant
+        # it was H3's 24 whatever family sampled — invisible while both video
+        # families run at 24, and a slow-motion preview on the first that does
+        # not.
+        "preview_fps": float(fps),
         # The sampler node inside our subgraph is not on anyone's canvas, so its
         # own preview overlay has nowhere to land. Ours is the only one.
         "suppress_default_preview": True,

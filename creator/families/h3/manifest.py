@@ -2,16 +2,16 @@
 draws for this family.
 
 Nothing here is a second copy of a number. The sampler row's defaults are
-`sampling.DEFAULTS`, the weight slots are `models.SLOTS`, the canvas rules are
+`sampling.DEFAULTS`, the weight slots are `slots.SLOTS`, the canvas rules are
 `canvas.py`'s — this module only says which *control* each value is behind,
 in the vocabulary `families/manifest.py` defines. The bounds and the help
 strings are the node schema's own (`creator_node._schema`), under the same
 English keys the i18n dictionaries already carry.
 """
 
-from ... import accel, canvas, compile, models, sampling, settings
+from ... import accel, canvas, compile, models as core, sampling, settings
 from .. import manifest as m
-from . import declare, still
+from . import declare, models as slots, still
 
 
 def _widgets():
@@ -110,8 +110,11 @@ def _weights():
         "loads": bool(slot.loader),
         "routed": slot.routed,
         "audio": slot.audio,
-        "gguf": slot.folder in models.GGUF_FOLDERS,
-        "device": name in models.DEVICE_FIELDS,
+        "gguf": slot.folder in core.GGUF_FOLDERS,
+        # Asked of the wrapper table rather than of the slot list, the way
+        # LTX 2.5's manifest asks: ComfyUI-MultiGPU subclasses the core
+        # loaders and a family may declare one it does not.
+        "device": slot.loader in core.MULTIGPU,
         # KeyError by design: a slot without its popover strings should fail
         # here, where the family is named, not draw a blank row.
         "title": _UI[name]["title"],
@@ -120,7 +123,7 @@ def _weights():
         "avoid": _UI[name].get("avoid", []),
         **({"name": _UI[name]["name"], "when": _UI[name]["when"]}
            if slot.routed else {}),
-    } for name, slot in models.SLOTS.items()]
+    } for name, slot in slots.SLOTS.items()]
 
 
 def manifest():
@@ -145,8 +148,8 @@ def manifest():
         # defaults to the reference checkpoint outright, the superset training,
         # so a strip mixing reference and plain cards runs on one set of
         # weights. Mirrors `compile._resolve_checkpoint`.
-        "routes": {"options": m.value_list(models.ROUTES),
-                   "default": models.DEFAULT_ROUTE,
+        "routes": {"options": m.value_list(slots.ROUTES),
+                   "default": core.DEFAULT_ROUTE,
                    "reference": "ref2va",
                    "plain": "fl2va",
                    "timeline": "ref2va"},

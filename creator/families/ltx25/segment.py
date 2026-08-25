@@ -40,7 +40,7 @@ from ... import canvas, compile as compiler, lora, media
 from . import models as slots
 from . import declare
 
-SEGMENT_NODE = "MiniMaxLTX25Segment"
+SEGMENT_NODE = declare.SEGMENT_NODE
 
 # Lightricks' own negative for this family, as diffusers ships it. Used rather
 # than invented: a negative prompt is a piece of the model's release, and a

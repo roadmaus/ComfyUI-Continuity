@@ -48,13 +48,9 @@ except Exception as exc:  # noqa: BLE001
 # The pack's module loads *outside* the skip guard: the guard proves the
 # environment, and a module of ours that will not import is a failure, not a
 # machine allowed to bow out.
-package = types.ModuleType("mmc")
-package.__path__ = [layout.PY_ROOT]
-sys.modules["mmc"] = package
-_spec = importlib.util.spec_from_file_location("mmc.encode", layout.py("encode"))
-encode = importlib.util.module_from_spec(_spec)
-sys.modules["mmc.encode"] = encode
-_spec.loader.exec_module(encode)
+# Through `layout.load`: `encode` lives in the family package now, and a module
+# flat-loaded under a fake name cannot reach above itself for `latents`/`media`.
+encode = layout.load("encode", package="mmcencode").encode
 
 from harness import FAILURES, check, passed
 

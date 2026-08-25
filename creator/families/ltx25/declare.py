@@ -32,6 +32,11 @@ LORA_STACK = "core"
 # for before it can.
 DURATION_HEAD = "duration_head"
 
+# The graph node that is this family's boundary. See `h3/declare.py`. A new id
+# rather than a reuse of H3's, because it is a genuinely new node: a different
+# conditioning, a different latent, and a fourth output that is a real negative.
+SEGMENT_NODE = "MiniMaxLTX25Segment"
+
 # One transformer, in several precisions — a choice of file rather than a choice
 # of weights. Nothing routes, so nothing is routed to, no pin may name one, and
 # a LoRA on such a piece claims nothing because there is nothing to claim

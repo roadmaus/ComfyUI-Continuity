@@ -577,7 +577,9 @@ try:
     # is the difference between watching the video and watching its first moment.
     check("it decodes the whole clip rather than the head of it",
           patches[0][1]["preview_frames"], models_mod.PREVIEW_FRAMES)
-    check("it plays at the render's own rate", patches[0][1]["preview_fps"], models_mod.PREVIEW_FPS)
+    check("it plays at the render's own rate", patches[0][1]["preview_fps"],
+      float(importlib.import_module(
+          f"{PACKAGE}.creator.families.h3.declare").RULES.fps))
     # The decision behind that number, rather than the number: the full-clip path
     # only opens if the count clears the *latent's* length, which is roughly five
     # rows per seventeen frames and not the frame count itself. The longest legal

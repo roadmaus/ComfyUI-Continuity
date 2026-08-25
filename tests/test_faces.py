@@ -20,27 +20,16 @@ import types
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-def _load():
-    package = types.ModuleType("mmc")
-    package.__path__ = [layout.PY_ROOT]
-    sys.modules["mmc"] = package
-    modules = {}
-    for name in ("canvas", "contextir", "compile", "faces"):
-        spec = importlib.util.spec_from_file_location(
-            f"mmc.{name}", layout.py(name))
-        module = importlib.util.module_from_spec(spec)
-        sys.modules[f"mmc.{name}"] = module
-        setattr(package, name, module)
-        spec.loader.exec_module(module)
-        modules[name] = module
-    return modules["canvas"], modules["compile"], modules["faces"]
-
-
-canvas, compiler, faces = _load()
+# Through `layout.load` rather than a loader of its own: `faces` lives in the
+# family package now, and a module flat-loaded under a fake name cannot reach
+# above itself for `canvas`.
+_pkg = layout.load("canvas", "h3_declare", "contextir", "compile", "faces",
+                   package="mmcfaces")
+canvas, compiler, faces = _pkg.canvas, _pkg.compile, _pkg.faces
 
 # The family the face pass belongs to — its own declaration, since nothing here
 # defaults to one any more.
-H3 = importlib.import_module("mmc.families.h3.declare").RULES
+H3 = _pkg.h3_declare.RULES
 
 from harness import FAILURES, check, passed
 

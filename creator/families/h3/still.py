@@ -47,9 +47,9 @@ because they are the video model's.
 
 from dataclasses import dataclass
 
-from ... import canvas, models, outputs
+from ... import canvas, models as core, outputs
 from ...compile import CHECKPOINTS, CompileError, active_loras, collect_triggers
-from . import declare
+from . import declare, models as slots
 
 ARCH = "minimax"
 
@@ -248,7 +248,7 @@ def compile_still(data, image_size_lookup=None):
 
 # --- the graph half -------------------------------------------------------
 
-SEGMENT_NODE = "MiniMaxH3TimelineSegment"
+SEGMENT_NODE = declare.SEGMENT_NODE
 STILL_NODE = "MiniMaxH3StillLatent"
 SAVE_NODE = "MiniMaxH3SaveImage"
 
@@ -256,14 +256,14 @@ FILENAME_PREFIX = outputs.IMAGE_PREFIX
 
 
 def weights_from_blob(data):
-    """`models.Weights` for the still's request.
+    """`core.Weights` for the still's request.
 
     Nothing to lift: the pre-stage's H3 branch is driven by the Creator's own
     editor, so the request carries a weights block in exactly the shape the
     video nodes' does — checkpoints, text encoder, VAEs, precision, devices, and
     the standing route.
     """
-    return models.weights_from_blob(data)
+    return slots.weights_from_blob(data)
 
 
 def emit(plan, weights, sampling, unique_id, filename_prefix=FILENAME_PREFIX):
@@ -293,10 +293,10 @@ def emit(plan, weights, sampling, unique_id, filename_prefix=FILENAME_PREFIX):
     # actually reach for. Nothing attached, nothing loaded.
     audio = any(one.ref_audios or any(v.track == "picture+sound" for v in one.ref_videos)
                 for one in compiled)
-    models.check(weights, models.needs(where, audio=audio), where)
+    core.check(weights, slots.needs(where, audio=audio), where)
 
     graph = GraphBuilder()
-    links = models.Links(graph, weights, set(where), audio=audio)
+    links = core.Links(graph, weights, set(where), audio=audio)
 
     inputs = {
         "clip": links.clip,
@@ -312,7 +312,7 @@ def emit(plan, weights, sampling, unique_id, filename_prefix=FILENAME_PREFIX):
         inputs["vae"] = links.vae
     if links.audio_vae is not None and compiled[0].encodes_audio():
         inputs["audio_vae"] = links.audio_vae
-    for name in models.ROUTED_SLOTS:
+    for name in slots.ROUTED_SLOTS:
         if links.get(name) is not None:
             inputs[f"model_{name}"] = links.get(name)
     segment = graph.node(SEGMENT_NODE, **inputs)
@@ -323,7 +323,8 @@ def emit(plan, weights, sampling, unique_id, filename_prefix=FILENAME_PREFIX):
     # taeh3 in the node body, exactly as on a video render. The preview is a
     # clip of the whole sampled latent, not of the frame that will be kept:
     # watching the motion is how you see the still is going somewhere.
-    model = models.graph_preview(graph, segment.out(0), weights)
+    model = core.graph_preview(graph, segment.out(0), weights,
+                               declare.RULES.fps)
 
     sampled = graph.node(
         "KSampler", model=model, positive=segment.out(1), negative=against,

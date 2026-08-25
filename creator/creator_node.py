@@ -54,12 +54,13 @@ import json
 
 from comfy_api.latest import ComfyExtension, io
 
-from . import (accel, canvas, compile as compiler, facepass, hires, media,
+from . import (accel, canvas, compile as compiler, media,
                models, outputs, prestage, redetail, redetailpass, sampling,
                settings, timeline)
 from .core import emit as loop
 from .families import registry
-from .families.h3 import declare as h3
+from .families.h3 import (declare as h3, facepass, hires,
+                          segment as h3_segment)
 from .families.ltx25 import segment as ltx25_segment
 
 DEFAULT_DATA = json.dumps({
@@ -352,7 +353,7 @@ class MiniMaxH3Timeline(io.ComfyNode):
 class MiniMaxCreatorExtension(ComfyExtension):
     async def get_node_list(self):
         return [MiniMaxH3Creator, MiniMaxH3Timeline,
-                *timeline.NODES, *ltx25_segment.NODES,
+                *timeline.NODES, *h3_segment.NODES, *ltx25_segment.NODES,
                 *prestage.NODES, *hires.NODES, *facepass.NODES,
                 *redetailpass.NODES]
 

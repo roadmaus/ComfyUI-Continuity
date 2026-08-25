@@ -37,8 +37,8 @@ Four rules, each of which is a mistake somebody already made:
 
 import math
 
-from . import canvas
-from .families.h3 import declare as h3
+from ... import canvas
+from . import declare as h3
 
 
 class FaceError(ValueError):

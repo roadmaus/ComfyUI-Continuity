@@ -1,7 +1,7 @@
 """The registry and the manifests: what exists, and that nothing drifted.
 
 The manifests are built *from* the modules that render — `sampling.DEFAULTS`,
-`models.SLOTS`, `canvas.py`, the family packages — so most drift is impossible
+each family's own `models.SLOTS`, its `declare.py`, the family packages — so most drift is impossible
 by construction. What this suite holds is the part construction cannot: that
 every family the registry names actually serves a valid manifest, that the
 catalog is JSON (it is a route's whole body), and that the derivations really
@@ -21,9 +21,10 @@ from harness import FAILURES, check, passed
 _pkg = layout.load("canvas", "accel", "sampling", "contextir", "compile",
                    "compile_image", "models", "registry", "manifest",
                    "still", "krea2_still", "ideogram4_still",
-                   "h3_declare", "ltx25_declare",
+                   "h3_declare", "h3_models", "ltx25_declare",
                    "ltx25_models", "ltx25_sampling")
 H3 = _pkg.h3_declare.RULES
+h3slots = _pkg.h3_models
 LTX25 = _pkg.ltx25_declare.RULES
 canvas = _pkg.canvas
 sampling = _pkg.sampling
@@ -49,6 +50,10 @@ catalog = manifest.catalog()
 DECLARES = ("ID", "LABEL", "ORDER", "PRODUCES", "STILL_ARCH", "PROMPT_PIPELINE",
             "LORA_STACK", "DURATION_HEAD", "ROUTED", "RULES")
 
+# A video family also declares the graph node that is its boundary; a still-only
+# family has no such node and no such field.
+VIDEO_DECLARES = ("SEGMENT_NODE",)
+
 check("every family package was discovered",
       sorted(registry.FAMILIES),
       sorted(os.path.basename(os.path.dirname(path))
@@ -65,6 +70,16 @@ for family in registry.FAMILIES:
     # back None to arithmetic that cannot use it.
     check(f"{family} declares rules iff it renders video",
           module.RULES is not None, "video" in module.PRODUCES)
+    if "video" in module.PRODUCES:
+        missing = [field for field in VIDEO_DECLARES if not hasattr(module, field)]
+        check(f"{family} declares its segment node", missing, [])
+
+# Two families must not claim one node id: the registry key is what ComfyUI
+# dispatches on, and a shared one would route the wrong family's payload.
+segments = [m.SEGMENT_NODE for m in registry.DECLARED
+            if "video" in m.PRODUCES]
+check("every video family has a segment node of its own",
+      len(set(segments)), len(segments))
 
 check("the families are ordered by their own ORDER",
       list(registry.FAMILIES),
@@ -144,24 +159,24 @@ check("core-owned combos declare no options — the node schema is the list",
       (False, False))
 
 check("h3 weight slots are the slot table, in its order",
-      [w["id"] for w in h3["weights"]], list(models.SLOTS))
+      [w["id"] for w in h3["weights"]], list(h3slots.SLOTS))
 for entry in h3["weights"]:
-    slot = models.SLOTS[entry["id"]]
+    slot = h3slots.SLOTS[entry["id"]]
     check(f"h3 slot {entry['id']} mirrors the table",
           (entry["folder"], entry["label"], entry["loads"],
            entry["routed"], entry["audio"]),
           (slot.folder, slot.label, bool(slot.loader),
            slot.routed, slot.audio))
 
-check("h3 routes are models.ROUTES",
+check("h3 routes are the family's own ROUTES",
       (h3["routes"]["options"], h3["routes"]["default"]),
-      (models.ROUTES, models.DEFAULT_ROUTE))
+      (h3slots.ROUTES, models.DEFAULT_ROUTE))
 
 # The derivation targets are routed slots, and the mode names are compile.py's
 # own vocabulary — the frontend shows exactly what the compiler will say.
 for key in ("reference", "plain", "timeline"):
     check(f"h3 routes[{key}] is a routed slot",
-          h3["routes"][key] in models.ROUTED_SLOTS, True)
+          h3["routes"][key] in h3slots.ROUTED_SLOTS, True)
 check("h3 mode names are compile.MODES",
       sorted(set(h3["modes"].values())), sorted(_pkg.compile.MODES))
 
