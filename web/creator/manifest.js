@@ -6,8 +6,8 @@
 // declared once, in Python, next to the code that renders it, and served at
 // `/minimax_creator/families`. This module loads that catalog and every other
 // frontend module reads it from here; a family constant spelled anywhere else
-// in `web/creator/` is a leak (the phase-5 grep in docs/PLAN-multi-family.md
-// is the audit).
+// in `web/creator/` is a leak, and `tests/test_family_leaks.py` is the grep
+// that says so.
 //
 // Loaded with top-level await, deliberately: importers see a resolved catalog
 // or they do not load at all. A UI drawn from a catalog that "has not arrived

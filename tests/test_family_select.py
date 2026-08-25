@@ -1,6 +1,6 @@
 """Which family renders a piece is a field of the piece, and everything reads it.
 
-Phase 1 of `docs/PLAN-ltx25.md`. `manifest.js` exported `VIDEO` — *the* family
+Written when LTX 2.5 arrived. `manifest.js` exported `VIDEO` — *the* family
 that produces video — and `state.js` and `canvas.js` bound to it at module load.
 With a second video family that binding is wrong by construction, so the piece
 gained a `family` field and the readers gained accessors that take one.
