@@ -546,20 +546,32 @@ class Timeline {
    */
   renderPool() {
     const assets = this.timeline.assets ?? [];
+    // The shelf is references, so on a family that reads none there is nothing
+    // to offer — the same answer the rails give, for the same reason. The head
+    // and any chips already on it stay: a piece carried over from a family that
+    // did read them has files here to take back off, and a shelf that vanished
+    // with them still on it would leave a queue-time refusal about references
+    // nothing on screen mentions. See `S.overflow`, which says exactly that.
+    const takesRefs = S.takesReferences(this.timeline);
+    if (!takesRefs && !assets.length) return this.poolHost.replaceChildren();
     this.poolHost.replaceChildren(
       el("div", { class: "mmc-tl-pool-head" }, [
         el("span", { class: "mmc-tl-field-name", text: t("Piece references") }),
         el("span", {
           class: "mmc-tl-pool-hint",
-          text: t("Attached once. Cite the @handle in the global prompt to use it in every "
-                + "segment, or in a segment's own prompt to use it just there."),
+          text: takesRefs
+            ? t("Attached once. Cite the @handle in the global prompt to use it in every "
+              + "segment, or in a segment's own prompt to use it just there.")
+            : t("{family} reads no attached references — detach these, or put the piece "
+              + "back on a model that reads them.",
+                { family: S.familyOf(this.timeline).label }),
         }),
-        el("button", {
+        ...(takesRefs ? [el("button", {
           class: "mmc-ghost mmc-tl-pool-add",
           title: t("Attach a reference to the whole piece — a character sheet, a location, "
                + "a voice. Cite it with its @handle in every segment where it appears."),
           onclick: () => this.addPoolAssets(),
-        }, [el("span", { text: "+" }), el("span", { text: t("Add") })]),
+        }, [el("span", { text: "+" }), el("span", { text: t("Add") })])] : []),
       ]),
       ...(assets.length ? [el("div", { class: "mmc-assets" }, assets.map((a) => this.poolChip(a)))] : []),
     );
@@ -2458,6 +2470,15 @@ class Timeline {
     const segment = this.timeline.segments[index];
     const editor = new CreatorEditor({
       state: segment,
+      // Which piece this card belongs to — the same answer the lone shot's
+      // editor gets (`faceBody`). Without it the editor fell back to the card
+      // itself, a segment carries no `family`, and every family-derived control
+      // in the window was drawn as the default family: no auto-duration switch
+      // on a family that has a duration head, H3's mode names over LTX's cards,
+      // a weights pill for routes LTX does not have, and attach tools for
+      // references the compiler would then refuse. The strip underneath had all
+      // of it right, because it asks `this.timeline`.
+      piece: this.timeline,
       // The shelf as well as the strip: writing `@ref-1` in this card is what
       // makes the pool chip say "in segment 3", and the shelf is the only place
       // that fact is ever shown. Redrawn on the card's own commits rather than
@@ -3001,30 +3022,25 @@ export class TimelineBody {
    * segment — the same stack the modal's LoRAs pill opens.
    */
   renderRail() {
-    const tool = (label, iconName, title, onclick, disabled = false) =>
-      el("button", { class: "mmc-tool", title, onclick,
-                     disabled: disabled || undefined },
+    const tool = (label, iconName, title, onclick) =>
+      el("button", { class: "mmc-tool", title, onclick },
          [el("span", { class: "mmc-tool-icon" }, [icon(iconName)]), el("span", { text: t(label) })]);
 
-    // The pool is references, so it is dead on a family that reads none — see
-    // `CreatorEditor.renderRail`. The sound lane is not affected and is not
-    // here: a track is laid on the piece's clock, not attached to a shot.
+    // The pool is references, so it is gone on a family that reads none — see
+    // `CreatorEditor.renderRail` for why gone rather than greyed. The sound
+    // lane is not affected and is not here: a track is laid on the piece's
+    // clock, not attached to a shot.
     const takesRefs = S.takesReferences(this.timeline);
-    const noRefs = t("{family} reads no attached references. Its shots are conditioned by "
-                   + "a start or end frame, a seam, and the piece's sound lane.",
-                     { family: S.familyOf(this.timeline).label });
 
     return el("div", { class: "mmc-rail" }, [
       el("div", { class: "mmc-rail-group" }, [
-        ...[["image", "Add image", "image"], ["video", "Add video", "video"],
-            ["audio", "Add audio", "audio"]].map(([kind, label, iconName]) =>
+        ...(takesRefs ? [["image", "Add image", "image"], ["video", "Add video", "video"],
+                         ["audio", "Add audio", "audio"]] : []).map(([kind, label, iconName]) =>
           tool(label, iconName,
-               takesRefs
-                 ? t("Attach a {kind} to the whole piece. Cite its @handle in a segment's "
-                   + "prompt — or in the global one, for every segment — to use it there.",
-                     { kind: t(kind) })
-                 : noRefs,
-               () => this.addPoolAssets(kind), !takesRefs)),
+               t("Attach a {kind} to the whole piece. Cite its @handle in a segment's "
+               + "prompt — or in the global one, for every segment — to use it there.",
+                 { kind: t(kind) }),
+               () => this.addPoolAssets(kind))),
         tool("Add LoRA", "effect",
              t("Manage the LoRAs patched onto every segment of this timeline"),
              () => this.manageLoras()),

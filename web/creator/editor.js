@@ -234,12 +234,10 @@ export class CreatorEditor {
       read: () => this.piece.sampling,
       write: (block) => { this.piece.sampling = block; },
     };
-    // Where the cast lives, which is not always where the piece does. A card of
-    // a strip is one shot of a piece whose subjects are kept a level up, and its
-    // `piece` is the card itself — so without this, clicking somebody's name in
-    // a card looked them up in an empty list and deleting their chip took them
-    // out of nothing. Defaults to the piece, which is the answer on every body
-    // that owns its own cast.
+    // Where the cast lives, which is not always where the piece does — the
+    // pre-stage's H3 branch mounts this body on a nested request whose subjects
+    // belong to the node above it. Defaults to the piece, which is the answer on
+    // every body that owns its own cast, a strip's card included.
     this.castPiece = castPiece ?? this.piece;
     // The piece's way to grow a shot, when this body's owner has one — a pill
     // in the tail of the row, beside the other two controls that act on the
@@ -1509,20 +1507,17 @@ export class CreatorEditor {
 
   renderRail() {
     // A family with no reference grammar refuses every attachment, so the three
-    // tools are dead rather than disabled-with-a-reason: the refusal is not
-    // about this card's state, it is about what the model reads. Said in the
-    // tooltip so a user who switched the piece's model pill finds out here
-    // rather than at queue time.
+    // tools are not drawn at all. A greyed button still says "this is a thing
+    // this node does, just not right now", and on such a family it is not one:
+    // the refusal is about what the model reads, not about this card's state,
+    // and it will never lift while the piece is on these weights. A full card
+    // is the other case — there the tool stays, disabled with its reason.
     const takes = S.takesReferences(this.piece);
-    const blocked = takes ? S.blockedReason(this.state, "reference")
-      : t("{family} reads no attached references. Its shots are conditioned by a "
-        + "start or end frame, a seam, and the piece's sound lane.",
-          { family: S.familyOf(this.piece).label });
-    const disabled = !!blocked;
+    const blocked = takes ? S.blockedReason(this.state, "reference") : null;
     const tool = (kind, label, iconName) =>
       el("button", {
         class: "mmc-tool",
-        disabled: disabled || undefined,
+        disabled: blocked ? true : undefined,
         title: blocked ?? t("Attach a reference {kind}", { kind: t(kind) }),
         onclick: () => this.addReferences(kind),
       }, [el("span", { class: "mmc-tool-icon" }, [icon(iconName)]), el("span", { text: t(label) })]);
@@ -1534,9 +1529,11 @@ export class CreatorEditor {
     // Seven equal siblings said none of that.
     return el("div", { class: "mmc-rail" }, [
       el("div", { class: "mmc-rail-group" }, [
-        tool("image", "Add image", "image"),
-        tool("video", "Add video", "video"),
-        tool("audio", "Add audio", "audio"),
+        ...(takes ? [
+          tool("image", "Add image", "image"),
+          tool("video", "Add video", "video"),
+          tool("audio", "Add audio", "audio"),
+        ] : []),
         // LoRAs sit on the checkpoint, not in the reference slots, so no
         // attach rule ever gates them.
         el("button", {

@@ -1317,6 +1317,7 @@ export const ja = {
  "{name} is too short to lay down — the shortest block is {min} s.": "{name} は短すぎて置けません — 最短のブロックは {min} 秒です。",
  "The piece is full — lengthen a shot, or trim what is on the lane, to make room for {name}.": "作品に空きがありません — {name} を置くには、ショットを長くするかレーン上のトラックをトリムしてください。",
  "{family} reads no attached references — an attached file would reach it as an ordinal in the prompt with nothing behind it. Detach them, or put the piece back on a model that reads them.": "{family} は添付リファレンスを読み取りません — 添付してもプロンプト内の番号だけが渡り、中身は届きません。取り外すか、リファレンスを読めるモデルに戻してください。",
+ "{family} reads no attached references — detach these, or put the piece back on a model that reads them.": "{family} は添付リファレンスを読み取りません — 取り外すか、リファレンスを読めるモデルに戻してください。",
  "{family} reads no attached references. Its shots are conditioned by a start or end frame, a seam, and the piece's sound lane.": "{family} は添付リファレンスを読み取りません。ショットの条件付けは開始・終了フレーム、シーム、作品のサウンドレーンで行います。",
  "{count} selected": "{count} 件を選択中",
  "Pick as many as you like": "好きなだけ選べます",

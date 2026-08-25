@@ -1317,6 +1317,7 @@ export const ko = {
  "{name} is too short to lay down — the shortest block is {min} s.": "{name}은(는) 너무 짧아 놓을 수 없습니다 — 가장 짧은 블록은 {min}초입니다.",
  "The piece is full — lengthen a shot, or trim what is on the lane, to make room for {name}.": "작품에 자리가 없습니다 — {name}을(를) 놓으려면 샷을 늘리거나 레인의 트랙을 다듬으세요.",
  "{family} reads no attached references — an attached file would reach it as an ordinal in the prompt with nothing behind it. Detach them, or put the piece back on a model that reads them.": "{family}은(는) 첨부된 레퍼런스를 읽지 않습니다 — 붙여도 프롬프트의 번호만 전달되고 내용은 닿지 않습니다. 떼어내거나, 레퍼런스를 읽는 모델로 되돌리세요.",
+ "{family} reads no attached references — detach these, or put the piece back on a model that reads them.": "{family}은(는) 첨부된 레퍼런스를 읽지 않습니다 — 떼어내거나, 레퍼런스를 읽는 모델로 되돌리세요.",
  "{family} reads no attached references. Its shots are conditioned by a start or end frame, a seam, and the piece's sound lane.": "{family}은(는) 첨부된 레퍼런스를 읽지 않습니다. 샷은 시작·끝 프레임, 심, 그리고 작품의 사운드 레인으로 조건이 주어집니다.",
  "{count} selected": "{count}개 선택됨",
  "Pick as many as you like": "원하는 만큼 고르세요",

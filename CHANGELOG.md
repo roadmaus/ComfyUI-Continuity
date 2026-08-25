@@ -2,6 +2,24 @@
 
 ## Unreleased
 
+**A card opened from the strip is a card of *that piece*.** The segment editor
+was built without being told which piece it belonged to, so it fell back to the
+card itself — and a card carries no family. Every family-derived control in that
+window was therefore drawn as the default family: no auto-duration switch on a
+piece whose weights have a duration head, H3's mode names over an LTX card, a
+weights pill for routes LTX does not have, and attach tools for references the
+compiler would refuse at queue time. The strip underneath had all of it right,
+which is how the same segment came to read `FL2V` on the card and `FL2VA` in the
+window over it.
+
+**Where a family reads no attached references, the attach tools are gone rather
+than greyed.** A disabled button says "this is a thing you could do here"; on
+LTX 2.5 it is not one, and no amount of waiting will make it one — the refusal
+is about what the model reads. The piece's reference shelf goes with them, and
+stays only where files are already on it, so a piece carried over from H3 can
+still be emptied. Greying is kept for the case it was meant for: a full card on
+a family that does take them.
+
 **A shot that cites a reference no longer claims to open on it.** Since the
 compiler started asking a family how to read a request, the prompt was composed
 as though nothing had been cited — so a reference generation was written in a

@@ -1318,6 +1318,7 @@ export const zh = {
  "{name} is too short to lay down — the shortest block is {min} s.": "{name} 太短，放不下——最短的音块是 {min} 秒。",
  "The piece is full — lengthen a shot, or trim what is on the lane, to make room for {name}.": "作品已经排满——请加长某个镜头，或修剪轨道上已有的音轨，给 {name} 腾出位置。",
  "{family} reads no attached references — an attached file would reach it as an ordinal in the prompt with nothing behind it. Detach them, or put the piece back on a model that reads them.": "{family} 不读取附加的参考文件——附上去也只有提示词里的一个编号传过去，背后没有内容。请取下它们，或把作品切回能读取参考的模型。",
+ "{family} reads no attached references — detach these, or put the piece back on a model that reads them.": "{family} 不读取附加的参考文件——请取下它们，或把作品切回能读取参考的模型。",
  "{family} reads no attached references. Its shots are conditioned by a start or end frame, a seam, and the piece's sound lane.": "{family} 不读取附加的参考文件。它的镜头靠首帧或尾帧、接缝，以及作品的声音轨道来做条件控制。",
  "{count} selected": "已选 {count} 个",
  "Pick as many as you like": "想选多少都可以",
