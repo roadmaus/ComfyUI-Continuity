@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+**LTX 2.5 renders can be guided for detail and for lip-sync, and the pills say
+what that costs.** Two of Lightricks' own patches, off by default and drawn in
+their own group beside the sampler row rather than among the accelerators —
+because they are the opposite trade. Detail guidance re-runs each step with the
+chosen transformer blocks' self-attention degraded and steers away from it,
+which sharpens spatial detail and steadies motion; a/v sync re-runs each step
+with the audio-to-video attention severed and pushes toward the coupled
+prediction, which is what tightens lip-sync. Each is an extra forward pass per
+step, so on the distilled weights either roughly doubles the time of the stage
+it runs on and both roughly triple it — which is in the tooltip, since it is the
+only thing worth deciding on. A pill is lit exactly while it is costing that,
+and a piece that leaves them alone builds the same graph it always did.
+
 **Every render has a live preview again, not just an H3 one pointed at taeh3.**
 The preview override was only ever emitted when a tiny decoder had been picked,
 which made a decoder look like the thing that turns previews on. It is not: it

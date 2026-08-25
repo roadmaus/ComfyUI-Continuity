@@ -116,8 +116,9 @@ Each ends green; goldens are re-recorded only when a phase *adds* graphs.
    them.~~ **Weighed — see "Phase 4: multishot" below.**
    ~~And the cross-family upscale.~~ **Done — see "Phase 4: ReDetail, as
    landed" below.**
-5. **Taste guidance**: STG / modality / reference-audio as their own pills
-   with honest cost copy — new UI, not the accel row.
+5. **Taste guidance**: ~~STG / modality~~ **done — see "Phase 5: the two
+   guidance patches" below** / reference-audio as their own pills with honest
+   cost copy — new UI, not the accel row.
 
 ## ReDetail: LTX 2.5 as an upscale pass for *any* family (phase 4)
 
@@ -724,6 +725,57 @@ transformer distilled to want 8 euler ones. The turbo switch is released into
 the row before it is stashed — switching a family off is switching its turbo
 off, and that means putting back the row it overwrote — and its own LoRA leaves
 the stack with it.
+
+## Phase 5: the two guidance patches, as landed
+
+**They are not accelerators and they are not the sampler row, so they are a
+third group.** An accelerator buys time and spends quality; `LTXVSpatioTemporalGuidance`
+and `LTXVModalityGuidance` spend time and buy quality — each hangs a post-CFG
+hook that runs **one extra forward pass per step**. On the distilled row the
+base pass is a single forward per step (`video_cfg == audio_cfg == 1.0`, where
+`Guider_LTXAVDualCFG` falls back to single CFG and the uncond pass is skipped),
+so either one roughly doubles a stage's time and both roughly triple it. That
+number is the copy on the pills, because it is the only thing a user needs to
+decide with.
+
+**The vocabulary grew three things, all of them earned by the first family to
+need them.** A `guidance` group; a `text` widget type, because STG's `blocks` is
+a list of transformer block indices and core parses it with a digit grep rather
+than a grammar; and two keys that say what a value *means* rather than how it is
+drawn — `off`, the value at which the control does nothing, and `requires`, which
+names the control a modifier belongs to. `off` is what makes a declared pill able
+to light itself honestly: 0 is off for STG and **1.0** is off for modality
+guidance, and neither is guessable from the range beside it. `requires` is the
+rule Spectrum's blend has always followed on H3's handwritten row, said in the
+vocabulary so a row nobody wrote by hand can follow it too. `manifest.check`
+refuses a `requires` naming a control the family does not declare — the failure
+would otherwise be a pill that silently never draws.
+
+**Off means absent from the graph, not present and inert.** Each node clones the
+model, and a clone carrying a hook that returns its input unchanged is a pass
+nobody asked for. So `_guided` emits nothing at the off values, a scale with an
+empty block list emits nothing either (core short-circuits on both, and the
+clone would be the only thing left), and a piece that never touched these pills
+builds the graph it built before they existed. Both patches go on **both** stages
+of a two-stage render: the second stage continues the first, and a piece guided
+in one and not the other changes its own look halfway through.
+
+They stack in the order Lightricks names them — STG then modality, which is the
+order `set_model_sampler_post_cfg_function` composes them in, each reading the
+denoised tensor the one before returned. The sigma window is left at core's full
+range: restricting either to part of the schedule is a real control and not one
+measured on these weights, so it is Lightricks' number rather than a guess
+behind a pill.
+
+**Not done: reference audio.** `LTXVReferenceAudio` is the third of the three
+this phase named, and it is a different kind of thing from the other two — it
+needs an *asset*, a ~5 s clip of the voice to transfer, which makes it a piece of
+the reference grammar this branch has not decided (the open question below) and
+not just a scale. What it would not need is a new weight slot: the AV model
+handles `ref_audio` natively (`comfy/ldm/lightricks/av_model.py` prepends the
+reference tokens to the audio stream), so the conditioning half is core's. Its
+own `identity_guidance_scale` costs the same extra pass per step as these two and
+belongs in the same group when it lands.
 
 ## Frozen, still
 

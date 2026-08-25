@@ -13,6 +13,11 @@ so there is no checkpoint for a payload to be routed between. There is no
 `still` block: LTX 2.5 renders video and the pre-stage never reaches for it.
 And there is a `duration` capability H3 has no answer to at all — the duration
 head predicting a shot's length from its own prompt.
+
+The `guidance` group is the other thing only this family has. H3's extra passes
+are accelerators, which buy time and spend quality; these spend time and buy
+quality, so they are drawn apart from the accelerator row and say what they
+cost.
 """
 
 from ... import canvas, models as core
@@ -46,6 +51,29 @@ def _widgets():
         m.widget("terminal", "slider", label="terminal", group="sampler",
                  default=d["terminal"], min=0.0, max=0.99, step=0.01,
                  help="Where a stretched schedule ends. Ignored when stretch is off."),
+
+        # Taste guidance. Its own group because it is its own kind of control:
+        # nothing here changes the schedule, and each of them buys picture with
+        # time at a rate worth saying out loud. `off` is what makes the pill
+        # honest — 0 and 1.0 are core's own "does nothing", and neither is
+        # guessable from the range beside it.
+        m.widget("stg_scale", "slider", label="detail guidance", group="guidance",
+                 default=d["stg_scale"], min=0.0, max=100.0, step=0.1, off=0.0,
+                 help="Spatio-temporal guidance: one extra pass per step with the chosen blocks' "
+                      "self-attention degraded, guided away from. Sharper spatial detail and "
+                      "steadier motion, at roughly double the time of the stage it runs on. "
+                      "Lightricks' own reference scale is 1."),
+        m.widget("stg_blocks", "text", label="blocks", group="guidance",
+                 default=d["stg_blocks"], requires="stg_scale",
+                 help="Which transformer blocks detail guidance degrades, comma-separated. 29 is "
+                      "the block core's own node points at; leaving this empty switches the "
+                      "guidance off however high its scale."),
+        m.widget("modality_scale", "slider", label="a/v sync", group="guidance",
+                 default=d["modality_scale"], min=1.0, max=100.0, step=0.1, off=1.0,
+                 help="Modality guidance: one extra pass per step with the audio-to-video "
+                      "cross-attention severed, pushed toward the coupled prediction. Tighter "
+                      "lip-sync and sound-to-picture timing, at roughly double the time of the "
+                      "stage it runs on. Lightricks' own reference scale is 3."),
     ]
 
 

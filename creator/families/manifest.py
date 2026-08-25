@@ -8,12 +8,21 @@ does not ship a bag of values for hardcoded controls: it describes the
 *controls*, in a small widget vocabulary the frontend renders from.
 
 A widget is `{id, type, min, max, step, default, label, help, group}` with
-`type` one of `slider | toggle | combo | stepper`. A combo may carry its
+`type` one of `slider | toggle | combo | stepper | text`. A combo may carry its
 `options`; one that does not draws its list off the node's own widget, because
 core's sampler and scheduler names are the node schema's to declare and a copy
 of them here would go stale the first time core added one (the same rule
 `sampling.py` follows). `group` places the control — `sampler` is the row,
-`accel` the accelerator pills, `weights` the weights popover.
+`accel` the accelerator pills, `guidance` the taste-guidance pills beside them,
+`weights` the weights popover.
+
+Two optional keys say what a value *means* rather than how it is drawn. `off`
+is the value at which the control does nothing, which is what lets a pill be
+lit only while it is costing something — LTX's STG is off at 0 and its modality
+guidance at 1.0, and neither number is guessable from a range. `requires` names
+another control this one modifies, so it is drawn only while that one is doing
+something: the same rule Spectrum's blend follows on H3's handwritten row, said
+in the vocabulary so a declared row can follow it too.
 
 Beyond widgets a manifest declares: **weight slots** (which files the family
 loads, from which folders, and how — mirrored off the family's own slot
@@ -35,12 +44,12 @@ import importlib
 
 from . import registry
 
-WIDGET_TYPES = ("slider", "toggle", "combo", "stepper")
-WIDGET_GROUPS = ("sampler", "accel", "weights", "reference")
+WIDGET_TYPES = ("slider", "toggle", "combo", "stepper", "text")
+WIDGET_GROUPS = ("sampler", "accel", "guidance", "weights", "reference")
 
 
 def widget(id, type, *, label, group, default=None, min=None, max=None,
-           step=None, options=None, help=""):
+           step=None, options=None, help="", off=None, requires=None):
     """One control, in the vocabulary above. Keys with nothing to say are
     omitted rather than carried as nulls, so the frontend reads presence."""
     if type not in WIDGET_TYPES:
@@ -50,7 +59,8 @@ def widget(id, type, *, label, group, default=None, min=None, max=None,
     entry = {"id": id, "type": type, "label": label, "group": group,
              "default": default, "help": help}
     for key, value in (("min", min), ("max", max), ("step", step),
-                       ("options", value_list(options))):
+                       ("options", value_list(options)),
+                       ("off", off), ("requires", requires)):
         if value is not None:
             entry[key] = value
     return entry
@@ -116,6 +126,15 @@ def check(manifest):
             raise ValueError(
                 f"family {manifest['id']!r}: widget {entry['id']!r} has "
                 f"unknown type {entry['type']!r}")
+    # `requires` names a control this one modifies, and a name that is not a
+    # control is a pill that never draws — silently, which is the one failure
+    # worth catching here rather than in a browser.
+    declared = {entry["id"] for entry in manifest["widgets"]}
+    for entry in manifest["widgets"]:
+        if "requires" in entry and entry["requires"] not in declared:
+            raise ValueError(
+                f"family {manifest['id']!r}: widget {entry['id']!r} requires "
+                f"{entry['requires']!r}, which this family does not declare")
     for entry in manifest["weights"]:
         for key in ("id", "folder", "label"):
             if key not in entry:

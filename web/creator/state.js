@@ -625,7 +625,7 @@ export function serializeTurbo(turbo) {
  *  vocabulary is about how a value is *drawn*; this is the JSON type behind it,
  *  and it is the only thing the store needs to know. */
 const FIELD_KIND = { stepper: "number", slider: "number",
-                     toggle: "boolean", combo: "string" };
+                     toggle: "boolean", combo: "string", text: "string" };
 
 const SAMPLING_FIELD_CACHE = new Map();
 
@@ -641,9 +641,11 @@ const SAMPLING_FIELD_CACHE = new Map();
  *  `DEFAULTS` its own backend module resolves against. The seed is in neither:
  *  it stays a widget, for the reason `sampling.WIDGET_ONLY` gives.
  *
- *  Both groups, because the accelerators are row too — they are declared apart
- *  because they are *drawn* apart, lit rather than dialled. A family that has
- *  not tried them declares none, and then it has none.
+ *  All three groups, because the accelerators and the taste guidance are row
+ *  too — they are declared apart because they are *drawn* apart, lit rather
+ *  than dialled. A family that has not tried them declares none, and then it
+ *  has none. `weights` and `reference` are not here: those groups describe
+ *  files and attachments, which live in their own blocks of the blob.
  *
  *  The *values* are deliberately not mirrored. A default here would be a second
  *  place the row's numbers live, and the whole point of the move is that the
@@ -653,7 +655,8 @@ export function samplingFields(family = DEFAULT_VIDEO_FAMILY) {
   let fields = SAMPLING_FIELD_CACHE.get(family);
   if (!fields) {
     fields = Object.fromEntries(widgetsOf(family)
-      .filter((w) => w.group === "sampler" || w.group === "accel")
+      .filter((w) => w.group === "sampler" || w.group === "accel"
+                     || w.group === "guidance")
       .map((w) => [w.id, FIELD_KIND[w.type]]));
     SAMPLING_FIELD_CACHE.set(family, fields);
   }

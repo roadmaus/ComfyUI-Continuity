@@ -392,9 +392,10 @@ function seedPills({ widgets, value, set, perSegment }) {
  * whole claim the manifest makes: LTX-AV wanted two CFG scales, a stretched
  * schedule and a terminal, and none of that is a superset of H3's row.
  *
- * Only the `sampler` group. `accel` and `weights` are drawn elsewhere, and a
- * family that declares neither — LTX declares no accelerators, because every
- * accelerator this pack knows about is an H3 patch — simply has none on the row.
+ * Only the `sampler` group. `accel`, `guidance` and `weights` are drawn
+ * elsewhere — `guidance` by `guidanceRow` just below, right after this — and a
+ * family that declares none of them simply has none on the row. LTX declares no
+ * accelerators, because every accelerator this pack knows about is an H3 patch.
  *
  * A combo with no `options` reads them off the node's own widget of that name,
  * the same rule the H3 row follows: core's sampler list is the node schema's to
@@ -413,16 +414,65 @@ function declaredRow(family, widgets, value, set) {
 }
 
 
-function declaredPill(w, widgets, value, set) {
+/**
+ * The taste-guidance pills, as one set — a family's `guidance` group.
+ *
+ * Apart from the sampler row and apart from the accelerators, because it is
+ * neither. An accelerator buys time and spends quality; these spend time and
+ * buy quality, and each of them costs an extra forward pass per step. So they
+ * are lit exactly when they are costing something — the accelerator rule, read
+ * off the manifest's `off` value rather than guessed from a range, because
+ * "does nothing" is 0 for one of LTX's two and 1.0 for the other.
+ *
+ * A control that only modifies another (`requires`) is drawn only while that
+ * one is on, which is the rule Spectrum's blend already follows one row up.
+ * One pill for the group, divided: they are one question — how much extra
+ * sampling is this piece willing to pay for.
+ */
+function guidanceRow(family, widgets, value, set) {
+  const declared = S_widgetsOf(family).filter((w) => w.group === "guidance");
+  if (!declared.length) return [];
+  const active = (w) => w.off !== undefined && value(w.id, w.default) !== w.off;
+  const pill = pillSet(declared.map((w) => {
+    if (w.requires) {
+      const on = declared.find((other) => other.id === w.requires);
+      if (!on || !active(on)) return null;
+    }
+    return (seg) => declaredPill(w, widgets, value, set, seg, active(w));
+  }));
+  return pill ? [pill] : [];
+}
+
+
+function declaredPill(w, widgets, value, set, seg = false, lit = false) {
   const help = w.help ? t(w.help) : t(w.label);
   const current = value(w.id, w.default);
+
+  if (w.type === "text") {
+    // A typed field in a pill. The one control whose value is prose — LTX's
+    // STG takes a list of block numbers — so there is nothing to step and
+    // nothing to choose from, and core parses whatever is typed with a digit
+    // grep rather than a grammar.
+    const text = String(current ?? "");
+    return el("div", { class: `${pillClass(seg, lit ? " accel-on" : "")} mmc-pill-group`, title: help }, [
+      el("span", { text: `${t(w.label)} ` }),
+      el("input", {
+        class: "mmc-pill-text",
+        type: "text",
+        value: text,
+        style: { width: `${Math.min(18, Math.max(3, text.length + 1))}ch` },
+        onchange: (event) => set(w.id, String(event.target.value)),
+        onpointerdown: (event) => event.stopPropagation(),
+      }),
+    ]);
+  }
 
   if (w.type === "toggle") {
     const on = Boolean(current);
     // Lit when on, quiet when off — the rule every switch on this row follows,
     // so what is doing something to your render is what you can see.
     return el("button", {
-      class: `mmc-pill${on ? " accel-on" : ""}`,
+      class: accelClass(seg, on),
       title: help,
       onclick: () => set(w.id, !on),
     }, [el("span", { text: on ? t(w.label) : t("{label} off", { label: t(w.label) }) })]);
@@ -440,7 +490,7 @@ function declaredPill(w, widgets, value, set) {
       : (typeof fromWidget === "function" ? fromWidget(widgets[w.id]) : fromWidget) || [];
     if (!options.length) return null;
     return el("button", {
-      class: "mmc-pill",
+      class: accelClass(seg, lit),
       title: help,
       onclick: (event) => openChoicePopover(event.currentTarget, {
         title: t(w.label),
@@ -458,6 +508,8 @@ function declaredPill(w, widgets, value, set) {
   const step = w.step ?? 1;
   const decimals = String(step).includes(".") ? String(step).split(".")[1].length : 0;
   return stepperPill({
+    seg,
+    className: lit ? "accel-on" : "",
     value: Number(current),
     min: w.min ?? 0,
     max: w.max ?? 100,
@@ -485,6 +537,7 @@ export function samplingBar({ widgets, value, set, perSegment = false,
     return el("div", { class: "mmc-pills" }, [
       ...seedPills({ widgets, value, set, perSegment }),
       ...declaredRow(family, widgets, value, set),
+      ...guidanceRow(family, widgets, value, set),
       ...turbo, ...trailing,
     ]);
   }

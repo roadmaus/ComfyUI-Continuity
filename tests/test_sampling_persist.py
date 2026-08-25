@@ -282,6 +282,61 @@ cycle("prestage_minimax", {
   out.body_timeline = drawn(body.root);
 }
 
+// ---- the taste-guidance pills ------------------------------------------------
+//
+// Their own group, and the one thing about them a reader cannot see from the
+// row: a pill is lit exactly when it is costing an extra forward pass per step,
+// which is the manifest's `off` value and not the low end of its range. And the
+// block list is drawn only while the guidance it modifies is on — the rule
+// Spectrum's blend follows one row up, said in the vocabulary this time.
+{
+  const { samplingBar } = await import("./web/creator/sampling.js");
+  const row = (block) => {
+    const bar = samplingBar({
+      widgets: widgets(PIECE_WIDGETS),
+      value: (name, fallback) => (name in block ? block[name] : fallback),
+      set: () => {},
+      family: "ltx25",
+    });
+    const seen = [];
+    // The class that says "lit" is on the pill and the text is on a span
+    // inside it, so what is asked of each node is whether *it or anything
+    // above it* is lit — which is what a reader of the row sees.
+    const walk = (n, above) => {
+      if (!n) return;
+      const cls = `${above} ${String(n.className ?? "")}`;
+      seen.push({ text: String(n.textContent ?? ""), cls });
+      (n.children ?? []).forEach((child) => walk(child, cls));
+    };
+    walk(bar, "");
+    const has = (text) => seen.some((n) => n.text.includes(text));
+    const lit = (text) => seen.some((n) => n.text.includes(text) && n.cls.includes("accel-on"));
+    return { has, lit, seen };
+  };
+
+  const off = row({});
+  const on = row({ stg_scale: 1.0, modality_scale: 3.0 });
+  out.guidance = {
+    // Drawn either way — a control nobody can find is a control nobody has.
+    drawn: off.has("detail guidance") && off.has("a/v sync"),
+    // ...and quiet until it is doing something.
+    quiet: !off.lit("detail guidance") && !off.lit("a/v sync"),
+    blocksHidden: !off.has("blocks"),
+    lit: on.lit("detail guidance") && on.lit("a/v sync"),
+    blocksShown: on.has("blocks"),
+  };
+  // H3 declares no guidance at all, and its row is handwritten — so nothing of
+  // this appears on it. A group that leaked onto the family that did not
+  // declare it would be a pill writing a field nothing reads.
+  const bar = samplingBar({ widgets: widgets(PIECE_WIDGETS),
+                            value: (name, fallback) => fallback, set: () => {} });
+  const h3 = [];
+  const walk = (n) => { if (!n) return;
+    h3.push(String(n.textContent ?? "")); (n.children ?? []).forEach(walk); };
+  walk(bar);
+  out.guidance.h3 = !h3.some((text) => text.includes("a/v sync"));
+}
+
 console.log(JSON.stringify(out));
 """
 
@@ -313,3 +368,12 @@ for face in ("body_creator", "body_timeline"):
 # render is.
 check("the schedule pill draws what the blob says", reflected["draws"]["pick"], True)
 check("...and not what the widget still holds", reflected["draws"]["stale"], False)
+
+# The guidance group: drawn always, lit only while it costs something, and the
+# block list only while the guidance it belongs to is on.
+check("the guidance pills are on LTX's row", reflected["guidance"]["drawn"], True)
+check("...quiet at the values that do nothing", reflected["guidance"]["quiet"], True)
+check("...with no block list while STG is off", reflected["guidance"]["blocksHidden"], True)
+check("...lit once they are costing a pass", reflected["guidance"]["lit"], True)
+check("...and the block list joins them", reflected["guidance"]["blocksShown"], True)
+check("...and none of it reaches H3's row", reflected["guidance"]["h3"], True)

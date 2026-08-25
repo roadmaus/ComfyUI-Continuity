@@ -34,6 +34,12 @@ the whole of that happens either at the end of `emit_sampler` (one-stage) or at
 the *start* of `emit_refine` (two-stage), never twice and never after an upscale
 has spent itself on frames nobody will see.
 
+**Taste guidance is two more model patches, and only when asked for.** STG and
+modality guidance each hang a post-CFG hook on the model that runs a second
+forward pass per step — so they are off by default, they are emitted only when
+the row's values would do something, and they wear their cost in the copy of the
+pills that write them. See `_guided`.
+
 **`refine` here is Lightricks' own second stage.** Not H3's refine, which
 re-encodes the conditioning at a larger canvas and re-samples: LTX ships a
 trained x2 latent upscaler, so the pipeline is sample at the native edge, run
@@ -119,6 +125,46 @@ class LTX25(base.Family):
             segment_data=json.dumps(payload, sort_keys=True),
             **seams)
 
+    def _guided(self, graph, model, sampling):
+        """The taste guidance, where the row asked for it. -> the model link.
+
+        Two model patches, both of which hang a post-CFG hook on the model and
+        both of which **cost one extra forward pass per step** — core's own
+        wording, and worth repeating here because it is the whole reason these
+        are not switched on by default. On the distilled row the base pass is a
+        single forward per step (`video_cfg == audio_cfg == 1.0`, where the dual
+        guider falls back to single CFG and the uncond pass is skipped), so
+        either one of these roughly doubles the time a stage takes and both of
+        them roughly triple it.
+
+        They stack: `set_model_sampler_post_cfg_function` appends, and each hook
+        reads `args["denoised"]` — whatever the hook before it returned — so the
+        order here is the order they compose in. STG first and modality second,
+        which is the order Lightricks' own copy names them in ("stacks with the
+        dual-CFG guider and STG").
+
+        Emitted only when the row says they would do something, so a piece that
+        never touched these pills builds the graph it always did. That is not
+        only a golden's convenience: each node clones the model, and a clone
+        carrying a hook that returns its input unchanged is a pass nobody can
+        see and nobody asked for.
+        """
+        if sampling.stg:
+            model = graph.node(
+                "LTXVSpatioTemporalGuidance", model=model,
+                scale=sampling.stg_scale, blocks=sampling.stg_blocks,
+                # The sigma window is core's full range. Restricting STG to part
+                # of the schedule is a real control and not one this pack has
+                # measured on these weights, so it is left where Lightricks put
+                # it rather than guessed at behind a pill.
+                start_percent=0.0, end_percent=1.0).out(0)
+        if sampling.modality:
+            model = graph.node(
+                "LTXVModalityGuidance", model=model,
+                modality_scale=sampling.modality_scale,
+                start_percent=0.0, end_percent=1.0).out(0)
+        return model
+
     def _sampled(self, graph, model, positive, negative, latent, sampling, seed,
                  sigmas, weights):
         """One custom-sampling pass over `latent`. -> the sampled latent link.
@@ -127,15 +173,17 @@ class LTX25(base.Family):
         (`sigmas` above, and the model it hands in); everything here is the same
         both times, which is the whole reason it is written once.
 
-        The preview override goes on last, outside `ModelSamplingLTXV`, because
-        it wraps OUTER_SAMPLE and wants to be the outermost thing on the model —
-        the same place H3's `render.patched` puts it. This family picks no tiny
+        The taste guidance goes on inside the preview and outside the sampling
+        patch: it is a post-CFG hook and belongs with the sampling, where the
+        preview override wraps OUTER_SAMPLE and wants to be the outermost thing
+        on the model — the same place H3's `render.patched` puts it. This family picks no tiny
         decoder, and does not need to: KJNodes recognises an LTX latent format
         and previews it through its own LTX previewer, guide frames cropped off.
         Without the pack installed this adds nothing and there is no preview,
         which is the one case worth a line in the log rather than an error.
         """
-        model = core.graph_preview(graph, model, weights)
+        model = core.graph_preview(graph, self._guided(graph, model, sampling),
+                                   weights)
         guider = graph.node(
             "LTXVDualCFGGuider", model=model,
             positive=positive, negative=negative,

@@ -772,6 +772,16 @@ export const css = `
   font-size: calc(12.5px * var(--mmc-type)); text-align: center; padding: 0;
   min-width: 5ch; max-width: 21ch;
 }
+/* A typed value inside a pill: the manifest's "text" control, whose one user so
+   far is the block list LTX's detail guidance degrades. The seed field's face —
+   mono, so a comma-separated list reads as a list — with its own bounds, since
+   what is in it is names rather than a fixed count of digits. */
+.mmc-pill-text {
+  background: none; border: 0; outline: none; color: var(--mmc-text);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: calc(12.5px * var(--mmc-type)); text-align: center; padding: 0;
+  min-width: 3ch; max-width: 18ch;
+}
 /* Dim on "fixed" — the default, and the state where nothing happens to the seed
    between queues. The three that do move it read at full strength. */
 .mmc-seed-mode { font-size: calc(11px * var(--mmc-type)); padding: 0 8px 0 4px; color: var(--mmc-off); }

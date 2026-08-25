@@ -218,6 +218,65 @@ check("stage one samples at the native edge",
 check("stage two is exactly twice it",
       (two_one.refine.width, two_one.refine.height), (1920, 1088))
 
+# ---- taste guidance ----------------------------------------------------------
+#
+# STG and modality guidance each hang a post-CFG hook that runs a second forward
+# pass per step. Off is the default and off means *absent*: a node that clones
+# the model to install a hook returning its input unchanged is a pass nobody
+# asked for, and it would move every golden that has an LTX piece in it.
+
+check("no detail guidance on an untouched piece",
+      "LTXVSpatioTemporalGuidance" in kinds, False)
+check("no modality guidance on an untouched piece",
+      "LTXVModalityGuidance" in kinds, False)
+
+stg = by_class(build(piece(sampling={"stg_scale": 1.0, "stg_blocks": "29, 30"})).expand)
+check("one STG node", len(stg["LTXVSpatioTemporalGuidance"]), 1)
+stg_inputs = stg["LTXVSpatioTemporalGuidance"][0][1]
+check("...at the scale the row asked for", stg_inputs["scale"], 1.0)
+check("...over the blocks it named", stg_inputs["blocks"], "29, 30")
+check("...across the whole schedule",
+      (stg_inputs["start_percent"], stg_inputs["end_percent"]), (0.0, 1.0))
+# Inside the sampling patch and outside nothing else: the guider samples the
+# model the hook was installed on, or the extra pass is bought and never used.
+check("...and it is what the guider guides",
+      stg["LTXVDualCFGGuider"][0][1]["model"][0],
+      stg["LTXVSpatioTemporalGuidance"][0][0])
+check("...patched after ModelSamplingLTXV",
+      stg_inputs["model"][0], stg["ModelSamplingLTXV"][0][0])
+check("a scale without blocks is not a node",
+      "LTXVSpatioTemporalGuidance" in
+      by_class(build(piece(sampling={"stg_scale": 1.0, "stg_blocks": ""})).expand),
+      False)
+
+mod = by_class(build(piece(sampling={"modality_scale": 3.0})).expand)
+check("one modality node", len(mod["LTXVModalityGuidance"]), 1)
+check("...at the row's scale",
+      mod["LTXVModalityGuidance"][0][1]["modality_scale"], 3.0)
+check("...and STG is not dragged along",
+      "LTXVSpatioTemporalGuidance" in mod, False)
+
+# Both, and both on both stages of a two-stage render: the second pass is a
+# continuation of the first and a piece guided in one and not the other would
+# change its own look halfway through.
+both = by_class(build(piece(short_edge=1088,
+                            sampling={"stg_scale": 1.0,
+                                      "modality_scale": 3.0})).expand)
+check("STG on each stage", len(both["LTXVSpatioTemporalGuidance"]), 2)
+check("modality on each stage", len(both["LTXVModalityGuidance"]), 2)
+check("...composed in the order Lightricks names them",
+      {i["model"][0] for _, i in both["LTXVModalityGuidance"]},
+      {node_id for node_id, _ in both["LTXVSpatioTemporalGuidance"]})
+
+# The row refuses by name rather than sampling at full cost with the guidance
+# quietly inert.
+expect_error("blocks naming nothing",
+             lambda: build(piece(sampling={"stg_blocks": "twenty-nine"})),
+             "names no block")
+expect_error("modality guidance below its off value",
+             lambda: build(piece(sampling={"modality_scale": 0.5})),
+             "at least 1.0")
+
 # ---- the seams, on the 8-grid ------------------------------------------------
 #
 # The reel and seam layer is core's and family-neutral by construction, which is
