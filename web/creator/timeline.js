@@ -2021,6 +2021,11 @@ class Timeline {
       : secondsForFrames(frames, cardRules);
     // The segment's own references plus the piece references its text cites —
     // both ride into this generation, so the card counts both.
+    // Whether this shot can be handed to the duration head, and whether it is.
+    // Only alone: in a pass the length that is sampled is the pass's total, so
+    // a per-shot switch would be offering the model a number nobody reads.
+    const predicts = !shared && S.canDo(this.timeline, "duration");
+    const autoLength = predicts && segment.auto_duration === true;
     const refs = S.references(segment).length + S.citedPool(segment).length;
     const loras = S.activeLoras(segment, S.pieceFamily(this.timeline)).length;
     const typed = (segment.prompt || "").trim();
@@ -2079,15 +2084,41 @@ class Timeline {
         // one go. Alone, that is this card; in a pass it is the pass, and
         // marking every card would say it about the wrong thing — the rail
         // carries it there instead.
-        el("span", {
-          class: `mmc-tl-dur${shared || isTrainedLength(frames) ? "" : " off-distribution"}`,
-          text: `${S.showSeconds(segment.duration_s)} s`,
+        // The seconds, and on a family with a duration head the switch that
+        // hands them over — the same control the shot's own editor carries,
+        // in the one place a strip is actually laid out. A card on auto wears
+        // the `~` for the same reason the strip's total does: the number is an
+        // estimate until the render measures it, and it is still what the bar
+        // and the queue guard count with. No off-distribution mark while it is
+        // on, because that would be marking a length nobody has chosen yet.
+        el(predicts ? "button" : "span", {
+          class: `mmc-tl-dur${autoLength ? " auto" : ""}`
+                 + (shared || autoLength || isTrainedLength(frames) ? "" : " off-distribution"),
+          text: autoLength
+            ? t("~{seconds} s", { seconds: S.showSeconds(segment.duration_s) })
+            : t("{seconds} s", { seconds: S.showSeconds(segment.duration_s) }),
           title: shared
             ? t("{s} s of this pass — the frame count is the pass's.",
                 { s: S.showSeconds(segment.duration_s) })
-            : isTrainedLength(frames)
-              ? t("{frames} frames at 24 fps", { frames })
-              : t("{frames} frames — outside the ~5–15 s the weights were trained on.", { frames }),
+            : autoLength
+              ? t("The model picks this shot's length when it renders, from its own "
+                + "prompt. {seconds} s is the estimate the strip counts with until "
+                + "then, and the length this card goes back to. Click to set it yourself.",
+                  { seconds: S.showSeconds(segment.duration_s) })
+              : (isTrainedLength(frames)
+                   ? t("{frames} frames at 24 fps", { frames })
+                   : t("{frames} frames — outside the ~5–15 s the weights were trained on.",
+                       { frames }))
+                + (predicts
+                     ? "\n" + t("Click to let the model pick this shot's length from its prompt.")
+                     : ""),
+          ...(predicts ? {
+            onclick: (event) => {
+              event.stopPropagation();
+              segment.auto_duration = !autoLength;
+              this.commit();
+            },
+          } : {}),
         }),
         // The mode is a property of the generation, and a pass holding several
         // shots has one of those for all of them — so it moves to the rail.

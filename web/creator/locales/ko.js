@@ -114,6 +114,8 @@ export const ko = {
  "{frames} frames · {seconds} s at {fps} fps": "{frames} 프레임 · {fps} fps에서 {seconds} 초",
  "~{seconds} s": "약 {seconds} 초",
  "The model picks this shot's length when it renders, from the prompt itself. {seconds} s is the estimate everything before the render counts with — the bar, the queue guard — and the length this card goes back to if you turn auto off.": "렌더링할 때 모델이 프롬프트를 보고 이 샷의 길이를 정합니다. {seconds}초는 렌더링 전의 모든 계산 — 막대, 큐 제한 — 이 사용하는 추정치이며, auto를 끄면 이 카드가 돌아가는 길이입니다.",
+ "The model picks this shot's length when it renders, from its own prompt. {seconds} s is the estimate the strip counts with until then, and the length this card goes back to. Click to set it yourself.": "렌더링할 때 모델이 이 샷 자체의 프롬프트를 보고 길이를 정합니다. {seconds}초는 그때까지 스트립이 사용하는 추정치이며, 이 카드가 돌아가는 길이입니다. 클릭하면 직접 설정할 수 있습니다.",
+ "Click to let the model pick this shot's length from its prompt.": "클릭하면 모델이 프롬프트를 보고 이 샷의 길이를 정합니다.",
  "The duration head is picking this shot's length. Click to set it yourself.": "duration head가 이 샷의 길이를 정하고 있습니다. 직접 설정하려면 클릭하세요.",
  "Let the model pick this shot's length from its prompt, between {min} and {max} s — the range its duration head was trained on. Needs the duration head picked under 'weights'.": "프롬프트를 보고 모델이 이 샷의 길이를 정하게 합니다. {min}〜{max}초 — duration head가 학습한 범위입니다. ‘weights’에서 duration head를 골라두어야 합니다.",
  "Outside the ~5–15 s the open weights were trained on. It will generate, but coherence and motion are on their own past here — and cost rises with the square of the length.": "오픈 가중치가 학습된 약 5–15 s 범위를 벗어납니다. 생성은 되지만 이 너머에서는 일관성과 모션을 보장할 수 없고, 비용은 길이의 제곱에 비례해 늘어납니다.",

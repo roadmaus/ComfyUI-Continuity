@@ -115,6 +115,8 @@ export const ja = {
  "~{seconds} s": "約 {seconds} 秒",
  "The model picks this shot's length when it renders, from the prompt itself. {seconds} s is the estimate everything before the render counts with — the bar, the queue guard — and the length this card goes back to if you turn auto off.": "レンダー時にモデルがプロンプト自体からこのショットの長さを決めます。{seconds} 秒はレンダー前のすべて — バーやキューの上限チェック — が使う見積もりであり、auto を外したときにこのカードが戻る長さです。",
  "The duration head is picking this shot's length. Click to set it yourself.": "長さは duration head が決めています。クリックすると自分で設定できます。",
+ "The model picks this shot's length when it renders, from its own prompt. {seconds} s is the estimate the strip counts with until then, and the length this card goes back to. Click to set it yourself.": "レンダー時にモデルがこのショット自身のプロンプトから長さを決めます。{seconds} 秒はそれまでストリップが使う見積もりであり、このカードが戻る長さです。クリックすると自分で設定できます。",
+ "Click to let the model pick this shot's length from its prompt.": "クリックすると、このショットの長さをプロンプトからモデルに決めさせます。",
  "Let the model pick this shot's length from its prompt, between {min} and {max} s — the range its duration head was trained on. Needs the duration head picked under 'weights'.": "このショットの長さをプロンプトからモデルに決めさせます。{min}〜{max} 秒 — duration head が学習した範囲です。「weights」で duration head を選んでおく必要があります。",
  "Outside the ~5–15 s the open weights were trained on. It will generate, but coherence and motion are on their own past here — and cost rises with the square of the length.": "オープンウェイトが学習した約 5–15 秒の範囲外です。生成はできますが、この先の一貫性とモーションは保証外 — そしてコストは長さの二乗で増えます。",
  "{seconds} s": "{seconds} 秒",

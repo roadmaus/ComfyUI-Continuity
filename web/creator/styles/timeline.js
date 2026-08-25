@@ -310,6 +310,16 @@ export const css = `
 }
 .mmc-tl-card.mmc-tl-unshot .mmc-tl-card-prompt,
 .mmc-tl-card.mmc-tl-unshot .mmc-tl-dur { color: var(--mmc-dim); }
+/* On a family with a duration head the seconds are a switch, so the chip is a
+   button — stripped back to the text it already was, since what says it can be
+   clicked is the hover and the lit state, not a box around a number. Lit in the
+   accent the shot editor's own auto switch uses. After the unshot rule and at its
+   specificity: a card on auto that has not been shot is still on auto. */
+.mmc-tl-card button.mmc-tl-dur {
+  border: 0; padding: 0; background: none; font: inherit; cursor: pointer;
+}
+.mmc-tl-card button.mmc-tl-dur:hover { color: var(--mmc-accent); }
+.mmc-tl-card .mmc-tl-dur.auto { color: var(--mmc-accent); }
 
 /* What a locked card is locked as, in the row that already carries what the
    card costs. The word is a readout — the lock beside the mode badge is the

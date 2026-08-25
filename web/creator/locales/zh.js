@@ -115,6 +115,8 @@ export const zh = {
  "{frames} frames · {seconds} s at {fps} fps": "{frames} 帧 · {fps} fps 下 {seconds} 秒",
  "~{seconds} s": "约 {seconds} 秒",
  "The model picks this shot's length when it renders, from the prompt itself. {seconds} s is the estimate everything before the render counts with — the bar, the queue guard — and the length this card goes back to if you turn auto off.": "渲染时由模型根据提示词本身决定这个镜头的长度。{seconds} 秒是渲染前所有计算 — 时间条、队列上限 — 所用的估值，也是关掉 auto 后这张卡片会回到的长度。",
+ "The model picks this shot's length when it renders, from its own prompt. {seconds} s is the estimate the strip counts with until then, and the length this card goes back to. Click to set it yourself.": "渲染时由模型根据这个镜头自己的提示词决定长度。{seconds} 秒是在那之前时间条所用的估值，也是这张卡片会回到的长度。点击可自行设定。",
+ "Click to let the model pick this shot's length from its prompt.": "点击可让模型根据提示词决定这个镜头的长度。",
  "The duration head is picking this shot's length. Click to set it yourself.": "长度由 duration head 决定。点击可改为自己设定。",
  "Let the model pick this shot's length from its prompt, between {min} and {max} s — the range its duration head was trained on. Needs the duration head picked under 'weights'.": "让模型根据提示词决定这个镜头的长度，范围 {min}〜{max} 秒 — 即其 duration head 的训练区间。需要先在“weights”中选好 duration head。",
  "Outside the ~5–15 s the open weights were trained on. It will generate, but coherence and motion are on their own past here — and cost rises with the square of the length.": "超出开源权重训练时的约 5–15 秒范围。仍会生成，但过了这里连贯性和运动就无从保证——而且开销随长度的平方增长。",

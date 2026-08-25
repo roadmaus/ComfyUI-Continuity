@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+**A shot's length can be handed to the model from the strip, not only from the
+shot.** The duration head's "auto" was on the seconds pill in a shot's own
+editor and nowhere else, so setting it on a strip of eight meant opening eight
+cards — in the one view where the lengths are actually laid out side by side,
+the seconds were a readout. They are the switch now, on any family that has a
+duration head, and a card on auto wears the same `~` its estimate already wears
+on the strip's total and inside the editor. Not on a shot inside a merged pass:
+what is sampled there is the pass's total, so a per-shot switch would be
+offering the model a number nothing reads.
+
 **The model leads every node's pill row.** Which architecture renders a piece
 was in two different places and neither was findable: on the pre-stage it stood
 mid-row between the frame pills and the canvas, and on the video nodes it was
