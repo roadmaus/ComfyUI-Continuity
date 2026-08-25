@@ -169,8 +169,13 @@ def manifest():
         "modes": dict(grammar.GRAMMAR.modes),
         "canvas": m.canvas_block(declare.RULES),
         "capabilities": {
-            # The passes the loop may ask this family for.
-            "refine": True, "face": True, "audio": True,
+            # The passes the loop may ask this family for. `audio.supplied` is
+            # whether a track laid on the piece's sound lane can be *fixed*
+            # rather than described — see the same entry on LTX 2.5. True here
+            # for the same reason: `_empty_av_latent` builds a nested (video,
+            # audio) pair and core masks the two streams separately, so the
+            # supplied half can be held out of the denoise.
+            "refine": True, "face": True, "audio": {"supplied": True},
             # Chained seams with feathering — the strip's whole grammar.
             "seams": True,
             # Whether a blended seam can *also* name its boundary frame to the

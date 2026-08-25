@@ -360,7 +360,16 @@ check("...which is optional, because the pass is a choice",
 check("ltx25 lacks the face pass H3 has",
       (lcaps["face"], h3["capabilities"]["refine"], h3["capabilities"]["face"]),
       (False, True, True))
-check("ltx25 always makes sound", lcaps["audio"], True)
+check("ltx25 always makes sound", bool(lcaps["audio"]), True)
+# ...and can be handed some. `supplied` is what the sound lane is gated on, and
+# it is a claim about the latent rather than about this pack: both video
+# families pack a maskable audio stream, so a track can be fixed instead of
+# described. A family that generated its sound in a second pass would say False
+# here and the lane would not draw.
+check("both video families take a supplied track",
+      [manifest.describe(family)["capabilities"]["audio"]["supplied"]
+       for family in sorted(registry.video_families())],
+      [True, True])
 check("ltx25 has no turbo switch — the distilled file is a pick, not a LoRA",
       "turbo" in lcaps, False)
 check("ltx25 prompts in plain prose", ltx["prompt"]["pipeline"], "plain")

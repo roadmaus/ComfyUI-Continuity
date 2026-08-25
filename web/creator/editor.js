@@ -540,10 +540,10 @@ export class CreatorEditor {
   attachFromMention(row) {
     const blocked = S.blockedReason(this.state, "reference");
     if (blocked) { this.flash(blocked); return null; }
-    const { used, max, filesLeft } = S.capacity(this.state, row.kind);
+    const { used, max, filesLeft } = S.capacity(this.state, row.kind, this.piece);
     if (used >= max || filesLeft <= 0) {
       this.flash(t("No {kind} slots left ({used}/{max} used, {filesLeft} files free of {maxFiles}).",
-        { kind: t(row.kind), used, max, filesLeft, maxFiles: S.MAX_REF_FILES }));
+        { kind: t(row.kind), used, max, filesLeft, maxFiles: S.refCaps(this.piece).files }));
       return null;
     }
     const handle = S.nextHandle(this.state, row.kind);
@@ -568,15 +568,15 @@ export class CreatorEditor {
   async addReferences(kind) {
     const blocked = S.blockedReason(this.state, "reference");
     if (blocked) return this.flash(blocked);
-    const { used, max, filesLeft } = S.capacity(this.state, kind);
+    const { used, max, filesLeft } = S.capacity(this.state, kind, this.piece);
     if (used >= max || filesLeft <= 0) {
       return this.flash(t("No {kind} slots left ({used}/{max} used, {filesLeft} files free of {maxFiles}).",
-        { kind: t(kind), used, max, filesLeft, maxFiles: S.MAX_REF_FILES }));
+        { kind: t(kind), used, max, filesLeft, maxFiles: S.refCaps(this.piece).files }));
     }
     const chosen = await openPicker({
       kinds: ["image", "video", "audio", "renders"],
       kind,
-      capacity: (k) => S.capacity(this.state, k),
+      capacity: (k) => S.capacity(this.state, k, this.piece),
       cardSeconds: this.cardSeconds(),
     });
     if (!chosen) return;
@@ -593,7 +593,7 @@ export class CreatorEditor {
     const chosen = await openPicker({
       kinds: ["renders", "image", "video", "audio"],
       kind: "renders",
-      capacity: (k) => S.capacity(this.state, k),
+      capacity: (k) => S.capacity(this.state, k, this.piece),
       cardSeconds: this.cardSeconds(),
     });
     if (!chosen) return;
@@ -653,7 +653,7 @@ export class CreatorEditor {
     const previous = asset.track;
     if (previous === track) return true;
     asset.track = track;
-    const problem = S.overflow(this.state);
+    const problem = S.overflow(this.state, this.piece);
     if (problem) {
       asset.track = previous;
       this.flash(t("@{handle} stays {track} — {problem}", {
@@ -1486,7 +1486,7 @@ export class CreatorEditor {
     const chosen = await openPicker({
       kinds: ["image", "video", "audio", "renders"],
       kind: "image",
-      capacity: (k) => S.capacity(this.state, k),
+      capacity: (k) => S.capacity(this.state, k, this.piece),
     });
     if (!chosen?.length) return null;
     const before = new Set(this.state.assets.map((a) => a.handle));
@@ -1508,12 +1508,22 @@ export class CreatorEditor {
   }
 
   renderRail() {
-    const disabled = !!S.blockedReason(this.state, "reference");
+    // A family with no reference grammar refuses every attachment, so the three
+    // tools are dead rather than disabled-with-a-reason: the refusal is not
+    // about this card's state, it is about what the model reads. Said in the
+    // tooltip so a user who switched the piece's model pill finds out here
+    // rather than at queue time.
+    const takes = S.takesReferences(this.piece);
+    const blocked = takes ? S.blockedReason(this.state, "reference")
+      : t("{family} reads no attached references. Its shots are conditioned by a "
+        + "start or end frame, a seam, and the piece's sound lane.",
+          { family: S.familyOf(this.piece).label });
+    const disabled = !!blocked;
     const tool = (kind, label, iconName) =>
       el("button", {
         class: "mmc-tool",
         disabled: disabled || undefined,
-        title: disabled ? S.blockedReason(this.state, "reference") : t("Attach a reference {kind}", { kind: t(kind) }),
+        title: blocked ?? t("Attach a reference {kind}", { kind: t(kind) }),
         onclick: () => this.addReferences(kind),
       }, [el("span", { class: "mmc-tool-icon" }, [icon(iconName)]), el("span", { text: t(label) })]);
 
@@ -1719,7 +1729,7 @@ export class CreatorEditor {
         // A muted reference is not a reference of this render, so bringing one
         // back can overrun a limit that was legal while it was off — the same
         // check a track change answers to, and the same rollback.
-        const problem = off ? S.overflow(this.state) : null;
+        const problem = off ? S.overflow(this.state, this.piece) : null;
         if (problem) {
           asset.enabled = false;
           return this.flash(t("@{handle} stays muted — {problem}",
@@ -2067,10 +2077,10 @@ export class CreatorEditor {
     if (role === "reference") {
       const blocked = S.blockedReason(this.state, "reference");
       if (blocked) return blocked;
-      const { used, max, filesLeft } = S.capacity(this.state, "image");
+      const { used, max, filesLeft } = S.capacity(this.state, "image", this.piece);
       if (used >= max || filesLeft <= 0) {
         return t("No {kind} slots left ({used}/{max} used, {filesLeft} files free of {maxFiles}).",
-          { kind: t("image"), used, max, filesLeft, maxFiles: S.MAX_REF_FILES });
+          { kind: t("image"), used, max, filesLeft, maxFiles: S.refCaps(this.piece).files });
       }
       this.state.assets.push({
         handle: S.nextHandle(this.state, "image"),

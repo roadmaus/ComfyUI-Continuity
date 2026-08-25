@@ -33,6 +33,8 @@ import sys
 import tempfile
 import types
 
+import harness
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # The two facts. Everything else in this file, and every suite that imports it,
@@ -86,8 +88,7 @@ def py(name):
 def skip_without_node():
     """Bow out on a machine with no `node`, the way every mirror suite must."""
     if shutil.which("node") is None:
-        print("skipped: node is not installed")
-        sys.exit(0)
+        harness.skip("node is not installed")
 
 
 def load(*names, package="mmcpkg"):
@@ -207,8 +208,7 @@ def run(script, *args, catalog=None):
         capture_output=True, text=True,
         env={**os.environ, "MMC_FAMILIES": served})
     if proc.returncode != 0:
-        print(f"node failed:\n{proc.stderr}")
-        sys.exit(1)
+        harness.died(f"node failed:\n{proc.stderr}")
     return json.loads(proc.stdout)
 
 
@@ -286,6 +286,5 @@ def in_pack(script, target, *args):
         ["node", "--input-type=module", "--eval", script, "--", *argv],
         capture_output=True, text=True, cwd=target)
     if proc.returncode != 0:
-        print(f"node failed:\n{proc.stderr}")
-        sys.exit(1)
+        harness.died(f"node failed:\n{proc.stderr}")
     return json.loads(proc.stdout)

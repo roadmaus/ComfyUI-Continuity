@@ -78,6 +78,11 @@ class Node {
     c.forEach((x) => this.appendChild(x));
   }
   insertBefore(n) { return this.appendChild(n); }
+  // A drag takes the pointer so it keeps arriving here once it has left the
+  // element. Nothing to emulate — the tests deliver the moves themselves — but
+  // the call is real and an element without it throws on pointerdown.
+  setPointerCapture() {}
+  releasePointerCapture() {}
   cloneNode() { return new Node(this.tagName); }
   remove() {
     if (!this.parent) return;

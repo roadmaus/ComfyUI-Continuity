@@ -19,6 +19,7 @@ import { openPresetLibrary, styleCastMember } from "./presetlib.js";
 import * as P from "./presets.js";
 import { PromptBox, openEditorSheet } from "./prompt.js";
 import { openSettings } from "./settings.js";
+import { SoundLane } from "./soundlane.js";
 import { openTrim } from "./trim.js";
 import { openAspectPopover, openResolutionPopover, openChoicePopover, facesPill, stepperPill,
          aspectGlyph, resolutionPillText, PILL_GLYPH } from "./pills.js";
@@ -430,6 +431,15 @@ class Timeline {
     this.barHost = el("div", { class: "mmc-tl-bar" });
     this.loraHost = el("div", { class: "mmc-tl-loras" });
     this.stripHost = el("div", { class: "mmc-tl-strip" });
+    // Under the strip, because it is under the strip in what it describes: the
+    // cards are what the piece is made of and the lane is what it is cut to.
+    // It brings its own axis — see `sound.js` for why it cannot borrow the
+    // strip's.
+    this.sound = new SoundLane({
+      read: () => this.timeline,
+      onCommit: () => this.commit(),
+      flash: (message) => this.flash?.(message),
+    });
 
     this.modal = el("div", { class: "mmc-modal mmc-tl-modal" }, [
       el("div", { class: "mmc-modal-head" }, [
@@ -438,7 +448,7 @@ class Timeline {
       ]),
       el("div", { class: "mmc-tl-body" }, [
         this.promptBox.frame, this.audioHost, this.poolHost, this.castHost,
-        this.barHost, this.loraHost, this.stripHost,
+        this.barHost, this.loraHost, this.stripHost, this.sound.host,
       ]),
     ]);
 
@@ -477,6 +487,11 @@ class Timeline {
     this.renderBar();
     this.renderLoras();
     this.renderStrip();
+    // Asked of the family rather than assumed: fixing a supplied track needs a
+    // maskable audio stream in the latent, which is an architectural fact and
+    // not something every family a later version adds will have.
+    this.sound.host.hidden = !S.familyOf(this.timeline).capabilities?.audio?.supplied;
+    if (!this.sound.host.hidden) this.sound.render();
   }
 
   /**
@@ -900,8 +915,8 @@ class Timeline {
       kinds: ["image", "video", "audio", "renders"],
       kind: "image",
       capacity: (kind) => (single
-        ? S.capacity(host, kind)
-        : { used: 0, max: S.MAX_REF_FILES, filesLeft: S.MAX_REF_FILES }),
+        ? S.capacity(host, kind, this.timeline)
+        : { used: 0, max: S.refCaps(this.timeline).files, filesLeft: S.refCaps(this.timeline).files }),
     });
     if (!chosen?.length) return null;
     const picked = chosen[0];
@@ -949,7 +964,7 @@ class Timeline {
       kind: "image",
       // The per-segment reference caps are compile's, applied where a segment
       // actually cites — the pool itself has no ceiling worth enforcing here.
-      capacity: () => ({ used: 0, max: S.MAX_REF_FILES, filesLeft: S.MAX_REF_FILES }),
+      capacity: () => ({ used: 0, max: S.refCaps(this.timeline).files, filesLeft: S.refCaps(this.timeline).files }),
     });
     if (!chosen) return;
     for (const picked of chosen) {
@@ -2986,19 +3001,30 @@ export class TimelineBody {
    * segment — the same stack the modal's LoRAs pill opens.
    */
   renderRail() {
-    const tool = (label, iconName, title, onclick) =>
-      el("button", { class: "mmc-tool", title, onclick },
+    const tool = (label, iconName, title, onclick, disabled = false) =>
+      el("button", { class: "mmc-tool", title, onclick,
+                     disabled: disabled || undefined },
          [el("span", { class: "mmc-tool-icon" }, [icon(iconName)]), el("span", { text: t(label) })]);
+
+    // The pool is references, so it is dead on a family that reads none — see
+    // `CreatorEditor.renderRail`. The sound lane is not affected and is not
+    // here: a track is laid on the piece's clock, not attached to a shot.
+    const takesRefs = S.takesReferences(this.timeline);
+    const noRefs = t("{family} reads no attached references. Its shots are conditioned by "
+                   + "a start or end frame, a seam, and the piece's sound lane.",
+                     { family: S.familyOf(this.timeline).label });
 
     return el("div", { class: "mmc-rail" }, [
       el("div", { class: "mmc-rail-group" }, [
         ...[["image", "Add image", "image"], ["video", "Add video", "video"],
             ["audio", "Add audio", "audio"]].map(([kind, label, iconName]) =>
           tool(label, iconName,
-               t("Attach a {kind} to the whole piece. Cite its @handle in a segment's "
-               + "prompt — or in the global one, for every segment — to use it there.",
-                 { kind: t(kind) }),
-               () => this.addPoolAssets(kind))),
+               takesRefs
+                 ? t("Attach a {kind} to the whole piece. Cite its @handle in a segment's "
+                   + "prompt — or in the global one, for every segment — to use it there.",
+                     { kind: t(kind) })
+                 : noRefs,
+               () => this.addPoolAssets(kind), !takesRefs)),
         tool("Add LoRA", "effect",
              t("Manage the LoRAs patched onto every segment of this timeline"),
              () => this.manageLoras()),
@@ -3048,7 +3074,7 @@ export class TimelineBody {
     const chosen = await openPicker({
       kinds: [kind, "renders"],
       kind,
-      capacity: () => ({ used: 0, max: S.MAX_REF_FILES, filesLeft: S.MAX_REF_FILES }),
+      capacity: () => ({ used: 0, max: S.refCaps(this.timeline).files, filesLeft: S.refCaps(this.timeline).files }),
     });
     if (!chosen?.length) return;
     for (const picked of chosen) {
@@ -3430,7 +3456,7 @@ export class TimelineBody {
     if (role === "reference") {
       const blocked = S.blockedReason(segment, "reference");
       if (blocked) return t("{where}: {blocked}", { where, blocked });
-      const { used, max, filesLeft } = S.capacity(segment, "image");
+      const { used, max, filesLeft } = S.capacity(segment, "image", this.timeline);
       if (used >= max || filesLeft <= 0) {
         return t("{where}: no image slots left ({used}/{max} used).", { where, used, max });
       }

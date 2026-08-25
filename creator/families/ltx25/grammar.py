@@ -5,12 +5,12 @@ the point of the seam: they are statements about Lightricks' weights that happen
 to agree with MiniMax's today, not a shared rule. The compiler used to make them
 for every family because there was only ever one to make them for.
 
-- **The caps are the same numbers H3 declares**, and deliberately so while
-  nothing here reads a reference at all: they bound a list this family carries
-  into the prose and no further, so tightening them would refuse an attachment
-  that costs nothing and loosening them would promise conditioning that does not
-  exist. `test_family_select` holds the two identical and fails the day one of
-  them stops being — which is the day this file has the real numbers in it.
+- **The caps are zero**, which is the day this file's own note said would come.
+  They used to be H3's numbers, on the reasoning that an attachment rode into
+  the prose and no further and so cost nothing. It does not: a citation becomes
+  the literal `<Picture 1>` and `compose` sends that to Gemma, so an attached
+  file put an ordinal referring to nothing into the prompt of an encoder trained
+  on captions. Refusing is the smaller harm, and `refuse` says what does work.
 - **The mode names are this family's own**, in Lightricks' vocabulary, and name
   what the segment node actually builds: guides, through `LTXVAddGuide`.
 - **There is no reference mode**, which is a declaration and not an omission.
@@ -45,10 +45,51 @@ class LTX25Grammar(grammar.Grammar):
              "closes": "L2V",
              "text": "T2V"}
 
-    max_images = 9
-    max_videos = 3
-    max_audios = 3
-    max_files = 12
+    # **Nothing may be attached, and that is the honest number.**
+    #
+    # These were H3's nine images and three videos, declared here while nothing
+    # in this package read a reference at all, on the reasoning that the caps
+    # bound a list which rides into the prose and no further. That reasoning was
+    # wrong about what the prose does. `compile._substitute` turns a cited
+    # `@ref-1` into the literal string `<Picture 1>`, and this family's
+    # `compose` sends the body to Gemma unchanged — so an attached file did not
+    # ride along harmlessly, it put an ordinal referring to nothing into a
+    # caption-trained encoder's prompt. That is worse than refusing it.
+    #
+    # Sound is the exception, and it is not a reference here: a track laid on the
+    # piece's **sound lane** is fixed into the audio latent (`audiolatent.py`),
+    # which is conditioning this family really does. The lane is not counted
+    # here because it is not attached to a card — see `sound.py`.
+    #
+    # What would raise these again is IC-LoRA: Lightricks' `Ingredients` adapter
+    # takes a composite reference sheet through `LTXVAddGuide` with an
+    # `iclora_parameters` downscale factor, which is a real reference grammar
+    # for this family. It is not wired yet, and a cap promising conditioning
+    # that does not exist is the thing this change is undoing.
+    max_images = 0
+    max_videos = 0
+    max_audios = 0
+    max_files = 0
+
+    def refuse(self, error, images, videos, audios):
+        """Refuse every attachment, saying what to do instead.
+
+        Overridden rather than left to the base class's counting, because the
+        base's messages are all "at most N" and N is zero — "at most 0 reference
+        images" is a true sentence that tells nobody anything. What a user wants
+        to know here is that this family has no reference grammar *yet* and
+        which controls do work.
+        """
+        if not (images or videos or audios):
+            return
+        raise error(
+            "LTX 2.5 has no reference grammar yet, so an attached file would "
+            "reach the model as an ordinal in the prompt with no picture "
+            "behind it. What conditions this family today: a start or end "
+            "frame on the card, a seam from the shot before it, and a track on "
+            "the piece's sound lane. Detach the references, or switch the "
+            "piece's model pill to MiniMax H3, which does read them."
+        )
 
     # One transformer. Nothing routes, so `Grammar.checkpoint` answers `""` and
     # `compile._resolve_checkpoint` derives nothing to pin against.

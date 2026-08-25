@@ -86,21 +86,31 @@ export const canDo = (piece, capability) =>
 // The reference grammar — what may be attached, how much of it, and what a
 // chip may narrow it to.
 //
-// **Read off the default family, and that is checked rather than assumed.**
-// Every video family declares this block from the same `compile.py` constants,
-// because `_derive_mode` and `_parse_assets` are shared: what a piece may
-// attach is what the one compiler will accept from it, whichever family renders
-// it. So threading the piece through the twenty-odd readers below would be
-// twenty arguments that cannot change an answer. `test_family_select` holds the
-// declarations identical across the video families; the day one of them differs
-// — which is the day `compile.py` learns families — that suite fails and these
-// become `referenceOf(pieceFamily(piece))`.
+// **The vocabulary is shared; the counts are the piece's family's.**
+//
+// This used to be read wholesale off the default family, with a note saying it
+// would become `referenceOf(pieceFamily(piece))` the day one family's
+// declaration differed from another's. That day is here: LTX 2.5 takes no
+// references at all, because a citation reaches its encoder as a bare
+// `<Picture 1>` with no picture behind it, and drawing an enabled "Add image"
+// on a piece the compiler will refuse is the UI lying about what the model can
+// be sent.
+//
+// What stays global is the *vocabulary* — the takes, the tracks, the default
+// sizes — because those are `compile.py`'s own constants and shared by
+// construction. What moves is the counts, which are now asked of the piece.
+// `test_family_select` holds the vocabulary identical across the families and
+// no longer holds the counts, which is the difference this split makes real.
 const REFERENCE = referenceOf(DEFAULT_VIDEO_FAMILY);
 
-export const MAX_REF_IMAGES = REFERENCE.max.image;
-export const MAX_REF_VIDEOS = REFERENCE.max.video;
-export const MAX_REF_AUDIOS = REFERENCE.max.audio;
-export const MAX_REF_FILES = REFERENCE.max.files;
+/** How many of each kind this piece's family takes, and how many files in all.
+ *  Zero on a family with no reference grammar, which is what every capacity
+ *  check and every attach control below reads. */
+export const refCaps = (piece) => referenceOf(pieceFamily(piece)).max;
+
+/** Whether this piece's family reads attached files at all. What the rail asks
+ *  before it draws a tool that would only ever refuse. */
+export const takesReferences = (piece) => refCaps(piece).files > 0;
 
 const PREFIX = { image: "img", video: "vid", audio: "aud" };
 
@@ -1204,6 +1214,13 @@ export function passOf(timeline, index) {
   return passes(timeline).find((pass) => index >= pass.start && index < pass.end);
 }
 
+/** Which pass, by position — what indexes anything held one-per-pass, such as
+ *  `passWindows`. Separate from `passOf` because a caller with a window list in
+ *  hand wants the subscript and not the pass. */
+export function passIndexOf(timeline, index) {
+  return passes(timeline).findIndex((pass) => index >= pass.start && index < pass.end);
+}
+
 /** Mirrors compile.DEFAULT_AUDIO_TAIL_S / MAX_AUDIO_TAIL_S. Short on purpose:
  *  the reference rows ride through every sampling step, and a long tail pushes
  *  the target's time origin away from the inherited start frame. */
@@ -1486,6 +1503,9 @@ export function emptyTimeline() {
     // How much of the previous segment's sound a continuing seam inherits.
     // Mirrors compile.DEFAULT_AUDIO_TAIL_S.
     audio_tail_s: DEFAULT_AUDIO_TAIL_S,
+    // The sound lane: files placed on the finished piece's own clock, which the
+    // picture is generated against. Empty until one is laid down. See sound.py.
+    sound: [],
     // One set of weights for the whole clip. Chained or not, the segments are
     // concatenated at the end and cannot come from different checkpoints of the
     // same name any more than they can come out different sizes.
@@ -2119,8 +2139,89 @@ function syncCanvas(timeline) {
     // A clip with no soundtrack has none to carry backwards across the seam.
     if (isClip(segment) && segment.has_audio === false) segment.continue_audio = false;
   });
+  syncSound(timeline);
   return timeline;
 }
+
+/**
+ * Keep the sound lane inside the piece it is laid on.
+ *
+ * The lane is placed in piece time and the piece can get shorter underneath it —
+ * shorten a shot, delete a card, switch to a family whose grid rounds the other
+ * way, and a cue that ended on the last frame now runs off the end. `sound.parse`
+ * refuses that, which is right for a hand-edited blob and wrong as the thing a
+ * user meets for trimming a shot: the render would stop with an error about a
+ * file they were not touching.
+ *
+ * So the same rule the feathers above follow — what the piece can no longer
+ * afford is cut here rather than left to fail at queue time. Cut and not
+ * dropped: a cue is minutes of somebody's music and losing all of it because the
+ * piece lost a second is not a trade anybody would make. Only a block left with
+ * nothing at all goes.
+ */
+function syncSound(timeline) {
+  if (!timeline.sound?.length) return timeline;
+  const rules = rulesFor(pieceFamily(timeline));
+  const total = timelineFrames(timeline);
+  const kept = [];
+  for (const entry of timeline.sound) {
+    const at = Math.max(0, Math.round((Number(entry.at_s) || 0) * rules.fps));
+    const room = (total - at) / rules.fps;
+    if (room < MIN_SOUND_SECONDS) continue;
+    const length = (Number(entry.out_s) || 0) - (Number(entry.in_s) || 0);
+    kept.push(length <= room ? entry
+      : { ...entry, out_s: Number((entry.in_s + room).toFixed(3)) });
+  }
+  timeline.sound = kept;
+  return timeline;
+}
+
+/**
+ * The lane, read off a blob that may have been hand-written.
+ *
+ * `sound.parse` refuses what this drops — that is the right answer on the
+ * Python side, where a bad block is a render that must not start, and the wrong
+ * one here, where it is a node that will not open. Same rule the rest of this
+ * reader follows: keep what can be read, drop what cannot, and let the surface
+ * show what survived.
+ */
+function parseSound(raw) {
+  if (!Array.isArray(raw)) return [];
+  // Dropped on exactly what `sound.parse` raises on, so the lane never draws a
+  // block the compiler will refuse: a lane that showed one would send the user
+  // to a queue-time error about a file they cannot see anything wrong with.
+  const number = (value) => {
+    const parsed = Number(value ?? 0);
+    return Number.isFinite(parsed) ? round3(parsed) : null;
+  };
+  return raw
+    .filter((entry) => entry && typeof entry.filename === "string" && entry.filename)
+    .map((entry) => ({
+      filename: entry.filename,
+      at_s: number(entry.at_s),
+      in_s: number(entry.in_s),
+      out_s: number(entry.out_s),
+    }))
+    .filter((entry) => entry.at_s !== null && entry.in_s !== null && entry.out_s !== null
+                    && entry.at_s >= 0 && entry.out_s - entry.in_s >= MIN_SOUND_SECONDS);
+}
+
+/** The lane, as the blob stores it. Same three decimals `soundlane.store`
+ *  writes: the lane is placed on a clock, and rounding it to the two the rest
+ *  of this file uses would move a cue by up to half a frame every save. */
+const serializeSound = (blocks) => blocks.map((block) => ({
+  filename: block.filename,
+  at_s: round3(block.at_s),
+  in_s: round3(block.in_s),
+  out_s: round3(block.out_s),
+}));
+
+const round3 = (value) => Number((Number(value) || 0).toFixed(3));
+
+/** Mirrors `sound.MIN_SECONDS`. Spelled here rather than imported: `sound.js`
+ *  imports this module, and a cycle for one constant is a worse trade than one
+ *  number said twice with the mirror suite holding them equal. */
+const MIN_SOUND_SECONDS = 0.25;
 
 export { syncCanvas as syncTimeline };
 
@@ -2234,6 +2335,7 @@ export function parseTimeline(raw) {
         delete timeline.aspect_source;
       }
       timeline.audio_tail_s = clampTail(timeline.audio_tail_s);
+      timeline.sound = parseSound(timeline.sound);
       for (const key of ["soundscape", "music"]) {
         if (typeof timeline[key] !== "string") timeline[key] = "";
       }
@@ -2402,6 +2504,11 @@ export function serializeTimeline(timeline) {
     // without one round-trips to the bytes it always did.
     ...(timeline.subjects?.length ? { subjects: timeline.subjects } : {}),
     audio_tail_s: clampTail(timeline.audio_tail_s),
+    // The sound lane. Absent when nothing is on it, so a piece that never laid
+    // a track down round-trips to the bytes it always did — and present the
+    // moment one is, which is the whole of what a lane is for: it is the piece
+    // being cut to something, and a piece that forgot it on reload was not.
+    ...(timeline.sound?.length ? { sound: serializeSound(timeline.sound) } : {}),
     // Where this node's renders land, when the blob overrides the setting. No
     // control writes it — it is the hand-edit the README documents as the only
     // way to have two nodes write to different places — so it is carried
@@ -2523,15 +2630,43 @@ export function shotTime(seconds) {
  * are then concatenated, which is what a strip of unmerged segments always was:
  * every one its own pass, every one snapped alone.
  */
-export function timelineFrames(timeline) {
+/**
+ * Where every pass lands in the finished piece — one window per pass.
+ *
+ * Two frame counts per pass, and the difference between them is why this is not
+ * a running sum of durations. `at`/`frames` are what the pass *delivers*, which
+ * is its place in the file and so the axis a soundtrack is laid against.
+ * `sampledAt`/`sampled` are what it *generates*, which is wider at both ends by
+ * the seams it re-makes and the reel then trims off.
+ *
+ * A feathered seam re-generates its inherited run at the head of the pass, and
+ * those frames cover the same instants as the tail of the pass in front — so
+ * `sampledAt` is `at` less the head blend, on one clock rather than two. That is
+ * what lets supplied sound cross a seam: both passes are handed the same stretch
+ * of the same track for the frames they share.
+ *
+ * Mirrors `compile.timeline_windows`.
+ */
+export function passWindows(timeline) {
   const all = passes(timeline);
   // The piece's own family's: the grid a pass snaps to and the rate a clip's
   // seconds become frames at are both the weights', and this readout is the
-  // number on the strip's bar. Mirrors `compile.timeline_frames`, which asks
+  // number on the strip's bar. Mirrors `compile.timeline_windows`, which asks
   // `rules_of(data)` for exactly the same two things.
   const rules = rulesFor(pieceFamily(timeline));
-  return all.reduce((total, pass, index) => {
+  const windows = [];
+  let at = 0;
+  all.forEach((pass, index) => {
     const head = pass.segments[0];
+    const seconds = cutTimes(pass.segments).total;
+    // A clip is played, not sampled, so its length is its own — there is no
+    // frame grid to snap it to. Mirrors `compile.timeline_windows`.
+    if (isClip(head)) {
+      const frames = Math.round(seconds * rules.fps);
+      windows.push({ at, frames, sampledAt: at, sampled: frames, clip: true });
+      at += frames;
+      return;
+    }
     // A blended seam re-generates its inherited run at the pass's head and
     // trims it off after decode, so those frames are sampled but never
     // delivered. Only between passes: a seam inside one does not exist.
@@ -2539,20 +2674,23 @@ export function timelineFrames(timeline) {
     // Never on a clip: its seam flags describe the blend running *backwards*
     // into it, which is paid for by the pass in front and is subtracted there.
     // Read here as well, they would take it off the strip twice.
-    const overlap = index > 0 && !isClip(head) && continues(head) && feather(head, timeline) > 1
+    const lead = index > 0 && continues(head) && feather(head, timeline) > 1
       ? feather(head, timeline) : 0;
     // ...and the same at the far end, where a clip in front of the next pass
     // owns the blend: those frames are re-generated at *this* pass's tail.
     const after = all[index + 1]?.segments[0];
-    const runs = after && isClip(after) && continues(after) && feather(after, timeline) > 1
+    const tail = after && isClip(after) && continues(after) && feather(after, timeline) > 1
       ? feather(after, timeline) : 0;
-    // A clip is played, not sampled, so its length is its own — there is no
-    // frame grid to snap it to. Mirrors `compile.timeline_frames`.
-    const seconds = cutTimes(pass.segments).total;
-    const own = isClip(head) ? Math.round(seconds * rules.fps)
-      : framesForSeconds(seconds, rules);
-    return total + own - overlap - runs;
-  }, 0);
+    const sampled = framesForSeconds(seconds, rules);
+    windows.push({ at, frames: sampled - lead - tail,
+                   sampledAt: at - lead, sampled, clip: false });
+    at += sampled - lead - tail;
+  });
+  return windows;
+}
+
+export function timelineFrames(timeline) {
+  return passWindows(timeline).reduce((total, window) => total + window.frames, 0);
 }
 
 /** How many shots this piece's family advises putting in one generation, or
@@ -4125,26 +4263,44 @@ function counts(state) {
   return { image: images, video: videos, audio: audios, files: images + videos + audios };
 }
 
-/** How many slots a kind has left, for the picker's "n / 9 slots filled". */
-export function capacity(state, kind) {
+/** How many slots a kind has left, for the picker's "n / 9 slots filled".
+ *
+ *  `piece` is optional and trailing, the way `lengthMatch` takes it: a caller
+ *  with the piece in hand gets that family's caps, and one without gets the
+ *  default family's. Optional rather than required because half the call sites
+ *  are inside a lone Creator node, where the piece *is* the state. */
+export function capacity(state, kind, piece = null) {
   const used = counts(state);
-  const max = { image: MAX_REF_IMAGES, video: MAX_REF_VIDEOS, audio: MAX_REF_AUDIOS }[kind];
-  return { used: used[kind], max, filesLeft: MAX_REF_FILES - used.files };
+  const max = refCaps(piece ?? state)[kind];
+  return { used: used[kind], max, filesLeft: refCaps(piece ?? state).files - used.files };
 }
 
 /**
  * Why the references as they now stand would not compile, or null. The same
  * limits as `_derive_mode`, checked after a change has been applied, so a switch
  * that would fail at queue time can be handed back while it is still reversible.
+ *
+ * The zero case gets its own sentence. "At most 0 reference images" is true and
+ * useless; what a user switching a piece to a family with no reference grammar
+ * needs to hear is that the files have to come off, and why.
  */
-export function overflow(state) {
+export function overflow(state, piece = null) {
   const used = counts(state);
-  if (used.image > MAX_REF_IMAGES) return t("At most {max} reference images.", { max: MAX_REF_IMAGES });
-  if (used.video > MAX_REF_VIDEOS) return t("At most {max} reference videos.", { max: MAX_REF_VIDEOS });
-  if (used.audio > MAX_REF_AUDIOS) {
-    return t("At most {max} reference audio clips, counting video soundtracks.", { max: MAX_REF_AUDIOS });
+  const caps = refCaps(piece ?? state);
+  if (!caps.files) {
+    return used.files
+      ? t("{family} reads no attached references — an attached file would reach it "
+        + "as an ordinal in the prompt with nothing behind it. Detach them, or put "
+        + "the piece back on a model that reads them.",
+          { family: familyOf(piece ?? state).label })
+      : null;
   }
-  if (used.files > MAX_REF_FILES) return t("At most {max} reference files in total.", { max: MAX_REF_FILES });
+  if (used.image > caps.image) return t("At most {max} reference images.", { max: caps.image });
+  if (used.video > caps.video) return t("At most {max} reference videos.", { max: caps.video });
+  if (used.audio > caps.audio) {
+    return t("At most {max} reference audio clips, counting video soundtracks.", { max: caps.audio });
+  }
+  if (used.files > caps.files) return t("At most {max} reference files in total.", { max: caps.files });
   return null;
 }
 

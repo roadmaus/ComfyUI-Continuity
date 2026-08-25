@@ -251,7 +251,15 @@ def manifest():
         "capabilities": {
             # The passes the loop may ask this family for. Audio always: LTX
             # 2.5 samples a packed AV latent and there is no soundless mode.
-            "audio": True,
+            #
+            # `supplied` is whether a track laid on the piece's sound lane can be
+            # *fixed* rather than described — which needs the audio stream of
+            # that latent to be maskable, and so is a fact about the
+            # architecture rather than about this pack. Core's own nested
+            # `noise_mask` is what makes it true here (`audiolatent.py`); a
+            # family that generated its sound in a second pass would declare it
+            # false and the lane would not draw.
+            "audio": {"supplied": True},
             # Chained seams with feathering. Core's reel/spill layer is
             # family-neutral by construction — `LTXVConcatAVLatent`'s own
             # description is what the joint latent was written against.

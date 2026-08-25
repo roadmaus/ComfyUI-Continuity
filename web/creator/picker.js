@@ -45,6 +45,12 @@ function chevron(cls) {
  * @param {string[]} options.kinds        tabs to show, in order
  * @param {string} options.kind           tab to open on
  * @param {(kind:string)=>{used:number,max:number,filesLeft:number}} options.capacity
+ *   how many slots the caller's buckets have left. **Optional.** Omitted means
+ *   the caller is not bounded by reference slots at all — the sound lane is
+ *   bounded by the length of the piece, not by a bucket — and the picker then
+ *   counts what is selected instead of pricing it against a maximum. It used to
+ *   be read unconditionally, so a caller that had no slots to report crashed the
+ *   modal on mount rather than being told it had to invent some.
  * @param {boolean} options.single        pick exactly one (start/end frame)
  * @param {string} options.only           show only this kind, on every tab the
  *   renders one included — a swap has to be the kind whose handle it inherits
@@ -660,6 +666,8 @@ class Picker {
    */
   fits(kind, extra = 0) {
     if (this.options.single) return this.selected.length + extra <= 1;
+    // No buckets to price against — see `openPicker`'s `capacity`.
+    if (!this.options.capacity) return true;
     const { used, max, filesLeft } = this.options.capacity(kind);
     // filesLeft is the shared total and reads the same whichever bucket is
     // asked, so every selection counts against it, not just this bucket's.
@@ -1051,6 +1059,14 @@ class Picker {
     );
     if (this.options.single) {
       this.slots.textContent = this.selected.length ? t("1 selected") : t("Pick one");
+      this.slots.classList.remove("full");
+    } else if (!this.options.capacity) {
+      // Nothing to fill, so nothing is reported as filling it: a caller with no
+      // buckets gets a count. "0 / ∞ slots filled" would be a control pretending
+      // to be a limit.
+      this.slots.textContent = this.selected.length
+        ? t("{count} selected", { count: this.selected.length })
+        : t("Pick as many as you like");
       this.slots.classList.remove("full");
     } else {
       // The renders tab has no bucket of its own — a picked render is a video

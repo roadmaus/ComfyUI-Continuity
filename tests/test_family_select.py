@@ -348,18 +348,35 @@ check("the switch is written to the blob", probed["roundTrip"], "probe")
 # failure mode is a reader that still compiles and quietly answers H3, and the
 # only reliable evidence against it is the absence of the name.
 
-# The reference grammar is read off the default family in `state.js`, on the
-# stated grounds that every video family declares the same one: it comes from
-# `compile.py`'s own constants, and that compiler is shared. That is a claim
-# about the manifests, so it is checked against them rather than trusted — the
-# day a family's block differs, the readers have to take the piece.
+# The reference grammar splits into two halves that are checked differently, and
+# the split is the point.
+#
+# The **vocabulary** — the takes, the tracks, the default sizes — comes from
+# `compile.py`'s own constants and is shared by construction, so it must be
+# identical on every family. `state.js` still reads it off one of them.
+#
+# The **counts** are the family's own, and this suite used to hold them
+# identical too. They are not any more: LTX 2.5 takes nothing, because a
+# citation reaches its encoder as a bare `<Picture 1>` with no picture behind
+# it. That is what `refCaps(piece)` exists for, and holding the counts equal
+# here would be re-asserting the thing that turned out to be false.
 _video = [m for m in catalog["families"] if "video" in m["produces"]]
 _grammars = [m.get("reference") for m in _video]
 check("every video family declares a reference grammar",
       [m["id"] for m in _video if m.get("reference") is None], [])
+_shared = lambda block: {k: v for k, v in block.items() if k != "max"}   # noqa: E731
 for entry in _grammars[1:]:
-    check("the video families' reference grammars are identical",
-          entry, _grammars[0])
+    check("the video families share one reference vocabulary",
+          _shared(entry), _shared(_grammars[0]))
+
+# A family that takes nothing has to say so in every count, not only in the
+# total: `capacity(state, kind, piece)` reads them per kind, and a zero `files`
+# beside a nine `image` would draw an enabled tool that refuses on click.
+for entry, family in zip(_grammars, _video):
+    caps = entry["max"]
+    check(f"{family['id']}: the caps agree with each other",
+          bool(caps["files"]) or not any(caps[k] for k in ("image", "video", "audio")),
+          True)
 
 # ...and the mode vocabulary is *not* shared, which is why `mode()` takes the
 # piece. Each family names the payload shapes its own segment node builds.

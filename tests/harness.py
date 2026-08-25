@@ -51,6 +51,23 @@ def skip(reason):
     sys.exit(0)
 
 
+def died(reason):
+    """The suite cannot run at all — a mirror that will not parse, a helper that
+    exited non-zero. Prints, and exits 1 *without* the success line.
+
+    It exists because `sys.exit` is not an error as far as `sys.excepthook` is
+    concerned: a helper that printed node's stderr and exited 1 left `_crashed`
+    false and `FAILURES` empty, so the report below printed "all tests passed"
+    over the top of a stack trace and the interpreter then exited 1. Anyone
+    reading the log — or scrolling a run of twenty suites — saw the green line.
+    """
+    global _crashed
+    _crashed = True
+    print(reason)
+    sys.stdout.flush()
+    sys.exit(1)
+
+
 def _note_crash(exc_type, exc, tb):
     global _crashed
     _crashed = True

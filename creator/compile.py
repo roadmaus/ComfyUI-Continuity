@@ -19,6 +19,7 @@ from dataclasses import dataclass, field, replace
 
 from . import canvas
 from . import redetail
+from . import sound
 from .families import grammar, registry
 from .families.h3 import contextir, declare as h3, subjects
 
@@ -1922,6 +1923,79 @@ def timeline_runs(data, segments=None):
     return [(start, end) for start, end in runs]
 
 
+def timeline_windows(data, segments=None, runs=None):
+    """Where every pass lands in the finished piece — one `Window` per run.
+
+    The piece is its passes laid end to end, and this is the arithmetic that
+    says where each one starts. Two frame counts, and the difference between
+    them is the whole reason this is not a running sum of durations:
+
+    - `at`/`frames` are what the pass **delivers** — its place in the file the
+      muxer writes, which is what a soundtrack is laid against.
+    - `sampled_at`/`sampled` are what it **generates**, which is wider at both
+      ends by the seams it re-makes and `MiniMaxH3Reel` then trims off.
+
+    A feathered seam re-generates the run it inherits at the head of the pass,
+    and those frames cover the same instants as the tail of the pass in front
+    — so `sampled_at` is `at` minus the head blend, in piece time, not a
+    separate clock. That is what lets supplied sound cross a seam without a
+    join in it: both passes are handed the same stretch of the same track for
+    the frames they share, so the overlap agrees by construction instead of
+    being crossfaded afterwards.
+
+    Mirrors `state.passWindows`.
+    """
+    if segments is None:
+        segments = timeline_segments(data)
+    if runs is None:
+        runs = timeline_runs(data, segments)
+
+    rules = rules_of(data)
+    windows = []
+    at = 0
+    for position, (start, end) in enumerate(runs):
+        seconds = sum(_duration_seconds(segment) for segment in segments[start:end])
+        head = segments[start]
+        # A clip is played, not sampled, so its length is its own — there is no
+        # 17n+5 grid to snap it to and snapping would price the strip wrong on
+        # the bar. A clip is always a run of one, so this is the whole pass.
+        if is_clip(head):
+            frames = round(seconds * rules.fps)
+            windows.append(Window(at=at, frames=frames, sampled_at=at,
+                                  sampled=frames, clip=True))
+            at += frames
+            continue
+
+        sampled = canvas.frames_for_seconds(seconds, rules)
+        # A feathered seam re-generates its inherited run at the head of the pass
+        # and trims it off after decode, so those frames are sampled but never
+        # delivered. Only between passes: a seam inside one does not exist. Read
+        # leniently — a bad feather is `compile_request`'s to refuse, with the
+        # frame count in hand to say why.
+        lead = _blend(head) if position and head.get("continue") else 0
+        # ...and the blend at the far end, which a clip in front of this pass
+        # owns: those frames are re-generated at this pass's tail and trimmed
+        # off it, so they are sampled and never delivered just the same.
+        after = segments[end] if end < len(segments) else None
+        tail = _blend(after) if after is not None and is_clip(after) \
+            and after.get("continue") else 0
+
+        windows.append(Window(at=at, frames=sampled - lead - tail,
+                              sampled_at=at - lead, sampled=sampled, clip=False))
+        at += sampled - lead - tail
+    return windows
+
+
+@dataclass(frozen=True)
+class Window:
+    """One pass's place in the finished piece, in frames. See `timeline_windows`."""
+    at: int             # first delivered frame, on the piece's clock
+    frames: int         # how many it delivers
+    sampled_at: int     # first *generated* frame — `at` less the head blend
+    sampled: int        # how many it generates, seams included
+    clip: bool          # supplied footage, which generates nothing
+
+
 def timeline_frames(data, segments=None, runs=None):
     """The frames the finished clip holds: every pass's own, less what each seam
     re-generates and `MiniMaxH3Reel` then trims off before writing the pass out.
@@ -1932,37 +2006,8 @@ def timeline_frames(data, segments=None, runs=None):
     rounding on each. This is the quantity `MAX_TIMELINE_FRAMES` bounds, and the
     one the cost line shows; mirrors `state.timelineFrames`.
     """
-    if segments is None:
-        segments = timeline_segments(data)
-    if runs is None:
-        runs = timeline_runs(data, segments)
-
-    rules = rules_of(data)
-    total = 0
-    for position, (start, end) in enumerate(runs):
-        seconds = sum(_duration_seconds(segment) for segment in segments[start:end])
-        # A clip is played, not sampled, so its length is its own — there is no
-        # 17n+5 grid to snap it to and snapping would price the strip wrong on
-        # the bar. A clip is always a run of one, so this is the whole pass.
-        if is_clip(segments[start]):
-            total += round(seconds * rules.fps)
-            continue
-        total += canvas.frames_for_seconds(seconds, rules)
-        # A feathered seam re-generates its inherited run at the head of the pass
-        # and trims it off after decode, so those frames are sampled but never
-        # delivered. Only between passes: a seam inside one does not exist. Read
-        # leniently — a bad feather is `compile_request`'s to refuse, with the
-        # frame count in hand to say why.
-        head = segments[start]
-        if position and head.get("continue"):
-            total -= _blend(head)
-        # ...and the blend at the far end, which a clip in front of this pass
-        # owns: those frames are re-generated at this pass's tail and trimmed
-        # off it, so they are sampled and never delivered just the same.
-        after = segments[end] if end < len(segments) else None
-        if after is not None and is_clip(after) and after.get("continue"):
-            total -= _blend(after)
-    return total
+    return sum(window.frames
+               for window in timeline_windows(data, segments, runs))
 
 
 def _blend(segment):
@@ -2421,6 +2466,8 @@ def timeline_payloads(data, image_size_lookup=None):
                 if head.get("feather_pin"):
                     payload["feather_pin"] = True
 
+    _stamp_sound(data, segments, runs, payloads, rules, frames)
+
     # One pass over the whole strip has nothing to be concatenated with, so
     # there is nothing to hold to one geometry and a start frame sets the aspect
     # adaptively exactly as it does in a lone generation. Everything else is
@@ -2443,6 +2490,42 @@ def timeline_payloads(data, image_size_lookup=None):
             # the canvas does.
             payload["clip"]["width"], payload["clip"]["height"] = delivered
     return payloads
+
+
+def _stamp_sound(data, segments, runs, payloads, rules, total_frames):
+    """The lane's blocks, cut up and written onto the passes they cover.
+
+    Each payload is handed only its own stretch, on its own clock, and that is
+    deliberate rather than incidental: a payload string is the segment node's
+    cache key, so a lane written this way means moving a cue over shot five
+    re-runs shot five and nothing else. Handing every pass the whole lane would
+    make one drag invalidate the entire strip.
+
+    A clip is skipped. It is played, not sampled, so there is no latent to fix
+    part of — what a supplied track does over supplied footage is a mix, and the
+    muxer does that from the lane directly (`mux.write`), without the payload
+    needing to carry it.
+    """
+    lane = sound.parse(data.get("sound"), rules, total_frames)
+    if not lane:
+        return
+    windows = timeline_windows(data, segments, runs)
+    for payload, window in zip(payloads, windows):
+        if "clip" in payload or window.clip:
+            continue
+        blocks = sound.for_window(lane, window, rules)
+        if blocks:
+            payload["sound"] = [
+                {"filename": block.filename, "at": block.at,
+                 "frames": block.frames, "in_s": round(block.in_s, 6),
+                 # The window's real duration, resolved here rather than left
+                 # for the tensor half to divide out again: this is the side
+                 # that knows the piece's frame rate, and two answers to one
+                 # question can differ in the last decimal and cut a file a
+                 # sample short of where it was dragged.
+                 "seconds": round(block.seconds(rules), 6)}
+                for block in blocks
+            ]
 
 
 def _stamp_clip_seams(segments, runs, payloads):

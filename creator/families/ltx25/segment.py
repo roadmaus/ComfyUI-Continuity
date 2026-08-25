@@ -36,11 +36,17 @@ import logging
 import torch
 from comfy_api.latest import io
 
-from ... import canvas, compile as compiler, lora, media
+from ... import audiolatent, canvas, compile as compiler, lora, media
 from . import models as slots
 from . import declare
 
 SEGMENT_NODE = declare.SEGMENT_NODE
+
+# Where time is on an LTX audio latent, and what rate its VAE is assumed to run
+# at when it does not name one. `LTXVEmptyLatentAudio` builds
+# `[B, z_channels, num_audio_latents, latent_frequency_bins]`, so time is axis 2
+# and the last axis is frequency — the opposite way round from H3's.
+AUDIO_LAYOUT = audiolatent.Layout(time_dim=2, sample_rate=44100)
 
 # Lightricks' own negative for this family, as diffusers ships it. Used rather
 # than invented: a negative prompt is a piece of the model's release, and a
@@ -344,17 +350,34 @@ class MiniMaxLTX25Segment(io.ComfyNode):
                 "[MiniMax] LTX 2.5: %d reference(s) are in the prompt text only "
                 "— this family has no reference grammar yet, so nothing is "
                 "encoded from them.", cited)
-        if prev_audio is not None or next_audio is not None:
-            logging.info(
-                "[MiniMax] LTX 2.5: a sound seam reached this segment and is "
-                "not conditioned on — the soundtrack is generated fresh with "
-                "the picture.")
-
         # The soundtrack's own empty latent, shaped by the audio VAE's config
         # for this many frames at this rate, then packed with the picture. After
         # the guides, always: `append_keyframe` refuses a combined AV latent.
         audio_latent = _core("LTXVEmptyLatentAudio").execute(
             frames, float(rules.fps), 1, audio_vae)[0]
+
+        # Sound the piece's lane laid across this pass, written into that latent
+        # and masked out of the denoise — see `audiolatent.py`. The lane is also
+        # what answers the seam: a pass that continues re-generates the run it
+        # inherits, and `sound.for_window` hands it the same stretch of the same
+        # file the pass in front had, so the frames they share carry one
+        # soundtrack by construction rather than by a crossfade afterwards.
+        blocks = payload.get("sound") or []
+        if blocks:
+            samples, mask = audiolatent.fill(
+                audio_vae, audio_latent["samples"], blocks, frames, AUDIO_LAYOUT)
+            audio_latent = {**audio_latent, "samples": samples, "noise_mask": mask}
+        elif prev_audio is not None or next_audio is not None:
+            # Nothing supplied here, so the seam's sound is still only the
+            # picture's neighbour and not a condition. Worth one line: it is the
+            # difference between a join you can hear and one you cannot, and the
+            # lane is the control that fixes it.
+            logging.info(
+                "[MiniMax] LTX 2.5: a sound seam reached this segment and is "
+                "not conditioned on — the soundtrack is generated fresh with "
+                "the picture. Lay a track on the piece's sound lane across the "
+                "cut to carry it.")
+
         latent = _core("LTXVConcatAVLatent").execute(latent, audio_latent)[0]
 
         # The rate, as conditioning. Last, so both conditionings carry it

@@ -799,4 +799,243 @@ export const css = `
 /* Sampler lists are long; the popover scrolls rather than running off screen. */
 .mmc-pop-scroll { max-height: 320px; overflow-y: auto; min-width: 190px; }
 
+/* ---- the sound lane -------------------------------------------------------
+
+   Four rows that share one axis: a header, the piece drawn to scale, the band,
+   and the clock. The strip above them is not on that axis and cannot be — see
+   sound.js — which is exactly why the reel is here: it is the bridge between
+   the storyboard's reading and the clock's.
+
+   The reel says which shot, the ruler says which second, and the cut guides
+   carry the first answer down through the second so a cue can be seen crossing
+   a boundary rather than measured against one.
+
+   Everything inside the tracks is positioned as a percentage of the whole, so
+   the lane survives the modal being resized without measuring anything. */
+.mmc-snd { display: flex; flex-direction: column; gap: 6px; }
+.mmc-snd-head {
+  display: flex; align-items: center; gap: 10px;
+  font-size: calc(11px * var(--mmc-type));
+}
+.mmc-snd-head .mmc-snd-name { color: var(--mmc-text); font-weight: 500; }
+.mmc-snd-hint { color: var(--mmc-dim); flex: 1; min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* The only line that names the gestures. Dimmer than the count beside it — it
+   is there to be found once and then stopped being read. */
+.mmc-snd-how { color: var(--mmc-off); flex: 0 1 auto; min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* At the header's own size, not .mmc-ghost's 14px — the same override the
+   pass rail's Split button makes, for the same reason. */
+.mmc-snd-add { flex: none; font-size: calc(11px * var(--mmc-type)); }
+
+/* The piece to scale. Deliberately slight — it is a ruler, not a second strip,
+   and anything taller starts competing with the cards it is explaining. */
+.mmc-snd-reel { position: relative; height: calc(17px * var(--mmc-type)); }
+.mmc-snd-pass {
+  position: absolute; top: 0; bottom: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--mmc-surface-3); border-radius: 3px;
+  color: var(--mmc-dim); font-size: calc(10px * var(--mmc-type));
+  /* The gap between passes is the cut, and it is drawn by inset rather than by
+     a margin so the block's own left edge stays the true frame it starts on —
+     which is what the lane below snaps to. */
+  box-shadow: inset 1px 0 0 var(--mmc-bg), inset -1px 0 0 var(--mmc-bg);
+  overflow: hidden;
+}
+/* Supplied footage: solid, because that film exists — the same statement the
+   strip makes about a clip card. */
+.mmc-snd-pass.clip { background: var(--mmc-wash-2); color: var(--mmc-text); }
+.mmc-snd-pass.kept { background: var(--mmc-wash-2); }
+.mmc-snd-pass.unshot { background: none; box-shadow: inset 0 0 0 1px var(--mmc-line); }
+/* Pointing at a shot is a question about where it is, and the lane answers. */
+.mmc-snd-pass:hover { color: var(--mmc-text); background: var(--mmc-wash-3); }
+
+/* The lane holds two zones that share its axis and must never overlap: the band,
+   which is placed in time, and the gutter, which belongs to the cards. A
+   reference drawn across a block would read as being *under* it — as though it
+   were the sound there — which is the one thing this surface must not imply. */
+.mmc-snd-lane {
+  position: relative; height: calc(52px * var(--mmc-type));
+  border-radius: 8px; background: var(--mmc-surface); overflow: hidden;
+  border: 1px solid var(--mmc-line);
+}
+.mmc-snd-lane.has-refs { height: calc(68px * var(--mmc-type)); }
+
+/* Where the shots cut, drawn through the sound rather than beside it. Dashed
+   so it reads as a guide and not as an edge of something — the only solid
+   vertical lines in this lane are the ends of blocks, and a cut is not one. */
+/* Over the band rather than under it. Under, a cut vanished the moment a block
+   or a gap's own fill was laid across it — which is every cut worth seeing.
+   Stopped at the gutter, because a reference belongs to a shot and drawing the
+   shot's own boundary through it would say it was placed in time. */
+.mmc-snd-cuts { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+.mmc-snd-lane.has-refs .mmc-snd-cuts { bottom: calc(16px * var(--mmc-type)); }
+.mmc-snd-cut {
+  position: absolute; top: 0; bottom: 0; width: 1px; margin-left: -1px;
+  background: repeating-linear-gradient(180deg,
+    color-mix(in srgb, var(--mmc-ink) 42%, transparent) 0 4px, transparent 4px 8px);
+}
+/* The stretch one shot owns, lit while its block in the reel is pointed at.
+   Bracketed at both ends, because the question being asked is where it starts
+   and stops and a wash alone answers neither precisely. */
+.mmc-snd-shot {
+  position: absolute; top: 0; bottom: 0; opacity: 0; pointer-events: none;
+  background: var(--mmc-wash-2); transition: opacity .12s ease;
+  box-shadow: inset 1px 0 0 var(--mmc-line-3), inset -1px 0 0 var(--mmc-line-3);
+}
+.mmc-snd-shot.on { opacity: 1; }
+/* The band. Always full: what is not a block is a gap, and a gap is the model
+   writing the sound rather than an absence. */
+.mmc-snd-band { position: absolute; left: 0; right: 0; top: 0; bottom: 0; }
+.mmc-snd-lane.has-refs .mmc-snd-band { bottom: calc(16px * var(--mmc-type)); }
+.mmc-snd-refs {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: calc(16px * var(--mmc-type));
+  border-top: 1px solid var(--mmc-line);
+  background: var(--mmc-bg);
+}
+/* The perforations, in a layer of their own under the band. A drag redraws them
+   on every move — the block it is carrying leaves one stretch and covers
+   another — and it cannot redraw the list the block itself is in without
+   pulling the pointer out of the document with it. */
+.mmc-snd-gaps { position: absolute; left: 0; right: 0; top: 0; bottom: 0; }
+.mmc-snd-lane.has-refs .mmc-snd-gaps { bottom: calc(16px * var(--mmc-type)); }
+
+/* Perforated, in the same grammar the strip uses for film that does not exist
+   yet. The label is dim and small: it names the state, it does not advertise
+   it. */
+.mmc-snd-gap {
+  position: absolute; top: 0; bottom: 0;
+  display: flex; align-items: center; justify-content: center;
+  background-image: repeating-linear-gradient(90deg,
+    var(--mmc-surface-3) 0 7px, transparent 7px 17px);
+  color: var(--mmc-off); font-size: calc(9px * var(--mmc-type));
+  letter-spacing: .04em; pointer-events: none;
+}
+.mmc-snd-gap span { background: var(--mmc-surface); padding: 0 6px; border-radius: 4px; }
+
+/* A laid-down track. The blue is the trim bar's, on purpose: what you drag here
+   is the same act as what you drag in the trim modal, and a second accent for
+   it would say they were different things. */
+.mmc-snd-block {
+  position: absolute; top: 3px; bottom: 3px;
+  border-radius: 6px; overflow: hidden; cursor: grab;
+  background: color-mix(in srgb, var(--mmc-blue) 26%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--mmc-blue) 55%, transparent);
+}
+.mmc-snd-block:active { cursor: grabbing; }
+.mmc-snd-block:hover { background: color-mix(in srgb, var(--mmc-blue) 34%, transparent); }
+.mmc-snd-block:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 1px; }
+/* Lifted over its neighbours while it is being dragged, so a block butted up
+   against a wall still reads as the one in hand. */
+.mmc-snd-block.dragging {
+  z-index: 3; background: color-mix(in srgb, var(--mmc-blue) 40%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--mmc-blue) 85%, transparent),
+              0 2px 10px var(--mmc-shadow-soft);
+}
+.mmc-snd-wave {
+  position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none;
+}
+/* Inset past the grips at both ends, so the name never sits on a handle. The
+   shadow is what keeps it readable over a loud waveform — a scrim box behind it
+   would cut a hole in the very thing the block is drawn to show. */
+.mmc-snd-label {
+  position: absolute; left: 13px; right: 13px; top: 4px;
+  display: flex; gap: 6px; align-items: baseline; justify-content: space-between;
+  pointer-events: none;
+  font-size: calc(10px * var(--mmc-type)); overflow: hidden; white-space: nowrap;
+  text-shadow: 0 1px 3px var(--mmc-bg), 0 0 6px var(--mmc-bg);
+}
+.mmc-snd-file { color: var(--mmc-text); overflow: hidden; text-overflow: ellipsis; }
+.mmc-snd-len { color: var(--mmc-dim); flex: none; font-variant-numeric: tabular-nums; }
+
+/* Wide enough to grab on a trackpad, narrow enough not to eat a short block.
+   Drawn at rest, unlike the rest of this pack's handles: the whole complaint
+   about this lane was that nothing said a block could be trimmed, and a handle
+   that only exists once you are already on top of it says it too late. Faint
+   until then, so six tracks do not read as a fence. */
+.mmc-snd-grip {
+  position: absolute; top: 0; bottom: 0; width: 11px; border: 0; padding: 0;
+  background: none; cursor: ew-resize; opacity: .5;
+  transition: opacity .12s ease;
+}
+.mmc-snd-grip.head { left: 0; }
+.mmc-snd-grip.tail { right: 0; }
+.mmc-snd-block:hover .mmc-snd-grip,
+.mmc-snd-block.dragging .mmc-snd-grip,
+.mmc-snd-grip:focus-visible { opacity: 1; }
+.mmc-snd-grip::after {
+  content: ""; position: absolute; top: 4px; bottom: 4px; left: 4px; width: 3px;
+  border-radius: 2px; background: var(--mmc-blue);
+  box-shadow: 0 0 0 1px var(--mmc-scrim-2);
+}
+.mmc-snd-grip:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: -2px; }
+
+/* Where the block has got to, while it is being moved or trimmed. The piece's
+   clock, not the file's: a drag is a question about the cut. Clamped off the
+   lane's own edges so a block at 0:00 still reads its numbers in full. */
+.mmc-snd-read {
+  position: absolute; top: 50%; z-index: 4; transform: translate(-50%, -50%);
+  /* Built with the lane and moved by the drag, so it has to be invisible until
+     there is a drag to talk about. */
+  opacity: 0;
+  display: flex; gap: 7px; align-items: baseline; pointer-events: none;
+  padding: 3px 8px; border-radius: 5px; white-space: nowrap;
+  background: var(--mmc-float); border: 1px solid var(--mmc-line-2);
+  box-shadow: 0 2px 10px var(--mmc-shadow-soft);
+  font-size: calc(10px * var(--mmc-type)); font-variant-numeric: tabular-nums;
+}
+.mmc-snd-read.on { opacity: 1; }
+.mmc-snd-read-at { color: var(--mmc-text); }
+.mmc-snd-read-len { color: var(--mmc-accent); }
+
+/* The clock. Ticks only where a number is written — a ruler with minor marks
+   between them would out-detail the band it is measuring. */
+.mmc-snd-ruler {
+  position: relative; height: calc(15px * var(--mmc-type));
+  font-size: calc(9px * var(--mmc-type)); color: var(--mmc-off);
+  font-variant-numeric: tabular-nums;
+}
+.mmc-snd-tick { position: absolute; top: 0; }
+.mmc-snd-tick::before {
+  content: ""; position: absolute; top: 0; left: -1px; width: 1px; height: 4px;
+  background: var(--mmc-line-3);
+}
+.mmc-snd-tick span {
+  position: absolute; top: 5px; left: 0; transform: translateX(-50%);
+  white-space: nowrap;
+}
+.mmc-snd-tick.first span { transform: none; }
+/* The length of the piece, hung inside its own end so it cannot be clipped. */
+.mmc-snd-tick.last span { transform: translateX(-100%); }
+.mmc-snd-tick.last { color: var(--mmc-dim); }
+
+/* An imitation reference, under the card it is attached to. A hairline because
+   it is not placed in time — the shot decides where it is — and dashed because
+   what it asks for is a resemblance rather than a signal. */
+.mmc-snd-ref {
+  position: absolute; top: 2px; bottom: 2px;
+  display: flex; align-items: center; padding: 0 6px; overflow: hidden;
+  border-radius: 3px;
+  border: 1px dashed color-mix(in srgb, var(--mmc-ink) 22%, transparent);
+  color: var(--mmc-off); font-size: calc(9px * var(--mmc-type));
+  white-space: nowrap; cursor: help;
+}
+/* The one take that is not imitation never draws as a hairline — it is the
+   signal itself and appears as a block. Named here so the rule is visible
+   rather than only implied by sound.js filtering it out. */
+.mmc-snd-ref.take-copy { display: none; }
+
+/* Why a drag stopped where it did. One hairline in the accent, which is the
+   pack's word for "here". */
+.mmc-snd-snap {
+  position: absolute; top: 0; bottom: 0; width: 2px; margin-left: -1px;
+  z-index: 5; background: var(--mmc-accent); opacity: 0; pointer-events: none;
+}
+.mmc-snd-snap.on { opacity: .9; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mmc-snd-block, .mmc-snd-grip, .mmc-snd-shot { transition: none; }
+}
+
 `;

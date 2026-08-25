@@ -20,7 +20,7 @@ import time
 import node_helpers
 import torch
 from comfy.ldm.minimax.model import FRAME_PER_TOKEN
-from ... import latents, media
+from ... import audiolatent, latents, media
 from .payload import AUDIO_END_KEY, CORE_ANCHORS_ANYWHERE, FRAME_INDEX_KEY
 from comfy_extras.nodes_minimax_h3 import (
     CANVAS_MULTIPLE,
@@ -46,6 +46,12 @@ except ImportError:  # core before 2026-08-13: a static method on the node
 # Asset and no filename — a reserved key rather than a handle, because handles
 # are the user's namespace and this frame is not something they attached.
 PREV_FRAME = "__prev__"
+
+# Where time is on an H3 audio latent, and the rate its VAE is assumed to run at
+# when it does not name one. `_empty_av_latent` builds `[B, 32, 2, audio_t]`, so
+# time is the *last* axis and the 2 before it is not a channel count worth
+# guessing at — the opposite layout from LTX's, which is why `Layout` exists.
+AUDIO_LAYOUT = audiolatent.Layout(time_dim=3, sample_rate=32000)
 
 # Where a timeline segment's inherited audio tail arrives. Same reasoning as
 # PREV_FRAME: it is the previous segment's *generated* sound, so there is no file
@@ -385,7 +391,7 @@ def _seam_blocks(audio_vae, compiled, loaded, frame_count):
     return blocks
 
 
-def encode(clip, vae, audio_vae, compiled, loaded, checkpoints=None):
+def encode(clip, vae, audio_vae, compiled, loaded, checkpoints=None, sound=None):
     """-> (conditioning, latent). `loaded` maps asset handle -> decoded media.
 
     `checkpoints` names the VAE files on `vae` and `audio_vae`, for the
@@ -394,11 +400,25 @@ def encode(clip, vae, audio_vae, compiled, loaded, checkpoints=None):
     loaded object is not; see `latents.fingerprint`. A caller with no names
     (a hand-built graph) passes none and the cache identifies the weights by
     their shape instead.
+
+    `sound` is the piece's lane, already cut to this pass by `sound.for_window`.
+    Applied here rather than inside either branch because it is the same
+    operation on both: the mode decides how the *picture* is conditioned, and a
+    supplied soundtrack is a fact about the latent either way.
+
+    It does not replace a `ref_audio` reference and is not the same statement.
+    A reference is imitation — it rides in the span before the clip and the
+    model is asked to sound like it. A lane block is the signal itself, masked
+    out of the denoise. A piece may carry both: "this is the music, and the
+    voice should sound like that" is a coherent thing to ask for.
     """
     if compiled.mode == "REF2VA":
-        return _encode_references(clip, vae, audio_vae, compiled, loaded,
-                                  checkpoints or {})
-    return _encode_frames(clip, vae, audio_vae, compiled, loaded)
+        cond, latent = _encode_references(clip, vae, audio_vae, compiled, loaded,
+                                          checkpoints or {})
+    else:
+        cond, latent = _encode_frames(clip, vae, audio_vae, compiled, loaded)
+    return cond, audiolatent.apply_av(latent, audio_vae, sound or [],
+                                      compiled.frames, AUDIO_LAYOUT)
 
 
 def _encode_frames(clip, vae, audio_vae, compiled, loaded):
