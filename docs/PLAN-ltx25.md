@@ -116,9 +116,11 @@ Each ends green; goldens are re-recorded only when a phase *adds* graphs.
    them.~~ **Weighed — see "Phase 4: multishot" below.**
    ~~And the cross-family upscale.~~ **Done — see "Phase 4: ReDetail, as
    landed" below.**
-5. **Taste guidance**: ~~STG / modality~~ **done — see "Phase 5: the two
-   guidance patches" below** / reference-audio as their own pills with honest
-   cost copy — new UI, not the accel row.
+5. ~~**Taste guidance**: STG / modality / reference-audio as their own pills
+   with honest cost copy — new UI, not the accel row.~~ **Done as the two
+   guidance patches — see below. Reference audio moved to the reference-grammar
+   question, where it belongs: it is the only one of the three that needs an
+   asset rather than a scale.**
 
 ## ReDetail: LTX 2.5 as an upscale pass for *any* family (phase 4)
 
@@ -614,6 +616,12 @@ previews on. Wrapping it the same way is a separate piece of work.
   Context-IR; LTX has `LTXVAddGuide` (per-guide strength, frame_idx on the
   8-grid, negative indexes from the end) and IC-LoRAs. The manifest declares no
   `reference` block until this is decided.
+  **Reference audio is part of this question and was folded into it during
+  phase 5** (decided 2026-08-25). `LTXVReferenceAudio` transfers a speaker's
+  identity from a ~5 s clip, and the natural home for that clip is a card's
+  existing audio reference — which is exactly the grammar nothing has decided.
+  Answering it for pictures and for sound at once is worth more than shipping
+  the sound half against a grammar the picture half may not keep.
 
 ## Phase 4: ReDetail, as landed
 
@@ -767,15 +775,16 @@ range: restricting either to part of the schedule is a real control and not one
 measured on these weights, so it is Lightricks' number rather than a guess
 behind a pill.
 
-**Not done: reference audio.** `LTXVReferenceAudio` is the third of the three
-this phase named, and it is a different kind of thing from the other two — it
-needs an *asset*, a ~5 s clip of the voice to transfer, which makes it a piece of
-the reference grammar this branch has not decided (the open question below) and
-not just a scale. What it would not need is a new weight slot: the AV model
-handles `ref_audio` natively (`comfy/ldm/lightricks/av_model.py` prepends the
-reference tokens to the audio stream), so the conditioning half is core's. Its
-own `identity_guidance_scale` costs the same extra pass per step as these two and
-belongs in the same group when it lands.
+**Reference audio was the third of the three and is deliberately not here.**
+It is a different kind of thing from the other two: it needs an *asset* — a ~5 s
+clip of the voice to transfer — which makes it a piece of the reference grammar
+this branch has not decided rather than a scale to add. Held for that question
+(above) rather than shipped against a grammar the picture half may not keep.
+What it will *not* need is a new weight slot: the AV model handles `ref_audio`
+natively (`comfy/ldm/lightricks/av_model.py` prepends the reference tokens to
+the audio stream), so the conditioning half is core's. Its own
+`identity_guidance_scale` costs the same extra pass per step as these two and
+belongs in this group when it lands.
 
 ## Frozen, still
 
