@@ -2,6 +2,22 @@
 
 ## Unreleased
 
+**A shot that cites a reference no longer claims to open on it.** Since the
+compiler started asking a family how to read a request, the prompt was composed
+as though nothing had been cited — so a reference generation was written in a
+keyframe mode and picked up the guide's base-mode alignment line, "at 0.00
+seconds `<Picture 1>` is fully referenced". On that road `<Picture 1>` is the
+first *reference*, not a frame the shot opens on: the seam is never presented to
+the text encoder there, and an attached start frame is presented after the
+references and already named, at the ordinal it really took, by the line under
+it. So the prompt told the model to open the shot on the character sheet.
+
+It bit hardest in a timeline, where the transformer was simultaneously handed
+the previous shot's own last frames as pinned guides: the picture the text asked
+for and the picture the guides asked for were different, and whatever came out
+of that argument was decoded, inherited by the next seam, and argued over again.
+A cast-driven chain drifted further from itself with every card.
+
 **The LTX 2.5 sampler row is five pills at rest instead of thirteen, and it is
 written in words rather than in the names of the nodes behind it.** Settings →
 Nodes → Advanced controls never reached this row: the flag was read past the

@@ -1355,8 +1355,22 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     # Read through the family's own names, because that is what the shape is
     # being spelled in — a family that does not distinguish these gets its own
     # answer out of the same three booleans.
-    prompt_mode = family_grammar.mode(cited=False, opens=opens_presented,
-                                      closes=closes_presented)
+    #
+    # `cited` is the encode mode's own answer and not `False`. A citation
+    # decides how the *whole* prompt is written, not merely which pictures are
+    # in it: on a reference generation the ordinals belong to the references, so
+    # the guide's base-mode line — "at 0.00 seconds <Picture 1> is fully
+    # referenced" — names the first reference and says the target opens on it.
+    # The seam is never presented there at all (`encode._encode_references`),
+    # and an attached start frame is presented *after* the references and
+    # already named by the alignment preamble, which knows the ordinal it
+    # really took. Said `False`, a chained reference segment told the model to
+    # open on the character sheet while the DiT was handed the previous pass's
+    # own frames as pinned guides — the two conditionings arguing, and in a
+    # timeline the loser inherited by the segment after it.
+    prompt_mode = family_grammar.mode(
+        cited=mode == family_grammar.modes.get("reference"),
+        opens=opens_presented, closes=closes_presented)
     # And what the encoder is actually sent. Everything above assembled the
     # parts; which of them reach the model, and in what form, is the family's —
     # H3 was trained on its own Context-IR and an encoder trained on captions

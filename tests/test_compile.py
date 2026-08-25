@@ -944,6 +944,27 @@ check("...and pinning it puts both back",
 check("the pin is inert without a blend to modify",
       timeline([segment(), segment(**{"continue": True, "feather_pin": True})])[1].feather_pin,
       False)
+
+# And the rule that holds over both of them: on a reference generation the
+# ordinals are the references', so the base modes' alignment line must not be
+# written at all. It names <Picture 1> as the frame the target opens on, and
+# <Picture 1> there is the first *reference* — the seam is never presented on
+# that road (`encode._encode_references`) and an attached start frame is
+# presented after the references, already named by the alignment preamble at
+# the ordinal it really took. Composed as a keyframe mode, a chained cast shot
+# told the model to open on the character sheet while the DiT held the previous
+# pass's own frames as pinned guides.
+OPENS_ON = "For the target video, at 0.00 seconds into the target video"
+cast_seam = timeline([segment(), segment("keep @img-1", **{"continue": True,
+                                                           "assets": [image("img-1")]})])[1]
+check("a chained reference segment is REF2VA", cast_seam.mode, "REF2VA")
+check("...and claims to open on no reference", OPENS_ON in cast_seam.prompt, False)
+cast_start = build("keep @img-1", [image("img-1"), image("st-1", "first_frame")])
+check("a reference generation with a start frame is REF2VA too", cast_start.mode, "REF2VA")
+check("...and states its alignment once, at the ordinal the frame took",
+      (OPENS_ON in cast_start.prompt,
+       "<Picture 2> (from [Shot 1]) aligns with the 0.00-second mark" in cast_start.prompt),
+      (False, True))
 expect_error("a feather off the VAE grid",
              lambda: timeline([segment(), segment(**{"continue": True, "feather": 10})]),
              "not 10")
