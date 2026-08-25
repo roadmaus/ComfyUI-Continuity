@@ -54,7 +54,7 @@ frame count and a sample count.
 """
 
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from fractions import Fraction
 
 import numpy as np
@@ -199,19 +199,65 @@ class _Target:
     channels: int | None
     layout: str | None
     audio_time_base: Fraction | None
+    # What the audio encoder will accept in one frame, or 0 for a codec that
+    # takes any length. AAC's is 1024 and it is not a suggestion — see
+    # `_mux_sound`. Knowable only once the encoder is open, which is why
+    # `write` opens it rather than letting the first frame do it.
+    audio_frame_size: int = 0
+    # The samples left over when a part does not end on a frame boundary, held
+    # as `[(at, waveform)]` so the next part continues them rather than sending
+    # a short frame of its own. A list because `_Target` is frozen and this is
+    # the one thing in it that changes as the reel is written.
+    pending: list = field(default_factory=list)
+
+
+def _encode_sound(av, target, block, at):
+    """One frame of sound at sample `at`, encoded and muxed."""
+    sound = av.AudioFrame.from_ndarray(
+        np.ascontiguousarray(block.contiguous().numpy()),
+        format="fltp", layout=target.layout)
+    sound.sample_rate = target.rate
+    sound.pts = at
+    sound.time_base = target.audio_time_base
+    target.output.mux(target.audio.encode(sound))
 
 
 def _mux_sound(av, target, waveform, at):
-    """Write one part's fitted waveform, in chunks, starting at sample `at`."""
-    chunk = max(1, int(_AUDIO_CHUNK_S * target.rate))
-    for start in range(0, waveform.shape[-1], chunk):
-        block = waveform[..., start:start + chunk].contiguous().numpy()
-        sound = av.AudioFrame.from_ndarray(
-            np.ascontiguousarray(block), format="fltp", layout=target.layout)
-        sound.sample_rate = target.rate
-        sound.pts = at + start
-        sound.time_base = target.audio_time_base
-        target.output.mux(target.audio.encode(sound))
+    """Write one part's fitted waveform, starting at sample `at`.
+
+    In the frames the encoder asks for, and **carried across part boundaries**:
+    AAC's frame size is fixed, and libavcodec refuses a short frame anywhere but
+    the end of the stream with a bare EINVAL out of `avcodec_send_frame()`. A
+    part whose sample count is not a multiple of 1024 — which is most of them,
+    since a part's sound is cut to the length of its own picture — would send
+    one every time. What is left over rides in `target.pending` and goes out at
+    the head of the next part's first frame; `_flush_sound` writes the last of
+    it, where a short frame is the one thing that is allowed.
+
+    A codec that takes any length (`audio_frame_size` 0) keeps the one-second
+    chunking this had before, which is nothing to do with correctness and
+    everything to do with not converting a ten-minute soundtrack in one piece.
+    """
+    if target.pending:
+        held_at, held = target.pending.pop()
+        waveform = torch.cat([held, waveform], dim=-1)
+        at = held_at
+    size = target.audio_frame_size or max(1, int(_AUDIO_CHUNK_S * target.rate))
+    total = waveform.shape[-1]
+    # Only whole frames while the stream is still open. Without a fixed frame
+    # size every part is whole by definition and this is the old loop exactly.
+    whole = (total // size) * size if target.audio_frame_size else total
+    for start in range(0, whole, size):
+        _encode_sound(av, target, waveform[..., start:start + size], at + start)
+    if whole < total:
+        target.pending.append((at + whole, waveform[..., whole:].contiguous()))
+
+
+def _flush_sound(av, target):
+    """The samples the last part ended on, as the one short frame that is legal."""
+    if target.pending:
+        at, waveform = target.pending.pop()
+        _encode_sound(av, target, waveform, at)
 
 
 def _write_pass(av, target, spec, at_frame, at_sample):
@@ -448,10 +494,17 @@ def write(path, parts, fps, crf, metadata=None):
         video.codec_context.time_base = video_time_base
 
         audio = None
+        audio_frame_size = 0
         if rate is not None:
             layout = _LAYOUTS[channels]
             audio = output.add_stream("aac", rate=rate, layout=layout)
             audio_time_base = Fraction(1, rate)
+            # Opened here rather than left to the first frame, because how many
+            # samples this encoder takes at once is only knowable once it is —
+            # and on a fixed-frame-size codec that number is a hard requirement
+            # rather than a preference. See `_mux_sound`.
+            audio.codec_context.open()
+            audio_frame_size = int(getattr(audio.codec_context, "frame_size", 0) or 0)
 
         written_frames = 0
         written_samples = 0
@@ -461,7 +514,8 @@ def write(path, parts, fps, crf, metadata=None):
         target = _Target(output, video, audio, pix_fmt, frame_rate,
                          video_time_base, rate, channels,
                          _LAYOUTS[channels] if channels else None,
-                         Fraction(1, rate) if rate else None)
+                         Fraction(1, rate) if rate else None,
+                         audio_frame_size)
 
         for part in parts:
             if is_clip(part):
@@ -478,6 +532,11 @@ def write(path, parts, fps, crf, metadata=None):
         # part would put a keyframe and a GOP boundary at every join.
         output.mux(video.encode(None))
         if audio is not None:
+            # The tail the last part did not fill a frame with, before the
+            # encoder is closed out — the end of the stream is the one place a
+            # short frame is legal, and dropping it would lose up to a frame's
+            # worth of the final part's sound.
+            _flush_sound(av, target)
             output.mux(audio.encode(None))
 
     return width, height

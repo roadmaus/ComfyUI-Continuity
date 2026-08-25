@@ -292,6 +292,38 @@ expect_error("a layout with no name is refused rather than guessed at",
              lambda: written([part(4, seconds=0.1, channels=3)]),
              "3-channel")
 
+# ---- the frames the audio encoder is actually handed ------------------------
+#
+# AAC's frame size is fixed at 1024 samples and libavcodec refuses anything else
+# anywhere but the end of the stream — a bare EINVAL out of
+# `avcodec_send_frame()`, four frames deep in PyAV, naming nothing. A part's
+# sound is cut to the length of its own picture, so a part landing on a frame
+# boundary is the exception rather than the rule: 11 frames at 24 fps is 22000
+# samples, which is 21 frames and a remainder of 496.
+#
+# Read through `_encode_sound` rather than off the file, because what is wrong
+# in the failing case is *what the encoder is handed*, and by the time it is a
+# container the evidence is gone — some builds and some PyAV versions buffer the
+# short frame for you, which is exactly why this went unnoticed until an install
+# whose PyAV does not.
+handed = []
+_encode = mux._encode_sound
+mux._encode_sound = lambda av_, target, block, at: (
+    handed.append((int(block.shape[-1]), int(at))), _encode(av_, target, block, at))[1]
+try:
+    written([part(11, seconds=11 / FPS), part(7, seconds=7 / FPS)])
+finally:
+    mux._encode_sound = _encode
+
+check("every audio frame but the last is the encoder's own size",
+      sorted({count for count, _ in handed[:-1]}), [1024])
+check("...including across the join between two parts",
+      len(handed) > 1 and handed[-1][0] < 1024, True)
+check("...and they run from zero without a gap or an overlap",
+      [at for _, at in handed],
+      [sum(count for count, _ in handed[:index]) for index in range(len(handed))])
+
+
 # ---- the quality setting reaches the encoder --------------------------------
 #
 # The old save node had to refuse a CRF on ComfyUI older than 0.29, because

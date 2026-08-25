@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+**A render whose sound does not land on the audio encoder's frame boundary now
+writes.** AAC's frame is a fixed 1024 samples and libavcodec refuses any other
+length anywhere but the end of the stream — as a bare `avcodec_send_frame()
+returned 22`, four frames deep in PyAV, naming nothing. Every part's sound is
+cut to the length of its own picture, so landing on a boundary was the
+exception: a 6 s shot at 24 fps is 288000 samples, which is 281 frames and a
+remainder of 256. Nothing was wrong with the audio and nothing was wrong with
+the family — some PyAV builds absorb the short frame and some return the error,
+which is why this survived every render made on a box whose PyAV does. The
+samples a part ends on are carried into the next part's first frame now, and the
+last of them go out with the flush, where a short frame is the one thing that is
+allowed.
+
 **A shot's length can be handed to the model from the strip, not only from the
 shot.** The duration head's "auto" was on the seconds pill in a shot's own
 editor and nowhere else, so setting it on a strip of eight meant opening eight
