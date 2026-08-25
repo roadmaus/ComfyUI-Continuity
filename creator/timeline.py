@@ -422,6 +422,16 @@ class MiniMaxH3Reel(io.ComfyNode):
                 io.Latent.Input("samples"),
                 io.Vae.Input("vae"),
                 io.Vae.Input("audio_vae"),
+                # The rate this pass's frames were snapped to. An input rather
+                # than a module constant because this node is family-neutral and
+                # the rate is not: it converts a seam's width in frames into a
+                # count of audio samples, and it is stamped onto the spill for
+                # every later reader of that pass. Read off `canvas.FPS` it was
+                # H3's 24 whatever family sampled — which both video families
+                # happen to agree on, so the error would have been invisible
+                # until a family that does not.
+                io.Float.Input("fps", default=float(canvas.H3.fps),
+                               min=1.0, max=120.0),
                 # The runs this pass shares with its neighbours, dropped before
                 # anything is written: a blend re-generates the moment it
                 # inherited, and an untrimmed pass would play it twice. `head`
@@ -439,7 +449,8 @@ class MiniMaxH3Reel(io.ComfyNode):
         )
 
     @classmethod
-    def execute(cls, samples, vae, audio_vae, head=0, tail=0, reel=None) -> io.NodeOutput:
+    def execute(cls, samples, vae, audio_vae, fps, head=0, tail=0,
+                reel=None) -> io.NodeOutput:
         import nodes
         from comfy_extras.nodes_audio import vae_decode_audio
 
@@ -460,15 +471,15 @@ class MiniMaxH3Reel(io.ComfyNode):
             # soundtrack is the same span as the picture but not the same
             # length, and an index computed from the frame count would drift by
             # the rounding.
-            head_samples = int(round(head / canvas.FPS * rate))
-            tail_samples = int(round(tail / canvas.FPS * rate))
+            head_samples = int(round(head / float(fps) * rate))
+            tail_samples = int(round(tail / float(fps) * rate))
             waveform = audio["waveform"][..., head_samples:]
             if tail_samples:
                 waveform = waveform[..., :-tail_samples]
             images = images[head:images.shape[0] - tail] if tail else images[head:]
             audio = {"waveform": waveform, "sample_rate": rate}
 
-        written = spill.write(images, audio, canvas.FPS)
+        written = spill.write(images, audio, float(fps))
         # Dropped before returning rather than left to the frame's teardown:
         # what this node exists to guarantee is that nothing holds a pass once
         # it is on disk, and the largest thing in this scope is that pass.
@@ -711,7 +722,7 @@ class MiniMaxH3Save(io.ComfyNode):
             is_output_node=True,
             inputs=[
                 io.Custom(REEL_TYPE).Input("reel"),
-                io.Float.Input("fps", default=float(canvas.FPS), min=1.0, max=120.0),
+                io.Float.Input("fps", default=float(canvas.H3.fps), min=1.0, max=120.0),
                 io.String.Input("filename_prefix", default="minimax/H3"),
                 # An input rather than a read of `settings.py` here, so that
                 # changing the quality and re-queueing actually re-writes the

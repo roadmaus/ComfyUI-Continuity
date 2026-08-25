@@ -160,7 +160,7 @@ def _frames(raw):
         frames = int(raw)
     except (TypeError, ValueError):
         raise CompileError("the still length must be a whole number of frames")
-    return canvas.frames_for_seconds(max(1, frames) / canvas.FPS)
+    return canvas.frames_for_seconds(max(1, frames) / canvas.H3.fps, canvas.H3)
 
 
 def _block(data):
@@ -179,7 +179,7 @@ def _request(block, frames):
         raise CompileError("the still's request must be a JSON object")
     # The duration the video side speaks in. `frames` is already snapped, so
     # `frames_for_seconds` inside `compile_request` lands back on it exactly.
-    request["duration_s"] = canvas.seconds_for_frames(frames)
+    request["duration_s"] = canvas.seconds_for_frames(frames, canvas.H3)
     # Never two-pass: a still past the native edge upscales through the
     # single-image VAE decode, and the still graph has no refine pass to hand
     # a capped canvas to — left unpinned, `compile_request` would sample at

@@ -126,7 +126,7 @@ for cards, seen in zip(CASES, reflected):
     # mirror does over the whole strip, restricted to what is sampled: a
     # feathered seam re-generates its inherited run and the reel node drops it.
     check(f"{name}: sampled frames", seen["sampled"],
-          sum(canvas_mod.frames_for_seconds(payload["request"]["duration_s"])
+          sum(canvas_mod.frames_for_seconds(payload["request"]["duration_s"], canvas_mod.H3)
               - (payload.get("feather", 1) if payload.get("continue")
                  and payload.get("feather", 1) > 1 else 0)
               for payload in sampled))

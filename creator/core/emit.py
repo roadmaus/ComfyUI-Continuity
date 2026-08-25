@@ -324,6 +324,10 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
         # and this is the pass as delivered.
         written = graph.node(
             REEL_NODE, samples=latent, vae=links.vae, audio_vae=links.audio_vae,
+            # The family's rate, for the same reason the save node is given it:
+            # the frame counts were snapped to it, so the seam trim's sample
+            # arithmetic and the spill's stamp are both wrong at any other.
+            fps=float(family.rules.fps),
             **({"head": one.feather} if one.feather > 1 else {}),
             **({"tail": one.ends_feather} if one.ends_feather > 1 else {}),
             **({"reel": reel} if reel is not None else {}))
@@ -378,7 +382,7 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
 
 
 def emit_tail(graph, reel, unique_id, filename_prefix=FILENAME_PREFIX, takes="",
-              fps=float(canvas.FPS)):
+              fps=float(canvas.H3.fps)):
     """Write the reel to a file, and report it against `unique_id`.
 
     An AV family generates picture and sound together and they should leave

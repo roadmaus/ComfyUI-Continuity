@@ -31,7 +31,7 @@ import { familyPill, weightsPill, loadCatalog, adoptWeights } from "./models.js"
 import * as Turbo from "./turbo.js";
 import { viewUrl, probe, probeAudio, primeSettings } from "./api.js";
 import * as S from "./state.js";
-import { FPS, MIN_SECONDS, MAX_SECONDS, describeRatio, framesForSeconds, isTrainedLength,
+import { describeRatio, framesForSeconds, isTrainedLength,
          rulesFor, secondsForFrames } from "./canvas.js";
 
 const HANDLE_RE = /@([A-Za-z]+-\d+)/g;
@@ -1821,22 +1821,22 @@ export class CreatorEditor {
     // pill is a coarse control by then anyway, and nudging 15 → 60 one second at
     // a time is 45 clicks.
     const grain = state.duration_s >= 15 ? 5 : 1;
-    const trained = isTrainedLength(geometry.frames);
+    const rules = rulesFor(S.pieceFamily(this.piece));
+    const trained = isTrainedLength(geometry.frames, rules);
     // A card matched to a reference carries a fractional length, so a step from
     // one lands on the whole second either side of it rather than 0.42 away
     // from where it started. From a whole second both are the plain step.
     const stepTo = (delta) => {
       const from = Number(state.duration_s) || 0;
       const step = delta < 0 ? (from > 15 ? 5 : 1) : grain;
-      return delta < 0 ? Math.max(MIN_SECONDS, Math.ceil(from) - step)
-                       : Math.min(MAX_SECONDS, Math.floor(from) + step);
+      return delta < 0 ? Math.max(rules.minSeconds, Math.ceil(from) - step)
+                       : Math.min(rules.maxSeconds, Math.floor(from) + step);
     };
     // Whether this family can be asked how long the shot wants to be. A
     // capability, not an id: H3 has no such weights, and a later family might.
     const predicts = S.canDo(this.piece, "duration");
     const auto = predicts && state.auto_duration === true;
     const setAuto = (on) => { state.auto_duration = on; this.commit(); };
-    const rules = rulesFor(S.pieceFamily(this.piece));
     const duration = el("div", {
       class: `mmc-pill mmc-pill-group${trained || auto ? "" : " off-distribution"}`,
       title: (auto
@@ -1857,7 +1857,7 @@ export class CreatorEditor {
     }, [
       el("button", {
         class: "mmc-step", text: "−",
-        disabled: auto || state.duration_s <= MIN_SECONDS || undefined,
+        disabled: auto || state.duration_s <= rules.minSeconds || undefined,
         onclick: () => {
           state.duration_s = stepTo(-1);
           this.commit();
@@ -1875,7 +1875,7 @@ export class CreatorEditor {
                             ...(auto ? { opacity: "0.6" } : {}) } }),
       el("button", {
         class: "mmc-step", text: "+",
-        disabled: auto || state.duration_s >= MAX_SECONDS || undefined,
+        disabled: auto || state.duration_s >= rules.maxSeconds || undefined,
         onclick: () => {
           state.duration_s = stepTo(1);
           this.commit();
@@ -1917,7 +1917,7 @@ export class CreatorEditor {
       // The ratio the picture brought with it, which is the one case where the
       // pill is showing a shape no entry in the list would have drawn.
       ? [aspectGlyph(geometry.ratio, PILL_GLYPH),
-         el("span", { text: describeRatio(geometry.ratio) }),
+         el("span", { text: describeRatio(geometry.ratio, rules) }),
          el("span", { class: "mmc-pill-sub",
                       text: chosen ? `@${sourceAsset.handle}` : t("from image") })]
       : [aspectGlyph(geometry.ratio, PILL_GLYPH), el("span", { text: state.aspect })]);

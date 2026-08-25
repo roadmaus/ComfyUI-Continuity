@@ -64,7 +64,7 @@ DEFAULT_DATA = json.dumps({
         "frames": still.DEFAULT_FRAMES,
         "latent_index": still.DEFAULT_LATENT_INDEX,
         "request": {"prompt": "", "assets": [], "loras": [],
-                    "aspect": "16:9", "short_edge": canvas.NATIVE_SHORT_EDGE,
+                    "aspect": "16:9", "short_edge": canvas.H3.native_short_edge,
                     "output_prefix": outputs.IMAGE_PREFIX, "models": {}},
     },
     # Per-arch sub-blocks, so switching the model pill never forgets the other

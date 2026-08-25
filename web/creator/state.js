@@ -2,9 +2,8 @@
 // Mirrors compile.py: it validates here so the user sees the problem while
 // editing rather than at queue time, but compile.py stays authoritative.
 
-import { ASPECT_PRESETS, FPS, MIN_SHORT_EDGE, NATIVE_SHORT_EDGE, CANVAS_MULTIPLE,
-         featherGrid, framesForSeconds, secondsForFrames, matchSeconds,
-         resolveCanvas, rulesFor } from "./canvas.js";
+import { VIDEO_RULES, featherGrid, framesForSeconds, secondsForFrames,
+         matchSeconds, resolveCanvas, rulesFor } from "./canvas.js";
 import { DEFAULT_STILL_ARCH, DEFAULT_VIDEO_FAMILY, STILL_ARCHES,
          UPSCALERS, VIDEO_FAMILIES, stillFamily, upscaler, videoFamily } from "./manifest.js";
 import { t } from "./i18n.js";
@@ -837,8 +836,12 @@ export function redetailTarget(target, ratio, backend = upscalerOf(target)) {
  * what a card gets to say is whether this shot is one that needs it.
  */
 export const DEFAULT_FACE_CANVAS = 512;
-export const MIN_FACE_CANVAS = MIN_SHORT_EDGE;
-export const MAX_FACE_CANVAS = NATIVE_SHORT_EDGE;
+// The face pass belongs to the default family — it is written against that
+// family's detector, frame grid and re-encode, and every other family declares
+// `face: false` — so these are that family's edges, spelled as such. A family
+// that grows a face pass brings its own bounds and these become a declaration.
+export const MIN_FACE_CANVAS = VIDEO_RULES.minShortEdge;
+export const MAX_FACE_CANVAS = VIDEO_RULES.nativeShortEdge;
 export const DEFAULT_FACE_DENOISE = 0.45;
 export const MIN_FACE_DENOISE = 0.1;
 export const MAX_FACE_DENOISE = 0.9;
@@ -855,7 +858,7 @@ export function parseFace(raw) {
   face.on = Boolean(face.on);
   face.canvas = Number.isFinite(canvas)
     ? Math.min(MAX_FACE_CANVAS, Math.max(MIN_FACE_CANVAS,
-        Math.round(canvas / CANVAS_MULTIPLE) * CANVAS_MULTIPLE))
+        Math.round(canvas / VIDEO_RULES.multiple) * VIDEO_RULES.multiple))
     : DEFAULT_FACE_CANVAS;
   face.denoise = Number.isFinite(denoise)
     ? Math.min(MAX_FACE_DENOISE, Math.max(MIN_FACE_DENOISE, denoise))
@@ -915,11 +918,11 @@ export function emptyState() {
     // counts with and what the card falls back to when auto goes off again.
     auto_duration: false,
     aspect: "16:9",
-    short_edge: NATIVE_SHORT_EDGE,
+    short_edge: VIDEO_RULES.nativeShortEdge,
     // The two-pass choice and its two knobs. Owned wherever the canvas is
     // owned; all inert while the first-pass edge is not under the slider.
     upscale: UPSCALE_MODES[0],
-    sample_edge: NATIVE_SHORT_EDGE,
+    sample_edge: VIDEO_RULES.nativeShortEdge,
     refine_denoise: DEFAULT_REFINE_DENOISE,
     // The face pass, off until asked for. Owned wherever the canvas is owned.
     face: emptyFace(),
@@ -1101,8 +1104,12 @@ export function serializeState(state) {
     aspect: state.aspect,
     short_edge: state.short_edge,
     // Absent means the default, so a blob that never left native adds nothing.
+    // Native is the *piece's* family's — `first_pass_edge` reads an absent one
+    // as that family's own edge, so comparing against another family's would
+    // write out the number that was already going to be assumed.
     ...(state.upscale !== UPSCALE_MODES[0] ? { upscale: state.upscale } : {}),
-    ...(state.sample_edge !== NATIVE_SHORT_EDGE ? { sample_edge: state.sample_edge } : {}),
+    ...(state.sample_edge !== rulesFor(pieceFamily(state)).nativeShortEdge
+      ? { sample_edge: state.sample_edge } : {}),
     ...(state.refine_denoise !== DEFAULT_REFINE_DENOISE
       ? { refine_denoise: state.refine_denoise } : {}),
     ...serializeFace(state.face),
@@ -1122,13 +1129,13 @@ export function serializeState(state) {
 // because the segments are concatenated at the end and have to match, plus one
 // flag saying whether it starts from the previous segment's last frame.
 
-// Mirrors compile.MAX_SEGMENTS / compile.MAX_TIMELINE_FRAMES — two bounds on two
+// Mirrors compile.MAX_SEGMENTS / compile.MAX_TIMELINE_MINUTES — two bounds on two
 // quantities, and only the second is about work. Cards are bounded so a corrupt
 // blob is refused before it is walked; how long the queue runs is a question
 // about frames, because a pass is anything from 5 to 1445 of them and a run of
 // cards is one generation. `canAddSegment` is what the strip actually asks.
 export const MAX_SEGMENTS = 240;
-export const MAX_TIMELINE_FRAMES = 30 * 60 * FPS;
+export const MAX_TIMELINE_MINUTES = 30;
 
 /** Mirrors compile.RENDER_MODES. "chained" is a generation per segment,
  *  concatenated; "single" is one generation whose description holds every
@@ -1429,10 +1436,10 @@ export function emptyTimeline() {
     // analysis describes the whole clip. Chained, each segment keeps its own.
     refined: null,
     aspect: "16:9",
-    short_edge: NATIVE_SHORT_EDGE,
+    short_edge: VIDEO_RULES.nativeShortEdge,
     // The two-pass choice rides with the canvas, which is the timeline's.
     upscale: UPSCALE_MODES[0],
-    sample_edge: NATIVE_SHORT_EDGE,
+    sample_edge: VIDEO_RULES.nativeShortEdge,
     refine_denoise: DEFAULT_REFINE_DENOISE,
     // The face pass, off until asked for. One answer for the whole piece; a
     // card may still opt out of it.
@@ -1665,7 +1672,12 @@ export function setFamily(timeline, id, remembered = null) {
   // An aspect the new family does not list is its nearest listed shape, which
   // is `describeRatio`'s question asked of the ratio the label stood for.
   if (!rules.aspects.some(([label]) => label === timeline.aspect)) {
-    const ratio = ASPECT_PRESETS.find(([label]) => label === timeline.aspect)?.[1] ?? 16 / 9;
+    // Looked up in the family being *left*, which is what the label meant: read
+    // off the default family's list it was the right ratio only while the piece
+    // happened to be on that family, and every other switch resolved the label
+    // against a list it was never written in.
+    const ratio = rulesFor(was).aspects
+      .find(([label]) => label === timeline.aspect)?.[1] ?? 16 / 9;
     timeline.aspect = rules.aspects.reduce(
       (best, entry) => Math.abs(entry[1] - ratio) < Math.abs(best[1] - ratio) ? entry : best,
       rules.aspects[0])[0];
@@ -2349,7 +2361,8 @@ export function serializeTimeline(timeline) {
     ...(timeline.aspect_source ? { aspect_source: timeline.aspect_source } : {}),
     short_edge: timeline.short_edge,
     ...(timeline.upscale !== UPSCALE_MODES[0] ? { upscale: timeline.upscale } : {}),
-    ...(timeline.sample_edge !== NATIVE_SHORT_EDGE ? { sample_edge: timeline.sample_edge } : {}),
+    ...(timeline.sample_edge !== rulesFor(pieceFamily(timeline)).nativeShortEdge
+      ? { sample_edge: timeline.sample_edge } : {}),
     ...(timeline.refine_denoise !== DEFAULT_REFINE_DENOISE
       ? { refine_denoise: timeline.refine_denoise } : {}),
     ...serializeFace(timeline.face),
@@ -2664,10 +2677,11 @@ export function addSegmentRefusal(timeline, seconds = DEFAULT_DURATION_S) {
     return t("A timeline holds at most {max} segments.", { max: MAX_SEGMENTS });
   }
   const rules = rulesFor(pieceFamily(timeline));
-  if (timelineFrames(timeline) + framesForSeconds(seconds, rules) > MAX_TIMELINE_FRAMES) {
+  const cap = MAX_TIMELINE_MINUTES * 60 * rules.fps;
+  if (timelineFrames(timeline) + framesForSeconds(seconds, rules) > cap) {
     return t("A timeline holds at most {minutes} minutes of finished video. "
            + "Shorten it, or split the piece across two Timeline nodes.",
-             { minutes: Math.round(MAX_TIMELINE_FRAMES / (60 * rules.fps)) });
+             { minutes: MAX_TIMELINE_MINUTES });
   }
   return null;
 }
@@ -2695,6 +2709,11 @@ export const PRESTAGE_ARCH_LABEL = Object.fromEntries(
 
 export const PRESTAGE_STILL_ARCH = stillOf(DEFAULT_VIDEO_FAMILY).arch;
 export const isStill = (state) => state?.arch === PRESTAGE_STILL_ARCH;
+
+/** The canvas rules a still on this branch is counted on. A still made by the
+ *  video model is a video generation one latent frame of which is decoded, so
+ *  its frame counts land on that family's own grid and nowhere else. */
+const STILL_RULES = rulesFor(STILL_ARCHES[PRESTAGE_STILL_ARCH]);
 
 /** What the length pill offers, and what a fresh still samples: the family's
  *  declaration, from the cheapest legal clip up to the bottom of its trained
@@ -2732,7 +2751,9 @@ export function parseStill(raw) {
   const out = emptyStill();
   if (!raw || typeof raw !== "object") return out;
   const frames = Number(raw.frames);
-  if (Number.isFinite(frames)) out.frames = framesForSeconds(Math.max(1, frames) / FPS);
+  if (Number.isFinite(frames)) {
+    out.frames = framesForSeconds(Math.max(1, frames) / STILL_RULES.fps, STILL_RULES);
+  }
   const index = Number(raw.latent_index);
   if (Number.isFinite(index)) out.latent_index = Math.round(index);
   if (PRESTAGE_PROMPT_MODES.includes(raw.prompt_mode)) out.prompt_mode = raw.prompt_mode;
@@ -3946,12 +3967,18 @@ export function hasReferences(state) {
 /** A timeline segment that starts from the previous segment's last frame. */
 export const continues = (state) => state.continue === true;
 
-/** Mirrors compile.FEATHER_GRID: the seam widths the video VAE's temporal
- *  grid can encode standalone. 1 is the classic single-frame seam; more pins
- *  the source's last run as motion context, re-generated at this segment's
- *  head and trimmed off after decode. The default family's, for the readers
- *  that predate the argument; `featherGridOf` is the one to reach for. */
-export const FEATHER_GRID = featherGrid();
+/** `width` retargeted onto a piece's own feather grid — the nearest run its
+ *  video VAE can encode standalone. What `setFamily` does to every seam on a
+ *  family switch, and what applying a preset written on another family has to
+ *  do to the one it carries: H3's medium 22 reaches LTX 2.5 as 25, where left
+ *  alone it would fall off the grid and be silently the classic single frame.
+ *  1 stays 1 — the classic seam is on every family's grid. */
+export function nearestFeather(width, piece) {
+  const n = Number(width);
+  if (!Number.isFinite(n) || n <= 1) return 1;
+  const grid = featherGridOf(piece);
+  return grid.reduce((best, f) => (Math.abs(f - n) < Math.abs(best - n) ? f : best), grid[0]);
+}
 
 /** The widths the seams of *this* piece may be. A family's own grid, because
  *  the run a seam inherits has to be one its video VAE can encode standalone —
@@ -3972,7 +3999,7 @@ export function featherPin(segment, piece) {
 
 /** The seam's width in frames — a valid grid value, or the classic 1. */
 export function feather(segment, piece) {
-  const grid = piece ? featherGridOf(piece) : FEATHER_GRID;
+  const grid = featherGridOf(piece);
   return grid.includes(segment.feather) && segment.feather > 1 ? segment.feather : 1;
 }
 

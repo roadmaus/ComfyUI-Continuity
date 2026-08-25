@@ -587,7 +587,7 @@ try:
     from comfy_extras.nodes_minimax_h3 import video_latent_t
 
     from Minimax_creator.creator import canvas as canvas_mod
-    longest = video_latent_t(max(canvas_mod.legal_frame_counts()))
+    longest = video_latent_t(max(canvas_mod.legal_frame_counts(canvas_mod.H3)))
     check("and asks for enough to cover the longest generation's latent",
           models_mod.PREVIEW_FRAMES >= longest, True)
     # Read off the installed class rather than carried here, the way accel.py
@@ -774,7 +774,7 @@ for field in ("prompt", "mode", "checkpoint", "frames", "seconds", "width", "hei
 # sampler's latent. At or under native — every graph above — none of it exists.
 
 canvas_mod = importlib.import_module(f"{PACKAGE}.creator.canvas")
-TARGET = canvas_mod.resolve_canvas(16 / 9, 1152)
+TARGET = canvas_mod.resolve_canvas(16 / 9, 1152, canvas_mod.H3)
 
 check("no refine pass at native", "MiniMaxH3RefinePass" in kinds, False)
 

@@ -7,7 +7,7 @@
 
 import { el, icon, dismissable, placeNear } from "./dom.js";
 import { t } from "./i18n.js";
-import { CANVAS_MULTIPLE, rulesFor } from "./canvas.js";
+import { rulesFor } from "./canvas.js";
 import { UPSCALE_MODES, DEFAULT_REFINE_DENOISE, MIN_REFINE_DENOISE, MAX_REFINE_DENOISE,
          twoPass, sampleEdge, emptyFace, isClip, pieceFamily, refineOf,
          redetailTarget, MIN_FACE_CANVAS, MAX_FACE_CANVAS,
@@ -654,7 +654,8 @@ export function openFacesPopover(anchor, { target, commit }) {
         el("span", { class: "mmc-refine-label", text: t("crop at") }),
         stepperPill({
           value: face.canvas,
-          min: MIN_FACE_CANVAS, max: MAX_FACE_CANVAS, step: CANVAS_MULTIPLE, width: "56px",
+          min: MIN_FACE_CANVAS, max: MAX_FACE_CANVAS,
+          step: rulesFor(pieceFamily(target)).multiple, width: "56px",
           title: t("The canvas each face crop is generated at. Bigger is more faithful "
                + "and costs the square of it — the face fills this either way, so most "
                + "of what a larger one buys is the hair around it."),

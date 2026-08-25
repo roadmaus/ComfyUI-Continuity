@@ -29,7 +29,7 @@
 import { api } from "../../../scripts/api.js";
 import { t } from "./i18n.js";
 import * as S from "./state.js";
-import { NATIVE_SHORT_EDGE } from "./canvas.js";
+import { rulesFor } from "./canvas.js";
 
 // ---- storage ----------------------------------------------------------------
 //
@@ -858,7 +858,8 @@ export function factsOf(body, scope) {
     passes,
     seconds,
     aspect: body.look?.aspect ?? "16:9",
-    short_edge: body.look?.short_edge ?? NATIVE_SHORT_EDGE,
+    short_edge: body.look?.short_edge
+      ?? rulesFor(body.speed?.family).nativeShortEdge,
     route: body.weights?.route ?? "auto",
     family: body.speed?.family ?? S.DEFAULT_VIDEO_FAMILY,
   };
@@ -1096,8 +1097,16 @@ export function leadWithName(text, handle) {
 /** What a section reverts to when the preset omits a field for it being at the
  *  default. Applying a section *replaces* it — a preset whose look never left
  *  native has to put a node that did back, not leave it where it was. */
-function lookDefaults() {
+/** What a `look` section leaves behind for the fields it does not carry.
+ *
+ *  Taken off a fresh piece *of the target's family*, not off a default one: the
+ *  canvas defaults are a family's native edge, so a starter that carries an
+ *  aspect and no edge would otherwise put the default family's 768 onto a piece
+ *  whose family samples at 544. `setFamily` re-clamps for the same reason, and
+ *  is what this borrows rather than repeating its arithmetic. */
+function lookDefaults(family) {
   const empty = S.emptyTimeline();
+  S.setFamily(empty, family);
   return pick(empty, ["aspect", "short_edge", "upscale", "sample_edge", "refine_denoise",
                       "face"]);
 }
@@ -1251,7 +1260,7 @@ export function applyToPiece(body, keys, timeline, io, { from = "piece" } = {}) 
   const chosen = new Set(keys);
 
   if (chosen.has("look")) {
-    Object.assign(timeline, lookDefaults(), body.look ?? {});
+    Object.assign(timeline, lookDefaults(S.pieceFamily(timeline)), body.look ?? {});
   }
   if (chosen.has("weights")) {
     // Through `parseModels` rather than assigned: a stored block omits every
@@ -1338,7 +1347,7 @@ export function applyToPiece(body, keys, timeline, io, { from = "piece" } = {}) 
 }
 
 /** Apply to one card of a strip, in place. The caller commits. */
-export function applyToShot(body, keys, segment, io, { from = "shot" } = {}) {
+export function applyToShot(body, keys, segment, io, { from = "shot", piece } = {}) {
   const chosen = new Set(keys);
 
   if (chosen.has("prompt")) {
@@ -1375,6 +1384,13 @@ export function applyToShot(body, keys, segment, io, { from = "shot" } = {}) {
     }
     for (const key of ["continue_from", "feather", "merge"]) {
       if (shot[key] === undefined) delete segment[key];
+      // The blend is retargeted rather than copied: a preset is family-neutral
+      // and a width is not, so the run this one names has to become the nearest
+      // run the target's video VAE can encode standalone. Copied verbatim onto
+      // another family it falls off the grid, and `S.feather` reads anything off
+      // the grid as the classic single frame — a seam that quietly stops being
+      // feathered, which is the failure the grid exists to prevent.
+      else if (key === "feather") segment.feather = S.nearestFeather(shot.feather, piece);
       else segment[key] = shot[key];
     }
   }

@@ -677,6 +677,11 @@ spill_mod.directory = lambda: _SPILLS
 
 RATE = 48000
 
+# The rate the reel node is handed. H3's, because these cases are H3's — and an
+# argument rather than a constant inside the node, which is what the trim below
+# checks by running the same frames at a second rate.
+FPS = 24.0
+
 
 class _DecodingVae:
     """A stand-in for the pair of decoders, answering with countable frames.
@@ -688,12 +693,12 @@ class _DecodingVae:
 
     audio_sample_rate_output = RATE
 
-    def __init__(self, frames, audio=False):
-        self.frames, self.audio = frames, audio
+    def __init__(self, frames, fps=FPS, audio=False):
+        self.frames, self.fps, self.audio = frames, fps, audio
 
     def decode(self, latent):
         if self.audio:
-            samples = int(round(self.frames / 24 * RATE))
+            samples = int(round(self.frames / self.fps * RATE))
             ramp = _torch.arange(samples, dtype=_torch.float32) / samples
             # (batch, samples, channels) — `vae_decode_audio` moves the last
             # axis into place, so this is the shape a real one hands back.
@@ -702,11 +707,16 @@ class _DecodingVae:
         return values.view(self.frames, 1, 1, 1).expand(self.frames, 8, 8, 3).contiguous()
 
 
-def _run_reel(frames, head=0, tail=0, reel=None):
+def _run_reel(frames, head=0, tail=0, reel=None, fps=FPS):
+    """One pass through the reel node. `fps` is the family's rate, and the
+    node's own input — it is what a trimmed seam's sample count is computed
+    from, so a family sampling at another rate trims a different number of
+    samples off the same number of frames."""
     return tl.MiniMaxH3Reel.execute(
         samples={"samples": _torch.zeros(1, 4, 4, 4)},
-        vae=_DecodingVae(frames), audio_vae=_DecodingVae(frames, audio=True),
-        head=head, tail=tail, reel=reel)
+        vae=_DecodingVae(frames, fps=fps),
+        audio_vae=_DecodingVae(frames, fps=fps, audio=True),
+        fps=fps, head=head, tail=tail, reel=reel)
 
 
 whole = _run_reel(48)
@@ -730,8 +740,24 @@ check("...off the right ends",
       [round(float(spill_mod.frames(trimmed, 1, end)[0, 0, 0, 0]) * 255)
        for end in ("head", "tail")], [5, 44])
 check("...and the sound loses the same stretch, not the same fraction",
-      trimmed["samples"], int(round(48 / 24 * RATE))
-      - int(round(5 / 24 * RATE)) - int(round(3 / 24 * RATE)))
+      trimmed["samples"], int(round(48 / FPS * RATE))
+      - int(round(5 / FPS * RATE)) - int(round(3 / FPS * RATE)))
+
+# The same pass at another rate. The node is family-neutral and its trim is
+# arithmetic on seconds, so the frames it drops are the same and the samples it
+# drops are not — the whole reason the rate is an input rather than the H3
+# constant it used to be read off. A family at 30 fps would otherwise have every
+# feathered seam trim a quarter too much sound, silently, since both video
+# families this pack ships happen to run at 24.
+OTHER_FPS = 30.0
+other = _run_reel(48, head=5, tail=3, fps=OTHER_FPS).result[1]
+check("the rate the reel is given is the rate its seam trim counts in",
+      other["samples"], int(round(48 / OTHER_FPS * RATE))
+      - int(round(5 / OTHER_FPS * RATE)) - int(round(3 / OTHER_FPS * RATE)))
+check("...and it is stamped on the spill for every later reader of the pass",
+      other["fps"], OTHER_FPS)
+check("...while the frames it drops are the frames either way",
+      (other["frames"], trimmed["frames"]), (40, 40))
 
 # The reel grows by one part per pass and keeps play order, and a pass never
 # reaches back into the list it was handed.

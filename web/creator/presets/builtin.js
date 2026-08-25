@@ -15,7 +15,6 @@
 // "Save current setup" is how you get one of your own.
 
 import { describe } from "../presets.js";
-import { NATIVE_SHORT_EDGE } from "../canvas.js";
 import * as S from "../state.js";
 
 /** Build the index row a card draws from, so a starter is described by exactly
@@ -90,7 +89,11 @@ export const BUILTIN = [
     scope: "piece",
     note: "A phone-shaped canvas at the native short edge.",
     data: {
-      look: { aspect: "9:16", short_edge: NATIVE_SHORT_EDGE, upscale: "two_pass" },
+      // No `short_edge`: the native edge is the family's, and a starter is
+      // family-neutral, so a number here would be one family's edge applied to
+      // whichever piece the preset lands on. Omitted, `applyToPiece` leaves the
+      // piece's own — which `lookDefaults` sets to its family's native.
+      look: { aspect: "9:16", upscale: "two_pass" },
     },
   }),
 
@@ -106,9 +109,12 @@ export const BUILTIN = [
         checkpoint: "auto",
         continue: true,
         continue_audio: true,
-        // A grid value, not a number: `state.feather` only honours FEATHER_GRID,
-        // and anything else is silently the classic single frame.
-        feather: S.FEATHER_GRID[2],
+        // The middle width of the default family's grid. A starter is
+        // family-neutral and a width is not, so `applyToShot` retargets this
+        // onto the grid of whatever family the card belongs to — see
+        // `S.nearestFeather`. Copied verbatim it would fall off that grid and
+        // read back as the classic single frame.
+        feather: S.featherGridOf()[2],
       },
     },
   }),

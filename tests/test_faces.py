@@ -55,7 +55,7 @@ def expect_error(label, fn, fragment):
 
 # --- windows -----------------------------------------------------------------
 
-LEGAL = set(canvas.legal_frame_counts())
+LEGAL = set(canvas.legal_frame_counts(canvas.H3))
 
 # The common case: a lone shot is generated at a legal count and nothing trims
 # it, so there is one window, no overlap, and nothing to cross-fade.
@@ -81,7 +81,7 @@ for count in (23, 40, 100, 225, 363, 500, 1445):
 
 # Long passes are bitten off at the trained ceiling rather than asked for in one.
 check("a 1445-frame pass is windowed, not sampled whole",
-      max(end - start for start, end in faces.windows(1445)) <= canvas.TRAINED_MAX_FRAMES,
+      max(end - start for start, end in faces.windows(1445)) <= canvas.H3.trained_max_frames,
       True)
 expect_error("a pass shorter than one generation",
              lambda: faces.windows(3), "nothing here to refine")

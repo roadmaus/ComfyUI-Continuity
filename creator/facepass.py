@@ -457,7 +457,7 @@ class MiniMaxH3FacePass(io.ComfyNode):
 
         audio = shell[1]
         if "audio_path" in source:
-            fps = float(source.get("fps") or canvas.FPS)
+            fps = float(source["fps"])
             clip_audio = spill.sound_between(source, start / fps, end / fps)
             encoded, _ = encode_ref_audio(audio_vae, clip_audio)
             encoded = encoded.to(audio.device, audio.dtype)

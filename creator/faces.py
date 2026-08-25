@@ -61,7 +61,7 @@ SIZE_WINDOW = 51
 # a face pass never asks the weights for a duration the render itself would have
 # warned about, and a minute-long merged pass is refined in several bites rather
 # than one that would not fit anywhere.
-WINDOW_CAP = canvas.TRAINED_MAX_FRAMES
+WINDOW_CAP = canvas.H3.trained_max_frames
 
 # How much two neighbouring windows share, when a pass needs more than one. One
 # temporal packing group: the smallest overlap that is a whole latent frame on
@@ -125,11 +125,12 @@ def windows(frames, cap=WINDOW_CAP, overlap=WINDOW_OVERLAP):
     """
     frames = int(frames)
     overlap = int(overlap)
-    usable = [n for n in canvas.legal_frame_counts() if n <= min(frames, int(cap))]
+    usable = [n for n in canvas.legal_frame_counts(canvas.H3)
+              if n <= min(frames, int(cap))]
     if not usable:
         raise FaceError(
             f"this pass is {frames} frames and the shortest generation H3 "
-            f"accepts is {canvas.legal_frame_counts()[0]} — there is nothing "
+            f"accepts is {canvas.legal_frame_counts(canvas.H3)[0]} — there is nothing "
             f"here to refine")
     if usable[-1] == frames:
         return [(0, frames)]

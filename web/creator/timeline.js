@@ -29,7 +29,7 @@ import { familyPill, weightsPill, loadCatalog, adoptWeights } from "./models.js"
 import * as S from "./state.js";
 import * as Turbo from "./turbo.js";
 import {
-  FPS, framesForSeconds, secondsForFrames, resolveCanvas, ASPECT_PRESETS, describeRatio, isTrainedLength,
+  framesForSeconds, secondsForFrames, resolveCanvas, describeRatio, isTrainedLength,
   rulesFor,
 } from "./canvas.js";
 
@@ -43,7 +43,7 @@ const BLEND_NAMES = ["None", "Short", "Medium", "Long"];
 
 /** A seam blend's width as the user reads it: seconds, one decimal. At the
  *  piece's own rate — the frames were snapped to it. */
-const blendSeconds = (frames, rules) => (frames / (rules ?? { fps: FPS }).fps).toFixed(1);
+const blendSeconds = (frames, rules) => (frames / rules.fps).toFixed(1);
 
 /** Whether a seam's sound tail is decided by its blend rather than by the
  *  piece's setting. Mirrors `compile.compile_request`: a blended seam's sound
@@ -145,10 +145,11 @@ const allDonors = (timeline) => [
 
 /** The bar's geometry, source honoured — the mirror of `_timeline_canvas`. */
 function timelineGeometry(timeline) {
+  const rules = rulesFor(S.pieceFamily(timeline));
   const size = S.timelineAspectSize(timeline, aspectSizeOf);
   const ratio = size ? size.width / size.height
-    : ASPECT_PRESETS.find(([label]) => label === timeline.aspect)?.[1] ?? 16 / 9;
-  const [width, height] = resolveCanvas(ratio, timeline.short_edge);
+    : rules.aspects.find(([label]) => label === timeline.aspect)?.[1] ?? 16 / 9;
+  const [width, height] = resolveCanvas(ratio, timeline.short_edge, rules);
   return { width, height, ratio, fromInput: !!size };
 }
 
@@ -1026,7 +1027,8 @@ class Timeline {
       donors,
       auto: {
         ratio: autoSize ? autoSize.width / autoSize.height
-          : ASPECT_PRESETS.find(([label]) => label === this.timeline.aspect)?.[1] ?? 16 / 9,
+          : rulesFor(S.pieceFamily(this.timeline)).aspects
+              .find(([label]) => label === this.timeline.aspect)?.[1] ?? 16 / 9,
         sub: autoSize ? aspectSourceLabel({ ...this.timeline, aspect_source: undefined })
           : this.timeline.aspect,
       },
@@ -1087,6 +1089,7 @@ class Timeline {
     probeAspectSizes(this.timeline, () => this.renderBar(), { all: true });
     const geometry = this.geometry();
     const { width, height, ratio, fromInput } = geometry;
+    const rules = rulesFor(S.pieceFamily(this.timeline));
     const res = resolutionPillText(this.timeline, geometry);
     const seconds = S.timelineSeconds(this.timeline);
     const frames = S.timelineFrames(this.timeline);
@@ -1114,11 +1117,11 @@ class Timeline {
         onclick: (event) => this.openAspect(event.currentTarget),
       }, fromInput
         ? [aspectGlyph(ratio, PILL_GLYPH),
-           el("span", { text: describeRatio(ratio) }),
+           el("span", { text: describeRatio(ratio, rules) }),
            el("span", { class: "mmc-pill-sub", text: aspectSourceLabel(this.timeline) })]
         : [aspectGlyph(ratio, PILL_GLYPH),
            el("span", { text: this.timeline.aspect }),
-           el("span", { class: "mmc-pill-sub", text: describeRatio(ratio) })]),
+           el("span", { class: "mmc-pill-sub", text: describeRatio(ratio, rules) })]),
       el("button", {
         class: "mmc-pill",
         // "every segment alike" is the strip's own footnote on the shared
@@ -1369,7 +1372,8 @@ class Timeline {
               + "itself, and identity across the cuts holds less well. Split the pass, "
               + "or give each shot a shorter, clearer beat.",
                 { count, advised: S.advisedShots(this.timeline) })
-            : t("{frames} frames at 24 fps, generated in one go.", { frames }),
+            : t("{frames} frames at {fps} fps, generated in one go.",
+                  { frames, fps: rulesFor(S.pieceFamily(this.timeline)).fps }),
         }),
         el("span", { class: "mmc-tl-mode", text: S.passMode(pass.segments) }),
         ...(chip ? [chip] : []),
@@ -1672,7 +1676,7 @@ class Timeline {
   }
 
   /** The seam's width. The options are the runs the video VAE can encode
-   *  standalone (state.FEATHER_GRID), named by what the user hears and sees:
+   *  standalone (`state.featherGridOf`), named by what the user hears and sees:
    *  how long a moment of motion crosses the cut. */
   pickFeather(anchor, segment, index) {
     const max = S.maxFeather(segment, this.timeline);
@@ -2093,7 +2097,8 @@ class Timeline {
         // on, because that would be marking a length nobody has chosen yet.
         el(predicts ? "button" : "span", {
           class: `mmc-tl-dur${autoLength ? " auto" : ""}`
-                 + (shared || autoLength || isTrainedLength(frames) ? "" : " off-distribution"),
+                 + (shared || autoLength || isTrainedLength(frames, cardRules)
+                      ? "" : " off-distribution"),
           text: autoLength
             ? t("~{seconds} s", { seconds: S.showSeconds(segment.duration_s) })
             : t("{seconds} s", { seconds: S.showSeconds(segment.duration_s) }),
@@ -2105,8 +2110,8 @@ class Timeline {
                 + "prompt. {seconds} s is the estimate the strip counts with until "
                 + "then, and the length this card goes back to. Click to set it yourself.",
                   { seconds: S.showSeconds(segment.duration_s) })
-              : (isTrainedLength(frames)
-                   ? t("{frames} frames at 24 fps", { frames })
+              : (isTrainedLength(frames, cardRules)
+                   ? t("{frames} frames at {fps} fps", { frames, fps: cardRules.fps })
                    : t("{frames} frames — outside the ~5–15 s the weights were trained on.",
                        { frames }))
                 + (predicts
@@ -2506,7 +2511,8 @@ class Timeline {
           defaultName: (segment.prompt || "").trim().split("\n")[0].slice(0, 48),
         }),
         apply: (body, keys, from) => {
-          P.applyToShot(body, keys, segment, this.io(), { from });
+          P.applyToShot(body, keys, segment, this.io(),
+                        { from, piece: this.timeline });
           this.onCommit?.();
           this.renderStrip();
         },
@@ -3075,6 +3081,7 @@ export class TimelineBody {
     const seconds = S.timelineSeconds(this.timeline);
     probeAspectSizes(this.timeline, () => this.render());
     const { width, height, ratio, fromInput } = timelineGeometry(this.timeline);
+    const rules = rulesFor(S.pieceFamily(this.timeline));
     const prompt = (this.timeline.prompt || "").trim();
     const globalLoras = S.activeGlobalLoras(this.timeline);
     const audio = [
@@ -3137,7 +3144,8 @@ export class TimelineBody {
                        ? t("An estimate: a shot on auto is measured by the model "
                          + "while it renders, so the finished length is not known "
                          + "until it has.")
-                       : t("The finished clip's length at 24 fps") }, [
+                       : t("The finished clip's length at {fps} fps",
+                           { fps: rules.fps }) }, [
           icon("clock", 16),
           el("span", { text: S.hasAutoDuration(this.timeline)
             ? `~${seconds.toFixed(1)} s` : `${seconds.toFixed(1)} s` }),
@@ -3148,7 +3156,7 @@ export class TimelineBody {
             ? t("The canvas the one generation runs at.")
             : t("Shared by every segment — they are joined end to end and have to match."),
         }, [
-          el("span", { text: fromInput ? describeRatio(ratio) : this.timeline.aspect }),
+          el("span", { text: fromInput ? describeRatio(ratio, rules) : this.timeline.aspect }),
           el("span", { class: "mmc-pill-sub", text: `${width} × ${height}` }),
         ]),
         // Only when there are any: an empty pill would say the timeline has a

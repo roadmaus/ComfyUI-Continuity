@@ -49,8 +49,18 @@ MAX_SEGMENTS = 240
 #
 # Half an hour of finished video. Not a statement about the weights: no
 # deliberate piece in one node reaches it, and a blob that asks for more asked by
-# accident. `timeline_frames` is what it is checked against.
-MAX_TIMELINE_FRAMES = 30 * 60 * canvas.FPS
+# accident. `timeline_frames` is what `max_timeline_frames` is checked against.
+#
+# Held in minutes and converted per family, because a frame is not an amount of
+# time. It is 1/`rules.fps` of one, so the same frame count is half an hour on
+# H3 and twenty-four minutes on a family sampling at 30 — and the bound is a
+# statement about length, which is what makes minutes the honest unit for it.
+MAX_TIMELINE_MINUTES = 30
+
+
+def max_timeline_frames(rules):
+    """The work bound in this family's own frames."""
+    return MAX_TIMELINE_MINUTES * 60 * rules.fps
 
 # How much of the previous segment's sound is handed to the next one.
 #
@@ -69,20 +79,6 @@ MAX_TIMELINE_FRAMES = 30 * 60 * canvas.FPS
 # tone, the key and the tempo, not the phrase.
 DEFAULT_AUDIO_TAIL_S = 1.0
 MAX_AUDIO_TAIL_S = 4.0
-
-# How many of the source segment's last frames a seam may inherit — the counts
-# the family's video VAE can encode standalone. H3's temporal grid compresses
-# runs of (1, 4, 4, 4, 4) pixel frames per latent step, so only a run ending on
-# a whole cycle boundary encodes to steps that cover exactly the frames given:
-# 1, 5, 22 and 39. Anything else would pin a run ending short of the source's
-# last frame, and the join would jump by the difference.
-#
-# Which is the same constraint the whole generation's frame count answers to, so
-# the set is derived from the family's grid rather than written twice — see
-# `canvas.feather_grid`, which is also what says why LTX cannot borrow H3's.
-# This spelling stays bound to H3 for the callers that predate the argument.
-# Mirrored by the seam's feather picker in `timeline.js`.
-FEATHER_GRID = canvas.FEATHER_GRID
 
 HANDLE_RE = re.compile(r"@([A-Za-z]+-\d+)")
 
@@ -120,9 +116,13 @@ MAX_REFINE_DENOISE = 0.9
 # detail is in the head rather than in the pixels around it, and it costs about a
 # quarter of a 768-native pass. The ceiling is native — past it the weights are
 # off-distribution again and the crop has no more detail to give.
+#
+# H3's edges, spelled as H3's: the pass is written against its detector, its
+# frame grid and its re-encode, and every other family declares `face: False`.
+# A family that grows a face pass brings its own bounds with it.
 DEFAULT_FACE_CANVAS = 512
-MIN_FACE_CANVAS = canvas.MIN_SHORT_EDGE
-MAX_FACE_CANVAS = canvas.NATIVE_SHORT_EDGE
+MIN_FACE_CANVAS = canvas.H3.min_short_edge
+MAX_FACE_CANVAS = canvas.H3.native_short_edge
 
 # How much of the schedule the face pass runs. Not an SDXL number and not
 # comparable to one: H3 is flow matching under a large sigma shift, so at the
@@ -924,7 +924,7 @@ def face_piece(data):
     edge = min(MAX_FACE_CANVAS, max(MIN_FACE_CANVAS, edge))
     # The same /32 snap every other canvas takes, so the crop latent is a shape
     # the DiT accepts without anybody having to think about it.
-    edge = canvas.resolve_canvas(1.0, edge)[0]
+    edge = canvas.resolve_canvas(1.0, edge, canvas.H3)[0]
     # `on` is kept in the returned shape so a resolved setting is still the same
     # kind of object the blob wrote, and a payload carrying one can be read back
     # by this very function — which is what `compile_request` does with it.
@@ -965,7 +965,7 @@ def face_label(settings):
     return f"on ({settings['canvas']} px, denoise {settings['denoise']:g})"
 
 
-def first_pass_edge(raw, short_edge, rules=canvas.H3):
+def first_pass_edge(raw, short_edge, rules):
     """The short edge the first of two passes samples at: the blob's
     `sample_edge`, defaulted to the native edge and clamped between the
     canvas floor and the lower of the target and native. The first pass
@@ -1051,7 +1051,7 @@ def plain_shot_body(shots):
     return " ".join(out)
 
 
-def _check_feather(width, live, what, rules=canvas.H3):
+def _check_feather(width, live, what, rules):
     """A blend's width, validated against the seam it belongs to.
 
     The same check at both ends of a segment: only the runs the video VAE can
@@ -1390,7 +1390,7 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
         preamble=(contextir.ref_frame_alignment(
                       labels.get(first_frame.handle) if first_frame else None,
                       labels.get(last_frame.handle) if last_frame else None,
-                      canvas.seconds_for_frames(frames), shots)
+                      canvas.seconds_for_frames(frames, rules), shots)
                   if mode == "REF2VA" else
                   contextir.AUDIO_SEAM_LINE
                   if continues_audio and feather == 1 else ""),
@@ -2318,14 +2318,15 @@ def timeline_payloads(data, image_size_lookup=None):
     # The work bound, asked here because this is the one function both node paths
     # go through and because it is answerable off the blob alone — before a
     # loader is built, let alone a sampler run. Frames rather than cards or
-    # passes: see `MAX_TIMELINE_FRAMES`.
+    # passes: see `MAX_TIMELINE_MINUTES`.
+    rules = rules_of(data)
     frames = timeline_frames(data, segments, runs)
-    if frames > MAX_TIMELINE_FRAMES:
+    if frames > max_timeline_frames(rules):
         raise CompileError(
             f"this timeline runs to "
-            f"{canvas.seconds_for_frames(frames, rules_of(data)) / 60:.1f} minutes "
+            f"{canvas.seconds_for_frames(frames, rules) / 60:.1f} minutes "
             f"({frames} frames) and one node will not queue more than "
-            f"{MAX_TIMELINE_FRAMES // (60 * canvas.FPS)} — shorten it, or split the piece "
+            f"{MAX_TIMELINE_MINUTES} — shorten it, or split the piece "
             f"across two Timeline nodes"
         )
 

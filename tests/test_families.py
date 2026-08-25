@@ -145,17 +145,17 @@ for frames in list(h3["still"]["lengths"]) + [_grid["base_frames"] + _grid["fram
     check(f"latent grid at {frames} frames", derived, h3s.latent_frames(frames))
 
 frames = h3["canvas"]["frames"]
-legal = canvas.legal_frame_counts()
+legal = canvas.legal_frame_counts(canvas.H3)
 check("the manifest's frame grid generates the legal counts",
       [frames["offset"], legal[1] - legal[0]],
       [legal[0], frames["step"]])
 check("h3 canvas carries the trained range and the snap",
       (h3["canvas"]["multiple"], frames["trained_min"], frames["trained_max"],
        h3["canvas"]["fps"]),
-      (canvas.CANVAS_MULTIPLE, canvas.TRAINED_MIN_FRAMES,
-       canvas.TRAINED_MAX_FRAMES, {"value": canvas.FPS, "fixed": True}))
+      (canvas.H3.multiple, canvas.H3.trained_min_frames,
+       canvas.H3.trained_max_frames, {"value": canvas.H3.fps, "fixed": True}))
 check("h3 aspects are the presets", h3["canvas"]["aspects"],
-      canvas.ASPECT_PRESETS)
+      canvas.H3.aspects)
 check("h3 still block is families/h3/still.py's",
       (h3["still"]["arch"], h3["still"]["lengths"],
        h3["still"]["prompt_modes"]),

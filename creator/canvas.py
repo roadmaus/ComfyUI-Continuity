@@ -22,10 +22,15 @@ Two model constraints drive H3's numbers:
   a 6.00-second H3 video; the UI shows whole seconds and we land on the nearest
   legal count behind it.
 
-The module-level constants at the bottom are the H3 rules under their historic
-names — every H3-owned caller spells `canvas.FPS`, and until the callers are
-family-parameterised themselves those spellings stay bound to the one family
-this pack ships.
+**Every function here takes its rules and none of them defaults.** They used to
+default to `H3`, and there were module constants beside them — `canvas.FPS`,
+`canvas.NATIVE_SHORT_EDGE`, `canvas.FEATHER_GRID` — carrying the same numbers
+under historic names. Both were how the one family this pack shipped reached its
+own arithmetic without saying so, and both are exactly the wrong shape for a
+second: a caller that forgot to thread the piece's rules through did not fail,
+it silently ran H3's grid over somebody else's weights. A required argument is
+the only version of this that fails loudly, and `canvas.H3` spelled out at an
+H3-owned call site is a leak anyone can grep for.
 """
 
 import math
@@ -168,7 +173,7 @@ LTX25 = Rules(
 RULES = {"h3": H3, "ltx25": LTX25}
 
 
-def legal_frame_counts(rules=H3):
+def legal_frame_counts(rules):
     """Every frame count the model accepts, ascending, across the offered range.
 
     `step*n + offset` is an architectural constraint — the temporal packing —
@@ -180,7 +185,7 @@ def legal_frame_counts(rules=H3):
                       rules.frame_step))
 
 
-def feather_grid(rules=H3):
+def feather_grid(rules):
     """The seam widths a family can inherit as motion. -> a tuple, ascending.
 
     A feathered seam hands the pass in front's last run to the next one as a
@@ -203,12 +208,12 @@ def feather_grid(rules=H3):
     return (1, *[n for n in legal_frame_counts(rules) if n > 1][:3])
 
 
-def is_trained_length(frames, rules=H3):
+def is_trained_length(frames, rules):
     """Whether a frame count sits inside what the weights actually saw."""
     return rules.trained_min_frames <= frames <= rules.trained_max_frames
 
 
-def frames_for_seconds(seconds, rules=H3):
+def frames_for_seconds(seconds, rules):
     """Whole UI seconds -> nearest legal frame count.
 
     Nearest rather than round-up: the worst drift is 0.35 s, where always
@@ -222,7 +227,7 @@ def frames_for_seconds(seconds, rules=H3):
     return min(legal_frame_counts(rules), key=lambda n: (abs(n - target), n))
 
 
-def seconds_for_frames(frames, rules=H3):
+def seconds_for_frames(frames, rules):
     """The real duration of a frame count. This is what the prompt refiner needs.
 
     The refiner writes the shot timeline and the `S.SS` keyframe-alignment line
@@ -232,7 +237,7 @@ def seconds_for_frames(frames, rules=H3):
     return frames / rules.fps
 
 
-def match_seconds(seconds, rules=H3):
+def match_seconds(seconds, rules):
     """A reference's own length -> the card duration that lands nearest it.
 
     Not `round(seconds)`. Legal frame counts are `frame_step` apart — 0.708 s
@@ -252,7 +257,7 @@ def match_seconds(seconds, rules=H3):
     return round(seconds_for_frames(frames_for_seconds(clamped, rules), rules), 2)
 
 
-def clamp_ratio(ratio, rules=H3):
+def clamp_ratio(ratio, rules):
     """Clamp an aspect ratio into the family's envelope. -> (ratio, was_clamped)."""
     if ratio < rules.min_ratio:
         return rules.min_ratio, True
@@ -266,7 +271,7 @@ def _snap(value, rules):
     return max(grid, int(value / grid + 0.5) * grid)
 
 
-def resolve_canvas(ratio, short_edge, rules=H3):
+def resolve_canvas(ratio, short_edge, rules):
     """(aspect ratio, slider short edge) -> the (width, height) actually generated.
 
     The area cap scales as the square of the slider, so `short_edge=768` with
@@ -300,7 +305,7 @@ def resolve_canvas(ratio, short_edge, rules=H3):
     return width, height
 
 
-def canvas_from_image(image_width, image_height, short_edge, rules=H3):
+def canvas_from_image(image_width, image_height, short_edge, rules):
     """Adaptive canvas for the image modes.
 
     In I2VA / L2VA / FL2VA the aspect comes from the keyframe, not the ratio
@@ -312,26 +317,6 @@ def canvas_from_image(image_width, image_height, short_edge, rules=H3):
     return width, height, ratio, clamped
 
 
-def describe_ratio(ratio, rules=H3):
+def describe_ratio(ratio, rules):
     """Nearest preset label for a free-form ratio, for the disabled ratio pill."""
     return min(rules.aspects.items(), key=lambda kv: abs(kv[1] - ratio))[0]
-
-
-# The H3 rules under their historic names. Every H3-owned caller spells these;
-# they are reads off `H3`, so the family's numbers exist exactly once.
-CANVAS_MULTIPLE = H3.multiple
-FPS = H3.fps
-FRAME_STEP = H3.frame_step
-FRAME_OFFSET = H3.frame_offset
-NATIVE_SHORT_EDGE = H3.native_short_edge
-NATIVE_MAX_PIXELS = H3.native_max_pixels
-MIN_SHORT_EDGE = H3.min_short_edge
-MAX_SHORT_EDGE = H3.max_short_edge
-MIN_RATIO = H3.min_ratio
-MAX_RATIO = H3.max_ratio
-ASPECT_PRESETS = H3.aspects
-TRAINED_MIN_FRAMES = H3.trained_min_frames
-TRAINED_MAX_FRAMES = H3.trained_max_frames
-MIN_SECONDS = H3.min_seconds
-MAX_SECONDS = H3.max_seconds
-FEATHER_GRID = feather_grid(H3)

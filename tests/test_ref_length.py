@@ -50,21 +50,21 @@ from harness import FAILURES, check, passed
 # 9.33 s of music, 6.6 s of dialogue, a 12 s clip: the lengths a reference
 # actually comes in, none of them a whole second.
 for length in (2.5, 6.6, 9.33, 12.0, 41.7):
-    matched = canvas.match_seconds(length)
+    matched = canvas.match_seconds(length, canvas.H3)
     compiled = compiler.compile_request({"prompt": "a courier waits", "duration_s": matched})
     check(f"{length}s matched compiles to its own count",
-          compiled.frames, canvas.frames_for_seconds(length))
+          compiled.frames, canvas.frames_for_seconds(length, canvas.H3))
     # And it is the nearest count there is, which is the claim the pill makes.
-    target = length * canvas.FPS
-    nearest = min(canvas.legal_frame_counts(), key=lambda n: abs(n - target))
+    target = length * canvas.H3.fps
+    nearest = min(canvas.legal_frame_counts(canvas.H3), key=lambda n: abs(n - target))
     check(f"{length}s matched is the nearest count", compiled.frames, nearest)
 
 # The pill's own range still holds: a three-minute cue cannot ask for a card the
 # UI could not then show.
-check("a long cue clamps", canvas.match_seconds(180),
-      canvas.match_seconds(canvas.MAX_SECONDS))
-check("a fragment clamps", canvas.match_seconds(0.2),
-      canvas.match_seconds(canvas.MIN_SECONDS))
+check("a long cue clamps", canvas.match_seconds(180, canvas.H3),
+      canvas.match_seconds(canvas.H3.max_seconds, canvas.H3))
+check("a fragment clamps", canvas.match_seconds(0.2, canvas.H3),
+      canvas.match_seconds(canvas.H3.min_seconds, canvas.H3))
 
 # ---- the JS half ------------------------------------------------------------
 
