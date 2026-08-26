@@ -68,6 +68,15 @@ export const css = `
 }
 .mmc-set-dest-head { display: flex; align-items: baseline; gap: 10px; min-width: 0; }
 .mmc-set-dest-name { font-size: calc(14px * var(--mmc-type)); }
+/* The way back to the shipped folder, at the far end of the row it belongs to.
+   Quiet until it is wanted: it sits beside a heading, and a heading with a
+   button shouting next to it stops reading as a heading. */
+.mmc-set-reset {
+  margin-left: auto; padding: 2px 7px; background: none; border: 0; border-radius: 7px;
+  color: var(--mmc-off); font-family: inherit; font-size: calc(11.5px * var(--mmc-type));
+  cursor: pointer;
+}
+.mmc-set-reset:hover { background: var(--mmc-surface-2); color: var(--mmc-text); }
 .mmc-set-dest .mmc-out-example { padding: 0 2px; }
 /* The token chips exist while the destination is being edited and not
    otherwise: at rest the tab is two fields and their readings, not sixteen

@@ -1109,12 +1109,57 @@ try {
     (node.children ?? []).forEach(findFields);
   };
   findFields(page);
-  out.settings.fields = fields.map((f) => f.value);
-  fields[0].value = "client/shoot-3/take";
-  fields[0].listeners.change[0]();
+  // The field is a token field, not an input: `%year%` is drawn as one tile
+  // wearing the plain word, and the stored string is what the tiles and the
+  // text between them spell. So it is read the way the page reads it and
+  // written the way typing writes it — a text node, then the change the caret
+  // leaving the field would fire.
+  const spell = (node) => (node.childNodes ?? []).map((child) => (
+    child.nodeType === 3 ? child.nodeValue
+      : child.dataset?.token ?? spell(child))).join("");
+  out.settings.fields = fields.map(spell);
+  // Typing core's own spelling turns into the tile where it stands. Someone who
+  // knows `%year%` should not have to unlearn it — and should not be left
+  // holding eight loose characters either, which is the state this field exists
+  // to make unreachable. Before the commit below, while these nodes are still
+  // the ones on screen: `set` re-renders the tab, and every field found above
+  // is detached the moment it does.
+  fields[1].replaceChildren(document.createTextNode("shoot/%year%/take"));
+  fields[1].listeners.input[0]();
+  out.settings.folderTyped = spell(fields[1]);
+  out.settings.folderTiles = (fields[1].childNodes ?? [])
+    .filter((node) => node.dataset?.token).map((node) => node.textContent);
+  fields[0].replaceChildren(document.createTextNode("client/shoot-3/take"));
+  fields[0].listeners.blur[0]();
   await new Promise((done) => setTimeout(done, 0));
   // Copied, not referenced: the Nodes tab clicks below append to the same array.
   out.settings.posted = [...globalThis.__posted];
+
+  // Nothing on the row wears a `%`: not the field, not the chips that write
+  // into it. That spelling is core's and the stored value's, and putting it in
+  // front of anyone is what made this field typeable into nonsense.
+  const rows = [];
+  const findRows = (node) => {
+    if (node.className === "mmc-set-dest") rows.push(node);
+    (node.children ?? []).forEach(findRows);
+  };
+  findRows(page);
+  out.settings.folderPercent = rows.some((row) => row.text.includes("%"));
+
+  // The way back to the shipped folder is only up on a row that has left it.
+  // The tab was rendered from the defaults, so H3 — edited above and posted —
+  // is the one offering it; nothing else is.
+  const resets = [];
+  const findResets = (node) => {
+    if (node.className === "mmc-set-reset") resets.push(node);
+    (node.children ?? []).forEach(findResets);
+  };
+  findResets(page);
+  out.settings.folderResets = resets.map((r) => r.style.display);
+  globalThis.__posted.length = 0;
+  resets[0].listeners.click[0]();
+  await new Promise((done) => setTimeout(done, 0));
+  out.settings.folderResetPosted = [...globalThis.__posted];
 
   // The Nodes tab: the two node settings, read but not clicked — a click would
   // append to __posted, which is why the folder assertion above copies it.
@@ -2614,6 +2659,22 @@ check("the folders tab carries a field per family, renders then stills",
       ["minimax/renders/h3/H3", "minimax/renders/ltx25/LTX25",
        "minimax/stills/h3/H3", "minimax/stills/krea2/Krea2",
        "minimax/stills/ideogram4/Ideogram4"])
+# The token is one object or it is nothing: it went in as eight characters and
+# came back as a tile wearing the plain word, with the stored string untouched.
+check("a typed token becomes one tile, and the stored string keeps its spelling",
+      (settings.get("folderTyped"), settings.get("folderTiles")),
+      ("shoot/%year%/take", ["year"]))
+check("no `%` reaches the screen on a folder row", settings.get("folderPercent"), False)
+# Only the row that has left its default offers the way back — H3's, edited
+# above. A button that would do nothing is worse than no button.
+check("the reset is offered on the edited row and no other",
+      settings.get("folderResets"), ["", "none", "none", "none", "none"])
+# And it posts the whole block, the same way an edit does: the shipped folder
+# for this family and this shelf, with every other family's left as it was.
+check("resetting posts the family's shipped folder back",
+      settings.get("folderResetPosted"),
+      [{"video_prefix": {"h3": "minimax/renders/h3/H3",
+                         "ltx25": "minimax/renders/ltx25/LTX25"}}])
 # The whole block goes back, not the one row: the settings route patches
 # shallowly, so posting `{h3: …}` alone would drop LTX 2.5's folder.
 check("editing one family's folder posts the block, leaving the others alone",

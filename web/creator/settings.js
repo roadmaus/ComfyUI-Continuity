@@ -23,7 +23,8 @@
 import { el, mountOverlay } from "./dom.js";
 import { loadSettings, saveSettings, noteSettings, loadLatentCache, clearLatentCache } from "./api.js";
 import { t } from "./i18n.js";
-import { TOKENS, cleanPrefix, folderOf, stemOf, examplePath } from "./outputs.js";
+import { CLOCK_TOKENS, FRAME_TOKENS, cleanPrefix, folderOf, stemOf, examplePath,
+         splitTokens, tokenLabel, tokenValues } from "./outputs.js";
 import { FAMILIES } from "./manifest.js";
 
 // libx264's own quality scale: lower is better and bigger, and six points is
@@ -1013,6 +1014,15 @@ class SettingsPage {
    * because a prefix is two things at once and "renders/H3" being a file called
    * H3 rather than a folder called H3 is the one surprise this page holds.
    *
+   * The field is a token field, not a text box. `%year%` is core's spelling of
+   * a token and it is a fine thing to *store*; it was a terrible thing to edit,
+   * because eight loose characters in a text box can be typed into, split, and
+   * half-deleted — which is how a field ends up reading `minima%sssyear%%month%x`
+   * with no way to tell the typo from the token. Here each one is a single tile
+   * wearing its plain word: the caret can sit either side of it and there is no
+   * position inside it, so one Backspace takes the whole thing. What is stored
+   * is unchanged, so `outputs.py` never learns about any of this.
+   *
    * The token chips only exist while the field has focus — CSS, off
    * :focus-within — so the page at rest is a field per family and not eight
    * buttons per family.
@@ -1022,26 +1032,165 @@ class SettingsPage {
     // the one case it cannot: a settings file that predates this family. It is
     // the manifest's own default, which is what the save node would use.
     const stored = this.settings[key]?.[family] ?? fallback;
-    const field = el("input", {
+    const field = el("div", {
       class: "mmc-out-field",
-      type: "text",
-      value: stored,
-      spellcheck: false,
+      contenteditable: "true",
+      role: "textbox",
+      "aria-multiline": "false",
+      spellcheck: "false",
       "aria-label": t("{title} — folder and filename prefix", { title }),
       onkeydown: (event) => {
         event.stopPropagation();
-        if (event.key === "Enter") field.blur();
-        if (event.key === "Escape") { field.value = stored; field.blur(); }
+        // The box is one line. Enter finishes it rather than growing it a
+        // second one the path could never hold.
+        if (event.key === "Enter") { event.preventDefault(); field.blur(); }
+        if (event.key === "Escape") { write(stored); field.blur(); }
       },
-      onchange: () => commit(),
+      onpaste: (event) => {
+        // Plain text, and not the graph's. ComfyUI's own paste listener decides
+        // an event is "on the canvas" by asking whether the target is an input
+        // or a textarea — a contenteditable is neither — and it never looks at
+        // defaultPrevented, so a Ctrl+V in here would also deal out the last
+        // copied nodes. The prompt box carries the long version of this note.
+        event.preventDefault();
+        event.stopPropagation();
+        // A path is one line: whatever shape the clipboard's newlines were in,
+        // they arrive here as the spaces `cleanPrefix` will then refuse out loud.
+        const text = (event.clipboardData?.getData("text/plain") ?? "").replace(/\s+/g, " ");
+        insert(text);
+      },
+      // A contenteditable has no `change`; leaving it is the whole commit.
       onblur: () => commit(),
     });
     const problem = el("div", { class: "mmc-out-problem" });
     const example = el("div", { class: "mmc-out-example" });
+    /**
+     * Back to the folder this family ships with.
+     *
+     * On the row rather than on the tab, because the default is per family and
+     * per shelf — H3 files into two of them and they are two different folders,
+     * so there is no one path a single button could mean. It says which one it
+     * means anyway: the path is in the title, since "default" names nothing on
+     * its own and this is the last chance to read it before it lands.
+     *
+     * Only up while the row is off its default. A control that does nothing is
+     * worse than no control, and five rows sitting at their defaults would
+     * otherwise carry five buttons that all decline to do anything.
+     */
+    const reset = el("button", {
+      class: "mmc-set-reset",
+      text: t("Reset"),
+      title: t("Back to {path}", { path: fallback }),
+      onclick: () => { write(fallback); commit(); },
+    });
+
+    /** The stored string the field currently spells. Walks rather than reading
+     *  textContent: a tile's text is the plain word, and the token is what has
+     *  to come out. Anything the browser wrapped the content in on the way past
+     *  is walked through — a wrapper's text belongs to the path too. */
+    const read = (parent = field) => {
+      let text = "";
+      for (const node of parent.childNodes) {
+        if (node.nodeType === Node.TEXT_NODE) text += node.nodeValue;
+        else if (node.dataset?.token) text += node.dataset.token;
+        else if (node.tagName !== "BR") text += read(node);
+      }
+      return text;
+    };
+
+    /** Draw a stored string: literal text as text, every token as one tile. */
+    const write = (text) => {
+      field.replaceChildren(...splitTokens(text).map((part) => (part.token
+        ? el("span", {
+            class: "mmc-out-tile",
+            contenteditable: "false",
+            "data-token": part.token,
+            text: tokenLabel(part.token),
+          })
+        : document.createTextNode(part.text))));
+    };
+
+    /**
+     * Where the caret is as an offset into `read()`, or null if it is not in
+     * here. An offset survives the rebuild a node does not — which is the only
+     * reason the field can be redrawn from its string under someone's fingers.
+     *
+     * The walk mirrors `read`'s, because it is the same string being counted,
+     * and it has to be a walk for the same reason: the browser is free to wrap
+     * what is in here, and a caret inside a wrapper is still a caret in the
+     * path. The container is the *parent* when the caret sits between two
+     * nodes rather than inside one — then the offset is a child index.
+     */
+    const caret = () => {
+      const selection = window.getSelection?.();
+      const range = selection?.rangeCount ? selection.getRangeAt(0) : null;
+      if (!range || !field.contains(range.endContainer)) return null;
+      let at = 0;
+      let found = null;
+      const walk = (parent) => {
+        const kids = [...parent.childNodes];
+        for (let index = 0; index < kids.length; index += 1) {
+          if (found !== null) return;
+          if (range.endContainer === parent && range.endOffset === index) { found = at; return; }
+          const node = kids[index];
+          if (node === range.endContainer) { found = at + range.endOffset; return; }
+          if (node.nodeType === Node.TEXT_NODE) at += node.nodeValue.length;
+          else if (node.dataset?.token) at += node.dataset.token.length;
+          else if (node.tagName !== "BR") walk(node);
+        }
+        if (found === null && range.endContainer === parent) found = at;
+      };
+      walk(field);
+      return found ?? at;
+    };
+
+    /** The caret at an offset into the stored string. A tile is passed over
+     *  whole — there is no offset inside one to land on. */
+    const place = (index) => {
+      let at = 0;
+      for (const node of field.childNodes) {
+        const length = node.nodeType === Node.TEXT_NODE
+          ? node.nodeValue.length : (node.dataset?.token?.length ?? 0);
+        if (node.nodeType === Node.TEXT_NODE && index <= at + length) {
+          const range = document.createRange();
+          range.setStart(node, Math.max(0, index - at));
+          range.collapse(true);
+          const selection = window.getSelection();
+          selection?.removeAllRanges();
+          selection?.addRange(range);
+          field.focus();
+          return;
+        }
+        at += length;
+      }
+      // Past everything, or the last thing in here is a tile: the caret goes
+      // after the lot, which is where the next keystroke belongs anyway.
+      field.focus();
+      const range = document.createRange();
+      range.selectNodeContents(field);
+      range.collapse(false);
+      const selection = window.getSelection();
+      selection?.removeAllRanges();
+      selection?.addRange(range);
+    };
+
+    /** Text into the path where the caret is, then redrawn — which is what
+     *  turns a pasted or chip-written `%year%` into its tile. Typing, not
+     *  finishing: the write is still Enter's or blur's. */
+    const insert = (text) => {
+      const before = read();
+      const at = caret() ?? before.length;
+      write(before.slice(0, at) + text + before.slice(at));
+      place(at + text.length);
+      paint();
+    };
 
     const paint = () => {
-      const { prefix, error } = cleanPrefix(field.value, stored);
+      const { prefix, error } = cleanPrefix(read(), stored);
       field.classList.toggle("bad", Boolean(error));
+      // A path that does not parse is off its default too, and that is exactly
+      // when the way back matters most.
+      reset.style.display = !error && prefix === fallback ? "none" : "";
       problem.textContent = error ?? "";
       problem.style.display = error ? "" : "none";
       example.replaceChildren(...(error ? [] : [
@@ -1071,8 +1220,50 @@ class SettingsPage {
       this.set({ [key]: { ...this.settings[key], [family]: prefix } });
     };
 
-    field.addEventListener("input", paint);
+    /**
+     * Whether the DOM has stopped spelling the string the way `write` would.
+     *
+     * Two ways it can: a token typed or pasted as bare text — someone who knows
+     * core's syntax should see the tile appear under their fingers rather than
+     * be told they have typed it wrong — and a wrapper the browser put around
+     * the content on its way past, which is the engine's own doing and would
+     * otherwise accumulate. Both are answered the same way, by redrawing from
+     * the string, so neither has to be detected precisely.
+     */
+    const strayed = (parent = field) => [...parent.childNodes].some((node) => (
+      node.nodeType === Node.TEXT_NODE
+        ? splitTokens(node.nodeValue).some((part) => part.token)
+        : !node.dataset?.token || strayed(node)));
+
+    field.addEventListener("input", () => {
+      if (strayed()) {
+        const at = caret();
+        write(read());
+        if (at !== null) place(at);
+      }
+      paint();
+    });
+    write(stored);
     paint();
+
+    const values = tokenValues();
+    /** One inserter. Says the word it writes and what that word is worth right
+     *  now, because "month" alone never said whether it meant 08 or August —
+     *  and the answer is the folder name. */
+    const chip = (token) => el("button", {
+      class: "mmc-out-token",
+      title: t("Inserts {name}, filled in when the file is written", { name: tokenLabel(token) }),
+      // pointerdown is swallowed so the click does not blur the field first —
+      // and inserting is typing, not finishing: it repaints the reading and
+      // leaves the write to Enter or blur, the same deal the keyboard has. A
+      // commit here would re-render the page and yank the field, row and caret
+      // both, out from under the second click.
+      onpointerdown: (event) => event.preventDefault(),
+      onclick: () => insert(token),
+    }, [
+      el("span", { class: "mmc-out-token-name", text: tokenLabel(token) }),
+      el("span", { class: "mmc-out-token-now", text: values[token] }),
+    ]);
 
     return el("div", { class: "mmc-set-dest" }, [
       // The family's own name, untranslated: "MiniMax H3" and "LTX 2.5" are
@@ -1080,36 +1271,20 @@ class SettingsPage {
       // this reader's language whether these are renders or stills.
       el("div", { class: "mmc-set-dest-head" }, [
         el("span", { class: "mmc-set-dest-name", text: title }),
+        reset,
       ]),
       field,
       problem,
       example,
-      // Core expands these when the file is written. Buttons because nobody
-      // guesses the spelling of `%year%`, and a folder per shoot date is the
-      // most useful thing this field does. The chips say the word and the
-      // field receives the token: `%year%` is core's syntax and the stored
-      // value, not something anyone should have to read on a button — the
-      // reading underneath shows what it turns into the moment it lands.
-      // Inserting is typing, not finishing: it repaints the reading and leaves
-      // the write to Enter or blur, the same deal the keyboard has — a commit
-      // here would re-render the page and yank the field (row and caret both)
-      // out from under the second click. pointerdown is swallowed so the click
-      // does not blur the field first.
+      // Clock first, then frame — the order they are useful in, since a folder
+      // per shoot is what this field is mostly for. Nothing marks the boundary:
+      // the row wraps at this width, and a rule between the groups spends most
+      // of its life stranded at the end of a line saying nothing.
       el("div", { class: "mmc-out-tokens" }, [
         el("span", { class: "mmc-out-tokens-key", text: t("insert") }),
-        ...TOKENS.map((token) => el("button", {
-        class: "mmc-out-token",
-        text: token.replaceAll("%", ""),
-        title: t("Inserts {token} — filled in when the file is written", { token }),
-        onpointerdown: (event) => event.preventDefault(),
-        onclick: () => {
-          const at = field.selectionStart ?? field.value.length;
-          field.value = field.value.slice(0, at) + token + field.value.slice(field.selectionEnd ?? at);
-          field.focus();
-          field.setSelectionRange?.(at + token.length, at + token.length);
-          paint();
-        },
-      }))]),
+        ...CLOCK_TOKENS.map(chip),
+        ...FRAME_TOKENS.map(chip),
+      ]),
     ]);
   }
 

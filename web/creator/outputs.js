@@ -17,9 +17,65 @@ import { t } from "./i18n.js";
 export const RENDERS = "minimax/renders";
 export const STILLS = "minimax/stills";
 
-// What core's `compute_vars` expands, in the order the hint lists them.
-export const TOKENS = ["%year%", "%month%", "%day%", "%hour%", "%minute%", "%second%",
-                       "%width%", "%height%"];
+// What core's `compute_vars` expands, in the order the hint lists them. The
+// split is real and the chip row draws it: the first six come off the clock at
+// the moment the file is written, the last two off the frame being written.
+export const CLOCK_TOKENS = ["%year%", "%month%", "%day%", "%hour%", "%minute%", "%second%"];
+export const FRAME_TOKENS = ["%width%", "%height%"];
+export const TOKENS = [...CLOCK_TOKENS, ...FRAME_TOKENS];
+
+// One token, whole. Used to find them inside typed or pasted text — the field
+// draws each one as a single tile, so it has to know where one starts and ends
+// rather than treating `%` as a character like any other.
+const TOKEN_RE = new RegExp(TOKENS.join("|"), "g");
+
+/** The word a token wears on screen. The `%` is core's syntax, not something a
+ *  reader of a folder name should have to look at. */
+export function tokenLabel(token) {
+  return token.replaceAll("%", "");
+}
+
+/**
+ * What every token expands to right now.
+ *
+ * One table, because the preview line under the field and the chip that inserts
+ * the token have to agree about whether `%month%` is `08` or `August`, and a
+ * chip that says one thing while the line below says another is worse than no
+ * chip at all.
+ */
+export function tokenValues({ width = 1344, height = 768, now = new Date() } = {}) {
+  const pad = (n) => String(n).padStart(2, "0");
+  return {
+    "%year%": String(now.getFullYear()),
+    "%month%": pad(now.getMonth() + 1),
+    "%day%": pad(now.getDate()),
+    "%hour%": pad(now.getHours()),
+    "%minute%": pad(now.getMinutes()),
+    "%second%": pad(now.getSeconds()),
+    "%width%": String(width),
+    "%height%": String(height),
+  };
+}
+
+/**
+ * A prefix split into the literal text and the whole tokens inside it, in order.
+ *
+ * `[{ text }]` and `[{ token }]` parts, never a part that is both. This is what
+ * lets the field draw a token as one object: the caret can sit either side of a
+ * tile but there is no position *inside* one, which is the whole reason
+ * `minima%sssyear%%month%x` was typeable at all.
+ */
+export function splitTokens(text) {
+  const parts = [];
+  let at = 0;
+  for (const match of String(text ?? "").matchAll(TOKEN_RE)) {
+    if (match.index > at) parts.push({ text: text.slice(at, match.index) });
+    parts.push({ token: match[0] });
+    at = match.index + match[0].length;
+  }
+  if (at < text.length) parts.push({ text: text.slice(at) });
+  return parts;
+}
 
 // Windows cannot create these, and a workflow shared from a Mac should not
 // produce a folder its Windows half cannot write into. Mirrors outputs.ILLEGAL.
@@ -81,16 +137,7 @@ export function stemOf(prefix) {
  * for the first render into an empty one. Shown as an example, labelled as one.
  */
 export function examplePath(prefix, { extension = "mp4", width = 1344, height = 768 } = {}) {
-  const now = new Date();
-  const pad = (n) => String(n).padStart(2, "0");
-  const filled = prefix
-    .replaceAll("%year%", String(now.getFullYear()))
-    .replaceAll("%month%", pad(now.getMonth() + 1))
-    .replaceAll("%day%", pad(now.getDate()))
-    .replaceAll("%hour%", pad(now.getHours()))
-    .replaceAll("%minute%", pad(now.getMinutes()))
-    .replaceAll("%second%", pad(now.getSeconds()))
-    .replaceAll("%width%", String(width))
-    .replaceAll("%height%", String(height));
+  const values = tokenValues({ width, height });
+  const filled = prefix.replaceAll(TOKEN_RE, (token) => values[token]);
   return `${filled}_00001_.${extension}`;
 }

@@ -20,9 +20,26 @@ export const css = `
   background: var(--mmc-surface); border: 1px solid var(--mmc-line);
   border-radius: 10px; color: var(--mmc-text);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: calc(12.5px * var(--mmc-type));
+  /* A contenteditable, not an input — see folderRow. So it has to be told the
+     things an input knows by itself: that it is one line tall when empty, that
+     a click anywhere in it is a caret, and that the spaces someone types are
+     theirs to keep until the path is cleaned. */
+  min-height: calc(19px * var(--mmc-type)); line-height: calc(19px * var(--mmc-type));
+  cursor: text; white-space: pre-wrap; overflow-wrap: anywhere;
 }
 .mmc-out-field:focus { outline: none; border-color: var(--mmc-blue); }
 .mmc-out-field.bad { border-color: var(--mmc-warn); }
+/* A token, whole. Set in the path's own type at the path's own size and only a
+   shade lifted off it, because it is a piece of the folder name and not a
+   control sitting on top of one — the tile says "this part is filled in later",
+   and saying more than that would make the literal text look like the guest. */
+.mmc-out-tile {
+  display: inline-block; padding: 0 4px; border-radius: 5px;
+  background: var(--mmc-surface-3); color: var(--mmc-text);
+  /* The caret parks either side of a tile and never inside it; a drag across
+     the field must not be able to take half of one either. */
+  user-select: none; -webkit-user-select: none; white-space: nowrap;
+}
 .mmc-out-problem { color: var(--mmc-warn); font-size: calc(11.5px * var(--mmc-type)); line-height: 1.45; padding: 6px 2px 0; }
 /* One line, two colours: the folder half dim, the filename bright. The colour
    break carries what two labelled rows used to — that the last path part names
@@ -42,12 +59,20 @@ export const css = `
   color: var(--mmc-off); font-size: calc(10px * var(--mmc-type)); letter-spacing: .06em;
   text-transform: uppercase; padding-right: 4px;
 }
+/* A chip says the word it writes and what that word is worth right now. The
+   value is the useful half — "month" never said whether it meant 08 or August,
+   and that is the folder name — so it is shown at the point of choosing rather
+   than only in the reading underneath. */
 .mmc-out-token {
+  display: inline-flex; align-items: baseline; gap: 5px;
   padding: 3px 7px; background: var(--mmc-surface-2); border: 0; border-radius: 7px;
   color: var(--mmc-dim); font-size: calc(11px * var(--mmc-type)); font-family: ui-monospace, Menlo, monospace;
   cursor: pointer;
 }
 .mmc-out-token:hover { background: var(--mmc-surface-3); color: var(--mmc-text); }
+.mmc-out-token-now { color: var(--mmc-off); }
+.mmc-out-token:hover .mmc-out-token-now { color: var(--mmc-dim); }
+
 .mmc-opt {
   display: flex; align-items: center; justify-content: space-between; width: 100%;
   padding: 9px 10px; background: none; border: 0; border-radius: 10px;
