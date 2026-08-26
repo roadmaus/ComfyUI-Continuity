@@ -552,13 +552,14 @@ class MiniMaxH3Save(io.ComfyNode):
         report = {"mmc_video": [
             {"filename": filename, "subfolder": subfolder, "type": "output"},
         ]}
-        kept = cls._takes(reel, takes, filename_prefix, fps, crf)
+        kept = cls._takes(reel, takes, filename_prefix, fps, crf,
+                          piece=(filename, subfolder))
         if kept:
             report["mmc_takes"] = kept
         return io.NodeOutput(ui=report)
 
     @classmethod
-    def _takes(cls, reel, takes, filename_prefix, fps, crf):
+    def _takes(cls, reel, takes, filename_prefix, fps, crf, piece=None):
         """Every generated pass, written out again as a file of its own.
 
         What a take is for: a piece is built a pass at a time, and a card whose
@@ -570,6 +571,13 @@ class MiniMaxH3Save(io.ComfyNode):
         Only the generated passes. A part that is already a file — supplied
         footage, or a take being spliced back in — has nothing to write: it is
         the file it would be written from.
+
+        `piece` is (filename, subfolder) of the render itself, and is the same
+        rule said about the render: a reel of one generated pass *is* that pass,
+        so its take is the file just written and reporting it is cheaper and
+        truer than encoding the same frames again. That is the shape a piece
+        shot a pass at a time starts in — one card, generated whole — and
+        without it the first card came back with nothing to keep.
 
         No metadata: the workflow rides in the piece's own container, and a take
         is a working file rather than something to drop back on a canvas.
@@ -595,6 +603,16 @@ class MiniMaxH3Save(io.ComfyNode):
         if not wanted:
             return []
 
+        def seed_of(index):
+            return int(seeds[index]) if index < len(seeds) and seeds[index] is not None \
+                else None
+
+        # The render as its own take — see the docstring. Nothing is written and
+        # nothing can fail, so this is above the shelf the others are written to.
+        if piece and len(reel) == 1:
+            return [cls._reported(reel[0], int(cards[wanted[0]]), piece[0], piece[1],
+                                  fps, seed_of(wanted[0]))]
+
         # One counter for the whole render, so a piece's takes sort together
         # and read as the set they are.
         width, height = mux.reel_geometry(reel)
@@ -604,7 +622,6 @@ class MiniMaxH3Save(io.ComfyNode):
 
         written = []
         for index in wanted:
-            spec = reel[index]["pass"]
             card = int(cards[index])
             filename = f"{name}_{counter:05}_s{card:02}.mp4"
             try:
@@ -614,18 +631,30 @@ class MiniMaxH3Save(io.ComfyNode):
                 logging.warning("MiniMax: could not write the take for segment "
                                 "%s: %s", card, exc)
                 continue
-            written.append({
-                "segment": card,
-                "filename": filename,
-                "subfolder": subfolder,
-                "type": "output",
-                "duration_s": round(int(spec["frames"]) / float(fps), 6),
-                "width": int(spec["width"]),
-                "height": int(spec["height"]),
-                "has_audio": "audio_path" in spec,
-                "seed": int(seeds[index]) if index < len(seeds) else None,
-            })
+            written.append(cls._reported(reel[index], card, filename, subfolder,
+                                         fps, seed_of(index)))
         return written
+
+    @staticmethod
+    def _reported(part, card, filename, subfolder, fps, seed):
+        """One take, as the strip reads it back: which card, and what the file is.
+
+        The length off the pass's own frame count rather than off the file,
+        because the file is not open here and the count is what it was written
+        from — the same number, arrived at without a probe.
+        """
+        spec = part["pass"]
+        return {
+            "segment": card,
+            "filename": filename,
+            "subfolder": subfolder,
+            "type": "output",
+            "duration_s": round(int(spec["frames"]) / float(fps), 6),
+            "width": int(spec["width"]),
+            "height": int(spec["height"]),
+            "has_audio": "audio_path" in spec,
+            "seed": seed,
+        }
 
 
 # Registered by `creator_node.MiniMaxCreatorExtension` — one extension for the

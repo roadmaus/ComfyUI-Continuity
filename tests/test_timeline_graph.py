@@ -1019,16 +1019,18 @@ check("a card with no seed of its own runs on the node's",
 check("...and the save node records the same two",
       json.loads(seeded["MiniMaxH3Save"][0][1]["takes"])["seeds"], [100, 4242])
 
-# A lone generation has one take and it is the render, so there is nothing to
-# write twice. True of a whole strip merged into one pass as well: it is one
-# generation over twelve cards, and its take is still the render.
-check("a one-pass render is told to keep nothing",
-      by_class(with_clip({"prompt": "only", "duration_s": 5}))
-      ["MiniMaxH3Save"][0][1]["takes"], "")
-check("...and a strip generated in one go is told the same",
-      by_class(with_clip({"prompt": "wide", "duration_s": 5},
-                         {"prompt": "closer", "duration_s": 5, "merge": True}))
-      ["MiniMaxH3Save"][0][1]["takes"], "")
+# A lone generation has one take and it is the render — which is a statement
+# about the *file*, not about the card. The plan still goes out, because the
+# card is still a card somebody may keep and build on; what the save node does
+# with it is report the render itself instead of encoding it twice.
+check("a one-pass render is still told which card it made",
+      json.loads(by_class(with_clip({"prompt": "only", "duration_s": 5}))
+                 ["MiniMaxH3Save"][0][1]["takes"])["cards"], [1])
+check("...and a strip generated in one go says the same of its first card",
+      json.loads(by_class(with_clip({"prompt": "wide", "duration_s": 5},
+                                    {"prompt": "closer", "duration_s": 5,
+                                     "merge": True}))
+                 ["MiniMaxH3Save"][0][1]["takes"])["cards"], [1])
 
 # A card shot by itself, which is how a piece is built one expensive generation
 # at a time: lock the rest, shoot this one, keep what came back, move on. It is
@@ -1126,3 +1128,22 @@ with tempfile.TemporaryDirectory() as _out:
 
 check("a render with nothing to keep writes nothing",
       tl.MiniMaxH3Save._takes(_reel, "", "minimax/renders/H3", 24.0, 20), [])
+
+# The lone generation: one pass, no clips, and the piece already written. Its
+# take is that file — no second encode, and nothing under the takes shelf.
+with tempfile.TemporaryDirectory() as _out:
+    _was = _folder_paths.get_output_directory
+    _folder_paths.get_output_directory = lambda: _out
+    try:
+        alone = tl.MiniMaxH3Save._takes(
+            [{"pass": spilled}], json.dumps({"cards": [1], "seeds": [100]}),
+            "minimax/renders/H3", 24.0, 20, piece=("H3_00007_.mp4", "minimax/renders"))
+    finally:
+        _folder_paths.get_output_directory = _was
+
+    check("a lone pass is kept as the render itself",
+          [(t["segment"], t["subfolder"], t["filename"], t["seed"]) for t in alone],
+          [(1, "minimax/renders", "H3_00007_.mp4", 100)])
+    check("...as long as the pass it is", alone[0]["duration_s"], 2.0)
+    check("...and nothing is encoded a second time",
+          __import__("glob").glob(os.path.join(_out, "**", "*.mp4"), recursive=True), [])

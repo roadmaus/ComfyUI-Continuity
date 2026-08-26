@@ -362,20 +362,18 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
         reel = redetailpass.emit(graph, family, links, upscaler, compiled, reel,
                                  seed_for(0))
 
-    # What the save node needs to write each pass out as its own file: which
-    # card it is and what seed it ran on. Not where the render is the whole
-    # piece made in one go: that take is the render, and writing it twice would
-    # be one file to keep and one to delete.
-    #
-    # "The whole piece" and not "one payload", because those differ exactly
-    # where takes matter most. A card shot by itself out of six is one payload,
-    # and gating on that is what stopped a piece from ever being shot a pass at
-    # a time: the take never landed, so the card could not be kept, so the next
-    # render was one payload again, and so on for the whole strip.
+    # What the save node needs to keep each pass as a take: which card it is and
+    # what seed it ran on. Asked for on every render that knows its cards,
+    # including the lone generation — a piece of one card is where a piece shot
+    # a pass at a time *starts*, and a strip whose first card came back with no
+    # take could only go on by shooting it again. The old gate read "the whole
+    # piece in one go has nothing to keep, because that take is the render",
+    # which is true about the file and wrong about the card: the render is the
+    # take, so the save node reports the piece's own file as one rather than
+    # writing it twice. See `MiniMaxH3Save._takes`.
     takes = json.dumps({"cards": list(cards),
                         "seeds": [seed_for(index) for index in range(len(payloads))]},
-                       sort_keys=True) \
-        if cards and (len(payloads) > 1 or not whole_piece) else ""
+                       sort_keys=True) if cards else ""
     emit_tail(graph, reel, unique_id, filename_prefix, takes,
               fps=float(family.rules.fps))
     return graph
