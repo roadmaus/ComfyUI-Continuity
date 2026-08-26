@@ -1243,6 +1243,7 @@ export const zh = {
  "mute": "静音",
  "muted": "已静音",
  "{name} is muted — out of the run, and kept exactly as you set it up. Click to bring it back.": "{name} 已静音——不参与运行，但设置原样保留。点击可恢复。",
+ "{name} — the distillation the turbo switch threw on. Muting or removing it here switches turbo off and puts the sampler row back.": "{name} — 涡轮开关投入的蒸馏模型。在这里静音或删除它会关闭涡轮，并把采样器行恢复原状。",
  "{name} — click to mute it: out of the run, but its strength, checkpoint and triggers stay.": "{name} — 点击静音：不参与运行，但强度、检查点和触发词都保留。",
  "Swap {name} for another LoRA, in the same slot.": "在同一个位置上把 {name} 换成另一个 LoRA。",
  // The fullscreen editor (fullscreen.js).

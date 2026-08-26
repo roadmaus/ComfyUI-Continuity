@@ -1242,6 +1242,7 @@ export const ja = {
  "mute": "ミュート",
  "muted": "ミュート中",
  "{name} is muted — out of the run, and kept exactly as you set it up. Click to bring it back.": "{name} はミュート中 — 実行からは外れていますが、設定はそのままです。クリックで戻します。",
+ "{name} — the distillation the turbo switch threw on. Muting or removing it here switches turbo off and puts the sampler row back.": "{name} — ターボスイッチが投入した蒸留モデルです。ここでミュートまたは削除するとターボがオフになり、サンプラー行が元に戻ります。",
  "{name} — click to mute it: out of the run, but its strength, checkpoint and triggers stay.": "{name} — クリックでミュート：実行からは外れますが、強度・チェックポイント・トリガーは残ります。",
  "Swap {name} for another LoRA, in the same slot.": "同じスロットのまま {name} を別の LoRA に差し替えます。",
  // The fullscreen editor (fullscreen.js).

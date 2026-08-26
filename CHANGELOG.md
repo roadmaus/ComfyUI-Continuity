@@ -2,6 +2,23 @@
 
 ## Unreleased
 
+**The first card of a piece can now be kept.** A render of one generation used
+to be told there was nothing to keep — its take *was* the render, so writing the
+same frames out a second time would have been one file to keep and one to
+delete. True about the file and wrong about the card: a piece shot a pass at a
+time starts as one card generated whole, and that card came back with no take on
+it, so locking it left nothing to play and the only way to add a second shot was
+to shoot the first one again. The save node now reports the render itself as
+that card's take. Nothing extra is written and nothing on disk moves.
+
+**The turbo LoRA reads as the switch's on the strip's rail.** Thrown on, it is an
+ordinary entry in the piece's stack — which is the point, and it stays one — but
+the piece rail drew it like a file you had picked, forty characters of
+`..._turbo_v4_step600_ema_pruned` beside the pill that had just dropped the
+filename for exactly that reason. It wears the switch's bolt and the word
+"turbo" now, with the file in the tooltip. The shot face never showed it: its
+rail is the segment's stack, and turbo's LoRA belongs to the piece.
+
 **The LoRA manager remembers what you set it to.** A strength you arrived at by
 trying it, and the two words out of a sidecar's nine that actually did anything,
 used to live on the entry in creator_data — which is to say they lived until the

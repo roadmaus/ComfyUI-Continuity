@@ -1851,6 +1851,9 @@ export class CreatorEditor {
     return loraBlock(this.state, {
       family: S.pieceFamily(this.piece),
       targets: S.checkpointsFor(this.state, S.pieceFamily(this.piece)),
+      // Only where this rail *is* the piece's — a node body's own stack. A
+      // strip's card draws the segment's, and the switch's LoRA is never in it.
+      turbo: this.state === this.piece ? (this.piece.turbo?.lora || null) : null,
       onToggle: (entry) => { S.toggleLora(this.state, entry.name); this.commit(); },
       onManage: (entry) => this.manageLoras(entry),
       onSwap: (entry) => this.swapLora(entry),

@@ -511,6 +511,11 @@ class Timeline {
     this.loraHost.replaceChildren(...(entries.length ? [loraBlock(this.timeline, {
       family: S.pieceFamily(this.timeline),
       targets: S.timelineCheckpoints(this.timeline),
+      // Which of these the turbo switch put there. It is drawn as the switch's
+      // rather than as a file somebody picked — see `loraChip`. The shot face
+      // never had to say this: its rail is the *segment's* stack, and turbo's
+      // LoRA is the piece's, so it only comes into view here.
+      turbo: this.timeline.turbo?.lora || null,
       // Not the trigger note: a global LoRA's words are prefixed onto each
       // segment's own prompt, so one line here would have to say "in front of
       // which" and cannot.

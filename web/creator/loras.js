@@ -121,9 +121,20 @@ export function loraBlock(state, spec) {
   return el("div", { class: "mmc-lora-block" }, parts);
 }
 
-/** One entry: the mute, the weight, the swap and the ✕. */
-function loraChip(entry, { targets = null, family = S.DEFAULT_VIDEO_FAMILY,
+/** One entry: the mute, the weight, the swap and the ✕.
+ *
+ *  `turbo` is the file the turbo switch owns, when this stack is the one it
+ *  throws its LoRA into. That entry is an ordinary entry and stays in the rail
+ *  — the rail is the account of what is patched onto the run, and one that drew
+ *  only some of it is one you cannot read as an answer — but it is not a LoRA
+ *  anybody picked, and drawn like the rest it read as one somebody had. So it
+ *  wears the switch's own bolt and the switch's own word, and the file is in
+ *  the tooltip: the same trade the pill made when the filename came off it,
+ *  where forty characters of `..._turbo_v4_step600_ema_pruned` crowded out
+ *  everything the row was for. */
+function loraChip(entry, { targets = null, family = S.DEFAULT_VIDEO_FAMILY, turbo = null,
                            onToggle, onManage, onSwap, onRemove }) {
+  const isTurbo = Boolean(turbo) && entry.name === turbo;
   const modes = S.loraModes(entry, family);
   const label = S.checkpointLabels(family);
   // Whether this chip has a checkpoint to say anything about at all. A family
@@ -143,14 +154,18 @@ function loraChip(entry, { targets = null, family = S.DEFAULT_VIDEO_FAMILY,
           modes: modes.map((mode) => label[mode]).join(" + "),
           target: targets.map((mode) => label[mode]).join(" + "),
         })
-      : entry.name,
+      : isTurbo
+        ? t("{name} — the distillation the turbo switch threw on. Muting or "
+            + "removing it here switches turbo off and puts the sampler row back.",
+            { name: entry.name })
+        : entry.name,
   }, [
-    el("span", { class: "mmc-asset-thumb" }, [svg(ICONS.effect, 15)]),
+    el("span", { class: "mmc-asset-thumb" }, [svg(isTurbo ? ICONS.bolt : ICONS.effect, 15)]),
     // The name is the mute. Whether a LoRA is the reason the last render looked
     // like that is a question you ask a dozen times an hour, and the only
     // control that used to answer it was the ✕ — which takes the strength, the
     // checkpoint and the trigger words with it.
-    loraName(entry, () => onToggle(entry)),
+    loraName(entry, () => onToggle(entry), isTurbo ? t("turbo") : null),
     el("button", {
       class: "mmc-ghost",
       style: { fontSize: "11px" },
@@ -172,17 +187,20 @@ function loraChip(entry, { targets = null, family = S.DEFAULT_VIDEO_FAMILY,
 
 /** The name, which is the mute switch: click to take this LoRA out of the run
  *  and click again to bring it back, with everything you set up still on it. */
-function loraName(entry, onToggle) {
+function loraName(entry, onToggle, label = null) {
   const off = entry.enabled === false;
   return el("button", {
     class: "mmc-asset-handle mmc-asset-name",
     "aria-pressed": off,
+    // The file either way, muted or not: the chip is what a stack is read off,
+    // and a name shortened to a word still has to say which file it is when
+    // asked. Only the face is the switch's word.
     title: off
       ? t("{name} is muted — out of the run, and kept exactly as you set it up. Click to bring it back.",
           { name: baseName(entry.name) })
       : t("{name} — click to mute it: out of the run, but its strength, checkpoint and triggers stay.",
           { name: baseName(entry.name) }),
-    text: baseName(entry.name),
+    text: label ?? baseName(entry.name),
     onclick: onToggle,
   });
 }

@@ -1242,6 +1242,7 @@ export const ko = {
  "mute": "음소거",
  "muted": "음소거됨",
  "{name} is muted — out of the run, and kept exactly as you set it up. Click to bring it back.": "{name}은(는) 음소거 상태입니다 — 실행에서 빠져 있지만 설정한 그대로입니다. 클릭하면 되돌립니다.",
+ "{name} — the distillation the turbo switch threw on. Muting or removing it here switches turbo off and puts the sampler row back.": "{name} — 터보 스위치가 올린 증류 LoRA입니다. 여기서 음소거하거나 제거하면 터보가 꺼지고 샘플러 행이 되돌아갑니다.",
  "{name} — click to mute it: out of the run, but its strength, checkpoint and triggers stay.": "{name} — 클릭하면 음소거됩니다: 실행에서는 빠지지만 강도, 체크포인트, 트리거는 그대로 남습니다.",
  "Swap {name} for another LoRA, in the same slot.": "같은 자리에서 {name}을(를) 다른 LoRA로 교체합니다.",
  // The fullscreen editor (fullscreen.js).
