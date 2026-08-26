@@ -94,6 +94,150 @@ export const widgetsOf = (id) => videoFamily(id).widgets;
 export const canDo = (piece, capability) =>
   Boolean(familyOf(piece).capabilities?.[capability]);
 
+/** The whole of a capability's declaration, or null. `canDo` answers whether
+ *  there is one; this is for a control that needs what it says. */
+export const capabilityOf = (piece, capability) =>
+  familyOf(piece).capabilities?.[capability] ?? null;
+
+/** The chips a cutout would destroy the meaning of — there the background *is*
+ *  the reference. Mirrors `cutout.KEEPS_BACKGROUND`. */
+export const KEEPS_BACKGROUND = ["scene", "style"];
+
+/** Whether cutting this picture out would leave the reference intact. -> bool.
+ *
+ *  Asked per picture and answered by its chip: a `scene` reference cites where
+ *  something was photographed and a `style` one cites how it looks, and both
+ *  live in exactly the pixels a matte throws away. Everything else — `full`
+ *  included, which means "this whole picture is a reference to something" — is a
+ *  subject the render wants and a background it does not. Mirrors
+ *  `cutout.wanted`, which is the backend's copy of the same list. */
+export const canCut = (takes) => !KEEPS_BACKGROUND.includes(takes ?? "full");
+
+/** Whether this asset is a plate — a picture the picker made out of pictures.
+ *  A plate carries its panels; an ordinary attachment is one photograph and
+ *  carries none. See `creator/plate.py`. */
+export const isPlate = (asset) => Boolean(asset?.panels?.length);
+
+/** Every handle a piece has spoken for, plates' panels included.
+ *
+ *  Panels are citable and the cast claims them, so they are handles in exactly
+ *  the sense `nextHandle` has to avoid — a plate holding `@img-2` and a loose
+ *  attachment called `@img-2` is a prompt with two answers, and `compile.py`
+ *  refuses the blob rather than picking one. */
+export function takenHandles(state) {
+  const taken = new Set();
+  for (const asset of state?.assets ?? []) {
+    taken.add(asset.handle);
+    for (const panel of asset.panels ?? []) taken.add(panel.handle);
+  }
+  return taken;
+}
+
+/**
+ * What the picker needs to build a plate for this piece, or null where it
+ * cannot build one at all.
+ *
+ * The three things it cannot work out for itself: which grey the family lays
+ * its panels on, whether a fresh pick starts out cut (`declare.CUTOUT_DEFAULT`
+ * — on for LTX 2.5, whose panels are ingredients rather than photographs; off
+ * for H3, where every piece ever saved was rendered against whole pictures),
+ * and which background-removal model the weights control names. The last of
+ * those comes off the capability's own `slot`, so the matte the picker takes is
+ * the file the node says it uses rather than a field name guessed here.
+ *
+ * The canvas is the caller's, because the sheet is built at the size the shot
+ * generates at.
+ *
+ * The model may be empty, and that is not a reason to refuse the plate: laying
+ * two pictures out side by side needs no matte at all, and the missing weight
+ * is only reported when the scissors are actually pressed.
+ */
+/** The next free `<prefix>-N`, marking it taken. Shared by the two numbering
+ *  schemes a plate can land in — `img-N` on a card, `ref-N` in a pool. */
+function nextIn(taken, prefix) {
+  for (let n = 1; ; n += 1) {
+    const handle = `${prefix}-${n}`;
+    if (!taken.has(handle)) { taken.add(handle); return handle; }
+  }
+}
+
+/**
+ * A plate answer from the picker -> the entry a card or a pool carries.
+ *
+ * One asset, holding the composite's own filename and the panels it was laid
+ * out from. The panels keep handles because they are what the prompt cites and
+ * what the cast claims — `panel 2` on LTX 2.5, `panel 2 of <Picture 1>` on H3 —
+ * and the plate keeps one of its own so there is something to hang the chip and
+ * the ✕ off. See `compile._parse_panels`.
+ *
+ * `taken` is every handle already spoken for (`takenHandles`), and it is
+ * *mutated*: the plate and its panels are numbered against one another as they
+ * are issued, so no two of them can be handed the same name. The prefixes are
+ * the caller's because the two hosts number differently — a card's references
+ * are `img-N`, a pool's are all `ref-N`.
+ *
+ * `kept` is `filename -> panel` from a plate being re-picked. A picture that
+ * comes back keeps its handle and its chip, so a prompt citing `@img-2` still
+ * means the picture it meant and a panel does not lose what it reads as for
+ * having been dragged one cell to the left.
+ */
+export function plateEntry(picked, taken, {
+  plate = "plate", panel = "img", handle = null, kept = new Map(),
+} = {}) {
+  if (handle) taken.delete(handle);        // a re-pick keeps the name it had
+  const entry = {
+    handle: handle ?? nextIn(taken, plate),
+    kind: "image",
+    role: "reference",
+    filename: picked.path,
+    ref_size: "max",
+    panels: [],
+  };
+  taken.add(entry.handle);
+  for (const source of picked.panels ?? []) {
+    const before = kept.get(source.path);
+    const made = {
+      handle: before && !taken.has(before.handle) ? before.handle : nextIn(taken, panel),
+      filename: source.path,
+      ...(source.cut ? { cut: true } : {}),
+    };
+    // The arrangement and the clicks ride with the panel for the same reason
+    // `cut` does: they are what the composite already looks like, and what
+    // re-opening the editor has to start from.
+    if (source.rect) made.rect = source.rect;
+    if (source.points?.length) made.points = source.points;
+    if (before?.takes) made.takes = before.takes;
+    taken.add(made.handle);
+    entry.panels.push(made);
+  }
+  return entry;
+}
+
+export function plateSpec(piece, { width, height } = {}) {
+  const capability = capabilityOf(piece, "cutout");
+  if (!capability) return null;
+  return {
+    backdrop: capability.backdrop ?? 0.5,
+    cut: Boolean(capability.default),
+    model: piece?.models?.[capability.slot || "cutout"] ?? "",
+    // The click-to-cut segmenter (SAM3), where the family names one. Empty is
+    // fine: the scissors still work whole-subject, and only a click asks.
+    segment: piece?.models?.[capability.segment || ""] ?? "",
+    width: width || 1280,
+    height: height || 704,
+    // Whether the family's image references *are* one sheet (LTX 2.5). The
+    // picker treats the whole image selection as the sheet where this is set;
+    // elsewhere a sheet is something Connect builds out of part of it.
+    sheet: sheetRefs(piece),
+  };
+}
+
+/** Whether this family's image references are the panels of ONE composite
+ *  sheet — LTX 2.5's `reference.sheet` declaration. Decides how image slots
+ *  are counted (panels there, attachments elsewhere: the two grammars'
+ *  `refuse` methods count the same ways) and how the picker behaves. */
+export const sheetRefs = (piece) => Boolean(referenceOf(pieceFamily(piece)).sheet);
+
 // The reference grammar — what may be attached, how much of it, and what a
 // chip may narrow it to.
 //
@@ -122,6 +266,15 @@ export const refCaps = (piece) => referenceOf(pieceFamily(piece)).max;
 /** Whether this piece's family reads attached files at all. What the rail asks
  *  before it draws a tool that would only ever refuse. */
 export const takesReferences = (piece) => refCaps(piece).files > 0;
+
+/** Whether this piece's family reads attached files *of this kind*.
+ *
+ *  A second question from `takesReferences`, and it became one the day a family
+ *  read some kinds and not others: LTX 2.5's reference grammar is a composite
+ *  sheet of stills, so it takes nine images and no video and no sound. The rail
+ *  asks per tool, so a family that cannot use a clip does not offer to attach
+ *  one — the same reasoning that hides all three on a family that reads none. */
+export const takesKind = (piece, kind) => (refCaps(piece)[kind] ?? 0) > 0;
 
 const PREFIX = { image: "img", video: "vid", audio: "aud" };
 
@@ -3266,10 +3419,15 @@ function hue(text) {
   return value % 8;
 }
 
-/** Next free @handle for a kind: img-1, img-2, ... Stable across deletions. */
+/** Next free @handle for a kind: img-1, img-2, ... Stable across deletions.
+ *
+ *  `kind` may also be "plate", which is not a kind of file but the one thing a
+ *  card can hold that is not one: a composite the picker made. It gets a prefix
+ *  of its own so it cannot take a number a panel inside it wants — the panels
+ *  are the `img-N`s, and the plate is what holds them. */
 export function nextHandle(state, kind) {
-  const prefix = PREFIX[kind];
-  const taken = new Set(state.assets.map((a) => a.handle));
+  const prefix = kind === "plate" ? "plate" : PREFIX[kind];
+  const taken = takenHandles(state);
   for (let n = 1; ; n += 1) {
     const handle = `${prefix}-${n}`;
     if (!taken.has(handle)) return handle;
@@ -4272,9 +4430,23 @@ export function mode(state, piece) {
 }
 
 /** What each bucket currently holds. A video with its sound on occupies both a
- *  video slot and an audio one, which is the rule compile.py enforces. */
-function counts(state) {
-  const images = refImages(state).length;
+ *  video slot and an audio one, which is the rule compile.py enforces.
+ *
+ *  `except` leaves one asset out of the count — the sheet the picker was opened
+ *  on, whose panels are the selection being edited and would otherwise be
+ *  counted twice.
+ */
+function counts(state, piece = null, except = null) {
+  // How an image reference is counted is the family's grammar. On a sheet
+  // family the references are the panels of one composite, so the panels are
+  // what the cap is about (mirrors `LTX25Grammar.refuse` — a plate counted as
+  // one would let a twelve-panel sheet through a nine-panel limit). Everywhere
+  // else a sheet is one encoded picture among the others, and counting its
+  // panels would charge one H3 reference slot per storyboard cell (mirrors
+  // `Grammar.refuse`, which counts attachments).
+  const panels = sheetRefs(piece ?? state);
+  const images = refImages(state).filter((a) => a !== except)
+    .reduce((n, a) => n + (panels ? Math.max(1, a.panels?.length ?? 0) : 1), 0);
   const videos = refVideos(state).length;
   const audios = refAudios(state).length
     + refVideos(state).filter((v) => v.track === "picture+sound").length;
@@ -4287,8 +4459,8 @@ function counts(state) {
  *  with the piece in hand gets that family's caps, and one without gets the
  *  default family's. Optional rather than required because half the call sites
  *  are inside a lone Creator node, where the piece *is* the state. */
-export function capacity(state, kind, piece = null) {
-  const used = counts(state);
+export function capacity(state, kind, piece = null, except = null) {
+  const used = counts(state, piece, except);
   const max = refCaps(piece ?? state)[kind];
   return { used: used[kind], max, filesLeft: refCaps(piece ?? state).files - used.files };
 }
@@ -4303,7 +4475,7 @@ export function capacity(state, kind, piece = null) {
  * needs to hear is that the files have to come off, and why.
  */
 export function overflow(state, piece = null) {
-  const used = counts(state);
+  const used = counts(state, piece);
   const caps = refCaps(piece ?? state);
   if (!caps.files) {
     return used.files
@@ -4312,6 +4484,24 @@ export function overflow(state, piece = null) {
         + "the piece back on a model that reads them.",
           { family: familyOf(piece ?? state).label })
       : null;
+  }
+  // A kind this family reads none of gets the zero sentence too, for the reason
+  // the whole-family case above does: "at most 0 reference videos" is true and
+  // useless. It happens on LTX 2.5, whose grammar is a sheet of stills — nine
+  // pictures, no clips, no sound.
+  for (const kind of ["video", "audio", "image"]) {
+    if (caps[kind] === 0 && used[kind] > 0) {
+      return t("{family} reads references as stills only — detach the {kind} "
+             + "references, or put the piece on a model that reads them.",
+               { family: familyOf(piece ?? state).label, kind: t(kind) });
+    }
+  }
+  // A sheet family carries its image references as ONE composite file, and the
+  // compiler refuses loose seconds rather than laying out a sheet nobody saw.
+  if (sheetRefs(piece ?? state) && refImages(state).length > 1) {
+    return t("{family} reads one reference image — the sheet the picker lays out "
+           + "as you choose the files. Combine these into one sheet.",
+             { family: familyOf(piece ?? state).label });
   }
   if (used.image > caps.image) return t("At most {max} reference images.", { max: caps.image });
   if (used.video > caps.video) return t("At most {max} reference videos.", { max: caps.video });

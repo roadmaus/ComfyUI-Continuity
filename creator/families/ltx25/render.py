@@ -129,6 +129,18 @@ class LTX25(base.Family):
     def emit_loaders(self, graph, weights, routes):
         return core.Links(graph, weights, routes)
 
+    def _ingredients(self, weights):
+        """The Ingredients IC-LoRA's filename, or the slot's own refusal.
+
+        A slot with no loader is never reached by `Links`, so nothing else would
+        notice it was empty until `LoraLoaderModelOnly` was handed "" — and the
+        error from there names a lora file, not the reference the user attached.
+        """
+        picked = weights.get(declare.INGREDIENTS)
+        if not picked:
+            raise ValueError(models.SLOTS[declare.INGREDIENTS].missing)
+        return picked
+
     def emit_segment(self, graph, links, payload, compiled, weights, sampling,
                      seams, run):
         import json
@@ -144,6 +156,13 @@ class LTX25(base.Family):
             # none never loads it at all.
             **({"duration_head": links.duration_head}
                if compiled.auto_duration else {}),
+            # The Ingredients IC-LoRA, by name — the slot has no loader, because
+            # the file answers a question that only exists once it is loaded
+            # (`segment._ingredients`). Refused here rather than in the node when
+            # nothing was picked: `check` runs before a single loader is built,
+            # which is where a missing weight belongs.
+            **({"ic_lora": self._ingredients(weights)}
+               if compiled.ref_images else {}),
             # sort_keys so an unchanged payload serialises identically every
             # time — this string is the segment node's cache key.
             segment_data=json.dumps(payload, sort_keys=True),

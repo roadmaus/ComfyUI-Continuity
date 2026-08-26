@@ -690,11 +690,38 @@ class Timeline {
         text: `@${subject.handle}`,
       })),
       el("span", { class: "mmc-tl-pool-where", text: where }),
+      // What a plate is, in the one number that says it — and the scissors
+      // where the one picture on it was cut out. Same readout the card's chip
+      // wears; see `CreatorEditor.renderAssets`.
+      ...(S.isPlate(asset) && asset.panels.length > 1
+        ? [el("span", { class: "mmc-asset-panels",
+                        text: t("{count} panels", { count: asset.panels.length }) })]
+        : asset.panels?.[0]?.cut
+          ? [el("span", { class: "mmc-pl-cut on",
+                          title: t("Cut out of its background") }, [icon("scissors", 12)])]
+          : []),
+      // Building the sheet again, from here. The pool is where a shared
+      // reference is set at all — a citation of it in a segment has nothing to
+      // open — so without this a sheet attached to the piece could never be
+      // added to.
+      ...(asset.kind === "image" && S.plateSpec(this.timeline)
+        ? [el("button", {
+            class: "mmc-ghost",
+            style: { fontSize: "11px" },
+            title: t("Choose the pictures on this sheet again — add one, take one off, "
+                   + "rearrange them, or change which are cut out of their backgrounds. "
+                   + "The sheet is laid out again as you go."),
+            text: S.isPlate(asset) && asset.panels.length > 1
+              ? t("Edit sheet…") : t("Cut out or combine…"),
+            onclick: () => this.editPoolSheet(asset),
+          })]
+        : []),
       // What of the file is the reference — a character sheet is usually the
       // person, not the sheet's background, a clip is as often borrowed for its
       // camera as for what it shows, and a voice is borrowed for its timbre and
       // not its words. The editor's own chip, same menu.
-      ...(S.takeable(asset) ? [el("button", {
+      ...(S.takeable(asset) && !(S.isPlate(asset) && asset.panels.length > 1)
+        ? [el("button", {
         class: "mmc-ghost",
         style: { fontSize: "11px" },
         title: t(takesHelp(asset)),
@@ -969,6 +996,15 @@ class Timeline {
     this.commit();
   }
 
+  /** The plate spec a pool picker gets: the family's, with `sheet` off. The
+   *  pool serves many segments — one loose picture per segment is legal even
+   *  on a family whose *card* carries one sheet — so multi-select stays loose
+   *  and Connect is the deliberate way to build a sheet here. */
+  poolPlate(extra = {}) {
+    const spec = S.plateSpec(this.timeline, this.frame());
+    return spec ? { ...spec, sheet: false, ...extra } : null;
+  }
+
   /** The same picker the segments use, filling the pool instead of a card. */
   async addPoolAssets() {
     const chosen = await openPicker({
@@ -977,9 +1013,18 @@ class Timeline {
       // The per-segment reference caps are compile's, applied where a segment
       // actually cites — the pool itself has no ceiling worth enforcing here.
       capacity: () => ({ used: 0, max: S.refCaps(this.timeline).files, filesLeft: S.refCaps(this.timeline).files }),
+      plate: this.poolPlate(),
     });
     if (!chosen) return;
     for (const picked of chosen) {
+      // A sheet built in the picker lands in the pool as one reference, the way
+      // it lands on a card as one — and numbered the pool's way, `ref-N` for
+      // the sheet and for every panel on it.
+      if (picked.plate) {
+        this.timeline.assets.push(S.plateEntry(
+          picked, S.takenHandles(this.timeline), { plate: "ref", panel: "ref" }));
+        continue;
+      }
       const entry = {
         handle: S.nextPoolHandle(this.timeline),
         kind: picked.kind,
@@ -993,6 +1038,57 @@ class Timeline {
       this.timeline.assets.push(entry);
     }
     this.commit();
+  }
+
+  /** Open the sheet editor on a pool sheet, keeping its handle — the pool-side
+   *  twin of the editor's `editSheet`, and the same bargain: the pictures that
+   *  come back keep the handles and the chips they had, so every segment citing
+   *  one still means the picture it meant. Loose picks made in the same session
+   *  join the pool as their own references. */
+  async editPoolSheet(asset) {
+    const spec = this.poolPlate({ edit: true });
+    if (!spec) return;
+    const chosen = await openPicker({
+      kinds: ["image", "renders"],
+      kind: "image",
+      capacity: () => ({ used: 0, max: S.refCaps(this.timeline).files,
+                         filesLeft: S.refCaps(this.timeline).files }),
+      plate: { ...spec, panels: (asset.panels?.length
+        ? asset.panels.map((panel) => ({ path: panel.filename, cut: Boolean(panel.cut) }))
+        : [{ path: asset.filename, cut: false }]) },
+    });
+    if (!chosen) return;
+    const at = this.timeline.assets.indexOf(asset);
+    if (at < 0) return;
+    const sheet = chosen.find((picked) => picked.plate);
+    const loose = chosen.filter((picked) => !picked.plate);
+    const kept = new Map((asset.panels ?? []).map((panel) => [panel.filename, panel]));
+    if (!asset.panels?.length) kept.set(asset.filename, asset);
+    this.timeline.assets.splice(at, 1);
+    if (sheet) {
+      this.timeline.assets.splice(at, 0, S.plateEntry(
+        sheet, S.takenHandles(this.timeline),
+        { plate: "ref", panel: "ref", handle: asset.handle, kept }));
+    } else {
+      // Narrowed to one, or taken apart: the first pick that was a panel steps
+      // into the sheet's place and its handle — same rule as the card's.
+      const heirAt = loose.findIndex((picked) => kept.has(picked.path));
+      if (heirAt >= 0) {
+        const [heir] = loose.splice(heirAt, 1);
+        this.timeline.assets.splice(at, 0, {
+          handle: asset.handle, kind: "image", role: "reference",
+          filename: heir.path, ref_size: "max",
+        });
+      }
+    }
+    for (const picked of loose) {
+      this.timeline.assets.push({
+        handle: S.nextPoolHandle(this.timeline), kind: picked.kind,
+        role: "reference", filename: picked.path, ref_size: "max",
+      });
+    }
+    this.commit();
+    this.renderPool();
   }
 
   /** Point a pool reference at a different file, keeping its handle — see the
@@ -3036,8 +3132,12 @@ export class TimelineBody {
 
     return el("div", { class: "mmc-rail" }, [
       el("div", { class: "mmc-rail-group" }, [
+        // Per kind — see `CreatorEditor.renderRail`. A family whose references
+        // are a sheet of stills offers the image tool alone.
         ...(takesRefs ? [["image", "Add image", "image"], ["video", "Add video", "video"],
-                         ["audio", "Add audio", "audio"]] : []).map(([kind, label, iconName]) =>
+                         ["audio", "Add audio", "audio"]]
+                          .filter(([kind]) => S.takesKind(this.timeline, kind))
+                      : []).map(([kind, label, iconName]) =>
           tool(label, iconName,
                t("Attach a {kind} to the whole piece. Cite its @handle in a segment's "
                + "prompt — or in the global one, for every segment — to use it there.",
@@ -3093,9 +3193,20 @@ export class TimelineBody {
       kinds: [kind, "renders"],
       kind,
       capacity: () => ({ used: 0, max: S.refCaps(this.timeline).files, filesLeft: S.refCaps(this.timeline).files }),
+      // `sheet` off, as on the modal's pool picker: the pool serves many
+      // segments, so loose pictures stay loose and Connect builds a sheet.
+      ...(kind === "image" && S.plateSpec(this.timeline, this.frame())
+        ? { plate: { ...S.plateSpec(this.timeline, this.frame()), sheet: false } } : {}),
     });
     if (!chosen?.length) return;
     for (const picked of chosen) {
+      // As on the modal's own "+ Add": a sheet is one pool reference, numbered
+      // the pool's way. See `Timeline.addPoolAssets`.
+      if (picked.plate) {
+        this.timeline.assets.push(S.plateEntry(
+          picked, S.takenHandles(this.timeline), { plate: "ref", panel: "ref" }));
+        continue;
+      }
       const entry = {
         handle: S.nextPoolHandle(this.timeline),
         kind: picked.kind,

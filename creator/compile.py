@@ -197,6 +197,21 @@ class Asset:
     ref_size: str = "match"    # reference image/video: match | max; see DEFAULT_REF_SIZE
     trim: tuple[float, float] | None = None   # video/audio only: (start, end) seconds; None = whole file
     takes: str = "full"        # reference: one of TAKES[kind]; what of it is the reference
+    # Whether the picker lifted this picture off its background before writing
+    # it. Recorded rather than acted on: the file named above *is* the cut-out
+    # one, so nothing downstream has anything left to do — this is what lets the
+    # card say so, and what lets the picker rebuild the same plate.
+    cut: bool = False
+    # A plate's panels, in layout order — `Asset`s of their own, each naming one
+    # of the pictures that went into the composite this asset's `filename`
+    # points at. Empty on an ordinary attachment, which is every asset that is
+    # one photograph. See `creator/plate.py`.
+    panels: tuple = ()
+    # A panel arranged by hand: `(x, y, w, h)` fractions of the sheet's canvas,
+    # or None for a grid cell. Recorded for the same reason `cut` is — the
+    # composite already looks like this — and read by exactly one thing, the
+    # caption's "panel 3 is top right" (`families/ltx25/sheet._placed`).
+    rect: tuple | None = None
 
 
 @dataclass
@@ -286,7 +301,9 @@ class Compiled:
     # by its shape, a subject's only by being declared. See `subjects.py`.
     cast: list = field(default_factory=list)               # subjects.Subject
     subject_labels: dict[str, str] = field(default_factory=dict)  # name -> "<Subject 1>"
-    plan: list[dict] = field(default_factory=list)         # REF2VA only; see plan_references
+    # The reference walk, on a reference generation only — whatever the family
+    # calls one (H3's REF2VA, LTX 2.5's REF2V). See `plan_references`.
+    plan: list[dict] = field(default_factory=list)
     triggers: list[str] = field(default_factory=list)      # already prefixed onto `prompt`
     checkpoint_pinned: bool = False                        # the user chose it; not derived
     # Whether this generation's length is the model's to pick. `frames` above
@@ -573,8 +590,58 @@ def _parse_assets(raw):
             ref_size=ref_size,
             trim=_parse_trim(handle, kind, item.get("trim")),
             takes=takes,
+            cut=bool(item.get("cut")),
+            panels=_parse_panels(handle, role, kind, item.get("panels"), seen),
         ))
     return assets
+
+
+def _parse_panels(owner, role, kind, raw, seen):
+    """A plate's panels -> a tuple of `Asset`s, or `()` where there are none.
+
+    A panel is an asset in its own right and is parsed as one, because that is
+    what it has to be for everything downstream to work unchanged: it carries a
+    handle the prompt can cite and the cast can claim, and a `takes` chip saying
+    what of it is the reference. What it does *not* carry is a role of its own —
+    a panel is part of the plate that holds it, and the plate is what has a role.
+
+    The handles go into the same `seen` set as the top-level ones. A blob whose
+    plate holds `@img-1` while a loose attachment is also `@img-1` is refused
+    rather than resolved to whichever the substitution reached first.
+    """
+    if not raw:
+        return ()
+    if role != "reference" or kind != "image":
+        raise CompileError(
+            f"@{owner}: only a reference picture can be a plate — panels are the "
+            f"pictures a composite was laid out from"
+        )
+    panels = []
+    for index, item in enumerate(raw):
+        handle = str(item.get("handle") or "").strip()
+        if not handle:
+            raise CompileError(f"@{owner}: panel #{index + 1} has no handle")
+        if handle in seen:
+            raise CompileError(f"duplicate asset handle @{handle}")
+        seen.add(handle)
+        filename = str(item.get("filename") or "").strip()
+        if not filename:
+            raise CompileError(f"@{handle}: no filename")
+        takes = item.get("takes") or "full"
+        if takes != "full" and takes not in TAKES.get("image", ()):
+            raise CompileError(
+                f"@{handle}: takes must be one of {', '.join(TAKES['image'])} "
+                f"(got {takes!r})")
+        rect = item.get("rect")
+        if rect is not None:
+            if not isinstance(rect, (list, tuple)) or len(rect) != 4:
+                raise CompileError(
+                    f"@{handle}: rect must be [x, y, w, h] fractions of the sheet")
+            rect = tuple(float(v) for v in rect)
+        panels.append(Asset(handle=handle, kind="image", role="reference",
+                            filename=filename, takes=takes,
+                            cut=bool(item.get("cut")), rect=rect))
+    return tuple(panels)
 
 
 def _parse_track(handle, kind, item):
@@ -678,7 +745,7 @@ def _resolve_checkpoint(grammar, mode, raw, family=registry.DEFAULT_VIDEO):
     return choice, choice != derived
 
 
-def plan_references(ref_images, ref_videos, ref_audios):
+def plan_references(ref_images, ref_videos, ref_audios, family_grammar=None):
     """The one ordered walk that both the labels and the DiT payload come from.
 
     `encode.py` executes this plan step by step rather than re-deriving the order
@@ -692,22 +759,55 @@ def plan_references(ref_images, ref_videos, ref_audios):
 
     A video referenced for its sound alone never reaches `ref_videos` at all —
     it arrives in `ref_audios` and is walked as a plain audio reference.
+
+    The *order* is this module's, because it is bookkeeping about three lists.
+    What each step is *called* is the family's (`Grammar.cite`), because it is a
+    form of the encoder's training — H3 cites by the ordinal a file took in the
+    presentation, an encoder trained on captions has to be given words. The walk
+    is the same either way, which is why there is still one of these.
     """
+    if family_grammar is None:
+        family_grammar = grammar.of(registry.DEFAULT_VIDEO)
     plan = []
     picture = video = audio = 0
 
+    def step(op, asset, ordinal):
+        plan.append({"op": op, "asset": asset,
+                     "label": family_grammar.cite(op, ordinal)})
+        return plan[-1]
+
     for asset in ref_images:
+        # **A plate is one picture and several citations, and which of the two a
+        # family counts in is a statement about its encoder.** LTX 2.5 is handed
+        # the composite itself and addresses what is on it in English, so a panel
+        # *is* a citation there and the ordinals run over panels. H3 is handed
+        # the composite as one `<Picture N>` — the ordinal is the file's place in
+        # a presentation, and inventing a second one for something inside a file
+        # would be addressing a picture the tokenizer never saw separately. So
+        # there the plate takes the ordinal and its panels are named against it
+        # (`Grammar.panel_cite`), which is a label the reference section goes on
+        # to define rather than a number pointing at nothing.
+        if asset.panels and family_grammar.cites_panels:
+            for panel in asset.panels:
+                picture += 1
+                step("image", panel, picture)
+            continue
         picture += 1
-        plan.append({"op": "image", "asset": asset, "label": f"<Picture {picture}>"})
+        made = step("image", asset, picture)
+        if asset.panels:
+            made["panels"] = [
+                (family_grammar.panel_cite(made["label"], index + 1,
+                                           len(asset.panels)), panel)
+                for index, panel in enumerate(asset.panels)]
     for asset in ref_videos:
         if asset.track == "picture+sound":
             audio += 1
-            plan.append({"op": "soundtrack", "asset": asset, "label": f"<Audio {audio}>"})
+            step("soundtrack", asset, audio)
         video += 1
-        plan.append({"op": "video", "asset": asset, "label": f"<Video {video}>"})
+        step("video", asset, video)
     for asset in ref_audios:
         audio += 1
-        plan.append({"op": "audio", "asset": asset, "label": f"<Audio {audio}>"})
+        step("audio", asset, audio)
     return plan
 
 
@@ -720,10 +820,16 @@ def _labels_from_plan(plan):
         if step["op"] == "soundtrack":
             key += ":audio"
         labels[key] = step["label"]
+        # A plate the family did not expand into panels still has to answer for
+        # every handle inside it: the panels are citable and the cast claims
+        # them, so a prompt saying `@img-2` must substitute to something rather
+        # than be left with an unresolved handle in it.
+        for label, panel in step.get("panels", ()):
+            labels[panel.handle] = label
     return labels
 
 
-def _trailing_frame_labels(plan, first_frame, last_frame):
+def _trailing_frame_labels(plan, first_frame, last_frame, family_grammar):
     """handle -> `<Picture N>` for start/end frames riding in a reference
     generation.
 
@@ -737,11 +843,12 @@ def _trailing_frame_labels(plan, first_frame, last_frame):
     for asset in (first_frame, last_frame):
         if asset is not None:
             ordinal += 1
-            labels[asset.handle] = f"<Picture {ordinal}>"
+            labels[asset.handle] = family_grammar.frame_cite(asset.role, ordinal)
     return labels
 
 
-def _keyframe_labels(first_frame, last_frame, seam_presented=False):
+def _keyframe_labels(first_frame, last_frame, seam_presented=False,
+                     family_grammar=None):
     """handle -> `<Picture N>` for the keyframe modes.
 
     A continuing segment's start frame is a tensor from the previous segment, so
@@ -759,16 +866,18 @@ def _keyframe_labels(first_frame, last_frame, seam_presented=False):
     "something opens this segment" flag swallows that branch — which is exactly
     what `test_compile.py` caught when this first went in.
     """
+    if family_grammar is None:
+        family_grammar = grammar.of(registry.DEFAULT_VIDEO)
     labels = {}
     ordinal = 0
     if seam_presented:
         ordinal += 1
     elif first_frame is not None:
         ordinal += 1
-        labels[first_frame.handle] = f"<Picture {ordinal}>"
+        labels[first_frame.handle] = family_grammar.frame_cite("first_frame", ordinal)
     if last_frame is not None:
         ordinal += 1
-        labels[last_frame.handle] = f"<Picture {ordinal}>"
+        labels[last_frame.handle] = family_grammar.frame_cite("last_frame", ordinal)
     return labels
 
 
@@ -784,7 +893,12 @@ def _substitute(prompt, labels, assets, where="prompt"):
     prompt: the refiner writes `@handles` into the reference sections and the
     two audio fields too, and they are substituted with the same labels.
     """
+    # A plate's panels are handles too. They are what the prompt cites on a
+    # family whose citation is a panel — `@img-2` becomes `panel 2` — so a walk
+    # that only saw the attachments would call every one of them dangling and
+    # refuse a card the picker had just built.
     known = {a.handle for a in assets}
+    known.update(panel.handle for a in assets for panel in a.panels)
     dangling = sorted({h for h in HANDLE_RE.findall(prompt) if h not in known})
     if dangling:
         raise CompileError(
@@ -848,15 +962,25 @@ def refined_scope(data):
     return "shot" if refined.get("scope") == "shot" else None
 
 
-def refined_sections(data):
-    """The reference form's three extra sections, when a refiner wrote them."""
+def refined_sections(data, family_grammar=None):
+    """The reference form's extra sections, when a refiner wrote them.
+
+    Which names those are is the family's (`Grammar.written_sections`): H3's
+    three are the parts of its Context-IR document, and LTX 2.5's one is the
+    reference-sheet half of its caption. Filtered rather than passed through, so
+    a rewrite written on one family and opened on another cannot put the first
+    family's document into the second's prompt.
+    """
+    if family_grammar is None:
+        family_grammar = grammar.of(registry.DEFAULT_VIDEO)
     refined = data.get("refined")
     if not isinstance(refined, dict) or refined.get("enabled") is False:
         return None
     sections = refined.get("sections")
     if not isinstance(sections, dict):
         return None
-    kept = {name: str(sections.get(name) or "").strip() for name in contextir.REF_SECTIONS}
+    kept = {name: str(sections.get(name) or "").strip()
+            for name in family_grammar.written_sections}
     return kept if any(kept.values()) else None
 
 
@@ -976,11 +1100,11 @@ def plain_prompt(body, soundscape, music):
     as the sentences they are written as. Nothing is invented and no format is
     imposed; a piece with neither sound field is its body, unchanged.
 
-    The `<Picture 1>`-style labels a reference generation substitutes into the
-    body stay in it. They are unexplained here, which is the honest state of the
-    open question the plan records: LTX cites by guide and IC-LoRA rather than by
-    ordinal, and until that grammar is decided a label is at least stable text
-    rather than a dropped citation.
+    A reference generation's citations are already in the body when this is
+    reached, in whatever words the family cites with (`Grammar.cite`) — and
+    saying what those words mean is the family's job too, not this one's. LTX 2.5
+    wraps the result in `Reference sheet: … Generated video: …` and defines every
+    panel in the first half; see `families/ltx25/grammar.compose`.
     """
     parts = [str(body or "").strip(),
              str(soundscape or "").strip(),
@@ -1115,7 +1239,7 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     except subjects.SubjectError as exc:
         raise CompileError(str(exc)) from exc
     raw_body = refined_body(data) or str(data.get("prompt") or "")
-    raw_sections = refined_sections(data)
+    raw_sections = refined_sections(data, family_grammar)
     everybody = cast
     cast = subjects.cited(cast, [raw_body,
                                  str(data.get("soundscape") or ""),
@@ -1206,12 +1330,14 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     checkpoint, pinned = _resolve_checkpoint(family_grammar, mode,
                                              data.get("checkpoint"), family)
     if mode == family_grammar.modes.get("reference"):
-        plan = plan_references(ref_images, ref_videos, ref_audios)
+        plan = plan_references(ref_images, ref_videos, ref_audios, family_grammar)
         labels = _labels_from_plan(plan)
-        labels.update(_trailing_frame_labels(plan, first_frame, last_frame))
+        labels.update(_trailing_frame_labels(plan, first_frame, last_frame,
+                                             family_grammar))
     else:
         plan = []
-        labels = _keyframe_labels(first_frame, last_frame, head_seam_shown)
+        labels = _keyframe_labels(first_frame, last_frame, head_seam_shown,
+                                  family_grammar)
 
     try:
         subjects.check(cast, assets)
@@ -2825,6 +2951,9 @@ def _chained_request(data, segment, pool, global_prompt, cast=()):
     # its segment nodes stay cache hits.
     if cast:
         request["subjects"] = [_subject_dict(s) for s in cast]
+    # Nothing here resolves a cutout any more: a cut-out reference is a file the
+    # picker already wrote (`creator/plate.py`), so what reaches the segment node
+    # is the picture itself rather than an instruction to make one.
     return request
 
 
@@ -3105,7 +3234,8 @@ def group_payload(data, start=0, end=None):
     # sections for a one-pass strip and has no way yet to write one per pass, so
     # a partially merged timeline would otherwise put the same reference
     # analysis into passes it does not describe.
-    sections = refined_sections(data) if len(group) == len(segments) else None
+    sections = (refined_sections(data, family_grammar)
+                if len(group) == len(segments) else None)
     if sections:
         request["refined"] = {"sections": sections}
     # One pass is one generation, so it carries the whole cast and

@@ -547,6 +547,66 @@ export async function upload(file, subfolder = "") {
   return asset;
 }
 
+/**
+ * One panel of the sheet being edited, cut out, as an object URL the editor's
+ * stage can put straight on an <img>. Nothing lands on disk — the PNG comes
+ * out of the server's memory (`server_routes.cut_plate_panel`) — which is what
+ * makes editing free of the litter building used to leave in `_plates/`.
+ *
+ * The caller owns the URL and revokes it when the panel's cutout changes or
+ * the editor closes; a leaked object URL is a leaked decoded image.
+ */
+export async function cutPanel(body) {
+  const response = await api.fetchApi("/minimax_creator/plate/panel", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!response.ok) {
+    const answer = await response.json().catch(() => ({}));
+    throw new Error(answer.error || t("cutting the panel out failed ({status})",
+                                      { status: response.status }));
+  }
+  return URL.createObjectURL(await response.blob());
+}
+
+/**
+ * Build the plate for a selection — the accepted sheet, written to disk.
+ * See `creator/plate.py`.
+ *
+ * `panels` is `[{path, cut, rect?, points?}]` in layout order. The answer
+ * carries the written file's path and its shape, so the caller can show it and
+ * attach it without a second round trip.
+ *
+ * The listing is nudged rather than invalidated: a plate lands in input/ and
+ * the picker is looking at input/, so a full re-list on every rebuild would
+ * re-walk the folder for one file it already knows everything about. It is
+ * `remember`ed under the shelf plates live on, which is what makes a plate you
+ * built an hour ago findable in the grid like any other picture.
+ */
+export async function buildPlate(body) {
+  const response = await api.fetchApi("/minimax_creator/plate", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const answer = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(answer.error || t("building the plate failed ({status})",
+                                      { status: response.status }));
+  }
+  const name = answer.path.split("/").pop();
+  remember("input", {
+    path: answer.path,
+    name,
+    subfolder: answer.path.slice(0, answer.path.length - name.length - 1),
+    kind: "image",
+    size: 0,
+    mtime: Date.now() / 1000,
+  });
+  return answer;
+}
+
 // ---- the prompt the model actually reads -------------------------------------
 //
 // The box shows two things: the sentence you typed, and the sectioned prompt the

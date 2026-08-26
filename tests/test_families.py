@@ -309,9 +309,13 @@ check("ltx25 routes nothing", [w["id"] for w in ltx["weights"] if w["routed"]], 
 check("ltx25 declares no routing block", "routes" in ltx, False)
 check("ltx25 required slots are the table's",
       [w["id"] for w in ltx["weights"] if w["required"]], lx.REQUIRED)
-check("both opt-in passes are optional",
+# Every slot a render can go without: the two opt-in passes, the Ingredients
+# IC-LoRA (needed only where a card cites a reference), the background remover
+# (needed only while the cutout toggle is on) and the subject picker (needed
+# only when the sheet editor is given clicks).
+check("the opt-in slots are optional",
       sorted(w["id"] for w in ltx["weights"] if not w["required"]),
-      ["duration_head", "upscaler"])
+      ["cutout", "duration_head", "ic_lora", "sam3", "upscaler"])
 
 # A device can only be pinned where ComfyUI-MultiGPU has a wrapper, which is
 # the four core loaders — not the patch loader, not the upscale loader.

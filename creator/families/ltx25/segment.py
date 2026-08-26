@@ -23,6 +23,15 @@ images come from `media`'s resolver rather than from a `LoadImage`. This is the
 same reason H3's segment node exists, and the payload string is the same cache
 key: edit one card and only that card's node re-runs.
 
+**A reference is a guide too, and it is the first one on.** This family's
+reference grammar is Lightricks' `Ingredients` IC-LoRA: the attached stills are
+laid out as one composite sheet (`sheet.py`), the adapter goes onto the
+transformer here, and the sheet rides in as a guide carrying the adapter's own
+`reference_downscale_factor`. It is the only guide that carries it — a keyframe
+and a seam are full-resolution pictures of the video itself, and encoding either
+at 1/factor and dilating it back would be applying the reference recipe to a
+frame that is not a reference.
+
 **The order the latent is built in is load-bearing.** `LTXVAddGuide.append_keyframe`
 refuses a combined AV latent outright — it checks the channel count against the
 video VAE's 128 — so every guide goes onto the *video* latent, and the audio
@@ -36,7 +45,7 @@ import logging
 import torch
 from comfy_api.latest import io
 
-from ... import audiolatent, canvas, compile as compiler, lora, media
+from ... import audiolatent, canvas, compile as compiler, lora, media, plate as plates
 from . import models as slots
 from . import declare
 
@@ -88,6 +97,29 @@ GUIDE_COMPRESSION = 18
 # continuation is inventing damage rather than matching training.
 STILL_STRENGTH = 0.7
 SEAM_STRENGTH = 1.0
+
+# How hard the reference sheet is held. 1.0, unlike a still: the sheet is not a
+# moment the video passes through, so there is no "leave some of it for the model
+# to move" to trade for. It is a picture the model attends to and never renders —
+# `LTXVCropGuides` takes its latent frames off before anything decodes — and the
+# whole point of the adapter is that what is on it comes through unchanged.
+SHEET_STRENGTH = 1.0
+
+# Where on the target timeline the sheet's tokens claim to sit.
+#
+# **A guide does not occupy a video frame**, which is the fact this rests on:
+# `LTXVAddGuide.append_keyframe` concatenates the guide's latent *past the end*
+# of the sequence and records a time coordinate for it in `keyframe_idxs`, so
+# frame 0 means "these tokens carry the RoPE position of the opening" and not
+# "this is the first frame". That is the convention every IC-LoRA guide node
+# uses for in-context conditioning — Lightricks' own `LTXAddVideoICLoRAGuide`
+# and the port in `redetailpass.py` both add their control picture at 0 — and it
+# is what the adapter was trained against.
+#
+# It also puts the sheet in front of any keyframe this card carries, which is the
+# order the two belong in: the sheet says who is in the video, the keyframe says
+# where it starts.
+SHEET_FRAME = 0
 
 
 def _core(node_id):
@@ -195,6 +227,68 @@ def _predicted_frames(model, positive, duration_head, compiled, rules):
     return int(frames)
 
 
+def _ingredients(model, filename):
+    """The Ingredients IC-LoRA on the transformer. -> `(model, parameters)`.
+
+    Both answers come out of the one file, which is why this is one function:
+    `LoraLoaderModelOnly` patches the weights, and `GetICLoRAParameters` reads
+    the `reference_downscale_factor` back off the metadata the patch attached.
+    Deriving the factor any other way would be this pack guessing at a number
+    Lightricks shipped inside the adapter.
+
+    Loaded here rather than through a loader in the graph for the reason the slot
+    has no loader at all: the second answer only exists once the first has
+    happened, and a graph cannot express "load this, then ask it a question".
+    `redetailpass.py` does exactly this with the upscaler IC-LoRA.
+    """
+    import nodes
+
+    if not str(filename or "").strip():
+        raise ValueError(slots.SLOTS[declare.INGREDIENTS].missing)
+    patched = nodes.LoraLoaderModelOnly().load_lora_model_only(model, filename, 1.0)[0]
+    return patched, _core("GetICLoRAParameters").execute(patched)[0]
+
+
+def _sheet(compiled):
+    """This card's reference sheet. -> an IMAGE.
+
+    A file, loaded, and nothing composed. The sheet is made when the pictures
+    are picked — matted and laid out by `creator/plate.py`, written into the
+    input folder, attached as the one reference this card carries — so by the
+    time a render reaches here there is nothing left to lay out. What the model
+    is handed is the picture the user was looking at when they queued it, and
+    the grammar refuses a card carrying more than one image file rather than
+    composing a sheet nobody saw (`LTX25Grammar.refuse`).
+    """
+    return media.load_image(compiled.ref_images[0].filename)
+
+
+def _check_sheet_grid(parameters, compiled):
+    """Refuse a canvas the IC-LoRA's dilation cannot land on, saying which sizes can.
+
+    `LTXVAddGuide` encodes a reference at the latent size divided by the
+    adapter's `reference_downscale_factor` and then zero-stuffs it back onto the
+    full grid, so both latent axes have to divide by that factor. Core raises
+    this itself, in latent units — "latent spatial size 30x17 must be divisible
+    by 2" — which is a true sentence about a number nobody set. The canvas is
+    what the user set, so this says it in pixels and names the pill.
+    """
+    factor = max(1, int((parameters or {}).get("reference_downscale_factor", 1)))
+    if factor <= 1:
+        return
+    grid = declare.RULES.multiple * factor
+    if compiled.width % grid == 0 and compiled.height % grid == 0:
+        return
+    raise ValueError(
+        f"This shot cites a reference sheet, and the Ingredients IC-LoRA encodes "
+        f"one at 1/{factor} of the canvas — so both axes have to divide by "
+        f"{grid} px, and {compiled.width}x{compiled.height} does not. Move the "
+        f"resolution pill's short edge until they do; the aspect pill decides "
+        f"the other axis, so a ratio whose canvas lands off the {grid} grid at "
+        f"every edge cannot carry a sheet. Or detach the references."
+    )
+
+
 class MiniMaxLTX25Segment(io.ComfyNode):
     """One segment of an LTX 2.5 piece. Written into the graph by the loop."""
 
@@ -224,6 +318,16 @@ class MiniMaxLTX25Segment(io.ComfyNode):
                 # lazily: it is a pass, not a component.
                 io.Custom("MODEL_PATCH").Input("duration_head", optional=True,
                     tooltip="LTX's duration head, when this shot's length is the model's to pick."),
+                # The Ingredients IC-LoRA, by filename rather than as a link:
+                # one file answers two questions here — what to patch the
+                # transformer with, and what downscale factor its guide is
+                # encoded at — and `GetICLoRAParameters` reads the second out of
+                # the file's own metadata after the first has been loaded. Same
+                # shape `redetailpass.py` takes its IC-LoRA in, for the same
+                # reason. Written into the graph only where this card cites
+                # something.
+                io.String.Input("ic_lora", optional=True,
+                    tooltip="Lightricks' Ingredients IC-LoRA, from models/loras — what makes a reference sheet mean anything."),
                 io.Image.Input("prev_image", optional=True,
                     tooltip="An earlier segment's last frame, when this segment continues from it."),
                 io.Audio.Input("prev_audio", optional=True,
@@ -255,7 +359,8 @@ class MiniMaxLTX25Segment(io.ComfyNode):
 
     @classmethod
     def execute(cls, model, clip, vae, audio_vae, segment_data,
-                duration_head=None, prev_image=None, prev_audio=None,
+                duration_head=None, ic_lora="",
+                prev_image=None, prev_audio=None,
                 next_image=None, next_audio=None) -> io.NodeOutput:
         from ... import timeline
 
@@ -277,6 +382,15 @@ class MiniMaxLTX25Segment(io.ComfyNode):
         model = lora.apply(model, payload["request"].get("loras"),
                            compiled.checkpoint, family="ltx25")
 
+        # The Ingredients adapter, before anything is encoded or predicted: it is
+        # part of the weights this shot samples with, so the duration head — which
+        # runs the transformer's own caption connectors — should be asking the
+        # patched model rather than the bare one.
+        parameters = None
+        if compiled.ref_images:
+            model, parameters = _ingredients(model, ic_lora)
+            _check_sheet_grid(parameters, compiled)
+
         positive = _encode(clip, compiled.prompt)
         negative = _encode(clip, DEFAULT_NEGATIVE)
 
@@ -290,12 +404,28 @@ class MiniMaxLTX25Segment(io.ComfyNode):
 
         add_guide = _core("LTXVAddGuide")
 
-        def guide(image, frame_idx, strength=SEAM_STRENGTH):
+        def guide(image, frame_idx, strength=SEAM_STRENGTH, iclora=None):
             nonlocal positive, negative, latent
             positive, negative, latent = add_guide.execute(
-                positive, negative, vae, latent, image, frame_idx, strength)
+                positive, negative, vae, latent, image, frame_idx, strength,
+                iclora_parameters=iclora)
 
-        # The guides, in timeline order, which is also the order their frame
+        # The reference sheet first, and only it carries the IC-LoRA's
+        # parameters. Core is explicit that "each LTXVAddGuide uses only the
+        # parameters connected to it", and that is the behaviour wanted: a
+        # keyframe and a seam are full-resolution pictures of the video itself,
+        # and encoding either at 1/factor and zero-stuffing it back would be
+        # applying the reference recipe to a frame that is not a reference.
+        if compiled.ref_images:
+            panels = sum(max(1, len(a.panels)) for a in compiled.ref_images)
+            logging.info(
+                "[MiniMax] LTX 2.5: an Ingredients sheet of %d panel(s) "
+                "(%dx%d), conditioned through the IC-LoRA.",
+                panels, *plates.grid(panels))
+            guide(_sheet(compiled), SHEET_FRAME, SHEET_STRENGTH,
+                  iclora=parameters)
+
+        # Then the guides, in timeline order, which is also the order their frame
         # indexes ascend. `LTXVAddGuide` appends each one's condition latent past
         # the end of the sequence and records where in time it belongs, so the
         # order is not arithmetic — but it is what a reader of the graph expects,
@@ -333,23 +463,7 @@ class MiniMaxLTX25Segment(io.ComfyNode):
         elif compiled.last_frame is not None:
             guide(_still(compiled.last_frame.filename), -1, STILL_STRENGTH)
 
-        # References are carried by the prompt and by nothing else, and that is
-        # a real limitation rather than an oversight. A guide is a keyframe: it
-        # pins picture at an instant. Attaching a character sheet as a guide at
-        # frame 0 would make the character sheet the first frame of the video,
-        # which is not what citing a reference means on H3 and is not what
-        # anybody attaching one wants. What LTX 2.5 has instead is IC-LoRAs and
-        # `GetICLoRAParameters`, and choosing that grammar is the open question
-        # the plan records. Until it is chosen the files ride as their `<Picture
-        # N>` labels in the prose, the render proceeds, and this says so once so
-        # that a reference doing nothing visible is legible in the log rather
-        # than mysterious on screen.
-        cited = len(compiled.ref_images) + len(compiled.ref_videos) + len(compiled.ref_audios)
-        if cited:
-            logging.info(
-                "[MiniMax] LTX 2.5: %d reference(s) are in the prompt text only "
-                "— this family has no reference grammar yet, so nothing is "
-                "encoded from them.", cited)
+        # The soundtrack's own empty latent, shaped by the audio VAE's config
         # The soundtrack's own empty latent, shaped by the audio VAE's config
         # for this many frames at this rate, then packed with the picture. After
         # the guides, always: `append_keyframe` refuses a combined AV latent.

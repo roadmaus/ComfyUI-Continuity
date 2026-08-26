@@ -262,4 +262,148 @@ export const css = `
 .mmc-move-opt svg { width: 13px; height: 13px; flex: none; }
 .mmc-move-menu .mmc-shelf-input { margin-top: 6px; width: auto; }
 
+
+/* --- the sheet editor ------------------------------------------------------
+   Its own modal over the picker: the composite exactly as the model will see
+   it, the panels in layout order, and the button that takes it — see
+   picker.openSheet. */
+.mmc-plate-edit {
+  width: min(760px, 94vw); max-height: 92vh; overflow: auto;
+  display: flex; flex-direction: column; gap: 12px;
+  padding: 18px 20px 16px; border-radius: 12px;
+  background: var(--mmc-surface); border: 1px solid var(--mmc-line-3);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, .5);
+}
+.mmc-plate-title {
+  font-size: calc(13px * var(--mmc-type)); color: var(--mmc-strong);
+}
+.mmc-plate-foot {
+  display: flex; align-items: center; justify-content: flex-end; gap: 12px;
+}
+/* The stage: the canvas the shot generates at, on the family's own backdrop
+   (set inline, because only the family knows which grey its panels sit on).
+   The aspect ratio and the height cap are inline too — they come off the
+   piece's canvas. Panels are absolutely placed children in the same fractions
+   the bake reads, so what is arranged here is what the model is handed. */
+.mmc-plate-stage-wrap { display: flex; justify-content: center; }
+.mmc-plate-stage {
+  position: relative; width: 100%; overflow: hidden;
+  border: 1px solid var(--mmc-line-3); border-radius: 8px;
+  touch-action: none;
+}
+.mmc-plate-stage.clicking .mmc-st-panel { cursor: crosshair; }
+.mmc-st-panel {
+  position: absolute; cursor: grab; user-select: none;
+}
+.mmc-st-panel:active { cursor: grabbing; }
+.mmc-st-panel.picked { outline: 1px solid var(--mmc-blue); outline-offset: -1px; }
+.mmc-st-img {
+  width: 100%; height: 100%; object-fit: contain; display: block;
+  pointer-events: none;
+}
+.mmc-st-no {
+  position: absolute; top: 2px; left: 3px; padding: 0 4px; border-radius: 5px;
+  background: var(--mmc-scrim-3); color: var(--mmc-strong);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: calc(9.5px * var(--mmc-type)); line-height: 1.5;
+  pointer-events: none;
+}
+/* The resize grip, on the panel's bottom-right corner. Visible on the picked
+   panel only: nine of them at once is a stage of thumbtacks. */
+.mmc-st-grip {
+  position: absolute; right: -5px; bottom: -5px; width: 12px; height: 12px;
+  border-radius: 3px; cursor: nwse-resize; display: none;
+  background: var(--mmc-blue); border: 1px solid var(--mmc-strong);
+}
+.mmc-st-panel.picked .mmc-st-grip { display: block; }
+/* A SAM click: where it landed on the picture, and which way it counts.
+   Centred on the spot; blue keeps, red leaves out. */
+.mmc-st-dot {
+  position: absolute; width: 11px; height: 11px; padding: 0;
+  transform: translate(-50%, -50%); border-radius: 50%; cursor: pointer;
+  background: var(--mmc-blue); border: 1.5px solid var(--mmc-strong);
+}
+.mmc-st-dot.out { background: var(--mmc-bad-solid); }
+/* The editor's own tools: click-to-pick, forget clicks, auto-arrange. */
+.mmc-plate-tools { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.mmc-tool.on { border-color: var(--mmc-blue); color: var(--mmc-strong); }
+.mmc-plate-say {
+  padding: 0 14px; text-align: center; color: var(--mmc-text);
+  font-size: calc(11.5px * var(--mmc-type)); line-height: 1.45;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, .8);
+}
+.mmc-plate-say.bad { color: var(--mmc-bad); }
+/* Laying out: a rule that sweeps the bottom edge of the frame. A picture being
+   composited is not an indeterminate wait for something elsewhere, it is this
+   frame filling in — so the sign of it belongs on the frame. */
+.mmc-plate-scan {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--mmc-blue), transparent);
+  animation: mmc-plate-sweep 1.1s ease-in-out infinite;
+}
+@keyframes mmc-plate-sweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mmc-plate-scan { animation: none; opacity: .6; }
+}
+/* What the sheet is, in numbers: panels, the grid they landed in, the canvas it
+   was built at. Tabular figures so the line does not shuffle sideways as the
+   numbers change under it. */
+.mmc-plate-caliper {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-variant-numeric: tabular-nums; letter-spacing: .04em;
+  font-size: calc(10.5px * var(--mmc-type)); color: var(--mmc-dim);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-height: 1em;
+}
+.mmc-plate-strip {
+  display: flex; align-items: center; gap: 8px; overflow-x: auto; padding-bottom: 4px;
+}
+.mmc-pl-cell {
+  position: relative; flex: none; width: 62px; height: 62px; border-radius: 8px;
+  overflow: hidden; border: 1px solid var(--mmc-line-2); background: var(--mmc-surface-2);
+}
+.mmc-pl-cell.cut { border-color: var(--mmc-blue); }
+.mmc-pl-cell.picked { outline: 1px solid var(--mmc-blue); outline-offset: 1px; }
+.mmc-pl-thumb { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* Which cell of the sheet this is. The number is the citation — panel 3 in the
+   caption is this one — so it is set in the same tabular face the caliper is. */
+.mmc-pl-no {
+  position: absolute; top: 2px; left: 3px; padding: 0 4px; border-radius: 5px;
+  background: var(--mmc-scrim-3); color: var(--mmc-strong);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: calc(9.5px * var(--mmc-type)); line-height: 1.5;
+}
+.mmc-pl-cut {
+  position: absolute; bottom: 3px; left: 3px; width: 20px; height: 20px;
+  display: flex; align-items: center; justify-content: center; padding: 0;
+  border: 0; border-radius: 6px; cursor: pointer;
+  background: var(--mmc-scrim-3); color: var(--mmc-faint);
+}
+.mmc-pl-cut svg { width: 12px; height: 12px; }
+.mmc-pl-cut:hover { color: var(--mmc-text); }
+.mmc-pl-cut.on { background: var(--mmc-blue); color: var(--mmc-strong); }
+.mmc-pl-x {
+  position: absolute; top: 2px; right: 3px; width: 18px; height: 18px;
+  display: flex; align-items: center; justify-content: center; padding: 0;
+  border: 0; border-radius: 5px; cursor: pointer;
+  background: var(--mmc-scrim-3); color: var(--mmc-faint);
+  font-size: calc(10px * var(--mmc-type)); font-family: inherit;
+}
+.mmc-pl-x:hover { color: var(--mmc-strong); background: var(--mmc-bad-solid); }
+/* A panel is dragged to rearrange, and the cursor says so. */
+.mmc-pl-cell { cursor: grab; }
+/* Paired: this grid cell is a panel of the connected sheet, and the number is
+   where it sits — the numbering the sheet editor and the caption share. */
+.mmc-cell-sheet {
+  position: absolute; top: 8px; left: 8px; padding: 0 5px; border-radius: 5px;
+  background: var(--mmc-blue); color: var(--mmc-strong);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: calc(9.5px * var(--mmc-type)); line-height: 1.6;
+  pointer-events: none;
+}
 `;

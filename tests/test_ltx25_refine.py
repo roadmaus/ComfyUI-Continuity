@@ -49,13 +49,26 @@ def expect_error(label, fn, fragment):
 
 # ---- the templates ----------------------------------------------------------
 #
-# Four, one per guide configuration the segment node builds — and no fifth for
-# references, because this family has no reference grammar to write one against.
+# Five: one per guide configuration the segment node builds, plus the reference
+# form — which is a real fifth here, because a REF2V card builds a guide the
+# other four do not (the Ingredients sheet) and asks for a field they do not.
 
-check("the family declares exactly the four guide configurations",
-      sorted(refine.MODE_TEMPLATE), ["FL2V", "I2V", "L2V", "T2V"])
+check("the family declares the four guide configurations and the reference form",
+      sorted(refine.MODE_TEMPLATE), ["FL2V", "I2V", "L2V", "REF2V", "T2V"])
 check("...and offers them under auto in the pill's order",
-      refine.PROMPTING.templates, ("auto", "T2V", "I2V", "L2V", "FL2V"))
+      refine.PROMPTING.templates, ("auto", "REF2V", "T2V", "I2V", "L2V", "FL2V"))
+# The reference form is the superset a whole-strip refine is written under: a
+# card with no references writes no handles, where a strip written under a guide
+# template would have nowhere to put the sheet at all.
+check("a strip with one reference card is written under the reference form",
+      refine.PROMPTING.representative(["I2V", "REF2V", "T2V"]), "REF2V")
+check("...and a strip with none takes the first card's",
+      refine.PROMPTING.representative(["I2V", "T2V"]), "I2V")
+# The sheet field is asked for on the reference form and on nothing else.
+check("REF2V asks for the sheet",
+      refine.SHEET_SECTION in refine.PROMPTING.reply_shape("REF2V", 1), True)
+check("...and I2V does not",
+      refine.SHEET_SECTION in refine.PROMPTING.reply_shape("I2V", 1), False)
 
 for mode, template in refine.MODE_TEMPLATE.items():
     check(f"the {mode} template carries a fenced worked example",

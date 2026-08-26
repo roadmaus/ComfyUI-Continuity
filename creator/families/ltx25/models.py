@@ -71,6 +71,30 @@ SLOTS = {
                 "head has been picked. Choose one under the node's 'weights' "
                 "control (models/model_patches), or set that shot's seconds "
                 "pill to a length."),
+    # The Ingredients IC-LoRA, and it has no loader of its own on purpose: one
+    # file answers two questions here — what to patch the transformer with, and
+    # what downscale factor its guide is encoded at, which `GetICLoRAParameters`
+    # reads out of the file's own metadata. `redetail.py`'s IC-LoRA slot is
+    # spelled the same way for the same reason, and `segment.py` does both from
+    # the filename.
+    "ic_lora": core.Slot(
+        "loras", "the Ingredients IC-LoRA", optional=True,
+        missing="This shot cites a reference, which on LTX 2.5 means Lightricks' "
+                "Ingredients IC-LoRA — and none has been picked. Choose one "
+                "under the node's 'weights' control (models/loras), or detach "
+                "the references."),
+    # The matte the *picker* takes, when you press the scissors on a picture.
+    # In the table because it is a file the user picks in the same control, not
+    # because it becomes a link: no graph this pack builds loads it any more, and
+    # `creator/plate.py` reads the name off the piece to run the matte where you
+    # can see the result. Optional, and with no `missing` sentence, because a
+    # render never asks for it — the picker does, and it says so there.
+    "cutout": core.Slot(
+        "background_removal", "the background-removal model", optional=True),
+    # The click-to-cut segmenter, the picker's too: SAM3, the same fused
+    # checkpoint H3's face pass reads, loaded by `creator/plate.py` when a
+    # panel carries points. Never a link in any graph.
+    "sam3": core.Slot("checkpoints", "the subject picker", optional=True),
     "upscaler": core.Slot(
         "latent_upscale_models", "the latent upscaler",
         loader=UPSCALE_LOADER, input="model_name", optional=True,

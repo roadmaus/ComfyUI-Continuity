@@ -55,6 +55,17 @@ class Grammar:
     #: key, and a card carrying one is named by its frames instead.
     modes = {}
 
+    #: The named sections a rewrite may carry for this family, and the whole of
+    #: what `compile.refined_sections` will read back off a stored one. H3's
+    #: three are the parts of its Context-IR document; a family whose reference
+    #: form is one half of a caption has one, and a family with no reference form
+    #: has none — where a stored section would be prose nothing composes.
+    #:
+    #: A filter rather than a schema: what is not named here is dropped, so a
+    #: rewrite written under one family and opened under another cannot smuggle
+    #: the first family's document into the second's caption.
+    written_sections = ()
+
     #: How many of each kind may be attached, and how many files in total.
     max_images = 0
     max_videos = 0
@@ -107,6 +118,68 @@ class Grammar:
         if closes:
             return self.modes["closes"]
         return self.modes["text"]
+
+    #: What each kind of reference is *called* in the prose, by the walk's op —
+    #: `%d` is the 1-based ordinal within that kind. H3's ordinal citations are
+    #: the default because they were the only ones when `plan_references` was
+    #: written, and they are a form of H3's own training: the tokenizer is
+    #: presented the files in exactly this order and the prompt addresses them by
+    #: the ordinal they took.
+    #:
+    #: A family whose encoder reads captions has to spell a citation as words —
+    #: `<Picture 1>` is a token sequence Gemma has never seen standing where a
+    #: noun phrase belongs. See `families/ltx25/grammar.py`.
+    citations = {"image": "<Picture %d>", "video": "<Video %d>",
+                 "soundtrack": "<Audio %d>", "audio": "<Audio %d>"}
+
+    #: Whether a panel of a plate is a citation of its own.
+    #:
+    #: **False by default, because an ordinal citation is a place in a
+    #: presentation.** H3 is handed a plate as one picture and calls it
+    #: `<Picture 1>`; giving the thing in its top-left corner a `<Picture 2>` of
+    #: its own would address a file the tokenizer was never shown. A family
+    #: whose encoder reads the composite *as* a layout — LTX 2.5, whose panels
+    #: are the citation — sets this True and takes its ordinals per panel.
+    cites_panels = False
+
+    def cite(self, op, ordinal):
+        """What the `ordinal`-th reference of this kind is called in the prose."""
+        return self.citations[op] % ordinal
+
+    def panel_cite(self, plate_label, ordinal, count):
+        """What one panel of a plate is called, on a family that cites the plate.
+
+        Only reached where `cites_panels` is False — where it is True the panel
+        took an ordinal of its own and `cite` already named it. The plate's own
+        label is carried in so the name says which picture the panel is in:
+        `panel 2 of <Picture 1>` is checkable against the composite in front of
+        the model, where a bare `panel 2` on a request holding two plates would
+        not be.
+
+        A plate of one panel *is* its panel — there is no layout, only a picture
+        the picker cut out of its background — so it takes the plate's own
+        label. `panel 1 of <Picture 1>` would name a cell inside a picture that
+        has no cells, and send the model looking for a region that is the whole
+        frame.
+        """
+        if count <= 1:
+            return plate_label
+        return f"panel {ordinal} of {plate_label}"
+
+    def frame_cite(self, role, ordinal):
+        """What an attached start or end frame is called in the prose.
+
+        Apart from `cite` because the two are not the same statement even on H3,
+        where they happen to share a form: a reference is a file the prompt
+        reaches for, a frame is where the generation begins or ends. On a family
+        that conditions its frames as *guides* the model is already looking at
+        them, and what the prose has to supply is a way to refer to a picture
+        rather than a slot in a presentation order.
+
+        `ordinal` is the `<Picture N>` this frame took, counted after the
+        references — see `compile._trailing_frame_labels`.
+        """
+        return self.citations["image"] % ordinal
 
     def checkpoint(self, mode):
         """The routed slot `mode` implies, before any pin. `""` where the family

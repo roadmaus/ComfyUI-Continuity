@@ -104,6 +104,22 @@ export const css = `
    places to click on a chip whose name is now the one place. Dim, because the
    handle is what identifies the chip and this is a footnote to it. */
 .mmc-asset-said { color: var(--mmc-dim); font-size: calc(11px * var(--mmc-type)); }
+/* The scissors a chip wears when its one picture was cut out. The picker styles
+   this class as a button pinned into the corner of a 62px cell; on a chip it is
+   a mark in a row, so the position and the chrome come off and the colour is
+   the whole of it. */
+.mmc-asset .mmc-pl-cut {
+  position: static; width: auto; height: auto; padding: 0;
+  background: none; color: var(--mmc-blue); cursor: default;
+}
+/* How many pictures a plate holds. The one fact about a sheet that is worth
+   reading off the card, set in the tabular face its panel numbers are in. */
+.mmc-asset-panels {
+  color: var(--mmc-faint);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-variant-numeric: tabular-nums; letter-spacing: .03em;
+  font-size: calc(10px * var(--mmc-type));
+}
 /* The LoRA chip's name, which is its mute switch. A button that has to keep
    reading as the label it replaced: no chrome, and the pointer plus the hover
    is what says it does something. */

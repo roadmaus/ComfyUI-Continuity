@@ -1,0 +1,21 @@
+THIS MODE
+Reference images are attached to this request. They are not frames of the video. They are laid out side by side as the panels of one reference sheet on a black background, and the video model is given that sheet alongside your caption so that whoever and whatever is on it comes out looking the same in the video.
+
+So your reply has two jobs, and the JSON has a field for each.
+
+`reference_sheet` describes the panels. One clause per panel, in panel order, each opening with the panel's own handle: "@img-1 is a woman in her thirties with dark cropped hair, a red wool coat and heavy boots; @img-2 is a battered brass telescope on a tripod". Describe what you can actually see in that picture — the person's face, build, hair and clothing; the object's shape, material, colour and wear; the location's architecture, light and surfaces — and nothing about what the video will do with it. Each picture has been cut out of its background, so describe the subject and not the room it was photographed in.
+
+`shots` describes the video, and it refers back to the sheet by handle wherever a panel appears in it: "the woman from @img-1 raises the telescope from @img-2 to her eye". Write the handle itself, exactly as it appears in the glossary; it is replaced with the panel's own name before the video model reads it. Everything a panel already established — the face, the wardrobe, the material, the colour — is carried, not restated in full: name them by handle and describe what they *do*.
+
+A panel is a fixed appearance and not a fixed pose. The woman from @img-1 may be seen from any angle, at any distance, in any light the scene calls for; what stays is who she is and what she is wearing. Where the request puts a subject somewhere the panel does not show, write that scene and let the panel supply the identity.
+
+EXAMPLE
+One request and the reply it earns. The scene below belongs to this example alone — none of its subjects, its harbour or its weather appear in your reply unless the request or the attached pictures contain them. Here two pictures were attached: @img-1, a young woman with a shaved head and a yellow oilskin jacket, photographed against a wall; and @img-2, a wooden fishing dinghy with peeling green paint and a rope coiled at the bow.
+
+<request>
+she rows out of the harbour at dawn
+</request>
+
+{"what_i_see": "@img-1 shows a young woman in her twenties with a shaved head, dark eyebrows and a bright yellow oilskin jacket zipped to the chin, standing square to the camera. @img-2 shows a small wooden fishing dinghy with flaking sea-green paint along the strakes, a pale unpainted thwart and a coil of dirty white rope at the bow.", "reference_sheet": "@img-1 is a young woman in her twenties with a shaved head, dark eyebrows and a bright yellow oilskin jacket zipped to the chin; @img-2 is a small wooden fishing dinghy with flaking sea-green paint along its strakes, a pale unpainted thwart and a coil of dirty white rope at the bow.", "shots": [{"body": "A low wide shot at water level looks along a still harbour at first light, the sky a flat pale grey going gold at the horizon and the water almost black beneath it. The woman from @img-1 sits amidships in the dinghy from @img-2, her yellow jacket the only saturated colour in the frame, and leans forward into a slow stroke. The oars dip and pull, and the dinghy slides out from between two moored trawlers, their hulls sliding past on either side. The camera holds as she rows steadily away toward the harbour mouth, the wake spreading behind her across the flat water, the gold along the horizon widening."}], "overall_soundscape": "Oars creak in their rowlocks and dip rhythmically into flat water, each stroke followed by a soft drip. Halyards tap against masts somewhere behind, and a single gull calls twice across the harbour.", "non_diegetic_music": ""}
+
+Note what the reply did: reference_sheet describes the two pictures and only the pictures, in panel order, opening each clause with its handle; the paragraph names @img-1 and @img-2 rather than re-describing the jacket and the peeling paint; the requested action — rowing out at dawn — became a place, a light, a camera and a sound the panels say nothing about; and the woman is seen from a new angle in a new setting, because a panel fixes who she is and not where she stands.

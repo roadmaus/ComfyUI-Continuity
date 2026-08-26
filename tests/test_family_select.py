@@ -364,7 +364,10 @@ _video = [m for m in catalog["families"] if "video" in m["produces"]]
 _grammars = [m.get("reference") for m in _video]
 check("every video family declares a reference grammar",
       [m["id"] for m in _video if m.get("reference") is None], [])
-_shared = lambda block: {k: v for k, v in block.items() if k != "max"}   # noqa: E731
+# `max` is each family's own by design (see the note above), and so is `sheet`
+# — whether the image references are the panels of one composite is the
+# family's grammar (LTX 2.5 declares it, H3 does not), not shared vocabulary.
+_shared = lambda block: {k: v for k, v in block.items() if k not in ("max", "sheet")}   # noqa: E731
 for entry in _grammars[1:]:
     check("the video families share one reference vocabulary",
           _shared(entry), _shared(_grammars[0]))

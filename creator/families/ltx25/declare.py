@@ -32,6 +32,28 @@ LORA_STACK = "core"
 # for before it can.
 DURATION_HEAD = "duration_head"
 
+# The IC-LoRA that makes a reference mean anything on this family, and the slot
+# that has to carry a file for it. Lightricks' `Ingredients` adapter: it reads a
+# composite reference sheet — characters, props and locations laid out on black —
+# and holds what is on it consistent through the generated video. That is this
+# family's answer to H3's ordinal citations, and the open question the grammar's
+# docstring used to record.
+INGREDIENTS = "ic_lora"
+
+# Black, because the sheet the adapter was trained on is black. Not a taste:
+# Lightricks' own description of the Ingredients reference sheet is panels "on a
+# black background", so any other field is a sheet unlike the ones it learned to
+# read. See `creator/cutout.py`.
+REF_BACKDROP = 0.0
+
+# Whether a piece on this family cuts its references out unless told otherwise.
+# **On.** A reference here becomes a panel of a composite sheet, and a panel that
+# still carries the room it was photographed in is a sheet made of photographs
+# rather than of ingredients. Nothing saved is changed by the default: this
+# family refused every attachment until the sheet existed, so there is no
+# LTX 2.5 piece with references on it that predates the choice.
+CUTOUT_DEFAULT = True
+
 # **The distilled transformer's own sigma curve, and it is a constant rather
 # than a schedule.** Both of Lightricks' 2.5 workflows and ComfyUI's own
 # `video_ltx2_5_i2v.json` template feed these numbers through `ManualSigmas`,

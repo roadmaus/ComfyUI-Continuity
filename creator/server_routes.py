@@ -26,6 +26,7 @@ it runs the real compiler to do it — see the route.
 
 import asyncio
 import json
+import logging
 import os
 
 from aiohttp import web
@@ -33,7 +34,8 @@ from aiohttp import web
 import folder_paths
 from server import PromptServer
 
-from . import compile as compiler, latents, lorameta, media, models, preview, settings
+from . import (compile as compiler, latents, lorameta, media, models, plate,
+               preview, settings)
 
 # The picker builds its grid lazily and paginates, so the cap only bounds the
 # listing's JSON payload (~2 MB at this size). Newest first, so when a folder
@@ -600,6 +602,131 @@ async def delete_asset(request):
         return web.json_response({"error": "no such file"}, status=404)
     os.remove(path)
     return web.json_response({"ok": True})
+
+
+def _plate_panels(body):
+    """The panels a plate request describes, with only what the pixels need."""
+    panels = []
+    for panel in body.get("panels") or []:
+        path = str(panel.get("path") or "").strip()
+        if not path:
+            continue
+        made = {"path": path, "cut": bool(panel.get("cut"))}
+        rect = panel.get("rect")
+        if isinstance(rect, (list, tuple)) and len(rect) == 4:
+            made["rect"] = [float(v) for v in rect]
+        points = [{"x": float(p.get("x", 0)), "y": float(p.get("y", 0)),
+                   "include": bool(p.get("include", True))}
+                  for p in (panel.get("points") or []) if isinstance(p, dict)]
+        if points:
+            made["points"] = points
+        panels.append(made)
+    return panels
+
+
+def _plate_models(body):
+    return {"cutout": str(body.get("model") or ""),
+            "segment": str(body.get("segment") or "")}
+
+
+@PromptServer.instance.routes.post("/minimax_creator/plate")
+async def build_plate(request):
+    """Write the accepted sheet. See `creator/plate.py`.
+
+    Posted when the sheet editor's Accept (or the picker's Add over an already
+    confirmed group) commits — never while the sheet is merely being edited,
+    which is what keeps `_plates/` holding only sheets somebody chose to keep.
+    The editing preview never touches this route: it composites in the browser
+    from `/plate/panel` cutouts, which are served from memory.
+
+    Errors come back as `{"error": …}` with a 400 rather than as a 500, because
+    every way this fails is something the user can act on — no model picked, a
+    file that has been deleted out from under the picker, an install without
+    core's background removal — and the editor puts the sentence on the sheet
+    where the picture would have been.
+    """
+    body = await request.json()
+    panels = _plate_panels(body)
+    if not panels:
+        return web.json_response({"error": "a plate needs at least one picture"},
+                                 status=400)
+
+    # Off the event loop: a matte is a forward pass through BiRefNet and the
+    # loop it would otherwise run on is also the prompt queue. Same reason the
+    # listing routes above hand their walks to an executor.
+    loop = asyncio.get_running_loop()
+    try:
+        built = await loop.run_in_executor(None, lambda: plate.build(
+            panels,
+            _plate_models(body),
+            float(body.get("backdrop", 0.5)),
+            int(body.get("width") or 1280),
+            int(body.get("height") or 704),
+        ))
+    except Exception as exc:                       # noqa: BLE001 — reported, not swallowed
+        logging.exception("[MiniMax] building a plate failed")
+        return web.json_response({"error": str(exc)}, status=400)
+    return web.json_response(built)
+
+
+# The sheet editor's per-panel cutouts, encoded once and held — bounded, and
+# keyed by everything that changes the pixels (the file's stamp, the matte
+# weights, the clicks), so replacing a photograph under the same name or moving
+# a point makes a fresh matte rather than finding the stale one.
+_PANEL_CACHE = {}
+_PANEL_KEEP = 64
+
+
+def _panel_png(panel, models):
+    """One panel's cutout as RGBA PNG bytes — the subject over transparency.
+
+    Transparent rather than composited, because the editor lays the panel over
+    the backdrop itself: one encode serves every backdrop, and the browser's
+    compositing is the same alpha-over `cutout.over` bakes on Accept.
+    """
+    import io as _io
+
+    import numpy as np
+    from PIL import Image
+
+    image, alpha = plate.cut_panel(panel, models)
+    rgb = image[0].clamp(0.0, 1.0).mul(255.0).round().to("cpu").numpy().astype(np.uint8)
+    if alpha is None:
+        made = Image.fromarray(rgb, "RGB")
+    else:
+        a = alpha[0].clamp(0.0, 1.0).mul(255.0).round().to("cpu").numpy().astype(np.uint8)
+        made = Image.fromarray(np.dstack([rgb, a]), "RGBA")
+    out = _io.BytesIO()
+    made.save(out, format="PNG", compress_level=4)
+    return out.getvalue()
+
+
+@PromptServer.instance.routes.post("/minimax_creator/plate/panel")
+async def cut_plate_panel(request):
+    """One panel of the sheet being edited, cut out, as a PNG — from memory,
+    never from a file. This is what the editor's live preview is made of."""
+    body = await request.json()
+    panels = _plate_panels(body)
+    if len(panels) != 1:
+        return web.json_response({"error": "one panel at a time"}, status=400)
+    panel, models = panels[0], _plate_models(body)
+
+    try:
+        stamp = media.stamp(panel["path"])
+        key = json.dumps([stamp, models, panel.get("points") or [],
+                          bool(panel.get("cut"))], sort_keys=True, default=str)
+        png = _PANEL_CACHE.get(key)
+        if png is None:
+            loop = asyncio.get_running_loop()
+            png = await loop.run_in_executor(
+                None, lambda: _panel_png(panel, models))
+            while len(_PANEL_CACHE) >= _PANEL_KEEP:
+                _PANEL_CACHE.pop(next(iter(_PANEL_CACHE)))
+            _PANEL_CACHE[key] = png
+    except Exception as exc:                       # noqa: BLE001 — reported, not swallowed
+        logging.exception("[MiniMax] cutting a panel failed")
+        return web.json_response({"error": str(exc)}, status=400)
+    return web.Response(body=png, content_type="image/png")
 
 
 @PromptServer.instance.routes.get("/minimax_creator/settings")

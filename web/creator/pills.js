@@ -10,7 +10,8 @@ import { t } from "./i18n.js";
 import { rulesFor } from "./canvas.js";
 import { UPSCALE_MODES, DEFAULT_REFINE_DENOISE, MIN_REFINE_DENOISE, MAX_REFINE_DENOISE,
          twoPass, sampleEdge, emptyFace, isClip, pieceFamily, refineOf,
-         redetailTarget, MIN_FACE_CANVAS, MAX_FACE_CANVAS,
+         redetailTarget, capabilityOf,
+         MIN_FACE_CANVAS, MAX_FACE_CANVAS,
          MIN_FACE_DENOISE, MAX_FACE_DENOISE } from "./state.js";
 import { UPSCALERS } from "./manifest.js";
 
@@ -622,6 +623,7 @@ export function facesPill({ target, commit }) {
     onclick: (event) => openFacesPopover(event.currentTarget, { target, commit }),
   }, [el("span", { text: face.on ? t("faces") : t("faces off") })]);
 }
+
 
 /** On or off, and — on — the two knobs. The card switches are on the cards. */
 export function openFacesPopover(anchor, { target, commit }) {

@@ -27,6 +27,10 @@ from . import contextir, declare, subjects
 class H3Grammar(grammar.Grammar):
     """H3's request grammar. See the module docstring."""
 
+    # The parts of H3's Context-IR reference form, which are what a rewrite may
+    # carry back and what `contextir.compose` composes.
+    written_sections = contextir.REF_SECTIONS
+
     modes = {"reference": "REF2VA",
              "opens_closes": "FL2VA",
              "opens": "I2VA",

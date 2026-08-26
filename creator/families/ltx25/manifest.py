@@ -161,6 +161,31 @@ _UI = {
                 "duration is yours to set, as it always is on H3.",
         "hints": ["duration-head", "duration_head"],
     },
+    "ic_lora": {
+        "title": "Ingredients IC-LoRA",
+        "help": "Needed to cite a reference. Lightricks' 'Ingredients' adapter, from "
+                "models/loras — it reads a composite reference sheet and holds the "
+                "characters, props and locations on it consistent through the video. Its "
+                "metadata also carries the downscale factor the sheet is encoded at.",
+        "hints": ["ic-lora-ingredients", "ingredients"],
+        "avoid": ["upscaler", "control", "motion"],
+    },
+    "cutout": {
+        "title": "Background remover",
+        "help": "Optional. A BiRefNet matte, from models/background_removal — what the "
+                "picker's scissors run to lift each subject off its background, so the "
+                "sheet is panels on black rather than photographs on black. This family "
+                "starts every panel cut. Loaded when you press them, not when you render.",
+        "hints": ["birefnet"],
+    },
+    "sam3": {
+        "title": "Subject picker",
+        "help": "Optional. A SAM3 checkpoint, from models/checkpoints — what the sheet "
+                "editor asks when you click the subject you want cut out (and "
+                "shift-click what you don't). Without it the scissors still work, "
+                "taking the whole salient subject; with it a click says which one.",
+        "hints": ["sam3"],
+    },
     "upscaler": {
         "title": "Latent upscaler",
         "help": "Optional. The x2 spatial upscaler that is the second stage of Lightricks' own "
@@ -203,8 +228,10 @@ def _weights():
 # Keyed by `refine.PROMPTING.templates`, so a template with no line here fails
 # at `describe` — where the family is named — rather than drawing a bare chip.
 _TEMPLATE_HELP = {
-    "auto": "follows the card's guides: a start frame picks I2V, an end frame L2V, "
-            "both FL2V, neither T2V.",
+    "auto": "follows the card: a reference picks REF2V, then a start frame I2V, an end "
+            "frame L2V, both FL2V, neither T2V.",
+    "REF2V": "a reference sheet — the panels are described first, then the video that "
+             "keeps what is on them.",
     "T2V": "text only — the scene is described from nothing.",
     "I2V": "first frame — the caption opens on the attached image and develops forward.",
     "L2V": "last frame — the caption arrives at the attached image at the end.",
@@ -231,24 +258,20 @@ def manifest():
         # The payload shape -> the name it goes by on a card. Lightricks' own
         # vocabulary rather than H3's protocol names: this family conditions
         # through `LTXVAddGuide`, so what a card is is which guides its segment
-        # node builds.
-        #
-        # **No `reference` entry, and that is the declaration.** On H3 a
-        # reference is a different payload — a different checkpoint, a different
-        # encode — so it is a mode. Here it changes nothing the segment node
-        # builds: the files ride as `<Picture N>` labels in the prose and
-        # nothing is encoded from them (see `segment.py`). A card carrying one
-        # says what its guides make it, which is the truth about what will be
-        # sampled, and `state.mode` falls through to the frames when a family
-        # declares no reference mode.
+        # node builds — and a `REF2V` card builds one more than the rest, the
+        # Ingredients sheet.
         "modes": dict(grammar.GRAMMAR.modes),
-        # The reference grammar. The same numbers and the same vocabulary H3
-        # declares, because they are the same code: `compile._derive_mode` and
-        # `_parse_assets` are shared, so what a piece on this family may attach
-        # is what the compiler will accept from it. That the files then reach
-        # the model as prose alone is this family's limitation, said in
-        # `segment.py` and in the log — not a different set of caps. When the
-        # compiler learns families this block is where the difference lands.
+        # The reference grammar, and it is this family's own rather than H3's
+        # numbers borrowed. Nine pictures and nothing that is not a picture:
+        # the adapter reads a composite sheet of stills, so a reference video or
+        # a reference sound has no panel to be, and `grammar.refuse` says so
+        # instead of counting to zero.
+        #
+        # `takes` is still the shared vocabulary, because the chips mean the same
+        # thing here — what of a picture is the reference. Two of them mean more
+        # than they did: `scene` and `style` are what the cutout leaves alone
+        # (`creator/cutout.py`), so the chip decides whether a panel keeps its
+        # background as well as what the caption says about it.
         "reference": {
             "takes": {kind: m.value_list(takes)
                       for kind, takes in compile.TAKES.items()},
@@ -259,6 +282,12 @@ def manifest():
                     "video": grammar.GRAMMAR.max_videos,
                     "audio": grammar.GRAMMAR.max_audios,
                     "files": grammar.GRAMMAR.max_files},
+            # The image references are the panels of ONE composite sheet, so
+            # the caps above count panels and a card carries a single image
+            # file. `state.js` reads this to count the same way the grammar
+            # does — on a family without it a sheet is one image among others,
+            # which is how H3 counts (`Grammar.refuse` counts attachments).
+            "sheet": True,
         },
         "canvas": m.canvas_block(declare.RULES),
         "capabilities": {
@@ -273,6 +302,15 @@ def manifest():
             # family that generated its sound in a second pass would declare it
             # false and the lane would not draw.
             "audio": {"supplied": True},
+            # What the picker needs to make a plate for this family. On by
+            # default here, unlike H3: a reference here becomes a panel of a
+            # composite sheet, and a panel still carrying the room it was
+            # photographed in is a sheet made of photographs rather than of
+            # ingredients. Nothing saved changes by it — this family refused
+            # every attachment until the sheet existed.
+            "cutout": {"default": declare.CUTOUT_DEFAULT,
+                       "backdrop": declare.REF_BACKDROP, "slot": "cutout",
+                       "segment": "sam3"},
             # Chained seams with feathering. Core's reel/spill layer is
             # family-neutral by construction — `LTXVConcatAVLatent`'s own
             # description is what the joint latent was written against.
@@ -332,9 +370,10 @@ def manifest():
             # prompt while the compiler composed another would be a UI lying
             # about what the model was sent.
             "pipeline": declare.PROMPT_PIPELINE,
-            # What the refiner's template pill offers. The four guide
-            # configurations and nothing else: there is no reference form to
-            # pin, because there is no reference grammar to write one against.
+            # What the refiner's template pill offers: the four guide
+            # configurations and the reference form, which is a real fifth here —
+            # a REF2V card builds a guide the others do not and asks the model for
+            # a field they do not.
             "templates": [
                 {"name": name, "help": _TEMPLATE_HELP[name]}
                 for name in refine.PROMPTING.templates

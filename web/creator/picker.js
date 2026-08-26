@@ -3,7 +3,8 @@
 
 import { el, ICONS, svg, icon, mountOverlay, dismissable } from "./dom.js";
 import { listAssets, listingTruncated, viewUrl, stillUrl, upload, moveAsset,
-         deleteAsset, loadPickerPrefs, savePickerPrefs } from "./api.js";
+         deleteAsset, loadPickerPrefs, savePickerPrefs, buildPlate,
+         cutPanel } from "./api.js";
 import { openTrim, trimLabel } from "./trim.js";
 import { t } from "./i18n.js";
 
@@ -31,6 +32,15 @@ const PAGE_SIZE = 60;
 // in PAGE_SIZE batches; past it a pager appears, because a ten-thousand-file
 // folder should be jumped through, not scrolled end to end.
 const PER_PAGE = 240;
+
+/** One backdrop level as a CSS colour. The plate's field is a grey level
+ *  because both families want a neutral one — see `creator/cutout.py` — and the
+ *  preview has to sit on the same grey the panels were composited onto, or the
+ *  cut-out edges read as a halo that is not in the file. */
+function greyField(level) {
+  const step = Math.round(Math.max(0, Math.min(1, Number(level) || 0)) * 255);
+  return "rgb(" + step + "," + step + "," + step + ")";
+}
 
 /** The small chevron the shelf row points with: sideways between crumbs, and
  *  on a chip that has folders inside it. CSS turns it. */
@@ -95,6 +105,36 @@ class Picker {
     this.page = 0;
     this.visibleCount = PAGE_SIZE;
     this.cells = new Map();
+
+    // ---- the sheet ---------------------------------------------------------
+    //
+    // `options.plate` is the family's answer to "how is a sheet made"
+    // (`state.plateSpec`): the backdrop its panels sit on, whether a fresh pick
+    // starts out cut, the matte model, the canvas — plus `sheet: true` on a
+    // family whose image references *are* one composite sheet (LTX 2.5), and
+    // the panels of a sheet already attached, which is what makes pairing
+    // survive reopening the picker.
+    this.plate = options.plate || null;
+    // path -> whether that picture is cut out of its background. Absent means
+    // the family's default, so a picture the user has not touched follows the
+    // family and one they have touched stays where they put it.
+    this.cuts = new Map((options.plate?.panels ?? [])
+      .map((panel) => [panel.path, Boolean(panel.cut)]));
+    // path -> [x, y, w, h] fractions of the canvas: where the user put that
+    // panel in the sheet editor. Absent means the grid cell, which is where
+    // every panel sat before arranging existed.
+    this.rects = new Map((options.plate?.panels ?? [])
+      .filter((panel) => panel.rect).map((panel) => [panel.path, [...panel.rect]]));
+    // path -> [{x, y, include}]: the SAM clicks that said which subject the
+    // scissors mean. Fractions of the source picture, so they survive resizes.
+    this.points = new Map((options.plate?.panels ?? [])
+      .filter((panel) => panel.points?.length)
+      .map((panel) => [panel.path, panel.points.map((point) => ({ ...point }))]));
+    // The connected group: paths, in layout order. On a sheet family every
+    // selected image is a panel and this stays empty; elsewhere it is what
+    // Connect built, and it holds until the sheet is taken off the piece.
+    this.sheet = this.plate?.sheet ? [] : (this.plate?.panels ?? []).map((p) => p.path);
+    this.committing = false;   // a commit that has to build the sheet first, in flight
   }
 
   mount() {
@@ -161,6 +201,12 @@ class Picker {
     this.overlay = el("div", {
       class: "mmc-overlay",
       onpointerdown: (event) => { if (event.target === this.overlay) this.close(null); },
+      // A drag that ends anywhere but a shelf chip stops here. Left to bubble,
+      // it reaches ComfyUI's own document drop handler, which reads the drag as
+      // a file to import and tries to write a file named after the thumbnail's
+      // URL into the input folder.
+      ondragover: (event) => event.preventDefault(),
+      ondrop: (event) => { event.preventDefault(); event.stopPropagation(); },
     }, [this.modal]);
 
     this.unmount = mountOverlay(this.overlay, () => this.close(null));
@@ -192,6 +238,17 @@ class Picker {
       if (!this.restored) {
         this.restored = true;
         this.shelf = this.rememberedShelf();
+        // Re-opened on a card that already carries a sheet: the pictures it
+        // was made of come back selected and paired, in the order they are
+        // laid out, so changing one panel is changing one panel rather than
+        // building the sheet again from nothing. A source that has since been
+        // deleted simply is not there — the sheet keeps the panel until the
+        // selection is committed, which is the same bargain every attached
+        // file has.
+        this.selected = (this.plate?.panels ?? [])
+          .map((panel) => this.assets.find((a) => a.path === panel.path)
+                       ?? this.renders.find((a) => a.path === panel.path))
+          .filter(Boolean);
       }
     } catch (error) {
       this.assets = [];
@@ -201,6 +258,13 @@ class Picker {
     }
     this.renderShelves();
     this.renderGrid();
+    this.renderFoot();
+    // Sent here to edit an attached sheet (the card's "Cut out or combine…"):
+    // the editor is the point, so it opens itself over the grid.
+    if (this.plate?.edit && !this.editOpened && this.sheetPanels().length) {
+      this.editOpened = true;
+      this.openSheet();
+    }
   }
 
   selectTab(kind) {
@@ -208,7 +272,9 @@ class Picker {
     const previous = this.kind;
     this.kind = kind;
     // Selections do not survive a tab change: they go into different slots.
+    // The sheet does not either — its panels were part of the selection.
     this.selected = [];
+    this.sheet = [];
     for (const tab of this.tabs) tab.setAttribute("aria-selected", String(tab.textContent === t(KIND_LABEL[kind])));
     // Nothing uploads into the output folder: renders arrive by being rendered.
     // Organizing them is another matter — see the note at the top of the file.
@@ -633,7 +699,12 @@ class Picker {
   }
 
   visible() {
-    const onShelf = this.shelf === "all" ? () => true
+    // "All" leaves out the derived shelves — the `_plates` composites the
+    // picker itself writes. A sheet is made *of* the grid's pictures, and a
+    // folder of them mixed back in offers every old sheet as a panel for the
+    // next one. They stay reachable on their own shelf.
+    const onShelf = this.shelf === "all"
+      ? (asset) => !(asset.subfolder || "").split("/")[0].startsWith("_")
       : this.shelf === "fav" ? (asset) => this.isFav(asset.path)
         : (asset) => this.under(asset.subfolder, this.shelf);
     // "renders" is a tab and not a kind, so it shows every kind the output
@@ -656,7 +727,20 @@ class Picker {
   }
 
   claimed(kind) {
-    return this.selected.filter((asset) => this.targetKind(asset) === kind).length;
+    let count = this.selected.filter((asset) => this.targetKind(asset) === kind).length;
+    // A connected group attaches as one file, so it claims one image slot —
+    // except on a sheet family, where the slots *are* panels and every picture
+    // costs one. Mirrors how the two grammars count: H3's `Grammar.refuse`
+    // counts attachments, `LTX25Grammar.refuse` counts panels.
+    const group = this.sheetFamily() ? 0 : this.sheetPanels().length;
+    if (kind === "image" && group > 1) count -= group - 1;
+    return count;
+  }
+
+  /** How many files the selection will attach as — the group is one of them. */
+  claimedFiles() {
+    const group = this.sheetFamily() ? 0 : this.sheetPanels().length;
+    return this.selected.length - (group > 1 ? group - 1 : 0);
   }
 
   /**
@@ -671,7 +755,7 @@ class Picker {
     const { used, max, filesLeft } = this.options.capacity(kind);
     // filesLeft is the shared total and reads the same whichever bucket is
     // asked, so every selection counts against it, not just this bucket's.
-    return used + this.claimed(kind) + extra <= max && this.selected.length + extra <= filesLeft;
+    return used + this.claimed(kind) + extra <= max && this.claimedFiles() + extra <= filesLeft;
   }
 
   room(kind) {
@@ -879,6 +963,14 @@ class Picker {
     }
 
     cell.appendChild(el("div", { class: "mmc-check" }));
+    // Paired: this picture is a panel of the connected sheet, and the number is
+    // where it sits — the same numbering the sheet editor and the card use.
+    if (!this.organize && this.sheet.includes(asset.path)) {
+      const number = this.sheetPanels().findIndex((a) => a.path === asset.path);
+      if (number >= 0) {
+        cell.appendChild(el("div", { class: "mmc-cell-sheet", text: `⧉ ${number + 1}` }));
+      }
+    }
     // No segment badge while organizing: configuring a segment selects the
     // file for attachment, which is exactly not what a mark means.
     if (asset.kind !== "image" && !this.organize) cell.appendChild(this.badge(asset));
@@ -1011,6 +1103,578 @@ class Picker {
     unmount = mountOverlay(overlay, () => unmount());
   }
 
+  // ---- the sheet ------------------------------------------------------------
+  //
+  // What used to happen invisibly at render time — the subject lifted off its
+  // background, the pictures laid out as one composite — happens in a modal of
+  // its own, opened by Connect (or, on a sheet family, on the way out through
+  // Add). The modal shows the picture the model will actually be handed and
+  // rebuilds it as you work. `creator/plate.py` does the making.
+
+  /** Whether this family's image references *are* the panels of one composite
+   *  sheet (LTX 2.5). There the whole image selection is the sheet and the
+   *  compiler refuses loose seconds; elsewhere (H3) a sheet is something
+   *  Connect builds out of part of the selection, and it rides as one
+   *  reference among the others. */
+  sheetFamily() {
+    return Boolean(this.plate?.sheet);
+  }
+
+  /** Whether a sheet can be made in this session at all. Not while organizing,
+   *  not for a single-pick caller (a keyframe is one frame of the video, not a
+   *  sheet of references), and only on the tabs pictures live on. */
+  sheetsPossible() {
+    if (!this.plate || this.organize || this.options.single || this.options.viewOnly) return false;
+    return this.kind === "image" || this.kind === "renders";
+  }
+
+  /** The images selected, in click order. Renders count: a character you
+   *  generated last night is a better reference than a photograph of somebody
+   *  else. */
+  selectedImages() {
+    return this.selected.filter((asset) => asset.kind === "image");
+  }
+
+  /** The panels of the sheet, as asset rows in layout order. On a sheet family
+   *  that is every selected image; elsewhere it is the connected group —
+   *  `this.sheet`'s order, minus anything since deselected. */
+  sheetPanels() {
+    const images = this.selectedImages();
+    if (this.sheetFamily()) return images;
+    const byPath = new Map(images.map((asset) => [asset.path, asset]));
+    return this.sheet.map((path) => byPath.get(path)).filter(Boolean);
+  }
+
+  /** Whether this picture is cut out. The family's default until somebody says
+   *  otherwise about this particular file. */
+  cutOf(asset) {
+    return this.cuts.has(asset.path) ? this.cuts.get(asset.path) : Boolean(this.plate?.cut);
+  }
+
+  /** Whether `panels` add up to a file that has to be built at all.
+   *
+   *  One picture, used whole, *is* the reference — there is no layout to make
+   *  and no matte to take, so attaching it is attaching it, and writing a
+   *  byte-identical copy into `_plates/` would be a second file to keep track
+   *  of for nothing. Everything else is a plate: two pictures need laying out,
+   *  and one that is cut needs making. */
+  sheetNeeded(panels = this.sheetPanels()) {
+    return panels.length > 1
+      || (panels.length === 1
+          && (this.cutOf(panels[0]) || this.rects.has(panels[0].path)));
+  }
+
+  /** One panel as the plate routes read it: path, scissors, and — only where
+   *  they exist — the arrangement and the clicks. The rect is rounded to the
+   *  1e-4 the server hashes at, so a re-accepted sheet finds its own file. */
+  panelPayload(asset) {
+    const points = this.points.get(asset.path) ?? [];
+    const rect = this.rects.get(asset.path);
+    return {
+      path: asset.path,
+      cut: this.cutOf(asset),
+      ...(rect ? { rect: rect.map((v) => Math.round(v * 1e4) / 1e4) } : {}),
+      ...(this.cutOf(asset) && points.length ? { points } : {}),
+    };
+  }
+
+  /** Redraw the pairing badges on the cells named — after the group changes,
+   *  the numbers behind it change too. Cells not materialised have nothing to
+   *  show and `refreshCell` skips them. */
+  refreshSheetCells(paths) {
+    for (const path of paths) {
+      const asset = this.selected.find((a) => a.path === path)
+        ?? this.activeAssets().find((a) => a.path === path);
+      if (asset) this.refreshCell(asset);
+    }
+  }
+
+  /** The answer a built sheet closes with: the composite the card attaches,
+   *  and the pictures it was laid out from. `Editor.attachAssets` turns it
+   *  into the one entry. */
+  sheetAnswer(built, panels) {
+    return {
+      plate: true,
+      kind: "image",
+      path: built.path,
+      name: built.path.split("/").pop(),
+      panels: panels.map((asset) => this.panelPayload(asset)),
+    };
+  }
+
+  /**
+   * The sheet editor: a stage the shape of the shot's canvas, with the panels
+   * on it where they will actually sit. Drag a panel to place it, take its
+   * corner to resize it, reorder the citations in the strip below, scissors
+   * per panel — and clicks that tell SAM3 *which* subject the scissors mean:
+   * click the thing to keep, shift-click what to leave out.
+   *
+   * The preview is composited here in the browser, from per-panel cutouts the
+   * server serves out of memory. Nothing touches the input folder until the
+   * sheet is confirmed — Accept on a sheet family, Add on the others — and
+   * Cancel forgets everything done here, files included, because there are
+   * none.
+   *
+   * On a sheet family OK *commits*: the sheet is the card's one image
+   * reference, so confirming what it looks like is the end of the pick.
+   * Elsewhere OK saves the group back into the session — the panels stay
+   * selected and paired, and Add is still to come, with whatever loose
+   * references ride alongside.
+   */
+  openSheet() {
+    // The group being edited: the sheet as it stands, plus any images selected
+    // since — which is how pictures are added to an existing sheet.
+    const inSheet = new Set(this.sheet);
+    let order = this.sheetFamily()
+      ? [...this.selectedImages()]
+      : [...this.sheetPanels(),
+         ...this.selectedImages().filter((a) => !inSheet.has(a.path))];
+    // This session's scissors, layout and clicks, committed only by OK — so
+    // Cancel really cancels, and cancels everything.
+    const cuts = new Map(this.cuts);
+    const rects = new Map([...this.rects].map(([path, r]) => [path, [...r]]));
+    const points = new Map([...this.points]
+      .map(([path, list]) => [path, list.map((point) => ({ ...point }))]));
+    const cut = (asset) =>
+      cuts.has(asset.path) ? cuts.get(asset.path) : Boolean(this.plate?.cut);
+    const needed = () => order.length > 1
+      || (order.length === 1 && (cut(order[0]) || rects.has(order[0].path)));
+
+    const W = this.plate.width || 1280, H = this.plate.height || 704;
+    let picked = order[0]?.path ?? null;   // the panel the toolbar acts on
+    let clicking = false;                  // whether stage clicks place SAM points
+    let saving = false, buildError = "";
+    let drag = null;                       // strip reorder source index
+    let fetchTimer = null;
+    // path -> {key, url, pending}: the cut-out panels as object URLs from the
+    // server's memory, revoked when the cutout changes and on the way out.
+    const urls = new Map();
+
+    const round4 = (v) => Math.round(v * 1e4) / 1e4;
+    const clampTo = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+
+    // The grid cell a panel without a rect sits in — `plate.grid`'s walk in
+    // fractions, so the stage agrees with the bake to the pixel.
+    const gridRect = (index, count) => {
+      const cols = Math.ceil(Math.sqrt(Math.max(1, count)));
+      const rows = Math.ceil(count / cols);
+      return [(index % cols) / cols, Math.floor(index / cols) / rows,
+              1 / cols, 1 / rows];
+    };
+    const rectOf = (asset) =>
+      rects.get(asset.path) ?? gridRect(order.indexOf(asset), order.length);
+
+    const payload = (asset) => ({
+      path: asset.path,
+      cut: cut(asset),
+      ...(rects.has(asset.path)
+        ? { rect: rects.get(asset.path).map(round4) } : {}),
+      ...(cut(asset) && points.get(asset.path)?.length
+        ? { points: points.get(asset.path) } : {}),
+    });
+
+    // ---- the cutouts, fetched as they are asked for ------------------------
+    const wantKey = (asset) => JSON.stringify(
+      [asset.path, points.get(asset.path) ?? []]);
+    const srcOf = (asset) => (cut(asset) && urls.get(asset.path)?.url)
+      || viewUrl(asset.path, { preview: true });
+    const fetchCuts = () => {
+      for (const asset of order) {
+        if (!cut(asset)) continue;
+        const key = wantKey(asset);
+        const have = urls.get(asset.path) ?? {};
+        if (have.key === key || have.pending === key) continue;
+        urls.set(asset.path, { ...have, pending: key });
+        cutPanel({ model: this.plate.model, segment: this.plate.segment,
+                   panels: [payload(asset)] })
+          .then((url) => {
+            const now = urls.get(asset.path);
+            if (!now || now.pending !== key) { URL.revokeObjectURL(url); return; }
+            if (now.url) URL.revokeObjectURL(now.url);
+            urls.set(asset.path, { key, url });
+            buildError = "";
+            render();
+          })
+          .catch((error) => {
+            const now = urls.get(asset.path);
+            if (!now || now.pending !== key) return;
+            urls.set(asset.path, { key: now.key, url: now.url });
+            buildError = error.message;
+            render();
+          });
+      }
+    };
+    // Fetch after the change settles: a run of clicks is many mattes, and only
+    // where it ends is a picture anybody is waiting on.
+    const schedule = () => {
+      clearTimeout(fetchTimer);
+      fetchTimer = setTimeout(fetchCuts, 250);
+      render();
+    };
+
+    // ---- geometry ----------------------------------------------------------
+    //
+    // A panel's picture is contain-fitted inside its rect, so the content box
+    // is a fraction of the panel box the two aspects alone decide. The click
+    // mapping and the dots use the same numbers, which is what keeps a dot
+    // exactly under the click that made it.
+    const contentFrac = (img, r) => {
+      const boxAspect = (r[2] * W) / Math.max(1e-6, r[3] * H);
+      const imgAspect = (img.naturalWidth || 1) / Math.max(1, img.naturalHeight || 1);
+      if (imgAspect > boxAspect) {
+        const ch = boxAspect / imgAspect;
+        return { cl: 0, ct: (1 - ch) / 2, cw: 1, ch };
+      }
+      const cw = imgAspect / boxAspect;
+      return { cl: (1 - cw) / 2, ct: 0, cw, ch: 1 };
+    };
+    const placeDots = (box, img, asset) => {
+      const c = contentFrac(img, rectOf(asset));
+      for (const dot of box.querySelectorAll(".mmc-st-dot")) {
+        dot.style.left = ((c.cl + Number(dot.dataset.x) * c.cw) * 100) + "%";
+        dot.style.top = ((c.ct + Number(dot.dataset.y) * c.ch) * 100) + "%";
+      }
+    };
+
+    // ---- the stage ---------------------------------------------------------
+    const stage = el("div", { class: "mmc-plate-stage" });
+    stage.style.aspectRatio = W + " / " + H;
+    stage.style.maxWidth = "min(100%, calc(48vh * " + (W / H) + "))";
+    stage.style.background = greyField(this.plate.backdrop);
+
+    // Select without redrawing: a redraw under a live pointer capture would
+    // end the drag it belongs to. The full render comes when the gesture does.
+    const pick = (asset, box) => {
+      if (picked === asset.path) return;
+      picked = asset.path;
+      for (const other of stage.querySelectorAll(".mmc-st-panel.picked")) {
+        other.classList.remove("picked");
+      }
+      box?.classList.add("picked");
+      renderTools();
+    };
+
+    const startMove = (event, box, asset, grip) => {
+      const stageRect = stage.getBoundingClientRect();
+      const from = rectOf(asset);
+      const sx = event.clientX, sy = event.clientY;
+      const target = grip || box;
+      target.setPointerCapture(event.pointerId);
+      const onMove = (ev) => {
+        const dx = (ev.clientX - sx) / Math.max(1, stageRect.width);
+        const dy = (ev.clientY - sy) / Math.max(1, stageRect.height);
+        let r;
+        if (grip) {
+          // Resize from the corner; the picture inside keeps its own aspect.
+          r = [from[0], from[1],
+               clampTo(from[2] + dx, 0.04, 2), clampTo(from[3] + dy, 0.04, 2)];
+        } else {
+          // Move. A sliver has to stay on the canvas, or there is nothing left
+          // to take hold of and bring back.
+          r = [clampTo(from[0] + dx, 0.03 - from[2], 0.97),
+               clampTo(from[1] + dy, 0.03 - from[3], 0.97), from[2], from[3]];
+        }
+        rects.set(asset.path, r);
+        box.style.left = (r[0] * 100) + "%";
+        box.style.top = (r[1] * 100) + "%";
+        box.style.width = (r[2] * 100) + "%";
+        box.style.height = (r[3] * 100) + "%";
+      };
+      const done = () => {
+        target.removeEventListener("pointermove", onMove);
+        render();
+      };
+      target.addEventListener("pointermove", onMove);
+      target.addEventListener("pointerup", done, { once: true });
+      target.addEventListener("pointercancel", done, { once: true });
+    };
+
+    const panelEl = (asset, index) => {
+      const r = rectOf(asset);
+      const box = el("div", {
+        class: "mmc-st-panel" + (asset.path === picked ? " picked" : ""),
+        title: clicking
+          ? t("Click the subject to keep. Shift-click what to leave out.")
+          : t("{name} — drag to place, corner to resize", { name: asset.name }),
+      });
+      box.style.left = (r[0] * 100) + "%";
+      box.style.top = (r[1] * 100) + "%";
+      box.style.width = (r[2] * 100) + "%";
+      box.style.height = (r[3] * 100) + "%";
+      box.style.zIndex = String(index + 1);
+      const img = el("img", { class: "mmc-st-img", src: srcOf(asset),
+                              alt: asset.name, draggable: "false" });
+      img.addEventListener("load", () => placeDots(box, img, asset));
+      box.appendChild(img);
+      box.appendChild(el("span", { class: "mmc-st-no", text: String(index + 1) }));
+      for (const [at, point] of (points.get(asset.path) ?? []).entries()) {
+        const dot = el("button", {
+          class: "mmc-st-dot" + (point.include ? "" : " out"),
+          title: point.include
+            ? t("A click on the subject — press to take it back")
+            : t("A click on what to leave out — press to take it back"),
+          onpointerdown: (ev) => ev.stopPropagation(),
+          onclick: (ev) => {
+            ev.stopPropagation();
+            const list = points.get(asset.path) ?? [];
+            list.splice(at, 1);
+            if (!list.length) points.delete(asset.path);
+            schedule();
+          },
+        });
+        dot.dataset.x = String(point.x);
+        dot.dataset.y = String(point.y);
+        box.appendChild(dot);
+      }
+      const grip = el("div", { class: "mmc-st-grip", title: t("Resize") });
+      grip.addEventListener("pointerdown", (event) => {
+        event.stopPropagation();
+        event.preventDefault();
+        pick(asset, box);
+        startMove(event, box, asset, grip);
+      });
+      box.appendChild(grip);
+      if (cut(asset) && urls.get(asset.path)?.pending) {
+        box.appendChild(el("div", { class: "mmc-plate-scan" }));
+      }
+      box.addEventListener("pointerdown", (event) => {
+        event.preventDefault();
+        pick(asset, box);
+        if (clicking) {
+          const at = box.getBoundingClientRect();
+          const c = contentFrac(img, rectOf(asset));
+          const x = ((event.clientX - at.left) / Math.max(1, at.width) - c.cl) / c.cw;
+          const y = ((event.clientY - at.top) / Math.max(1, at.height) - c.ct) / c.ch;
+          if (x >= 0 && x <= 1 && y >= 0 && y <= 1) {
+            const list = points.get(asset.path) ?? [];
+            list.push({ x: round4(x), y: round4(y),
+                        include: !(event.shiftKey || event.altKey) });
+            points.set(asset.path, list);
+            cuts.set(asset.path, true);
+            schedule();
+          }
+          return;
+        }
+        startMove(event, box, asset, null);
+      });
+      return box;
+    };
+
+    // ---- the toolbar -------------------------------------------------------
+    const clickButton = el("button", {
+      class: "mmc-ghost mmc-tool",
+      "aria-pressed": "false",
+      title: t("Click the subject on the sheet and SAM 3 cuts exactly that out — "
+             + "shift-click marks what to leave out. Needs a SAM 3 checkpoint "
+             + "under the node's weights control."),
+      text: t("Click to choose the subject"),
+      onclick: () => { clicking = !clicking; render(); },
+    });
+    const clearClicks = el("button", {
+      class: "mmc-ghost mmc-tool",
+      title: t("Forget this panel's clicks and go back to the whole-subject matte"),
+      text: t("Forget clicks"),
+      onclick: () => {
+        if (!picked) return;
+        points.delete(picked);
+        schedule();
+      },
+    });
+    const autoButton = el("button", {
+      class: "mmc-ghost mmc-tool",
+      title: t("Put every panel back in its grid cell"),
+      text: t("Auto-arrange"),
+      onclick: () => { rects.clear(); schedule(); },
+    });
+    const tools = el("div", { class: "mmc-plate-tools" },
+                     [clickButton, clearClicks, autoButton]);
+
+    const caliper = el("div", { class: "mmc-plate-caliper" });
+    const say = el("div", { class: "mmc-plate-say" });
+    const strip = el("div", { class: "mmc-plate-strip" });
+    const okButton = el("button", { class: "mmc-add", onclick: () => finish() });
+
+    const cell = (asset, index) => {
+      const on = cut(asset);
+      const scissors = el("button", {
+        class: `mmc-pl-cut${on ? " on" : ""}`,
+        "aria-pressed": String(on),
+        title: on
+          ? t("{name} is cut out: the subject is lifted off its background onto the flat "
+            + "field the panels sit on, so the room it was photographed in stops "
+            + "conditioning the render alongside it. Click to keep the background.",
+              { name: asset.name })
+          : t("{name} is used whole, background and all. Click to lift the subject off it "
+            + "— which is what you want when you are citing a person or an object and not "
+            + "the place they were photographed in.", { name: asset.name }),
+        onclick: (event) => {
+          event.stopPropagation();
+          cuts.set(asset.path, !on);
+          schedule();
+        },
+      }, [icon("scissors", 12)]);
+
+      const box = el("div", {
+        class: `mmc-pl-cell${on ? " cut" : ""}${asset.path === picked ? " picked" : ""}`,
+        title: t("{name} — drag to rearrange, click to select", { name: asset.name }),
+        onclick: () => { picked = asset.path; render(); },
+      }, [
+        el("img", { class: "mmc-pl-thumb", src: viewUrl(asset.path, { preview: true }), alt: asset.name }),
+        el("span", { class: "mmc-pl-no", text: String(index + 1) }),
+        scissors,
+        el("button", {
+          class: "mmc-pl-x", text: "✕",
+          title: t("Take {name} off the sheet", { name: asset.name }),
+          onclick: (event) => {
+            event.stopPropagation();
+            order = order.filter((a) => a.path !== asset.path);
+            // On a sheet family every selected image is a panel, so off the
+            // sheet is out of the selection; elsewhere the picture goes back
+            // to being an ordinary loose pick.
+            if (this.sheetFamily()) {
+              this.selected = this.selected.filter((a) => a.path !== asset.path);
+              this.syncSelected();
+              this.renderFoot();
+            }
+            if (!order.length) { shut(); return; }
+            schedule();
+          },
+        }),
+      ]);
+      // Drag to rearrange. The panel numbering is the citation — `panel 3` in
+      // the caption is cell 3 of this strip — so the order is worth a gesture.
+      box.draggable = true;
+      box.addEventListener("dragstart", (event) => {
+        drag = index;
+        event.dataTransfer.effectAllowed = "move";
+        // An inert payload: Firefox refuses to start a drag with none, and a
+        // real one (a URL) is what ComfyUI's drop handler would try to import
+        // if the drop ever escaped the modal.
+        event.dataTransfer.setData("text/plain", "");
+      });
+      box.addEventListener("dragover", (event) => {
+        event.preventDefault();
+        if (drag === null || drag === index) return;
+        const [moved] = order.splice(drag, 1);
+        order.splice(index, 0, moved);
+        drag = index;
+        schedule();
+      });
+      box.addEventListener("dragend", () => { drag = null; });
+      return box;
+    };
+
+    const render = () => {
+      stage.replaceChildren(...order.map(panelEl));
+      stage.classList.toggle("clicking", clicking);
+
+      // The caliper: what the sheet is, in numbers — panels, the canvas it
+      // will bake at (the canvas the shot generates at), what has been cut.
+      const parts = order.length > 1 ? [t("{count} panels", { count: order.length })] : [];
+      parts.push(`${W} × ${H}`);
+      const cutCount = order.filter(cut).length;
+      if (cutCount) parts.push(t("{count} cut out", { count: cutCount }));
+      if (rects.size) parts.push(t("arranged by hand"));
+      caliper.textContent = parts.join("  ·  ");
+
+      say.textContent = buildError
+        || (clicking ? t("Click the subject to keep. Shift-click what to leave out.") : "");
+      say.classList.toggle("bad", Boolean(buildError));
+      say.style.display = say.textContent ? "" : "none";
+
+      renderTools();
+      strip.replaceChildren(...order.map(cell));
+      okButton.textContent = saving ? t("Laying it out…")
+        : this.sheetFamily()
+          ? (order.length > 1 ? t("Add sheet") : t("Add"))
+          : t("Connect");
+      okButton.disabled = !order.length || saving;
+    };
+    const renderTools = () => {
+      clickButton.classList.toggle("on", clicking);
+      clickButton.setAttribute("aria-pressed", String(clicking));
+      clearClicks.disabled = !(picked && points.get(picked)?.length);
+      autoButton.disabled = !rects.size;
+    };
+
+    const finish = async () => {
+      if (saving) return;
+      this.cuts = cuts;
+      this.rects = rects;
+      this.points = points;
+      if (!needed()) {
+        if (this.sheetFamily()) {
+          shut();
+          // A lone uncut picture *is* the reference: attached as itself.
+          this.close([{ ...order[0], ...(this.settings.get(order[0].path) || {}) }]);
+          return;
+        }
+        // A group of one uncut picture is not a sheet — it dissolves back into
+        // a loose pick, which is also how a sheet is dismantled on purpose.
+        const before = this.sheet;
+        this.sheet = [];
+        shut();
+        this.refreshSheetCells([...new Set(before)]);
+        this.renderFoot();
+        return;
+      }
+      if (this.sheetFamily()) {
+        // Accept is the approval, so this is the one moment a file is made.
+        saving = true;
+        buildError = "";
+        render();
+        try {
+          const built = await buildPlate({ ...this.plate,
+            panels: order.map((asset) => this.panelPayload(asset)) });
+          shut();
+          this.close([this.sheetAnswer(built, order)]);
+        } catch (error) {
+          saving = false;
+          buildError = error.message;
+          render();
+        }
+        return;
+      }
+      // Elsewhere the group holds in the session and Add writes the file.
+      const before = this.sheet;
+      this.sheet = order.map((a) => a.path);
+      shut();
+      this.refreshSheetCells([...new Set([...before, ...this.sheet])]);
+      this.renderFoot();
+    };
+
+    const sheetEl = el("div", { class: "mmc-plate-edit" }, [
+      el("div", { class: "mmc-plate-title", text: t("The reference sheet") }),
+      el("div", { class: "mmc-plate-stage-wrap" }, [stage]),
+      say,
+      tools,
+      caliper,
+      strip,
+      el("div", { class: "mmc-plate-foot" }, [
+        el("button", { class: "mmc-ghost", text: t("Cancel"), onclick: () => shut() }),
+        okButton,
+      ]),
+    ]);
+    const overlay = el("div", {
+      class: "mmc-overlay",
+      onpointerdown: (event) => { if (event.target === overlay) shut(); },
+      // Same seal as the picker's own overlay: a panel dropped outside the
+      // strip must not fall through to ComfyUI's file-import drop handler.
+      ondragover: (event) => event.preventDefault(),
+      ondrop: (event) => { event.preventDefault(); event.stopPropagation(); },
+    }, [sheetEl]);
+    const remove = mountOverlay(overlay, () => shut());
+    const shut = () => {
+      clearTimeout(fetchTimer);
+      for (const held of urls.values()) {
+        if (held.url) URL.revokeObjectURL(held.url);
+      }
+      urls.clear();
+      remove();
+    };
+    schedule();
+  }
+
   toggle(asset) {
     if (this.options.viewOnly) return;
     const at = this.selected.findIndex((a) => a.path === asset.path);
@@ -1018,6 +1682,12 @@ class Picker {
     else if (this.options.single) this.selected = [asset];
     else if (this.room(this.targetKind(asset))) this.selected.push(asset);
     else return;  // at capacity: the counter already says why
+    // Deselecting a paired picture takes it off the sheet too — the sheet is
+    // made of selected pictures — and the badges behind it renumber.
+    if (at >= 0 && this.sheet.includes(asset.path)) {
+      this.sheet = this.sheet.filter((path) => path !== asset.path);
+      this.refreshSheetCells([asset.path, ...this.sheet]);
+    }
     this.syncSelected();
     this.renderFoot();
   }
@@ -1038,8 +1708,24 @@ class Picker {
         class: "mmc-del", text: t("Delete"), disabled: !this.marked.length,
         onclick: () => this.confirmDelete(),
       });
+      // Mark everything in sight — what makes clearing a shelf of hundreds of
+      // stale files (a `_plates` folder full of old sheets, say) one press
+      // instead of hundreds.
+      const inView = this.visible();
+      const allMarked = inView.length
+        && inView.every((asset) => this.marked.includes(asset.path));
       this.foot.replaceChildren(
         this.slots,
+        el("button", {
+          class: "mmc-ghost", disabled: !inView.length,
+          text: allMarked ? t("Unmark all") : t("Mark all"),
+          onclick: () => {
+            this.marked = allMarked ? []
+              : [...new Set([...this.marked, ...inView.map((asset) => asset.path)])];
+            this.renderGrid();
+            this.renderFoot();
+          },
+        }),
         el("button", {
           class: "mmc-ghost", text: t("Move to…"), disabled: !this.marked.length,
           onclick: () => this.moveMenu(),
@@ -1051,12 +1737,38 @@ class Picker {
     }
 
     this.deleteButton = null;
-    this.addButton = el("button", { class: "mmc-add", text: t("Add"), onclick: () => this.commit() });
-    this.foot.replaceChildren(
+    const panels = this.sheetFamily() ? [] : this.sheetPanels();
+    // Named after what pressing it produces. On a sheet family the whole image
+    // selection is one sheet — that is the family's grammar, not a choice — so
+    // the button says so, and pressing it goes through the sheet editor where
+    // the composite is looked at before it lands.
+    this.addButton = el("button", {
+      class: "mmc-add",
+      text: this.sheetFamily() && this.selectedImages().length > 1 ? t("Add sheet") : t("Add"),
+      onclick: () => this.commit(),
+    });
+    const row = [
       this.slots,
       el("button", { class: "mmc-ghost", text: t("Cancel"), onclick: () => this.close(null) }),
       this.addButton,
-    );
+    ];
+    // Connect: lay the selected pictures out as one sheet, which then attaches
+    // as a single reference and stays paired until it is taken off the piece.
+    // Only where that is a choice — a sheet family has no button because its
+    // selection is the sheet already.
+    if (this.sheetsPossible() && !this.sheetFamily()) {
+      const joinable = new Set([...panels.map((a) => a.path),
+                               ...this.selectedImages().map((a) => a.path)]).size;
+      row.splice(2, 0, el("button", {
+        class: "mmc-ghost mmc-connect",
+        text: panels.length ? t("Edit sheet…") : t("Connect"),
+        title: t("Lay the selected pictures out as one sheet — cut subjects out of their "
+               + "backgrounds, arrange them, and attach the result as a single reference."),
+        disabled: !(panels.length || joinable >= 2),
+        onclick: () => this.openSheet(),
+      }));
+    }
+    this.foot.replaceChildren(...row);
     if (this.options.single) {
       this.slots.textContent = this.selected.length ? t("1 selected") : t("Pick one");
       this.slots.classList.remove("full");
@@ -1082,7 +1794,11 @@ class Picker {
         + (elsewhere ? t(" · {used} / {max} audio", { used: audio.used + this.claimed("audio"), max: audio.max }) : "");
       this.slots.classList.toggle("full", filled >= max);
     }
-    this.addButton.disabled = this.selected.length === 0;
+    // The group is one of the slots, and the counter says which.
+    if (panels.length > 1) {
+      this.slots.textContent += t(" · sheet of {count}", { count: panels.length });
+    }
+    this.addButton.disabled = this.selected.length === 0 || this.committing;
   }
 
   pickFile() {
@@ -1120,9 +1836,40 @@ class Picker {
     input.click();
   }
 
-  commit() {
-    if (!this.selected.length) return;
-    this.close(this.selected.map((asset) => ({ ...asset, ...(this.settings.get(asset.path) || {}) })));
+  async commit() {
+    if (!this.selected.length || this.committing) return;
+    // On a sheet family the image selection *is* the sheet, and the way out is
+    // through the editor: what gets attached is confirmed by being looked at.
+    // A lone uncut picture is the one case with nothing to look at — it is the
+    // reference, unchanged — and it attaches directly.
+    if (this.sheetFamily() && this.sheetNeeded()) {
+      this.openSheet();
+      return;
+    }
+    const panels = this.sheetFamily() ? [] : this.sheetPanels();
+    const grouped = new Set(panels.map((asset) => asset.path));
+    const loose = this.selected.filter((asset) => !grouped.has(asset.path))
+      .map((asset) => ({ ...asset, ...(this.settings.get(asset.path) || {}) }));
+    if (!panels.length || !this.sheetNeeded(panels)) {
+      this.close(loose);
+      return;
+    }
+    // The group closes as one thing, because it is one thing: the file the
+    // server wrote, and the pictures it was laid out from — `Editor.attachAssets`
+    // turns it into one reference. Usually the file exists already (the sheet
+    // editor built it), so this await is a stat; it is awaited anyway because
+    // the group may have changed since — a panel deselected from the grid.
+    this.committing = true;
+    this.renderFoot();
+    try {
+      const built = await buildPlate({ ...this.plate,
+        panels: panels.map((asset) => this.panelPayload(asset)) });
+      this.close([this.sheetAnswer(built, panels), ...loose]);
+    } catch (error) {
+      this.committing = false;
+      this.renderFoot();
+      this.warn(error.message);
+    }
   }
 
   close(result) {

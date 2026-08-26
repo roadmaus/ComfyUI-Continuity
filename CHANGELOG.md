@@ -2,6 +2,103 @@
 
 ## Unreleased
 
+**LTX 2.5 reads references.** The second video family used to refuse every
+attachment, because a citation reached its text encoder as a bare `<Picture 1>`
+with no picture behind it. It has a reference grammar now, and it is Lightricks'
+own: pick up to nine stills and the picker lays them out as an Ingredients
+reference sheet — panels on a black background — which the render hands to the
+transformer as a guide through the `Ingredients` IC-LoRA, with the caption
+written in two parts, `Reference sheet: …` then `Generated video: …`.
+
+The whole of the reference system is the one you already had. The same chips,
+the same handles, the same cast, the same pool, the same refiner panel. What
+changes is the words: a reference is `panel 1` of the sheet rather than
+`<Picture 1>` of a presentation, and a start frame is `the first frame` rather
+than an ordinal, because Gemma reads captions and an ordinal there is a token
+sequence standing where a noun phrase belongs. H3 is untouched — same ordinals,
+same Context-IR, byte-identical graphs.
+
+Videos and sounds are still turned away on this family, and the refusal says why
+rather than counting to nothing: a clip has no panel to be. Lay it on the
+piece's sound lane, or put the piece on H3, which reads both. The rail offers
+the tools the family can actually use, so an LTX piece draws "Add image" alone.
+
+Pick the Ingredients IC-LoRA under the weights control. Every canvas axis has to
+divide by the adapter's own downscale factor times 32; a canvas that does not is
+refused before anything loads, naming the pill to move.
+
+**The sheet is made while you pick, and you see it before it lands.** On LTX
+2.5 the image selection *is* the sheet — that is the family's grammar, one
+composite per shot — so pressing Add opens the sheet editor: the composite
+exactly as the model will be handed it, on the black field the adapter was
+trained against, with the panels in a strip below. Drag a panel to rearrange
+(the numbering is the citation — `panel 3` in the caption is cell 3 of the
+grid), press the scissors to cut one out of its background or keep it whole,
+take one off with the ✕, and confirm. A card on this family carries one image
+reference and the render loads that file; a request carrying loose seconds is
+refused rather than composed behind your back.
+
+On H3 nothing is welded together for you: multi-select attaches separate
+references, as it always did, and each is encoded on its own. The new Connect
+button in the picker's foot is how a sheet happens there — select two or more
+pictures, press it, and the same editor lays them out on mid grey. The result
+attaches as ONE reference, storyboard-style, costing one of H3's slots however
+many panels are on it, and rides alongside the loose references. The paired
+pictures stay connected: reopen the picker and they come back selected and
+numbered, ready to be edited, extended, or dismantled, while you keep adding
+other references around them.
+
+The scissors are core's BiRefNet matte — no prompt, no box, no click. A
+reference image is a photograph, and a photograph is mostly not the thing it is
+a reference *of*: cite somebody's portrait for their face and the model is also
+handed the room they stood in. Panels start cut on LTX 2.5, where they are
+ingredients rather than photographs, and whole on H3, where every piece ever
+saved was rendered against whole pictures.
+
+What lands on the card is one reference: the sheet, as a real file in the input
+folder, with the pictures it was laid out from listed on its card. Those keep
+their handles, so `@img-2` still means the second panel and the cast still
+claims it — `panel 2` in an LTX caption, `panel 2 of <Picture 1>` in H3's. Open
+the sheet's name to change what a panel reads as, or Edit sheet… to build it
+again — also offered on a plain picture, which is a sheet of one nobody has
+added to yet, and where the scissors on a lone H3 reference live.
+
+Pick a background-removal model under weights; it is loaded the first time you
+press the scissors and held for the session. Nothing about a cutout or a layout
+happens at render time any more — the graph loads no matte and composes no
+sheet, and a selection you have built before comes back without a second pass.
+
+**The sheet editor is a stage now, and nothing is written until you accept.**
+The editor used to show a server-built composite and rebuild it — as a real
+file in `input/_plates/` — on every click, so an afternoon of picking left the
+folder full of discarded previews and the All shelf full of half-made sheets.
+Both halves are gone. The preview is composited in the browser, from per-panel
+cutouts the server serves straight out of memory, and the composite is written
+exactly once: when Accept (or Add, for a Connect group) commits it. Cancel
+leaves no file anywhere, `_plates/` no longer appears on the All shelf (its own
+shelf still holds it), and Organize grew a Mark all button — which is also how
+the sheets an earlier version littered are cleared in one press.
+
+The stage is the shot's own canvas, and the panels on it are where they will
+actually sit. Drag one to place it, take its corner to resize it, reorder the
+citations in the strip below; Auto-arrange puts everything back on the grid.
+The arrangement is part of the sheet's identity — the same panels laid out
+differently are a different file — and part of its caption: an unarranged
+`panel 3` is still described by its grid cell, a dragged one by where it
+landed, against thirds of the canvas, so "panel 1 is the person top right"
+stays a sentence the model can check against the picture in front of it.
+
+**Click the subject and SAM 3 cuts exactly that out.** BiRefNet's matte is
+salient-object — hand it a picture of two people and it lifts both. The editor
+now has "Click to choose the subject": click the thing you mean and the panel's
+matte comes from SAM 3's point path instead, shift-click marks what to leave
+out, every click is a dot you can press to take back, and the mask is feathered
+a couple of pixels so a hard edge does not read as a sticker. Clicks are part
+of the sheet's name too, and they ride with the panel, so reopening the editor
+starts from them. Pick a SAM 3 checkpoint under weights — on H3 it is the same
+file the face pass already uses; without one the scissors still work
+whole-subject, and the first click tells you what is missing.
+
 **The refiner writes the prompt this piece's model was trained to read, not
 always H3's.** The Refine button was written when H3 was the only family, and it
 stayed H3's after there were two: whatever the piece's model pill said, the

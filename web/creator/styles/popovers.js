@@ -207,4 +207,31 @@ export const css = `
 .mmc-refsheet-go.danger { margin-left: auto; }
 .mmc-refsheet-go.danger:hover { color: var(--mmc-warn); border-color: var(--mmc-warn); background: none; }
 
+
+/* --- a plate's panels, on its card ----------------------------------------
+   What a sheet is made of, one row per cell. The chip is editable here because
+   it is prose; the scissors are a mark and not a control, because the sheet on
+   disk is the cut-out version — see editor.panelRows. */
+.mmc-pl-rows { display: flex; flex-direction: column; gap: 6px; }
+.mmc-pl-row { display: flex; align-items: center; gap: 8px; }
+.mmc-pl-row .mmc-refsheet-opts { margin-left: auto; }
+.mmc-pl-row .mmc-pl-no {
+  position: static; flex: none; min-width: 14px; padding: 0; background: none;
+  color: var(--mmc-faint);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-variant-numeric: tabular-nums; font-size: calc(10.5px * var(--mmc-type));
+}
+.mmc-pl-row .mmc-pl-thumb {
+  flex: none; width: 26px; height: 26px; border-radius: 5px; object-fit: cover;
+  border: 1px solid var(--mmc-line-2);
+}
+.mmc-pl-handle {
+  font-size: calc(11px * var(--mmc-type)); white-space: nowrap;
+}
+.mmc-pl-row .mmc-pl-cut {
+  position: static; flex: none; width: 18px; height: 18px; background: none;
+  color: var(--mmc-off); cursor: default;
+}
+.mmc-pl-row .mmc-pl-cut.on { background: none; color: var(--mmc-blue); }
+
 `;

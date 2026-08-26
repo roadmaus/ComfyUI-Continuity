@@ -42,6 +42,21 @@ LORA_STACK = "h3lora"
 # would be offering nothing.
 DURATION_HEAD = None
 
+# What a cut-out reference is composited onto, as one grey level. See
+# `creator/cutout.py` for why there is a field at all and why this one is not
+# white: H3 encodes each reference on its own, so what a cutout buys here is the
+# absence of a background rather than a layout, and a white field clips the light
+# end of skin, hair and pale clothing into itself before the VAE ever sees them.
+REF_BACKDROP = 0.5
+
+# Whether a piece on this family cuts its references out unless told otherwise.
+# **Off, and permanently.** Every H3 piece ever saved was rendered against whole
+# reference pictures; a default that lifted their subjects off would change what
+# an unedited workflow generates the day it is opened, which is the one thing
+# `piece_family` and `as_piece` exist to prevent. The toggle is offered and it
+# starts where H3 already was.
+CUTOUT_DEFAULT = False
+
 # The graph node that is this family's boundary: one self-contained payload in,
 # `(model, positive, latent, lead model)` out. A ComfyUI registry key named in
 # saved workflows, and frozen for it — the module it is defined in has moved and

@@ -34,11 +34,17 @@ re-establishes the framing after it. So the refiner never asks the model for cut
 times: `shot_limit` is 1 whatever the duration, and multi-shot lives inside the
 one body under `prompts/multishot.txt`.
 
-**Nothing is attached but frames.** `grammar.LTX25Grammar` refuses every
-reference, because a citation would reach Gemma as a bare ordinal with no
-picture behind it. So the glossary here only ever describes a start or an end
-frame — and those still ride into the message as pictures, which is the whole
-reason the refiner reads images at all.
+**A reference is a panel, and the glossary says so.** This family's reference
+grammar is the Ingredients IC-LoRA — the attached stills become the panels of
+one composite sheet — so the rewrite has a second job H3 spells differently: it
+writes a `reference_sheet` field describing the panels, and the body refers back
+to them by handle. The handles stay handles in storage and become `panel 1`,
+`panel 2` at queue time (`grammar.LTX25Grammar.citations`), exactly as H3's
+become ordinals, so adding or removing a picture re-labels a stored rewrite
+instead of leaving it pointing at the panel that used to be there.
+
+Videos and sounds are still refused — there is no panel either of them could
+be — so the glossary here describes stills and frames and nothing else.
 
 No torch, no ComfyUI: request building and reply parsing are ordinary data, like
 H3's. See `families/refine.py` for the harness half that is neither family's.
@@ -72,7 +78,13 @@ MULTISHOT = (_PROMPTS / "multishot.txt").read_text(encoding="utf-8").strip()
 # worked request-and-reply pair, which is what teaches the transformation: a
 # casual sentence in, a faithful expansion out, no answer to the asker.
 MODE_TEMPLATE = {mode: (_MODE_DIR / f"{mode.lower()}.txt").read_text(encoding="utf-8").strip()
-                 for mode in ("T2V", "I2V", "L2V", "FL2V")}
+                 for mode in ("REF2V", "T2V", "I2V", "L2V", "FL2V")}
+
+# The section the reference form writes, and the only one this family has. H3
+# has three, because Context-IR is a document with named parts; here it is one
+# half of a two-part caption (`grammar.SHEET_LEAD`), so there is one name and it
+# is the compiler's own key for it.
+SHEET_SECTION = "reference_sheet"
 
 
 # ---- the instructions -------------------------------------------------------
@@ -151,6 +163,9 @@ it is in beside the quotation, as the craft section shows.
 # node builds are the same statement to the model however the frames got there
 # — a keyframe the user attached, or a seam inherited from the shot before.
 MODE_NOTES = {
+    "REF2V": "Reference pictures are attached. They are the panels of one sheet, not "
+             "frames of the video — describe the panels in `reference_sheet` and refer "
+             "back to them by handle in the shot bodies.",
     "T2V": "No frames are attached. Describe the video from nothing.",
     "I2V": "The attached start frame is the video's first frame. Open on exactly "
            "that image — its subjects, clothing, colours, objects and layout — and "
@@ -183,7 +198,7 @@ def choose_template(choice, mode):
 # ---- the JSON contract ------------------------------------------------------
 
 
-def reply_shape(shots, images=0, piece=False):
+def reply_shape(shots, images=0, piece=False, sheet=False):
     """The JSON contract, written out for the model to read.
 
     Nothing in ComfyUI's generation loop constrains a reply to a shape —
@@ -193,15 +208,18 @@ def reply_shape(shots, images=0, piece=False):
     would have gone.
 
     Shorter than H3's by everything H3's markup needed: no cut times, because a
-    cut is a sentence here, and no reference sections, because nothing but a
-    frame can be attached. `images` and `piece` are the two questions that are
-    this pack's rather than a model's — see `SEEN_FIELD` and `PIECE_FIELD`.
+    cut is a sentence here, and one reference section rather than three, because
+    the reference form here is one half of a caption rather than a document with
+    named parts. `images` and `piece` are the two questions that are this pack's
+    rather than a model's — see `SEEN_FIELD` and `PIECE_FIELD`.
     """
     lines = ["Return exactly this JSON object, and nothing before or after it:", "{"]
     if int(images) > 0:
         lines.append('  "%s": "...",' % SEEN_FIELD)
     if piece:
         lines.append('  "%s": "...",' % PIECE_FIELD)
+    if sheet:
+        lines.append('  "%s": "...",' % SHEET_SECTION)
     lines.append('  "shots": [%s],' % ", ".join('{"body": "..."}' for _ in range(shots)))
     lines.append('  "overall_soundscape": "...",')
     lines.append('  "non_diegetic_music": "..."')
@@ -231,6 +249,15 @@ def reply_shape(shots, images=0, piece=False):
             "light, the framing. Describe what you can see there, not what the "
             "request leads you to expect. Then write the rest of the object from "
             "it." % SEEN_FIELD
+        )
+    if sheet:
+        lines.append(
+            "Write `%s` before the shots: one clause per reference picture, in "
+            "the order they are attached, each opening with that picture's own "
+            "@handle and saying what is in it — who or what it is, and what it "
+            "looks like. Then write the shot bodies to be read after it, naming "
+            "those handles where the panel appears in the video instead of "
+            "describing it again." % SHEET_SECTION
         )
     return "\n".join(lines)
 
@@ -265,21 +292,23 @@ def system_prompt(mode, language="English", shape=None):
 _WHAT = {
     "first_frame": "the target video's first frame",
     "last_frame": "the target video's final frame",
+    "reference": "a panel of the reference sheet",
 }
 
 
 def slot_row(asset, label=None, show_label=False):
     """One glossary line's worth of an asset.
 
-    `label` is accepted and ignored. Ordinals are H3's citation grammar; this
-    family has none, so the model is shown the handle alone and writes that —
-    which is also what storage keeps, so nothing has to be converted back.
+    `label` is accepted and ignored, and that is the point: `panel 3` is
+    assigned at queue time off the final asset list, so a rewrite that had been
+    shown it and written it down would go stale the moment a picture was added
+    ahead of it. The model is shown the handle alone and writes that, which is
+    also what storage keeps.
     """
     what = _WHAT.get(asset.role)
     if what is None:
-        # Not reachable through the compiler, which refuses every reference on
-        # this family. Said plainly rather than guessed at, so that the day a
-        # reference grammar exists here this line is obviously the one to write.
+        # Not reachable through the compiler: the three roles are the whole of
+        # what `_parse_assets` produces, and every one of them is above.
         what = "an attached file this family has no reference grammar for"
     return {"handle": asset.handle,
             "what": f"{what} ({os.path.basename(asset.filename)})"}
@@ -441,7 +470,7 @@ def user_message(shots, seconds=None, images=0, mode=None, piece=None, pool=None
 # ---- the reply --------------------------------------------------------------
 
 
-def parse_reply(content, shots, piece=False):
+def parse_reply(content, shots, piece=False, sheet=False):
     """The model's content string -> `{"shots": [str], "soundscape", "music", ...}`.
 
     `json_object` is tolerant about transport — a leaked `<think>` block, a
@@ -477,6 +506,15 @@ def parse_reply(content, shots, piece=False):
     }
     if piece:
         out["piece"] = str(data.get(PIECE_FIELD) or "").strip()
+    if sheet:
+        # Under `sections`, which is the shape the route stores and
+        # `compile.refined_sections` reads back — the same road H3's three
+        # sections travel, so nothing downstream has to know this family writes
+        # one. Written even when empty: an absent key would silently fall back
+        # to the derived scaffold, and a model that skipped the field is worth
+        # seeing rather than papering over.
+        written = str(data.get(SHEET_SECTION) or "").strip()
+        out["sections"] = {SHEET_SECTION: written}
     return out
 
 
@@ -502,14 +540,26 @@ class LTX25Prompting(harness.Prompting):
     def representative(self, modes):
         """The mode the system prompt is written for, across a strip.
 
-        The first card's, because the four templates differ only in what the
-        frames are and each card carries its own note beside its text. There is
-        no superset form to reach for the way H3 reaches for its reference
-        template: a card here is what its guides make it, and a strip that
-        mixes them is a strip of shots that open differently.
+        The reference form where any card is one, for the reason H3 answers the
+        same way: it is the superset. A strip whose cards cite a sheet needs the
+        `reference_sheet` field asked for once for the whole reply, and a card
+        that has no references simply writes no handles into its body — where a
+        strip written under `I2V` would have nowhere to put the sheet at all.
+
+        Otherwise the first card's, because the four guide templates differ only
+        in what the frames are and each card carries its own note beside its
+        text.
         """
         modes = list(modes)
+        reference = self.modes_reference()
+        if reference in modes:
+            return reference
         return modes[0] if modes else "T2V"
+
+    def modes_reference(self):
+        """This family's name for a reference generation — `grammar`'s, not a
+        second spelling of it."""
+        return grammar.GRAMMAR.modes["reference"]
 
     def shot_limit(self, seconds):
         """Never. A cut is a sentence in this family, not a numbered shot with a
@@ -519,7 +569,8 @@ class LTX25Prompting(harness.Prompting):
         return 1
 
     def reply_shape(self, mode, shots, cuts=0, images=0, piece=False, ref_shots=()):
-        return reply_shape(shots, images=images, piece=piece)
+        return reply_shape(shots, images=images, piece=piece,
+                           sheet=mode == self.modes_reference())
 
     def system_prompt(self, mode, language="English", shape=None, cuts=0):
         return system_prompt(mode, language, shape=shape)
@@ -530,7 +581,8 @@ class LTX25Prompting(harness.Prompting):
                             piece=piece, pool=pool, footage=footage, cast=cast)
 
     def parse_reply(self, content, mode, shots, cuts=0, piece=False, ref_shots=()):
-        return parse_reply(content, shots, piece=piece)
+        return parse_reply(content, shots, piece=piece,
+                           sheet=mode == self.modes_reference())
 
     def join_shots(self, bodies, cuts, seconds):
         """The bodies run together as prose, unmarked — `grammar.join_shots`'s

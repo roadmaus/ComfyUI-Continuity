@@ -566,19 +566,119 @@ export class CreatorEditor {
   async addReferences(kind) {
     const blocked = S.blockedReason(this.state, "reference");
     if (blocked) return this.flash(blocked);
-    const { used, max, filesLeft } = S.capacity(this.state, kind, this.piece);
+    const sheet = this.seedSheet(kind);
+    const { used, max, filesLeft } = S.capacity(this.state, kind, this.piece, sheet);
     if (used >= max || filesLeft <= 0) {
       return this.flash(t("No {kind} slots left ({used}/{max} used, {filesLeft} files free of {maxFiles}).",
         { kind: t(kind), used, max, filesLeft, maxFiles: S.refCaps(this.piece).files }));
     }
+    await this.pickReferences(kind, sheet);
+  }
+
+  /**
+   * What the picker needs to lay a sheet out for this card, or null.
+   *
+   * The canvas is this card's own, because that is the size the shot generates
+   * at and the sheet is built to match it — the panels are then downsampled
+   * once, by the encoder, from a picture whose shape already fits. The weights
+   * are the piece's, so the matte the picker takes is the model the node says
+   * it uses rather than whatever happened to be first in the folder.
+   */
+  plateSpec() {
+    const { width, height } = this.frame();
+    return S.plateSpec(this.piece, { width, height });
+  }
+
+  /**
+   * The attached reference an image-picking session carries in as its sheet,
+   * or null. The panels come back selected and paired, so editing the pairing
+   * and adding more references is one session rather than two tools.
+   *
+   * On a sheet family the card's one image reference is the sheet whether it
+   * is a plate or a lone picture — either way the next pick extends it.
+   * Elsewhere only a real plate is a pairing worth carrying in: the loose
+   * references are attachments of their own and stay out of it.
+   */
+  seedSheet(kind) {
+    const spec = this.plateSpec();
+    if (kind !== "image" || !spec) return null;
+    return (spec.sheet
+      ? this.state.assets.find((a) => a.role === "reference" && a.kind === "image")
+      : this.state.assets.find((a) => a.role === "reference" && S.isPlate(a))) ?? null;
+  }
+
+  /** The picker, carrying the card's sheet, and the merge of whatever comes
+   *  back. `edit: true` opens straight into the sheet editor — the card's
+   *  "Cut out or combine…" — rather than at the grid. */
+  async pickReferences(kind, sheet, { edit = false } = {}) {
+    const spec = this.plateSpec();
     const chosen = await openPicker({
-      kinds: ["image", "video", "audio", "renders"],
+      kinds: edit ? ["image", "renders"] : ["image", "video", "audio", "renders"],
       kind,
-      capacity: (k) => S.capacity(this.state, k, this.piece),
+      capacity: (k) => S.capacity(this.state, k, this.piece, sheet),
       cardSeconds: this.cardSeconds(),
+      // A plain attachment seeds as the sheet of one it already is. Its own
+      // filename is the source, because nothing has been derived from it yet —
+      // where a plate's panels name the pictures its composite was built from,
+      // which is what makes re-picking a cut-out reference start from the
+      // photograph rather than from the cut-out of it.
+      plate: spec ? { ...spec, edit,
+        panels: sheet
+          ? (sheet.panels?.length
+              ? sheet.panels.map((panel) => ({ path: panel.filename, cut: Boolean(panel.cut),
+                  ...(panel.rect ? { rect: [...panel.rect] } : {}),
+                  ...(panel.points?.length ? { points: panel.points.map((p) => ({ ...p })) } : {}) }))
+              : [{ path: sheet.filename, cut: false }])
+          : [] } : null,
     });
     if (!chosen) return;
-    await this.attachAssets(chosen);
+    await this.mergeSheet(sheet, chosen);
+  }
+
+  /** Open the sheet editor on a reference already attached — a plate, or a
+   *  plain picture, which is a sheet of one nobody has added to yet. Whatever
+   *  comes back takes its place, handle intact. */
+  async editSheet(asset) {
+    if (!this.plateSpec()) return;
+    await this.pickReferences("image", asset, { edit: true });
+  }
+
+  /**
+   * Fold a picker answer back into the card. The sheet entry replaces the seed
+   * it rode out on — keeping its handle, and its panels' handles wherever the
+   * same file came back, so a prompt citing `@img-2` still means the picture
+   * it meant — and the loose picks attach as usual. A file that has left the
+   * sheet takes its handle with it; the prompt box's uncited warning says so.
+   */
+  async mergeSheet(seed, chosen) {
+    const sheet = chosen.find((asset) => asset.plate);
+    const loose = chosen.filter((asset) => !asset.plate);
+    const at = seed ? this.state.assets.indexOf(seed) : -1;
+    if (at < 0) return this.attachAssets(chosen);   // nothing seeded, or detached meanwhile
+    const kept = new Map((seed.panels ?? []).map((panel) => [panel.filename, panel]));
+    if (!seed.panels?.length) kept.set(seed.filename, seed);
+    this.state.assets.splice(at, 1);
+    if (sheet) {
+      this.state.assets.splice(at, 0,
+        S.plateEntry(sheet, S.takenHandles(this.state), { handle: seed.handle, kept }));
+    } else {
+      // The sheet came back as loose pictures — narrowed to one, or taken
+      // apart. The first pick that was a panel steps into the seed's place and
+      // its handle, which is what makes narrowing a sheet down to a single
+      // reference a change to this card rather than a detach and a re-attach.
+      const heirAt = loose.findIndex((asset) => kept.has(asset.path));
+      if (heirAt >= 0) {
+        const [heir] = loose.splice(heirAt, 1);
+        const before = kept.get(heir.path);
+        this.state.assets.splice(at, 0, {
+          handle: seed.handle, kind: "image", role: "reference",
+          filename: heir.path, ref_size: "max",
+          ...(before?.takes && before.takes !== "full" ? { takes: before.takes } : {}),
+        });
+      }
+    }
+    this.commit();
+    if (loose.length) await this.attachAssets(loose);
   }
 
   /**
@@ -588,16 +688,28 @@ export class CreatorEditor {
    * picker's own counters already hold it to that.
    */
   async openGallery() {
+    // The sheet rides along here too: a finished render picked as a panel joins
+    // the card's sheet the same way an upload does.
+    const spec = this.plateSpec();
+    const sheet = this.seedSheet("image");
     const chosen = await openPicker({
       kinds: ["renders", "image", "video", "audio"],
       kind: "renders",
-      capacity: (k) => S.capacity(this.state, k, this.piece),
+      capacity: (k) => S.capacity(this.state, k, this.piece, sheet),
       cardSeconds: this.cardSeconds(),
+      plate: spec ? { ...spec,
+        panels: sheet
+          ? (sheet.panels?.length
+              ? sheet.panels.map((panel) => ({ path: panel.filename, cut: Boolean(panel.cut),
+                  ...(panel.rect ? { rect: [...panel.rect] } : {}),
+                  ...(panel.points?.length ? { points: panel.points.map((p) => ({ ...p })) } : {}) }))
+              : [{ path: sheet.filename, cut: false }])
+          : [] } : null,
     });
     if (!chosen) return;
     const blocked = S.blockedReason(this.state, "reference");
     if (blocked) return this.flash(blocked);
-    await this.attachAssets(chosen);
+    await this.mergeSheet(sheet, chosen);
   }
 
   /** Turn picked assets into reference entries. The shared tail of both the
@@ -605,6 +717,14 @@ export class CreatorEditor {
   async attachAssets(chosen) {
     const undecided = [];
     for (const asset of chosen) {
+      // A plate is one reference and several pictures, and it arrives whole:
+      // the file was written while the picker was open, so there is nothing to
+      // build here and nothing to ask the server about.
+      if (asset.plate) {
+        this.state.assets.push(
+          S.plateEntry(asset, S.takenHandles(this.state)));
+        continue;
+      }
       const entry = {
         handle: S.nextHandle(this.state, asset.kind),
         kind: asset.kind,
@@ -871,7 +991,11 @@ export class CreatorEditor {
     // it is once its anchor goes.
     const paint = () => {
       const rows = [];
-      if (S.takeable(asset)) {
+      // A plate is a picture made of pictures, so what "reads as" is asked of
+      // is each panel rather than the sheet. The sheet itself has no chip: it
+      // is not a reference to anything, it is where the references are.
+      if (S.isPlate(asset)) rows.push(this.panelRows(asset));
+      if (S.takeable(asset) && !S.isPlate(asset)) {
         // The one people came here for. "Reads as" rather than "takes": it says
         // what the model does with the file, which is the question being asked.
         rows.push(choose(t("reads as"), t(takesHelp(asset)),
@@ -917,6 +1041,20 @@ export class CreatorEditor {
       if (asset.kind !== "image") {
         foot.push(opens(trimLabel(asset), t("Use the whole clip, or only a segment of it"),
                         () => this.editSegment(asset)));
+      }
+      // Offered on any reference picture, not only on a sheet: what it opens
+      // is the sheet editor with this reference as the sheet, which is where
+      // you add a second picture to it, take one off, press the scissors, or
+      // drag the panels into another order. A plain attachment is a sheet of
+      // one that nobody has added to yet, and making that the same gesture is
+      // what stops "cut this out" from being a detach and a re-attach.
+      if (asset.role === "reference" && asset.kind === "image" && this.plateSpec()) {
+        foot.push(opens(S.isPlate(asset) && asset.panels.length > 1
+                          ? t("Edit sheet…") : t("Cut out or combine…"),
+                        t("Choose the pictures on this sheet again — add one, take one off, "
+                        + "rearrange them, or change which are cut out of their backgrounds. "
+                        + "The sheet is laid out again as you go."),
+                        () => this.editSheet(asset)));
       }
       foot.push(opens(t("Swap file"),
                       t("Swap the file behind @{handle} — the handle stays, so the prompt still fits.",
@@ -1071,7 +1209,8 @@ export class CreatorEditor {
     const geometry = S.resolved(state, source ? this.sizes.get(source.filename) : null, this.piece);
 
     this.railHost.replaceChildren(this.renderRail());
-    this.assetsHost.replaceChildren(...(state.assets.length ? [this.renderAssets()] : []));
+    this.assetsHost.replaceChildren(
+      ...(state.assets.length ? [this.renderAssets()] : []));
     this.renderCastShelf();
     this.loraHost.replaceChildren(...(state.loras.length ? [this.renderLoras()] : []));
     this.pillsHost.replaceChildren(
@@ -1529,11 +1668,16 @@ export class CreatorEditor {
     // Seven equal siblings said none of that.
     return el("div", { class: "mmc-rail" }, [
       el("div", { class: "mmc-rail-group" }, [
+        // Per kind, not per family: LTX 2.5 reads a sheet of stills, so it
+        // offers the image tool and not the other two. Same argument as the
+        // family-wide case above — a tool that would only ever refuse is not a
+        // tool this node has.
         ...(takes ? [
-          tool("image", "Add image", "image"),
-          tool("video", "Add video", "video"),
-          tool("audio", "Add audio", "audio"),
-        ] : []),
+          ["image", "Add image", "image"],
+          ["video", "Add video", "video"],
+          ["audio", "Add audio", "audio"],
+        ].filter(([kind]) => S.takesKind(this.piece, kind))
+         .map(([kind, label, iconName]) => tool(kind, label, iconName)) : []),
         // LoRAs sit on the checkpoint, not in the reference slots, so no
         // attach rule ever gates them.
         el("button", {
@@ -1676,6 +1820,23 @@ export class CreatorEditor {
 
       const parts = [thumb, handle];
 
+      // What a plate is, in the one number that says it. Before the narrowing
+      // summary, because it is what the picture *is* rather than something
+      // somebody set about it.
+      //
+      // A plate of one panel says nothing with a count: there is no layout to
+      // report, only a picture the picker cut out, and "1 panels" is a badge
+      // that exists to be wrong. The scissors say the one true thing instead.
+      if (S.isPlate(asset) && asset.panels.length > 1) {
+        parts.push(el("span", {
+          class: "mmc-asset-panels",
+          text: t("{count} panels", { count: asset.panels.length }),
+        }));
+      } else if (asset.panels?.[0]?.cut) {
+        parts.push(el("span", {
+          class: "mmc-pl-cut on", title: t("Cut out of its background"),
+        }, [icon("scissors", 12)]));
+      }
       if (asset.role !== "reference") {
         parts.push(el("span", { class: "mmc-asset-role", text: asset.role === "first_frame" ? t("start") : t("end") }));
       }
@@ -1710,6 +1871,53 @@ export class CreatorEditor {
     // Bounded on the face (see the stylesheet), so it needs the wheel the way
     // the prompt box does — otherwise the row that scrolls zooms the canvas.
     return keepScroll(el("div", { class: "mmc-assets" }, this.state.assets.map(chip)));
+  }
+
+  /**
+   * The panels of a plate, as rows of its card: which picture each is, what it
+   * is a reference to, and whether it was cut out of its background.
+   *
+   * The chip is editable here because it is prose — it changes what the caption
+   * says a panel holds, and nothing about the file. The cutout is not: the
+   * sheet on disk *is* the cut-out version, so changing that mind is building
+   * the sheet again, which is what Edit sheet… is for. Said rather than offered as
+   * a control that would silently do nothing.
+   */
+  panelRows(asset) {
+    const rows = (asset.panels ?? []).map((panel, index) => el("div", {
+      class: "mmc-pl-row",
+    }, [
+      el("span", { class: "mmc-pl-no", text: String(index + 1) }),
+      el("img", {
+        class: "mmc-pl-thumb",
+        src: viewUrl(panel.filename, { preview: true }),
+        alt: panel.filename, title: panel.filename,
+      }),
+      el("span", { class: `mmc-pl-handle mmc-tag-${S.tagIndex(panel.handle)}`,
+                   text: `@${panel.handle}` }),
+      el("div", { class: "mmc-refsheet-opts" }, S.takeOptions({ kind: "image", role: "reference" }).map((key) =>
+        el("button", {
+          class: "mmc-refsheet-opt",
+          "aria-checked": String(key === (panel.takes ?? "full")),
+          title: key === (panel.takes ?? "full") || S.canCut(key) || !panel.cut
+            ? ""
+            : t("This panel is cut out, and a {key} reference is its background — "
+              + "edit the sheet to keep it.", { key: t(key) }),
+          onclick: () => {
+            if (key === "full") delete panel.takes;
+            else panel.takes = key;
+            this.commit();
+          },
+        }, [el("span", { text: t(key) })]))),
+      panel.cut
+        ? el("span", { class: "mmc-pl-cut on", title: t("Cut out of its background") },
+             [icon("scissors", 12)])
+        : el("span", { class: "mmc-pl-cut", title: t("Used whole, background and all") }),
+    ]));
+    return el("div", { class: "mmc-pl-rows" }, [
+      el("div", { class: "mmc-refsheet-name", text: t("panels") }),
+      ...rows,
+    ]);
   }
 
   /** Take one reference out of the run, or bring it back. Everything about it

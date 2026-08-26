@@ -42,6 +42,14 @@ SLOTS = {
     # is in the table because it is a file the user picks in the same control,
     # not because it becomes a link.
     "sam3": core.Slot("checkpoints", "the face detector"),
+    # The matte the *picker* takes, when you press the scissors on a picture.
+    # In the table because it is a file the user picks in the same control, not
+    # because it becomes a link: no graph this pack builds loads it any more, and
+    # `creator/plate.py` reads the name off the piece to run the matte where you
+    # can see the result. Optional, and with no `missing` sentence, because a
+    # render never asks for it — the picker does, and it says so there.
+    "cutout": core.Slot(
+        "background_removal", "the background-removal model", optional=True),
 }
 
 # The slots a generation routes between — H3's two checkpoints.

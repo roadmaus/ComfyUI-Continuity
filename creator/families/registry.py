@@ -96,6 +96,22 @@ DURATION_HEAD = {module.ID: module.DURATION_HEAD for module in DECLARED}
 # `tests/test_families.py` holds the two together.
 ROUTED = {module.ID: tuple(module.ROUTED) for module in DECLARED}
 
+# What a cut-out reference is composited onto, per family, as one grey level, and
+# whether a piece cuts them out unless it says otherwise. See `creator/cutout.py`
+# for what a cutout is and `compile.cutout_piece` for what "unless it says
+# otherwise" means.
+#
+# `getattr` with a default here rather than a bare attribute, which is the one
+# place these tables differ from the six above: a reference is a thing a *video*
+# request attaches, and the still families compile through `compile_image.py`,
+# which has no reference pool to cut anything out of. Asking them to declare a
+# backdrop for a pass they cannot run would be a field with no reader. The
+# fallbacks are the neutral answer — no cutout, mid grey if one ever happened.
+REF_BACKDROP = {module.ID: getattr(module, "REF_BACKDROP", 0.5)
+                for module in DECLARED}
+CUTOUT_DEFAULT = {module.ID: bool(getattr(module, "CUTOUT_DEFAULT", False))
+                  for module in DECLARED}
+
 # The families that render nothing but stills, in the registry's order.
 IMAGE_FAMILIES = tuple(module.ID for module in DECLARED
                        if module.PRODUCES == frozenset({"still"}))

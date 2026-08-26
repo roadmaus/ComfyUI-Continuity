@@ -95,7 +95,18 @@ _UI = {
     "sam3": {
         "title": "Face detector",
         "help": "A SAM3 checkpoint, from models/checkpoints — what the face pass asks "
-                "where the face is. Needed only when the face pass is switched on.",
+                "where the face is, and what the sheet editor asks when you click the "
+                "subject to cut out. Needed only when the face pass is on or the "
+                "scissors are given clicks.",
+        "hints": ["sam3"],
+    },
+    "cutout": {
+        "title": "Background remover",
+        "help": "Optional. A BiRefNet matte, from models/background_removal — what the "
+                "picker's scissors run to lift a reference's subject off its background, so "
+                "the room it was photographed in stops conditioning the render alongside "
+                "the face. Loaded when you press them, not when you render.",
+        "hints": ["birefnet"],
     },
 }
 
@@ -191,6 +202,18 @@ def manifest():
             # audio) pair and core masks the two streams separately, so the
             # supplied half can be held out of the denoise.
             "refine": True, "face": True, "audio": {"supplied": True},
+            # What the picker needs to make a plate for this family: the field
+            # its panels are laid on, whether a fresh pick starts out cut, and
+            # which weights slot names the matte. A capability rather than a
+            # control every family draws, because all three are facts about the
+            # family — see `creator/plate.py` — and because a family with no
+            # reference grammar has nothing to lay out. The default is off here:
+            # every H3 piece ever saved was rendered against whole reference
+            # pictures, and starting cut would change what an unedited workflow
+            # generates the day it is opened.
+            "cutout": {"default": declare.CUTOUT_DEFAULT,
+                       "backdrop": declare.REF_BACKDROP, "slot": "cutout",
+                       "segment": "sam3"},
             # Chained seams with feathering — the strip's whole grammar.
             "seams": True,
             # Whether a blended seam can *also* name its boundary frame to the
