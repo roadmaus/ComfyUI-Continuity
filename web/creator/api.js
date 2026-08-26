@@ -308,6 +308,133 @@ export async function listLoras({ folder = "", force = false } = {}) {
   return body;
 }
 
+/**
+ * The same rows, for an explicit list of names rather than a folder.
+ *
+ * What the manager's shelves are built on. A folder listing is newest-first and
+ * capped at the server's `MAX_LORAS`, which is right for browsing and wrong for
+ * a shelf — a favorite in a large folder would be starred and then unreachable.
+ * Naming the files bounds the work by the shelf instead.
+ *
+ * Uncached: a shelf is short, it is read on a tab click rather than on every
+ * keystroke, and it is the one listing whose *absences* matter — see `missing`.
+ *
+ * @returns {Promise<{loras: object[], missing: string[],
+ *                    folders: {path: string, count: number}[]}>}
+ */
+export async function listLorasNamed(names) {
+  if (!names.length) return { loras: [], missing: [], folders: [] };
+  const response = await api.fetchApi("/minimax_creator/loras_named", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ names }),
+  });
+  if (!response.ok) throw new Error(t("LoRA listing failed ({status})", { status: response.status }));
+  return await response.json();
+}
+
+// ---- LoRA manager preferences -----------------------------------------------
+//
+// Favorites, the scope the manager was last left in, and — the part that earns
+// its own file — what you last had each LoRA set to. A strength and a set of
+// trigger words are arrived at by trying the thing, and until now that work
+// lived only on the entry in creator_data: remove the LoRA, or add the same
+// file to the next piece, and it started again from the sidecar's guess.
+//
+// Its own file rather than a branch of the picker prefs above, because both are
+// written whole from a snapshot the window took when it opened. Two windows
+// open at once — the asset picker and this — and the second to write would
+// clobber the first's half of a shared object.
+//
+// {folder, favorites: [name],
+//  used: {[name]: {strength, on: [word], custom: [word], modes: {[family]: [id]}, at}}}
+//
+// `on` is what was in the prompt and `custom` is the vocabulary you have added
+// for that file, which is deliberately not the same list: a word you typed and
+// then switched off is still a word you typed, and the old model — one flat
+// list of the words currently on — could not express it, so it was lost.
+
+const LORA_PREFS_FILE = "minimax_creator.loras.json";
+const LORA_PREFS_KEY = "mmc-lora-prefs";
+// Where the folder used to live, alone, before any of the rest of this existed.
+const LEGACY_FOLDER_KEY = "mmc.loraFolder";
+
+// A working collection is a few hundred files and every one of them is a couple
+// of short arrays, so this is kilobytes. The cap is only there so that a machine
+// churning through thousands over years does not grow the file without bound;
+// the oldest-touched go first, which is also the order you would drop them in.
+const MAX_REMEMBERED = 500;
+
+let loraPrefsCache = null;
+
+const words = (value) =>
+  (Array.isArray(value) ? value.filter((word) => typeof word === "string" && word.trim()) : []);
+
+function normalizeUsed(raw) {
+  const out = {};
+  if (!raw || typeof raw !== "object") return out;
+  const entries = Object.entries(raw)
+    .filter(([name, memo]) => typeof name === "string" && memo && typeof memo === "object")
+    .sort((a, b) => (b[1].at ?? 0) - (a[1].at ?? 0))
+    .slice(0, MAX_REMEMBERED);
+  for (const [name, memo] of entries) {
+    const modes = {};
+    // Keyed by family: the checkpoint ids are the family's own, so one family's
+    // claim means nothing to another and must not be applied to it.
+    if (memo.modes && typeof memo.modes === "object") {
+      for (const [family, claim] of Object.entries(memo.modes)) {
+        const ids = names(claim);
+        if (ids.length) modes[family] = ids;
+      }
+    }
+    out[name] = {
+      strength: Number.isFinite(memo.strength) ? memo.strength : null,
+      on: words(memo.on),
+      custom: words(memo.custom),
+      modes,
+      at: Number.isFinite(memo.at) ? memo.at : 0,
+    };
+  }
+  return out;
+}
+
+function normalizeLoraPrefs(raw) {
+  return {
+    folder: typeof raw?.folder === "string" ? raw.folder : "",
+    favorites: names(raw?.favorites),
+    used: normalizeUsed(raw?.used),
+  };
+}
+
+export async function loadLoraPrefs() {
+  if (loraPrefsCache) return loraPrefsCache;
+  let raw = null;
+  try {
+    const response = await api.getUserData(LORA_PREFS_FILE);
+    if (response.status === 200) raw = await response.json();
+  } catch {
+    try { raw = JSON.parse(localStorage.getItem(LORA_PREFS_KEY) ?? "null"); } catch { /* fresh */ }
+  }
+  loraPrefsCache = normalizeLoraPrefs(raw);
+  // The one thing that was remembered before this file existed. Carried over on
+  // the first read so that an update does not read as the manager forgetting
+  // where you were, and left where it was — nothing writes it any more.
+  if (!raw) {
+    try { loraPrefsCache.folder = localStorage.getItem(LEGACY_FOLDER_KEY) || ""; } catch { /* denied */ }
+  }
+  return loraPrefsCache;
+}
+
+export function saveLoraPrefs(prefs) {
+  loraPrefsCache = normalizeLoraPrefs(prefs);
+  const body = JSON.stringify(loraPrefsCache);
+  try { localStorage.setItem(LORA_PREFS_KEY, body); } catch { /* quota; userdata still tries */ }
+  // Fire and forget, the same deal the picker's stars have: a star should feel
+  // instant, and losing one write is recoverable in a way a blocked click is not.
+  try { api.storeUserData(LORA_PREFS_FILE, loraPrefsCache, { stringify: true }); } catch { /* offline */ }
+  return loraPrefsCache;
+}
+
 /** The card's image or clip, from wherever the server found one — a sidecar's
  *  gallery, a `.preview.png` beside the file, or a thumbnail embedded in the
  *  safetensors header. 404s into the card's fallback when there is nothing. */

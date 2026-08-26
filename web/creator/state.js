@@ -1189,8 +1189,12 @@ export function parseState(raw) {
 
 /** LoRA entries, stripped to what compile.py reads. Shared by a segment's own
  *  list and the timeline's global one — they are the same kind of entry and are
- *  merged into one stack by `compile.merge_loras`. */
-function serializeLoras(entries, family = DEFAULT_VIDEO_FAMILY) {
+ *  merged into one stack by `compile.merge_loras`.
+ *
+ *  Exported for the LoRA manager's saved stacks, which are preset bodies: a
+ *  stack kept from that window and one captured by the preset library have to be
+ *  the same bytes, and the way to be sure of that is one serializer. */
+export function serializeLoras(entries, family = DEFAULT_VIDEO_FAMILY) {
   return entries.map((entry) => {
     const out = { name: entry.name, strength: round2(entry.strength) };
     if (entry.enabled === false) out.enabled = false;

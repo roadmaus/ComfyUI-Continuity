@@ -371,6 +371,43 @@ async def list_loras(request):
     return web.json_response(await loop.run_in_executor(None, _collect_loras, folder, refresh))
 
 
+def _collect_named(names):
+    """The rows for an explicit list of names, in the order asked for.
+
+    The folder listing above is newest-first and capped, which is the right
+    shape for browsing and the wrong one for a shelf: a favorite in a folder of
+    two thousand files would be starred and then unreachable, because the client
+    can only filter what the server chose to send. Naming the files sidesteps
+    the cap entirely — the work is bounded by the shelf, not by the folder.
+
+    What is *not* here comes back too. A LoRA can be renamed or deleted between
+    the day it was starred and the day the shelf is opened, and a shelf that
+    quietly showed nine of ten would be lying about which ten.
+    """
+    known = set(_lora_names())
+    rows = []
+    missing = []
+    for name in names:
+        path = folder_paths.get_full_path("loras", name) if name in known else None
+        if path is None:
+            missing.append(name)
+            continue
+        rows.append(lorameta.row(name, path))
+    # The folder counts ride along because the manager's scope picker lists both
+    # shelves and folders, and a session that opens straight onto a shelf would
+    # otherwise have a picker with no folders in it until you left.
+    return {"loras": rows, "missing": missing, "folders": _folder_counts(sorted(known))}
+
+
+@PromptServer.instance.routes.post("/minimax_creator/loras_named")
+async def loras_named(request):
+    body = await request.json()
+    raw = body.get("names")
+    names = [str(name) for name in raw][:MAX_LORAS] if isinstance(raw, list) else []
+    loop = asyncio.get_running_loop()
+    return web.json_response(await loop.run_in_executor(None, _collect_named, names))
+
+
 def _lora_path(request):
     """The absolute path behind a `?name=`, or None.
 

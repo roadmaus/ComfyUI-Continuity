@@ -292,16 +292,17 @@ export class PreStageEditor {
     this.commit();
   }
 
-  async manageLoras() {
-    await openLoras({ state: this.state, checkpointModes: false, onChange: () => this.commit() });
+  async manageLoras(entry = null) {
+    await openLoras({ state: this.state, checkpointModes: false, scope: "prestage",
+                      reveal: entry?.name ?? null, onChange: () => this.commit() });
     this.commit();
   }
 
   /** Try another file in this LoRA's slot. See `state.replaceLora`. */
   async swapLora(entry) {
     await openLoras({
-      state: this.state, checkpointModes: false, swapping: entry.name,
-      onChange: () => this.commit(),
+      state: this.state, checkpointModes: false, scope: "prestage",
+      swapping: entry.name, onChange: () => this.commit(),
     });
     this.commit();
   }
@@ -528,7 +529,7 @@ export class PreStageEditor {
     return loraBlock(this.state, {
       targets: null,
       onToggle: (entry) => { S.toggleLora(this.state, entry.name); this.commit(); },
-      onManage: () => this.manageLoras(),
+      onManage: (entry) => this.manageLoras(entry),
       onSwap: (entry) => this.swapLora(entry),
       onRemove: (entry) => { S.removeLora(this.state, entry.name); this.commit(); },
     });

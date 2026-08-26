@@ -56,7 +56,17 @@ class Node {
   removeAttribute(k) { delete this.attrs[k]; }
   addEventListener(t, fn) { (this.listeners[t] ??= []).push(fn); }
   removeEventListener() {}
-  appendChild(c) { this.children.push(c); c.parent = this; return c; }
+  /** A fragment is emptied into the parent rather than added to it, which is
+   *  what a real one does and what the callers are counting on: the LoRA grid
+   *  builds a chunk of cards in one and expects the grid to end up holding the
+   *  cards, not a wrapper around them. */
+  appendChild(c) {
+    if (c.tagName === "#fragment") {
+      for (const kid of c.children.splice(0)) this.appendChild(kid);
+      return c;
+    }
+    this.children.push(c); c.parent = this; return c;
+  }
   append(...c) { c.forEach((x) => this.appendChild(x)); }
   // The old children are detached, as a real one detaches them: `isConnected`
   // is read off the parent chain, and a node left pointing at its former parent
@@ -78,6 +88,17 @@ class Node {
     c.forEach((x) => this.appendChild(x));
   }
   insertBefore(n) { return this.appendChild(n); }
+  /** Swap this node for another where it stands, keeping the position. The LoRA
+   *  manager rebuilds one card in place on every edit — redrawing the grid would
+   *  throw away the scroll and every chunk appended to reach it — so a shim
+   *  without this cannot get past the first click in that window. */
+  replaceWith(next) {
+    if (!this.parent) return;
+    const at = this.parent.children.indexOf(this);
+    this.parent.children[at] = next;
+    next.parent = this.parent;
+    this.parent = null;
+  }
   // A drag takes the pointer so it keeps arriving here once it has left the
   // element. Nothing to emulate — the tests deliver the moves themselves — but
   // the call is real and an element without it throws on pointerdown.
@@ -214,6 +235,8 @@ globalThis.document = {
   createElement: (tag) => new Node(String(tag).toUpperCase()),
   createElementNS: (ns, tag) => new Node(tag),
   createTextNode: (t) => Object.assign(new Node("#text"), { textContent: t }),
+  // Emptied into whatever it is appended to — see Node.appendChild.
+  createDocumentFragment: () => new Node("#fragment"),
   body: new Node("body"),
   head: new Node("head"),
   documentElement: new Node("html"),
@@ -256,6 +279,30 @@ globalThis.ResizeObserver = class {
   observe() {} unobserve() {} disconnect() { this.dead = true; }
   fire() { if (!this.dead) this.fn([]); }
 };
+// The LoRA grid hands a card's showcase clip a src only once it nears the
+// viewport: a folder of hundreds each opening a connection at once is the
+// media-element cap and the six-per-host budget both blown in one scroll.
+// Nothing here has a viewport, so nothing ever intersects — this exists so that
+// registering one is not a crash, which is what kept that window out of the
+// suite entirely. Recorded like the resize ones, so a test can fire it by hand.
+globalThis.IntersectionObserver = class {
+  constructor(fn) { this.fn = fn; globalThis.__observers.push(this); }
+  observe() {} unobserve() {} disconnect() { this.dead = true; }
+  fire(entries = []) { if (!this.dead) this.fn(entries); }
+};
+// Backed by a Map rather than absent. Every localStorage access in the pack is
+// wrapped against a browser that denies it outright, so leaving it undefined
+// did not throw — it quietly sent all of them down the denied branch, which is
+// the one path those features are least interesting on.
+globalThis.localStorage = (() => {
+  const store = new Map();
+  return {
+    getItem: (k) => (store.has(k) ? store.get(k) : null),
+    setItem: (k, v) => { store.set(k, String(v)); },
+    removeItem: (k) => { store.delete(k); },
+    clear: () => { store.clear(); },
+  };
+})();
 globalThis.Image = class { set src(v) {} };
 globalThis.fetch = async () => ({ ok: true, json: async () => ({}) });
 export const NodeClass = Node;

@@ -1829,8 +1829,11 @@ export class CreatorEditor {
     ]);
   }
 
-  async manageLoras() {
+  /** `reveal` is the chip that asked. Opening the manager from one means "this
+   *  one", and landing at the top of a folder of hundreds did not say so. */
+  async manageLoras(entry = null) {
     await openLoras({ state: this.state, family: S.pieceFamily(this.piece),
+                      scope: "piece", reveal: entry?.name ?? null,
                       onChange: () => this.commit() });
     this.commit();
   }
@@ -1839,7 +1842,8 @@ export class CreatorEditor {
    *  picker and the pick lands where this entry stood. See `state.replaceLora`. */
   async swapLora(entry) {
     await openLoras({ state: this.state, family: S.pieceFamily(this.piece),
-                      swapping: entry.name, onChange: () => this.commit() });
+                      scope: "piece", swapping: entry.name,
+                      onChange: () => this.commit() });
     this.commit();
   }
 
@@ -1848,7 +1852,7 @@ export class CreatorEditor {
       family: S.pieceFamily(this.piece),
       targets: S.checkpointsFor(this.state, S.pieceFamily(this.piece)),
       onToggle: (entry) => { S.toggleLora(this.state, entry.name); this.commit(); },
-      onManage: () => this.manageLoras(),
+      onManage: (entry) => this.manageLoras(entry),
       onSwap: (entry) => this.swapLora(entry),
       onRemove: (entry) => { S.removeLora(this.state, entry.name); this.commit(); },
     });

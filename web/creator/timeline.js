@@ -518,7 +518,7 @@ class Timeline {
       // `commit` re-renders, which redraws these chips and the pill counting
       // them: a mute changes both.
       onToggle: (entry) => { S.toggleLora(this.timeline, entry.name); this.commit(); },
-      onManage: () => this.openLoras(),
+      onManage: (entry) => this.openLoras(entry),
       onSwap: (entry) => this.swapLora(entry),
       onRemove: (entry) => { S.removeLora(this.timeline, entry.name); this.commit(); },
     })] : []));
@@ -530,6 +530,7 @@ class Timeline {
       state: this.timeline,
       family: S.pieceFamily(this.timeline),
       targets: S.timelineCheckpoints(this.timeline),
+      scope: "piece",
       swapping: entry.name,
       onChange: () => this.commit(),
     });
@@ -2526,11 +2527,14 @@ class Timeline {
    * global LoRA is patched onto every segment and the segments need not agree,
    * so "idle" here means it lands on none of them, not on the wrong one.
    */
-  async openLoras() {
+  async openLoras(entry = null) {
     await openLoras({
       state: this.timeline,
       family: S.pieceFamily(this.timeline),
       targets: S.timelineCheckpoints(this.timeline),
+      scope: "piece",
+      // The chip that asked, so the grid opens on it. See `loras.revealNow`.
+      reveal: entry?.name ?? null,
       onChange: () => this.commit(),
     });
     this.render();
@@ -3325,11 +3329,13 @@ export class TimelineBody {
     this.commit();
   }
 
-  async manageLoras() {
+  async manageLoras(entry = null) {
     await openLoras({
       state: this.timeline,
       family: S.pieceFamily(this.timeline),
       targets: S.timelineCheckpoints(this.timeline),
+      scope: "piece",
+      reveal: entry?.name ?? null,
       onChange: () => this.commit(),
     });
     this.commit();

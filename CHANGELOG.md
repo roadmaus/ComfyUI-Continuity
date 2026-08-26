@@ -2,6 +2,36 @@
 
 ## Unreleased
 
+**The LoRA manager remembers what you set it to.** A strength you arrived at by
+trying it, and the two words out of a sidecar's nine that actually did anything,
+used to live on the entry in creator_data — which is to say they lived until the
+✕, and the next piece started again from the file's own guess. They are kept per
+file now, and adding a LoRA anywhere picks up where you left it. A card whose
+settings came from you rather than from its sidecar says so, and a file nobody
+has used yet still starts from whatever its sidecar recorded.
+
+Trigger words are kept the same way, including the ones that are switched off.
+A word you type is part of that LoRA's vocabulary from then on: switch it off and
+the chip stays, so turning it back on is a click rather than retyping it. The ✕
+on a chip of your own is what forgets one for good.
+
+**Opening the manager from a chip goes to that LoRA.** It lands on the card, in
+whatever folder the file is in, and marks it for a moment. Before this the window
+opened on the folder you happened to be in last, scrolled to the top, with no
+hint of which of several hundred cards you had just clicked.
+
+**Star a LoRA, and save whole stacks.** The scope picker now offers two shelves
+above the folder list — Favorites and Recently used — and the shelves are read by
+name rather than by walking a folder, so a starred file stays reachable even in a
+folder past the listing cap. A file that has been renamed or deleted since you
+starred it is named as missing rather than quietly dropped.
+
+A stack you have built is kept under the manager's own Stacks tab, as a preset
+holding nothing but its LoRAs: it is the same body the preset library writes, so
+it lists, exports and cross-applies there like anything else you have kept. Apply
+one over the current stack with Replace, or merge it into what is already on the
+node with Add.
+
 **LTX 2.5 reads references.** The second video family used to refuse every
 attachment, because a citation reached its text encoder as a bare `<Picture 1>`
 with no picture behind it. It has a reference grammar now, and it is Lightricks'

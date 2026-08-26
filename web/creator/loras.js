@@ -15,10 +15,23 @@
 // A real collection is hundreds or thousands of files, so the grid never holds
 // all of them: a folder picker narrows what the server even walks, and what
 // comes back is appended a screenful at a time as you scroll.
+//
+// Three things outlive the window, in `api.loadLoraPrefs`. The scope it was last
+// left in, so it opens where you were. Which files are starred, which is the
+// only way back to a LoRA in a folder too large to list. And what you last had
+// each LoRA set to — the strength you settled on and the trigger words you kept
+// — because that is the part that took the trying, and it used to be thrown away
+// the moment the LoRA left the stack.
+//
+// A saved *stack* is a preset and lives in the preset store, under the Stacks
+// tab here. `presets.js` already knows how to name, file, cross-apply and export
+// a set of sections, and a LoRA stack is one of its sections; a second store for
+// the same data would be a second set of those answers to keep in step.
 
 import { el, ICONS, svg, drawFrame, mountOverlay } from "./dom.js";
-import { listLoras, loraPreviewUrl } from "./api.js";
+import { listLoras, listLorasNamed, loraPreviewUrl, loadLoraPrefs, saveLoraPrefs } from "./api.js";
 import { openLoraDetail } from "./loradetail.js";
+import { listPresets, loadBody, savePreset, deletePreset } from "./presets.js";
 import { t } from "./i18n.js";
 import * as S from "./state.js";
 
@@ -28,16 +41,32 @@ import * as S from "./state.js";
 const CHUNK = 48;
 const LOOKAHEAD = 500;
 
-// The last folder browsed, so reopening the manager lands where you left off.
-const FOLDER_KEY = "mmc.loraFolder";
+// The two scopes that are not places. A folder path cannot collide with these:
+// they come from splitting a relative filename on "/", and a leading colon is
+// not something any of them starts with.
+const FAVORITES = ":favorites";
+const RECENT = ":recent";
+const isShelf = (scope) => scope === FAVORITES || scope === RECENT;
+
+// How many of the recently-used to put on that shelf. Long enough to cover what
+// you are actually working with this month, short enough to still be a shelf
+// rather than a second All.
+const RECENT_SHOWN = 60;
 
 const MAX_STRENGTH = 2;
+
+const same = (a, b) => a.toLowerCase() === b.toLowerCase();
+const has = (list, word) => list.some((entry) => same(entry, word));
 
 /** A LoRA's filename as the chips, the swap header and the strip face's pill
  *  say it: no folder, no extension. What a card shows is the sidecar's title
  *  where there is one. */
 export const loraBase = (entry) => baseName(entry.name);
 const baseName = (name) => name.split("/").pop().replace(/\.[^.]+$/, "");
+
+/** The folder a name sits in, "" at the root — the scope that certainly holds
+ *  it, which is what `reveal` opens on. */
+const folderOf = (name) => name.split("/").slice(0, -1).join("/");
 
 /** What the per-LoRA checkpoint control offers, for a family that routes.
  *  Built per family rather than once, because the choices *are* the family's
@@ -179,6 +208,12 @@ function swapLoraButton(entry, onclick) {
  * @param {string} [options.swapping]  the name of an entry to replace: the grid
  *                                     becomes a one-shot picker, and the card
  *                                     you click takes that entry's slot.
+ * @param {string} [options.reveal]    the name of a LoRA to scroll to and mark.
+ *                                     Opening the manager from a chip means
+ *                                     "this one" — see `revealNow`.
+ * @param {string} [options.scope]     which kind of node this stack belongs to,
+ *                                     for a stack saved from here: "piece",
+ *                                     "shot" or "prestage".
  */
 export function openLoras(options) {
   return new Promise((resolve) => {
@@ -191,9 +226,11 @@ class LoraManager {
    *  marks — the PreStage's image models have one DiT each, so "which
    *  checkpoint does this LoRA claim" is not a question there. */
   constructor({ state, onChange, targets, family = S.DEFAULT_VIDEO_FAMILY,
-                checkpointModes = true, swapping = null }, resolve) {
+                checkpointModes = true, swapping = null, reveal = null,
+                scope = "piece" }, resolve) {
     this.state = state;
     this.family = family;
+    this.presetScope = scope;
     // ...and dropped for a family that ships one transformer, for the same
     // reason the PreStage drops it: "which checkpoint does this LoRA claim" is
     // not a question where there is one. `S.routing` is the whole test.
@@ -203,6 +240,10 @@ class LoraManager {
     // rather than a second browser that would need its own folder memory,
     // chunking, previews and sidecar reading.
     this.swapping = swapping;
+    // Which card to scroll to once the grid has one. Cleared the moment it is
+    // spent, so that typing in the search box does not keep jumping back.
+    this.reveal = swapping ? null : reveal;
+    this.revealTried = false;
     this.targets = targets ?? (this.checkpointModes
       ? S.checkpointsFor(state, family) : [...S.checkpointsOf(family)]);
     this.onChange = onChange;
@@ -210,14 +251,19 @@ class LoraManager {
     this.query = "";
     this.rows = [];
     this.folders = [];
+    this.missing = [];
     this.cards = new Map();   // name -> the card element currently in the grid
     this.shown = 0;
     this.loaded = false;
-    try {
-      this.folder = localStorage.getItem(FOLDER_KEY) || "";
-    } catch {
-      this.folder = "";   // storage can be denied outright; the picker still works
-    }
+    // Which LoRAs on screen were set up from memory rather than from their
+    // sidecar, so the card can say so — a slider sitting somewhere the file's
+    // author did not put it is otherwise unexplained.
+    this.restored = new Set();
+    this.tab = "loras";
+    // Until the prefs land: no favorites, nothing remembered, browsing
+    // everything. The grid says "Loading…" over all of it anyway.
+    this.prefs = { folder: "", favorites: [], used: {} };
+    this.scope = "";
   }
 
   mount() {
@@ -228,8 +274,8 @@ class LoraManager {
     });
     this.picker = el("select", {
       class: "mmc-folder",
-      title: t("Which folder under models/loras to browse."),
-      onchange: (event) => this.setFolder(event.target.value),
+      title: t("What the grid shows: a shelf of your own, or a folder under models/loras."),
+      onchange: (event) => this.setScope(event.target.value),
     });
     this.search = el("input", {
       class: "mmc-search",
@@ -247,22 +293,42 @@ class LoraManager {
       }),
     ]);
 
+    this.bar = el("div", { class: "mmc-modal-bar" }, [
+      this.picker,
+      this.search,
+      el("button", { class: "mmc-ghost", text: t("Rescan"), onclick: () => this.load({ force: true }) }),
+    ]);
+    this.stacksPane = el("div", { class: "mmc-stacks", style: { display: "none" } });
+    this.stacks = [];
+
+    // A swap is one question with one answer in it — "which file instead" — so
+    // it gets the title it always had and none of the tabs. Applying a whole
+    // stack is not an answer to it.
+    this.tabs = this.swapping
+      ? [el("button", {
+          class: "mmc-tab", "aria-selected": true,
+          text: t("Replace {name}", { name: baseName(this.swapping) }),
+        })]
+      : [
+          this.loraTab = el("button", {
+            class: "mmc-tab", "aria-selected": true, text: t("LoRAs"),
+            onclick: () => this.setTab("loras"),
+          }),
+          this.stackTab = el("button", {
+            class: "mmc-tab", "aria-selected": false, text: t("Stacks"),
+            title: t("Whole stacks you have saved, kept with your presets."),
+            onclick: () => this.setTab("stacks"),
+          }),
+        ];
+
     this.modal = el("div", { class: "mmc-modal" }, [
       el("div", { class: "mmc-modal-head" }, [
-        el("button", {
-          class: "mmc-tab", "aria-selected": true,
-          text: this.swapping
-            ? t("Replace {name}", { name: baseName(this.swapping) })
-            : t("LoRAs"),
-        }),
+        ...this.tabs,
         el("button", { class: "mmc-close", text: "✕", onclick: () => this.close() }),
       ]),
-      el("div", { class: "mmc-modal-bar" }, [
-        this.picker,
-        this.search,
-        el("button", { class: "mmc-ghost", text: t("Rescan"), onclick: () => this.load({ force: true }) }),
-      ]),
+      this.bar,
       this.grid,
+      this.stacksPane,
       this.foot,
     ]);
     this.modal.style.position = "relative";
@@ -275,17 +341,35 @@ class LoraManager {
     this.unmount = mountOverlay(this.overlay, () => this.close());
 
     this.renderFoot();
-    this.load();
+    this.start();
     setTimeout(() => this.search.focus(), 30);
   }
 
+  /** Read what was remembered, then open on it. The prefs are one small file
+   *  and the grid is showing "Loading…" for the listing regardless, so there is
+   *  nothing to be gained by drawing a scope the user did not leave it in. */
+  async start() {
+    this.prefs = { ...(await loadLoraPrefs()) };
+    // A LoRA asked for by name is the whole reason the window is open, and it
+    // will not be on a shelf that does not hold it. Its own folder is where it
+    // certainly is.
+    this.scope = this.reveal ? folderOf(this.reveal) : this.prefs.folder;
+    this.load();
+  }
+
+  writePrefs() {
+    this.prefs = { ...saveLoraPrefs(this.prefs) };
+  }
+
   async load({ force = false } = {}) {
-    const folder = this.folder;
+    const scope = this.scope;
     this.loaded = false;
     this.renderGrid();
     let body;
     try {
-      body = await listLoras({ folder, force });
+      body = isShelf(scope)
+        ? await listLorasNamed(this.shelved(scope))
+        : await listLoras({ folder: scope, force });
       this.loadError = null;
     } catch (error) {
       body = { loras: [], folders: this.folders };
@@ -293,34 +377,67 @@ class LoraManager {
     }
     // A slow folder answering after you have already moved on would otherwise
     // repaint the grid with the wrong folder's cards.
-    if (folder !== this.folder) return;
+    if (scope !== this.scope) return;
     this.rows = body.loras ?? [];
-    this.folders = body.folders ?? [];
+    this.folders = body.folders ?? this.folders;
+    this.missing = body.missing ?? [];
     this.matched = body.matched ?? this.rows.length;
+    // A shelf is the files it names, all of them: there is no cap to be under.
     this.truncated = !!body.truncated;
     this.loaded = true;
+    // Asked for a LoRA that is not here after all — renamed, deleted, or in a
+    // folder the name does not describe. One retry across everything, then the
+    // grid is left as it is and the search box is the way to look.
+    if (this.reveal && !this.rows.some((row) => row.name === this.reveal)
+        && !this.revealTried && this.scope !== "") {
+      this.revealTried = true;
+      this.scope = "";
+      return this.load();
+    }
     this.renderPicker();
     this.renderGrid();
   }
 
-  setFolder(folder) {
-    this.folder = folder;
-    try {
-      localStorage.setItem(FOLDER_KEY, folder);
-    } catch { /* denied storage is not worth failing a click over */ }
+  /** The names on a shelf, in the order it shows them. Favorites keep the order
+   *  they were starred in; recents are newest first, which is the only order a
+   *  list of recents can be in. */
+  shelved(scope) {
+    if (scope === FAVORITES) return [...this.prefs.favorites];
+    return Object.entries(this.prefs.used)
+      .sort((a, b) => (b[1].at ?? 0) - (a[1].at ?? 0))
+      .slice(0, RECENT_SHOWN)
+      .map(([name]) => name);
+  }
+
+  setScope(scope) {
+    this.scope = scope;
+    // Only a folder is a place to open on next time. A shelf is a way of
+    // looking at the collection rather than part of it, and landing on an empty
+    // Favorites every morning is not where anyone means to start.
+    if (!isShelf(scope)) {
+      this.prefs.folder = scope;
+      this.writePrefs();
+    }
     this.load();
   }
 
   renderPicker() {
     // The remembered folder may have been renamed or emptied since; it stays in
     // the list so the picker still shows what it is actually browsing.
-    const known = this.folders.some((entry) => entry.path === this.folder);
-    const entries = known ? this.folders : [...this.folders, { path: this.folder, count: 0 }];
-    this.picker.replaceChildren(...entries.map((entry) => el("option", {
-      value: entry.path,
-      text: `${entry.path || t("All folders")} (${entry.count})`,
-    })));
-    this.picker.value = this.folder;
+    const known = isShelf(this.scope) || this.folders.some((entry) => entry.path === this.scope);
+    const folders = known ? this.folders : [...this.folders, { path: this.scope, count: 0 }];
+    const option = (value, text) => el("option", { value, text });
+    // Shelves and folders in one control, because they answer one question —
+    // what is the grid showing — and two controls would let them disagree. The
+    // groups are what keep "Favorites" from reading as a directory.
+    const shelves = el("optgroup", { label: t("Shelves") }, [
+      option(FAVORITES, `★ ${t("Favorites")} (${this.prefs.favorites.length})`),
+      option(RECENT, `${t("Recently used")} (${Object.keys(this.prefs.used).length})`),
+    ]);
+    const places = el("optgroup", { label: t("Folders") }, folders.map(
+      (entry) => option(entry.path, `${entry.path || t("All folders")} (${entry.count})`)));
+    this.picker.replaceChildren(shelves, places);
+    this.picker.value = this.scope;
   }
 
   /** Anything the user could reasonably type: filename, Civitai title, base
@@ -335,21 +452,95 @@ class LoraManager {
   // ---- edits ---------------------------------------------------------------
 
   changed() {
+    this.rememberAll();
     this.onChange?.();
     this.renderFoot();
   }
 
+  // ---- memory --------------------------------------------------------------
+  //
+  // What each LoRA was last set to, so that adding one back — to this piece next
+  // week, or to a piece that has never seen it — starts where you left off
+  // rather than where its sidecar guessed. The sidecar is still the fallback,
+  // and still the only thing a LoRA nobody has used yet has.
+
+  memoryOf(name) {
+    return this.prefs.used[name] ?? null;
+  }
+
+  /**
+   * Write every live entry down. All of them rather than the one that changed,
+   * because `changed` is called from six places and threading the entry through
+   * all of them would be six chances to forget one — and the stack is a handful
+   * of entries, not a list to walk carefully.
+   *
+   * `custom` is only recomputed where the row is on screen: the sidecar's words
+   * are what "custom" is defined against, and a stack can hold entries from
+   * folders this scope is not showing. Their vocabulary is left as it was rather
+   * than guessed at from a sidecar we cannot read.
+   */
+  rememberAll() {
+    const now = Date.now();
+    for (const entry of this.state.loras ?? []) {
+      const previous = this.memoryOf(entry.name);
+      const row = this.rows.find((candidate) => candidate.name === entry.name);
+      const custom = [...(previous?.custom ?? [])];
+      if (row) {
+        const sidecar = row.trained_words || [];
+        for (const word of entry.triggers ?? []) {
+          if (has(sidecar, word) || has(custom, word)) continue;
+          custom.push(word);
+        }
+      }
+      this.prefs.used[entry.name] = {
+        strength: Number.isFinite(entry.strength) ? entry.strength : null,
+        on: [...(entry.triggers ?? [])],
+        custom,
+        modes: {
+          ...(previous?.modes ?? {}),
+          // Only where the family has checkpoints to claim between. A pre-stage
+          // session must not write an empty claim over the one a piece made:
+          // the ids belong to the family, and it has none to overwrite it with.
+          ...(this.checkpointModes ? { [this.family]: S.loraModes(entry, this.family) } : {}),
+        },
+        at: now,
+      };
+    }
+    this.writePrefs();
+  }
+
   toggle(row) {
     if (this.swapping) return this.swapTo(row);
-    if (S.findLora(this.state, row.name)) S.removeLora(this.state, row.name);
-    // Both of these are the sidecar's opinion and both stay editable: the
-    // triggers become chips that can be switched off, the strength a slider
-    // that can be dragged. Starting from what the file's author chose is only
-    // a better guess than 1.00, not a decision.
-    else S.addLora(this.state, row.name, row.trained_words || [], row.strength,
-                   this.family);
+    if (S.findLora(this.state, row.name)) {
+      // Remembered on the way out, which is the whole point: the setup survives
+      // the removal, and putting the LoRA back brings it with it.
+      this.rememberAll();
+      S.removeLora(this.state, row.name);
+      this.restored.delete(row.name);
+    } else {
+      this.add(row);
+    }
     this.refreshCard(row);
     this.changed();
+  }
+
+  /**
+   * Add one, from memory where there is any and from the sidecar otherwise.
+   *
+   * Both are opinions and both stay editable: the triggers become chips that can
+   * be switched off, the strength a slider that can be dragged. What memory
+   * changes is whose opinion it starts from — yours, from the last time you used
+   * this file, rather than the author's guess at how anyone would.
+   */
+  add(row) {
+    const memory = this.memoryOf(row.name);
+    const strength = Number.isFinite(memory?.strength) ? memory.strength : row.strength;
+    const entry = S.addLora(this.state, row.name, memory ? memory.on : (row.trained_words || []),
+                            strength, this.family);
+    if (!entry) return;
+    const claim = memory?.modes?.[this.family];
+    if (this.checkpointModes && claim?.length) entry.modes = [...claim];
+    if (memory) this.restored.add(row.name);
   }
 
   /** Take the slot of the entry this manager was opened to replace, and leave:
@@ -360,6 +551,26 @@ class LoraManager {
                   row.strength, this.family);
     this.changed();
     this.close();
+  }
+
+  // ---- favorites -----------------------------------------------------------
+
+  isFavorite(name) {
+    return this.prefs.favorites.includes(name);
+  }
+
+  toggleFavorite(row) {
+    this.prefs.favorites = this.isFavorite(row.name)
+      ? this.prefs.favorites.filter((name) => name !== row.name)
+      : [...this.prefs.favorites, row.name];
+    this.writePrefs();
+    // On the favorites shelf a star changes what is on screen, so the shelf is
+    // re-read; anywhere else it only changes the card it is on.
+    if (this.scope === FAVORITES) this.load();
+    else {
+      this.refreshCard(row);
+      this.renderPicker();   // the count in the scope picker moved
+    }
   }
 
   /** Neither of these re-renders the grid: the trigger row owns a text input,
@@ -377,6 +588,26 @@ class LoraManager {
     entry.triggers.push(word);
     this.changed();
     return true;
+  }
+
+  /**
+   * Drop a word of your own for good — out of the prompt and out of the
+   * vocabulary this LoRA remembers.
+   *
+   * The other half of letting a custom word survive being switched off. Once an
+   * off word is still a chip, "click again to remove it" is no longer available
+   * as the way to be rid of one, and without this there would be no way at all:
+   * a typo typed once would sit under that LoRA forever.
+   *
+   * Out of the entry first, so that the write `changed` triggers does not read
+   * it back off the live list and put it straight back.
+   */
+  forgetTrigger(entry, word) {
+    const at = entry.triggers.findIndex((w) => same(w, word));
+    if (at >= 0) entry.triggers.splice(at, 1);
+    const memory = this.memoryOf(entry.name);
+    if (memory) memory.custom = memory.custom.filter((known) => !same(known, word));
+    this.changed();
   }
 
   setModes(entry, row, choice) {
@@ -418,7 +649,15 @@ class LoraManager {
 
     const rows = this.visible();
     if (!rows.length) {
-      const where = this.folder ? `“${this.folder}”` : "models/loras";
+      if (!this.query && this.scope === FAVORITES) {
+        return this.message(t("No favorites yet — hover a card and hit the star. "
+                            + "This is how you get back to a LoRA in a folder too big to scroll."));
+      }
+      if (!this.query && this.scope === RECENT) {
+        return this.message(t("Nothing used yet. Every LoRA you set up turns up here, "
+                            + "with the strength and the trigger words you left on it."));
+      }
+      const where = this.scopeLabel();
       const capped = this.truncated
         ? " " + t("Only the {shown} most recent of {matched} here were listed — try a narrower folder.",
                   { shown: this.rows.length, matched: this.matched })
@@ -435,6 +674,42 @@ class LoraManager {
     this.grid.replaceChildren(this.note);
     this.grid.scrollTop = 0;
     this.fill();
+    this.revealNow();
+  }
+
+  /** What to call the scope in a sentence. */
+  scopeLabel() {
+    if (this.scope === FAVORITES) return t("your favorites");
+    if (this.scope === RECENT) return t("what you have used");
+    return this.scope ? `“${this.scope}”` : "models/loras";
+  }
+
+  /**
+   * Scroll to the LoRA the window was opened for and mark it.
+   *
+   * Opening the manager from a chip on the node face means "this one" — and the
+   * grid it opened onto was a folder of hundreds, scrolled to the top, with no
+   * hint of which card the chip you clicked belongs to. Finding it by hand was
+   * the whole of what used to happen.
+   *
+   * Chunks are appended past it rather than waiting for a scroll to ask for
+   * them: `fill` stops a screenful below the fold, and the card is only
+   * scrollable-to once it exists. One-shot — the reveal is spent here, so that
+   * typing in the search box afterwards does not keep dragging the grid back.
+   */
+  revealNow() {
+    const name = this.reveal;
+    if (!name) return;
+    this.reveal = null;
+    const at = this.pending.findIndex((row) => row.name === name);
+    if (at < 0) return;
+    while (this.shown <= at && this.shown < this.pending.length) this.appendChunk();
+    const card = this.cards.get(name);
+    if (!card) return;
+    card.scrollIntoView({ block: "center" });
+    // A grid of near-identical cards does not say which one moved under you.
+    card.classList.add("mmc-lora-found");
+    setTimeout(() => card.classList.remove("mmc-lora-found"), 1600);
   }
 
   /** Append chunks until the note sits far enough below the fold. */
@@ -464,6 +739,15 @@ class LoraManager {
     const left = this.pending.length - this.shown;
     if (left > 0) {
       this.note.textContent = t("{left} more below…", { left });
+    } else if (this.missing.length) {
+      // A shelf names its files, so it is the one listing that can tell the
+      // difference between "not here" and "gone" — and it should, rather than
+      // quietly showing nine of the ten you starred.
+      this.note.textContent = t(
+        this.missing.length === 1
+          ? "{count} file on this shelf is no longer in models/loras: {names}"
+          : "{count} files on this shelf are no longer in models/loras: {names}",
+        { count: this.missing.length, names: this.missing.map(baseName).join(", ") });
     } else if (this.truncated) {
       // The server described only the newest of what it found, and the search
       // box only filters what it sent — so say so rather than let a LoRA that
@@ -623,6 +907,18 @@ class LoraManager {
     }
     const check = el("div", { class: "mmc-check" });
     art.appendChild(check);
+    // Not while swapping: every card there is a candidate for one slot, and
+    // filing one away is not what the click you came to make is about.
+    if (!this.swapping) {
+      const starred = this.isFavorite(row.name);
+      art.appendChild(el("button", {
+        class: `mmc-lora-star${starred ? " on" : ""}`,
+        title: starred ? t("Remove from favorites") : t("Add to favorites"),
+        // The art is itself a button that adds the LoRA, and a star is a
+        // different errand entirely.
+        onclick: (event) => { event.stopPropagation(); this.toggleFavorite(row); },
+      }, [svg(ICONS.star, 13)]));
+    }
     if (row.preview === "video") this.hoverClip(art, check, loraPreviewUrl(row.name));
     card.appendChild(art);
 
@@ -665,16 +961,30 @@ class LoraManager {
    * can delete, and creator_data stores whichever survived. So a LoRA whose
    * sidecar is wrong, or has none at all, is no harder to trigger than one whose
    * sidecar is right.
+   *
+   * Which chips exist and which are lit are two questions, and they used to have
+   * one answer. `entry.triggers` is the words going into the prompt, so a chip
+   * drawn only from it could not show a word that is off — the sidecar's words
+   * survived being switched off because they are redrawn from the sidecar, and a
+   * word you typed simply vanished, with no way back but typing it again. So the
+   * chips are the sidecar's words plus the vocabulary this LoRA remembers, and
+   * `entry.triggers` decides which of them are pressed.
    */
   triggerBox(entry, row) {
     if (!Array.isArray(entry.triggers)) entry.triggers = [];
     const suggested = row.trained_words || [];
-    const isSuggested = (word) => suggested.some((s) => s.toLowerCase() === word.toLowerCase());
-    const chosen = (word) => entry.triggers.some((w) => w.toLowerCase() === word.toLowerCase());
+    const chosen = (word) => has(entry.triggers, word);
+    // Yours: what memory has for this file, plus anything live that neither list
+    // accounts for — a stack applied from a preset arrives with words this
+    // machine has never seen typed.
+    const remembered = (this.memoryOf(entry.name)?.custom ?? []).filter((word) => !has(suggested, word));
+    const own = [...remembered];
+    for (const word of entry.triggers) {
+      if (!has(suggested, word) && !has(own, word)) own.push(word);
+    }
 
     const chips = el("div", { class: "mmc-trigs" });
     const renderChips = () => {
-      const own = entry.triggers.filter((word) => !isSuggested(word));
       chips.replaceChildren(...[
         ...suggested.map((word) => el("button", {
           class: "mmc-trig", "aria-pressed": chosen(word),
@@ -682,12 +992,28 @@ class LoraManager {
           text: word,
           onclick: () => { this.toggleTrigger(entry, word); renderChips(); },
         })),
-        ...own.map((word) => el("button", {
-          class: "mmc-trig own", "aria-pressed": true,
-          title: t("Yours — click to remove"),
-          text: word,
-          onclick: () => { this.toggleTrigger(entry, word); renderChips(); },
-        })),
+        ...own.map((word) => el("span", {
+          class: `mmc-trig own${chosen(word) ? " on" : ""}`,
+          "aria-pressed": chosen(word),
+        }, [
+          el("button", {
+            class: "mmc-trig-word",
+            title: chosen(word)
+              ? t("Yours, in the prompt — click to drop")
+              : t("Yours — click to use"),
+            text: word,
+            onclick: () => { this.toggleTrigger(entry, word); renderChips(); },
+          }),
+          el("button", {
+            class: "mmc-trig-forget", text: "✕",
+            title: t("Forget “{word}” for this LoRA", { word }),
+            onclick: () => {
+              this.forgetTrigger(entry, word);
+              own.splice(own.findIndex((candidate) => same(candidate, word)), 1);
+              renderChips();
+            },
+          }),
+        ])),
       ]);
     };
     renderChips();
@@ -699,7 +1025,11 @@ class LoraManager {
       onkeydown: (event) => {
         if (event.key !== "Enter") return;
         event.preventDefault();
-        if (this.addTrigger(entry, event.target.value)) renderChips();
+        const word = event.target.value.trim();
+        if (this.addTrigger(entry, word)) {
+          if (!has(suggested, word) && !has(own, word)) own.push(word);
+          renderChips();
+        }
         event.target.value = "";
       },
       // The manager sits over the graph canvas, which reads keys of its own.
@@ -758,6 +1088,17 @@ class LoraManager {
       ...(this.checkpointModes ? [modes] : []),
       this.triggerBox(entry, row),
     ];
+    // Where the settings came from, when it was not this file's author. A
+    // slider that opens somewhere other than the sidecar's preferred weight is
+    // otherwise a small unexplained thing, and "did I set that or did it?" is
+    // exactly the doubt this whole feature exists to remove.
+    if (this.restored.has(entry.name)) {
+      rows.push(el("div", {
+        class: "mmc-lora-memo",
+        title: t("Everything here is how you last left this LoRA. Change it and the new setup is what comes back next time."),
+        text: t("your last setup"),
+      }));
+    }
     // Active, but on none of the checkpoints this graph routes to.
     if (this.checkpointModes && !this.applies(entry)) {
       rows.push(el("div", {
@@ -784,6 +1125,183 @@ class LoraManager {
     const label = S.checkpointLabels(this.family);
     return this.targets.map((name) => label[name]).join(" + ")
       || t(S.FAMILY_LABEL[this.family]);
+  }
+
+  // ---- stacks --------------------------------------------------------------
+  //
+  // A stack you have saved, which is a preset holding nothing but its `loras`
+  // section. The preset store already answers naming, filing, deletion, export
+  // and — through `crossable` — whether a stack kept off a piece may land on a
+  // pre-stage, which for LoRAs it always may. Keeping them here as well as in
+  // the library is only a question of where you are standing when you want one:
+  // you build a stack in this window, and this is where you reach for one.
+
+  setTab(tab) {
+    this.tab = tab;
+    this.loraTab?.setAttribute("aria-selected", String(tab === "loras"));
+    this.stackTab?.setAttribute("aria-selected", String(tab === "stacks"));
+    const stacks = tab === "stacks";
+    this.bar.style.display = stacks ? "none" : "";
+    this.grid.style.display = stacks ? "none" : "";
+    this.stacksPane.style.display = stacks ? "" : "none";
+    this.renderFoot();
+    if (stacks) this.loadStacks();
+  }
+
+  /** Only the ones that are a stack and nothing else. A piece preset carrying
+   *  LoRAs alongside its prompt and its weights is a whole node, and applying it
+   *  from here would change six things the window cannot show you. */
+  async loadStacks() {
+    this.stacksPane.replaceChildren(el("div", { class: "mmc-empty", text: t("Loading…") }));
+    let rows;
+    try {
+      rows = await listPresets({ force: true });
+    } catch (error) {
+      this.stacksPane.replaceChildren(el("div", {
+        class: "mmc-empty",
+        text: t("Could not read your presets: {error}", { error: error.message }),
+      }));
+      return;
+    }
+    const stacks = rows.filter((row) => !row.builtin
+      && Array.isArray(row.sections) && row.sections.length === 1 && row.sections[0] === "loras");
+    // The bodies hold the filenames, which is what a stack is worth showing: a
+    // count tells you nothing about which stack this is. Few enough to read at
+    // once, and only on this tab.
+    const bodies = await Promise.all(stacks.map((row) => loadBody(row).catch(() => null)));
+    this.stacks = stacks.map((row, at) => ({ row, entries: bodies[at]?.loras ?? [] }));
+    this.renderStacks();
+  }
+
+  renderStacks() {
+    const parts = [this.saveStackRow()];
+    if (!this.stacks.length) {
+      parts.push(el("div", {
+        class: "mmc-empty",
+        text: t("No saved stacks yet. Set a stack up on the LoRAs tab, then keep it here — "
+              + "it lands with your presets, and applies to a piece, a card or a pre-stage alike."),
+      }));
+    }
+    parts.push(...this.stacks.map((stack) => this.stackRow(stack)));
+    this.stacksPane.replaceChildren(...parts);
+  }
+
+  /** Keep what is in the stack right now. The name is asked for inline rather
+   *  than through a prompt(): the window is already a window, and a second one
+   *  over it to type six characters is a jolt. */
+  saveStackRow() {
+    const live = this.state.loras ?? [];
+    const name = el("input", {
+      class: "mmc-stack-name", type: "text",
+      placeholder: t("name this stack"),
+      onkeydown: (event) => { if (event.key === "Enter") save(); },
+      onkeyup: (event) => event.stopPropagation(),   // the graph canvas reads keys
+    });
+    const save = () => this.saveStack(name.value);
+    return el("div", { class: "mmc-stack-save" }, [
+      el("div", { class: "mmc-stack-save-what" }, [
+        el("span", { class: "mmc-lora-label", text: t("Keep this stack") }),
+        el("span", {
+          class: "mmc-stack-sub",
+          text: live.length
+            ? live.map((entry) => baseName(entry.name)).join(", ")
+            : t("nothing in the stack to keep"),
+        }),
+      ]),
+      name,
+      el("button", {
+        class: "mmc-add", text: t("Save"),
+        disabled: !live.length,
+        onclick: save,
+      }),
+    ]);
+  }
+
+  async saveStack(typed) {
+    const entries = this.state.loras ?? [];
+    if (!entries.length) return;
+    await savePreset({
+      name: typed.trim() || t("LoRA stack"),
+      scope: this.presetScope,
+      // Through the same serializer every other capture goes through, so a
+      // stack kept here and a stack kept by the preset library are the same
+      // bytes — see the note over `presets.capturePiece`.
+      data: { loras: S.serializeLoras(entries, this.family) },
+    });
+    this.loadStacks();
+  }
+
+  stackRow({ row, entries }) {
+    const names = entries.map((entry) => baseName(entry.name));
+    return el("div", { class: "mmc-stack" }, [
+      el("div", { class: "mmc-stack-what" }, [
+        el("div", { class: "mmc-stack-title", text: row.name }),
+        el("div", {
+          class: "mmc-stack-sub",
+          title: entries.map((entry) => `${entry.name} @ ${Number(entry.strength ?? 1).toFixed(2)}`).join("\n"),
+          text: names.length ? names.join(", ") : t("empty"),
+        }),
+      ]),
+      el("button", {
+        class: "mmc-ghost",
+        title: t("Add these to the stack that is already here, leaving it in place."),
+        text: t("Add"),
+        onclick: () => this.applyStack(entries, { replace: false }),
+      }),
+      el("button", {
+        class: "mmc-add",
+        title: t("Throw away the current stack and use this one instead."),
+        text: t("Replace"),
+        onclick: () => this.applyStack(entries, { replace: true }),
+      }),
+      el("button", {
+        class: "mmc-del", text: t("Delete"),
+        title: t("Delete the “{name}” stack", { name: row.name }),
+        onclick: (event) => this.armDelete(event.currentTarget, row),
+      }),
+    ]);
+  }
+
+  /** Two clicks, because a stack is somebody's work and there is no undo behind
+   *  this window. The same arming, and the same classes, as the picker's. */
+  armDelete(button, row) {
+    if (button.classList.contains("armed")) {
+      deletePreset(row.id).then(() => this.loadStacks());
+      return;
+    }
+    button.textContent = t("Delete for good");
+    button.classList.add("armed");
+    setTimeout(() => {
+      if (!button.isConnected) return;
+      button.textContent = t("Delete");
+      button.classList.remove("armed");
+    }, 3000);
+  }
+
+  /**
+   * Put a saved stack on this node.
+   *
+   * Replace is what a preset does everywhere else — `presets.applyToPiece` and
+   * its two siblings assign the section over whatever was there — and Add is the
+   * thing this window can offer that the library cannot: you are looking at the
+   * stack, so merging into it is a decision you can actually see the result of.
+   * A file already in the stack keeps the settings it has; the one on screen is
+   * the one you were just working on.
+   */
+  applyStack(entries, { replace }) {
+    if (replace) this.state.loras = [];
+    for (const entry of entries) {
+      if (S.findLora(this.state, entry.name)) continue;
+      this.state.loras.push(JSON.parse(JSON.stringify(entry)));
+    }
+    // The applied entries carry their own strengths and words, so nothing here
+    // was "restored" from memory — the note would be pointing at the wrong
+    // source. Their settings are written *into* memory by `changed`, which is
+    // right: a stack you applied is a setup you used.
+    for (const entry of entries) this.restored.delete(entry.name);
+    this.changed();
+    this.setTab("loras");
+    this.renderGrid();
   }
 
   renderFoot() {
