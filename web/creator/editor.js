@@ -29,7 +29,8 @@ import { blobIO, samplingBar, segmentSeedPill } from "./sampling.js";
 import { Stage } from "./stage.js";
 import { familyPill, weightsPill, loadCatalog, adoptWeights } from "./models.js";
 import * as Turbo from "./turbo.js";
-import { viewUrl, probe, probeAudio, primeSettings } from "./api.js";
+import { viewUrl, probe, probeAudio, primeSettings, buildPlate } from "./api.js";
+import { openSubjectView } from "./subject.js";
 import * as S from "./state.js";
 import { describeRatio, framesForSeconds, isTrainedLength,
          rulesFor, secondsForFrames } from "./canvas.js";
@@ -609,7 +610,7 @@ export class CreatorEditor {
 
   /** The picker, carrying the card's sheet, and the merge of whatever comes
    *  back. `edit: true` opens straight into the sheet editor — the card's
-   *  "Cut out or combine…" — rather than at the grid. */
+   *  "Edit sheet…" and "Combine…" — rather than at the grid. */
   async pickReferences(kind, sheet, { edit = false } = {}) {
     const spec = this.plateSpec();
     const chosen = await openPicker({
@@ -641,6 +642,50 @@ export class CreatorEditor {
   async editSheet(asset) {
     if (!this.plateSpec()) return;
     await this.pickReferences("image", asset, { edit: true });
+  }
+
+  /**
+   * Cut one attached picture out of its background, or put it back — without
+   * the picker. The entry is rebuilt through the same seam a picker answer
+   * takes (`mergeSheet`), so the handle, the chip and the prompt citing it
+   * all survive; what changes is the file the card points at — the plate the
+   * server wrote, or the source photograph again.
+   */
+  async cutReference(asset, on, points = null) {
+    const spec = this.plateSpec();
+    if (!spec) return;
+    const panel = asset.panels?.[0];
+    const source = panel?.filename ?? asset.filename;
+    const clicks = points ?? (panel?.points?.length ? panel.points.map((p) => ({ ...p })) : []);
+    try {
+      if (!on) {
+        await this.mergeSheet(asset, [{ kind: "image", path: source,
+                                        name: source.split("/").pop() }]);
+        return;
+      }
+      const made = { path: source, cut: true, ...(clicks.length ? { points: clicks } : {}) };
+      const built = await buildPlate({ ...spec, panels: [made] });
+      await this.mergeSheet(asset, [{ plate: true, kind: "image", path: built.path,
+                                      name: built.path.split("/").pop(), panels: [made] }]);
+    } catch (error) {
+      this.flash(error.message);
+    }
+  }
+
+  /** The subject view on an attached picture: the clicks that say which
+   *  subject its scissors mean. Accepting rebuilds the cutout with them;
+   *  cancel leaves the reference exactly as it stands. */
+  async chooseSubject(asset) {
+    const spec = this.plateSpec();
+    if (!spec) return;
+    const panel = asset.panels?.[0];
+    const source = panel?.filename ?? asset.filename;
+    const got = await openSubjectView({
+      plate: spec, path: source, name: source.split("/").pop(),
+      points: panel?.points ?? [],
+    });
+    if (!got) return;
+    await this.cutReference(asset, true, got.points);
   }
 
   /**
@@ -1042,19 +1087,42 @@ export class CreatorEditor {
         foot.push(opens(trimLabel(asset), t("Use the whole clip, or only a segment of it"),
                         () => this.editSegment(asset)));
       }
-      // Offered on any reference picture, not only on a sheet: what it opens
-      // is the sheet editor with this reference as the sheet, which is where
-      // you add a second picture to it, take one off, press the scissors, or
-      // drag the panels into another order. A plain attachment is a sheet of
-      // one that nobody has added to yet, and making that the same gesture is
-      // what stops "cut this out" from being a detach and a re-attach.
+      // The scissors and the sheet, separated: cutting is a property of this
+      // one picture and lives here as its own rows; combining is a relation
+      // between pictures and opens the sheet editor. A plain attachment is a
+      // sheet of one nobody has added to yet, so Combine… seeds with it — and
+      // either way the handle survives, which is what stops any of this being
+      // a detach and a re-attach.
       if (asset.role === "reference" && asset.kind === "image" && this.plateSpec()) {
-        foot.push(opens(S.isPlate(asset) && asset.panels.length > 1
-                          ? t("Edit sheet…") : t("Cut out or combine…"),
-                        t("Choose the pictures on this sheet again — add one, take one off, "
-                        + "rearrange them, or change which are cut out of their backgrounds. "
-                        + "The sheet is laid out again as you go."),
-                        () => this.editSheet(asset)));
+        if (S.isPlate(asset) && asset.panels.length > 1) {
+          foot.push(opens(t("Edit sheet…"),
+                          t("Choose the pictures on this sheet again — add one, take one off, "
+                          + "rearrange them, or change which are cut out of their backgrounds. "
+                          + "The sheet is laid out again as you go."),
+                          () => this.editSheet(asset)));
+        } else {
+          const cut = Boolean(asset.panels?.[0]?.cut);
+          if (S.canCut((asset.panels?.[0] ?? asset).takes)) {
+            foot.push(opens(cut ? t("Keep the background") : t("Cut out"),
+                            cut
+                              ? t("Put the background back — the reference goes back to being "
+                                + "the whole photograph.")
+                              : t("Lift the subject off its background, onto the flat field the "
+                                + "model reads references against. The room it was photographed "
+                                + "in stops conditioning the render alongside it."),
+                            () => this.cutReference(asset, !cut)));
+            if (cut) {
+              foot.push(opens(t("Choose the subject…"),
+                              t("Where the whole-subject cut grabs the wrong thing, click the "
+                              + "one you mean — and click again on what should go."),
+                              () => this.chooseSubject(asset)));
+            }
+          }
+          foot.push(opens(t("Combine…"),
+                          t("Lay this picture out with others as one sheet, attached as a "
+                          + "single reference."),
+                          () => this.editSheet(asset)));
+        }
       }
       foot.push(opens(t("Swap file"),
                       t("Swap the file behind @{handle} — the handle stays, so the prompt still fits.",
@@ -1620,10 +1688,15 @@ export class CreatorEditor {
   async attachOneAsset() {
     const blocked = S.blockedReason(this.state, "reference");
     if (blocked) { this.flash(blocked); return null; }
+    const spec = this.plateSpec();
     const chosen = await openPicker({
       kinds: ["image", "video", "audio", "renders"],
       kind: "image",
       capacity: (k) => S.capacity(this.state, k, this.piece),
+      // The scissors ride along: a picture attached while casting somebody is
+      // the purest cutout case there is — the `takes` prose already promises
+      // the background is dropped, and the chip makes the pixels agree.
+      plate: spec ? { ...spec, panels: [] } : null,
     });
     if (!chosen?.length) return null;
     const before = new Set(this.state.assets.map((a) => a.handle));
@@ -1826,12 +1899,30 @@ export class CreatorEditor {
       //
       // A plate of one panel says nothing with a count: there is no layout to
       // report, only a picture the picker cut out, and "1 panels" is a badge
-      // that exists to be wrong. The scissors say the one true thing instead.
+      // that exists to be wrong. The scissors say the one true thing instead —
+      // and on any picture that *could* be cut they are the control itself,
+      // right on the chip, so "cut this out" is one press on the face rather
+      // than a footer link found through the card. A scene or style reference
+      // shows no scissors at all: there the background is the reference.
       if (S.isPlate(asset) && asset.panels.length > 1) {
         parts.push(el("span", {
           class: "mmc-asset-panels",
           text: t("{count} panels", { count: asset.panels.length }),
         }));
+      } else if (asset.role === "reference" && asset.kind === "image" && this.plateSpec()
+                 && S.canCut((asset.panels?.[0] ?? asset).takes)) {
+        const cut = Boolean(asset.panels?.[0]?.cut);
+        parts.push(el("button", {
+          class: `mmc-pl-cut mmc-asset-scissors${cut ? " on" : ""}`,
+          "aria-pressed": String(cut),
+          title: cut
+            ? t("Cut out of its background — press to keep the background")
+            : t("Used whole — press to lift the subject off its background"),
+          onclick: (event) => {
+            event.stopPropagation();
+            this.cutReference(asset, !cut);
+          },
+        }, [icon("scissors", 12)]));
       } else if (asset.panels?.[0]?.cut) {
         parts.push(el("span", {
           class: "mmc-pl-cut on", title: t("Cut out of its background"),

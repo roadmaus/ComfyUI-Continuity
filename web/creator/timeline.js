@@ -7,7 +7,7 @@
 // LoRAs, same routing badge. There is no reduced "segment UI" to keep in step
 // with the node's, because there is only one editor.
 
-import { compiledPrompt, probe, viewUrl, primeSettings } from "./api.js";
+import { compiledPrompt, probe, viewUrl, primeSettings, buildPlate } from "./api.js";
 import { CastShelf } from "./cast.js";
 import { clearButton } from "./clear.js";
 import { el, icon, mountOverlay, swappable } from "./dom.js";
@@ -20,6 +20,7 @@ import * as P from "./presets.js";
 import { PromptBox, openEditorSheet } from "./prompt.js";
 import { openSettings } from "./settings.js";
 import { SoundLane } from "./soundlane.js";
+import { openSubjectView } from "./subject.js";
 import { openTrim } from "./trim.js";
 import { openAspectPopover, openResolutionPopover, openChoicePopover, facesPill, stepperPill,
          aspectGlyph, resolutionPillText, PILL_GLYPH } from "./pills.js";
@@ -573,6 +574,9 @@ class Timeline {
           onclick: () => this.addPoolAssets(),
         }, [el("span", { text: "+" }), el("span", { text: t("Add") })])] : []),
       ]),
+      // What the last scissors press ran into — a missing matte model, mostly.
+      // Cleared by the next press that lands.
+      ...(this.poolError ? [el("div", { class: "mmc-tl-pool-bad", text: this.poolError })] : []),
       ...(assets.length ? [el("div", { class: "mmc-assets" }, assets.map((a) => this.poolChip(a)))] : []),
     );
   }
@@ -691,15 +695,40 @@ class Timeline {
       })),
       el("span", { class: "mmc-tl-pool-where", text: where }),
       // What a plate is, in the one number that says it — and the scissors
-      // where the one picture on it was cut out. Same readout the card's chip
-      // wears; see `CreatorEditor.renderAssets`.
+      // where the picture could be cut at all: the control itself, right on
+      // the chip, same as the card's. Same eligibility too — a scene or style
+      // reference shows no scissors, because there the background *is* the
+      // reference.
       ...(S.isPlate(asset) && asset.panels.length > 1
         ? [el("span", { class: "mmc-asset-panels",
                         text: t("{count} panels", { count: asset.panels.length }) })]
-        : asset.panels?.[0]?.cut
-          ? [el("span", { class: "mmc-pl-cut on",
-                          title: t("Cut out of its background") }, [icon("scissors", 12)])]
-          : []),
+        : asset.kind === "image" && S.plateSpec(this.timeline)
+            && S.canCut((asset.panels?.[0] ?? asset).takes)
+          ? [el("button", {
+              class: `mmc-pl-cut mmc-asset-scissors${asset.panels?.[0]?.cut ? " on" : ""}`,
+              "aria-pressed": String(Boolean(asset.panels?.[0]?.cut)),
+              title: asset.panels?.[0]?.cut
+                ? t("Cut out of its background — press to keep the background")
+                : t("Used whole — press to lift the subject off its background"),
+              onclick: () => this.cutPoolReference(asset, !asset.panels?.[0]?.cut),
+            }, [icon("scissors", 12)])]
+          : asset.panels?.[0]?.cut
+            ? [el("span", { class: "mmc-pl-cut on",
+                            title: t("Cut out of its background") }, [icon("scissors", 12)])]
+            : []),
+      // Where a cut picture's scissors grabbed the wrong subject: the clicks
+      // that name the right one, without rebuilding the whole sheet session.
+      ...(asset.kind === "image" && S.plateSpec(this.timeline)
+          && !(S.isPlate(asset) && asset.panels.length > 1) && asset.panels?.[0]?.cut
+        ? [el("button", {
+            class: "mmc-ghost",
+            style: { fontSize: "11px" },
+            title: t("Where the whole-subject cut grabs the wrong thing, click the "
+                   + "one you mean — and click again on what should go."),
+            text: t("Choose the subject…"),
+            onclick: () => this.choosePoolSubject(asset),
+          })]
+        : []),
       // Building the sheet again, from here. The pool is where a shared
       // reference is set at all — a citation of it in a segment has nothing to
       // open — so without this a sheet attached to the piece could never be
@@ -712,7 +741,7 @@ class Timeline {
                    + "rearrange them, or change which are cut out of their backgrounds. "
                    + "The sheet is laid out again as you go."),
             text: S.isPlate(asset) && asset.panels.length > 1
-              ? t("Edit sheet…") : t("Cut out or combine…"),
+              ? t("Edit sheet…") : t("Combine…"),
             onclick: () => this.editPoolSheet(asset),
           })]
         : []),
@@ -926,6 +955,10 @@ class Timeline {
       // Which family a preset's row and weights would be landing on. Read by
       // `crossable`, which refuses those two sections across families.
       family: () => S.pieceFamily(this.timeline),
+      // What the picker needs to cut a picture out — the scissors ride into
+      // the library's own attach flow through this. The pool's spec, because a
+      // member's pictures are individual files, not one sheet.
+      plate: () => this.poolPlate(),
       capture: () => ({
         data: P.capturePiece(this.timeline, this.io()),
         defaultName: (this.timeline.prompt || this.timeline.segments?.[0]?.prompt || "")
@@ -956,9 +989,24 @@ class Timeline {
       capacity: (kind) => (single
         ? S.capacity(host, kind, this.timeline)
         : { used: 0, max: S.refCaps(this.timeline).files, filesLeft: S.refCaps(this.timeline).files }),
+      // The scissors ride along: a picture attached while casting somebody is
+      // the purest cutout case there is — the `takes` prose already promises
+      // the background is dropped, and the chip makes the pixels agree.
+      plate: this.poolPlate(),
     });
     if (!chosen?.length) return null;
     const picked = chosen[0];
+    if (!Array.isArray(host.assets)) host.assets = [];
+    // A cut picture (or a sheet) arrives as a plate: one reference, numbered
+    // the way this host numbers — a card's references are img-N, the pool's
+    // are ref-N.
+    if (picked.plate) {
+      const entry = S.plateEntry(picked, S.takenHandles(host),
+        single ? {} : { plate: "ref", panel: "ref" });
+      host.assets.push(entry);
+      this.commit();
+      return entry;
+    }
     const entry = {
       handle: single ? S.nextHandle(host, picked.kind) : S.nextPoolHandle(this.timeline),
       kind: picked.kind,
@@ -968,7 +1016,6 @@ class Timeline {
     };
     if (picked.trim) entry.trim = picked.trim;
     if (entry.kind === "video") entry.track = picked.track ?? S.DEFAULT_TRACK;
-    if (!Array.isArray(host.assets)) host.assets = [];
     host.assets.push(entry);
     this.commit();
     return entry;
@@ -1058,6 +1105,13 @@ class Timeline {
         : [{ path: asset.filename, cut: false }]) },
     });
     if (!chosen) return;
+    this.foldPoolSheet(asset, chosen);
+  }
+
+  /** Fold a picker (or scissors) answer back into the pool in `asset`'s place,
+   *  keeping its handle — the pool-side twin of the editor's `mergeSheet`,
+   *  and the shared tail of Edit sheet…, the chip and the subject view. */
+  foldPoolSheet(asset, chosen) {
     const at = this.timeline.assets.indexOf(asset);
     if (at < 0) return;
     const sheet = chosen.find((picked) => picked.plate);
@@ -1089,6 +1143,49 @@ class Timeline {
     }
     this.commit();
     this.renderPool();
+  }
+
+  /** Cut one pool picture out of its background, or put it back — the chip's
+   *  press, without a picker session. The entry is rebuilt through
+   *  `foldPoolSheet`, so the handle and every citation of it survive; what
+   *  changes is the file the pool points at — the plate the server wrote, or
+   *  the source photograph again. */
+  async cutPoolReference(asset, on, points = null) {
+    const spec = this.poolPlate();
+    if (!spec) return;
+    const panel = asset.panels?.[0];
+    const source = panel?.filename ?? asset.filename;
+    const clicks = points ?? (panel?.points?.length ? panel.points.map((p) => ({ ...p })) : []);
+    try {
+      if (!on) {
+        this.poolError = null;
+        this.foldPoolSheet(asset, [{ kind: "image", path: source }]);
+        return;
+      }
+      const made = { path: source, cut: true, ...(clicks.length ? { points: clicks } : {}) };
+      const built = await buildPlate({ ...spec, panels: [made] });
+      this.poolError = null;
+      this.foldPoolSheet(asset, [{ plate: true, kind: "image", path: built.path,
+                                   panels: [made] }]);
+    } catch (error) {
+      this.poolError = String(error.message || error);
+      this.renderPool();
+    }
+  }
+
+  /** The subject view on a pool picture — see the editor's `chooseSubject`,
+   *  which this is the pool-side twin of. */
+  async choosePoolSubject(asset) {
+    const spec = this.poolPlate();
+    if (!spec) return;
+    const panel = asset.panels?.[0];
+    const source = panel?.filename ?? asset.filename;
+    const got = await openSubjectView({
+      plate: spec, path: source, name: source.split("/").pop(),
+      points: panel?.points ?? [],
+    });
+    if (!got) return;
+    await this.cutPoolReference(asset, true, got.points);
   }
 
   /** Point a pool reference at a different file, keeping its handle — see the
@@ -2993,6 +3090,8 @@ export class TimelineBody {
       scope: "piece",
       label: t("this piece"),
       family: () => S.pieceFamily(this.timeline),
+      // See `pieceTarget`: the scissors in the library's attach flow.
+      plate: () => this.poolPlate(),
       capture: () => ({
         data: P.capturePiece(this.timeline, this.widgetIO()),
         cover: P.coverFromResult(this.stage?.result),

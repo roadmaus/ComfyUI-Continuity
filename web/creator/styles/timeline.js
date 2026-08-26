@@ -79,6 +79,9 @@ export const css = `
   background: none; border: 0; padding: 0; font: inherit; cursor: pointer;
 }
 .mmc-tl-pool-cite:hover { text-decoration: underline; }
+/* What the shelf's last scissors press ran into — a missing matte model,
+   mostly. One line, the shelf's own red. */
+.mmc-tl-pool-bad { font-size: calc(11px * var(--mmc-type)); color: var(--mmc-bad); }
 
 /* The cast shelf sits between the pool and the bar, in a host of its own. The
    shelf itself is mounted from cast.js and wears the stylesheet next door,

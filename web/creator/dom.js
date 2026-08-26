@@ -80,6 +80,9 @@ export const ICONS = {
   play: `<path d="M8 5.5l11 6.5-11 6.5z"/>`,
   pause: `<path d="M8 5v14M16 5v14"/>`,
   scissors: `<circle cx="6" cy="6" r="2.4"/><circle cx="6" cy="18" r="2.4"/><path d="M8 7.4L20 18M8 16.6L20 6"/>`,
+  // The subject chooser beside the scissors: a point named on the picture —
+  // the click that tells SAM 3 which subject the scissors mean.
+  subject: `<circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/>`,
   dice: `<rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.2"/><circle cx="15.5" cy="15.5" r="1.2"/><circle cx="12" cy="12" r="1.2"/>`,
   // Back round to where it was: the seed the last queue ran on, put back. An
   // arrow returning to its own start, which is what the button does — beside

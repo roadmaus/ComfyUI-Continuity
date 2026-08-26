@@ -406,4 +406,76 @@ export const css = `
   font-size: calc(9.5px * var(--mmc-type)); line-height: 1.6;
   pointer-events: none;
 }
+
+/* --- the scissors on the cell ----------------------------------------------
+   The chip that cuts a picture where it is picked, and the smaller button
+   under it that opens the subject view. Same appearance grammar as the star:
+   hidden until the cell is hovered, except that a pressed chip stays — a cut
+   cell is showing a cutout, and the sign of why must not vanish with the
+   pointer. */
+.mmc-cell-cut, .mmc-cell-subject {
+  position: absolute; top: 8px; left: 8px; width: 24px; height: 24px;
+  display: none; align-items: center; justify-content: center;
+  border: 0; border-radius: 50%; background: var(--mmc-scrim-2);
+  color: var(--mmc-text); cursor: pointer; padding: 0;
+}
+.mmc-cell-subject { top: 36px; }
+.mmc-cell:hover .mmc-cell-cut,
+.mmc-cell:focus-visible .mmc-cell-cut,
+.mmc-cell-cut.on { display: flex; }
+.mmc-cell:hover .mmc-cell-subject,
+.mmc-cell:focus-visible .mmc-cell-subject { display: flex; }
+.mmc-cell-cut.on { background: var(--mmc-blue); color: var(--mmc-strong); }
+.mmc-cell-cut svg, .mmc-cell-subject svg { width: 13px; height: 13px; }
+/* Cut by clicks rather than whole-subject: the mark that a subject was chosen. */
+.mmc-cell-cut.pts::after {
+  content: ""; position: absolute; right: -1px; top: -1px;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--mmc-accent); border: 1px solid var(--mmc-ground);
+}
+/* The paired badge owns the corner where both appear; the scissors move down. */
+.mmc-cell-sheet ~ .mmc-cell-cut { top: 34px; }
+.mmc-cell-sheet ~ .mmc-cell-subject { top: 62px; }
+/* A cut cell is showing the cutout itself, contain-fitted — cover would crop
+   the subject against a field whose whole point is showing all of it. The
+   field's grey is set inline; only the family knows which one. */
+.mmc-cell.cutout img { object-fit: contain; }
+
+/* --- the subject view ------------------------------------------------------
+   One picture and the clicks that say which subject its scissors mean — see
+   subject.openSubjectView. Reuses the sheet editor's frame, stage chrome and
+   dots; what is its own is the polarity pair and the picture-shaped stage. */
+.mmc-subject { width: min(640px, 94vw); }
+.mmc-subject-name { color: var(--mmc-dim); margin-left: 10px; }
+.mmc-subject-stage {
+  position: relative; width: 100%; overflow: hidden;
+  border: 1px solid var(--mmc-line-3); border-radius: 8px;
+  touch-action: none; cursor: crosshair; align-self: center;
+}
+.mmc-subject-img {
+  width: 100%; height: 100%; object-fit: contain; display: block;
+  pointer-events: none; user-select: none;
+}
+/* Keep | Drop: what the next click means, said out loud. One of the two is
+   always on — this is a reading of the pointer, not a pair of actions — so it
+   gets the segmented chrome the ghost style does not have. */
+.mmc-subject-pol { display: flex; }
+.mmc-subject-pol .mmc-tool {
+  padding: 3px 14px; border: 1px solid var(--mmc-line-3); border-radius: 0;
+  font-size: calc(12.5px * var(--mmc-type));
+}
+.mmc-subject-pol .mmc-tool:first-child { border-radius: 7px 0 0 7px; }
+.mmc-subject-pol .mmc-tool:last-child { border-radius: 0 7px 7px 0; margin-left: -1px; }
+.mmc-subject-pol .mmc-tool.on {
+  background: var(--mmc-blue); border-color: var(--mmc-blue);
+  color: var(--mmc-strong);
+}
+
+/* What a panel's toolbar is acting on, named in the strip's own numbering. */
+.mmc-plate-which {
+  min-width: 58px; color: var(--mmc-dim);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: calc(10.5px * var(--mmc-type));
+}
 `;

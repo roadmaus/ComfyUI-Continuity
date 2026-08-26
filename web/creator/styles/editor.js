@@ -112,6 +112,12 @@ export const css = `
   position: static; width: auto; height: auto; padding: 0;
   background: none; color: var(--mmc-blue); cursor: default;
 }
+/* The same scissors as a live control: on any single picture that could be
+   cut, the badge is the press itself — off is faint, on is the blue the badge
+   always wore, and the hand plus the hover is what says it does something. */
+.mmc-asset .mmc-asset-scissors { border: 0; cursor: pointer; display: inline-flex; }
+.mmc-asset .mmc-asset-scissors:not(.on) { color: var(--mmc-faint); }
+.mmc-asset .mmc-asset-scissors:hover { color: var(--mmc-strong); }
 /* How many pictures a plate holds. The one fact about a sheet that is worth
    reading off the card, set in the tabular face its panel numbers are in. */
 .mmc-asset-panels {

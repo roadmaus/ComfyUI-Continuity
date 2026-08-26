@@ -6,6 +6,7 @@ import { listAssets, listingTruncated, viewUrl, stillUrl, upload, moveAsset,
          deleteAsset, loadPickerPrefs, savePickerPrefs, buildPlate,
          cutPanel } from "./api.js";
 import { openTrim, trimLabel } from "./trim.js";
+import { openSubjectView, greyField } from "./subject.js";
 import { t } from "./i18n.js";
 
 // "renders" is a tab, not a kind: it browses the output folder instead of a
@@ -32,15 +33,6 @@ const PAGE_SIZE = 60;
 // in PAGE_SIZE batches; past it a pager appears, because a ten-thousand-file
 // folder should be jumped through, not scrolled end to end.
 const PER_PAGE = 240;
-
-/** One backdrop level as a CSS colour. The plate's field is a grey level
- *  because both families want a neutral one — see `creator/cutout.py` — and the
- *  preview has to sit on the same grey the panels were composited onto, or the
- *  cut-out edges read as a halo that is not in the file. */
-function greyField(level) {
-  const step = Math.round(Math.max(0, Math.min(1, Number(level) || 0)) * 255);
-  return "rgb(" + step + "," + step + "," + step + ")";
-}
 
 /** The small chevron the shelf row points with: sideways between crumbs, and
  *  on a chip that has folders inside it. CSS turns it. */
@@ -135,6 +127,10 @@ class Picker {
     // Connect built, and it holds until the sheet is taken off the piece.
     this.sheet = this.plate?.sheet ? [] : (this.plate?.panels ?? []).map((p) => p.path);
     this.committing = false;   // a commit that has to build the sheet first, in flight
+    // path -> {key, url, pending}: the grid's own cut previews, from the same
+    // in-memory route the sheet stage reads. A cell whose scissors are on shows
+    // the cutout itself — the chip's promise is the picture, not a state.
+    this.cutUrls = new Map();
   }
 
   mount() {
@@ -259,7 +255,8 @@ class Picker {
     this.renderShelves();
     this.renderGrid();
     this.renderFoot();
-    // Sent here to edit an attached sheet (the card's "Cut out or combine…"):
+    // Sent here to edit an attached sheet (the card's "Edit sheet…" and
+    // "Combine…"):
     // the editor is the point, so it opens itself over the grid.
     if (this.plate?.edit && !this.editOpened && this.sheetPanels().length) {
       this.editOpened = true;
@@ -949,9 +946,18 @@ class Picker {
     // Which route shows this file is `api.stillUrl`'s to know — the same
     // question the preset library's cards ask, answered in one place.
     const still = stillUrl(asset);
+    // A cut cell shows the cutout itself, on the family's own backdrop — the
+    // scissors' promise is a picture, and this is it. The original stands in
+    // until the matte lands; `previewCut` swaps the cell when it does.
+    const held = this.chipPossible(asset) && this.cutOf(asset)
+      ? this.cutUrls.get(asset.path) : null;
+    if (held?.url) {
+      cell.classList.add("cutout");
+      cell.style.background = greyField(this.plate.backdrop);
+    }
     if (still) {
       // Filenames reach the DOM only as attributes/text, never as markup.
-      const thumb = el("img", { src: still, loading: "lazy", alt: asset.name });
+      const thumb = el("img", { src: held?.url ?? still, loading: "lazy", alt: asset.name });
       // A clip the decoder cannot open answers 404, and the cell falls back to
       // the same icon tile audio uses rather than showing a broken image.
       if (asset.kind === "video") {
@@ -970,6 +976,37 @@ class Picker {
       if (number >= 0) {
         cell.appendChild(el("div", { class: "mmc-cell-sheet", text: `⧉ ${number + 1}` }));
       }
+    }
+    // The scissors, on the picture itself. One press cuts the whole subject
+    // out and the cell shows the cutout; a second, smaller button — there only
+    // once something is cut — opens the subject view for the picture the
+    // whole-subject matte is wrong about. This is the door the sheet editor
+    // used to be the only way through.
+    if (this.chipPossible(asset)) {
+      const on = this.cutOf(asset);
+      cell.appendChild(el("button", {
+        class: `mmc-cell-cut${on ? " on" : ""}${
+          on && this.points.get(asset.path)?.length ? " pts" : ""}`,
+        "aria-pressed": String(on),
+        title: on
+          ? t("{name} is cut out: the subject is lifted off its background onto the flat "
+            + "field the panels sit on, so the room it was photographed in stops "
+            + "conditioning the render alongside it. Click to keep the background.",
+              { name: asset.name })
+          : t("{name} is used whole, background and all. Click to lift the subject off it "
+            + "— which is what you want when you are citing a person or an object and not "
+            + "the place they were photographed in.", { name: asset.name }),
+        onclick: (event) => { event.stopPropagation(); this.setCut(asset, !on); },
+      }, [icon("scissors", 12)]));
+      if (on) {
+        cell.appendChild(el("button", {
+          class: "mmc-cell-subject",
+          title: t("Choose the subject — where the whole-subject cut grabs the wrong "
+                 + "thing, click the one you mean"),
+          onclick: (event) => { event.stopPropagation(); this.chooseSubject(asset); },
+        }, [icon("subject", 12)]));
+      }
+      if (held?.pending) cell.appendChild(el("div", { class: "mmc-plate-scan" }));
     }
     // No segment badge while organizing: configuring a segment selects the
     // file for attachment, which is exactly not what a mark means.
@@ -1106,10 +1143,11 @@ class Picker {
   // ---- the sheet ------------------------------------------------------------
   //
   // What used to happen invisibly at render time — the subject lifted off its
-  // background, the pictures laid out as one composite — happens in a modal of
-  // its own, opened by Connect (or, on a sheet family, on the way out through
-  // Add). The modal shows the picture the model will actually be handed and
-  // rebuilds it as you work. `creator/plate.py` does the making.
+  // background, the pictures laid out as one composite — happens in the open.
+  // The scissors live on the grid cells themselves; the modal here is for
+  // *combining* pictures, opened by Combine… (or, on a sheet family, on the
+  // way out through Add). It shows the picture the model will actually be
+  // handed and rebuilds it as you work. `creator/plate.py` does the making.
 
   /** Whether this family's image references *are* the panels of one composite
    *  sheet (LTX 2.5). There the whole image selection is the sheet and the
@@ -1149,6 +1187,71 @@ class Picker {
    *  otherwise about this particular file. */
   cutOf(asset) {
     return this.cuts.has(asset.path) ? this.cuts.get(asset.path) : Boolean(this.plate?.cut);
+  }
+
+  /** Whether a cell wears the scissors chip: a picture, on a caller that can
+   *  build a plate, in a session that is picking rather than organizing or
+   *  browsing. A keyframe caller (`single`) does not — a start frame is a
+   *  frame of the video, and cutting it out would condition on a hole. */
+  chipPossible(asset) {
+    return Boolean(this.plate) && asset.kind === "image"
+      && !this.organize && !this.options.viewOnly && !this.options.single;
+  }
+
+  /** The chip's press: cut this picture, or stop. Cutting a picture is wanting
+   *  it — an unselected cell selects on the way, and a press that finds no
+   *  slot left goes nowhere, with the counter already saying why. */
+  setCut(asset, on) {
+    if (!this.selected.some((a) => a.path === asset.path)) {
+      this.toggle(asset);
+      if (!this.selected.some((a) => a.path === asset.path)) return;
+    }
+    this.cuts.set(asset.path, on);
+    this.previewCut(asset);
+    this.renderFoot();
+  }
+
+  /** The subject view, from a cell: the clicks that say which subject this
+   *  picture's scissors mean. Accepting cuts the picture with them; cancel
+   *  changes nothing, clicks included. */
+  async chooseSubject(asset) {
+    const got = await openSubjectView({
+      plate: this.plate, path: asset.path, name: asset.name,
+      points: this.points.get(asset.path) ?? [],
+    });
+    if (!got) return;
+    if (got.points.length) this.points.set(asset.path, got.points);
+    else this.points.delete(asset.path);
+    this.cuts.set(asset.path, true);
+    this.previewCut(asset);
+  }
+
+  /** Fetch the cutout a cut cell shows, from the same in-memory route the
+   *  sheet stage reads. One matte per press, no debounce — the runs of clicks
+   *  that need one happen in the subject view, which has its own. */
+  previewCut(asset) {
+    if (!this.cutOf(asset)) { this.refreshCell(asset); return; }
+    const key = JSON.stringify([asset.path, this.points.get(asset.path) ?? []]);
+    const have = this.cutUrls.get(asset.path) ?? {};
+    if (have.key === key || have.pending === key) { this.refreshCell(asset); return; }
+    this.cutUrls.set(asset.path, { ...have, pending: key });
+    this.refreshCell(asset);
+    cutPanel({ model: this.plate.model, segment: this.plate.segment,
+               panels: [this.panelPayload(asset)] })
+      .then((url) => {
+        const now = this.cutUrls.get(asset.path);
+        if (!now || now.pending !== key) { URL.revokeObjectURL(url); return; }
+        if (now.url) URL.revokeObjectURL(now.url);
+        this.cutUrls.set(asset.path, { key, url });
+        this.refreshCell(asset);
+      })
+      .catch((error) => {
+        const now = this.cutUrls.get(asset.path);
+        if (!now || now.pending !== key) return;
+        this.cutUrls.set(asset.path, { key: now.key, url: now.url });
+        this.warn(error.message);
+        this.refreshCell(asset);
+      });
   }
 
   /** Whether `panels` add up to a file that has to be built at all.
@@ -1206,8 +1309,9 @@ class Picker {
    * The sheet editor: a stage the shape of the shot's canvas, with the panels
    * on it where they will actually sit. Drag a panel to place it, take its
    * corner to resize it, reorder the citations in the strip below, scissors
-   * per panel — and clicks that tell SAM3 *which* subject the scissors mean:
-   * click the thing to keep, shift-click what to leave out.
+   * per panel. Choosing *which* subject a panel's scissors mean is the subject
+   * view's job — opened from the toolbar for the picked panel — so a click on
+   * the stage only ever means layout.
    *
    * The preview is composited here in the browser, from per-panel cutouts the
    * server serves out of memory. Nothing touches the input folder until the
@@ -1242,7 +1346,6 @@ class Picker {
 
     const W = this.plate.width || 1280, H = this.plate.height || 704;
     let picked = order[0]?.path ?? null;   // the panel the toolbar acts on
-    let clicking = false;                  // whether stage clicks place SAM points
     let saving = false, buildError = "";
     let drag = null;                       // strip reorder source index
     let fetchTimer = null;
@@ -1312,30 +1415,6 @@ class Picker {
       render();
     };
 
-    // ---- geometry ----------------------------------------------------------
-    //
-    // A panel's picture is contain-fitted inside its rect, so the content box
-    // is a fraction of the panel box the two aspects alone decide. The click
-    // mapping and the dots use the same numbers, which is what keeps a dot
-    // exactly under the click that made it.
-    const contentFrac = (img, r) => {
-      const boxAspect = (r[2] * W) / Math.max(1e-6, r[3] * H);
-      const imgAspect = (img.naturalWidth || 1) / Math.max(1, img.naturalHeight || 1);
-      if (imgAspect > boxAspect) {
-        const ch = boxAspect / imgAspect;
-        return { cl: 0, ct: (1 - ch) / 2, cw: 1, ch };
-      }
-      const cw = imgAspect / boxAspect;
-      return { cl: (1 - cw) / 2, ct: 0, cw, ch: 1 };
-    };
-    const placeDots = (box, img, asset) => {
-      const c = contentFrac(img, rectOf(asset));
-      for (const dot of box.querySelectorAll(".mmc-st-dot")) {
-        dot.style.left = ((c.cl + Number(dot.dataset.x) * c.cw) * 100) + "%";
-        dot.style.top = ((c.ct + Number(dot.dataset.y) * c.ch) * 100) + "%";
-      }
-    };
-
     // ---- the stage ---------------------------------------------------------
     const stage = el("div", { class: "mmc-plate-stage" });
     stage.style.aspectRatio = W + " / " + H;
@@ -1393,39 +1472,16 @@ class Picker {
       const r = rectOf(asset);
       const box = el("div", {
         class: "mmc-st-panel" + (asset.path === picked ? " picked" : ""),
-        title: clicking
-          ? t("Click the subject to keep. Shift-click what to leave out.")
-          : t("{name} — drag to place, corner to resize", { name: asset.name }),
+        title: t("{name} — drag to place, corner to resize", { name: asset.name }),
       });
       box.style.left = (r[0] * 100) + "%";
       box.style.top = (r[1] * 100) + "%";
       box.style.width = (r[2] * 100) + "%";
       box.style.height = (r[3] * 100) + "%";
       box.style.zIndex = String(index + 1);
-      const img = el("img", { class: "mmc-st-img", src: srcOf(asset),
-                              alt: asset.name, draggable: "false" });
-      img.addEventListener("load", () => placeDots(box, img, asset));
-      box.appendChild(img);
+      box.appendChild(el("img", { class: "mmc-st-img", src: srcOf(asset),
+                                  alt: asset.name, draggable: "false" }));
       box.appendChild(el("span", { class: "mmc-st-no", text: String(index + 1) }));
-      for (const [at, point] of (points.get(asset.path) ?? []).entries()) {
-        const dot = el("button", {
-          class: "mmc-st-dot" + (point.include ? "" : " out"),
-          title: point.include
-            ? t("A click on the subject — press to take it back")
-            : t("A click on what to leave out — press to take it back"),
-          onpointerdown: (ev) => ev.stopPropagation(),
-          onclick: (ev) => {
-            ev.stopPropagation();
-            const list = points.get(asset.path) ?? [];
-            list.splice(at, 1);
-            if (!list.length) points.delete(asset.path);
-            schedule();
-          },
-        });
-        dot.dataset.x = String(point.x);
-        dot.dataset.y = String(point.y);
-        box.appendChild(dot);
-      }
       const grip = el("div", { class: "mmc-st-grip", title: t("Resize") });
       grip.addEventListener("pointerdown", (event) => {
         event.stopPropagation();
@@ -1440,43 +1496,48 @@ class Picker {
       box.addEventListener("pointerdown", (event) => {
         event.preventDefault();
         pick(asset, box);
-        if (clicking) {
-          const at = box.getBoundingClientRect();
-          const c = contentFrac(img, rectOf(asset));
-          const x = ((event.clientX - at.left) / Math.max(1, at.width) - c.cl) / c.cw;
-          const y = ((event.clientY - at.top) / Math.max(1, at.height) - c.ct) / c.ch;
-          if (x >= 0 && x <= 1 && y >= 0 && y <= 1) {
-            const list = points.get(asset.path) ?? [];
-            list.push({ x: round4(x), y: round4(y),
-                        include: !(event.shiftKey || event.altKey) });
-            points.set(asset.path, list);
-            cuts.set(asset.path, true);
-            schedule();
-          }
-          return;
-        }
         startMove(event, box, asset, null);
       });
       return box;
     };
 
     // ---- the toolbar -------------------------------------------------------
-    const clickButton = el("button", {
+    //
+    // The picked panel's own tools, then the stage's. The stage is only ever
+    // about layout now: choosing which subject a panel's scissors mean is the
+    // subject view's job, one picture at a time, where a click cannot also
+    // mean a drag — the armed click mode this row used to carry is what made
+    // the old editor confusing.
+    const pickedAsset = () => order.find((asset) => asset.path === picked) ?? null;
+    const which = el("span", { class: "mmc-plate-which" });
+    const cutButton = el("button", {
       class: "mmc-ghost mmc-tool",
       "aria-pressed": "false",
-      title: t("Click the subject on the sheet and SAM 3 cuts exactly that out — "
-             + "shift-click marks what to leave out. Needs a SAM 3 checkpoint "
-             + "under the node's weights control."),
-      text: t("Click to choose the subject"),
-      onclick: () => { clicking = !clicking; render(); },
-    });
-    const clearClicks = el("button", {
-      class: "mmc-ghost mmc-tool",
-      title: t("Forget this panel's clicks and go back to the whole-subject matte"),
-      text: t("Forget clicks"),
+      title: t("Lift this panel's subject off its background — or put the background back"),
+      text: t("Cut out"),
       onclick: () => {
-        if (!picked) return;
-        points.delete(picked);
+        const asset = pickedAsset();
+        if (!asset) return;
+        cuts.set(asset.path, !cut(asset));
+        schedule();
+      },
+    });
+    const subjectButton = el("button", {
+      class: "mmc-ghost mmc-tool",
+      title: t("Choose the subject — where the whole-subject cut grabs the wrong "
+             + "thing, click the one you mean"),
+      text: t("Choose the subject…"),
+      onclick: async () => {
+        const asset = pickedAsset();
+        if (!asset) return;
+        const got = await openSubjectView({
+          plate: this.plate, path: asset.path, name: asset.name,
+          points: points.get(asset.path) ?? [],
+        });
+        if (!got) return;
+        if (got.points.length) points.set(asset.path, got.points);
+        else points.delete(asset.path);
+        cuts.set(asset.path, true);
         schedule();
       },
     });
@@ -1487,7 +1548,7 @@ class Picker {
       onclick: () => { rects.clear(); schedule(); },
     });
     const tools = el("div", { class: "mmc-plate-tools" },
-                     [clickButton, clearClicks, autoButton]);
+                     [which, cutButton, subjectButton, autoButton]);
 
     const caliper = el("div", { class: "mmc-plate-caliper" });
     const say = el("div", { class: "mmc-plate-say" });
@@ -1566,7 +1627,6 @@ class Picker {
 
     const render = () => {
       stage.replaceChildren(...order.map(panelEl));
-      stage.classList.toggle("clicking", clicking);
 
       // The caliper: what the sheet is, in numbers — panels, the canvas it
       // will bake at (the canvas the shot generates at), what has been cut.
@@ -1577,8 +1637,7 @@ class Picker {
       if (rects.size) parts.push(t("arranged by hand"));
       caliper.textContent = parts.join("  ·  ");
 
-      say.textContent = buildError
-        || (clicking ? t("Click the subject to keep. Shift-click what to leave out.") : "");
+      say.textContent = buildError;
       say.classList.toggle("bad", Boolean(buildError));
       say.style.display = say.textContent ? "" : "none";
 
@@ -1587,13 +1646,19 @@ class Picker {
       okButton.textContent = saving ? t("Laying it out…")
         : this.sheetFamily()
           ? (order.length > 1 ? t("Add sheet") : t("Add"))
-          : t("Connect");
+          : t("Use this sheet");
       okButton.disabled = !order.length || saving;
     };
     const renderTools = () => {
-      clickButton.classList.toggle("on", clicking);
-      clickButton.setAttribute("aria-pressed", String(clicking));
-      clearClicks.disabled = !(picked && points.get(picked)?.length);
+      const asset = pickedAsset();
+      const on = Boolean(asset && cut(asset));
+      which.textContent = asset ? t("Panel {n}", { n: order.indexOf(asset) + 1 }) : "";
+      cutButton.disabled = !asset;
+      // A text button says what pressing it does, so the state lives in the
+      // label rather than in chrome the ghost style does not have.
+      cutButton.textContent = on ? t("Keep the background") : t("Cut out");
+      cutButton.setAttribute("aria-pressed", String(on));
+      subjectButton.disabled = !asset;
       autoButton.disabled = !rects.size;
     };
 
@@ -1644,7 +1709,7 @@ class Picker {
     };
 
     const sheetEl = el("div", { class: "mmc-plate-edit" }, [
-      el("div", { class: "mmc-plate-title", text: t("The reference sheet") }),
+      el("div", { class: "mmc-plate-title", text: t("Combine into one sheet") }),
       el("div", { class: "mmc-plate-stage-wrap" }, [stage]),
       say,
       tools,
@@ -1752,18 +1817,19 @@ class Picker {
       el("button", { class: "mmc-ghost", text: t("Cancel"), onclick: () => this.close(null) }),
       this.addButton,
     ];
-    // Connect: lay the selected pictures out as one sheet, which then attaches
+    // Combine: lay the selected pictures out as one sheet, which then attaches
     // as a single reference and stays paired until it is taken off the piece.
     // Only where that is a choice — a sheet family has no button because its
-    // selection is the sheet already.
+    // selection is the sheet already. Cutting is not why anybody comes here
+    // any more: the scissors live on the cells.
     if (this.sheetsPossible() && !this.sheetFamily()) {
       const joinable = new Set([...panels.map((a) => a.path),
                                ...this.selectedImages().map((a) => a.path)]).size;
       row.splice(2, 0, el("button", {
         class: "mmc-ghost mmc-connect",
-        text: panels.length ? t("Edit sheet…") : t("Connect"),
-        title: t("Lay the selected pictures out as one sheet — cut subjects out of their "
-               + "backgrounds, arrange them, and attach the result as a single reference."),
+        text: panels.length ? t("Edit sheet…") : t("Combine…"),
+        title: t("Lay the selected pictures out as one sheet — arrange them on the shot's "
+               + "canvas and attach the result as a single reference."),
         disabled: !(panels.length || joinable >= 2),
         onclick: () => this.openSheet(),
       }));
@@ -1838,33 +1904,49 @@ class Picker {
 
   async commit() {
     if (!this.selected.length || this.committing) return;
-    // On a sheet family the image selection *is* the sheet, and the way out is
-    // through the editor: what gets attached is confirmed by being looked at.
-    // A lone uncut picture is the one case with nothing to look at — it is the
-    // reference, unchanged — and it attaches directly.
-    if (this.sheetFamily() && this.sheetNeeded()) {
+    // On a sheet family the image selection *is* the sheet, and a *layout* is
+    // confirmed by being looked at: two or more pictures still leave through
+    // the editor. A lone cut picture no longer does — its cell has been
+    // showing the cutout since the scissors were pressed, so there is nothing
+    // left for the editor to reveal.
+    if (this.sheetFamily() && this.selectedImages().length > 1) {
       this.openSheet();
       return;
     }
     const panels = this.sheetFamily() ? [] : this.sheetPanels();
     const grouped = new Set(panels.map((asset) => asset.path));
-    const loose = this.selected.filter((asset) => !grouped.has(asset.path))
+    const loose = this.selected.filter((asset) => !grouped.has(asset.path));
+    // A loose picture the scissors touched closes as a plate of one — the cut
+    // baked exactly once, here, the way a sheet's is on Accept. The rest
+    // attach as themselves.
+    const cut = loose.filter((asset) => this.chipPossible(asset) && this.sheetNeeded([asset]));
+    const plain = loose.filter((asset) => !cut.includes(asset))
       .map((asset) => ({ ...asset, ...(this.settings.get(asset.path) || {}) }));
-    if (!panels.length || !this.sheetNeeded(panels)) {
-      this.close(loose);
+    if (!cut.length && (!panels.length || !this.sheetNeeded(panels))) {
+      this.close(plain);
       return;
     }
-    // The group closes as one thing, because it is one thing: the file the
+    // Each group closes as one thing, because it is one thing: the file the
     // server wrote, and the pictures it was laid out from — `Editor.attachAssets`
-    // turns it into one reference. Usually the file exists already (the sheet
-    // editor built it), so this await is a stat; it is awaited anyway because
-    // the group may have changed since — a panel deselected from the grid.
+    // turns each into one reference. Usually the file exists already (the
+    // sheet editor or the chip's preview built its panels), so these awaits
+    // are mostly stats; they are awaited anyway because the selection may have
+    // changed since — a panel deselected from the grid.
     this.committing = true;
     this.renderFoot();
     try {
-      const built = await buildPlate({ ...this.plate,
-        panels: panels.map((asset) => this.panelPayload(asset)) });
-      this.close([this.sheetAnswer(built, panels), ...loose]);
+      const answers = [];
+      if (panels.length && this.sheetNeeded(panels)) {
+        const built = await buildPlate({ ...this.plate,
+          panels: panels.map((asset) => this.panelPayload(asset)) });
+        answers.push(this.sheetAnswer(built, panels));
+      }
+      for (const asset of cut) {
+        const built = await buildPlate({ ...this.plate,
+          panels: [this.panelPayload(asset)] });
+        answers.push(this.sheetAnswer(built, [asset]));
+      }
+      this.close([...answers, ...plain]);
     } catch (error) {
       this.committing = false;
       this.renderFoot();
@@ -1875,6 +1957,10 @@ class Picker {
   close(result) {
     clearTimeout(this.warnTimer);
     clearTimeout(this.armTimer);
+    for (const held of this.cutUrls.values()) {
+      if (held.url) URL.revokeObjectURL(held.url);
+    }
+    this.cutUrls.clear();
     this.observer?.disconnect();
     this.unmount();
     this.resolve(result);
