@@ -505,6 +505,19 @@ function storedFile(asset, slot) {
     ...(asset.track ? { track: asset.track } : {}),
     ...(asset.ref_size ? { ref_size: asset.ref_size } : {}),
     ...(asset.trim ? { trim: asset.trim } : {}),
+    // A plate's panels, in the shape a picker answer carries them (`path`,
+    // not `filename`) and without their handles — handles are the piece's,
+    // and `addSubjectToPiece` issues fresh ones when the member lands.
+    ...(asset.panels?.length
+      ? { panels: asset.panels.map((panel) => ({
+          path: panel.filename,
+          ...(panel.cut ? { cut: true } : {}),
+          ...(panel.rect ? { rect: [...panel.rect] } : {}),
+          ...(panel.points?.length
+            ? { points: panel.points.map((point) => ({ ...point })) } : {}),
+          ...(panel.takes ? { takes: panel.takes } : {}),
+        })) }
+      : {}),
   };
 }
 
@@ -1206,15 +1219,29 @@ export function addSubjectToPiece(stored, timeline) {
     let asset = [...host.assets, ...(single ? timeline.assets : [])].find(
       (entry) => entry.filename === file.filename && entry.kind === kind);
     if (!asset) {
-      asset = {
-        handle: single ? S.nextHandle(host, kind) : S.nextPoolHandle(timeline),
-        kind,
-        role: "reference",
-        filename: file.filename,
-        ref_size: file.ref_size ?? "max",
-        ...(file.track ? { track: file.track } : {}),
-        ...(file.trim ? { trim: file.trim } : {}),
-      };
+      if (file.panels?.length) {
+        // A file the library holds as a cutout (or a sheet) lands as the plate
+        // it is: one reference whose panels carry the cut, the clicks and the
+        // source pictures — the same entry a picker answer becomes. `kept` is
+        // the panels themselves, so each keeps the narrowing it was stored with.
+        const panels = file.panels.map((panel) => ({ ...panel }));
+        asset = S.plateEntry(
+          { path: file.filename, panels },
+          S.takenHandles(single ? host : timeline),
+          { ...(single ? {} : { plate: "ref", panel: "ref" }),
+            kept: new Map(panels.map((panel) => [panel.path, panel])) });
+        if (file.ref_size) asset.ref_size = file.ref_size;
+      } else {
+        asset = {
+          handle: single ? S.nextHandle(host, kind) : S.nextPoolHandle(timeline),
+          kind,
+          role: "reference",
+          filename: file.filename,
+          ref_size: file.ref_size ?? "max",
+          ...(file.track ? { track: file.track } : {}),
+          ...(file.trim ? { trim: file.trim } : {}),
+        };
+      }
       host.assets.push(asset);
     }
     // Their looks and the place they take hold several files each; the other
@@ -1226,6 +1253,12 @@ export function addSubjectToPiece(stored, timeline) {
     // to say so. Over the default only; a file the piece already held under a
     // narrowing somebody chose keeps it. See `state.inheritTake`.
     S.inheritTake({ ...stored, takes: stored.takes ?? "person" }, file.slot, asset);
+    // A plate's narrowing is read off its panels at compile time — what the
+    // slot said lands on the one panel a cutout is, unless the panel arrived
+    // already narrowed.
+    if (asset.takes && asset.panels?.length === 1 && !asset.panels[0].takes) {
+      asset.panels[0].takes = asset.takes;
+    }
   }
   const subject = {
     handle: freeSubjectHandle(stored.handle || "subject", timeline),

@@ -3090,8 +3090,13 @@ export class TimelineBody {
       scope: "piece",
       label: t("this piece"),
       family: () => S.pieceFamily(this.timeline),
-      // See `pieceTarget`: the scissors in the library's attach flow.
-      plate: () => this.poolPlate(),
+      // See `Timeline.pieceTarget`: the scissors in the library's attach flow.
+      // Built here rather than borrowed — `poolPlate` is the window's, and
+      // this target is the node body's.
+      plate: () => {
+        const spec = S.plateSpec(this.timeline, this.frame());
+        return spec ? { ...spec, sheet: false } : null;
+      },
       capture: () => ({
         data: P.capturePiece(this.timeline, this.widgetIO()),
         cover: P.coverFromResult(this.stage?.result),

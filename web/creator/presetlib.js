@@ -1164,18 +1164,30 @@ class PresetLibrary {
   /** Attach a file to them, uploading it if that is what the picker comes back
    *  with. The slot is guessed from what the file *is* — a sound file is a voice
    *  and a still is a look — which is the same guess `cast.js` makes when
-   *  something is dropped on a card, and it is right almost every time. */
+   *  something is dropped on a card, and it is right almost every time.
+   *
+   *  The scissors ride along wherever the library was opened over a piece
+   *  (`target.plate`): a member's picture is the purest cutout case there is,
+   *  and this used to be the one picker without the chip. A cut picture comes
+   *  back as a plate — the file stored is the cutout the server wrote, and the
+   *  panels ride with it so casting them into a piece keeps the clicks. */
   async addFile(member) {
+    const spec = this.target?.plate?.() ?? null;
     const chosen = await openPicker({
       kinds: ["image", "video", "audio", "renders"],
       kind: "image",
       capacity: () => ({ used: 0, max: 8, filesLeft: 8 }),
+      plate: spec ? { ...spec, panels: [] } : null,
     });
     if (!chosen?.length) return;
     for (const asset of chosen) {
       const kind = asset.kind ?? "image";
       const slot = (ROLES.find((role) => role.fits({ kind })) ?? ROLE.from).key;
-      member.files = [...(member.files ?? []), { slot, filename: asset.path, kind }];
+      member.files = [...(member.files ?? []), {
+        slot, filename: asset.path, kind,
+        ...(asset.panels?.length
+          ? { panels: asset.panels.map((panel) => ({ ...panel })) } : {}),
+      }];
     }
     await this.flushSave();
     this.renderSheet();
