@@ -1262,7 +1262,6 @@ export const zh = {
  "This piece has a pre-stage. The full view is where it is edited.": "此作品带有预备台。请在完整视图中编辑它。",
  "The still this shot is built on — its prompt, its references, its checkpoint.": "这个镜头所依据的静帧——它的提示词、参考图与检查点。",
  "The video: the prompt, the cast and everything the render reads.": "影片——提示词、演员表，以及渲染读取的一切。",
- "Remove the pre-stage node": "移除预备台节点",
  "Edit @{handle}": "编辑 @{handle}",
  "Fullscreen": "全屏",
  "Fullscreen editor": "全屏编辑器",

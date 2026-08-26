@@ -1261,7 +1261,6 @@ export const ja = {
  "This piece has a pre-stage. The full view is where it is edited.": "この作品にはプリステージがあります。編集はフル表示で行います。",
  "The still this shot is built on — its prompt, its references, its checkpoint.": "このショットの土台になる静止画 — そのプロンプト、リファレンス、チェックポイント。",
  "The video: the prompt, the cast and everything the render reads.": "映像 — プロンプト、キャスト、レンダリングが読むすべて。",
- "Remove the pre-stage node": "プリステージノードを削除",
  "Edit @{handle}": "@{handle} を編集",
  "Fullscreen": "フルスクリーン",
  "Fullscreen editor": "フルスクリーンエディター",

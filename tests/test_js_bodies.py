@@ -529,7 +529,10 @@ try {
   fs.openFullscreen(node);
   out.__docked = body.satellite?.docked?.className === "mmc-fs-dock";
   const shell = document.body.children.at(-1);
-  const inShell = body.root.parent?.className === "mmc-fs-col";
+  // Inside the card, in the wrapper the card keeps for it — the step turn is
+  // run on that wrapper, because the body itself is replaced by the swap.
+  const inShell = body.root.parent?.className === "mmc-fs-face"
+    && body.root.parent.parent?.className === "mmc-fs-col";
   // Read before the press below, which puts the shell into its working state
   // and turns the Render label into a progress report.
   const opened = shell?.className === "mmc-fs";

@@ -417,7 +417,16 @@ export class CreatorEditor {
       // away once a rewrite is what gets queued.
       this.panel = el("div", { class: "mmc-panel" }, [
         ...(this.onFace ? [this.expandHost] : []),
-        this.prompt.frame, this.refinePanel.root, this.pillsHost,
+        // The writing and the controls over it are two things, and only the
+        // first of them may scroll. Stacked as siblings they could not be told
+        // apart by a container: a well tall enough to need scrolling took the
+        // pill row down with it, and a well the panel was allowed to shrink
+        // painted the rewrite over Render. The wrapper is what the overflow
+        // goes on — see the simple view's rules in styles/fullscreen.js.
+        this.well = el("div", { class: "mmc-well" }, [
+          this.prompt.frame, this.refinePanel.root,
+        ]),
+        this.pillsHost,
       ]),
       this.noticeHost,
       this.samplingHost,

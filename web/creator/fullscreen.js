@@ -106,6 +106,7 @@ function storedPlate() {
 const REVIEW_FLIGHT = { duration: 280, easing: "cubic-bezier(.2,.75,.25,1)" };
 const REVIEW_FADE = { duration: 160, easing: "ease-out" };
 
+
 /** Asked at the moment of the animation rather than cached: this is a system
  *  setting and it can change under a window that is already open. */
 const reduced = () =>
@@ -228,19 +229,27 @@ class Fullscreen {
     // to carry an amber pill that did the spawning, and two controls over one
     // node is one too many — the switch says where you are *and* gets you there,
     // which is what a step is.
-    this.stepDrop = el("button", {
-      class: "mmc-fs-step-drop", title: t("Remove the pre-stage node"),
-      onclick: (event) => { event.stopPropagation(); this.dropPreStage(); },
-      text: "×",
-    });
-    this.stepBar = el("div", { class: "mmc-fs-stepbar" }, STEPS.map(([step, label]) =>
-      el("button", {
-        class: "mmc-fs-step", "data-step": step,
-        title: step === "pre"
-          ? t("The still this shot is built on — its prompt, its references, its checkpoint.")
-          : t("The video: the prompt, the cast and everything the render reads."),
-        onclick: () => this.setStep(step),
-      }, [el("span", { text: t(label) }), ...(step === "pre" ? [this.stepDrop] : [])])));
+    //
+    // Two segments and nothing else. The pre step used to carry an × that took
+    // the node back out of the graph, and a switch is the wrong place for it: in
+    // this view you are on one step or the other, and the only thing either
+    // segment should do is take you there. Removing the pre-stage is the desk's
+    // — the toggle in the shot's own row, which the desk still draws.
+    // The lit segment, as one object that travels rather than as a background
+    // that appears on whichever button was pressed. It is the only thing on
+    // screen that is continuous across the switch — the card's contents are
+    // replaced outright — so it is what the eye follows, and the direction it
+    // travels is the direction the new card arrives from. See `paintInk`.
+    this.stepInk = el("span", { class: "mmc-fs-step-ink" });
+    this.stepBar = el("div", { class: "mmc-fs-stepbar" }, [this.stepInk,
+      ...STEPS.map(([step, label]) =>
+        el("button", {
+          class: "mmc-fs-step", "data-step": step,
+          title: step === "pre"
+            ? t("The still this shot is built on — its prompt, its references, its checkpoint.")
+            : t("The video: the prompt, the cast and everything the render reads."),
+          onclick: () => this.setStep(step),
+        }, [el("span", { text: t(label) })]))]);
 
     // What each column is, said once at the top of it. The desk shows two
     // node faces that are built from the same parts — the same rail, the same
@@ -254,6 +263,7 @@ class Fullscreen {
 
     this.preStill = el("div", { class: "mmc-fs-still" });
     this.pre = el("div", { class: "mmc-fs-pre" });
+    this.face = el("div", { class: "mmc-fs-face" });
     this.col = el("div", { class: "mmc-fs-col" });
     // The dock is never empty, because an empty dock is a third of the window
     // with nothing in it and a hairline border ending in mid-air. Until there
@@ -460,9 +470,6 @@ class Fullscreen {
     // a second thing for it to switch to.
     const stepping = this.view === "simple" && !!this.node.mmcBody?.preStage;
     this.stepBar.style.display = stepping ? "" : "none";
-    // The way out of the pair, and only where it cannot be pressed by accident:
-    // on the step you are standing on, next to the name of the thing it removes.
-    this.stepDrop.style.display = paired && this.step === "pre" ? "" : "none";
 
     // The one the card is showing, and the one beside it on the desk. In the
     // simple view the second is null and its node keeps its body on the canvas,
@@ -477,7 +484,12 @@ class Fullscreen {
     this.colHeadName.textContent =
       this.node.mmcBody?.showsStrip?.() ? t("Strip") : t("Shot");
     this.paintMark();
-    this.col.replaceChildren(this.colHead, this.stepBar, body.root, this.runRow);
+    // The body goes inside a wrapper the card keeps, rather than straight into
+    // the card. What it buys is a stable element: `mount` replaces the body on
+    // every step change, and the turn between the two steps has to be run on
+    // something that is still there afterwards. See `turnTo`.
+    this.col.replaceChildren(this.colHead, this.stepBar, this.face, this.runRow);
+    this.face.replaceChildren(body.root);
     // The card the simple view draws has no cast drawer and no Cast tool — see
     // styles/fullscreen.js for why — so the body it borrows has to be told, or
     // it goes on answering "the shelf is a row of me" because it still knows
@@ -576,16 +588,103 @@ class Fullscreen {
       return;
     }
     if (step === this.step) return;
-    this.step = step;
-    this.mount();
-    this.paint();
+    // Which way the pair reads, so the turn goes the way the switch does.
+    // Pre-stage is left of Shot and always has been — it is the step before it
+    // — so the sign is the whole of the direction.
+    const was = STEPS.findIndex(([name]) => name === this.step);
+    this.turnTo(step, Math.sign(STEPS.findIndex(([name]) => name === step) - was));
   }
 
-  /** Take the pre-stage back out of the graph. `mount` puts the card back on the
-   *  shot on its own — there is nothing else left for it to show. */
-  dropPreStage() {
-    if (!preStageOf(this.node)) return;
-    this.node.mmcBody?.preStage?.toggle();
+  /**
+   * Turn the card over onto its other step.
+   *
+   * Both steps are now the same rectangle — a fixed measure in both axes, see
+   * styles/fullscreen.js — and two faces the same size that you switch between
+   * is a *card*. So the switch turns it: the work rotates away on its own
+   * vertical axis, the other step is mounted while its back is to you, and it
+   * comes round the rest of the way. Only the work turns. The switch you pressed
+   * and the Render under it stay where they are, because they belong to the
+   * window rather than to the step, and a control that flees the press is a
+   * control you press twice.
+   *
+   * The two halves are deliberately uneven. Leaving is quicker than arriving and
+   * accelerates into the edge; arriving decelerates out of it and carries a
+   * touch of overshoot in the light rather than in the geometry — the lit
+   * segment of the switch is still travelling underneath the whole time, which
+   * is what says the two halves are one gesture.
+   *
+   * With reduced motion it is the swap and nothing else.
+   */
+  turnTo(step, dir) {
+    const land = () => {
+      this.step = step;
+      this.mount();
+      this.paint();
+    };
+    if (reduced() || this.view !== "simple" || !this.face.animate) {
+      land();
+      return;
+    }
+    // A second press mid-turn would mount under a running animation and leave
+    // the card edge-on. The switch itself stays live — this only drops presses
+    // that arrive inside the third of a second the turn takes.
+    if (this.turning) return;
+    this.turning = true;
+    // The lit segment goes now, on the press, rather than at the swap: it is
+    // the one thing on screen that crosses the whole gesture, and a highlight
+    // that waited for the card to be half-turned would have nothing to say
+    // about the first half of it.
+    this.paintInk(step);
+    // Lit from the side it is turning away from, so the face darkens as it goes
+    // edge-on and comes back up into the light. Nothing else says a flat
+    // rectangle has a thickness.
+    const away = this.face.animate([
+      { transform: "perspective(1600px) rotateY(0deg)", filter: "brightness(1)" },
+      { transform: `perspective(1600px) rotateY(${dir * -90}deg) scale(.94)`,
+        filter: "brightness(.45)" },
+    ], { duration: 190, easing: "cubic-bezier(.6, 0, .9, .5)", fill: "forwards" });
+    away.finished.then(() => {
+      land();
+      // Started before the half that held the card edge-on is cancelled, and
+      // not after: two animations on one element resolve in the order they were
+      // started, so this one is already overriding that held state by the time
+      // it goes. Cancelling first would show the new face flat for one frame.
+      const back = this.face.animate([
+        { transform: `perspective(1600px) rotateY(${dir * 90}deg) scale(.94)`,
+          filter: "brightness(.45)" },
+        { transform: "perspective(1600px) rotateY(0deg)", filter: "brightness(1)" },
+      ], { duration: 280, easing: "cubic-bezier(.2, .85, .3, 1)" });
+      back.finished.finally(() => { away.cancel(); this.turning = false; });
+    }, () => { this.turning = false; });
+  }
+
+  /**
+   * Put the lit segment under the step you are on.
+   *
+   * Measured rather than declared: the two segments are the width of their own
+   * words, in whatever language the shell is drawn in, so there is no fraction
+   * to slide the ink by. The first placement is silent — a pill that slid in
+   * from the left edge on open would announce a switch nobody made.
+   */
+  paintInk(step = this.step, retry = true) {
+    const on = [...this.stepBar.children].find((el) => el.dataset?.step === step);
+    if (!on) return;
+    // Nothing to measure until the bar is in the document and displayed, which
+    // on the first open is a frame away. Asked once more and then let go.
+    if (!on.offsetWidth) {
+      if (retry && this.stepBar.style.display !== "none") {
+        requestAnimationFrame(() => this.paintInk(step, false));
+      }
+      return;
+    }
+    this.stepInk.style.width = `${on.offsetWidth}px`;
+    this.stepInk.style.transform = `translateX(${on.offsetLeft}px)`;
+    if (!this.inked) {
+      this.inked = true;
+      // After the placement above has been painted, or the class that turns the
+      // transition on is in force for the placement itself.
+      requestAnimationFrame(() => this.stepInk.classList.add("travels"));
+    }
   }
 
   /**
@@ -1175,8 +1274,10 @@ class Fullscreen {
       button.setAttribute("aria-pressed", String(button.dataset.view === this.view));
     }
     for (const button of this.stepBar.children) {
+      if (!button.dataset?.step) continue;   // the travelling ink, which is not a control
       button.setAttribute("aria-pressed", String(button.dataset.step === this.step));
     }
+    this.paintInk();
     this.more.setAttribute("aria-pressed", String(this.advanced));
     const sampling = Object.values(this.runs).some((run) => run.state === "sampling");
     const left = Math.max(0, (this.remaining ?? 0) - (sampling ? 1 : 0));

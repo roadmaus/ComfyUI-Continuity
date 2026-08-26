@@ -135,10 +135,15 @@ export const css = `
   min-height: 0; max-height: 100%; border-radius: 22px;
   background: var(--mmc-surface); border: 1px solid var(--mmc-line);
 }
+/* The wrapper between the card and the body it is showing. It exists so the
+   step change has something stable to turn — the body itself is replaced by the
+   swap — and it is otherwise nothing: a column the same shape as the one it
+   replaced in the layout. See turnTo() in fullscreen.js. */
+.mmc-fs-face { display: flex; flex-direction: column; flex: 0 1 auto; min-height: 0; }
 /* As tall as the body in it, up to the height of the window — past that the body
    scrolls inside the card (see the overflow rule below) and Render, which is not
    part of it, stays where it is. */
-.mmc-fs-col > .mmc-root { flex: 0 1 auto; min-height: 0; }
+.mmc-fs-face > .mmc-root { flex: 0 1 auto; min-height: 0; }
 /* The card's inset. On the body that draws the furniture, never on the wrapper
    around it: a Creator's body is a .mmc-root.hosting whose only job is to hold
    the shot's own .mmc-root, and padding put on both is the inset twice. */
@@ -206,25 +211,46 @@ export const css = `
 .mmc-fs-stepbar {
   flex: none; display: flex; gap: 2px; padding: 2px; align-self: center;
   border-radius: 15px; background: var(--mmc-bg); border: 1px solid var(--mmc-line);
+  position: relative;
 }
 .mmc-fs-step {
   height: calc(26px * var(--mmc-type)); padding: 0 18px; border-radius: 13px; border: 0; background: none;
   color: var(--mmc-dim); font-family: inherit; font-size: calc(12px * var(--mmc-type)); cursor: pointer;
+  position: relative;   /* over the ink, which is painted behind the words */
 }
 .mmc-fs-step:hover { color: var(--mmc-text); }
-.mmc-fs-step[aria-pressed="true"] { background: var(--mmc-surface-3); color: var(--mmc-text); }
-.mmc-fs-step:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: -2px; }
-/* Inside the segment it acts on, and shown only while you are standing on that
-   segment — the one place where "remove the pre-stage" cannot be a slip of the
-   hand on the way to switching to it. */
-.mmc-fs-step { display: flex; align-items: center; gap: 8px; }
-.mmc-fs-step-drop {
-  display: flex; align-items: center; justify-content: center;
-  width: calc(16px * var(--mmc-type)); height: calc(16px * var(--mmc-type)); padding: 0; margin-right: -4px;
-  border: 0; border-radius: 50%; background: none; cursor: pointer;
-  color: var(--mmc-off); font-family: inherit; font-size: calc(14px * var(--mmc-type)); line-height: 1;
+.mmc-fs-step[aria-pressed="true"] { color: var(--mmc-text); }
+/*
+ * The lit segment, travelling. It used to be a background on whichever button
+ * was pressed, which meant the switch had no motion of its own: the card was
+ * replaced and the highlight was somewhere else, two changes in the same frame
+ * with nothing joining them. One element that slides is the join — and it is
+ * the only thing on the card that survives the switch, so it is what the eye
+ * holds on to while everything under it is dealt back in.
+ *
+ * Sized and placed from fullscreen.js rather than in fractions: the segments
+ * are the width of their own words, and those words are translated.
+ */
+.mmc-fs-step-ink {
+  position: absolute; top: 2px; bottom: 2px; left: 0; width: 0;
+  border-radius: 13px; background: var(--mmc-surface-3); pointer-events: none;
 }
-.mmc-fs-step-drop:hover { background: color-mix(in srgb, var(--mmc-warn) 18%, transparent); color: var(--mmc-warn); }
+/* Only once it has been placed. A pill that slid in from the left edge on open
+   would announce a switch nobody made. */
+.mmc-fs-step-ink.travels {
+  transition: transform .3s cubic-bezier(.32, .72, 0, 1),
+              width .3s cubic-bezier(.32, .72, 0, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .mmc-fs-step-ink.travels { transition: none; }
+}
+.mmc-fs-step:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: -2px; }
+/* A segment holds its name and nothing else. It carried an × that took the
+   pre-stage back out of the graph, on the grounds that the step you are standing
+   on is the safe place for it; the safer reading is that a switch switches. In
+   this view you are on one step or the other, and removing the node is the
+   desk's — the toggle in the shot's own row, which the desk still draws. */
+.mmc-fs-step { display: flex; align-items: center; }
 
 /* The way in, inside. Both faces grow a control that opens the shell — the rail
    tile on a shot, the pill on a strip — and in here the same door is already in
@@ -887,8 +913,15 @@ export const css = `
      and quietly added 38px of padding and border to it — which is 38px the
      window's own padding had not been asked for at the width where the two meet. */
   box-sizing: border-box;
-  /* Its own scroll, so a card taller than the window keeps Render reachable
-     without the window scrolling the picture beside it out of view. */
+  /* One height, whatever step you are standing on and whatever you have
+     written. The card used to be as tall as its contents, which made the size
+     of the room a function of the length of your sentence — and made the step
+     switch a jump, because a pre-stage has one pill row where a shot has two.
+     A measure in both axes instead: the card is the same rectangle on both
+     steps, so switching moves what is *in* it and nothing else. The writing
+     inside gives and takes the room (see .mmc-well below); the card does not.
+     Capped by the window first, so a short screen still gets a whole card. */
+  height: min(calc(620px * var(--mmc-type)), 100%);
   max-height: 100%; min-height: 0; overflow-y: auto;
   /* Positioned, and only for the paint order. The stage is position:relative,
      so an unpositioned card below it in the DOM is painted *under* it — which
@@ -900,26 +933,36 @@ export const css = `
   background: var(--mmc-surface); border: 1px solid var(--mmc-line);
   box-shadow: 0 24px 64px var(--mmc-shadow-soft);
 }
-/* On the desk the body fills a column and scrolls inside it. Here it is as tall
-   as what is in it — so a short shot is a small card centred on the ground,
-   which a body pinned to full height could never be — and no taller than the
-   card, which is no taller than the window. Shrinkable rather than fixed is the
-   whole of that second half: with flex:none a long prompt grew the body past the
-   screen, and the pill row, the sampler row and Render went off the bottom of it
-   with the card's own scrollbar the only way back to them. The room has to come
-   out of something, and the writing well is the one part of the card that
-   already scrolls on its own. Both roots, wrapper and shot alike, or the wrapper
-   caps the body it was only ever holding. */
-.mmc-fs.simple .mmc-fs-col .mmc-root { flex: 0 1 auto; min-height: 0; }
-/* And it stops where the well does. Every box between the body and the box you
-   type into carries min-height:0, so that they could fill a card of a fixed
-   height; asked to give room back instead, a chain of zero floors goes on
-   shrinking the panel past the rows inside it and the sentence is painted over
-   the pills. The floor is the well's own minimum plus the rails that live in the
-   panel with it — the compiled row and the two lines of pills. Under that there
-   is nothing left to give and the card scrolls, which is what it did before any
-   of this and is the only honest answer for a window that short. */
-.mmc-fs.simple .mmc-panel { min-height: calc(210px * var(--mmc-type)); }
+/* The body fills the card and gives room back to it, both. It used to only give
+   — the card was as tall as its contents, so growing was the card's business —
+   and now the card is a fixed rectangle, so the room between the rail and Render
+   belongs to the body and the well inside it. Both roots, wrapper and shot
+   alike, or the wrapper caps the body it was only ever holding. */
+.mmc-fs.simple .mmc-fs-face,
+.mmc-fs.simple .mmc-fs-col .mmc-root { flex: 1 1 auto; min-height: 0; }
+/* The turn's axis, and nothing more. Down the middle of the face, so it pivots
+   about the line the switch sits on rather than about an edge; the perspective
+   is written into the animation's own transform (see turnTo() in fullscreen.js)
+   because it belongs to the gesture and not to the layout. No will-change: a
+   layer held for the whole session to serve a third of a second of motion is
+   the trade the wrong way round, and a promoted layer softens the type in it. */
+.mmc-fs.simple .mmc-fs-face { transform-origin: 50% 50%; }
+/* The panel fills what the card has left, and the writing inside it is what
+   scrolls. This used to be a floor in pixels — 210, hand-counted from the box's
+   own minimum plus the rails that share the panel with it — and a floor is a
+   number that can be wrong. A rewrite puts a second description of the shot in
+   here, which is far taller than any floor written for a panel holding only the
+   box; the flex chain above went on shrinking the panel to that number anyway,
+   and the rewrite was painted straight over the pill row and Render. That was
+   the broken layout: not a scrollbar in the wrong place, a panel smaller than
+   the thing inside it.
+   Now the card owns the height, the panel takes it, and .mmc-well takes what is
+   left of the panel once the pill row has had its line. Nothing is ever asked
+   to be shorter than what it holds. */
+.mmc-fs.simple .mmc-panel { flex: 1; min-height: 0; }
+/* And the scroll is here, on the writing alone, so the pills and Render stay
+   where they are however long the rewrite runs. */
+.mmc-fs.simple .mmc-well { overflow-y: auto; }
 .mmc-fs.simple .mmc-root { height: auto; overflow: visible; }
 .mmc-fs.simple .mmc-root:not(.hosting) { padding: 0; gap: 12px; }
 

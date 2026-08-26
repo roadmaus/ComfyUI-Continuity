@@ -1261,7 +1261,6 @@ export const ko = {
  "This piece has a pre-stage. The full view is where it is edited.": "이 작품에는 프리스테이지가 있습니다. 편집은 전체 보기에서 합니다.",
  "The still this shot is built on — its prompt, its references, its checkpoint.": "이 샷의 바탕이 되는 스틸 — 프롬프트, 레퍼런스, 체크포인트.",
  "The video: the prompt, the cast and everything the render reads.": "영상 — 프롬프트, 캐스트, 렌더링이 읽는 모든 것.",
- "Remove the pre-stage node": "프리스테이지 노드를 제거",
  "Edit @{handle}": "@{handle} 편집",
  "Fullscreen": "전체 화면",
  "Fullscreen editor": "전체 화면 편집기",

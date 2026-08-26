@@ -5,6 +5,18 @@ export const css = `
 .mmc-pop {
   position: fixed; z-index: 1300; background: var(--mmc-float); border: 1px solid var(--mmc-line);
   border-radius: 16px; padding: 8px; min-width: 190px;
+  /* Said out loud, because a popover is portaled to document.body and so stands
+     outside every root this pack draws: what it inherits is ComfyUI's own body
+     colour, whatever the installed theme makes that. Every other line in here
+     names its colour and looked right; the one that did not — the short-edge
+     readout, the biggest number on the card — came out at whatever the page
+     underneath happened to be, which on the dark theme is barely on the panel
+     at all. The floor is the pack's own text colour and the rest still overrides
+     it downward. */
+  color: var(--mmc-text);
+  /* And the face, for the same reason and from the same omission — every other
+     portaled root in the pack (.mmc-overlay, .mmc-sheet) states its own. */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
   box-shadow: 0 18px 48px var(--mmc-shadow);
   /* Never taller than the screen: on a 1080p display the refine popover's
      stacked sections can outgrow the viewport, and placeNear can only clamp

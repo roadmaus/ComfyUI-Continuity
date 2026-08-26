@@ -202,6 +202,13 @@ export const css = `
    out of the box, not a row of the form, and it must not move the box down by
    its own height on every node. */
 .mmc-panel { position: relative; }
+/* The writing half of the well: the box and, under it, the rewrite that stands
+   in for it. A column of its own so that "the writing scrolls" can be said
+   about the writing alone — the pill row is a sibling of this, not of the box,
+   and so it stays put wherever the room runs out. */
+.mmc-well {
+  display: flex; flex-direction: column; gap: 12px; flex: 1; min-height: 0;
+}
 .mmc-panel-corner { position: absolute; top: 10px; right: 10px; z-index: 1; }
 .mmc-expand {
   display: flex; align-items: center; justify-content: center;
@@ -215,7 +222,7 @@ export const css = `
    it is where the writing is. */
 .mmc-expand.on { opacity: 1; color: var(--mmc-accent); border-color: color-mix(in srgb, var(--mmc-accent) 45%, transparent); }
 /* Room for it, so a long first line does not run under the button. */
-.mmc-panel > .mmc-prompt-fold > .mmc-prompt { padding-right: 30px; }
+.mmc-panel .mmc-well > .mmc-prompt-fold > .mmc-prompt { padding-right: 30px; }
 
 /* The window the face's corner control opens — and the one a timeline segment
    opens over the strip. One window: both are the same node body over the same
