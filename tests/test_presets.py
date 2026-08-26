@@ -223,7 +223,10 @@ try {
 
   const target = S.parseTimeline(SOURCE);
   S.syncTimeline(target);
-  P.applyToShot(body, Object.keys(body), target.segments[0], fakeIO({}));
+  // `piece` on every call, because every call in the pack has one: the seam
+  // width a preset carries is retargeted onto the target family's grid, and
+  // that is a question only the piece can answer.
+  P.applyToShot(body, Object.keys(body), target.segments[0], fakeIO({}), { piece: target });
   S.syncTimeline(target);
   const landed = target.segments[0];
   // Read off the serialized blob, not off the live object: what a card *is* is
@@ -245,7 +248,7 @@ try {
   // is legal and has to survive.
   const second = S.parseTimeline(SOURCE);
   S.syncTimeline(second);
-  P.applyToShot(body, Object.keys(body), second.segments[1], fakeIO({}));
+  P.applyToShot(body, Object.keys(body), second.segments[1], fakeIO({}), { piece: second });
   S.syncTimeline(second);
   out.shot.seamKept = second.segments[1].continue === true
                    && second.segments[1].feather === 22;
@@ -363,7 +366,8 @@ try {
   const target = S.parseTimeline(SOURCE);
   S.syncTimeline(target);
   const card = target.segments[0];
-  P.applyToShot(body, ["prompt", "refs", "loras"], card, fakeIO({}), { from: "prestage" });
+  P.applyToShot(body, ["prompt", "refs", "loras"], card, fakeIO({}),
+                { from: "prestage", piece: target });
   S.syncTimeline(target);
   out.preToShot = {
     prompt: card.prompt === "a lighthouse",

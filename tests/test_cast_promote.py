@@ -77,7 +77,7 @@ const beforeGrow = {
 };
 
 const grown = lonePiece();
-grown.segments.push(s.continuingSegment());
+grown.segments.push(s.continuingSegment(grown));
 grown.segments[1].prompt = "@anna sits down";
 s.syncTimeline(grown);
 const card2 = grown.segments[1];

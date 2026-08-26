@@ -82,7 +82,9 @@ const lengthOf = (name) => lengths[name] ?? null;
 
 const out = { led: S.LENGTH_LED, cases: {} };
 const record = (label, state) => {
-  const match = S.lengthMatch(state, lengthOf);
+  // The piece, because the offer lands on its family's frame grid — there is
+  // no such thing as a length match without one to land on.
+  const match = S.lengthMatch(state, lengthOf, S.emptyTimeline());
   out.cases[label] = match && { handle: match.asset.handle, seconds: match.seconds,
                                 duration: match.duration, matched: match.matched };
 };

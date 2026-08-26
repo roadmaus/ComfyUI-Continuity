@@ -206,6 +206,13 @@ for (const [cls, widget, blob] of [
   try {
     await ext.nodeCreated(node);
     const key = cls + (cls === "MiniMaxH3PreStage" && blob !== "{}" ? " (H3 still)" : "");
+    // Where the piece object hangs off the body, which is not the same property
+    // on both kinds — see the `pieceRead` block below for what that costs.
+    out.holds ??= {};
+    out.holds[key] = {
+      timeline: !!node.mmcBody?.timeline,
+      state: !!node.mmcBody?.state,
+    };
     out.nodes[key] = { mounted: !!node.mmcBody && !!node.dom,
                        body: node.mmcBody?.editor?.constructor.name
                           ?? node.mmcBody?.constructor.name };
@@ -228,6 +235,31 @@ for (const [cls, widget, blob] of [
   } catch (error) {
     out.errors.push(`${cls}: ${error.message}`);
   }
+}
+
+// Which property a host has to read to get the piece, and what happens when it
+// reads the wrong one. `familyOf` used to answer a missing piece with the
+// default family, so a host that reached for `.state` on a piece node got a
+// valid, confident, wrong answer — which is how the fullscreen bar spent its
+// whole life drawing "MiniMax H3" over an LTX 2.5 shot without looking broken.
+// It refuses now, and this is what pins that: the wrong read has to be an
+// error and not an answer.
+try {
+  const node = fakeNode("MiniMaxH3Timeline", "timeline_data",
+                        JSON.stringify({ ...JSON.parse(A_STRIP), family: "ltx25" }));
+  await ext.nodeCreated(node);
+  let refused = null;
+  try { S.familyOf(node.mmcBody.state); } catch (error) { refused = error.message; }
+  out.pieceRead = {
+    onTimeline: S.familyOf(node.mmcBody.timeline).label,
+    // Not just that it threw — that it threw something naming the way out.
+    refusesMissing: Boolean(refused?.includes("mmcBody.timeline")),
+    // A piece that names no family at all is a different thing and keeps the
+    // default: that is a blob written before the field existed, not a bug.
+    noFamilyField: S.familyOf({ segments: [] }).label,
+  };
+} catch (error) {
+  out.errors.push(`pieceRead: ${error.stack}`);
 }
 
 // Somebody typed into the sentence. The `@` menu offers the cast library where
@@ -375,14 +407,17 @@ try {
   const chip = () => String(editor.assetsHost.querySelectorAll(".mmc-asset")[0]?.className ?? "")
     .split(" ").includes("off");
 
-  const liveMode = S.mode(shot);
+  // The piece on every `mode` call: which mode a card is in is the family's
+  // vocabulary, and the card alone cannot say whose.
+  const piece = node.mmcBody.timeline;
+  const liveMode = S.mode(shot, piece);
   press();
-  const offMode = S.mode(shot);
+  const offMode = S.mode(shot, piece);
   const dimmedWhileOff = chip();
   const blob = JSON.parse(node.widgets[0].value).segments[0].assets[0];
   press();
   out.mute = {
-    liveMode, offMode, backMode: S.mode(shot),
+    liveMode, offMode, backMode: S.mode(shot, piece),
     // Attached throughout — that is the whole difference between this and ✕.
     kept: shot.assets.length,
     file: shot.assets[0]?.filename,
@@ -717,7 +752,7 @@ try {
     // ...and the strip still redraws once something is added, which is the path
     // every piece takes on its first click.
     added: (() => {
-      body.timeline.segments.push(S.continuingSegment());
+      body.timeline.segments.push(S.continuingSegment(body.timeline));
       body.commit();
       return S.passes(body.timeline).length;
     })(),
@@ -2446,6 +2481,20 @@ check("a piece of one shot wears that shot's editor",
       {"mounted": True, "body": "CreatorEditor"})
 check("a piece of several wears the strip", report["nodes"].get("MiniMaxH3Timeline"),
       {"mounted": True, "body": "TimelineBody"})
+# A piece keeps its blob on `timeline`; only a pre-stage keeps one on `state`.
+# Both are reached through the same `mmcBody`, so a host has to know which — and
+# nothing tells it, which is what the pair after this is really about.
+check("a piece holds its blob on `timeline`, not `state`",
+      report["holds"].get("MiniMaxH3Timeline"), {"timeline": True, "state": False})
+check("...and a pre-stage the other way round",
+      report["holds"].get("MiniMaxH3PreStage"), {"timeline": False, "state": True})
+check("an LTX 2.5 piece reads as LTX 2.5 off `timeline`",
+      report["pieceRead"].get("onTimeline"), "LTX 2.5")
+check("...and reading `state` instead is refused, naming the way out",
+      report["pieceRead"].get("refusesMissing"), True)
+check("...while a piece that simply names no family keeps the default",
+      report["pieceRead"].get("noFamilyField"), "MiniMax H3")
+
 check("the image pre-stage mounts", report["nodes"].get("MiniMaxH3PreStage"),
       {"mounted": True, "body": "PreStageEditor"})
 check("the H3 pre-stage mounts the Creator's body",

@@ -33,12 +33,28 @@ export { VIDEO_FAMILIES, DEFAULT_VIDEO_FAMILY };
 
 /** The id a piece renders with, validated. An absent or unknown one is the
  *  default — see `compile.piece_family` for why an unrecognised id is a piece
- *  to draw rather than a blob to refuse. */
-export const pieceFamily = (piece) =>
-  VIDEO_FAMILIES.includes(piece?.family) ? piece.family : DEFAULT_VIDEO_FAMILY;
+ *  to draw rather than a blob to refuse.
+ *
+ *  **A missing *piece* is not an absent family, and does not get the default.**
+ *  The two used to give the same answer, and that made a whole class of caller
+ *  bug invisible: a host that reached through `mmcBody` for the wrong property
+ *  — `.state` on a piece node, where the blob is `.timeline` — got `undefined`,
+ *  and got a confident "MiniMax H3" back. The fullscreen bar shipped that way
+ *  and drew H3 over every LTX 2.5 shot without ever looking broken. Refusing is
+ *  `manifest.family`'s own rule one level up: an unknown id is a bug rather
+ *  than a state, and so is a piece that is not there. */
+export const pieceFamily = (piece) => {
+  if (!piece) {
+    throw new Error("pieceFamily: no piece. A piece node keeps its blob on "
+                  + "`mmcBody.timeline`; only a pre-stage keeps one on `.state`.");
+  }
+  return VIDEO_FAMILIES.includes(piece.family) ? piece.family : DEFAULT_VIDEO_FAMILY;
+};
 
-/** That family's whole manifest. */
-export const familyOf = (piece) => videoFamily(piece?.family);
+/** That family's whole manifest. Refuses a missing piece for `pieceFamily`'s
+ *  reason, which is the whole point of routing through it rather than reaching
+ *  past it to `videoFamily(piece?.family)` as this used to. */
+export const familyOf = (piece) => videoFamily(pieceFamily(piece));
 
 /** What the family pill calls each choice, and what it says about it — the
  *  families' own strings, translation keys like any written in source. */
@@ -4308,7 +4324,7 @@ export function timedRefs(state, lengthOf) {
  * second — and `matched` is whether the card already lands on the same frame
  * count, which is the only sense in which two lengths can agree here.
  */
-export function lengthMatch(state, lengthOf, piece = null) {
+export function lengthMatch(state, lengthOf, piece) {
   // The grid the offer lands on is the piece's family's: `matchSeconds` answers
   // in the model's own units precisely because whole seconds do not cover the
   // frame grid evenly, and which grid that is differs by family.
@@ -4360,6 +4376,17 @@ export function nearestFeather(width, piece) {
  *  H3 takes 5 frames where LTX 2.5 would crop the same run to 1 and go on
  *  claiming a feathered seam. See `canvas.feather_grid`. */
 export const featherGridOf = (piece) => featherGrid(rulesFor(pieceFamily(piece)));
+
+/** The same grid for a seam that belongs to no piece yet — the shipped starters,
+ *  which are family-neutral by design and are retargeted by `nearestFeather`
+ *  when one is applied to a card.
+ *
+ *  A named export rather than `featherGridOf()` with nothing in the brackets,
+ *  which is what this was. Omitting the piece and meaning "the default family"
+ *  reads identically to omitting it by mistake, and `pieceFamily` cannot tell
+ *  them apart — so the one caller that means it says so, and everybody else
+ *  gets an error. */
+export const DEFAULT_FEATHER_GRID = featherGrid(rulesFor(DEFAULT_VIDEO_FAMILY));
 
 /** Whether this seam also names its boundary frame to the text encoder, on
  *  top of the run it pins for the DiT. Only meaningful on a blended seam and

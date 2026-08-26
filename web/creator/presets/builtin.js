@@ -114,7 +114,7 @@ export const BUILTIN = [
         // onto the grid of whatever family the card belongs to — see
         // `S.nearestFeather`. Copied verbatim it would fall off that grid and
         // read back as the classic single frame.
-        feather: S.featherGridOf()[2],
+        feather: S.DEFAULT_FEATHER_GRID[2],
       },
     },
   }),
