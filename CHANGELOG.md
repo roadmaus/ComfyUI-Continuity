@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+**Every family files its renders and stills under its own name.** A piece shot
+on LTX 2.5 was written to `output/minimax/renders/H3_00021_.mp4` — the wrong
+shelf and another architecture's name on the file — because where a render
+landed was one constant for the whole pack, decided when H3 was the only thing
+in it. It is decided by whatever rendered it now: renders go to
+`minimax/renders/<family>/`, stills to `minimax/stills/<family>/`, and a piece
+shot a pass at a time keeps its takes in that family's own `takes/` folder.
+
+Settings → Folders has a row per family to match, so a family can be sent
+anywhere without moving the others. A machine that had typed its own folder
+keeps it: the old single setting is read as an answer for every family of its
+kind, which is what it was, and only the untouched default gives way to the new
+layout.
+
 **The first card of a piece can now be kept.** A render of one generation used
 to be told there was nothing to keep — its take *was* the render, so writing the
 same frames out a second time would have been one file to keep and one to

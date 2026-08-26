@@ -24,18 +24,21 @@ spec.loader.exec_module(outputs)
 
 from harness import FAILURES, check, passed
 
+# One family's render default, which is what every caller passes as the
+# fallback: there is no pack-wide prefix left to reach for.
+D = outputs.default_video("h3", "H3")
+I = outputs.default_image("h3", "H3")
+
 
 def refuses(label, raw, fragment):
     try:
-        outputs.clean(raw, outputs.VIDEO_PREFIX)
+        outputs.clean(raw, D)
     except outputs.PrefixError as exc:
         if fragment not in str(exc):
             FAILURES.append(f"{label}: refused, but said {str(exc)!r} (wanted {fragment!r})")
         return
     FAILURES.append(f"{label}: was accepted")
 
-
-D = outputs.VIDEO_PREFIX
 
 # ---- the ordinary cases -----------------------------------------------------
 
@@ -53,8 +56,7 @@ check("backslashes are separators", outputs.clean("my-project\\take", D), "my-pr
 # A trailing slash is a folder, not a mistake — it is what anyone types when
 # they mean "in here, named the usual thing".
 check("a trailing slash keeps the default's stem", outputs.clean("my-project/", D), "my-project/H3")
-check("...including a bare one", outputs.clean("shots/", "minimax/stills/prestage"),
-      "shots/prestage")
+check("...including a bare one", outputs.clean("shots/", I), "shots/H3")
 
 # Tokens are core's and pass through untouched — including in a folder, which is
 # where a date token is actually useful.
@@ -85,20 +87,41 @@ except outputs.PrefixError as exc:
     check("the absolute-path refusal points at the flag that does work",
           "--output-directory" in str(exc), True)
 
+# ---- the per-family defaults ------------------------------------------------
+
+# A folder per family, named by the family id, with the family's own stem on
+# the files in it. Both halves matter: the folder is what the gallery sorts on,
+# and the stem is what a file dragged out of it still says about itself.
+check("a family's renders land under its own folder",
+      outputs.default_video("ltx25", "LTX25"), "minimax/renders/ltx25/LTX25")
+check("...and its stills under the other shelf",
+      outputs.default_image("krea2", "Krea2"), "minimax/stills/krea2/Krea2")
+# Two families' renders cannot collide, which is the whole bug this replaced:
+# every family used to write `minimax/renders/H3`.
+check("two families do not share a folder",
+      outputs.default_video("h3", "H3") != outputs.default_video("ltx25", "LTX25"), True)
+# Stills and clips default apart, which is what pre-sorts the gallery into two
+# shelves with no special case in the picker — including for the one family
+# that renders both.
+check("the two shelves are different folders",
+      outputs.default_video("h3", "H3").rsplit("/", 1)[0]
+      != outputs.default_image("h3", "H3").rsplit("/", 1)[0], True)
+# The flat layout every settings file written before this holds. `settings.py`
+# recognises it to migrate off it, so it has to stay exactly what it was.
+check("the legacy prefixes are unchanged",
+      (outputs.LEGACY_VIDEO_PREFIX, outputs.LEGACY_IMAGE_PREFIX),
+      ("minimax/renders/H3", "minimax/stills/prestage"))
+
 # ---- the two blob accessors -------------------------------------------------
 
-check("a blob with no key gets the video default", outputs.video({}), outputs.VIDEO_PREFIX)
-check("a blob with no key gets the image default", outputs.image({}), outputs.IMAGE_PREFIX)
-check("a blob's key is used", outputs.video({"output_prefix": "shots/a"}), "shots/a")
-# Stills and clips default apart, which is what pre-sorts the gallery into two
-# shelves with no special case in the picker.
-check("the two defaults are different folders",
-      outputs.VIDEO_PREFIX.rsplit("/", 1)[0] != outputs.IMAGE_PREFIX.rsplit("/", 1)[0], True)
+check("a blob with no key gets the caller's default", outputs.video({}, D), D)
+check("a blob with no key gets the still default", outputs.image({}, I), I)
+check("a blob's key is used", outputs.video({"output_prefix": "shots/a"}, D), "shots/a")
 
 # A render's takes sort into a shelf of their own, one folder under wherever
 # the render itself lands, and keep the render's stem.
-check("takes go one folder deeper", outputs.takes("minimax/renders/H3"),
-      "minimax/renders/takes/H3")
+check("takes go one folder deeper", outputs.takes("minimax/renders/h3/H3"),
+      "minimax/renders/h3/takes/H3")
 check("...even under a typed folder", outputs.takes("shots/a"), "shots/takes/a")
 check("...and under no folder at all", outputs.takes("H3"), "takes/H3")
 

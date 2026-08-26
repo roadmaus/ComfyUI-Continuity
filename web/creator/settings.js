@@ -24,6 +24,7 @@ import { el, mountOverlay } from "./dom.js";
 import { loadSettings, saveSettings, noteSettings, loadLatentCache, clearLatentCache } from "./api.js";
 import { t } from "./i18n.js";
 import { TOKENS, cleanPrefix, folderOf, stemOf, examplePath } from "./outputs.js";
+import { FAMILIES } from "./manifest.js";
 
 // libx264's own quality scale: lower is better and bigger, and six points is
 // roughly double the file size. Four points on it, because the encoder's full
@@ -946,29 +947,36 @@ class SettingsPage {
   // ---- folders ---------------------------------------------------------------
 
   /**
-   * Where the two kinds of file land: one section, one card, two rows.
+   * Where each family files what it makes: one section, two cards, a row per
+   * family in each.
    *
-   * The two prefixes are one setting asked twice, so they read as two rows of
-   * one card the way the quality tiers do — two full sections was the same
-   * heading, description and token row said twice, and the second telling
-   * taught nothing the first had not.
+   * It was one row per *kind* until families arrived, and that was the bug: an
+   * LTX 2.5 piece wrote `minimax/renders/H3_00021_.mp4` — the wrong shelf and
+   * somebody else's name on the file. A render lands somewhere because of what
+   * rendered it, so the question is asked once per family, and the families
+   * come off the catalog rather than a list here: a new one gets its row by
+   * existing, and gets it filled with the default the save node will use,
+   * because that default is served in its manifest.
+   *
+   * The two cards keep their own heading and the renders/stills split the
+   * gallery sorts on, but they still share one section: the footnote below them
+   * is about every field on the tab, and saying it twice taught nothing.
    *
    * This used to be a pill on every node, which meant every node was a place
    * the answer could differ and a shared workflow arrived carrying somebody
-   * else's folder names. It is one answer per machine now.
+   * else's folder names. It is one answer per family per machine now.
    */
   renderFolders() {
+    const renders = FAMILIES.filter((family) => family.produces.includes("video"));
+    const stills = FAMILIES.filter((family) => family.produces.includes("still"));
     return [
       this.section("Output", "Folders",
-        "Where this ComfyUI files what it makes. Renders and stills get their "
-        + "own, which is how the gallery tells them apart.",
+        "Where this ComfyUI files what it makes. Every family gets a folder of "
+        + "its own, and renders and stills get their own shelf — which is how "
+        + "the gallery tells any of them apart.",
         [
-          el("div", { class: "mmc-set-field" }, [
-            this.folderRow("video_prefix", "Renders",
-              "finished videos — the Creator and the Timeline", "mp4"),
-            this.folderRow("image_prefix", "Stills",
-              "pre-stage stills", "png"),
-          ]),
+          this.folderCard("Renders", "video_prefix", renders, "video", "mp4"),
+          this.folderCard("Stills", "image_prefix", stills, "still", "png"),
           el("div", { class: "mmc-set-foot" }, [
             el("span", { text: t("Relative to ComfyUI's output folder (") }),
             el("code", { text: "--output-directory" }),
@@ -980,7 +988,23 @@ class SettingsPage {
   }
 
   /**
-   * One destination: a name, the field, and the single line it resolves to.
+   * One shelf's card: a heading and a destination per family that files there.
+   *
+   * `kind` is which half of the family's `output` block holds its default —
+   * H3 is in both cards and its two defaults are different folders, so the
+   * fallback has to be read per card and not per family.
+   */
+  folderCard(title, key, families, kind, extension) {
+    return el("div", { class: "mmc-set-group" }, [
+      el("div", { class: "mmc-set-group-name", text: t(title) }),
+      el("div", { class: "mmc-set-field" },
+        families.map((family) => this.folderRow(
+          key, family.id, family.label, family.output?.[kind] ?? "", extension))),
+    ]);
+  }
+
+  /**
+   * One family's destination: its name, the field, and the line it resolves to.
    *
    * Written through on Enter or on leaving the field rather than on every
    * keystroke — the rest of the page writes on a click, and a click is finished
@@ -990,20 +1014,24 @@ class SettingsPage {
    * H3 rather than a folder called H3 is the one surprise this page holds.
    *
    * The token chips only exist while the field has focus — CSS, off
-   * :focus-within — so the page at rest is two fields, not sixteen buttons.
+   * :focus-within — so the page at rest is a field per family and not eight
+   * buttons per family.
    */
-  folderRow(key, title, description, extension) {
-    const stored = this.settings[key];
+  folderRow(key, family, title, fallback, extension) {
+    // The server fills a row for every family it knows, so the fallback is for
+    // the one case it cannot: a settings file that predates this family. It is
+    // the manifest's own default, which is what the save node would use.
+    const stored = this.settings[key]?.[family] ?? fallback;
     const field = el("input", {
       class: "mmc-out-field",
       type: "text",
       value: stored,
       spellcheck: false,
-      "aria-label": t("{title} — folder and filename prefix", { title: t(title) }),
+      "aria-label": t("{title} — folder and filename prefix", { title }),
       onkeydown: (event) => {
         event.stopPropagation();
         if (event.key === "Enter") field.blur();
-        if (event.key === "Escape") { field.value = this.settings[key]; field.blur(); }
+        if (event.key === "Escape") { field.value = stored; field.blur(); }
       },
       onchange: () => commit(),
       onblur: () => commit(),
@@ -1036,17 +1064,22 @@ class SettingsPage {
       // A path that does not parse is left on screen to be fixed rather than
       // stored or silently reverted — nothing has changed on disk yet, and the
       // line under it says what is wrong.
-      if (error || prefix === this.settings[key]) return;
-      this.set({ [key]: prefix });
+      if (error || prefix === this.settings[key]?.[family]) return;
+      // The whole block, not the one family: `set` patches the settings object
+      // shallowly, so sending `{h3: …}` alone would drop every other family's
+      // folder on the way through.
+      this.set({ [key]: { ...this.settings[key], [family]: prefix } });
     };
 
     field.addEventListener("input", paint);
     paint();
 
     return el("div", { class: "mmc-set-dest" }, [
+      // The family's own name, untranslated: "MiniMax H3" and "LTX 2.5" are
+      // what the checkpoints are called, and the card above already says in
+      // this reader's language whether these are renders or stills.
       el("div", { class: "mmc-set-dest-head" }, [
-        el("span", { class: "mmc-set-dest-name", text: t(title) }),
-        el("span", { class: "mmc-set-dest-sub", text: t(description) }),
+        el("span", { class: "mmc-set-dest-name", text: title }),
       ]),
       field,
       problem,

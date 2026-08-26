@@ -27,9 +27,25 @@ from .compile import CompileError
 from .models import is_gguf, loader_for
 
 SAVE_NODE = "MiniMaxH3SaveImage"
-# Where a still lands when the blob does not say — see `outputs`, which owns
-# both defaults and what a typed prefix is allowed to be.
-FILENAME_PREFIX = outputs.IMAGE_PREFIX
+
+
+def default_prefix(family):
+    """Where `family`'s stills land when the caller names nowhere.
+
+    A folder per family under the stills shelf — `outputs` owns the shape of
+    that tree and what a typed prefix is allowed to be, and the family owns its
+    name. `family` is a family id — `emit` below takes the still *module* and
+    maps its `ARCH` through the registry, because "minimax" is the pre-stage's
+    permanent alias for H3 and not a folder anybody should see.
+
+    Every real caller passes a prefix: they resolve the setting above the graph,
+    so an unusable one stops the queue before anything is sampled. This is the
+    save node's own widget default and what a hand-driven `emit` gets.
+    """
+    from .families import registry
+
+    return outputs.default_image(family, registry.OUTPUT_STEM[family])
+
 
 # Which directory each pickable field browses — ComfyUI's own folder keys, and
 # the listing route hands the same map to the frontend.
@@ -120,7 +136,7 @@ def emit_unet(graph, weights, name):
     return graph.node(node_id, unet_name=filename, **dtype).out(0)
 
 
-def emit(payload, weights, sampling, unique_id, family, filename_prefix=FILENAME_PREFIX):
+def emit(payload, weights, sampling, unique_id, family, filename_prefix=None):
     """-> the graph, which the caller finalizes with `render.expanded`.
 
     `sampling` is a `render.Sampling` — the same widget names as the video
@@ -130,6 +146,10 @@ def emit(payload, weights, sampling, unique_id, family, filename_prefix=FILENAME
     """
     from comfy_execution.graph_utils import GraphBuilder
 
+    from .families import registry
+
+    if filename_prefix is None:
+        filename_prefix = default_prefix(registry.STILL_ARCHES[family.ARCH])
     if payload.arch != weights.arch:
         raise CompileError("the payload and the weights disagree about the architecture")
     family.require_support()

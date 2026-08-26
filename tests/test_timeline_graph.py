@@ -272,8 +272,9 @@ check("the reel is one node per pass, samplers all the way down",
 check("the first pass opens the reel with nothing in front of it",
       "reel" in graph[[node_id for node_id, i in by_type["MiniMaxH3Reel"]
                        if "reel" not in i][0]]["inputs"], False)
-check("it lands in the render folder — the same one a Creator render lands in",
-      save_inputs["filename_prefix"], outputs_mod.VIDEO_PREFIX)
+check("it lands in the family's render folder — the same one a Creator render "
+      "on that family lands in",
+      save_inputs["filename_prefix"], outputs_mod.default_video("h3", "H3"))
 # One prefix for the whole timeline, because a timeline is one file: the
 # passes reach the save node as one reel, so there is nothing per-segment to
 # put anywhere else.

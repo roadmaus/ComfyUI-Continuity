@@ -71,11 +71,22 @@ CLIP_FRAMES_NODE = "MiniMaxH3ClipFrames"
 CLIP_AUDIO_NODE = "MiniMaxH3ClipAudio"
 SAVE_NODE = "MiniMaxH3Save"
 
-# Where a render lands when the blob does not say. Under a folder of its own,
-# because the node writes one every queue now and mixing them into the root of
-# output/ would bury whatever else is in there. `outputs` owns the value and
-# what a typed one is allowed to be.
-FILENAME_PREFIX = outputs.VIDEO_PREFIX
+
+def default_prefix(family):
+    """Where `family`'s renders land when the caller names nowhere.
+
+    A folder of its own, because the node writes a file every queue now and
+    mixing them into the root of output/ would bury whatever else is in there —
+    and a folder *per family*, because the loop is one loop for every family and
+    the files it writes should not all be named after the first one. `outputs`
+    owns the shape of that tree and what a typed prefix is allowed to be; the
+    family owns its name.
+
+    The callers all pass a prefix — they resolve the setting above the graph, so
+    an unusable one stops the queue before anything is sampled. This is for the
+    ones that do not, which is the tests and a hand-driven `emit`.
+    """
+    return outputs.default_video(family.id, family.output_stem)
 
 
 def compile_all(family, payloads, labels):
@@ -146,7 +157,7 @@ def inherited_audio(graph, source, seconds):
 
 
 def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
-         filename_prefix=FILENAME_PREFIX, cards=None, seeds=None,
+         filename_prefix=None, cards=None, seeds=None,
          whole_piece=True, run=None, upscaler=None):
     """-> the graph, which the caller finalizes. Nothing comes back out of it.
 

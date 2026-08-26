@@ -12,6 +12,10 @@ ORDER = 2
 
 PRODUCES = frozenset({"video"})
 
+# What this family's files are called under `minimax/renders/ltx25/`. See
+# `h3/declare.py` for why the stem is declared rather than derived.
+OUTPUT_STEM = "LTX25"
+
 # No still branch: LTX 2.5 renders video and the pre-stage never reaches for it.
 STILL_ARCH = None
 

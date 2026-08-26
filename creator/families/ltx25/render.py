@@ -79,6 +79,7 @@ class LTX25(base.Family):
     #: The canvas and duration arithmetic this family renders under. Read by
     #: `core/emit.py` for the rate the finished file is written at, which used
     #: to be H3's `canvas.FPS` because there was one family to have one.
+    output_stem = declare.OUTPUT_STEM
     rules = declare.RULES
 
     def weights_from_blob(self, data):

@@ -187,8 +187,8 @@ check("it is reported against the node that built it",
       graph[save_id].get("override_display_id"), NODE_ID)
 check("it saves the decoded picture",
       graph[save_inputs["images"][0]]["class_type"], "VAEDecode")
-check("it lands in the pre-stage folder, which is its own",
-      save_inputs["filename_prefix"], outputs.IMAGE_PREFIX)
+check("it lands in this family's stills folder, which is its own",
+      save_inputs["filename_prefix"], outputs.default_image("krea2", "Krea2"))
 
 
 def save_prefix(**overrides):
@@ -197,15 +197,15 @@ def save_prefix(**overrides):
 
 
 # The blob decides where the file goes, and a blob that says nothing gets the
-# default above. This is the whole output-structure control: before it, the
-# prefix was a module constant and every install on earth wrote its stills to
-# the same folder with no way to say otherwise.
+# family's own default above. This is the whole output-structure control: before
+# it, the prefix was a module constant and every install on earth wrote every
+# family's stills to one folder under one family's name.
 check("a blob's own prefix is used instead",
       save_prefix(output_prefix="my-project/stills/take"), "my-project/stills/take")
-check("a trailing slash means a folder, and keeps the default's stem",
-      save_prefix(output_prefix="my-project/"), "my-project/prestage")
+check("a trailing slash means a folder, and keeps the family's stem",
+      save_prefix(output_prefix="my-project/"), "my-project/Krea2")
 check("an empty prefix falls back to the default rather than the output root",
-      save_prefix(output_prefix="   "), outputs.IMAGE_PREFIX)
+      save_prefix(output_prefix="   "), outputs.default_image("krea2", "Krea2"))
 # Refused while the graph is being built, *not* by get_save_image_path after the
 # still has been sampled — which is the whole reason `outputs` exists rather
 # than the save node just taking whatever it is handed.
@@ -478,8 +478,8 @@ check("it samples the shortest legal clip",
       cs.latent_frames(round(payload["request"]["duration_s"] * 24)), 2)
 check("on H3's own canvas",
       (payload["request"]["short_edge"], payload["request"]["aspect"]), (768, "16:9"))
-check("it lands in the pre-stage folder",
-      h3["MiniMaxH3SaveImage"][0][1]["filename_prefix"], outputs.IMAGE_PREFIX)
+check("it lands in H3's stills folder",
+      h3["MiniMaxH3SaveImage"][0][1]["filename_prefix"], outputs.default_image("h3", "H3"))
 
 # The standing route, the video nodes' own control: Ref2VA takes the text-only
 # payload FL2VA was trained for, so a t2i still can be made by the reference

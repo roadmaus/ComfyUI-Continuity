@@ -252,7 +252,7 @@ SEGMENT_NODE = declare.SEGMENT_NODE
 STILL_NODE = "MiniMaxH3StillLatent"
 SAVE_NODE = "MiniMaxH3SaveImage"
 
-FILENAME_PREFIX = outputs.IMAGE_PREFIX
+FILENAME_PREFIX = outputs.default_image(declare.ID, declare.OUTPUT_STEM)
 
 
 def weights_from_blob(data):
@@ -355,4 +355,4 @@ def emit_still(data, plan, sampling, unique_id):
 
     return emit(plan, weights_from_blob(plan.request), sampling, unique_id,
                 filename_prefix=outputs.image(plan.request,
-                                              settings.image_prefix()))
+                                              settings.image_prefix(declare.ID)))

@@ -50,19 +50,24 @@ export const css = `
   margin-top: 10px; background: var(--mmc-surface); border: 1px solid var(--mmc-line);
   border-radius: 14px; padding: 12px;
 }
-/* A destination: name and note on one line, the field, the reading under it.
-   Two of these share the card, split by a hairline — they are one setting
-   asked twice, and the quality list above answers the same way. */
+/* One shelf's worth of destinations: a heading, then a card of rows. Two of
+   these sit on the Folders tab — renders and stills — and the heading is what
+   makes a row's family name enough on its own, since "MiniMax H3" appears in
+   both and means a different folder in each. */
+.mmc-set-group + .mmc-set-group { margin-top: 18px; }
+.mmc-set-group-name {
+  color: var(--mmc-dim); font-size: calc(11.5px * var(--mmc-type));
+  letter-spacing: 0.04em; text-transform: uppercase; padding: 0 2px;
+}
+/* A destination: the family's name, the field, the reading under it. The rows
+   share a card, split by a hairline — they are one setting asked once per
+   family, and the quality list above answers the same way. */
 .mmc-set-dest { display: flex; flex-direction: column; gap: 8px; padding: 6px 4px; }
 .mmc-set-dest + .mmc-set-dest {
   border-top: 1px solid var(--mmc-line); margin-top: 10px; padding-top: 16px;
 }
 .mmc-set-dest-head { display: flex; align-items: baseline; gap: 10px; min-width: 0; }
 .mmc-set-dest-name { font-size: calc(14px * var(--mmc-type)); }
-.mmc-set-dest-sub {
-  color: var(--mmc-dim); font-size: calc(11.5px * var(--mmc-type));
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
 .mmc-set-dest .mmc-out-example { padding: 0 2px; }
 /* The token chips exist while the destination is being edited and not
    otherwise: at rest the tab is two fields and their readings, not sixteen

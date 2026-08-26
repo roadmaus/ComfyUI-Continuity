@@ -30,6 +30,8 @@ import importlib
 import os
 import pkgutil
 
+from .. import outputs
+
 # The directory this module sits in — `families/`, whose subpackages are the
 # families. `__path__` would be the package's, and this is a module inside it.
 _HERE = os.path.dirname(os.path.abspath(__file__))
@@ -112,6 +114,11 @@ REF_BACKDROP = {module.ID: getattr(module, "REF_BACKDROP", 0.5)
 CUTOUT_DEFAULT = {module.ID: bool(getattr(module, "CUTOUT_DEFAULT", False))
                   for module in DECLARED}
 
+# What each family's files are called. The folder they land in is the family id
+# and the tree is `outputs.py`'s; this is the stem every file in it is numbered
+# off. See `h3/declare.py` for why it is declared rather than lowercased off ID.
+OUTPUT_STEM = {module.ID: module.OUTPUT_STEM for module in DECLARED}
+
 # The families that render nothing but stills, in the registry's order.
 IMAGE_FAMILIES = tuple(module.ID for module in DECLARED
                        if module.PRODUCES == frozenset({"still"}))
@@ -157,6 +164,33 @@ def video_families():
     family becomes selectable by being registered.
     """
     return tuple(f for f in FAMILIES if "video" in PRODUCES.get(f, ()))
+
+
+def still_families():
+    """Every family that renders stills, in the registry's order.
+
+    The still half of `video_families` above. `IMAGE_FAMILIES` is a narrower
+    question — the families that render *nothing but* stills — and the two are
+    not interchangeable: H3 files stills like everybody else and belongs in any
+    list of where stills can land.
+    """
+    return tuple(f for f in FAMILIES if "still" in PRODUCES.get(f, ()))
+
+
+def default_prefixes():
+    """Where every family files what it makes, before anyone has said otherwise:
+    `{"video": {family: prefix}, "still": {family: prefix}}`.
+
+    What `settings.py` starts from and what the settings page draws a row per.
+    Built from the registry rather than written down, which is the whole point
+    of the stem being a declaration: a family gets its folder by existing.
+    """
+    return {
+        "video": {f: outputs.default_video(f, OUTPUT_STEM[f])
+                  for f in video_families()},
+        "still": {f: outputs.default_image(f, OUTPUT_STEM[f])
+                  for f in still_families()},
+    }
 
 
 def still(arch):

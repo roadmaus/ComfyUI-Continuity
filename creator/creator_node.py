@@ -69,8 +69,6 @@ DEFAULT_DATA = json.dumps({
     "prompt": "",
     "aspect": "16:9",
     "short_edge": h3.RULES.native_short_edge,
-    # Where the finished clip lands under output/. See `outputs`.
-    "output_prefix": outputs.VIDEO_PREFIX,
     # Which files to load. Empty here rather than guessed: a fresh node has no
     # idea what is on this machine, and the UI fills it from the listing route.
     "models": {},
@@ -256,7 +254,7 @@ def _render(blob, seed, steps, cfg, sampler_name, scheduler,
         # used should stop the queue before anything is sampled, not after —
         # `get_save_image_path` raising at the end of a render costs the user the
         # render.
-        filename_prefix=outputs.video(data, settings.video_prefix()),
+        filename_prefix=outputs.video(data, settings.video_prefix(family.id)),
         # Which card each pass is, and what seed it runs on. Both are read off
         # the run's first segment because both are properties of the generation
         # rather than of a card: a pass holding three shots is one sampler call

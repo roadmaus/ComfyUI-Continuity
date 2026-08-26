@@ -14,6 +14,10 @@ ORDER = 3
 PRODUCES = frozenset({"still"})
 RULES = None
 
+# What this family's stills are called under `minimax/stills/krea2/`. See
+# `h3/declare.py` for why the stem is declared rather than derived.
+OUTPUT_STEM = "Krea2"
+
 # The pre-stage arch pill's own id for it, which is the family id: unlike H3's
 # "minimax" there was never an earlier spelling to stay compatible with.
 STILL_ARCH = "krea2"

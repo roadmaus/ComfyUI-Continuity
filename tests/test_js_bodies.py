@@ -103,8 +103,14 @@ export const app = {
     # what was posted — which is what lets the settings page be exercised here.
     "api.js": """
 globalThis.__posted = [];
-let stored = { video_crf: 23, video_prefix: "minimax/renders/H3",
-               image_prefix: "minimax/stills/prestage" };
+// A row per family, the way the settings route serves it — the page draws one
+// field per entry and a patch must not drop the entries it did not touch.
+let stored = { video_crf: 23,
+               video_prefix: { h3: "minimax/renders/h3/H3",
+                               ltx25: "minimax/renders/ltx25/LTX25" },
+               image_prefix: { h3: "minimax/stills/h3/H3",
+                               krea2: "minimax/stills/krea2/Krea2",
+                               ideogram4: "minimax/stills/ideogram4/Ideogram4" } };
 // A real listener table, because the shell now listens for the one thing the
 // frontend says out loud when a prompt is accepted — see `promptQueued` below.
 const listeners = {};
@@ -2600,10 +2606,20 @@ check("choosing a separation posts the multiplier", settings.get("liftPosted"),
       {"surface_lift": 1.4})
 check("...and writes it where the stylesheet reads it",
       settings.get("liftVar"), "1.4")
-check("the folders tab carries both stored prefixes", settings.get("fields"),
-      ["minimax/renders/H3", "minimax/stills/prestage"])
-check("editing a folder writes it back under the server's own key",
-      settings.get("posted"), [{"video_prefix": "client/shoot-3/take"}])
+# A field per family, renders first: an LTX 2.5 render used to land in H3's
+# folder with H3's name on it, and one field for every family is what says
+# out loud that it no longer does.
+check("the folders tab carries a field per family, renders then stills",
+      settings.get("fields"),
+      ["minimax/renders/h3/H3", "minimax/renders/ltx25/LTX25",
+       "minimax/stills/h3/H3", "minimax/stills/krea2/Krea2",
+       "minimax/stills/ideogram4/Ideogram4"])
+# The whole block goes back, not the one row: the settings route patches
+# shallowly, so posting `{h3: …}` alone would drop LTX 2.5's folder.
+check("editing one family's folder posts the block, leaving the others alone",
+      settings.get("posted"),
+      [{"video_prefix": {"h3": "client/shoot-3/take",
+                         "ltx25": "minimax/renders/ltx25/LTX25"}}])
 
 # The node face is a preview and the prompt is written in a sheet.
 face = report.get("face", {})

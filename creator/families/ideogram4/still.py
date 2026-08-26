@@ -124,9 +124,10 @@ def compile_still(data, image_size_lookup=None):
 def emit_still(data, plan, sampling, unique_id):
     """The uniform still surface over the shared `render_image.emit`."""
     from ... import outputs, render_image, settings
+    from . import declare
 
     weights = render_image.ImageWeights.from_blob(data, sys.modules[__name__])
     return render_image.emit(plan, weights, sampling, unique_id,
                              sys.modules[__name__],
                              filename_prefix=outputs.image(
-                                 data, settings.image_prefix()))
+                                 data, settings.image_prefix(declare.ID)))

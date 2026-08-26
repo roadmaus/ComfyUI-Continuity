@@ -424,7 +424,7 @@
     "class_type": "MiniMaxH3Save",
     "inputs": {
       "crf": 23,
-      "filename_prefix": "minimax/renders/H3",
+      "filename_prefix": "minimax/renders/ltx25/LTX25",
       "fps": 24.0,
       "reel": [
         "36",

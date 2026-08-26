@@ -233,8 +233,11 @@ check("at the rate the frame count was snapped to", save_inputs["fps"], 24.0)
 # writing the quality it was built with. See `render.emit_tail`.
 check("at the quality this ComfyUI is set to",
       save_inputs["crf"], settings_mod.video_crf())
-check("it lands in the render folder, which is not the stills folder",
-      save_inputs["filename_prefix"], outputs_mod.VIDEO_PREFIX)
+# The family's own folder, with the family's own name on the file. An LTX 2.5
+# piece used to land in `minimax/renders/H3_00021_.mp4` — the wrong shelf and
+# somebody else's name — because the prefix was one constant for the pack.
+check("it lands in this family's render folder, which is not the stills folder",
+      save_inputs["filename_prefix"], outputs_mod.default_video("h3", "H3"))
 
 
 def save_prefix(**overrides):

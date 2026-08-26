@@ -177,7 +177,9 @@ The atlas is vendored (~5 MB of index and stills); nothing is downloaded.
   count. Resolution sets the short edge (native 768); past 768 it samples native
   and refines up in a second pass rather than going off-distribution directly.
 - **Where files go** is a per-machine setting (Settings → Folders), not part of
-  the workflow, with `%year%`-style tokens; MP4 quality is a setting too.
+  the workflow, with `%year%`-style tokens; MP4 quality is a setting too. Every
+  family files into a folder of its own — `output/minimax/renders/ltx25/` and
+  `output/minimax/stills/krea2/` — and each has its own row to override.
 - **Language** follows ComfyUI's own locale — English, 日本語, 한국어, 简体中文.
   Corrections are one-line edits in `web/creator/locales/`.
 

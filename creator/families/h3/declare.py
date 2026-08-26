@@ -19,6 +19,13 @@ ORDER = 1
 # generation one latent frame of which is decoded.
 PRODUCES = frozenset({"video", "still"})
 
+# What this family's files are called, and the folder they land in. The folder
+# is the family id; this is the stem every file in it is numbered off, so a
+# render reads as H3's from its name alone and not only from where it sits.
+# Declared rather than derived from `ID`, because a lowercase `h3_00001_.mp4`
+# would rename every file this pack has ever written.
+OUTPUT_STEM = "H3"
+
 # What the pre-stage's arch pill calls this family's still branch. "minimax"
 # predates the family ids and is frozen in every saved blob, so the alias is
 # permanent — the id it maps to is the registry's business.

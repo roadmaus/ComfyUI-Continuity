@@ -52,6 +52,11 @@ class Family:
     label = None
     #: which kinds of thing the family renders, e.g. {"video", "still"}.
     produces = frozenset()
+    #: "H3" — the stem this family's files are numbered off, and with the
+    #: family id for a folder, the whole of where a render lands by default.
+    #: Read by `core/emit.py` when the caller names no prefix. See
+    #: `families/h3/declare.py` for why it is declared rather than derived.
+    output_stem = None
     #: the family's `canvas.Rules` — its frame grid, its rate, its native edge.
     #: The one thing the loop reads off the family object itself rather than
     #: through a hook: the finished file is written at a frame rate, and that

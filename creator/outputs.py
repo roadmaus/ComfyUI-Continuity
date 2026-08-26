@@ -19,12 +19,20 @@ here is relative to whatever that resolved to.
 
 import re
 
-# The two defaults. Both live under `minimax/` so the pack keeps one shelf in
+# The two shelves. Both live under `minimax/` so the pack keeps one shelf in
 # somebody else's output folder, and they are split one level deeper so the
 # gallery sorts finished videos apart from PreStage stills with no special case
 # in the picker: a shelf chip is just a subfolder, and these are two subfolders.
-VIDEO_PREFIX = "minimax/renders/H3"
-IMAGE_PREFIX = "minimax/stills/prestage"
+RENDERS = "minimax/renders"
+STILLS = "minimax/stills"
+
+# What the two shelves held before there was a second family: one folder each,
+# with H3's name on the files in both. Kept because `settings.py` has to be able
+# to recognise them — a machine that never typed a folder is on these, and
+# migrating it onto the per-family defaults below must not look like a folder
+# somebody chose. Nothing else reads them; they are history, not a default.
+LEGACY_VIDEO_PREFIX = f"{RENDERS}/H3"
+LEGACY_IMAGE_PREFIX = f"{STILLS}/prestage"
 
 # Tokens core's `compute_vars` expands. Listed only so the error message can
 # tell the user what *is* allowed when they typo one; core owns the real list.
@@ -80,19 +88,44 @@ def clean(raw, default):
     return "/".join(parts)
 
 
+def default_video(family, stem):
+    """Where `family` files its renders when nobody has said otherwise.
+
+    A folder per family under the renders shelf, named by the family id, and the
+    family's own stem on the files in it. Two statements at once and both are
+    wanted: the folder is what the gallery's shelf chips sort on, so a piece
+    shot on LTX 2.5 is one click away from the H3 ones rather than interleaved
+    with them, and the stem is what a file dragged out of that folder still says
+    about itself.
+
+    Composed here rather than written out in each `declare.py` so that the shape
+    of the tree is one decision — a family declares its name, not its path.
+    """
+    return f"{RENDERS}/{family}/{stem}"
+
+
+def default_image(family, stem):
+    """Where `family` files its stills. The stills shelf, laid out the same way
+    — see `default_video`, of which this is the other half."""
+    return f"{STILLS}/{family}/{stem}"
+
+
 # The blob's own key is no longer written by the UI — where files land is a
 # preference of this machine and lives in `settings.py`, so a workflow shared
 # with someone else does not carry your folder names to their disk. It is still
 # *read*, because a hand-edited blob is a supported way to drive these nodes and
 # a prefix typed into one has to mean something. Blob first, then the setting.
-def video(data, default=None):
+#
+# `default` is the caller's and is required: it is that family's row of the
+# settings file, and there is no pack-wide answer left to fall back to.
+def video(data, default):
     """The prefix a Creator or Timeline render lands under."""
-    return clean(data.get("output_prefix"), default or VIDEO_PREFIX)
+    return clean(data.get("output_prefix"), default)
 
 
-def image(data, default=None):
+def image(data, default):
     """The prefix a PreStage still lands under."""
-    return clean(data.get("output_prefix"), default or IMAGE_PREFIX)
+    return clean(data.get("output_prefix"), default)
 
 
 def takes(prefix):

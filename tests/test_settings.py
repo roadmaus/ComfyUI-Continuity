@@ -162,18 +162,57 @@ refuses("a scale under the floor", {"text_scale": settings.MIN_TEXT_SCALE - 0.1}
 refuses("a boolean scale", {"text_scale": True}, "must be a number")
 refuses("a scale that is not a number", {"text_scale": "large"}, "must be a number")
 
-# The output folders. `outputs.clean` is the authority — this only has to show
-# that the setting is held to it, so a prefix that would be refused at the end
-# of a render is refused while it is still a field being edited.
+# The output folders. One row per family — a render lands somewhere because of
+# what rendered it — and `outputs.clean` is the authority on what a row may say,
+# so this only has to show that the setting is held to it and that one family's
+# row cannot move another family's files.
+DEFAULT_PREFIXES = settings.default_prefixes()
+
+check("every family this install has gets a row",
+      (sorted(settings.clean({})["video_prefix"]),
+       sorted(settings.clean({})["image_prefix"])),
+      (sorted(DEFAULT_PREFIXES["video"]), sorted(DEFAULT_PREFIXES["still"])))
 check("a folder is kept as typed",
-      settings.clean({"video_prefix": "client/shoot-3/take"})["video_prefix"],
+      settings.clean({"video_prefix": {"ltx25": "client/shoot-3/take"}})["video_prefix"]["ltx25"],
       "client/shoot-3/take")
-check("a trailing slash keeps the default's filename stem",
-      settings.clean({"image_prefix": "client/"})["image_prefix"], "client/prestage")
-check("an empty folder is the default",
-      settings.clean({"video_prefix": ""})["video_prefix"], settings.DEFAULT_VIDEO_PREFIX)
-refuses("an absolute output folder", {"video_prefix": "/tmp/renders"}, "absolute")
-refuses("a folder that escapes upwards", {"image_prefix": "../elsewhere/x"}, "'.' and '..'")
+check("...and leaves the other families where they were",
+      settings.clean({"video_prefix": {"ltx25": "client/shoot-3/take"}})["video_prefix"]["h3"],
+      DEFAULT_PREFIXES["video"]["h3"])
+check("a trailing slash keeps that family's filename stem",
+      settings.clean({"image_prefix": {"krea2": "client/"}})["image_prefix"]["krea2"],
+      "client/Krea2")
+check("an empty folder is the family's default",
+      settings.clean({"video_prefix": {"h3": ""}})["video_prefix"]["h3"],
+      DEFAULT_PREFIXES["video"]["h3"])
+# A family that is not installed keeps its row rather than losing it, the same
+# deal `clean_weights` gives an unknown slot: uninstalling a family for an
+# afternoon should not mean typing its folder again.
+check("an unknown family's row is kept",
+      settings.clean({"video_prefix": {"someday": "shots/someday"}})["video_prefix"]["someday"],
+      "shots/someday")
+refuses("an absolute output folder", {"video_prefix": {"h3": "/tmp/renders"}}, "absolute")
+refuses("a folder that escapes upwards", {"image_prefix": {"h3": "../elsewhere/x"}},
+        "'.' and '..'")
+refuses("a folder block that is not one", {"video_prefix": ["shots"]}, "family id")
+
+# ---- the migration off the flat layout ----------------------------------------
+#
+# Every settings file written before families had their own folders holds a
+# string here. It migrates onto *every* family of its kind: somebody who pointed
+# their stills at `client/stills` meant every still, and moving two of the three
+# architectures somewhere else would be this change breaking a working setup.
+check("a typed flat video folder reaches every video family",
+      settings.clean({"video_prefix": "client/shoot-3/take"})["video_prefix"],
+      {family: "client/shoot-3/take" for family in DEFAULT_PREFIXES["video"]})
+check("...and a typed flat stills folder every still family",
+      settings.clean({"image_prefix": "client/stills"})["image_prefix"],
+      {family: "client/stills" for family in DEFAULT_PREFIXES["still"]})
+# The one string that must not migrate: nobody chose the old default, and
+# carrying it forward would pin the install to the flat layout for good.
+check("the old default migrates to the new defaults instead",
+      (settings.clean({"video_prefix": settings.outputs.LEGACY_VIDEO_PREFIX})["video_prefix"],
+       settings.clean({"image_prefix": settings.outputs.LEGACY_IMAGE_PREFIX})["image_prefix"]),
+      (DEFAULT_PREFIXES["video"], DEFAULT_PREFIXES["still"]))
 refuses("a negative value", {"video_crf": -1}, "between")
 refuses("a fractional value", {"video_crf": 18.5}, "whole number")
 refuses("a string", {"video_crf": "18"}, "whole number")
@@ -203,17 +242,22 @@ with tempfile.TemporaryDirectory() as directory:
     # the one field just edited, so a second save must not hand back the first
     # field's default — the bug that made a custom stills folder disappear the
     # moment somebody touched the video one.
+    videos = {**DEFAULT_PREFIXES["video"], "ltx25": "client/shoot-3/take"}
+    stills = {**DEFAULT_PREFIXES["still"], "krea2": "client/stills"}
     check("a later save keeps the earlier one",
-          settings.save({"video_prefix": "client/shoot-3/take"}),
-          {**settings.DEFAULTS, "video_crf": 14, "video_prefix": "client/shoot-3/take"})
+          settings.save({"video_prefix": videos}),
+          {**settings.DEFAULTS, "video_crf": 14, "video_prefix": videos})
     check("...and again, from the other side",
-          settings.save({"image_prefix": "client/stills"}),
-          {**settings.DEFAULTS, "video_crf": 14, "video_prefix": "client/shoot-3/take",
-           "image_prefix": "client/stills"})
-    check("...and that is what loads", settings.load()["video_prefix"], "client/shoot-3/take")
+          settings.save({"image_prefix": stills}),
+          {**settings.DEFAULTS, "video_crf": 14, "video_prefix": videos,
+           "image_prefix": stills})
+    check("...and that is what the save node asks for",
+          (settings.video_prefix("ltx25"), settings.video_prefix("h3"),
+           settings.image_prefix("krea2")),
+          ("client/shoot-3/take", DEFAULT_PREFIXES["video"]["h3"], "client/stills"))
 
-    settings.save({"video_crf": 14, "video_prefix": settings.DEFAULT_VIDEO_PREFIX,
-                   "image_prefix": settings.DEFAULT_IMAGE_PREFIX})
+    settings.save({"video_crf": 14, "video_prefix": DEFAULT_PREFIXES["video"],
+                   "image_prefix": DEFAULT_PREFIXES["still"]})
 
     # The one thing the temp file is for: a render reading this while the page
     # writes it must see one or the other, never half a JSON document.

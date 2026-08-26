@@ -9,8 +9,13 @@
 
 import { t } from "./i18n.js";
 
-export const VIDEO_PREFIX = "minimax/renders/H3";
-export const IMAGE_PREFIX = "minimax/stills/prestage";
+// The two shelves everything lands under. Where a *family* lands inside them is
+// composed on the Python side and served in its manifest (`output`), because
+// the save node and the settings page must show one answer, not two spellings
+// of it. These are here for the mirror test, which is what holds the two files
+// together at all.
+export const RENDERS = "minimax/renders";
+export const STILLS = "minimax/stills";
 
 // What core's `compute_vars` expands, in the order the hint lists them.
 export const TOKENS = ["%year%", "%month%", "%day%", "%hour%", "%minute%", "%second%",

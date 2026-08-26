@@ -186,6 +186,7 @@ class H3(base.Family):
     id = "h3"
     label = "MiniMax H3"
     produces = frozenset({"video", "still"})
+    output_stem = declare.OUTPUT_STEM
     rules = declare.RULES
     compile_error = compiler.CompileError
 

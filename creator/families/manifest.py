@@ -154,6 +154,24 @@ def canvas_block(rules):
     }
 
 
+def output_block(family):
+    """Where `family` files what it makes, before anyone overrides it.
+
+    Served rather than composed on the frontend for the reason `catalog`'s
+    `video_families` is: the settings page draws a row per family and has to
+    show the same default the save node will use, and two spellings of
+    `minimax/renders/<id>/<Stem>` would be one spelling too many. What the
+    frontend still owns is what a *typed* prefix may say — `outputs.js` mirrors
+    `outputs.py` so the field can refuse one without a queue round-trip.
+
+    Keyed by what the family produces, so a still-only family carries one entry
+    and the page cannot draw it a renders row it has no renders for.
+    """
+    prefixes = registry.default_prefixes()
+    return {kind: prefixes[kind][family]
+            for kind in ("video", "still") if family in prefixes[kind]}
+
+
 def check(manifest):
     """Refuse a malformed manifest, naming what is wrong.
 
@@ -162,7 +180,7 @@ def check(manifest):
     not as a blank control three files away.
     """
     for key in ("id", "label", "description", "produces", "widgets", "weights",
-                "canvas", "capabilities", "prompt"):
+                "canvas", "capabilities", "prompt", "output"):
         if key not in manifest:
             raise ValueError(f"family {manifest.get('id')!r}: manifest has no {key!r}")
     for entry in manifest["widgets"]:
@@ -226,9 +244,15 @@ def check(manifest):
 
 
 def describe(family):
-    """The validated manifest of one family, by id."""
+    """The validated manifest of one family, by id.
+
+    `output` is added here rather than declared by each family's own manifest:
+    where a family's files land is composed from its id and its stem by
+    `outputs.py`, so a family writing the path out again would be a second
+    author of one tree.
+    """
     module = importlib.import_module(f".{family}.manifest", __package__)
-    return check(module.manifest())
+    return check({**module.manifest(), "output": output_block(family)})
 
 
 def catalog():

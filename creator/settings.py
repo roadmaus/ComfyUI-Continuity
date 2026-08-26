@@ -36,6 +36,7 @@ import json
 import os
 
 from . import outputs
+from .families import registry
 
 FILE = "minimax_creator.settings.json"
 
@@ -49,17 +50,34 @@ MAX_CRF = 51
 # pack wrote before the setting existed. Passing it explicitly changes no file.
 DEFAULT_CRF = 23
 
-# Where the two kinds of file land under ComfyUI's output directory. Prefixes,
-# not folders: core's `filename_prefix` names the folder *and* the stem every
-# file in it is numbered off, and expands `%year%`-style tokens per render.
-# `outputs.py` owns what one is allowed to be.
-DEFAULT_VIDEO_PREFIX = outputs.VIDEO_PREFIX
-DEFAULT_IMAGE_PREFIX = outputs.IMAGE_PREFIX
+# Where each family files what it makes, under ComfyUI's output directory.
+# Prefixes, not folders: core's `filename_prefix` names the folder *and* the
+# stem every file in it is numbered off, and expands `%year%`-style tokens per
+# render. `outputs.py` owns what one is allowed to be and the shape of the tree;
+# the families own their names; this asks the registry to put the two together.
+#
+# **One row per family, and that is the fix these two keys exist to record.**
+# They used to be one string each, which meant an LTX 2.5 piece wrote
+# `minimax/renders/H3_00021_.mp4` — the wrong shelf and somebody else's name on
+# the file. A render lands somewhere because of what rendered it, so the answer
+# is keyed by the family that did.
+#
+# A function rather than two constants, because it is two tables that grow a row
+# each time a family package appears, and `clean` needs a fresh copy of both
+# every time it fills a settings blob in.
+def default_prefixes():
+    """`{"video": {family: prefix}, "still": {family: prefix}}` — the registry's."""
+    return registry.default_prefixes()
+
 
 DEFAULTS = {
     "video_crf": DEFAULT_CRF,
-    "video_prefix": DEFAULT_VIDEO_PREFIX,
-    "image_prefix": DEFAULT_IMAGE_PREFIX,
+    # `{family: prefix}` apiece — see `default_prefixes` above. Asked of the
+    # registry rather than written out, so the tree has one author; asked once,
+    # at import, because a family is a directory in this pack and one appearing
+    # is a restart either way.
+    "video_prefix": default_prefixes()["video"],
+    "image_prefix": default_prefixes()["still"],
     # Whether the sampler row draws the two flow-shift pills. Off by default:
     # most rows never leave the checkpoints' own schedule, and two more numbers
     # on every node is a cost only the people dialling schedules should pay.
@@ -299,17 +317,60 @@ def clean(raw):
             if not isinstance(raw[flag], bool):
                 raise ValueError(f"{flag} must be true or false")
             clean_settings[flag] = raw[flag]
-    for key, fallback in (("video_prefix", DEFAULT_VIDEO_PREFIX),
-                          ("image_prefix", DEFAULT_IMAGE_PREFIX)):
-        if key in raw and raw[key] is not None:
-            # `outputs.clean` is what the save nodes are held to, so a prefix
-            # that would be refused at the end of a render is refused here
-            # instead — while it is still a field somebody is editing.
-            try:
-                clean_settings[key] = outputs.clean(raw[key], fallback)
-            except outputs.PrefixError as exc:
-                raise ValueError(f"{key}: {exc}") from exc
+    defaults = default_prefixes()
+    for key, kind, legacy in (
+            ("video_prefix", "video", outputs.LEGACY_VIDEO_PREFIX),
+            ("image_prefix", "still", outputs.LEGACY_IMAGE_PREFIX)):
+        clean_settings[key] = clean_prefixes(
+            key, raw.get(key), dict(defaults[kind]), legacy)
     return clean_settings
+
+
+def clean_prefixes(key, raw, defaults, legacy):
+    """One kind's `{family: prefix}` block, filled in for every family here.
+
+    Filled rather than sparse because this is what the settings page draws its
+    rows from: a family with no entry would be a row with nothing in it, and the
+    page would have to know how to compose a default the registry already knows.
+
+    **A string is a settings file written before families had their own
+    folders**, and it migrates rather than being refused — but onto *every*
+    family of its kind, not just the one that existed. Somebody who pointed
+    their stills at `client/stills` meant every still, and a migration that
+    quietly moved two of the three architectures somewhere else would be this
+    change breaking a working setup. The one string that does not migrate is the
+    old default itself: nobody chose it, and carrying it forward would pin the
+    whole install to the flat layout it is the point of this to leave.
+
+    A family this install has never heard of keeps its entry, for the reason
+    `clean_weights` keeps an unknown slot: a family that is temporarily not
+    installed is not a folder anybody wants to type again.
+    """
+    def cleaned(value, fallback):
+        # `outputs.clean` is what the save nodes are held to, so a prefix that
+        # would be refused at the end of a render is refused here instead —
+        # while it is still a field somebody is editing.
+        try:
+            return outputs.clean(value, fallback)
+        except outputs.PrefixError as exc:
+            raise ValueError(f"{key}: {exc}") from exc
+
+    if raw is None:
+        return defaults
+    if isinstance(raw, str):
+        typed = cleaned(raw, legacy)
+        if typed != legacy:
+            return {family: typed for family in defaults}
+        return defaults
+    if not isinstance(raw, dict):
+        raise ValueError(f"{key} must map a family id to a folder")
+    for family, value in raw.items():
+        if not isinstance(family, str):
+            raise ValueError(f"{key}: a family id must be a string")
+        if value is None:
+            continue
+        defaults[family] = cleaned(value, defaults.get(family, legacy))
+    return defaults
 
 
 def clean_weights(raw):
@@ -363,7 +424,10 @@ def load():
         with open(path(), "r", encoding="utf-8") as handle:
             return clean(json.load(handle))
     except (OSError, ValueError):
-        return dict(DEFAULTS)
+        # Through `clean` rather than a copy of DEFAULTS, so the per-family
+        # folder blocks come back as this file's own dicts and no caller can
+        # reach the defaults through them.
+        return clean({})
 
 
 def save(raw):
@@ -395,14 +459,16 @@ def video_crf():
     return load()["video_crf"]
 
 
-def video_prefix():
-    """Where finished renders land, unless the blob names somewhere itself."""
-    return load()["video_prefix"]
+def video_prefix(family):
+    """Where `family`'s finished renders land, unless the blob says otherwise."""
+    return (load()["video_prefix"].get(family)
+            or default_prefixes()["video"][family])
 
 
-def image_prefix():
-    """Where pre-stage stills land, unless the blob names somewhere itself."""
-    return load()["image_prefix"]
+def image_prefix(family):
+    """Where `family`'s pre-stage stills land, unless the blob says otherwise."""
+    return (load()["image_prefix"].get(family)
+            or default_prefixes()["still"][family])
 
 
 def turbo_lead_in():

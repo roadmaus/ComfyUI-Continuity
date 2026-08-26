@@ -25,7 +25,7 @@ outputs = layout.load("outputs").outputs
 # Every string worth asking both sides about, in one subprocess rather than one
 # per case. Legal values, refusals, and the shapes that sit on the boundary.
 CASES = [
-    "", "   ", "H3", "minimax/renders/H3", "my-project/scene-a/take",
+    "", "   ", "H3", "minimax/renders/h3/H3", "my-project/scene-a/take",
     "  shots/a  ", "my-project\\take", "my-project/", "shots/",
     "minimax/%year%-%month%-%day%/H3", "H3_%width%x%height%",
     "a b/c d", "a-b/c_d", "2026-08-10/take-1",
@@ -38,11 +38,11 @@ CASES = [
 SCRIPT = """
 const m = await import(process.argv[1]);
 const cases = JSON.parse(process.argv[2]);
-const out = { constants: { VIDEO_PREFIX: m.VIDEO_PREFIX, IMAGE_PREFIX: m.IMAGE_PREFIX,
-                           TOKENS: m.TOKENS },
+const DEFAULT = process.argv[3];
+const out = { constants: { RENDERS: m.RENDERS, STILLS: m.STILLS, TOKENS: m.TOKENS },
               cleaned: {} };
 for (const raw of cases) {
-  const result = m.cleanPrefix(raw, m.VIDEO_PREFIX);
+  const result = m.cleanPrefix(raw, DEFAULT);
   out.cleaned[raw] = result.error ? { error: true } : { prefix: result.prefix };
 }
 out.folders = { "a/b/c": m.folderOf("a/b/c"), "abc": m.folderOf("abc") };
@@ -50,7 +50,10 @@ out.stems = { "a/b/c": m.stemOf("a/b/c"), "abc": m.stemOf("abc") };
 console.log(JSON.stringify(out));
 """
 
-reflected = layout.run(SCRIPT, MIRROR, CASES)
+# One family's default, which is the shape every caller passes as the fallback.
+DEFAULT = outputs.default_video("h3", "H3")
+
+reflected = layout.run(SCRIPT, MIRROR, CASES, DEFAULT)
 
 from harness import FAILURES, passed
 
@@ -60,14 +63,14 @@ def check(label, got, want):
         FAILURES.append(f"{label}: js {got!r}, py {want!r}")
 
 
-check("the video default matches", reflected["constants"]["VIDEO_PREFIX"], outputs.VIDEO_PREFIX)
-check("the image default matches", reflected["constants"]["IMAGE_PREFIX"], outputs.IMAGE_PREFIX)
+check("the renders shelf matches", reflected["constants"]["RENDERS"], outputs.RENDERS)
+check("the stills shelf matches", reflected["constants"]["STILLS"], outputs.STILLS)
 check("the token list matches", reflected["constants"]["TOKENS"], list(outputs.TOKENS))
 
 for raw in CASES:
     got = reflected["cleaned"][raw]
     try:
-        want = {"prefix": outputs.clean(raw, outputs.VIDEO_PREFIX)}
+        want = {"prefix": outputs.clean(raw, DEFAULT)}
     except outputs.PrefixError:
         want = {"error": True}
     check(f"clean({raw!r})", got, want)

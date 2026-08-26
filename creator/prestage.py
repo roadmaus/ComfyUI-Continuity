@@ -35,7 +35,7 @@ import json
 
 from comfy_api.latest import io
 
-from . import canvas, compile_image, media, outputs, render_image, sampling
+from . import canvas, compile_image, media, render_image, sampling
 from .core import emit as loop
 from .compile import CompileError
 from .families import registry
@@ -55,9 +55,6 @@ DEFAULT_DATA = json.dumps({
     "loras": [],
     "turbo": {"on": False, "quality": krea2.DEFAULT_TURBO_QUALITY, "saved": None},
     "quality": ideogram4.DEFAULT_IDEOGRAM_QUALITY,
-    # Where the still lands under output/. Its own default, so the gallery
-    # sorts stills apart from finished renders. See `outputs`.
-    "output_prefix": outputs.IMAGE_PREFIX,
     # The H3 branch: how long a clip it samples and which of that clip's latent
     # frames becomes the picture, plus the generation itself in the Creator's
     # own shape — because it is one. See `families/h3/still`.
@@ -66,7 +63,7 @@ DEFAULT_DATA = json.dumps({
         "latent_index": still.DEFAULT_LATENT_INDEX,
         "request": {"prompt": "", "assets": [], "loras": [],
                     "aspect": "16:9", "short_edge": h3_rules.RULES.native_short_edge,
-                    "output_prefix": outputs.IMAGE_PREFIX, "models": {}},
+                    "models": {}},
     },
     # Per-arch sub-blocks, so switching the model pill never forgets the other
     # side's files. Empty rather than guessed — the UI fills it from the
@@ -208,7 +205,11 @@ class MiniMaxH3SaveImage(io.ComfyNode):
             is_output_node=True,
             inputs=[
                 io.Image.Input("images"),
-                io.String.Input("filename_prefix", default=render_image.FILENAME_PREFIX),
+                # The arch pill's opening choice, so a hand-wired save node
+                # writes somewhere real. Every graph this pack emits passes the
+                # prefix explicitly — see `render_image.default_prefix`.
+                io.String.Input("filename_prefix", default=render_image.default_prefix(
+                    registry.STILL_ARCHES[registry.DEFAULT_STILL_ARCH])),
             ],
             outputs=[],
             hidden=[io.Hidden.prompt, io.Hidden.extra_pnginfo],
