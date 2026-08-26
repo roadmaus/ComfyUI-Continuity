@@ -38,8 +38,16 @@ export const css = `
 .mmc-fs-mark svg { stroke: var(--mmc-accent); fill: none; stroke-width: 1.6; }
 .mmc-fs-logo svg { stroke: none; fill: initial; stroke-width: initial; display: block; }
 .mmc-fs-slash { color: var(--mmc-off); }
+/* Which family the piece renders with. The one thing in the bar that changes
+   while you work, so it reads a step brighter than the node's name behind it. */
+.mmc-fs-family {
+  font-size: calc(13px * var(--mmc-type)); color: var(--mmc-text);
+}
 /* The node's title, which is the piece's name — see fullscreen.js on why this
-   pack does not store a second one. */
+   pack does not store a second one, and why the group is hidden until there
+   is one. */
+.mmc-fs-piece-group { display: none; align-items: center; gap: 8px; }
+.mmc-fs-piece-group.on { display: flex; }
 .mmc-fs-piece { font-size: calc(13px * var(--mmc-type)); color: var(--mmc-dim); }
 .mmc-fs-gap { flex: 1; }
 
@@ -1114,10 +1122,11 @@ export const css = `
   .mmc-fs, .mmc-fs.simple { --mmc-fs-lip: 84px; }
   /* The title bar is one line of chrome and it must stay one line. What goes is
      only what is said twice or said elsewhere: the node's name is on the card,
-     and the way out keeps its arrow and its tooltip. */
+     and the way out keeps its arrow and its tooltip. The family stays — it is
+     the one thing up here that is not written anywhere else on this view. */
   .mmc-fs-bar { gap: 8px; padding: 0 12px; }
-  .mmc-fs-mark { white-space: nowrap; }
-  .mmc-fs-slash, .mmc-fs-piece { display: none; }
+  .mmc-fs-mark, .mmc-fs-family { white-space: nowrap; }
+  .mmc-fs-piece-group, .mmc-fs-piece-group.on { display: none; }
   .mmc-fs-exit span { display: none; }
   .mmc-fs-exit { padding: 0 8px; }
 }

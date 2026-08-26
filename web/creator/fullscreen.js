@@ -344,13 +344,22 @@ class Fullscreen {
         // icon that means "the strip" everywhere else it is drawn.
         el("span", { class: "mmc-fs-mark" }, [
           el("span", { class: "mmc-fs-logo" }, [mark(22)]),
-          // Named on mount rather than here: the bar says which family this
-          // piece renders with, and the shell is built before it is holding
-          // one. Read off the default family it named H3 over an LTX 2.5 piece.
-          this.markName = el("span"),
+          // The pack, and it is a product name rather than copy, so it is not
+          // translated and does not change with what is on the card.
+          el("span", { text: "Continuity" }),
         ]),
         el("span", { class: "mmc-fs-slash", text: "/" }),
-        this.piece,
+        // Which family this piece renders with. Filled on mount rather than
+        // here, because the shell is built before it is holding a piece — read
+        // off the default at build time it would say H3 over an LTX 2.5 piece.
+        this.family = el("span", { class: "mmc-fs-family" }),
+        // The node's own name, and only when there is one: LiteGraph titles a
+        // fresh node after its display name, so an unrenamed one would put
+        // "Continuity" on the bar twice and say nothing the mark did not.
+        this.pieceGroup = el("span", { class: "mmc-fs-piece-group" }, [
+          el("span", { class: "mmc-fs-slash", text: "/" }),
+          this.piece,
+        ]),
         el("span", { class: "mmc-fs-gap" }),
         this.views = el("div", { class: "mmc-fs-views" }, VIEWS.map((view) =>
           el("button", {
@@ -467,7 +476,7 @@ class Fullscreen {
     this.front = front;
     this.colHeadName.textContent =
       this.node.mmcBody?.showsStrip?.() ? t("Strip") : t("Shot");
-    this.markName.textContent = t(S.familyOf(this.node.mmcBody?.state).label);
+    this.paintMark();
     this.col.replaceChildren(this.colHead, this.stepBar, body.root, this.runRow);
     // The card the simple view draws has no cast drawer and no Cast tool — see
     // styles/fullscreen.js for why — so the body it borrows has to be told, or
@@ -498,8 +507,9 @@ class Fullscreen {
     if (body.stage) body.stage.root.appendChild(this.sizer);
     // The empty frame is drawn from whatever the card is about to make — the
     // shot's canvas and length, or the still's canvas. The body says when it
-    // has redrawn.
-    body.onRender = () => this.paintFrame();
+    // has redrawn — which is after every commit, and so is also the only
+    // notice the bar gets that the family pill moved.
+    body.onRender = () => { this.paintFrame(); this.paintMark(); };
     this.paintFrame();
 
     // Whatever is no longer where it belongs goes home first. This is the path
@@ -532,7 +542,17 @@ class Fullscreen {
     // The node's own title, which LiteGraph already lets you rename and already
     // saves into the workflow. A piece name is a thing this pack would otherwise
     // have had to invent, store and reconcile; the graph has one.
-    this.piece.textContent = this.node.title || t("untitled piece");
+    //
+    // **Shown only when it is a name somebody gave.** A node nobody has renamed
+    // is titled after its display name, so drawing it here would spell the
+    // pack's name a second time — `Continuity / MiniMax H3 / Continuity` — and
+    // the reader would have to notice that the third word was the one that
+    // could have been different. Against the constructor's title rather than a
+    // hardcoded list, so this keeps working whatever the node ends up called.
+    const named = (this.node.title || "").trim();
+    const untitled = !named || named === (this.node.constructor?.title ?? "").trim();
+    this.piece.textContent = named;
+    this.pieceGroup.classList.toggle("on", !untitled);
   }
 
   /**
@@ -978,6 +998,34 @@ class Fullscreen {
    * instead, which lands near the plate's own 18px at the sizes a frame is
    * actually drawn at. The outline has to be the shape the picture will be.
    */
+  /** The family crumb: what the card in front of you renders with.
+   *
+   *  Read off the step rather than off the piece, because the two steps do not
+   *  answer to the same pill. The shot's family is the piece's — the family pill
+   *  on the rail — while a pre-stage's is its arch pill, which is a separate
+   *  choice on a separate node and is routinely a different one: a Krea 2 still
+   *  feeding a shot that lands on LTX 2.5 is the ordinary case, not a corner.
+   *
+   *  Only the simple view has a step to be on; the desk puts both columns on
+   *  screen with the arch pill visible above the still, and forces `step` to
+   *  the shot. So on the desk this is the piece's family, which is the one the
+   *  bar is not otherwise saying.
+   *
+   *  **The piece is `mmcBody.timeline`, and only a pre-stage's is `.state`.**
+   *  Worth saying because the two bodies are reached through the same property
+   *  and the wrong one costs nothing at the time: `familyOf(undefined)` is a
+   *  valid call that answers with the default family, so reading `.state` off a
+   *  piece drew "MiniMax H3" over an LTX 2.5 shot and never once looked broken.
+   *  Neither branch below is allowed to pass a missing object on. */
+  paintMark() {
+    const pre = this.step === "pre" ? preStageOf(this.node)?.mmcBody?.state : null;
+    const piece = this.node.mmcBody?.timeline;
+    const label = pre ? S.PRESTAGE_ARCH_LABEL[pre.arch]
+                : piece ? S.familyOf(piece).label
+                : null;
+    this.family.textContent = label ? t(label) : "";
+  }
+
   paintFrame() {
     const spec = this.front?.mmcBody?.frame?.();
     if (!spec?.width || !spec?.height) { this.frame.replaceChildren(); return; }
