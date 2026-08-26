@@ -59,6 +59,22 @@ import logging
 # does not.
 KEEPS_BACKGROUND = ("scene", "style")
 
+# Who a matte says it is, to ComfyUI's progress channel. The same trap
+# `refine_local.PROGRESS_ID` documents: a core node's `ProgressBar` run outside
+# a queued prompt falls back to `PromptServer.last_prompt_id`, which `main.py`
+# only ever *assigns* when a prompt runs — so a matte taken in the picker before
+# the session's first queue crashes on an attribute that does not exist yet.
+# Entering a named context of our own means the hook takes both ids from there
+# and never reaches that fallback.
+PROGRESS_ID = "minimax-creator-cutout"
+
+
+def _progress_context():
+    """A named context for work that is real but is not a node."""
+    from comfy_execution.utils import CurrentNodeContext
+
+    return CurrentNodeContext(prompt_id=PROGRESS_ID, node_id=PROGRESS_ID)
+
 
 def wanted(takes):
     """Whether a picture chipped `takes` is one a cutout would improve. -> bool.
@@ -89,7 +105,8 @@ def matte(model, image):
             "'RemoveBackground' node, which this ComfyUI does not have. Update "
             "it, or switch the piece's 'cut out references' toggle off."
         )
-    return node.execute(model, image)[0]
+    with _progress_context():
+        return node.execute(model, image)[0]
 
 
 def matte_points(model, image, points):
@@ -124,9 +141,10 @@ def matte_points(model, image, points):
                 for p in points if not p.get("include", True)]
     if not positive:
         raise ValueError("clicking a subject out needs at least one point on it")
-    mask = node.execute(model, image,
-                        positive_coords=_json.dumps(positive),
-                        negative_coords=_json.dumps(negative) if negative else None)[0]
+    with _progress_context():
+        mask = node.execute(model, image,
+                            positive_coords=_json.dumps(positive),
+                            negative_coords=_json.dumps(negative) if negative else None)[0]
     mask = mask.to(torch.float32)
 
     # Feather: two passes of a small box blur, radius scaled to the picture so a
