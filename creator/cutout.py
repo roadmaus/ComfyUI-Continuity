@@ -69,11 +69,24 @@ KEEPS_BACKGROUND = ("scene", "style")
 PROGRESS_ID = "minimax-creator-cutout"
 
 
-def _progress_context():
-    """A named context for work that is real but is not a node."""
+def _node_context():
+    """The two contexts a queued prompt would have given this call.
+
+    The progress context above, and no-grad: `PromptExecutor.execute` runs
+    every node under inference mode, and the nodes rely on it — SAM3 returns
+    its mask with grad attached when called bare, and the first `.numpy()`
+    downstream refuses it. Reproduced here because the picker calls the nodes
+    directly, outside any queued prompt.
+    """
+    import contextlib
+
+    import torch
     from comfy_execution.utils import CurrentNodeContext
 
-    return CurrentNodeContext(prompt_id=PROGRESS_ID, node_id=PROGRESS_ID)
+    stack = contextlib.ExitStack()
+    stack.enter_context(CurrentNodeContext(prompt_id=PROGRESS_ID, node_id=PROGRESS_ID))
+    stack.enter_context(torch.no_grad())
+    return stack
 
 
 def wanted(takes):
@@ -105,7 +118,7 @@ def matte(model, image):
             "'RemoveBackground' node, which this ComfyUI does not have. Update "
             "it, or switch the piece's 'cut out references' toggle off."
         )
-    with _progress_context():
+    with _node_context():
         return node.execute(model, image)[0]
 
 
@@ -141,7 +154,7 @@ def matte_points(model, image, points):
                 for p in points if not p.get("include", True)]
     if not positive:
         raise ValueError("clicking a subject out needs at least one point on it")
-    with _progress_context():
+    with _node_context():
         mask = node.execute(model, image,
                             positive_coords=_json.dumps(positive),
                             negative_coords=_json.dumps(negative) if negative else None)[0]
