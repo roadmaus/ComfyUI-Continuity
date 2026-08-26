@@ -160,7 +160,7 @@ def output_block(family):
     Served rather than composed on the frontend for the reason `catalog`'s
     `video_families` is: the settings page draws a row per family and has to
     show the same default the save node will use, and two spellings of
-    `minimax/renders/<id>/<Stem>` would be one spelling too many. What the
+    `continuity/renders/<id>/<Stem>` would be one spelling too many. What the
     frontend still owns is what a *typed* prefix may say — `outputs.js` mirrors
     `outputs.py` so the field can refuse one without a queue round-trip.
 

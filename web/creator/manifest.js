@@ -4,7 +4,7 @@
 // Everything a control needs to know about a family — its weight slots, its
 // canvas rules, its sampler widgets, what its pre-stage still is called — is
 // declared once, in Python, next to the code that renders it, and served at
-// `/minimax_creator/families`. This module loads that catalog and every other
+// `/continuity/families`. This module loads that catalog and every other
 // frontend module reads it from here; a family constant spelled anywhere else
 // in `web/creator/` is a leak, and `tests/test_family_leaks.py` is the grep
 // that says so.
@@ -25,15 +25,15 @@
 
 const catalog = globalThis.__MMC_FAMILIES ?? await (async () => {
   const { api } = await import("../../../scripts/api.js");
-  const response = await api.fetchApi("/minimax_creator/families");
+  const response = await api.fetchApi("/continuity/families");
   if (!response.ok) {
-    throw new Error(`/minimax_creator/families answered ${response.status}`);
+    throw new Error(`/continuity/families answered ${response.status}`);
   }
   return response.json();
 })();
 
 if (!Array.isArray(catalog?.families) || !catalog.families.length) {
-  throw new Error("/minimax_creator/families served no catalog");
+  throw new Error("/continuity/families served no catalog");
 }
 
 /** Every family, in the registry's order. */

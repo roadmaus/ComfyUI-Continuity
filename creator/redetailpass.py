@@ -120,8 +120,8 @@ class MiniMaxReDetailPass(io.ComfyNode):
     def define_schema(cls):
         return io.Schema(
             node_id=REDETAIL_NODE,
-            display_name="MiniMax ReDetail Pass",
-            category="MiniMax/internal",
+            display_name="LTX 2.5 ReDetail Pass",
+            category="Continuity/internal",
             description="Re-renders every pass on the reel through LTX 2.5's pixel "
                         "spatial upscaler at twice the canvas. Written into the graph "
                         "by render.emit.",

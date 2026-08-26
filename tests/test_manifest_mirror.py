@@ -1,7 +1,7 @@
 """`web/creator/manifest.js` really carries the catalog the server serves.
 
 Phase 5 moves the frontend's family knowledge out of `state.js` and into the
-`/minimax_creator/families` catalog, which makes `manifest.js` the one file
+`/continuity/families` catalog, which makes `manifest.js` the one file
 everything else reads it from. This holds the loading contract from both
 directions the module can be reached:
 

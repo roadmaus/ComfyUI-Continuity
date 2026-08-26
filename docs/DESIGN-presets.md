@@ -40,7 +40,7 @@ A preset is two records. The **index row** is everything a card draws, and the
 **body** is what applying it writes.
 
 ```jsonc
-// the row, in minimax_creator.presets.json
+// the row, in continuity.presets.json
 {
   "id": "pm7k2f1a3b",           // opaque, time-ordered, generated once
   "name": "Portal walk — long tail",
@@ -59,7 +59,7 @@ A preset is two records. The **index row** is everything a card draws, and the
              "short_edge": 720, "route": "ref2va" }
 }
 
-// the body, in minimax_creator.preset.<id>.json — only captured sections present
+// the body, in continuity.preset.<id>.json — only captured sections present
 { "version": 1, "id": "pm7k2f1a3b", "data": {
   "look":    { "aspect": "16:9", "short_edge": 720, "upscale": "two_pass" },
   "weights": { "fl2va": "…", "clip": "…", "route": "ref2va", "dtype": "fp8_e4m3fn" },
@@ -157,9 +157,9 @@ and the userdata API is what the pack already uses for per-user UI state.
 
 Two levels, because a library has to draw before it has read everything:
 
-- `minimax_creator.presets.json` — the **index**: one row per preset holding
+- `continuity.presets.json` — the **index**: one row per preset holding
   everything a card draws. A few hundred bytes each.
-- `minimax_creator.preset.<id>.json` — the **body**, fetched when a card is
+- `continuity.preset.<id>.json` — the **body**, fetched when a card is
   opened or applied.
 
 Flat filenames rather than a `presets/` subfolder. The userdata API takes a path
@@ -207,7 +207,7 @@ anyway.
 
 Which picture, per block, first hit wins:
 
-1. a **clip** card — its own thumb, through `/minimax_creator/thumb`
+1. a **clip** card — its own thumb, through `/continuity/thumb`
 2. the segment's **`first_frame`** asset
 3. its **`last_frame`**
 4. the first **reference image** the segment cites — its own `assets`, then the
@@ -266,7 +266,7 @@ silently replaces one you chose, because a card you recognise changing under you
 is worse than a card that is one render out of date.
 
 A cover is a video as often as a still, and it needs no special case:
-`/minimax_creator/thumb` takes an annotated `[output]` path — the routes resolve
+`/continuity/thumb` takes an annotated `[output]` path — the routes resolve
 through `exists_annotated_filepath` — so a clip cover is a few KB of
 server-decoded JPEG, exactly as a picker cell is, and no `<video>` goes in the
 grid.
@@ -428,7 +428,7 @@ having the number to hand.
 
 ### The route this needed
 
-One, and it is the only Python in the feature: `/minimax_creator/render_meta`
+One, and it is the only Python in the feature: `/continuity/render_meta`
 opens the file and hands back the two tags parsed. The browser cannot read either
 — an MP4's container tags are not reachable from JS at all, and no client-side
 box parser is worth shipping for this. Two readers behind it, chosen by
@@ -511,7 +511,7 @@ the same remount the pill does.
 | `web/creator.js` | the context-menu item |
 | `web/creator/styles.js` | the new chunk, after the picker's |
 | `web/creator/api.js` | `renderMeta`, the one call to the one route |
-| `server_routes.py` | `/minimax_creator/render_meta` and its two readers |
+| `server_routes.py` | `/continuity/render_meta` and its two readers |
 | `web/creator/locales/{ja,ko,zh}.js` | 81 new strings, in all three |
 
 One route of Python, and only because a browser cannot open a file. Nothing here

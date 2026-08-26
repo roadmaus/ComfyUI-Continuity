@@ -211,7 +211,7 @@ def to_tensor(image):
 # The ids are deliberately not a node's. This is a button, not a graph step;
 # borrowing whichever node ran last would attribute a minute of token generation
 # to something that finished long ago.
-PROGRESS_ID = "minimax-creator-refine"
+PROGRESS_ID = "continuity-refine"
 
 
 def _progress_context():

@@ -5,7 +5,7 @@ The plan's pass condition is a grep: family tokens (`fl2va`, `ref2va`, `h3`,
 anything the UI *branches on* that is not in the served manifest is a leak the
 next family trips over. Run raw, that grep drowns in things that are not
 leaks: comments that explain H3, localized copy that names it, the frozen
-`/minimax_creator/*` routes and `MiniMaxH3*` node ids, SVG path data that
+`/continuity/*` routes and `MiniMaxH3*` node ids, SVG path data that
 happens to contain `h3`.
 
 So this suite strips every file down to what the grep was actually after —

@@ -63,7 +63,7 @@ def _semaphore():
 
 
 def _cache_dir():
-    directory = os.path.join(folder_paths.get_user_directory(), "minimax_creator", "previews")
+    directory = os.path.join(folder_paths.get_user_directory(), "continuity", "previews")
     os.makedirs(directory, exist_ok=True)
     return directory
 

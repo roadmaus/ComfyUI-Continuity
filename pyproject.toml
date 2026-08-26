@@ -1,16 +1,16 @@
 [project]
-name = "minimax-creator"
-version = "2.26"
-description = "One node for MiniMax H3 video, one shot or twenty: write a sentence, attach media with @, press Run — get a finished clip with sound. Local open weights only, no API key."
+name = "continuity"
+version = "3.0.0"
+description = "One node for AI video and stills across four model families — MiniMax H3, LTX 2.5, Krea 2, Ideogram 4.0. Write a sentence, attach media with @, press Run: get a finished clip with sound. Local open weights only, no API key."
 license = { file = "LICENSE" }
 requires-python = ">=3.10"
 dependencies = []
 
 [project.urls]
-Repository = "https://github.com/roadmaus/ComfyUI-MiniMax-Creator"
-"Bug Tracker" = "https://github.com/roadmaus/ComfyUI-MiniMax-Creator/issues"
+Repository = "https://github.com/roadmaus/ComfyUI-Continuity"
+"Bug Tracker" = "https://github.com/roadmaus/ComfyUI-Continuity/issues"
 
 [tool.comfy]
 PublisherId = "roadmaus"
-DisplayName = "MiniMax Creator"
-Icon = "https://raw.githubusercontent.com/roadmaus/ComfyUI-MiniMax-Creator/main/docs/img/icon.svg"
+DisplayName = "Continuity"
+Icon = "https://raw.githubusercontent.com/roadmaus/ComfyUI-Continuity/main/docs/img/icon.svg"

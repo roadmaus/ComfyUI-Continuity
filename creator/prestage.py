@@ -82,12 +82,12 @@ class MiniMaxH3PreStage(io.ComfyNode):
 
         return io.Schema(
             node_id="MiniMaxH3PreStage",
-            display_name="MiniMax H3 PreStage",
-            category="MiniMax",
+            display_name="Continuity PreStage",
+            category="Continuity",
             description=(
                 "Generate a still with Krea 2, Ideogram 4.0 or MiniMax H3 for "
                 "the video pipeline — a start or end frame, a reference, a style "
-                "sheet. Spawned from the pre-stage pill on a Creator or Timeline."
+                "sheet. Spawned from the pre-stage pill on a Continuity node."
             ),
             enable_expand=True,
             is_output_node=True,
@@ -198,8 +198,8 @@ class MiniMaxH3SaveImage(io.ComfyNode):
     def define_schema(cls):
         return io.Schema(
             node_id="MiniMaxH3SaveImage",
-            display_name="MiniMax H3 Save Image",
-            category="MiniMax/internal",
+            display_name="Continuity Save Image",
+            category="Continuity/internal",
             description="Writes a pre-stage render under output/ and reports it to the stage card.",
             is_dev_only=True,
             is_output_node=True,
@@ -271,8 +271,8 @@ class MiniMaxH3StillLatent(io.ComfyNode):
     def define_schema(cls):
         return io.Schema(
             node_id="MiniMaxH3StillLatent",
-            display_name="MiniMax H3 Still Latent",
-            category="MiniMax/internal",
+            display_name="H3 Still Latent",
+            category="Continuity/internal",
             description="Takes one temporal frame of a sampled H3 latent as a single-image latent.",
             is_dev_only=True,
             inputs=[

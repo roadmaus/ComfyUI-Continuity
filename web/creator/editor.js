@@ -1,6 +1,6 @@
 // The generation body: tool rail, attached assets, prompt, pill row, mode badge.
 //
-// Used twice — as the MiniMax Creator node's body, and as a timeline segment's
+// Used twice — as the Continuity node's body, and as a timeline segment's
 // editor — because a segment is a whole generation and deserves the same
 // controls. It owns a state object and calls back when it changes; who persists
 // that state, and where, is the caller's business.
@@ -152,7 +152,7 @@ export class CreatorEditor {
    * @param {{active: () => boolean, toggle: () => void}} [options.preStage]
    *   the pre-stage pill's wiring, supplied only for a node body: whether a
    *   PreStage currently claims this node, and spawning/removing one. The state
-   *   is derived by scan on every render, never stored — see minimax_creator.js.
+   *   is derived by scan on every render, never stored — see creator.js.
    */
   /**
    * @param {boolean} [options.durationPill]  false where the generation's length

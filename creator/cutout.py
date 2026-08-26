@@ -66,7 +66,7 @@ KEEPS_BACKGROUND = ("scene", "style")
 # the session's first queue crashes on an attribute that does not exist yet.
 # Entering a named context of our own means the hook takes both ids from there
 # and never reaches that fallback.
-PROGRESS_ID = "minimax-creator-cutout"
+PROGRESS_ID = "continuity-cutout"
 
 
 def _node_context():

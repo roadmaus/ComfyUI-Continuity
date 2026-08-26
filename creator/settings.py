@@ -38,7 +38,14 @@ import os
 from . import outputs
 from .families import registry
 
-FILE = "minimax_creator.settings.json"
+FILE = "continuity.settings.json"
+
+# What this file was called when the pack was called MiniMax Creator. Read as a
+# fallback and never written, so an install that has one keeps its encoder
+# quality and — more to the point — its output folders. `docs/RENAME.md` has the
+# rule this follows: a rename does not get to move where somebody's renders land.
+# Delete this and the `load` branch below one release after the rename ships.
+LEGACY_FILE = "minimax_creator.settings.json"
 
 # libx264's own scale, verbatim: 0 is (near) lossless and 51 is unwatchable.
 # Refusing anything outside it here means the number reaching the encoder is
@@ -412,6 +419,17 @@ def path():
     return os.path.join(folder_paths.get_user_directory(), FILE)
 
 
+def legacy_path():
+    """Where the same settings sat under the old name. See `LEGACY_FILE`.
+
+    Off `path()` rather than off `folder_paths` a second time: this module keeps
+    exactly one ComfyUI import, in `path`, so that it runs standalone under
+    `tests/test_settings.py` — and a second one here would be a second thing a
+    caller has to know to replace.
+    """
+    return os.path.join(os.path.dirname(path()), LEGACY_FILE)
+
+
 def load():
     """The stored settings, with every key filled in.
 
@@ -420,14 +438,16 @@ def load():
     the page will show, so a value that did not survive is visibly gone rather
     than quietly in force.
     """
-    try:
-        with open(path(), "r", encoding="utf-8") as handle:
-            return clean(json.load(handle))
-    except (OSError, ValueError):
-        # Through `clean` rather than a copy of DEFAULTS, so the per-family
-        # folder blocks come back as this file's own dicts and no caller can
-        # reach the defaults through them.
-        return clean({})
+    for candidate in (path(), legacy_path()):
+        try:
+            with open(candidate, "r", encoding="utf-8") as handle:
+                return clean(json.load(handle))
+        except (OSError, ValueError):
+            continue
+    # Through `clean` rather than a copy of DEFAULTS, so the per-family
+    # folder blocks come back as this file's own dicts and no caller can
+    # reach the defaults through them.
+    return clean({})
 
 
 def save(raw):

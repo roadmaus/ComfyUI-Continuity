@@ -770,7 +770,7 @@ def _run(body):
     }
 
 
-@PromptServer.instance.routes.get("/minimax_creator/refine/models")
+@PromptServer.instance.routes.get("/continuity/refine/models")
 async def refine_models(request):
     """The text encoders on disk.
 
@@ -783,7 +783,7 @@ async def refine_models(request):
     return web.json_response({"models": names})
 
 
-@PromptServer.instance.routes.get("/minimax_creator/refine/skills")
+@PromptServer.instance.routes.get("/continuity/refine/skills")
 async def refine_skills(request):
     """The skill packages under the node's skills/ directory.
 
@@ -806,12 +806,12 @@ _jobs = {}
 _JOBS_KEPT = 8
 
 
-@PromptServer.instance.routes.post("/minimax_creator/refine")
+@PromptServer.instance.routes.post("/continuity/refine")
 async def refine_prompt(request):
     """Start rewriting one prompt, one card, or a whole timeline.
 
     Replies `{"job": id}` at once; the work runs on a thread and its end is
-    announced as the `minimax_creator.refine.done` websocket event, after which
+    announced as the `continuity.refine.done` websocket event, after which
     the result is collected from the job route below. The event is only the
     nudge — the reply can be big, and every listening tab hears it, so the tab
     that owns the job is the one that fetches.
@@ -851,14 +851,14 @@ async def refine_prompt(request):
         except Exception as exc:  # noqa: BLE001
             entry.update(error=f"{type(exc).__name__}: {exc}", status=500)
         entry["done"] = True
-        PromptServer.instance.send_sync("minimax_creator.refine.done", {"job": job})
+        PromptServer.instance.send_sync("continuity.refine.done", {"job": job})
 
     # Held on the entry: a bare create_task is garbage-collectable mid-flight.
     entry["task"] = asyncio.create_task(_work())
     return web.json_response({"job": job})
 
 
-@PromptServer.instance.routes.get("/minimax_creator/refine/job/{job}")
+@PromptServer.instance.routes.get("/continuity/refine/job/{job}")
 async def refine_job(request):
     """One refine job's outcome, once the done event (or a poll) asks for it.
 

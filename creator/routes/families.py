@@ -1,4 +1,4 @@
-"""`/minimax_creator/families`: the family manifests, served.
+"""`/continuity/families`: the family manifests, served.
 
 One GET, answering everything the frontend needs to know about what exists:
 every family's manifest in the registry's order, and how the pre-stage's arch
@@ -15,6 +15,6 @@ from server import PromptServer
 from ..families import manifest
 
 
-@PromptServer.instance.routes.get("/minimax_creator/families")
+@PromptServer.instance.routes.get("/continuity/families")
 async def list_families(request):
     return web.json_response(manifest.catalog())

@@ -56,11 +56,11 @@ body:
         ComfyUI version is in the terminal at startup or in Manager. The node version is in `pyproject.toml`, or run `git log -1 --oneline` in the node's folder.
       value: |
         - ComfyUI version / commit:
-        - MiniMax Creator version / commit:
+        - Continuity version / commit:
         - Installed via: (git clone / ComfyUI Manager / registry)
         - OS:
         - GPU + VRAM:
-        - Does `comfy_extras/nodes_minimax_h3.py` exist in your ComfyUI? (yes/no):
+        - Model family: (MiniMax H3 / LTX 2.5 / Krea 2 / Ideogram 4.0)
     validations:
       required: true
 

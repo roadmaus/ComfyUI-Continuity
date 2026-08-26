@@ -296,8 +296,8 @@ class MiniMaxLTX25Segment(io.ComfyNode):
     def define_schema(cls):
         return io.Schema(
             node_id=SEGMENT_NODE,
-            display_name="MiniMax LTX 2.5 Segment",
-            category="MiniMax/internal",
+            display_name="LTX 2.5 Segment",
+            category="Continuity/internal",
             description="One segment of an LTX 2.5 piece. Written into the graph by the Creator node.",
             is_dev_only=True,
             inputs=[

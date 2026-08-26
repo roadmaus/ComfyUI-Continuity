@@ -1,54 +1,38 @@
 {
   "MiniMaxH3Creator": {
-    "display_name": "MiniMax H3 创作器",
-    "description": "用文字描述视频，并用 @ 引用附加的媒体。根据附加内容路由到 FL2VA 或 Ref2VA 检查点进行采样，返回成片的画面与声音。"
+    "display_name": "Continuity",
+    "description": "用文字描述视频，并用 @ 引用附加的媒体。在 MiniMax H3 或 LTX 2.5 上渲染，根据附加内容路由到相应的检查点，并保存带声音的成片。再写一个镜头，同一个节点就成为时间线 — 一条由若干卡片组成的胶片，每张卡片都有自己的提示词、参考、LoRA 与模型家族，以剪切或接续相连。"
   },
   "MiniMaxH3Timeline": {
-    "display_name": "MiniMax H3 时间线",
-    "description": "用多个镜头组装一段成片。链式：每个片段都是一次完整生成，拥有自己的提示词、参考与 LoRA，并可从上一段的最后一帧接续。单次通过：同样的片段成为单次生成中的镜头，剪切点也一并保留。"
+    "display_name": "Continuity 时间线",
+    "description": "用文字描述视频，并用 @ 引用附加的媒体。在 MiniMax H3 或 LTX 2.5 上渲染，根据附加内容路由到相应的检查点，并保存带声音的成片。再写一个镜头，同一个节点就成为时间线 — 一条由若干卡片组成的胶片，每张卡片都有自己的提示词、参考、LoRA 与模型家族，以剪切或接续相连。"
   },
   "MiniMaxH3TimelineSegment": {
-    "display_name": "MiniMax H3 时间线片段",
+    "display_name": "H3 片段",
     "description": "MiniMax H3 时间线中的一个片段。由时间线节点写入图中。"
   },
-  "MiniMaxH3AudioTail": {
-    "display_name": "MiniMax H3 音频尾段",
-    "description": "已解码音轨的最后几秒，交给下一个时间线片段。"
-  },
-  "MiniMaxH3LastFrame": {
-    "display_name": "MiniMax H3 最后一帧",
-    "description": "已解码批次的末尾帧 — 下一个时间线片段接续的起点。"
-  },
-  "MiniMaxH3SeamTrim": {
-    "display_name": "MiniMax H3 接缝修剪",
-    "description": "从已解码片段的开头去掉羽化接缝重新生成的重叠部分。"
-  },
-  "MiniMaxH3TimelineJoin": {
-    "display_name": "MiniMax H3 时间线拼接",
-    "description": "拼接两个时间线片段的画面与音频。"
-  },
   "MiniMaxH3Save": {
-    "display_name": "MiniMax H3 保存",
+    "display_name": "Continuity 保存",
     "description": "将渲染的画面与声音封装为一个文件，写入 output/ 之下。"
   },
   "MiniMaxH3PreStage": {
-    "display_name": "MiniMax H3 预备台",
-    "description": "用 Krea 2、Ideogram 4.0 或 MiniMax H3 为视频管线生成静帧 — 起始/结束帧、参考图、风格表。由创作器或时间线上的预备台胶囊按钮打开。"
+    "display_name": "Continuity 预备台",
+    "description": "用 Krea 2、Ideogram 4.0 或 MiniMax H3 为视频管线生成静帧 — 起始/结束帧、参考图、风格表。由 Continuity 节点上的预备台胶囊按钮打开。"
   },
   "MiniMaxH3SaveImage": {
-    "display_name": "MiniMax H3 保存图像",
+    "display_name": "Continuity 保存图像",
     "description": "将预备台的渲染写入 output/ 之下，并报告给舞台卡片。"
   },
   "MiniMaxH3StillLatent": {
-    "display_name": "MiniMax H3 静帧 Latent",
+    "display_name": "H3 静帧 Latent",
     "description": "取出已采样 H3 latent 在时间维度上的一帧，作为单张图像的 latent。"
   },
   "MiniMaxH3RefinePass": {
-    "display_name": "MiniMax H3 精修通道",
+    "display_name": "H3 精修通道",
     "description": "两遍渲染的第二遍：放大 H3 AV latent 的视频部分并从调度中途重新采样，音轨不加噪。由 render.emit 写入图中。"
   },
   "MiniMaxH3FacePass": {
-    "display_name": "MiniMax H3 面部处理",
+    "display_name": "H3 面部处理",
     "description": "把已解码采样中的面部逐帧裁剪出来，在脸能占满画面的画布上重画，再合成回原画。由 render.emit 写入图中。"
   }
 }

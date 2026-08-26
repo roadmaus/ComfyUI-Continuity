@@ -69,11 +69,11 @@ export const api = {
   async fetchApi(url, init) {
     const text = String(url);
     globalThis.__calls.push(text.split("?")[0]);
-    if (text.startsWith("/minimax_creator/families")) {
+    if (text.startsWith("/continuity/families")) {
       const body = readFileSync(new URL("./families.json", import.meta.url), "utf8");
       return { ok: true, status: 200, json: async () => JSON.parse(body) };
     }
-    if (text.startsWith("/minimax_creator/loras_named")) {
+    if (text.startsWith("/continuity/loras_named")) {
       const asked = JSON.parse(init.body).names;
       const all = ROWS[""];
       const found = asked.map((n) => all.find((r) => r.name === n)).filter(Boolean);
@@ -82,7 +82,7 @@ export const api = {
         missing: asked.filter((n) => !all.some((r) => r.name === n)),
       }) };
     }
-    if (text.startsWith("/minimax_creator/loras")) {
+    if (text.startsWith("/continuity/loras")) {
       const folder = new URLSearchParams(text.split("?")[1] || "").get("folder") || "";
       const rows = ROWS[folder] ?? [];
       return { ok: true, status: 200, json: async () => ({
@@ -239,10 +239,10 @@ const out = {};
   click(find("mmc-add", find("mmc-stack-save")));
   await settle();
 
-  const index = JSON.parse(globalThis.__userdata.get("minimax_creator.presets.json"));
+  const index = JSON.parse(globalThis.__userdata.get("continuity.presets.json"));
   const row = index.presets[0];
   const body = JSON.parse(globalThis.__userdata.get(
-    "minimax_creator.preset." + row.id + ".json"));
+    "continuity.preset." + row.id + ".json"));
   out.stack = { name: row.name, sections: row.sections, entries: body.data.loras };
 
   // ...and what applying one does to a node that already has something on it.

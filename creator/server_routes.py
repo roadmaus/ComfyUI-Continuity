@@ -166,7 +166,7 @@ def _read_header(path):
         }
 
 
-@PromptServer.instance.routes.get("/minimax_creator/probe")
+@PromptServer.instance.routes.get("/continuity/probe")
 async def probe_asset(request):
     """Does this clip carry a soundtrack?
 
@@ -231,7 +231,7 @@ def _read_embedded(path):
     return out
 
 
-@PromptServer.instance.routes.get("/minimax_creator/render_meta")
+@PromptServer.instance.routes.get("/continuity/render_meta")
 async def render_meta(request):
     """The workflow embedded in one render, so a preset can be taken from it.
 
@@ -255,7 +255,7 @@ async def render_meta(request):
         return web.json_response({"prompt": None, "workflow": None, "error": str(exc)})
 
 
-@PromptServer.instance.routes.get("/minimax_creator/thumb")
+@PromptServer.instance.routes.get("/continuity/thumb")
 async def asset_thumb(request):
     """A JPEG still of one clip, for a picker cell.
 
@@ -276,7 +276,7 @@ async def asset_thumb(request):
     })
 
 
-@PromptServer.instance.routes.get("/minimax_creator/peaks")
+@PromptServer.instance.routes.get("/continuity/peaks")
 async def asset_peaks(request):
     """Waveform peaks for the segment editor's timeline, normalised to 0..1.
 
@@ -360,7 +360,7 @@ def _collect_loras(folder, refresh=False):
     }
 
 
-@PromptServer.instance.routes.get("/minimax_creator/loras")
+@PromptServer.instance.routes.get("/continuity/loras")
 async def list_loras(request):
     # Thousands of files means thousands of stat calls and hundreds of sidecar
     # reads. On the event loop that is the prompt queue and the websocket held
@@ -399,7 +399,7 @@ def _collect_named(names):
     return {"loras": rows, "missing": missing, "folders": _folder_counts(sorted(known))}
 
 
-@PromptServer.instance.routes.post("/minimax_creator/loras_named")
+@PromptServer.instance.routes.post("/continuity/loras_named")
 async def loras_named(request):
     body = await request.json()
     raw = body.get("names")
@@ -432,7 +432,7 @@ def _serve(path, data):
     return web.Response(status=404)
 
 
-@PromptServer.instance.routes.get("/minimax_creator/lora_preview")
+@PromptServer.instance.routes.get("/continuity/lora_preview")
 async def lora_preview(request):
     """Serve the card image or clip for one LoRA, from wherever it was found.
 
@@ -447,7 +447,7 @@ async def lora_preview(request):
     return _serve(found, data)
 
 
-@PromptServer.instance.routes.get("/minimax_creator/lora_detail")
+@PromptServer.instance.routes.get("/continuity/lora_detail")
 async def lora_detail(request):
     """Everything one LoRA's detail sheet needs, in one request: whatever the
     sidecars beside it know, the showcase with its generation recipes, and what
@@ -463,7 +463,7 @@ async def lora_detail(request):
     return web.json_response(await loop.run_in_executor(None, lorameta.detail, name, path))
 
 
-@PromptServer.instance.routes.get("/minimax_creator/lora_showcase")
+@PromptServer.instance.routes.get("/continuity/lora_showcase")
 async def lora_showcase(request):
     """Serve one showcase file by its index in the detail's showcase list.
 
@@ -496,7 +496,7 @@ async def lora_showcase(request):
     return _serve(entry.get("path"), data)
 
 
-@PromptServer.instance.routes.get("/minimax_creator/models")
+@PromptServer.instance.routes.get("/continuity/models")
 async def list_models(request):
     """What the weights control can offer: one file list per field.
 
@@ -512,7 +512,7 @@ async def list_models(request):
     return web.json_response(await loop.run_in_executor(None, models.available))
 
 
-@PromptServer.instance.routes.get("/minimax_creator/assets")
+@PromptServer.instance.routes.get("/continuity/assets")
 async def list_assets(request):
     """The picker's grid: `?root=input` (the default) or `?root=output`.
 
@@ -572,7 +572,7 @@ def _rooted(filename):
     return os.path.realpath(base), name, annotation
 
 
-@PromptServer.instance.routes.post("/minimax_creator/move")
+@PromptServer.instance.routes.post("/continuity/move")
 async def move_asset(request):
     """Move one file into another subfolder of the root it already lives in —
     the picker's drag-a-thumbnail-onto-a-shelf.
@@ -614,7 +614,7 @@ async def move_asset(request):
     return web.json_response({"path": relative + annotation})
 
 
-@PromptServer.instance.routes.post("/minimax_creator/delete")
+@PromptServer.instance.routes.post("/continuity/delete")
 async def delete_asset(request):
     """Delete one file — organize mode's other action. Files only, never
     directories: a shelf whose last file goes simply drops out of the listing.
@@ -666,7 +666,7 @@ def _plate_models(body):
             "segment": str(body.get("segment") or "")}
 
 
-@PromptServer.instance.routes.post("/minimax_creator/plate")
+@PromptServer.instance.routes.post("/continuity/plate")
 async def build_plate(request):
     """Write the accepted sheet. See `creator/plate.py`.
 
@@ -738,7 +738,7 @@ def _panel_png(panel, models):
     return out.getvalue()
 
 
-@PromptServer.instance.routes.post("/minimax_creator/plate/panel")
+@PromptServer.instance.routes.post("/continuity/plate/panel")
 async def cut_plate_panel(request):
     """One panel of the sheet being edited, cut out, as a PNG — from memory,
     never from a file. This is what the editor's live preview is made of."""
@@ -766,13 +766,13 @@ async def cut_plate_panel(request):
     return web.Response(body=png, content_type="image/png")
 
 
-@PromptServer.instance.routes.get("/minimax_creator/settings")
+@PromptServer.instance.routes.get("/continuity/settings")
 async def read_settings(request):
     """What the settings page shows: every key, filled in. See `settings.py`."""
     return web.json_response({"settings": settings.load()})
 
 
-@PromptServer.instance.routes.post("/minimax_creator/settings")
+@PromptServer.instance.routes.post("/continuity/settings")
 async def write_settings(request):
     """Store what the settings page changed and hand back what was stored.
 
@@ -790,7 +790,7 @@ async def write_settings(request):
     return web.json_response({"settings": stored})
 
 
-@PromptServer.instance.routes.get("/minimax_creator/latent_cache")
+@PromptServer.instance.routes.get("/continuity/latent_cache")
 async def read_latent_cache(request):
     """How much of the disk the reference cache is holding. See `latents.py`.
 
@@ -802,7 +802,7 @@ async def read_latent_cache(request):
     return web.json_response({"entries": count, "bytes": size})
 
 
-@PromptServer.instance.routes.post("/minimax_creator/latent_cache/clear")
+@PromptServer.instance.routes.post("/continuity/latent_cache/clear")
 async def clear_latent_cache(request):
     """Delete every cached reference. -> what was freed, so the page can say so.
 
@@ -818,7 +818,7 @@ async def clear_latent_cache(request):
     return web.json_response({"freed": freed, "entries": 0, "bytes": 0})
 
 
-@PromptServer.instance.routes.post("/minimax_creator/compiled_prompt")
+@PromptServer.instance.routes.post("/continuity/compiled_prompt")
 async def compiled_prompt(request):
     """The prompt the model will actually read, for the blob the editor holds.
 

@@ -1,54 +1,38 @@
 {
   "MiniMaxH3Creator": {
-    "display_name": "MiniMax H3 クリエイター",
-    "description": "動画を文章で描き、@ で添付メディアを参照します。添付内容に応じて FL2VA / Ref2VA チェックポイントへ振り分けてサンプリングし、完成したフレームと音声を返します。"
+    "display_name": "Continuity",
+    "description": "動画を文章で描き、@ で添付メディアを参照します。MiniMax H3 または LTX 2.5 でレンダリングし、添付内容に合うチェックポイントへ振り分けて、音声入りの完成クリップを保存します。ショットをもう 1 つ書き足せば、同じノードがタイムラインになります — 各カードがそれぞれのプロンプト・リファレンス・LoRA・モデルファミリーを持ち、カットまたは継続でつながれた 1 本のストリップです。"
   },
   "MiniMaxH3Timeline": {
-    "display_name": "MiniMax H3 タイムライン",
-    "description": "複数のショットから 1 本のクリップを組み立てます。連鎖モード: 各セグメントはそれぞれのプロンプト・リファレンス・LoRA を持つ完全な生成で、前のセグメントの最終フレームから始められます。ワンパス: 同じセグメントが 1 回の生成の中のショットになり、カット位置もそのまま反映されます。"
+    "display_name": "Continuity タイムライン",
+    "description": "動画を文章で描き、@ で添付メディアを参照します。MiniMax H3 または LTX 2.5 でレンダリングし、添付内容に合うチェックポイントへ振り分けて、音声入りの完成クリップを保存します。ショットをもう 1 つ書き足せば、同じノードがタイムラインになります — 各カードがそれぞれのプロンプト・リファレンス・LoRA・モデルファミリーを持ち、カットまたは継続でつながれた 1 本のストリップです。"
   },
   "MiniMaxH3TimelineSegment": {
-    "display_name": "MiniMax H3 タイムラインセグメント",
+    "display_name": "H3 セグメント",
     "description": "MiniMax H3 タイムラインの 1 セグメント。タイムラインノードがグラフに書き込みます。"
   },
-  "MiniMaxH3AudioTail": {
-    "display_name": "MiniMax H3 オーディオテール",
-    "description": "デコード済みサウンドトラックの末尾数秒。次のタイムラインセグメントに渡します。"
-  },
-  "MiniMaxH3LastFrame": {
-    "display_name": "MiniMax H3 ラストフレーム",
-    "description": "デコード済みバッチの最終フレーム — 次のタイムラインセグメントが続きを描く起点です。"
-  },
-  "MiniMaxH3SeamTrim": {
-    "display_name": "MiniMax H3 シームトリム",
-    "description": "フェザー処理された継ぎ目の再生成オーバーラップを、デコード済みセグメントの先頭から取り除きます。"
-  },
-  "MiniMaxH3TimelineJoin": {
-    "display_name": "MiniMax H3 タイムライン結合",
-    "description": "2 つのタイムラインセグメントのフレームと音声を連結します。"
-  },
   "MiniMaxH3Save": {
-    "display_name": "MiniMax H3 保存",
+    "display_name": "Continuity 保存",
     "description": "レンダリングのフレームと音声を 1 つのファイルにまとめ、output/ 以下に書き出します。"
   },
   "MiniMaxH3PreStage": {
-    "display_name": "MiniMax H3 プリステージ",
-    "description": "Krea 2、Ideogram 4.0、MiniMax H3 のいずれかで、動画パイプライン用のスチル — 開始/終了フレーム、リファレンス、スタイルシート — を生成します。クリエイターまたはタイムラインのプリステージピルから起動します。"
+    "display_name": "Continuity プリステージ",
+    "description": "Krea 2、Ideogram 4.0、MiniMax H3 のいずれかで、動画パイプライン用のスチル — 開始/終了フレーム、リファレンス、スタイルシート — を生成します。Continuity ノードのプリステージピルから起動します。"
   },
   "MiniMaxH3SaveImage": {
-    "display_name": "MiniMax H3 画像保存",
+    "display_name": "Continuity 画像保存",
     "description": "プリステージのレンダリングを output/ 以下に書き出し、ステージカードへ報告します。"
   },
   "MiniMaxH3StillLatent": {
-    "display_name": "MiniMax H3 スチルレイテント",
+    "display_name": "H3 スチルレイテント",
     "description": "サンプリング済み H3 レイテントの時間方向 1 フレームを、単一画像のレイテントとして取り出します。"
   },
   "MiniMaxH3RefinePass": {
-    "display_name": "MiniMax H3 リファインパス",
+    "display_name": "H3 リファインパス",
     "description": "2 パスレンダリングの 2 パス目: H3 AV レイテントの映像側をアップスケールしてスケジュール途中から再サンプリングし、サウンドトラックにはノイズを加えません。render.emit がグラフに書き込みます。"
   },
   "MiniMaxH3FacePass": {
-    "display_name": "MiniMax H3 フェイスパス",
+    "display_name": "H3 フェイスパス",
     "description": "デコード済みパスの顔をフレームごとに切り出し、顔が大きく写るキャンバスで描き直して元の画に合成し直します。render.emit がグラフに書き込みます。"
   }
 }

@@ -14,7 +14,7 @@ ORDER = 4
 PRODUCES = frozenset({"still"})
 RULES = None
 
-# What this family's stills are called under `minimax/stills/ideogram4/`. See
+# What this family's stills are called under `continuity/stills/ideogram4/`. See
 # `h3/declare.py` for why the stem is declared rather than derived.
 OUTPUT_STEM = "Ideogram4"
 

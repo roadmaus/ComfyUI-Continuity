@@ -50,7 +50,7 @@ import uuid
 
 # Where entries live under the user directory, beside the previews cache that
 # is keyed the same way and kept for the same reason.
-DIR_NAME = os.path.join("minimax_creator", "latents")
+DIR_NAME = os.path.join("continuity", "latents")
 
 # How long an entry nobody has read is kept, when nothing has been set. Counted
 # from the last read (see `_touch`), not from the write: what makes an entry

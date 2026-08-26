@@ -71,8 +71,8 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
     def define_schema(cls):
         return io.Schema(
             node_id="MiniMaxH3TimelineSegment",
-            display_name="MiniMax H3 Timeline Segment",
-            category="MiniMax/internal",
+            display_name="H3 Segment",
+            category="Continuity/internal",
             description="One segment of a MiniMax H3 timeline. Written into the graph by the Timeline node.",
             is_dev_only=True,
             inputs=[

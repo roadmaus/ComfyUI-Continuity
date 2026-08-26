@@ -44,7 +44,7 @@ import folder_paths
 from .compile import active_loras
 from .families import registry
 
-LOG = logging.getLogger("minimax_creator")
+LOG = logging.getLogger("continuity")
 
 # One spare, no more. These files are ~700 MB each, and the point of holding any
 # is only so re-queueing the same graph does not re-read from disk.
@@ -128,7 +128,7 @@ def _apply_h3(model, rows):
     from .h3lora import apply as h3lora
 
     patched, report = h3lora.apply_stack(model, rows)
-    LOG.info("MiniMax Creator LoRAs:\n%s", report.text())
+    LOG.info("Continuity LoRAs:\n%s", report.text())
     return patched
 
 
@@ -162,6 +162,6 @@ def _apply_core(model, rows):
                 f"the transformer this piece renders with. It is a LoRA for "
                 f"other weights — take it out of the stack, or switch the "
                 f"piece back to the family it was trained against.")
-        LOG.info("MiniMax Creator LoRA: %s at %.2f — %d keys patched",
+        LOG.info("Continuity LoRA: %s at %.2f — %d keys patched",
                  row["name"], row["strength"], len(set(placed)))
     return patched

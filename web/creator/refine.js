@@ -33,7 +33,10 @@ import { api } from "../../../scripts/api.js";
 // fact about this computer; putting it in `creator_data` would ship it to
 // whoever opens the workflow next and would invalidate the node's cache every
 // time the temperature moved.
-const STORE = "minimax_creator.refiner";
+const STORE = "continuity.refiner";
+// The same settings under the pack's old name. Read as a fallback and never
+// written; see `docs/RENAME.md`. Delete one release after the rename ships.
+const LEGACY_STORE = "minimax_creator.refiner";
 
 const DEFAULTS = {
   // A text encoder in ComfyUI's own process, managed and evicted like any other
@@ -80,7 +83,8 @@ export const LANGUAGES = [
 export function settings() {
   let stored;
   try {
-    stored = JSON.parse(localStorage.getItem(STORE) || "{}");
+    stored = JSON.parse(localStorage.getItem(STORE)
+                        || localStorage.getItem(LEGACY_STORE) || "{}");
   } catch {
     return { ...DEFAULTS };
   }
@@ -149,7 +153,7 @@ let modelCache = { at: 0, names: [] };
 export async function listModels({ force = false } = {}) {
   if (!force && Date.now() - modelCache.at < 20000) return modelCache.names;
   try {
-    const response = await api.fetchApi("/minimax_creator/refine/models");
+    const response = await api.fetchApi("/continuity/refine/models");
     const body = await response.json();
     modelCache = { at: Date.now(), names: body.models ?? [] };
   } catch {
@@ -164,7 +168,7 @@ let skillCache = { at: 0, names: [] };
 export async function listSkills({ force = false } = {}) {
   if (!force && Date.now() - skillCache.at < 20000) return skillCache.names;
   try {
-    const response = await api.fetchApi("/minimax_creator/refine/skills");
+    const response = await api.fetchApi("/continuity/refine/skills");
     const body = await response.json();
     skillCache = { at: Date.now(), names: body.skills ?? [] };
   } catch {
@@ -196,7 +200,7 @@ export async function refine(payload) {
   // family's refiner writes the rewrite, and a template pinned for another
   // one must not ride along with it.
   const template = chosenTemplate(pieceFamily(payload.data), current);
-  const response = await api.fetchApi("/minimax_creator/refine", {
+  const response = await api.fetchApi("/continuity/refine", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ ...payload, model, temperature, seed, language,
@@ -223,14 +227,14 @@ function collect(job) {
     let inFlight = false;
     const settle = (fn, value) => {
       clearInterval(timer);
-      api.removeEventListener("minimax_creator.refine.done", nudge);
+      api.removeEventListener("continuity.refine.done", nudge);
       fn(value);
     };
     const check = async () => {
       if (inFlight) return;
       inFlight = true;
       try {
-        const response = await api.fetchApi(`/minimax_creator/refine/job/${job}`);
+        const response = await api.fetchApi(`/continuity/refine/job/${job}`);
         const body = await response.json().catch(() => ({}));
         if (response.status === 404) {
           settle(reject, new Error(body.error || t("the refine was lost — the server may have restarted")));
@@ -244,7 +248,7 @@ function collect(job) {
       inFlight = false;
     };
     const nudge = ({ detail }) => { if (detail?.job === job) check(); };
-    api.addEventListener("minimax_creator.refine.done", nudge);
+    api.addEventListener("continuity.refine.done", nudge);
     timer = setInterval(check, 5000);
     check(); // it may have finished before the listener existed
   });
@@ -838,7 +842,7 @@ export function refineButton({ run, family = null, label = "Refine", title,
   // tokens instead of promising vaguely. Best effort: with no event the label
   // just stays "Refining…".
   const onProgress = ({ detail }) => {
-    if (detail?.prompt_id !== "minimax-creator-refine") return;
+    if (detail?.prompt_id !== "continuity-refine") return;
     text.textContent = `${t("Refining…")} ${detail.value}/${detail.max}`;
   };
   const button = el("button", {

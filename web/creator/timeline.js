@@ -2800,7 +2800,7 @@ class Timeline {
  * move. The seed alone is still really a widget.
  */
 export class TimelineBody {
-  /** `preStage` and `face` are wiring the node supplies — see minimax_creator.js.
+  /** `preStage` and `face` are wiring the node supplies — see creator.js.
    *  `face` is where the piece-view pin is kept, which is a preference about
    *  this node rather than anything the render reads, so it lives on the node
    *  and not in the blob. */

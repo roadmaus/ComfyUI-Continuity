@@ -85,6 +85,11 @@ from comfy.ldm.minimax.model import FRAME_RESCALE, PackedLayout
 CORE_ANCHORS_ANYWHERE = (
     "frame_count" not in inspect.signature(PackedLayout.__init__).parameters)
 
+# **The four `minimax_creator_*` keys below keep that spelling forever.** They
+# were not renamed when the pack was, because they are not the pack's name —
+# they are the surface the `AUDIO_END_KEY` repair matches against inside core's
+# conditioning dict on every core release, and the one thing a compatibility
+# probe cannot afford is to be a moving target. See `docs/RENAME.md`.
 WRAPPER_KEY = "minimax_creator_cond_video_latents"
 
 # On a keyframe dict: the pixel-frame index this guide is really pinned at, on
@@ -127,7 +132,7 @@ def _target_origin(layout):
     a, b, kind = layout.segments[-1]
     if kind != "video" or b <= a:
         raise RuntimeError(
-            f"Minimax_creator: expected the target video rows to be the last "
+            f"Continuity: expected the target video rows to be the last "
             f"layout segment, found {kind!r} spanning {b - a} rows. Core's H3 "
             f"layout changed; refusing to reposition seam guides."
         )
@@ -149,7 +154,7 @@ def _reposition(layout, payload):
     cond = [(a, b) for a, b, kind in layout.segments if kind == "cond"]
     if len(cond) != len(keyframes):
         raise RuntimeError(
-            f"Minimax_creator: {len(keyframes)} keyframes should emit "
+            f"Continuity: {len(keyframes)} keyframes should emit "
             f"{len(keyframes)} cond segments, the layout has {len(cond)}. "
             f"Core's H3 layout changed; refusing to reposition seam guides."
         )
@@ -165,7 +170,7 @@ def _reposition(layout, payload):
     segments = _ref_audio_segments(layout)
     if len(segments) != len(audio):
         raise RuntimeError(
-            f"Minimax_creator: {len(audio)} audio reference blocks should emit "
+            f"Continuity: {len(audio)} audio reference blocks should emit "
             f"{len(audio)} ref_audio segments, the layout has {len(segments)}. "
             f"Core's H3 layout changed; refusing to reposition seam guides."
         )
@@ -176,7 +181,7 @@ def _reposition(layout, payload):
         steps = int(ref["ref_audio_t"])
         if b - a != steps * 2:
             raise RuntimeError(
-                f"Minimax_creator: an audio block of {steps} latent steps "
+                f"Continuity: an audio block of {steps} latent steps "
                 f"should span {steps * 2} rows, found {b - a}. Core's H3 "
                 f"layout changed; refusing to reposition seam guides."
             )
@@ -212,7 +217,7 @@ def _wrapper(executor, *args, **kwargs):
                         (video.shape[4] + 1) // 2 * 2, audio.shape[-1])
             if layout is None or layout.signature != expected:
                 raise RuntimeError(
-                    "Minimax_creator: seam guides present but the prebuilt "
+                    "Continuity: seam guides present but the prebuilt "
                     "layout is missing or does not match the sampled streams "
                     f"({None if layout is None else layout.signature} vs "
                     f"{expected}) — the forward would rebuild it with the "

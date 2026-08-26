@@ -13,7 +13,7 @@ const CACHE_MS = 4000;
 export async function listAssets({ force = false, root = "input" } = {}) {
   const hit = cache.get(root);
   if (!force && hit && Date.now() - hit.at < CACHE_MS) return hit.assets;
-  const response = await api.fetchApi(`/minimax_creator/assets?root=${encodeURIComponent(root)}`);
+  const response = await api.fetchApi(`/continuity/assets?root=${encodeURIComponent(root)}`);
   if (!response.ok) throw new Error(t("asset listing failed ({status})", { status: response.status }));
   const body = await response.json();
   const assets = body.assets ?? [];
@@ -51,7 +51,7 @@ function remember(root, asset) {
  *  it is a gallery path, and the server reads the root off that rather than
  *  trusting a second field that could disagree with it. */
 export async function moveAsset(filename, subfolder) {
-  const response = await api.fetchApi("/minimax_creator/move", {
+  const response = await api.fetchApi("/continuity/move", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ filename, subfolder }),
@@ -65,7 +65,7 @@ export async function moveAsset(filename, subfolder) {
 /** Delete one file, from whichever of the two folders it names. Organize
  *  mode's other action, and the only irreversible one in the picker. */
 export async function deleteAsset(filename) {
-  const response = await api.fetchApi("/minimax_creator/delete", {
+  const response = await api.fetchApi("/continuity/delete", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ filename }),
@@ -88,8 +88,14 @@ export async function deleteAsset(filename) {
 // organized load unchanged. Favorites need no such split: a gallery path
 // carries its ` [output]` annotation, so the two roots cannot collide.
 
-const PREFS_FILE = "minimax_creator.picker.json";
-const PREFS_KEY = "mmc-picker-prefs";
+const PREFS_FILE = "continuity.picker.json";
+const PREFS_KEY = "continuity-picker-prefs";
+// What both were called when the pack was called MiniMax Creator. Read once, on
+// a first read that finds nothing, and never written — `docs/RENAME.md` has the
+// rule: a rename does not get to lose somebody's favourites. Delete these one
+// release after the rename ships.
+const LEGACY_PREFS_FILE = "minimax_creator.picker.json";
+const LEGACY_PREFS_KEY = "mmc-picker-prefs";
 let prefsCache = null;
 
 const names = (value) => (Array.isArray(value) ? value.filter((p) => typeof p === "string") : []);
@@ -114,10 +120,15 @@ export async function loadPickerPrefs() {
   if (prefsCache) return prefsCache;
   let raw = null;
   try {
-    const response = await api.getUserData(PREFS_FILE);
-    if (response.status === 200) raw = await response.json();
+    for (const file of [PREFS_FILE, LEGACY_PREFS_FILE]) {
+      const response = await api.getUserData(file);
+      if (response.status === 200) { raw = await response.json(); break; }
+    }
   } catch {
-    try { raw = JSON.parse(localStorage.getItem(PREFS_KEY) ?? "null"); } catch { /* fresh */ }
+    for (const key of [PREFS_KEY, LEGACY_PREFS_KEY]) {
+      try { raw = JSON.parse(localStorage.getItem(key) ?? "null"); } catch { /* fresh */ }
+      if (raw) break;
+    }
   }
   prefsCache = normalizePrefs(raw);
   return prefsCache;
@@ -141,7 +152,7 @@ export function savePickerPrefs(prefs) {
 
 /** Every setting, with the keys this build does not know about dropped. */
 export async function loadSettings() {
-  const response = await api.fetchApi("/minimax_creator/settings");
+  const response = await api.fetchApi("/continuity/settings");
   if (!response.ok) throw new Error(t("settings failed ({status})", { status: response.status }));
   return (await response.json()).settings ?? {};
 }
@@ -149,7 +160,7 @@ export async function loadSettings() {
 /** Store some settings and resolve to the whole stored object — what the server
  *  actually wrote, which is what the page then shows. */
 export async function saveSettings(patch) {
-  const response = await api.fetchApi("/minimax_creator/settings", {
+  const response = await api.fetchApi("/continuity/settings", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(patch),
@@ -165,14 +176,14 @@ export async function saveSettings(patch) {
  *  route says: the settings are what this machine was told, and this is what
  *  came of it. */
 export async function loadLatentCache() {
-  const response = await api.fetchApi("/minimax_creator/latent_cache");
+  const response = await api.fetchApi("/continuity/latent_cache");
   if (!response.ok) throw new Error(t("cache failed ({status})", { status: response.status }));
   return await response.json();
 }
 
 /** Delete every cached reference; resolves to the emptied `{ entries, bytes }`. */
 export async function clearLatentCache() {
-  const response = await api.fetchApi("/minimax_creator/latent_cache/clear", { method: "POST" });
+  const response = await api.fetchApi("/continuity/latent_cache/clear", { method: "POST" });
   const body = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(body.error || t("cache failed ({status})", { status: response.status }));
   return body;
@@ -258,7 +269,7 @@ export async function listModels({ force = false } = {}) {
   if (!force && modelsInFlight) return modelsInFlight;
   modelsInFlight = (async () => {
     try {
-      const response = await api.fetchApi("/minimax_creator/models");
+      const response = await api.fetchApi("/continuity/models");
       if (!response.ok) throw new Error(t("model listing failed ({status})", { status: response.status }));
       modelsCache = await response.json();
       modelsAt = Date.now();
@@ -300,7 +311,7 @@ export async function listLoras({ folder = "", force = false } = {}) {
   if (!force && hit && Date.now() - hit.at < CACHE_MS) return hit.body;
   const query = new URLSearchParams({ folder });
   if (force) query.set("refresh", "1");
-  const response = await api.fetchApi(`/minimax_creator/loras?${query}`);
+  const response = await api.fetchApi(`/continuity/loras?${query}`);
   if (!response.ok) throw new Error(t("LoRA listing failed ({status})", { status: response.status }));
   const body = await response.json();
   if (force) loraCache.clear();
@@ -324,7 +335,7 @@ export async function listLoras({ folder = "", force = false } = {}) {
  */
 export async function listLorasNamed(names) {
   if (!names.length) return { loras: [], missing: [], folders: [] };
-  const response = await api.fetchApi("/minimax_creator/loras_named", {
+  const response = await api.fetchApi("/continuity/loras_named", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ names }),
@@ -354,8 +365,11 @@ export async function listLorasNamed(names) {
 // then switched off is still a word you typed, and the old model — one flat
 // list of the words currently on — could not express it, so it was lost.
 
-const LORA_PREFS_FILE = "minimax_creator.loras.json";
-const LORA_PREFS_KEY = "mmc-lora-prefs";
+const LORA_PREFS_FILE = "continuity.loras.json";
+const LORA_PREFS_KEY = "continuity-lora-prefs";
+// The same two under the pack's old name. See `LEGACY_PREFS_FILE` above.
+const LEGACY_LORA_PREFS_FILE = "minimax_creator.loras.json";
+const LEGACY_LORA_PREFS_KEY = "mmc-lora-prefs";
 // Where the folder used to live, alone, before any of the rest of this existed.
 const LEGACY_FOLDER_KEY = "mmc.loraFolder";
 
@@ -410,10 +424,15 @@ export async function loadLoraPrefs() {
   if (loraPrefsCache) return loraPrefsCache;
   let raw = null;
   try {
-    const response = await api.getUserData(LORA_PREFS_FILE);
-    if (response.status === 200) raw = await response.json();
+    for (const file of [LORA_PREFS_FILE, LEGACY_LORA_PREFS_FILE]) {
+      const response = await api.getUserData(file);
+      if (response.status === 200) { raw = await response.json(); break; }
+    }
   } catch {
-    try { raw = JSON.parse(localStorage.getItem(LORA_PREFS_KEY) ?? "null"); } catch { /* fresh */ }
+    for (const key of [LORA_PREFS_KEY, LEGACY_LORA_PREFS_KEY]) {
+      try { raw = JSON.parse(localStorage.getItem(key) ?? "null"); } catch { /* fresh */ }
+      if (raw) break;
+    }
   }
   loraPrefsCache = normalizeLoraPrefs(raw);
   // The one thing that was remembered before this file existed. Carried over on
@@ -439,7 +458,7 @@ export function saveLoraPrefs(prefs) {
  *  gallery, a `.preview.png` beside the file, or a thumbnail embedded in the
  *  safetensors header. 404s into the card's fallback when there is nothing. */
 export function loraPreviewUrl(name) {
-  return api.apiURL(`/minimax_creator/lora_preview?name=${encodeURIComponent(name)}`);
+  return api.apiURL(`/continuity/lora_preview?name=${encodeURIComponent(name)}`);
 }
 
 const detailCache = new Map();   // name -> {at, detail}
@@ -453,7 +472,7 @@ const detailCache = new Map();   // name -> {at, detail}
 export async function loraDetail(name) {
   const hit = detailCache.get(name);
   if (hit && Date.now() - hit.at < 60000) return hit.detail;
-  const response = await api.fetchApi(`/minimax_creator/lora_detail?name=${encodeURIComponent(name)}`);
+  const response = await api.fetchApi(`/continuity/lora_detail?name=${encodeURIComponent(name)}`);
   if (!response.ok) throw new Error(t("detail failed ({status})", { status: response.status }));
   const detail = await response.json();
   detailCache.set(name, { at: Date.now(), detail });
@@ -465,7 +484,7 @@ export async function loraDetail(name) {
 export function loraShowcaseUrl(name, item, { thumb = false } = {}) {
   const params = new URLSearchParams({ name, item: String(item) });
   if (thumb) params.set("thumb", "1");
-  return api.apiURL(`/minimax_creator/lora_showcase?${params}`);
+  return api.apiURL(`/continuity/lora_showcase?${params}`);
 }
 
 const PROBES = new Map();   // path -> Promise<{hasAudio, duration, width, height}>
@@ -494,7 +513,7 @@ export async function probeAudio(path) {
 
 async function ask(path) {
   try {
-    const response = await api.fetchApi(`/minimax_creator/probe?filename=${encodeURIComponent(path)}`);
+    const response = await api.fetchApi(`/continuity/probe?filename=${encodeURIComponent(path)}`);
     const body = await response.json();
     return {
       hasAudio: typeof body.has_audio === "boolean" ? body.has_audio : null,
@@ -522,7 +541,7 @@ async function ask(path) {
  */
 export async function renderMeta(path) {
   const response = await api.fetchApi(
-    `/minimax_creator/render_meta?filename=${encodeURIComponent(path)}`);
+    `/continuity/render_meta?filename=${encodeURIComponent(path)}`);
   const body = await response.json().catch(() => ({}));
   if (!response.ok) {
     throw new Error(body.error || t("could not read that render ({status})", { status: response.status }));
@@ -577,7 +596,7 @@ export function viewUrl(path, { preview = false } = {}) {
 export function thumbUrl(path, version) {
   const params = new URLSearchParams({ filename: path });
   if (version) params.set("v", String(version));
-  return api.apiURL(`/minimax_creator/thumb?${params}`);
+  return api.apiURL(`/continuity/thumb?${params}`);
 }
 
 /**
@@ -608,7 +627,7 @@ export function stillUrl(asset) {
  */
 export async function fetchPeaks(path) {
   try {
-    const response = await api.fetchApi(`/minimax_creator/peaks?filename=${encodeURIComponent(path)}`);
+    const response = await api.fetchApi(`/continuity/peaks?filename=${encodeURIComponent(path)}`);
     if (!response.ok) return null;
     const body = await response.json();
     return Array.isArray(body.peaks) ? Float32Array.from(body.peaks) : null;
@@ -684,7 +703,7 @@ export async function upload(file, subfolder = "") {
  * the editor closes; a leaked object URL is a leaked decoded image.
  */
 export async function cutPanel(body) {
-  const response = await api.fetchApi("/minimax_creator/plate/panel", {
+  const response = await api.fetchApi("/continuity/plate/panel", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
@@ -712,7 +731,7 @@ export async function cutPanel(body) {
  * built an hour ago findable in the grid like any other picture.
  */
 export async function buildPlate(body) {
-  const response = await api.fetchApi("/minimax_creator/plate", {
+  const response = await api.fetchApi("/continuity/plate", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
@@ -764,7 +783,7 @@ export async function buildPlate(body) {
 export async function compiledPrompt(creatorData) {
   let body;
   try {
-    const response = await api.fetchApi("/minimax_creator/compiled_prompt", {
+    const response = await api.fetchApi("/continuity/compiled_prompt", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ creator_data: creatorData }),

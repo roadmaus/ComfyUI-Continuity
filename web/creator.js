@@ -352,7 +352,7 @@ function attach(node, build) {
 
 /** Whether new and selected pieces open in the fullscreen editor.
  *
- *  ComfyUI's own store, not `/minimax_creator/settings`: that file is one copy
+ *  ComfyUI's own store, not `/continuity/settings`: that file is one copy
  *  for the whole install with, as `api.js` puts it, "no request behind it and
  *  so no ComfyUI user". Which editor you look at is a preference about a
  *  person, and this is the store that is per-person and already the place
@@ -362,7 +362,7 @@ function attach(node, build) {
  *  while the frontend is still booting and the locale store has not answered.
  *  A string translated there would be whatever the boot order gave it, forever.
  */
-const FULLSCREEN_SETTING = "MiniMax.Creator.Fullscreen";
+const FULLSCREEN_SETTING = "Continuity.Editor.Fullscreen";
 
 const wantsFullscreen = () => {
   try {
@@ -373,12 +373,12 @@ const wantsFullscreen = () => {
 };
 
 app.registerExtension({
-  name: "minimax.creator",
+  name: "continuity",
 
   settings: [{
     id: FULLSCREEN_SETTING,
-    category: ["MiniMax H3", "Editor", "Fullscreen"],
-    name: "Open the Creator fullscreen",
+    category: ["Continuity", "Editor", "Fullscreen"],
+    name: "Open the node fullscreen",
     tooltip: "Draw the node's body over the whole window instead of on the canvas. "
            + "The node stays in the graph and is queued exactly as it always was. "
            + "Ctrl+Shift+M toggles it; Escape and the button in its corner go back.",
@@ -390,12 +390,12 @@ app.registerExtension({
   // is no node to right-click, so the editor cannot be the only thing that
   // knows how to close itself.
   commands: [{
-    id: "minimax.toggleFullscreen",
-    label: "MiniMax H3: fullscreen editor",
+    id: "continuity.toggleFullscreen",
+    label: "Continuity: fullscreen editor",
     function: toggleFullscreen,
   }],
   keybindings: [{
-    commandId: "minimax.toggleFullscreen",
+    commandId: "continuity.toggleFullscreen",
     combo: { key: "m", ctrl: true, shift: true },
   }],
 

@@ -30,7 +30,7 @@ for you. Everything else in this package exists to support that one gesture.
 | Duration | Whole seconds in the UI | The user asked for `6 s` on the pill. The 17n+5 grid is handled behind it; downstream sees the true value. |
 | Checkpoints | Two MODEL inputs, routed | FL2VA and Ref2VA are different checkpoints. What you attach picks the mode; the mode picks which input is passed through. A new timeline pins its route to Ref2VA rather than auto: tested, Ref2VA is the stronger training — it handles text-only and keyframe payloads perfectly alongside references, a superset of what FL2VA was trained for — and one route means a strip mixing reference and plain cards runs on one set of weights. The pill still overrides it; a saved timeline keeps whatever it stored, and a models block without a route reads back as auto, exactly as it ran. The Creator node keeps auto. |
 | Clip segments | Optional `trim`, one editor, two entry points | Whole clip stays the default and the grid stays a grid. The picker cell and the attached chip open the same modal, so the segment is chosen the same way before or after attaching. Cutting in `media.py` rather than asking for a pre-trimmed file keeps the input folder the only asset store. |
-| Video sound | `track`: picture, picture+sound, or sound — sound on by default, probed | A clip chosen for its motion is usually wanted for its sound too. But the default is only right when there is a soundtrack to bind, and no browser reports that portably — hence `/minimax_creator/probe`, which reads the container header. A silent clip attaches silent instead of failing at queue time on a choice the user never made. Explicitly choosing a track in the segment editor outranks the default. |
+| Video sound | `track`: picture, picture+sound, or sound — sound on by default, probed | A clip chosen for its motion is usually wanted for its sound too. But the default is only right when there is a soundtrack to bind, and no browser reports that portably — hence `/continuity/probe`, which reads the container header. A silent clip attaches silent instead of failing at queue time on a choice the user never made. Explicitly choosing a track in the segment editor outranks the default. |
 | Sound without the picture | The same `track` field, routed into `ref_audios` by `compile.py` | A soundtrack you want to cite is often attached to a clip whose look you do not — a voice, a room tone, a piece of scoring. Making that a third value of the field that already decided picture-vs-picture-and-sound keeps one axis with three points instead of two booleans that can contradict each other. It is a bucketing question, not a loading one: the decoder already reads an audio stream out of an mp4, so the whole feature is which list the asset lands in, decided once in `compile.py` and mirrored by `state.js` so the slot counters agree. The clip keeps its `vid-N` handle — the handle names the file, not the bucket — so switching the picture back on never rewrites the prompt. |
 | LoRAs | Managed in the node, patched onto the routed checkpoint | The node already decides which of the two checkpoints comes out, so it is the only place that knows what a LoRA would be patching. A LoRA trained against FL2VA does nothing on Ref2VA and says nothing about it — `load_lora` only logs the keys it could not place — so each entry names the checkpoints it claims, and one that lands somewhere it matches no keys is refused rather than quietly generating an unchanged video. |
 | Trigger words | Copied onto the entry, prefixed at compile time, printed in the node | The sidecar is a cache, not a contract: it can be wrong, absent, or on a different machine, so the entry owns the literal words and a sidecar word is just a chip switched on. Prefixing is what every LoRA is documented against, but it edits a prompt the user cannot see edited — hence the line under the chips. `prompt_override` still bypasses the lot. |
@@ -91,7 +91,7 @@ for you. Everything else in this package exists to support that one gesture.
 - [x] **1 — Backend, headless.** `canvas.py`, `compile.py`, `media.py`,
   `encode.py`, the node. Driven by hand-written `creator_data` so the reference
   ordering was provable before any UI existed.
-- [x] **2 — Asset route and picker.** `/minimax_creator/assets`, the picker
+- [x] **2 — Asset route and picker.** `/continuity/assets`, the picker
   modal, the tool rail, the pill row, state serialisation.
 - [x] **3 — `@` chips.** Contenteditable prompt, mention menu, attach-on-select.
 - [x] **4 — LoRAs.** `lora.py`, the listing and preview routes, the manager
@@ -330,7 +330,7 @@ package, which may not be installed.
 
 The path, end to end:
 
-1. The frontend posts the blob it is already holding to `/minimax_creator/refine`
+1. The frontend posts the blob it is already holding to `/continuity/refine`
    — the whole `creator_data`, or the whole `timeline_data` plus which card.
 2. `refine_routes.py` **compiles** it. That is where the mode, the reference
    slots and the ordinal each handle will be given come from; there is no second

@@ -106,11 +106,11 @@ globalThis.__posted = [];
 // A row per family, the way the settings route serves it — the page draws one
 // field per entry and a patch must not drop the entries it did not touch.
 let stored = { video_crf: 23,
-               video_prefix: { h3: "minimax/renders/h3/H3",
-                               ltx25: "minimax/renders/ltx25/LTX25" },
-               image_prefix: { h3: "minimax/stills/h3/H3",
-                               krea2: "minimax/stills/krea2/Krea2",
-                               ideogram4: "minimax/stills/ideogram4/Ideogram4" } };
+               video_prefix: { h3: "continuity/renders/h3/H3",
+                               ltx25: "continuity/renders/ltx25/LTX25" },
+               image_prefix: { h3: "continuity/stills/h3/H3",
+                               krea2: "continuity/stills/krea2/Krea2",
+                               ideogram4: "continuity/stills/ideogram4/Ideogram4" } };
 // A real listener table, because the shell now listens for the one thing the
 // frontend says out loud when a prompt is accepted — see `promptQueued` below.
 const listeners = {};
@@ -127,7 +127,7 @@ export const api = {
   async fetchApi(route, options) {
     // The family catalog, written beside this stub — manifest.js loads it at
     // import, the same way the real route serves it.
-    if (String(route).startsWith("/minimax_creator/families")) {
+    if (String(route).startsWith("/continuity/families")) {
       const body = (await import("node:fs")).readFileSync(new URL("./families.json", import.meta.url), "utf8");
       return { ok: true, status: 200, json: async () => JSON.parse(body) };
     }
@@ -2432,7 +2432,7 @@ from harness import FAILURES, check, passed
 
 
 FAILURES.extend(report["errors"])
-check("the extension registers", report["registered"], "minimax.creator")
+check("the extension registers", report["registered"], "continuity")
 
 # Each node's body, and which editor drives it. The H3 pre-stage is the one that
 # differs: its still is a video generation, so it is driven by the Creator's own
@@ -2656,9 +2656,9 @@ check("...and writes it where the stylesheet reads it",
 # out loud that it no longer does.
 check("the folders tab carries a field per family, renders then stills",
       settings.get("fields"),
-      ["minimax/renders/h3/H3", "minimax/renders/ltx25/LTX25",
-       "minimax/stills/h3/H3", "minimax/stills/krea2/Krea2",
-       "minimax/stills/ideogram4/Ideogram4"])
+      ["continuity/renders/h3/H3", "continuity/renders/ltx25/LTX25",
+       "continuity/stills/h3/H3", "continuity/stills/krea2/Krea2",
+       "continuity/stills/ideogram4/Ideogram4"])
 # The token is one object or it is nothing: it went in as eight characters and
 # came back as a tile wearing the plain word, with the stored string untouched.
 check("a typed token becomes one tile, and the stored string keeps its spelling",
@@ -2673,14 +2673,14 @@ check("the reset is offered on the edited row and no other",
 # for this family and this shelf, with every other family's left as it was.
 check("resetting posts the family's shipped folder back",
       settings.get("folderResetPosted"),
-      [{"video_prefix": {"h3": "minimax/renders/h3/H3",
-                         "ltx25": "minimax/renders/ltx25/LTX25"}}])
+      [{"video_prefix": {"h3": "continuity/renders/h3/H3",
+                         "ltx25": "continuity/renders/ltx25/LTX25"}}])
 # The whole block goes back, not the one row: the settings route patches
 # shallowly, so posting `{h3: …}` alone would drop LTX 2.5's folder.
 check("editing one family's folder posts the block, leaving the others alone",
       settings.get("posted"),
       [{"video_prefix": {"h3": "client/shoot-3/take",
-                         "ltx25": "minimax/renders/ltx25/LTX25"}}])
+                         "ltx25": "continuity/renders/ltx25/LTX25"}}])
 
 # The node face is a preview and the prompt is written in a sheet.
 face = report.get("face", {})

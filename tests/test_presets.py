@@ -46,12 +46,13 @@ STUBS = {
     "app.js": "export const app = { registerExtension() {}, extensionManager: null };",
     "api.js": """
 const store = new Map();
+globalThis.__userdata = store;
 export const api = {
   apiURL: (u) => u,
   async fetchApi(url) {
     // The family catalog, written beside this stub — manifest.js loads it at
     // import, the same way the real route serves it.
-    if (String(url).startsWith("/minimax_creator/families")) {
+    if (String(url).startsWith("/continuity/families")) {
       const body = (await import("node:fs")).readFileSync(new URL("./families.json", import.meta.url), "utf8");
       return { ok: true, status: 200, json: async () => JSON.parse(body) };
     }
@@ -832,6 +833,38 @@ try {
   out.errors.push(`keep: ${error.stack}`);
 }
 
+// A library written when the pack was called MiniMax Creator still opens. This
+// is the migration `docs/RENAME.md` exists for: a preset is work somebody did by
+// hand, and it lives in userdata rather than in the workflow, so a rename is the
+// one thing that could quietly lose it.
+try {
+  const store = globalThis.__userdata;
+  store.clear();
+  const body = { look: { aspect: "21:9" } };
+  store.set("minimax_creator.presets.json", JSON.stringify({
+    version: P.PRESET_VERSION,
+    presets: [{ id: "pold", name: "Portal walk", scope: "piece", updated: 1,
+                sections: ["look"], facts: {}, lane: [], frames: [] }],
+  }));
+  store.set("minimax_creator.preset.pold.json", JSON.stringify({ data: body }));
+
+  const rows = await P.listPresets({ force: true });
+  out.legacy = {
+    listed: rows.length === 1 && rows[0].id === "pold",
+    bodyRead: JSON.stringify(await P.loadBody(rows[0])) === JSON.stringify(body),
+  };
+
+  // ...and the new name wins outright once it exists, rather than the two being
+  // merged: a preset deleted under the new name must stay deleted.
+  store.set("continuity.presets.json", JSON.stringify({
+    version: P.PRESET_VERSION, presets: [],
+  }));
+  out.legacy.newNameWins = (await P.listPresets({ force: true })).length === 0;
+  store.clear();
+} catch (error) {
+  out.errors.push(`legacy: ${error.stack}`);
+}
+
 // The shipped starters load, describe themselves, and name no files.
 try {
   const { BUILTIN } = await import("./web/creator/presets/builtin.js");
@@ -890,6 +923,11 @@ if not trip.get("blob"):
     FAILURES.append("a captured piece does not come back identical:\n"
                     f"    want {json.dumps(trip.get('want'), sort_keys=True)[:400]}\n"
                     f"    got  {json.dumps(trip.get('got'), sort_keys=True)[:400]}")
+legacy = report.get("legacy") or {}
+check("a library saved under the pack's old name still lists", legacy.get("listed"), True)
+check("...and its bodies still open", legacy.get("bodyRead"), True)
+check("...and the new name wins once it exists", legacy.get("newNameWins"), True)
+
 check("the sampler row comes back too — it is not in the blob", trip.get("row"), True)
 check("...and the seed is left where the target had it", trip.get("seedUntouched"), True)
 

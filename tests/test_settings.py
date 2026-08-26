@@ -281,6 +281,37 @@ with tempfile.TemporaryDirectory() as directory:
     check("a file missing a key is the default for that key",
           settings.load(), dict(settings.DEFAULTS))
 
+# ---- the file the pack wrote when it was called MiniMax Creator ---------------
+#
+# The rename's one real risk. An install that had typed an output folder must
+# still be filing renders there afterwards — `docs/RENAME.md` is explicit that a
+# rename does not get to move where somebody's finished work lands.
+
+with tempfile.TemporaryDirectory() as directory:
+    settings.path = lambda: os.path.join(directory, settings.FILE)
+    typed = {**DEFAULT_PREFIXES["video"], "h3": "client/shoot-3/take"}
+    with open(settings.legacy_path(), "w", encoding="utf-8") as handle:
+        json.dump({"video_crf": 14, "video_prefix": typed}, handle)
+
+    check("the old file is read when there is no new one",
+          (settings.load()["video_crf"], settings.load()["video_prefix"]["h3"]),
+          (14, "client/shoot-3/take"))
+
+    # And it is read *once*: the first save writes the new name, and from then
+    # on the old file is history rather than a second source of truth.
+    settings.save({"video_crf": 20})
+    check("...and saving moves it to the new name",
+          sorted(os.listdir(directory)), sorted([settings.FILE, settings.LEGACY_FILE]))
+    check("...carrying the typed folder with it",
+          settings.load()["video_prefix"]["h3"], "client/shoot-3/take")
+
+    # The new file wins outright once it exists, even though the old one is
+    # still sitting beside it. Reading both and merging would make deleting a
+    # setting impossible.
+    with open(settings.legacy_path(), "w", encoding="utf-8") as handle:
+        json.dump({"video_crf": 14}, handle)
+    check("the new file wins over the old one", settings.video_crf(), 20)
+
 # The default is libx264's own, which is what this pack wrote before the setting
 # existed: turning the page on must not change anybody's files.
 check("the default is what the encoder would have picked anyway",

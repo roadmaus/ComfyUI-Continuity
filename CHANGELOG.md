@@ -2,13 +2,35 @@
 
 ## Unreleased
 
+**The pack is called Continuity.** "MiniMax Creator" named the only thing it
+could render when it was written; it now renders on four families — MiniMax H3,
+LTX 2.5, Krea 2 and Ideogram 4.0 — and a fifth is a directory with a declaration
+in it. Continuity is the script supervisor's job: the same person, the same prop
+and the same light in shot 1 and in shot 9, which is the cast, the piece
+references and the seams, and the one thing that stays true whichever family
+renders the frames.
+
+**Nothing you have made moves.** Saved workflows load untouched — the node class
+ids never changed, only what they are called on the canvas — and your presets,
+picker favourites, LoRA memory, refiner settings and machine settings are all
+read under their old names on the first open and written back under the new one.
+An install that had typed its own output folder keeps writing there; only the
+untouched default moves from `output/minimax/` to `output/continuity/`. The one
+casualty is the fullscreen setting and any custom keybinding for it, which go
+back to their defaults; Ctrl+Shift+M is unchanged. `docs/RENAME.md` is the whole
+manifest, including what is frozen forever and why.
+
+The pack also has a new home — `github.com/roadmaus/ComfyUI-Continuity` — and a
+new Comfy Registry entry, `continuity`. An existing clone keeps pulling through
+GitHub's redirect.
+
 **Every family files its renders and stills under its own name.** A piece shot
 on LTX 2.5 was written to `output/minimax/renders/H3_00021_.mp4` — the wrong
 shelf and another architecture's name on the file — because where a render
 landed was one constant for the whole pack, decided when H3 was the only thing
 in it. It is decided by whatever rendered it now: renders go to
-`minimax/renders/<family>/`, stills to `minimax/stills/<family>/`, and a piece
-shot a pass at a time keeps its takes in that family's own `takes/` folder.
+`continuity/renders/<family>/`, stills to `continuity/stills/<family>/`, and a
+piece shot a pass at a time keeps its takes in that family's own `takes/` folder.
 
 Settings → Folders has a row per family to match, so a family can be sent
 anywhere without moving the others. A machine that had typed its own folder

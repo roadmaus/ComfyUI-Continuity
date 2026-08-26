@@ -93,9 +93,9 @@ except outputs.PrefixError as exc:
 # the files in it. Both halves matter: the folder is what the gallery sorts on,
 # and the stem is what a file dragged out of it still says about itself.
 check("a family's renders land under its own folder",
-      outputs.default_video("ltx25", "LTX25"), "minimax/renders/ltx25/LTX25")
+      outputs.default_video("ltx25", "LTX25"), "continuity/renders/ltx25/LTX25")
 check("...and its stills under the other shelf",
-      outputs.default_image("krea2", "Krea2"), "minimax/stills/krea2/Krea2")
+      outputs.default_image("krea2", "Krea2"), "continuity/stills/krea2/Krea2")
 # Two families' renders cannot collide, which is the whole bug this replaced:
 # every family used to write `minimax/renders/H3`.
 check("two families do not share a folder",
@@ -120,8 +120,8 @@ check("a blob's key is used", outputs.video({"output_prefix": "shots/a"}, D), "s
 
 # A render's takes sort into a shelf of their own, one folder under wherever
 # the render itself lands, and keep the render's stem.
-check("takes go one folder deeper", outputs.takes("minimax/renders/h3/H3"),
-      "minimax/renders/h3/takes/H3")
+check("takes go one folder deeper", outputs.takes("continuity/renders/h3/H3"),
+      "continuity/renders/h3/takes/H3")
 check("...even under a typed folder", outputs.takes("shots/a"), "shots/takes/a")
 check("...and under no folder at all", outputs.takes("H3"), "takes/H3")
 

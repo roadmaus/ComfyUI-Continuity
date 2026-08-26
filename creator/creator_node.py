@@ -94,13 +94,14 @@ def _schema(node_id, display_name, blob, deprecated=False):
     return io.Schema(
         node_id=node_id,
         display_name=display_name,
-        category="MiniMax",
+        category="Continuity",
         description=(
-            "Describe a video and reference attached media with @. Routes to the "
-            "FL2VA or Ref2VA checkpoint depending on what you attach, samples it, "
-            "and saves the finished clip. Add a second shot and the same node "
-            "becomes a timeline: a strip of shots, each with its own prompt, "
-            "references and LoRAs, joined by cuts or by continuations."
+            "Describe a video and reference attached media with @. Renders on "
+            "MiniMax H3 or LTX 2.5, routing to the checkpoint that matches what "
+            "you attach, and saves the finished clip with its sound in it. Add a "
+            "second shot and the same node becomes a timeline: a strip of shots, "
+            "each with its own prompt, references, LoRAs and model family, "
+            "joined by cuts or by continuations."
         ),
         # This node returns a subgraph rather than tensors, because it owns
         # the sampler — see the module docstring. It is also an output node:
@@ -283,7 +284,7 @@ def _render(blob, seed, steps, cfg, sampler_name, scheduler,
 class MiniMaxH3Creator(io.ComfyNode):
     @classmethod
     def define_schema(cls):
-        return _schema("MiniMaxH3Creator", "MiniMax H3 Creator", "creator_data")
+        return _schema("MiniMaxH3Creator", "Continuity", "creator_data")
 
     @classmethod
     def fingerprint_inputs(cls, creator_data, **kwargs):
@@ -325,7 +326,7 @@ class MiniMaxH3Timeline(io.ComfyNode):
 
     @classmethod
     def define_schema(cls):
-        return _schema("MiniMaxH3Timeline", "MiniMax H3 Timeline", "timeline_data",
+        return _schema("MiniMaxH3Timeline", "Continuity Timeline", "timeline_data",
                        deprecated=True)
 
     @classmethod

@@ -192,8 +192,8 @@ class MiniMaxH3Reel(io.ComfyNode):
     def define_schema(cls):
         return io.Schema(
             node_id="MiniMaxH3Reel",
-            display_name="MiniMax H3 Reel",
-            category="MiniMax/internal",
+            display_name="Continuity Reel",
+            category="Continuity/internal",
             description="Decodes one pass, writes it to disk and adds it to the reel.",
             is_dev_only=True,
             inputs=[
@@ -288,8 +288,8 @@ class MiniMaxH3PassFrames(io.ComfyNode):
     def define_schema(cls):
         return io.Schema(
             node_id="MiniMaxH3PassFrames",
-            display_name="MiniMax H3 Pass Frames",
-            category="MiniMax/internal",
+            display_name="Continuity Pass Frames",
+            category="Continuity/internal",
             description="The final frames of a decoded pass — what the next one continues from.",
             is_dev_only=True,
             inputs=[
@@ -317,8 +317,8 @@ class MiniMaxH3PassAudio(io.ComfyNode):
     def define_schema(cls):
         return io.Schema(
             node_id="MiniMaxH3PassAudio",
-            display_name="MiniMax H3 Pass Audio",
-            category="MiniMax/internal",
+            display_name="Continuity Pass Audio",
+            category="Continuity/internal",
             description="The last few seconds of a decoded pass's sound, for the next one.",
             is_dev_only=True,
             inputs=[
@@ -353,8 +353,8 @@ class MiniMaxH3ClipReel(io.ComfyNode):
     def define_schema(cls):
         return io.Schema(
             node_id="MiniMaxH3ClipReel",
-            display_name="MiniMax H3 Clip",
-            category="MiniMax/internal",
+            display_name="Continuity Clip",
+            category="Continuity/internal",
             description="Adds a supplied clip to the reel, without decoding it.",
             is_dev_only=True,
             inputs=[
@@ -412,8 +412,8 @@ class MiniMaxH3ClipFrames(io.ComfyNode):
     def define_schema(cls):
         return io.Schema(
             node_id="MiniMaxH3ClipFrames",
-            display_name="MiniMax H3 Clip Frames",
-            category="MiniMax/internal",
+            display_name="Continuity Clip Frames",
+            category="Continuity/internal",
             description="The first or last frames of a supplied clip, for a seam beside it.",
             is_dev_only=True,
             inputs=[
@@ -443,8 +443,8 @@ class MiniMaxH3ClipAudio(io.ComfyNode):
     def define_schema(cls):
         return io.Schema(
             node_id="MiniMaxH3ClipAudio",
-            display_name="MiniMax H3 Clip Audio",
-            category="MiniMax/internal",
+            display_name="Continuity Clip Audio",
+            category="Continuity/internal",
             description="The first or last seconds of a supplied clip's sound, for a seam beside it.",
             is_dev_only=True,
             inputs=[
@@ -494,15 +494,15 @@ class MiniMaxH3Save(io.ComfyNode):
     def define_schema(cls):
         return io.Schema(
             node_id="MiniMaxH3Save",
-            display_name="MiniMax H3 Save",
-            category="MiniMax/internal",
+            display_name="Continuity Save",
+            category="Continuity/internal",
             description="Writes a render's passes into one file under output/.",
             is_dev_only=True,
             is_output_node=True,
             inputs=[
                 io.Custom(REEL_TYPE).Input("reel"),
                 io.Float.Input("fps", default=24.0, min=1.0, max=120.0),
-                io.String.Input("filename_prefix", default="minimax/H3"),
+                io.String.Input("filename_prefix", default="continuity/H3"),
                 # An input rather than a read of `settings.py` here, so that
                 # changing the quality and re-queueing actually re-writes the
                 # file: an output node whose inputs are all unchanged is a

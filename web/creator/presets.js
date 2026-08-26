@@ -46,13 +46,23 @@ import { rulesFor } from "./canvas.js";
 // path, but a flat prefix needs nothing from it that the picker's single file has
 // not already proven works.
 
-const INDEX_FILE = "minimax_creator.presets.json";
-const BODY_FILE = (id) => `minimax_creator.preset.${id}.json`;
+const INDEX_FILE = "continuity.presets.json";
+const BODY_FILE = (id) => `continuity.preset.${id}.json`;
 // The mirror, for a frontend whose userdata API is unavailable. Same deal the
 // picker's prefs have: losing a write is recoverable in a way a blocked click is
 // not.
-const INDEX_KEY = "mmc-presets";
-const BODY_KEY = (id) => `mmc-preset-${id}`;
+const INDEX_KEY = "continuity-presets";
+const BODY_KEY = (id) => `continuity-preset-${id}`;
+
+// All four under the pack's old name, read as a fallback and never written.
+// This is the one that mattered enough to make `docs/RENAME.md` a migration
+// rather than a delete: a preset is work — a 24-shot strip somebody arranged by
+// hand — and it lives in userdata rather than in the workflow, so nothing else
+// would carry it across a rename. Delete these one release after it ships.
+const LEGACY_INDEX_FILE = "minimax_creator.presets.json";
+const LEGACY_BODY_FILE = (id) => `minimax_creator.preset.${id}.json`;
+const LEGACY_INDEX_KEY = "mmc-presets";
+const LEGACY_BODY_KEY = (id) => `mmc-preset-${id}`;
 
 export const PRESET_VERSION = 1;
 
@@ -64,16 +74,26 @@ function newId() {
   return `p${Date.now().toString(36)}${Math.floor(Math.random() * 0x10000).toString(16).padStart(4, "0")}`;
 }
 
-async function readUserData(file, key) {
-  try {
-    const response = await api.getUserData(file);
-    if (response.status === 200) return await response.json();
-    // 404 is a library nobody has written to yet, which is not an error.
-    if (response.status === 404) return null;
-  } catch {
-    // No userdata API on this frontend, or it is offline.
+async function readUserData(file, key, legacyFile, legacyKey) {
+  for (const name of [file, legacyFile]) {
+    try {
+      const response = await api.getUserData(name);
+      if (response.status === 200) return await response.json();
+      // 404 is a library nobody has written to yet, which is not an error —
+      // and the cue to look under the old name before giving up.
+      if (response.status !== 404) break;
+    } catch {
+      // No userdata API on this frontend, or it is offline.
+      break;
+    }
   }
-  try { return JSON.parse(localStorage.getItem(key) ?? "null"); } catch { return null; }
+  for (const stored of [key, legacyKey]) {
+    try {
+      const found = JSON.parse(localStorage.getItem(stored) ?? "null");
+      if (found) return found;
+    } catch { /* denied or unparseable; try the other */ }
+  }
+  return null;
 }
 
 async function writeUserData(file, key, value) {
@@ -101,7 +121,7 @@ async function deleteUserData(file, key) {
  *  `listPresets({force: true})`, and everything that writes updates the cache. */
 export async function listPresets({ force = false } = {}) {
   if (indexCache && !force) return indexCache;
-  const raw = await readUserData(INDEX_FILE, INDEX_KEY);
+  const raw = await readUserData(INDEX_FILE, INDEX_KEY, LEGACY_INDEX_FILE, LEGACY_INDEX_KEY);
   const rows = Array.isArray(raw?.presets) ? raw.presets : [];
   indexCache = rows.filter((row) => row && typeof row.id === "string")
     .sort((a, b) => (b.updated ?? 0) - (a.updated ?? 0));
@@ -119,7 +139,8 @@ async function writeIndex(rows) {
  *  with it. */
 export async function loadBody(row) {
   if (row.builtin) return row.data ?? null;
-  const stored = await readUserData(BODY_FILE(row.id), BODY_KEY(row.id));
+  const stored = await readUserData(BODY_FILE(row.id), BODY_KEY(row.id),
+                                   LEGACY_BODY_FILE(row.id), LEGACY_BODY_KEY(row.id));
   return stored?.data ?? null;
 }
 
@@ -1520,7 +1541,7 @@ export function applyToPreStage(body, keys, state, io, { from = "prestage" } = {
 
 export function exportPresets(rows, bodies) {
   const payload = {
-    kind: "minimax_creator.presets",
+    kind: "continuity.presets",
     version: PRESET_VERSION,
     presets: rows.map((row, index) => ({
       ...row, builtin: undefined, data: bodies[index] ?? {},
@@ -1531,8 +1552,8 @@ export function exportPresets(rows, bodies) {
   const link = document.createElement("a");
   link.href = url;
   link.download = rows.length === 1
-    ? `${rows[0].name.replace(/[^\w -]+/g, "_")}.mmcpreset.json`
-    : "minimax_creator.presets.json";
+    ? `${rows[0].name.replace(/[^\w -]+/g, "_")}.continuity-preset.json`
+    : "continuity.presets.json";
   link.click();
   URL.revokeObjectURL(url);
 }

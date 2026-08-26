@@ -52,7 +52,7 @@ export const api = {
   async fetchApi(url) {
     // The family catalog, written beside this stub — manifest.js loads it at
     // import, the same way the real route serves it.
-    if (String(url).startsWith("/minimax_creator/families")) {
+    if (String(url).startsWith("/continuity/families")) {
       const body = (await import("node:fs")).readFileSync(new URL("./families.json", import.meta.url), "utf8");
       return { ok: true, status: 200, json: async () => JSON.parse(body) };
     }

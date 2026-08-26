@@ -65,8 +65,12 @@ import urllib.request
 from html.parser import HTMLParser
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT_MODULE = os.path.join(ROOT, "js", "minimax_creator", "presets", "atlas.js")
-OUT_THUMBS = os.path.join(ROOT, "js", "minimax_creator", "presets", "atlas")
+# `web/creator/`, which is where the frontend has lived since it became a
+# package. These said `js/minimax_creator/` — the layout before that move, and
+# before the pack was renamed — so a re-vendor would have written the atlas into
+# a directory nothing loads.
+OUT_MODULE = os.path.join(ROOT, "web", "creator", "presets", "atlas.js")
+OUT_THUMBS = os.path.join(ROOT, "web", "creator", "presets", "atlas")
 OUT_STILLS = os.path.join(OUT_THUMBS, "full")
 
 UPSTREAM = "hoodtronik/minimax-h3-style-atlas"

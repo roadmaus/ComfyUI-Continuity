@@ -19,20 +19,30 @@ here is relative to whatever that resolved to.
 
 import re
 
-# The two shelves. Both live under `minimax/` so the pack keeps one shelf in
+# The two shelves. Both live under `continuity/` so the pack keeps one shelf in
 # somebody else's output folder, and they are split one level deeper so the
 # gallery sorts finished videos apart from PreStage stills with no special case
 # in the picker: a shelf chip is just a subfolder, and these are two subfolders.
-RENDERS = "minimax/renders"
-STILLS = "minimax/stills"
+#
+# **These are the default and only the default.** They were `minimax/` until the
+# pack stopped being named after one of its four families, and an install that
+# already has a settings file keeps whatever is in it — see `docs/RENAME.md`.
+# Where somebody's finished renders land is not something a rename gets to
+# change under them.
+RENDERS = "continuity/renders"
+STILLS = "continuity/stills"
 
 # What the two shelves held before there was a second family: one folder each,
 # with H3's name on the files in both. Kept because `settings.py` has to be able
 # to recognise them — a machine that never typed a folder is on these, and
 # migrating it onto the per-family defaults below must not look like a folder
 # somebody chose. Nothing else reads them; they are history, not a default.
-LEGACY_VIDEO_PREFIX = f"{RENDERS}/H3"
-LEGACY_IMAGE_PREFIX = f"{STILLS}/prestage"
+#
+# Spelled out rather than built off `RENDERS`, which is what they used to be:
+# these name a folder that exists on somebody's disk, so they have to keep
+# saying `minimax/` after the default above stopped.
+LEGACY_VIDEO_PREFIX = "minimax/renders/H3"
+LEGACY_IMAGE_PREFIX = "minimax/stills/prestage"
 
 # Tokens core's `compute_vars` expands. Listed only so the error message can
 # tell the user what *is* allowed when they typo one; core owns the real list.

@@ -333,8 +333,8 @@ class MiniMaxH3FacePass(io.ComfyNode):
     def define_schema(cls):
         return io.Schema(
             node_id="MiniMaxH3FacePass",
-            display_name="MiniMax H3 Face Pass",
-            category="MiniMax/internal",
+            display_name="H3 Face Pass",
+            category="Continuity/internal",
             description="Re-draws the face in a decoded pass at a canvas where it "
                         "fills the frame, then composites it back. Written into "
                         "the graph by render.emit.",

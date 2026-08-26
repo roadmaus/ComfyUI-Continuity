@@ -40,7 +40,7 @@ from dataclasses import dataclass
 
 from . import media
 
-LOG = logging.getLogger("minimax_creator")
+LOG = logging.getLogger("continuity")
 
 
 @dataclass(frozen=True)

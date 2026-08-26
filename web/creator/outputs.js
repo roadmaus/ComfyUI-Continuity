@@ -14,8 +14,8 @@ import { t } from "./i18n.js";
 // the save node and the settings page must show one answer, not two spellings
 // of it. These are here for the mirror test, which is what holds the two files
 // together at all.
-export const RENDERS = "minimax/renders";
-export const STILLS = "minimax/stills";
+export const RENDERS = "continuity/renders";
+export const STILLS = "continuity/stills";
 
 // What core's `compute_vars` expands, in the order the hint lists them. The
 // split is real and the chip row draws it: the first six come off the clock at

@@ -297,7 +297,7 @@ export const css = `
    left/top/width/height onto whatever element it holds, every frame, so the body
    itself cannot be that element — it has to be able to leave for the fullscreen
    editor and come back. This is the part that stays behind and keeps being
-   positioned; see attach() in minimax_creator.js. */
+   positioned; see attach() in creator.js. */
 .mmc-widget-host { height: 100%; }
 .mmc-widget-host > * { height: 100%; }
 

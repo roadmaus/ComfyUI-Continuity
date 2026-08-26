@@ -1,54 +1,38 @@
 {
   "MiniMaxH3Creator": {
-    "display_name": "MiniMax H3 크리에이터",
-    "description": "영상을 글로 묘사하고 @ 로 첨부한 미디어를 참조합니다. 첨부 내용에 따라 FL2VA / Ref2VA 체크포인트로 라우팅해 샘플링하고, 완성된 프레임과 사운드를 반환합니다."
+    "display_name": "Continuity",
+    "description": "영상을 글로 묘사하고 @ 로 첨부한 미디어를 참조합니다. MiniMax H3 또는 LTX 2.5 로 렌더링하며, 첨부 내용에 맞는 체크포인트로 라우팅해 사운드가 들어간 완성 클립을 저장합니다. 숏을 하나 더 쓰면 같은 노드가 타임라인이 됩니다 — 각 카드가 자체 프롬프트·레퍼런스·LoRA·모델 패밀리를 가지고, 컷 또는 이어붙이기로 연결된 하나의 스트립입니다."
   },
   "MiniMaxH3Timeline": {
-    "display_name": "MiniMax H3 타임라인",
-    "description": "여러 숏으로 하나의 클립을 만듭니다. 체인 모드: 각 세그먼트는 자체 프롬프트·레퍼런스·LoRA를 가진 완전한 생성이며, 이전 세그먼트의 마지막 프레임에서 이어서 시작할 수 있습니다. 원패스: 같은 세그먼트들이 컷 타이밍까지 그대로 단일 생성 속의 숏이 됩니다."
+    "display_name": "Continuity 타임라인",
+    "description": "영상을 글로 묘사하고 @ 로 첨부한 미디어를 참조합니다. MiniMax H3 또는 LTX 2.5 로 렌더링하며, 첨부 내용에 맞는 체크포인트로 라우팅해 사운드가 들어간 완성 클립을 저장합니다. 숏을 하나 더 쓰면 같은 노드가 타임라인이 됩니다 — 각 카드가 자체 프롬프트·레퍼런스·LoRA·모델 패밀리를 가지고, 컷 또는 이어붙이기로 연결된 하나의 스트립입니다."
   },
   "MiniMaxH3TimelineSegment": {
-    "display_name": "MiniMax H3 타임라인 세그먼트",
+    "display_name": "H3 세그먼트",
     "description": "MiniMax H3 타임라인의 세그먼트 하나. 타임라인 노드가 그래프에 기록합니다."
   },
-  "MiniMaxH3AudioTail": {
-    "display_name": "MiniMax H3 오디오 테일",
-    "description": "디코딩된 사운드트랙의 마지막 몇 초. 다음 타임라인 세그먼트로 전달됩니다."
-  },
-  "MiniMaxH3LastFrame": {
-    "display_name": "MiniMax H3 라스트 프레임",
-    "description": "디코딩된 배치의 마지막 프레임 — 다음 타임라인 세그먼트가 이어서 그리는 시작점입니다."
-  },
-  "MiniMaxH3SeamTrim": {
-    "display_name": "MiniMax H3 이음새 트림",
-    "description": "페더링된 이음새의 재생성 오버랩을 디코딩된 세그먼트 앞부분에서 잘라냅니다."
-  },
-  "MiniMaxH3TimelineJoin": {
-    "display_name": "MiniMax H3 타임라인 결합",
-    "description": "두 타임라인 세그먼트의 프레임과 오디오를 이어 붙입니다."
-  },
   "MiniMaxH3Save": {
-    "display_name": "MiniMax H3 저장",
+    "display_name": "Continuity 저장",
     "description": "렌더링된 프레임과 사운드를 하나의 파일로 먹싱해 output/ 아래에 저장합니다."
   },
   "MiniMaxH3PreStage": {
-    "display_name": "MiniMax H3 프리스테이지",
-    "description": "Krea 2, Ideogram 4.0 또는 MiniMax H3로 영상 파이프라인용 스틸 — 시작/끝 프레임, 레퍼런스, 스타일 시트 — 을 생성합니다. 크리에이터나 타임라인의 프리스테이지 필에서 열립니다."
+    "display_name": "Continuity 프리스테이지",
+    "description": "Krea 2, Ideogram 4.0 또는 MiniMax H3로 영상 파이프라인용 스틸 — 시작/끝 프레임, 레퍼런스, 스타일 시트 — 을 생성합니다. Continuity 노드의 프리스테이지 필에서 열립니다."
   },
   "MiniMaxH3SaveImage": {
-    "display_name": "MiniMax H3 이미지 저장",
+    "display_name": "Continuity 이미지 저장",
     "description": "프리스테이지 렌더링을 output/ 아래에 저장하고 스테이지 카드에 보고합니다."
   },
   "MiniMaxH3StillLatent": {
-    "display_name": "MiniMax H3 스틸 레이턴트",
+    "display_name": "H3 스틸 레이턴트",
     "description": "샘플링된 H3 레이턴트의 시간축 한 프레임을 단일 이미지 레이턴트로 꺼냅니다."
   },
   "MiniMaxH3RefinePass": {
-    "display_name": "MiniMax H3 리파인 패스",
+    "display_name": "H3 리파인 패스",
     "description": "2패스 렌더링의 두 번째 패스: H3 AV 레이턴트의 영상 쪽을 업스케일해 스케줄 중간부터 다시 샘플링하며, 사운드트랙에는 노이즈를 더하지 않습니다. render.emit이 그래프에 기록합니다."
   },
   "MiniMaxH3FacePass": {
-    "display_name": "MiniMax H3 얼굴 패스",
+    "display_name": "H3 얼굴 패스",
     "description": "디코드된 패스의 얼굴을 프레임마다 잘라내어 얼굴이 크게 잡히는 캔버스에서 다시 그린 뒤 원본에 합성합니다. render.emit이 그래프에 기록합니다."
   }
 }

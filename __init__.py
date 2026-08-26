@@ -13,10 +13,10 @@ would be a translation nobody loads. And the node class ids inside are frozen
 whatever the directories do — they are what saved workflows name.
 """
 
-from .creator import refine_routes  # noqa: F401  (registers /minimax_creator/refine)
-from .creator import server_routes  # noqa: F401  (registers /minimax_creator/assets)
+from .creator import refine_routes  # noqa: F401  (registers /continuity/refine)
+from .creator import server_routes  # noqa: F401  (registers /continuity/assets)
 from .creator.creator_node import comfy_entrypoint  # noqa: F401
-from .creator.routes import families  # noqa: F401  (registers /minimax_creator/families)
+from .creator.routes import families  # noqa: F401  (registers /continuity/families)
 
 WEB_DIRECTORY = "./web"
 

@@ -56,7 +56,7 @@ const stale = r.chosenTemplate(families[0]);
 // The pre-family setting: one template, written flat. It was pinned against
 // the only family there was, so that is the one it survives on.
 store.clear();
-store.set('minimax_creator.refiner', JSON.stringify({ template: pinned }));
+store.set('continuity.refiner', JSON.stringify({ template: pinned }));
 const lifted = Object.fromEntries(families.map((id) => [id, r.chosenTemplate(id)]));
 
 console.log(JSON.stringify({ offered, helped, after, stale, lifted }));

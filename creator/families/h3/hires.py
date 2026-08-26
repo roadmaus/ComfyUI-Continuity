@@ -58,8 +58,8 @@ class MiniMaxH3RefinePass(io.ComfyNode):
     def define_schema(cls):
         return io.Schema(
             node_id="MiniMaxH3RefinePass",
-            display_name="MiniMax H3 Refine Pass",
-            category="MiniMax/internal",
+            display_name="H3 Refine Pass",
+            category="Continuity/internal",
             description="Second pass of a two-pass render: upscales the video half of an "
                         "H3 AV latent and re-samples it partway down the schedule, leaving "
                         "the soundtrack un-noised. Written into the graph by render.emit.",

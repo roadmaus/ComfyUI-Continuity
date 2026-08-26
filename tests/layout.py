@@ -163,7 +163,7 @@ _CATALOG_JSON = None
 
 def catalog_json():
     """`families/manifest.catalog()`, dumped once — what the server serves at
-    `/minimax_creator/families`, and what `web/creator/manifest.js` loads.
+    `/continuity/families`, and what `web/creator/manifest.js` loads.
 
     The frontend's family knowledge lives in this catalog (phase 5), so any
     suite that imports a frontend module needs it in reach: `run()` injects it
@@ -231,7 +231,7 @@ export const api = {
     // The one route with a real body: the family catalog, written beside this
     // stub by layout.pack() — so the packed suites take the same load path the
     // browser does instead of leaning on the __MMC_FAMILIES injection.
-    if (String(url).startsWith("/minimax_creator/families")) {
+    if (String(url).startsWith("/continuity/families")) {
       const body = readFileSync(new URL("./families.json", import.meta.url), "utf8");
       return { ok: true, status: 200, json: async () => JSON.parse(body) };
     }
@@ -272,7 +272,7 @@ def pack(extra_stubs=None, skip=None):
         for name, source in {**STUBS, **(extra_stubs or {})}.items():
             with open(os.path.join(scripts, name), "w", encoding="utf-8") as handle:
                 handle.write(source)
-        # What the stub api serves at /minimax_creator/families.
+        # What the stub api serves at /continuity/families.
         with open(os.path.join(scripts, "families.json"), "w", encoding="utf-8") as handle:
             handle.write(catalog_json())
         yield target
