@@ -67,8 +67,10 @@ DEFAULT_DATA = json.dumps({
     },
     # Per-arch sub-blocks, so switching the model pill never forgets the other
     # side's files. Empty rather than guessed — the UI fills it from the
-    # listing route, exactly as the Creator's block is filled.
-    "models": {"krea2": {}, "ideogram4": {}, "minimax": {}},
+    # listing route, exactly as the Creator's block is filled. Keyed off the
+    # pill's own arches rather than written down, so a family registering
+    # itself gets a block here too and this cannot go stale behind one.
+    "models": {arch: {} for arch in registry.STILL_ARCHES},
     # A hint for the frontend's peer discovery, never authoritative: node ids
     # renumber on paste, so the pill re-derives the relationship by scan.
     "peer": None,
