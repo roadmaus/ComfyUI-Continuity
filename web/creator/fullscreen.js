@@ -55,7 +55,7 @@
 import { app } from "../../../scripts/app.js";
 import { api } from "../../../scripts/api.js";
 import { el, icon, mark } from "./dom.js";
-import { openNavMenu, openNavPalette } from "./navigate.js";
+import { openNavMenu } from "./navigate.js";
 import { openPresetLibrary } from "./presetlib.js";
 import { elapsed } from "./stage.js";
 import { t } from "./i18n.js";
@@ -146,10 +146,6 @@ export function fullscreenNode() {
 
 const creators = () =>
   (app.graph?._nodes ?? []).filter((n) => PIECE.includes(n.comfyClass) && n.mmcBody);
-
-/** The palette's shortcut, spelled the way this keyboard spells it. */
-const navKeyLabel = () =>
-  (globalThis.navigator?.platform?.startsWith("Mac") ? "⌘" : "Ctrl+") + "K";
 
 /** The PreStage paired with `node`, by the same scan the spawn pill uses — the
  *  blob's `peer` field, never a stored id, because ids renumber on paste. */
@@ -359,14 +355,13 @@ class Fullscreen {
         // in the window that says whose room this is, and `timeline` is a control
         // icon that means "the strip" everywhere else it is drawn.
         //
-        // And it is the door. Everywhere the editor can go — the other pieces in
-        // the graph, a fresh one, and in time the benches — is a list, and the
-        // wordmark drops it rather than a rail holding it open all day. ⌘K
-        // raises the same list for the keyboard; the caret is what says the
-        // name is pressable at all.
+        // And it is the door. The editor's tools are a list, and the wordmark
+        // drops it rather than a rail holding it open all day; the caret is
+        // what says the name is pressable at all. No keystroke raises it —
+        // there was a ⌘K once, and every pack on the canvas wants that key.
         el("button", {
           class: "mmc-fs-mark",
-          title: t("Pieces and tools") + " — " + navKeyLabel(),
+          title: t("Tools"),
           onclick: (event) => openNavMenu({
             anchor: event.currentTarget, groups: this.destinations(),
           }),
@@ -428,19 +423,6 @@ class Fullscreen {
       if (this.reviewing) { this.endReview(); return; }
       close();
     };
-    // ⌘K, wherever focus is — the prompt box included, because "go somewhere
-    // else" is exactly the thing you want mid-sentence. Unlike Escape this is
-    // taken in capture, on window, and stopped dead: ComfyUI's node search
-    // answers to the same key and registers earlier, so the bubble phase never
-    // sees the event — its dialog was opening over the shell. While the editor
-    // is the window, the window's shortcut is the editor's.
-    this.onNavKey = (event) => {
-      if (!(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== "k") return;
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      openNavPalette({ groups: this.destinations() });
-    };
-    window.addEventListener("keydown", this.onNavKey, true);
     document.addEventListener("keydown", this.onKey);
 
     // The queue is global; the button reports it. `status` is how ComfyUI says
@@ -736,8 +718,8 @@ class Fullscreen {
   // ---- where else the editor can go ------------------------------------------
 
   /**
-   * Everywhere the wordmark and ⌘K can take you — the tools, and nothing
-   * else. One row today: the preset library, reached through the same
+   * Everywhere the wordmark can take you — the tools, and nothing else.
+   * One row today: the preset library, reached through the same
    * `presetTarget` the rail's Presets button reads off the body in front —
    * the pre-stage's on the pre step, the piece's on the shot. The repaint
    * afterwards is the rail button's, for the rail button's reason: an applied
@@ -1213,7 +1195,6 @@ class Fullscreen {
     // collected. Stopped rather than dropped.
     this.endReview({ animate: false });
     document.removeEventListener("keydown", this.onKey);
-    window.removeEventListener("keydown", this.onNavKey, true);
     api.removeEventListener("status", this.onStatus);
     api.removeEventListener("promptQueued", this.onQueued);
     this.release(this.node);

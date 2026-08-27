@@ -1285,58 +1285,20 @@ export const css = `
 .mmc-fs .mmc-panel-corner { display: none; }
 .mmc-fs .mmc-panel .mmc-prompt-fold .mmc-prompt { padding-right: 0; }
 
-/* --- the destinations: the wordmark's menu and ⌘K ------------------------- */
-/* One row, both doors. The menu shows the groups under .mmc-pop-title
-   headings; the palette flattens them and hangs the group on the right as a
-   tag instead. */
+/* --- the wordmark's menu: the tool list ----------------------------------- */
 .mmc-nav { min-width: 254px; padding: 7px; }
 .mmc-nav-item {
   display: flex; width: 100%; align-items: center; gap: 10px; padding: 8px 10px;
   background: none; border: 0; border-radius: 10px; cursor: pointer;
   color: var(--mmc-text); font-family: inherit; text-align: left;
 }
-.mmc-nav-item:hover, .mmc-nav-item.hot { background: var(--mmc-surface); }
+.mmc-nav-item:hover { background: var(--mmc-surface); }
 .mmc-nav-item svg { stroke: var(--mmc-dim); flex: none; }
-/* The piece already on the card. Still a row — a list missing the current
-   thing reads as a list with a hole in it — but it goes nowhere, and it says
-   which one you are by being the one that is not offered. */
-.mmc-nav-item.here { cursor: default; }
-.mmc-nav-item.here:hover { background: none; }
-.mmc-nav-item.here .mmc-nav-label { color: var(--mmc-dim); }
 .mmc-nav-word { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
 .mmc-nav-label {
   font-size: calc(13px * var(--mmc-type));
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .mmc-nav-sub { font-size: calc(11.5px * var(--mmc-type)); color: var(--mmc-dim); }
-.mmc-nav-tag {
-  margin-left: auto; padding-left: 12px; flex: none;
-  font-size: calc(10.5px * var(--mmc-type)); color: var(--mmc-off);
-}
-
-/* ⌘K. The veil is the standard overlay; the card hangs high rather than
-   centred, where a launcher is expected and where the list growing and
-   shrinking under the filter does not make it jump about its middle. */
-.mmc-nav-veil { align-items: flex-start; padding-top: 16vh; }
-.mmc-nav-palette {
-  width: min(460px, 100%); display: flex; flex-direction: column; overflow: hidden;
-  background: var(--mmc-float); border: 1px solid var(--mmc-line);
-  border-radius: 16px; box-shadow: 0 30px 80px var(--mmc-shadow);
-}
-.mmc-nav-input {
-  background: none; border: 0; outline: none; padding: 14px 16px;
-  border-bottom: 1px solid var(--mmc-line);
-  color: var(--mmc-strong); font-family: inherit;
-  font-size: calc(14.5px * var(--mmc-type));
-}
-.mmc-nav-input::placeholder { color: var(--mmc-off); }
-.mmc-nav-list {
-  display: flex; flex-direction: column; padding: 6px;
-  max-height: 336px; overflow-y: auto;
-}
-.mmc-nav-empty {
-  padding: 14px 12px; color: var(--mmc-dim);
-  font-size: calc(12.5px * var(--mmc-type));
-}
 
 `;

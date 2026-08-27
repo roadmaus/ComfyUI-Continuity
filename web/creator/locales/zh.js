@@ -1383,9 +1383,6 @@ export const zh = {
  "{family} reads no attached references. Its shots are conditioned by a start or end frame, a seam, and the piece's sound lane.": "{family} 不读取附加的参考文件。它的镜头靠首帧或尾帧、接缝，以及作品的声音轨道来做条件控制。",
  "{count} selected": "已选 {count} 个",
  "Pick as many as you like": "想选多少都可以",
- "Pieces and tools": "作品与工具",
- "Where to?": "去哪里？",
- "Nothing by that name": "没有叫这个名字的",
  "Tools": "工具",
  "Apply a saved setup, or save this one": "应用已保存的设置，或保存当前设置",
 };

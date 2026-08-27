@@ -3,11 +3,11 @@
 ## Unreleased
 
 **The wordmark is the door.** In the fullscreen editor, pressing **Continuity**
-in the title bar drops the editor's tool list, and **⌘K** (Ctrl+K elsewhere)
-raises the same list as a palette. One row today — the preset library, the
-same one the rail's Presets button opens — and the list is where future tools
-will appear as rows. Nothing else about the window changes, and no new chrome
-stands open while you work.
+in the title bar drops the editor's tool list. One row today — the preset
+library, the same one the rail's Presets button opens — and the list is where
+future tools will appear as rows. No keystroke is claimed for it: every pack
+on the canvas wants ⌘K, so the menu is the mark's alone. Nothing else about
+the window changes, and no new chrome stands open while you work.
 
 **The pack is called Continuity.** "MiniMax Creator" named the only thing it
 could render when it was written; it now renders on four families — MiniMax H3,

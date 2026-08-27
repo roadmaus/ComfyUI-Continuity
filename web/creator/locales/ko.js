@@ -1382,9 +1382,6 @@ export const ko = {
  "{family} reads no attached references. Its shots are conditioned by a start or end frame, a seam, and the piece's sound lane.": "{family}은(는) 첨부된 레퍼런스를 읽지 않습니다. 샷은 시작·끝 프레임, 심, 그리고 작품의 사운드 레인으로 조건이 주어집니다.",
  "{count} selected": "{count}개 선택됨",
  "Pick as many as you like": "원하는 만큼 고르세요",
- "Pieces and tools": "작품과 도구",
- "Where to?": "어디로 갈까요?",
- "Nothing by that name": "그런 이름은 없습니다",
  "Tools": "도구",
  "Apply a saved setup, or save this one": "저장된 설정을 적용하거나 지금 설정을 저장",
 };
