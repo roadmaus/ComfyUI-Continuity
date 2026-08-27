@@ -32,6 +32,7 @@ import { DEFAULT_STILL_ARCH, stillFamily } from "./manifest.js";
 import { openPicker } from "./picker.js";
 import { openLoras, loraBlock } from "./loras.js";
 import { openFrameGrab } from "./framegrab.js";
+import { openContactSheet } from "./contact.js";
 import { openChoicePopover, stepperPill, aspectGlyph, edgeSlider, PILL_GLYPH } from "./pills.js";
 import { CreatorEditor } from "./editor.js";
 import { openPresetLibrary } from "./presetlib.js";
@@ -273,6 +274,41 @@ export class PreStageEditor {
     this.state.init = { filename: path, denoise: this.state.init?.denoise ?? S.PRESTAGE_DEFAULT_DENOISE };
     this.commit();
     this.probeInit();
+  }
+
+  /**
+   * The contact-sheet tool, over a clip or over a sheet.
+   *
+   * Which half opens is decided by the file, not by a switch here — see
+   * `contact.js`. What comes back is either one sheet or the frames cut out of
+   * one, and only the first has anywhere to go: a sheet is the picture this
+   * render is about, so it takes the first reference slot on a family that
+   * reads references and the init slot on one that does not. Cut frames are
+   * left in the input folder, which is where a start frame is picked from.
+   */
+  async contactSheet() {
+    const chosen = await openPicker({
+      kinds: ["video", "image", "renders"], kind: "video", single: true,
+      capacity: () => ({ used: 0, max: 1, filesLeft: 1 }),
+    });
+    if (!chosen) return;
+    const source = chosen[0];
+    const result = await openContactSheet({
+      path: source.path, video: source.kind === "video",
+    });
+    if (!result?.paths?.length) return;
+    if (result.paths.length > 1) {
+      return this.flash(t("{count} frames cut into the input folder — attach them from "
+                        + "the picker, or send one to a shot as its start frame.",
+                        { count: result.paths.length }));
+    }
+    const [sheet] = result.paths;
+    if (!this.refBlocked()) {
+      this.state.refs.unshift({ handle: S.nextPreStageHandle(this.state), filename: sheet });
+    } else {
+      this.state.init = { filename: sheet, denoise: this.state.init?.denoise ?? S.PRESTAGE_DEFAULT_DENOISE };
+    }
+    this.commit();
   }
 
   async addRefs(fromVideo = false) {
@@ -519,6 +555,11 @@ export class PreStageEditor {
         tool(t("From video"), "video",
              t("Pull a single frame off a video's playhead — as the init image, saved as a PNG in the input folder."),
              () => this.setInit(true)),
+        tool(t("Contact sheet"), "gallery",
+             t("A strip of footage as one picture, so an edit model can be asked about a "
+             + "whole shot at once — and the same tool cuts the edited sheet back into "
+             + "frames. Hand it a clip to lay one, or a sheet to split one."),
+             () => this.contactSheet()),
         tool(t("Add LoRA"), "effect",
              t("Manage the LoRAs patched onto the image model. Krea LoRAs train on RAW and apply on Turbo too."),
              () => this.manageLoras()),

@@ -1907,6 +1907,46 @@ try {
   out.errors.push(`placement: ${error.message}`);
 }
 
+// ---- the contact sheet's arithmetic ------------------------------------------
+//
+// Two pure functions, and both of them are only ever seen as a picture: a sheet
+// laid a pixel wrong is a sheet whose ninth tile is a sliver of the eighth, and
+// nothing on screen says so until the split comes back wrong. So the geometry
+// is checked here rather than by looking at it.
+try {
+  const contact = await import("./web/creator/contact.js");
+  const sheet = contact.sheetSize(16 / 9, 3, 3);
+  out.contact = {
+    // Whole tiles: `cols * tile` *is* the sheet, which is what makes the cut
+    // on the way back out the same arithmetic as the lay on the way in.
+    exact: sheet.width === sheet.tileWidth * 3 && sheet.height === sheet.tileHeight * 3,
+    // Inside the pre-stage's own canvas envelope, because the sheet is about
+    // to be a pre-stage canvas.
+    capped: Math.max(sheet.width, sheet.height) <= 2048 && sheet.width * sheet.height <= 2048 * 2048,
+    portrait: contact.sheetSize(9 / 16, 2, 2).height > contact.sheetSize(9 / 16, 2, 2).width,
+  };
+  // A width that does not divide by three, which is what a /16 render canvas
+  // routinely is: the tiles still have to meet and still have to reach the far
+  // edge. Walked rather than spot-checked — a gap is a lost strip of frame.
+  const W = 1024;
+  const H = 592;
+  const rects = Array.from({ length: 9 }, (_, i) => contact.tileRect(W, H, 3, 3, i));
+  out.contact.tiles = {
+    meetAcross: [0, 3, 6].every((first) =>
+      rects[first].x === 0
+      && rects[first].x + rects[first].width === rects[first + 1].x
+      && rects[first + 1].x + rects[first + 1].width === rects[first + 2].x
+      && rects[first + 2].x + rects[first + 2].width === W),
+    meetDown: [0, 1, 2].every((top) =>
+      rects[top].y === 0
+      && rects[top].y + rects[top].height === rects[top + 3].y
+      && rects[top + 3].y + rects[top + 3].height === rects[top + 6].y
+      && rects[top + 6].y + rects[top + 6].height === H),
+  };
+} catch (error) {
+  out.errors.push(`contact: ${error.stack}`);
+}
+
 // ---- the resolution popover opens on every finish it offers -----------------
 //
 // It threw and never appeared, for one afternoon, because the row offering the
@@ -2651,6 +2691,13 @@ check("its turbo pill draws the Lightning ladder and names the LoRA",
       ("4" in rows.get("qwenTurbo", ""),
        "qwen_edit_lightning_4step" in rows.get("qwenTurbo", "")),
       (True, True))
+
+contact = report.get("contact", {})
+check("a contact sheet is whole tiles, inside the pre-stage's canvas envelope",
+      (contact.get("exact"), contact.get("capped"), contact.get("portrait")),
+      (True, True, True))
+check("...and the cuts meet, on a width that does not divide by the grid",
+      contact.get("tiles"), {"meetAcross": True, "meetDown": True})
 
 check("the image pre-stage mounts", report["nodes"].get("MiniMaxH3PreStage"),
       {"mounted": True, "body": "PreStageEditor"})

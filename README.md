@@ -62,6 +62,13 @@ Attach the last frame of shot 1, write "the coat is red now", and what comes
 back is the same person in the same room. That is shot 9's start frame, which is
 the whole errand this pack is named after.
 
+It reads a *strip* the same way. The **Contact sheet** tool on the pre-stage's
+rail lays nine frames of a clip out as one gutterless picture; edit that picture
+with one instruction and the model holds the subject across the tiles, because
+as far as it is concerned they are one image. The same tool cuts the edited
+sheet back into nine frames in the input folder. It is a real experiment in
+continuity across a shot rather than across a cut, and it costs one render.
+
 ## Install
 
 ```
@@ -377,6 +384,10 @@ with `@`. Neither is required: the file is in the picker either way.
   aimed at was trained to read, using a small local vision model, and lands it in
   an editable box under the prompt. It is a button rather than a queue-time step
   so you see what the model will read *before* five minutes of sampling.
+- **Contact sheet** lays a clip out as one picture — nine frames, no gutter — so
+  an edit model can be asked about a whole shot at once, and cuts the edited
+  sheet back into frames. Browser-side arithmetic: no queue, no weights, and
+  the files land in the input folder where the pickers already look.
 - **PreStage** generates the stills the pipeline eats — start frames, end frames,
   references — on the same canvas, with Krea 2, Ideogram 4.0, Qwen Image Edit or
   H3 itself. Its result card writes the finished still straight into the peer

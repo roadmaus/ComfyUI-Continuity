@@ -62,4 +62,19 @@ export const css = `
 .mmc-grab-actions .mmc-btn:hover:not(:disabled) { border-color: var(--mmc-line-3); }
 .mmc-grab-actions .mmc-btn-primary { background: var(--mmc-accent); color: var(--mmc-on-accent); border-color: transparent; }
 .mmc-grab-actions .mmc-btn:disabled { opacity: .5; cursor: progress; }
+
+/* ---- the contact sheet (contact.js, not the Ingredients sheet) -------------------------------------------------------
+   The grab's card with a grid of shapes where its scrubber is: what the tool
+   asks for is a layout, and a layout is worth showing as one. */
+.mmc-contact-stage { max-height: 52vh; }
+.mmc-contact-grid { display: flex; gap: 8px; flex-wrap: wrap; }
+.mmc-contact-cell {
+  padding: 7px 14px; border-radius: 999px; cursor: pointer; font-family: inherit;
+  font-size: calc(12px * var(--mmc-type)); font-variant-numeric: tabular-nums;
+  background: var(--mmc-surface-2); color: var(--mmc-text);
+  border: 1px solid var(--mmc-line);
+}
+.mmc-contact-cell:hover { border-color: var(--mmc-line-3); }
+.mmc-contact-cell.on { background: var(--mmc-accent); color: var(--mmc-on-accent); border-color: transparent; }
+.mmc-contact-note { color: var(--mmc-dim); line-height: 1.5; min-height: 2.6em; }
 `;

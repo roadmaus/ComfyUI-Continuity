@@ -35,6 +35,24 @@ a four-step render.
 Switching the model pill now writes the arriving family's own sampler row rather
 than Krea 2's for everyone.
 
+**A strip of footage as one picture, and back again.**
+
+The observation Qwen-Video-Edit is built on is that an image editor will edit a
+*contact sheet* of frames as though it were one picture, and hold the subject
+across the tiles — and the half of that which needs no training, no projections
+and no second VAE is a grid, an edit, and a pair of scissors. So the pre-stage's
+rail has a **Contact sheet** tool: hand it a clip and it lays nine frames out as
+one gutterless picture, hand it a sheet and it cuts the frames back out into the
+input folder in order. In between is an ordinary Qwen Image Edit render with the
+sheet as the picture being changed.
+
+Gutterless on purpose: a seam is one more thing for the model to reproduce, and
+a bare grid makes the cut on the way out the same arithmetic as the lay on the
+way in — which matters, because the edited sheet comes back on a /16 canvas that
+need not divide by three. There is no server half; a browser already decodes
+video and already draws to a canvas, and every frame this touches was on its way
+to the input folder anyway.
+
 **The LoRA grid groups a model's versions, and the strength slider fits the LoRA.**
 
 A LoRA you have retrained four times was four cards: four near-identical
