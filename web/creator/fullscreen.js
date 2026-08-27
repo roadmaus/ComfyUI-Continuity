@@ -55,6 +55,7 @@
 import { app } from "../../../scripts/app.js";
 import { api } from "../../../scripts/api.js";
 import { el, icon, mark } from "./dom.js";
+import { openNavMenu, openNavPalette } from "./navigate.js";
 import { elapsed } from "./stage.js";
 import { t } from "./i18n.js";
 import { noteFullscreen } from "./styles.js";
@@ -144,6 +145,10 @@ export function fullscreenNode() {
 
 const creators = () =>
   (app.graph?._nodes ?? []).filter((n) => PIECE.includes(n.comfyClass) && n.mmcBody);
+
+/** The palette's shortcut, spelled the way this keyboard spells it. */
+const navKeyLabel = () =>
+  (globalThis.navigator?.platform?.startsWith("Mac") ? "⌘" : "Ctrl+") + "K";
 
 /** The PreStage paired with `node`, by the same scan the spawn pill uses — the
  *  blob's `peer` field, never a stored id, because ids renumber on paste. */
@@ -352,11 +357,24 @@ class Fullscreen {
         // The pack's own mark rather than a rail glyph: the bar is the one place
         // in the window that says whose room this is, and `timeline` is a control
         // icon that means "the strip" everywhere else it is drawn.
-        el("span", { class: "mmc-fs-mark" }, [
+        //
+        // And it is the door. Everywhere the editor can go — the other pieces in
+        // the graph, a fresh one, and in time the benches — is a list, and the
+        // wordmark drops it rather than a rail holding it open all day. ⌘K
+        // raises the same list for the keyboard; the caret is what says the
+        // name is pressable at all.
+        el("button", {
+          class: "mmc-fs-mark",
+          title: t("Pieces and tools") + " — " + navKeyLabel(),
+          onclick: (event) => openNavMenu({
+            anchor: event.currentTarget, groups: this.destinations(),
+          }),
+        }, [
           el("span", { class: "mmc-fs-logo" }, [mark(22)]),
           // The pack, and it is a product name rather than copy, so it is not
           // translated and does not change with what is on the card.
           el("span", { text: "Continuity" }),
+          el("span", { class: "mmc-fs-caret" }, [icon("chevron", 12)]),
         ]),
         el("span", { class: "mmc-fs-slash", text: "/" }),
         // Which family this piece renders with. Filled on mount rather than
@@ -405,6 +423,16 @@ class Fullscreen {
     // way — the topmost thing goes first, and the second press closes the
     // editor.
     this.onKey = (event) => {
+      // ⌘K, wherever focus is — the prompt box included, because "go somewhere
+      // else" is exactly the thing you want mid-sentence. Claimed outright
+      // (ComfyUI has no binding on it, and if one arrives this window is not
+      // where it should fire).
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        event.stopPropagation();
+        openNavPalette({ groups: this.destinations() });
+        return;
+      }
       if (event.key !== "Escape") return;
       if (this.reviewing) { this.endReview(); return; }
       close();
@@ -699,6 +727,75 @@ class Fullscreen {
     try { localStorage.setItem(VIEW_KEY, view); } catch { /* private mode; the session still switches */ }
     this.mount();
     this.paint();
+  }
+
+  // ---- where else the editor can go ------------------------------------------
+
+  /**
+   * Everywhere the wordmark and ⌘K can take you, built fresh on every open:
+   * the graph is where pieces live, and a list built any earlier would name
+   * nodes that have been deleted or retitled since.
+   *
+   * Two groups for now — something new, and the pieces already in the graph.
+   * The benches join as a third when there are benches; a tool becomes
+   * reachable by becoming a row here, not by growing a button somewhere.
+   */
+  destinations() {
+    const pieces = creators().map((node) => {
+      // The same reading `mount` does for the bar: a node nobody renamed is
+      // titled after its display name, and that is a class, not a name.
+      const named = (node.title || "").trim();
+      const untitled = !named || named === (node.constructor?.title ?? "").trim();
+      const body = node.mmcBody;
+      const strip = body?.showsStrip?.();
+      const family = body?.timeline ? t(S.familyOf(body.timeline).label) : "";
+      return {
+        label: untitled ? (strip ? t("Untitled strip") : t("Untitled shot")) : named,
+        // What the row would render with, which is how pieces in one graph
+        // actually differ once half of them are called "take 2".
+        sub: strip && family ? family + " · " + t("Strip") : family,
+        glyph: strip ? "timeline" : "video",
+        here: node === this.node,
+        go: () => openFullscreen(node),
+      };
+    });
+    return [
+      { title: t("New"), items: [
+        // PIECE reads [creator, timeline] — the two faces a piece can have.
+        { label: t("New shot"), sub: t("Describe a video from nothing"),
+          glyph: "video", go: () => this.newPiece(PIECE[0]) },
+        { label: t("New strip"), sub: t("Shots in a row, cut as one piece"),
+          glyph: "timeline", go: () => this.newPiece(PIECE[1]) },
+      ] },
+      { title: t("Pieces"), items: pieces },
+    ];
+  }
+
+  /**
+   * Put a fresh piece in the graph and open the editor on it. The graph gets
+   * the node either way — this window is a way of working on the graph, not a
+   * place apart from it, so a piece made here is a piece the canvas shows the
+   * moment you go back.
+   *
+   * Below the current node rather than beside it: the satellite already parks
+   * the picture to the right, and a pre-stage spawns to the left.
+   */
+  newPiece(cls) {
+    const spawned = globalThis.LiteGraph?.createNode?.(cls);
+    // Not registered — the backend half did not load, and the console already
+    // carries the import error. Same answer togglePreStage gives.
+    if (!spawned) return;
+    const graph = this.node.graph ?? app.graph;
+    graph.add(spawned);
+    spawned.pos = [this.node.pos[0], this.node.pos[1] + this.node.size[1] + 80];
+    graph.setDirtyCanvas(true, true);
+    // The body is built by `nodeCreated`, a frame late on some builds; the
+    // editor cannot host a node that does not have one yet.
+    const claim = () => {
+      if (!spawned.mmcBody) { requestAnimationFrame(claim); return; }
+      openFullscreen(spawned);
+    };
+    claim();
   }
 
   /**
