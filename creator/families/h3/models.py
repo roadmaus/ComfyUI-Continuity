@@ -50,6 +50,26 @@ SLOTS = {
     # render never asks for it — the picker does, and it says so there.
     "cutout": core.Slot(
         "background_removal", "the background-removal model", optional=True),
+    # The Fun ControlNet-Union branch: `control_proj_in` plus five control
+    # blocks, loaded on top of whichever checkpoint this generation routes to
+    # and injected into it every tenth layer. Core's own `ControlNetLoader`
+    # loads it — `load_controlnet_state_dict` detects the branch off
+    # `control_proj_in.weight` and converts VideoX-Fun's naming itself — so
+    # there is no loader of ours here and must not be.
+    #
+    # Optional, because a guide is a pass rather than a component: a piece with
+    # the guide pill off must not load six gigabytes it will never inject. That
+    # is `Links`' lazy-optional path, and the sentence below is what it says
+    # when a guide is thrown with nothing picked — which names the pill, because
+    # by then the field is not what the user is looking at.
+    "control": core.Slot(
+        "controlnet", "the ControlNet branch",
+        loader="ControlNetLoader", input="control_net_name", optional=True,
+        missing="This piece has a ControlNet guide on it and no ControlNet "
+                "branch has been picked. Open the node's 'weights' control and "
+                "choose a file from models/controlnet — MiniMax-H3-Fun-"
+                "Controlnet-Union, or one of Kijai's pruned repacks of it — or "
+                "switch the guide pill off."),
 }
 
 # The slots a generation routes between — H3's two checkpoints.

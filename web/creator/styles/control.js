@@ -209,12 +209,32 @@ export const css = `
   font-size: calc(10.5px * var(--mmc-type)); letter-spacing: .1em; text-transform: uppercase;
 }
 .mmc-ctl-tag.left { left: 10px; }
-.mmc-ctl-tag.right { right: 10px; }
+/* Room for a filename, which is what this says for the length of the arrival
+   sweep — and an ellipsis rather than a second line, because it sits on the
+   picture and a tag that grows upward covers the thing being judged. */
+.mmc-ctl-tag.right {
+  right: 10px; max-width: 55%; overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap;
+}
 /* The wait, on the glass rather than in the corner: the picture is what is
    being asked for, so the picture is what says it is coming. Barely there —
    at ninety milliseconds a spinner would be a flash of chrome per drag. */
 .mmc-ctl-box.waiting .mmc-ctl-traced { opacity: .55; }
 .mmc-ctl-traced { transition: opacity 120ms ease; }
+/* The arrival sweep. The seam is dragged by hand every other second of a
+   session and never animates; for the half second after a file is written it
+   runs out to the edge and back on its own, which is the bench showing you the
+   drawing alone under its new name. Written as a state on the frame rather than
+   a keyframe so it is the same clip-path and the same left the hand moves —
+   there is one seam, and this is it being moved by something other than a
+   pointer. */
+.mmc-ctl-frame.sweeping .mmc-ctl-traced {
+  transition: clip-path 520ms cubic-bezier(.22, 1, .36, 1), opacity 120ms ease;
+}
+.mmc-ctl-frame.sweeping .mmc-ctl-seam {
+  transition: left 520ms cubic-bezier(.22, 1, .36, 1), background 120ms ease;
+}
+.mmc-ctl-frame.sweeping .mmc-ctl-tag.right { color: var(--mmc-strong); }
 
 /* The empty bench. An invitation rather than a message: there is one thing to
    do here and this says what it is. */
@@ -261,22 +281,60 @@ export const css = `
    pretending to be a workflow. */
 .mmc-ctl-out { flex: none; display: none; }
 .mmc-ctl-out.on {
-  display: flex; align-items: center; gap: 14px; padding: 12px 16px;
+  display: flex; align-items: center; gap: 16px; padding: 12px 12px 12px 16px;
   border-radius: 14px; background: var(--mmc-surface); border: 1px solid var(--mmc-line);
 }
-.mmc-ctl-outword { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.mmc-ctl-outword { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
 .mmc-ctl-outname {
   font-size: calc(13px * var(--mmc-type)); font-weight: 500;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .mmc-ctl-outnote { font-size: calc(11.5px * var(--mmc-type)); color: var(--mmc-off); }
-.mmc-ctl-send {
-  height: calc(34px * var(--mmc-type)); padding: 0 16px; border-radius: 10px;
+
+/* The doors.
+   Two lines each, and the second one is not a caption: it is the difference
+   between the three of them. A guide, an init image and a reference are three
+   instructions to the sampler, and a row of same-width pills reading "Send
+   to…" spends the one moment somebody is deciding on making them look
+   interchangeable. Wrapping, because a narrow window should stack them rather
+   than shrink three explanations into three columns of one word. */
+.mmc-ctl-doors { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+.mmc-ctl-door {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 3px;
+  max-width: calc(250px * var(--mmc-type)); padding: 9px 14px 10px;
+  border-radius: 12px; text-align: left; cursor: pointer; font-family: inherit;
   background: var(--mmc-surface-2); border: 1px solid var(--mmc-line-2);
-  color: var(--mmc-text); font-family: inherit; font-size: calc(12.5px * var(--mmc-type));
-  cursor: pointer; white-space: nowrap;
+  color: var(--mmc-text);
+  transition: border-color 120ms ease, background 120ms ease;
 }
-.mmc-ctl-send:hover { border-color: var(--mmc-accent); color: var(--mmc-strong); }
+.mmc-ctl-door:hover:not(:disabled) { border-color: var(--mmc-accent); background: var(--mmc-wash-2); }
+.mmc-ctl-door:disabled { cursor: default; opacity: .55; }
+.mmc-ctl-doorname { font-size: calc(12.5px * var(--mmc-type)); font-weight: 600; white-space: nowrap; }
+/* --mmc-dim, not the --mmc-off a footnote gets. This line is the difference
+   between the doors and it is read while a decision is being made, which is the
+   same job the tracing's own note does in the rail — so it is set at the same
+   weight. */
+.mmc-ctl-doordoes {
+  font-size: calc(11px * var(--mmc-type)); line-height: 1.4; color: var(--mmc-dim);
+}
+/* The one door that takes the file exactly as it was written — which on a
+   family with a control branch is the door this bench was opened for. The only
+   amber in the row, and the same amber as Trace: the press that made the file
+   and the press that spends it are one errand, and they are lit the same way.
+   Where nothing takes it as written, nothing is lit — see paintResult. */
+.mmc-ctl-door.lead {
+  background: var(--mmc-accent); border-color: var(--mmc-accent); color: var(--mmc-on-accent);
+}
+.mmc-ctl-door.lead .mmc-ctl-doordoes { color: var(--mmc-on-accent); opacity: .75; }
+.mmc-ctl-door.lead:hover:not(:disabled) {
+  background: var(--mmc-accent); border-color: var(--mmc-accent); filter: brightness(1.08);
+}
+/* Pressed already, and still pressable: a drawing can be a shot's guide and a
+   reference on the same card, and the send that stays in the room is the one
+   somebody may want to repeat after re-trimming. Dashed, the way an unready
+   tracing is — the pack's one mark for "this is real but not what it was". */
+.mmc-ctl-door.done { border-style: dashed; border-color: var(--mmc-line-3); }
+.mmc-ctl-door.done.lead { border-style: solid; }
 
 /* A narrow window puts the bench above the light box rather than beside it: the
    rail is the shorter of the two and the picture is the part that needs the
@@ -288,8 +346,56 @@ export const css = `
     max-height: 45vh; padding: 16px 18px 20px;
   }
   .mmc-ctl-work { padding: 16px 18px 16px; }
+  /* The doors are the widest thing in the shelf, so below the break the name of
+     the file goes above them rather than beside them. */
+  .mmc-ctl-out.on { flex-direction: column; align-items: stretch; }
+  .mmc-ctl-out.on .mmc-ctl-gap { display: none; }
+  .mmc-ctl-doors { justify-content: flex-start; }
+  .mmc-ctl-door { max-width: none; flex: 1 1 180px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .mmc-ctl-seam, .mmc-ctl-grip, .mmc-ctl-traced, .mmc-ctl-op { transition: none; }
+  .mmc-ctl-seam, .mmc-ctl-grip, .mmc-ctl-traced, .mmc-ctl-op, .mmc-ctl-door { transition: none; }
+  .mmc-ctl-frame.sweeping .mmc-ctl-traced,
+  .mmc-ctl-frame.sweeping .mmc-ctl-seam { transition: none; }
 }
+/* ---- the guide switch -------------------------------------------------------
+
+   The bench's other half, drawn on the pill row rather than in the room: the
+   bench makes a drawing, the card holds it, and this decides whether the branch
+   that reads it is loaded at all. Here rather than in styles/editor.js because
+   it is this feature, and a reader looking for how a guide is drawn should find
+   both ends of it in one place.
+
+   Nothing here picks a file. The drawing is an attached asset and wears the
+   .mmc-asset chip every other attachment wears, which is why this section is
+   four rules rather than a control. */
+.mmc-guide-main {
+  display: flex; align-items: center; gap: 7px; height: 100%; padding: 0 2px;
+  background: none; border: 0; color: inherit; font-size: calc(13px * var(--mmc-type));
+  font-family: inherit; cursor: pointer; white-space: nowrap;
+}
+/* Lit in the accent, not in the accelerator blue beside it. Blue on this row
+   means "this render is not native", and a guide does not make it native or
+   otherwise -- it decides the composition. The accent is what this pack lights
+   the control that is doing the deciding, which is the same reading the
+   duration pill gives its auto switch. */
+.mmc-pill.mmc-guide-on {
+  border-color: color-mix(in srgb, var(--mmc-accent) 45%, transparent);
+  color: var(--mmc-accent);
+}
+.mmc-pill.mmc-guide-on:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--mmc-accent) 70%, transparent);
+}
+/* The pressed stop. Qualified past .mmc-pill-seg[aria-pressed] rather than left
+   to the concatenation order, which is a thing that can be reordered. */
+.mmc-pill-set .mmc-pill-seg.mmc-guide-on {
+  background: color-mix(in srgb, var(--mmc-accent) 14%, transparent);
+  color: var(--mmc-accent);
+}
+/* The only thing on the pill drawn in the warn colour: a drawing these weights
+   never saw. A worse render rather than an impossible one, which is the exact
+   thing --mmc-warn is the pack's word for -- so it stays warn inside a lit
+   pill, where everything else has gone amber. */
+.mmc-pill .mmc-guide-warn { color: var(--mmc-warn); }
+
 `;

@@ -844,12 +844,18 @@ class Fullscreen {
   /**
    * Where a finished guide can go, and what happens to it there.
    *
-   * Both targets are the piece's own bodies — nothing here is a second way of
-   * holding a file. A still becomes the pre-stage's init image, which is the
-   * slot that means "start from this arrangement"; anything becomes a reference
-   * on the shot, which is the slot that means "read this". A clip has no place
-   * in a node that makes stills, and `kinds` is how the bench knows to say so
-   * rather than to offer a button that would refuse.
+   * Every target is one of the piece's own bodies — nothing here is a second
+   * way of holding a file. What differs between them is what the drawing *does*
+   * once it lands, which is why each carries a `does`: a guide the shot is
+   * aimed at, a picture the still is built on and a reference named in a prompt
+   * are three different instructions, and a row of buttons that all say "send"
+   * makes them look like one.
+   *
+   * `kinds` says what shape a door takes, not what it refuses. A pre-stage
+   * renders a still, so it takes one; the bench answers that by cutting the
+   * frame under its playhead rather than by greying the door out. What a door
+   * genuinely cannot be given — a moving guide out of a photograph — is a door
+   * the bench never draws, from the moment the source lands.
    */
   guideTargets() {
     const targets = [];
@@ -859,14 +865,18 @@ class Fullscreen {
       // `PreStageEditor.takeGuide`. Said here because it is the difference
       // between a render aimed at the tracing and a render *of* the tracing,
       // and the press is where somebody would want to know.
-      const aimed = S.preStageReadsGuides(pre.state);
+      // Three answers, because there are three ways a pre-stage can take a
+      // drawing and they do genuinely different things to the render.
+      const native = S.preStageReadsGuides(pre.state);
+      const branch = S.preStageLoadsBranch(pre.state);
       targets.push({
-        id: "pre", label: t("Send to pre-stage"), kinds: ["image"],
-        note: aimed
-          ? t("Aim the still at it. These weights follow a depth, edge or pose map "
-            + "arriving as a picture — there is no ControlNet to load.")
-          : t("Make it the picture the still is built on — the pre-stage's init image."),
-        kindNote: t("A clip cannot go to a pre-stage: that step makes stills."),
+        id: "pre", kinds: ["image"],
+        label: native || branch ? t("Aim the still at it") : t("Build the still on it"),
+        does: native
+          ? t("These weights follow a tracing on their own — nothing to load.")
+          : branch
+            ? t("Loads the ControlNet branch that reads it.")
+            : t("Becomes the pre-stage's init image."),
         // Closes the bench and puts the pre-stage in front, because sending is
         // the end of the errand: the guide exists to be written a prompt
         // around, and the next thing anybody does is write it.
@@ -878,11 +888,42 @@ class Fullscreen {
         },
       });
     }
+    // The guide slot: not a reference and not a picture the render starts from,
+    // but the drawing this shot is aimed at. Offered first, because on a family
+    // that has a ControlNet it is what the bench was opened for — the other two
+    // are what you do with a tracing when there is nothing to load that reads
+    // it.
+    //
+    // It goes through `takeGuide` on the body rather than writing an asset from
+    // here, so a drawing that arrives from the bench lands by exactly the same
+    // path as one picked in the Guide tab: same handle rules, same swap of an
+    // existing one, same switch thrown on arrival. Two ways in, one attach.
+    //
+    // Clips only, and only where the family declares a branch. On a family with
+    // no ControlNet there is nothing to aim with, which is a real answer and
+    // not a missing feature — Qwen-Image-Edit reads a tracing straight out of a
+    // picture slot, which is what the pre-stage target above already does.
+    const body = this.node.mmcBody;
+    if (body?.takeGuide && S.controlOf(S.pieceFamily(body.timeline ?? {}))) {
+      targets.unshift({
+        id: "guide", label: t("Aim the shot at it"), kinds: ["video"],
+        does: t("Every frame of the shot follows a frame of the drawing."),
+        // Why a photograph never gets this door, said where the bench can show
+        // it while there is still time to choose different footage.
+        needsClip: t("A still held for a whole shot is a shot told not to move. "
+                   + "Trace a clip to aim one."),
+        closeOnSend: true,
+        // `opId` is why the bench hands over more than a path: which tracing
+        // this is decides whether these weights were ever post-trained on it,
+        // and the pill says so once it is attached.
+        take: (result) => body.takeGuide({ path: result.path, op: result.opId }),
+      });
+    }
     const shot = this.node.mmcBody;
     if (shot?.takeReference) {
       targets.push({
-        id: "shot", label: t("Send to the shot"),
-        note: t("Attach it as a reference, ready to be named in the prompt with @."),
+        id: "shot", label: t("Attach as a reference"),
+        does: t("Read as a look, and named in the prompt with @."),
         take: (result) => shot.takeReference({ path: result.path, kind: result.kind }),
       });
     }

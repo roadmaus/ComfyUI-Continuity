@@ -594,7 +594,8 @@ function declaredPill(w, widgets, value, set, seg = false, lit = false) {
 
 
 export function samplingBar({ widgets, value, set, perSegment = false,
-                              turbo = [], trailing = [], family = DEFAULT_VIDEO_FAMILY }) {
+                              guide = [], turbo = [], trailing = [],
+                              family = DEFAULT_VIDEO_FAMILY }) {
   const pills = [];
 
   // A family the frontend has never seen draws its row from its own manifest —
@@ -615,7 +616,7 @@ export function samplingBar({ widgets, value, set, perSegment = false,
       ...seedPills({ widgets, value, set, perSegment }),
       ...declaredRow(family, widgets, value, set),
       ...guidanceRow(family, widgets, value, set),
-      ...turbo, ...trailing,
+      ...guide, ...turbo, ...trailing,
     ]);
   }
 
@@ -709,6 +710,12 @@ export function samplingBar({ widgets, value, set, perSegment = false,
       : null,
   ]);
   if (shifts) pills.push(shifts);
+
+  // The guide, in front of them all. It is not an accelerator and is not lit
+  // like one — what it changes is what the render *is*, where everything after
+  // it changes how the render is arrived at. Read the row left to right and it
+  // says: this seed, this schedule, aimed at this drawing, at this speed.
+  pills.push(...guide);
 
   // The accelerators. Off is the default and reads as off — an unlit pill —
   // because they are other people's nodes and a render with one on is not a

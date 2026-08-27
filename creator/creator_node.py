@@ -54,7 +54,7 @@ import json
 
 from comfy_api.latest import ComfyExtension, io
 
-from . import (accel, canvas, compile as compiler, media,
+from . import (accel, canvas, compile as compiler, guide as guides, media,
                models, outputs, prestage, redetail, redetailpass, sampling,
                settings, timeline)
 from .core import emit as loop
@@ -277,7 +277,13 @@ def _render(blob, seed, steps, cfg, sampler_name, scheduler,
         # and for the same reason: this node is where a blob becomes objects.
         # They belong to no family — ReDetail re-renders an H3 pass through LTX
         # 2.5's weights — so they are their own block and their own reader.
-        upscaler=redetail.weights_from_blob(data))
+        upscaler=redetail.weights_from_blob(data),
+        # The ControlNet guide, off `data` for the turbo switch's reason: the
+        # drawing the piece is aimed at is a property of the strip as it stands,
+        # and holding a card back does not change it. Family-neutral — which
+        # file, how strongly, over how much of the schedule — so it is read here
+        # beside the weights rather than through the family.
+        guide=guides.Guide.of(data))
     return loop.expanded(graph)
 
 

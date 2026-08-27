@@ -93,6 +93,16 @@ async def run_tracing(request):
         if trim[1] <= trim[0]:
             return web.json_response({"error": "a cut has to end after it starts"}, status=400)
 
+    # One frame of a clip as a still, rather than the cut as a clip. The bench
+    # sends this when the door being pressed takes a picture and the source is
+    # footage — see `control.run`.
+    at = body.get("at")
+    if at is not None:
+        try:
+            at = max(0.0, float(at))
+        except (TypeError, ValueError):
+            return web.json_response({"error": "at must be a mark in seconds"}, status=400)
+
     token = str(body.get("token") or "")
 
     def tell(fraction):
@@ -108,7 +118,7 @@ async def run_tracing(request):
             None, lambda: control.run(
                 body.get("filename", ""), body.get("op", "as_shot"),
                 body.get("params") or {}, trim,
-                bool(body.get("keep_sound")), tell if token else None))
+                bool(body.get("keep_sound")), tell if token else None, at))
     except (control.ControlError, media.MediaError) as exc:
         return web.json_response({"error": str(exc)}, status=400)
     except Exception as exc:  # noqa: BLE001

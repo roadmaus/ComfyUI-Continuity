@@ -1628,9 +1628,27 @@ export class PreStageBody {
    * init image on the two that draw, the request's start frame on the H3 branch
    * — and the editor already owns that answer for its own architecture.
    */
-  takeGuide({ path }) {
-    if (this.state.arch === S.PRESTAGE_STILL_ARCH) return this.setStillFrame(path);
-    this.editor?.takeGuide?.({ path });
+  takeGuide({ path, opId = null }) {
+    if (this.state.arch === S.PRESTAGE_STILL_ARCH) {
+      // **H3's still is a one-frame video generation, so it is aimed the way a
+      // shot is.** The Fun ControlNet branch loads beside the same checkpoint
+      // and reads the same drawing; the only difference is that one frame comes
+      // back instead of a hundred and forty. So a tracing goes to the request's
+      // guide slot, through the same door a shot's does.
+      //
+      // It used to go to the start frame, which is the worst available answer:
+      // the render *opens* on the edge map and develops away from it, so what
+      // comes back is a tidied edge map rather than a picture aimed at one.
+      // That was the fallback for a family with nothing to read a guide with,
+      // and this branch was reaching it because it had never been given the
+      // ControlNet the video path had.
+      const editor = this.editor;
+      if (editor?.takeGuide && S.controlOf(S.pieceFamily(editor.piece))) {
+        return editor.takeGuide({ path, op: opId ?? "" });
+      }
+      return this.setStillFrame(path);
+    }
+    this.editor?.takeGuide?.({ path, opId });
   }
 
   /**

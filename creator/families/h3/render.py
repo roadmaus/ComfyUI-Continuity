@@ -21,8 +21,8 @@ from dataclasses import dataclass
 
 import comfy.sample
 
-from ... import (accel, canvas, compile as compiler, models as core,
-                 sampling as sampling_mod, settings)
+from ... import (accel, canvas, compile as compiler, guide as guides,
+                 models as core, sampling as sampling_mod, settings)
 from .. import base
 from . import declare, models as slots
 
@@ -283,6 +283,48 @@ class H3(base.Family):
         return graph.node(SEGMENT_NODE,
                           **self._segment_inputs(links, payload, compiled,
                                                  weights, seams, splits, run))
+
+    def emit_control(self, graph, links, segment, compiled, weights, guide):
+        """The Fun ControlNet-Union branch, put on this segment's conditioning.
+
+        Three nodes and no arithmetic, which is the shape this hook is supposed
+        to have: the drawing and its trim came in on `compiled.guide` as an
+        ordinary attached asset, the switch's strength came in on `guide`,
+        `Links` opened the branch, and what is left for the family to say is
+        which core node reads them and what its inputs are called.
+
+        **On the conditioning, not on the model.** Core's `MiniMaxH3ControlNet`
+        encodes the hint to a latent and hangs it off each conditioning entry,
+        and `MiniMaxH3Model._forward` picks it up as `control` and advances a
+        control block at every tenth layer. So the returned segment replaces
+        out 1 and leaves the model alone — which matters, because the turbo
+        lead-in samples out 3 (the model with the distillation held off it) and
+        both sittings have to be aimed at the same drawing.
+
+        **The VAE is wired in whether or not the segment encodes anything.** A
+        text-only shot leaves `vae` off the segment node on purpose — see
+        `_segment_inputs` — and the apply node needs it regardless, because the
+        hint is encoded to a video latent before it ever reaches a block. That
+        is not a contradiction: a guided text-only shot is one that encodes a
+        picture after all, and the picture is the drawing.
+        """
+        frames = guides.guide_frames(graph, compiled.guide, compiled,
+                                     self.rules.fps)
+        applied = graph.node(
+            declare.CONTROL_NODE,
+            positive=segment.out(1),
+            # `links.control` is the lazy-optional path: this is the first ask,
+            # so the loader is built here, and a guide thrown with no file
+            # picked raises the slot's own sentence rather than emitting a
+            # loader with an empty filename.
+            control_net=links.control,
+            vae=links.vae,
+            strength=float(guide.strength),
+            start_percent=float(guide.start),
+            end_percent=float(guide.end),
+            control_video=frames,
+        )
+        return guides.Controlled(segment, positive=applied.out(0))
 
     def emit_sampler(self, graph, segment, payload, compiled, sampling,
                      acceleration, weights, seed, run):

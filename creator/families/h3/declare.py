@@ -122,3 +122,20 @@ RULES = canvas.Rules(
     min_seconds=1,
     max_seconds=60,
 )
+
+# The core node that puts the Fun ControlNet-Union branch on a conditioning, and
+# the bench tracings those weights were actually post-trained to follow.
+#
+# Declared here rather than in `render.py` because the manifest has to name both
+# and must not import the render half — that is this module's whole reason for
+# existing. The node arrives with Comfy-Org/ComfyUI#15860; until it is on the
+# core somebody is running, `guide.node_available` says so and the manifest
+# leaves the guide capability out, so the pill is never drawn rather than drawn
+# over a render that would die at queue time.
+CONTROL_NODE = "MiniMaxH3FunControlNetApply"
+
+# canny, HED, depth and pose, in the bench's own vocabulary. The checkpoint's
+# card also lists MLSD, which is straight-line segments and which the bench does
+# not trace — a tracing nothing here can produce is not worth declaring — and
+# video inpainting, which is a mask rather than a drawing and is not wired yet.
+CONTROL_TRACINGS = ("edges", "lines", "depth", "pose")

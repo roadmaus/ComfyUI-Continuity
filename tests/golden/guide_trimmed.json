@@ -1,0 +1,151 @@
+{
+  "1": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "h3/fl2va.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "10": {
+    "class_type": "KSampler",
+    "inputs": {
+      "cfg": 1.0,
+      "denoise": 1.0,
+      "latent_image": [
+        "5",
+        2
+      ],
+      "model": [
+        "5",
+        0
+      ],
+      "negative": [
+        "9",
+        0
+      ],
+      "positive": [
+        "8",
+        0
+      ],
+      "sampler_name": "res_multistep",
+      "scheduler": "simple",
+      "seed": 100,
+      "steps": 20
+    }
+  },
+  "11": {
+    "class_type": "MiniMaxH3Reel",
+    "inputs": {
+      "audio_vae": [
+        "4",
+        0
+      ],
+      "fps": 24.0,
+      "samples": [
+        "10",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
+    }
+  },
+  "12": {
+    "class_type": "MiniMaxH3Save",
+    "inputs": {
+      "crf": 23,
+      "filename_prefix": "continuity/renders/h3/H3",
+      "fps": 24.0,
+      "reel": [
+        "11",
+        0
+      ],
+      "takes": "{\"cards\": [1], \"seeds\": [100]}"
+    }
+  },
+  "2": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "h3/text_encoder.safetensors",
+      "type": "minimax"
+    }
+  },
+  "3": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "h3/video_vae.safetensors"
+    }
+  },
+  "4": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "h3/audio_vae.safetensors"
+    }
+  },
+  "5": {
+    "class_type": "MiniMaxH3TimelineSegment",
+    "inputs": {
+      "clip": [
+        "2",
+        0
+      ],
+      "model_fl2va": [
+        "1",
+        0
+      ],
+      "segment_data": "{\"canvas\": {\"clamped\": false, \"from_image\": false, \"height\": 768, \"label\": \"16:9\", \"ratio\": 1.7777777777777777, \"width\": 1344}, \"continue\": false, \"continue_audio\": false, \"request\": {\"aspect\": \"16:9\", \"audio_tail_s\": 1.0, \"duration_s\": 6, \"loras\": [], \"music\": \"\", \"prompt\": \"a red room\", \"short_edge\": 768, \"soundscape\": \"\"}}"
+    }
+  },
+  "6": {
+    "class_type": "ContinuityGuideFrames",
+    "inputs": {
+      "end": 10.0,
+      "filename": "continuity/control/walk_edges.mp4",
+      "fps": 24.0,
+      "frames": 141,
+      "height": 768,
+      "start": 4.0,
+      "width": 1344
+    }
+  },
+  "7": {
+    "class_type": "ControlNetLoader",
+    "inputs": {
+      "control_net_name": "h3/fun_controlnet_union.safetensors"
+    }
+  },
+  "8": {
+    "class_type": "MiniMaxH3FunControlNetApply",
+    "inputs": {
+      "control_net": [
+        "7",
+        0
+      ],
+      "control_video": [
+        "6",
+        0
+      ],
+      "end_percent": 0.7,
+      "positive": [
+        "5",
+        1
+      ],
+      "start_percent": 0.0,
+      "strength": 0.8,
+      "vae": [
+        "3",
+        0
+      ]
+    }
+  },
+  "9": {
+    "class_type": "ConditioningZeroOut",
+    "inputs": {
+      "conditioning": [
+        "8",
+        0
+      ]
+    }
+  }
+}

@@ -70,6 +70,7 @@ MODULES = {
     "ltx25_declare": "families.ltx25.declare",
     "registry": "families.registry",
     "manifest": "families.manifest",
+    "guide": "guide",
     "grammar": "families.grammar",
     "prompting": "families.refine",
 }
@@ -175,7 +176,25 @@ def catalog_json():
     """
     global _CATALOG_JSON
     if _CATALOG_JSON is None:
-        _CATALOG_JSON = json.dumps(load("manifest").manifest.catalog())
+        # **Capabilities probed off the installed core are forced on here.**
+        # Some of them are declared only when the ComfyUI this runs against has
+        # the node behind them — the guide's apply node is the first — and these
+        # suites run under bare node with no ComfyUI at all, so every such probe
+        # honestly answers "no". Left alone, the catalog every frontend suite
+        # sees would have those capabilities permanently absent, and the
+        # controls behind them would be untestable *and* green: a suite that
+        # asserts nothing about a pill it never draws passes forever.
+        #
+        # So the probe is answered "yes" while the catalog is dumped. That is
+        # the right question for these suites to be asking — they test what the
+        # frontend does *given* a capability, and whether a particular ComfyUI
+        # offers it is the server's business and is covered where it is decided.
+        guide = load("guide").guide
+        was, guide.node_available = guide.node_available, lambda node_id: True
+        try:
+            _CATALOG_JSON = json.dumps(load("manifest").manifest.catalog())
+        finally:
+            guide.node_available = was
     return _CATALOG_JSON
 
 

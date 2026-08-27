@@ -87,6 +87,32 @@ const blocked = {
   demote: why(refused, "img-1", "reference"),
 };
 
+// The guide: a clip attached as a reference, told to become the drawing the
+// shot is aimed at, and told back again. The gesture this suite is about,
+// applied to the role that arrived last — and it belongs here rather than in a
+// guide suite of its own because "@vid-1 is a reference" and "@vid-1 is the
+// guide" are the same file doing two jobs, which is exactly what `rerole`
+// exists to move between.
+const guided = shot();
+const afterGuide = move(guided, "vid-1", "guide");
+// A guide is silent whatever the clip was doing before: the branch reads a
+// drawing, so a soundtrack here is an audio slot spent on nothing.
+const guideTrack = guided.assets.find((a) => a.handle === "vid-1").track;
+const afterUnguide = move(guided, "vid-1", "reference");
+
+// Two clips, one guide slot: promoting the second hands the first the role the
+// second is leaving, exactly as two start frames swap.
+const twoClips = shot();
+twoClips.assets.push({ handle: "vid-2", kind: "video", role: "reference", filename: "run.mp4" });
+s.rerole(twoClips, twoClips.assets.find((a) => a.handle === "vid-1"), "guide");
+const afterGuideSwap = move(twoClips, "vid-2", "guide");
+
+const guideBlocked = {
+  still: why(refused, "img-2", "guide"),
+  itself: (() => { const c = shot(); s.rerole(c, c.assets.find((a) => a.handle === "vid-1"), "guide");
+                   return why(c, "vid-1", "guide"); })(),
+};
+
 // A segment that starts from the one before it already has its opening.
 const continuing = shot();
 continuing.continue = true;
@@ -98,6 +124,7 @@ const whileContinuing = {
 console.log(JSON.stringify({
   before: roles(shot()), afterDemote, afterPromote, afterSwap, afterUnmute,
   blocked, whileContinuing,
+  afterGuide, guideTrack, afterUnguide, afterGuideSwap, guideBlocked,
 }));
 """
 
@@ -139,4 +166,23 @@ check("a continuing segment's opening is the segment before it",
 check("...which says nothing about the frame it closes on",
       got["whileContinuing"]["end"], "")
 
-passed("an attached picture can be told what it is for after the fact")
+check("a reference clip becomes the drawing the shot is aimed at",
+      got["afterGuide"],
+      ["img-1:first_frame:opening.png", "img-2:reference:wall.png",
+       "vid-1:guide:walk.mp4"])
+check("...silently, whatever it was doing before", got["guideTrack"], "picture")
+check("...and goes back to being an ordinary reference",
+      got["afterUnguide"],
+      ["img-1:first_frame:opening.png", "img-2:reference:wall.png",
+       "vid-1:reference:walk.mp4"])
+check("a second clip promoted to guide swaps with the first, and loses neither",
+      got["afterGuideSwap"],
+      ["img-1:first_frame:opening.png", "img-2:reference:wall.png",
+       "vid-1:reference:walk.mp4", "vid-2:guide:run.mp4"])
+
+check("a still cannot be a guide",
+      got["guideBlocked"]["still"].startswith("Every frame of the shot is aimed at"), True)
+check("the role it already has is never blocked, guides included",
+      got["guideBlocked"]["itself"], "")
+
+passed("an attached file can be told what it is for after the fact")

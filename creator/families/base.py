@@ -133,6 +133,41 @@ class Family:
         already built; the hook passes them through untouched."""
         raise NotImplementedError(f"{self.id}.emit_segment")
 
+    def emit_control(self, graph, links, segment, compiled, weights, guide):
+        """The piece's guide, applied to this segment. -> a segment-shaped node.
+
+        **Returns `segment` unchanged by default, and most families want that.**
+        A family with no ControlNet has nothing to apply; a family whose weights
+        read a guide *natively* — Qwen-Image-Edit 2509 and 2511, which were
+        post-trained on depth, edge and pose maps arriving in an ordinary picture
+        slot — has nothing to apply either, because the guide reached the model
+        as `Picture 1` long before this hook was called. Only the third kind
+        overrides: a control branch loaded beside the transformer, which is what
+        `capabilities.control.method == "branch"` declares.
+
+        What comes back must answer `.out(i)` for the same four indices the
+        segment node does, because the sampler, the refine and the face hooks all
+        read it and none of them should have to know whether a guide is on. Two
+        of the four are the ones a control can touch and they are touched by
+        different families in different ways: MiniMax H3's branch and core's
+        generic ControlNets patch the **conditioning** (out 1), while Z-Image's
+        and Qwen-Image's Fun controlnets patch the **model** (out 0). `Controlled`
+        in `core/emit.py` is the wrapper for saying either without the loop
+        learning which.
+
+        `guide` is `creator/guide.Guide` — the *switch*: how hard it pulls and
+        over how much of the schedule. The drawing itself is `compiled.guide`,
+        an ordinary `Asset` the picker attached to this shot, carrying the
+        filename and the trim that says which seconds of it this shot uses. Both
+        are family-neutral by construction, which is the whole point of the
+        split: what is left for a family to say is the node id and how its
+        inputs are spelled.
+
+        Called only where both are present — see the call site in
+        `core/emit.py` for why that is two people's decisions and not one.
+        """
+        return segment
+
     def emit_sampler(self, graph, segment, payload, compiled, sampling,
                      acceleration, weights, seed, run):
         """The sampler subgraph over one segment. -> the sampled latent link."""

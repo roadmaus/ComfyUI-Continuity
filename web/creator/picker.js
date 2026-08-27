@@ -20,8 +20,23 @@ import { t } from "./i18n.js";
 // being rendered. `activeAssets` is what keeps that one implementation: it is
 // the list the current tab is looking at, and every organize path goes through
 // it rather than reaching for `this.assets`.
-const KIND_LABEL = { image: "Image", video: "Video", audio: "Audio", renders: "Renders" };
-const ACCEPT = { image: "image/*", video: "video/*", audio: "audio/*" };
+const KIND_LABEL = { image: "Image", video: "Video", audio: "Audio",
+                     renders: "Renders", guides: "Guide" };
+const ACCEPT = { image: "image/*", video: "video/*", audio: "audio/*",
+                 guides: "video/*" };
+
+// Where the ControlNet bench writes, and so the whole of what the guide tab
+// shows. Mirrors `control.SUBFOLDER`.
+//
+// A tab and not a kind, exactly as "renders" is one: that tab browses a
+// different *folder* while its files keep their own kinds, and this browses a
+// different *corner* of the input folder while its files stay videos. Both are
+// the same idea — a tab is a place to look, a kind is what a file is — and
+// making the guide a fourth kind would have meant teaching the caps, the
+// grammar and compile.py about a kind that does not exist.
+const GUIDE_SUBFOLDER = "continuity/control";
+const isGuide = (asset) =>
+  asset.kind === "video" && (asset.subfolder || "").startsWith(GUIDE_SUBFOLDER);
 // What a configured video cell says about itself, short enough for the badge.
 const TRACK_BADGE = { "picture+sound": "sound", "picture": "silent", "sound": "sound only" };
 // How many cells the grid materialises per batch. A folder of hundreds of
@@ -428,6 +443,7 @@ class Picker {
     // its grid is showing.
     const scoped = this.kind === "renders"
       ? (this.options.only ? this.renders.filter((a) => a.kind === this.options.only) : this.renders)
+      : this.kind === "guides" ? this.assets.filter(isGuide)
       : this.assets.filter((a) => a.kind === this.kind);
     const count = (test) => scoped.filter(test).length;
     const here = this.here();
@@ -710,7 +726,11 @@ class Picker {
     // kind is a pick it would have to refuse.
     const only = this.options.only;
     const onKind = only ? (asset) => asset.kind === only
-      : this.kind === "renders" ? () => true : (asset) => asset.kind === this.kind;
+      : this.kind === "renders" ? () => true
+      // The guide tab is a place, not a kind: every clip the bench has traced,
+      // and nothing else in the input folder.
+      : this.kind === "guides" ? isGuide
+      : (asset) => asset.kind === this.kind;
     return this.activeAssets().filter((asset) =>
       onKind(asset) && onShelf(asset)
       && (!this.query || asset.path.toLowerCase().includes(this.query)));

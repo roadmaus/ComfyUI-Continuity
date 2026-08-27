@@ -61,7 +61,7 @@ import json
 from comfy_api.latest import io
 from comfy_execution.graph_utils import GraphBuilder
 
-from .. import canvas, media, outputs, settings
+from .. import canvas, guide as guides, media, outputs, settings
 
 PASS_FRAMES_NODE = "MiniMaxH3PassFrames"
 PASS_AUDIO_NODE = "MiniMaxH3PassAudio"
@@ -158,7 +158,7 @@ def inherited_audio(graph, source, seconds):
 
 def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
          filename_prefix=None, cards=None, seeds=None,
-         whole_piece=True, run=None, upscaler=None):
+         whole_piece=True, run=None, upscaler=None, guide=None):
     """-> the graph, which the caller finalizes. Nothing comes back out of it.
 
     `labels[i]` names payload i in any error raised about it — "Segment 2", or
@@ -180,6 +180,13 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
     things the loop does read are the contract's fine print in
     `families/base.py`: `weights.routed(payload)` and the `.vae`/`.audio_vae`
     links on what `emit_loaders` returns.
+
+    `guide` is the piece's ControlNet guide (`creator/guide.Guide`) or None,
+    read off the blob by the caller the same way `run` is. It is family-neutral
+    on purpose — the drawing, its strength and its schedule window are the same
+    three facts whatever renders them — and the loop's only jobs with it are to
+    work out which seconds of it each pass is aimed at and to hand that to
+    `family.emit_control`, which is where an architecture finally gets a say.
 
     `upscaler` is the blob's upscale-backend weights, read by the caller the
     same way the family's are and passed through unread unless a compiled
@@ -312,8 +319,30 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
                     CLIP_AUDIO_NODE, clip_data=json.dumps(ahead, sort_keys=True),
                     seconds=one.ends_tail_s, at="head").out(0)
 
-        segment = family.emit_segment(graph, links, payloads[index], one,
-                                      weights, sampling, seams, run)
+        # The guide comes off the payload before the segment node sees it: it
+        # reaches the model through a branch bolted on after that node, so
+        # leaving it in `segment_data` would re-encode the prompt every time a
+        # trim handle moved. See `guide.without`. Family-neutral, and done here
+        # rather than in each family's `_segment_inputs` for the same reason the
+        # seams are wired here — it is a fact about how a guide travels, not
+        # about how an architecture reads one.
+        segment = family.emit_segment(graph, links, guides.without(payloads[index]),
+                                      one, weights, sampling, seams, run)
+        # The guide, applied. Two things have to be true and they are two
+        # different people's decisions: this shot has a drawing attached
+        # (`one.guide`, an ordinary asset the picker put there), and the switch
+        # that loads the branch is thrown (`guide`, the piece's). Either alone
+        # emits nothing — a clip on a card with the switch off is a file the
+        # render ignores, and a switch thrown over a strip with no drawing on it
+        # has nothing to aim at and must not load six gigabytes to discover so.
+        #
+        # After the segment and before the sampler, because what a ControlNet
+        # changes is what the sampler is handed — and through the family,
+        # because *which* socket it changes is the architecture's answer and not
+        # the loop's.
+        if guide is not None and one.guide is not None:
+            segment = family.emit_control(graph, links, segment, one, weights,
+                                          guide)
         latent = family.emit_sampler(graph, segment, payloads[index], one,
                                      sampling, acceleration, weights,
                                      seed_for(index), run)

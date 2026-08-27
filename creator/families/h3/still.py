@@ -270,16 +270,20 @@ def weights_from_blob(data):
     return slots.weights_from_blob(data)
 
 
-def emit(plan, weights, sampling, unique_id, filename_prefix=FILENAME_PREFIX):
+def emit(plan, weights, sampling, unique_id, filename_prefix=FILENAME_PREFIX,
+         guide=None):
     """-> the graph, which the caller finalizes with `core.emit.expanded`.
 
     `sampling` is a `sampling.Sampling`, under the same widget names the two
-    video nodes use.
+    video nodes use. `guide` is the ControlNet switch (`creator/guide.Guide`) or
+    None — the drawing itself rides in the request as an ordinary attachment,
+    the same as on a video render.
     """
     import json
 
     from comfy_execution.graph_utils import GraphBuilder
 
+    from ... import guide as guides
     from ...core import emit as loop
     from . import render as h3
 
@@ -305,8 +309,11 @@ def emit(plan, weights, sampling, unique_id, filename_prefix=FILENAME_PREFIX):
     inputs = {
         "clip": links.clip,
         # sort_keys so an unchanged payload serialises identically every time —
-        # this string is the segment node's cache key.
-        "segment_data": json.dumps(payloads[0], sort_keys=True),
+        # this string is the segment node's cache key. The guide comes out of it
+        # first, for the reason it comes out on the video path: it reaches the
+        # model through a branch bolted on after this node, so leaving it in
+        # would re-encode the prompt every time the drawing changed.
+        "segment_data": json.dumps(guides.without(payloads[0]), sort_keys=True),
     }
     # Wire each VAE into the encoder only when this still encodes with it — a
     # keyframe or a cited reference. A text-only still needs the video VAE at
@@ -320,6 +327,20 @@ def emit(plan, weights, sampling, unique_id, filename_prefix=FILENAME_PREFIX):
         if links.get(name) is not None:
             inputs[f"model_{name}"] = links.get(name)
     segment = graph.node(SEGMENT_NODE, **inputs)
+
+    # The guide. **A pre-stage still is a one-frame video generation**, so it
+    # takes the Fun ControlNet branch exactly as a shot does — same hook, same
+    # node, same weights slot. It is emitted here rather than reached through
+    # `core/emit.py` because this branch builds its own graph: a still is one
+    # segment, one sampler and one decoded frame, with none of the reel, seam
+    # and spill machinery that loop exists for.
+    #
+    # Both halves are required, and they are the same two decisions the video
+    # path makes: a drawing attached to this still, and the switch that loads
+    # the branch thrown.
+    if guide is not None and compiled[0].guide is not None:
+        segment = h3.FAMILY.emit_control(graph, links, segment, compiled[0],
+                                         weights, guide)
 
     # The distilled H3 checkpoints run at cfg 1.0, where the negative is
     # skipped outright — the same zeroed conditioning the video path uses.
@@ -356,11 +377,14 @@ def emit_still(data, plan, sampling, unique_id):
     """The uniform still surface over `emit` — see `families/registry.py`.
 
     The request owns the weights and the output prefix, because it is an
-    ordinary creator request; `data` — the pre-stage blob around it — has
-    nothing this branch reads.
+    ordinary creator request, and `data` — the pre-stage blob around it — has
+    nothing this branch reads: the ControlNet switch rides *in* the request,
+    beside the drawing it governs, because this branch keeps a whole creator
+    request and the switch is part of one.
     """
-    from ... import outputs, settings
+    from ... import guide as guides, outputs, settings
 
     return emit(plan, weights_from_blob(plan.request), sampling, unique_id,
                 filename_prefix=outputs.image(plan.request,
-                                              settings.image_prefix(declare.ID)))
+                                              settings.image_prefix(declare.ID)),
+                guide=guides.Guide.of(plan.request))

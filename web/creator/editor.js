@@ -29,7 +29,8 @@ import { blobIO, samplingBar, segmentSeedPill } from "./sampling.js";
 import { Stage } from "./stage.js";
 import { familyPill, weightsPill, loadCatalog, adoptWeights } from "./models.js";
 import * as Turbo from "./turbo.js";
-import { viewUrl, probe, probeAudio, primeSettings, buildPlate } from "./api.js";
+import * as Guide from "./guide.js";
+import { viewUrl, thumbUrl, probe, probeAudio, primeSettings, buildPlate } from "./api.js";
 import { openSubjectView } from "./subject.js";
 import * as S from "./state.js";
 import { describeRatio, framesForSeconds, isTrainedLength,
@@ -736,6 +737,47 @@ export class CreatorEditor {
   }
 
   /**
+   * Attach the drawing this shot is aimed at.
+   *
+   * The same picker as everything else, opened on its Guide tab — which browses
+   * the corner of the input folder the ControlNet bench writes into. A guide is
+   * media and is attached like media; the only things that make it its own tool
+   * rather than a fourth role on the video tab are that the files live in one
+   * place and that a shot has room for exactly one.
+   *
+   * It answers to no reference cap. A guide is never cited in the prompt, takes
+   * no ordinal and enters no reference plan — it reaches the model through a
+   * control branch — so the caps that bound what the encoder is shown have
+   * nothing to say about it. The capacity handed to the picker is the real
+   * limit instead: one drawing, because the branch injects one control latent.
+   */
+  async addGuide() {
+    const existing = S.guideAsset(this.state);
+    const chosen = await openPicker({
+      kinds: ["guides"],
+      kind: "guides",
+      capacity: () => ({ used: existing ? 1 : 0, max: 1, filesLeft: 1 }),
+      single: true,
+      cardSeconds: this.cardSeconds(),
+    });
+    if (!chosen?.length) return;
+    this.takeGuide({ path: chosen[0].path, trim: chosen[0].trim });
+  }
+
+  /**
+   * Put a drawing on this shot. The one attach path, for both ways in — the
+   * Guide tab above and the ControlNet bench's send button.
+   *
+   * A second drawing replaces the first rather than joining it, and keeps its
+   * place among the chips and its handle: swapping the guide is a change to
+   * this shot, not a detach and a re-attach.
+   */
+  takeGuide({ path, op = "", trim = null }) {
+    if (!S.attachGuide(this.state, this.piece, { path, op, trim })) return;
+    this.commit();
+  }
+
+  /**
    * The gallery: the same picker, opened on the renders tab. No capacity
    * precheck, unlike addReferences — looking at finished renders is legal with
    * every slot full; only an actual pick has to answer for room, and the
@@ -1067,9 +1109,10 @@ export class CreatorEditor {
       // so the sentence that cited @img-1 was left citing a picture that had
       // gone. See `S.rerole`.
       rows.push(choose(t("attached as"),
-        t("Where this picture sits in the shot: the frame it opens on, the frame it closes "
-        + "on, or a reference the render is conditioned by and the prompt can cite. Moving "
-        + "it into a frame that is taken swaps the two."),
+        t("What this file does in the shot: the frame it opens on, the frame it closes on, "
+        + "a reference the render is conditioned by and the prompt can cite, or the guide "
+        + "every frame is aimed at. Stills take the two frames, clips take the guide, and "
+        + "both can be a reference. Moving one into a slot that is taken swaps the two."),
         S.ATTACH_ROLES.map((key) => ({
           key, label: S.roleLabel(key),
           blocked: S.reroleBlocked(this.state, asset, key, this.piece),
@@ -1093,7 +1136,10 @@ export class CreatorEditor {
             this.commit();
           }));
       }
-      if (asset.kind === "video") {
+      // A guide has no sound row: the branch reads a drawing, so its soundtrack
+      // is not a setting with two useful answers — it is a slot that would be
+      // spent on nothing. See `S.rerole`, which silences one on promotion.
+      if (asset.kind === "video" && asset.role !== "guide") {
         rows.push(choose(t("sound"),
           t("On by default: this clip's soundtrack is bound as a reference audio, taking an "
           + "<Audio> slot before the video's own label, and needing the audio VAE connected. "
@@ -1380,6 +1426,14 @@ export class CreatorEditor {
       turbo: this.nodeId && S.turboOf(S.pieceFamily(this.piece)) ? Turbo.turboPills({
         container: this.piece,
         ...this.widgetIO(),
+        onCommit: () => this.commit(),
+      }) : [],
+      // The guide switch, next to it and on the same terms: a node body only,
+      // and only where the family declares a ControlNet. It takes no widget IO
+      // — unlike turbo, nothing it sets is a sampler widget; the whole of what
+      // it writes is the piece's own guide block.
+      guide: this.nodeId ? Guide.guidePills({
+        container: this.piece,
         onCommit: () => this.commit(),
       }) : [],
       // Last on the row, because it is the one thing there you set when you
@@ -1805,6 +1859,19 @@ export class CreatorEditor {
           ["audio", "Add audio", "audio"],
         ].filter(([kind]) => S.takesKind(this.piece, kind))
          .map(([kind, label, iconName]) => tool(kind, label, iconName)) : []),
+        // The drawing this shot is aimed at. Beside the three attach tools
+        // because it is the same gesture — pick a file, it lands on the card —
+        // and gated on the family declaring a ControlNet rather than on the
+        // reference grammar, which has nothing to say about a guide: it is not
+        // cited, takes no ordinal and costs no slot. A family with no branch to
+        // load has no such tool, for the reason the three above are per kind.
+        ...(S.controlOf(S.pieceFamily(this.piece)) ? [el("button", {
+          class: "mmc-tool",
+          title: t("Aim this shot at a drawing — an edge, depth or pose tracing "
+                 + "from the ControlNet bench"),
+          onclick: () => this.addGuide(),
+        }, [el("span", { class: "mmc-tool-icon" }, [icon("pen")]),
+            el("span", { text: t("Add guide") })])] : []),
         // LoRAs sit on the checkpoint, not in the reference slots, so no
         // attach rule ever gates them.
         el("button", {
@@ -1929,9 +1996,18 @@ export class CreatorEditor {
       for (const handle of S.replacesOf(subject)) cast.add(handle);
     }
     const chip = (asset) => {
+      // A guide shows its own frame, where every other clip shows a glyph. That
+      // is not a flourish: the only question anybody has about a guide is
+      // whether it is the right tracing, and an "edges" and a "depth" pass of
+      // the same footage are one word apart in the filename and nothing alike
+      // to look at. A reference clip is cited by handle and read as motion, so
+      // its chip has a name to be recognised by; a guide has no handle in the
+      // prompt and only its picture.
       const thumb = asset.kind === "image"
         ? el("img", { class: "mmc-asset-thumb", src: viewUrl(asset.filename, { preview: true }), alt: asset.filename })
-        : el("span", { class: "mmc-asset-thumb" }, [svg(ICONS[asset.kind], 15)]);
+        : asset.role === "guide"
+          ? el("img", { class: "mmc-asset-thumb", src: thumbUrl(asset.filename), alt: asset.filename })
+          : el("span", { class: "mmc-asset-thumb" }, [svg(ICONS[asset.kind], 15)]);
       swappable(thumb, {
         title: t("Swap the file behind @{handle} — the handle stays, so the prompt still fits.",
                  { handle: asset.handle }),
@@ -1995,7 +2071,20 @@ export class CreatorEditor {
       // word, and it opens the same card the handle does, because "this should
       // have been the end frame" is a fact about @img-1 like every other fact
       // the card holds. See `openReferenceSheet`.
-      if (asset.role !== "reference") {
+      // A guide's word is a door like the keyframes', and for the same reason:
+      // a clip attached as a reference and one attached as a guide are the same
+      // file doing two different jobs, and which job it is doing should be
+      // changeable in place rather than by detaching and picking it again.
+      if (asset.role === "guide") {
+        parts.push(el("button", {
+          class: "mmc-asset-role mmc-asset-role-pick",
+          text: S.roleLabel(asset.role),
+          title: t("Every frame of this shot is aimed at this drawing. Click to "
+                 + "make it an ordinary reference instead — or to trim which "
+                 + "stretch of it this shot uses."),
+          onclick: (event) => this.openReferenceSheet(event.currentTarget, asset),
+        }));
+      } else if (asset.role !== "reference") {
         parts.push(el("button", {
           class: "mmc-asset-role mmc-asset-role-pick",
           text: S.roleLabel(asset.role),

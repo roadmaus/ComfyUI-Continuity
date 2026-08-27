@@ -118,7 +118,14 @@ class Bench {
     this.hasAudio = false;
     this.busy = false;
     this.progress = null;
-    this.sent = null;
+    // Which doors this tracing has already gone through, by target id. A set
+    // rather than a name, because sending is not one press: a drawing can be
+    // the shot's guide *and* a reference on the same card, and a row that
+    // forgot the first send the moment the second happened would be a row that
+    // cannot say what it has done.
+    this.sentTo = new Set();
+    // The door whose file is being cut right now — see `send`.
+    this.sending = null;
     this.result = null;
     // Whether the tracing on the glass is currently being asked for over and
     // over because the clip is running. See `chase`.
@@ -259,6 +266,8 @@ class Bench {
     if (open === this) open = null;
     api.removeEventListener("continuity.control", this.onProgress);
     this.chasing = false;
+    clearTimeout(this.sweeping);
+    clearTimeout(this.settling);
     this.overVideo?.pause();
     this.watcher?.disconnect();
     this.cutter?.destroy();
@@ -303,6 +312,8 @@ class Bench {
   openSource(asset) {
     this.source = asset;
     this.result = null;
+    this.sentTo.clear();
+    this.sending = null;
     this.error = null;
     this.trim = null;
     this.at = 0;
@@ -604,7 +615,7 @@ class Bench {
     if (this.busy || !this.source) return;
     this.busy = true;
     this.progress = null;
-    this.sent = null;
+    this.sentTo.clear();
     this.error = null;
     this.result = null;
     this.paintFoot();
@@ -627,7 +638,7 @@ class Bench {
       // file it is about to play is still what the dials mean. Read before any
       // repaint, because a dial moved after this is a file that has gone stale.
       this.result.dialled = this.dialled();
-      this.mountTraced();
+      this.arrive();
     } catch (error) {
       this.error = String(error.message || error);
     }
@@ -636,17 +647,141 @@ class Bench {
     if (this.overlay.isConnected) this.paintFoot();
   }
 
-  send(target) {
-    if (!this.result) return;
-    target.take(this.result);
-    this.sent = target.label;
+  /**
+   * The tracing has landed.
+   *
+   * The bench's whole argument is that a tracing is judged *through* the
+   * footage, so the moment a file exists is the one moment worth seeing it
+   * alone: the seam runs out to the left edge, the drawing takes the whole
+   * glass for half a second under its own name, and the seam eases back to
+   * wherever it was being held. One gesture, on the one element in the room
+   * allowed to be loud, made out of the control the room is already built
+   * around — rather than a tick, a toast or a colour that means "good".
+   *
+   * The name goes back to the tracing's afterwards. A tag that kept the
+   * filename would be a label that goes stale the next time a dial moves, and
+   * the tag's standing job is to say which half of the glass you are looking
+   * at.
+   */
+  arrive() {
+    this.mountTraced();
+    const named = this.result?.path.split("/").pop() ?? "";
+    const settle = () => {
+      if (this.tagRight) this.tagRight.textContent = t(this.tracing()?.label ?? "");
+      this.frame?.classList.remove("sweeping");
+    };
+    clearTimeout(this.sweeping);
+    clearTimeout(this.settling);
+    if (!this.frame || !this.tagRight
+        || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    this.tagRight.textContent = named;
+    const held = this.seam;
+    this.frame.classList.add("sweeping");
+    this.seam = 0;
+    this.paintSeam();
+    this.sweeping = setTimeout(() => {
+      this.seam = held;
+      this.paintSeam();
+      this.settling = setTimeout(settle, 520);
+    }, 560);
+  }
+
+  /**
+   * A door pressed.
+   *
+   * Most doors take the file that was written. One kind does not, and it is the
+   * reason this is asynchronous: a pre-stage renders a still, so a clip has
+   * nothing it can hand over — but the frame under the playhead is a still, and
+   * the bench can write it. So the press cuts that frame first, through the
+   * same operator at the same dials, and hands over what comes back.
+   *
+   * That is the whole of the answer to "a clip cannot go to a pre-stage". It
+   * was true and it was useless: it named a shape mismatch at the one moment
+   * nothing could be done about it. What somebody wants at that point is the
+   * composition they were just looking at, in the step that draws stills, and
+   * the bench is holding every part needed to make it.
+   *
+   * @param {{target: object, frame: boolean}} door
+   */
+  async send(door) {
+    if (!this.result || this.sending) return;
+    let handed = this.result;
+    if (door.frame) {
+      this.sending = door.target.id;
+      this.error = null;
+      this.paintFoot();
+      try {
+        const cut = await controlRun({
+          filename: this.source.path,
+          op: this.op,
+          params: this.values[this.op] ?? {},
+          at: this.at,
+        });
+        // Stamped like a full run's answer, because the far side reads the same
+        // fields off both: which tracing this is decides whether the weights it
+        // lands in front of were ever post-trained on it.
+        handed = { ...cut, op: this.result.op, opId: this.op, dialled: this.dialled() };
+      } catch (error) {
+        this.error = String(error.message || error);
+        this.sending = null;
+        this.paintFoot();
+        return;
+      }
+      this.sending = null;
+      if (!this.overlay.isConnected) return;
+    }
+    door.target.take(handed);
+    this.sentTo.add(door.target.id);
     // Some sends are the end of the errand rather than one of several: a guide
     // handed to the pre-stage is there to have a prompt written around it, and
     // leaving the bench in front of the thing that just received the file makes
     // the room something to dismiss before the work can start. The file is
     // written either way, so nothing is lost by closing — the picker finds it.
-    if (target.closeOnSend) return this.close();
+    if (door.target.closeOnSend) return this.close();
     this.paintFoot();
+  }
+
+  // ---- where a tracing can go ---------------------------------------------------
+
+  /**
+   * What this source can be written as.
+   *
+   * A clip can be a clip, and — through the playhead — any one of its frames. A
+   * photograph can only ever be a still. The distinction is a fact about the
+   * *source*, known the moment it lands on the bench, which is why the doors are
+   * decided from it rather than from whatever the last press happened to write.
+   */
+  produces() {
+    return this.source?.kind === "video" ? ["video", "image"] : ["image"];
+  }
+
+  /** Every door this source can reach, and whether reaching it means cutting a
+   *  frame first. Order is the targets' own: they arrive strongest-aim-first,
+   *  which is the order somebody reads them in. */
+  doors() {
+    const can = this.produces();
+    const written = this.result?.kind ?? null;
+    return this.targets
+      .filter((target) => !target.kinds || target.kinds.some((kind) => can.includes(kind)))
+      .map((target) => ({
+        target,
+        frame: Boolean(target.kinds) && Boolean(written) && !target.kinds.includes(written),
+      }));
+  }
+
+  /**
+   * The doors this source can never reach, where the target said why.
+   *
+   * Drawn in the rail beside the footage rather than under the result, and that
+   * placement is the point: a photograph cannot aim a moving shot, which is
+   * knowable the second the photograph lands and worth nothing at all once a
+   * tracing has been paid for. Said early it is a reason to go and get a clip;
+   * said late it is a wall.
+   */
+  shut() {
+    const can = this.produces();
+    return this.targets.filter((target) =>
+      target.kinds && !target.kinds.some((kind) => can.includes(kind)) && target.needsClip);
   }
 
   // ---- drawing ------------------------------------------------------------------
@@ -688,6 +823,12 @@ class Bench {
         }, [icon("folder", 14), el("span", {
           text: this.busy ? t("Uploading…") : source ? t("Change the footage") : t("Choose footage"),
         })]),
+        // A door this footage can never reach, said here rather than under the
+        // result. A photograph cannot aim a moving shot, and that is knowable
+        // the second the photograph lands — which is while there is still time
+        // to go and get a clip instead. See `shut`.
+        ...(source ? this.shut().map((target) =>
+          el("p", { class: "mmc-ctl-needs", text: target.needsClip })) : []),
       ]),
       this.section(t("Tracing"), [
         el("div", { class: "mmc-ctl-ops" }, this.tracings.map((tracing) => el("button", {
@@ -902,7 +1043,13 @@ class Bench {
     this.frame.replaceChildren(
       this.under, this.over, this.seamEl,
       el("span", { class: "mmc-ctl-tag left", text: t("Footage") }),
-      el("span", { class: "mmc-ctl-tag right", text: t(this.tracing()?.label ?? "") }),
+      // Kept, because it is the one label on the glass that changes: for the
+      // length of the arrival sweep it says the name of the file that was just
+      // written, and then goes back to saying which tracing this is. See
+      // `arrive`.
+      this.tagRight = el("span", {
+        class: "mmc-ctl-tag right", text: t(this.tracing()?.label ?? ""),
+      }),
     );
     this.frame.onpointerdown = (event) => this.dragSeam(event);
     this.paintSeam();
@@ -1015,6 +1162,23 @@ class Bench {
     this.paintResult();
   }
 
+  /**
+   * The file that was written, and the doors it can go through.
+   *
+   * The doors are the reason this is a shelf rather than a row of buttons. Every
+   * one of them takes the same drawing and does something different with it —
+   * aims a shot at it frame for frame, builds a still on it, hands it over as a
+   * look to be named in a prompt — and three identical pills reading "Send to…"
+   * make three instructions look like one act with three destinations. So each
+   * door says what it does underneath what it is called, in the vocabulary the
+   * card it lands on uses.
+   *
+   * One of them is filled: the door that takes the file exactly as it was
+   * written, which on a family with a control branch is the door this bench was
+   * opened for. Where no door takes it as written — every remaining door wants a
+   * frame cut out of it — none is filled, because there is nothing here that is
+   * simply the obvious next press.
+   */
   paintResult() {
     if (!this.resultRow) {
       this.resultRow = el("div", { class: "mmc-ctl-out" });
@@ -1026,31 +1190,60 @@ class Bench {
       return;
     }
     this.resultRow.classList.add("on");
-    const takers = this.targets.filter((target) =>
-      !target.kinds || target.kinds.includes(this.result.kind));
+    const doors = this.doors();
+    const lead = doors.find((door) => !door.frame) ?? null;
     this.resultRow.replaceChildren(
       el("div", { class: "mmc-ctl-outword" }, [
         el("span", { class: "mmc-ctl-outname", text: this.result.path.split("/").pop() }),
-        el("span", {
-          class: "mmc-ctl-outnote",
-          text: this.sent
-            ? t("Sent to {where}. It is in the input folder either way.", { where: this.sent })
-            : t("Written into the input folder."),
-        }),
+        el("span", { class: "mmc-ctl-outnote", text: this.outLine() }),
       ]),
       el("span", { class: "mmc-ctl-gap" }),
-      ...takers.map((target) => el("button", {
-        class: "mmc-ctl-send", title: t(target.note),
-        onclick: () => this.send(target),
-        text: target.label,
-      })),
-      // Said rather than left to be worked out: a target that cannot take this
-      // kind is a target that is *missing* from the row, and a row that is
-      // simply short reads as a bench that forgot. The reason is the target's
-      // own — this end knows that a door was not drawn, not why.
-      ...this.targets
-        .filter((target) => !takers.includes(target) && target.kindNote)
-        .map((target) => el("span", { class: "mmc-ctl-outnote", text: target.kindNote })),
+      doors.length
+        ? el("div", { class: "mmc-ctl-doors" }, doors.map((door) => this.door(door, door === lead)))
+        // No piece to send to — the bench was opened without targets. Not a
+        // failure and not worth a warning: the file is on the disk under a name
+        // the picker lists, which is the whole of what happened.
+        : el("span", { class: "mmc-ctl-outnote", text:
+            t("Pick it up from the picker whenever you want it.") }),
     );
+  }
+
+  /** What the written file is, in the three facts worth having: which tracing
+   *  drew it, how long it runs, and the folder to look in. Not a sentence — a
+   *  line that reads "Written into the input folder." is a log entry wearing the
+   *  clothes of help. */
+  outLine() {
+    const parts = [t(this.result.op)];
+    const span = this.result.kind === "video"
+      ? (this.trim ? this.trim.end - this.trim.start : this.cutter?.media?.duration ?? 0)
+      : 0;
+    if (span > 0) parts.push(formatTime(span));
+    parts.push(`input/${this.result.path.split("/").slice(0, -1).join("/")}`);
+    return parts.join(" · ");
+  }
+
+  /** One door: what it is called, and what happens when it is pressed. */
+  door(door, lead) {
+    const id = door.target.id;
+    const busy = this.sending === id;
+    const done = this.sentTo.has(id);
+    return el("button", {
+      class: `mmc-ctl-door${lead ? " lead" : ""}${done ? " done" : ""}`,
+      disabled: Boolean(this.sending) || null,
+      onclick: () => this.send(door),
+    }, [
+      el("span", { class: "mmc-ctl-doorname", text: door.target.label }),
+      el("span", { class: "mmc-ctl-doordoes", text: this.doorLine(door, busy, done) }),
+    ]);
+  }
+
+  doorLine(door, busy, done) {
+    // A door that needs a frame says which frame, by the mark on the bar — the
+    // one thing somebody would want to check before pressing it, and the one
+    // thing they can still go and change.
+    if (busy) return t("Tracing that frame…");
+    if (done) return t("Sent. The file is in the input folder either way.");
+    if (door.frame) return t("The frame at {when}, traced as a still.", { when: formatTime(this.at) });
+    return door.target.does ?? "";
   }
 }

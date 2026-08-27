@@ -30,6 +30,7 @@ import { Stage } from "./stage.js";
 import { familyPill, weightsPill, loadCatalog, adoptWeights } from "./models.js";
 import * as S from "./state.js";
 import * as Turbo from "./turbo.js";
+import * as Guide from "./guide.js";
 import {
   framesForSeconds, secondsForFrames, resolveCanvas, describeRatio, isTrainedLength,
   rulesFor,
@@ -3756,6 +3757,65 @@ export class TimelineBody {
   }
 
   /**
+   * A drawing off the ControlNet bench, attached to the shot it aims.
+   *
+   * On the body, not on the editor, because the body is what a caller outside
+   * this node can reach: `mmcBody` is a `TimelineBody`, and the door the bench
+   * looks for has to be on the object it is looking at. The editor version was
+   * on `CreatorEditor` and on the strip window, and neither of those is what
+   * `node.mmcBody` is — so the bench asked for a door that was never there and
+   * drew the row without it, which is how a piece with a ControlNet came to
+   * offer nowhere to send a clip.
+   *
+   * Shot one, which is where every other hand-off from outside this node lands
+   * — see `attachFromPreStage`. A piece is a strip of cards and a file arriving
+   * without a card named has to pick one; picking the first is the same answer
+   * the pre-stage's chips already give.
+   */
+  takeGuide({ path, op = "", opId = null, trim = null }) {
+    const segment = this.timeline.segments[0];
+    if (!segment) return;
+    // Through the editor where one is already built for this shot, so the
+    // caret, the chips and the redraw are the editor's own. Straight onto the
+    // blob otherwise: on a strip there is no card editor to route through, and
+    // `commit` redraws whatever is in front.
+    if (this.faceEditor?.state === segment) {
+      return this.faceEditor.takeGuide({ path, op: op || opId || "", trim });
+    }
+    if (!S.attachGuide(segment, this.timeline, { path, op: op || opId || "", trim })) return;
+    this.commit();
+  }
+
+  /**
+   * A file handed to this node from outside, attached as a reference.
+   *
+   * Shot one for the same reason `takeGuide` uses it. Through the editor where
+   * there is one, because `attachAssets` is what settles a clip's sound track
+   * with the server — a reference video pushed onto the blob by hand would land
+   * silent where a picked one lands with its audio on.
+   */
+  async takeReference(picked) {
+    const segment = this.timeline.segments[0];
+    if (!segment) return;
+    if (this.faceEditor?.state === segment) {
+      return this.faceEditor.attachAssets([picked]);
+    }
+    const blocked = S.blockedReason(segment, "reference");
+    if (blocked) return;
+    const entry = {
+      handle: S.nextHandle(segment, picked.kind),
+      kind: picked.kind,
+      role: "reference",
+      filename: picked.path,
+      ref_size: "max",
+    };
+    if (picked.kind === "video") entry.track = S.DEFAULT_TRACK;
+    if (picked.trim) entry.trim = picked.trim;
+    segment.assets.push(entry);
+    this.commit();
+  }
+
+  /**
    * The sampler row, shared with the Creator node — see `sampling.js`. Both
    * nodes own their sampler and declare the same widgets, so neither draws its
    * own version of this.
@@ -3782,6 +3842,15 @@ export class TimelineBody {
         ...this.widgetIO(),
         onCommit: () => this.commit(),
       }) : [],
+      // The guide switch, on the timeline's own block. Global for a reason of
+      // its own rather than by analogy with the stack above: a guide is a clip
+      // laid along the piece, and each pass takes its own seconds out of it —
+      // so a per-card one would be asking the user to cut the drawing up by
+      // hand along boundaries the strip already knows.
+      guide: Guide.guidePills({
+        container: this.timeline,
+        onCommit: () => this.commit(),
+      }),
       // A chained timeline legitimately runs some shots on one checkpoint and
       // some on the other, so the pill is asked about the set rather than
       // about one — a Ref2VA it never reaches for is not missing.

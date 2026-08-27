@@ -197,6 +197,12 @@ class Asset:
     ref_size: str = "match"    # reference image/video: match | max; see DEFAULT_REF_SIZE
     trim: tuple[float, float] | None = None   # video/audio only: (start, end) seconds; None = whole file
     takes: str = "full"        # reference: one of TAKES[kind]; what of it is the reference
+    # guide only: which tracing the bench wrote it with ("edges", "depth", ...).
+    # Read by nothing on the encode path — a guide is not encoded — and only so
+    # that a family can say when its weights were never post-trained on this
+    # kind of drawing. Empty for a guide that did not come off the bench, which
+    # is a thing nothing can be said about rather than a thing to guess at.
+    op: str = ""
     # Whether the picker lifted this picture off its background before writing
     # it. Recorded rather than acted on: the file named above *is* the cut-out
     # one, so nothing downstream has anything left to do — this is what lets the
@@ -291,6 +297,12 @@ class Compiled:
     music: str = ""                 # non_diegetic_music, as written
     first_frame: Asset | None = None
     last_frame: Asset | None = None
+    # The ControlNet guide this shot is aimed at, or None. An `Asset` like the
+    # keyframes beside it, so its window comes off `trim` exactly as a reference
+    # clip's does and nothing had to invent a second way of saying "these
+    # seconds of that file". Whether the branch that reads it is actually loaded
+    # is the guide *switch*'s answer, not this one's — see `creator/guide.py`.
+    guide: Asset | None = None
     ref_images: list[Asset] = field(default_factory=list)
     ref_videos: list[Asset] = field(default_factory=list)
     ref_audios: list[Asset] = field(default_factory=list)
@@ -518,10 +530,32 @@ def _parse_assets(raw):
             raise CompileError(f"@{handle}: unknown kind {kind!r}")
 
         role = item.get("role", "reference")
-        if role not in ("reference", "first_frame", "last_frame"):
+        if role not in ("reference", "first_frame", "last_frame", "guide"):
             raise CompileError(f"@{handle}: unknown role {role!r}")
-        if role != "reference" and kind != "image":
+        # The two keyframe roles are a still the shot opens or closes on, so
+        # they are pictures. A guide is the opposite constraint and for the
+        # opposite reason: it is what the render is aimed at frame for frame, so
+        # a single picture held for six seconds is a shot told not to move.
+        if role in ("first_frame", "last_frame") and kind != "image":
             raise CompileError(f"@{handle}: only images can be a {role}")
+        # A guide is a picture or a clip, and which one is right is the *shot's*
+        # question rather than the file's. A clip is what a moving shot wants:
+        # every frame aimed at its own drawing. A still is what a one-frame
+        # generation wants, and the pre-stage makes exactly those — a rule that
+        # said "clips only" left H3's pre-stage unable to be aimed at anything,
+        # which is what a still branch that is a one-frame video render should
+        # be best at.
+        #
+        # Neither is refused on the other, because neither is wrong: a picture
+        # on a moving shot is held for every frame, which is "aim the whole shot
+        # at this one drawing" and is a real thing to ask for. `guide.read`
+        # holds it, the same way it holds a clip that runs out early.
+        if role == "guide" and kind == "audio":
+            raise CompileError(
+                f"@{handle}: a guide is something the render is aimed at, and "
+                f"there is nothing in a sound to aim at. Trace a picture or a "
+                f"clip on the ControlNet bench."
+            )
 
         # Muted, the way a LoRA is: attached, kept exactly as it was set up, and
         # out of this run. Dropped here rather than filtered downstream so the
@@ -592,6 +626,11 @@ def _parse_assets(raw):
             takes=takes,
             cut=bool(item.get("cut")),
             panels=_parse_panels(handle, role, kind, item.get("panels"), seen),
+            # The bench's tracing id, on a guide and nowhere else. Not validated
+            # against a list: the catalogue of tracings is `control.py`'s and
+            # grows, and a guide naming one this build has never heard of is
+            # still a drawing the branch can read.
+            op=str(item.get("op") or "") if role == "guide" else "",
         ))
     return assets
 
@@ -1272,6 +1311,21 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     first_frame = next((a for a in frame_assets if a.role == "first_frame"), None)
     last_frame = next((a for a in frame_assets if a.role == "last_frame"), None)
 
+    # The ControlNet guide: the clip this shot is aimed at, frame for frame.
+    # Its own role rather than a narrowed reference, because a reference is
+    # something the prompt reaches for by ordinal and a guide is not cited at
+    # all — it never takes a `<Video N>` label, never enters the reference caps,
+    # and reaches the model through a control branch instead of the encoder.
+    # One per shot: the branch injects a single control latent, and two drawings
+    # for one shot is a question with no answer.
+    guides = [a for a in assets if a.role == "guide"]
+    if len(guides) > 1:
+        raise CompileError(
+            "only one guide is allowed on a shot — a shot is aimed at one "
+            "drawing, and two would be two answers to the same question"
+        )
+    guide = guides[0] if guides else None
+
     refs = [a for a in assets if a.role == "reference"]
     ref_images = [a for a in refs if a.kind == "image"]
     # A video referenced for its soundtrack alone is an audio reference and
@@ -1612,6 +1666,7 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
         ratio_clamped=clamped,
         first_frame=first_frame,
         last_frame=last_frame,
+        guide=guide,
         ref_images=ref_images,
         ref_videos=ref_videos,
         ref_audios=ref_audios,

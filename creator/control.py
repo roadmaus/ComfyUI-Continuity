@@ -785,19 +785,48 @@ def _free_name(directory, stem, extension):
     return name
 
 
-def _stem(path, op, trim):
+def _stem(path, op, trim, at=None):
+    """What the written file is called before the counter is put on it.
+
+    `at` wins over `trim` because they describe different files: a span is the
+    stretch a clip was traced over, and a mark is the single frame cut out of
+    it. A still named for the span it came out of would say it was six seconds
+    long.
+    """
     base = os.path.splitext(os.path.basename(path))[0]
     # Room for the counter and the extension inside the 255 bytes most file
     # systems allow, without truncating the part that says what the file is.
     base = base[:90]
     parts = [base, op]
-    if trim:
+    if at is not None:
+        parts.append(f"{at:.1f}s".replace(".", "-"))
+    elif trim:
         parts.append(f"{trim[0]:.0f}-{trim[1]:.0f}s")
     return "-".join(parts)
 
 
 def _run_image(path, op, values, out_dir, stem):
     frame = trace(_open_image(path), op, values)
+    name = _free_name(out_dir, stem, ".png")
+    Image.fromarray(frame).save(os.path.join(out_dir, name), "PNG")
+    return name
+
+
+def _run_frame(path, op, values, out_dir, stem, at):
+    """One frame of a clip, traced at full size and written as a still.
+
+    A pre-stage renders a single picture, so a clip is not something it can be
+    aimed at — but the frame under the bench's playhead is a picture, and it is
+    the one that has been on the light box the whole time the dials were being
+    moved. Tracing it through the same operator at the same values is what makes
+    the file that lands in the pre-stage the thing that was being judged, rather
+    than a second guess at it.
+
+    Full size and undecorated, the way `_run_image` is: the preview route fits
+    its frame to 768 because it is answering a slider, and this is answering a
+    render.
+    """
+    frame = trace(_video_frame(path, at), op, values)
     name = _free_name(out_dir, stem, ".png")
     Image.fromarray(frame).save(os.path.join(out_dir, name), "PNG")
     return name
@@ -931,25 +960,35 @@ def _run_video(path, op, values, out_dir, stem, trim, keep_sound, on_progress):
     return name
 
 
-def run(filename, op, raw, trim=None, keep_sound=False, on_progress=None):
-    """Trace a whole file. -> the input-relative path of what was written.
+def run(filename, op, raw, trim=None, keep_sound=False, on_progress=None, at=None):
+    """Trace a file. -> the input-relative path of what was written.
 
     The answer is a path rather than a payload because the caller's next move is
     to hand it to a pre-stage or a shot, and both of those reference files by
     name in the input folder. Nothing is returned that would have to be uploaded
     back.
+
+    `at` asks for one frame of a clip as a still instead of the whole cut as a
+    clip, and it is what lets the bench offer a door rather than a refusal: the
+    two places a tracing can go want different shapes, and which shape gets
+    written is the caller's to say. Ignored for a source that is already a
+    still, which has one frame and it is the file.
     """
     from . import media
 
     path = media.resolve(filename)
     values = _params(op, raw)
     out_dir = os.path.join(folder_paths.get_input_directory(), *SUBFOLDER.split("/"))
-    stem = _stem(path, op, trim)
-    if is_video(path):
-        name = _run_video(path, op, values, out_dir, stem, trim, keep_sound, on_progress)
+    if is_video(path) and at is not None:
+        name = _run_frame(path, op, values, out_dir,
+                          _stem(path, op, None, max(0.0, float(at))), max(0.0, float(at)))
+        kind = "image"
+    elif is_video(path):
+        name = _run_video(path, op, values, out_dir, _stem(path, op, trim),
+                          trim, keep_sound, on_progress)
         kind = "video"
     else:
-        name = _run_image(path, op, values, out_dir, stem)
+        name = _run_image(path, op, values, out_dir, _stem(path, op, trim))
         kind = "image"
     log.info("continuity: traced %s -> %s/%s", os.path.basename(path), SUBFOLDER, name)
     return {"path": f"{SUBFOLDER}/{name}", "kind": kind}

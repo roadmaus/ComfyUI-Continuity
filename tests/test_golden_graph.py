@@ -358,6 +358,60 @@ finally:
     del comfy_nodes.NODE_CLASS_MAPPINGS[_accel.BLOCK_CACHE_NODE]
 
 
+# ---- the ControlNet guide ------------------------------------------------------
+#
+# A guide is an attached asset with a role, so the two cases below are the two
+# halves of the feature: the drawing (an ordinary attachment, trimmed like any
+# reference clip) and the switch (whether the branch is loaded at all).
+#
+# The pair matters because either alone must emit nothing. A clip on a card with
+# the switch off is a file the render ignores; a switch thrown over a shot with
+# no drawing on it has nothing to aim at and must not load six gigabytes of
+# branch to find that out.
+#
+# `resolve` is patched for the same reason `image_size` is above: a golden must
+# not depend on which files happen to be in this ComfyUI's input folder.
+media_mod.resolve = lambda filename: f"/input/{filename}"
+
+GUIDE_MODELS = {**MODELS, "control": "h3/fun_controlnet_union.safetensors"}
+SWITCH = {"on": True, "strength": 0.8, "start": 0.0, "end": 0.7}
+GUIDE_ASSET = {"handle": "gde-1", "kind": "video", "role": "guide",
+               "filename": "continuity/control/walk_edges.mp4", "op": "edges"}
+
+
+def guided(**fields):
+    return json.dumps({
+        "version": 2, "prompt": "", "aspect": "16:9", "short_edge": 768,
+        "models": GUIDE_MODELS, "guide": SWITCH, **fields,
+    })
+
+
+frozen("guide_single", guided(segments=[{
+    "prompt": "a red room", "duration_s": 6, "assets": [GUIDE_ASSET]}]))
+
+# Trimmed, which is the whole reason a guide is an asset: "these seconds of that
+# file" is a question the reference grammar already answers, in the overlay the
+# user already knows, and nothing here had to invent a second way to ask it.
+frozen("guide_trimmed", guided(segments=[{
+    "prompt": "a red room", "duration_s": 6,
+    "assets": [{**GUIDE_ASSET, "trim": {"start": 4.0, "end": 10.0}}]}]))
+
+# Three cards, each aimed at its own stretch of the same clip — which on a strip
+# is three separate attachments, exactly as three reference clips would be. The
+# middle one is unguided on purpose: a guide is per shot, so a strip may aim
+# some of its shots and not others, and the branch is loaded once for all of
+# them.
+frozen("guide_chained", guided(
+    prompt="a house at dusk",
+    segments=[
+        {"prompt": "wide", "duration_s": 5,
+         "assets": [{**GUIDE_ASSET, "trim": {"start": 0.0, "end": 5.0}}]},
+        {"prompt": "closer", "duration_s": 5, "continue": True},
+        {"prompt": "her face", "duration_s": 5, "continue": True,
+         "assets": [{**GUIDE_ASSET, "trim": {"start": 10.0, "end": 15.0}}]},
+    ]))
+
+
 # ---- the row in the blob -----------------------------------------------------
 #
 # `sampling.py` moved the row off the widgets and into `creator_data`, and the
@@ -398,3 +452,30 @@ def _segment_data(graph):
 #    payloads out of named keys. This is what says so out loud.
 if _segment_data(graph_of(piece(segments=[SHOT]))) != _segment_data(by_blob):
     FAILURES.append("a sampling block changed segment_data — the row is now a cache key")
+
+
+# 4. Both halves of a guide are required, and each alone emits the graph that
+#    existed before guides did — not a graph with the branch wired at strength
+#    zero, the same bytes.
+#
+#    Two cases because they are two different mistakes. A drawing attached with
+#    the switch off is the blob a user leaves behind every time they try a guide
+#    and change their mind, and it must not cost them a loaded controlnet. A
+#    switch thrown over a strip with nothing attached is the opposite: it must
+#    not load the branch to discover there is nothing to aim at.
+plain = canonical(graph_of(piece(segments=[SHOT])))
+
+switch_off = graph_of(json.dumps({
+    "version": 2, "prompt": "", "aspect": "16:9", "short_edge": 768,
+    "models": MODELS, "guide": {**SWITCH, "on": False},
+    "segments": [{**SHOT, "assets": [GUIDE_ASSET]}],
+}))
+if canonical(switch_off) != plain:
+    FAILURES.append("a drawing attached with the switch off changed the graph")
+
+nothing_attached = graph_of(json.dumps({
+    "version": 2, "prompt": "", "aspect": "16:9", "short_edge": 768,
+    "models": MODELS, "guide": SWITCH, "segments": [SHOT],
+}))
+if canonical(nothing_attached) != plain:
+    FAILURES.append("the switch alone loaded a branch with nothing to aim at")

@@ -55,7 +55,7 @@ import logging
 
 from comfy_api.latest import io
 
-from . import (compile as compiler, lora, media, mux,
+from . import (compile as compiler, guide, lora, media, mux,
                outputs, settings, spill)
 
 # The reel's own socket type: the parts of the finished video in play order,
@@ -469,6 +469,65 @@ class MiniMaxH3ClipAudio(io.ComfyNode):
         return io.NodeOutput(media.clip_audio(_parse(clip_data), float(seconds), at))
 
 
+class ContinuityGuideFrames(io.ComfyNode):
+    """The stretch of a ControlNet guide one shot is aimed at.
+
+    The counterpart to `MiniMaxH3ClipFrames` on the other side of the render: a
+    clip's frames are what a seam *inherits*, and these are what a pass is
+    *pointed at*. Same shape of job — a window of a file on disk, decoded to the
+    frames one generation needs and no more — which is why it sits here beside
+    it rather than in a family package. Nothing about reading a drawing off a
+    file is an architecture's decision; which node the drawing is then handed to
+    is, and that is `Family.emit_control`'s.
+
+    A node rather than a tensor built in the emitter, for the reason every other
+    file in this pack is read through one: the emitter runs at queue time on the
+    event loop, and decoding fifteen seconds of video there would stall the
+    progress socket for every render in the queue. This runs where the executor
+    runs it, and ComfyUI caches its output across queues that did not change it.
+
+    Its id is its own rather than a `MiniMaxH3*` one: those are frozen because
+    saved workflows name them, and a node that has never shipped has no saved
+    workflow to break.
+    """
+
+    @classmethod
+    def define_schema(cls):
+        return io.Schema(
+            node_id="ContinuityGuideFrames",
+            display_name="Continuity Guide Frames",
+            category="Continuity/internal",
+            description="One pass's window of a ControlNet guide, at the render's canvas and rate.",
+            is_dev_only=True,
+            inputs=[
+                io.String.Input("filename"),
+                io.Float.Input("start", default=0.0, min=0.0, max=86400.0, step=0.001),
+                # 0 means "to the end of the file" -- `media._decode_window`'s own
+                # convention for a duration of 0, and what an untrimmed guide carries.
+                io.Float.Input("end", default=0.0, min=0.0, max=86400.0, step=0.001),
+                io.Int.Input("frames", default=5, min=1, max=100000),
+                io.Int.Input("width", default=0, min=0, max=16384),
+                io.Int.Input("height", default=0, min=0, max=16384),
+                io.Float.Input("fps", default=float(media.TARGET_FPS), min=1.0, max=240.0, step=0.001),
+            ],
+            outputs=[io.Image.Output()],
+        )
+
+    @classmethod
+    def fingerprint_inputs(cls, filename, **kwargs):
+        # The file's mtime beside its name, for `stamps`' reason: re-tracing a
+        # guide over the same filename has to re-render the passes aimed at it,
+        # and the name alone would be a cache hit on the drawing that is gone.
+        return (filename, stamps({"assets": [{"filename": filename}]}))
+
+    @classmethod
+    def execute(cls, filename, start=0.0, end=0.0, frames=5, width=0, height=0,
+                fps=float(media.TARGET_FPS)) -> io.NodeOutput:
+        trim = (float(start), float(end)) if float(end) > float(start) else None
+        return io.NodeOutput(guide.read(
+            filename, trim, int(frames), int(width), int(height), float(fps)))
+
+
 class MiniMaxH3Save(io.ComfyNode):
     """The last node of every render: the reel, muxed and written out.
 
@@ -662,4 +721,5 @@ class MiniMaxH3Save(io.ComfyNode):
 NODES = [MiniMaxH3Reel,
          MiniMaxH3PassFrames, MiniMaxH3PassAudio,
          MiniMaxH3ClipReel, MiniMaxH3ClipFrames, MiniMaxH3ClipAudio,
+         ContinuityGuideFrames,
          MiniMaxH3Save]

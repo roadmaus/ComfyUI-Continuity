@@ -836,6 +836,69 @@ check("and that one frame is what is saved",
 check("no audio is decoded", "VAEDecodeAudio" in h3, False)
 check("and no video is written", "MiniMaxH3Save" in h3, False)
 
+# ---- the H3 branch's ControlNet ---------------------------------------------
+#
+# **A pre-stage still is a one-frame video generation, so it is aimed the way a
+# shot is** — same Fun ControlNet branch, same apply node, same weights slot.
+# That is the whole claim, and it is here rather than in the guide suite because
+# this branch builds its own graph: it does not go through `core/emit.py`, so
+# nothing the video path asserts covers a single node of it. It went unwired for
+# exactly that reason.
+#
+# A still guide is a *picture*, which is the shape the bench sends here and the
+# right one for a render that is one frame. The video-only rule that used to
+# refuse it is gone: which of the two is right is the shot's question, and a
+# one-frame shot answers it with a still.
+
+GUIDE_ASSET = {"handle": "gde-1", "kind": "image", "role": "guide",
+               "filename": "continuity/control/room_edges.png", "op": "edges"}
+GUIDE_MODELS = {**H3_MODELS, "control": "minimax_h3_fun_controlnet_union.safetensors"}
+
+
+def guided_still(**request):
+    return still_blob(request={
+        "models": GUIDE_MODELS, "assets": [GUIDE_ASSET],
+        "guide": {"on": True, "strength": 0.8}, **request})
+
+
+g = by_class(still(guided_still()).expand)
+check("the branch is loaded once", len(g["ControlNetLoader"]), 1)
+check("...from the controlnet slot",
+      g["ControlNetLoader"][0][1]["control_net_name"],
+      "minimax_h3_fun_controlnet_union.safetensors")
+check("the drawing is read once", len(g["ContinuityGuideFrames"]), 1)
+check("...as the still's own canvas", len(g["MiniMaxH3FunControlNetApply"]), 1)
+check("the strength is the switch's",
+      g["MiniMaxH3FunControlNetApply"][0][1]["strength"], 0.8)
+
+# What the sampler is handed. The branch goes on the conditioning, so the model
+# reaching the sampler is the segment's own — which is what keeps the preview
+# override and everything else on that side untouched.
+guided_graph = still(guided_still()).expand
+sampler = by_class(guided_graph)["KSampler"][0][1]
+check("the sampler is aimed at the branch's conditioning",
+      guided_graph[sampler["positive"][0]]["class_type"],
+      "MiniMaxH3FunControlNetApply")
+
+# The two halves, each alone. Same pair the video path holds: a drawing with the
+# switch off must not load six gigabytes of branch, and a switch thrown with
+# nothing attached has nothing to aim at.
+off = by_class(still(guided_still(guide={"on": False, "strength": 0.8})).expand)
+check("a drawing with the switch off loads no branch", "ControlNetLoader" in off, False)
+check("...and reads no drawing", "ContinuityGuideFrames" in off, False)
+
+bare = by_class(still(still_blob(request={
+    "models": GUIDE_MODELS, "guide": {"on": True}})).expand)
+check("the switch alone loads no branch", "ControlNetLoader" in bare, False)
+
+# And the drawing stays out of the segment node's cache key: it reaches the
+# model through a branch bolted on after that node, so re-tracing it must not
+# re-encode the prompt.
+guided_data = by_class(still(guided_still()).expand)["MiniMaxH3TimelineSegment"][0][1]["segment_data"]
+check("the guide is not in the segment's cache key",
+      "gde-1" in guided_data, False)
+
+
 # The slice node itself. Two tokens out of however many went in, whichever one
 # was asked for, and the copy is a copy rather than a view onto the clip.
 import torch  # noqa: E402 — after the boot, like everything else in this file

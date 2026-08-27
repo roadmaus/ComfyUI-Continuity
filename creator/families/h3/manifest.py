@@ -9,7 +9,7 @@ strings are the node schema's own (`creator_node._schema`), under the same
 English keys the i18n dictionaries already carry.
 """
 
-from ... import accel, canvas, compile, models as core, sampling, settings
+from ... import accel, canvas, compile, guide, models as core, sampling, settings
 from .. import manifest as m
 from . import declare, grammar, models as slots, refine, still
 
@@ -107,6 +107,16 @@ _UI = {
                 "the room it was photographed in stops conditioning the render alongside "
                 "the face. Loaded when you press them, not when you render.",
         "hints": ["birefnet"],
+    },
+    "control": {
+        "title": "ControlNet branch",
+        "help": "Optional. MiniMax-H3-Fun-Controlnet-Union, from models/controlnet — "
+                "what the guide pill loads to aim a render at a tracing. One file "
+                "covers edges, lines, depth and pose; alibaba-pai's original is ~6.8 GB "
+                "in VideoX-Fun naming and core converts it on load, Kijai's pruned "
+                "repacks are 4.2 GB (bf16) and 2.3 GB (int8) and load as they are. "
+                "Loaded only when a guide is actually on the piece.",
+        "hints": ["fun_controlnet_union", "minimax_h3_fun", "controlnet_union"],
     },
 }
 
@@ -251,6 +261,45 @@ def manifest():
                              "shift_video": 6, "shift_audio": 3}],
                 "default_strength": 1.0,
             },
+            # The guide pill: a ControlNet branch loaded beside the checkpoint,
+            # aimed at a clip the bench traced. `method` is the whole of what
+            # separates this from Qwen-Image-Edit's answer to the same question —
+            # there the weights read a tracing arriving in a picture slot and
+            # nothing is loaded at all, here there is a file and a node — and it
+            # is what lets one pill, one blob block and one loop hook serve both.
+            #
+            # `tracings` are the bench ids these weights were post-trained on.
+            # A fourth one is not refused anywhere: it is a picture, and the
+            # render comes out looking like the drawing instead of aimed by it,
+            # which is worth a sentence rather than a wall.
+            #
+            # Absent entirely — not `False` — on a core without the apply node,
+            # which is every core until Comfy-Org/ComfyUI#15860 lands. The
+            # frontend draws the pill off the block's presence, so the switch is
+            # simply not there rather than there and broken.
+            **({"control": {
+                "method": "branch",
+                "slot": "control",
+                "tracings": list(declare.CONTROL_TRACINGS),
+                # A guide is a clip laid along the piece, not a still: H3's
+                # branch conditions a video latent, and a single frame held for
+                # six seconds is a shot told not to move.
+                "kind": "video",
+                "default_strength": guide.DEFAULT_STRENGTH,
+                "max_strength": guide.MAX_STRENGTH,
+                # How closely the render follows the drawing, as three stops the
+                # pill presses — the same shape as the turbo switch's step
+                # table, and for the same reason: the number is what reaches
+                # the node, and a name is what the person choosing is choosing
+                # between. `control_context_scale` in the checkpoint's own card.
+                "stops": {"loose": 0.5, "firm": 0.8, "locked": 1.0},
+                "default_stop": "firm",
+                # Both ends of the schedule window are honoured. Not drawn on
+                # the pill: the release point is a real dial and a rarely-moved
+                # one, and two more segments would cost the row more than they
+                # buy. The blob carries them and `Guide.of` clamps them.
+                "schedule": True,
+            }} if guide.node_available(declare.CONTROL_NODE) else {}),
         },
         # The reference grammar: what an attached file may be narrowed to,
         # which streams of a clip count, and how many of each the payload

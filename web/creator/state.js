@@ -79,6 +79,14 @@ const NO_ROUTING = { options: ["auto"], default: "auto" };
 export const routesOf = (id) => videoFamily(id).routes ?? NO_ROUTING;
 export const modesOf = (id) => videoFamily(id).modes;
 export const turboOf = (id) => videoFamily(id).capabilities.turbo;
+/** How this family takes a ControlNet guide, or undefined where it has no
+ *  answer at all. `method` is the whole of the difference between the two that
+ *  exist: `branch` loads a control model beside the checkpoint and puts it on
+ *  the conditioning, `native` means the weights read a tracing arriving in an
+ *  ordinary picture slot and there is nothing to load. Absent on a core without
+ *  the family's apply node — see the manifest — so the pill is not drawn rather
+ *  than drawn over a render that would fail at queue time. */
+export const controlOf = (id) => videoFamily(id).capabilities.control;
 export const stillOf = (id) => videoFamily(id).still;
 
 /** How a family runs a second pass, or a falsy value where it has none.
@@ -832,6 +840,178 @@ export function serializeTurbo(turbo) {
   return { turbo: out };
 }
 
+// ---- the ControlNet guide ----------------------------------------------------
+//
+// **The drawing is not here.** It is an ordinary asset on the shot, with
+// `role: "guide"` — attached by the picker, trimmed in the overlay every
+// reference clip uses, and drawn as a chip beside them. What lives in this
+// block is only the half of a guide that is not media: whether the control
+// branch is loaded at all, and how hard it pulls.
+//
+// Split that way because they are two people's decisions at two different
+// moments. Attaching a drawing is authoring; loading several gigabytes of
+// branch weights beside the checkpoint is a machine decision, and it is the one
+// the pill on the sampler row makes. A drawing attached with the switch off is
+// a file the render ignores — which is what makes the branch something you opt
+// into rather than something that happens because a clip landed on a card.
+//
+// The block rides a blob whose family has no ControlNet inert, exactly as the
+// turbo block does. It is *not* reset when the family is switched: every number
+// the turbo switch throws is the family's, while a strength is a fraction of
+// full control and 0.8 means the same thing on any weights.
+
+/** The stops a family offers, or an empty pair where it declares none. Read
+ *  through a fallback for the reason `turboPreset` reads one: a piece can be
+ *  carried onto a family with no guide at all, and the block still has to
+ *  answer what it is holding. */
+function guideStops(family = DEFAULT_VIDEO_FAMILY) {
+  return controlOf(family)?.stops ?? {};
+}
+
+export const guideStopNames = (family = DEFAULT_VIDEO_FAMILY) =>
+  Object.keys(guideStops(family));
+
+/** The strength a named stop writes. */
+export const guideStopStrength = (name, family = DEFAULT_VIDEO_FAMILY) =>
+  guideStops(family)[name];
+
+/** Which stop a strength is sitting on, or null for a number between them.
+ *  Derived rather than stored, for the reason the turbo pill derives its
+ *  pressed quality from the real step count: a hand-edited strength should
+ *  un-press all of them rather than leave one lying about it. */
+export function guideStopOf(guide, family = DEFAULT_VIDEO_FAMILY) {
+  const stops = guideStops(family);
+  const at = Math.round((Number(guide?.strength) || 0) * 100);
+  return Object.keys(stops).find((name) => Math.round(stops[name] * 100) === at) ?? null;
+}
+
+/** The switch, off. `family` decides only the strength it starts at — a family
+ *  with no guide never draws the pill, and the block rides its blob inert. */
+export function emptyGuide(family = DEFAULT_VIDEO_FAMILY) {
+  const control = controlOf(family);
+  return {
+    // Whether the branch is loaded and the drawings are followed.
+    on: false,
+    strength: control?.stops?.[control?.default_stop]
+      ?? control?.default_strength ?? 1,
+    // The stretch of the schedule the branch is in force over. Not on the pill;
+    // see the manifest's `schedule`.
+    start: 0,
+    end: 1,
+  };
+}
+
+const clamp01 = (value, fallback) => {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return fallback;
+  return Math.min(1, Math.max(0, number));
+};
+
+export function parseGuide(raw, family = DEFAULT_VIDEO_FAMILY) {
+  const out = emptyGuide(family);
+  if (!raw || typeof raw !== "object") return out;
+  out.on = raw.on === true;
+  out.strength = clamp01(raw.strength, out.strength);
+  out.start = clamp01(raw.start, 0);
+  out.end = clamp01(raw.end, 1);
+  // Two ends of one control, dragged past each other. The mirror of
+  // `guide.Guide.of`, so the pill and the queue cannot disagree about which
+  // span a blob means.
+  if (out.end < out.start) [out.start, out.end] = [out.end, out.start];
+  return out;
+}
+
+/** Nothing at all until the switch has been thrown, like the turbo block above:
+ *  every blob from before guides existed, and every piece nobody has aimed,
+ *  says nothing about one. */
+export function serializeGuide(guide, family = DEFAULT_VIDEO_FAMILY) {
+  const picked = parseGuide(guide, family);
+  if (!picked.on) return {};
+  const out = { on: true, strength: round2(picked.strength) };
+  if (picked.start !== 0) out.start = round2(picked.start);
+  if (picked.end !== 1) out.end = round2(picked.end);
+  return { guide: out };
+}
+
+/** The drawing this shot is aimed at, or null. An ordinary asset, which is the
+ *  whole point — see the note at the top of this section. */
+export const guideAsset = (state) =>
+  (state?.assets ?? []).find((a) => a.role === "guide") ?? null;
+
+/**
+ * Put a drawing on a shot, and arm the switch that reads it.
+ *
+ * Here rather than on the editor because there is more than one way in and
+ * there must not be more than one attach. The Guide tab picks a file, the
+ * ControlNet bench sends one, and the bench can send one to a node whose face
+ * is showing a strip and has no card editor built at all — three callers, and a
+ * drawing that arrived by the third would otherwise land by a fourth set of
+ * rules nobody wrote down.
+ *
+ * A second drawing replaces the first rather than joining it, and keeps its
+ * place among the chips and its handle: swapping the guide is a change to this
+ * shot, not a detach and a re-attach.
+ *
+ * @param {object} segment  the shot the drawing goes on
+ * @param {?object} piece   the container holding the switch, where there is one
+ */
+export function attachGuide(segment, piece, { path, op = "", trim = null }) {
+  if (!segment || !path) return null;
+  const existing = guideAsset(segment);
+  const at = existing ? segment.assets.indexOf(existing) : segment.assets.length;
+  const entry = {
+    handle: existing?.handle ?? nextHandle(segment, "video"),
+    kind: "video",
+    role: "guide",
+    filename: path,
+    // Silent, always. A guide is a drawing; whatever soundtrack the footage it
+    // was traced from happened to carry is not something the branch reads, and
+    // attaching it with sound would spend an audio slot on nothing.
+    track: "picture",
+    ...(op ? { op } : {}),
+    ...(trim ? { trim } : {}),
+  };
+  segment.assets.splice(at, existing ? 1 : 0, entry);
+  // Thrown on by the arrival, which is what the switch being separate is for:
+  // you attach a drawing because you want it followed, and having to find a
+  // second control to say so is a step nobody wants the first time. Off is then
+  // one press away, and stays where it is put — so a piece rendered once without
+  // the branch does not quietly re-arm on the next attach.
+  if (piece?.guide && !piece.guide.on) piece.guide.on = true;
+  return entry;
+}
+
+/** Every drawing on the piece — a lone shot's own, and one per card of a strip.
+ *  A piece and a segment are the same shape here, which is what lets a Creator
+ *  node and a timeline ask this the same way. */
+export function guideAssets(container) {
+  const own = guideAsset(container);
+  return [
+    ...(own ? [own] : []),
+    ...(container?.segments ?? []).map(guideAsset).filter(Boolean),
+  ];
+}
+
+/** Whether anything on the piece is aimed at a drawing. What the pill reads to
+ *  decide whether to draw at all: a switch over a strip with nothing attached
+ *  would load a branch to discover there is nothing to aim at. */
+export const guidedAnywhere = (container) => guideAssets(container).length > 0;
+
+/** Whether any drawing on the piece is a tracing these weights never saw.
+ *
+ *  Never a refusal. A guide the checkpoint was not post-trained on is still a
+ *  picture, and the render comes out looking like the drawing rather than aimed
+ *  by it — worth a word on the pill, and not worth a wall. Mirrors
+ *  `guide.untrained`, which says the same thing to the log for a blob nobody
+ *  opened.
+ *
+ *  A drawing that did not come off the bench carries no tracing at all, and
+ *  nothing can be said about it: an unknown tracing is not an untrained one. */
+export function guidesUntrained(container, tracings) {
+  if (!tracings?.length) return false;
+  return guideAssets(container).some((a) => a.op && !tracings.includes(a.op));
+}
+
 /** What a declared control carries in the blob, by widget type. The manifest's
  *  vocabulary is about how a value is *drawn*; this is the JSON type behind it,
  *  and it is the only thing the store needs to know. */
@@ -1160,6 +1340,9 @@ export function emptyState() {
     upscale_models: emptyUpscalerModels(),
     // The turbo switch. Owned by the node for the same reason the weights are.
     turbo: emptyTurbo(),
+    // The ControlNet guide, on the same terms — and for a stronger reason: a
+    // guide is a clip laid along the whole piece, so a card cannot own one.
+    guide: emptyGuide(),
   };
 }
 
@@ -1190,6 +1373,7 @@ export function parseState(raw) {
       state.models = parseModels(state.models);
       state.upscale_models = parseUpscalerModels(state.upscale_models);
       state.turbo = parseTurbo(state.turbo);
+      state.guide = parseGuide(state.guide, pieceFamily(state));
       normalizeCheckpoint(state);
       for (const asset of state.assets) {
         if (asset?.kind !== "video") continue;
@@ -1296,6 +1480,12 @@ function serializeAssets(assets) {
     if (takeable(asset) && takes(asset) !== "full") {
       out.takes = takes(asset);
     }
+    // Which tracing a guide is, in the bench's own vocabulary. Carried so both
+    // ends can say when these weights were never post-trained on it — a worse
+    // render rather than an impossible one. Only the bench knows: a drawing
+    // picked back off the folder carries none, and an absent id says nothing
+    // rather than something false.
+    if (asset.role === "guide" && asset.op) out.op = asset.op;
     return out;
   });
 }
@@ -1345,6 +1535,7 @@ export function serializeState(state) {
     ...serializeModels(state.models),
     ...serializeUpscalerModels(state.upscale_models),
     ...serializeTurbo(state.turbo),
+    ...serializeGuide(state.guide, pieceFamily(state)),
   }, null, 2);
 }
 
@@ -1714,6 +1905,9 @@ export function emptyTimeline() {
     // The turbo switch. Global like the LoRA it engages: a speed-up belongs to
     // the run, not to shot 3.
     turbo: emptyTurbo(),
+    // The ControlNet guide. Global for a reason of its own: the drawing runs
+    // the length of the piece and every pass takes its own seconds out of it.
+    guide: emptyGuide(),
     // The rows dialled for the families this piece is not on. See `setFamily`.
     sampling_spare: {},
     // How the piece is sampled. Empty on a fresh node and empty in every blob
@@ -1876,6 +2070,20 @@ export function setFamily(timeline, id, remembered = null) {
   // said. See the note above.
   if (timeline.turbo?.lora) removeLora(timeline, timeline.turbo.lora);
   timeline.turbo = emptyTurbo(family);
+
+  // **The guide is not reset, and that is the difference between the two
+  // switches.** Every number the turbo switch throws is the family's — a step
+  // table, a sampler row, a flow shift a distill was trained against — so
+  // carrying it across would be one family's numbers quietly in force on
+  // another's weights. A guide is a file. The drawing is the same drawing
+  // whatever renders it, and a piece switched from H3 to LTX is still a piece
+  // aimed at that clip. What does not carry is the branch that reads it, and
+  // that is a weights slot, which `models_spare` above already stashes per
+  // family. On a family that declares no guide at all the block rides the blob
+  // inert and the pill is not drawn, exactly as the turbo block does.
+  //
+  // The strength is left where it stands for the same reason: it is a fraction
+  // of full control, not a step count, and 0.8 means the same thing on both.
 
   const routed = checkpointsOf(family);
   // A seam's width is retargeted rather than dropped, for the same reason a
@@ -2546,6 +2754,7 @@ export function parseTimeline(raw) {
       timeline.sampling_spare = parseSamplingSpare(timeline.sampling_spare);
       timeline.upscale_models = parseUpscalerModels(timeline.upscale_models);
       timeline.turbo = parseTurbo(timeline.turbo);
+      timeline.guide = parseGuide(timeline.guide, pieceFamily(timeline));
       // No card is invented for a blob that has none: a fresh node's widget is
       // "{}" and the strip it opens is empty on purpose — see `emptyTimeline`.
       const segments = Array.isArray(parsed.segments) ? parsed.segments : [];
@@ -2585,6 +2794,7 @@ export function parseTimeline(raw) {
         // second answer to a question that has one. The turbo switch likewise.
         delete segment.models;
         delete segment.turbo;
+        delete segment.guide;
         segment.continue = raw?.continue === true;
         segment.continue_audio = raw?.continue_audio === true;
         // Which pass this segment is generated in. A timeline saved as one pass
@@ -2715,6 +2925,7 @@ export function serializeTimeline(timeline) {
     ...serializeSpareModels(timeline.models_spare),
     ...serializeUpscalerModels(timeline.upscale_models),
     ...serializeTurbo(timeline.turbo),
+    ...serializeGuide(timeline.guide, pieceFamily(timeline)),
     ...serializeSampling(timeline.sampling, pieceFamily(timeline)),
     ...serializeSamplingSpare(timeline.sampling_spare),
     segments: timeline.segments.map((segment, index) => {
@@ -3629,6 +3840,21 @@ export function preStageReadsGuides(state) {
   if (!refs?.nativeControl?.length) return false;
   return !refs.controlEditions.length
     || refs.controlEditions.includes(state.edition);
+}
+
+/** Whether this pre-stage aims its still through a *loaded* ControlNet branch,
+ *  as against reading a tracing natively out of a picture slot.
+ *
+ *  The two are not interchangeable and the difference is a file on disk. H3's
+ *  still branch is a one-frame video generation, so it takes the same Fun
+ *  ControlNet the video path does — a drawing attaches as a guide and the pill
+ *  loads the branch. Qwen-Image-Edit 2509 and 2511 were post-trained to follow
+ *  a tracing that simply arrives as `Picture 1`, so there is nothing to load.
+ *  Everywhere else a drawing has no reader at all and belongs in the init slot,
+ *  the way every guide went before either of these existed. */
+export function preStageLoadsBranch(state) {
+  if (state?.arch !== PRESTAGE_STILL_ARCH) return false;
+  return Boolean(controlOf(pieceFamily(state?.[PRESTAGE_STILL_ARCH]?.request)));
 }
 
 /** Is this render drawing onto an empty canvas with its pictures only cited?
@@ -4920,11 +5146,21 @@ export function blockedReason(state, action) {
  *  default is what an older blob's untyped attachment always meant. */
 export const roleOf = (asset) => asset?.role ?? "reference";
 
-export const ATTACH_ROLES = ["first_frame", "last_frame", "reference"];
+// Every role an attachment can be switched between on its card. Four rather
+// than three: a clip can be a reference the prompt cites *or* the drawing the
+// shot is aimed at, and which one it is should be changeable in place, the way
+// a picture moves between the two ends of the shot and the reference slot. The
+// file, the handle and everything set on it survive the change — that is what
+// this row is for. `reroleBlocked` is where each role says which files it can
+// take, and images and clips get different halves of this list.
+export const ATTACH_ROLES = ["first_frame", "last_frame", "reference", "guide"];
 
 /** What this picture is doing on the card, in the word the chip wears. */
 export const roleLabel = (role) =>
-  (role === "first_frame" ? t("start") : role === "last_frame" ? t("end") : t("reference"));
+  (role === "first_frame" ? t("start")
+   : role === "last_frame" ? t("end")
+   : role === "guide" ? t("guide")
+   : t("reference"));
 
 /** The assets as they would stand with `asset` attached as `role` — clones, for
  *  asking the caps a question without answering it. See `rerole` for why an
@@ -4950,7 +5186,23 @@ function reroled(state, asset, role) {
  */
 export function reroleBlocked(state, asset, role, piece = null) {
   if (roleOf(asset) === role) return null;
-  if (role !== "reference") {
+  // The drawing the shot is aimed at. A clip, always — every frame of the shot
+  // is aimed at one of its frames, so a still is a shot told not to move — and
+  // only on weights with something to read it: on a family with no ControlNet
+  // a guide would be a file the render silently ignores.
+  if (role === "guide") {
+    if (asset.kind !== "video") {
+      return t("Every frame of the shot is aimed at a frame of the guide, so a guide is a "
+             + "clip. @{handle} is a {kind}.", { handle: asset.handle, kind: t(asset.kind) });
+    }
+    if (!controlOf(pieceFamily(piece ?? state))) {
+      return t("{family} has no ControlNet to read a guide with. Put the piece on a model "
+             + "that does, or attach the clip as a reference.",
+               { family: familyOf(piece ?? state).label });
+    }
+    return null;
+  }
+  if (role === "first_frame" || role === "last_frame") {
     if (asset.kind !== "image") {
       return t("A shot opens and closes on a still. @{handle} is a {kind}, so it can only "
              + "be a reference.", { handle: asset.handle, kind: t(asset.kind) });
@@ -5005,6 +5257,14 @@ export function rerole(state, asset, role) {
     if (held) held.role = from;
     delete asset.enabled;
   }
+  // A guide is silent, always. The branch reads a drawing, not a soundtrack, so
+  // a clip promoted to guide with its sound on would be holding an audio slot
+  // for a track nothing listens to — and on a family with three of them, that
+  // is a slot taken off a reference that would have used it. Demoting back
+  // leaves it silent rather than guessing: the sound row is right there, and a
+  // clip that turns its own audio back on behind your back is worse than one
+  // that waits to be asked.
+  if (role === "guide" && asset.kind === "video") asset.track = "picture";
   asset.role = role;
 }
 
