@@ -102,7 +102,7 @@
     "class_type": "MiniMaxH3Save",
     "inputs": {
       "crf": 23,
-      "filename_prefix": "minimax/renders/h3/H3",
+      "filename_prefix": "continuity/renders/h3/H3",
       "fps": 24.0,
       "reel": [
         "8",
