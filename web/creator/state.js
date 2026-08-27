@@ -971,6 +971,11 @@ const ROUTED = routesOf(DEFAULT_VIDEO_FAMILY);
 export const CHECKPOINT_CHOICES = ["auto", ...CHECKPOINTS];
 export const DEFAULT_STRENGTH = 1.0;
 
+/** How far a LoRA's weight may go in either direction. Well past where a style
+ *  LoRA is useful, because slider LoRAs are not style LoRAs — see the manager's
+ *  SCALES, whose widest span this is. */
+export const MAX_STRENGTH = 25;
+
 /** Mirrors compile.UPSCALE_MODES, first_pass_edge and the refine-denoise
  *  clamp. How a piece reaches the size it is finished at, asked once: sample
  *  at the first-pass edge and refine up ("two_pass", the default), one pass at
@@ -3631,7 +3636,11 @@ function newLora(name, triggers, strength, family = DEFAULT_VIDEO_FAMILY) {
   const preferred = typeof strength === "number" ? strength : NaN;
   return {
     name,
-    strength: Number.isFinite(preferred) && preferred >= -1 && preferred <= 2
+    // The window is a sanity check on what a sidecar claims, not a cap on what
+    // a LoRA may be run at: slider LoRAs are trained as a signed axis and are
+    // meant to be driven to ten or more, and clipping their author's own
+    // suggested weight to 2 was the manager quietly disagreeing with the file.
+    strength: Number.isFinite(preferred) && preferred >= -MAX_STRENGTH && preferred <= MAX_STRENGTH
       ? preferred : turboStrength(name),
     enabled: true,
     // The family's routed slots — none, on a family that ships one

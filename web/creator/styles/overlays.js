@@ -129,6 +129,28 @@ export const css = `
 .mmc-sheet-version[aria-current="true"] .mmc-sheet-version-name { color: var(--mmc-accent); }
 .mmc-sheet-version-sub { margin-left: auto; flex: none; font-size: calc(10.5px * var(--mmc-type)); color: var(--mmc-off); }
 .mmc-sheet-installed { flex: none; font-size: calc(10px * var(--mmc-type)); color: var(--mmc-accent); }
+/* The versions that are actually on this disk, which is the one list on the
+   sheet you can act on: landing on a row redraws the whole sheet around that
+   file, so the showcase and the recipe are what you compare, not two filenames.
+   A whole row is the target rather than the name alone — this is the widest
+   this choice ever gets to be, and the card's pills are already the cramped
+   version of it. */
+.mmc-sheet-version.pick { align-items: center; gap: 6px; padding: 2px 0; }
+.mmc-sheet-version-pick {
+  flex: 1; min-width: 0; display: flex; align-items: baseline; gap: 8px;
+  margin-left: -7px; padding: 5px 7px; border: 0; border-radius: 8px;
+  background: none; color: inherit; font: inherit; text-align: left; cursor: pointer;
+}
+.mmc-sheet-version-pick:hover { background: var(--mmc-float); }
+.mmc-sheet-version-pick .mmc-sheet-version-sub { margin-left: auto; }
+.mmc-sheet-version-pin {
+  flex: none; display: inline-flex; align-items: center; justify-content: center;
+  width: calc(24px * var(--mmc-type)); height: calc(24px * var(--mmc-type));
+  padding: 0; border: 0; border-radius: 8px; background: none;
+  color: var(--mmc-off); cursor: pointer; opacity: .45;
+}
+.mmc-sheet-version-pin:hover { opacity: 1; color: var(--mmc-text); }
+.mmc-sheet-version-pin.on { opacity: 1; color: var(--mmc-accent); }
 .mmc-sheet-license, .mmc-sheet-tags, .mmc-sheet-hint { font-size: calc(11.5px * var(--mmc-type)); line-height: 1.5; color: var(--mmc-dim); }
 .mmc-sheet-file { display: flex; flex-direction: column; gap: 3px; font-size: calc(11px * var(--mmc-type)); color: var(--mmc-dim); }
 .mmc-sheet-path {

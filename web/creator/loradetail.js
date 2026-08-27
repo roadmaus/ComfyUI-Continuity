@@ -19,10 +19,28 @@ import { el, ICONS, svg, mountOverlay } from "./dom.js";
 import { loraDetail, loraShowcaseUrl } from "./api.js";
 import { t } from "./i18n.js";
 
-/** Open the sheet for one listing row. Resolves when it closes. */
-export function openLoraDetail(row) {
+/**
+ * Open the sheet for one listing row. Resolves when it closes.
+ *
+ * `siblings` is what the manager knows and the sidecar cannot: which of this
+ * model's versions are actually on this disk. Given it, the Versions section
+ * stops being a list of what exists somewhere and becomes the place you switch
+ * between them — the same click the card's pills make, with the showcase and
+ * the recipe of each version in front of you while you decide.
+ *
+ * @param {object} row
+ * @param {object} [siblings]
+ * @param {{row: object, label: string}[]} siblings.versions installed, in
+ *        version order
+ * @param {string|null} siblings.pinned       the version kept as this model's
+ * @param {(name: string) => boolean} siblings.isActive whether one is in the stack
+ * @param {(name: string) => void} siblings.onPick      switch to one
+ * @param {(name: string) => string|null} siblings.onPin toggle the pin, giving
+ *        back what is pinned now
+ */
+export function openLoraDetail(row, siblings = null) {
   return new Promise((resolve) => {
-    new LoraDetailSheet(row, resolve).mount();
+    new LoraDetailSheet(row, siblings, resolve).mount();
   });
 }
 
@@ -183,10 +201,34 @@ function tagFrequency(metadata) {
 // ---- the sheet --------------------------------------------------------------
 
 class LoraDetailSheet {
-  constructor(row, resolve) {
+  constructor(row, siblings, resolve) {
     this.row = row;
+    this.siblings = siblings;
+    this.pinned = siblings?.pinned ?? null;
     this.resolve = resolve;
     this.current = 0;   // which showcase item the stage shows
+  }
+
+  /** Turn the sheet to another version of the same model, and tell the grid
+   *  behind it — the two are one gesture, not a preview and a commit. */
+  async switchTo(name) {
+    if (name === this.row.name) return;
+    const next = this.siblings?.versions.find((version) => version.row.name === name);
+    if (!next) return;
+    this.siblings.onPick?.(name);
+    this.row = next.row;
+    this.current = 0;
+    this.detail = null;
+    this.sheet.replaceChildren(el("div", { class: "mmc-sheet-info" }, [
+      this.closeButton(),
+      el("div", { class: "mmc-empty", text: t("Loading…") }),
+    ]));
+    await this.load();
+  }
+
+  pin(name) {
+    this.pinned = this.siblings?.onPin?.(name) ?? null;
+    this.render();
   }
 
   mount() {
@@ -417,7 +459,8 @@ class LoraDetailSheet {
         ? el("div", { class: "mmc-sheet-desc" }, [el("div", { text: meta.notes })])
         : null),
       this.section(t("About"), about),
-      this.section(t("Versions"), this.versions(meta)),
+      this.section(t("On this disk"), this.installed()),
+      this.section(t("Published versions"), this.versions(meta)),
       this.section(t("License"), this.license(meta.license)),
       this.section(t("Tags"), meta.tags?.length
         ? el("div", { class: "mmc-sheet-tags", text: meta.tags.join(" · ") })
@@ -434,7 +477,53 @@ class LoraDetailSheet {
     ]);
   }
 
-  /** Sibling versions from the sidecar, the installed one marked. */
+  /**
+   * The versions of this model that are on this disk, as rows you switch with.
+   *
+   * The manager's card carries the same choice as pills, which is the right
+   * shape for a 230px card and the wrong one for deciding: a pill says `v2` and
+   * nothing about what v2 looks like. Here each version is a row you can land
+   * on, and the sheet redraws around it — showcase, recipe, trigger words,
+   * trained resolution. This is where you find out which one you actually want,
+   * and the pin is here so that finding out is worth something tomorrow.
+   */
+  installed() {
+    const versions = this.siblings?.versions ?? [];
+    if (versions.length < 2) return null;
+    return el("div", { class: "mmc-sheet-versions" }, versions.map(({ row, label }) => {
+      const here = row.name === this.row.name;
+      const kept = this.pinned === row.name;
+      return el("div", {
+        class: "mmc-sheet-version pick",
+        "aria-current": here,
+      }, [
+        el("button", {
+          class: "mmc-sheet-version-pick",
+          title: here ? row.name : t("Show {name}", { name: row.name }),
+          onclick: () => this.switchTo(row.name),
+        }, [
+          el("span", { class: "mmc-sheet-version-name", text: label }),
+          el("span", {
+            class: "mmc-sheet-version-sub",
+            text: [row.base_model, row.version].filter(Boolean).join(" · ") || row.name,
+          }),
+        ]),
+        this.siblings?.isActive?.(row.name)
+          ? el("span", { class: "mmc-sheet-installed", text: t("in the stack") }) : null,
+        el("button", {
+          class: `mmc-sheet-version-pin${kept ? " on" : ""}`,
+          title: kept
+            ? t("Kept as this model's version. Click to stop keeping it.")
+            : t("Keep {label} as this model's version.", { label }),
+          onclick: () => this.pin(row.name),
+        }, [svg(ICONS.pin, 12)]),
+      ]);
+    }));
+  }
+
+  /** Sibling versions from the sidecar — everything the model has published,
+   *  including what is not on this disk. The list above is what you can run;
+   *  this is what there is. */
   versions(meta) {
     if (!meta.versions?.length) return null;
     return el("div", { class: "mmc-sheet-versions" }, meta.versions.map((version) =>
@@ -534,6 +623,7 @@ class LoraDetailSheet {
       header.error
         ? el("div", { class: "mmc-sheet-license", text: t("The header could not be read: {error}", { error: header.error }) })
         : null,
+      this.section(t("On this disk"), this.installed()),
       this.section(t("Specification"), spec),
       this.section(t("Dataset tags"), tagChips && [
         el("div", {

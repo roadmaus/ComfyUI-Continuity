@@ -53,7 +53,38 @@ const isShelf = (scope) => scope === FAVORITES || scope === RECENT;
 // rather than a second All.
 const RECENT_SHOWN = 60;
 
-const MAX_STRENGTH = 2;
+/**
+ * The slider's span, and what one notch of it is worth.
+ *
+ * A style LoRA lives inside ±2 and wants a fine notch there. A slider LoRA —
+ * age, weight, detail, the ones trained as a signed axis — is meant to be
+ * driven to ±10 and sometimes past it, and one track stretched to cover both is
+ * a track where the whole useful range of every ordinary LoRA is four pixels
+ * wide. So the span is a setting on the card rather than a constant here, and
+ * every span keeps roughly eighty notches across the same width: the drag feels
+ * identical at every scale and only the units under it change.
+ */
+const SCALES = [
+  { span: 2, step: 0.05 },
+  { span: 5, step: 0.1 },
+  { span: 10, step: 0.25 },
+  { span: 25, step: 0.5 },
+];
+const MAX_STRENGTH = SCALES[SCALES.length - 1].span;
+
+/** The smallest span that holds a value — what a card opens on when memory or a
+ *  sidecar hands it a weight the default span cannot show. */
+function scaleFor(value) {
+  const at = SCALES.findIndex((scale) => Math.abs(value) <= scale.span + 1e-9);
+  return at < 0 ? SCALES.length - 1 : at;
+}
+
+/** A LoRA trained as a signed axis rather than a style, which is the one kind
+ *  the default span is wrong for. Nothing records this in a field, but the
+ *  people who train them say so in the name or the tags, every time. */
+const SLIDER_HINT = /(?:^|[^a-z0-9])sliders?(?:[^a-z0-9]|$)/i;
+const looksLikeSlider = (row) =>
+  SLIDER_HINT.test([row.name, row.title, ...(row.tags || [])].filter(Boolean).join(" "));
 
 const same = (a, b) => a.toLowerCase() === b.toLowerCase();
 const has = (list, word) => list.some((entry) => same(entry, word));
@@ -67,6 +98,150 @@ const baseName = (name) => name.split("/").pop().replace(/\.[^.]+$/, "");
 /** The folder a name sits in, "" at the root — the scope that certainly holds
  *  it, which is what `reveal` opens on. */
 const folderOf = (name) => name.split("/").slice(0, -1).join("/");
+
+// ---- versions ---------------------------------------------------------------
+//
+// One model's files, as one card.
+//
+// A LoRA that has been retrained four times is four files on disk, and it was
+// four cards in the grid — four all-but-identical thumbnails under four
+// identical titles, with nothing on any of them saying which was which or that
+// the other three existed. Picking the right one meant reading four filenames
+// off four cards and knowing the trainer's naming habits.
+//
+// Civitai's model id settles it wherever a sidecar carries one: every version
+// of a model shares it and no two models do. Everything else — a folder of
+// hand-trained files nothing has ever described — falls back to the filename,
+// which is where the version is written anyway. `dreamscape_v1`,
+// `dreamscape-v2` and `dreamscape_v2_000012` all reduce to `dreamscape` once
+// the tail is taken off.
+//
+// That fallback is deliberately kept inside one folder. Two people's `style_v1`
+// in two folders are two different LoRAs, and a card that merged them would be
+// a card that lies about what you are choosing between.
+
+/** Tails that name a *version* of one model rather than a different model.
+ *  Deliberately narrow: a group that is too eager hides a file, and a file
+ *  hidden inside the wrong card is worse than a file with its own card. */
+const VERSION_TAIL =
+  /[-_. ]+(?:v(?:er)?[.\-_]?\d+(?:[._]\d+)*|e(?:p|poch)?[-_]?\d+|step[-_]?\d+|\d{2,6}|rank\d+|dim\d+|final|last|fp16|fp8|bf16|pruned)$/i;
+
+/**
+ * The half of a split model this file is, or "".
+ *
+ * Wan's two-transformer LoRAs ship as a high-noise file and a low-noise one,
+ * and a text-to-video LoRA and its image-to-video sibling are routinely
+ * published under one model id. Those are not versions of each other: the pair
+ * goes in the stack *together*, and grouping them would put a card in the grid
+ * offering a choice between two files you need both of.
+ */
+function roleOf(name) {
+  const stem = baseName(name).toLowerCase();
+  const marks = [];
+  if (/(^|[^a-z])high([^a-z]|$)|highnoise/.test(stem)) marks.push("high");
+  else if (/(^|[^a-z])low([^a-z]|$)|lownoise/.test(stem)) marks.push("low");
+  if (/(^|[^a-z])t2v([^a-z]|$)/.test(stem)) marks.push("t2v");
+  else if (/(^|[^a-z])i2v([^a-z]|$)/.test(stem)) marks.push("i2v");
+  return marks.join("+");
+}
+
+function groupKey(row) {
+  const role = roleOf(row.name);
+  if (row.model_id) return `model:${row.model_id}|${role}`;
+  let stem = baseName(row.name).toLowerCase();
+  // Repeatedly: `dreamscape_v2_000012_fp16` wears three of these tails at once.
+  for (let pass = 0; pass < 4; pass += 1) {
+    const next = stem.replace(VERSION_TAIL, "");
+    if (next === stem || next.length < 3) break;
+    stem = next;
+  }
+  return `stem:${folderOf(row.name)}/${stem}|${role}`;
+}
+
+/** Natural order, so v2 sorts before v10 rather than after it. */
+function naturally(a, b) {
+  const chunks = (text) => text.toLowerCase().match(/\d+|\D+/g) ?? [];
+  const left = chunks(a);
+  const right = chunks(b);
+  for (let at = 0; at < Math.max(left.length, right.length); at += 1) {
+    const one = left[at] ?? "";
+    const two = right[at] ?? "";
+    if (one === two) continue;
+    const numeric = /^\d/.test(one) && /^\d/.test(two);
+    return numeric ? Number(one) - Number(two) : (one < two ? -1 : 1);
+  }
+  return 0;
+}
+
+/**
+ * What to call each file on the pills: the part that is not shared with its
+ * siblings.
+ *
+ * The card already carries the model's name in its title, and a pill repeating
+ * it is a pill you cannot read at 230px. What you are actually choosing between
+ * is the tail — `v1` against `v2` against `v2_lite` — so the common head comes
+ * off and the difference is what is left. Trimmed back to a word boundary, so a
+ * pair that diverges mid-word (`...v1` / `...v15`) does not read as `` / `5`.
+ */
+function commonHead(stems) {
+  // One file shares its whole name with itself: there is nothing to take off,
+  // and trimming back to a separator anyway would leave a card titled "dream"
+  // over a file called dream_scape.
+  if (stems.length < 2) return stems[0] ?? "";
+  let head = stems[0];
+  for (const stem of stems.slice(1)) {
+    let at = 0;
+    while (at < head.length && at < stem.length
+           && head[at].toLowerCase() === stem[at].toLowerCase()) at += 1;
+    head = head.slice(0, at);
+  }
+  return head.replace(/[^-_. ]*$/, "").replace(/[-_. ]+$/, "");
+}
+
+function versionLabels(stems) {
+  if (stems.length < 2) return stems;
+  const head = commonHead(stems);
+  const labels = stems.map((stem) => stem.slice(head.length).replace(/^[-_. ]+/, ""));
+  // One of the files is named exactly the shared head — `thing` beside
+  // `thing_final` — so its pill would be blank. Everything falls back to the
+  // whole stem rather than one pill with nothing on it.
+  return labels.every(Boolean) ? labels : stems;
+}
+
+/**
+ * Rows in, cards out. Every group carries its members in version order and the
+ * short label each of them wears.
+ *
+ * Built off whatever the grid is currently showing, filter included: a search
+ * for "v2" narrows the pills to the v2s, which is the same promise the grid has
+ * always made about the cards.
+ */
+function groupRows(rows) {
+  const groups = new Map();
+  for (const row of rows) {
+    const key = groupKey(row);
+    if (!groups.has(key)) groups.set(key, { key, members: [] });
+    groups.get(key).members.push(row);
+  }
+  for (const group of groups.values()) {
+    group.members.sort((a, b) => naturally(a.version || baseName(a.name),
+                                           b.version || baseName(b.name)));
+    const stems = group.members.map((row) => row.base || baseName(row.name));
+    group.labels = new Map(
+      versionLabels(stems).map((label, at) => [group.members[at].name, label]));
+    // The newest is the one a card opens on when nothing else decides it, and
+    // the sort above put it last.
+    group.newest = group.members[group.members.length - 1].name;
+    // A model's title is the model's and not the version's. A sidecar knows the
+    // difference; a folder of bare filenames does not, so the shared head of
+    // the names stands in for it — which is the same string the pills were cut
+    // away from, so card and pills together spell each filename back out.
+    const titled = group.members.find((row) => row.title);
+    group.title = titled?.title || commonHead(stems)
+      || stems.reduce((shortest, stem) => (stem.length < shortest.length ? stem : shortest));
+  }
+  return [...groups.values()];
+}
 
 /** What the per-LoRA checkpoint control offers, for a family that routes.
  *  Built per family rather than once, because the choices *are* the family's
@@ -270,7 +445,16 @@ class LoraManager {
     this.rows = [];
     this.folders = [];
     this.missing = [];
-    this.cards = new Map();   // name -> the card element currently in the grid
+    this.cards = new Map();   // group key -> the card element currently in the grid
+    this.groups = [];
+    this.groupAt = new Map(); // file name -> the group it is a version of
+    // Which version each card is showing, for this sitting. The one that
+    // outlives the window is `prefs.pinned`; this is what a click on a pill
+    // does, which is a way of looking rather than a decision to keep.
+    this.picked = new Map();  // group key -> file name
+    // The slider span each card is on, likewise for this sitting only until it
+    // is written to memory with everything else the LoRA was set to.
+    this.scales = new Map();  // file name -> index into SCALES
     this.shown = 0;
     this.loaded = false;
     // Which LoRAs on screen were set up from memory rather than from their
@@ -280,7 +464,7 @@ class LoraManager {
     this.tab = "loras";
     // Until the prefs land: no favorites, nothing remembered, browsing
     // everything. The grid says "Loading…" over all of it anyway.
-    this.prefs = { folder: "", favorites: [], used: {} };
+    this.prefs = { folder: "", favorites: [], used: {}, pinned: {} };
     this.scope = "";
   }
 
@@ -512,6 +696,10 @@ class LoraManager {
       }
       this.prefs.used[entry.name] = {
         strength: Number.isFinite(entry.strength) ? entry.strength : null,
+        // The span the card was left on, not just the one you clicked to: a
+        // slider LoRA recognised by its name should still open wide next week,
+        // when nothing has been clicked at all.
+        scale: Number.isFinite(entry.strength) ? this.scaleOf(entry, row) : (previous?.scale ?? null),
         on: [...(entry.triggers ?? [])],
         custom,
         modes: {
@@ -591,6 +779,153 @@ class LoraManager {
     }
   }
 
+  // ---- versions ------------------------------------------------------------
+
+  /**
+   * Which of a model's files the card is showing.
+   *
+   * What is in the stack outranks what is pinned, because the controls under
+   * the pills edit that entry — a card showing v1 while v2 is the file being
+   * patched onto the run would put the strength slider under the wrong name.
+   * A click on a pill outranks both: that is you asking to look at one.
+   */
+  shownIn(group) {
+    const held = (name) => name && group.members.some((row) => row.name === name);
+    const picked = this.picked.get(group.key);
+    if (held(picked)) return picked;
+    const active = group.members.find((row) => S.findLora(this.state, row.name));
+    if (active) return active.name;
+    const pinned = this.prefs.pinned?.[group.key];
+    return held(pinned) ? pinned : group.newest;
+  }
+
+  /**
+   * Turn a card to one of its versions.
+   *
+   * With none of this model in the stack that is only a way of looking. With
+   * one of its versions in the stack it is a swap in place — the same slot, the
+   * strength you dialled in, the checkpoint you pinned it to, a different file
+   * — because that is the whole of what changing a version means, and doing it
+   * by hand used to be: find the old card, remove it, find the new one, add it,
+   * and set the strength again from memory.
+   *
+   * The one case where a model is legitimately in a stack twice is the split
+   * families — a high-noise file beside its low-noise half — and `roleOf` has
+   * already given those two cards of their own. So inside one card there is
+   * nothing else a version click could mean.
+   */
+  pick(group, name) {
+    this.picked.set(group.key, name);
+    const active = group.members.find((row) => S.findLora(this.state, row.name));
+    if (active && active.name !== name) this.switchTo(active.name, name);
+    this.refreshCard(group.members[0]);
+  }
+
+  /**
+   * Run a different file in an entry's slot.
+   *
+   * Not the same deal as `swapTo`, which is "this is a different LoRA" and lets
+   * the new file bring its own everything. A version switch is the same LoRA,
+   * later: the weight you settled on is the weight you still want, so it
+   * survives. The trigger words do not — a retrain routinely renames them, and
+   * carrying the old ones across would put words in the prompt that the file
+   * now loaded has never been trained on.
+   */
+  switchTo(from, to) {
+    const was = S.findLora(this.state, from);
+    const already = S.findLora(this.state, to);
+    const row = this.rows.find((candidate) => candidate.name === to);
+    const strength = was?.strength;
+    const entry = S.replaceLora(this.state, from, to, row?.trained_words ?? [],
+                                row?.strength ?? null, this.family);
+    // `replaceLora` hands back the existing entry when the target was already
+    // in the stack; that one is somebody's setup and is left alone.
+    if (entry && !already) {
+      if (Number.isFinite(strength)) entry.strength = strength;
+      const memory = this.memoryOf(to);
+      if (memory?.on?.length) entry.triggers = [...memory.on];
+    }
+    this.restored.delete(from);
+    this.changed();
+  }
+
+  /**
+   * Keep one version as the one this model opens on.
+   *
+   * A pin is about the collection rather than about this piece: "of the four
+   * files I have of this, that is the one I use". So it outlives the window and
+   * every piece in it, and the only thing that overrides it is a version
+   * actually being in the stack you are looking at.
+   */
+  togglePin(group, name) {
+    const pinned = { ...(this.prefs.pinned ?? {}) };
+    if (pinned[group.key] === name) delete pinned[group.key];
+    else pinned[group.key] = name;
+    this.prefs.pinned = pinned;
+    this.writePrefs();
+    this.refreshCard(group.members[0]);
+    return pinned[group.key] ?? null;
+  }
+
+  /**
+   * The pills: one per file this model has on disk, each wearing only the part
+   * of its name the others do not share.
+   *
+   * This row is the whole of what the grouping costs. Four retrains used to be
+   * four cards saying the same title four times over; they are now four words
+   * you can read at a glance and click between, with the one you are running
+   * lit and the one you keep marked.
+   */
+  versionRow(group, shown) {
+    const pinned = this.prefs.pinned?.[group.key];
+    const label = (row) => group.labels.get(row.name) || baseName(row.name);
+    // Whether clicking a pill is a swap or only a look, which is the one thing
+    // the tooltips have to be straight about.
+    const running = group.members.some((row) => S.findLora(this.state, row.name));
+    const pills = group.members.map((row) => {
+      const active = Boolean(S.findLora(this.state, row.name));
+      const here = row.name === shown.name;
+      return el("button", {
+        class: `mmc-ver${active ? " on" : ""}`,
+        "aria-pressed": here,
+        title: here ? row.name
+          : active ? t("{name} — in the stack.", { name: row.name })
+          : running ? t("Run {name} instead. The strength and the checkpoint come with it.",
+                        { name: row.name })
+          : t("Show {name}", { name: row.name }),
+        text: label(row),
+        onclick: (event) => { event.stopPropagation(); this.pick(group, row.name); },
+      });
+    });
+    if (!this.swapping) {
+      const kept = pinned === shown.name;
+      pills.push(el("button", {
+        class: `mmc-ver-pin${kept ? " on" : ""}`,
+        title: kept
+          ? t("{label} is the version this card opens on. Click to stop keeping it.",
+              { label: label(shown) })
+          : t("Open this card on {label} from now on.", { label: label(shown) }),
+        onclick: (event) => { event.stopPropagation(); this.togglePin(group, shown.name); },
+      }, [svg(ICONS.pin, 12)]));
+    }
+    return el("div", { class: "mmc-vers" }, pills);
+  }
+
+  /** The sheet, told what else this model has on disk so its Versions list can
+   *  be the thing you switch with rather than a list of what exists. */
+  openDetail(group, row) {
+    return openLoraDetail(row, {
+      versions: group.members.map((member) => ({
+        row: member,
+        label: group.labels.get(member.name) || baseName(member.name),
+      })),
+      pinned: this.prefs.pinned?.[group.key] ?? null,
+      isActive: (name) => Boolean(S.findLora(this.state, name)),
+      onPick: (name) => this.pick(group, name),
+      onPin: (name) => this.togglePin(group, name),
+    });
+  }
+
   /** Neither of these re-renders the grid: the trigger row owns a text input,
    *  and rebuilding the card under it would take the caret away between words. */
   toggleTrigger(entry, word) {
@@ -644,11 +979,13 @@ class LoraManager {
    *  every chunk appended to reach it.
    */
   refreshCard(row) {
-    const current = this.cards.get(row.name);
+    const group = this.groupAt.get(row.name);
+    if (!group) return;
+    const current = this.cards.get(group.key);
     if (!current) return;
-    const next = this.card(row);
+    const next = this.card(group);
     current.replaceWith(next);
-    this.cards.set(row.name, next);
+    this.cards.set(group.key, next);
     // A card that just lost its controls is shorter, which can uncover room the
     // next chunk should fill.
     this.fill();
@@ -685,7 +1022,12 @@ class LoraManager {
         : t("No LoRAs in {where} yet.", { where })) + capped);
     }
 
-    this.pending = rows;
+    this.groups = groupRows(rows);
+    this.groupAt.clear();
+    for (const group of this.groups) {
+      for (const row of group.members) this.groupAt.set(row.name, group);
+    }
+    this.pending = this.groups;
     this.shown = 0;
     this.cards.clear();
     this.note = el("div", { class: "mmc-grid-note" });
@@ -719,10 +1061,14 @@ class LoraManager {
     const name = this.reveal;
     if (!name) return;
     this.reveal = null;
-    const at = this.pending.findIndex((row) => row.name === name);
+    const at = this.pending.findIndex(
+      (group) => group.members.some((row) => row.name === name));
     if (at < 0) return;
+    // The card is a model now, so revealing a file also means turning the card
+    // to it — otherwise the grid scrolls to a thumbnail of the wrong version.
+    this.picked.set(this.pending[at].key, name);
     while (this.shown <= at && this.shown < this.pending.length) this.appendChunk();
-    const card = this.cards.get(name);
+    const card = this.cards.get(this.pending[at].key);
     if (!card) return;
     card.scrollIntoView({ block: "center" });
     // A grid of near-identical cards does not say which one moved under you.
@@ -743,9 +1089,9 @@ class LoraManager {
   appendChunk() {
     const batch = this.pending.slice(this.shown, this.shown + CHUNK);
     const frag = document.createDocumentFragment();
-    for (const row of batch) {
-      const card = this.card(row);
-      this.cards.set(row.name, card);
+    for (const group of batch) {
+      const card = this.card(group);
+      this.cards.set(group.key, card);
       frag.appendChild(card);
     }
     this.grid.insertBefore(frag, this.note);
@@ -876,7 +1222,9 @@ class LoraManager {
     });
   }
 
-  card(row) {
+  card(group) {
+    const name = this.shownIn(group);
+    const row = group.members.find((candidate) => candidate.name === name) ?? group.members[0];
     const entry = S.findLora(this.state, row.name);
     const card = el("div", { class: "mmc-lora", "aria-selected": !!entry });
 
@@ -901,7 +1249,7 @@ class LoraManager {
           && this.lastClick.name === row.name && now - this.lastClick.at < 400;
         this.lastClick = double ? null : { name: row.name, at: now };
         this.toggle(row);
-        if (double) openLoraDetail(row);
+        if (double) this.openDetail(group, row);
       },
       onkeydown: (event) => {
         if (event.key === "Enter" || event.key === " ") { event.preventDefault(); this.toggle(row); }
@@ -940,11 +1288,15 @@ class LoraManager {
     if (row.preview === "video") this.hoverClip(art, check, loraPreviewUrl(row.name));
     card.appendChild(art);
 
+    // The title is the model's and the sub line is this file's: with four
+    // versions on one card the name has to stop moving when you click between
+    // them, or the pills read as four different LoRAs rather than one.
     const meta = [row.base_model, row.version].filter(Boolean).join(" · ");
     const body = el("div", { class: "mmc-lora-body" }, [
-      el("div", { class: "mmc-lora-name", text: row.title || row.base, title: row.name }),
-      el("div", { class: "mmc-lora-sub", text: meta || row.name }),
+      el("div", { class: "mmc-lora-name", text: group.title || row.base, title: row.name }),
+      el("div", { class: "mmc-lora-sub", text: meta || row.name, title: row.name }),
     ]);
+    if (group.members.length > 1) body.appendChild(this.versionRow(group, row));
     // Until the LoRA is active its trigger words are just information; once it
     // is, they become the editable list in the controls below.
     if (!entry && row.trained_words?.length) {
@@ -1061,10 +1413,101 @@ class LoraManager {
     ]);
   }
 
+  // ---- strength ------------------------------------------------------------
+
+  /**
+   * The span this LoRA's slider covers, decided once and then yours.
+   *
+   * Picked for you the first time: a file whose own name says "slider" opens at
+   * ±10, a file your last setup or its sidecar put at 6.5 opens wide enough to
+   * show 6.5, and everything else opens at ±2 — where an ordinary LoRA's whole
+   * useful range finally gets the full width of the track instead of the middle
+   * fifth of it.
+   *
+   * Never narrower than the weight it has to display, whatever was remembered:
+   * a track that cannot reach the number beside it is a broken control.
+   */
+  scaleOf(entry, row) {
+    const needed = scaleFor(entry.strength);
+    const held = this.scales.get(entry.name);
+    if (held !== undefined) return Math.max(held, needed);
+    const memory = this.memoryOf(entry.name);
+    const start = Number.isFinite(memory?.scale)
+      ? memory.scale
+      : (row && looksLikeSlider(row) ? scaleFor(10) : 0);
+    return Math.max(start, needed);
+  }
+
+  setScale(entry, row, at) {
+    this.scales.set(entry.name, at);
+    this.refreshCard(row);
+    this.changed();
+  }
+
+  /** From the typed box rather than the track, so it may name a weight the
+   *  current span cannot reach — the span follows rather than clipping it. */
+  setStrength(entry, row, value) {
+    const held = Math.max(-MAX_STRENGTH, Math.min(MAX_STRENGTH, value));
+    entry.strength = Math.round(held * 100) / 100;
+    this.scales.set(entry.name, this.scaleOf(entry, row));
+    this.refreshCard(row);
+    this.changed();
+  }
+
+  /**
+   * The weight: a track, the number it is on, and the span the track covers.
+   *
+   * The number is typed rather than read, because no track is the right one for
+   * every LoRA and there has to be one control that always reaches the value
+   * you mean. The span is a button rather than a hidden constant for the same
+   * reason the pills exist — the thing that differs between two files should be
+   * the thing on screen.
+   */
+  strengthBox(entry, row) {
+    const at = this.scaleOf(entry, row);
+    const scale = SCALES[at];
+    const readout = el("input", {
+      class: "mmc-lora-num",
+      type: "text", inputmode: "decimal", spellcheck: "false",
+      value: entry.strength.toFixed(2),
+      title: t("The weight this LoRA is patched on at. Type any value from -{max} to {max}.",
+               { max: MAX_STRENGTH }),
+      onchange: (event) => {
+        const typed = Number(String(event.target.value).replace(",", ".").trim());
+        if (Number.isFinite(typed)) this.setStrength(entry, row, typed);
+        else event.target.value = entry.strength.toFixed(2);
+      },
+      onkeydown: (event) => { if (event.key === "Enter") event.target.blur(); },
+      onkeyup: (event) => event.stopPropagation(),   // the graph canvas reads keys
+    });
+    const span = el("button", {
+      class: "mmc-lora-span",
+      text: `±${scale.span}`,
+      title: t("The track runs -{span} to {span} in steps of {step}. Click to widen it: "
+             + "slider LoRAs are trained to be driven well past where a style LoRA stops.",
+             { span: scale.span, step: scale.step }),
+      onclick: () => this.setScale(entry, row,
+        at + 1 >= SCALES.length ? scaleFor(entry.strength) : at + 1),
+    });
+    const slider = el("input", {
+      type: "range", min: -scale.span, max: scale.span, step: scale.step,
+      value: entry.strength,
+      // Dragging must not re-render the card out from under the pointer, so the
+      // readout is updated by hand and only the release reserialises.
+      oninput: (event) => {
+        entry.strength = Number(event.target.value);
+        readout.value = entry.strength.toFixed(2);
+      },
+      onchange: () => this.changed(),
+      onpointerdown: (event) => event.stopPropagation(),
+    });
+    return { readout, span, slider };
+  }
+
   controls(entry, row) {
     // A hand-edited creator_data can carry anything; the slider needs a number.
     if (!Number.isFinite(entry.strength)) entry.strength = S.DEFAULT_STRENGTH;
-    const readout = el("span", { class: "mmc-lora-strength", text: entry.strength.toFixed(2) });
+    const { readout, span, slider } = this.strengthBox(entry, row);
     // The same mute the chip on the node face carries, so a stack switched off
     // there does not read as fully in here. See `state.toggleLora`.
     const mute = el("button", {
@@ -1076,18 +1519,6 @@ class LoraManager {
       text: entry.enabled === false ? t("muted") : t("mute"),
       onclick: () => { S.toggleLora(this.state, entry.name); this.refreshCard(row); this.changed(); },
     });
-    const slider = el("input", {
-      type: "range", min: -1, max: MAX_STRENGTH, step: 0.05, value: entry.strength,
-      // Dragging must not re-render the card out from under the pointer, so the
-      // readout is updated by hand and only the release reserialises.
-      oninput: (event) => {
-        entry.strength = Number(event.target.value);
-        readout.textContent = entry.strength.toFixed(2);
-      },
-      onchange: () => this.changed(),
-      onpointerdown: (event) => event.stopPropagation(),
-    });
-
     const current = S.claimsBoth(entry, this.family)
       ? "both" : S.loraModes(entry, this.family)[0];
     const modes = el("div", { class: "mmc-seg" }, modeChoices(this.family).map(([value, label, hint]) =>
@@ -1101,7 +1532,7 @@ class LoraManager {
 
     const rows = [
       el("div", { class: "mmc-lora-row" }, [
-        el("span", { class: "mmc-lora-label", text: t("Strength") }), mute, readout]),
+        el("span", { class: "mmc-lora-label", text: t("Strength") }), mute, span, readout]),
       slider,
       ...(this.checkpointModes ? [modes] : []),
       this.triggerBox(entry, row),

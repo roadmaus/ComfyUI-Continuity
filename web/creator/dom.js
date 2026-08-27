@@ -118,6 +118,10 @@ export const ICONS = {
   close: `<path d="M6 6l12 12M18 6L6 18"/>`,
   chevron: `<path d="M6 9l6 6 6-6"/>`,
   star: `<path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.9-5.2-2.8-5.2 2.8 1-5.9-4.3-4.1 5.9-.9z"/>`,
+  // Which of a model's versions is kept as its one. Lucide's `pin`, verbatim,
+  // for the same reason `brain` is: it is drawn to survive being rendered at
+  // twelve pixels on a pill row, which a hand-cut pushpin does not.
+  pin: `<path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/>`,
   folder: `<path d="M3 7.5A2.5 2.5 0 015.5 5h3.8l2 2.2h7.2A2.5 2.5 0 0121 9.7v6.8a2.5 2.5 0 01-2.5 2.5h-13A2.5 2.5 0 013 16.5z"/>`,
   // A grid of frames: the gallery is the one place in the node that shows many
   // renders at once, and the rail already spends `image` on "Add image".

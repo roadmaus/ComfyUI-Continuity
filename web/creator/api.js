@@ -403,6 +403,10 @@ function normalizeUsed(raw) {
     }
     out[name] = {
       strength: Number.isFinite(memo.strength) ? memo.strength : null,
+      // Which of the manager's slider spans this file was last shown on. An
+      // index rather than a number of units, so widening the set of spans later
+      // does not reinterpret what everybody has already saved.
+      scale: Number.isInteger(memo.scale) && memo.scale >= 0 ? memo.scale : null,
       on: words(memo.on),
       custom: words(memo.custom),
       modes,
@@ -412,11 +416,25 @@ function normalizeUsed(raw) {
   return out;
 }
 
+/** Which version of each model the manager opens on: a group key (see
+ *  `loras.groupKey`) to the filename kept under it. Values are checked against
+ *  what is on disk when they are used, so a pin to a deleted file is inert
+ *  rather than broken. */
+function normalizePinned(raw) {
+  const out = {};
+  if (!raw || typeof raw !== "object") return out;
+  for (const [key, name] of Object.entries(raw)) {
+    if (typeof key === "string" && typeof name === "string" && name) out[key] = name;
+  }
+  return out;
+}
+
 function normalizeLoraPrefs(raw) {
   return {
     folder: typeof raw?.folder === "string" ? raw.folder : "",
     favorites: names(raw?.favorites),
     used: normalizeUsed(raw?.used),
+    pinned: normalizePinned(raw?.pinned),
   };
 }
 

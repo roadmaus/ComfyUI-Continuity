@@ -59,7 +59,6 @@ export const css = `
 }
 .mmc-lora-row { display: flex; justify-content: space-between; align-items: center; font-size: calc(11px * var(--mmc-type)); }
 .mmc-lora-label { color: var(--mmc-dim); }
-.mmc-lora-strength { color: var(--mmc-text); font-variant-numeric: tabular-nums; }
 /* The card's mute, in the strength row: label left, this and the readout right.
    Pressed is lit the way a chosen trigger chip is — same "on" in the same
    panel — except that what is lit here is the LoRA being *off*. */
@@ -73,6 +72,69 @@ export const css = `
   background: color-mix(in srgb, var(--mmc-warn) 16%, transparent); border-color: transparent; color: var(--mmc-warn);
 }
 .mmc-lora-ctl input[type="range"] { width: 100%; accent-color: var(--mmc-blue); margin: 0; }
+/* The weight, typed. It has to look like the readout it replaced until you go
+   for it — a card of forty is a wall of boxes otherwise — but a track is never
+   the right instrument for every LoRA, and this is the one control that reaches
+   any value at all. */
+.mmc-lora-num {
+  width: calc(46px * var(--mmc-type)); flex: none; text-align: right;
+  background: none; border: 1px solid transparent; border-radius: 7px;
+  color: var(--mmc-text); font-family: inherit; font-size: calc(11px * var(--mmc-type));
+  font-variant-numeric: tabular-nums; padding: 1px 4px; outline: none;
+}
+.mmc-lora-num:hover { border-color: var(--mmc-line); }
+.mmc-lora-num:focus { border-color: var(--mmc-blue); background: var(--mmc-float); }
+/* How far the track under this row reaches. A constant everywhere else in the
+   panel, and a control here, because a slider LoRA and a style LoRA do not
+   share a range and the difference has to be something you can see and change.
+   Same chip as the mute beside it: they are both settings on this one row. */
+.mmc-lora-span {
+  flex: none; margin-right: 6px; padding: 1px 6px; border-radius: 8px;
+  background: none; border: 1px solid var(--mmc-line); color: var(--mmc-off);
+  font-family: inherit; font-size: calc(10px * var(--mmc-type));
+  font-variant-numeric: tabular-nums; cursor: pointer;
+}
+.mmc-lora-span:hover { color: var(--mmc-text); border-color: var(--mmc-edge-2); }
+
+/* --- versions -------------------------------------------------------------- */
+/* One model's files, the pills wearing only what differs between them: the card
+   above already said the name, and a pill that repeated it would be four
+   identical unreadable words. Wraps rather than scrolls — a model with six
+   retrains on disk should show six, and honestly. */
+.mmc-vers { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin-top: 6px; }
+.mmc-ver {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 7px; border-radius: 8px; max-width: 100%;
+  background: none; border: 1px solid var(--mmc-line); color: var(--mmc-off);
+  font-family: inherit; font-size: calc(10px * var(--mmc-type)); cursor: pointer;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.mmc-ver:hover { color: var(--mmc-text); }
+/* Which one the card is turned to. Same blue-tinted press as the checkpoint
+   segment below it, because it is the same kind of answer: one of these. */
+.mmc-ver[aria-pressed="true"] {
+  background: color-mix(in srgb, var(--mmc-blue) 22%, transparent);
+  border-color: transparent; color: var(--mmc-text);
+}
+/* In the stack. A dot rather than a fill: being run and being looked at are two
+   different states and a card can show both at once. */
+.mmc-ver.on::before {
+  content: ""; flex: none; width: 4px; height: 4px; border-radius: 50%;
+  background: var(--mmc-accent);
+}
+/* Which version this model opens on tomorrow. Exactly the star's manners, and
+   for the star's reason: an untouched grid should look untouched, but a pin
+   that is set stays lit. Hidden rather than dropped, so reaching for one does
+   not shuffle the pills out from under the pointer. */
+.mmc-ver-pin {
+  margin-left: auto; flex: none; display: inline-flex; align-items: center; justify-content: center;
+  width: calc(20px * var(--mmc-type)); height: calc(20px * var(--mmc-type));
+  padding: 0; border: 0; border-radius: 7px; background: none;
+  color: var(--mmc-off); cursor: pointer; visibility: hidden; opacity: .45;
+}
+.mmc-lora:hover .mmc-ver-pin, .mmc-ver-pin:focus-visible, .mmc-ver-pin.on { visibility: visible; }
+.mmc-ver-pin:hover, .mmc-ver-pin:focus-visible { opacity: 1; color: var(--mmc-text); }
+.mmc-ver-pin.on { opacity: 1; color: var(--mmc-accent); }
 .mmc-lora-idle { font-size: calc(10px * var(--mmc-type)); color: var(--mmc-warn); }
 .mmc-seg {
   display: flex; border: 1px solid var(--mmc-line); border-radius: 9px; overflow: hidden;

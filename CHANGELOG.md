@@ -2,6 +2,46 @@
 
 ## Unreleased
 
+**The LoRA grid groups a model's versions, and the strength slider fits the LoRA.**
+
+A LoRA you have retrained four times was four cards: four near-identical
+thumbnails under four identical titles, with nothing on any of them saying that
+the other three existed. Its files are one card now, and the version is a row of
+pills wearing only the part of the filename its siblings do not share — `v1`
+against `v2` against `v2_lite`, which is the part you are actually choosing
+between. Civitai's model id groups them wherever a sidecar carries one; a folder
+of hand-trained files falls back to the filename, taking off the version tails
+people write there anyway, and stays inside one folder while it does it, because
+two people's `style_v1` are two different LoRAs.
+
+Two things it deliberately does not group. Wan's split LoRAs publish a high-noise
+file and a low-noise one under one model id, and those go in a stack *together* —
+a card offering a choice between them would hide half of what you need — so a
+name saying which half it is keeps its own card, and so does a t2v beside its
+i2v.
+
+Clicking a pill while one of that model's versions is in the stack is a swap in
+place: same slot, same weight, same checkpoint, different file. The trigger words
+come from the file now loaded, because a retrain renames them. The pin beside the
+pills keeps one version as the one that model opens on, which is a fact about
+your collection rather than about this piece, so it outlives the window. The
+detail sheet grew the same choice as an **On this disk** list you can land on —
+the sheet redraws around whichever version you pick, so the showcase and the
+recipe are what you compare rather than two filenames — with the sidecar's full
+published list below it.
+
+**And the weight's range now follows the LoRA.** Slider LoRAs are trained as a
+signed axis and are meant to be driven to ±10 and past it; the track ran -1 to 2,
+so half of what those files can do was unreachable and the other half was four
+pixels of travel. The row carries the span as a control — ±2, ±5, ±10, ±25, each
+one about eighty notches wide, so the drag feels the same at every scale — and it
+is picked for you: a file whose own name says slider opens at ±10, one your last
+setup left at 6.5 opens wide enough to show 6.5, everything else opens at ±2,
+where an ordinary LoRA's whole useful range finally gets the full track. The
+weight beside it is typed rather than read, which is the one control that reaches
+any value at all; typing past the track widens the span instead of clipping what
+you asked for.
+
 **A ControlNet bench, and two quick links on the wordmark's dashboard.**
 
 The bench is a room of its own, reached from the dashboard the wordmark opens.
