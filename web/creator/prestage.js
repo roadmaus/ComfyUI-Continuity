@@ -1563,9 +1563,9 @@ export class PreStageBody {
 
     const index = stepperPill({
       value: still.latent_index, min: -latents, max: latents - 1, step: 1, width: "56px",
-      title: t("Which latent frame becomes the picture. 0 is the causal first frame — the one "
-             + "slice the single-image VAE was trained on, and the only one that is a function "
-             + "of a single video frame. Negative counts from the end."),
+      title: t("Which latent frame becomes the picture. 0 is the causal first frame — the only "
+             + "one that is a function of a single video frame, and the one the decode is "
+             + "exact for. Negative counts from the end."),
       format: (n) => t("latent {n}", { n }),
       onChange: (next) => { still.latent_index = Math.round(next); this.commit(); },
     });

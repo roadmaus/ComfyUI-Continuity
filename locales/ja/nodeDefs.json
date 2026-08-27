@@ -25,7 +25,7 @@
   },
   "MiniMaxH3StillLatent": {
     "display_name": "H3 スチルレイテント",
-    "description": "サンプリング済み H3 レイテントの時間方向 1 フレームを、単一画像のレイテントとして取り出します。"
+    "description": "サンプリング済み H3 レイテントの時間方向 1 フレームを、H3 VAE がデコードできる最短のクリップとして取り出します。"
   },
   "MiniMaxH3RefinePass": {
     "display_name": "H3 リファインパス",

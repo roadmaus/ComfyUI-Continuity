@@ -1539,8 +1539,8 @@ check("...and its sample_edge",
 check("...and its direct choice",
       single([segment("a shot")], short_edge=1152, upscale="direct").refine, None)
 
-# The still branch pins "direct": it upscales through the single-image VAE and
-# its graph has no refine pass — left unpinned, the slider above native would
+# The still branch pins "direct": it has one decode and its graph has no refine
+# pass — left unpinned, the slider above native would
 # quietly sample at 768 and change nothing.
 still_request = still._request({"request": {"prompt": "a poster", "short_edge": 2048}}, 5)
 check("a still compiles direct past native", still_request.get("upscale"), "direct")

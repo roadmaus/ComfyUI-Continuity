@@ -216,7 +216,9 @@ mask, this is the file it needs.
 |---|---|---|
 | H3's live preview, decoded properly | [`taeh3.safetensors`](https://github.com/madebyollin/taehv/blob/main/safetensors/taeh3.safetensors) | `models/vae_approx` |
 | the **Refine** button | any Qwen3-VL 4B or 8B, e.g. `qwen3vl_4b_bf16.safetensors` | `models/text_encoders` |
-| H3 stills on the pre-stage | [`minimax_h3_t1_image_vae_step1597.safetensors`](https://huggingface.co/Mamad8/MiniMax-H3-Image-VAE) | `models/vae` |
+
+H3 stills on the pre-stage need nothing of their own: they are decoded by the
+same video VAE the shot is.
 
 The refiner is free if you already have Krea 2 or Ideogram 4.0 installed — their
 text encoders *are* Qwen3-VL 4B and 8B, and the refiner reads the same files.
@@ -470,10 +472,11 @@ This pack is glue. The work underneath it belongs to other people:
   puts a device chip on every row of the weights popover.
 - **[ComfyUI-GGUF](https://github.com/city96/ComfyUI-GGUF)** by city96 — loads the
   `.gguf` files the weights popover offers once it is installed.
-- **[MiniMax-H3-Image-VAE](https://huggingface.co/Mamad8/MiniMax-H3-Image-VAE)** by
-  Mamad8 — the experimental single-image decoder the PreStage's H3 branch reads a
-  still through. Trained with H3's own encoder frozen, which is what lets one file
-  both encode the references and decode the picture.
+- **[ComfyUI#15416](https://github.com/Comfy-Org/ComfyUI/issues/15416)** by matlowai —
+  measured what a single-token H3 decode actually costs (31.4 and 93.7 mean absolute
+  error, against 3.92 for a legal clip) and found the fix the PreStage's H3 still now
+  uses: give the VAE the two tokens its grid is built on and keep the first pixel
+  frame.
 - **[ComfyUI-MiniMaxH3_LatentUpscaler](https://github.com/Tr1dae/ComfyUI-MiniMaxH3_LatentUpscaler)**
   by Tr1dae — pioneered the two-pass workflow the resolution popover's "two
   passes" option is built on: upscale the video half of the AV latent between

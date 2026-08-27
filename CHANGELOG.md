@@ -2,6 +2,28 @@
 
 ## Unreleased
 
+**An H3 still is decoded by the VAE that renders the shot, and needs no file of
+its own.**
+
+The PreStage's H3 branch took one latent frame off a sampled clip and handed it
+to the VAE alone. That shape is off the model's grid — H3 packs 17k+5 pixel
+frames into 5k+2 latent tokens, so the shortest legal clip is *two* tokens — and
+a decoder given one returns tile seams and 16px patch-grid noise rather than a
+picture. It was measured at 31.4 mean absolute error tiled and 93.7 untiled,
+against 3.92 for a legal decode of the same content
+([ComfyUI#15416](https://github.com/Comfy-Org/ComfyUI/issues/15416)). It is why
+the branch used to ask for `minimax_h3_t1_image_vae_step1597`: an experimental
+decoder retrained on 51k images to make the illegal shape decodable, at the cost
+— its own card says so — of soft text, hair and microtexture, and of every video
+decode in the same workflow if you left it in the slot.
+
+The slice now hands the VAE the shortest clip the chosen token can live in —
+itself, twice — and the still is pixel frame 0 of the five that come back. That
+frame is exact for index 0: the VAE is causal, so the first pixel frame is a
+function of the first token alone and never sees the copy. Nothing else about
+the branch changes, and the file you need is the video VAE already in the slot.
+If you fetched the image VAE for this, you can stop pointing at it.
+
 **Qwen Image Edit joins the pre-stage, and it is the one that edits.**
 
 The pre-stage could draw a picture from a sentence, twice over — Krea 2 and

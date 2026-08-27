@@ -1404,8 +1404,7 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     # lowers it, so past native two passes happen on their own, and under it
     # only when `sample_edge` asks — which is how a blob written before the
     # setting existed keeps meaning what it meant. The still branch pins
-    # "direct": it upscales through the single-image VAE instead and has no
-    # refine pass to hand this to.
+    # "direct": it has one decode and no refine pass to hand this to.
     # A third answer, which is the backend one: "redetail" samples once and
     # never above the native edge — going off-distribution and then asking a
     # second family to invent detail on top of the result is two ways of being

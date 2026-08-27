@@ -783,7 +783,7 @@ H3_MODELS = {
     "fl2va": "minimax_h3_fl2va_fp8.safetensors",
     "ref2va": "minimax_h3_ref2va_fp8.safetensors",
     "clip": "minimax_qwen3vl_32b.safetensors",
-    "vae": "minimax_h3_t1_image_vae_step1597.safetensors",
+    "vae": "minimax_h3_video_vae_fp16.safetensors",
     "audio_vae": "minimax_h3_audio_vae.safetensors",
 }
 
@@ -822,14 +822,39 @@ check("decoded once, saved once",
 check("the first latent frame by default", h3["MiniMaxH3StillLatent"][0][1]["index"], 0)
 check("the still is what gets decoded",
       h3_graph[h3["VAEDecode"][0][1]["samples"][0]]["class_type"], "MiniMaxH3StillLatent")
+# The slice is two latent tokens — the shortest clip the H3 VAE will decode, one
+# token being the shape that comes back as tile seams and patch-grid noise
+# (Comfy-Org/ComfyUI#15416) — so the decode is five pixel frames and the picture
+# is the first of them.
+check("the decode is cut back to one frame", len(h3["ImageFromBatch"]), 1)
+check("...the clip's first", (h3["ImageFromBatch"][0][1]["batch_index"],
+                              h3["ImageFromBatch"][0][1]["length"]), (0, 1))
+check("...taken off the decode",
+      h3_graph[h3["ImageFromBatch"][0][1]["image"][0]]["class_type"], "VAEDecode")
+check("and that one frame is what is saved",
+      h3_graph[h3["MiniMaxH3SaveImage"][0][1]["images"][0]]["class_type"], "ImageFromBatch")
 check("no audio is decoded", "VAEDecodeAudio" in h3, False)
 check("and no video is written", "MiniMaxH3Save" in h3, False)
+
+# The slice node itself. Two tokens out of however many went in, whichever one
+# was asked for, and the copy is a copy rather than a view onto the clip.
+import torch  # noqa: E402 — after the boot, like everything else in this file
+
+_clip = torch.arange(3, dtype=torch.float32).view(1, 1, 3, 1, 1).expand(1, 24, 3, 4, 6)
+_slice = ps.MiniMaxH3StillLatent.execute({"samples": _clip.contiguous()}, 0)
+check("the slice is a two-token clip", tuple(_slice.result[0]["samples"].shape),
+      (1, 24, 2, 4, 6))
+check("...of the frame that was asked for, twice",
+      [float(_slice.result[0]["samples"][0, 0, t, 0, 0]) for t in (0, 1)], [0.0, 0.0])
+_last = ps.MiniMaxH3StillLatent.execute({"samples": _clip.contiguous()}, -1)
+check("a negative index counts from the end",
+      [float(_last.result[0]["samples"][0, 0, t, 0, 0]) for t in (0, 1)], [2.0, 2.0])
 
 # Only the routed checkpoint is loaded, exactly as on a video render — and the
 # audio VAE is not loaded at all, because nothing here cites sound.
 check("a bare prompt loads FL2VA and nothing else",
       [i["unet_name"] for _, i in h3["UNETLoader"]], [H3_MODELS["fl2va"]])
-check("one VAE, the single-image one",
+check("one VAE, the video one the shot is decoded by",
       [i["vae_name"] for _, i in h3["VAELoader"]], [H3_MODELS["vae"]])
 check("the text encoder is loaded as H3's",
       (h3["CLIPLoader"][0][1]["clip_name"], h3["CLIPLoader"][0][1]["type"]),

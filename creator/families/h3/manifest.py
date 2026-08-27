@@ -77,7 +77,7 @@ _UI = {
     },
     "vae": {
         "title": "Video VAE",
-        "help": "Decodes the picture.",
+        "help": "Decodes the picture — a shot's, and a pre-stage still's.",
         "hints": ["minimax", "h3"],
         "avoid": ["t1[_-]?image", "image[_-]vae", "audio"],
     },
@@ -161,9 +161,9 @@ def manifest():
         "id": declare.ID,
         "label": declare.LABEL,
         # What the arch pill's tooltip says this family is.
-        "description": "MiniMax H3 — experimental. The still is a video generation whose first latent "
-                       "frame is decoded by the single-image H3 VAE, on the weights and the canvas your "
-                       "render already uses. No second model family is loaded.",
+        "description": "MiniMax H3 — experimental. The still is a video generation with one latent "
+                       "frame decoded as a picture, on the weights, the VAE and the canvas your render "
+                       "already uses. No second model family is loaded, and no extra file to fetch.",
         "produces": sorted(declare.PRODUCES),
         "widgets": _widgets(),
         "weights": _weights(),

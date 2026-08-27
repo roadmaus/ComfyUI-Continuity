@@ -25,7 +25,7 @@
   },
   "MiniMaxH3StillLatent": {
     "display_name": "H3 静帧 Latent",
-    "description": "取出已采样 H3 latent 在时间维度上的一帧，作为单张图像的 latent。"
+    "description": "取采样后 H3 latent 的一个时间帧，作为 H3 VAE 能解码的最短片段输出。"
   },
   "MiniMaxH3RefinePass": {
     "display_name": "H3 精修通道",

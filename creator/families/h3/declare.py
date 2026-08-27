@@ -84,8 +84,8 @@ ROUTED = ("fl2va", "ref2va")
 # - `max_short_edge` is the slider's ceiling, not a statement about the
 #   weights — everything above the native edge is off-distribution and the
 #   pill says so. There is a reason to offer it anyway: the pre-stage's H3
-#   branch decodes one latent frame as a still, where the single-image VAE
-#   holds up to around 3 MP, and a 2K checkpoint is expected. A ceiling the
+#   branch decodes one latent frame as a still, which the VAE holds up to
+#   around 3 MP, and a 2K checkpoint is expected. A ceiling the
 #   hardware and the warning already govern is better than one that has to be
 #   raised again the day those weights land.
 # - The 9:16..21:9 ratio envelope is the official H3 aspect range.

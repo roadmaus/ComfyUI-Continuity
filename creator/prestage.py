@@ -7,12 +7,11 @@ in core) or MiniMax H3 itself, and saves them where the picker already looks, so
 a finished still is one chip away from being the next render's keyframe.
 
 The third of those is a different animal and lives in `families/h3/still.py`:
-H3 is a video model, so a still from it is a video generation whose first
-latent frame is decoded as a picture, through an experimental T=1
-image VAE. It reuses the video pipeline outright — the same segment node, the
-same checkpoints, the same canvas — which is the point of having it: no second
-model family loaded, and a keyframe made by the weights that will render the
-shot it opens.
+H3 is a video model, so a still from it is a video generation with one latent
+frame decoded as a picture. It reuses the video pipeline outright — the same
+segment node, the same checkpoints, the same canvas, the same VAE — which is the
+point of having it: no second model family loaded, no extra file to fetch, and a
+keyframe made by the weights that will render the shot it opens.
 
 It is built exactly like the Creator, because it is driven exactly like the
 Creator: zero sockets, one JSON blob the UI owns, weights named by filename,
@@ -255,14 +254,28 @@ class MiniMaxH3SaveImage(io.ComfyNode):
 
 
 class MiniMaxH3StillLatent(io.ComfyNode):
-    """One temporal slice of a sampled H3 latent, as an ordinary image latent.
+    """The shortest legal clip around one temporal slice of a sampled H3 latent.
 
     H3 samples a NestedTensor pair — video `[B,24,T,H/16,W/16]` and audio — and
-    this takes the video half's frame `index` and hands it on as a plain latent
-    of length 1. That is the tensor the experimental T=1 image VAE was fitted
-    to: the H3 VAE is causal on the 17k+5 <-> 5k+2 grid, so latent frame 0 is a
-    function of pixel frame 0 alone and is exactly what encoding a single image
-    produces (core's own `downscale_ratio` returns 1 latent frame for 1 image).
+    this takes the video half's frame `index` and hands it on as a plain video
+    latent of *two* tokens: the chosen one, twice.
+
+    Two rather than one because the H3 VAE has no decode for a single token. Its
+    grid is 17k+5 pixel frames <-> 5k+2 latent tokens, so the shortest legal clip
+    is two tokens, and handing the decoder one produces tile seams and 16px
+    patch-grid noise instead of a picture — 31.4 and 93.7 mean absolute error
+    tiled and untiled, against 3.92 for a legal decode of the same content
+    (Comfy-Org/ComfyUI#15416). Duplicating the token and keeping pixel frame 0 of
+    the five that come back is what that issue settled on, and for index 0 it is
+    exact: the VAE is causal, so the first pixel frame is a function of the first
+    token alone and never sees the copy. A later index is decoded as if it opened
+    a clip, which is the same approximation the reference workaround makes.
+
+    This is why a still needs no image VAE. The experimental T=1 decoder this
+    branch used to require exists to make the illegal shape decodable; the legal
+    shape is decoded by the video VAE the render already loads, and better —
+    that decoder is fitted on 51k images and its own card warns it softens text,
+    hair and microtexture.
 
     Negative indexes from the end, so -1 is the clip's last latent frame. The
     audio half is dropped here rather than never generated: the DiT samples the
@@ -275,12 +288,12 @@ class MiniMaxH3StillLatent(io.ComfyNode):
             node_id="MiniMaxH3StillLatent",
             display_name="H3 Still Latent",
             category="Continuity/internal",
-            description="Takes one temporal frame of a sampled H3 latent as a single-image latent.",
+            description="Takes one temporal frame of a sampled H3 latent as the shortest clip the H3 VAE can decode.",
             is_dev_only=True,
             inputs=[
                 io.Latent.Input("samples"),
                 io.Int.Input("index", default=0, min=-4096, max=4096,
-                             tooltip="Which latent frame becomes the picture. 0 is the causal first frame — the slice the image VAE was trained on. Negative counts from the end."),
+                             tooltip="Which latent frame becomes the picture. 0 is the causal first frame, where the decode is exact; a later frame is decoded as if it opened the clip. Negative counts from the end."),
             ],
             outputs=[io.Latent.Output()],
         )
@@ -305,9 +318,11 @@ class MiniMaxH3StillLatent(io.ComfyNode):
                 f"Latent frame {index} does not exist: this clip packs into "
                 f"{total} latent frames (0..{total - 1})."
             )
-        # Contiguous rather than a view, so nothing downstream holds the whole
-        # sampled clip alive to read one frame of it.
-        return io.NodeOutput({"samples": video[:, :, resolved:resolved + 1].contiguous()})
+        # `repeat` copies, so nothing downstream holds the whole sampled clip
+        # alive to read one frame of it — and the copy is the second token the
+        # VAE needs to have a legal clip to decode.
+        return io.NodeOutput(
+            {"samples": video[:, :, resolved:resolved + 1].repeat(1, 1, 2, 1, 1)})
 
 
 NODES = [MiniMaxH3PreStage, MiniMaxH3SaveImage, MiniMaxH3StillLatent]

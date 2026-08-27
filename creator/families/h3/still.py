@@ -8,7 +8,8 @@ half reduces a pre-stage blob to exactly the request shape
 `compile.compile_request` already takes, and `emit` builds a video render that
 stops at the first latent frame:
 
-    loaders -> segment -> [preview] -> KSampler -> still slice -> VAEDecode -> save
+    loaders -> segment -> [preview] -> KSampler -> still slice -> VAEDecode
+            -> frame 0 -> save
 
 Every node in that line except the slice is one the video path already uses, and
 the segment node is *the* video segment node — same conditioning, same reference
@@ -25,13 +26,16 @@ conditioning — a reference clip's soundtrack, which a still can cite exactly a
 a shot can. And there is no chaining, because there is nothing to chain: one
 still is one pass.
 
-**Why the first latent frame is a still at all.** The H3 VAE is causal on the
+**Why one latent frame is a still at all.** The H3 VAE is causal on the
 17k+5 <-> 5k+2 grid: a 5-frame clip has two latent frames, and the first of them
-is a function of frame 0 alone. Encoding a single image produces that same
-one-frame latent (core's `downscale_ratio` returns 1 for a single frame), which
-is what the experimental T=1 image decoder was trained against. Decoding latent
-index 0 is therefore not a trick — it is the one temporal slice the image VAE
-was fitted to.
+is a function of pixel frame 0 alone. So the picture is already in the first
+token, and the still slice hands the VAE the shortest clip that token can live
+in — itself, twice — and the decode's first pixel frame is that token and
+nothing else. Two tokens rather than one because the VAE has no decode for a
+single one; see `prestage.MiniMaxH3StillLatent`, which is where the measurements
+are. It is why this branch needs no image VAE: the illegal shape needed a
+decoder built for it, the legal shape is decoded by the video VAE the render
+already loads, and better.
 
 **How long a clip, and which frame of it.** The DiT's trained range is 124-362
 frames (`canvas.TRAINED_MIN_FRAMES`), so the short end of `STILL_LENGTHS` is
@@ -63,9 +67,9 @@ DEFAULT_FRAMES = 5
 # to "what the weights actually saw".
 STILL_LENGTHS = (5, 22, 39, 56, 90, 124)
 
-# Which latent frame is decoded. 0 is the causal first frame — the slice the
-# image VAE was trained on. Negative indexes from the end, so -1 is the last
-# frame of the clip and is how you ask for "the shot a moment later".
+# Which latent frame is decoded. 0 is the causal first frame, the one the decode
+# is exact for. Negative indexes from the end, so -1 is the last frame of the
+# clip and is how you ask for "the shot a moment later".
 DEFAULT_LATENT_INDEX = 0
 
 # How the prompt reaches the DiT. "context-ir" is what a video render does: the
@@ -181,8 +185,8 @@ def _request(block, frames):
     # The duration the video side speaks in. `frames` is already snapped, so
     # `frames_for_seconds` inside `compile_request` lands back on it exactly.
     request["duration_s"] = canvas.seconds_for_frames(frames, declare.RULES)
-    # Never two-pass: a still past the native edge upscales through the
-    # single-image VAE decode, and the still graph has no refine pass to hand
+    # Never two-pass: a still past the native edge upscales through the one
+    # decode it does, and the still graph has no refine pass to hand
     # a capped canvas to — left unpinned, `compile_request` would sample at
     # 768 and the slider above it would quietly do nothing.
     request["upscale"] = "direct"
@@ -334,7 +338,11 @@ def emit(plan, weights, sampling, unique_id, filename_prefix=FILENAME_PREFIX):
     )
 
     still = graph.node(STILL_NODE, samples=sampled.out(0), index=plan.index).out(0)
-    image = graph.node("VAEDecode", samples=still, vae=links.vae).out(0)
+    # The slice is two latent tokens — the shortest clip the H3 VAE will decode —
+    # so five pixel frames come back for the one that was asked for. Frame 0 is
+    # the token; the rest are the VAE unrolling its duplicate.
+    clip = graph.node("VAEDecode", samples=still, vae=links.vae).out(0)
+    image = graph.node("ImageFromBatch", image=clip, batch_index=0, length=1).out(0)
     save = graph.node(SAVE_NODE, images=image, filename_prefix=filename_prefix)
     # The save node lives in an expanded graph on nobody's canvas; the stamp
     # files its result under the PreStage the user is looking at, which is what

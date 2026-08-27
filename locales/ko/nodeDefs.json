@@ -25,7 +25,7 @@
   },
   "MiniMaxH3StillLatent": {
     "display_name": "H3 스틸 레이턴트",
-    "description": "샘플링된 H3 레이턴트의 시간축 한 프레임을 단일 이미지 레이턴트로 꺼냅니다."
+    "description": "샘플링된 H3 레이턴트의 시간축 한 프레임을, H3 VAE가 디코딩할 수 있는 가장 짧은 클립으로 꺼냅니다."
   },
   "MiniMaxH3RefinePass": {
     "display_name": "H3 리파인 패스",
