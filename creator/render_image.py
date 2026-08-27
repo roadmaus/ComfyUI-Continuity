@@ -22,11 +22,16 @@ keeps both video checkpoints.
 
 from dataclasses import dataclass, field
 
-from . import outputs
+from . import models as core, outputs
 from .compile import CompileError
 from .models import is_gguf, loader_for
 
 SAVE_NODE = "MiniMaxH3SaveImage"
+
+# The preview override wants a playback rate for the animated clip it makes of a
+# video latent. A still has one frame and no such clip; this is what gets passed
+# so the required input has a number.
+PREVIEW_FPS = 24.0
 
 
 def default_prefix(family):
@@ -168,6 +173,20 @@ def emit(payload, weights, sampling, unique_id, family, filename_prefix=None):
         model = graph.node("LoraLoaderModelOnly", model=model,
                            lora_name=entry["name"],
                            strength_model=entry["strength"]).out(0)
+    # The same preview override the video render and the H3 still are patched
+    # with, and here for the same reason: core's previewer paints its frames
+    # onto the canvas node over the top of the node body, where the stage card
+    # is not, and where the fullscreen editor cannot see them at all. The
+    # override broadcasts them instead — `kj_preview_override`, which stage.js
+    # reads — and suppresses core's. `preview_frames` is ignored on a 4D image
+    # latent, and so is the rate; both are passed because the node requires
+    # them. Adds nothing when KJNodes is not installed.
+    #
+    # Patched here rather than in each family's branch because every wrapper
+    # downstream of it clones the patcher and carries it along: Krea's
+    # `ModelSamplingFlux` on the reference branch, Ideogram's `CFGOverride` and
+    # its guider.
+    model = core.graph_preview(graph, model, weights, PREVIEW_FPS)
 
     family.emit_graph(graph, payload, sampling, weights, clip, vae, model,
                       unique_id, filename_prefix)

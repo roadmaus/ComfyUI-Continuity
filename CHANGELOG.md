@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+**A pre-stage render previews beside the node, not on it.** The two image
+architectures — Krea 2 and Ideogram 4.0 — sampled behind ComfyUI's own
+previewer, whose frames the frontend paints onto the canvas node itself: under
+the stage card that should be showing them, and invisible in the fullscreen
+editor. They now carry the same KJNodes preview override the video render and
+the H3 still already did, which broadcasts the frames the stage reads and
+suppresses core's overlay. As everywhere else it is optional: without the pack
+installed nothing is emitted and the render is identical.
+
 **The wordmark is the door.** In the fullscreen editor, pressing **Continuity**
 in the title bar drops the editor's tool list. One row today — the preset
 library, the same one the rail's Presets button opens — and the list is where

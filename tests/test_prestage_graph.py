@@ -605,3 +605,70 @@ try:
 finally:
     comfy_nodes.NODE_CLASS_MAPPINGS.clear()
     comfy_nodes.NODE_CLASS_MAPPINGS.update(_restore_gguf)
+
+# ---- the preview override on the image branches ------------------------------
+#
+# The same KJNodes patch the video render and the H3 still carry, and here for
+# the same reason: without it these two sample behind core's previewer, whose
+# frames the frontend paints onto the canvas node — over the node body, and
+# nowhere the fullscreen editor can show them. Optional in the same way too, so
+# the absent path is what runs unaided above.
+
+check("no preview node when the pack is not installed",
+      ("ModelPreviewOverrideKJ" in kinds, "ModelPreviewOverrideKJ" in ideo),
+      (False, False))
+
+
+class _FakePreview:
+    FUNCTION = "execute"
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {"required": {
+            "model": ("MODEL",),
+            "max_resolution": ("INT", {"default": 1024}),
+            "jpeg_quality": ("INT", {"default": 80}),
+            "suppress_default_preview": ("BOOLEAN", {"default": True}),
+            "preview_frames": ("INT", {"default": 1}),
+            "preview_fps": ("INT", {"default": 12}),
+        }}
+
+
+_restore_preview = dict(comfy_nodes.NODE_CLASS_MAPPINGS)
+comfy_nodes.NODE_CLASS_MAPPINGS["ModelPreviewOverrideKJ"] = _FakePreview
+try:
+    previewed = by_class(build().expand)
+    patches = previewed["ModelPreviewOverrideKJ"]
+    check("one preview patch on a Krea render", len(patches), 1)
+    check("core's own overlay is suppressed — ours is the only one",
+          patches[0][1]["suppress_default_preview"], True)
+    # No tiny decoder: the image architectures declare no `preview` field, so
+    # this is the node's own latent2rgb path — which is the point. The node is
+    # emitted for where it puts the picture, not for what decodes it.
+    check("...with no decoder picked", "tiny_vae" in patches[0][1], False)
+    check("the sampler reads the patch",
+          previewed["KSampler"][0][1]["model"][0], patches[0][0])
+
+    # The reference branch patches the shift on top of the override. Order is
+    # what is checked: everything downstream clones the patcher and carries the
+    # wrapper along, so the override has to be under the shift and not over it.
+    shifted = by_class(build(blob(refs=["a.png"])).expand)
+    check("the shift sits on top of the override on the reference branch",
+          shifted["ModelSamplingFlux"][0][1]["model"][0],
+          shifted["ModelPreviewOverrideKJ"][0][0])
+
+    # Ideogram samples through a guider rather than a KSampler, and its
+    # conditional branch carries the late-cfg drop — the override goes under
+    # both, for the same reason.
+    previewed_ideo = by_class(build(blob(arch="ideogram4"), steps=20, cfg=7.0).expand)
+    ideo_patch = previewed_ideo["ModelPreviewOverrideKJ"]
+    check("one preview patch on an Ideogram render", len(ideo_patch), 1)
+    check("...on the conditional model, under the cfg drop",
+          previewed_ideo["CFGOverride"][0][1]["model"][0], ideo_patch[0][0])
+    check("...and not on the unconditional one",
+          previewed_ideo["DualModelGuider"][0][1]["model_negative"][0],
+          [i for i, _ in previewed_ideo["UNETLoader"]
+           if _["unet_name"] == MODELS["ideogram4"]["uncond_model"]][0])
+finally:
+    comfy_nodes.NODE_CLASS_MAPPINGS.clear()
+    comfy_nodes.NODE_CLASS_MAPPINGS.update(_restore_preview)
