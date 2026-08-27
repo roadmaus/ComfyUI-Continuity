@@ -24,9 +24,10 @@ def _widgets():
 
 # What the weights popover says about each slot — the strings' single home;
 # the frontend runs them through t() at render. `hints` are the filename
-# needles the guess fills an empty field from, newest spelling first: both
-# published editions load through the same three slots, so which one is on the
-# disk is the only thing that decides.
+# needles the guess fills an empty field from, newest spelling first: every
+# published edition loads through the same three slots, so which one is on the
+# disk is the only thing that decides — and, since the file will not say, what
+# the edition pill is guessed from too.
 _UI = {
     "model": {
         "title": "Checkpoint",
@@ -108,8 +109,29 @@ def manifest():
             # is what makes this family different from every other still —
             # `Picture 1` is the picture being changed, so it is also the canvas
             # and the latent the render starts from.
+            #
+            # How *many* of them is the edition's answer rather than the
+            # encoder's: the first Qwen-Image-Edit weights read one picture, and
+            # nothing in the file says which release it is, so the edition is a
+            # declared field with a filename guess behind it.
             "refs": {"methods": [], "default_method": None,
-                     "needs_lora": False, "edits_first": True},
+                     "needs_lora": False, "edits_first": True,
+                     "noun": list(still.REFS_NOUN),
+                     # ...and the way out of it: these are Qwen-Image weights
+                     # post-trained, so drawing a new picture with the attached
+                     # ones only cited is a render they can do, and the
+                     # promotion above would otherwise make it unreachable.
+                     "start_blank": compile_image.START_BLANK_FIELD,
+                     # The built-in ControlNet: which tracings these weights
+                     # follow when one arrives in an image slot, and from which
+                     # edition. There is no node behind this — see
+                     # `still.NATIVE_CONTROL` — so what the frontend does with
+                     # it is send the bench's file to the right slot.
+                     "native_control": list(still.NATIVE_CONTROL),
+                     "control_editions": list(still.CONTROL_EDITIONS),
+                     "editions": dict(still.EDITIONS),
+                     "default_edition": still.DEFAULT_EDITION,
+                     "edition_hints": [list(pair) for pair in still.EDITION_HINTS]},
         },
         "prompt": {
             # Plain prose; references are cited as the labels core's Qwen-edit

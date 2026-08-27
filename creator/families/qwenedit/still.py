@@ -33,6 +33,67 @@ CLIP_TYPE = "qwen_image"
 # the base weights read them, which is what "edit" means here.
 TAKES_REFS = True
 
+# What to call them, which is not what Krea 2 calls its own — see that family's
+# `REFS_NOUN`. Nothing attached here is a style input: `Picture 1` is the thing
+# being changed and `Picture 2` and `Picture 3` are pictures the instruction
+# names, read for what is in them. "Style reference" would describe the one
+# property of these images the model is not being asked about.
+REFS_NOUN = ("picture", "pictures")
+
+# ...and one of those pictures may be a ControlNet guide, which is the part of
+# these weights that has no node anywhere.
+#
+# 2509 and 2511 have ControlNet *built in*: they were post-trained to recognise a
+# depth pass, an edge map or a pose skeleton arriving in an ordinary image slot
+# and to build the render around it. There is nothing to load and nothing to
+# apply — no `ControlNetLoader`, no `QwenImageDiffsynthControlnet`, no strength
+# to set. Core's shipped 2509 and 2511 blueprints are the evidence: three plain
+# image inputs and no control input among them.
+#
+# So the graph a guide render emits is the graph a reference render already
+# emits, and what the pack has to get right is which slot the tracing bench
+# hands its file to. As the init image — where every guide went before this — an
+# edge map is a picture being restyled at denoise 0.65, and what comes back is a
+# tidied edge map. As `Picture 1` it is what the render is aimed at.
+#
+# The three tracings named on the model card, and no more: `lines` and `blocks`
+# are edge-ish and tone-ish and were not trained on, and a guide the weights
+# never learned reads as a picture of a drawing.
+NATIVE_CONTROL = ("depth", "edges", "pose")
+# The first edition has none of it — the built-in ControlNet arrived with 2509.
+CONTROL_EDITIONS = ("2509", "2511")
+CONTROL_NEEDS_EDITION = (
+    "A ControlNet guide is read by the 2509 and 2511 weights, which were "
+    "post-trained on depth, edge and pose maps arriving as a picture. The first "
+    "edition never learned to, and would edit the guide instead of following "
+    "it — move the edition pill, or attach the guide as an ordinary picture"
+)
+
+# ...but not the same number of them on every file that loads here. The encoder
+# has three slots on all of them; what changed between editions is what the DiT
+# was post-trained to *read*, and the first Qwen-Image-Edit weights were fitted
+# on a single picture. Three references on those is not a worse render, it is
+# two pictures the model has no idea what to do with.
+#
+# Nothing in the checkpoint says which edition it is — 2509 and base are the
+# same architecture and differ only in post-training, and core's own detection
+# tells 2511 apart by a marker buffer the other two share nothing like. So the
+# edition is a declared field with a filename guess behind it in the UI, and the
+# compile reads what the field says. Wrong-by-default in one direction only:
+# an unrecognised filename is read as the edition most people are running.
+EDITIONS = {"2511": 3, "2509": 3, "base": 1}
+DEFAULT_EDITION = "2511"
+# Which needle in a filename means which edition, checked in this order. The
+# frontend fills the field from these; a name that says nothing leaves the
+# default standing.
+EDITION_HINTS = (("2511", "2511"), ("2509", "2509"))
+EDITION_REASON = {
+    3: "the Qwen edit encoder the model reads them through has exactly three "
+       "image slots",
+    1: "the first Qwen-Image-Edit weights were post-trained on a single "
+       "picture — switch the edition to 2509 or 2511 for three",
+}
+
 # ...and the first of them is not only a reference. An edit is a picture being
 # changed, so `Picture 1` is also what the render starts from: the shared
 # compile promotes it to the init image at denoise 1.0, which is the shape the
@@ -99,6 +160,47 @@ def plan(data):
     return "model", {"shift": AURAFLOW_SHIFT}
 
 
+def edition(data):
+    """Which Qwen-Image-Edit release this blob says it is loading."""
+    from ...compile import CompileError
+
+    name = data.get("edition") or DEFAULT_EDITION
+    if name not in EDITIONS:
+        raise CompileError(f"unknown Qwen Image Edit edition {name!r}")
+    return name
+
+
+def max_refs(data):
+    """`(references this edition reads, why)` — see `EDITIONS`."""
+    limit = EDITIONS[edition(data)]
+    return limit, EDITION_REASON[limit]
+
+
+def reads_guides(data):
+    """Does the edition this blob names read a control map as a picture?"""
+    return edition(data) in CONTROL_EDITIONS
+
+
+def check_refs(data, refs, loras):
+    """What has to be true before these pictures are worth sampling.
+
+    One thing, and it is the guide: the built-in ControlNet arrived with 2509,
+    so a tracing handed to the first edition is a depth pass about to be edited
+    rather than followed. Read off the blob's own `refs` rather than the parsed
+    pair list, because the role is this family's business and nothing between
+    here and the graph has any use for it — the guide *is* `Picture N`, wired
+    exactly as every other picture is, which is the whole reason this needed no
+    node.
+    """
+    from ...compile import CompileError
+
+    if reads_guides(data):
+        return
+    for item in data.get("refs") or []:
+        if isinstance(item, dict) and item.get("role") == "guide":
+            raise CompileError(CONTROL_NEEDS_EDITION)
+
+
 def require_support():
     """Refuse a core that does not know Qwen Image Edit yet — see krea2's twin.
 
@@ -158,10 +260,13 @@ def _negative(graph, sampling, positive, clip, vae, images):
 
     At real CFG that is a second pass of the edit encoder over the *same*
     images with an empty prompt — what the published workflow does, and not the
-    same thing as zeroing the conditional: the reference latents ride in the
-    conditioning, so a zeroed negative removes the pictures from the
-    unconditional as well and the guidance then points away from the edit's own
-    subject.
+    same thing as zeroing the conditional. `ConditioningZeroOut` copies the
+    conditioning dict, so the reference latents do survive into the negative;
+    what does not is the encoder's reading of the pictures, which becomes a
+    block of zeros. The guidance is then a difference between a grounded
+    prediction and one made against a text stream the model never saw in
+    training, which is not the unconditional this edit post-training was fitted
+    against.
 
     At cfg 1 the sampler never evaluates the negative, and a second 7B encoder
     pass to build a tensor nothing reads is a minute of a Lightning render's

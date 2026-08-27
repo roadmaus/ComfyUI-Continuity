@@ -258,12 +258,41 @@ try {
                 loras: [{ name: "krea2_style_reference.safetensors", strength: 1 }] },
     kreaRefsNoAdapter: { arch: "krea2", prompt: "p",
                          refs: [{ handle: "ref-1", filename: "a.png" }], loras: [] },
+    // A stack with a LoRA in it and nothing in it that reads references. The
+    // failure this pair is really about: counting the stack passes this render
+    // and its picture goes nowhere, so the adapter is named and this one has to
+    // draw as having none.
+    kreaRefsStyleOnly: { arch: "krea2", prompt: "p",
+                        refs: [{ handle: "ref-1", filename: "a.png" }],
+                        loras: [{ name: "some_painting_style.safetensors", strength: 1 }] },
     // The edit family: references on the base weights, so no layout to pick and
     // no adapter to be missing — and the first chip is the picture being
     // changed rather than a style to carry.
     qwenEdit: { arch: "qwenedit", prompt: "p",
                 refs: [{ handle: "ref-1", filename: "a.png" },
                        { handle: "ref-2", filename: "b.png" }], loras: [] },
+    // The first Qwen-Image-Edit weights read one picture, so the second chip is
+    // one the compile will refuse — drawn struck rather than dropped, because a
+    // chip that vanished when the edition pill moved would take the file with
+    // it and say nothing.
+    qwenEditBase: { arch: "qwenedit", prompt: "p", edition: "base",
+                    refs: [{ handle: "ref-1", filename: "a.png" },
+                           { handle: "ref-2", filename: "b.png" }], loras: [] },
+    // The same two pictures, released from the promotion: the render draws onto
+    // an empty canvas and Picture 1 is cited like the rest.
+    qwenEditBlank: { arch: "qwenedit", prompt: "p", start_blank: true,
+                     refs: [{ handle: "ref-1", filename: "a.png" },
+                            { handle: "ref-2", filename: "b.png" }], loras: [] },
+    // A guide off the tracing bench, which on these weights is a picture the
+    // render is aimed at rather than the init image it used to become.
+    qwenEditGuide: { arch: "qwenedit", prompt: "p",
+                     refs: [{ handle: "ref-1", filename: "depth.png",
+                              role: "guide", guide: "depth" }], loras: [] },
+    // ...and one the weights were never post-trained on, which is a warning
+    // rather than a refusal: it is still a picture, it is just not a guide.
+    qwenEditOddGuide: { arch: "qwenedit", prompt: "p",
+                        refs: [{ handle: "ref-1", filename: "lines.png",
+                                 role: "guide", guide: "lines" }], loras: [] },
     qwenTurbo: { arch: "qwenedit", prompt: "p",
                  turbo: { qwenedit: { on: true, quality: "draft",
                                       lora: "qwen_edit_lightning_4step.safetensors" } },
@@ -303,6 +332,16 @@ try {
     const pill = find(node.mmcBody.root);
     out.refPill ??= {};
     out.refPill[name] = pill ? String(pill.className ?? "") : null;
+    // Every class the body drew, so a chip's own state can be read without
+    // hunting for the element that wears it.
+    const classes = [];
+    const sweep = (n) => {
+      if (n.className) classes.push(String(n.className));
+      (n.children ?? []).forEach(sweep);
+    };
+    sweep(node.mmcBody.root);
+    out.prestageClasses ??= {};
+    out.prestageClasses[name] = classes.join(" ");
   }
 } catch (error) {
   out.errors.push(`prestageRows: ${error.stack}`);
@@ -2727,13 +2766,72 @@ check("...and flags itself when nothing in the stack can read one",
       (True, False))
 check("...and does not draw at all where there is no reference",
       pill.get("kreaTurboLora"), None)
+
+# The adapter that reads the references, named on the pill. A stack holding one
+# unrelated LoRA has to read as having no adapter — that is the whole difference
+# between naming it and counting the stack.
+check("the adapter pill names the reference LoRA it found in the stack",
+      "krea2_style_reference" in rows.get("kreaRefs", ""), True)
+check("...and says there is none where the stack only holds a style",
+      ("no adapter" in rows.get("kreaRefsStyleOnly", ""),
+       "no adapter" in rows.get("kreaRefs", "")),
+      (True, False))
+check("...and none where the stack is empty",
+      "no adapter" in rows.get("kreaRefsNoAdapter", ""), True)
+
+# The edition pill, which is only a pill because nothing in the checkpoint says
+# which release it is — and the release is what decides how many pictures the
+# weights read.
+check("the edition pill draws the release and the cap that follows from it",
+      ("2511" in rows.get("qwenEdit", ""), "3 refs" in rows.get("qwenEdit", "")),
+      (True, True))
+check("...and the base weights' own number, singular",
+      ("base" in rows.get("qwenEditBase", ""), "1 ref" in rows.get("qwenEditBase", "")),
+      (True, True))
+check("...and does not draw on a family with one answer for every file",
+      "2511" in rows.get("kreaRefs", ""), False)
+
+# The first picture on an edit family is the one whose role is a decision, so
+# the word is a switch: "editing" while it is the subject, "Picture 1" once the
+# render is drawing onto an empty canvas with it merely cited.
+check("...and as an ordinary citation once the canvas starts blank",
+      ("editing" in rows.get("qwenEditBlank", ""),
+       "Picture 1" in rows.get("qwenEditBlank", "")),
+      (False, True))
+# And nothing on an edit family calls an attached picture a style reference —
+# on these weights that names the one property they are not read for.
+check("the edit family's pictures are not styles",
+      "style" in rows.get("qwenEdit", ""), False)
+check("...while Krea 2's, which really are, still say so",
+      "style reference" in rows.get("kreaRefs", ""), True)
+
+# A guide is never the picture being edited: it is the drawing the render is
+# aimed at, whichever slot it happens to sit in.
+check("a guide chips as a guide rather than as the subject",
+      ("guide" in rows.get("qwenEditGuide", ""),
+       "editing" in rows.get("qwenEditGuide", "")),
+      (True, False))
+
+classes = report.get("prestageClasses", {})
+check("a tracing these weights never learned is flagged, not refused",
+      ("mmc-asset-offshape" in classes.get("qwenEditOddGuide", ""),
+       "mmc-asset-offshape" in classes.get("qwenEditGuide", "")),
+      (True, False))
+check("the picture past the cap is drawn struck rather than dropped",
+      ("mmc-asset-refused" in classes.get("qwenEditBase", ""),
+       "mmc-asset-refused" in classes.get("qwenEdit", "")),
+      (True, False))
 # Qwen Image Edit reads references on the base weights, so there is no layout to
 # pick and no adapter that could be missing — the pill core's detection already
 # answers is a pill nobody should be shown.
 check("...nor on the family whose base weights read references",
       pill.get("qwenEdit"), None)
+# The first picture is the one being changed and the rest are cited beside it.
+# The second chip used to read "style", which named the one property these
+# weights do not read an attached picture for — an edit model is being told what
+# is *in* the picture, not what it looks like.
 check("the edit family's first picture is chipped as the one being changed",
-      ("editing" in rows.get("qwenEdit", ""), "style" in rows.get("qwenEdit", "")),
+      ("editing" in rows.get("qwenEdit", ""), "Picture 2" in rows.get("qwenEdit", "")),
       (True, True))
 check("its turbo pill draws the Lightning ladder and names the LoRA",
       ("4" in rows.get("qwenTurbo", ""),

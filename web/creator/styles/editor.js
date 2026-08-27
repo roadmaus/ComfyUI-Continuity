@@ -135,6 +135,34 @@ export const css = `
 }
 .mmc-asset-name:hover, .mmc-asset-name:focus-visible { color: var(--mmc-text); outline: none; }
 .mmc-asset-role { color: var(--mmc-dim); }
+/* The one role that is a decision: on an edit family the first picture is the
+   thing being changed by default and need not be, so the word is the switch.
+   Drawn as the label it replaced until it is hovered — the same trade
+   .mmc-asset-name makes. */
+.mmc-asset-role-pick {
+  background: none; border: 0; padding: 0 2px; font: inherit; cursor: pointer;
+  line-height: inherit; border-radius: 5px;
+}
+.mmc-asset-role-pick.on { color: var(--mmc-accent); }
+.mmc-asset-role-pick:hover, .mmc-asset-role-pick:focus-visible {
+  background: var(--mmc-surface-3); color: var(--mmc-text); outline: none;
+}
+/* A reference the compile will refuse, drawn rather than dropped: the blob
+   keeps every picture it was given, so the chip is where the cap is said. Read
+   as struck out, because the file is still attached and still recoverable by
+   moving the cap rather than by finding the picture again. */
+.mmc-asset-refused {
+  border-color: color-mix(in srgb, var(--mmc-bad) 55%, transparent);
+  color: var(--mmc-off);
+}
+.mmc-asset-refused .mmc-asset-handle, .mmc-asset-refused .mmc-asset-role {
+  text-decoration: line-through;
+}
+/* ...and the softer one: attached, read, and a shape the adapter was not
+   trained to hold against this canvas. A worse render, not a refused one, so it
+   is the warning colour and nothing is struck. */
+.mmc-asset-offshape { border-color: color-mix(in srgb, var(--mmc-warn) 55%, transparent); }
+.mmc-asset-offshape .mmc-asset-role { color: var(--mmc-warn); }
 .mmc-asset-x {
   background: none; border: 0; color: var(--mmc-off); cursor: pointer;
   font-size: calc(15px * var(--mmc-type)); line-height: 1; padding: 2px 3px; font-family: inherit;

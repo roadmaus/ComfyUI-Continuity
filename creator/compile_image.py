@@ -72,6 +72,18 @@ DEFAULT_ASPECT = "16:9"
 # Core's TextEncodeQwenImageEditPlus has three image inputs. The cap is that
 # node's shape, mirrored here so the UI refuses a fourth instead of the graph.
 MAX_STYLE_REFS = 3
+REFS_LIMIT_REASON = ("the Qwen edit encoder the model reads them through has "
+                     "exactly three image slots")
+# What an attached picture is called, where a family does not say. Style is what
+# a reference contributes on the families that carry a look across; a family
+# whose references are the subject rather than the look declares its own — see
+# `families/qwenedit/still.REFS_NOUN`.
+REFS_NOUN = ("style reference", "style references")
+
+# The blob field that releases an edit family's first picture from being the
+# thing edited. Named here rather than in the family because the shared flow is
+# what reads it — see the promotion in `compile_prestage`.
+START_BLANK_FIELD = "start_blank"
 
 # How much of the init image survives by default when one is attached. The same
 # number the img2img tradition has always landed on: enough to keep the
@@ -207,8 +219,27 @@ def _parse_init(raw):
     return {"filename": raw["filename"], "denoise": denoise}
 
 
-def _parse_refs(raw):
-    """The style references, as `[(handle, filename)]` in slot order.
+def ref_limit(family, data):
+    """`(how many references this render may carry, why that is the number)`.
+
+    Not a constant, because the encoder's three slots are not the only cap in
+    play: what a checkpoint was *post-trained* to read is its own number, and on
+    Qwen Image Edit it changed between editions — the base weights take one
+    picture and the 2509/2511 weights three. A family with one answer for every
+    file it loads declares no hook and gets the encoder's shape.
+    """
+    hook = getattr(family, "max_refs", None)
+    return hook(data) if hook else (MAX_STYLE_REFS, REFS_LIMIT_REASON)
+
+
+def refs_noun(family):
+    """`(singular, plural)` for what this family's attached pictures are."""
+    return getattr(family, "REFS_NOUN", REFS_NOUN)
+
+
+def _parse_refs(raw, limit=MAX_STYLE_REFS, reason=REFS_LIMIT_REASON,
+                noun=REFS_NOUN):
+    """The attached pictures, as `[(handle, filename)]` in slot order.
 
     The handle is what the prompt cites and the position is what the encoder
     labels, so both have to come out of here together — a bare filename list
@@ -221,18 +252,16 @@ def _parse_refs(raw):
     for item in raw or []:
         filename = item.get("filename") if isinstance(item, dict) else item
         if not filename or not isinstance(filename, str):
-            raise CompileError("every style reference must carry a filename")
+            raise CompileError(f"every {noun[0]} must carry a filename")
         handle = item.get("handle") if isinstance(item, dict) else None
         refs.append((handle if isinstance(handle, str) else None, filename))
-    if len(refs) > MAX_STYLE_REFS:
-        raise CompileError(
-            f"at most {MAX_STYLE_REFS} style references — the Qwen edit encoder "
-            f"the model reads them through has exactly three image slots"
-        )
+    if len(refs) > limit:
+        raise CompileError(f"at most {limit} {noun[0] if limit == 1 else noun[1]} "
+                           f"— {reason}")
     return refs
 
 
-def _cite_refs(prompt, refs):
+def _cite_refs(prompt, refs, noun=REFS_NOUN):
     """Replace every `@handle` with the label its slot will carry.
 
     `Picture N`, 1-based in slot order, because that is the string core's
@@ -251,7 +280,7 @@ def _cite_refs(prompt, refs):
     if dangling:
         raise CompileError(
             "the prompt references " + ", ".join("@" + h for h in dangling)
-            + " but no such style reference is attached"
+            + f" but no such {noun[0]} is attached"
         )
     return HANDLE_RE.sub(lambda m: labels.get(m.group(1), m.group(0)), prompt)
 
@@ -286,36 +315,47 @@ def compile_prestage(data, family, image_size_lookup=None):
     if triggers:
         prompt = f"{', '.join(triggers)}, {prompt}"
 
-    refs = _parse_refs(data.get("refs"))
+    refs = _parse_refs(data.get("refs"), *ref_limit(family, data), refs_noun(family))
     # Cited before the family check below, so a prompt citing a reference on a
     # family that reads none is refused for the reference rather than for the
     # citation — one mistake, and the one the user actually made.
-    prompt = _cite_refs(prompt, refs)
+    prompt = _cite_refs(prompt, refs, refs_noun(family))
     if refs and not family.TAKES_REFS:
         # Refused rather than dropped, in the family's own words: a render that
         # silently ignored the attached images is the failure this package
         # exists to avoid.
         raise CompileError(family.REFS_REFUSAL)
-    if refs and not loras and getattr(family, "REFS_NEED_LORA", None):
-        # And the same refusal one step in, for a family whose model reads
-        # references only with an adapter patched on. Krea 2 is one: core hands
-        # its DiT no default reference method because the base weights have
-        # none, so an attached image with an empty stack is conditioning that
-        # never reaches the sampler.
-        raise CompileError(family.REFS_NEED_LORA)
+    if refs and hasattr(family, "check_refs"):
+        # And everything past "does this family read pictures at all", which is
+        # the family's own business: whether the adapter that reads them is in
+        # the stack, and whether the row this render will sample can do what the
+        # instruction asks. Krea 2 is the family with both — see its
+        # `check_refs`. Handed the reduced LoRA list, which is already only the
+        # entries that will actually be patched on.
+        family.check_refs(data, refs, loras)
 
     init = _parse_init(data.get("init"))
-    if init is None and refs and getattr(family, "EDITS_FIRST_REF", False):
-        # An edit family's first reference is the picture being edited, so it is
-        # also what the render starts from: the canvas follows its aspect and
-        # the latent is that image encoded, at a denoise of 1.0 because the
-        # instruction reaches the model through the reference conditioning
-        # rather than through leftover noise. That is the shape the published
-        # Qwen-Image-Edit workflow has, said once here instead of as a second
-        # image field the user would have to fill with a picture already
-        # attached. An explicit init still wins — it is the only way to ask for
-        # a partial denoise, and a family with a reference pool has no other
-        # place to say "keep this composition".
+    if (init is None and refs and getattr(family, "EDITS_FIRST_REF", False)
+            and not data.get(START_BLANK_FIELD)):
+        # An edit family's first reference is *usually* the picture being
+        # edited, so it is also what the render starts from: the canvas follows
+        # its aspect and the latent is that image encoded, at a denoise of 1.0
+        # because the instruction reaches the model through the reference
+        # conditioning rather than through leftover noise. That is the shape the
+        # published Qwen-Image-Edit workflow has, said once here instead of as a
+        # second image field the user would have to fill with a picture already
+        # attached.
+        #
+        # Two things override it. An explicit init wins — it is the only way to
+        # ask for a partial denoise, and a family with a reference pool has no
+        # other place to say "keep this composition". And `start_blank` wins,
+        # which is the render these weights can do that the promotion would
+        # otherwise take away: draw a new picture from an empty canvas with the
+        # attached ones only cited. Qwen Image Edit is Qwen-Image post-trained,
+        # not replaced, so "here are three pictures, now make a fourth" is a
+        # real request and not a mistake — and without the flag there is no way
+        # to make it, because attaching the first picture is what silently turns
+        # the render into an edit of it.
         init = {"filename": refs[0][1], "denoise": 1.0}
 
     short_edge = data.get("short_edge", DEFAULT_SHORT_EDGE)

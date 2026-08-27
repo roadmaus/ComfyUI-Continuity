@@ -26,14 +26,97 @@ Qwen2.5-VL 7B encoder, and the Qwen image VAE Krea 2 already loads. The turbo
 pill is a Lightning LoRA and only a LoRA, since there is no distilled checkpoint
 to swap to. The schedule shift core does not detect for these weights is put
 back, and the unconditional branch is a second pass of the edit encoder over the
-same pictures rather than a zeroed copy of the first — zeroing takes the
-reference latents out with it, and the guidance then points away from the edit's
-own subject. At cfg 1 it *is* the zeroed copy, because a distilled run never
+same pictures rather than a zeroed copy of the first — a zeroed copy keeps the
+reference latents but hands the model a text stream of zeros in place of the
+encoder's reading of the pictures, which is not the unconditional this edit
+post-training was fitted against. At cfg 1 it *is* the zeroed copy, because a distilled run never
 evaluates a negative and a 7B encoder pass for a tensor nothing reads is most of
 a four-step render.
 
 Switching the model pill now writes the arriving family's own sampler row rather
 than Krea 2's for everyone.
+
+**References are checked for the things that fail quietly.**
+
+Every way a reference image can be attached and then not read has been made a
+refusal rather than a worse picture.
+
+Krea 2 asked only that the LoRA stack was not empty. It asks now *which* entry
+reads the references, on a pill beside the layout pill, because a stack holding
+a style LoRA and nothing that reads pictures passed the old check and rendered
+as though no reference had been attached at all. A reference render on Krea 2's
+RAW row also builds its unconditional the way Qwen Image Edit's does — the same
+pictures with nothing asked of them — instead of a zeroed copy, which is the row
+these adapters were trained against. And Turbo now refuses a removal: distilled
+at cfg 1 there is no guidance to push against the reference, so it re-draws the
+subject it was asked to delete. Take the switch off and let RAW do it.
+
+Qwen Image Edit has an edition pill. The encoder has three image slots on every
+edition, but the first Qwen-Image-Edit weights were post-trained on one picture
+— and nothing in the checkpoint says which release it is, so the filename is
+guessed from and the pill is where you correct it. A picture past what the
+edition reads is drawn struck through rather than silently dropped, and the
+compile refuses it by name.
+
+The text encoder is checked for its vision tower before a render with pictures
+in it starts. Both VL encoders ship in a text-only cut that loads without
+complaint, tokenizes the sentence without complaint, and then has nothing to
+encode the references with — a render that ignored every picture it was given
+and looked like a prompting problem. Safetensors and GGUF alike, read from the
+header rather than by loading anything, and a file that cannot be read is not
+held against you.
+
+Krea 2 also warns when a reference's shape does not match the canvas: those
+adapters were trained on pairs whose aspects agreed, and what they preserve
+falls off when they do not.
+
+**An attached picture is called what it is, and the first one need not be the
+subject.**
+
+On Qwen Image Edit the second and third chips said `style`, which names the one
+property those weights do not read an attached picture for — an edit model is
+being told what is *in* the picture. They say `Picture 2` and `Picture 3` now,
+which is both what the encoder writes in front of them and what the prompt cites
+them by; `style reference` stays on Krea 2, where an attached image really does
+contribute its look. The prompt placeholder, the window subtitle and the refusal
+messages follow the same split.
+
+And `editing` on the first chip is a button. These are Qwen-Image weights
+post-trained rather than replaced, so "here are three pictures, now draw a
+fourth" is a render they can do — and promoting the first picture to the thing
+being edited was quietly taking it away, because attaching a picture was what
+turned the render into an edit of it. Click the word and the render draws onto
+an empty canvas at the aspect pill's shape, with every picture merely cited. An
+init image still overrides both, since it is the only way to ask for a partial
+denoise.
+
+**Qwen Image Edit's built-in ControlNet is reachable, and a guide lands where
+it is followed.**
+
+2509 and 2511 have ControlNet post-trained into the weights: a depth pass, an
+edge map or a pose skeleton arriving in an ordinary image slot is followed, with
+nothing to load and no strength to set. Core's own blueprints for both editions
+are three plain image inputs and no control input, which is why there was
+nothing to wire — and why the bug was invisible. Every guide the tracing bench
+made went to the **init image**, and an edge map in the init slot is a picture
+being restyled at denoise 0.65: what came back was a tidied edge map.
+
+A guide sent to a pre-stage on those editions is now a picture, chipped `guide`,
+with the canvas taking its shape. On Krea 2, Ideogram and the first Qwen edition
+it is still the init image, because that is the only slot those weights have
+that means "start from this arrangement" — and a guide handed to the first Qwen
+edition is refused outright rather than quietly edited. A tracing outside the
+three the weights were trained on (`lines`, `blocks`, a raw frame) is flagged on
+the chip: it will be read as a picture of a drawing, not as something to aim at.
+
+**Sending to the pre-stage opens the pre-stage.**
+
+A picture handed over used to land in a blob nobody was looking at, and the
+press that sends it is followed every time by writing the instruction that goes
+with it. `↻ edit` and the bench's *Send to pre-stage* now put the pre-stage in
+front: the step, inside the fullscreen shell, and the window on the canvas. The
+bench closes behind the send, since the guide exists to be written a prompt
+around.
 
 **The finished still can go back in.**
 

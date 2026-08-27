@@ -7,9 +7,12 @@ what only Krea 2 knows: RAW is the base checkpoint and samples with real CFG;
 Turbo is an 8-step distillation at cfg 1; the two want different timestep shifts
 and this is where that is put right (`KREA_RAW_SHIFT`); and style references go
 through core's Qwen-edit encoder, which the model only reads with one of the
-reference LoRAs patched on.
+reference LoRAs patched on — named rather than counted (`check_refs`), because
+a stack that merely holds a LoRA is not the same question as a stack that holds
+the one that reads pictures.
 """
 
+import re
 import sys
 
 ARCH = "krea2"
@@ -24,6 +27,15 @@ CLIP_TYPE = "krea2"
 # Style references are read: core's Qwen-edit encoder conditions on up to three
 # images, which Krea 2 was post-trained against.
 TAKES_REFS = True
+
+# ...and *style reference* is the right words for them here, which is not true
+# of every family that reads pictures. Krea 2 carries a look across: what these
+# images contribute is their appearance, and the LoRA that reads them is the one
+# trained to hold identity or style. On an edit family the same slot holds a
+# picture the instruction is about, and calling that a style reference describes
+# it as the one thing it is not. So the noun is the family's, and every message
+# that counts references asks for it.
+REFS_NOUN = ("style reference", "style references")
 
 # What each checkpoint wants from the sampler row. RAW is undistilled and runs
 # real CFG; Turbo is distilled and runs at 1. These are what the turbo pill
@@ -69,13 +81,61 @@ KREA_TURBO_SHIFT = 1.15
 REF_METHODS = ("index_timestep_zero", "index")
 DEFAULT_REF_METHOD = REF_METHODS[0]
 
-# ...and references with no adapter at all are refused. Every way of reading a
-# reference on Krea 2 is a LoRA, so an empty stack is not a weaker render, it is
-# the images going nowhere.
-REFS_NEED_LORA = (
+# ...and the adapter that reads them is *named*, not merely present. Every way
+# of reading a reference on Krea 2 is a LoRA, so the stack has to hold one — but
+# "the stack is not empty" is not the same question, and answering the easy one
+# passes a render whose only LoRA is a style or a character and whose pictures
+# go nowhere. That is the exact failure the check exists to catch, so the blob
+# says which entry is the reference adapter and this refuses anything else.
+#
+# It is also the honest place for the layout: `REF_METHODS` above is a property
+# of the adapter, not of the render, so the two are picked together in the UI.
+REF_LORA_FIELD = "ref_lora"
+REFS_NEED_ADAPTER = (
     "Krea 2 reads style references only through a reference LoRA — the base "
-    "weights were never trained to. Add one to the stack (krea2_style_reference "
-    "for style, an ai-toolkit edit LoRA for edits), or clear the references"
+    "weights were never trained to, so an unread picture is the only other "
+    "outcome. Add one to the stack (krea2_style_reference for style, an "
+    "ai-toolkit edit LoRA for edits) and name it as the reference adapter, or "
+    "clear the references"
+)
+REFS_ADAPTER_GONE = (
+    "{name} is named as the reference adapter but is not in this render's LoRA "
+    "stack — it was removed, disabled or turned down to zero strength. Pick the "
+    "adapter again, or clear the references"
+)
+
+# Filename needles the *frontend* fills an empty adapter field from — the
+# published Krea 2 reference LoRAs, spelled the ways they are actually
+# distributed. Deliberately only the names that identify themselves: a needle as
+# loose as "edit" would fill the field from a LoRA that merely had the word in
+# its title, which is the silent mis-read this field exists to prevent. A file
+# named anything else is picked by hand, and the compile reads the field and
+# nothing else either way.
+REF_LORA_HINTS = ("krea2_style_reference", "krea2_identity_edit", "krea2_edit",
+                  "identity_edit")
+
+# Removal is the one edit the distilled checkpoint cannot do. At cfg 1 there is
+# no guidance to push the render away from what the reference latents are
+# showing it, so Turbo re-draws the subject it was asked to delete — the doc's
+# own words, and a routing rule rather than a tuning preference. RAW at its own
+# row is what the task needs.
+#
+# The instruction is the only place that says a removal is being asked for, so
+# it is read for the verbs a removal is written with. English-shaped and so
+# necessarily partial: it catches the way these prompts are actually written
+# without claiming to be a parser, and it only ever refuses the one combination
+# the doc says produces a wrong picture.
+REMOVAL_WORDS = (
+    "remove", "removes", "removed", "removing", "removal",
+    "delete", "deletes", "deleted", "deleting",
+    "erase", "erases", "erased", "erasing",
+    "take out", "takes out", "taking out", "get rid of", "rid of",
+)
+REMOVAL_NEEDS_RAW = (
+    "Krea 2 Turbo cannot take something out of a picture: distilled at cfg 1 it "
+    "has no guidance to push against the reference, so it re-renders the "
+    "subject instead of deleting it. Throw the turbo switch back and let RAW's "
+    "own row do the removal"
 )
 
 
@@ -109,6 +169,40 @@ def ref_method(data):
     if method not in REF_METHODS:
         raise CompileError(f"unknown Krea 2 reference method {method!r}")
     return method
+
+
+def check_refs(data, refs, loras):
+    """What has to be true before Krea 2's references are worth sampling.
+
+    Two things, and neither is visible in the graph afterwards: the adapter that
+    reads them is actually in this render's stack, and the row this render will
+    sample can do what the instruction asks. See `REFS_NEED_ADAPTER` and
+    `REMOVAL_NEEDS_RAW` for why each is a refusal rather than a worse picture.
+    """
+    from ...compile import CompileError
+    from ...compile_image import turbo_block
+
+    adapter = data.get(REF_LORA_FIELD)
+    adapter = adapter.strip() if isinstance(adapter, str) else ""
+    if not adapter:
+        raise CompileError(REFS_NEED_ADAPTER)
+    # `loras` has already been reduced to the entries that will be patched on,
+    # so "not in it" covers removed, unticked and turned down to zero alike.
+    if adapter not in {entry["name"] for entry in loras}:
+        raise CompileError(REFS_ADAPTER_GONE.format(name=adapter))
+
+    if turbo_block(data, ARCH).get("on") and asks_for_removal(data.get("prompt")):
+        raise CompileError(REMOVAL_NEEDS_RAW)
+
+
+def asks_for_removal(prompt):
+    """Is this instruction asking for something to be taken out of the picture?
+
+    Word-boundary matching so `removed` counts and `remote` does not. See
+    `REMOVAL_WORDS` on what this is and is not claiming to be.
+    """
+    text = (prompt or "").lower()
+    return any(re.search(rf"\b{re.escape(word)}\b", text) for word in REMOVAL_WORDS)
 
 
 def require_support():
@@ -149,22 +243,19 @@ def emit_graph(graph, payload, sampling, weights, clip, vae, model, unique_id,
         # The Qwen-edit encoder reads up to three references: it feeds them to
         # the text encoder as vision tokens *and* VAE-encodes them into the
         # conditioning's reference latents, which is the pair Krea 2 was
-        # post-trained against. The method node picks the variant the official
-        # workflow uses.
+        # post-trained against. The method node picks the variant the adapter in
+        # the stack was trained with.
         images = {f"image{i + 1}": graph.node("LoadImage", image=name).out(0)
                   for i, name in enumerate(payload.refs)}
-        positive = graph.node("TextEncodeQwenImageEditPlus", clip=clip,
-                              prompt=payload.prompt, vae=vae, **images).out(0)
-        positive = graph.node("FluxKontextMultiReferenceLatentMethod",
-                              conditioning=positive,
-                              reference_latents_method=payload.schedule["ref_method"]).out(0)
+        method = payload.schedule["ref_method"]
+        positive = _refs_encode(graph, clip, vae, payload.prompt, images, method)
+        negative = _refs_negative(graph, sampling, positive, clip, vae, images, method)
     else:
         positive = graph.node("CLIPTextEncode", clip=clip, text=payload.prompt).out(0)
-
-    # Zeroed-out conditioning as the negative on both checkpoints: at Turbo's
-    # cfg 1.0 it is skipped outright, and RAW's cfg 3.5 wants an unconditional,
-    # not a second prompt.
-    negative = graph.node("ConditioningZeroOut", conditioning=positive).out(0)
+        # Nothing grounded to be unconditional *about*: with no pictures in the
+        # conditioning, a zeroed copy is the whole unconditional either
+        # checkpoint wants, and at Turbo's cfg 1.0 it is skipped outright.
+        negative = graph.node("ConditioningZeroOut", conditioning=positive).out(0)
 
     latent, denoise = render_image.emit_latent(graph, payload, vae,
                                                "EmptySD3LatentImage")
@@ -175,6 +266,37 @@ def emit_graph(graph, payload, sampling, weights, clip, vae, model, unique_id,
         scheduler=sampling.scheduler, denoise=denoise,
     )
     render_image.emit_tail(graph, sampled.out(0), vae, unique_id, filename_prefix)
+
+
+def _refs_encode(graph, clip, vae, prompt, images, method):
+    """One grounded encode: the pictures as vision tokens and as reference
+    latents, laid into the sequence the way the adapter learned them."""
+    conditioning = graph.node("TextEncodeQwenImageEditPlus", clip=clip,
+                              prompt=prompt, vae=vae, **images).out(0)
+    return graph.node("FluxKontextMultiReferenceLatentMethod",
+                      conditioning=conditioning,
+                      reference_latents_method=method).out(0)
+
+
+def _refs_negative(graph, sampling, positive, clip, vae, images, method):
+    """The unconditional branch of a reference render, in the shape the row it
+    is sampled against can use.
+
+    At real CFG that is a second grounded encode — the same pictures, nothing
+    asked of them — because that is the unconditional these adapters were
+    trained against. A zeroed copy is *not* the same thing: `ConditioningZeroOut`
+    copies the conditioning dict, so the reference latents do ride along, but the
+    text stream it hands the DiT is a block of zeros rather than the encoder's
+    reading of the pictures, and the guidance is then a difference between two
+    things only one of which the model has seen before.
+
+    At cfg 1 the sampler never evaluates the negative, so the distilled path
+    gets the zeroed copy instead of paying for a second VL encode that nothing
+    reads — the same trade Qwen Image Edit's branch makes.
+    """
+    if sampling.cfg == 1.0:
+        return graph.node("ConditioningZeroOut", conditioning=positive).out(0)
+    return _refs_encode(graph, clip, vae, "", images, method)
 
 
 def compile_still(data, image_size_lookup=None):

@@ -113,9 +113,16 @@ def manifest():
                       "checkpoint": True},
             # What a reference render needs beyond the images: an adapter in the
             # stack, and the layout that adapter was trained on.
+            # References, the adapter that reads them, and the layout that
+            # rides with it. `adapter` is the blob field the compile checks by
+            # name — the stack merely holding a LoRA is not the same question —
+            # and `hints` are the filename needles the picker pre-selects from.
             "refs": {"methods": list(still.REF_METHODS),
                      "default_method": still.DEFAULT_REF_METHOD,
-                     "needs_lora": True},
+                     "needs_lora": True,
+                     "noun": list(still.REFS_NOUN),
+                     "adapter": still.REF_LORA_FIELD,
+                     "adapter_hints": list(still.REF_LORA_HINTS)},
         },
         "prompt": {
             # Plain prose; references are cited as the labels core's Qwen-edit

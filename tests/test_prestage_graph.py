@@ -306,9 +306,17 @@ ADAPTER = [{"name": "krea2_style_reference.safetensors", "strength": 1.0}]
 def refs_blob(**overrides):
     data = {"arch": "krea2", "prompt": "p", "aspect": "1:1", "short_edge": 1024,
             "refs": [{"filename": "a.png"}, {"filename": "b.png"}],
-            "loras": list(ADAPTER)}
+            "loras": list(ADAPTER), "ref_lora": ADAPTER[0]["name"]}
     data.update(overrides)
     return data
+
+
+def refs_graph(data=None, **row):
+    settings = dict(seed=0, steps=20, cfg=1.0, sampler_name="euler", scheduler="simple")
+    settings.update(row)
+    return by_class(ri.emit(ci.compile_prestage(data if data is not None else refs_blob(), k2),
+                            ri.ImageWeights(arch="krea2", files=MODELS["krea2"]),
+                            sampling_mod.Sampling(**settings), NODE_ID, k2).finalize())
 
 
 refs_payload = ci.compile_prestage(refs_blob(), k2)
@@ -341,12 +349,67 @@ expect_error("an unknown reference method is refused by name",
 # none — every way of reading a reference on this model is a LoRA. So an empty
 # stack is not a weaker render, it is the images going nowhere.
 expect_error("references with no adapter in the stack are refused",
-             lambda: ci.compile_prestage(refs_blob(loras=[]), k2),
+             lambda: ci.compile_prestage(refs_blob(loras=[], ref_lora=None), k2),
              "only through a reference LoRA")
 expect_error("...and a muted adapter counts as no adapter",
              lambda: ci.compile_prestage(refs_blob(
                  loras=[{**ADAPTER[0], "enabled": False}]), k2),
+             "not in this render's LoRA stack")
+# And the adapter is named rather than counted: a stack holding a style LoRA and
+# nothing that reads references is the same silent failure as an empty one, so
+# "there is a LoRA" is not the question being asked.
+expect_error("a stack with no *reference* adapter in it is refused",
+             lambda: ci.compile_prestage(refs_blob(
+                 loras=[{"name": "some_painting_style.safetensors", "strength": 1.0}],
+                 ref_lora=None), k2),
              "only through a reference LoRA")
+expect_error("...and an adapter named but never added is refused by name",
+             lambda: ci.compile_prestage(refs_blob(
+                 loras=[{"name": "some_painting_style.safetensors", "strength": 1.0}]), k2),
+             "krea2_style_reference.safetensors")
+check("a stack that carries the named adapter alongside others is fine",
+      ci.compile_prestage(refs_blob(loras=[
+          {"name": "some_painting_style.safetensors", "strength": 0.6},
+          *ADAPTER]), k2).refs, ["a.png", "b.png"])
+
+# The unconditional a reference render is guided against is the same pictures
+# with nothing asked of them — the row these adapters were trained against.
+# `ConditioningZeroOut` is not that: it copies the conditioning dict, so the
+# reference latents do ride along, but the text stream becomes a block of zeros
+# the model never saw in training.
+guided = refs_graph(cfg=3.5)
+check("at real CFG the negative is a second grounded encode",
+      len(guided["TextEncodeQwenImageEditPlus"]), 2)
+check("...over the same pictures, with nothing asked of them",
+      sorted(i["prompt"] for _, i in guided["TextEncodeQwenImageEditPlus"]), ["", "p"])
+check("...laid in the same way as the positive's",
+      {i["reference_latents_method"]
+       for _, i in guided["FluxKontextMultiReferenceLatentMethod"]},
+      {k2.DEFAULT_REF_METHOD})
+check("...and nothing is zeroed", "ConditioningZeroOut" in guided, False)
+check("at cfg 1 the negative is never evaluated, so it is not paid for",
+      (len(refs["TextEncodeQwenImageEditPlus"]), "ConditioningZeroOut" in refs),
+      (1, True))
+
+# Removal is the one edit the distilled checkpoint cannot do: at cfg 1 there is
+# no guidance to push against the reference, so Turbo re-draws what it was asked
+# to delete. A routing rule, not a tuning preference.
+TURBO_ON = {"krea2": {"on": True}}
+expect_error("a removal asked of the distilled row is refused",
+             lambda: ci.compile_prestage(
+                 refs_blob(prompt="remove the car from the driveway",
+                           turbo=TURBO_ON), k2),
+             "re-renders the subject instead of deleting it")
+check("...while every other edit the distillation covers goes through",
+      ci.compile_prestage(refs_blob(prompt="recolour the car red",
+                                    turbo=TURBO_ON), k2).checkpoint_field,
+      "turbo_model")
+check("...and the same removal on RAW is what the rule points at",
+      ci.compile_prestage(refs_blob(prompt="remove the car"), k2).checkpoint_field,
+      "model")
+check("a word that merely contains one is not a removal",
+      ci.compile_prestage(refs_blob(prompt="a removable panel on a remote cabin",
+                                    turbo=TURBO_ON), k2).arch, "krea2")
 check("the reference branch samples on the same RAW ramp as t2i",
       (refs["ModelSamplingFlux"][0][1]["max_shift"], refs["ModelSamplingFlux"][0][1]["base_shift"]),
       (k2.KREA_RAW_SHIFT["max_shift"], k2.KREA_RAW_SHIFT["base_shift"]))
@@ -548,8 +611,10 @@ check("the text encoder is loaded as Qwen's",
       edit["CLIPLoader"][0][1]["type"], "qwen_image")
 
 # Two passes of the same encoder over the same pictures. Zeroing the positive
-# would take the reference latents out of the unconditional with it, and the
-# guidance would then point away from the edit's own subject.
+# keeps the reference latents — `ConditioningZeroOut` copies the conditioning
+# dict — but hands the model a text stream of zeros in place of the encoder's
+# reading of the pictures, which is not the unconditional this post-training was
+# fitted against.
 check("the positive and the negative are both edit encodes",
       len(edit["TextEncodeQwenImageEditPlus"]), 2)
 prompts = sorted(i["prompt"] for _, i in edit["TextEncodeQwenImageEditPlus"])
@@ -574,6 +639,29 @@ check("...at full denoise, because the instruction arrives as conditioning",
 sized_payload = ci.compile_prestage(edit_blob(), qe, lambda name: (1920, 1080))
 check("the canvas takes the edited picture's shape",
       (sized_payload.width > sized_payload.height, sized_payload.height), (True, 1024))
+# ...and the way out of it. These are Qwen-Image weights post-trained, not
+# replaced, so "here are two pictures, now draw a third" is a render they can
+# do — and the promotion above is what would otherwise make it unreachable, by
+# turning the act of attaching the first picture into an edit of it.
+blank_payload, blank = edit_graph(edit_blob(start_blank=True))
+check("a blank start releases the first picture from being the subject",
+      blank_payload.init, None)
+check("...so the render draws onto an empty canvas",
+      ("EmptySD3LatentImage" in blank, "VAEEncode" in blank), (True, False))
+check("...at the aspect the pill asked for, not the picture's",
+      (blank_payload.width, blank_payload.height), (1024, 1024))
+check("...while both pictures are still read and still cited",
+      ("image1" in blank["TextEncodeQwenImageEditPlus"][0][1],
+       "image2" in blank["TextEncodeQwenImageEditPlus"][0][1]),
+      (True, True))
+check("an explicit init beats the flag, since it is the only partial denoise",
+      ci.compile_prestage(edit_blob(start_blank=True,
+                                    init={"filename": "plate.png", "denoise": 0.4}),
+                          qe).init,
+      {"filename": "plate.png", "denoise": 0.4})
+check("the flag means nothing on a family that never promoted anything",
+      ci.compile_prestage(refs_blob(start_blank=True), k2).init, None)
+
 check("an explicit init still wins — the only way to ask for a partial denoise",
       ci.compile_prestage(edit_blob(init={"filename": "plate.png", "denoise": 0.4}),
                           qe).init,
@@ -609,6 +697,45 @@ expect_error("a fourth picture is refused here too",
              lambda: ci.compile_prestage(edit_blob(
                  refs=["a.png", "b.png", "c.png", "d.png"]), qe),
              "three image slots")
+
+# ...but three is the 2509/2511 number, not the encoder's last word. The first
+# Qwen-Image-Edit weights were post-trained on one picture, and nothing in the
+# file says which release it is — so the edition is declared and the cap follows
+# it rather than the three slots the node happens to have.
+check("the edition defaults to the one most people are running",
+      qe.edition(edit_blob()), "2511")
+check("...and 2509 reads three pictures just as 2511 does",
+      ci.compile_prestage(edit_blob(edition="2509"), qe).refs, ["her.png", "coat.png"])
+expect_error("a second picture on the base weights is refused",
+             lambda: ci.compile_prestage(edit_blob(edition="base"), qe),
+             "post-trained on a single picture")
+check("...while one picture on them is the render they can do",
+      ci.compile_prestage(edit_blob(edition="base", refs=["her.png"]), qe).refs,
+      ["her.png"])
+# The built-in ControlNet, which is the one part of these weights with no node
+# behind it: 2509 and 2511 follow a depth, edge or pose map arriving in an
+# ordinary image slot, so the guide is Picture N and the graph is the graph a
+# reference render already emits. What the pack has to get right is the slot —
+# and that the edition in front of it learned to read one.
+GUIDE = [{"handle": "img-1", "filename": "depth.png", "role": "guide"}]
+check("a guide is wired exactly as any other picture is",
+      ci.compile_prestage(edit_blob(refs=GUIDE), qe).refs, ["depth.png"])
+check("...and the canvas follows it, so the render comes out its shape",
+      ci.compile_prestage(edit_blob(refs=GUIDE), qe, lambda name: (1920, 1080)).width
+      > ci.compile_prestage(edit_blob(refs=GUIDE), qe, lambda name: (1920, 1080)).height,
+      True)
+expect_error("a guide handed to the edition that never learned one is refused",
+             lambda: ci.compile_prestage(edit_blob(refs=GUIDE, edition="base"), qe),
+             "would edit the guide instead of following it")
+check("...while 2509 reads it, which is the edition it arrived in",
+      ci.compile_prestage(edit_blob(refs=GUIDE, edition="2509"), qe).refs, ["depth.png"])
+check("an ordinary picture on the base weights is untouched by that rule",
+      ci.compile_prestage(edit_blob(refs=["her.png"], edition="base"), qe).refs,
+      ["her.png"])
+
+expect_error("an edition nobody published is refused by name",
+             lambda: ci.compile_prestage(edit_blob(edition="2601"), qe),
+             "unknown Qwen Image Edit edition")
 
 # ---- refusals ----------------------------------------------------------------
 

@@ -825,6 +825,15 @@ class Fullscreen {
     ];
   }
 
+  /** Put the pre-stage in front, wherever this shell happens to be.
+   *
+   *  In the desk view both columns are already on screen and there is nothing
+   *  to do; in the simple view the pre-stage is a step, and a step you are not
+   *  on is a step you cannot see. */
+  revealPreStage() {
+    if (this.view === "simple" && preStageOf(this.node)) this.setStep("pre");
+  }
+
   /** A quick link, pressed: one column, showing the step named. `setView` first,
    *  because `setStep` in the desk view has no card to turn and nothing to say. */
   goTo(step) {
@@ -846,11 +855,27 @@ class Fullscreen {
     const targets = [];
     const pre = preStageOf(this.node)?.mmcBody;
     if (pre?.takeGuide) {
+      // Which slot it lands in is the weights' answer, not this button's — see
+      // `PreStageEditor.takeGuide`. Said here because it is the difference
+      // between a render aimed at the tracing and a render *of* the tracing,
+      // and the press is where somebody would want to know.
+      const aimed = S.preStageReadsGuides(pre.state);
       targets.push({
         id: "pre", label: t("Send to pre-stage"), kinds: ["image"],
-        note: t("Make it the picture the still is built on — the pre-stage's init image."),
+        note: aimed
+          ? t("Aim the still at it. These weights follow a depth, edge or pose map "
+            + "arriving as a picture — there is no ControlNet to load.")
+          : t("Make it the picture the still is built on — the pre-stage's init image."),
         kindNote: t("A clip cannot go to a pre-stage: that step makes stills."),
-        take: (result) => { pre.takeGuide(result); this.paintFrame(); },
+        // Closes the bench and puts the pre-stage in front, because sending is
+        // the end of the errand: the guide exists to be written a prompt
+        // around, and the next thing anybody does is write it.
+        closeOnSend: true,
+        take: (result) => {
+          pre.takeGuide(result);   // carries `opId`, which the pre-stage reads
+          this.paintFrame();
+          this.revealPreStage();
+        },
       });
     }
     const shot = this.node.mmcBody;
@@ -962,6 +987,32 @@ class Fullscreen {
   // ---- looking at an earlier take -------------------------------------------
 
   /**
+   * The hand-off chips, on a take borrowed back from the lip.
+   *
+   * A still does not stop being usable because a newer one was made. The
+   * pre-stage's plate has carried "→ start / → end / → ref" since the pair
+   * existed, but the moment the next queue retired that still to the lip the
+   * only way to reach the row again was to re-render the picture you were
+   * already looking at — which is the one thing the lip exists to make
+   * unnecessary. Reviewing is *for* choosing between takes; the choice has to
+   * be actionable where it is made.
+   *
+   * Not re-implemented here: the row is whatever the body on the card builds
+   * from an `executed` payload, which is `PreStageBody.renderResultChips` and
+   * its late-resolved peer. So a take answers to the same capacity and
+   * exclusivity rules the live still does, resolved at the press rather than
+   * at the render — and a step whose body has no such row (the shot's, whose
+   * takes are clips) simply gets none.
+   */
+  reviewChips(result) {
+    // `saved` is the output entry the chips name the file from, and a clip is
+    // not a frame: the shot's own takes are videos, and a video has no place in
+    // a start-frame slot.
+    if (!result.saved || !result.isImage) return [];
+    return this.front?.mmcBody?.renderResultChips?.(result.saved) ?? [];
+  }
+
+  /**
    * Put a take from the lip on the picture.
    *
    * **A layer over the stage, not a picture written into it.** The stage owns
@@ -1018,6 +1069,7 @@ class Fullscreen {
             class: "mmc-stage-chip mmc-fs-review-back",
             onclick: () => this.endReview(),
           }, [icon("rewind", 13), el("span", { text: t("Back to the render") })]),
+          ...this.reviewChips(result),
         ]),
         result.tookMs
           ? el("div", { class: "mmc-stage-side end" }, [
@@ -1477,6 +1529,25 @@ export function remount(node) {
  */
 export function stepToShot() {
   open?.setStep("shot");
+}
+
+/**
+ * Put the pre-stage in front of whoever is looking, and say whether anybody was.
+ *
+ * The other half of "send it to the pre-stage": a picture handed over that
+ * lands somewhere nobody is looking has to be gone and found again. `false`
+ * means this shell is closed or is open on some other node, and the caller
+ * opens its own window instead — see `PreStageBody.reveal`.
+ */
+export function revealPreStage(nodeId) {
+  if (!open) return false;
+  // By id, because a body knows the id it was built for and not the node object
+  // — and either half of the pair counts: the shell hosts the shot and reaches
+  // its pre-stage through it, so a send from either lands in the same room.
+  const ids = [open.node?.id, preStageOf(open.node)?.id];
+  if (nodeId != null && !ids.some((id) => String(id) === String(nodeId))) return false;
+  open.revealPreStage();
+  return true;
 }
 
 export function close() {

@@ -618,6 +618,11 @@ class Bench {
         token: this.token,
       });
       this.result.op = this.tracing()?.label ?? this.op;
+      // The tracing's id as well as its name. A target may need to know *which*
+      // tracing this is and not only what to call it: the weights that follow a
+      // guide natively were post-trained on three of them, and a fourth handed
+      // over reads as a picture of a drawing.
+      this.result.opId = this.op;
       // What it was traced from, so the light box can tell later whether the
       // file it is about to play is still what the dials mean. Read before any
       // repaint, because a dial moved after this is a file that has gone stale.
@@ -635,6 +640,12 @@ class Bench {
     if (!this.result) return;
     target.take(this.result);
     this.sent = target.label;
+    // Some sends are the end of the errand rather than one of several: a guide
+    // handed to the pre-stage is there to have a prompt written around it, and
+    // leaving the bench in front of the thing that just received the file makes
+    // the room something to dismiss before the work can start. The file is
+    // written either way, so nothing is lost by closing — the picker finds it.
+    if (target.closeOnSend) return this.close();
     this.paintFoot();
   }
 

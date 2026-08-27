@@ -30,10 +30,11 @@
 import { el, icon, ICONS, svg, dismissable, keepScroll, placeNear, swappable } from "./dom.js";
 import { DEFAULT_STILL_ARCH, stillFamily } from "./manifest.js";
 import { openPicker } from "./picker.js";
-import { openLoras, loraBlock } from "./loras.js";
+import { openLoras, loraBlock, loraBase } from "./loras.js";
 import { openFrameGrab } from "./framegrab.js";
 import { openContactSheet } from "./contact.js";
 import { openChoicePopover, stepperPill, aspectGlyph, edgeSlider, PILL_GLYPH } from "./pills.js";
+import { revealPreStage } from "./fullscreen.js";
 import { CreatorEditor } from "./editor.js";
 import { openPresetLibrary } from "./presetlib.js";
 import * as P from "./presets.js";
@@ -132,9 +133,7 @@ export class PreStageEditor {
         : null,
       onBrowse: () => this.addRefs(false),
     });
-    this.prompt.root.dataset.placeholder =
-      t("Describe the image. These models were trained on long, detailed "
-      + "natural-language prompts. Use @ to name a style reference.");
+    this.prompt.root.dataset.placeholder = this.placeholder();
     // Leaving the box arms the escalation again: the waiver is about the
     // sentence being written, not about the text. See
     // `CreatorEditor.onPromptOverflow`.
@@ -202,6 +201,11 @@ export class PreStageEditor {
   }
 
   commit() {
+    // Before anything is drawn or written out: the adapter that reads the
+    // references and the Qwen edition are both fields the blob has to carry,
+    // and both have exactly one thing that can be guessed at. See
+    // `S.syncPreStageGuesses` for what is and is not guessed.
+    S.syncPreStageGuesses(this.state);
     this.onCommit?.();
     this.render();
     // Cheap after the first time — `probeInit` returns at once for a picture
@@ -226,10 +230,17 @@ export class PreStageEditor {
       return t("{arch} has no local reference conditioning — switch the model pill to "
              + "one that reads pictures.", { arch: S.PRESTAGE_ARCH_LABEL[this.state.arch] });
     }
-    if ((this.state.refs?.length ?? 0) >= S.PRESTAGE_MAX_REFS) {
-      return t("At most {max} style references — the Qwen edit encoder the model "
-             + "reads them through has exactly three image slots.",
-             { max: S.PRESTAGE_MAX_REFS });
+    const max = S.preStageMaxRefs(this.state);
+    if ((this.state.refs?.length ?? 0) >= max) {
+      // Two different caps wearing one number. The encoder has three image
+      // slots on every family; what a checkpoint was post-trained to *read* is
+      // its own answer, and the first Qwen-Image-Edit weights read one picture.
+      return max === 1
+        ? t("The {edition} weights were post-trained on a single picture. Move the "
+          + "edition pill to 2509 or 2511 for three.", { edition: this.state.edition })
+        : t("At most {max} {noun} — the Qwen edit encoder the model reads them "
+          + "through has exactly three image slots.",
+          { max, noun: t(refs.noun?.[1] ?? "style references") });
     }
     return null;
   }
@@ -351,11 +362,48 @@ export class PreStageEditor {
    * The denoise it lands with is whatever the pre-stage already had, so a still
    * that has been dialled in does not have its strength reset by a new guide.
    */
-  takeGuide({ path }) {
+  takeGuide({ path, opId = null }) {
+    // Where a guide goes is what the weights in front of it can read.
+    //
+    // On 2509 and 2511 the ControlNet is built in: a depth pass, an edge map or
+    // a pose skeleton arriving in an ordinary image slot is followed, and there
+    // is no node to load and no strength to set. So the guide is a *picture*,
+    // and the render is aimed at it. Sent to the init slot instead — where
+    // every guide went before these weights existed — an edge map is a picture
+    // being restyled at denoise 0.65, and what comes back is a tidied edge map.
+    //
+    // Everywhere else that is still the right slot, because the init image is
+    // the only thing those families have that means "start from this
+    // arrangement".
+    if (S.preStageReadsGuides(this.state)) return this.takeGuideAsPicture(path, opId);
     this.state.init = {
       filename: path,
       denoise: this.state.init?.denoise ?? S.PRESTAGE_DEFAULT_DENOISE,
     };
+    this.commit();
+    this.probeInit();
+  }
+
+  /** The guide as the picture the render is aimed at.
+   *
+   *  It replaces a guide already in the pool rather than joining it: re-tracing
+   *  a frame at a different threshold is the loop the bench exists for, and
+   *  three presses of it would otherwise fill every slot with the same picture
+   *  at three settings. A guide the pool has no room for is refused out loud,
+   *  the way a fourth picture is. */
+  takeGuideAsPicture(path, opId = null) {
+    const standing = this.state.refs.find((ref) => ref.role === "guide");
+    if (standing) {
+      standing.filename = path;
+      standing.guide = opId;
+    } else {
+      const blocked = this.refBlocked();
+      if (blocked) return this.flash(blocked);
+      this.state.refs.push({
+        handle: S.nextPreStageHandle(this.state), filename: path,
+        role: "guide", guide: opId,
+      });
+    }
     this.commit();
     this.probeInit();
   }
@@ -392,14 +440,31 @@ export class PreStageEditor {
    *  shape. Not always the init image — on an edit family it is the first
    *  reference; see `S.preStageSource`. */
   probeInit() {
-    const source = S.preStageSource(this.state);
-    if (!source || this.sizes.has(source)) return;
-    const probe = new Image();
-    probe.onload = () => {
-      this.sizes.set(source, { width: probe.naturalWidth, height: probe.naturalHeight });
-      this.render();
-    };
-    probe.src = viewUrl(source);
+    for (const name of this.measurable()) {
+      if (!name || this.sizes.has(name)) continue;
+      const probe = new Image();
+      probe.onload = () => {
+        this.sizes.set(name, { width: probe.naturalWidth, height: probe.naturalHeight });
+        this.render();
+      };
+      probe.src = viewUrl(name);
+    }
+  }
+
+  /** Which pictures this editor needs the shape of.
+   *
+   *  The one the canvas follows, always. And on a family whose references do
+   *  *not* set the canvas, every reference as well: an adapter trained on pairs
+   *  that agreed about their aspect preserves visibly less from one that does
+   *  not, and nothing about the render says so. Where the first reference is
+   *  the canvas there is nothing to disagree with. */
+  measurable() {
+    const names = [S.preStageSource(this.state)];
+    const refs = S.PRESTAGE_REFS[this.state.arch];
+    if (refs?.reads && !refs.editsFirst) {
+      names.push(...(this.state.refs ?? []).map((ref) => ref.filename));
+    }
+    return names;
   }
 
   /** The measured size of that picture, or null while it is still loading. */
@@ -425,8 +490,26 @@ export class PreStageEditor {
     return { width, height };
   }
 
+  /** What the empty prompt box says, which is not one sentence for every
+   *  family: what `@` names is a style reference on Krea 2 and the picture the
+   *  instruction is about on an edit family. Re-read on every render, because
+   *  the arch pill can move under it. */
+  placeholder() {
+    const refs = S.PRESTAGE_REFS[this.state.arch] ?? {};
+    if (!refs.reads) {
+      return t("Describe the image. These models were trained on long, detailed "
+             + "natural-language prompts.");
+    }
+    return refs.editsFirst
+      ? t("Say what to change. The first picture is the one being changed; name "
+        + "the others with @ and they arrive as Picture 2 and Picture 3.")
+      : t("Describe the image. These models were trained on long, detailed "
+        + "natural-language prompts. Use @ to name a style reference.");
+  }
+
   render() {
     const state = this.state;
+    this.prompt.root.dataset.placeholder = this.placeholder();
     this.railHost.replaceChildren(this.renderRail());
     this.renderExpand();
     const chips = [
@@ -501,7 +584,8 @@ export class PreStageEditor {
     this.sheetEditor = editor;
     this.sheet = openEditorSheet({
       title: t("Still"),
-      subtitle: t("Prompt, init image, style references and LoRAs. The sampler stays on the node."),
+      subtitle: t("Prompt, init image, {noun} and LoRAs. The sampler stays on the node.",
+                  { noun: t(S.PRESTAGE_REFS[this.state.arch]?.noun?.[1] ?? "style references") }),
       content: [editor.root],
       onClose: () => {
         this.sheet = null;
@@ -523,14 +607,19 @@ export class PreStageEditor {
       return t("{arch} has no local reference conditioning — switch the model pill to "
              + "one that reads pictures.", { arch: S.PRESTAGE_ARCH_LABEL[this.state.arch] });
     }
+    const max = S.preStageMaxRefs(this.state);
     if (refs.editsFirst) {
-      return t("Up to three pictures the instruction is about. The first one is the "
-             + "picture being changed — it sets the canvas and the render starts from "
-             + "it; the others are there to be cited, as Picture 2 and Picture 3.");
+      return max === 1
+        ? t("The picture the instruction is about. It sets the canvas and the render "
+          + "starts from it. These weights read one — the 2509 and 2511 editions are "
+          + "the ones post-trained on three.")
+        : t("Up to {max} pictures the instruction is about. The first one is the "
+          + "picture being changed — it sets the canvas and the render starts from "
+          + "it; the others are there to be cited, as Picture 2 and Picture 3.", { max });
     }
-    return t("Up to three images whose look this render should carry. Encoded through "
-           + "the Qwen edit path Krea 2 was post-trained against; the "
-           + "krea2_style_reference LoRA strengthens it.");
+    return t("Up to {max} images whose look this render should carry. Encoded through "
+           + "the Qwen edit path Krea 2 was post-trained against — and only read at "
+           + "all through a reference LoRA, which the adapter pill names.", { max });
   }
 
   renderRail() {
@@ -608,10 +697,60 @@ export class PreStageEditor {
 
   renderRefChip(ref, slot = 0) {
     const refs = S.PRESTAGE_REFS[this.state.arch] ?? {};
-    const role = refs.editsFirst && slot === 0 && !this.state.init ? "editing" : "style";
+    // What this picture is *for*, in the family's own words. On an edit family
+    // nothing here is a style input: the first slot is the picture being
+    // changed, and the rest are pictures the instruction names — so they wear
+    // the label the encoder itself writes in front of them, which is also the
+    // string the prompt cites them by. "style" is Krea 2's answer and Krea 2's
+    // alone, where what an attached image contributes really is its look.
+    // The first slot on an edit family is the one picture whose role is a
+    // decision rather than a fact: it is the thing being changed by default,
+    // and it does not have to be. So there it is a button, and everywhere else
+    // it is the label it has always been.
+    // A guide is never the picture being edited: it is the drawing the render
+    // is aimed at, so the slot it happens to sit in does not make it a subject.
+    const guide = ref.role === "guide";
+    // A guide these weights were never post-trained on. Not a refusal — the
+    // file is a picture and the encoder will read it as one — but the render
+    // will be *of* the drawing rather than aimed at it, which is worth saying
+    // where the drawing is.
+    const untrained = guide && ref.guide
+      && !(refs.nativeControl ?? []).includes(ref.guide);
+    const edits = refs.editsFirst && slot === 0 && !this.state.init && !guide;
+    const blank = S.preStageStartsBlank(this.state);
+    const role = guide
+      ? t("guide")
+      : refs.editsFirst
+        ? (edits && !blank ? t("editing") : t("Picture {n}", { n: slot + 1 }))
+        : t(refs.noun?.[0] ?? "style reference");
+    // Past the cap, and drawn rather than dropped: the blob keeps every
+    // reference it was given so the compile is the one place that decides, and
+    // a chip that vanished when the edition pill moved would take two pictures
+    // with it and say nothing. See `parsePreStage`.
+    const refused = slot >= S.preStageMaxRefs(this.state);
+    // ...and the softer one: a shape the adapter was not trained to hold
+    // against this canvas. A warning, because it is a worse render rather than
+    // an impossible one — see `S.preStageRefOffShape`.
+    const canvas = S.resolvedPreStage(this.state, this.sourceSize());
+    const offShape = !refused && !untrained && S.preStageRefOffShape(
+      this.state, this.sizes.get(ref.filename), canvas.width / canvas.height);
     return el("div", {
-      class: `mmc-asset mmc-tag-${S.tagIndex(ref.handle)}`,
-      title: ref.filename,
+      class: `mmc-asset mmc-tag-${S.tagIndex(ref.handle)}`
+             + (refused ? " mmc-asset-refused"
+                : untrained || offShape ? " mmc-asset-offshape" : ""),
+      title: refused
+        ? t("This render will be refused: {arch} reads {max} of these, and this is "
+          + "the one past it. Remove it, or move the edition pill.",
+          { arch: S.PRESTAGE_ARCH_LABEL[this.state.arch], max: S.preStageMaxRefs(this.state) })
+        : untrained
+          ? t("These weights follow a depth, edge or pose map — this tracing is none "
+            + "of the three, so it will be read as a picture of a drawing rather "
+            + "than as a guide to aim at.")
+        : offShape
+          ? t("This picture's shape does not match the canvas. The reference adapters "
+            + "were trained on pairs that agreed, so what they hold on to falls off "
+            + "when it does not — crop it, or set the aspect to match.")
+          : ref.filename,
     }, [
       swappable(
         el("img", { class: "mmc-asset-thumb", src: viewUrl(ref.filename, { preview: true }), alt: ref.filename }),
@@ -625,7 +764,22 @@ export class PreStageEditor {
       // What this picture is *for*, which is not the same on every arch: a
       // style reference on Krea 2, and on an edit family the first slot is the
       // picture being changed while the rest are cited beside it.
-      el("span", { class: "mmc-asset-role", text: t(role) }),
+      edits
+        ? el("button", {
+            class: `mmc-asset-role mmc-asset-role-pick${blank ? "" : " on"}`,
+            text: role,
+            title: blank
+              ? t("Drawing onto an empty canvas — these pictures are only cited, and "
+                + "the aspect pill sets the shape. Click to edit this picture instead.")
+              : t("Editing this picture: the canvas follows its shape and the render "
+                + "starts from it. Click to draw onto an empty canvas instead and "
+                + "leave it as Picture 1, cited like the others."),
+            onclick: () => {
+              this.state.start_blank = !this.state.start_blank;
+              this.commit();
+            },
+          })
+        : el("span", { class: "mmc-asset-role", text: role }),
       el("button", {
         class: "mmc-asset-x", text: "✕", title: t("Remove @{handle}", { handle: ref.handle }),
         onclick: () => {
@@ -706,17 +860,75 @@ export class PreStageEditor {
     // that is said. Qwen Image Edit declares no methods and gets no pill — its
     // base weights read references, so core's detection already gives them the
     // layout they were trained with.
+    // Which release of the Qwen edit weights is loaded, because nothing in the
+    // file says and the answer decides how many pictures they read. A pill
+    // rather than a filename guess alone: the guess is right for a file that
+    // kept its published name and has nothing to go on for one that did not.
+    if (S.PRESTAGE_REFS[state.arch]?.editions) {
+      const max = S.preStageMaxRefs(state);
+      pills.push(el("button", {
+        class: "mmc-pill",
+        title: t("Which Qwen-Image-Edit release this checkpoint is. It is not in the "
+               + "file — only the filename hints at it — and it decides how many "
+               + "pictures the weights were post-trained to read: one on the first "
+               + "edition, three on 2509 and 2511."),
+        onclick: (event) => openChoicePopover(event.currentTarget, {
+          title: t("Edition"),
+          options: Object.keys(S.PRESTAGE_EDITIONS),
+          value: state.edition,
+          onPick: (picked) => { state.edition = picked; this.commit(); },
+        }),
+      }, [icon("weights", 16), el("span", { text: state.edition }),
+          el("span", { class: "mmc-pill-sub",
+                       text: t(max === 1 ? "{count} ref" : "{count} refs", { count: max }) })]));
+    }
+
+    // Which entry in the stack reads the references, on the family where one
+    // has to. Named and not counted: a stack holding a style LoRA and nothing
+    // that reads pictures is the same silent failure as an empty one, and this
+    // pill is where the difference is said out loud.
+    const adapterField = S.PRESTAGE_REFS[state.arch]?.adapter;
+    if (adapterField && state.refs.length) {
+      const stack = (state.loras ?? [])
+        .filter((entry) => entry?.name && entry.enabled !== false)
+        .map((entry) => entry.name);
+      const named = state.ref_lora && stack.includes(state.ref_lora);
+      pills.push(el("button", {
+        class: `mmc-pill${named ? "" : " missing"}`,
+        title: named
+          ? t("The LoRA that reads these references. Krea 2's base weights never "
+            + "learned to, so this is the only thing that makes the pictures render "
+            + "at all.")
+          : state.ref_lora
+            ? t("{name} is named as the reference adapter but is no longer in the "
+              + "stack. The render is refused until one is picked.", { name: state.ref_lora })
+            : t("These references will not render: Krea 2 reads them only through a "
+              + "reference LoRA, and none is named. Add one to the stack — "
+              + "krea2_style_reference for style, an ai-toolkit edit LoRA for edits — "
+              + "and pick it here."),
+        onclick: (event) => openChoicePopover(event.currentTarget, {
+          title: t("Reference adapter"),
+          options: stack,
+          value: named ? state.ref_lora : null,
+          onPick: (picked) => { state.ref_lora = picked; this.commit(); },
+        }),
+      }, [icon("model", 16), el("span", {
+        text: named ? loraBase({ name: state.ref_lora }) : t("no adapter"),
+      })]));
+    }
+
     if (S.PRESTAGE_REFS[state.arch]?.methods.length && state.refs.length) {
-      const adapted = (state.loras ?? []).some((entry) => entry.enabled !== false);
+      const adapted = state.ref_lora
+        && (state.loras ?? []).some((entry) => entry?.name === state.ref_lora
+                                            && entry.enabled !== false);
       pills.push(el("button", {
         class: `mmc-pill${adapted ? "" : " missing"}`,
         title: adapted
           ? t("How the references are laid into the token sequence. The ai-toolkit edit "
             + "LoRAs pin theirs at timestep zero; the identity-edit ones index them like "
-            + "any other frame. Match the adapter in the stack.")
-          : t("These references will not render: Krea 2 reads them only through a "
-            + "reference LoRA. Add one to the stack — krea2_style_reference for style, "
-            + "an ai-toolkit edit LoRA for edits."),
+            + "any other frame. Match the adapter named beside this pill.")
+          : t("The layout only matters once an adapter reads the references — see the "
+            + "adapter pill."),
         onclick: (event) => openChoicePopover(event.currentTarget, {
           title: t("Reference layout"),
           options: [...S.PRESTAGE_REF_METHODS],
@@ -1438,15 +1650,37 @@ export class PreStageBody {
    * `@ref-1` is still citing the picture in front of it.
    */
   takeBack(filename) {
-    if (this.state.arch === S.PRESTAGE_STILL_ARCH) return this.setStillFrame(filename);
+    if (this.state.arch === S.PRESTAGE_STILL_ARCH) {
+      this.setStillFrame(filename);
+      return this.reveal();
+    }
     if (!S.PRESTAGE_REFS[this.state.arch]?.editsFirst) {
-      return this.editor?.takeGuide?.({ path: filename });
+      this.editor?.takeGuide?.({ path: filename });
+      return this.reveal();
     }
     const first = this.state.refs[0];
     if (first) first.filename = filename;
     else this.state.refs.unshift({ handle: S.nextPreStageHandle(this.state), filename });
     this.commit();
     this.editor?.probeInit?.();
+    this.reveal();
+  }
+
+  /**
+   * Put this pre-stage in front of whoever just sent something to it.
+   *
+   * A picture handed over lands in a blob, and a blob is not somewhere anybody
+   * is looking: the press that sends it is followed, every time, by writing the
+   * instruction that goes with it. So the send opens the place to write.
+   *
+   * Where that is depends on where the press happened. Inside the fullscreen
+   * shell the pre-stage is a step and the shell turns to it — a window on top of
+   * a window would be two rooms for one node. On the canvas there is no shell,
+   * and the window is the only place with room for the prompt.
+   */
+  reveal() {
+    if (revealPreStage(this.nodeId)) return;
+    this.editor?.openEditor?.();
   }
 
   // ---- the hand-off ----------------------------------------------------------

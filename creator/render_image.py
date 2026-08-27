@@ -131,6 +131,38 @@ def check(weights, payload):
         )
 
 
+def check_vision(weights, payload):
+    """Refuse a text-only encoder on a render that has pictures to encode.
+
+    Both VL encoders ship in two cuts, and the text-only one is the same
+    filename shape as the other: it loads, it tokenizes the sentence, and then
+    the reference images reach a vision tower that is not in the file. Nothing
+    errors — the render just quietly ignores every picture it was given, which
+    is the failure this pack exists to make impossible, so it is caught here
+    instead of noticed in the output.
+
+    Only on a render that actually carries references: a text-to-image still on
+    the same weights has nothing to encode and no reason to care. `has_vision`
+    answers `None` for a file it could not read, and that is deliberately not a
+    refusal — see `visionweights`.
+    """
+    if not payload.refs:
+        return
+    import folder_paths
+
+    from . import visionweights
+
+    filename = weights.get("clip")
+    path = folder_paths.get_full_path("text_encoders", filename)
+    if visionweights.has_vision(path) is not False:
+        return
+    raise ValueError(
+        f"{filename} is the text-only cut of this encoder — it has no vision "
+        f"tower, so the references would not be read at all. Pick the full VL "
+        f"encoder from models/{FOLDERS['clip']}, or clear the references."
+    )
+
+
 def emit_unet(graph, weights, name):
     """One DiT loader, GGUF-aware the way `models.Links` is: a `.gguf`
     filename swaps the class through `loader_for`, and `weight_dtype` is only a
@@ -159,6 +191,7 @@ def emit(payload, weights, sampling, unique_id, family, filename_prefix=None):
         raise CompileError("the payload and the weights disagree about the architecture")
     family.require_support()
     check(weights, payload)
+    check_vision(weights, payload)
 
     graph = GraphBuilder()
 

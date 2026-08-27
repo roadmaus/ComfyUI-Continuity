@@ -36,6 +36,23 @@ for (const name of ["PRESTAGE_CANVAS_MULTIPLE", "PRESTAGE_MIN_EDGE", "PRESTAGE_M
                     "PRESTAGE_DEFAULT_DENOISE", "PRESTAGE_MIN_DENOISE"]) {
   out.constants[name] = s[name];
 }
+out.max_refs = {
+  "krea2": s.preStageMaxRefs({ arch: "krea2" }),
+  "qwenedit-2511": s.preStageMaxRefs({ arch: "qwenedit", edition: "2511" }),
+  "qwenedit-2509": s.preStageMaxRefs({ arch: "qwenedit", edition: "2509" }),
+  "qwenedit-base": s.preStageMaxRefs({ arch: "qwenedit", edition: "base" }),
+};
+out.edition_guess = ["Qwen-Image-Edit-2511-fp8.safetensors",
+                     "qwen_image_edit_2509_Q4_K_M.gguf",
+                     "qwen_image_edit_bf16.safetensors",
+                     ""].map((name) => s.preStageEditionGuess(name));
+out.reads_guides = {
+  "krea2": s.preStageReadsGuides({ arch: "krea2" }),
+  "ideogram4": s.preStageReadsGuides({ arch: "ideogram4" }),
+  "qwenedit-2511": s.preStageReadsGuides({ arch: "qwenedit", edition: "2511" }),
+  "qwenedit-2509": s.preStageReadsGuides({ arch: "qwenedit", edition: "2509" }),
+  "qwenedit-base": s.preStageReadsGuides({ arch: "qwenedit", edition: "base" }),
+};
 out.arches = [...s.PRESTAGE_ARCHES];
 out.image_arches = [...s.PRESTAGE_IMAGE_ARCHES];
 out.presets = s.PRESTAGE_ASPECTS.map(([label]) => label).sort();
@@ -129,11 +146,49 @@ check("...and Qwen Image Edit's own", reflected["base_rows"]["qwenedit"], qe.QWE
 # the pill copy turns on all four of these fields.
 check("what a reference is on each arch", reflected["refs"],
       {"krea2": {"reads": True, "methods": list(k2.REF_METHODS),
-                 "needsLora": True, "editsFirst": False},
+                 "needsLora": True, "editsFirst": False,
+                 "noun": list(k2.REFS_NOUN), "startBlank": None,
+                 "nativeControl": [], "controlEditions": [],
+                 "adapter": k2.REF_LORA_FIELD,
+                 "adapterHints": list(k2.REF_LORA_HINTS),
+                 "editions": None, "defaultEdition": None, "editionHints": []},
        "ideogram4": {"reads": False, "methods": [],
-                     "needsLora": False, "editsFirst": False},
+                     "needsLora": False, "editsFirst": False,
+                     "noun": list(ci.REFS_NOUN), "startBlank": None,
+                     "nativeControl": [], "controlEditions": [],
+                     "adapter": None, "adapterHints": [],
+                     "editions": None, "defaultEdition": None, "editionHints": []},
        "qwenedit": {"reads": True, "methods": [],
-                    "needsLora": False, "editsFirst": True}})
+                    "needsLora": False, "editsFirst": True,
+                    "noun": list(qe.REFS_NOUN),
+                    "startBlank": ci.START_BLANK_FIELD,
+                    "nativeControl": list(qe.NATIVE_CONTROL),
+                    "controlEditions": list(qe.CONTROL_EDITIONS),
+                    "adapter": None, "adapterHints": [],
+                    "editions": dict(qe.EDITIONS),
+                    "defaultEdition": qe.DEFAULT_EDITION,
+                    "editionHints": [list(pair) for pair in qe.EDITION_HINTS]}})
+
+# The cap is the render's, not a constant: the encoder has three image slots on
+# every family, and what the checkpoint was post-trained to read is its own
+# number — one on the first Qwen-Image-Edit weights. Both halves have to agree,
+# or the UI offers a fourth slot the compile will refuse (or refuses a second
+# the weights would have read).
+check("how many references each render may carry", reflected["max_refs"],
+      {"krea2": ci.MAX_STYLE_REFS,
+       "qwenedit-2511": qe.EDITIONS["2511"],
+       "qwenedit-2509": qe.EDITIONS["2509"],
+       "qwenedit-base": qe.EDITIONS["base"]})
+check("...and which edition a filename looks like", reflected["edition_guess"],
+      ["2511", "2509", None, None])
+
+# Which slot the tracing bench's file lands in is this answer: a picture on the
+# editions with the built-in ControlNet, the init image everywhere else. Both
+# halves have to agree, or a depth pass goes to the slot that restyles it.
+check("which renders read a guide as one of their pictures",
+      reflected["reads_guides"],
+      {"krea2": False, "ideogram4": False,
+       "qwenedit-2511": True, "qwenedit-2509": True, "qwenedit-base": False})
 
 # ---- the turbo pill, per arch ------------------------------------------------
 #
@@ -171,12 +226,14 @@ check("the reference layouts are Krea's own",
 
 
 def still(prompt, refs=(), arch="krea2"):
-    # Krea 2 refuses references with no adapter in the stack — see
-    # `test_prestage_graph.py` — so the citations below carry one.
+    # Krea 2 refuses references unless the adapter that reads them is in the
+    # stack *and* named — see `test_prestage_graph.py` — so the citations below
+    # carry both.
+    adapter = "krea2_style_reference.safetensors"
     return {"arch": arch, "prompt": prompt, "width": 1024, "height": 1024,
             "refs": [{"handle": h, "filename": f} for h, f in refs], "models": {},
-            "loras": [{"name": "krea2_style_reference.safetensors", "strength": 1.0}]
-                     if refs else []}
+            "loras": [{"name": adapter, "strength": 1.0}] if refs else [],
+            **({"ref_lora": adapter} if refs else {})}
 
 
 REFS = (("ref-1", "plate.png"), ("ref-2", "coat.png"))

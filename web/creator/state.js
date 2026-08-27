@@ -3215,8 +3215,115 @@ export const PRESTAGE_REFS = Object.fromEntries(
       methods: refs?.methods ?? [],
       needsLora: refs?.needs_lora === true,
       editsFirst: refs?.edits_first === true,
+      // What this family calls an attached picture, [singular, plural]. Not one
+      // word for every family: Krea 2 carries a look across and "style
+      // reference" is what those images contribute, while on an edit family the
+      // same slot holds the subject and calling it a style reference names the
+      // one thing the model is not reading it for.
+      noun: refs?.noun ?? ["style reference", "style references"],
+      // The blob field that releases the first picture from being the one
+      // edited, on the family where it otherwise always is.
+      startBlank: refs?.start_blank ?? null,
+      // The tracings this family's weights follow when one arrives as a
+      // picture, and the editions that learned to. Empty where a guide is not
+      // a picture at all — on those families it is the init image, which is
+      // what every guide was before these weights had a built-in ControlNet.
+      nativeControl: refs?.native_control ?? [],
+      controlEditions: refs?.control_editions ?? [],
+      // Which blob field names the adapter that reads them, on the family where
+      // one has to, and the filename needles the picker pre-selects from.
+      adapter: refs?.adapter ?? null,
+      adapterHints: refs?.adapter_hints ?? [],
+      // How many pictures each release of these weights was post-trained on,
+      // where that is not one number for every file the family loads.
+      editions: refs?.editions ?? null,
+      defaultEdition: refs?.default_edition ?? null,
+      editionHints: refs?.edition_hints ?? [],
     }];
   }));
+
+/** Qwen Image Edit's releases and the reference count each reads. */
+const QWEN_REFS = PRESTAGE_REFS.qwenedit ?? {};
+export const PRESTAGE_EDITIONS = QWEN_REFS.editions ?? {};
+export const PRESTAGE_DEFAULT_EDITION = QWEN_REFS.defaultEdition ?? null;
+
+/** Which edition a checkpoint filename looks like, or null when it says
+ *  nothing — a guess offered to the pill, never a decision taken behind it.
+ *  Mirrors `families/qwenedit/still.EDITION_HINTS`. */
+export function preStageEditionGuess(filename) {
+  const name = (filename ?? "").toLowerCase();
+  if (!name) return null;
+  for (const [needle, edition] of QWEN_REFS.editionHints ?? []) {
+    if (name.includes(needle)) return edition;
+  }
+  return null;
+}
+
+/** How far a reference's shape may sit from the canvas before it is worth
+ *  saying so.
+ *
+ *  A reference whose aspect does not match the output's is out of distribution
+ *  for the edit adapters — they were trained on pairs that agreed — and it
+ *  shows up as preservation quietly getting worse rather than as anything
+ *  failing. 6% lets 16:9 against 1.85:1 pass and catches 3:2 against 16:9,
+ *  which is the gap that actually happens when a still is dropped onto a
+ *  canvas somebody set for something else. A warning and not a refusal: it is a
+ *  worse render, not an impossible one.
+ *
+ *  The families whose first reference *is* the canvas cannot disagree with it,
+ *  so this is Krea 2's alone. */
+export const PRESTAGE_REF_RATIO_TOLERANCE = 0.06;
+
+/** Is this reference's shape far enough from the canvas to warn about? */
+export function preStageRefOffShape(state, size, canvasRatio) {
+  const refs = PRESTAGE_REFS[state?.arch];
+  if (!refs?.reads || refs.editsFirst) return false;
+  if (!size?.width || !size?.height || !canvasRatio) return false;
+  const ratio = size.width / size.height;
+  return Math.abs(ratio - canvasRatio) / canvasRatio > PRESTAGE_REF_RATIO_TOLERANCE;
+}
+
+/** Fill in the reference adapter and the Qwen edition where the blob can say
+ *  what they are — the one guess each, run after anything that could have
+ *  changed the answer. Returns whether it wrote anything.
+ *
+ *  Neither is a decision taken behind the user: the adapter is only ever filled
+ *  from a filename that names itself a reference LoRA (a stack holding one
+ *  unrelated LoRA is left alone, which is the whole point of the field), and
+ *  the edition only from a checkpoint filename that names a release. */
+export function syncPreStageGuesses(state) {
+  let changed = false;
+  const refs = PRESTAGE_REFS[state.arch];
+  if (refs?.adapter && !state.ref_lora && state.refs?.length) {
+    const named = (state.loras ?? [])
+      .filter((entry) => entry?.name && entry.enabled !== false)
+      .map((entry) => entry.name)
+      .find((name) => refs.adapterHints.some((hint) => name.toLowerCase().includes(hint)));
+    if (named) {
+      state.ref_lora = named;
+      changed = true;
+    }
+  }
+  if (refs?.editions) {
+    const guess = preStageEditionGuess(state.models?.[state.arch]?.model);
+    if (guess && guess !== state.edition) {
+      state.edition = guess;
+      changed = true;
+    }
+  }
+  return changed;
+}
+
+/** How many references this render may carry, and why that is the number.
+ *
+ *  Not a constant: the encoder's three slots are one cap and what a checkpoint
+ *  was post-trained to read is another, and on Qwen Image Edit the second
+ *  changed between releases. Mirrors `compile_image.ref_limit`. */
+export function preStageMaxRefs(state) {
+  const refs = PRESTAGE_REFS[state?.arch];
+  if (!refs?.editions) return PRESTAGE_MAX_REFS;
+  return refs.editions[state.edition] ?? refs.editions[refs.defaultEdition] ?? PRESTAGE_MAX_REFS;
+}
 
 /** Ideogram's official preset table. The presets own steps *and* the schedule
  *  shape; the widget cfg feeds the dual-model guider. */
@@ -3267,6 +3374,19 @@ export function emptyPreStage() {
     // Which reference layout Krea 2's adapter was trained on. See
     // `PRESTAGE_REF_METHODS`.
     ref_method: PRESTAGE_DEFAULT_REF_METHOD,
+    // Which entry in the stack is that adapter. Named rather than counted: the
+    // compile checks this field, because "the stack is not empty" would pass a
+    // render whose only LoRA is a style and whose pictures go nowhere. Krea 2's
+    // field; null until a reference is attached and one is picked.
+    ref_lora: null,
+    // Draw onto an empty canvas even with pictures attached, instead of editing
+    // the first one. Only an edit family has anything to release; see
+    // `preStageStartsBlank`.
+    start_blank: false,
+    // Which Qwen-Image-Edit release the checkpoint is, which decides how many
+    // pictures it reads — nothing in the file says, so it is declared here and
+    // guessed from the filename. See `PRESTAGE_EDITIONS`.
+    edition: PRESTAGE_DEFAULT_EDITION,
     // Ideogram's speed axis: which official preset shapes the schedule.
     quality: PRESTAGE_DEFAULT_QUALITY,
     // The video family's branch: its own settings, and its generation in the
@@ -3329,9 +3449,23 @@ export function parsePreStage(raw) {
       if (!PRESTAGE_ARCHES.includes(state.arch)) state.arch = DEFAULT_STILL_ARCH;
       if (typeof state.prompt !== "string") state.prompt = "";
       if (!Array.isArray(state.refs)) state.refs = [];
+      // Not truncated to the cap. The compile refuses a render carrying more
+      // references than its weights read, and a blob quietly losing the fourth
+      // one on the way in would put those two on different terms — and would
+      // silently drop two pictures the moment the Qwen edition pill moved to
+      // the release that reads one. The chips past the cap are drawn as
+      // refused instead; see `renderRefChip`.
       state.refs = state.refs
         .filter((ref) => ref && typeof ref.filename === "string")
-        .slice(0, PRESTAGE_MAX_REFS);
+        // `guide` is the only role a picture can have beyond being one: it says
+        // this slot holds a tracing the weights follow rather than a picture
+        // they read. Nothing in the graph changes — the guide is Picture N like
+        // any other — so this is carried for the chip and for the one refusal
+        // that depends on it.
+        .map((ref) => (ref.role === "guide"
+          ? { handle: ref.handle, filename: ref.filename, role: "guide",
+              guide: typeof ref.guide === "string" ? ref.guide : null }
+          : { handle: ref.handle, filename: ref.filename }));
       if (!Array.isArray(state.loras)) state.loras = [];
       // UI-only, never serialized: the LoRA manager and `promptTriggers` walk
       // the video-state accessors (`checkpoint`, `references`), which want
@@ -3357,6 +3491,12 @@ export function parsePreStage(raw) {
       if (!PRESTAGE_REF_METHODS.includes(state.ref_method)) {
         state.ref_method = PRESTAGE_DEFAULT_REF_METHOD;
       }
+      state.ref_lora = typeof state.ref_lora === "string" && state.ref_lora.trim()
+        ? state.ref_lora.trim() : null;
+      state.start_blank = state.start_blank === true;
+      if (!Object.keys(PRESTAGE_EDITIONS).includes(state.edition)) {
+        state.edition = PRESTAGE_DEFAULT_EDITION;
+      }
       state.turbo = parsePreStageTurbo(state.turbo);
       const models = state.models && typeof state.models === "object" ? state.models : {};
       state.models = emptyPreStageModels();
@@ -3370,6 +3510,11 @@ export function parsePreStage(raw) {
         }
       }
       if (MODEL_DTYPES.includes(models.dtype)) state.models.dtype = models.dtype;
+      // Last, because both guesses read fields filled above — the LoRA stack
+      // and the checkpoint this arch loads. A blob written before either field
+      // existed comes in with the answer already worked out, rather than
+      // wearing "no adapter" over a stack that plainly has one.
+      syncPreStageGuesses(state);
       return state;
     }
   } catch {
@@ -3395,11 +3540,18 @@ export function serializePreStage(state) {
     aspect: state.aspect,
     short_edge: state.short_edge,
     ...(state.init ? { init: { filename: state.init.filename, denoise: round2(state.init.denoise) } } : {}),
-    ...(state.refs.length ? { refs: state.refs.map((r) => ({ handle: r.handle, filename: r.filename })) } : {}),
+    ...(state.refs.length ? { refs: state.refs.map((r) => ({
+      handle: r.handle, filename: r.filename,
+      ...(r.role ? { role: r.role } : {}),
+      ...(r.guide ? { guide: r.guide } : {}),
+    })) } : {}),
     loras: serializeLoras(state.loras),
     ...serializePreStageTurbo(state.turbo),
     ...(state.quality !== "default" ? { quality: state.quality } : {}),
     ...(state.ref_method !== PRESTAGE_DEFAULT_REF_METHOD ? { ref_method: state.ref_method } : {}),
+    ...(state.ref_lora ? { ref_lora: state.ref_lora } : {}),
+    ...(state.start_blank ? { start_blank: true } : {}),
+    ...(state.edition !== PRESTAGE_DEFAULT_EDITION ? { edition: state.edition } : {}),
     [PRESTAGE_STILL_ARCH]: serializeStill(state[PRESTAGE_STILL_ARCH]),
     ...serializeSampling(state.sampling),
     ...(Object.keys(models).length ? { models } : {}),
@@ -3459,10 +3611,36 @@ export function guessPreStageModels(models, byFolder) {
  *  way — see `compile_image.compile_prestage`. */
 export function preStageSource(state) {
   if (state.init) return state.init.filename;
-  if (PRESTAGE_REFS[state.arch]?.editsFirst && state.refs?.length) {
+  if (PRESTAGE_REFS[state.arch]?.editsFirst && state.refs?.length
+      && !state.start_blank) {
     return state.refs[0].filename;
   }
   return null;
+}
+
+/** Does this render read a ControlNet guide as one of its pictures?
+ *
+ *  True only where the weights were post-trained to follow one — which is a
+ *  property of the edition, not of the family. Everywhere else a guide belongs
+ *  in the init slot, at a denoise, the way every guide did before the built-in
+ *  ControlNet existed. See `families/qwenedit/still.NATIVE_CONTROL`. */
+export function preStageReadsGuides(state) {
+  const refs = PRESTAGE_REFS[state?.arch];
+  if (!refs?.nativeControl?.length) return false;
+  return !refs.controlEditions.length
+    || refs.controlEditions.includes(state.edition);
+}
+
+/** Is this render drawing onto an empty canvas with its pictures only cited?
+ *
+ *  Only ever true on a family whose first picture would otherwise be promoted
+ *  to the thing being edited — everywhere else the empty canvas is simply what
+ *  a render with no init image already does, and a flag saying so would be a
+ *  second name for the same state. */
+export function preStageStartsBlank(state) {
+  const refs = PRESTAGE_REFS[state?.arch];
+  return Boolean(refs?.editsFirst && state?.refs?.length && state.start_blank
+                 && !state.init);
 }
 
 /** The resolved image canvas, mirroring compile_image.resolve_canvas: /16 grid,
