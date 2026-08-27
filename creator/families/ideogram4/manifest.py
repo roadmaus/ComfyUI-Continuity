@@ -103,6 +103,16 @@ def manifest():
                            "min_denoise": compile_image.MIN_DENOISE},
             "qualities": {name: dict(preset) for name, preset
                           in still.IDEOGRAM_QUALITIES.items()},
+            # The turbo pill, which here is a LoRA and only a LoRA: Ideogram
+            # ships no distilled checkpoint, so `checkpoint` is False and the
+            # switch refuses to engage without a file. Thrown on it also drops
+            # the unconditional branch and the polish tail, both of which are
+            # cfg machinery a distilled run at cfg 1 has no use for.
+            "turbo": {"steps": dict(still.TURBO_STEPS),
+                      "row": dict(still.TURBO_ROW),
+                      "default_quality": still.DEFAULT_TURBO_QUALITY,
+                      "lora": True, "default_strength": 1.0,
+                      "checkpoint": False},
         },
         "prompt": {
             # Plain prose, no reference conditioning of any kind.

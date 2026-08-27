@@ -401,7 +401,16 @@ check("krea2 weight slots are the family's fields",
 check("krea2 turbo capability carries the presets",
       krea["capabilities"]["turbo"],
       {"steps": k2.TURBO_STEPS, "row": k2.KREA_TURBO,
-       "default_quality": k2.DEFAULT_TURBO_QUALITY})
+       "default_quality": k2.DEFAULT_TURBO_QUALITY,
+       "lora": True, "default_strength": 1.0, "checkpoint": True})
+check("krea2 declares both ways to be fast — the distilled file and the LoRA",
+      (krea["capabilities"]["turbo"]["checkpoint"],
+       krea["capabilities"]["turbo"]["lora"]), (True, True))
+check("krea2 reference methods are the family's, adapter first",
+      (krea["capabilities"]["refs"]["methods"],
+       krea["capabilities"]["refs"]["default_method"],
+       krea["capabilities"]["refs"]["needs_lora"]),
+      (list(k2.REF_METHODS), k2.DEFAULT_REF_METHOD, True))
 check("krea2 reference cap is the encoder's",
       krea["prompt"]["max_refs"], ci.MAX_STYLE_REFS)
 check("krea2 canvas is the shared /16 grid",
@@ -421,5 +430,13 @@ check("ideogram reads no references",
 check("only the unconditional checkpoint is optional",
       [w["id"] for w in ideo["weights"] if not w.get("required", True)],
       ["uncond_model"])
+check("ideogram turbo is a LoRA and only a LoRA — there is no distilled file",
+      (ideo["capabilities"]["turbo"]["lora"],
+       ideo["capabilities"]["turbo"]["checkpoint"],
+       ideo["capabilities"]["turbo"]["steps"]),
+      (True, False, i4.TURBO_STEPS))
+check("every quality preset names its polish tail",
+      {name: preset["polish"] for name, preset in ideo["capabilities"]["qualities"].items()},
+      {name: preset["polish"] for name, preset in i4.IDEOGRAM_QUALITIES.items()})
 
 passed("the registry serves every family and the manifests hold their sources")

@@ -3169,6 +3169,22 @@ export const PRESTAGE_KREA_TURBO = KREA.capabilities.turbo.row;
 export const PRESTAGE_TURBO_QUALITIES = Object.keys(KREA.capabilities.turbo.steps);
 export const PRESTAGE_TURBO_STEPS = KREA.capabilities.turbo.steps;
 
+/** Every image arch's turbo declaration, by arch. The pill is one pill and it
+ *  does not mean one thing: Krea's throws a distilled checkpoint *or* the SVD
+ *  extraction of it as a LoRA, Ideogram's has no distilled checkpoint to throw
+ *  and is a LoRA or nothing. `checkpoint` and `lora` are which of the two a
+ *  family offers, so the pill can draw the choice rather than assume it. */
+export const PRESTAGE_TURBO = Object.fromEntries(
+  PRESTAGE_IMAGE_ARCHES
+    .filter((arch) => IMAGE_FAMILY[arch].capabilities.turbo)
+    .map((arch) => [arch, IMAGE_FAMILY[arch].capabilities.turbo]));
+export const turboOfArch = (arch) => PRESTAGE_TURBO[arch] ?? null;
+
+/** How Krea 2 lays reference tokens into the sequence — the adapter's choice,
+ *  because the published reference LoRAs disagree and neither layout errors. */
+export const PRESTAGE_REF_METHODS = KREA.capabilities.refs.methods;
+export const PRESTAGE_DEFAULT_REF_METHOD = KREA.capabilities.refs.default_method;
+
 /** Ideogram's official preset table. The presets own steps *and* the schedule
  *  shape; the widget cfg feeds the dual-model guider. */
 export const PRESTAGE_IDEOGRAM_QUALITIES = Object.keys(IDEOGRAM.capabilities.qualities);
@@ -3208,10 +3224,16 @@ export function emptyPreStage() {
     // [{handle, filename}] — style references, Krea 2 only.
     refs: [],
     loras: [],
-    // The image turbo is a checkpoint swap, not a LoRA — Krea Turbo *is* a
-    // distilled checkpoint — but the pill keeps the H3 contract: it saves the
-    // sampler row once per throw and puts it back exactly on release.
-    turbo: { on: false, quality: KREA.capabilities.turbo.default_quality, saved: null },
+    // The turbo pill, per arch the way `models` is: it does not mean the same
+    // thing on both sides, so one shared block would carry Krea's distilled
+    // file onto Ideogram the moment the arch pill moved. Either way it keeps
+    // the H3 contract — the sampler row is saved once per throw and put back
+    // exactly on release — and `lora` is the entry in the ordinary stack the
+    // switch owns, which is H3's arrangement too.
+    turbo: emptyPreStageTurbo(),
+    // Which reference layout Krea 2's adapter was trained on. See
+    // `PRESTAGE_REF_METHODS`.
+    ref_method: PRESTAGE_DEFAULT_REF_METHOD,
     // Ideogram's speed axis: which official preset shapes the schedule.
     quality: PRESTAGE_DEFAULT_QUALITY,
     // The video family's branch: its own settings, and its generation in the
@@ -3226,6 +3248,38 @@ export function emptyPreStage() {
     // so the pre-stage pill re-derives the pairing by scan.
     peer: null,
   };
+}
+
+export function emptyPreStageTurbo() {
+  const empty = {};
+  for (const [arch, turbo] of Object.entries(PRESTAGE_TURBO)) {
+    empty[arch] = { on: false, quality: turbo.default_quality, saved: null, lora: null };
+  }
+  return empty;
+}
+
+/** The pre-stage turbo block, validated per arch.
+ *
+ *  A blob written before the pill went per-arch has the flat shape, and is read
+ *  as Krea 2's: it was the only arch with a turbo pill at all. The same reading
+ *  the compiler does — see `compile_image.turbo_block`. */
+export function parsePreStageTurbo(raw) {
+  const out = emptyPreStageTurbo();
+  const stored = raw && typeof raw === "object" ? raw : {};
+  const blocks = typeof stored.on === "boolean" ? { krea2: stored } : stored;
+  for (const [arch, empty] of Object.entries(out)) {
+    const side = blocks[arch];
+    if (!side || typeof side !== "object") continue;
+    empty.on = side.on === true;
+    if (Object.keys(PRESTAGE_TURBO[arch].steps).includes(side.quality)) empty.quality = side.quality;
+    if (side.saved && typeof side.saved === "object") empty.saved = { ...side.saved };
+    if (typeof side.lora === "string" && side.lora.trim()) empty.lora = side.lora.trim();
+    // A LoRA-only arch cannot be on without one: Ideogram ships no distilled
+    // checkpoint, so an `on` with no file is a compile refusal waiting to
+    // happen. Read as off, which is what it will render as either way.
+    if (empty.on && !empty.lora && !PRESTAGE_TURBO[arch].checkpoint) empty.on = false;
+  }
+  return out;
 }
 
 export function emptyPreStageModels() {
@@ -3267,12 +3321,10 @@ export function parsePreStage(raw) {
       // list. A still architecture that wants a row of its own would ask for it
       // here, the way `parseTimeline` asks for the piece's family's.
       state.sampling = parseSampling(state.sampling);
-      const turbo = state.turbo && typeof state.turbo === "object" ? state.turbo : {};
-      state.turbo = {
-        on: turbo.on === true,
-        quality: PRESTAGE_TURBO_QUALITIES.includes(turbo.quality) ? turbo.quality : "good",
-        saved: turbo.saved && typeof turbo.saved === "object" ? { ...turbo.saved } : null,
-      };
+      if (!PRESTAGE_REF_METHODS.includes(state.ref_method)) {
+        state.ref_method = PRESTAGE_DEFAULT_REF_METHOD;
+      }
+      state.turbo = parsePreStageTurbo(state.turbo);
       const models = state.models && typeof state.models === "object" ? state.models : {};
       state.models = emptyPreStageModels();
       for (const arch of PRESTAGE_IMAGE_ARCHES) {
@@ -3312,16 +3364,29 @@ export function serializePreStage(state) {
     ...(state.init ? { init: { filename: state.init.filename, denoise: round2(state.init.denoise) } } : {}),
     ...(state.refs.length ? { refs: state.refs.map((r) => ({ handle: r.handle, filename: r.filename })) } : {}),
     loras: serializeLoras(state.loras),
-    ...(state.turbo.on || state.turbo.saved
-      ? { turbo: { on: state.turbo.on, quality: state.turbo.quality,
-                   ...(state.turbo.saved ? { saved: { ...state.turbo.saved } } : {}) } }
-      : {}),
+    ...serializePreStageTurbo(state.turbo),
     ...(state.quality !== "default" ? { quality: state.quality } : {}),
+    ...(state.ref_method !== PRESTAGE_DEFAULT_REF_METHOD ? { ref_method: state.ref_method } : {}),
     [PRESTAGE_STILL_ARCH]: serializeStill(state[PRESTAGE_STILL_ARCH]),
     ...serializeSampling(state.sampling),
     ...(Object.keys(models).length ? { models } : {}),
     ...(state.peer != null ? { peer: state.peer } : {}),
   }, null, 2);
+}
+
+/** The turbo block, arches that have nothing to say left out — a pill never
+ *  thrown writes nothing, exactly as the flat block did. */
+function serializePreStageTurbo(turbo) {
+  const out = {};
+  for (const [arch, side] of Object.entries(turbo ?? {})) {
+    if (!side?.on && !side?.saved) continue;
+    out[arch] = {
+      on: side.on, quality: side.quality,
+      ...(side.lora ? { lora: side.lora } : {}),
+      ...(side.saved ? { saved: { ...side.saved } } : {}),
+    };
+  }
+  return Object.keys(out).length ? { turbo: out } : {};
 }
 
 /** Fill empty weight fields from unambiguous filename matches — the same

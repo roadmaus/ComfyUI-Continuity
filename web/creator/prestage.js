@@ -37,6 +37,7 @@ import { openPresetLibrary } from "./presetlib.js";
 import * as P from "./presets.js";
 import { PromptBox, focusEnd, openEditorSheet } from "./prompt.js";
 import { blobIO, samplingBar } from "./sampling.js";
+import { loadLoraNames, loraNames } from "./turbo.js";
 import { Stage } from "./stage.js";
 import { loadCatalog, refreshCatalog, catalogByFolder } from "./models.js";
 import { viewUrl } from "./api.js";
@@ -49,11 +50,29 @@ const QUALITY_TITLE = {
   turbo: "12 steps on the shifted schedule — the hosted service's 'Turbo' tier.",
 };
 
+// Keyed by arch, because the same three words mean different step counts on
+// each side — Krea's ladder is the distilled checkpoint's, Ideogram's is what a
+// distillation LoRA over an undistilled checkpoint will hold up at.
 const TURBO_TITLE = {
-  draft: "4 steps — the fast look. Softer detail.",
-  medium: "6 steps — quick and usable.",
-  good: "8 steps — what the Turbo checkpoint was distilled for.",
+  krea2: {
+    draft: "4 steps — the fast look. Softer detail.",
+    medium: "6 steps — quick and usable.",
+    good: "8 steps — what the Turbo checkpoint was distilled for.",
+  },
+  ideogram4: {
+    draft: "2 steps — as short as the distillation goes. For framing, not for finals.",
+    medium: "4 steps — quick and usable.",
+    good: "8 steps — where a distilled Ideogram stops gaining.",
+  },
 };
+
+/** The distilled-checkpoint answer in the turbo source picker: not a file, and
+ *  only offered by an arch that ships one. */
+const TURBO_CHECKPOINT = "— distilled checkpoint —";
+
+/** A filename as the pill wears it: no folder, no extension. Forty characters
+ *  of `..._turbo_v4_step600_ema_pruned` is not a label. */
+const shortLora = (name) => name.split("/").pop().replace(/\.[^.]+$/, "");
 
 export class PreStageEditor {
   /**
@@ -358,7 +377,7 @@ export class PreStageEditor {
       ...this.widgetIO(),
       set: (name, value) => { this.widgetIO().set(name, value); this.render(); },
       perSegment: false,
-      turbo: state.arch === "krea2" ? this.renderTurbo() : [],
+      turbo: this.renderTurbo(),
       trailing: [this.renderWeightsPill()],
     })] : []));
     this.sheetEditor?.render();
@@ -583,6 +602,33 @@ export class PreStageEditor {
       }, [icon("steps", 16), el("span", { text: `${state.quality} · ${S.PRESTAGE_IDEOGRAM_STEPS[state.quality]}` })]));
     }
 
+    // The reference layout, and only where there is a reference to lay out.
+    // Krea 2's base weights read none: core hands the DiT no default method
+    // because it never learned one, and every way of reading a reference on
+    // this model is a LoRA. The published adapters disagree about the layout
+    // and neither disagreement is an error, so the pill is where that is said.
+    if (state.arch === "krea2" && state.refs.length) {
+      const adapted = (state.loras ?? []).some((entry) => entry.enabled !== false);
+      pills.push(el("button", {
+        class: `mmc-pill${adapted ? "" : " missing"}`,
+        title: adapted
+          ? t("How the references are laid into the token sequence. The ai-toolkit edit "
+            + "LoRAs pin theirs at timestep zero; the identity-edit ones index them like "
+            + "any other frame. Match the adapter in the stack.")
+          : t("These references will not render: Krea 2 reads them only through a "
+            + "reference LoRA. Add one to the stack — krea2_style_reference for style, "
+            + "an ai-toolkit edit LoRA for edits."),
+        onclick: (event) => openChoicePopover(event.currentTarget, {
+          title: t("Reference layout"),
+          options: [...S.PRESTAGE_REF_METHODS],
+          value: state.ref_method,
+          onPick: (picked) => { state.ref_method = picked; this.commit(); },
+        }),
+      }, [icon("image", 16), el("span", {
+        text: state.ref_method === "index" ? t("indexed") : t("t=0 refs"),
+      })]));
+    }
+
     if (state.init) {
       pills.push(stepperPill({
         value: state.init.denoise, min: S.PRESTAGE_MIN_DENOISE, max: 1, step: 0.05, width: "52px",
@@ -596,73 +642,195 @@ export class PreStageEditor {
     return el("div", { class: "mmc-pills" }, pills);
   }
 
-  // ---- turbo (Krea 2) --------------------------------------------------------
+  // ---- turbo -----------------------------------------------------------------
 
-  /** The turbo pill, under the H3 contract: save the row once per throw, put it
-   *  back exactly on release, own no second stack. What it throws here is a
-   *  *checkpoint* — Krea 2 Turbo is a distillation of RAW, not a LoRA — so the
-   *  stack is untouched either way (Krea LoRAs train on RAW, apply on Turbo). */
+  /** The turbo pill, under the H3 contract: save the sampler row once per
+   *  throw, put it back exactly on release, own no second stack.
+   *
+   *  What it throws is the arch's business and the manifest says which. Krea 2
+   *  ships the distillation twice — as its own checkpoint and as an SVD
+   *  extraction of the same weight difference — so its pill offers both, and
+   *  the LoRA route is the one that keeps RAW resident across a flick of the
+   *  switch and lets a content LoRA ride along. Ideogram ships no distilled
+   *  checkpoint at all: its pill is a LoRA or it does not engage.
+   *
+   *  A LoRA route is an ordinary stack entry the whole way — the manager's
+   *  card, the chip's ✕ and the strength slider all work on it — which is the
+   *  same bargain `turbo.js` strikes on the video side. */
   renderTurbo() {
     const state = this.state;
-    const turbo = state.turbo;
+    const spec = S.turboOfArch(state.arch);
+    if (!spec) return [];
+    const turbo = state.turbo[state.arch];
     const io = this.widgetIO();
-    const pills = [];
+    const titles = TURBO_TITLE[state.arch] ?? {};
 
+    if (spec.lora && !turbo.lora) loadLoraNames();
+
+    const pills = [];
     pills.push(el("div", { class: `mmc-pill mmc-pill-group${turbo.on ? " accel-on" : ""}` }, [
       el("button", {
         class: "mmc-turbo-main",
-        title: turbo.on
-          ? t("Turbo — running the Turbo checkpoint at {steps} steps, cfg 1. "
-            + "Switching off loads RAW again and puts the sampler row back.",
-            { steps: io.value("steps", "?") })
-          : t("Turbo off — running RAW. On, the Turbo checkpoint (an 8-step distillation) is loaded "
-            + "instead and the row drops to the picked quality at cfg 1."),
-        onclick: () => {
-          if (turbo.on) {
-            const saved = turbo.saved ?? S.PRESTAGE_KREA_RAW;
-            io.set("steps", saved.steps);
-            io.set("cfg", saved.cfg);
-            io.set("sampler_name", saved.sampler_name);
-            io.set("scheduler", saved.scheduler);
-            turbo.on = false;
-            turbo.saved = null;
-          } else {
-            turbo.saved = {
-              steps: Number(io.value("steps", S.PRESTAGE_KREA_RAW.steps)),
-              cfg: Number(io.value("cfg", S.PRESTAGE_KREA_RAW.cfg)),
-              sampler_name: String(io.value("sampler_name", S.PRESTAGE_KREA_RAW.sampler_name)),
-              scheduler: String(io.value("scheduler", S.PRESTAGE_KREA_RAW.scheduler)),
-            };
-            turbo.on = true;
-            io.set("steps", S.PRESTAGE_TURBO_STEPS[turbo.quality]);
-            io.set("cfg", S.PRESTAGE_KREA_TURBO.cfg);
-            io.set("sampler_name", S.PRESTAGE_KREA_TURBO.sampler_name);
-            io.set("scheduler", S.PRESTAGE_KREA_TURBO.scheduler);
+        title: this.turboTitle(spec, turbo, io),
+        onclick: (event) => {
+          if (turbo.on) { this.throwTurbo(false); return; }
+          // Nothing to throw yet on a LoRA-only arch: the first press is the
+          // picking, on the spot — the pill was pressed to go faster, not to
+          // go configure something.
+          if (!spec.checkpoint && !turbo.lora) {
+            this.openTurboSource(event.currentTarget, spec, turbo,
+                                 () => this.throwTurbo(true));
+            return;
           }
-          this.commit();
+          this.throwTurbo(true);
         },
       }, [icon("bolt", 16), el("span", { text: t(turbo.on ? "turbo" : "turbo off") })]),
     ]));
 
     if (turbo.on) {
       const steps = Number(io.value("steps", 0));
-      pills.push(el("div", { class: "mmc-pill mmc-turbo-seg" }, S.PRESTAGE_TURBO_QUALITIES.map((quality) =>
-        el("button", {
+      pills.push(el("div", { class: "mmc-pill mmc-turbo-seg" },
+        Object.keys(spec.steps).map((quality) => el("button", {
           class: "mmc-turbo-opt",
-          "aria-pressed": steps === S.PRESTAGE_TURBO_STEPS[quality],
-          title: t(TURBO_TITLE[quality]),
+          "aria-pressed": steps === spec.steps[quality],
+          title: t(titles[quality] ?? ""),
           onclick: () => {
             turbo.quality = quality;
-            io.set("steps", S.PRESTAGE_TURBO_STEPS[quality]);
+            io.set("steps", spec.steps[quality]);
             this.commit();
           },
         }, [
           el("span", { text: t(quality === "medium" ? "med" : quality) }),
-          el("span", { class: "mmc-pill-sub", text: String(S.PRESTAGE_TURBO_STEPS[quality]) }),
+          el("span", { class: "mmc-pill-sub", text: String(spec.steps[quality]) }),
         ]))));
+
+      // Which of the two the run is on, and the way to the other. Only where
+      // there are two: an arch with one route has nothing to say here.
+      if (spec.lora && spec.checkpoint) {
+        pills.push(el("button", {
+          class: "mmc-pill",
+          title: turbo.lora
+            ? t("Running the distillation as a LoRA over RAW — the base checkpoint stays "
+              + "loaded and the rest of the stack rides along. Press to swap to the "
+              + "distilled checkpoint.", {})
+            : t("Running the distilled checkpoint. Press to run the distillation as a "
+              + "LoRA over RAW instead, which keeps one file resident and lets the rest "
+              + "of the stack ride along."),
+          onclick: (event) => this.openTurboSource(event.currentTarget, spec, turbo,
+                                                   () => this.retrowTurbo()),
+        }, [icon("model", 16), el("span", {
+          text: turbo.lora ? shortLora(turbo.lora) : t("checkpoint"),
+        })]));
+      }
     }
 
     return pills;
+  }
+
+  /** What the switch says it will do, per arch and per route. */
+  turboTitle(spec, turbo, io) {
+    if (turbo.on) {
+      return turbo.lora
+        ? t("Turbo — {lora} over the ordinary checkpoint at {steps} steps, cfg 1. "
+          + "Switching off removes the LoRA and puts the sampler row back.",
+          { lora: shortLora(turbo.lora), steps: io.value("steps", "?") })
+        : t("Turbo — running the Turbo checkpoint at {steps} steps, cfg 1. "
+          + "Switching off loads RAW again and puts the sampler row back.",
+          { steps: io.value("steps", "?") });
+    }
+    return spec.checkpoint
+      ? t("Turbo off — running RAW. On, the distillation is loaded — the Turbo checkpoint, "
+        + "or the same weights as a LoRA — and the row drops to the picked quality at cfg 1.")
+      : t("Turbo off. Ideogram ships no distilled checkpoint, so this runs a distillation "
+        + "LoRA over the ordinary one: a handful of steps at cfg 1, with the unconditional "
+        + "checkpoint left unloaded. The first press picks the file.");
+  }
+
+  /** The source popover: the distilled checkpoint where there is one, then the
+   *  LoRA files, distillation-shaped names first. */
+  openTurboSource(anchor, spec, turbo, after) {
+    const names = loraNames();
+    const matched = names.filter((name) => /turbo|distill/i.test(name));
+    const listed = matched.length ? matched : names;
+    openChoicePopover(anchor, {
+      title: t("Turbo source"),
+      options: [
+        ...(spec.checkpoint ? [t(TURBO_CHECKPOINT)] : []),
+        ...listed,
+      ],
+      value: turbo.lora ?? (spec.checkpoint ? t(TURBO_CHECKPOINT) : ""),
+      onPick: (picked) => {
+        turbo.lora = picked === t(TURBO_CHECKPOINT) ? null : picked;
+        after();
+      },
+    });
+  }
+
+  /** Throw the switch, saving the row on the way on and restoring it on the
+   *  way off. The row it writes and the row it returns to are both the arch's
+   *  declarations — see `setArch`, which resets to the same place. */
+  throwTurbo(on) {
+    const state = this.state;
+    const spec = S.turboOfArch(state.arch);
+    const turbo = state.turbo[state.arch];
+    const io = this.widgetIO();
+
+    if (!on) {
+      const saved = turbo.saved ?? this.nativeRow();
+      for (const [key, value] of Object.entries(saved)) io.set(key, value);
+      if (turbo.lora) S.removeLora(state, turbo.lora);
+      turbo.on = false;
+      turbo.saved = null;
+      this.commit();
+      return;
+    }
+
+    // Saved once per throw, not per quality change: the row being remembered is
+    // the pre-turbo one, and draft → good in between must not overwrite it.
+    if (!turbo.on) {
+      const native = this.nativeRow();
+      turbo.saved = Object.fromEntries(Object.entries(native)
+        .map(([key, value]) => [key, typeof value === "string"
+          ? String(io.value(key, value)) : Number(io.value(key, value))]));
+    }
+    turbo.on = true;
+    if (turbo.lora) {
+      const entry = S.findLora(state, turbo.lora) ?? S.addLora(state, turbo.lora, []);
+      if (entry) {
+        entry.enabled = true;
+        entry.strength = spec.default_strength ?? 1.0;
+      }
+    }
+    io.set("steps", spec.steps[turbo.quality] ?? spec.steps[spec.default_quality]);
+    for (const [key, value] of Object.entries(spec.row)) io.set(key, value);
+    this.commit();
+  }
+
+  /** Swap route while the switch is on: drop whatever the old route added and
+   *  engage the new one, so a run never carries both distillations at once. */
+  retrowTurbo() {
+    const state = this.state;
+    const turbo = state.turbo[state.arch];
+    for (const entry of state.loras ?? []) {
+      if (entry.name !== turbo.lora && /turbo|distill/i.test(entry.name)) {
+        S.removeLora(state, entry.name);
+      }
+    }
+    turbo.on = false;
+    this.throwTurbo(true);
+  }
+
+  /** The sampler row this arch runs at with the switch off — where `throwTurbo`
+   *  returns to when nothing was saved, and what `setArch` writes. */
+  nativeRow() {
+    if (this.state.arch === "ideogram4") {
+      return {
+        steps: S.PRESTAGE_IDEOGRAM_STEPS[this.state.quality],
+        cfg: S.PRESTAGE_IDEOGRAM_ROW.cfg,
+        sampler_name: S.PRESTAGE_IDEOGRAM_ROW.sampler_name,
+      };
+    }
+    return { ...S.PRESTAGE_KREA_RAW };
   }
 
   // ---- weights ---------------------------------------------------------------
@@ -988,8 +1156,12 @@ export class PreStageBody {
     const io = this.widgetIO();
     const from = this.promptOf();
 
-    this.state.turbo.on = false;
-    this.state.turbo.saved = null;
+    // The switch is per arch, so leaving one does not throw the other's — but
+    // the row on the way out is this node's one row, and it belongs to whoever
+    // is arriving. Released here rather than carried across.
+    const leaving = this.state.turbo[this.state.arch];
+    if (leaving?.on && leaving.lora) S.removeLora(this.state, leaving.lora);
+    if (leaving) { leaving.on = false; leaving.saved = null; }
     this.state.arch = arch;
 
     if (arch === "krea2") {

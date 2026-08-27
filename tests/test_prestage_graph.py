@@ -158,8 +158,19 @@ check("the negative is the prompt zeroed out", len(kinds["ConditioningZeroOut"])
 check("an empty 16-channel latent", len(kinds["EmptySD3LatentImage"]), 1)
 check("one decode", len(kinds["VAEDecode"]), 1)
 for absent in ("LoadImage", "VAEEncode", "LoraLoaderModelOnly", "SamplerCustomAdvanced",
-               "Ideogram4Scheduler", "TextEncodeQwenImageEditPlus", "ModelSamplingFlux"):
+               "Ideogram4Scheduler", "TextEncodeQwenImageEditPlus"):
     check(f"no {absent} in a bare t2i render", absent in kinds, False)
+
+# RAW's shift is the canvas-derived ramp, on every render rather than only the
+# reference branch: core detects one arch for both checkpoint files and hands
+# both of them Turbo's pin, so without this RAW samples on Turbo's schedule.
+check("RAW carries the shift ramp",
+      (kinds["ModelSamplingFlux"][0][1]["max_shift"],
+       kinds["ModelSamplingFlux"][0][1]["base_shift"],
+       kinds["ModelSamplingFlux"][0][1]["width"]),
+      (k2.KREA_RAW_SHIFT["max_shift"], k2.KREA_RAW_SHIFT["base_shift"], 1824))
+check("the sampler reads the shifted model",
+      kinds["KSampler"][0][1]["model"][0], kinds["ModelSamplingFlux"][0][0])
 
 check("the RAW checkpoint is loaded",
       [i["unet_name"] for _, i in kinds["UNETLoader"]], [MODELS["krea2"]["model"]])
@@ -223,10 +234,14 @@ expect_error("an absolute prefix, pointed at the flag that does work",
 
 turbo = by_class(build(blob(turbo={"on": True, "quality": "good", "saved": None}),
                        steps=8, cfg=1.0).expand)
+# The flat block is what every blob written before the pill went per-arch
+# carries, and Krea 2 is the only family that had one — so it still reads.
 check("turbo loads the Turbo checkpoint",
       [i["unet_name"] for _, i in turbo["UNETLoader"]], [MODELS["krea2"]["turbo_model"]])
-check("turbo changes nothing structural",
-      sorted(turbo), sorted(kinds))
+check("turbo changes nothing structural but the shift",
+      sorted(turbo), sorted(k for k in kinds if k != "ModelSamplingFlux"))
+check("turbo keeps the pin the checkpoint already detected, so emits no shift node",
+      "ModelSamplingFlux" in turbo, False)
 check("the pill's sampler row arrives verbatim",
       (turbo["KSampler"][0][1]["steps"], turbo["KSampler"][0][1]["cfg"]), (8, 1.0))
 
@@ -242,8 +257,10 @@ check("one LoRA patch — the disabled one is skipped", len(loras), 1)
 check("model-only, at the entry's strength",
       (loras[0][1]["lora_name"], loras[0][1]["strength_model"]),
       ("krea2_darkbrush.safetensors", 0.8))
-check("the sampler reads the patch",
-      with_lora["KSampler"][0][1]["model"][0], loras[0][0])
+check("the shift reads the patch, and the sampler reads the shift",
+      (with_lora["ModelSamplingFlux"][0][1]["model"][0],
+       with_lora["KSampler"][0][1]["model"][0]),
+      (loras[0][0], with_lora["ModelSamplingFlux"][0][0]))
 check("the trigger word rides in front of the prompt",
       with_lora["CLIPTextEncode"][0][1]["text"],
       "monochrome ink wash style, a red room")
@@ -280,12 +297,21 @@ check("the sampler starts from the encode at the entry's strength",
 # ---- style references (Krea 2) -----------------------------------------------
 #
 # The official reference workflow's wiring: the Qwen-edit encoder with the
-# references in its image slots, the method node on its conditioning, and the
-# shift moved onto ModelSamplingFlux — none of which appears without refs.
+# references in its image slots and the method node on its conditioning,
+# neither of which appears without refs.
 
-refs_payload = ci.compile_prestage(
-    {"arch": "krea2", "prompt": "p", "refs": [{"filename": "a.png"}, {"filename": "b.png"}],
-     "aspect": "1:1", "short_edge": 1024}, k2)
+ADAPTER = [{"name": "krea2_style_reference.safetensors", "strength": 1.0}]
+
+
+def refs_blob(**overrides):
+    data = {"arch": "krea2", "prompt": "p", "aspect": "1:1", "short_edge": 1024,
+            "refs": [{"filename": "a.png"}, {"filename": "b.png"}],
+            "loras": list(ADAPTER)}
+    data.update(overrides)
+    return data
+
+
+refs_payload = ci.compile_prestage(refs_blob(), k2)
 refs = by_class(ri.emit(refs_payload, ri.ImageWeights(arch="krea2", files=MODELS["krea2"]),
                         sampling_mod.Sampling(), NODE_ID, k2).finalize())
 encode = refs["TextEncodeQwenImageEditPlus"][0][1]
@@ -294,19 +320,60 @@ check("both references sit in the encoder's image slots",
       (True, True, False))
 check("the encoder also gets the VAE for the reference latents",
       encode["vae"][0] in {nid for nid, _ in refs["VAELoader"]}, True)
-check("the reference method is the official one",
+check("the reference method defaults to the edit LoRAs'",
       refs["FluxKontextMultiReferenceLatentMethod"][0][1]["reference_latents_method"],
-      "index_timestep_zero")
-check("the shift moves onto ModelSamplingFlux on this branch",
+      k2.DEFAULT_REF_METHOD)
+
+# The layout is the adapter's, not a constant: the identity-edit LoRAs index
+# their reference tokens like any other frame instead of pinning them at t=0,
+# and picking the wrong one is a silently weaker render rather than an error.
+indexed = by_class(ri.emit(ci.compile_prestage(refs_blob(ref_method="index"), k2),
+                           ri.ImageWeights(arch="krea2", files=MODELS["krea2"]),
+                           sampling_mod.Sampling(), NODE_ID, k2).finalize())
+check("...and follows the adapter when the blob names another",
+      indexed["FluxKontextMultiReferenceLatentMethod"][0][1]["reference_latents_method"],
+      "index")
+expect_error("an unknown reference method is refused by name",
+             lambda: ci.compile_prestage(refs_blob(ref_method="offset"), k2),
+             "offset")
+
+# Core hands Krea 2 no default reference method because the base weights have
+# none — every way of reading a reference on this model is a LoRA. So an empty
+# stack is not a weaker render, it is the images going nowhere.
+expect_error("references with no adapter in the stack are refused",
+             lambda: ci.compile_prestage(refs_blob(loras=[]), k2),
+             "only through a reference LoRA")
+expect_error("...and a muted adapter counts as no adapter",
+             lambda: ci.compile_prestage(refs_blob(
+                 loras=[{**ADAPTER[0], "enabled": False}]), k2),
+             "only through a reference LoRA")
+check("the reference branch samples on the same RAW ramp as t2i",
       (refs["ModelSamplingFlux"][0][1]["max_shift"], refs["ModelSamplingFlux"][0][1]["base_shift"]),
-      (1.15, 0.5))
+      (k2.KREA_RAW_SHIFT["max_shift"], k2.KREA_RAW_SHIFT["base_shift"]))
 check("no plain text encode on the reference branch", "CLIPTextEncode" in refs, False)
 
 expect_error("a fourth reference is refused",
              lambda: ci.compile_prestage(
-                 {"arch": "krea2", "prompt": "p",
-                  "refs": ["a.png", "b.png", "c.png", "d.png"]}, k2),
+                 refs_blob(refs=["a.png", "b.png", "c.png", "d.png"]), k2),
              "three image slots")
+
+# ---- turbo as a LoRA (Krea 2) ------------------------------------------------
+#
+# The distillation ships twice: as its own checkpoint, and as an SVD extraction
+# of the same weight difference. With the LoRA picked the DiT stays RAW and the
+# stack does the distilling — which is what keeps one file resident across a
+# flick of the pill and lets a content LoRA ride along.
+
+turbo_lora = "krea2_turbo_distill.safetensors"
+by_lora = by_class(build(blob(
+    turbo={"krea2": {"on": True, "quality": "good", "saved": None, "lora": turbo_lora}},
+    loras=[{"name": turbo_lora, "strength": 1.0}]), steps=8, cfg=1.0).expand)
+check("the LoRA route keeps RAW loaded",
+      [i["unet_name"] for _, i in by_lora["UNETLoader"]], [MODELS["krea2"]["model"]])
+check("...and patches the distillation over it",
+      by_lora["LoraLoaderModelOnly"][0][1]["lora_name"], turbo_lora)
+check("...on the schedule the distillation was fitted to, not RAW's ramp",
+      "ModelSamplingFlux" in by_lora, False)
 
 # ---- Ideogram 4 --------------------------------------------------------------
 #
@@ -327,9 +394,8 @@ check("both checkpoints load — the unconditional branch is a separate model",
 guider = ideo["DualModelGuider"][0][1]
 check("the guider runs at the widget's cfg", guider["cfg"], 7.0)
 override = ideo["CFGOverride"][0]
-check("the conditional branch carries the late-cfg drop",
-      (override[1]["cfg"], override[1]["start_percent"], override[1]["end_percent"]),
-      (3.0, 0.7, 1.0))
+check("the conditional branch carries the polish drop",
+      (override[1]["cfg"], override[1]["end_percent"]), (3.0, 1.0))
 check("...and the guider reads it as its conditional model",
       guider["model"][0], override[0])
 check("the text encoder is loaded as Ideogram's",
@@ -340,6 +406,77 @@ quality = by_class(build(blob(arch="ideogram4", quality="quality"), steps=48).ex
 check("the quality preset reshapes the schedule",
       (quality["Ideogram4Scheduler"][0][1]["mu"], quality["Ideogram4Scheduler"][0][1]["std"]),
       (0.0, 1.5))
+
+# ---- the polish tail is a step count, not a percentage -----------------------
+#
+# Each preset ends on a fixed number of steps at gw=3 — 3 of 48, 2 of 20, 1 of
+# 12 — and CFGOverride takes a percent, so the boundary has to be resolved
+# against the schedule this render will run. Ideogram 4 samples on
+# ModelSamplingDiscreteFlow at shift 1, where the sigma *is* the timestep, so
+# the percent the node converts back is exactly `1 - sigma` and the count below
+# is what the sampler will really do.
+
+
+def polish_steps(quality_name, width=1024, height=1024):
+    preset = i4.IDEOGRAM_QUALITIES[quality_name]
+    steps = preset["steps"]
+    start = i4.polish_percent(steps, preset["polish"], width, height,
+                              preset["mu"], preset["std"])
+    row = i4.sigmas(steps, width, height, preset["mu"], preset["std"])
+    return sum(1 for sigma in row[:steps] if sigma <= 1.0 - start)
+
+
+for name, preset in i4.IDEOGRAM_QUALITIES.items():
+    check(f"{name} runs exactly its {preset['polish']} polish step(s) at 1K",
+          polish_steps(name), preset["polish"])
+    check(f"{name} runs exactly its {preset['polish']} polish step(s) at 2K",
+          polish_steps(name, 2048, 1152), preset["polish"])
+
+check("the mirrored schedule matches core's own",
+      [round(v, 6) for v in i4.sigmas(12, 1024, 1024, 0.5, 1.75)],
+      [round(float(v), 6) for v in
+       importlib.import_module("comfy_extras.nodes_ideogram4")
+       .ideogram4_sigmas(12, 1024, 1024, 0.5, 1.75)])
+
+# The fixed 0.7 this replaced was right for exactly one preset at one canvas.
+check("a fixed 0.7 would have run Quality's tail more than twice too long",
+      sum(1 for sigma in i4.sigmas(48, 1024, 1024, 0.0, 1.5)[:48] if sigma <= 0.3), 7)
+
+# ---- turbo as a LoRA (Ideogram 4) --------------------------------------------
+#
+# Ideogram ships no distilled checkpoint — the presets *are* its official fast
+# path — so this pill is a LoRA or it is nothing. Thrown on it also sheds the
+# two pieces of cfg machinery a run at cfg 1 has no use for: the 9.3B
+# unconditional file, and the polish tail's guidance drop.
+
+ideo_turbo_lora = "ideogram4_turbotime.safetensors"
+ideo_turbo = by_class(build(blob(
+    arch="ideogram4",
+    turbo={"ideogram4": {"on": True, "quality": "medium", "saved": None,
+                         "lora": ideo_turbo_lora}},
+    loras=[{"name": ideo_turbo_lora, "strength": 1.0}]), steps=4, cfg=1.0).expand)
+check("turbo patches the distillation over the one checkpoint",
+      ([i["unet_name"] for _, i in ideo_turbo["UNETLoader"]],
+       ideo_turbo["LoraLoaderModelOnly"][0][1]["lora_name"]),
+      ([MODELS["ideogram4"]["model"]], ideo_turbo_lora))
+check("the unconditional branch is not loaded at all",
+      "model_negative" in ideo_turbo["DualModelGuider"][0][1], False)
+check("and the polish tail is gone with the guidance it dropped",
+      "CFGOverride" in ideo_turbo, False)
+check("the schedule is the Turbo preset's, which is shaped for a short run",
+      (ideo_turbo["Ideogram4Scheduler"][0][1]["mu"],
+       ideo_turbo["Ideogram4Scheduler"][0][1]["std"],
+       ideo_turbo["Ideogram4Scheduler"][0][1]["steps"]),
+      (i4.IDEOGRAM_QUALITIES["turbo"]["mu"], i4.IDEOGRAM_QUALITIES["turbo"]["std"], 4))
+expect_error("turbo with no LoRA picked is refused, not sampled undistilled",
+             lambda: build(blob(arch="ideogram4",
+                                turbo={"ideogram4": {"on": True, "quality": "medium"}})),
+             "no distilled checkpoint")
+check("Krea's pill does not reach across the arch split",
+      "LoraLoaderModelOnly" in by_class(build(blob(
+          arch="ideogram4",
+          turbo={"krea2": {"on": True, "quality": "good", "lora": "k.safetensors"}},
+      )).expand), False)
 
 # Without the unconditional file the guider degrades to ordinary CFG — the
 # node's own documented behaviour — rather than refusing.
@@ -646,16 +783,14 @@ try:
     # this is the node's own latent2rgb path — which is the point. The node is
     # emitted for where it puts the picture, not for what decodes it.
     check("...with no decoder picked", "tiny_vae" in patches[0][1], False)
-    check("the sampler reads the patch",
-          previewed["KSampler"][0][1]["model"][0], patches[0][0])
+    check("the shift reads the patch, and the sampler reads the shift",
+          (previewed["ModelSamplingFlux"][0][1]["model"][0],
+           previewed["KSampler"][0][1]["model"][0]),
+          (patches[0][0], previewed["ModelSamplingFlux"][0][0]))
 
-    # The reference branch patches the shift on top of the override. Order is
-    # what is checked: everything downstream clones the patcher and carries the
-    # wrapper along, so the override has to be under the shift and not over it.
-    shifted = by_class(build(blob(refs=["a.png"])).expand)
-    check("the shift sits on top of the override on the reference branch",
-          shifted["ModelSamplingFlux"][0][1]["model"][0],
-          shifted["ModelPreviewOverrideKJ"][0][0])
+    # Order is what is checked: everything downstream clones the patcher and
+    # carries the wrapper along, so the override has to be under the shift and
+    # not over it.
 
     # Ideogram samples through a guider rather than a KSampler, and its
     # conditional branch carries the late-cfg drop — the override goes under

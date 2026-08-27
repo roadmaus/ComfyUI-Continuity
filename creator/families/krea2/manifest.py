@@ -102,9 +102,20 @@ def manifest():
             # image with a strength, and the distilled Turbo checkpoint.
             "init_image": {"default_denoise": compile_image.DEFAULT_DENOISE,
                            "min_denoise": compile_image.MIN_DENOISE},
+            # Two ways to be fast, one pill: the distilled checkpoint, or the
+            # SVD extraction of the same weight difference as a LoRA over RAW.
+            # `lora` is what the switch offers to pick — the same shape H3's
+            # turbo declaration has, because it is the same switch.
             "turbo": {"steps": dict(still.TURBO_STEPS),
                       "row": dict(still.KREA_TURBO),
-                      "default_quality": still.DEFAULT_TURBO_QUALITY},
+                      "default_quality": still.DEFAULT_TURBO_QUALITY,
+                      "lora": True, "default_strength": 1.0,
+                      "checkpoint": True},
+            # What a reference render needs beyond the images: an adapter in the
+            # stack, and the layout that adapter was trained on.
+            "refs": {"methods": list(still.REF_METHODS),
+                     "default_method": still.DEFAULT_REF_METHOD,
+                     "needs_lora": True},
         },
         "prompt": {
             # Plain prose; references are cited as the labels core's Qwen-edit

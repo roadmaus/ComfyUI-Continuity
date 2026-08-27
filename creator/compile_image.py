@@ -93,9 +93,10 @@ class ImagePayload:
     loras: list = field(default_factory=list)        # [{"name", "strength"}]
     refs: list = field(default_factory=list)         # filenames, krea2 only
     init: dict = None                                # {"filename", "denoise"} or None
-    # Ideogram's schedule shape, None on krea2.
-    mu: float = None
-    std: float = None
+    # How this family's schedule is shaped for this render — the family's own
+    # keys, opaque here. Ideogram's mu/std/polish; Krea's shift ramp. Empty on a
+    # family whose schedule the sampler row already states in full.
+    schedule: dict = field(default_factory=dict)
     ratio_clamped: bool = False
 
 
@@ -121,6 +122,27 @@ def active_image_loras(entries):
             continue
         active.append(entry)
     return active
+
+
+def turbo_block(data, arch):
+    """The turbo pill's state for `arch`, `{}` where there is none.
+
+    Per-arch like `models`, and for the same reason: the pill does not mean the
+    same thing on both sides — Krea's throws a distilled checkpoint or an SVD
+    extraction of it, Ideogram's throws a distillation LoRA and has no checkpoint
+    to offer — so one shared block would carry one family's file onto the other
+    the moment the arch pill moved.
+
+    A blob written before the split carries the flat shape, and is read as Krea
+    2's: it was the only family with a turbo pill at all.
+    """
+    block = data.get("turbo")
+    if not isinstance(block, dict):
+        return {}
+    side = block.get(arch)
+    if isinstance(side, dict):
+        return side
+    return block if arch == "krea2" and "on" in block else {}
 
 
 def clamp_ratio(ratio):
@@ -239,7 +261,7 @@ def compile_prestage(data, family, image_size_lookup=None):
     `family` is the architecture's own module — `families/krea2/still.py` or
     `families/ideogram4/still.py` — and supplies everything the flow below does
     not decide: whether references are read, and which checkpoint field and
-    schedule shape the blob's arch block resolves to. The caller picked it off
+    schedule block the blob's arch block resolves to. The caller picked it off
     the blob's `arch`, so an unknown arch is refused there, not here.
 
     `image_size_lookup(filename) -> (width, height)` supplies the init image's
@@ -272,6 +294,13 @@ def compile_prestage(data, family, image_size_lookup=None):
         # silently ignored the attached images is the failure this package
         # exists to avoid.
         raise CompileError(family.REFS_REFUSAL)
+    if refs and not loras and getattr(family, "REFS_NEED_LORA", None):
+        # And the same refusal one step in, for a family whose model reads
+        # references only with an adapter patched on. Krea 2 is one: core hands
+        # its DiT no default reference method because the base weights have
+        # none, so an attached image with an empty stack is conditioning that
+        # never reaches the sampler.
+        raise CompileError(family.REFS_NEED_LORA)
 
     init = _parse_init(data.get("init"))
 
@@ -288,7 +317,7 @@ def compile_prestage(data, family, image_size_lookup=None):
             raise CompileError(f"unknown aspect {aspect!r}")
     width, height = resolve_canvas(ratio, short_edge)
 
-    checkpoint_field, mu, std = family.plan(data)
+    checkpoint_field, schedule = family.plan(data)
 
     return ImagePayload(
         arch=family.ARCH, prompt=prompt, width=width, height=height,
@@ -296,5 +325,5 @@ def compile_prestage(data, family, image_size_lookup=None):
         # Filenames alone from here on: the handles did their work above and the
         # graph loads these by name, in this order, into the encoder's slots.
         refs=[filename for _, filename in refs], init=init,
-        mu=mu, std=std, ratio_clamped=ratio_clamped,
+        schedule=schedule or {}, ratio_clamped=ratio_clamped,
     )

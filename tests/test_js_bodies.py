@@ -237,6 +237,67 @@ for (const [cls, widget, blob] of [
   }
 }
 
+// The pre-stage's arch-dependent rows, which the two blobs above do not reach:
+// Ideogram's turbo pill (a LoRA route with no distilled checkpoint behind it)
+// and Krea's reference layout pill, both of which draw only when the arch and
+// the attachments line up. A body that throws while drawing them is a body
+// nobody sees, so this mounts each one and reports the pills it got.
+try {
+  out.prestageRows = {};
+  const variants = {
+    ideogramTurbo: { arch: "ideogram4", prompt: "p",
+                     turbo: { ideogram4: { on: true, quality: "medium",
+                                           lora: "ideogram4_turbotime.safetensors" } },
+                     loras: [{ name: "ideogram4_turbotime.safetensors", strength: 1 }] },
+    kreaTurboLora: { arch: "krea2", prompt: "p",
+                     turbo: { krea2: { on: true, quality: "good",
+                                       lora: "krea2_turbo_distill.safetensors" } },
+                     loras: [{ name: "krea2_turbo_distill.safetensors", strength: 1 }] },
+    kreaRefs: { arch: "krea2", prompt: "p",
+                refs: [{ handle: "ref-1", filename: "a.png" }],
+                loras: [{ name: "krea2_style_reference.safetensors", strength: 1 }] },
+    kreaRefsNoAdapter: { arch: "krea2", prompt: "p",
+                         refs: [{ handle: "ref-1", filename: "a.png" }], loras: [] },
+  };
+  for (const [name, blob] of Object.entries(variants)) {
+    const node = fakeNode("MiniMaxH3PreStage", "prestage_data", JSON.stringify(blob));
+    await ext.nodeCreated(node);
+    const text = [];
+    const walk = (n) => {
+      if (n.text) text.push(String(n.text));
+      (n.children ?? []).forEach(walk);
+    };
+    walk(node.mmcBody.root);
+    out.prestageRows[name] = text.join(" ");
+    // The reference pill's own class, not the body's: the weights pill wears
+    // `missing` too on a node with no files picked, which every one of these has.
+    const labels = ["t=0 refs", "indexed"];
+    // Deepest first: every ancestor up to the root "contains" the label, and
+    // the one worth reading is the pill itself.
+    const find = (n) => {
+      for (const child of n.children ?? []) {
+        const hit = find(child);
+        if (hit) return hit;
+      }
+      const own = [];
+      walk2(n, own);
+      // The pill, not the span inside it: the class this is reading for is the
+      // pill's own, and the span that carries the label has none.
+      return String(n.className ?? "").split(" ").includes("mmc-pill")
+        && labels.some((label) => own.includes(label)) ? n : null;
+    };
+    const walk2 = (n, into) => {
+      if (n.text) into.push(String(n.text));
+      (n.children ?? []).forEach((child) => walk2(child, into));
+    };
+    const pill = find(node.mmcBody.root);
+    out.refPill ??= {};
+    out.refPill[name] = pill ? String(pill.className ?? "") : null;
+  }
+} catch (error) {
+  out.errors.push(`prestageRows: ${error.stack}`);
+}
+
 // Which property a host has to read to get the piece, and what happens when it
 // reads the wrong one. `familyOf` used to answer a missing piece with the
 // default family, so a host that reached for `.state` on a piece node got a
@@ -2538,6 +2599,24 @@ check("...and reading `state` instead is refused, naming the way out",
       report["pieceRead"].get("refusesMissing"), True)
 check("...while a piece that simply names no family keeps the default",
       report["pieceRead"].get("noFamilyField"), "MiniMax H3")
+
+rows = report.get("prestageRows", {})
+check("Ideogram's turbo pill draws its own step ladder and its LoRA route",
+      ("turbo" in rows.get("ideogramTurbo", ""),
+       "2" in rows.get("ideogramTurbo", ""),
+       "turbotime" in rows.get("ideogramTurbo", "")),
+      (True, True, True))
+check("Krea's turbo pill names the route it is on",
+      "krea2_turbo_distill" in rows.get("kreaTurboLora", ""), True)
+check("the reference layout pill draws with a reference attached",
+      "t=0 refs" in rows.get("kreaRefs", ""), True)
+pill = report.get("refPill", {})
+check("...and flags itself when nothing in the stack can read one",
+      ("missing" in (pill.get("kreaRefsNoAdapter") or ""),
+       "missing" in (pill.get("kreaRefs") or "")),
+      (True, False))
+check("...and does not draw at all where there is no reference",
+      pill.get("kreaTurboLora"), None)
 
 check("the image pre-stage mounts", report["nodes"].get("MiniMaxH3PreStage"),
       {"mounted": True, "body": "PreStageEditor"})

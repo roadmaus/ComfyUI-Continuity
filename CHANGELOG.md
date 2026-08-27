@@ -2,6 +2,49 @@
 
 ## Unreleased
 
+**Both image models now sample the way their authors said to.** Four things were
+wrong in the pre-stage, and each of them was quiet — nothing errored, the
+pictures were just worse than the weights can do.
+
+*Ideogram's low-guidance polish tail.* Every official preset ends on a fixed
+number of steps at guidance 3 instead of 7 — three of Quality's 48, two of
+Default's 20, one of Turbo's 12 — and this pack asked for it as a flat 30% of
+the trajectory, which is the approximation the shipped ComfyUI template makes.
+On a 1K canvas that gave Quality *seven* polish steps instead of three; on a 2K
+canvas it gave Turbo none at all, because Ideogram's schedule carries a
+resolution term and the boundary moves with it. The tail is now resolved against
+the sigmas the render will really run, so "the last three steps" is three steps
+at any preset and any canvas.
+
+*Krea 2 RAW's timestep shift.* Krea derives RAW's shift from the canvas — the
+`--y1 0.5 / --y2 1.15` ramp in its own inference code — and pins it only for
+Turbo, which was distilled against a constant. ComfyUI detects one architecture
+for both files and so gives both of them Turbo's pin, which left RAW sampling a
+1K canvas on a schedule meant for a 2K distilled render. RAW gets its ramp back
+on every render; Turbo keeps the pin, and emits no shift node at all because the
+pin is what the checkpoint already detected.
+
+*Style references need an adapter, and now say so.* Krea 2's base weights read
+no reference at all: core hands the DiT no default reference method because it
+never learned one. Every way of reading a reference on this model is a LoRA —
+`krea2_style_reference` for style, an ai-toolkit edit LoRA for edits — and
+attaching images without one was conditioning that never reached the sampler.
+That is refused now rather than rendered, and because the published adapters
+disagree about how reference tokens are laid into the sequence (pinned at
+timestep zero, or indexed like any other frame) the layout is a pill on the
+references row rather than a constant.
+
+*Turbo is a LoRA too.* Krea ships its distillation twice — as its own checkpoint
+and as an SVD extraction of the same weight difference — and the pill now offers
+both: the LoRA route keeps RAW resident across a flick of the switch and lets a
+content LoRA ride along. Ideogram, which ships no distilled checkpoint at all,
+gets the pill for the first time: a distillation LoRA over the ordinary
+checkpoint takes it to a handful of steps at cfg 1, where the unconditional
+checkpoint is no longer loaded and the polish tail has no guidance left to drop.
+The switch is per architecture, so flipping the model pill no longer carries one
+family's file onto the other; blobs written before the split are read as Krea
+2's, which is the only side that had one.
+
 **A pre-stage render previews beside the node, not on it.** The two image
 architectures — Krea 2 and Ideogram 4.0 — sampled behind ComfyUI's own
 previewer, whose frames the frontend paints onto the canvas node itself: under

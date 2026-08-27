@@ -55,6 +55,18 @@ out.still = {
   latents: {},
 };
 for (const n of s.PRESTAGE_STILL_LENGTHS) out.still.latents[n] = s.stillLatentFrames(n);
+
+// The turbo pill, per arch — and the reading of a blob written before it went
+// per arch, which is the migration `compile_image.turbo_block` also does.
+out.turbo_arches = Object.keys(s.PRESTAGE_TURBO).sort();
+out.turbo_routes = Object.fromEntries(Object.entries(s.PRESTAGE_TURBO)
+  .map(([arch, spec]) => [arch, [spec.checkpoint === true, spec.lora === true]]));
+out.turbo_steps = Object.fromEntries(Object.entries(s.PRESTAGE_TURBO)
+  .map(([arch, spec]) => [arch, spec.steps]));
+out.legacy_turbo = s.parsePreStageTurbo({ on: true, quality: "draft" });
+out.turbo_needs_lora = s.parsePreStageTurbo({ ideogram4: { on: true } }).ideogram4.on;
+out.ref_methods = [...s.PRESTAGE_REF_METHODS];
+out.default_ref_method = s.PRESTAGE_DEFAULT_REF_METHOD;
 console.log(JSON.stringify(out));
 """
 
@@ -106,6 +118,29 @@ for quality, steps in reflected["ideogram"].items():
 check("turbo steps", reflected["turbo"], k2.TURBO_STEPS)
 check("krea RAW row", reflected["krea_raw"], k2.KREA_RAW)
 
+# ---- the turbo pill, per arch ------------------------------------------------
+#
+# It is one pill and it does not mean one thing: Krea ships the distillation as
+# a checkpoint *and* as a LoRA, Ideogram only as a LoRA. Both halves have to
+# agree about which, or the pill offers a route the compiler will refuse.
+
+check("both image arches have a turbo pill", reflected["turbo_arches"],
+      ["ideogram4", "krea2"])
+check("which routes each arch offers",
+      reflected["turbo_routes"], {"krea2": [True, True], "ideogram4": [False, True]})
+check("the step ladders are the families' own", reflected["turbo_steps"],
+      {"krea2": k2.TURBO_STEPS, "ideogram4": i4.TURBO_STEPS})
+check("a blob from before the split reads as Krea 2's",
+      (reflected["legacy_turbo"]["krea2"]["on"],
+       reflected["legacy_turbo"]["krea2"]["quality"],
+       reflected["legacy_turbo"]["ideogram4"]["on"]),
+      (True, "draft", False))
+check("...and a LoRA-only arch cannot be on without one",
+      reflected["turbo_needs_lora"], False)
+check("the reference layouts are Krea's own",
+      (reflected["ref_methods"], reflected["default_ref_method"]),
+      (list(k2.REF_METHODS), k2.DEFAULT_REF_METHOD))
+
 # ---- citing a style reference -----------------------------------------------
 #
 # The prompt names a reference by handle and the compile turns it into the label
@@ -116,8 +151,12 @@ check("krea RAW row", reflected["krea_raw"], k2.KREA_RAW)
 
 
 def still(prompt, refs=(), arch="krea2"):
+    # Krea 2 refuses references with no adapter in the stack — see
+    # `test_prestage_graph.py` — so the citations below carry one.
     return {"arch": arch, "prompt": prompt, "width": 1024, "height": 1024,
-            "refs": [{"handle": h, "filename": f} for h, f in refs], "models": {}}
+            "refs": [{"handle": h, "filename": f} for h, f in refs], "models": {},
+            "loras": [{"name": "krea2_style_reference.safetensors", "strength": 1.0}]
+                     if refs else []}
 
 
 REFS = (("ref-1", "plate.png"), ("ref-2", "coat.png"))

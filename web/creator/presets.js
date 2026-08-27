@@ -1483,7 +1483,10 @@ export function applyToPreStage(body, keys, state, io, { from = "prestage" } = {
     }
   }
   if (chosen.has("speed")) {
-    state.turbo = S.parseTurbo(body.speed?.turbo ?? null);
+    // The pre-stage's switch is per arch and the piece's is not — see
+    // `parsePreStageTurbo`. A preset captured before the split carries the flat
+    // block and lands on Krea 2, which is where it was made.
+    state.turbo = S.parsePreStageTurbo(body.speed?.turbo ?? null);
     applyRow(body.speed?.row, io);
   }
   if (chosen.has("prompt")) {
