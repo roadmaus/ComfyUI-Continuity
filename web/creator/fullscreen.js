@@ -56,6 +56,7 @@ import { app } from "../../../scripts/app.js";
 import { api } from "../../../scripts/api.js";
 import { el, icon, mark } from "./dom.js";
 import { openNavMenu, openNavPalette } from "./navigate.js";
+import { openPresetLibrary } from "./presetlib.js";
 import { elapsed } from "./stage.js";
 import { t } from "./i18n.js";
 import { noteFullscreen } from "./styles.js";
@@ -735,70 +736,29 @@ class Fullscreen {
   // ---- where else the editor can go ------------------------------------------
 
   /**
-   * Everywhere the wordmark and ⌘K can take you, built fresh on every open:
-   * the graph is where pieces live, and a list built any earlier would name
-   * nodes that have been deleted or retitled since.
+   * Everywhere the wordmark and ⌘K can take you — the tools, and nothing
+   * else. One row today: the preset library, reached through the same
+   * `presetTarget` the rail's Presets button reads off the body in front —
+   * the pre-stage's on the pre step, the piece's on the shot. The repaint
+   * afterwards is the rail button's, for the rail button's reason: an applied
+   * preset redraws the face it landed on.
    *
-   * Two groups for now — something new, and the pieces already in the graph.
-   * The benches join as a third when there are benches; a tool becomes
-   * reachable by becoming a row here, not by growing a button somewhere.
+   * Built fresh on every open, because the target is the card's current body.
+   * The benches join as rows when there are benches; a tool becomes reachable
+   * by becoming a row here, not by growing a button somewhere.
    */
   destinations() {
-    const pieces = creators().map((node) => {
-      // The same reading `mount` does for the bar: a node nobody renamed is
-      // titled after its display name, and that is a class, not a name.
-      const named = (node.title || "").trim();
-      const untitled = !named || named === (node.constructor?.title ?? "").trim();
-      const body = node.mmcBody;
-      const strip = body?.showsStrip?.();
-      const family = body?.timeline ? t(S.familyOf(body.timeline).label) : "";
-      return {
-        label: untitled ? (strip ? t("Untitled strip") : t("Untitled shot")) : named,
-        // What the row would render with, which is how pieces in one graph
-        // actually differ once half of them are called "take 2".
-        sub: strip && family ? family + " · " + t("Strip") : family,
-        glyph: strip ? "timeline" : "video",
-        here: node === this.node,
-        go: () => openFullscreen(node),
-      };
-    });
+    const body = this.front?.mmcBody;
+    const editor = body?.editor ?? body;
     return [
-      { title: t("New"), items: [
-        // PIECE reads [creator, timeline] — the two faces a piece can have.
-        { label: t("New shot"), sub: t("Describe a video from nothing"),
-          glyph: "video", go: () => this.newPiece(PIECE[0]) },
-        { label: t("New strip"), sub: t("Shots in a row, cut as one piece"),
-          glyph: "timeline", go: () => this.newPiece(PIECE[1]) },
+      { title: t("Tools"), items: [
+        { label: t("Presets"), sub: t("Apply a saved setup, or save this one"),
+          glyph: "star",
+          go: () => openPresetLibrary({
+            target: editor?.presetTarget?.() ?? body?.pieceTarget?.() ?? null,
+          }).then(() => editor?.render?.()) },
       ] },
-      { title: t("Pieces"), items: pieces },
     ];
-  }
-
-  /**
-   * Put a fresh piece in the graph and open the editor on it. The graph gets
-   * the node either way — this window is a way of working on the graph, not a
-   * place apart from it, so a piece made here is a piece the canvas shows the
-   * moment you go back.
-   *
-   * Below the current node rather than beside it: the satellite already parks
-   * the picture to the right, and a pre-stage spawns to the left.
-   */
-  newPiece(cls) {
-    const spawned = globalThis.LiteGraph?.createNode?.(cls);
-    // Not registered — the backend half did not load, and the console already
-    // carries the import error. Same answer togglePreStage gives.
-    if (!spawned) return;
-    const graph = this.node.graph ?? app.graph;
-    graph.add(spawned);
-    spawned.pos = [this.node.pos[0], this.node.pos[1] + this.node.size[1] + 80];
-    graph.setDirtyCanvas(true, true);
-    // The body is built by `nodeCreated`, a frame late on some builds; the
-    // editor cannot host a node that does not have one yet.
-    const claim = () => {
-      if (!spawned.mmcBody) { requestAnimationFrame(claim); return; }
-      openFullscreen(spawned);
-    };
-    claim();
   }
 
   /**

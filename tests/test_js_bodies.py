@@ -2436,44 +2436,18 @@ try {
 
 // ---- the wordmark's destinations --------------------------------------------
 //
-// "New shot" spawns a piece and reopens the editor on it. Checked as the whole
-// gesture through the real menu — the mark pressed, the row pressed, the shell
-// ending up on a node that did not exist before — because the failure this is
-// for is silent from every angle: the node quietly lands in the graph, the
-// editor quietly stays where it was, and the only symptom is a graph filling
-// up with untitled pieces nobody remembers making.
+// The wordmark drops the tool list, and its one row today is the preset
+// library. Checked as the whole gesture — the mark pressed, the row pressed,
+// the library standing open — from a strip, because the row has to find its
+// target on whichever body is in front, and the strip's answers under a
+// different name than the shot's.
 try {
   const fs = await import("./web/creator/fullscreen.js");
-  // A strip, because that is the piece the editor is most likely open on when
-  // somebody reaches for "New shot" — a shot is what a strip cannot give them.
   const node = fakeNode("MiniMaxH3Timeline", "timeline_data", A_STRIP);
   node.id = 21;
-  // The graph's own display name, which is what an unrenamed node is titled
-  // after — the row has to read it as having no name of its own.
-  node.constructor = { title: node.title };
   await ext.nodeCreated(node);
-  const graph = node.graph;
-  graph._nodes.push(node);
-  graph.add = (n) => { graph._nodes.push(n); };
-  app.graph = graph;
-
-  // The frontend's own pair: createNode builds the node and the pack's
-  // nodeCreated runs a beat later (the hook is invoked async); add puts it in
-  // the graph. The shim's requestAnimationFrame is a no-op, and the claim that
-  // waits for the body rides on it — so here it is a real deferral.
-  const rafWas = globalThis.requestAnimationFrame;
-  globalThis.requestAnimationFrame = (fn) => setTimeout(fn, 0);
-  let born = 22;
-  globalThis.LiteGraph = {
-    createNode: (cls) => {
-      const widget = cls === "MiniMaxH3Timeline" ? "timeline_data" : "creator_data";
-      const spawned = fakeNode(cls, widget, ONE_SHOT);
-      spawned.id = born++;
-      spawned.graph = graph;
-      setTimeout(() => ext.nodeCreated(spawned), 0);
-      return spawned;
-    },
-  };
+  node.graph._nodes.push(node);
+  app.graph = node.graph;
 
   fs.openFullscreen(node);
   const shell = document.body.children.at(-1);
@@ -2485,17 +2459,18 @@ try {
   press(rowWith(shell, "mmc-fs-mark", "Continuity"));
   const menu = document.body.children.at(-1);
   const settle = () => new Promise((done) => setTimeout(done, 0));
-  press(rowWith(menu, "mmc-nav-item", "New shot"));
-  await settle(); await settle(); await settle();
-  const now = fs.fullscreenNode();
+  press(rowWith(menu, "mmc-nav-item", "Presets"));
+  await settle(); await settle();
+  const top = document.body.children.at(-1);
   out.navigate = {
     menuOpened: String(menu?.className ?? "").includes("mmc-nav"),
-    listsThePiece: !!rowWith(menu, "mmc-nav-item", "Untitled strip"),
-    spawned: graph._nodes.length === 2,
-    movedToTheNewPiece: !!now && now !== node && now.comfyClass === "MiniMaxH3Creator",
+    // The graph's pieces are deliberately not rows — the list is tools only.
+    noPieceHistory: !rowWith(menu, "mmc-nav-item", "Untitled")
+      && !rowWith(menu, "mmc-nav-item", node.title),
+    opensTheLibrary: String(top?.className ?? "").includes("mmc-overlay"),
+    menuGone: !document.body.children.includes(menu),
   };
   fs.close();
-  globalThis.requestAnimationFrame = rafWas;
 } catch (error) {
   out.errors.push(`navigate: ${error.stack}`);
 }
@@ -2687,15 +2662,14 @@ check("closing gives the picture back to the canvas", full.get("undocked"), True
 check("...and the body back to the node", full.get("cameBack"), True)
 check("...and takes the shell down with it", full.get("closed"), True)
 
-# The wordmark's menu: the destinations open, the graph's pieces are rows, and
-# "New shot" is the whole gesture — a node lands in the graph and the shell
-# reopens on it. The half that fails silently is the reopening: the graph fills
-# with untitled pieces while the editor never moves.
+# The wordmark's menu: the tool list opens, holds no piece history, and its
+# Presets row opens the same library the rail's button does — found through
+# the body in front, which on a strip answers under a different name.
 nav = report.get("navigate", {})
-check("the wordmark drops the destinations", nav.get("menuOpened"), True)
-check("...listing the graph's pieces", nav.get("listsThePiece"), True)
-check("New shot puts a piece in the graph", nav.get("spawned"), True)
-check("...and reopens the editor on it", nav.get("movedToTheNewPiece"), True)
+check("the wordmark drops the tool list", nav.get("menuOpened"), True)
+check("...with no piece history in it", nav.get("noPieceHistory"), True)
+check("Presets opens the library", nav.get("opensTheLibrary"), True)
+check("...and the menu goes with the press", nav.get("menuGone"), True)
 
 # The settings page owns four questions now — how good the file is, where it
 # goes, what the node faces offer and what a render does on the way there, and

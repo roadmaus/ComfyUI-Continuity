@@ -3,12 +3,10 @@
 ## Unreleased
 
 **The wordmark is the door.** In the fullscreen editor, pressing **Continuity**
-in the title bar drops a list of everywhere the editor can go: a new shot, a
-new strip, and every piece already in the graph, each under the name you gave
-it. **⌘K** (Ctrl+K elsewhere) raises the same list as a filterable palette, so
-switching pieces or starting a fresh one no longer means going back to the
-graph, finding the node and reopening. The list is where future tools will
-appear as rows — nothing else about the window changes, and no new chrome
+in the title bar drops the editor's tool list, and **⌘K** (Ctrl+K elsewhere)
+raises the same list as a palette. One row today — the preset library, the
+same one the rail's Presets button opens — and the list is where future tools
+will appear as rows. Nothing else about the window changes, and no new chrome
 stands open while you work.
 
 **The pack is called Continuity.** "MiniMax Creator" named the only thing it
