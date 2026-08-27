@@ -298,6 +298,27 @@ export class PreStageEditor {
     this.commit();
   }
 
+  /**
+   * A guide off the ControlNet bench, taken as the picture this still is built on.
+   *
+   * The init image rather than a style reference, and the difference is what the
+   * two slots mean: a reference is *what this should look like*, and an edge map
+   * or a depth pass is not a look — it is where things are. The init slot is the
+   * one that says "start from this arrangement", which is the whole reason
+   * somebody traced a frame.
+   *
+   * The denoise it lands with is whatever the pre-stage already had, so a still
+   * that has been dialled in does not have its strength reset by a new guide.
+   */
+  takeGuide({ path }) {
+    this.state.init = {
+      filename: path,
+      denoise: this.state.init?.denoise ?? S.PRESTAGE_DEFAULT_DENOISE,
+    };
+    this.commit();
+    this.probeInit();
+  }
+
   /** Point a style reference at a different image, keeping its handle — the
    *  prompt cites it by handle, and a re-add would renumber. */
   async replaceRef(ref) {

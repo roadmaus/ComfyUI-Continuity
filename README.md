@@ -308,6 +308,46 @@ six looks on one shot gives you six prompts rather than six stacked paragraphs.
 The atlas is vendored — 941 looks over 2000 frames, about 40 MB, which is most
 of this repository's size — and nothing is downloaded at runtime.
 
+## The ControlNet bench
+
+Every other picture in this pack starts from a sentence. This one starts from a
+file you already have. Press the wordmark at the top of the editor and open
+**ControlNet**: drop in a clip or a photograph, cut the span you want on the same
+trim bar the picker uses, choose a tracing, and it writes a guide into the input
+folder that a pre-stage or a shot can be aimed at.
+
+The tracings are **Edges** (Canny — the hard outlines), **Lines** (a drawing that
+follows the form rather than a threshold), **Blocks** (the frame flattened into
+fields of one colour), **Luma** (the tones with the colour taken out) and **Blur**
+(the masses and nothing else). **As shot** does no tracing at all, for when the
+footage is already what you want to hand over and only needs cutting or its
+soundtrack stripped.
+
+**Depth** and **Pose** are the other two, and they run a model rather than an
+arithmetic operator — Depth Anything 3 and SDPose, both of which ComfyUI ships
+itself. Put a Depth Anything 3 model in `models/geometry_estimation`, or
+`sdpose_wholebody_fp16.safetensors` plus any SD 1.5 VAE in `models/checkpoints`
+and `models/vae`, and the tracing turns on. The file is picked on the same
+**weights** pill the pre-stage and the shot use, and the pick is remembered for
+the machine — set it when you install the model and never again. Nothing is
+downloaded from here: a tracing whose files are missing says which ones and
+where they go.
+
+Nothing queues. The five arithmetic tracings are pixels in and pixels out, so the
+frame under the pointer redraws while a threshold is being dragged — which is why
+the settings are sliders and not a form with an Apply button, and why pressing
+play traces the clip as it runs rather than leaving a still on the glass. Depth
+and pose are a model per frame and cannot be chased like that; press **Trace**
+and the written file is what plays on the right. The picture is one rectangle
+with a seam across it: footage on the left, tracing on the right, and the seam is
+dragged, so an outline that has slipped off a shoulder is visible instead of
+being two pictures you have to compare.
+
+What comes out is a file in `input/continuity/control/` and nothing else — no
+node is added and no workflow is touched. **Send to pre-stage** makes it the
+still's init image; **Send to the shot** attaches it as a reference you can name
+with `@`. Neither is required: the file is in the picker either way.
+
 ## The rest, briefly
 
 - **Refine** rewrites your sentence into the long description the family it is
@@ -347,9 +387,6 @@ of this repository's size — and nothing is downloaded at runtime.
 
 No dates, and none of this is a promise - it is what is being worked on.
 
-- a **ControlNet stage**: turn a picture or a clip into pose, depth or edges,
-  then hand that to a pre-stage or straight into a shot, so a render can be
-  aimed at a composition you already have rather than described from scratch
 - **Qwen Image Edit** as another stills family
 - a **3D scene** step for blocking a shot out before anything samples
 - more of the small tools that live on the rail, as they turn out to be needed

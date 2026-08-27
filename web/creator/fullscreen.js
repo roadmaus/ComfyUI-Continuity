@@ -56,6 +56,7 @@ import { app } from "../../../scripts/app.js";
 import { api } from "../../../scripts/api.js";
 import { el, icon, mark } from "./dom.js";
 import { buildDashboard } from "./navigate.js";
+import { openControl } from "./control.js";
 import { openPresetLibrary } from "./presetlib.js";
 import { elapsed } from "./stage.js";
 import { t } from "./i18n.js";
@@ -774,29 +775,93 @@ class Fullscreen {
   }
 
   /**
-   * Everywhere the wordmark can take you — the tools, and nothing else.
-   * One card today: the preset library, reached through the same
-   * `presetTarget` the rail's Presets button reads off the body in front —
-   * the pre-stage's on the pre step, the piece's on the shot. The repaint
-   * afterwards is the rail button's, for the rail button's reason: an applied
-   * preset redraws the face it landed on.
+   * Everywhere the wordmark can take you.
    *
-   * Built fresh on every open, because the target is the card's current body.
-   * The benches join as cards when there are benches; a tool becomes reachable
-   * by becoming a card here, not by growing a button somewhere.
+   * Two groups, and the split between them is what a card *does* to the window.
+   * **Go to** rearranges the room you are already in: the same piece, one column
+   * in the middle of the screen, showing the step you named. **Tools** open a
+   * surface over it. Both are cards because both are destinations, and a person
+   * pressing the mark is asking the same question either way — where else can I
+   * be — but a card that moves the furniture and a card that opens a door should
+   * not be adjacent without a line between them.
+   *
+   * The quick links exist because the two halves of a piece are two rooms and the
+   * way between them was three presses in two different places: the view switch
+   * in the bar, then the step switch on the card, and the step switch is not even
+   * drawn until the view is simple. One card, one press, and pressing Pre-stage
+   * when the piece has none spawns it on the way — the same thing `setStep` has
+   * always done, said out loud.
+   *
+   * Built fresh on every open, because every one of these is resolved against
+   * whichever body is on the card *now*. A tool becomes reachable by becoming a
+   * card here, not by growing a button somewhere.
    */
   destinations() {
     const body = this.front?.mmcBody;
     const editor = body?.editor ?? body;
+    const strip = this.node.mmcBody?.showsStrip?.();
     return [
+      { title: t("Go to"), items: [
+        { label: t("Pre-stage"), glyph: "image",
+          sub: t("The still this shot is built on, alone in the middle of the screen"),
+          go: () => this.goTo("pre") },
+        { label: strip ? t("Strip") : t("Shot"), glyph: "video",
+          sub: t("The video — the prompt, the cast and everything the render reads"),
+          go: () => this.goTo("shot") },
+      ] },
       { title: t("Tools"), items: [
         { label: t("Presets"), sub: t("Apply a saved setup, or save this one"),
           glyph: "star",
           go: () => openPresetLibrary({
             target: editor?.presetTarget?.() ?? body?.pieceTarget?.() ?? null,
           }).then(() => editor?.render?.()) },
+        // The bench, and the pair of doors back. Not a preview and not a node:
+        // what it hands back is a file in the input folder, and the targets below
+        // are the two places this piece can take one.
+        { label: t("ControlNet"), glyph: "pen",
+          sub: t("Trace footage into edges, lines or tones — then aim a render at it"),
+          go: () => openControl({ targets: this.guideTargets() }) },
       ] },
     ];
+  }
+
+  /** A quick link, pressed: one column, showing the step named. `setView` first,
+   *  because `setStep` in the desk view has no card to turn and nothing to say. */
+  goTo(step) {
+    this.setView("simple");
+    this.setStep(step);
+  }
+
+  /**
+   * Where a finished guide can go, and what happens to it there.
+   *
+   * Both targets are the piece's own bodies — nothing here is a second way of
+   * holding a file. A still becomes the pre-stage's init image, which is the
+   * slot that means "start from this arrangement"; anything becomes a reference
+   * on the shot, which is the slot that means "read this". A clip has no place
+   * in a node that makes stills, and `kinds` is how the bench knows to say so
+   * rather than to offer a button that would refuse.
+   */
+  guideTargets() {
+    const targets = [];
+    const pre = preStageOf(this.node)?.mmcBody;
+    if (pre?.takeGuide) {
+      targets.push({
+        id: "pre", label: t("Send to pre-stage"), kinds: ["image"],
+        note: t("Make it the picture the still is built on — the pre-stage's init image."),
+        kindNote: t("A clip cannot go to a pre-stage: that step makes stills."),
+        take: (result) => { pre.takeGuide(result); this.paintFrame(); },
+      });
+    }
+    const shot = this.node.mmcBody;
+    if (shot?.takeReference) {
+      targets.push({
+        id: "shot", label: t("Send to the shot"),
+        note: t("Attach it as a reference, ready to be named in the prompt with @."),
+        take: (result) => shot.takeReference({ path: result.path, kind: result.kind }),
+      });
+    }
+    return targets;
   }
 
   /**

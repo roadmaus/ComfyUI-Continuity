@@ -2,6 +2,62 @@
 
 ## Unreleased
 
+**A ControlNet bench, and two quick links on the wordmark's dashboard.**
+
+The bench is a room of its own, reached from the dashboard the wordmark opens.
+Footage goes in — dropped on it, or picked out of the input folder — and a guide
+comes out: **Edges** (Canny), **Lines** (a difference-of-Gaussians drawing),
+**Blocks**, **Luma** and **Blur**, plus **As shot** for a clip that needs only
+cutting or its soundtrack stripped.
+
+**Depth** and **Pose** are there too, and they are model work rather than
+arithmetic: Depth Anything 3 and SDPose, both of which ComfyUI already ships in
+`comfy_extras`. The bench loads what core loads and draws the skeleton with
+core's own `KeypointDraw`, which is where the DWPose colour tables the pose
+ControlNets were trained on actually live — a skeleton in a palette of its own is
+one a ControlNet reads as a different pose. Neither downloads anything: the file is
+picked on the same weights pill the pre-stage and the shot wear — same popover,
+same chooser — and a tracing whose files are missing says which files and which
+folder rather than going quiet. The bench has no piece to save a pick into, so
+the pick is remembered per machine in the user settings beside `weights`: which
+file on this disk is the depth model is a fact about the disk, and being asked
+again every time the bench opens is being asked forever. Depth measures its near and far once and
+holds them for the rest of the cut, because normalising each frame against its
+own extremes is the usual reason a depth-guided render flickers.
+
+Nothing about the other five queues. Those tracings are arithmetic over pixels,
+written against numpy and `scipy.ndimage` so the pack still declares no
+dependencies of its own, and the server answers a single preview frame fast
+enough that the picture redraws while a threshold is under the pointer — and
+fast enough that a running clip is traced *as it plays*, one request in the air
+at a time, so the two halves of the wipe stay the same moment. A guide already
+written plays there instead, held against the footage frame for frame, and comes
+off the glass the moment a dial moves it out of date. The two pictures share one
+rectangle with a draggable seam rather than sitting side by side, because the
+question being asked is whether the tracing follows the frame it came from, and
+that is invisible until they are on top of each other.
+
+A video source can be cut before it is traced, and its sound kept or stripped.
+The cut is the reference trim editor's own bar — `trim.js` grew a `mountTrim`
+that puts it inline instead of in a modal — so the handles, the rigid-window
+drag, the arrow keys, the looping transport and the waveform behind them are the
+same code the picker has always opened, and the playhead you scrub is what the
+light box is showing. On the way out the cut keeps the source's own timestamps
+rather than counting frames out at the container's average rate: every phone clip
+is variable-rate, and counting made a two-second cut into a three-second file
+that played slow.
+
+What comes out is a file in `input/continuity/control/`. **Send to pre-stage**
+makes it the still's init image; **Send to the shot** attaches it as a reference.
+Neither is required, and neither is wiring the bench owns — the file is in the
+picker either way.
+
+The dashboard also grows a **Go to** group above the tools: Pre-stage and Shot,
+each one press to that half of the piece alone in the middle of the screen.
+Pressing Pre-stage when the piece has none spawns it on the way. It was three
+presses in two places before — the view switch in the bar, then the step switch
+on the card, which is not even drawn until the view is simple.
+
 **Both image models now sample the way their authors said to.** Four things were
 wrong in the pre-stage, and each of them was quiet — nothing errored, the
 pictures were just worse than the weights can do.

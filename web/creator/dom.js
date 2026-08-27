@@ -290,6 +290,11 @@ export function mountOverlay(overlay, onEscape) {
   overlay.style.zIndex = String(1400 + document.querySelectorAll(".mmc-overlay").length * 10);
   const onKey = (event) => {
     if (event.key !== "Escape") return;
+    // A popover opened from inside an overlay is portaled to <body> rather than
+    // nested in it, so it is not "the last overlay" and this would close the
+    // room out from under it. While a transient layer is up Escape is its —
+    // `dismissable` is holding a listener for exactly that.
+    if (document.querySelector(".mmc-pop")) return;
     const open = document.querySelectorAll(".mmc-overlay");
     if (open[open.length - 1] !== overlay) return;
     event.stopPropagation();

@@ -1078,18 +1078,40 @@ class Timeline {
           picked, S.takenHandles(this.timeline), { plate: "ref", panel: "ref" }));
         continue;
       }
-      const entry = {
-        handle: S.nextPoolHandle(this.timeline),
-        kind: picked.kind,
-        role: "reference",
-        filename: picked.path,
-        // Fidelity is why a reference is attached — same default as the editor.
-        ref_size: "max",
-      };
-      if (picked.kind === "video") entry.track = picked.track ?? S.DEFAULT_TRACK;
-      if (picked.trim) entry.trim = picked.trim;
-      this.timeline.assets.push(entry);
+      this.timeline.assets.push(this.poolEntry(picked));
     }
+    this.commit();
+  }
+
+  /** One picked file as a pool reference. Its own function because the picker is
+   *  no longer the only thing that hands this body a file — see `takeReference`. */
+  poolEntry(picked) {
+    const entry = {
+      handle: S.nextPoolHandle(this.timeline),
+      kind: picked.kind,
+      role: "reference",
+      filename: picked.path,
+      // Fidelity is why a reference is attached — same default as the editor.
+      ref_size: "max",
+    };
+    if (picked.kind === "video") entry.track = picked.track ?? S.DEFAULT_TRACK;
+    if (picked.trim) entry.trim = picked.trim;
+    return entry;
+  }
+
+  /**
+   * A guide off the ControlNet bench, attached where this body keeps references.
+   *
+   * Which place that is depends on what the body is wearing. A lone shot has an
+   * editor and the reference belongs on the card, chip and all, the same as
+   * anything the slot buttons attach. A piece on the strip has no single card to
+   * attach to and its shared references live in the pool, so that is where this
+   * goes — and every segment can then cite it by handle.
+   */
+  async takeReference(picked) {
+    const editor = this.editor;
+    if (editor) return editor.attachAssets([picked]);
+    this.timeline.assets.push(this.poolEntry(picked));
     this.commit();
   }
 

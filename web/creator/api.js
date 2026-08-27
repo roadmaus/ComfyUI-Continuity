@@ -800,3 +800,70 @@ export async function compiledPrompt(creatorData) {
   }
   return body;
 }
+
+// ---- the tracing bench ------------------------------------------------------
+
+/**
+ * What can be traced, and with which dials.
+ *
+ * The catalogue is the server's (`creator/control.py`), so a tracing added
+ * there arrives here with its sliders, its bounds and its prose, and this side
+ * learns nothing new.
+ *
+ * Cached for the session, and `fresh` is the way past it. The tracings
+ * themselves are a constant tuple in a module — but which of them are *ready* is
+ * a walk of the model folders, and that goes stale the moment a file is copied
+ * into one. So the bench holds this listing while it draws and asks again when
+ * somebody opens the weights control, which is the one moment the listing is
+ * being read rather than displayed.
+ */
+let tracings = null;
+
+export async function controlTracings({ fresh = false } = {}) {
+  if (tracings && !fresh) return tracings;
+  const response = await api.fetchApi("/continuity/control/tracings");
+  if (!response.ok) throw new Error(t("the tracings could not be read ({status})", { status: response.status }));
+  tracings = (await response.json()).tracings ?? [];
+  return tracings;
+}
+
+/**
+ * One frame of a source, traced, as a URL an `<img>` can be pointed at.
+ *
+ * A URL rather than a fetch, deliberately. This is set as a `src` while a
+ * slider is under the pointer, which hands the browser the three things it is
+ * already good at — coalescing, aborting the request the last drag started, and
+ * serving from cache when a dial comes back to where it was. None of that is
+ * free through fetch, and all of it is what makes the picture feel attached to
+ * the slider rather than fetched by it.
+ */
+export function controlPreviewUrl(path, op, params, at = 0) {
+  const query = new URLSearchParams({ filename: path, op, at: String(at) });
+  for (const [key, value] of Object.entries(params ?? {})) {
+    query.set(key, typeof value === "boolean" ? (value ? "1" : "0") : String(value));
+  }
+  return api.apiURL(`/continuity/control/preview?${query}`);
+}
+
+/**
+ * Trace the whole file and write it into the input folder.
+ *
+ * `token` is how the progress on the way back is told apart from anybody else's
+ * — the server sends it back on ComfyUI's own websocket under
+ * `continuity.control`, which is the socket the page is already listening to.
+ * Resolves to `{path, kind}`: a file in the input folder, which is the shape
+ * the pre-stage and the shot both take a reference in.
+ */
+export async function controlRun(body) {
+  const response = await api.fetchApi("/continuity/control/run", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const answer = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(answer.error || t("the tracing failed ({status})", { status: response.status }));
+  // The file is new and the picker's listing is a few seconds stale — without
+  // this the guide is missing from the grid it was just written into.
+  invalidate("input");
+  return answer;
+}
