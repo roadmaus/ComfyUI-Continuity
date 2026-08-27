@@ -769,20 +769,6 @@ class Bench {
       }));
   }
 
-  /**
-   * The doors this source can never reach, where the target said why.
-   *
-   * Drawn in the rail beside the footage rather than under the result, and that
-   * placement is the point: a photograph cannot aim a moving shot, which is
-   * knowable the second the photograph lands and worth nothing at all once a
-   * tracing has been paid for. Said early it is a reason to go and get a clip;
-   * said late it is a wall.
-   */
-  shut() {
-    const can = this.produces();
-    return this.targets.filter((target) =>
-      target.kinds && !target.kinds.some((kind) => can.includes(kind)) && target.needsClip);
-  }
 
   // ---- drawing ------------------------------------------------------------------
 
@@ -823,12 +809,6 @@ class Bench {
         }, [icon("folder", 14), el("span", {
           text: this.busy ? t("Uploading…") : source ? t("Change the footage") : t("Choose footage"),
         })]),
-        // A door this footage can never reach, said here rather than under the
-        // result. A photograph cannot aim a moving shot, and that is knowable
-        // the second the photograph lands — which is while there is still time
-        // to go and get a clip instead. See `shut`.
-        ...(source ? this.shut().map((target) =>
-          el("p", { class: "mmc-ctl-needs", text: target.needsClip })) : []),
       ]),
       this.section(t("Tracing"), [
         el("div", { class: "mmc-ctl-ops" }, this.tracings.map((tracing) => el("button", {
@@ -1244,6 +1224,10 @@ class Bench {
     if (busy) return t("Tracing that frame…");
     if (done) return t("Sent. The file is in the input folder either way.");
     if (door.frame) return t("The frame at {when}, traced as a still.", { when: formatTime(this.at) });
+    // A door that takes either shape says which one it is being handed: a shot
+    // aimed at a clip and a shot aimed at one drawing are the same attach and
+    // not the same instruction.
+    if (this.result?.kind === "image" && door.target.doesStill) return door.target.doesStill;
     return door.target.does ?? "";
   }
 }

@@ -955,21 +955,22 @@ export const guideAsset = (state) =>
  * @param {object} segment  the shot the drawing goes on
  * @param {?object} piece   the container holding the switch, where there is one
  */
-export function attachGuide(segment, piece, { path, op = "", trim = null }) {
+export function attachGuide(segment, piece, { path, kind = "video", op = "", trim = null }) {
   if (!segment || !path) return null;
   const existing = guideAsset(segment);
   const at = existing ? segment.assets.indexOf(existing) : segment.assets.length;
   const entry = {
-    handle: existing?.handle ?? nextHandle(segment, "video"),
-    kind: "video",
+    handle: existing?.handle ?? nextHandle(segment, kind),
+    kind,
     role: "guide",
     filename: path,
-    // Silent, always. A guide is a drawing; whatever soundtrack the footage it
-    // was traced from happened to carry is not something the branch reads, and
-    // attaching it with sound would spend an audio slot on nothing.
-    track: "picture",
     ...(op ? { op } : {}),
     ...(trim ? { trim } : {}),
+    // Silent, always, and only a clip has a soundtrack to silence. A guide is a
+    // drawing; whatever the footage it was traced from happened to carry is not
+    // something the branch reads, and attaching it with sound would spend an
+    // audio slot on nothing.
+    ...(kind === "video" ? { track: "picture" } : {}),
   };
   segment.assets.splice(at, existing ? 1 : 0, entry);
   // Thrown on by the arrival, which is what the switch being separate is for:
@@ -5186,18 +5187,19 @@ function reroled(state, asset, role) {
  */
 export function reroleBlocked(state, asset, role, piece = null) {
   if (roleOf(asset) === role) return null;
-  // The drawing the shot is aimed at. A clip, always — every frame of the shot
-  // is aimed at one of its frames, so a still is a shot told not to move — and
-  // only on weights with something to read it: on a family with no ControlNet
-  // a guide would be a file the render silently ignores.
+  // The drawing the shot is aimed at. A picture or a clip — which one is right
+  // is the shot's question and not the file's, and `compile._parse_assets` says
+  // the same: a clip is what a moving shot wants, a still is what a one-frame
+  // generation wants, and the pre-stage makes exactly those. Held for every
+  // frame, a still is "aim the whole shot at this one drawing", which is a real
+  // thing to ask for.
+  //
+  // The one refusal left is the weights: on a family with no ControlNet a guide
+  // is a file the render silently ignores.
   if (role === "guide") {
-    if (asset.kind !== "video") {
-      return t("Every frame of the shot is aimed at a frame of the guide, so a guide is a "
-             + "clip. @{handle} is a {kind}.", { handle: asset.handle, kind: t(asset.kind) });
-    }
     if (!controlOf(pieceFamily(piece ?? state))) {
       return t("{family} has no ControlNet to read a guide with. Put the piece on a model "
-             + "that does, or attach the clip as a reference.",
+             + "that does, or attach it as a reference.",
                { family: familyOf(piece ?? state).label });
     }
     return null;

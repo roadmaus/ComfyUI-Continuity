@@ -761,7 +761,7 @@ export class CreatorEditor {
       cardSeconds: this.cardSeconds(),
     });
     if (!chosen?.length) return;
-    this.takeGuide({ path: chosen[0].path, trim: chosen[0].trim });
+    this.takeGuide({ path: chosen[0].path, kind: chosen[0].kind, trim: chosen[0].trim });
   }
 
   /**
@@ -772,8 +772,8 @@ export class CreatorEditor {
    * place among the chips and its handle: swapping the guide is a change to
    * this shot, not a detach and a re-attach.
    */
-  takeGuide({ path, op = "", trim = null }) {
-    if (!S.attachGuide(this.state, this.piece, { path, op, trim })) return;
+  takeGuide({ path, kind = "video", op = "", trim = null }) {
+    if (!S.attachGuide(this.state, this.piece, { path, kind, op, trim })) return;
     this.commit();
   }
 

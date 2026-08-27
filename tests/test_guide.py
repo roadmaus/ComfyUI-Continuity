@@ -126,14 +126,25 @@ check("and is not a reference", [a.handle for a in one.ref_videos], [])
 trimmed = compiled([{**GUIDE, "trim": {"start": 4.0, "end": 10.0}}])
 check("the window is the asset's trim", trimmed.guide.trim, (4.0, 10.0))
 
-# A still held for the whole shot is a shot told not to move. Refused with that
-# sentence rather than silently accepted, because the branch would take it.
+# A still is a guide, and which shape is right is the *shot's* question rather
+# than the file's. H3's pre-stage still is a one-frame video generation aimed by
+# the same Fun branch a shot is, and one frame has one drawing to be aimed at —
+# a rule that said "clips only" left it unable to be aimed at anything. On a
+# moving shot the same file is held for every frame, which is "aim the whole
+# shot at this one drawing" and is a real thing to ask for; `guide.read` holds
+# it the way it holds a clip that runs out early.
+still = compiled([{**GUIDE, "kind": "image", "filename": "a.png"}])
+check("a still is a guide", still.guide.filename, "a.png")
+check("...and is not a reference either", [a.handle for a in still.ref_images], [])
+
+# Sound is the one thing a guide can never be. There is nothing in a recording
+# to aim a picture at, and the refusal says where to go instead.
 try:
-    compiled([{**GUIDE, "kind": "image", "filename": "a.png"}])
-    FAILURES.append("a still was accepted as a guide")
+    compiled([{**GUIDE, "kind": "audio", "filename": "a.wav"}])
+    FAILURES.append("a sound was accepted as a guide")
 except compiler.CompileError as exc:
-    if "clip" not in str(exc):
-        FAILURES.append(f"the refusal does not say a guide is a clip: {exc}")
+    if "aimed at" not in str(exc):
+        FAILURES.append(f"the refusal does not say why a sound cannot be one: {exc}")
 
 # One per shot: the branch injects a single control latent, so two drawings is a
 # question with no answer.

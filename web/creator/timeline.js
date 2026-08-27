@@ -3772,7 +3772,7 @@ export class TimelineBody {
    * without a card named has to pick one; picking the first is the same answer
    * the pre-stage's chips already give.
    */
-  takeGuide({ path, op = "", opId = null, trim = null }) {
+  takeGuide({ path, kind = "video", op = "", opId = null, trim = null }) {
     const segment = this.timeline.segments[0];
     if (!segment) return;
     // Through the editor where one is already built for this shot, so the
@@ -3780,9 +3780,9 @@ export class TimelineBody {
     // blob otherwise: on a strip there is no card editor to route through, and
     // `commit` redraws whatever is in front.
     if (this.faceEditor?.state === segment) {
-      return this.faceEditor.takeGuide({ path, op: op || opId || "", trim });
+      return this.faceEditor.takeGuide({ path, kind, op: op || opId || "", trim });
     }
-    if (!S.attachGuide(segment, this.timeline, { path, op: op || opId || "", trim })) return;
+    if (!S.attachGuide(segment, this.timeline, { path, kind, op: op || opId || "", trim })) return;
     this.commit();
   }
 

@@ -2519,6 +2519,7 @@ try {
   // unavailable and carrying the reason.
   const opt = (label) => all(all(document.body, "mmc-refsheet")[0] ?? { children: [] },
                              "mmc-refsheet-opt").find((o) => o.text.trim() === label);
+  out.refsheet.guideOpen = String(opt("guide")?.attrs?.["aria-disabled"] ?? "") !== "true";
   const end = opt("end");
   out.refsheet.blockedEnd = String(end?.attrs?.["aria-disabled"] ?? "") === "true";
   end?.listeners?.click?.[0]?.();
@@ -3523,7 +3524,12 @@ sheet = report.get("refsheet") or {}
 check("a reference's handle is a button", sheet.get("hasDoor"), True)
 check("...that opens the card", sheet.get("opened"), True)
 check("...leading with what the picture is for, then every narrowing, defaults included",
-      sheet.get("offers"), "start,end,reference,full,person,object,scene,style,match,max")
+      sheet.get("offers"),
+      "start,end,reference,guide,full,person,object,scene,style,match,max")
+# A still is a guide — the shape is the shot's question, not the file's, and
+# `compile._parse_assets` says the same. What decides the row is the weights:
+# on a family with no ControlNet a guide is a file the render ignores.
+check("a still can be the drawing the shot is aimed at", sheet.get("guideOpen"), True)
 check("...and picking one lands on the asset", sheet.get("takes"), "style")
 check("...where the chip then says so without being opened again",
       sheet.get("chipSays"), "style · max")

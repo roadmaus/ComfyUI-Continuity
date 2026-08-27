@@ -899,24 +899,31 @@ class Fullscreen {
     // path as one picked in the Guide tab: same handle rules, same swap of an
     // existing one, same switch thrown on arrival. Two ways in, one attach.
     //
-    // Clips only, and only where the family declares a branch. On a family with
-    // no ControlNet there is nothing to aim with, which is a real answer and
-    // not a missing feature — Qwen-Image-Edit reads a tracing straight out of a
-    // picture slot, which is what the pre-stage target above already does.
+    // A picture or a clip, and only where the family declares a branch. On a
+    // family with no ControlNet there is nothing to aim with, which is a real
+    // answer and not a missing feature — Qwen-Image-Edit reads a tracing
+    // straight out of a picture slot, which is what the pre-stage target above
+    // already does.
+    //
+    // No `kinds`: which shape is right is the shot's question rather than the
+    // file's, and `compile._parse_assets` answers it the same way. A clip is
+    // what a moving shot wants, one frame aimed at each of its own; a still is
+    // one drawing the whole shot is held against, which is unusual, legitimate,
+    // and exactly what a one-frame generation wants.
     const body = this.node.mmcBody;
     if (body?.takeGuide && S.controlOf(S.pieceFamily(body.timeline ?? {}))) {
       targets.unshift({
-        id: "guide", label: t("Aim the shot at it"), kinds: ["video"],
+        id: "guide", label: t("Aim the shot at it"),
         does: t("Every frame of the shot follows a frame of the drawing."),
-        // Why a photograph never gets this door, said where the bench can show
-        // it while there is still time to choose different footage.
-        needsClip: t("A still held for a whole shot is a shot told not to move. "
-                   + "Trace a clip to aim one."),
+        // The same door, told what it is doing when the drawing does not move.
+        doesStill: t("The whole shot is aimed at this one drawing, held throughout."),
         closeOnSend: true,
         // `opId` is why the bench hands over more than a path: which tracing
         // this is decides whether these weights were ever post-trained on it,
         // and the pill says so once it is attached.
-        take: (result) => body.takeGuide({ path: result.path, op: result.opId }),
+        take: (result) => body.takeGuide({
+          path: result.path, kind: result.kind, op: result.opId,
+        }),
       });
     }
     const shot = this.node.mmcBody;

@@ -1644,7 +1644,10 @@ export class PreStageBody {
       // ControlNet the video path had.
       const editor = this.editor;
       if (editor?.takeGuide && S.controlOf(S.pieceFamily(editor.piece))) {
-        return editor.takeGuide({ path, op: opId ?? "" });
+        // A still, and said so: the pre-stage renders one frame, so the drawing
+        // it is aimed at is one drawing. `guide.read` holds it for the whole of
+        // a one-frame generation, which is the length of it.
+        return editor.takeGuide({ path, kind: "image", op: opId ?? "" });
       }
       return this.setStillFrame(path);
     }
