@@ -1907,6 +1907,54 @@ try {
   out.errors.push(`placement: ${error.message}`);
 }
 
+// ---- the way back into the pre-stage ----------------------------------------
+//
+// Three of the chips on a finished still send it *on*, to the shot. The fourth
+// is the loop: the render you are looking at, back into this node as the next
+// one's subject. On an edit family that means the first picture slot, replaced
+// and keeping its handle so a prompt citing `@ref-1` still cites what is in
+// front of it.
+//
+// The door the ControlNet bench knocks on is checked in the same breath, and
+// for a related reason: it looks for `takeGuide` on `mmcBody`, which is a
+// `PreStageBody`, and a method that only existed on the editor inside it was a
+// button that silently never drew.
+try {
+  const node = fakeNode("MiniMaxH3PreStage", "prestage_data", JSON.stringify({
+    arch: "qwenedit", prompt: "the coat is red now",
+    refs: [{ handle: "ref-1", filename: "her.png" }],
+  }));
+  await ext.nodeCreated(node);
+  const body = node.mmcBody;
+  const saved = { filename: "QwenEdit_00001_.png", subfolder: "continuity/stills/qwenedit" };
+  const press = (node) => node?.listeners?.click?.[0]?.();
+  const chips = body.renderResultChips(saved);
+  press(chips[0]);
+  out.takeBack = {
+    // Drawn first and drawn at all: this node has no peer, and the three chips
+    // that need one are the ones that are missing.
+    labels: chips.map((c) => String(c.text ?? c.textContent ?? "")),
+    door: typeof body.takeGuide === "function",
+    slots: body.state.refs.length,
+    handle: body.state.refs[0].handle,
+    filename: body.state.refs[0].filename,
+  };
+  // ...and on a family that draws rather than edits, the same chip is the init
+  // image instead, because that is what "the picture this render is about"
+  // means there.
+  const drawn = fakeNode("MiniMaxH3PreStage", "prestage_data",
+                         JSON.stringify({ arch: "krea2", prompt: "p" }));
+  await ext.nodeCreated(drawn);
+  press(drawn.mmcBody.renderResultChips(saved)[0]);
+  out.takeBack.drawn = {
+    label: String(drawn.mmcBody.renderResultChips(saved)[0].text ?? ""),
+    init: drawn.mmcBody.state.init?.filename ?? null,
+    refs: drawn.mmcBody.state.refs.length,
+  };
+} catch (error) {
+  out.errors.push(`takeBack: ${error.stack}`);
+}
+
 // ---- the contact sheet's arithmetic ------------------------------------------
 //
 // Two pure functions, and both of them are only ever seen as a picture: a sheet
@@ -2691,6 +2739,17 @@ check("its turbo pill draws the Lightning ladder and names the LoRA",
       ("4" in rows.get("qwenTurbo", ""),
        "qwen_edit_lightning_4step" in rows.get("qwenTurbo", "")),
       (True, True))
+
+back = report.get("takeBack", {})
+check("the finished still can go back in, and the bench's door is on the body",
+      (back.get("labels"), back.get("door")), (["\u21bb edit"], True))
+check("...replacing the picture being edited, handle and all",
+      (back.get("slots"), back.get("handle"), back.get("filename")),
+      (1, "ref-1", "continuity/stills/qwenedit/QwenEdit_00001_.png [output]"))
+check("...and landing in the init slot on a family that draws rather than edits",
+      back.get("drawn"),
+      {"label": "\u21bb again", "refs": 0,
+       "init": "continuity/stills/qwenedit/QwenEdit_00001_.png [output]"})
 
 contact = report.get("contact", {})
 check("a contact sheet is whole tiles, inside the pre-stage's canvas envelope",

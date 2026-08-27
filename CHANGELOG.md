@@ -35,6 +35,28 @@ a four-step render.
 Switching the model pill now writes the arriving family's own sampler row rather
 than Krea 2's for everyone.
 
+**The finished still can go back in.**
+
+Three chips on a result send it *on* — to the shot, as a start frame, an end
+frame or a reference. There is a fourth now and it is the loop: `↻ edit` puts
+the render you are looking at back into the pre-stage as the next one's subject.
+You edited a picture, the edit is right about one thing and wrong about another,
+and what you want to change now is the thing on screen. The way round used to be
+the picker, four presses away, hunting for your own output among everything else
+in the folder.
+
+Where it lands is the arch's own answer to "the picture this render is about":
+the first picture slot on a family that edits — replaced, keeping its handle, so
+a prompt citing `@ref-1` is still citing what is in front of it — the init image
+on one that draws, the request's start frame on the H3 branch. It draws whether
+or not the node has a shot attached, which is the one chip here that never
+needed one.
+
+While wiring it: the ControlNet bench's **Send to pre-stage** button has never
+appeared. It looks for `takeGuide` on the node's body and the method was one
+class further in, so the target was silently dropped every time. It is on the
+body now.
+
 **A strip of footage as one picture, and back again.**
 
 The observation Qwen-Video-Edit is built on is that an image editor will edit a

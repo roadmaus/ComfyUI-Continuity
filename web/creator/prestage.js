@@ -1385,26 +1385,81 @@ export class PreStageBody {
     if (!clip) return;
     const grabbed = await openFrameGrab({ path: clip[0].path });
     if (!grabbed) return;
+    this.setStillFrame(grabbed.path);
+  }
+
+  /** The H3 branch's own "start from this picture": the request's first frame,
+   *  replaced rather than added to, because there is only one of them. */
+  setStillFrame(filename) {
+    const request = this.state[S.PRESTAGE_STILL_ARCH].request;
+    if (S.blockedReason(request, "first_frame")) return;
     const existing = S.frameAsset(request, "first_frame");
     if (existing) request.assets = request.assets.filter((a) => a.handle !== existing.handle);
     request.assets.push({
       handle: S.nextHandle(request, "image"),
       kind: "image",
       role: "first_frame",
-      filename: grabbed.path,
+      filename,
     });
     this.commit();
+  }
+
+  // ---- taking a picture in ---------------------------------------------------
+
+  /**
+   * A guide off the ControlNet bench, or any other picture handed to this node
+   * from outside it, taken as the thing the still is built on.
+   *
+   * The body's, not the editor's, because the body is what a caller can reach:
+   * `mmcBody` is a `PreStageBody`, and the door the bench looks for has to be on
+   * the object it is looking at. Which slot "built on" means is the arch's — an
+   * init image on the two that draw, the request's start frame on the H3 branch
+   * — and the editor already owns that answer for its own architecture.
+   */
+  takeGuide({ path }) {
+    if (this.state.arch === S.PRESTAGE_STILL_ARCH) return this.setStillFrame(path);
+    this.editor?.takeGuide?.({ path });
+  }
+
+  /**
+   * The finished still, back into this same node as the next render's subject.
+   *
+   * The three chips beside this one send the picture *on* — to the shot, as a
+   * start frame or a reference. This one is the loop that has no other door:
+   * you edited a picture, the edit is right about one thing and wrong about
+   * another, and what you want to change now is the render you are looking at.
+   * Without it the way round is the picker, four presses away, hunting for your
+   * own output among everything else in the folder.
+   *
+   * Where it lands is the arch's own answer to "the picture this render is
+   * about": the first reference slot on a family that edits, the init image on
+   * one that draws, the request's start frame on the H3 branch. On an edit
+   * family the slot is *replaced* and its handle kept, so a prompt that cites
+   * `@ref-1` is still citing the picture in front of it.
+   */
+  takeBack(filename) {
+    if (this.state.arch === S.PRESTAGE_STILL_ARCH) return this.setStillFrame(filename);
+    if (!S.PRESTAGE_REFS[this.state.arch]?.editsFirst) {
+      return this.editor?.takeGuide?.({ path: filename });
+    }
+    const first = this.state.refs[0];
+    if (first) first.filename = filename;
+    else this.state.refs.unshift({ handle: S.nextPreStageHandle(this.state), filename });
+    this.commit();
+    this.editor?.probeInit?.();
   }
 
   // ---- the hand-off ----------------------------------------------------------
 
   /** The chips on the finished still: one click writes it into the peer's blob
-   *  as a start frame, end frame or reference. The annotated `[output]` path is
-   *  the same currency the gallery attach uses — one store, no copy. */
+   *  as a start frame, end frame or reference — or back into this node as the
+   *  next render's subject. The annotated `[output]` path is the same currency
+   *  the gallery attach uses — one store, no copy. */
   renderResultChips(saved) {
-    const target = this.peer?.();
-    if (!target) return [];
     const filename = `${saved.subfolder ? `${saved.subfolder}/` : ""}${saved.filename} [output]`;
+    const chips = [this.renderAgainChip(filename)];
+    const target = this.peer?.();
+    if (!target) return chips;
     const chip = (role, label, title) => el("button", {
       class: "mmc-stage-chip mmc-stage-send",
       text: t(label),
@@ -1412,10 +1467,32 @@ export class PreStageBody {
       onpointerdown: (event) => event.stopPropagation(),
       onclick: () => target.attach(role, filename),
     });
-    return [
+    chips.push(
       chip("first_frame", "→ start", "Use this still as the start frame"),
       chip("last_frame", "→ end", "Use this still as the end frame"),
       chip("reference", "→ ref", "Attach this still as a reference"),
-    ];
+    );
+    return chips;
+  }
+
+  /** The way back in. Drawn whether or not this node has a peer: iterating on
+   *  your own still is a thing to want on a pre-stage nobody has attached to a
+   *  shot yet, and it is the only chip here that does not need one. */
+  renderAgainChip(filename) {
+    const edits = S.PRESTAGE_REFS[this.state.arch]?.editsFirst;
+    return el("button", {
+      class: "mmc-stage-chip mmc-stage-send",
+      text: t(edits ? "↻ edit" : "↻ again"),
+      title: this.state.arch === S.PRESTAGE_STILL_ARCH
+        ? t("Build the next still on this one — it becomes the start frame of the "
+          + "clip this branch samples.")
+        : edits
+          ? t("Edit this again. It replaces the picture in the first slot, so the next "
+            + "instruction is about the render you are looking at.")
+          : t("Start the next render from this one — it becomes the init image, at the "
+            + "strength already dialled in."),
+      onpointerdown: (event) => event.stopPropagation(),
+      onclick: () => this.takeBack(filename),
+    });
   }
 }

@@ -391,7 +391,8 @@ with `@`. Neither is required: the file is in the picker either way.
 - **PreStage** generates the stills the pipeline eats — start frames, end frames,
   references — on the same canvas, with Krea 2, Ideogram 4.0, Qwen Image Edit or
   H3 itself. Its result card writes the finished still straight into the peer
-  node.
+  node, or back into the pre-stage as the next render's subject: `↻ edit` is one
+  press, and editing the edit is most of what an edit model is for.
 - **Faces** runs a second small generation per pass: the face is tracked, cropped
   to fill 512 px, re-drawn at a denoise scaled by how big the head already is, and
   pasted back under a feathered mask.
