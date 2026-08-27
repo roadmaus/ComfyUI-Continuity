@@ -17,6 +17,25 @@ Local open weights only, through ComfyUI core. No API key, nothing uploaded.
 Release notes live in [CHANGELOG.md](CHANGELOG.md). The design decisions, in
 full, are in [docs/PLAN.md](docs/PLAN.md).
 
+## It used to be MiniMax Creator
+
+That was an honest name while H3 was the only thing this drove. It now drives
+four model families, and the old name described a quarter of it. Continuity is
+the part that is true of all four: the same person, the same prop and the same
+light in shot 1 and in shot 9, whichever model is doing the sampling. What that
+buys you is the section below.
+
+The repository is now `ComfyUI-Continuity`. GitHub redirects the old address, so
+an existing clone still pulls, but it is worth pointing it at the new one:
+
+```
+git remote set-url origin https://github.com/roadmaus/ComfyUI-Continuity.git
+```
+
+Nothing in a saved workflow changed. The node ids, the widget names and the
+folders your renders land in are all the same, so old graphs load and old files
+stay where they are.
+
 ## Four families, one node
 
 A **family** is a model architecture and everything this pack knows about how to
@@ -323,6 +342,21 @@ of this repository's size — and nothing is downloaded at runtime.
   `output/continuity/stills/krea2/` — and each has its own row to override.
 - **Language** follows ComfyUI's own locale — English, 日本語, 한국어, 简体中文.
   Corrections are one-line edits in `web/creator/locales/`.
+
+## Where this is going
+
+No dates, and none of this is a promise - it is what is being worked on.
+
+- a **ControlNet stage**: turn a picture or a clip into pose, depth or edges,
+  then hand that to a pre-stage or straight into a shot, so a render can be
+  aimed at a composition you already have rather than described from scratch
+- **Qwen Image Edit** as another stills family
+- a **3D scene** step for blocking a shot out before anything samples
+- more of the small tools that live on the rail, as they turn out to be needed
+
+A family is a package under `creator/families/` with a `declare.py` the registry
+picks up, which is deliberate: adding the next one should not mean touching the
+node. If there is a model you want in here, open an issue.
 
 ## Thanks
 
