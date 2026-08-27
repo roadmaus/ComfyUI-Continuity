@@ -158,7 +158,21 @@ export const BUILTIN = [
     data: {
       look: { aspect: "9:16", short_edge: S.PRESTAGE_DEFAULT_EDGE },
       weights: { arch: "krea2", models: {} },
-      speed: { turbo: null, row: { ...S.PRESTAGE_KREA_RAW } },
+      speed: { turbo: null, row: { ...S.PRESTAGE_BASE_ROW.krea2 } },
+    },
+  }),
+
+  builtin({
+    id: "same-person-next-shot",
+    name: "Same person, next shot — Qwen Image Edit",
+    scope: "prestage",
+    note: "The continuity errand: attach the frame you already have, write what "
+        + "changes, and the render starts from that picture rather than from noise. "
+        + "16:9 and the model's own row; the canvas follows the picture you attach.",
+    data: {
+      look: { aspect: "16:9", short_edge: S.PRESTAGE_DEFAULT_EDGE },
+      weights: { arch: "qwenedit", models: {} },
+      speed: { turbo: null, row: { ...S.PRESTAGE_BASE_ROW.qwenedit } },
     },
   }),
 ];

@@ -8,10 +8,11 @@ reduces it to the payload `render_image.emit` builds a graph from.
 
 This is the *shared* half. What an architecture decides for itself — its
 checkpoint fields, its sampler presets, which files it loads — lives in its
-family package (`families/krea2/still.py`, `families/ideogram4/still.py`), and
-`compile_prestage` takes that module as `family` and reads its declarations.
-What stays here is what every image still shares: the prompt and its triggers,
-the style-reference citations, the init image, and the /16 canvas.
+family package (`families/krea2/still.py`, `families/ideogram4/still.py`,
+`families/qwenedit/still.py`), and `compile_prestage` takes that module as
+`family` and reads its declarations. What stays here is what every image still
+shares: the prompt and its triggers, the style-reference citations, the init
+image, and the /16 canvas.
 
 Style references are cited from the prompt the way everything else in this pack
 is: `@ref-1` is written where the reference belongs in the sentence and becomes
@@ -91,7 +92,7 @@ class ImagePayload:
     # here rather than in the emitter so the payload states which file runs.
     checkpoint_field: str
     loras: list = field(default_factory=list)        # [{"name", "strength"}]
-    refs: list = field(default_factory=list)         # filenames, krea2 only
+    refs: list = field(default_factory=list)         # filenames, on the families that read them
     init: dict = None                                # {"filename", "denoise"} or None
     # How this family's schedule is shaped for this render — the family's own
     # keys, opaque here. Ideogram's mu/std/polish; Krea's shift ramp. Empty on a
@@ -258,11 +259,12 @@ def _cite_refs(prompt, refs):
 def compile_prestage(data, family, image_size_lookup=None):
     """`prestage_data` dict -> `ImagePayload`, for `family`'s architecture.
 
-    `family` is the architecture's own module — `families/krea2/still.py` or
-    `families/ideogram4/still.py` — and supplies everything the flow below does
-    not decide: whether references are read, and which checkpoint field and
-    schedule block the blob's arch block resolves to. The caller picked it off
-    the blob's `arch`, so an unknown arch is refused there, not here.
+    `family` is the architecture's own module — `families/krea2/still.py`,
+    `families/ideogram4/still.py`, `families/qwenedit/still.py` — and supplies
+    everything the flow below does not decide: whether references are read and
+    what one means to the render, and which checkpoint field and schedule block
+    the blob's arch block resolves to. The caller picked it off the blob's
+    `arch`, so an unknown arch is refused there, not here.
 
     `image_size_lookup(filename) -> (width, height)` supplies the init image's
     dimensions so an img2img render keeps its source's aspect — the same
@@ -303,6 +305,18 @@ def compile_prestage(data, family, image_size_lookup=None):
         raise CompileError(family.REFS_NEED_LORA)
 
     init = _parse_init(data.get("init"))
+    if init is None and refs and getattr(family, "EDITS_FIRST_REF", False):
+        # An edit family's first reference is the picture being edited, so it is
+        # also what the render starts from: the canvas follows its aspect and
+        # the latent is that image encoded, at a denoise of 1.0 because the
+        # instruction reaches the model through the reference conditioning
+        # rather than through leftover noise. That is the shape the published
+        # Qwen-Image-Edit workflow has, said once here instead of as a second
+        # image field the user would have to fill with a picture already
+        # attached. An explicit init still wins — it is the only way to ask for
+        # a partial denoise, and a family with a reference pool has no other
+        # place to say "keep this composition".
+        init = {"filename": refs[0][1], "denoise": 1.0}
 
     short_edge = data.get("short_edge", DEFAULT_SHORT_EDGE)
     ratio_clamped = False

@@ -2,6 +2,39 @@
 
 ## Unreleased
 
+**Qwen Image Edit joins the pre-stage, and it is the one that edits.**
+
+The pre-stage could draw a picture from a sentence, twice over — Krea 2 and
+Ideogram 4.0 — and it could not do the thing this pack is named after: take the
+frame you already have and change one thing about it. Qwen Image Edit is a fifth
+family and does exactly that. Attach the last frame of shot 1, write "the coat
+is red now", and what comes back is the same person in the same room, on the
+same canvas, ready to be shot 9's start frame.
+
+It reads up to three pictures on the base weights — no adapter first, which is
+the difference from Krea 2's reference path — and the first of them is not a
+reference at all. It is the picture being changed, so it sets the canvas and the
+render starts from it rather than from noise; the chip says `editing` where the
+others say `style`, and the aspect pill reads "from image" without an init image
+being attached. Cite the other two from the prompt as `@handle` the way you
+always have; they arrive as `Picture 2` and `Picture 3`, the labels the encoder
+itself writes.
+
+Everything it emits is core's — the Qwen encoder Krea 2 already borrows, pointed
+at the weights it was built for. Three files: the 2511 or 2509 checkpoint, the
+Qwen2.5-VL 7B encoder, and the Qwen image VAE Krea 2 already loads. The turbo
+pill is a Lightning LoRA and only a LoRA, since there is no distilled checkpoint
+to swap to. The schedule shift core does not detect for these weights is put
+back, and the unconditional branch is a second pass of the edit encoder over the
+same pictures rather than a zeroed copy of the first — zeroing takes the
+reference latents out with it, and the guidance then points away from the edit's
+own subject. At cfg 1 it *is* the zeroed copy, because a distilled run never
+evaluates a negative and a 7B encoder pass for a tensor nothing reads is most of
+a four-step render.
+
+Switching the model pill now writes the arriving family's own sampler row rather
+than Krea 2's for everyone.
+
 **The LoRA grid groups a model's versions, and the strength slider fits the LoRA.**
 
 A LoRA you have retrained four times was four cards: four near-identical

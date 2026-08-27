@@ -503,11 +503,118 @@ check("the sampler reads the truncated schedule",
       ideo_i2i["SamplerCustomAdvanced"][0][1]["sigmas"][0],
       ideo_i2i["SplitSigmasDenoise"][0][0])
 
+# ---- Qwen Image Edit ---------------------------------------------------------
+#
+# The one family whose subject is a picture that already exists. The shipped
+# workflow's chain — AuraFlow shift, CFG-norm, the edit encoder twice over the
+# same images, and the first picture straight into the sampler as the latent —
+# and the promotion that makes the last of those true without a second image
+# field: `Picture 1` is the thing being changed, so it is also the init.
+
+qe = importlib.import_module(f"{PACKAGE}.creator.families.qwenedit.still")
+MODELS["qwenedit"] = {
+    "model": "qwen_image_edit_2511_fp8mixed.safetensors",
+    "clip": "qwen_2.5_vl_7b_fp8_scaled.safetensors",
+    "vae": "qwen_image_vae.safetensors",
+}
+QE_WEIGHTS = ri.ImageWeights(arch="qwenedit", files=MODELS["qwenedit"])
+
+
+def edit_blob(**overrides):
+    data = {"arch": "qwenedit", "prompt": "put her in the red coat", "aspect": "1:1",
+            "short_edge": 1024,
+            "refs": [{"filename": "her.png"}, {"filename": "coat.png"}], "loras": []}
+    data.update(overrides)
+    return data
+
+
+def edit_graph(data=None, **row):
+    settings = dict(seed=7, steps=20, cfg=4.0, sampler_name="euler", scheduler="simple")
+    settings.update(row)
+    payload = ci.compile_prestage(data if data is not None else edit_blob(), qe)
+    return payload, by_class(ri.emit(payload, QE_WEIGHTS,
+                                     sampling_mod.Sampling(**settings),
+                                     NODE_ID, qe).finalize())
+
+edit_payload, edit = edit_graph()
+
+check("the schedule shift core does not detect is put back",
+      edit["ModelSamplingAuraFlow"][0][1]["shift"], qe.AURAFLOW_SHIFT)
+check("...and the guided prediction is normed on top of it",
+      edit["CFGNorm"][0][1]["model"][0], edit["ModelSamplingAuraFlow"][0][0])
+check("the sampler reads the normed model",
+      edit["KSampler"][0][1]["model"][0], edit["CFGNorm"][0][0])
+check("the text encoder is loaded as Qwen's",
+      edit["CLIPLoader"][0][1]["type"], "qwen_image")
+
+# Two passes of the same encoder over the same pictures. Zeroing the positive
+# would take the reference latents out of the unconditional with it, and the
+# guidance would then point away from the edit's own subject.
+check("the positive and the negative are both edit encodes",
+      len(edit["TextEncodeQwenImageEditPlus"]), 2)
+prompts = sorted(i["prompt"] for _, i in edit["TextEncodeQwenImageEditPlus"])
+check("...the negative being the same images with nothing asked of them",
+      prompts, ["", "put her in the red coat"])
+check("no zeroed conditioning at real CFG", "ConditioningZeroOut" in edit, False)
+for _, inputs in edit["TextEncodeQwenImageEditPlus"]:
+    check("both encodes hold both pictures",
+          ("image1" in inputs, "image2" in inputs, "image3" in inputs),
+          (True, True, False))
+
+# The first reference is the picture being changed: promoted to the init at a
+# denoise of 1.0, which is the published workflow's latent exactly.
+check("the first picture becomes the render's own starting point",
+      edit_payload.init, {"filename": "her.png", "denoise": 1.0})
+check("...encoded into the latent rather than an empty canvas",
+      ("VAEEncode" in edit, "EmptySD3LatentImage" in edit), (True, False))
+check("...at full denoise, because the instruction arrives as conditioning",
+      edit["KSampler"][0][1]["denoise"], 1.0)
+
+# And the canvas follows it, the way an init image's always has.
+sized_payload = ci.compile_prestage(edit_blob(), qe, lambda name: (1920, 1080))
+check("the canvas takes the edited picture's shape",
+      (sized_payload.width > sized_payload.height, sized_payload.height), (True, 1024))
+check("an explicit init still wins — the only way to ask for a partial denoise",
+      ci.compile_prestage(edit_blob(init={"filename": "plate.png", "denoise": 0.4}),
+                          qe).init,
+      {"filename": "plate.png", "denoise": 0.4})
+
+# At cfg 1 the sampler never evaluates the negative, and a second 7B encoder
+# pass to build a tensor nothing reads is most of a four-step render.
+_, distilled = edit_graph(edit_blob(
+    turbo={"qwenedit": {"on": True, "lora": "qwen_edit_lightning_4step.safetensors"}},
+    loras=[{"name": "qwen_edit_lightning_4step.safetensors", "strength": 1.0}]),
+    steps=4, cfg=1.0)
+check("a distilled run does not pay for an unconditional it cannot use",
+      (len(distilled["TextEncodeQwenImageEditPlus"]), "ConditioningZeroOut" in distilled),
+      (1, True))
+check("...and the Lightning LoRA is patched model-only, like every image LoRA",
+      distilled["LoraLoaderModelOnly"][0][1]["lora_name"],
+      "qwen_edit_lightning_4step.safetensors")
+
+# An edit model asked to draw from nothing is a legitimate request, and takes
+# the plain text encoder: with no images the edit encoder's only contribution is
+# a system prompt about an input picture there isn't one of.
+_, bare = edit_graph(edit_blob(refs=[]))
+check("with no pictures it is an ordinary text-to-image render",
+      ("CLIPTextEncode" in bare, "TextEncodeQwenImageEditPlus" in bare,
+       "EmptySD3LatentImage" in bare),
+      (True, False, True))
+
+expect_error("turbo with no Lightning LoRA picked is refused",
+             lambda: ci.compile_prestage(
+                 edit_blob(turbo={"qwenedit": {"on": True}}), qe),
+             "Lightning LoRA")
+expect_error("a fourth picture is refused here too",
+             lambda: ci.compile_prestage(edit_blob(
+                 refs=["a.png", "b.png", "c.png", "d.png"]), qe),
+             "three image slots")
+
 # ---- refusals ----------------------------------------------------------------
 
 expect_error("Ideogram with references is refused with directions",
              lambda: build(blob(arch="ideogram4", refs=["a.png"])),
-             "switch the model pill to Krea 2")
+             "switch the model pill to Krea 2 or Qwen Image Edit")
 expect_error("an empty prompt is refused",
              lambda: build(blob(prompt="  ")),
              "prompt is empty")

@@ -1,9 +1,9 @@
 // The PreStage node: stills for the pipeline, made on the left.
 //
-// Two classes. `PreStageEditor` is the body for the two *image* architectures,
-// Krea 2 and Ideogram 4 — same skeleton as CreatorEditor (rail, chips, panel,
-// pills, sampler row) because it is driven the same way, and the same prompt
-// box for the same reason.
+// Two classes. `PreStageEditor` is the body for the *image* architectures —
+// Krea 2, Ideogram 4 and Qwen Image Edit — same skeleton as CreatorEditor
+// (rail, chips, panel, pills, sampler row) because it is driven the same way,
+// and the same prompt box for the same reason.
 //
 // It was a plain textarea, on the reasoning that an image prompt references
 // nothing by handle — that the Qwen-edit encoder labels the style references
@@ -21,10 +21,11 @@
 //
 // The model pill is the one control the video nodes do not have, and it belongs
 // to the body rather than to either editor: it is the control that swaps them.
-// Krea 2 and Ideogram 4 want different sampler rows — RAW runs 52 steps at cfg
-// 3.5 where Ideogram runs its preset's steps at cfg 7 on its own schedule — so
-// switching the arch rewrites the row, and the turbo pill exists only on Krea
-// (Turbo *is* a checkpoint there; Ideogram's speed axis is its preset table).
+// The architectures want different sampler rows — Krea RAW runs 52 steps at cfg
+// 3.5, Qwen Image Edit 20 at cfg 4, Ideogram its preset's steps at cfg 7 on its
+// own schedule — so switching the arch rewrites the row from the arriving
+// family's own widget defaults, and the turbo pill means a different thing on
+// each (a checkpoint on Krea, a distillation LoRA on the other two).
 
 import { el, icon, ICONS, svg, dismissable, keepScroll, placeNear, swappable } from "./dom.js";
 import { DEFAULT_STILL_ARCH, stillFamily } from "./manifest.js";
@@ -63,6 +64,11 @@ const TURBO_TITLE = {
     draft: "2 steps — as short as the distillation goes. For framing, not for finals.",
     medium: "4 steps — quick and usable.",
     good: "8 steps — where a distilled Ideogram stops gaining.",
+  },
+  qwenedit: {
+    draft: "4 steps — what the 4-step Lightning LoRA was distilled for.",
+    medium: "6 steps — a little more than the short LoRA's own number.",
+    good: "8 steps — what the 8-step Lightning LoRA was distilled for.",
   },
 };
 
@@ -126,7 +132,7 @@ export class PreStageEditor {
       onBrowse: () => this.addRefs(false),
     });
     this.prompt.root.dataset.placeholder =
-      t("Describe the image. Both models were trained on long, detailed "
+      t("Describe the image. These models were trained on long, detailed "
       + "natural-language prompts. Use @ to name a style reference.");
     // Leaving the box arms the escalation again: the waiver is about the
     // sentence being written, not about the text. See
@@ -197,6 +203,10 @@ export class PreStageEditor {
   commit() {
     this.onCommit?.();
     this.render();
+    // Cheap after the first time — `probeInit` returns at once for a picture
+    // already measured — and here rather than only behind the init picker
+    // because on an edit family attaching a *reference* moves the canvas too.
+    this.probeInit();
   }
 
   setState(state) {
@@ -211,9 +221,9 @@ export class PreStageEditor {
    *  before it offers the input folder, and `attachFromMention` asks again
    *  before it takes one. */
   refBlocked() {
-    if (this.state.arch === "ideogram4") {
-      return t("Ideogram 4.0 has no local reference conditioning — switch the model "
-             + "pill to Krea 2 to use style references.");
+    if (!S.PRESTAGE_REFS[this.state.arch]?.reads) {
+      return t("{arch} has no local reference conditioning — switch the model pill to "
+             + "one that reads pictures.", { arch: S.PRESTAGE_ARCH_LABEL[this.state.arch] });
     }
     if ((this.state.refs?.length ?? 0) >= S.PRESTAGE_MAX_REFS) {
       return t("At most {max} style references — the Qwen edit encoder the model "
@@ -266,16 +276,11 @@ export class PreStageEditor {
   }
 
   async addRefs(fromVideo = false) {
-    if (this.state.arch === "ideogram4") {
-      return this.flash(t("Ideogram 4.0 has no local reference conditioning — switch the model "
-                        + "pill to Krea 2 to use style references."));
-    }
+    // The same two refusals the `@` menu asks for, said out loud here because
+    // this door was pressed rather than typed into.
+    const blocked = this.refBlocked();
+    if (blocked) return this.flash(blocked);
     const room = S.PRESTAGE_MAX_REFS - this.state.refs.length;
-    if (room <= 0) {
-      return this.flash(t("At most {max} style references — the Qwen edit encoder "
-                        + "the model reads them through has exactly three image slots.",
-                        { max: S.PRESTAGE_MAX_REFS }));
-    }
     if (fromVideo) {
       const clip = await openPicker({
         kinds: ["video", "renders"], kind: "video", single: true,
@@ -347,15 +352,24 @@ export class PreStageEditor {
     this.commit();
   }
 
+  /** Measure the picture the canvas follows, so the aspect pill can show its
+   *  shape. Not always the init image — on an edit family it is the first
+   *  reference; see `S.preStageSource`. */
   probeInit() {
-    const init = this.state.init;
-    if (!init || this.sizes.has(init.filename)) return;
+    const source = S.preStageSource(this.state);
+    if (!source || this.sizes.has(source)) return;
     const probe = new Image();
     probe.onload = () => {
-      this.sizes.set(init.filename, { width: probe.naturalWidth, height: probe.naturalHeight });
+      this.sizes.set(source, { width: probe.naturalWidth, height: probe.naturalHeight });
       this.render();
     };
-    probe.src = viewUrl(init.filename);
+    probe.src = viewUrl(source);
+  }
+
+  /** The measured size of that picture, or null while it is still loading. */
+  sourceSize() {
+    const source = S.preStageSource(this.state);
+    return source ? this.sizes.get(source) : null;
   }
 
   flash(message) {
@@ -371,8 +385,7 @@ export class PreStageEditor {
   /** The still this editor is about to make. No seconds: a still has no length,
    *  and the shell's frame draws what it is given. See `CreatorEditor.frame`. */
   frame() {
-    const { width, height } =
-      S.resolvedPreStage(this.state, this.state.init ? this.sizes.get(this.state.init.filename) : null);
+    const { width, height } = S.resolvedPreStage(this.state, this.sourceSize());
     return { width, height };
   }
 
@@ -382,7 +395,7 @@ export class PreStageEditor {
     this.renderExpand();
     const chips = [
       ...(state.init ? [this.renderInitChip()] : []),
-      ...state.refs.map((ref) => this.renderRefChip(ref)),
+      ...state.refs.map((ref, slot) => this.renderRefChip(ref, slot)),
     ];
     this.assetsHost.replaceChildren(...(chips.length ? [keepScroll(el("div", { class: "mmc-assets" }, chips))] : []));
     this.loraHost.replaceChildren(...(state.loras.length ? [this.renderLoras()] : []));
@@ -467,7 +480,25 @@ export class PreStageEditor {
     else editor.prompt.root.focus();
   }
 
+  /** What the rail's picture tool says it will do, which is a different
+   *  sentence on each of the three architectures — see `S.PRESTAGE_REFS`. */
+  refsTitle(refs) {
+    if (!refs.reads) {
+      return t("{arch} has no local reference conditioning — switch the model pill to "
+             + "one that reads pictures.", { arch: S.PRESTAGE_ARCH_LABEL[this.state.arch] });
+    }
+    if (refs.editsFirst) {
+      return t("Up to three pictures the instruction is about. The first one is the "
+             + "picture being changed — it sets the canvas and the render starts from "
+             + "it; the others are there to be cited, as Picture 2 and Picture 3.");
+    }
+    return t("Up to three images whose look this render should carry. Encoded through "
+           + "the Qwen edit path Krea 2 was post-trained against; the "
+           + "krea2_style_reference LoRA strengthens it.");
+  }
+
   renderRail() {
+    const refs = S.PRESTAGE_REFS[this.state.arch] ?? { reads: false };
     const tool = (label, iconName, title, onclick) => el("button", {
       class: "mmc-tool", title, onclick,
     }, [el("span", { class: "mmc-tool-icon" }, [icon(iconName)]), el("span", { text: label })]);
@@ -482,11 +513,8 @@ export class PreStageEditor {
         tool(t("Init image"), "frameIn",
              t("Start from an image instead of noise — img2img. The strength pill says how much of it survives."),
              () => this.setInit(false)),
-        tool(t("Style refs"), "image",
-             this.state.arch === "ideogram4"
-               ? t("Ideogram 4.0 has no local reference conditioning — style references are a Krea 2 feature.")
-               : t("Up to three images whose look this render should carry. Encoded through the Qwen edit "
-                 + "path Krea 2 was post-trained against; the krea2_style_reference LoRA strengthens it."),
+        tool(t(refs.editsFirst ? "Pictures" : "Style refs"), "image",
+             this.refsTitle(refs),
              () => this.addRefs(false)),
         tool(t("From video"), "video",
              t("Pull a single frame off a video's playhead — as the init image, saved as a PNG in the input folder."),
@@ -537,7 +565,9 @@ export class PreStageEditor {
     ]);
   }
 
-  renderRefChip(ref) {
+  renderRefChip(ref, slot = 0) {
+    const refs = S.PRESTAGE_REFS[this.state.arch] ?? {};
+    const role = refs.editsFirst && slot === 0 && !this.state.init ? "editing" : "style";
     return el("div", {
       class: `mmc-asset mmc-tag-${S.tagIndex(ref.handle)}`,
       title: ref.filename,
@@ -551,7 +581,10 @@ export class PreStageEditor {
         },
       ),
       el("span", { class: "mmc-asset-handle", text: `@${ref.handle}` }),
-      el("span", { class: "mmc-asset-role", text: t("style") }),
+      // What this picture is *for*, which is not the same on every arch: a
+      // style reference on Krea 2, and on an edit family the first slot is the
+      // picture being changed while the rest are cited beside it.
+      el("span", { class: "mmc-asset-role", text: t(role) }),
       el("button", {
         class: "mmc-asset-x", text: "✕", title: t("Remove @{handle}", { handle: ref.handle }),
         onclick: () => {
@@ -577,7 +610,7 @@ export class PreStageEditor {
 
   renderPills() {
     const state = this.state;
-    const geometry = S.resolvedPreStage(state, state.init ? this.sizes.get(state.init.filename) : null);
+    const geometry = S.resolvedPreStage(state, this.sourceSize());
 
     const archPill = this.archPill?.() ?? el("span");
 
@@ -585,7 +618,8 @@ export class PreStageEditor {
       class: "mmc-pill",
       disabled: geometry.fromImage || undefined,
       title: geometry.fromImage
-        ? t("The aspect follows the init image — the resolution pill still sets the scale.")
+        ? t("The aspect follows the picture this render starts from — the resolution "
+          + "pill still sets the scale.")
         : t("Aspect Ratio"),
       onclick: (event) => this.openAspect(event.currentTarget),
     }, geometry.fromImage
@@ -594,7 +628,7 @@ export class PreStageEditor {
 
     const resPill = el("button", {
       class: "mmc-pill",
-      title: t("Short edge. Both models are comfortable up to a 2048×2048 area."),
+      title: t("Short edge. Every image model here is comfortable up to a 2048×2048 area."),
       onclick: (event) => this.openResolution(event.currentTarget),
     }, [
       icon("res", 16),
@@ -623,12 +657,15 @@ export class PreStageEditor {
       }, [icon("steps", 16), el("span", { text: `${state.quality} · ${S.PRESTAGE_IDEOGRAM_STEPS[state.quality]}` })]));
     }
 
-    // The reference layout, and only where there is a reference to lay out.
-    // Krea 2's base weights read none: core hands the DiT no default method
-    // because it never learned one, and every way of reading a reference on
-    // this model is a LoRA. The published adapters disagree about the layout
-    // and neither disagreement is an error, so the pill is where that is said.
-    if (state.arch === "krea2" && state.refs.length) {
+    // The reference layout, and only where there is a reference to lay out and
+    // a layout to pick. Krea 2's base weights read none: core hands the DiT no
+    // default method because it never learned one, and every way of reading a
+    // reference on this model is a LoRA. The published adapters disagree about
+    // the layout and neither disagreement is an error, so the pill is where
+    // that is said. Qwen Image Edit declares no methods and gets no pill — its
+    // base weights read references, so core's detection already gives them the
+    // layout they were trained with.
+    if (S.PRESTAGE_REFS[state.arch]?.methods.length && state.refs.length) {
       const adapted = (state.loras ?? []).some((entry) => entry.enabled !== false);
       pills.push(el("button", {
         class: `mmc-pill${adapted ? "" : " missing"}`,
@@ -845,13 +882,15 @@ export class PreStageEditor {
    *  returns to when nothing was saved, and what `setArch` writes. */
   nativeRow() {
     if (this.state.arch === "ideogram4") {
+      // The one arch whose steps are not a widget default: the quality preset
+      // owns them, and it owns the schedule they land on as well.
       return {
         steps: S.PRESTAGE_IDEOGRAM_STEPS[this.state.quality],
         cfg: S.PRESTAGE_IDEOGRAM_ROW.cfg,
         sampler_name: S.PRESTAGE_IDEOGRAM_ROW.sampler_name,
       };
     }
-    return { ...S.PRESTAGE_KREA_RAW };
+    return { ...S.PRESTAGE_BASE_ROW[this.state.arch] };
   }
 
   // ---- weights ---------------------------------------------------------------
@@ -966,13 +1005,12 @@ export class PreStageEditor {
       mark: S.PRESTAGE_DEFAULT_EDGE, markLabel: t("default"),
       apply: (edge) => { this.state.short_edge = edge; },
       describe: () => {
-        const geometry = S.resolvedPreStage(this.state,
-          this.state.init ? this.sizes.get(this.state.init.filename) : null);
+        const geometry = S.resolvedPreStage(this.state, this.sourceSize());
         return {
           size: `${geometry.width} × ${geometry.height}`,
           note: this.state.short_edge >= S.PRESTAGE_MAX_EDGE
             ? t("The models' 2048 ceiling — wide ratios trade the short edge down to hold the area.")
-            : t("{speed} {edge} is the comfortable default for both models.", {
+            : t("{speed} {edge} is the comfortable default on every image model here.", {
                 speed: t(this.state.short_edge < S.PRESTAGE_DEFAULT_EDGE ? "Faster, softer." : "Sharper, slower."),
                 edge: S.PRESTAGE_DEFAULT_EDGE,
               }),
@@ -1185,16 +1223,16 @@ export class PreStageBody {
     if (leaving) { leaving.on = false; leaving.saved = null; }
     this.state.arch = arch;
 
-    if (arch === "krea2") {
-      const row = S.PRESTAGE_KREA_RAW;
+    if (arch === "ideogram4") {
+      io.set("steps", S.PRESTAGE_IDEOGRAM_STEPS[this.state.quality]);
+      io.set("cfg", S.PRESTAGE_IDEOGRAM_ROW.cfg);
+      io.set("sampler_name", S.PRESTAGE_IDEOGRAM_ROW.sampler_name);
+    } else if (S.PRESTAGE_BASE_ROW[arch]) {
+      const row = S.PRESTAGE_BASE_ROW[arch];
       io.set("steps", row.steps);
       io.set("cfg", row.cfg);
       io.set("sampler_name", row.sampler_name);
       io.set("scheduler", row.scheduler);
-    } else if (arch === "ideogram4") {
-      io.set("steps", S.PRESTAGE_IDEOGRAM_STEPS[this.state.quality]);
-      io.set("cfg", S.PRESTAGE_IDEOGRAM_ROW.cfg);
-      io.set("sampler_name", S.PRESTAGE_IDEOGRAM_ROW.sampler_name);
     } else {
       const row = S.PRESTAGE_STILL_ROW;
       io.set("steps", row.steps);

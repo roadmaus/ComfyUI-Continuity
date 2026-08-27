@@ -62,6 +62,7 @@ MODULES = {
     "ltx25_sampling": "families.ltx25.sampling",
     "krea2_still": "families.krea2.still",
     "ideogram4_still": "families.ideogram4.still",
+    "qwenedit_still": "families.qwenedit.still",
     "h3_declare": "families.h3.declare",
     "h3_models": "families.h3.models",
     "h3_grammar": "families.h3.grammar",

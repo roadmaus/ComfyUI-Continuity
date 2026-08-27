@@ -18,18 +18,19 @@ layout.skip_without_node()
 MIRROR = layout.js("state.js")
 
 _pkg = layout.load("canvas", "contextir", "compile", "compile_image", "still",
-                   "krea2_still", "ideogram4_still")
+                   "krea2_still", "ideogram4_still", "qwenedit_still")
 ci = _pkg.compile_image
 cs = _pkg.still
 k2 = _pkg.krea2_still
 i4 = _pkg.ideogram4_still
+qe = _pkg.qwenedit_still
 cv = _pkg.canvas
 
 
 SCRIPT = """
 const s = await import(process.argv[1]);
 const out = { constants: {}, canvases: {}, ideogram: {}, turbo: s.PRESTAGE_TURBO_STEPS,
-              krea_raw: s.PRESTAGE_KREA_RAW };
+              base_rows: s.PRESTAGE_BASE_ROW, refs: s.PRESTAGE_REFS };
 for (const name of ["PRESTAGE_CANVAS_MULTIPLE", "PRESTAGE_MIN_EDGE", "PRESTAGE_MAX_EDGE",
                     "PRESTAGE_DEFAULT_EDGE", "PRESTAGE_MAX_PIXELS", "PRESTAGE_MAX_REFS",
                     "PRESTAGE_DEFAULT_DENOISE", "PRESTAGE_MIN_DENOISE"]) {
@@ -116,20 +117,39 @@ for quality, steps in reflected["ideogram"].items():
     check(f"ideogram {quality} steps", steps, i4.IDEOGRAM_QUALITIES[quality]["steps"])
 
 check("turbo steps", reflected["turbo"], k2.TURBO_STEPS)
-check("krea RAW row", reflected["krea_raw"], k2.KREA_RAW)
+
+# The row each arch arrives on. Written by the arch pill and returned to when
+# the turbo switch is released, so a family's own widget defaults are what the
+# node ends up sampling at — Krea's 52 at cfg 3.5, Qwen's 20 at cfg 4. Ideogram
+# is not here: its steps come off the quality preset, which is checked above.
+check("the row each arch arrives on", reflected["base_rows"]["krea2"], k2.KREA_RAW)
+check("...and Qwen Image Edit's own", reflected["base_rows"]["qwenedit"], qe.QWEN_BASE)
+
+# What an attached picture means, per arch. Three families, three answers, and
+# the pill copy turns on all four of these fields.
+check("what a reference is on each arch", reflected["refs"],
+      {"krea2": {"reads": True, "methods": list(k2.REF_METHODS),
+                 "needsLora": True, "editsFirst": False},
+       "ideogram4": {"reads": False, "methods": [],
+                     "needsLora": False, "editsFirst": False},
+       "qwenedit": {"reads": True, "methods": [],
+                    "needsLora": False, "editsFirst": True}})
 
 # ---- the turbo pill, per arch ------------------------------------------------
 #
 # It is one pill and it does not mean one thing: Krea ships the distillation as
-# a checkpoint *and* as a LoRA, Ideogram only as a LoRA. Both halves have to
-# agree about which, or the pill offers a route the compiler will refuse.
+# a checkpoint *and* as a LoRA, Ideogram and Qwen Image Edit only as a LoRA.
+# Both halves have to agree about which, or the pill offers a route the compiler
+# will refuse.
 
-check("both image arches have a turbo pill", reflected["turbo_arches"],
-      ["ideogram4", "krea2"])
+check("every image arch has a turbo pill", reflected["turbo_arches"],
+      sorted(ci.ARCHES))
 check("which routes each arch offers",
-      reflected["turbo_routes"], {"krea2": [True, True], "ideogram4": [False, True]})
+      reflected["turbo_routes"], {"krea2": [True, True], "ideogram4": [False, True],
+                                  "qwenedit": [False, True]})
 check("the step ladders are the families' own", reflected["turbo_steps"],
-      {"krea2": k2.TURBO_STEPS, "ideogram4": i4.TURBO_STEPS})
+      {"krea2": k2.TURBO_STEPS, "ideogram4": i4.TURBO_STEPS,
+       "qwenedit": qe.TURBO_STEPS})
 check("a blob from before the split reads as Krea 2's",
       (reflected["legacy_turbo"]["krea2"]["on"],
        reflected["legacy_turbo"]["krea2"]["quality"],

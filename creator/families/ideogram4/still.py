@@ -35,7 +35,7 @@ CLIP_TYPE = "ideogram4"
 TAKES_REFS = False
 REFS_REFUSAL = (
     "Ideogram 4.0 has no local reference conditioning — switch the "
-    "model pill to Krea 2, or clear the style references"
+    "model pill to Krea 2 or Qwen Image Edit, or clear the style references"
 )
 
 # Ideogram's official preset table, verbatim from the shipped ComfyUI template

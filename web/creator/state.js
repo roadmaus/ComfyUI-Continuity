@@ -3165,11 +3165,20 @@ const widgetDefaults = (family, ids) => Object.fromEntries(
 /** How many style references the arch takes — its encoder's own slot count. */
 export const PRESTAGE_MAX_REFS = KREA.prompt.max_refs;
 
-/** What each Krea 2 checkpoint wants from the sampler row — what the arch and
- *  turbo pills write into the widgets: the RAW row is the family's own widget
- *  defaults, the turbo row and step table its turbo capability's. */
-export const PRESTAGE_KREA_RAW =
-  widgetDefaults(KREA, ["steps", "cfg", "sampler_name", "scheduler"]);
+/** The sampler row each image arch runs with nothing distilled on it — the
+ *  family's own widget defaults, which is what the arch pill writes into the
+ *  widgets on arrival and what the turbo switch returns to on release.
+ *
+ *  Per arch rather than Krea's row for everyone: this node has one static
+ *  schema wearing Krea's numbers, and an arch that samples 20 steps at cfg 4
+ *  arriving on 52 at 3.5 is a slow render nobody asked for. Ideogram is the one
+ *  exception and says so itself — its steps are the quality preset's, not a
+ *  widget default. */
+export const PRESTAGE_BASE_ROW = Object.fromEntries(
+  PRESTAGE_IMAGE_ARCHES.map((arch) => [arch,
+    widgetDefaults(IMAGE_FAMILY[arch], ["steps", "cfg", "sampler_name", "scheduler"])]));
+
+/** Krea 2's turbo row and step table — its turbo capability's own. */
 export const PRESTAGE_KREA_TURBO = KREA.capabilities.turbo.row;
 export const PRESTAGE_TURBO_QUALITIES = Object.keys(KREA.capabilities.turbo.steps);
 export const PRESTAGE_TURBO_STEPS = KREA.capabilities.turbo.steps;
@@ -3186,9 +3195,28 @@ export const PRESTAGE_TURBO = Object.fromEntries(
 export const turboOfArch = (arch) => PRESTAGE_TURBO[arch] ?? null;
 
 /** How Krea 2 lays reference tokens into the sequence — the adapter's choice,
- *  because the published reference LoRAs disagree and neither layout errors. */
+ *  because the published reference LoRAs disagree and neither layout errors.
+ *  The blob's `ref_method` is that one family's field and stays Krea's. */
 export const PRESTAGE_REF_METHODS = KREA.capabilities.refs.methods;
 export const PRESTAGE_DEFAULT_REF_METHOD = KREA.capabilities.refs.default_method;
+
+/** What an attached picture *means* on each image arch. Four different answers
+ *  across three families, none of them guessable from the file: Ideogram reads
+ *  none at all, Krea 2 reads them only through an adapter and wants to be told
+ *  which layout that adapter learned, and Qwen Image Edit reads them on the base
+ *  weights — where the first one is not a reference at all but the picture being
+ *  changed, which is why it also decides the canvas. A family that declares no
+ *  `refs` capability reads none. */
+export const PRESTAGE_REFS = Object.fromEntries(
+  PRESTAGE_IMAGE_ARCHES.map((arch) => {
+    const refs = IMAGE_FAMILY[arch].capabilities.refs;
+    return [arch, {
+      reads: Boolean(refs),
+      methods: refs?.methods ?? [],
+      needsLora: refs?.needs_lora === true,
+      editsFirst: refs?.edits_first === true,
+    }];
+  }));
 
 /** Ideogram's official preset table. The presets own steps *and* the schedule
  *  shape; the widget cfg feeds the dual-model guider. */
@@ -3422,12 +3450,28 @@ export function guessPreStageModels(models, byFolder) {
   return changed;
 }
 
+/** Which picture this render's canvas follows, or null.
+ *
+ *  The init image, and on an edit family the first reference when there is no
+ *  init: `Picture 1` is the thing being changed, so the compile promotes it to
+ *  the init at denoise 1 and the aspect comes off it. Mirrored here so the
+ *  aspect pill says "from image" for the same renders the compile resolves that
+ *  way — see `compile_image.compile_prestage`. */
+export function preStageSource(state) {
+  if (state.init) return state.init.filename;
+  if (PRESTAGE_REFS[state.arch]?.editsFirst && state.refs?.length) {
+    return state.refs[0].filename;
+  }
+  return null;
+}
+
 /** The resolved image canvas, mirroring compile_image.resolve_canvas: /16 grid,
- *  2048² area cap, and the aspect taken from the init image when there is one. */
+ *  2048² area cap, and the aspect taken from the source picture when the caller
+ *  measured one — `preStageSource` is which picture that is. */
 export function resolvedPreStage(state, initSize = null) {
   let ratio = PRESTAGE_ASPECTS.find(([label]) => label === state.aspect)?.[1] ?? 16 / 9;
   let fromImage = false;
-  if (state.init && initSize?.width && initSize?.height) {
+  if (initSize?.width && initSize?.height) {
     ratio = initSize.width / initSize.height;
     fromImage = true;
   }

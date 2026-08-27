@@ -20,8 +20,8 @@ full, are in [docs/PLAN.md](docs/PLAN.md).
 ## It used to be MiniMax Creator
 
 That was an honest name while H3 was the only thing this drove. It now drives
-four model families, and the old name described a quarter of it. Continuity is
-the part that is true of all four: the same person, the same prop and the same
+five model families, and the old name described a fifth of it. Continuity is
+the part that is true of all five: the same person, the same prop and the same
 light in shot 1 and in shot 9, whichever model is doing the sampling. What that
 buys you is the section below.
 
@@ -36,7 +36,7 @@ Nothing in a saved workflow changed. The node ids, the widget names and the
 folders your renders land in are all the same, so old graphs load and old files
 stay where they are.
 
-## Four families, one node
+## Five families, one node
 
 A **family** is a model architecture and everything this pack knows about how to
 talk to it: which checkpoints it routes between, how prose reaches its encoder,
@@ -49,11 +49,18 @@ all of them. What changes is the pill that says which one this shot lands on.
 | **LTX 2.5** | video with sound | up to nine stills composited into one Ingredients reference sheet. Stills only — a reference clip or sound has no panel to be |
 | **Krea 2** | stills | up to three, cited as `Picture N` — the labels core's Qwen-edit encoder writes |
 | **Ideogram 4.0** | stills | none. Prose only |
+| **Qwen Image Edit** | stills | up to three, on the base weights. The first one is not a reference at all — it is the picture being changed |
 
 You are not asked to pick one and stay there. A strip can be H3 throughout, or
 a pre-stage on Krea 2 feeding start frames into shots on LTX 2.5. Every render
 files into a folder named after whatever rendered it, and carries that name on
 the file.
+
+Qwen Image Edit is the odd one out and the reason it is here: the other four
+answer a sentence, and it answers a sentence *about a picture you already have*.
+Attach the last frame of shot 1, write "the coat is red now", and what comes
+back is the same person in the same room. That is shot 9's start frame, which is
+the whole errand this pack is named after.
 
 ## Install
 
@@ -147,6 +154,22 @@ asks for it.
 | Turbo checkpoint | `diffusion_models/krea2_turbo_*.safetensors` | `models/diffusion_models` |
 | text encoder | `text_encoders/qwen3vl_4b_*.safetensors` | `models/text_encoders` |
 | VAE | `vae/qwen_image_vae.safetensors` | `models/vae` |
+
+### Stills — Qwen Image Edit
+
+[**Comfy-Org/Qwen-Image-Edit_ComfyUI**](https://huggingface.co/Comfy-Org/Qwen-Image-Edit_ComfyUI)
+
+| slot | file | folder |
+|---|---|---|
+| checkpoint | `diffusion_models/qwen_image_edit_2511_*.safetensors` (or `2509`) | `models/diffusion_models` |
+| text encoder | `text_encoders/qwen_2.5_vl_7b_*.safetensors` | `models/text_encoders` |
+| VAE | `vae/qwen_image_vae.safetensors` | `models/vae` |
+
+The turbo pill wants a [**Lightning
+LoRA**](https://huggingface.co/lightx2v/Qwen-Image-Edit-2511-Lightning) in
+`models/loras` — four or eight steps at cfg 1, matched to the edition your
+checkpoint is. There is no distilled checkpoint to swap to; the LoRA is the whole
+speed axis. The VAE is the same file Krea 2 loads.
 
 ### Stills — Ideogram 4.0
 
@@ -355,8 +378,9 @@ with `@`. Neither is required: the file is in the picker either way.
   an editable box under the prompt. It is a button rather than a queue-time step
   so you see what the model will read *before* five minutes of sampling.
 - **PreStage** generates the stills the pipeline eats — start frames, end frames,
-  references — on the same canvas, with Krea 2, Ideogram 4.0 or H3 itself. Its
-  result card writes the finished still straight into the peer node.
+  references — on the same canvas, with Krea 2, Ideogram 4.0, Qwen Image Edit or
+  H3 itself. Its result card writes the finished still straight into the peer
+  node.
 - **Faces** runs a second small generation per pass: the face is tracked, cropped
   to fill 512 px, re-drawn at a denoise scaled by how big the head already is, and
   pasted back under a feathered mask.
@@ -387,7 +411,6 @@ with `@`. Neither is required: the file is in the picker either way.
 
 No dates, and none of this is a promise - it is what is being worked on.
 
-- **Qwen Image Edit** as another stills family
 - a **3D scene** step for blocking a shot out before anything samples
 - more of the small tools that live on the rail, as they turn out to be needed
 

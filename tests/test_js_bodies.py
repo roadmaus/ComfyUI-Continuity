@@ -258,6 +258,16 @@ try {
                 loras: [{ name: "krea2_style_reference.safetensors", strength: 1 }] },
     kreaRefsNoAdapter: { arch: "krea2", prompt: "p",
                          refs: [{ handle: "ref-1", filename: "a.png" }], loras: [] },
+    // The edit family: references on the base weights, so no layout to pick and
+    // no adapter to be missing — and the first chip is the picture being
+    // changed rather than a style to carry.
+    qwenEdit: { arch: "qwenedit", prompt: "p",
+                refs: [{ handle: "ref-1", filename: "a.png" },
+                       { handle: "ref-2", filename: "b.png" }], loras: [] },
+    qwenTurbo: { arch: "qwenedit", prompt: "p",
+                 turbo: { qwenedit: { on: true, quality: "draft",
+                                      lora: "qwen_edit_lightning_4step.safetensors" } },
+                 loras: [{ name: "qwen_edit_lightning_4step.safetensors", strength: 1 }] },
   };
   for (const [name, blob] of Object.entries(variants)) {
     const node = fakeNode("MiniMaxH3PreStage", "prestage_data", JSON.stringify(blob));
@@ -2629,6 +2639,18 @@ check("...and flags itself when nothing in the stack can read one",
       (True, False))
 check("...and does not draw at all where there is no reference",
       pill.get("kreaTurboLora"), None)
+# Qwen Image Edit reads references on the base weights, so there is no layout to
+# pick and no adapter that could be missing — the pill core's detection already
+# answers is a pill nobody should be shown.
+check("...nor on the family whose base weights read references",
+      pill.get("qwenEdit"), None)
+check("the edit family's first picture is chipped as the one being changed",
+      ("editing" in rows.get("qwenEdit", ""), "style" in rows.get("qwenEdit", "")),
+      (True, True))
+check("its turbo pill draws the Lightning ladder and names the LoRA",
+      ("4" in rows.get("qwenTurbo", ""),
+       "qwen_edit_lightning_4step" in rows.get("qwenTurbo", "")),
+      (True, True))
 
 check("the image pre-stage mounts", report["nodes"].get("MiniMaxH3PreStage"),
       {"mounted": True, "body": "PreStageEditor"})
@@ -2854,7 +2876,7 @@ check("the folders tab carries a field per family, renders then stills",
       settings.get("fields"),
       ["continuity/renders/h3/H3", "continuity/renders/ltx25/LTX25",
        "continuity/stills/h3/H3", "continuity/stills/krea2/Krea2",
-       "continuity/stills/ideogram4/Ideogram4"])
+       "continuity/stills/ideogram4/Ideogram4", "continuity/stills/qwenedit/QwenEdit"])
 # The token is one object or it is nothing: it went in as eight characters and
 # came back as a tile wearing the plain word, with the stored string untouched.
 check("a typed token becomes one tile, and the stored string keeps its spelling",
@@ -2864,7 +2886,7 @@ check("no `%` reaches the screen on a folder row", settings.get("folderPercent")
 # Only the row that has left its default offers the way back — H3's, edited
 # above. A button that would do nothing is worse than no button.
 check("the reset is offered on the edited row and no other",
-      settings.get("folderResets"), ["", "none", "none", "none", "none"])
+      settings.get("folderResets"), ["", "none", "none", "none", "none", "none"])
 # And it posts the whole block, the same way an edit does: the shipped folder
 # for this family and this shelf, with every other family's left as it was.
 check("resetting posts the family's shipped folder back",
