@@ -54,6 +54,16 @@ the H3 still already did, which broadcasts the frames the stage reads and
 suppresses core's overlay. As everywhere else it is optional: without the pack
 installed nothing is emitted and the render is identical.
 
+**Fixed: the strip's reel went blank after turning the card.** In the fullscreen
+editor's simple view, switching between Pre-stage and Shot left every block on
+the timeline reel unlabelled — no shot number, no length — until the node was
+resized. The reel decides what it can print by measuring how wide its blocks
+came out, and it was asking for the *painted* width: the card is rotated on its
+vertical axis while it turns, so a measurement taken during the turn found every
+block a few pixels wide and stripped the labels off all of them. A turn changes
+nothing the reel's resize observer reports, so nothing ever asked again. It
+measures the laid-out width now, which is the question it meant to ask.
+
 **The wordmark is the door.** In the fullscreen editor, pressing **Continuity**
 in the title bar drops the editor's tool list. One row today — the preset
 library, the same one the rail's Presets button opens — and the list is where

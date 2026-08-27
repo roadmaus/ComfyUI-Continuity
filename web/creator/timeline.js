@@ -3646,7 +3646,14 @@ export class TimelineBody {
       // trimmed one would find it narrower still and never give the label back.
       for (const block of blocks) block.classList.remove("narrow", "bare");
       for (const block of blocks) {
-        const room = block.getBoundingClientRect().width;
+        // Laid-out width, not painted width. getBoundingClientRect() reports
+        // the box *after* every transform on the way up the tree, and the
+        // fullscreen card is turned on its vertical axis while it swaps steps
+        // — so a fit that ran during the turn measured every block as a few
+        // pixels wide, went bare on all of them, and stayed that way: the turn
+        // changes nothing a ResizeObserver reports, so nothing ever asked
+        // again. offsetWidth is the layout answer, which is the question.
+        const room = block.offsetWidth;
         block.classList.toggle("narrow", room < 46);
         // What the number itself needs — shot 7 fits where shot 47 does not,
         // and dropping a digit that would have fitted reads as a blank block
@@ -3661,11 +3668,14 @@ export class TimelineBody {
     // keeps two numbers well clear of each other. Sparse on purpose — its job
     // is to make the band countable, not to name every block on it.
     const step = [1, 2, 5, 10, 20, 25, 50].find((n) => per * n >= 56) ?? 100;
-    const origin = lane.getBoundingClientRect().left;
+    // Layout again, and for the same reason — nothing between the lane and a
+    // block is positioned, so the two offsets are measured from the same corner
+    // and the difference is the block's distance along the lane.
+    const origin = lane.offsetLeft;
     this.edge.replaceChildren(...blocks.flatMap((block, index) => (index % step ? [] : [
       el("span", {
         class: "mmc-tl-edge-n",
-        style: { left: `${Math.round(block.getBoundingClientRect().left - origin)}px` },
+        style: { left: `${block.offsetLeft - origin}px` },
         text: String(index + 1),
       }),
     ])));
