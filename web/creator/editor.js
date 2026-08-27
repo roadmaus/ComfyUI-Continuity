@@ -1021,10 +1021,20 @@ export class CreatorEditor {
       class: "mmc-refsheet-row",
     }, [
       el("span", { class: "mmc-refsheet-name", title: help, text: name }),
-      el("div", { class: "mmc-refsheet-opts" }, options.map(({ key, label }) => el("button", {
-        class: "mmc-refsheet-opt",
+      el("div", { class: "mmc-refsheet-opts" }, options.map(({ key, label, blocked = null }) => el("button", {
+        // An answer this file cannot give stays in the row, drawn as
+        // unavailable and carrying why. Removed, it would leave a card that
+        // says a picture has two roles when the third is the one being asked
+        // about — and the reason is usually a thing you can go and change.
+        class: `mmc-refsheet-opt${blocked ? " off" : ""}`,
         "aria-checked": String(key === current),
-        onclick: () => { pick(key); paint(); },
+        "aria-disabled": blocked ? "true" : undefined,
+        title: blocked || "",
+        onclick: () => {
+          if (blocked) return this.flash(blocked);
+          pick(key);
+          paint();
+        },
       }, [el("span", { text: label })]))),
     ]);
 
@@ -1045,6 +1055,28 @@ export class CreatorEditor {
     // it is once its anchor goes.
     const paint = () => {
       const rows = [];
+      // What this picture is *for*, first, because it is the one thing on the
+      // card that changes what every row under it means: a keyframe has no
+      // narrowing to set and no mute to give, and both rows go when the answer
+      // here is "start" or "end".
+      //
+      // The file, the handle and everything set on it survive the change —
+      // which is the whole reason this lives here rather than in the pills. A
+      // start frame you meant as the end used to be removed and picked again
+      // off the other pill, and the new attachment came back with a new handle,
+      // so the sentence that cited @img-1 was left citing a picture that had
+      // gone. See `S.rerole`.
+      rows.push(choose(t("attached as"),
+        t("Where this picture sits in the shot: the frame it opens on, the frame it closes "
+        + "on, or a reference the render is conditioned by and the prompt can cite. Moving "
+        + "it into a frame that is taken swaps the two."),
+        S.ATTACH_ROLES.map((key) => ({
+          key, label: S.roleLabel(key),
+          blocked: S.reroleBlocked(this.state, asset, key, this.piece),
+        })),
+        S.roleOf(asset),
+        (key) => this.setRole(asset, key)));
+
       // A plate is a picture made of pictures, so what "reads as" is asked of
       // is each panel rather than the sheet. The sheet itself has no chip: it
       // is not a reference to anything, it is where the references are.
@@ -1199,6 +1231,19 @@ export class CreatorEditor {
       filename: asset.path,
     });
     this.commit();
+    this.probeKeyframe();
+  }
+
+  /** Attach a picture already on this card as something else — the end frame
+   *  rather than the start, a reference rather than either. The card's own row;
+   *  see `S.rerole` for what survives it and why an occupied slot is a swap. */
+  setRole(asset, role) {
+    const blocked = S.reroleBlocked(this.state, asset, role, this.piece);
+    if (blocked) return this.flash(blocked);
+    S.rerole(this.state, asset, role);
+    this.commit();
+    // A frame is a canvas donor and a reference is not, so the readout has a
+    // new picture to measure — or one fewer.
     this.probeKeyframe();
   }
 
@@ -1944,8 +1989,26 @@ export class CreatorEditor {
           class: "mmc-pl-cut on", title: t("Cut out of its background"),
         }, [icon("scissors", 12)]));
       }
+      // Which end of the shot this is — and the press that makes it the other
+      // one, or a reference instead. The word was a caption for as long as the
+      // role was decided by the pill you picked the file with; it is the same
+      // word, and it opens the same card the handle does, because "this should
+      // have been the end frame" is a fact about @img-1 like every other fact
+      // the card holds. See `openReferenceSheet`.
       if (asset.role !== "reference") {
-        parts.push(el("span", { class: "mmc-asset-role", text: asset.role === "first_frame" ? t("start") : t("end") }));
+        parts.push(el("button", {
+          class: "mmc-asset-role mmc-asset-role-pick",
+          text: S.roleLabel(asset.role),
+          // Two whole sentences rather than one with the verb and the other end
+          // dropped into it: a slot holding a bare "opens" is a word a
+          // translation cannot conjugate or move.
+          title: asset.role === "first_frame"
+            ? t("The shot opens on this picture. Click to make it the end frame instead, "
+              + "or an ordinary reference.")
+            : t("The shot closes on this picture. Click to make it the start frame instead, "
+              + "or an ordinary reference."),
+          onclick: (event) => this.openReferenceSheet(event.currentTarget, asset),
+        }));
       }
       // What somebody set, and nothing else — read, not pressed. A file left
       // ordinary says nothing at all, and the row stays as short as the files

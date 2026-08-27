@@ -2511,6 +2511,27 @@ try {
   // ...and the chip now says so, where before it said nothing until you opened
   // the row of buttons that were hidden for saying nothing.
   out.refsheet.chipSays = all(editor.root, "mmc-asset-said").map((n) => n.text).join(",");
+
+  // ---- and what the picture is *for*, which is the row above all of that.
+  //
+  // A narrowed reference is not a whole frame, so the card says so rather than
+  // letting the compiler refuse it later: the option stays in the row, drawn as
+  // unavailable and carrying the reason.
+  const opt = (label) => all(all(document.body, "mmc-refsheet")[0] ?? { children: [] },
+                             "mmc-refsheet-opt").find((o) => o.text.trim() === label);
+  const end = opt("end");
+  out.refsheet.blockedEnd = String(end?.attrs?.["aria-disabled"] ?? "") === "true";
+  end?.listeners?.click?.[0]?.();
+  out.refsheet.stillReference = asset.role;
+  // Whole again, and now it can be the frame the shot closes on — under the
+  // handle it arrived with, which is the whole point of moving the role rather
+  // than detaching and picking the file again.
+  opt("full")?.listeners?.click?.[0]?.();
+  opt("end")?.listeners?.click?.[0]?.();
+  out.refsheet.promoted = `${asset.handle}:${asset.role}:${asset.filename}`;
+  // The chip wears the word, and the word is the door back.
+  const word = all(editor.root, "mmc-asset-role-pick")[0];
+  out.refsheet.chipRole = word?.text ?? "";
 } catch (error) {
   out.errors.push(`refsheet: ${error.stack}`);
 }
@@ -3501,11 +3522,20 @@ check("...and its picture with it", summon.get("andItsPicture"), "anna/face.png"
 sheet = report.get("refsheet") or {}
 check("a reference's handle is a button", sheet.get("hasDoor"), True)
 check("...that opens the card", sheet.get("opened"), True)
-check("...offering every narrowing, defaults included",
-      sheet.get("offers"), "full,person,object,scene,style,match,max")
+check("...leading with what the picture is for, then every narrowing, defaults included",
+      sheet.get("offers"), "start,end,reference,full,person,object,scene,style,match,max")
 check("...and picking one lands on the asset", sheet.get("takes"), "style")
 check("...where the chip then says so without being opened again",
       sheet.get("chipSays"), "style · max")
+# The role is a property of the attachment, not of the pill the file was picked
+# with — so it moves, and the handle the prompt cites moves with it.
+check("a reference narrowed to a part of itself cannot be a whole frame",
+      sheet.get("blockedEnd"), True)
+check("...and pressing it anyway changes nothing", sheet.get("stillReference"), "reference")
+check("whole again, it becomes the frame the shot closes on, handle and all",
+      sheet.get("promoted"), "img-1:last_frame:doors/red.png")
+check("...and the chip wears the word, which is the door back",
+      sheet.get("chipRole"), "end")
 
 # ---- the / menu -------------------------------------------------------------
 slash = report.get("slash") or {}

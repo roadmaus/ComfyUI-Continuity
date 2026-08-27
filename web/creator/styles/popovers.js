@@ -229,6 +229,12 @@ export const css = `
   background: var(--mmc-surface-3); border-color: var(--mmc-blue); color: var(--mmc-text);
 }
 .mmc-refsheet-opt:focus-visible { outline: none; border-color: var(--mmc-blue); }
+/* An answer this file cannot give. Drawn rather than dropped — a row missing
+   its third option says the question has two answers — and still pressable,
+   because the press is what says why: the reason goes to the body's notice,
+   where a disabled button's tooltip would never have been read. */
+.mmc-refsheet-opt.off { background: none; color: var(--mmc-faint); cursor: help; }
+.mmc-refsheet-opt.off:hover { background: none; color: var(--mmc-off); }
 /* The three that open something else, ruled off from the answers above them:
    everything over the line changes this reference, everything under it leaves
    the card. */

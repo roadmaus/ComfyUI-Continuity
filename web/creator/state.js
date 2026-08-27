@@ -4905,6 +4905,109 @@ export function blockedReason(state, action) {
   return null;
 }
 
+// ---- what an attached picture is *for*, after the fact -----------------------
+//
+// A file used to be told what it was at the moment it arrived: picked on the
+// Start frame pill it was the start frame, picked with Add image it was a
+// reference, and that was the end of it. Changing your mind meant taking it
+// off and finding it again on the other pill — which spends a handle, so a
+// prompt that cited @img-1 comes back citing nothing.
+//
+// The role is a property of the attachment, not of the picking, so it moves.
+// `rerole` is the whole of it; `reroleBlocked` is why it sometimes cannot.
+
+/** The role an asset carries. Written on every attachment this pack makes; the
+ *  default is what an older blob's untyped attachment always meant. */
+export const roleOf = (asset) => asset?.role ?? "reference";
+
+export const ATTACH_ROLES = ["first_frame", "last_frame", "reference"];
+
+/** What this picture is doing on the card, in the word the chip wears. */
+export const roleLabel = (role) =>
+  (role === "first_frame" ? t("start") : role === "last_frame" ? t("end") : t("reference"));
+
+/** The assets as they would stand with `asset` attached as `role` — clones, for
+ *  asking the caps a question without answering it. See `rerole` for why an
+ *  occupied slot is a swap. */
+function reroled(state, asset, role) {
+  const from = roleOf(asset);
+  return state.assets.map((a) => {
+    if (a === asset) return { ...a, role };
+    return role !== "reference" && roleOf(a) === role ? { ...a, role: from } : a;
+  });
+}
+
+/**
+ * Why @handle cannot be attached as `role` instead, or null.
+ *
+ * Four answers, in the order they are worth hearing: a file that could never be
+ * a frame, a picture narrowed or cut and so not a whole frame, a slot the
+ * segment's continuation already fills, and a family with no room for another
+ * reference. The middle two are fixable in the rows right above the one this
+ * refuses in, which is why they are refusals and not silent repairs — a frame
+ * is bound whole (`compile._parse_assets` refuses the alternative), and a
+ * picture quietly un-cut on promotion is a file changed behind somebody's back.
+ */
+export function reroleBlocked(state, asset, role, piece = null) {
+  if (roleOf(asset) === role) return null;
+  if (role !== "reference") {
+    if (asset.kind !== "image") {
+      return t("A shot opens and closes on a still. @{handle} is a {kind}, so it can only "
+             + "be a reference.", { handle: asset.handle, kind: t(asset.kind) });
+    }
+    if (isPlate(asset) && asset.panels.length > 1) {
+      return t("A sheet is several pictures in one file — there is no single frame in it "
+             + "for the shot to open or close on.");
+    }
+    // A lone panel is how a cut-out picture is carried: the file named on the
+    // asset is the cut version, and the panel under it is the photograph it was
+    // lifted out of. Said as the cut, because that is what somebody set.
+    if (isPlate(asset)) {
+      return t("This picture is cut out of its background. A frame is used whole — keep the "
+             + "background, and it can be one.");
+    }
+    if (takes(asset) !== "full") {
+      return t("A frame is used whole: the shot opens or closes on the picture itself, so "
+             + "there is nothing for it to be read as a part of. Set it back to full first.");
+    }
+    const why = blockedReason(state, role);
+    if (why) return why;
+  }
+  // Applied and then read back, rather than counted by hand: a promotion into
+  // an occupied slot hands that picture the role this one is leaving, and what
+  // the caps have to answer is the whole trade. Only a refusal this change
+  // *causes* is one — a card already over its family's cap is over it either
+  // way, and saying so here would block every move out of the state that fixes
+  // it.
+  const after = overflow({ ...state, assets: reroled(state, asset, role) }, piece);
+  return after && after !== overflow(state, piece) ? after : null;
+}
+
+/**
+ * Attach @handle as `role` instead, in place — so the handle, the file and
+ * everything set on it survive, and a prompt citing it still fits.
+ *
+ * A slot that was taken is swapped, never emptied: the picture standing there
+ * takes the role this one is leaving, because "make this the end frame" is not
+ * a request to lose the end frame you had, and the two-frame case is the one
+ * this gesture exists for — you attached them the wrong way round.
+ *
+ * Muting comes off on the way to a frame. A mute is "attached, and out of this
+ * run", which a keyframe cannot be — `compile._parse_assets` refuses one — and
+ * making a picture the opening of the shot is not an ambiguous way to say you
+ * want it in.
+ */
+export function rerole(state, asset, role) {
+  const from = roleOf(asset);
+  if (from === role) return;
+  if (role !== "reference") {
+    const held = state.assets.find((a) => a !== asset && roleOf(a) === role);
+    if (held) held.role = from;
+    delete asset.enabled;
+  }
+  asset.role = role;
+}
+
 /**
  * Why the seam in front of a clip cannot be made live, or null.
  *
