@@ -20,6 +20,7 @@ import { css as refine } from "./styles/refine.js";
 import { css as prestage } from "./styles/prestage.js";
 import { css as presets } from "./styles/presets.js";
 import { css as fullscreen } from "./styles/fullscreen.js";
+import { css as control } from "./styles/control.js";
 
 const CSS = [
   base,
@@ -40,6 +41,9 @@ const CSS = [
   // After the picker's: the library reuses its modal, tabs and shelves and
   // overrides the grid inside them.
   presets,
+  // After the picker's too: the bench rides on the picker's overlay and undoes
+  // the three things a centred modal wants that a whole room does not.
+  control,
   // Last: the shell hosts every body in the pack and lifts the caps the node
   // face put on them, so its rules have to win over the sections that set them.
   fullscreen,

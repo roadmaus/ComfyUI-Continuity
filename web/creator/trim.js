@@ -70,6 +70,32 @@ export function openTrim(options) {
   return new Promise((resolve) => new Trim(options, resolve).mount());
 }
 
+/**
+ * The same editor's *bar*, mounted where the caller wants it.
+ *
+ * The modal above is the right shape for choosing a segment and going away
+ * again, which is what the picker and an asset chip are doing. It is the wrong
+ * shape for a bench you stand at: there the cut is one of several things being
+ * dialled at once, and a control you have to open, use and dismiss to change a
+ * threshold's worth of decision is a control you stop touching.
+ *
+ * So the bar comes out of the modal rather than being drawn a second time —
+ * the same handles, the same rigid-window drag, the same arrow keys, the same
+ * waveform behind them, the same looping transport. What the caller loses is
+ * Cancel and Use, because inline there is nothing to cancel *to*: every change
+ * is reported as it is made.
+ *
+ * @param {object} options  everything `openTrim` takes, plus:
+ *   `onChange({trim, track})` after any change, `onFrame(media)` in place of
+ *   the modal's own picture, and `picture: false` to draw no picture at all —
+ *   for a host that is already showing the frame itself.
+ * @returns {{root: Element, media: Element, at(): number, destroy(): void}}
+ */
+export function mountTrim(options) {
+  const bar = new Trim({ ...options, inline: true }, null);
+  return bar.mount();
+}
+
 const round = (value) => Math.round(value * 1000) / 1000;
 
 class Trim {
@@ -88,11 +114,15 @@ class Trim {
     // by `media.load_all`, so this is the one place where that cut can be seen
     // before it happens — and where the segment can be dialled to fit it.
     this.card = Number(options.cardSeconds) > 0 ? Number(options.cardSeconds) : null;
+    // Inline, the bar is the whole component: no overlay, no foot, and every
+    // change reported as it happens rather than held until Use.
+    this.inline = !!options.inline;
   }
 
   mount() {
-    const isVideo = this.options.kind === "video";
-    const source = viewUrl(this.options.path);
+    const { options } = this;
+    const isVideo = options.kind === "video";
+    const source = viewUrl(options.path);
     // The decoder, never the picture: the element stays out of the document and
     // every frame is copied into `stage` instead. A <video> in the page is
     // composited by the browser rather than painted into it, and on Linux that
@@ -105,7 +135,10 @@ class Trim {
     this.media.preload = isVideo ? "auto" : "metadata";
     this.media.playsInline = true;
     this.media.src = source;
-    this.stage = isVideo ? el("canvas", { class: "mmc-trim-media" }) : null;
+    // A host that already draws the frame itself asks for no picture and takes
+    // the decoded frames through `onFrame` instead — one decoder, one drawing.
+    this.stage = isVideo && options.picture !== false
+      ? el("canvas", { class: "mmc-trim-media" }) : null;
     if (isVideo) {
       this.media.addEventListener("loadeddata", () => this.drawFrame());
       this.media.addEventListener("seeked", () => this.drawFrame());
@@ -146,7 +179,12 @@ class Trim {
     this.readout = el("div", { class: "mmc-trim-read" });
     this.fullButton = el("button", {
       class: "mmc-ghost", text: t("Whole clip"), title: t("Reset to the whole file"),
-      onclick: () => { this.start = 0; this.end = this.duration; this.paint(); },
+      onclick: () => {
+        this.start = 0;
+        this.end = this.duration;
+        this.seek(0, { pause: true });
+        this.changed();
+      },
     });
 
     // The other half of the pill's "match @vid-1": there, the card grows to the
@@ -157,6 +195,23 @@ class Trim {
       title: t("Cut the segment to the length of the shot referencing it, from the in point."),
       onclick: () => this.fitCard(),
     }) : null;
+
+    if (this.inline) {
+      this.root = el("div", { class: "mmc-trim-inline" }, [
+        el("div", { class: "mmc-trim-bar" }, [this.playButton, this.trackEl]),
+        this.readout,
+        el("div", { class: "mmc-trim-inline-foot" }, [this.fullButton, this.fitButton]),
+      ]);
+      this.paint();
+      this.loadWave();
+      this.loadHeader();
+      return {
+        root: this.root,
+        media: this.media,
+        at: () => this.media.currentTime || 0,
+        destroy: () => this.close(null),
+      };
+    }
 
     const foot = [this.fullButton, this.fitButton].filter(Boolean);
     if (this.options.showTrack) {
@@ -218,7 +273,10 @@ class Trim {
     // proprietary codecs is the common case. A segment dialled in by time alone
     // beats a modal that never comes up.
     if (!this.duration && duration) this.setDuration(duration);
-    this.paint();
+    // `changed`, not `paint`: adopting a length fits the range inside it, so a
+    // segment handed in that overruns this clip is a segment the host has to be
+    // told about.
+    this.changed();
   }
 
   /** Decode the soundtrack in the background and paint it behind the range.
@@ -228,7 +286,13 @@ class Trim {
     this.observer = new ResizeObserver(() => this.paintWave());
     this.observer.observe(this.trackEl);
     this.peaks = await peaks(this.options.path);
-    if (this.overlay.isConnected) this.paintWave();
+    if (this.alive()) this.paintWave();
+  }
+
+  /** Whether what was mounted is still in the document — the overlay for the
+   *  modal, the bar itself inline. */
+  alive() {
+    return (this.root ?? this.overlay)?.isConnected === true;
   }
 
   paintWave() {
@@ -236,14 +300,15 @@ class Trim {
   }
 
   drawFrame() {
-    drawFrame(this.stage, this.media);
+    if (this.stage) drawFrame(this.stage, this.media);
+    this.options.onFrame?.(this.media);
   }
 
   /** Playback fires no `seeked`, so the stage runs off the display's clock for
    *  as long as the clip is running. */
   follow() {
     this.frameTimer = null;
-    if (this.media.paused || !this.overlay.isConnected) return;
+    if (this.media.paused || !this.alive()) return;
     this.drawFrame();
     this.frameTimer = requestAnimationFrame(() => this.follow());
   }
@@ -253,7 +318,7 @@ class Trim {
     // playhead and the seeks are actually addressing.
     this.setDuration(Number.isFinite(this.media.duration) ? this.media.duration : 0);
     this.status = null;
-    this.paint();
+    this.changed();
   }
 
   /** Adopt a clip length and fit the current range inside it. */
@@ -358,7 +423,7 @@ class Trim {
     this.start = Math.min(Math.max(0, start), Math.max(0, this.duration - length));
     this.end = this.start + length;
     this.seek(this.start, { pause: true });
-    this.paint();
+    this.changed();
   }
 
   setEdge(edge, value) {
@@ -367,7 +432,7 @@ class Trim {
     else this.end = Math.max(Math.min(this.duration, this.snapCard(value)), this.start + MIN_SEGMENT);
     // Follow the handle being dragged, so the frame under it is visible.
     this.seek(edge === "start" ? this.start : Math.max(this.start, this.end - 1 / 24), { pause: true });
-    this.paint();
+    this.changed();
   }
 
   /** An out point within a couple of frames of the card's length lands on it
@@ -388,7 +453,7 @@ class Trim {
     this.start = Math.min(this.start, this.duration - length);
     this.end = this.start + length;
     this.seek(this.start, { pause: true });
-    this.paint();
+    this.changed();
   }
 
   // ---- playback ------------------------------------------------------------
@@ -485,16 +550,27 @@ class Trim {
     return !this.duration || (this.start <= 0.001 && this.end >= this.duration - 0.001);
   }
 
-  commit() {
-    // A range that covers everything is stored as no range at all, so a clip the
-    // user opened and left alone stays "full" in creator_data.
+  /** What the bar currently says. A range that covers everything is *no* range,
+   *  so a clip somebody opened and left alone stays "full" in creator_data. */
+  value() {
     const result = { trim: this.isWhole() ? null : { start: round(this.start), end: round(this.end) } };
     if (this.options.showTrack) {
       // A clip with no soundtrack has nothing to offer either audio track, so
       // the answer is "picture" whatever the switch was showing.
       result.track = this.hasAudio === false ? "picture" : (this.track || "picture+sound");
     }
-    this.close(result);
+    return result;
+  }
+
+  /** Repaint, and tell an inline host. The modal has nobody to tell — its
+   *  answer is given once, on Use. */
+  changed() {
+    this.paint();
+    if (this.inline) this.options.onChange?.(this.value());
+  }
+
+  commit() {
+    this.close(this.value());
   }
 
   close(result) {
@@ -502,7 +578,8 @@ class Trim {
     if (this.frameTimer) cancelAnimationFrame(this.frameTimer);
     this.media.pause();
     this.media.removeAttribute("src");
-    this.unmount();
-    this.resolve(result);
+    this.root?.remove();
+    this.unmount?.();
+    this.resolve?.(result);
   }
 }
