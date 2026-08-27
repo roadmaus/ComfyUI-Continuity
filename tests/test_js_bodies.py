@@ -2497,11 +2497,11 @@ try {
 
 // ---- the wordmark's destinations --------------------------------------------
 //
-// The wordmark drops the tool list, and its one row today is the preset
-// library. Checked as the whole gesture — the mark pressed, the row pressed,
-// the library standing open — from a strip, because the row has to find its
-// target on whichever body is in front, and the strip's answers under a
-// different name than the shot's.
+// The wordmark turns the room over to the dashboard, and its one card today is
+// the preset library. Checked as the whole gesture — the mark pressed, the card
+// pressed, the library standing open — from a strip, because the card has to
+// find its target on whichever body is in front, and the strip's answers under
+// a different name than the shot's.
 try {
   const fs = await import("./web/creator/fullscreen.js");
   const node = fakeNode("MiniMaxH3Timeline", "timeline_data", A_STRIP);
@@ -2517,19 +2517,31 @@ try {
   const rowWith = (root, cls, text) =>
     root?.querySelectorAll("." + cls).find((h) => (h.text ?? "").includes(text));
 
-  press(rowWith(shell, "mmc-fs-mark", "Continuity"));
-  const menu = document.body.children.at(-1);
+  const mark = rowWith(shell, "mmc-fs-mark", "Continuity");
+  press(mark);
+  const dash = shell.querySelectorAll(".mmc-dash")[0];
   const settle = () => new Promise((done) => setTimeout(done, 0));
-  press(rowWith(menu, "mmc-nav-item", "Presets"));
+  const opened = {
+    // The dashboard is the shell's own layer, inside the room rather than a
+    // popover portalled to the body — that is what keeps the bar, and the mark
+    // that closes it again, on screen.
+    dashOpened: !!dash,
+    markSaysOpen: mark?.getAttribute?.("aria-expanded") === "true",
+    // The graph's pieces are deliberately not cards — the grid is tools only.
+    noPieceHistory: !rowWith(dash, "mmc-dash-name", "Untitled")
+      && !rowWith(dash, "mmc-dash-name", node.title),
+    // ...and the empty place the next tool lands in is not pressable.
+    holdsAPlace: !!rowWith(dash, "mmc-dash-name", "More to come"),
+  };
+  press(rowWith(dash, "mmc-dash-card", "Presets"));
   await settle(); await settle();
   const top = document.body.children.at(-1);
   out.navigate = {
-    menuOpened: String(menu?.className ?? "").includes("mmc-nav"),
-    // The graph's pieces are deliberately not rows — the list is tools only.
-    noPieceHistory: !rowWith(menu, "mmc-nav-item", "Untitled")
-      && !rowWith(menu, "mmc-nav-item", node.title),
+    ...opened,
     opensTheLibrary: String(top?.className ?? "").includes("mmc-overlay"),
-    menuGone: !document.body.children.includes(menu),
+    // Going somewhere puts the room back — the dashboard is not left standing
+    // under whatever it opened.
+    dashGone: !shell.querySelectorAll(".mmc-dash").length,
   };
   fs.close();
 } catch (error) {
@@ -2741,14 +2753,17 @@ check("closing gives the picture back to the canvas", full.get("undocked"), True
 check("...and the body back to the node", full.get("cameBack"), True)
 check("...and takes the shell down with it", full.get("closed"), True)
 
-# The wordmark's menu: the tool list opens, holds no piece history, and its
-# Presets row opens the same library the rail's button does — found through
-# the body in front, which on a strip answers under a different name.
+# The wordmark's dashboard: the tools open as cards over the room, hold no
+# piece history, keep a marked-out place for the tools still to come, and the
+# Presets card opens the same library the rail's button does — found through the
+# body in front, which on a strip answers under a different name.
 nav = report.get("navigate", {})
-check("the wordmark drops the tool list", nav.get("menuOpened"), True)
+check("the wordmark turns the room over to the dashboard", nav.get("dashOpened"), True)
+check("...and the mark says which side you are on", nav.get("markSaysOpen"), True)
 check("...with no piece history in it", nav.get("noPieceHistory"), True)
+check("...and a place kept for the next tool", nav.get("holdsAPlace"), True)
 check("Presets opens the library", nav.get("opensTheLibrary"), True)
-check("...and the menu goes with the press", nav.get("menuGone"), True)
+check("...and the room comes back with the press", nav.get("dashGone"), True)
 
 # The settings page owns four questions now — how good the file is, where it
 # goes, what the node faces offer and what a render does on the way there, and

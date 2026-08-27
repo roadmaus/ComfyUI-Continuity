@@ -55,7 +55,7 @@
 import { app } from "../../../scripts/app.js";
 import { api } from "../../../scripts/api.js";
 import { el, icon, mark } from "./dom.js";
-import { openNavMenu } from "./navigate.js";
+import { buildDashboard } from "./navigate.js";
 import { openPresetLibrary } from "./presetlib.js";
 import { elapsed } from "./stage.js";
 import { t } from "./i18n.js";
@@ -348,6 +348,12 @@ class Fullscreen {
     // view it is display:contents and this row does not exist at all.
     this.desk = el("div", { class: "mmc-fs-desk" }, [this.pre, this.col]);
     this.body = el("div", { class: "mmc-fs-body" }, [this.desk, this.reel]);
+    // Everything under the bar, as one box, so the dashboard has something to
+    // cover. It covers rather than replaces: the desk stays mounted and laid
+    // out behind it, which is why the prompt you were half-way through is still
+    // there when you come back, and why a render that finishes while the
+    // dashboard is up still has a plate with a width to measure itself against.
+    this.room = el("div", { class: "mmc-fs-room" }, [this.body, this.strip]);
 
     this.root = el("div", { class: "mmc-fs" }, [
       el("div", { class: "mmc-fs-bar" }, [
@@ -355,16 +361,16 @@ class Fullscreen {
         // in the window that says whose room this is, and `timeline` is a control
         // icon that means "the strip" everywhere else it is drawn.
         //
-        // And it is the door. The editor's tools are a list, and the wordmark
-        // drops it rather than a rail holding it open all day; the caret is
-        // what says the name is pressable at all. No keystroke raises it —
-        // there was a ⌘K once, and every pack on the canvas wants that key.
-        el("button", {
+        // And it is the door. Pressing it turns the room over to the dashboard
+        // — the editor's tools, as cards — and pressing it again turns it back;
+        // the caret is what says the name is pressable at all, and which way it
+        // points is which side you are on. No keystroke raises it: there was a
+        // ⌘K once, and every pack on the canvas wants that key.
+        this.mark = el("button", {
           class: "mmc-fs-mark",
           title: t("Tools"),
-          onclick: (event) => openNavMenu({
-            anchor: event.currentTarget, groups: this.destinations(),
-          }),
+          "aria-expanded": false,
+          onclick: () => this.toggleDash(),
         }, [
           el("span", { class: "mmc-fs-logo" }, [mark(22)]),
           // The pack, and it is a product name rather than copy, so it is not
@@ -399,8 +405,7 @@ class Fullscreen {
           onclick: () => close(),
         }, [icon("expand", 15), el("span", { text: t("Back to the graph") })]),
       ]),
-      this.body,
-      this.strip,
+      this.room,
     ]);
 
     // Escape belongs to whatever is on top, and the shell is the bottom of that
@@ -421,6 +426,11 @@ class Fullscreen {
     this.onKey = (event) => {
       if (event.key !== "Escape") return;
       if (this.reviewing) { this.endReview(); return; }
+      // The dashboard is the shell's own layer, like a review — not a popover
+      // and not a modal, so it has nothing registered in capture and takes its
+      // Escape here. Topmost first either way: the press that puts the room
+      // back is not the press that leaves the editor.
+      if (this.dash) { this.closeDash(); return; }
       close();
     };
     document.addEventListener("keydown", this.onKey);
@@ -709,6 +719,10 @@ class Fullscreen {
    */
   setView(view) {
     if (!VIEWS.includes(view) || view === this.view) return;
+    // The switch is in the bar and stays pressable while the dashboard is up,
+    // so it puts the room back: a control whose whole result is hidden behind
+    // the surface you are looking at is a control that appears to do nothing.
+    this.closeDash();
     this.view = view;
     try { localStorage.setItem(VIEW_KEY, view); } catch { /* private mode; the session still switches */ }
     this.mount();
@@ -718,16 +732,58 @@ class Fullscreen {
   // ---- where else the editor can go ------------------------------------------
 
   /**
+   * The mark, pressed. Up becomes down and down becomes up — one control for
+   * both directions, because the dashboard covers the room the mark sits over
+   * and there is no outside left to click.
+   */
+  toggleDash() {
+    if (this.dash) this.closeDash(); else this.openDash();
+  }
+
+  /**
+   * Turn the room over to the tools.
+   *
+   * Built fresh every time for the same reason the list was: a card's
+   * destination is resolved against whichever body is on the card *now*, and
+   * the step can have changed since the last time this was up.
+   */
+  openDash() {
+    if (this.dash) return;
+    this.dash = buildDashboard({
+      groups: this.destinations(),
+      onLeave: () => this.closeDash(),
+    });
+    this.room.appendChild(this.dash);
+    this.mark.setAttribute("aria-expanded", "true");
+    // Focus goes to the first card, so the surface is usable from the keyboard
+    // the moment it is up rather than after tabbing back through the bar.
+    this.dash.querySelector(".mmc-dash-card:not(.soon)")?.focus();
+  }
+
+  /** And back to the piece. */
+  closeDash() {
+    if (!this.dash) return;
+    // Only when the keyboard was on the surface being taken away — otherwise
+    // this is the view switch closing it, and moving focus onto the mark from
+    // a button somebody just pressed elsewhere in the bar is focus theft.
+    const held = this.dash.contains?.(document.activeElement);
+    this.dash.remove();
+    this.dash = null;
+    this.mark.setAttribute("aria-expanded", "false");
+    if (held) this.mark.focus();
+  }
+
+  /**
    * Everywhere the wordmark can take you — the tools, and nothing else.
-   * One row today: the preset library, reached through the same
+   * One card today: the preset library, reached through the same
    * `presetTarget` the rail's Presets button reads off the body in front —
    * the pre-stage's on the pre step, the piece's on the shot. The repaint
    * afterwards is the rail button's, for the rail button's reason: an applied
    * preset redraws the face it landed on.
    *
    * Built fresh on every open, because the target is the card's current body.
-   * The benches join as rows when there are benches; a tool becomes reachable
-   * by becoming a row here, not by growing a button somewhere.
+   * The benches join as cards when there are benches; a tool becomes reachable
+   * by becoming a card here, not by growing a button somewhere.
    */
   destinations() {
     const body = this.front?.mmcBody;

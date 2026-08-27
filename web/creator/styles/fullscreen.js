@@ -413,6 +413,14 @@ export const css = `
  * it, which is the thing all of this is here to stop. It is empty for exactly
  * one render, and while it is empty it is a hairline and a little air, not a box.
  */
+/* Everything under the bar, and the box the dashboard covers. It is only a
+   position: the two regions inside it lay out exactly as they did when they
+   were the shell's own children — see fullscreen.js on why the dashboard
+   covers the room rather than replacing it. */
+.mmc-fs-room {
+  position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column;
+}
+
 .mmc-fs-strip {
   flex: none; height: var(--mmc-fs-lip, 104px); box-sizing: border-box;
   display: flex; align-items: center; gap: 10px;
@@ -1285,20 +1293,135 @@ export const css = `
 .mmc-fs .mmc-panel-corner { display: none; }
 .mmc-fs .mmc-panel .mmc-prompt-fold .mmc-prompt { padding-right: 0; }
 
-/* --- the wordmark's menu: the tool list ----------------------------------- */
-.mmc-nav { min-width: 254px; padding: 7px; }
-.mmc-nav-item {
-  display: flex; width: 100%; align-items: center; gap: 10px; padding: 8px 10px;
-  background: none; border: 0; border-radius: 10px; cursor: pointer;
-  color: var(--mmc-text); font-family: inherit; text-align: left;
+/* --- the wordmark's dashboard: the tools, as cards ------------------------ */
+/*
+ * A layer over the room, not a popover beside the mark. It is opaque and it is
+ * the full width under the bar: the tools are a place you go, and a place you
+ * go has to look like somewhere rather than like a panel hung over the work.
+ *
+ * Inside .mmc-fs-room rather than over the whole shell so the bar survives —
+ * the mark you pressed is still there, still under the pointer, and pressing it
+ * again is the way back. A layer that covered its own control would have needed
+ * a second one drawn on top of itself to close it.
+ */
+.mmc-dash {
+  position: absolute; inset: 0; z-index: 3;
+  background: var(--mmc-bg);
+  overflow: auto; overscroll-behavior: contain;
 }
-.mmc-nav-item:hover { background: var(--mmc-surface); }
-.mmc-nav-item svg { stroke: var(--mmc-dim); flex: none; }
-.mmc-nav-word { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
-.mmc-nav-label {
-  font-size: calc(13px * var(--mmc-type));
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+/* The measure. Not the window: a grid of 260-pixel cards spread across a
+   32-inch screen is eleven columns of nothing-much, and the eye has no left
+   edge to come back to. Left-aligned inside the measure rather than centred,
+   because the cards are a list that grows down and to the right and the first
+   one has to stay where it was when there were three. */
+.mmc-dash-sheet {
+  max-width: 900px; margin: 0 auto; padding: 34px 28px 40px;
+  display: flex; flex-direction: column;
 }
-.mmc-nav-sub { font-size: calc(11.5px * var(--mmc-type)); color: var(--mmc-dim); }
+/* What pressing any card does, said once, so no card has to say it. */
+.mmc-dash-lede {
+  margin: 0 0 26px; max-width: 46ch;
+  font-size: calc(13.5px * var(--mmc-type)); line-height: 1.5; color: var(--mmc-dim);
+}
+/* A section's name, and the rule that says how far the section reaches. The
+   same eyebrow the desk's columns wear, so the two surfaces of this editor are
+   labelled in one voice. */
+.mmc-dash-head {
+  display: flex; align-items: center; gap: 14px; margin-bottom: 14px;
+  font-size: calc(11px * var(--mmc-type)); font-weight: 600;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--mmc-off);
+}
+.mmc-dash-rule { flex: 1; height: 1px; background: var(--mmc-line); }
+/* Auto-fill rather than auto-fit: with one tool on the grid, auto-fit would
+   stretch that card the width of the sheet and the surface would read as a
+   banner. The track is the card's size whether or not anything is in it, which
+   is what keeps the first card the same size on the day the eighth arrives. */
+.mmc-dash-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(236px, 1fr));
+  gap: 14px; margin-bottom: 30px;
+}
+.mmc-dash-grid:last-child { margin-bottom: 0; }
+
+/* One tool. The whole card is the press. */
+.mmc-dash-card {
+  display: flex; flex-direction: column; overflow: hidden; text-align: left;
+  border-radius: 20px; background: var(--mmc-surface); border: 1px solid var(--mmc-line);
+  color: var(--mmc-text); font-family: inherit; padding: 0; cursor: pointer;
+  transition: background 140ms ease, border-color 140ms ease, transform 140ms ease;
+}
+.mmc-dash-card:hover { background: var(--mmc-surface-2); border-color: var(--mmc-line-2); transform: translateY(-2px); }
+.mmc-dash-card:active { transform: translateY(0); }
+.mmc-dash-card:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 2px; }
+
+/* The plate, and the one piece of decoration on this surface.
+ *
+ * It carries the tool's own glyph — the fifteen-pixel drawing off the rail — at
+ * poster size, anchored to the plate's lower-left and cropped by its bottom
+ * edge. Cropped deliberately: a glyph centred in a box is an icon with padding,
+ * and the grid was then eight boxes of the same shape distinguished by a small
+ * shape in the middle of each. Run off the edge it is a picture the card is
+ * showing, and across a row of them the plates are what the eye tells apart
+ * before it reads a single name.
+ */
+.mmc-dash-plate {
+  position: relative; flex: none; height: 96px; overflow: hidden;
+  background: var(--mmc-tint); border-bottom: 1px solid var(--mmc-line);
+}
+.mmc-dash-glyph {
+  position: absolute; left: -4px; bottom: -30px; display: flex;
+  transition: transform 220ms cubic-bezier(.2, .7, .3, 1);
+}
+/* Hairline weight, because the stroke scales with the drawing: the 1.6 the rail
+   sets would come out as a seven-pixel bar at this size. */
+.mmc-dash-glyph svg {
+  stroke: var(--mmc-line-3); fill: none; stroke-width: .7;
+  transition: stroke 140ms ease;
+}
+.mmc-dash-card:hover .mmc-dash-glyph { transform: translateY(-6px); }
+.mmc-dash-card:hover .mmc-dash-glyph svg { stroke: var(--mmc-accent); }
+
+.mmc-dash-word { display: flex; flex-direction: column; gap: 4px; padding: 14px 16px 16px; }
+.mmc-dash-name { font-size: calc(15px * var(--mmc-type)); font-weight: 600; }
+.mmc-dash-sub {
+  font-size: calc(12px * var(--mmc-type)); line-height: 1.45; color: var(--mmc-dim);
+}
+
+/* The place the next tool lands in. Outlined rather than filled — there is no
+   surface here yet, only a space kept for one — and it is not pressable, so it
+   never takes the pointer or the tab. */
+.mmc-dash-card.soon {
+  background: none; border-style: dashed; border-color: var(--mmc-line-2);
+  cursor: default; pointer-events: none;
+}
+.mmc-dash-card.soon .mmc-dash-plate { background: none; border-bottom-color: transparent; }
+.mmc-dash-card.soon .mmc-dash-name { color: var(--mmc-off); font-weight: 500; }
+.mmc-dash-card.soon .mmc-dash-sub { color: var(--mmc-off); }
+
+/* The arrival. One sweep across the grid rather than a scatter of effects: the
+   surface is new, so it comes in, and then it is still. The stagger is capped
+   so a grid of twenty does not spend two seconds assembling itself. */
+.mmc-dash-card {
+  animation: mmc-dash-in 180ms ease both;
+  animation-delay: calc(min(var(--i, 0), 8) * 28ms);
+}
+@keyframes mmc-dash-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+/* The caret is the standing hint that the name is pressable; which way it
+   points is which side of the door you are on. */
+.mmc-fs-mark[aria-expanded="true"] .mmc-fs-caret { transform: rotate(180deg); }
+.mmc-fs-caret { transition: transform 180ms ease; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mmc-dash-card { animation: none; }
+  .mmc-dash-card:hover { transform: none; }
+  .mmc-dash-glyph, .mmc-fs-caret { transition: none; }
+}
+@media (max-width: 720px) {
+  .mmc-dash-sheet { padding: 24px 18px 32px; }
+  .mmc-dash-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+  .mmc-dash-plate { height: 84px; }
+}
 
 `;

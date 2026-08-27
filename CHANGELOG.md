@@ -65,11 +65,14 @@ nothing the reel's resize observer reports, so nothing ever asked again. It
 measures the laid-out width now, which is the question it meant to ask.
 
 **The wordmark is the door.** In the fullscreen editor, pressing **Continuity**
-in the title bar drops the editor's tool list. One row today — the preset
-library, the same one the rail's Presets button opens — and the list is where
-future tools will appear as rows. No keystroke is claimed for it: every pack
-on the canvas wants ⌘K, so the menu is the mark's alone. Nothing else about
-the window changes, and no new chrome stands open while you work.
+in the title bar turns the room over to the dashboard: the editor's tools, as
+cards, over the whole width under the title bar. One card today — the preset
+library, the same one the rail's Presets button opens — beside a marked-out
+place for the tools still to come, which is where they will appear. Pressing
+the mark again, pressing Escape, or opening a card puts the piece back exactly
+as you left it. No keystroke is claimed for it: every pack on the canvas wants
+⌘K, so the dashboard is the mark's alone. Nothing else about the window changes,
+and no new chrome stands open while you work.
 
 **The pack is called Continuity.** "MiniMax Creator" named the only thing it
 could render when it was written; it now renders on four families — MiniMax H3,

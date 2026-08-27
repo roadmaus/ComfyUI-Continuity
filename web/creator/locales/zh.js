@@ -1399,5 +1399,8 @@ export const zh = {
  "{count} selected": "已选 {count} 个",
  "Pick as many as you like": "想选多少都可以",
  "Tools": "工具",
+ "Each tool opens over the piece on the card.": "每个工具都作用于卡片上的作品。",
+ "More to come": "更多功能即将到来",
+ "New tools arrive here as cards.": "新工具会以卡片的形式出现在这里。",
  "Apply a saved setup, or save this one": "应用已保存的设置，或保存当前设置",
 };

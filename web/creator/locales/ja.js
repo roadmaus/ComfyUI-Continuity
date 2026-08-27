@@ -1398,5 +1398,8 @@ export const ja = {
  "{count} selected": "{count} 件を選択中",
  "Pick as many as you like": "好きなだけ選べます",
  "Tools": "ツール",
+ "Each tool opens over the piece on the card.": "各ツールはカード上のピースに対して開きます。",
+ "More to come": "今後さらに追加",
+ "New tools arrive here as cards.": "新しいツールはカードとしてここに追加されます。",
  "Apply a saved setup, or save this one": "保存済みのセットアップを適用、またはこのセットアップを保存",
 };

@@ -1398,5 +1398,8 @@ export const ko = {
  "{count} selected": "{count}개 선택됨",
  "Pick as many as you like": "원하는 만큼 고르세요",
  "Tools": "도구",
+ "Each tool opens over the piece on the card.": "각 도구는 카드에 올려진 작품 위에서 열립니다.",
+ "More to come": "더 추가될 예정",
+ "New tools arrive here as cards.": "새 도구는 여기에 카드로 추가됩니다.",
  "Apply a saved setup, or save this one": "저장된 설정을 적용하거나 지금 설정을 저장",
 };
