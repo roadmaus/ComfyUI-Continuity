@@ -423,20 +423,23 @@ class Fullscreen {
     // way — the topmost thing goes first, and the second press closes the
     // editor.
     this.onKey = (event) => {
-      // ⌘K, wherever focus is — the prompt box included, because "go somewhere
-      // else" is exactly the thing you want mid-sentence. Claimed outright
-      // (ComfyUI has no binding on it, and if one arrives this window is not
-      // where it should fire).
-      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
-        event.preventDefault();
-        event.stopPropagation();
-        openNavPalette({ groups: this.destinations() });
-        return;
-      }
       if (event.key !== "Escape") return;
       if (this.reviewing) { this.endReview(); return; }
       close();
     };
+    // ⌘K, wherever focus is — the prompt box included, because "go somewhere
+    // else" is exactly the thing you want mid-sentence. Unlike Escape this is
+    // taken in capture, on window, and stopped dead: ComfyUI's node search
+    // answers to the same key and registers earlier, so the bubble phase never
+    // sees the event — its dialog was opening over the shell. While the editor
+    // is the window, the window's shortcut is the editor's.
+    this.onNavKey = (event) => {
+      if (!(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== "k") return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      openNavPalette({ groups: this.destinations() });
+    };
+    window.addEventListener("keydown", this.onNavKey, true);
     document.addEventListener("keydown", this.onKey);
 
     // The queue is global; the button reports it. `status` is how ComfyUI says
@@ -1250,6 +1253,7 @@ class Fullscreen {
     // collected. Stopped rather than dropped.
     this.endReview({ animate: false });
     document.removeEventListener("keydown", this.onKey);
+    window.removeEventListener("keydown", this.onNavKey, true);
     api.removeEventListener("status", this.onStatus);
     api.removeEventListener("promptQueued", this.onQueued);
     this.release(this.node);
