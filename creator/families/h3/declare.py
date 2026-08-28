@@ -134,8 +134,10 @@ RULES = canvas.Rules(
 # over a render that would die at queue time.
 CONTROL_NODE = "MiniMaxH3FunControlNetApply"
 
-# canny, HED, depth and pose, in the bench's own vocabulary. The checkpoint's
-# card also lists MLSD, which is straight-line segments and which the bench does
-# not trace — a tracing nothing here can produce is not worth declaring — and
-# video inpainting, which is a mask rather than a drawing and is not wired yet.
-CONTROL_TRACINGS = ("edges", "lines", "depth", "pose")
+# canny, HED, depth, pose and the inpaint mask, in the bench's own vocabulary.
+# The checkpoint's card also lists MLSD, which is straight-line segments and
+# which the bench does not trace — a tracing nothing here can produce is not
+# worth declaring. "matte" is the card's video inpainting: a mask rather than a
+# drawing, read through the same apply node's `mask`/`source_video` inputs, and
+# `render.emit_control` is where the two part ways.
+CONTROL_TRACINGS = ("edges", "lines", "depth", "pose", "matte")

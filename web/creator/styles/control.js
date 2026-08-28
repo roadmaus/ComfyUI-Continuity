@@ -143,6 +143,13 @@ export const css = `
   width: 13px; height: 13px; border-radius: 50%; background: var(--mmc-strong); border: 0;
 }
 .mmc-ctl-range:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 4px; }
+.mmc-ctl-text {
+  width: 100%; box-sizing: border-box; padding: 5px 8px;
+  border: 1px solid var(--mmc-wash-2); border-radius: 6px;
+  background: var(--mmc-wash); color: var(--mmc-strong);
+  font: inherit; font-size: calc(12.5px * var(--mmc-type));
+}
+.mmc-ctl-text:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 1px; }
 .mmc-ctl-switch {
   display: flex; align-items: center; gap: 8px; cursor: pointer;
   font-size: calc(12.5px * var(--mmc-type)); color: var(--mmc-dim);

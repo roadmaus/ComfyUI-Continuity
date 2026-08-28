@@ -411,6 +411,30 @@ frozen("guide_chained", guided(
          "assets": [{**GUIDE_ASSET, "trim": {"start": 10.0, "end": 15.0}}]},
     ]))
 
+# The union's other mode: a matte off the bench is an inpaint mask, and the
+# apply node reads the shot's edit clip behind it as `source_video`, so
+# everything outside the white is conditioned to stay that clip at latent
+# level. The tracing id on the asset is the whole fork — the guide grammar
+# (attachment, trim, switch) does not move.
+MATTE_ASSET = {**GUIDE_ASSET, "filename": "continuity/control/walk_matte.mp4",
+               "op": "matte"}
+frozen("guide_matte", guided(segments=[{
+    "prompt": "a different man stands at the counter in @vid-1",
+    "duration_s": 6,
+    "assets": [MATTE_ASSET,
+               {"handle": "vid-1", "kind": "video", "role": "reference",
+                "filename": "walk.mp4", "takes": "edit"}]}]))
+
+# A matte with no edit clip behind it has nothing to hold outside the white,
+# and the refusal has to land at queue time and say what to attach.
+try:
+    graph_of(guided(segments=[{
+        "prompt": "a red room", "duration_s": 6, "assets": [MATTE_ASSET]}]))
+    FAILURES.append("a matte guide with no edit clip was accepted")
+except ValueError as exc:
+    if "matte" not in str(exc) or "edit" not in str(exc):
+        FAILURES.append(f"the matte refusal does not say what to attach: {exc}")
+
 
 # ---- the row in the blob -----------------------------------------------------
 #

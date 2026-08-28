@@ -16,6 +16,17 @@ everything and everyone else kept, "while ⟨who⟩ is replaced by ⟨Subject N�
 A clip somebody is cast into counts as an edit source even if its chip was
 never narrowed to *edit* by hand.
 
+**And the swap can be held in place with a mask.** A new *Matte* tracing on
+the ControlNet bench asks SAM 3 — the same checkpoint the face pass and the
+picker's click-scissors read — who goes, in words ("person", or "the man in
+the red shirt"), and writes them as white on black, grown past their outline
+by a dial so the replacement has room to be a different build. Thrown as a
+guide on a shot that carries an edit clip, it runs the Fun ControlNet-Union's
+other trained mode, video inpainting: everything outside the white is
+conditioned to stay the source clip at latent level rather than asked to in
+prose, and only the person is regenerated. Inverted, it is the other job —
+keep the named subject, replace the world around them.
+
 **Somebody else can take a cast member's place, and the footage stays put.**
 
 Removing a cast member took the clip they stood in with them. That clip is the

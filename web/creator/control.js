@@ -960,6 +960,18 @@ class Bench {
           el("span", { text: t(spec.label) }),
         ]);
       }
+      if (spec.kind === "text") {
+        // Free words — the matte's "who". Committed on change rather than on
+        // input: a heavy tracing must not be re-asked per keystroke.
+        return el("div", { class: "mmc-ctl-dial", title: t(spec.note) }, [
+          el("div", { class: "mmc-ctl-diallabel" }, [el("span", { text: t(spec.label) })]),
+          el("input", {
+            type: "text", class: "mmc-ctl-text", value: String(held ?? ""),
+            placeholder: String(spec.default ?? ""),
+            onchange: (event) => this.setValue(spec.key, event.target.value),
+          }),
+        ]);
+      }
       const readout = el("span", { class: "mmc-ctl-value", text: String(held) });
       return el("div", { class: "mmc-ctl-dial", title: t(spec.note) }, [
         el("div", { class: "mmc-ctl-diallabel" }, [

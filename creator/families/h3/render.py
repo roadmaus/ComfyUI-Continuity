@@ -308,6 +308,8 @@ class H3(base.Family):
         is not a contradiction: a guided text-only shot is one that encodes a
         picture after all, and the picture is the drawing.
         """
+        if getattr(compiled.guide, "op", "") == "matte":
+            return self._emit_inpaint(graph, links, segment, compiled, guide)
         frames = guides.guide_frames(graph, compiled.guide, compiled,
                                      self.rules.fps)
         applied = graph.node(
@@ -323,6 +325,51 @@ class H3(base.Family):
             start_percent=float(guide.start),
             end_percent=float(guide.end),
             control_video=frames,
+        )
+        return guides.Controlled(segment, positive=applied.out(0))
+
+    def _emit_inpaint(self, graph, links, segment, compiled, guide):
+        """The same apply node's other mode: mask and source instead of drawing.
+
+        The Fun union's inpaint channels — the bench's matte is the mask (white
+        regenerates, `set_inpaint` re-hardens it at 0.5), and the clip being
+        edited rides behind it as `source_video`, so everything outside the
+        white is conditioned to *stay that clip* at latent level rather than
+        asked to in prose. `control_video` stays unwired on purpose: the node
+        holds an absent input's channels at zero, which is the checkpoint's
+        trained fallback for masking without a drawing.
+
+        The source is the shot's own edit clip — the one a subject replaces
+        into, or the one chipped `edit`. Read through the same frames node as
+        the matte, at the same canvas, rate and length, so the two line up
+        frame for frame as long as the matte was traced over the same cut the
+        clip is trimmed to.
+        """
+        replaced = {h for s in compiled.cast for h in s.replaces}
+        source = next(
+            (a for a in compiled.ref_videos
+             if a.handle in replaced or a.takes == "edit"), None)
+        if source is None:
+            raise guides.GuideError(
+                "a matte guide is an inpaint mask over a source clip, and this "
+                "shot has none: attach the clip the matte was traced from as a "
+                "reference and chip it 'edit' (casting somebody to take a place "
+                "in it does the same)."
+            )
+        matte = guides.guide_frames(graph, compiled.guide, compiled,
+                                    self.rules.fps)
+        mask = graph.node("ImageToMask", image=matte, channel="red").out(0)
+        frames = guides.guide_frames(graph, source, compiled, self.rules.fps)
+        applied = graph.node(
+            declare.CONTROL_NODE,
+            positive=segment.out(1),
+            control_net=links.control,
+            vae=links.vae,
+            strength=float(guide.strength),
+            start_percent=float(guide.start),
+            end_percent=float(guide.end),
+            mask=mask,
+            source_video=frames,
         )
         return guides.Controlled(segment, positive=applied.out(0))
 

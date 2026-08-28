@@ -262,6 +262,42 @@ TRACINGS = (
                      "down a shrunken frame; thinner is more exact."},
         ),
     },
+    {
+        "id": "matte", "label": "Matte", "heavy": True,
+        "note": "Who goes, as a mask: the named subject drawn white on black. "
+                "The inpaint guide — white is regenerated, black is kept as "
+                "shot, pixel for pixel. This is how a person is replaced "
+                "without the rest of the frame drifting.",
+        "needs": "a SAM 3 checkpoint in models/checkpoints — the same file the "
+                 "face pass and the picker's click-scissors read. Nothing is "
+                 "downloaded from here.",
+        "params": (
+            {"key": "model", "kind": "choice", "from": ("checkpoints",),
+             "label": "Model", "default": "", "options": (),
+             "note": "The SAM 3 checkpoint. It is open-vocabulary, which is what "
+                     "lets the box below say who; any other checkpoint in the "
+                     "folder will load and then have no detector to ask."},
+            {"key": "who", "kind": "text", "default": "person", "label": "Who",
+             "note": "Who or what is masked, in words — 'person' takes everybody, "
+                     "'the man in the red shirt' takes just that one. The same "
+                     "words you would put in the cast card's 'takes the place "
+                     "of' box."},
+            {"key": "certainty", "kind": "range", "min": 5, "max": 90, "step": 1,
+             "default": 40, "label": "Certainty",
+             "note": "How sure the model has to be before something counts as "
+                     "the named subject. Up to drop lookalikes, down to keep a "
+                     "subject that is half out of frame."},
+            {"key": "grow", "kind": "range", "min": 0, "max": 15, "step": 0.5,
+             "default": 4, "label": "Grow",
+             "note": "How far past the subject's own outline the mask reaches, as "
+                     "a share of the frame. The replacement can only exist inside "
+                     "the white, so a bigger build, a coat or longer hair needs "
+                     "room grown for it — and their shadow is worth covering too."},
+            {"key": "invert", "kind": "switch", "default": False, "label": "Invert",
+             "note": "The other job: keep the named subject as shot and "
+                     "regenerate everything around them instead."},
+        ),
+    },
 )
 
 BY_ID = {tracing["id"]: tracing for tracing in TRACINGS}
@@ -334,6 +370,11 @@ def _params(op, raw):
         given = raw.get(spec["key"])
         if spec["kind"] == "switch":
             values[spec["key"]] = _truthy(given, spec["default"])
+            continue
+        if spec["kind"] == "text":
+            # Free words, defaulted rather than refused: an emptied box means
+            # the default question, not no question.
+            values[spec["key"]] = str(given or "").strip() or spec["default"]
             continue
         if spec["kind"] == "choice":
             # Not clamped like a slider: a name that is not on the disk cannot be
@@ -513,7 +554,8 @@ _ONE_AT_A_TIME = threading.Lock()
 # that were picked, so changing the pick reloads and dragging a slider does not:
 # a preview that reloaded two gigabytes per drag would not be a preview.
 _MODELS = {"depth": {"key": None, "held": None},
-           "pose": {"key": None, "held": None}}
+           "pose": {"key": None, "held": None},
+           "matte": {"key": None, "held": None}}
 
 
 def _keep(kind, key, load):
@@ -670,6 +712,82 @@ def _pose(frame, values):
     return _from_torch(drawn.float())
 
 
+def _matte_model(name):
+    """SAM3, loaded with its text tower — `facepass._detector`'s recipe.
+
+    A fused checkpoint, so `comfy.sd` over models/checkpoints rather than a
+    split loader; with the CLIP this time, because the bench asks in words
+    where the picker's scissors ask in clicks.
+    """
+    def load():
+        import comfy.sd
+
+        loaded = comfy.sd.load_checkpoint_guess_config(
+            _model_path(("checkpoints",), name),
+            output_vae=False, output_clip=True,
+            embedding_directory=folder_paths.get_folder_paths("embeddings"))
+        model, clip = loaded[0], loaded[1]
+        if clip is None:
+            raise ControlError(
+                f"{name} has no text encoder in it, so it cannot be asked who "
+                f"to mask — that is not a SAM 3 checkpoint.")
+        return model, clip
+
+    return _keep("matte", name, load)
+
+
+def _matte(frame, values):
+    """SAM3, asked in words, dilated into an inpaint mask.
+
+    Through core's `SAM3_Detect` node rather than the model's own methods, the
+    way `cutout.matte_points` goes: the node id is core's contract. Per frame
+    and stateless like every operator here — SAM3's video tracker wants the
+    whole clip in memory at once, and a 15-second cut does not fit; the
+    detector re-asked the same words each frame holds the same subject well
+    enough for a mask that is about to be grown and re-hardened anyway.
+
+    The grow is the dial that matters. The ControlNet re-binarises whatever it
+    is handed (`set_inpaint` thresholds at 0.5), so there is no feather to keep
+    — but the replacement can only be painted inside the white, and a new
+    person clipped to the old one's silhouette is the failure the dilation
+    exists to prevent. Distance transform rather than a structuring element:
+    one pass whatever the radius.
+    """
+    import nodes
+    import torch
+
+    node = nodes.NODE_CLASS_MAPPINGS.get("SAM3_Detect")
+    if node is None:
+        raise ControlError(
+            "Matte needs core's 'SAM3_Detect' node, which this ComfyUI does "
+            "not have. Update it, or mask the clip elsewhere.")
+    model, clip = _matte_model(values["model"])
+
+    # The words, encoded once per cut rather than per frame — `values` lives
+    # for one run the way depth's `_hold` does, so the cache dies with it.
+    held = values.setdefault("_cond", {})
+    if held.get("who") != values["who"]:
+        tokens = clip.tokenize(values["who"])
+        held["who"] = values["who"]
+        held["cond"] = clip.encode_from_tokens_scheduled(tokens)
+
+    # The same two contexts a queued prompt would have wrapped the node in —
+    # no-grad, and a progress id of our own so the node's ProgressBar does not
+    # reach for a prompt that is not running. See `cutout._node_context`.
+    from .cutout import _node_context
+
+    with _ONE_AT_A_TIME, _node_context():
+        mask = node.execute(model, _torch_frame(frame),
+                            conditioning=held["cond"],
+                            threshold=values["certainty"] / 100.0)[0]
+    flat = (mask.to(torch.float32).amax(dim=0) > 0.5).cpu().numpy()
+
+    grown = float(values["grow"]) / 100.0 * min(frame.shape[0], frame.shape[1])
+    if grown >= 1 and flat.any():
+        flat = ndimage.distance_transform_edt(~flat) <= grown
+    return _mono(flat.astype(np.float32), values["invert"])
+
+
 def trace(frame, op, values):
     """One frame, traced. `frame` and the answer are both (H, W, 3) uint8 RGB."""
     if op == "as_shot":
@@ -690,6 +808,8 @@ def trace(frame, op, values):
         return _depth(frame, values)
     if op == "pose":
         return _pose(frame, values)
+    if op == "matte":
+        return _matte(frame, values)
     raise ControlError(f"{op!r} is not a tracing this pack knows")
 
 
