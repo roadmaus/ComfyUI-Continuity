@@ -72,6 +72,36 @@ const STALL_MS = 60000;
  *  the `src` is a real `/view` URL and "save image as" does what it says. */
 const noMenu = (event) => event.preventDefault();
 
+/**
+ * Double-click the finished picture for the browser's own fullscreen.
+ *
+ * The stage is as large as the room it is in and no larger — a card beside a
+ * node, a plate in the shell — and neither is the size a 4K render was made to
+ * be looked at. The way out was to find the file in the gallery and open it in
+ * a tab, which is a detour around a picture that is already on screen.
+ *
+ * The browser's fullscreen rather than a lightbox of our own: it is the whole
+ * display rather than the whole window, the video keeps its own transport, and
+ * Escape already means what everyone expects it to. Toggled, because a second
+ * double-click on the same picture is the obvious way back and the first one is
+ * how you got here.
+ *
+ * On the finished render only. The step preview is an object URL that the next
+ * frame revokes, so a fullscreen of it would go blank a second later — the same
+ * reason that one has no context menu.
+ */
+const toFullscreen = (event) => {
+  const media = event.currentTarget;
+  event.preventDefault();
+  if (document.fullscreenElement === media) {
+    document.exitFullscreen?.();
+    return;
+  }
+  // webkit's prefixed name is the one Safari has on a non-video element.
+  const open = media.requestFullscreen ?? media.webkitRequestFullscreen;
+  try { open?.call(media)?.catch?.(() => {}); } catch { /* refused; nothing to do */ }
+};
+
 export class Stage {
   /**
    * @param {object} spec
@@ -210,10 +240,19 @@ export class Stage {
     if (!detail) return;
     switch (type) {
       case "execution_start":
-        // A new queue: whatever is on the stage belongs to the last one. Back to
-        // hidden until the first frame of this one arrives, rather than leaving
-        // the previous render up while a different one is being made.
-        this.reset();
+        // A new queue — and not necessarily *this* stage's queue. Every stage on
+        // the page hears every prompt, and a piece is routinely two of them: the
+        // shot and the pre-stage that feeds it. Clearing here cleared the shot's
+        // finished render the moment you stepped over to the pre-stage and made
+        // a still, and cleared it past recovery — the fullscreen lip is handed
+        // the picture by the run that *starts*, and no run ever started for the
+        // shot, so the take was not retired to the shelf either. It was simply
+        // gone.
+        //
+        // So the clearing moved to `begin`, which is the first word that the
+        // run is ours. Until then the last render stays up, which is what the
+        // reader wants anyway while a checkpoint is being read off disk.
+        //
         // Kept even though this stage may turn out to have no part in the run:
         // it is the only place the prompt id is ever said, and by the time the
         // stage knows the render is its own the message has long gone by.
@@ -255,7 +294,12 @@ export class Stage {
         // threshold), and not waiting for a first preview frame either, which
         // may simply never arrive (preview method off, or a frontend that
         // stopped carrying metadata on the frames).
-        if (!this.showing()) {
+        // Against the run rather than against the picture: with the last
+        // render left up until this one is known to be ours (see
+        // `execution_start`), "there is something in the box" no longer means
+        // "a render is under way", and a stage that asked the box would never
+        // start the clock on the second take at all.
+        if (this.state !== "sampling") {
           if ((best.max ?? 0) < OPENS_ON_STEPS) break;
           this.begin();
           this.render();
@@ -369,13 +413,11 @@ export class Stage {
     }
   }
 
-  reset() {
-    clearInterval(this.ticker);
+  /** Everything the last render left in the box — the picture, the clock, what
+   *  went wrong. Not the run's bookkeeping: `reset` adds that, and `begin` keeps
+   *  it, because a run that is starting is the one asking. */
+  clearRender() {
     this.metaFrameAt = 0;
-    this.promptId = null;
-    this.lastNewsAt = 0;
-    this.probedAt = 0;
-    this.state = "idle";
     this.result = null;
     this.error = null;
     this.tookMs = 0;
@@ -385,6 +427,15 @@ export class Stage {
     this.frame = null;
     this.frameIsClip = false;
     this.clearAspect();
+  }
+
+  reset() {
+    clearInterval(this.ticker);
+    this.promptId = null;
+    this.lastNewsAt = 0;
+    this.probedAt = 0;
+    this.state = "idle";
+    this.clearRender();
     this.render();
   }
 
@@ -392,6 +443,9 @@ export class Stage {
    *  the elapsed readout is elapsed and not a stutter. */
   begin() {
     if (this.state === "sampling") return;
+    // The first word that this queue is ours, and so the moment the last one's
+    // picture stops being the answer — see `execution_start`.
+    this.clearRender();
     this.state = "sampling";
     this.startedAt = Date.now();
     this.lastNewsAt = Date.now();
@@ -684,6 +738,8 @@ export class Stage {
       class: "mmc-stage-img",
       src: this.result.url,
       alt: this.result.name,
+      title: t("Double-click for fullscreen"),
+      ondblclick: toFullscreen,
       onload: (event) => this.setAspect(event.currentTarget.naturalWidth,
                                         event.currentTarget.naturalHeight),
       onpointerdown: (event) => event.stopPropagation(),
@@ -715,6 +771,8 @@ export class Stage {
     return el("video", {
       class: "mmc-stage-video",
       src: this.result.url,
+      title: t("Double-click for fullscreen"),
+      ondblclick: toFullscreen,
       autoplay: uiSetting("autoplay_previews", true),
       controls: true, loop: true, muted: true, playsinline: true, preload: "metadata",
       onloadedmetadata: (event) => this.setAspect(event.currentTarget.videoWidth,

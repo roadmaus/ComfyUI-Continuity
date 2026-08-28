@@ -832,6 +832,7 @@ export const zh = {
  "Show this render on the picture": "在画面中显示这次渲染",
  "Back to the render": "返回本次渲染",
  "Picture size": "画面尺寸",
+  "Double-click for fullscreen": "双击进入全屏",
  "Drag to resize the picture. Double-click for full size.": "拖动可调整画面大小，双击恢复完整尺寸。",
  "Krea 2": "Krea 2",
  "Ideogram 4.0": "Ideogram 4.0",

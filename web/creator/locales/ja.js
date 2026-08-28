@@ -830,6 +830,7 @@ export const ja = {
  "Show this render on the picture": "このレンダリングを映像に表示",
  "Back to the render": "レンダリングに戻る",
  "Picture size": "映像のサイズ",
+  "Double-click for fullscreen": "ダブルクリックで全画面表示",
  "Drag to resize the picture. Double-click for full size.": "ドラッグで映像のサイズを変更。ダブルクリックで原寸に戻ります。",
  "Krea 2": "Krea 2",
  "Ideogram 4.0": "Ideogram 4.0",

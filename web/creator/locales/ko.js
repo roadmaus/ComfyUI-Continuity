@@ -831,6 +831,7 @@ export const ko = {
  "Show this render on the picture": "이 렌더를 화면에 표시",
  "Back to the render": "렌더로 돌아가기",
  "Picture size": "화면 크기",
+  "Double-click for fullscreen": "더블클릭하면 전체 화면으로 열립니다",
  "Drag to resize the picture. Double-click for full size.": "드래그하여 화면 크기를 조절합니다. 더블클릭하면 전체 크기로 돌아갑니다.",
  "Krea 2": "Krea 2",
  "Ideogram 4.0": "Ideogram 4.0",

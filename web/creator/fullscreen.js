@@ -940,8 +940,8 @@ class Fullscreen {
   /**
    * Move the finished picture into the reel when the next queue takes the stage.
    *
-   * The stage is one box and it is cleared by `execution_start`, which is right
-   * on a canvas — a card beside a node showing last week's render while this
+   * The stage is one box and it is cleared by the next run of its own — see
+   * `Stage.begin` — which is right on a canvas — a card beside a node showing last week's render while this
    * week's is sampling would be a card that lies. In a window there is room for
    * both, and the thing that was lost was the comparison: you queue a second
    * take of a shot precisely to look at it beside the first.
