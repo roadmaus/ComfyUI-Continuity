@@ -50,8 +50,71 @@ export const css = `
 .mmc-refine-split.pill .mmc-refine-more:hover { background: var(--mmc-surface-3); }
 .mmc-refine-split.pill .mmc-pill { padding-right: 16px; }
 
-.mmc-refine-pop { width: 264px; padding: 8px; }
-.mmc-refine-models { max-height: 190px; overflow-y: auto; }
+/* A card, not a strip: 264px stacked every section into a scroll of wrapped
+   chips and paragraphs. At 420 the chips sit in rows, the dials share a line,
+   and the popover reads top to bottom as decisions rather than documentation. */
+.mmc-refine-pop { width: 420px; max-width: calc(100vw - 24px); padding: 10px; }
+
+/* The header holds the first decision: the title names the tool, the switch
+   says where it runs. A segmented track rather than two loose chips — this is
+   a mode, not a tag. */
+.mmc-refine-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 10px; padding: 2px 2px 8px;
+}
+.mmc-refine-head .mmc-pop-title { padding: 0 0 0 8px; }
+.mmc-refine-seg {
+  display: flex; padding: 2px; border-radius: 999px;
+  background: var(--mmc-surface-2); border: 1px solid var(--mmc-line);
+}
+.mmc-refine-seg-btn {
+  border: 0; background: none; border-radius: 999px; cursor: pointer;
+  padding: 4px 12px; color: var(--mmc-dim); font-family: inherit;
+  font-size: calc(11px * var(--mmc-type)); transition: all .12s ease;
+}
+.mmc-refine-seg-btn:hover { color: var(--mmc-text); }
+.mmc-refine-seg-btn[aria-checked="true"] {
+  background: var(--mmc-accent); color: var(--mmc-bg);
+}
+
+/* The server is one object with a state, so it is one card: URL and Connect
+   on a line, the write-only key box under it, and a status line whose dot is
+   the card's condition. The model list hangs below, outside the card. */
+.mmc-refine-server {
+  display: flex; flex-direction: column; gap: 8px;
+  margin: 0 2px 8px; padding: 10px;
+  background: var(--mmc-surface); border: 1px solid var(--mmc-line);
+  border-radius: 12px;
+}
+.mmc-refine-server .mmc-refine-row { flex-wrap: nowrap; align-items: center; }
+.mmc-refine-connect {
+  flex: none; height: calc(30px * var(--mmc-type)); padding: 0 14px;
+  border: 0; border-radius: 15px; cursor: pointer;
+  background: var(--mmc-accent); color: var(--mmc-bg);
+  font-family: inherit; font-size: calc(12px * var(--mmc-type));
+}
+.mmc-refine-connect:hover { filter: brightness(1.08); }
+.mmc-refine-forget { flex: none; font-size: calc(11px * var(--mmc-type)); }
+.mmc-refine-status {
+  display: flex; align-items: center; gap: 7px;
+  font-size: calc(11px * var(--mmc-type)); color: var(--mmc-dim); line-height: 1.4;
+}
+.mmc-refine-status .mmc-dot { color: var(--mmc-off); opacity: 1; flex: none; }
+.mmc-refine-status.ok { color: var(--mmc-text); }
+.mmc-refine-status.ok .mmc-dot { color: var(--mmc-accent); }
+.mmc-refine-status.bad { color: var(--mmc-warn); }
+.mmc-refine-status.bad .mmc-dot { color: var(--mmc-warn); }
+.mmc-refine-status-text { min-width: 0; }
+
+/* Only the lists scroll; the card and the sections stay put. */
+.mmc-refine-list, .mmc-refine-remote-rows { max-height: 210px; overflow-y: auto; }
+
+/* A hairline starts each section, which is what lets the uppercase eyebrows
+   read as headings instead of drowning between paragraphs. */
+.mmc-refine-section { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--mmc-line); }
+.mmc-refine-section:empty { display: none; }
+.mmc-refine-section > .mmc-note-key { display: block; padding: 0 10px 6px; }
+.mmc-refine-section > .mmc-chips { padding: 0 10px 4px; }
 /* Names run to a folder-qualified qwen3vl/qwen3vl_4b_instruct_fp8.safetensors.
    The row ellipsises and the title carries the whole of it. */
 .mmc-refine-name {
@@ -79,13 +142,10 @@ export const css = `
 }
 .mmc-refine-empty .mmc-ghost { font-size: calc(12px * var(--mmc-type)); }
 
-/* The remote endpoint. The URL and the key are the popover's only text inputs;
-   they take the shelf input's dress and the popover's width. The key box is
-   write-only — a placeholder says one is stored, the value never returns. */
+/* The URL and the key are the popover's only text inputs; they take the shelf
+   input's dress and share their row with the button beside them. The key box
+   is write-only — a placeholder says one is stored, the value never returns. */
 .mmc-refine-field { width: 100%; flex: 1; min-width: 0; }
-.mmc-refine-models .mmc-refine-row { padding: 2px 10px; }
-.mmc-refine-problem { padding: 2px 10px; color: var(--mmc-warn); }
-.mmc-refine-problem:empty { display: none; }
 
 /* Everything but the model, folded away: it is set once and the model is not. */
 .mmc-refine-fold { font-size: calc(12px * var(--mmc-type)); }
@@ -99,6 +159,13 @@ export const css = `
 }
 .mmc-refine-group { display: flex; flex-direction: column; gap: 7px; }
 .mmc-refine-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* The three dials share a line each with its label above it — three controls
+   never needed three paragraph-bearing rows. The seed pair runs wider than a
+   half column, so it takes the row under the two steppers whole. */
+.mmc-refine-dials { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 12px; }
+.mmc-refine-dial { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+.mmc-refine-dial.wide { grid-column: 1 / -1; }
 .mmc-refine-seed { font-size: calc(12px * var(--mmc-type)); padding: 0 10px 0 2px; }
 
 /* Eleven languages: chips wrap into three lines and stay scannable, where a

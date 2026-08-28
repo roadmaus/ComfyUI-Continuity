@@ -106,6 +106,13 @@ check("127.x is loopback too",
       "Authorization" in remote._headers("http://127.0.0.1:8080/v1", "sk-a"), True)
 check("a key rides anywhere over https",
       "Authorization" in remote._headers("https://openrouter.ai/api/v1", "sk-a"), True)
+anthropic = remote._headers("https://api.anthropic.com/v1", "sk-a")
+check("anthropic gets its native headers beside the Bearer — its /models wants them",
+      (anthropic.get("x-api-key"), anthropic.get("anthropic-version"),
+       anthropic.get("Authorization")),
+      ("sk-a", "2023-06-01", "Bearer sk-a"))
+check("no other host gets the native pair",
+      "x-api-key" in remote._headers("https://api.openai.com/v1", "sk-a"), False)
 expect_error("a key over plain http to the LAN is refused, with the fix named",
              lambda: remote._headers("http://192.168.1.20:11434/v1", "sk-a"),
              "https")

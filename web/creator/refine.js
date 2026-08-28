@@ -336,46 +336,45 @@ function collect(job) {
  */
 export function openSettings(anchor, onChange, family = DEFAULT_VIDEO_FAMILY) {
   const pop = el("div", { class: "mmc-pop mmc-refine-pop" });
-  const backendHost = el("div", { class: "mmc-refine-models" });
+  const backendHost = el("div", { class: "mmc-refine-seg" });
   const modelHost = el("div", { class: "mmc-refine-models" });
   const noteHost = el("div", { class: "mmc-refine-hint mmc-refine-note" });
-  const skillHost = el("div", { class: "mmc-refine-models" });
-  const templateHost = el("div", { class: "mmc-refine-models" });
+  const skillHost = el("div", { class: "mmc-refine-section" });
+  const templateHost = el("div", { class: "mmc-refine-section" });
   const moreHost = el("div", { class: "mmc-refine-more-body" });
 
   const changed = () => { onChange?.(); drawTemplate(); drawMore(); };
 
-  /** In-process, or a server the user already runs. Two chips, because that is
-   *  the whole choice — everything the word implies is drawn underneath it. */
+  /** In-process, or a server the user already runs. A segmented switch in the
+   *  header, because it is the popover's first decision and everything drawn
+   *  below it is that word's consequence. */
   function drawBackend() {
     const chosen = settings().backend === "remote" ? "remote" : "local";
-    const chip = (label, value, help) => el("button", {
-      class: "mmc-chip",
+    const half = (label, value, help) => el("button", {
+      class: "mmc-refine-seg-btn",
       "aria-checked": value === chosen,
       text: t(label),
       title: t(help),
       onclick: () => {
+        if (value === chosen) return;
         saveSettings({ backend: value });
         changed(); drawBackend(); drawNote(); drawModels();
       },
     });
     backendHost.replaceChildren(
-      el("span", { class: "mmc-note-key", text: t("runs on") }),
-      el("div", { class: "mmc-chips" }, [
-        chip("this ComfyUI", "local",
-             "A text encoder in ComfyUI's own process, loaded and evicted like any other model."),
-        chip("a server", "remote",
-             "An OpenAI-compatible endpoint you already run — LM Studio, Ollama, "
-             + "llama.cpp, vLLM — or a hosted API."),
-      ]),
+      half("this ComfyUI", "local",
+           "A text encoder in ComfyUI's own process, loaded and evicted like any other model."),
+      half("a server", "remote",
+           "An OpenAI-compatible endpoint you already run — LM Studio, Ollama, "
+           + "llama.cpp, vLLM — or a hosted API."),
     );
   }
 
   function drawNote() {
+    // The remote face carries its facts inside the server card; a second
+    // paragraph under it would be the old wall of text coming back.
     noteHost.textContent = settings().backend === "remote"
-      ? t("Works with anything speaking the OpenAI chat API. Your key is kept on "
-          + "this machine's server side and is never sent to the browser or saved "
-          + "into a workflow. Attach images only with a vision-capable model.")
+      ? ""
       : t("A Qwen3-VL text encoder, loaded and evicted like any other model. "
           + "It also reads your attached images.");
   }
@@ -399,13 +398,11 @@ export function openSettings(anchor, onChange, family = DEFAULT_VIDEO_FAMILY) {
         class: "mmc-chip",
         "aria-checked": name === chosen,
         text: name === "auto" ? "auto" : name.toLowerCase(),
+        // The chip's own help carries what the old paragraph said; the
+        // paragraph itself is gone — this popover was mostly prose.
         title: t(help),
         onclick: () => { saveTemplate(family, name); changed(); },
       }))),
-      el("div", { class: "mmc-refine-hint",
-                  text: t("Which of the built-in prompt templates writes the rewrite. "
-                      + "auto follows the request, like the weights route; the result "
-                      + "panel says which one was used.") }),
     );
   }
 
@@ -446,22 +443,61 @@ export function openSettings(anchor, onChange, family = DEFAULT_VIDEO_FAMILY) {
           t("The '{name}' skill package, handed to the model as its only instruction. "
         + "The model writes the whole prompt document itself — instruction line, shot "
         + "markers and timestamps included — and the rewrite lands as one block.", { name }))),
-      el("div", { class: "mmc-refine-hint",
-                  text: t("A skill replaces the built-in prompting entirely, and rewrites one "
-                      + "generation at a time.") }),
     );
   }
 
-  /** The endpoint and the server's models, drawn together: the URL, the
-   *  write-only key box, and the listing that doubles as the connection test.
-   *  Redrawn only on save, switch or refresh — the inputs hold carets. */
+  // The providers people actually mean, each one click to its base URL —
+  // nobody knows by heart that Anthropic's compatibility endpoint is
+  // api.anthropic.com/v1. Names are brands and stay untranslated; the
+  // tooltip is the URL itself, which is also what clicking writes.
+  const PROVIDERS = [
+    ["LM Studio", "http://localhost:1234/v1"],
+    ["Ollama", "http://localhost:11434/v1"],
+    ["Anthropic", "https://api.anthropic.com/v1"],
+    ["OpenAI", "https://api.openai.com/v1"],
+    ["OpenRouter", "https://openrouter.ai/api/v1"],
+    ["Gemini", "https://generativelanguage.googleapis.com/v1beta/openai"],
+  ];
+
+  /** The server as one card with a state: provider presets, URL and Connect
+   *  on a line, the write-only key box under it, and a status line whose dot
+   *  says whether the endpoint answered — connected, unreachable, or not set
+   *  up yet. The model list hangs below the card. Redrawn only on save,
+   *  switch or refresh — the inputs hold carets. */
   async function drawRemote(force = false) {
     const status = await remoteStatus({ force });
-    const problem = el("div", { class: "mmc-refine-hint mmc-refine-problem" });
+    // One line owns the card's condition: config errors, transport errors and
+    // "connected — N models" all land here, so the eye has one place to check.
+    const stateText = el("span", { class: "mmc-refine-status-text" });
+    const state = el("div", { class: "mmc-refine-status" }, [
+      el("span", { class: "mmc-dot" }),
+      stateText,
+    ]);
+    const say = (kind, text) => {
+      state.className = "mmc-refine-status " + kind;
+      stateText.textContent = text;
+    };
     const urlBox = el("input", {
       class: "mmc-shelf-input mmc-refine-field", type: "text",
       placeholder: "http://localhost:1234/v1", value: status.url,
       spellcheck: "false", autocomplete: "off",
+    });
+    // Chips fill the URL box; nothing is stored until Connect. Checked marks
+    // follow whatever the box holds, typed or clicked.
+    const presets = el("div", { class: "mmc-chips mmc-refine-providers" },
+      PROVIDERS.map(([name, url]) => el("button", {
+        class: "mmc-chip", text: name, title: url,
+        "aria-checked": status.url === url,
+        onclick: (event) => {
+          urlBox.value = url;
+          for (const chip of presets.children)
+            chip.setAttribute("aria-checked", String(chip === event.currentTarget));
+          urlBox.focus();
+        },
+      })));
+    urlBox.addEventListener("input", () => {
+      for (const chip of presets.children)
+        chip.setAttribute("aria-checked", String(chip.title === urlBox.value.trim()));
     });
     // Write-only on purpose: the placeholder says a key exists, the value never
     // comes back to fill it. Typing replaces; the button beside it forgets.
@@ -476,43 +512,51 @@ export function openSettings(anchor, onChange, family = DEFAULT_VIDEO_FAMILY) {
         await listRemoteModels({ force: true });
         drawRemote();
       } catch (error) {
-        problem.textContent = String(error.message || error);
+        say("bad", String(error.message || error));
       }
     };
-    const rows = el("div");
+    const connect = () => store(keyBox.value || null);
+    urlBox.addEventListener("keydown", (e) => { if (e.key === "Enter") connect(); });
+    keyBox.addEventListener("keydown", (e) => { if (e.key === "Enter") connect(); });
+    const rows = el("div", { class: "mmc-refine-remote-rows" });
     modelHost.replaceChildren(
-      el("div", { class: "mmc-refine-row" }, [urlBox]),
-      el("div", { class: "mmc-refine-row" }, [
-        keyBox,
-        status.key_set
-          ? el("button", { class: "mmc-ghost", text: t("Forget key"),
-                           title: t("Delete the stored key from this machine."),
-                           onclick: () => store("") })
-          : null,
+      el("div", { class: "mmc-refine-server" }, [
+        presets,
+        el("div", { class: "mmc-refine-row" }, [
+          urlBox,
+          el("button", { class: "mmc-refine-connect", text: t("Connect"), onclick: connect }),
+        ]),
+        el("div", { class: "mmc-refine-row" }, [
+          keyBox,
+          status.key_set
+            ? el("button", { class: "mmc-ghost mmc-refine-forget", text: t("Forget key"),
+                             title: t("Delete the stored key from this machine."),
+                             onclick: () => store("") })
+            : null,
+        ]),
+        state,
+        el("div", { class: "mmc-refine-hint",
+                    text: t("The key stays on this machine — never in the browser or a workflow.") }),
       ]),
-      el("div", { class: "mmc-refine-row" }, [
-        el("button", { class: "mmc-ghost", text: t("Connect"),
-                       onclick: () => store(keyBox.value || null) }),
-      ]),
-      problem,
-      el("div", { class: "mmc-refine-hint",
-                  text: t("LM Studio: http://localhost:1234/v1 · Ollama: http://localhost:11434/v1 "
-                      + "· hosted APIs take their base URL and a key.") }),
       rows,
     );
-    if (!status.url) return;
-    rows.replaceChildren(el("div", { class: "mmc-refine-hint", text: t("Looking for models…") }));
+    if (!status.url) {
+      say("", t("Not connected"));
+      return;
+    }
+    say("", t("Looking for models…"));
     const { names, error } = await listRemoteModels({ force });
     if (error) {
-      problem.textContent = error;
+      say("bad", error);
       rows.replaceChildren();
       return;
     }
     if (!names.length) {
-      rows.replaceChildren(el("div", { class: "mmc-refine-hint",
-        text: t("The server lists no models — load one there first.") }));
+      say("bad", t("The server lists no models — load one there first."));
+      rows.replaceChildren();
       return;
     }
+    say("ok", t("Connected — {n} models", { n: names.length }));
     const chosen = settings().remoteModel;
     rows.replaceChildren(...names.map((name) => el("button", {
       class: "mmc-opt",
@@ -540,7 +584,7 @@ export function openSettings(anchor, onChange, family = DEFAULT_VIDEO_FAMILY) {
       return;
     }
     const chosen = settings().model;
-    modelHost.replaceChildren(...names.map((name) => el("button", {
+    modelHost.replaceChildren(el("div", { class: "mmc-refine-list" }, names.map((name) => el("button", {
       class: "mmc-opt",
       "aria-checked": name === chosen,
       // The full name, because the row ellipsises it — a folder-qualified
@@ -551,7 +595,7 @@ export function openSettings(anchor, onChange, family = DEFAULT_VIDEO_FAMILY) {
     }, [
       el("span", { class: "mmc-opt-label mmc-refine-name", text: name }),
       el("span", { class: "mmc-radio" }),
-    ])));
+    ]))));
   }
 
   /** The language chips and the two sampling pills. Redrawn whole on every
@@ -566,6 +610,12 @@ export function openSettings(anchor, onChange, family = DEFAULT_VIDEO_FAMILY) {
     });
 
     const random = current.seed < 0;
+    // A labelled column per dial, side by side: three controls do not need
+    // three paragraph-bearing rows. What the paragraphs said rides on each
+    // pill's own title.
+    const dial = (label, control, wide = false) => el("div", {
+      class: "mmc-refine-dial" + (wide ? " wide" : ""),
+    }, [el("span", { class: "mmc-note-key", text: label }), control]);
     moreHost.replaceChildren(
       el("div", { class: "mmc-refine-group" }, [
         el("span", { class: "mmc-note-key", text: t("language") }),
@@ -573,59 +623,53 @@ export function openSettings(anchor, onChange, family = DEFAULT_VIDEO_FAMILY) {
         el("div", { class: "mmc-refine-hint",
                     text: t("The prose and the dialogue. Field names, labels and camera terms stay English.") }),
       ]),
-      el("div", { class: "mmc-refine-group" }, [
-        el("span", { class: "mmc-note-key", text: t("reply length") }),
-        el("div", { class: "mmc-refine-row" }, [
-          stepperPill({
-            value: Number(current.maxTokens), ...TOKENS, width: "62px",
-            title: t("How many tokens the rewrite may run to. Raise it if a whole-timeline "
-                 + "refine comes back cut off; there is no cost to a model that stops early."),
-            format: (n) => t("{n}k tokens", { n: Math.round(n / 1024) }),
-            onChange: (next) => { saveSettings({ maxTokens: next }); changed(); },
+      el("div", { class: "mmc-refine-dials" }, [
+        dial(t("reply length"), stepperPill({
+          value: Number(current.maxTokens), ...TOKENS, width: "62px",
+          title: t("How many tokens the rewrite may run to. Raise it if a whole-timeline "
+               + "refine comes back cut off; there is no cost to a model that stops early."),
+          format: (n) => t("{n}k tokens", { n: Math.round(n / 1024) }),
+          onChange: (next) => { saveSettings({ maxTokens: next }); changed(); },
+        })),
+        dial(t("temperature"), stepperPill({
+          value: Number(current.temperature), min: 0, max: 2, step: 0.05, width: "58px",
+          title: t("Lower keeps closer to your wording; higher invents more around it."),
+          format: (n) => n.toFixed(2),
+          onChange: (next) => { saveSettings({ temperature: next }); changed(); },
+        })),
+        dial(t("seed"), el("div", { class: "mmc-pill mmc-pill-group" }, [
+          el("button", {
+            class: "mmc-step mmc-seed-dice",
+            title: random ? t("Fix the seed at a number") : t("Roll a new seed now"),
+            onclick: () => {
+              saveSettings({ seed: Math.floor(Math.random() * 0x7fffffff) });
+              changed();
+            },
+          }, [icon("dice", 15)]),
+          el("button", {
+            class: "mmc-ghost mmc-refine-seed",
+            text: random ? t("new every time") : String(current.seed),
+            title: random
+              ? t("Every refine comes out differently. Click to fix it.")
+              : t("Refining the same prompt gives the same rewrite. Click to vary it again."),
+            onclick: () => {
+              saveSettings({ seed: random ? Math.floor(Math.random() * 0x7fffffff) : -1 });
+              changed();
+            },
           }),
-        ]),
-        el("div", { class: "mmc-refine-hint",
-                    text: t("The answer's budget, not a context size — the prompt is never "
-                        + "truncated to fit, however long it gets.") }),
-      ]),
-      el("div", { class: "mmc-refine-group" }, [
-        el("span", { class: "mmc-note-key", text: t("sampling") }),
-        el("div", { class: "mmc-refine-row" }, [
-          stepperPill({
-            value: Number(current.temperature), min: 0, max: 2, step: 0.05, width: "58px",
-            title: t("Lower keeps closer to your wording; higher invents more around it."),
-            format: (n) => t("temp {n}", { n: n.toFixed(2) }),
-            onChange: (next) => { saveSettings({ temperature: next }); changed(); },
-          }),
-          el("div", { class: "mmc-pill mmc-pill-group" }, [
-            el("button", {
-              class: "mmc-step mmc-seed-dice",
-              title: random ? t("Fix the seed at a number") : t("Roll a new seed now"),
-              onclick: () => {
-                saveSettings({ seed: Math.floor(Math.random() * 0x7fffffff) });
-                changed();
-              },
-            }, [icon("dice", 15)]),
-            el("button", {
-              class: "mmc-ghost mmc-refine-seed",
-              text: random ? t("new every time") : String(current.seed),
-              title: random
-                ? t("Every refine comes out differently. Click to fix it.")
-                : t("Refining the same prompt gives the same rewrite. Click to vary it again."),
-              onclick: () => {
-                saveSettings({ seed: random ? Math.floor(Math.random() * 0x7fffffff) : -1 });
-                changed();
-              },
-            }),
-          ]),
-        ]),
+        ]), true),
       ]),
     );
   }
 
   pop.append(
-    el("div", { class: "mmc-pop-title", text: t("Refiner") }),
-    backendHost,
+    // The first decision shares the header: the title names the tool, the
+    // switch says where it runs, and everything under the line follows from
+    // that word.
+    el("div", { class: "mmc-refine-head" }, [
+      el("span", { class: "mmc-pop-title", text: t("Refiner") }),
+      backendHost,
+    ]),
     modelHost,
     noteHost,
     skillHost,

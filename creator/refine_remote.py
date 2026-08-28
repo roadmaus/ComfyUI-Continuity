@@ -186,6 +186,13 @@ def _headers(url, key):
                 f"{host} — use https, or clear the key for an open local server"
             )
         headers["Authorization"] = f"Bearer {key}"
+        # Anthropic's compatibility endpoint takes the Bearer for chat, but its
+        # `/models` listing is the native API and wants the native headers — so
+        # both ride along, and the one endpoint that cares about each reads its
+        # own. The lone provider special case, and it is two header lines.
+        if host == "api.anthropic.com":
+            headers["x-api-key"] = key
+            headers["anthropic-version"] = "2023-06-01"
     return headers
 
 
