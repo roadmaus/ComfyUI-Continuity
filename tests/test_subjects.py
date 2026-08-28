@@ -393,6 +393,46 @@ _local = compiler.compile_single(piece(
 check("a subject built out of a card's own file survives the merge",
       "<Subject 1> is the person in <Picture 1>." in _local.prompt, True)
 
+# What they are, all the way through the compile. `_subject_dict` writes the blob
+# each segment and each merged pass is compiled from, and it used to write the
+# handle, the files and the markers and stop — so every feature anybody had typed
+# was dropped on this hop and the prompt was built from a bare `from` list. The
+# card said one thing and the model was told another, which is invisible from
+# either end: the shelf still showed the features and the retention line still
+# said something plausible, just not what the card said.
+_kept = piece(shot("@anna walks in."),
+              assets=[image("ref-1")],
+              subjects=[{"handle": "anna", "from": ["ref-1"], "seeded": True,
+                         "features": [{"attr": "face"}, {"attr": "hair"},
+                                      {"attr": "build"},
+                                      {"attr": "clothing", "instead": "a red waxed jacket"},
+                                      {"is": "a thin silver necklace"}]}])
+_seg = compiler.compile_segment(compiler.timeline_payloads(_kept)[0])
+check("a segment compile carries the rows, not just the files",
+      "their face, hair, build, and a thin silver necklace are retained" in _seg.prompt,
+      True)
+check("...including the one the target video changes",
+      "clothing is replaced by a red waxed jacket" in _seg.prompt, True)
+check("...and the words somebody typed reach the definition",
+      "with a thin silver necklace" in _seg.prompt, True)
+# The merged-pass path renames the handles as it goes, and rebuilt the subject
+# from scratch to do it — so it dropped the rows a second way.
+_merged = compiler.compile_single(piece(
+    shot("a road."), shot("@anna walks in.", merge=True, assets=[image("img-1")]),
+    subjects=[{"handle": "anna", "from": ["img-1"], "seeded": True,
+               "features": [{"attr": "face"}, {"attr": "hair"},
+                            {"is": "a thin silver necklace"}]}]))
+check("a merged pass carries them through the rename too",
+      "their face, hair, and a thin silver necklace are retained" in _merged.prompt, True)
+# Every row dropped is not the same as no rows at all, and only `seeded` tells
+# them apart: without it an emptied card is handed the whole baseline back, which
+# is the one thing dropping the last row must not do.
+_emptied = compiler.compile_segment(compiler.timeline_payloads(piece(
+    shot("@anna walks in."), assets=[image("ref-1")],
+    subjects=[{"handle": "anna", "from": ["ref-1"], "seeded": True}]))[0])
+check("a card whose rows were all dropped claims none of them back",
+      "their face, hair, build, and clothing are retained" in _emptied.prompt, False)
+
 # --- standing in for somebody across more than one clip -----------------------
 #
 # The same person in a medium shot and a close-up is one vacancy filmed twice.
@@ -512,6 +552,105 @@ check("...and the transfer names what lands on whom",
       "long dark hair is transferred onto the bench in <Video 1>" in _line, True)
 check("...keeps the clip's own work", "framing, camera work and action are kept" in _line, True)
 check("...and still says what changed", "replaced by a red waxed jacket" in _line, True)
+
+# ---- the baseline, as rows ---------------------------------------------------
+#
+# What a `takes` word carries used to be one sentence in the compiler, reached
+# only where nobody had named a feature of their own. So naming one silently
+# narrowed the claim: "their face, hair, build, and clothing are retained"
+# became "a red leather jacket is retained", and on a swap that meant the jacket
+# moved and the replaced person's own build and hair stayed where they were.
+#
+# It is a list of rows now, seeded onto the card when somebody is cast. The
+# sentence is what the untouched rows compose, so nothing about an untouched
+# card changed; what is new is that each row can be described, changed or
+# dropped by itself.
+
+def _rows(*attrs):
+    return [{"attr": a} for a in attrs]
+
+
+_seeded = subjects.parse([{"handle": "vera", "from": ["img-1"], "takes": "person",
+                           "features": _rows("face", "hair", "build", "clothing")}])
+check("an untouched card compiles the sentence it always did",
+      subjects.retention(_seeded, _LAB, "[Shot 1] <Subject 1> waits."),
+      "<Subject 1> (appears in [Shot 1]): fully_preserved - their face, hair, "
+      "build, and clothing are retained.")
+check("...the same one a card with no rows at all still compiles",
+      subjects.retention(_seeded, _LAB, "[Shot 1] <Subject 1> waits."),
+      subjects.retention(
+          subjects.parse([{"handle": "vera", "from": ["img-1"], "takes": "person"}]),
+          _LAB, "[Shot 1] <Subject 1> waits."))
+# The definition is what the label denotes, and "with face, hair, build, and
+# clothing" says nothing the noun did not. A seeded row earns its place in the
+# retention line, where the question is what is carried over.
+check("...and says nothing extra in the definition",
+      subjects.definitions(_seeded, _LAB), "<Subject 1> is the person in <Picture 1>.")
+
+# The bug this whole shape exists for.
+_plus = subjects.parse([{"handle": "vera", "from": ["img-1"], "takes": "person",
+                         "features": _rows("face", "hair", "build", "clothing")
+                                     + [{"is": "a red leather jacket"}]}])
+check("a feature somebody types joins the baseline rather than replacing it",
+      subjects.retention(_plus, _LAB, "[Shot 1] <Subject 1> waits."),
+      "<Subject 1> (appears in [Shot 1]): fully_preserved - their face, hair, "
+      "build, clothing, and a red leather jacket are retained.")
+
+# The three things a row can have done to it.
+_dropped = subjects.parse([{"handle": "vera", "from": ["img-1"], "takes": "person",
+                            "features": _rows("face", "build", "clothing")}])
+check("a dropped row leaves the rest of the baseline standing",
+      "their face, build, and clothing are retained"
+      in subjects.retention(_dropped, _LAB, "[Shot 1] <Subject 1> waits."), True)
+
+_described = subjects.parse([{
+    "handle": "vera", "from": ["img-1"], "takes": "person",
+    "features": [{"attr": "face"}, {"attr": "hair", "is": "long dark hair"},
+                 {"attr": "build"}, {"attr": "clothing"}]}])
+check("a described row reads as their words in the retention line",
+      "their face, long dark hair, build, and clothing are retained"
+      in subjects.retention(_described, _LAB, "[Shot 1] <Subject 1> waits."), True)
+check("...and is the only row that reaches the definition",
+      subjects.definitions(_described, _LAB),
+      "<Subject 1> is the person in <Picture 1>, with long dark hair.")
+
+_swapped = subjects.parse([{
+    "handle": "vera", "from": ["img-1"], "takes": "person",
+    "features": [{"attr": "face"}, {"attr": "hair", "instead": "a short blonde bob"},
+                 {"attr": "build"}, {"attr": "clothing"}]}])
+check("a changed row names the attribute and what replaces it",
+      subjects.retention(_swapped, _LAB, "[Shot 1] <Subject 1> waits."),
+      "<Subject 1> (appears in [Shot 1]): partially_preserved - their face, build, "
+      "and clothing are retained; hair is replaced by a short blonde bob.")
+
+# A swap, which is what the narrowing broke worst: the whole baseline is what
+# lands on the person going, and it says so in as many words.
+_place = subjects.parse([{
+    "handle": "vera", "from": ["img-1"], "takes": "person",
+    "replaces": ["vid-1"], "replaces_what": "the man at the counter",
+    "features": _rows("face", "hair", "build", "clothing")}])
+check("a swap transfers the whole baseline, not the last thing typed",
+      subjects.retention(_place, _LAB, "[Shot 1] <Subject 1> waits."),
+      "<Subject 1> (appears in [Shot 1]): attribute_transfer - their face, hair, "
+      "build, and clothing are transferred onto the man at the counter in "
+      "<Video 1>, whose framing, camera work and action are kept.")
+
+# Every take has its own baseline, and the possessive is part of it: a place is
+# not "their" anything.
+check("a scene's rows compose the scene's own sentence",
+      subjects.retention(
+          subjects.parse([{"handle": "loft", "from": ["img-1"], "takes": "scene",
+                           "features": _rows("environment", "surfaces", "light")}]),
+          _LAB, "[Shot 1] <Subject 1> waits."),
+      "<Subject 1> (appears in [Shot 1]): fully_preserved - the environment, its "
+      "surfaces, and its light are retained.")
+
+# A seeded row survives with nothing typed into it — the attribute's own name is
+# what it says. Only a row with neither half is the empty one the editor writes.
+check("a row with an attribute and no words is not an empty row",
+      [(f.attr, f.text) for f in subjects.parse([{"handle": "v", "features":
+          [{"attr": "hair"}, {"is": ""}, {"attr": "", "is": "  "}]}])[0].features],
+      [("hair", "")])
 
 # The override is the only way to reach weak_reference — "only broad similarity
 # in style, category, composition, or atmosphere" is a judgement about the

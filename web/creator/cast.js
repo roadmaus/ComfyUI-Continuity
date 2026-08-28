@@ -758,7 +758,12 @@ export class CastShelf {
         // `instead` is a change somebody thought better of, so the row goes back
         // to being kept rather than disappearing.
         onblur: () => {
-          if (key === "is" && !String(feature.is ?? "").trim()) return this.dropFeature(subject, feature);
+          // An emptied box is a row nobody filled in — except on a seeded one,
+          // where the attribute's own name is still what it says. Clearing the
+          // words on "hair" leaves "hair"; dropping it is the ✕.
+          if (key === "is" && !feature.attr && !String(feature.is ?? "").trim()) {
+            return this.dropFeature(subject, feature);
+          }
           if (key === "instead" && !String(feature.instead ?? "").trim()) {
             this.changing?.delete(feature);
           }
@@ -771,9 +776,21 @@ export class CastShelf {
       box.addEventListener("pointerdown", (event) => event.stopPropagation());
       return box;
     };
-    return el("div", { class: `mmc-cast-feature${changing ? " changed" : ""}` }, [
-      field("is", "one thing about them", "Written into their definition, and named "
-            + "again in the retention line as something that is retained."),
+    return el("div", { class: `mmc-cast-feature${changing ? " changed" : ""}`
+                              + (feature.attr ? " attr" : "") }, [
+      ...(feature.attr ? [el("span", {
+        class: "mmc-cast-feature-attr",
+        text: t(feature.attr),
+        title: t("What a {takes} reference carries. Retained as it is unless you "
+               + "describe it, change it, or drop it with the ✕.",
+                { takes: t(subject.takes ?? "person") }),
+      })] : []),
+      field("is", feature.attr ? "describe it" : "one thing about them",
+            feature.attr
+              ? "Optional. Their own words for it — “long dark hair” rather than "
+                + "“hair” — written into the definition and the retention line."
+              : "Written into their definition, and named "
+                + "again in the retention line as something that is retained."),
       ...(changing ? [
         el("span", { class: "mmc-cast-feature-arrow", text: "→" }),
         field("instead", "what it is instead", "What the target video gives them in "
@@ -811,6 +828,23 @@ export class CastShelf {
       const rows = this.root?.querySelectorAll?.(".mmc-cast-feature-is") ?? [];
       rows[rows.length - 1]?.focus?.();
     });
+  }
+
+  /**
+   * Swap the seeded rows for the ones the new `takes` is made of.
+   *
+   * A face is not something a place has, so the old baseline goes. What does not
+   * go is anything somebody typed: a described or changed row keeps its words
+   * and simply stops being an attribute, which is the difference between
+   * changing your mind about what they are and losing the sentence you wrote.
+   * Untouched rows are the baseline itself and are replaced by the new one.
+   */
+  reseed(subject, takes) {
+    const kept = S.subjectFeatures(subject)
+      .filter((feature) => feature.is || feature.instead)
+      .map(({ attr, ...rest }) => rest);
+    subject.features = [...S.seedFeatures(takes), ...kept];
+    subject.seeded = true;
   }
 
   dropFeature(subject, feature) {
@@ -1077,11 +1111,13 @@ export class CastShelf {
           checked: key === (subject.takes ?? "person"),
           onPick: () => {
             const before = subject.takes ?? "person";
+            if (before === key) return;
             subject.takes = key;
             // Their pictures were person references because they were a person. They
             // are a place now, so they are scene references — and a file
             // somebody narrowed to something else themselves is left alone.
             S.inheritTakes(subject, this.getAssets(), { over: before });
+            this.reseed(subject, key);
             this.save();
           },
         })),
@@ -1117,7 +1153,12 @@ export class CastShelf {
     const taken = new Set(cast.map((s) => s.handle));
     let handle = "subject";
     for (let n = 2; taken.has(handle); n += 1) handle = `subject_${n}`;
-    const subject = { handle, from: [], takes: "person" };
+    // Seeded with what a person reference carries, because that is what it
+    // carries whether or not anybody lists it — the rows are the list said out
+    // loud, and the point of saying it is that each one can now be described,
+    // changed or dropped on its own. See `S.SUBJECT_ATTRIBUTES`.
+    const subject = { handle, from: [], takes: "person",
+                      features: S.seedFeatures("person"), seeded: true };
     this.setCast([...cast, subject]);
     // Open, because somebody just cast is somebody about to be described. They are
     // the only one open — see `card`.

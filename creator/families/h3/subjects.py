@@ -103,15 +103,31 @@ class Feature:
     be defined before it can be changed.
     """
 
-    __slots__ = ("text", "instead")
+    __slots__ = ("text", "instead", "attr")
 
-    def __init__(self, text, instead=""):
+    def __init__(self, text, instead="", attr=""):
         self.text = text
         self.instead = instead
+        # The baseline attribute this row stands for, or "" for a feature
+        # somebody typed from nothing. See `ATTRIBUTES`: a cast card seeds one
+        # row per attribute of its `takes`, so "what is retained" is a list on
+        # the card rather than a sentence buried in this module. `text` is then
+        # optional — an untouched row says "hair" and a described one says
+        # "long dark hair", and both are the same row.
+        self.attr = attr
 
     @property
     def changed(self):
         return bool(self.instead)
+
+    def phrase(self, takes):
+        """What this feature is called in prose, under `takes`.
+
+        The user's own words where they wrote any, and the attribute's own
+        fragment where they did not. A row with neither is not a feature and
+        `_parse_features` drops it.
+        """
+        return self.text or _attr_phrase(takes, self.attr)
 
 
 class Subject:
@@ -119,11 +135,12 @@ class Subject:
     a dataclass so the optional halves can carry their own docstrings."""
 
     __slots__ = ("handle", "sources", "takes", "description", "features",
-                 "motion", "voice", "replaces", "replaces_what", "marker")
+                 "motion", "voice", "replaces", "replaces_what", "marker",
+                 "seeded")
 
     def __init__(self, handle, sources, takes="person", description="",
                  features=(), motion=None, voice=None, replaces=(),
-                 replaces_what="", marker=None):
+                 replaces_what="", marker=None, seeded=False):
         self.handle = handle
         self.sources = tuple(sources)      # asset handles defining its appearance
         self.takes = takes                 # one of TAKES
@@ -147,6 +164,16 @@ class Subject:
         # for someone is — and anything else is preserved whole unless the user
         # says otherwise.
         self.marker = marker
+        # Whether the feature rows are the whole account of what this subject
+        # carries. The shelf seeds one row per `ATTRIBUTES` entry when somebody
+        # is cast and sets this, so an empty list means "everything was dropped"
+        # rather than "nobody has said". Without it the two are the same list
+        # and dropping the last row would silently hand back the whole baseline
+        # — the one thing a drop must not do.
+        #
+        # False is every piece written before the rows existed, and `_RETAINED`
+        # is what those compile to: the same sentence the seeded rows compose.
+        self.seeded = bool(seeded)
 
     @property
     def changed(self):
@@ -270,6 +297,7 @@ def parse(raw):
             takes=takes,
             description=description,
             features=features,
+            seeded=bool(item.get("seeded")),
             motion=motion,
             voice=voice,
             replaces=replaces,
@@ -294,16 +322,21 @@ def _parse_features(handle, raw):
             # The scalar form: a feature with nothing to say about it is the
             # phrase alone. Saves every caller that only wants the list from
             # writing {"is": ...} around each entry.
-            text, instead = item.strip(), ""
+            text, instead, attr = item.strip(), "", ""
         elif isinstance(item, dict):
             text = str(item.get("is") or "").strip()
             instead = str(item.get("instead") or "").strip()
+            attr = str(item.get("attr") or "").strip()
         else:
             raise SubjectError(
                 f"@{handle}: feature #{index + 1} is neither a phrase nor an object")
-        if not text:
+        # A seeded row is a feature with nothing typed into it yet, and it still
+        # says something — "hair" is the attribute's own name. So the row
+        # survives on either half, and only one with neither is the empty row
+        # the editor writes the moment somebody presses "add a feature".
+        if not text and not attr:
             continue
-        out.append(Feature(text.rstrip("."), instead.rstrip(".")))
+        out.append(Feature(text.rstrip("."), instead.rstrip("."), attr))
     return tuple(out)
 
 
@@ -468,14 +501,6 @@ _NOUN = {
 # content abstracted from reference assets" (2.1), so the abstraction from the
 # file is already in the label. `<Picture N>` is the label that denotes a file
 # and needs saying which parts of it count; this one is not.
-_RETAINED = {
-    "person": "their face, hair, build and clothing",
-    "object": "the object's own form, colour and markings",
-    "scene": "the environment, its surfaces and its light",
-    "style": "the medium, palette, light and rendering",
-}
-
-
 def _english(items):
     """`[a, b, c]` -> `"a, b, and c"`, the guide's own list punctuation."""
     items = list(items)
@@ -486,12 +511,63 @@ def _english(items):
     return ", ".join(items[:-1]) + f", and {items[-1]}"
 
 
+# The baseline attributes each `takes` is made of: what the label denotes when
+# nobody has narrowed it. A cast card seeds one feature row per entry, so the
+# four things a person reference carries are four rows somebody can describe,
+# change or drop one at a time — which is the whole of "keep everything except
+# his build". `_RETAINED` below is these same lists said as a sentence, for a
+# subject seeded before this table existed.
+#
+# `(prefix, ((key, fragment), ...))`. The key is what the blob stores and what
+# the card labels the row; the fragment is how it reads inside the list, which
+# is not always the same word — a scene's surfaces are "its surfaces" once the
+# leading "the" has been spent on the environment.
+#
+# `web/creator/state.js` seeds from its own copy of this table. The two are one
+# list in two languages and `tests/test_cast_mirror.py` holds them to it.
+ATTRIBUTES = {
+    "person": ("their", (("face", "face"), ("hair", "hair"),
+                         ("build", "build"), ("clothing", "clothing"))),
+    "object": ("the object's own", (("form", "form"), ("colour", "colour"),
+                                    ("markings", "markings"))),
+    "scene": ("the", (("environment", "environment"), ("surfaces", "its surfaces"),
+                      ("light", "its light"))),
+    "style": ("the", (("medium", "medium"), ("palette", "palette"),
+                      ("light", "light"), ("rendering", "rendering"))),
+}
+
+
+def _attr_phrase(takes, attr):
+    """An attribute key -> the fragment it reads as, or the key itself.
+
+    The fallback is for a row whose `takes` has moved under it — the editor
+    converts a described row rather than dropping it, so a stale key is a thing
+    that can arrive here, and the key is a word either way.
+    """
+    for key, fragment in ATTRIBUTES.get(takes, ATTRIBUTES["person"])[1]:
+        if key == attr:
+            return fragment
+    return attr
+
+
+def _all_attributes(takes):
+    """The whole baseline, as one phrase. `_RETAINED`'s value, computed."""
+    prefix, pairs = ATTRIBUTES[takes]
+    return f"{prefix} {_english([fragment for _, fragment in pairs])}"
+
+
+# What is carried over for a subject with no feature rows at all — every piece
+# cast before the rows existed. Identical to what the seeded rows now compose,
+# which is what keeps those pieces compiling the sentence they always did.
+_RETAINED = {takes: _all_attributes(takes) for takes in TAKES}
+
+
 def _cite(handles, asset_labels):
     """Asset handles -> the labels the tokenizer will see them as."""
     return _english([asset_labels.get(h, f"@{h}") for h in handles])
 
 
-def _described(subject):
+def _described_subject(subject):
     """A subject nothing but words stand behind, said as a noun phrase, or "".
 
     The description leads, because it is the whole of what is known; the `takes`
@@ -548,11 +624,12 @@ def definitions(cast, asset_labels, extra_lines=()):
             # references in it. The description *is* the definition here, so the
             # noun that stands in for a missing one would only pad it — and the
             # `, description` clause below is skipped for the same reason.
-            described = _described(subject)
-            if subject.features:
-                described = (f"{described}, with {_feature_texts(subject.features)}"
+            described = _described_subject(subject)
+            spoken = _described(subject.features)
+            if spoken:
+                described = (f"{described}, with {_feature_texts(spoken)}"
                              if described else
-                             f"{noun}, {_feature_texts(subject.features)}")
+                             f"{noun}, {_feature_texts(spoken)}")
             lines.append(f"{label} is {described}.")
             continue
         if subject.description:
@@ -564,8 +641,9 @@ def definitions(cast, asset_labels, extra_lines=()):
         # being changed, so it has to be defined here first, and a definition
         # that quietly dropped the changed ones would leave the retention line
         # changing something the model was never told about.
-        if subject.features:
-            line += f", with {_feature_texts(subject.features)}"
+        spoken = _described(subject.features)
+        if spoken:
+            line += f", with {_feature_texts(spoken)}"
         lines.append(line + ".")
 
         # The audio line is the guide's own form, and it carries the speaker ID
@@ -585,6 +663,43 @@ def definitions(cast, asset_labels, extra_lines=()):
 def _feature_texts(features):
     """The feature phrases, as the guide punctuates a list of them."""
     return _english([f.text for f in features])
+
+
+def _described(features):
+    """The features somebody actually described, for `subject_definitions`.
+
+    A seeded row nobody has typed into is not a description — "<Subject 1> is
+    the person in <Picture 1>, with face, hair, build, and clothing" says
+    nothing the noun did not already say. It earns its place in
+    `retention_analysis`, where the question is what is carried over rather than
+    what the label denotes, and it is dropped here.
+    """
+    return [f for f in features if f.text]
+
+
+def _carried(takes, kept):
+    """What `kept` amounts to, as prose, and how many things that is.
+
+    The seeded rows lead, in the order `ATTRIBUTES` lists them, and take the
+    possessive the whole list used to be written with: four untouched rows
+    compose "their face, hair, build, and clothing" — `_RETAINED` exactly, which
+    is what makes seeding a card change nothing about what it compiles to. A row
+    somebody described reads as their words instead of the attribute's name, and
+    a row somebody dropped is simply not here.
+
+    Features typed from nothing follow, sharing the possessive where there are
+    seeded rows in front of them and standing alone where there are not: a
+    subject cast before the rows existed has only these, and its line is the one
+    it always was.
+    """
+    attrs = [f for f in kept if f.attr]
+    items = ([f.phrase(takes) for f in attrs]
+             + [f.text for f in kept if not f.attr])
+    if not items:
+        return "", 0
+    if attrs:
+        return f"{ATTRIBUTES[takes][0]} {_english(items)}", len(items)
+    return _english(items), len(items)
 
 
 def retention(cast, asset_labels, body):
@@ -618,15 +733,20 @@ def retention(cast, asset_labels, body):
 
         # What is carried over: the features they were given, or — where nobody
         # named any — the general claim their `takes` word makes.
+        carried_count = 0
         if subject.kept:
-            carried = _feature_texts(subject.kept)
+            carried, carried_count = _carried(subject.takes, subject.kept)
         elif subject.features:
             # Every feature they have is changed. Nothing is carried, and saying
             # so beats naming the `takes` word's general claim, which the
             # changes below contradict one by one.
             carried = ""
         elif subject.sources or subject.motion:
-            carried = _RETAINED[subject.takes]
+            # The baseline, for a subject nobody has itemised. A seeded one has
+            # said its piece — every row is gone, so nothing is carried — and
+            # handing it back the whole list here is what would make dropping
+            # the last row do nothing at all.
+            carried = "" if subject.seeded else _RETAINED[subject.takes]
         elif subject.replaces:
             carried = ""
         else:
@@ -640,7 +760,7 @@ def retention(cast, asset_labels, body):
         # One feature is a thing, several are things. The lists here are the
         # user's own noun phrases, so nothing else in the sentence can carry the
         # agreement for them.
-        verb = "is" if (len(subject.kept) == 1 if subject.kept else False) else "are"
+        verb = "is" if carried_count == 1 else "are"
         clauses = [clauses_lead] if clauses_lead else []
         if subject.replaces:
             # The transfer is the relationship, so it leads: what they are made
@@ -663,7 +783,8 @@ def retention(cast, asset_labels, body):
             clauses.append(f"{carried} {verb} retained")
 
         for feature in subject.changed:
-            clauses.append(f"{feature.text} is replaced by {feature.instead}")
+            clauses.append(
+                f"{feature.phrase(subject.takes)} is replaced by {feature.instead}")
 
         # A subject with nothing to say still has to say something: the marker
         # is not a sentence and a line that is only a marker claims a scope it

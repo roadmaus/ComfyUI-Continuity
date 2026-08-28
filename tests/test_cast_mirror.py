@@ -4,6 +4,10 @@ Three things are written down twice and have to stay identical, because the band
 decides what you *can* say and the compiler decides what is *sent*:
 
   - the four takes a subject may have, and the four relationship markers;
+  - the baseline attributes each take is made of, which the shelf seeds a card's
+    feature rows from and the compiler composes the retention line out of. The
+    two lists disagreeing would mean a card whose rows say one thing and a
+    prompt that says another about the same person;
   - what a name is allowed to be, which is the whole of why `@anna` is safe to
     be a word — the two sides recognising different names would mean a chip in
     the band pointing at a subject the compiler never resolves;
@@ -68,6 +72,27 @@ CASES = [
     # The override still wins, and it is the only way to reach weak_reference.
     {"handle": "a", "from": ["ref-1"], "relationship": "weak_reference",
      "features": [{"is": "a blue cardigan", "instead": "a red waxed jacket"}]},
+    # ...and the seeded rows, which is what a card holds the moment somebody is
+    # cast. An untouched one survives on its attribute alone — this is the row
+    # that used to be dropped for having no text — and the described, the
+    # changed and the dropped are the three things you can do to it.
+    {"handle": "a", "from": ["ref-1"],
+     "features": [{"attr": "face"}, {"attr": "hair"}, {"attr": "build"},
+                  {"attr": "clothing"}]},
+    {"handle": "a", "from": ["ref-1"],
+     "features": [{"attr": "face"}, {"attr": "hair", "is": "long dark hair"},
+                  {"attr": "build"}, {"attr": "clothing"}]},
+    {"handle": "a", "from": ["ref-1"],
+     "features": [{"attr": "face"}, {"attr": "hair", "instead": "a short blonde bob"},
+                  {"attr": "build"}, {"attr": "clothing"}]},
+    {"handle": "a", "from": ["ref-1"],
+     "features": [{"attr": "face"}, {"attr": "build"}, {"attr": "clothing"}]},
+    # Seeded rows and a feature somebody typed, which is the arrangement the
+    # single sentence used to get wrong: the typed one replaced the baseline
+    # instead of joining it.
+    {"handle": "a", "from": ["ref-1"],
+     "features": [{"attr": "face"}, {"attr": "hair"}, {"attr": "build"},
+                  {"attr": "clothing"}, {"is": "a red leather jacket"}]},
 ]
 
 SCRIPT = """
@@ -79,7 +104,9 @@ console.log(JSON.stringify({
   markers: s.SUBJECT_MARKERS,
   names: Object.fromEntries(names.map((n) => [n, s.SUBJECT_HANDLE_RE.test(n)])),
   files: cases.map((c) => s.subjectFiles(c)),
-  features: cases.map((c) => s.subjectFeatures(c).map((f) => [f.is, f.instead])),
+  features: cases.map((c) => s.subjectFeatures(c).map((f) => [f.is, f.instead, f.attr ?? ""])),
+  attributes: s.SUBJECT_ATTRIBUTES,
+  seeded: Object.fromEntries(s.SUBJECT_TAKES.map((t) => [t, s.seedFeatures(t)])),
   derived: cases.map((c) => s.subjectMarker(c)),
   // The citation pattern, exercised rather than compared: a regex written twice
   // is never textually equal and the only thing that matters is what it matches.
@@ -152,6 +179,20 @@ def check(label, got, want):
 
 
 check("the subject takes match", reflected["takes"], list(subjects.TAKES))
+# The baseline. `subjects.ATTRIBUTES` carries a prose fragment beside each key
+# because the compiler has to write the list into a sentence; the shelf only
+# needs the keys, which are what it labels a row and stores in the blob. So the
+# keys are the mirror and the fragments are the compiler's alone.
+for takes in subjects.TAKES:
+    check(f"the attributes a {takes} is made of",
+          reflected["attributes"][takes],
+          [key for key, _ in subjects.ATTRIBUTES[takes][1]])
+    # And what casting somebody actually writes: a row per attribute, in order,
+    # which is what makes an untouched card compile to the sentence a card with
+    # no rows at all always compiled to.
+    check(f"...and what seeding a {takes} writes",
+          [f["attr"] for f in reflected["seeded"][takes]],
+          [key for key, _ in subjects.ATTRIBUTES[takes][1]])
 check("the relationship markers match", reflected["markers"], list(subjects.MARKERS))
 
 for name in NAMES:
@@ -168,7 +209,7 @@ for case, files in zip(CASES, reflected["files"]):
 for case, features in zip(CASES, reflected["features"]):
     check(f"the features of {case}",
           [tuple(f) for f in features],
-          [(f.text, f.instead) for f in subjects.parse([case])[0].features])
+          [(f.text, f.instead, f.attr) for f in subjects.parse([case])[0].features])
 for case, marker in zip(CASES, reflected["derived"]):
     check(f"the marker {case} derives",
           marker, subjects.parse([case])[0].relationship)

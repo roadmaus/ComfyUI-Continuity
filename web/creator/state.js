@@ -1358,12 +1358,17 @@ function parseSubjects(raw) {
   if (!Array.isArray(raw)) return [];
   return raw
     .filter((s) => s && typeof s.handle === "string")
-    .map((s) => ({
+    // Seeded on the way in, which is the repair that gives a piece written
+    // before the rows existed a row per attribute. See `seedSubject`.
+    .map((s) => seedSubject({
       handle: s.handle,
       from: Array.isArray(s.from) ? s.from.filter((h) => typeof h === "string") : [],
       takes: SUBJECT_TAKES.includes(s.takes) ? s.takes : "person",
       ...(s.description ? { description: String(s.description) } : {}),
       ...(subjectFeatures(s).length ? { features: subjectFeatures(s) } : {}),
+      // Two states, one empty list: see `seedSubject`. Written only where it is
+      // true, so a piece nobody has opened since is byte-identical.
+      ...(s.seeded ? { seeded: true } : {}),
       ...(s.motion ? { motion: String(s.motion) } : {}),
       ...(s.voice ? { voice: String(s.voice) } : {}),
       ...(replacesOf(s).length ? { replaces: replacesOf(s) } : {}),
@@ -4478,6 +4483,60 @@ function poolTexts(state, { own = false } = {}) {
  *  relationships, which have no subject in them. */
 export const SUBJECT_TAKES = ["person", "object", "scene", "style"];
 
+/**
+ * The baseline attributes each `takes` is made of.
+ *
+ * Casting somebody seeds one feature row per entry, so what the reference
+ * carries is a list on the card — four rows for a person — rather than a
+ * sentence buried in the compiler. That is what makes "keep everything except
+ * their build" a thing you can do: drop the row.
+ *
+ * It also closes the trap the single sentence had. `retention_analysis` used to
+ * name the features somebody typed *or*, where they typed none, the general
+ * claim the `takes` word makes — so adding one feature silently narrowed
+ * "their face, hair, build and clothing are retained" to "a red leather jacket
+ * is retained", and a swap moved the jacket and left the replaced person's build
+ * and hair where they were.
+ *
+ * Mirrors `subjects.ATTRIBUTES`; `tests/test_cast_mirror.py` holds the two
+ * copies to the same list.
+ */
+export const SUBJECT_ATTRIBUTES = {
+  person: ["face", "hair", "build", "clothing"],
+  object: ["form", "colour", "markings"],
+  scene: ["environment", "surfaces", "light"],
+  style: ["medium", "palette", "light", "rendering"],
+};
+
+/** The seeded rows for `takes`, as the blob stores them. */
+export function seedFeatures(takes) {
+  return (SUBJECT_ATTRIBUTES[takes] ?? SUBJECT_ATTRIBUTES.person)
+    .map((attr) => ({ attr, is: "", instead: "" }));
+}
+
+/**
+ * A subject with its baseline rows in front, and `seeded` set to say so.
+ *
+ * The flag is what tells "nobody has itemised this one" from "every row was
+ * dropped" — two states with the same empty list and opposite meanings. Without
+ * it the compiler hands an emptied card the whole baseline back, which is the
+ * one thing dropping the last row must not do.
+ *
+ * Run on the way in as well as on the way out, so a piece written before the
+ * rows existed gets them. What that piece compiles to does not change: the
+ * untouched rows compose the same sentence its `takes` word always claimed. What
+ * changes is that a feature somebody typed into it now *joins* that sentence
+ * instead of replacing it — which is the bug, and the reason this is a repair
+ * on load rather than a shape only new cards get.
+ */
+export function seedSubject(subject) {
+  if (subject.seeded) return subject;
+  subject.features = [...seedFeatures(subject.takes ?? "person"),
+                      ...subjectFeatures(subject)];
+  subject.seeded = true;
+  return subject;
+}
+
 /** The reference guide's fixed relationship markers. Mirrors
  *  `subjects.MARKERS`; they are English output values in every language. */
 export const SUBJECT_MARKERS = ["fully_preserved", "partially_preserved",
@@ -4517,13 +4576,22 @@ export function replacesOf(subject) {
  * A bare string is read as a feature with nothing to say about it, and a row
  * with no text at all is dropped: the editor writes an empty row the moment
  * somebody presses "add a feature". Mirrors `subjects._parse_features`.
+ *
+ * A seeded row (`attr`, see `SUBJECT_ATTRIBUTES`) survives with nothing typed
+ * into it, because the attribute's own name is what it says: an untouched
+ * `{ attr: "hair" }` is "hair" in the retention line. Only a row with neither
+ * half is the empty one "add a feature" just wrote.
  */
 export function subjectFeatures(subject) {
   return (subject?.features ?? [])
     .map((item) => (typeof item === "string"
       ? { is: item.trim(), instead: "" }
-      : { is: String(item?.is ?? "").trim(), instead: String(item?.instead ?? "").trim() }))
-    .filter((feature) => feature.is);
+      : {
+        is: String(item?.is ?? "").trim(),
+        instead: String(item?.instead ?? "").trim(),
+        ...(item?.attr ? { attr: String(item.attr).trim() } : {}),
+      }))
+    .filter((feature) => feature.is || feature.attr);
 }
 
 /**

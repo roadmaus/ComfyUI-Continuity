@@ -39,7 +39,7 @@ import { renderMeta, stillUrl, viewUrl } from "./api.js";
 import { atlasRef } from "./presets/atlasref.js";
 import { openPicker } from "./picker.js";
 import { openMenu, MARKER_LABEL, MARKER_NOTE, ROLES, TAKES_NOTE } from "./cast.js";
-import { SUBJECT_TAKES, showSeconds, tagIndex } from "./state.js";
+import { SUBJECT_TAKES, seedFeatures, showSeconds, tagIndex } from "./state.js";
 import { BUILTIN } from "./presets/builtin.js";
 import * as P from "./presets.js";
 
@@ -806,7 +806,11 @@ class PresetLibrary {
       const row = await P.savePreset({
         name: handle,
         scope: "cast",
-        data: { cast: { handle, takes: "person", files: [] } },
+        // Seeded, the same as casting somebody straight onto a piece: a member
+        // made here is a person reference and carries what one carries, and
+        // each of those is a row they can describe, change or drop.
+        data: { cast: { handle, takes: "person", files: [],
+                        features: seedFeatures("person"), seeded: true } },
       });
       this.rows = [row, ...this.rows];
       this.busy = false;

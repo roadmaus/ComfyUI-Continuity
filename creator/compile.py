@@ -3046,6 +3046,8 @@ def _renamed(subject, rename):
         description=subject.description,
         motion=pick(subject.motion),
         voice=pick(subject.voice),
+        features=subject.features,
+        seeded=subject.seeded,
         replaces=[pick(h) for h in subject.replaces],
         replaces_what=subject.replaces_what,
         marker=subject.marker,
@@ -3059,6 +3061,20 @@ def _subject_dict(subject):
     out = {"handle": subject.handle, "from": list(subject.sources)}
     if subject.takes != "person":
         out["takes"] = subject.takes
+    # What they are, feature by feature — the rows the card holds. This is the
+    # blob `compile_request` re-parses, so a feature missing here is a feature
+    # the prompt never sees: it was left out, and every subject compiled through
+    # a segment or a merged pass reached the model as a bare `from` list with
+    # the general claim its `takes` word makes and nothing anybody had typed.
+    # `seeded` rides with them, because an empty list means two different things
+    # without it. See `subjects.Subject`.
+    if subject.features:
+        out["features"] = [
+            {"is": f.text, **({"instead": f.instead} if f.instead else {}),
+             **({"attr": f.attr} if f.attr else {})}
+            for f in subject.features]
+    if subject.seeded:
+        out["seeded"] = True
     # A list, always, where there is one at all: `subjects.parse` still reads
     # the scalar a blob written before somebody could stand in for two clips
     # carries, but nothing writes one any more.

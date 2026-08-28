@@ -277,6 +277,17 @@ export const css = `
 .mmc-cast-feature {
   display: flex; align-items: center; gap: 7px; min-width: 0; flex-wrap: wrap;
 }
+/* A seeded row opens with the attribute it stands for. Set in the off colour
+   and boxed to one width, so the four names read down the card as the list they
+   are and the words somebody types beside them are the only text at full
+   weight. Dim, because the name is the card talking and the box is the user. */
+.mmc-cast-feature-attr {
+  flex: 0 0 5.5em; min-width: 0; color: var(--mmc-off);
+  font-size: calc(11.5px * var(--mmc-type)); white-space: nowrap;
+}
+/* Narrower, because the name in front of it has already spent part of the lane
+   and the arrows still have to line up with the rows that have no name. */
+.mmc-cast-feature.attr .mmc-cast-feature-is { flex: 0 1 9.5em; }
 /* The fields are the line. No border and no box: a bordered input per feature
    turns four facts about one person into a form to fill in, and what this is is
    a sentence somebody is writing. The rule under it is the only edge. */

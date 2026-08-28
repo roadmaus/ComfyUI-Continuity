@@ -577,6 +577,10 @@ export function captureSubject(subject, assets) {
         // that person comes back as a name and a photograph.
         ...(S.subjectFeatures(subject).length
           ? { features: S.subjectFeatures(subject) } : {}),
+        // Whether those rows are the whole account of them. Kept with them for
+        // the same reason the rows are: a member who comes back with the
+        // baseline they had dropped comes back as somebody else.
+        ...(subject.seeded ? { seeded: true } : {}),
         ...(subject.replaces_what ? { replaces_what: subject.replaces_what } : {}),
         ...(subject.relationship ? { relationship: subject.relationship } : {}),
         files,
@@ -853,7 +857,13 @@ export function factsOf(body, scope) {
       voice: files.some((file) => file.slot === "voice"),
       replaces: files.some((file) => file.slot === "replaces"),
       described: Boolean(String(member.description ?? "").trim()),
-      features: S.subjectFeatures(member).length,
+      // What somebody wrote about them, which is not every row: a card is
+      // seeded with a row per attribute of its `takes`, and an untouched one is
+      // the baseline every person reference carries rather than a fact about
+      // this person. "4 features" under a member nobody has described would say
+      // the card is full when it is empty.
+      features: S.subjectFeatures(member)
+        .filter((feature) => feature.is || feature.instead).length,
     };
   }
   if (scope === "style") {
@@ -1296,7 +1306,11 @@ export function addSubjectToPiece(stored, timeline) {
     ...(stored.replaces_what ? { replaces_what: String(stored.replaces_what) } : {}),
     ...(S.SUBJECT_MARKERS.includes(stored.relationship)
       ? { relationship: stored.relationship } : {}),
+    ...(stored.seeded ? { seeded: true } : {}),
   };
+  // A member kept before the rows existed gets them here, on the way into a
+  // piece — the same repair `parseSubjects` does for a piece written then.
+  S.seedSubject(subject);
   timeline.subjects.push(subject);
   return subject;
 }
