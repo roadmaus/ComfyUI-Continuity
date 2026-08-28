@@ -180,8 +180,8 @@ check("a second clip promoted to guide swaps with the first, and loses neither",
       ["img-1:first_frame:opening.png", "img-2:reference:wall.png",
        "vid-1:reference:walk.mp4", "vid-2:guide:run.mp4"])
 
-check("a still cannot be a guide",
-      got["guideBlocked"]["still"].startswith("Every frame of the shot is aimed at"), True)
+check("a still can be the drawing the whole shot is aimed at",
+      got["guideBlocked"]["still"], "")
 check("the role it already has is never blocked, guides included",
       got["guideBlocked"]["itself"], "")
 
