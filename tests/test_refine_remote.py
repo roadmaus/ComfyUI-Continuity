@@ -140,6 +140,28 @@ check("the Nth attachment is the Nth image",
 check("the text rides behind them whole", parts[2]["text"], "the request")
 
 
+# ---- parameter negotiation ---------------------------------------------------
+
+payload = {"model": "m", "messages": [], "temperature": 0.3, "max_tokens": 2048,
+           "seed": 7, "stream": False}
+check("a refused temperature is dropped and named",
+      remote.adapt("`temperature` is deprecated for this model.", payload),
+      "temperature")
+check("…and is gone from the resend", "temperature" in payload, False)
+check("max_tokens renames when the complaint offers the successor",
+      remote.adapt("Unsupported parameter: 'max_tokens' is not supported with this "
+                   "model. Use 'max_completion_tokens' instead.", payload),
+      "max_tokens -> max_completion_tokens")
+check("…keeping the reply budget under the new name",
+      payload.get("max_completion_tokens"), 2048)
+check("a refused seed is dropped",
+      remote.adapt("Unsupported parameter: 'seed'.", payload), "seed")
+check("an unrelated 400 changes nothing and is not retried",
+      remote.adapt("model 'qwen3' not found", dict(payload)), None)
+check("a complaint about a parameter never sent changes nothing",
+      remote.adapt("`temperature` is deprecated for this model.", payload), None)
+
+
 # ---- the reply shapes --------------------------------------------------------
 
 content, finish = remote._content(

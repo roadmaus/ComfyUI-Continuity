@@ -77,6 +77,17 @@ class ConfigError(ValueError):
     """A URL or key this module will not store, with the reason."""
 
 
+class ServerError(refine.RefineError):
+    """The server answered with an error status. Carries the pieces `chat`'s
+    parameter negotiation reads — the code, and the provider's own complaint —
+    while staying the RefineError every caller already handles."""
+
+    def __init__(self, message, code, detail):
+        super().__init__(message)
+        self.code = code
+        self.detail = detail
+
+
 # ---- the credentials file ----------------------------------------------------
 
 
@@ -219,8 +230,9 @@ def _request(url, key, payload=None):
         except (OSError, ValueError):
             pass
         detail = _scrub(str(detail)[:ERROR_EXCERPT], key)
-        raise refine.RefineError(
-            f"the server answered {exc.code}" + (f": {detail}" if detail else "")
+        raise ServerError(
+            f"the server answered {exc.code}" + (f": {detail}" if detail else ""),
+            exc.code, detail,
         ) from None
     except urllib.error.URLError as exc:
         raise refine.RefineError(
@@ -268,6 +280,35 @@ def to_data_url(image):
     image.save(buffer, "JPEG", quality=90)
     encoded = base64.b64encode(buffer.getvalue()).decode("ascii")
     return f"data:image/jpeg;base64,{encoded}"
+
+
+# What `chat` may give up when a server refuses it by name. Hosted reasoning
+# models reject sampling controls outright — "`temperature` is deprecated for
+# this model", "Unsupported parameter: 'seed'" — and a 400 the user cannot act
+# on is the wrong place to stop: the parameters are preferences, the request is
+# the prompt. `max_tokens` is the special case with a successor; when the
+# complaint names `max_completion_tokens`, it renames instead of dropping, so
+# the reply-length budget survives the newer dialect.
+NEGOTIABLE = ("temperature", "seed", "max_tokens")
+
+
+def adapt(detail, payload):
+    """Rewrite `payload` past a 400 naming a parameter. -> what changed, or None.
+
+    Deliberately literal: the named parameter must be one this module sent and
+    must appear in the server's own complaint, so an unrelated 400 — a bad
+    model name, a malformed message — is never papered over by silently
+    resending with less.
+    """
+    for param in NEGOTIABLE:
+        if param not in payload or param not in detail:
+            continue
+        if param == "max_tokens" and "max_completion_tokens" in detail:
+            payload["max_completion_tokens"] = payload.pop("max_tokens")
+            return "max_tokens -> max_completion_tokens"
+        del payload[param]
+        return param
+    return None
 
 
 def messages(system, message, images=()):
@@ -331,7 +372,15 @@ def chat(model, system, message, images=(), temperature=0.7, seed=-1,
     if int(seed) >= 0:
         payload["seed"] = int(seed)
 
-    body = _request(f"{url}/chat/completions", key, payload)
+    # One try per negotiable parameter, so a server that refuses two sheds
+    # both — and a 400 about anything else still surfaces on the first pass.
+    for _ in range(len(NEGOTIABLE) + 1):
+        try:
+            body = _request(f"{url}/chat/completions", key, payload)
+            break
+        except ServerError as exc:
+            if exc.code != 400 or not adapt(exc.detail, payload):
+                raise
     content, finish = _content(body)
     if not content.strip():
         raise refine.RefineError(
