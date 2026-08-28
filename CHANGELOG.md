@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+**Replacing a person replaces the person, not just the face.** Casting
+somebody into a clip compiled to the one prompt shape H3 reads as "keep the
+person and re-animate them": the newcomer was marked `attribute_transfer` —
+whose meaning in the reference guide is that the *target* subject stays
+identifiable — and the retention line said their features were "transferred
+onto" the outgoing person, whose framing was kept. The model did what it was
+told and moved the face. The swap now compiles the way the guide's own
+combined-source example is written: the newcomer is `fully_preserved` with
+their appearance from the picture and the vacancy named in their definition,
+and the clip's own line is where the swap is scoped — `partially_preserved`,
+everything and everyone else kept, "while ⟨who⟩ is replaced by ⟨Subject N⟩".
+A clip somebody is cast into counts as an edit source even if its chip was
+never narrowed to *edit* by hand.
+
 **Somebody else can take a cast member's place, and the footage stays put.**
 
 Removing a cast member took the clip they stood in with them. That clip is the

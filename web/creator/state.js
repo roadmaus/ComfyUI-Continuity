@@ -4600,10 +4600,12 @@ export function subjectFeatures(subject) {
  *
  * Derived from facts the user stated rather than picked off a list they could
  * contradict — which is what the picker was, and it wrote `partially_preserved`
- * over a sentence that said everything was retained. Standing in for somebody
- * leads, because the transfer is the relationship whatever else changes; a
- * feature the target video gives them instead is `partially_preserved`; the
- * rest is preserved whole.
+ * over a sentence that said everything was retained. A feature the target video
+ * gives them instead is `partially_preserved`; the rest is preserved whole —
+ * including a subject who stands in for somebody, whose appearance appears
+ * entire. (`attribute_transfer` here was the face-swap bug: its gloss keeps the
+ * *target* subject identifiable, so the model kept the person and moved the
+ * face. The swap is scoped on the clip's own retention line instead.)
  *
  * `relationship` on the blob still wins. It is the only way to reach
  * `weak_reference`, which nothing here can infer: "only broad similarity in
@@ -4611,7 +4613,6 @@ export function subjectFeatures(subject) {
  */
 export function subjectMarker(subject) {
   if (SUBJECT_MARKERS.includes(subject?.relationship)) return subject.relationship;
-  if (replacesOf(subject).length) return "attribute_transfer";
   if (subjectFeatures(subject).some((feature) => feature.instead)) return "partially_preserved";
   return "fully_preserved";
 }

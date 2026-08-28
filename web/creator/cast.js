@@ -961,8 +961,10 @@ export class CastShelf {
    * prompt does nothing structural — it lands in `detailed_description` and the
    * retention line still says @vera is preserved whole and the clip is preserved
    * whole, with nothing saying the two have anything to do with each other. What
-   * says it is section 4.1's `attribute_transfer`, and reaching it used to mean
-   * finding a menu item called "their place" behind a thumbnail.
+   * says it is the pair of retention lines the compiler writes — @vera appearing
+   * in the occupant's place, the clip `partially_preserved` around the swap —
+   * and reaching it used to mean finding a menu item called "their place"
+   * behind a thumbnail.
    *
    * So the row is on the card whenever the piece holds a clip that could be
    * edited or continued. Empty and silent where nobody takes anyone's place,

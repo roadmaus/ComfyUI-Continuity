@@ -177,7 +177,7 @@ def _define(asset, label):
     return form % label if form else None
 
 
-def reference_lines(plan, skip=()):
+def reference_lines(plan, skip=(), replaced=None):
     """`compile.plan_references`'s walk -> the lines that define its labels.
 
     One line per label, in the order the tokenizer is shown them, so the prose
@@ -206,6 +206,12 @@ def reference_lines(plan, skip=()):
                          else _DEFINE[("audio", "full")] % label)
             continue
         if asset.handle in skip:
+            continue
+        # A clip somebody is replaced in is an edit source whatever its chip
+        # says — `retention_lines` and `summary` treat it as one, and a
+        # definition calling it "a reference video" would be the odd voice out.
+        if asset.kind == "video" and asset.handle in (replaced or {}):
+            lines.append(_DEFINE[("video", "edit")] % label)
             continue
         line = _define(asset, label)
         if line:
@@ -321,7 +327,7 @@ def _kind(asset):
     return "audio" if (asset.kind == "audio" or asset.track == "sound") else asset.kind
 
 
-def retention_lines(plan, skip=(), body=""):
+def retention_lines(plan, skip=(), body="", replaced=None):
     """`plan` -> the `retention_analysis` lines for the labels no subject claimed.
 
     The mirror of `reference_lines`: whatever that defined, this scopes, so the
@@ -333,6 +339,14 @@ def retention_lines(plan, skip=(), body=""):
     A label the description never cites still gets its line: it is in the
     payload either way, and an unscoped label is the thing this exists to
     prevent.
+
+    `replaced` maps a video handle to `[(subject_label, who), ...]` — the cast
+    members standing in for somebody in that clip. Its line is where the swap
+    is scoped, the way the model card's own editing example scopes it ("...
+    maintained while the central character is edited"): the generic edit line —
+    "everything this description does not change stays as it is" — reads as
+    keeping the very person the cast is replacing, since a one-line body never
+    re-describes them.
     """
     video_label = {step["asset"].handle: step["label"]
                    for step in plan if step["op"] == "video"}
@@ -347,7 +361,7 @@ def retention_lines(plan, skip=(), body=""):
             # the one case the guide settles outright ("When editing a source
             # video, use audio reuse as well if its original audio remains
             # audible"), and everything else is a reference rather than a copy.
-            if asset.takes == "edit":
+            if asset.takes == "edit" or asset.handle in (replaced or {}):
                 marker, becomes = "fully_copy", (
                     f"the original audio of {video_label.get(asset.handle, 'the source video')} "
                     f"remains audible in the target video")
@@ -361,6 +375,23 @@ def retention_lines(plan, skip=(), body=""):
         if asset.role != "reference":
             continue
         kind = _kind(asset)
+        swaps = (replaced or {}).get(asset.handle) if kind == "video" else None
+        if swaps:
+            # Somebody stands in for someone in this clip, so its line says both
+            # halves in one sentence: everything around the vacancy is kept, and
+            # the occupant is who moves. `partially_preserved` whatever the
+            # chip's own take said — a clip marked `full` beside a replacement
+            # would claim, `fully_preserved`, that its occupant is carried in,
+            # which is the one thing this generation is for.
+            marker = "partially_preserved"
+            becomes = "; ".join(
+                f"{who or 'the corresponding subject'} is replaced by {stands}"
+                for stands, who in swaps)
+            becomes = (f"the framing, camera work, timing, environment and "
+                       f"everyone else are kept as they are in the source "
+                       f"video, while {becomes}")
+            lines.append(f"{label} (source video): {marker} - {becomes}.")
+            continue
         marker = _MARKER.get((kind, asset.takes)) or _MARKER.get((kind, "full"))
         becomes = _BECOMES.get((kind, asset.takes)) or _BECOMES.get((kind, "full"))
         if not marker or not becomes:
@@ -391,10 +422,13 @@ TASK_ORDER = ("video editing", "video continuation", "reference generation",
 _VIDEO_TASK = {"edit": "video editing", "continue": "video continuation"}
 
 
-def task_types(plan, has_frames=False):
+def task_types(plan, has_frames=False, edited=()):
     """The task types this generation actually satisfies, in the guide's order.
 
     Combined with " + " by `summary`, never repeated — section 3 says both.
+    `edited` is extra video handles that are edit sources whatever their chip
+    says — a clip somebody is replaced in is being directly modified, which is
+    the guide's own test for `video editing`.
     """
     found = set()
     if has_frames:
@@ -402,7 +436,9 @@ def task_types(plan, has_frames=False):
     for step in plan:
         asset = step["asset"]
         if step["op"] == "soundtrack":
-            found.add("audio reuse" if asset.takes == "edit" else "audio reference")
+            found.add("audio reuse"
+                      if asset.takes == "edit" or asset.handle in edited
+                      else "audio reference")
             continue
         if asset.role != "reference":
             continue
@@ -410,7 +446,10 @@ def task_types(plan, has_frames=False):
         if kind == "audio":
             found.add("audio reuse" if asset.takes == "copy" else "audio reference")
         elif kind == "video":
-            found.add(_VIDEO_TASK.get(asset.takes, "reference generation"))
+            if asset.handle in edited:
+                found.add("video editing")
+            else:
+                found.add(_VIDEO_TASK.get(asset.takes, "reference generation"))
         else:
             found.add("reference generation")
     return [name for name in TASK_ORDER if name in found]
@@ -439,11 +478,15 @@ def summary(plan, cast, subject_labels, asset_labels, shots=1, has_frames=False)
     for it where the refiner has not supplied a real one, and a refined summary
     replaces it whole.
     """
-    types = task_types(plan, has_frames)
+    # A clip somebody is replaced in is an edit source whether or not its chip
+    # was narrowed to `edit` — the replacement is a direct modification of it.
+    replaced_in = {h for s in cast for h in s.replaces}
+    types = task_types(plan, has_frames, edited=replaced_in)
     prefix = f"[{' + '.join(types)}]" if types else ""
 
     edited = [step["label"] for step in plan
-              if step["op"] == "video" and step["asset"].takes == "edit"]
+              if step["op"] == "video" and (step["asset"].takes == "edit"
+                                            or step["asset"].handle in replaced_in)]
     continued = [step["label"] for step in plan
                  if step["op"] == "video" and step["asset"].takes == "continue"]
 

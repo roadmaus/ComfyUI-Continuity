@@ -168,12 +168,15 @@ check("appearance and motion are one subject from two files",
 _swap = subjects.parse([{"handle": "anna", "from": ["img-1"], "replaces": "vid-1",
                          "replaces_what": "the man at the counter"}])
 _swap_labels = {"img-1": "<Picture 1>", "vid-1": "<Video 1>"}
-check("a replacement derives the guide's attribute_transfer marker",
-      _swap[0].relationship, "attribute_transfer")
+check("a replacement stays fully_preserved — the swap is the clip's line to scope",
+      _swap[0].relationship, "fully_preserved")
 _ret = subjects.retention(_swap, _swap_labels, "[Shot 1] <Subject 1> pours coffee.")
 check("and says who is going, in the retention line",
       "the man at the counter in <Video 1>" in _ret, True)
-check("and keeps the clip's own work", "framing, camera work and action are kept" in _ret, True)
+check("and the baseline appearance is retained, not transferred onto him",
+      "their face, hair, build, and clothing are retained" in _ret, True)
+check("and the subject is what appears in the vacancy",
+      "they appear in place of the man at the counter in <Video 1>" in _ret, True)
 
 _where = subjects.parse([{"handle": "anna", "from": ["img-1"]}])
 check("where a subject appears is read off the shots she is written into",
@@ -539,18 +542,20 @@ check("...and the line says what it was and what it is now",
       "<Subject 1> (appears in [Shot 1]): partially_preserved - long dark hair is "
       "retained; a blue cardigan is replaced by a red waxed jacket.")
 
-# Standing in for somebody outranks it: the transfer is the relationship whatever
-# else moves, and the clip's own work is what a replacement must not disturb.
+# Standing in for somebody does not move the marker — the changed feature does,
+# and the swap is stated beside what is kept and what changed.
 _both = subjects.parse([{
     "handle": "vera", "from": ["img-1"], "takes": "person",
     "replaces": ["vid-1"], "replaces_what": "the bench",
     "features": [{"is": "long dark hair"},
                  {"is": "a blue cardigan", "instead": "a red waxed jacket"}]}])
-check("a place taken outranks a feature changed", _both[0].relationship, "attribute_transfer")
+check("a changed feature beside a place taken is partially_preserved",
+      _both[0].relationship, "partially_preserved")
 _line = subjects.retention(_both, _LAB, "[Shot 1] <Subject 1> waits.")
-check("...and the transfer names what lands on whom",
-      "long dark hair is transferred onto the bench in <Video 1>" in _line, True)
-check("...keeps the clip's own work", "framing, camera work and action are kept" in _line, True)
+check("...and the kept feature is retained, not transferred",
+      "long dark hair is retained" in _line, True)
+check("...and the swap names whose place is taken",
+      "they appear in place of the bench in <Video 1>" in _line, True)
 check("...and still says what changed", "replaced by a red waxed jacket" in _line, True)
 
 # ---- the baseline, as rows ---------------------------------------------------
@@ -629,11 +634,11 @@ _place = subjects.parse([{
     "handle": "vera", "from": ["img-1"], "takes": "person",
     "replaces": ["vid-1"], "replaces_what": "the man at the counter",
     "features": _rows("face", "hair", "build", "clothing")}])
-check("a swap transfers the whole baseline, not the last thing typed",
+check("a swap carries the whole baseline into the vacancy, not the last thing typed",
       subjects.retention(_place, _LAB, "[Shot 1] <Subject 1> waits."),
-      "<Subject 1> (appears in [Shot 1]): attribute_transfer - their face, hair, "
-      "build, and clothing are transferred onto the man at the counter in "
-      "<Video 1>, whose framing, camera work and action are kept.")
+      "<Subject 1> (appears in [Shot 1]): fully_preserved - their face, hair, "
+      "build, and clothing are retained; they appear in place of the man at the "
+      "counter in <Video 1>, taking over the source's action and timing.")
 
 # Every take has its own baseline, and the possessive is part of it: a place is
 # not "their" anything.

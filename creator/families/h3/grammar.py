@@ -70,14 +70,25 @@ class H3Grammar(grammar.Grammar):
         entry.
         """
         claimed = subjects.claimed(cast)
+        # Which clip's occupant each cast member stands in for. The clip is not
+        # among the subject's own files — its content is kept, so it holds its
+        # `<Video N>` line — and that line is where the swap has to be scoped,
+        # or the generic edit line claims the occupant stays.
+        replaced = {}
+        for subject in cast:
+            for handle in subject.replaces:
+                replaced.setdefault(handle, []).append(
+                    (subject_labels[subject.handle], subject.replaces_what))
         derived = {}
         if cast:
             derived["subject_definitions"] = subjects.definitions(
                 cast, labels,
-                contextir.reference_lines(plan, skip=claimed) if plan else ())
+                contextir.reference_lines(plan, skip=claimed,
+                                          replaced=replaced) if plan else ())
             derived["retention_analysis"] = "\n".join(
                 [subjects.retention(cast, labels, body)]
-                + contextir.retention_lines(plan, skip=claimed, body=body)).strip()
+                + contextir.retention_lines(plan, skip=claimed, body=body,
+                                            replaced=replaced)).strip()
         elif plan:
             derived["subject_definitions"] = "\n".join(
                 contextir.reference_lines(plan))

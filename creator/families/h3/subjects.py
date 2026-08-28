@@ -157,12 +157,9 @@ class Subject:
         # may be spread across several assets.
         self.replaces = tuple(replaces or ())
         self.replaces_what = replaces_what  # who, in that video, in the user's words
-        # None means "derive it": a subject that replaces somebody is by
-        # definition `attribute_transfer` — section 4.1's own gloss is
-        # "referenced characteristics are transferred to a different
-        # identifiable target subject", which is the whole of what standing in
-        # for someone is — and anything else is preserved whole unless the user
-        # says otherwise.
+        # None means "derive it" — see `relationship`. Preserved whole unless a
+        # feature is changed; standing in for somebody does not move the marker,
+        # because the swap is stated on the clip's own retention line.
         self.marker = marker
         # Whether the feature rows are the whole account of what this subject
         # carries. The shelf seeds one row per `ATTRIBUTES` entry when somebody
@@ -190,12 +187,17 @@ class Subject:
         """The retention marker this subject carries.
 
         Derived, and derived from facts the user stated rather than from a
-        picker they could contradict. Standing in for somebody is section 4.1's
-        `attribute_transfer` in as many words — "referenced characteristics are
-        transferred to a different identifiable target subject" — and it outranks
-        the rest, because the transfer is the relationship whatever else changes.
-        A feature the target video gives them instead is `partially_preserved`,
-        again by 4.1's own gloss. Everything else is preserved whole.
+        picker they could contradict. A feature the target video gives them
+        instead is `partially_preserved`, by 4.1's own gloss. Everything else
+        is preserved whole — *including* a subject who stands in for somebody:
+        their defined role is their appearance, and in the target video it
+        appears entire. This used to be `attribute_transfer`, whose gloss is
+        "transferred to a different identifiable target subject" — a marker
+        that keeps the target identifiable, which the model read faithfully as
+        "keep the person, move the face". The swap itself lives on the *clip's*
+        line (`contextir.retention_lines`), the way the model card's own edit
+        example puts it: the source is partially preserved "while the central
+        character is edited".
 
         `marker` still wins where it is set. It is the way to reach
         `weak_reference`, which nothing here can infer: "only broad similarity
@@ -204,8 +206,6 @@ class Subject:
         """
         if self.marker:
             return self.marker
-        if self.replaces:
-            return "attribute_transfer"
         if self.changed:
             return "partially_preserved"
         return "fully_preserved"
@@ -602,23 +602,34 @@ def definitions(cast, asset_labels, extra_lines=()):
     for subject in cast:
         label = subject_labels[subject.handle]
         noun = _NOUN[subject.takes]
-        if subject.motion and subject.sources:
-            line = (f"{label} is {noun} whose appearance comes from "
-                    f"{_cite(subject.sources, asset_labels)} and whose motion "
-                    f"comes from {_cite([subject.motion], asset_labels)}")
-        elif subject.sources:
-            line = f"{label} is {noun} in {_cite(subject.sources, asset_labels)}"
-        elif subject.motion:
-            line = (f"{label} is {noun} whose motion comes from "
-                    f"{_cite([subject.motion], asset_labels)}")
-        elif subject.replaces:
-            # The subject is whoever the target video puts there instead, and
-            # the clips are where the vacancy is. Several of them read as one
+        # The relative clauses the guide's combined-source form is made of
+        # (§2.1: "the woman whose appearance comes from <Picture 1> and whose
+        # walking motion comes from <Video 1>"). A replacement is one of them,
+        # not a branch of its own: the definition is where the model learns the
+        # appearance and the vacancy belong to one person, and while these were
+        # an either/or a pictured subject's "in place of" clause was written
+        # nowhere at all.
+        clauses = []
+        if subject.sources:
+            clauses.append("whose appearance comes from "
+                           f"{_cite(subject.sources, asset_labels)}"
+                           if subject.motion or subject.replaces else
+                           f"in {_cite(subject.sources, asset_labels)}")
+        if subject.motion:
+            clauses.append("whose motion comes from "
+                           f"{_cite([subject.motion], asset_labels)}")
+        if subject.replaces:
+            # The clips are where the vacancy is. Several of them read as one
             # list — the same person in a medium shot and a close-up is one
             # vacancy filmed twice, not two.
-            line = (f"{label} is {noun} the target video puts in place of "
-                    f"{subject.replaces_what or 'the corresponding subject'} in "
-                    f"{_cite(subject.replaces, asset_labels)}")
+            who = subject.replaces_what or "the corresponding subject"
+            clauses.append(f"who takes the place of {who} in "
+                           f"{_cite(subject.replaces, asset_labels)}"
+                           if subject.sources or subject.motion else
+                           f"the target video puts in place of {who} in "
+                           f"{_cite(subject.replaces, asset_labels)}")
+        if clauses:
+            line = f"{label} is {noun} {_english(clauses)}"
         else:
             # Words alone, which is what a cast is in a generation with no
             # references in it. The description *is* the definition here, so the
@@ -762,25 +773,24 @@ def retention(cast, asset_labels, body):
         # agreement for them.
         verb = "is" if carried_count == 1 else "are"
         clauses = [clauses_lead] if clauses_lead else []
-        if subject.replaces:
-            # The transfer is the relationship, so it leads: what they are made
-            # of lands on somebody else's place, and the clip's own framing,
-            # camera work and action stay where they are. That last half is the
-            # failure this clause exists to prevent — a replacement read as a
-            # new shot rather than as an edit of the old one.
-            who = subject.replaces_what or "the corresponding subject"
-            # "transferred onto <who>" and not "onto <who>'s place": 4.1's gloss
-            # is "transferred to a different identifiable target subject", and
-            # the man at the counter is that subject. The possessive also breaks
-            # on the phrases people actually type — "the man at the counter's
-            # place" reads as the counter's.
-            lead = (f"{carried} {verb} transferred onto " if carried
-                    else "they take the place of ")
-            clauses.append(
-                f"{lead}{who} in {_cite(subject.replaces, asset_labels)}, "
-                f"whose framing, camera work and action are kept")
-        elif carried:
+        if carried:
             clauses.append(f"{carried} {verb} retained")
+        if subject.replaces:
+            # The subject is what appears; the person they stand in for is not.
+            # This used to read "their face, hair, build, and clothing are
+            # transferred onto <who>, whose framing, camera work and action are
+            # kept" — a sentence whose every half tells the model to keep the
+            # man and move the face onto him: "transferred onto" makes him the
+            # surviving target, and the "whose" clause hangs the kept camera
+            # work off *him*. What is kept of the clip is the clip's own line
+            # to say (`contextir.retention_lines` names the replacement there),
+            # and this one says only whose appearance stands in the shot and
+            # whose performance it follows.
+            who = subject.replaces_what or "the corresponding subject"
+            clauses.append(
+                f"they appear in place of {who} in "
+                f"{_cite(subject.replaces, asset_labels)}, taking over the "
+                f"source's action and timing")
 
         for feature in subject.changed:
             clauses.append(
