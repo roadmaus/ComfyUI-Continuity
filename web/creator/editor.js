@@ -424,9 +424,11 @@ export class CreatorEditor {
         // pill row down with it, and a well the panel was allowed to shrink
         // painted the rewrite over Render. The wrapper is what the overflow
         // goes on — see the simple view's rules in styles/fullscreen.js.
-        this.well = el("div", { class: "mmc-well" }, [
+        // keepScroll: the well is the face's scroll container once a rewrite
+        // outgrows the node, and on the canvas the wheel is the zoom.
+        this.well = keepScroll(el("div", { class: "mmc-well" }, [
           this.prompt.frame, this.refinePanel.root,
-        ]),
+        ])),
         this.pillsHost,
       ]),
       this.noticeHost,

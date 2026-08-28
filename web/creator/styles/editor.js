@@ -233,10 +233,21 @@ export const css = `
 /* The writing half of the well: the box and, under it, the rewrite that stands
    in for it. A column of its own so that "the writing scrolls" can be said
    about the writing alone — the pill row is a sibling of this, not of the box,
-   and so it stays put wherever the room runs out. */
+   and so it stays put wherever the room runs out.
+
+   The scroll is here, not on the pieces: a rewrite plus an open prompt is far
+   taller than any node face, and without an overflow the flex chain answered
+   by crushing each box toward zero and letting its text paint over the row
+   below — the fullscreen card's old bug (see styles/fullscreen.js), replayed
+   on the face. The wheel works over it on the canvas via keepScroll, wired
+   where the well is built. */
 .mmc-well {
   display: flex; flex-direction: column; gap: 12px; flex: 1; min-height: 0;
+  overflow-y: auto;
 }
+/* Nothing in the well may be shorter than what it holds — the well scrolls
+   instead. Without this the rewrite's textareas were the give in the chain. */
+.mmc-well > * { flex-shrink: 0; }
 .mmc-panel-corner { position: absolute; top: 10px; right: 10px; z-index: 1; }
 .mmc-expand {
   display: flex; align-items: center; justify-content: center;
@@ -306,7 +317,10 @@ export const css = `
    the same shot the same room. The wrapper is what grows, so the box inside it
    goes on filling the panel exactly as it did; closed, it gives its height back
    to the rewrite that is actually queued. */
-.mmc-prompt-fold { display: flex; flex-direction: column; gap: 8px; flex: 1; min-height: 0; }
+/* flex-basis auto, shrink 0: the fold may grow into spare room but never below
+   its content — undersized, it is the well that scrolls, not this that folds
+   its text over the rewrite underneath. */
+.mmc-prompt-fold { display: flex; flex-direction: column; gap: 8px; flex: 1 0 auto; min-height: 0; }
 .mmc-prompt-fold:not([open]) { flex: 0 0 auto; }
 /* The box has to fill the fold, or the panel is mostly dead space: a
    contenteditable is only clickable where its box is, so a short prompt in a

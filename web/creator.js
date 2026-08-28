@@ -308,7 +308,13 @@ function attach(node, build) {
   // Empty, the wrapper is a blank box on a node nobody is looking at, which is
   // cheaper than the alternative: collapsing the node would serialize into the
   // saved workflow, and a workflow that comes back collapsed is a bug.
-  const host = el("div", { class: "mmc-widget-host" }, [body.root]);
+  // data-capture-wheel is the frontend's own contract for DOM widgets that
+  // scroll: without it, useCanvasInteractions forwards every wheel over the
+  // body to the canvas as zoom — keepScroll never even sees the event. With
+  // it, the wheel is ours whenever the focus is somewhere in the body (the
+  // same deal the stock textarea widget gets), which is what lets the well
+  // scroll a rewrite that outgrew the face.
+  const host = el("div", { class: "mmc-widget-host", "data-capture-wheel": "true" }, [body.root]);
   node.mmcHost = host;
   // The sampler row reads UI preferences (the shift pills' visibility) from the
   // settings cache, which is empty until the server first answers. Prime it —
