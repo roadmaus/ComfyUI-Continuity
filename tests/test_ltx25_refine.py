@@ -166,7 +166,7 @@ expect_error("...including another family's, which is the pin a family switch le
 
 # ---- the reply contract -----------------------------------------------------
 
-shape = refine.reply_shape(3, images=2, piece=True)
+shape = refine.reply_shape(3, shown=("img-1", "img-2"), piece=True)
 check("the contract asks for one entry per shot",
       shape.count('{"body": "..."}'), 3)
 check("...for the grounding pass first, where there are pictures",
@@ -253,7 +253,7 @@ SHOT = {"text": "a kite gets airborne", "seconds": 8, "mode": "FL2V",
         "slots": [{"handle": "img-1", "what": "the target video's first frame (kite.png)",
                    "image": 1}]}
 
-message = refine.user_message([SHOT], seconds=8, images=1, mode="FL2V")
+message = refine.user_message([SHOT], seconds=8, shown=("img-1",), mode="FL2V")
 check("the request is fenced, so it reads as material and not as a question",
       "<request>\na kite gets airborne\n</request>" in message, True)
 check("the attached picture is bound to the handle it is of",
@@ -263,7 +263,7 @@ check("...and the model is told to look at it beside that handle",
 check("the duration is stated", "runs 8.00 seconds" in message, True)
 
 strip = refine.user_message([SHOT, {**SHOT, "text": "it comes down again", "continues": True}],
-                            seconds=16, images=1, mode="FL2V")
+                            seconds=16, shown=("img-1",), mode="FL2V")
 check("a strip says how many entries it wants back",
       "Return exactly 2 entries in `shots`" in strip, True)
 check("...and a seam is said to be one", prompting.CONTINUES_NOTE in strip, True)

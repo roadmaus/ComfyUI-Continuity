@@ -217,5 +217,31 @@ check("a piece of one card has no cut times of its own",
 check("a piece of several already has them",
       len(compiler.timeline_segments(strip([False, True, True]))), 3)
 
+# ---- which handle each attached picture belongs to ---------------------------
+#
+# A clip and a sound are references with no picture handle anywhere near them,
+# and the instruction that asks the model to describe the pictures names the
+# handles it is describing. Positional numbering cannot supply them: an audio
+# reference has no picture at all, so the Nth line is not the Nth image, which
+# is why `_number` stamps the number onto the slot and hands the handles back
+# in the order the pictures ride.
+slots = [{"handle": "aud-1"},
+         {"handle": "vid-1", "picture": True},
+         {"handle": "img-1", "picture": True}]
+dropped, kept, shown = routes._number([slots], ["clip still", "the picture"], 16)
+check("the handles come back in picture order", shown, ("vid-1", "img-1"))
+check("...aligned with the pictures attached", len(kept), len(shown))
+check("a reference with no picture claims no image number",
+      [slot.get("image") for slot in slots], [None, 1, 2])
+check("nothing was dropped", dropped, 0)
+
+# A pool reference cited in a shot rides once and both slots point at that one
+# picture, so its handle is named once rather than twice.
+pool = [{"handle": "img-1", "picture": True}]
+cited = [{"handle": "img-1", "picture": True}]
+_, kept, shown = routes._number([pool, cited], ["a", "b"], 16, shared={"img-1"})
+check("a shared reference is named once", shown, ("img-1",))
+check("...and rides once", len(kept), 1)
+
 
 passed("ok")

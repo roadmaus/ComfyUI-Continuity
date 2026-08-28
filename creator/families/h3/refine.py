@@ -173,7 +173,9 @@ REFERENCES
 Attached media is named by handles such as @img-1, @vid-2, @aud-1. The user \
 message lists every handle, what it holds, and the H3 label it will be given. \
 Write handles in your prose wherever you mean that asset — the labels are \
-substituted in afterwards. Use only handles from that list.
+substituted in afterwards. Every handle you write is one from that list, \
+whatever kind of file it names: a clip is @vid-N and a sound is @aud-N, and \
+where the list holds those, those are the ones your prose carries.
 
 SPEECH
 Whenever the request has anyone speak, talk, say something, ask, answer, shout, \
@@ -314,7 +316,7 @@ def join_shots(bodies, cuts, seconds):
     return contextir.shot_body(plan_cuts(clean, times, seconds))
 
 
-def reply_shape(mode, shots, cuts=0, images=0, piece=False, ref_shots=()):
+def reply_shape(mode, shots, cuts=0, shown=(), piece=False, ref_shots=()):
     """The JSON contract, written out for the model to read.
 
     Nothing in ComfyUI's generation loop constrains a reply to a shape —
@@ -326,8 +328,14 @@ def reply_shape(mode, shots, cuts=0, images=0, piece=False, ref_shots=()):
     `cuts` is the shot ceiling when the model is choosing the cuts, from
     `shot_limit`; anything below 2 is the fixed-count form.
 
-    `images` is how many pictures ride with the message. Where there are any,
-    the object opens with `SEEN_FIELD` — see there for why it is first.
+    `shown` is the handle of each picture riding with the message, in the order
+    they are attached. Where there are any, the object opens with `SEEN_FIELD` —
+    see there for why it is first — and the handles are written into the
+    instruction that asks for it. Told only that a picture is attached, a model
+    naming it reaches for the handle its worked example used, and every example
+    here is written in `@img-N`: a lone reference video came back described as
+    `@img-1`, and the same invented handle then ran through subject_definitions
+    and the shot bodies (issue #31).
 
     `piece` asks for `PIECE_FIELD` — the rewritten global prompt, on a
     whole-timeline refine.
@@ -340,8 +348,9 @@ def reply_shape(mode, shots, cuts=0, images=0, piece=False, ref_shots=()):
     """
     timed = int(cuts) >= 2
     ref_shots = set(ref_shots or ())
+    shown = tuple(shown)
     lines = ["Return exactly this JSON object, and nothing before or after it:", "{"]
-    if int(images) > 0:
+    if shown:
         lines.append('  "%s": "...",' % SEEN_FIELD)
     if piece:
         lines.append('  "%s": "...",' % PIECE_FIELD)
@@ -362,7 +371,7 @@ def reply_shape(mode, shots, cuts=0, images=0, piece=False, ref_shots=()):
         lines.append(
             "Write `%s` right after any `%s`: the piece's standing description, "
             "rewritten — see THE PIECE in the user message." % (PIECE_FIELD, SEEN_FIELD)
-            if int(images) > 0 else
+            if shown else
             "Write `%s` first: the piece's standing description, rewritten — "
             "see THE PIECE in the user message." % PIECE_FIELD
         )
@@ -388,15 +397,17 @@ def reply_shape(mode, shots, cuts=0, images=0, piece=False, ref_shots=()):
             "play order. Escape any quote inside the prose, and write no comments, no "
             "markdown fence and no explanation." % (shots, "y" if shots == 1 else "ies")
         )
-    if int(images) > 0:
+    if shown:
         lines.append(
             "Write `%s` first, before anything else: one sentence per attached "
-            "picture, in the order they are attached, naming its handle and saying "
-            "what is actually in that picture — the subjects and what they look "
-            "like, their clothing, the objects, the setting, the colours, the "
-            "light, the framing. Describe what you can see there, not what the "
-            "request leads you to expect. Then write the rest of the object from "
-            "it." % SEEN_FIELD
+            "picture, in the order they are attached, opening with the handle it "
+            "belongs to. The pictures attached here are %s — those handles, in "
+            "that order, and no others. Say what is actually in each picture — "
+            "the subjects and what they look like, their clothing, the objects, "
+            "the setting, the colours, the light, the framing. Describe what you "
+            "can see there, not what the request leads you to expect. Then write "
+            "the rest of the object from it."
+            % (SEEN_FIELD, ", ".join("@" + handle for handle in shown))
         )
     return "\n".join(lines)
 
@@ -680,7 +691,7 @@ def slot_row(asset, label=None, show_label=False):
     return row
 
 
-def user_message(shots, seconds=None, images=0, mode=None, piece=None, pool=None,
+def user_message(shots, seconds=None, shown=(), mode=None, piece=None, pool=None,
                  footage=(), cast=()):
     """What to rewrite, and what is attached to rewrite it against.
 
@@ -696,6 +707,12 @@ def user_message(shots, seconds=None, images=0, mode=None, piece=None, pool=None
     `rewrite` it is material like the shots and comes back as `PIECE_FIELD`;
     without — a single-card refine, where the other cards' rewrites were
     written against it — it is context that the body must not restate.
+
+    `shown` is the handle each attached picture belongs to, in the order they
+    ride with the message — the same list `reply_shape` writes into the
+    `what_i_see` instruction. Said here as well because it is what the glossary's
+    `[image N]` marks point back at, and a clip or an audio reference is a handle
+    with no picture of its own.
 
     `pool` is the timeline's own reference pool as glossary slots — the assets
     attached to the piece rather than to one card. Listed once, at the top,
@@ -716,16 +733,18 @@ def user_message(shots, seconds=None, images=0, mode=None, piece=None, pool=None
     a cut that is going to hold somebody else's footage.
     """
     many = len(shots) > 1
+    shown = tuple(shown)
     lines = []
 
-    if images == 1:
-        lines.append("One image is attached to this message. The asset marked "
-                     "[image 1] below is what it is a picture of. Look at it and "
-                     "describe what is actually there.")
-    elif images:
-        lines.append(f"{images} images are attached to this message, in order. The "
-                     f"asset marked [image N] below is what the Nth of them is a "
-                     f"picture of. Look at them and describe what is actually there.")
+    if len(shown) == 1:
+        lines.append(f"One image is attached to this message: it is the picture of "
+                     f"@{shown[0]}, the asset marked [image 1] below. Look at it and "
+                     f"describe what is actually there.")
+    elif shown:
+        lines.append(f"{len(shown)} images are attached to this message, in order: "
+                     f"they are the pictures of {', '.join('@' + h for h in shown)}, "
+                     f"the assets marked [image N] below. Look at them and describe "
+                     f"what is actually there.")
     if seconds:
         lines.append(f"The finished video runs {float(seconds):.2f} seconds in total.")
     if many:
@@ -1014,16 +1033,16 @@ class H3Prompting(harness.Prompting):
                 f"which may degrade the result. The pinned template was honoured; "
                 f"set it to auto if that is not what you wanted.")
 
-    def reply_shape(self, mode, shots, cuts=0, images=0, piece=False, ref_shots=()):
-        return reply_shape(mode, shots, cuts=cuts, images=images, piece=piece,
+    def reply_shape(self, mode, shots, cuts=0, shown=(), piece=False, ref_shots=()):
+        return reply_shape(mode, shots, cuts=cuts, shown=shown, piece=piece,
                            ref_shots=ref_shots)
 
     def system_prompt(self, mode, language="English", shape=None, cuts=0):
         return system_prompt(mode, language, shape=shape, cuts=cuts)
 
-    def user_message(self, shots, seconds=None, images=0, mode=None, piece=None,
+    def user_message(self, shots, seconds=None, shown=(), mode=None, piece=None,
                      pool=None, footage=(), cast=()):
-        return user_message(shots, seconds=seconds, images=images, mode=mode,
+        return user_message(shots, seconds=seconds, shown=shown, mode=mode,
                             piece=piece, pool=pool, footage=footage, cast=cast)
 
     def parse_reply(self, content, mode, shots, cuts=0, piece=False, ref_shots=()):

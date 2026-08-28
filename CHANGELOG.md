@@ -2,6 +2,25 @@
 
 ## Unreleased
 
+**The refiner names the handles its pictures belong to, so a reference clip
+stops coming back as `@img-1`.**
+
+Every worked example in the built-in prompts is written with `@img-1` and
+`@img-2`, and the instruction that asks the model to describe the attached
+pictures said only how many there were. So a request whose only reference was a
+video — which rides along as one still, giving it a picture but no image handle
+— had nothing near the write point saying what to call it, and a 4B model reached
+for the handle its example had just used. The invented `@img-1` then ran on
+through `subject_definitions` and the shot bodies
+([#31](https://github.com/roadmaus/ComfyUI-Continuity/issues/31)).
+
+The handles now ride with the pictures: the `what_i_see` instruction lists them
+in attach order and says those are the only ones, the message says which asset
+each attached picture is of, and the reference template's example says its own
+handles are its own. A `what_i_see` that comes back when nothing was attached is
+dropped rather than shown — it was never asked for, and a panel headed "what the
+model saw in your images" is a claim about attachments there are none of.
+
 **An H3 still is decoded by the VAE that renders the shot, and needs no file of
 its own.**
 

@@ -497,7 +497,7 @@ class Prompting:
         """
         return None
 
-    def reply_shape(self, mode, shots, cuts=0, images=0, piece=False, ref_shots=()):
+    def reply_shape(self, mode, shots, cuts=0, shown=(), piece=False, ref_shots=()):
         """The JSON contract, written out for the model to read."""
         raise NotImplementedError(f"{self.id}.reply_shape")
 
@@ -505,7 +505,7 @@ class Prompting:
         """The whole instruction: rules, craft, the mode's template, the contract."""
         raise NotImplementedError(f"{self.id}.system_prompt")
 
-    def user_message(self, shots, seconds=None, images=0, mode=None, piece=None,
+    def user_message(self, shots, seconds=None, shown=(), mode=None, piece=None,
                      pool=None, footage=(), cast=()):
         """What to rewrite, and what is attached to rewrite it against."""
         raise NotImplementedError(f"{self.id}.user_message")

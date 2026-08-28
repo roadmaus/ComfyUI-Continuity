@@ -356,9 +356,13 @@ def _number(groups, images, limit, shared=frozenset()):
 
     Doing it after the cap is applied means the slots past it say they were not
     shown, rather than pointing at an image that is no longer in the message.
-    Returns `(how many were dropped, the pictures actually attached)`.
+    Returns `(how many were dropped, the pictures actually attached, the handle
+    each of those belongs to)`. The handles come back because the instruction
+    that asks the model to describe the pictures names them: told only how many
+    there are, a model reaching for a handle takes the one its worked example
+    used, and every example is written in `@img-N`.
     """
-    kept, seen, dropped, position = [], {}, 0, 0
+    kept, shown, seen, dropped, position = [], [], {}, 0, 0
     for slots in groups:
         for slot in slots:
             if not slot.pop("picture", False):
@@ -375,10 +379,11 @@ def _number(groups, images, limit, shared=frozenset()):
                                 f"{limit} images")
                 continue
             kept.append(picture)
+            shown.append(handle)
             slot["image"] = len(kept)
             if handle in shared:
                 seen[handle] = len(kept)
-    return dropped, kept
+    return dropped, kept, tuple(shown)
 
 
 def _shared(shots):
@@ -494,15 +499,18 @@ def _run(body):
         # The skill's message knows nothing of the pool, so its pictures stay
         # out of the attachment list — a cited pool reference still rides in
         # through the card's own slots, which the compile injected.
-        dropped, pictures = _number([shot["slots"] for shot in shots],
-                                    pictures, MAX_IMAGES)
+        # The handles the pictures belong to go unused here: the skill's own
+        # message lists every slot with its handle and its `[attached image N]`
+        # mark side by side, which is the same grounding said in its vocabulary.
+        dropped, pictures, _ = _number([shot["slots"] for shot in shots],
+                                       pictures, MAX_IMAGES)
         return _run_skill(body, skill, derived, shots, pictures, seconds, dropped,
                           piece_text)
 
     # The pool's pictures lead — they are the ones several shots share — and a
     # cited copy inside a shot points back at the pool's number instead of
     # attaching the same picture twice.
-    dropped, pictures = _number(
+    dropped, pictures, shown = _number(
         ([pool["slots"]] if pool else []) + [shot["slots"] for shot in shots],
         (pool["images"] if pool else []) + pictures,
         MAX_IMAGES,
@@ -553,14 +561,14 @@ def _run(body):
     # ComfyUI's generation loop samples plain logits — nothing constrains the
     # reply to a shape — so the shape is written into the instruction as words
     # and the reply is started mid-object.
-    shape = prompting.reply_shape(mode, len(shots), cuts=cuts, images=len(pictures),
+    shape = prompting.reply_shape(mode, len(shots), cuts=cuts, shown=shown,
                                   piece=ask_piece, ref_shots=ref_shots)
     system = prompting.system_prompt(mode, body.get("language") or "English",
                                      shape=shape, cuts=cuts)
     message = prompting.user_message(
         shots,
         seconds=seconds,
-        images=len(pictures),
+        shown=shown,
         mode=mode,
         piece=piece,
         pool=pool["slots"] if pool else None,
@@ -605,6 +613,12 @@ def _run(body):
             "the model did not say what it saw in the attached images, so it may "
             "have written past them — check the rewrite against your frames"
         )
+    # ...and with no picture attached the field was never asked for, so anything
+    # under it is the model writing the field its worked example had rather than
+    # the one it was given. Dropped rather than shown: a panel headed "what the
+    # model saw in your images" is a claim about attachments, and there are none.
+    if not pictures:
+        parsed["seen"] = ""
 
     shot_sections = parsed.get("shot_sections") or [None] * len(shots)
     out = []

@@ -230,7 +230,7 @@ message = refine.user_message([
     {"text": "she walks in", "seconds": 5, "mode": "I2VA",
      "slots": [{"handle": "img-1", "what": "the first frame (a.png)", "label": "<Picture 1>"}]},
     {"text": "her hands", "seconds": 4, "mode": "T2VA", "continues": True, "slots": []},
-], seconds=9.04, images=1, mode="I2VA")
+], seconds=9.04, shown=("img-1",), mode="I2VA")
 
 check("each shot's own attachments are listed under it", "@img-1" in message, True)
 # Fenced, so the rules have something to point at when they say the text is not
@@ -446,12 +446,23 @@ check("...and a timeline, whose cuts are the cards', never sees it",
 # whole description having never attended to the images. `SEEN_FIELD` is the
 # grounding pass, and it is asked for only where there is something to see.
 
-with_images = refine.reply_shape("I2VA", 1, images=2)
+with_images = refine.reply_shape("I2VA", 1, shown=("img-1", "img-2"))
 check("a picture buys a field to describe it in", prompting.SEEN_FIELD in with_images, True)
 check("...and it is the first thing written",
       with_images.index(prompting.SEEN_FIELD) < with_images.index('"shots"'), True)
 check("a text-only request is not asked for one",
       prompting.SEEN_FIELD in refine.reply_shape("T2VA", 1), False)
+
+# Which handles those pictures belong to, said where the field is asked for. A
+# reference video rides as one still, so the picture's handle is `@vid-1` and
+# no `@img-N` exists at all — and told only that a picture was attached, the
+# model took the handle from the worked example it had just read and wrote
+# `@img-1` through what_i_see, subject_definitions and the bodies (issue #31).
+clip = refine.reply_shape("REF2VA", 1, shown=("vid-1",))
+check("the picture's own handle is named", "@vid-1" in clip, True)
+check("...and no handle it was not given is", "@img-1" in clip, False)
+check("several are named in attach order",
+      "@img-1, @aud-2" in refine.reply_shape("REF2VA", 1, shown=("img-1", "aud-2")), True)
 
 SEEN = ('{"what_i_see": "@img-1 is a red door.", "shots": [{"body": "a courier waits"}], '
         '"overall_soundscape": "rain", "non_diegetic_music": ""}')
@@ -469,11 +480,12 @@ looked = refine.user_message([
     {"text": "she walks in", "seconds": 5, "mode": "I2VA",
      "slots": [{"handle": "img-1", "what": "the first frame (a.png)",
                 "label": "<Picture 1>", "image": 1}]},
-], seconds=5, images=1, mode="I2VA")
+], seconds=5, shown=("img-1",), mode="I2VA")
 check("the shot holding a picture is told to look at it",
       "Look at [image 1] before writing this shot" in looked, True)
 check("a shot with nothing attached is not", "Look at [image" in refine.user_message(
     [{"text": "a street", "seconds": 5, "mode": "T2VA", "slots": []}], mode="T2VA"), False)
+check("the message says which handle the picture is of", "@img-1" in looked.splitlines()[0], True)
 
 
 # ---- quoted words -----------------------------------------------------------
