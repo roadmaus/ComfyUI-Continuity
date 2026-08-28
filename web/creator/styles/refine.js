@@ -130,6 +130,12 @@ export const css = `
   border: 1px solid var(--mmc-line); border-radius: 999px; padding: 1px 7px;
 }
 .mmc-refine-hint { font-size: calc(11px * var(--mmc-type)); color: var(--mmc-dim); line-height: 1.4; }
+/* The eject chip sits inside the server card, under its hint: it is a
+   property of that server, not of the popover. */
+.mmc-refine-eject { padding-top: 2px; }
+/* Replace or add, and one line saying what the answer costs. Indented to the
+   rows above it, since it is about whichever of them is checked. */
+.mmc-refine-modes { padding: 6px 10px 2px; }
 .mmc-refine-note { padding: 2px 10px 8px; }
 .mmc-refine-empty {
   display: flex; flex-direction: column; align-items: flex-start; gap: 8px;

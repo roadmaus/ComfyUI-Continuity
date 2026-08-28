@@ -23,6 +23,7 @@ button rewrote every family's prompt into Context-IR.
 """
 
 import asyncio
+import functools
 import os
 import uuid
 
@@ -424,14 +425,21 @@ def _backend(body):
     a tensor in-process, a `data:` URL on the wire. The request says which
     with one word; everything the word guards lives server-side, so a blob
     carrying `backend` carries no address and no credential.
+
+    `eject` is bound here rather than passed down every call site: it is a
+    property of *where* the model is, and the local half has no use for it —
+    `refine_local.release` already hands the VRAM back after every generation,
+    which is the same promise made by the half that can just do it.
     """
     if body.get("backend") == "remote":
-        return refine_remote.chat, refine_remote.to_data_url
+        chat = (functools.partial(refine_remote.chat, eject=True)
+                if body.get("eject") else refine_remote.chat)
+        return chat, refine_remote.to_data_url
     return refine_local.chat, refine_local.to_tensor
 
 
-def _run_skill(body, name, mode, shots, pictures, seconds, dropped, piece_text=None):
-    """The skill path: the packaged skill is the whole instruction.
+def _run_skill(body, skill, mode, shots, pictures, seconds, dropped, piece_text=None):
+    """The replace path: the loaded skill or prompt is the whole instruction.
 
     Nothing of the harness rides along — no rules, no guide, no JSON contract,
     no prefill — so the reply is the finished document itself and is stored
@@ -445,7 +453,8 @@ def _run_skill(body, name, mode, shots, pictures, seconds, dropped, piece_text=N
     if len(shots) != 1:
         raise compiler.CompileError(
             "a skill writes one whole prompt at a time — refine cards one by one, "
-            "or switch the refiner back to its built-in prompts"
+            "set it to add to the built-in prompting rather than replace it, or "
+            "switch the refiner back to the built-in prompts"
         )
     shot = shots[0]
     # The skill's contract is one finished document from one request, so the
@@ -455,7 +464,6 @@ def _run_skill(body, name, mode, shots, pictures, seconds, dropped, piece_text=N
     if (piece_text or "").strip():
         shot = {**shot, "text": compiler._join_prompt(piece_text, shot.get("text"))}
 
-    skill = refine_skill.load(name)
     chat, look = _backend(body)
     content = chat(
         body.get("model") or "",
@@ -491,6 +499,10 @@ def _run_skill(body, name, mode, shots, pictures, seconds, dropped, piece_text=N
     return {
         "mode": mode,
         "skill": skill["name"],
+        # Which of the two wrote it. A package and a file the user typed read
+        # very differently on the panel's badge, and "skill: noir" over prose
+        # somebody wrote themselves names the wrong thing.
+        "kind": skill["kind"],
         "shots": [{"index": shot.get("index"), "body": written}],
         "soundscape": "",
         "music": "",
@@ -498,6 +510,28 @@ def _run_skill(body, name, mode, shots, pictures, seconds, dropped, piece_text=N
         "seen": "",
         "problems": problems,
     }
+
+
+def _instructions(body):
+    """The user's own instructions for this press: `(skill to run whole, text to add)`.
+
+    One file under the node's skills/ folder, and one of two things done with
+    it. `replace` comes back as the loaded skill and takes the whole prompt over
+    — the mode a `.skill` package has always meant. `add` comes back as text
+    instead, which the family joins onto its own system prompt with its harness
+    left standing. Exactly one of the pair is ever set.
+
+    The file's own declared mode is the default and the panel's switch overrides
+    it. Anything that is not `add` is a replace: a value neither side recognises
+    must not quietly keep the harness while the user believes it is gone.
+    """
+    name = str(body.get("skill") or "").strip()
+    if not name:
+        return None, ""
+    skill = refine_skill.load(name)
+    if (body.get("skill_mode") or skill["mode"]) == refine_skill.ADD:
+        return None, refine_skill.instructions(skill)
+    return skill, ""
 
 
 def _run(body):
@@ -508,7 +542,7 @@ def _run(body):
 
     seconds = sum(float(s.get("seconds") or 0) for s in shots)
 
-    skill = str(body.get("skill") or "").strip()
+    skill, extra = _instructions(body)
     if skill:
         # The skill's message knows nothing of the pool, so its pictures stay
         # out of the attachment list — a cited pool reference still rides in
@@ -578,7 +612,7 @@ def _run(body):
     shape = prompting.reply_shape(mode, len(shots), cuts=cuts, shown=shown,
                                   piece=ask_piece, ref_shots=ref_shots)
     system = prompting.system_prompt(mode, body.get("language") or "English",
-                                     shape=shape, cuts=cuts)
+                                     shape=shape, cuts=cuts, extra=extra)
     message = prompting.user_message(
         shots,
         seconds=seconds,
@@ -862,13 +896,20 @@ async def refine_remote_models(request):
 
 @PromptServer.instance.routes.get("/continuity/refine/skills")
 async def refine_skills(request):
-    """The skill packages under the node's skills/ directory.
+    """The skills and prompt files under the node's skills/ directory.
 
     A directory listing, like the models route: whether a listed package is
     actually loadable is judged in `refine_skill.load`, on the press, where a
     broken zip becomes a message rather than a missing menu entry.
+
+    Each entry carries what kind of thing it is and the mode it asks for, since
+    a `.skill` package and a paragraph in a `.md` are drawn differently and
+    start on different sides of the replace/add switch. `skills` stays a list of
+    names beside it: it is what the panel checks a stored choice against.
     """
-    return web.json_response({"skills": refine_skill.list_skills()})
+    entries = refine_skill.entries()
+    return web.json_response({"skills": [entry["name"] for entry in entries],
+                              "entries": entries})
 
 
 # Refines in flight and finished ones waiting to be picked up, newest last.

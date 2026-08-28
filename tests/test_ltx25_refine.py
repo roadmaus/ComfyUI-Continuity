@@ -147,6 +147,15 @@ check("a language other than English reaches the prose and the dialogue",
 check("...and English says nothing at all",
       "LANGUAGE" in refine.system_prompt("T2V", "English"), False)
 
+# The user's own added instructions land in the same place here as in H3's:
+# after the family's craft, before the reply contract.
+extra = refine.system_prompt("T2V", shape=refine.reply_shape(1),
+                             extra="Write everything as 1940s noir.")
+check("a user's added instructions ride along",
+      "Write everything as 1940s noir." in extra, True)
+check("...between the craft and the contract",
+      extra.index("YOUR INSTRUCTIONS") < extra.index("Return exactly this JSON object"), True)
+
 
 # ---- choosing the template --------------------------------------------------
 

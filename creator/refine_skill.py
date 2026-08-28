@@ -32,6 +32,20 @@ around the document. What the model writes in labels (`<Picture 1>`) is mapped
 back to `@handles` by `refine.normalize_handles` exactly as the harness's
 output is, because storage is storage whichever mode wrote it.
 
+**A plain file is a skill too, and usually an addition rather than one.** Not
+everyone who wants to say something to the refiner wants to replace it: the ask
+this grew from is a user with scenario presets the built-in prompting does not
+cover, which is a paragraph, not a package. So a bare `.md` or `.txt` under
+`skills/` is listed alongside the packages and loaded the same way, and every
+entry carries a *mode*: `replace` hands it over as the whole instruction, which
+is what a package means and what everything above describes; `add` leaves the
+family's harness — its rules, its guides, its JSON contract — standing and joins
+the text on as one more section of the system prompt. `add` is where a plain
+file starts, because a paragraph written without knowing what it is replacing
+almost always meant to be added; a package starts at `replace`, because that is
+what it always was. A file says which it wants in its own frontmatter
+(`mode: replace`), and the settings panel offers the switch either way.
+
 No torch, no ComfyUI: like the families' own halves, everything here is ordinary
 data and is unit-tested that way. `families/refine.py` is the shared harness the
 few functions used below come from.
@@ -48,7 +62,16 @@ SKILLS_DIR = Path(__file__).parent / "skills"
 # The one file every skill has, and the one that comes first.
 SKILL_MD = "SKILL.md"
 
+# What a single-file instruction may be called. A plain document, in the two
+# extensions anyone writing prose in a folder reaches for.
+PROMPT_SUFFIXES = (".md", ".txt")
+
+# What the text does to the built-in prompting. See the module docstring.
+REPLACE, ADD = "replace", "add"
+MODES = (REPLACE, ADD)
+
 _FRONTMATTER_RE = re.compile(r"\A---\n.*?\n---\n", re.DOTALL)
+_MODE_RE = re.compile(r"^mode:\s*(\w+)\s*$", re.MULTILINE)
 
 # What the loader itself says. Runtime facts only — the skill cannot know it is
 # being run without tools or turns, and these are the three consequences: the
@@ -64,23 +87,82 @@ with the request instead. Your reply is used verbatim as the skill's \
 deliverable: return the finished output as plain text, with no markdown fence \
 and nothing before or after it."""
 
+# The same three facts for a single-file prompt, minus the sentence about
+# bundled files: there are none, and telling a model to look for files that are
+# not there is the loader inventing a runtime the user never packaged.
+PROMPT_NOTE = """\
+You are following the instructions below. This is a non-interactive runtime: \
+you cannot ask the user questions and you cannot open files. Where the \
+instructions say to ask for missing information, choose something consistent \
+with the request instead. Your reply is used verbatim as the deliverable: \
+return the finished output as plain text, with no markdown fence and nothing \
+before or after it."""
 
-def list_skills():
-    """The installed skills, by name. Empty when the folder is bare or missing.
 
-    A skill is either a `.skill` zip or a directory with a SKILL.md in it, both
-    living under `skills/`. Listed by what is on disk rather than validated
-    here — `load` is where a broken package becomes a message.
+def _declared_mode(text, fallback):
+    """The `mode:` a file asks for in its frontmatter, or `fallback`.
+
+    Read out of the frontmatter block alone — a `mode: replace` written in the
+    body is prose about a mode, not a declaration of one — and ignored when it
+    names something that is not a mode, because a typo should leave the file
+    working rather than break the press with a parse error.
+    """
+    front = _FRONTMATTER_RE.match(text or "")
+    if not front:
+        return fallback
+    found = _MODE_RE.search(front.group(0))
+    return found.group(1) if found and found.group(1) in MODES else fallback
+
+
+def _kind(entry):
+    """What kind of instruction a directory entry is, or None if it is neither.
+
+    -> `("skill" | "prompt", the default mode)`.
+    """
+    if entry.is_file() and entry.suffix == ".skill":
+        return "skill", REPLACE
+    if entry.is_dir() and (entry / SKILL_MD).is_file():
+        return "skill", REPLACE
+    if entry.is_file() and entry.suffix in PROMPT_SUFFIXES:
+        return "prompt", ADD
+    return None
+
+
+def entries():
+    """Every installed instruction: `{"name", "kind", "mode"}`, by name.
+
+    The panel draws off this rather than off bare names, because the two kinds
+    read differently on screen and start in different modes. Listed by what is
+    on disk rather than validated here — `load` is where a broken package
+    becomes a message.
     """
     if not SKILLS_DIR.is_dir():
         return []
-    names = set()
-    for entry in SKILLS_DIR.iterdir():
-        if entry.is_file() and entry.suffix == ".skill":
-            names.add(entry.stem)
-        elif entry.is_dir() and (entry / SKILL_MD).is_file():
-            names.add(entry.name)
-    return sorted(names)
+    found = {}
+    for entry in sorted(SKILLS_DIR.iterdir()):
+        kind = _kind(entry)
+        if kind is None:
+            continue
+        kind, mode = kind
+        name = entry.stem if entry.is_file() else entry.name
+        # A package and a loose file of the same name: the package wins, which
+        # is the order `load` resolves them in too.
+        if name in found and found[name]["kind"] == "skill":
+            continue
+        text = ""
+        if kind == "prompt":
+            try:
+                text = entry.read_text(encoding="utf-8")
+            except (UnicodeDecodeError, OSError):
+                continue
+        found[name] = {"name": name, "kind": kind,
+                       "mode": _declared_mode(text, mode)}
+    return [found[name] for name in sorted(found)]
+
+
+def list_skills():
+    """The installed skills, by name. Empty when the folder is bare or missing."""
+    return [entry["name"] for entry in entries()]
 
 
 def _read_zip(path):
@@ -125,13 +207,15 @@ def _read_dir(path):
 
 
 def load(name):
-    """One installed skill -> `{"name", "body", "files": [(path, text)]}`.
+    """One installed instruction -> `{"name", "kind", "mode", "body", "files"}`.
 
-    `body` is SKILL.md with its frontmatter taken off — the frontmatter is
-    trigger metadata for a runtime that chooses between skills, and this
-    runtime was told which one to run. `files` is every other bundled text
-    file, in path order, which for the packages this was built against means
-    `references/` in the order the names sort.
+    `body` is SKILL.md — or the whole of a single-file prompt — with its
+    frontmatter taken off: the frontmatter is trigger metadata for a runtime
+    that chooses between skills, and this runtime was told which one to run.
+    `files` is every other bundled text file, in path order, which for the
+    packages this was built against means `references/` in the order the names
+    sort, and for a plain file is empty. `mode` is what the file asks for; the
+    caller may override it, and the settings panel does.
     """
     # The name arrives in an HTTP body and becomes a path component, so it is
     # held to what `list_skills` can produce: one plain filename, no separators,
@@ -141,6 +225,7 @@ def load(name):
 
     zipped = SKILLS_DIR / f"{name}.skill"
     unpacked = SKILLS_DIR / name
+    loose = [SKILLS_DIR / f"{name}{suffix}" for suffix in PROMPT_SUFFIXES]
     if zipped.is_file():
         try:
             files = _read_zip(zipped)
@@ -148,31 +233,56 @@ def load(name):
             raise refine.RefineError(f"'{name}.skill' is not a readable skill package: {exc}") from exc
     elif unpacked.is_dir():
         files = _read_dir(unpacked)
+    elif any(path.is_file() for path in loose):
+        path = next(p for p in loose if p.is_file())
+        try:
+            text = path.read_text(encoding="utf-8")
+        except (UnicodeDecodeError, OSError) as exc:
+            raise refine.RefineError(f"'{path.name}' could not be read as text: {exc}") from exc
+        body = _FRONTMATTER_RE.sub("", text).strip()
+        if not body:
+            raise refine.RefineError(f"'{path.name}' is empty — there is nothing to tell the model")
+        return {"name": name, "kind": "prompt", "mode": _declared_mode(text, ADD),
+                "body": body, "files": []}
     else:
         raise refine.RefineError(
-            f"no skill named '{name}' — put a '{name}.skill' file or a '{name}/' "
-            f"folder with a SKILL.md in it under the node's skills/ directory"
+            f"no skill named '{name}' — put a '{name}.skill' file, a '{name}.md' "
+            f"file or a '{name}/' folder with a SKILL.md in it under the node's "
+            f"skills/ directory"
         )
 
     if SKILL_MD not in files:
         raise refine.RefineError(f"'{name}' has no {SKILL_MD}, so it is not a skill")
     body = _FRONTMATTER_RE.sub("", files[SKILL_MD]).strip()
     rest = [(path, files[path].strip()) for path in sorted(files) if path != SKILL_MD]
-    return {"name": name, "body": body, "files": rest}
+    return {"name": name, "kind": "skill",
+            "mode": _declared_mode(files[SKILL_MD], REPLACE),
+            "body": body, "files": rest}
 
 
-def system_prompt(skill):
-    """The runtime note, then the skill, whole.
+def instructions(skill):
+    """The skill's own text, whole and unframed — what the user wrote, nothing else.
 
     Every bundled file is included — the loader does not know which ones this
     request needs, and deciding that is the skill's own step-one logic, which
     the model is reading. Each file sits under a fence naming its path, so "read
-    `references/base-modes.md`" resolves to something the model can find.
+    `references/base-modes.md`" resolves to something the model can find. A
+    single-file prompt has no such files and comes back as the one paragraph it
+    is, with no header bolted onto it: in `add` mode this text lands inside a
+    system prompt the family wrote, and a `========== SKILL.md ==========` line
+    in the middle of it would be the loader talking over the user.
     """
-    parts = [RUNTIME_NOTE,
-             f"========== {SKILL_MD} ==========\n{skill['body']}"]
+    if not skill["files"]:
+        return skill["body"]
+    parts = [f"========== {SKILL_MD} ==========\n{skill['body']}"]
     parts += [f"========== {path} ==========\n{text}" for path, text in skill["files"]]
     return "\n\n".join(parts)
+
+
+def system_prompt(skill):
+    """The runtime note, then the instruction, whole. `replace` mode's whole prompt."""
+    note = RUNTIME_NOTE if skill["files"] else PROMPT_NOTE
+    return f"{note}\n\n{instructions(skill)}"
 
 
 def user_message(shot, seconds=None, images=0, mode=None, language=None):

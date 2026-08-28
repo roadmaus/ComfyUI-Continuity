@@ -2,6 +2,32 @@
 
 ## Unreleased
 
+**The refiner writes to your instructions, and hands the memory back when it
+is done.** Two things asked for on
+[#19](https://github.com/roadmaus/ComfyUI-Continuity/issues/19) after the
+remote backend shipped.
+
+The prompting is yours to write. A `.md` file in the node's `creator/skills/`
+folder is offered in the refiner's settings by name, with a switch under it:
+*add to the built-in* leaves the node's own instructions, guides, handle checks
+and reply format standing and reads your lines after the craft notes, so a
+scenario preset can steer a whole-timeline refine without breaking anything;
+*replace it* hands your text over as the model's only instruction and keeps the
+answer whole, which is exactly how a `.skill` package has always run, one card
+at a time. A file can say which it wants in its own frontmatter (`mode:
+replace`); a plain paragraph that says nothing is an addition. Skill packages
+still default to replacing, and can now be added instead.
+
+And a remote server can be told to let go. "Eject when done" in the server card
+asks it to unload the model as soon as the rewrite is in, so the next sampler
+pass finds the VRAM free rather than waiting behind an idle LM Studio. It uses
+the server's own call for it — LM Studio's `/api/v1/models/unload`, Ollama's
+`keep_alive: 0`, and a `ttl` alongside the request for LM Studio builds older
+than 0.4 — and a server that can do none of that is left alone rather than
+failing the press. Only ever asked of a server on your own machine or LAN: a
+hosted API has nothing to evict. The in-process backend never needed the switch
+— it has always handed its weights back after every generation.
+
 **The H3 still's two pills are written in the artist's units, not the VAE's.**
 
 A still on the H3 branch is a video generation with one latent frame decoded,

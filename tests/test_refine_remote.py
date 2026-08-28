@@ -162,6 +162,78 @@ check("a complaint about a parameter never sent changes nothing",
       remote.adapt("`temperature` is deprecated for this model.", payload), None)
 
 
+# ---- ejecting ----------------------------------------------------------------
+#
+# What the unload promises is that it is asked of the right servers and that it
+# can never turn a finished rewrite into a failure. Both are checkable without a
+# socket: `_request` is the module's one seam onto the wire.
+
+check("a ttl is negotiable — only LM Studio knows the word",
+      remote.adapt("Unrecognized request argument supplied: ttl",
+                   {"model": "m", "ttl": 1}), "ttl")
+
+for host in ("localhost", "127.0.0.1", "::1", "192.168.1.20", "10.0.0.4",
+             "172.16.3.9", "172.31.255.1", "studio-box", "studio.local"):
+    check(f"{host} is a machine whose memory could be ours", remote._private(host), True)
+for host in ("api.openai.com", "openrouter.ai", "172.15.0.1", "172.32.0.1",
+             "8.8.8.8"):
+    check(f"{host} holds nothing of ours to free", remote._private(host), False)
+
+calls = []
+real_request = remote._request
+
+
+def _fake(answers):
+    """Record every call and answer from `answers`, keyed by the whole URL."""
+    def request(url, key, payload=None):
+        calls.append((url, payload))
+        answer = answers.get(url)
+        if isinstance(answer, Exception):
+            raise answer
+        return answer if answer is not None else {}
+    return request
+
+
+remote.configure("http://localhost:1234/v1", "")
+
+# LM Studio 0.4 and later answer the first endpoint; nothing else is tried.
+calls.clear()
+remote._request = _fake({"http://localhost:1234/api/v1/models/unload": {"ok": True}})
+check("the unload goes to the server's root, not under the /v1 prefix",
+      remote.unload("qwen3-vl"), "/api/v1/models/unload")
+check("…and stops at the one that answered", len(calls), 1)
+check("…naming the model as the instance to drop",
+      calls[0][1], {"instance_id": "qwen3-vl"})
+
+# Ollama has no such endpoint; the ladder falls through to keep_alive.
+calls.clear()
+remote._request = _fake({
+    "http://localhost:1234/api/v1/models/unload": remote.ServerError("404", 404, ""),
+    "http://localhost:1234/api/generate": {"done": True},
+})
+check("a server without the newer endpoint gets the keep_alive call",
+      remote.unload("qwen3:8b"), "/api/generate")
+check("…which says zero seconds, which is Ollama for now",
+      calls[-1][1], {"model": "qwen3:8b", "keep_alive": 0})
+
+# llama.cpp, vLLM, KoboldCpp: neither call exists, and that is not an error.
+calls.clear()
+remote._request = _fake({
+    "http://localhost:1234/api/v1/models/unload": remote.ServerError("404", 404, ""),
+    "http://localhost:1234/api/generate": refine.RefineError("could not reach"),
+})
+check("a server that can do neither is left alone, silently", remote.unload("m"), "")
+check("…after asking both ways", len(calls), 2)
+
+remote.configure("https://api.openai.com/v1", "sk-hosted")
+calls.clear()
+remote._request = _fake({})
+check("a hosted API is never asked to unload anything", remote.unload("gpt-4o"), "")
+check("…and nothing went out to it", calls, [])
+remote._request = real_request
+remote.configure("http://localhost:1234/v1", "")
+
+
 # ---- the reply shapes --------------------------------------------------------
 
 content, finish = remote._content(

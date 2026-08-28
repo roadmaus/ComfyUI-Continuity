@@ -53,15 +53,28 @@ const DEFAULTS = {
   // The server's model, kept apart from the text encoder's name so switching
   // backends and back loses neither choice.
   remoteModel: "",
+  // Ask the server to drop the model once the rewrite is in. A server the user
+  // keeps warm for other work should stay warm, which is why this is off; a
+  // server that only ever answers this button is holding VRAM the sampler is
+  // about to want, which is why it is here. Remote only — the in-process
+  // backend already hands its weights back after every generation.
+  eject: false,
   // Cold by default: refining is a fidelity task, and at 0.7 a small model
   // paraphrases the very words it was told to keep. Raise it for variety.
   temperature: 0.3,
   seed: -1,
   language: "English",
-  // Which skill package writes the rewrite instead of the built-in prompts.
-  // Empty is the built-in harness; a name is a `.skill` under the node's
-  // skills/ folder, handed to the model whole as its only instruction.
+  // Which skill package or prompt file writes the rewrite instead of the
+  // built-in prompts. Empty is the built-in harness; a name is a `.skill` or a
+  // `.md` under the node's skills/ folder.
   skill: "",
+  // What a chosen file does to the built-in prompting, by name: "replace"
+  // hands it over as the model's only instruction, "add" joins it onto the
+  // family's own system prompt and keeps the harness — its guides, its handle
+  // checks, its reply contract — standing. Keyed by name because the answer is
+  // the file's, and absent means "whatever the file itself asks for", which is
+  // the server's default and what makes a switch-free install behave.
+  skillModes: {},
   // Which of the built-in per-mode templates writes the rewrite, per family.
   // "auto" — the absent value — follows the request's derived mode exactly as
   // the weights pill's route does; a pinned name overrides everywhere, and a
@@ -226,19 +239,31 @@ export async function listRemoteModels({ force = false } = {}) {
   return remoteModelCache;
 }
 
-let skillCache = { at: 0, names: [] };
+let skillCache = { at: 0, entries: [] };
 
-/** The skill packages under the node's skills/ folder. */
+/** The skills and prompt files under the node's skills/ folder, each as
+ *  `{name, kind, mode}` — what it is called, whether it is a package or a
+ *  plain file, and the mode the file itself asks for. */
 export async function listSkills({ force = false } = {}) {
-  if (!force && Date.now() - skillCache.at < 20000) return skillCache.names;
+  if (!force && Date.now() - skillCache.at < 20000) return skillCache.entries;
   try {
     const response = await api.fetchApi("/continuity/refine/skills");
     const body = await response.json();
-    skillCache = { at: Date.now(), names: body.skills ?? [] };
+    skillCache = { at: Date.now(), entries: body.entries ?? [] };
   } catch {
-    skillCache = { at: Date.now(), names: [] };
+    skillCache = { at: Date.now(), entries: [] };
   }
-  return skillCache.names;
+  return skillCache.entries;
+}
+
+/** Replace the built-in prompting, or add to it — the user's pick for this
+ *  file, else the mode the file declares. Empty when nothing is chosen: the
+ *  built-in prompting has no such switch. */
+export function chosenSkillMode(name, entries = skillCache.entries, current = settings()) {
+  if (!name) return "";
+  return current.skillModes?.[name]
+    || entries.find((entry) => entry.name === name)?.mode
+    || "replace";
 }
 
 /**
@@ -259,6 +284,10 @@ export async function listSkills({ force = false } = {}) {
 export async function refine(payload) {
   const current = settings();
   const { temperature, seed, language, maxTokens, skill } = current;
+  // Only a mode the user actually picked travels. Absent, the server reads the
+  // file's own `mode:` — so a prompt file that says what it wants behaves the
+  // same on a fresh install as it does here.
+  const skillMode = skill ? (current.skillModes?.[skill] || "") : "";
   // One word says which half of the server holds the model; the model is the
   // active backend's. The URL and the key are already there — nothing about
   // the endpoint rides in the request.
@@ -273,7 +302,11 @@ export async function refine(payload) {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ ...payload, model, backend, temperature, seed, language,
-                           max_tokens: maxTokens, skill, template }),
+                           max_tokens: maxTokens, skill, skill_mode: skillMode,
+                           template,
+                           // Meaningless to the in-process backend, which frees
+                           // its weights after every generation regardless.
+                           eject: backend === "remote" && current.eject === true }),
   });
   const body = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(body.error || t("the refiner failed ({status})", { status: response.status }));
@@ -383,11 +416,14 @@ export function openSettings(anchor, onChange, family = DEFAULT_VIDEO_FAMILY) {
   // strings, travelling in its manifest and translated like any other copy.
   const TEMPLATES = templatesOf(family);
 
-  /** Which per-mode template writes the rewrite. Hidden while a skill is
-   *  chosen — a skill replaces the built-in prompting whole, templates
-   *  included, and a dial that does nothing should not be shown doing it. */
+  /** Which per-mode template writes the rewrite. Hidden while a file is set to
+   *  replace the built-in prompting — that replaces the templates with it, and
+   *  a dial that does nothing should not be shown doing it. A file that only
+   *  adds to the prompting leaves the templates writing the rewrite, so the
+   *  chips stay. */
   function drawTemplate() {
-    if (settings().skill || !TEMPLATES.length) {
+    const { skill } = settings();
+    if ((skill && chosenSkillMode(skill) === "replace") || !TEMPLATES.length) {
       templateHost.replaceChildren();
       return;
     }
@@ -406,11 +442,12 @@ export function openSettings(anchor, onChange, family = DEFAULT_VIDEO_FAMILY) {
     );
   }
 
-  /** Built-in prompts, or one of the skill packages. Only drawn when a skill
+  /** Built-in prompts, or one of the files under skills/. Only drawn when one
    *  exists on disk: with a bare skills/ folder there is no choice to show,
    *  and a one-option radio group would only raise the question it answers. */
   async function drawSkills(force = false) {
-    const names = await listSkills({ force });
+    const entries = await listSkills({ force });
+    const names = entries.map((entry) => entry.name);
     let chosen = settings().skill;
     // A setting pointing at a package since deleted would silently refine with
     // it and 400 on every press; forget it instead.
@@ -422,9 +459,39 @@ export function openSettings(anchor, onChange, family = DEFAULT_VIDEO_FAMILY) {
       skillHost.replaceChildren();
       return;
     }
-    // Each row says what kind of thing it is, because the two kinds behave
-    // nothing alike: a prompt is the node's harness with the format assembled
-    // around the model, a skill is a package the model follows on its own.
+    // What the chosen file does to the built-in prompting. Drawn only when one
+    // is chosen, because "built-in" is what the switch would otherwise be
+    // asking about, and only ever two answers wide.
+    const modes = () => {
+      if (!chosen) return null;
+      const mode = chosenSkillMode(chosen, entries);
+      const chip = (label, value, help) => el("button", {
+        class: "mmc-chip", "aria-checked": value === mode, text: t(label), title: t(help),
+        onclick: () => {
+          saveSettings({ skillModes: { ...settings().skillModes, [chosen]: value } });
+          changed(); drawSkills();
+        },
+      });
+      return el("div", { class: "mmc-refine-group mmc-refine-modes" }, [
+        el("div", { class: "mmc-chips" }, [
+          chip("add to the built-in", "add",
+               "The node's own instructions, guides and reply contract stay — your "
+               + "text is one more section of them. Works on a whole timeline."),
+          chip("replace it", "replace",
+               "Your text is the model's only instruction and its reply is kept "
+               + "whole, exactly as a skill package is run. One card at a time."),
+        ]),
+        el("div", { class: "mmc-refine-hint", text: mode === "replace"
+          ? t("The rewrite lands as one block, and a whole-timeline refine is refused — "
+              + "one reply is one document.")
+          : t("Your lines are read after the craft notes and before the reply format, "
+              + "which stays the node's.") }),
+      ]);
+    };
+    // Each row says what kind of thing it is, because they behave nothing
+    // alike: the built-in is the node's harness with the format assembled
+    // around the model, a skill is a package the model follows on its own, and
+    // a prompt is whatever the user wrote in a file next to them.
     const row = (label, value, kind, title) => el("button", {
       class: "mmc-opt",
       "aria-checked": value === chosen,
@@ -437,13 +504,23 @@ export function openSettings(anchor, onChange, family = DEFAULT_VIDEO_FAMILY) {
     ]);
     skillHost.replaceChildren(
       el("span", { class: "mmc-note-key", text: t("prompting") }),
-      row(t("built-in"), "", "prompt",
+      row(t("built-in"), "", "node",
           t("The node's own instructions and guides, with the format assembled around the model's prose.")),
-      ...names.map((name) => row(name, name, "skill",
-          t("The '{name}' skill package, handed to the model as its only instruction. "
-        + "The model writes the whole prompt document itself — instruction line, shot "
-        + "markers and timestamps included — and the rewrite lands as one block.", { name }))),
+      // The tag says whose the instructions are — the node's, a package's, or
+      // the user's own — which is the distinction that decides how the row
+      // behaves. "prompt" is the server's word for a plain file; on screen the
+      // useful thing about it is that the user wrote it.
+      ...entries.map(({ name, kind }) => row(name, name, kind === "skill" ? "skill" : "yours",
+        kind === "skill"
+        ? t("The '{name}' skill package. Handed to the model whole; whether it replaces "
+          + "the node's prompting or adds to it is the switch below.", { name })
+        : t("Your own instructions, from {name} in the node's skills/ folder.", { name }))),
+      // Nothing is chosen, so there is no switch — and `replaceChildren` would
+      // write the word "null" into the panel if it were handed one.
+      ...[modes()].filter(Boolean),
     );
+    // Which templates are offered depends on the mode this just settled.
+    drawTemplate();
   }
 
   // The providers people actually mean, each one click to its base URL —
@@ -537,6 +614,27 @@ export function openSettings(anchor, onChange, family = DEFAULT_VIDEO_FAMILY) {
         state,
         el("div", { class: "mmc-refine-hint",
                     text: t("The key stays on this machine — never in the browser or a workflow.") }),
+        // Under the card because it is a fact about this server, not about the
+        // model: whether the refiner is allowed to hand the memory back when
+        // it is done with it.
+        el("div", { class: "mmc-chips mmc-refine-eject" }, [
+          el("button", {
+            class: "mmc-chip", "aria-checked": settings().eject === true,
+            text: t("eject when done"),
+            title: t("Ask the server to unload the model as soon as the rewrite is in, "
+                   + "so the sampler gets the memory back. LM Studio and Ollama can do "
+                   + "this; a server that cannot is left alone. Leave it off if you keep "
+                   + "the model loaded for other work."),
+            // Toggled in place rather than by redrawing the card: the card owns
+            // two inputs holding carets and a model list it would refetch.
+            onclick: (event) => {
+              const on = !(settings().eject === true);
+              saveSettings({ eject: on });
+              event.currentTarget.setAttribute("aria-checked", String(on));
+              changed();
+            },
+          }),
+        ]),
       ]),
       rows,
     );
@@ -760,9 +858,12 @@ export class RefinePanel {
       // typed text. The Creator node has no global prompt and gets none.
       ...(result.scope ? { scope: result.scope } : {}),
       ...(result.sections ? { sections: result.sections } : {}),
-      // Which skill package wrote this, when one did — the answer to "why does
-      // this rewrite look nothing like yesterday's" once the setting has moved.
-      ...(result.skill ? { skill: result.skill } : {}),
+      // Which skill package or prompt file wrote this, when one did — the
+      // answer to "why does this rewrite look nothing like yesterday's" once
+      // the setting has moved. Only ever present on a rewrite that replaced
+      // the built-in prompting: one that only added to it was still written by
+      // the node's own prompting and reads as such.
+      ...(result.skill ? { skill: result.skill, kind: result.kind || "skill" } : {}),
       // Which template wrote this, and whether that was the request's own mode
       // or a pin. Stored, not re-derived: the setting and the attachments can
       // both move after the fact, and the answer is about this rewrite.
@@ -942,10 +1043,19 @@ export class RefinePanel {
             : t("Written with the {template} template, picked automatically from "
               + "what is attached.", { template: refined.template }),
         })] : []),
+        // A rewrite written by something other than the built-in prompting says
+        // so, and says which kind — a package, or a file the user wrote. A
+        // rewrite stored before prompt files existed carries no kind and is a
+        // package, which is all there was.
         ...(refined.skill ? [el("span", { class: "mmc-refined-model",
-                                          text: t("skill: {skill}", { skill: refined.skill }),
-                                          title: t("Written by this skill package rather than the "
-                                               + "built-in prompts — the whole document, format included.") })] : []),
+                                          text: refined.kind === "prompt"
+                                            ? t("prompt: {skill}", { skill: refined.skill })
+                                            : t("skill: {skill}", { skill: refined.skill }),
+                                          title: refined.kind === "prompt"
+                                            ? t("Written to your own instructions rather than the "
+                                              + "built-in prompts — the whole document, format included.")
+                                            : t("Written by this skill package rather than the "
+                                              + "built-in prompts — the whole document, format included.") })] : []),
         ...(this.stale ? [el("span", {
           class: "mmc-refined-stale",
           text: t("prompt edited since"),

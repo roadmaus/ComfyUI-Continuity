@@ -61,7 +61,49 @@ os.makedirs(os.path.join(tmp, "plain"))
 with open(os.path.join(tmp, "plain", "SKILL.md"), "w") as f:
     f.write("no frontmatter here")
 
-check("both package forms are listed", skill.list_skills(), ["demo", "plain"])
+# A single file is an instruction too: the ask this grew from is a paragraph,
+# not a package. Written next to the packages so the listing has to sort them
+# together and say which is which.
+with open(os.path.join(tmp, "noir.md"), "w") as f:
+    f.write("Write everything as 1940s noir.")
+with open(os.path.join(tmp, "whole.md"), "w") as f:
+    f.write("---\nmode: replace\n---\n\nYou are the prompt writer. Write the document.")
+with open(os.path.join(tmp, "notes.png"), "wb") as f:
+    f.write(b"\x89PNG\x00\xff")
+
+check("both package forms are listed", skill.list_skills(),
+      ["demo", "noir", "plain", "whole"])
+check("each entry says what it is and which mode it wants",
+      skill.entries(),
+      [{"name": "demo", "kind": "skill", "mode": "replace"},
+       {"name": "noir", "kind": "prompt", "mode": "add"},
+       {"name": "plain", "kind": "skill", "mode": "replace"},
+       {"name": "whole", "kind": "prompt", "mode": "replace"}])
+
+noir = skill.load("noir")
+check("a plain file is its own body", noir["body"], "Write everything as 1940s noir.")
+check("…with nothing bundled beside it", noir["files"], [])
+check("…and adds to the built-in prompting unless it says otherwise", noir["mode"], "add")
+check("a file that asks to replace it is taken at its word",
+      skill.load("whole")["mode"], "replace")
+check("frontmatter is off the body either way",
+      skill.load("whole")["body"].startswith("You are"), True)
+expect_error("a file with nothing in it says so",
+             lambda: (open(os.path.join(tmp, "bare.md"), "w").write("---\nmode: add\n---\n"),
+                      skill.load("bare"))[1],
+             "nothing to tell the model")
+
+# In `add` mode the text lands inside a system prompt the family wrote, so it
+# arrives unframed — a loader's header in the middle of it would be the node
+# talking over the user.
+check("a plain prompt contributes exactly what was written",
+      skill.instructions(noir), "Write everything as 1940s noir.")
+check("a package contributes its files under their paths",
+      "========== references/a.md ==========" in skill.instructions(skill.load("demo")), True)
+check("the runtime note is the replace mode's, not the text's",
+      skill.RUNTIME_NOTE in skill.instructions(skill.load("demo")), False)
+check("a fileless prompt run whole gets the note without the file sentence",
+      skill.system_prompt(noir).startswith(skill.PROMPT_NOTE), True)
 
 demo = skill.load("demo")
 check("the wrapping folder is packaging, not path",

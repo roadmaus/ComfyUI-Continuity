@@ -38,6 +38,16 @@ is LM Studio's own default and never leaves the machine; `http://` to anything
 else with a key attached is the key on the wire in the clear, and `_headers`
 refuses it with the fix in the message rather than sending it and hoping.
 
+**Ejecting.** A server that keeps the refiner's model resident is holding VRAM
+the sampler is about to want, which on one machine is the whole difference
+between a refine and a slower render. So a press can end by asking the server
+to drop the model again: `unload` walks the two endpoints that exist for it —
+LM Studio's `/api/v1/models/unload` and Ollama's `keep_alive: 0` — and a server
+with neither is left alone, silently, because failing to free memory is not a
+reason to fail a rewrite that already succeeded. It is asked only of a server
+on this machine or this LAN: a hosted API has nothing to evict, and an unload
+POST at a public host would only be the key on a stranger's wire again.
+
 Errors are wrapped before they are raised: no header ever reaches an exception
 string, and `_scrub` blots the key out of any text that might have picked it
 up, because a traceback in the ComfyUI console is a log line like any other.
@@ -125,6 +135,25 @@ def _loopback(host):
     host = (host or "").lower().strip("[]")
     return (host in ("localhost", "::1")
             or host.startswith("127."))
+
+
+def _private(host):
+    """This host is on this machine or this LAN — the only kind worth ejecting.
+
+    Deliberately coarse: the question is not "is this address safe" (nothing is
+    sent that a chat request has not already sent to the same server) but "could
+    there be a model here whose memory is mine". A bare name with no dot is a
+    LAN hostname the way `lmstudio-box:1234` is one.
+    """
+    host = (host or "").lower().strip("[]")
+    if _loopback(host) or host.endswith(".local") or "." not in host:
+        return True
+    if host.startswith(("10.", "192.168.", "169.254.")):
+        return True
+    if host.startswith("172."):
+        second = host.split(".")[1] if host.count(".") >= 2 else ""
+        return second.isdigit() and 16 <= int(second) <= 31
+    return False
 
 
 def normalize_url(url):
@@ -264,6 +293,60 @@ def list_models(url=None, key=None):
     return sorted(names)
 
 
+# How long LM Studio may keep a JIT-loaded model after an ejecting press, in
+# seconds. The unload endpoint below is the real mechanism and covers 0.4 and
+# later; this is what 0.3, which has no such endpoint, understands — a TTL that
+# has all but expired by the time the reply is read. One second rather than zero
+# because zero reads as "no TTL" in more dialects than it reads as "now".
+EJECT_TTL = 1
+
+# The two ways a local server can be told to drop a model, newest first. Each is
+# `(path under the server's root, the body it wants)`; the model name is the
+# only variable either takes. LM Studio 0.4 added `/api/v1`; Ollama has always
+# taken `keep_alive: 0` on its native generate endpoint, where an empty request
+# means "just unload". Everything else — llama.cpp's server, vLLM, KoboldCpp —
+# has no such call, answers 404 to both, and is left holding its model.
+UNLOADS = (
+    ("/api/v1/models/unload", lambda model: {"instance_id": model}),
+    ("/api/generate", lambda model: {"model": model, "keep_alive": 0}),
+)
+
+
+def _root(url):
+    """`http://host:1234/v1` -> `http://host:1234`.
+
+    The unload endpoints hang off the server itself, not off the OpenAI-shaped
+    prefix the chat endpoint lives under.
+    """
+    parsed = urllib.parse.urlparse(url)
+    return f"{parsed.scheme}://{parsed.netloc}"
+
+
+def unload(model):
+    """Ask the stored server to drop `model`. -> the path that worked, or "".
+
+    Best effort by contract, not by accident: this runs after a rewrite the
+    caller already has in hand, so every failure here — a server that has no
+    such endpoint, one that has gone away, one that says no — is swallowed. The
+    press succeeded; the memory is a preference.
+    """
+    stored = _read()
+    url, key = stored.get("url", ""), stored.get("key", "")
+    model = (model or "").strip()
+    if not url or not model:
+        return ""
+    if not _private(urllib.parse.urlparse(url).hostname):
+        return ""  # a hosted API holds nothing of ours to free
+    root = _root(url)
+    for path, body in UNLOADS:
+        try:
+            _request(f"{root}{path}", key, body(model))
+            return path
+        except refine.RefineError:
+            continue
+    return ""
+
+
 def to_data_url(image):
     """A PIL image -> a `data:` URL, downscaled like `refine_local.to_tensor`.
 
@@ -288,8 +371,10 @@ def to_data_url(image):
 # on is the wrong place to stop: the parameters are preferences, the request is
 # the prompt. `max_tokens` is the special case with a successor; when the
 # complaint names `max_completion_tokens`, it renames instead of dropping, so
-# the reply-length budget survives the newer dialect.
-NEGOTIABLE = ("temperature", "seed", "max_tokens")
+# the reply-length budget survives the newer dialect. `ttl` is only ever sent
+# by an eject, and only LM Studio knows the word; anything else that bothers to
+# complain about it sheds it here and refines anyway.
+NEGOTIABLE = ("temperature", "seed", "max_tokens", "ttl")
 
 
 def adapt(detail, payload):
@@ -343,7 +428,7 @@ def _content(body):
 
 
 def chat(model, system, message, images=(), temperature=0.7, seed=-1,
-         max_tokens=None, prefill=refine.PREFILL):
+         max_tokens=None, prefill=refine.PREFILL, eject=False):
     """One generation -> the assistant's raw content string.
 
     The same signature as `refine_local.chat`, which is what lets the routes
@@ -371,16 +456,30 @@ def chat(model, system, message, images=(), temperature=0.7, seed=-1,
     }
     if int(seed) >= 0:
         payload["seed"] = int(seed)
+    # Asked for in the same breath as the generation, because LM Studio 0.3 has
+    # no unload call and this is the only thing it will hear. Local servers
+    # only: `ttl` is a word no hosted provider knows, and the ones that check
+    # their parameters would 400 on it — `adapt` sheds it if any of them does.
+    if eject and _private(urllib.parse.urlparse(url).hostname):
+        payload["ttl"] = EJECT_TTL
 
     # One try per negotiable parameter, so a server that refuses two sheds
     # both — and a 400 about anything else still surfaces on the first pass.
-    for _ in range(len(NEGOTIABLE) + 1):
-        try:
-            body = _request(f"{url}/chat/completions", key, payload)
-            break
-        except ServerError as exc:
-            if exc.code != 400 or not adapt(exc.detail, payload):
-                raise
+    try:
+        for _ in range(len(NEGOTIABLE) + 1):
+            try:
+                body = _request(f"{url}/chat/completions", key, payload)
+                break
+            except ServerError as exc:
+                if exc.code != 400 or not adapt(exc.detail, payload):
+                    raise
+    finally:
+        # In a `finally` because a failed press loaded the model just as surely
+        # as a successful one did — a refine that errored on the reply's shape
+        # must not be the one that leaves the weights sitting in the sampler's
+        # memory.
+        if eject:
+            unload(model)
     content, finish = _content(body)
     if not content.strip():
         raise refine.RefineError(

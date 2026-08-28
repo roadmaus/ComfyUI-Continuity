@@ -412,7 +412,7 @@ def reply_shape(mode, shots, cuts=0, shown=(), piece=False, ref_shots=()):
     return "\n".join(lines)
 
 
-def system_prompt(mode, language="English", shape=None, cuts=0):
+def system_prompt(mode, language="English", shape=None, cuts=0, extra=""):
     """The whole instruction: rules, craft, the mode's template, the contract.
 
     Recency does the heavy lifting on a small model — whatever it read last is
@@ -436,6 +436,8 @@ def system_prompt(mode, language="English", shape=None, cuts=0):
     parts.append(f"MODE\nThis request is {mode}. {MODE_NOTES[mode]}")
     parts.append(CRAFT)
     parts.append(MODE_TEMPLATE[mode])
+    if (extra or "").strip():
+        parts.append(harness.EXTRA_RULE.format(extra=extra.strip()))
     if shape:
         parts.append("OUTPUT\n" + shape)
     return "\n\n".join(parts)
@@ -1037,8 +1039,8 @@ class H3Prompting(harness.Prompting):
         return reply_shape(mode, shots, cuts=cuts, shown=shown, piece=piece,
                            ref_shots=ref_shots)
 
-    def system_prompt(self, mode, language="English", shape=None, cuts=0):
-        return system_prompt(mode, language, shape=shape, cuts=cuts)
+    def system_prompt(self, mode, language="English", shape=None, cuts=0, extra=""):
+        return system_prompt(mode, language, shape=shape, cuts=cuts, extra=extra)
 
     def user_message(self, shots, seconds=None, shown=(), mode=None, piece=None,
                      pool=None, footage=(), cast=()):

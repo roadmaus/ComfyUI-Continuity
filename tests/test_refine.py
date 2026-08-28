@@ -111,6 +111,22 @@ check("the worked example comes after the craft",
 check("the contract is the last thing read, after the example",
       ordered.index("\nEXAMPLE") < ordered.index("Return exactly this JSON object"), True)
 
+# A user's own instructions, from a prompt file set to add to the built-in
+# prompting rather than replace it. They outrank the craft and are outranked by
+# the contract, and the order they are read in is what says so.
+extra = refine.system_prompt("T2VA", shape=refine.reply_shape("T2VA", 1),
+                             extra="Write everything as 1940s noir.")
+check("the user's lines are in the prompt, whole",
+      "Write everything as 1940s noir." in extra, True)
+check("…after the mode's template, so they bind over the craft",
+      extra.index("\nEXAMPLE") < extra.index("YOUR INSTRUCTIONS"), True)
+check("…and before the contract, which is not theirs to move",
+      extra.index("YOUR INSTRUCTIONS") < extra.index("Return exactly this JSON object"), True)
+check("nothing is said about them when there are none",
+      "YOUR INSTRUCTIONS" in refine.system_prompt("T2VA"), False)
+check("whitespace is not instructions",
+      "YOUR INSTRUCTIONS" in refine.system_prompt("T2VA", extra="  \n "), False)
+
 
 # ---- choosing the template --------------------------------------------------
 #

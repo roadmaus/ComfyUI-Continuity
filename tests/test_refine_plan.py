@@ -244,4 +244,37 @@ check("a shared reference is named once", shown, ("img-1",))
 check("...and rides once", len(kept), 1)
 
 
+# ---- who writes the prompt, and who cleans up after it -----------------------
+#
+# `refine_skill` is a stub here, so the two seams are stubbed with it: what is
+# under test is the branch, not the loading it already has its own suite for.
+
+skills = sys.modules["mmc.refine_skill"]
+skills.ADD = "add"
+skills.instructions = lambda skill: f"the text of {skill['name']}"
+skills.load = lambda name: {"name": name, "mode": "add" if name == "noir" else "replace"}
+
+check("no file chosen is the built-in prompting, whole",
+      routes._instructions({}), (None, ""))
+check("a package runs as the model's only instruction",
+      routes._instructions({"skill": "pkg"}), ({"name": "pkg", "mode": "replace"}, ""))
+check("a prompt file joins the family's own prompt instead",
+      routes._instructions({"skill": "noir"}), (None, "the text of noir"))
+check("the panel's switch overrides what the file asks for",
+      routes._instructions({"skill": "noir", "skill_mode": "replace"}),
+      ({"name": "noir", "mode": "add"}, ""))
+check("...and the other way about",
+      routes._instructions({"skill": "pkg", "skill_mode": "add"}),
+      (None, "the text of pkg"))
+check("a mode neither side knows replaces rather than silently keeping the harness",
+      routes._instructions({"skill": "noir", "skill_mode": "sideways"})[0] is None, False)
+
+remote = sys.modules["mmc.refine_remote"]
+check("a remote press calls the client itself",
+      routes._backend({"backend": "remote"})[0], remote.chat)
+ejecting = routes._backend({"backend": "remote", "eject": True})[0]
+check("an ejecting press binds the flag onto that same client",
+      (ejecting.func, ejecting.keywords), (remote.chat, {"eject": True}))
+
+
 passed("ok")

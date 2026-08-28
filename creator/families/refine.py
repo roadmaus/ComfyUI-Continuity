@@ -151,6 +151,24 @@ def plan_cuts(bodies, cuts, seconds):
 
 # ---- the glossary -----------------------------------------------------------
 
+# Where a user's own instructions land inside a family's system prompt, and
+# what they are allowed to move. They arrive from a prompt file the user chose
+# to *add* to the built-in prompting rather than replace it, so the two have to
+# be ranked out loud: the craft above is a default and theirs outranks it, the
+# reply contract below is the shape this node parses and nothing outranks that.
+# Shared rather than written twice, because both families place it identically
+# — after the mode's template, before OUTPUT — and a family that let it override
+# the contract would return prose the panel cannot read.
+EXTRA_RULE = """\
+YOUR INSTRUCTIONS
+These come from the user of this node and are about how to write, not about \
+what to reply with. Where they disagree with the craft notes above, follow \
+them. Where they would change the format of your reply, ignore that part: the \
+OUTPUT contract below is not theirs to move.
+
+{extra}"""
+
+
 CONTINUES_NOTE = (
     "This shot continues straight out of the previous shot in the finished clip: "
     "its first frame is the previous one's last frame. Open in that same place, "
@@ -501,8 +519,15 @@ class Prompting:
         """The JSON contract, written out for the model to read."""
         raise NotImplementedError(f"{self.id}.reply_shape")
 
-    def system_prompt(self, mode, language="English", shape=None, cuts=0):
-        """The whole instruction: rules, craft, the mode's template, the contract."""
+    def system_prompt(self, mode, language="English", shape=None, cuts=0, extra=""):
+        """The whole instruction: rules, craft, the mode's template, the contract.
+
+        `extra` is the user's own instructions, from a prompt file they put in
+        the node's skills/ folder and set to add to the built-in prompting
+        rather than replace it. It goes after the family's own craft and before
+        the reply contract — late enough to bind, early enough that the shape
+        of the reply is still the last thing read.
+        """
         raise NotImplementedError(f"{self.id}.system_prompt")
 
     def user_message(self, shots, seconds=None, shown=(), mode=None, piece=None,

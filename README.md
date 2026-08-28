@@ -228,7 +228,16 @@ has no head to decode text with, and the picker says so if you choose it.
 Or skip the file entirely: the refiner's settings can point it at an
 OpenAI-compatible server instead — LM Studio, Ollama, llama.cpp, vLLM, or a
 hosted API with a key. The key is kept server-side on your machine and never
-enters the browser or a workflow file.
+enters the browser or a workflow file. A server you keep loaded for other work
+stays loaded; one that is only answering this button can be told to drop the
+model the moment the rewrite is in, so the sampler gets the memory back.
+
+**And the prompting is yours if you want it.** Put a `.md` file in the node's
+`creator/skills/` folder and the refiner's settings offer it by name: either
+added to the built-in prompting — its guides, its checks and its reply format
+all still standing — or replacing it outright, in which case what you wrote is
+the model's only instruction and its answer is kept whole. Agent skill packages
+(`.skill`) go in the same folder and work the same way.
 
 ### The minimum
 
