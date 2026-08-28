@@ -96,285 +96,422 @@
 {"clip": "000426", "keep": 1, "edits": []}
 {"clip": "000424", "keep": 3, "edits": []}
 {"clip": "000429", "keep": 1, "edits": [["chunky cubic arena walls", "chunky cubic geometry"]]}
-{"clip":"000854","keep":2,"edits":[]}
-{"clip":"000675","keep":2,"edits":[]}
-{"clip":"000613","keep":2,"edits":[["a telemetry overlay reading \"ALT 210FT\" ticking down in the corner","a telemetry overlay in the corner"]]}
-{"clip":"000615","keep":2,"edits":[["a telemetry overlay reading \"ALT 480FT | 76MPH\" in the corner","a telemetry overlay in the corner"]]}
-{"clip":"000614","keep":2,"edits":[["with dim dusk light filtering through dense branches and a telemetry overlay reading \"SPD 61MPH\" in the corner","with dim dusk light and a telemetry overlay in the corner"]]}
-{"clip":"000611","keep":2,"edits":[["a telemetry overlay reading \"BATT 62% | 94MPH\" in the corner","a telemetry overlay in the corner"]]}
-{"clip":"000612","keep":2,"edits":[["under pulsing purple and green rave lights inside a converted warehouse","under pulsing purple and green rave lights"]]}
-{"clip":"000676","keep":2,"edits":[]}
-{"clip":"000677","keep":2,"edits":[]}
-{"clip":"000678","keep":2,"edits":[]}
-{"clip":"000673","keep":2,"edits":[["a timestamp overlay reading \"02:14:07 AM\" burning in the corner","a timestamp overlay burning in the corner"]]}
-{"clip":"000674","keep":2,"edits":[]}
-{"clip":"000873","keep":1,"edits":[[" over dry grassland",""]]}
-{"clip":"000875","keep":1,"edits":[[" and the silhouette of a cathedral spire below",""]]}
-{"clip":"000891","keep":1,"edits":[[" reflecting off a wide",""]]}
-{"clip":"000893","keep":1,"edits":[[" raking across a near-vertical concrete dam wall",""]]}
-{"clip":"000278","keep":1,"edits":[]}
-{"clip":"000948","keep":1,"edits":[]}
-{"clip":"000961","keep":1,"edits":[]}
-{"clip":"000935","keep":1,"edits":[]}
-{"clip":"000329","keep":1,"edits":[["vibrant gym lighting","vibrant interior lighting"]]}
-{"clip":"000879","keep":1,"edits":[]}
-{"clip":"000911","keep":2,"edits":[]}
-{"clip":"000292","keep":2,"edits":[]}
-{"clip":"000729","keep":2,"edits":[[" inside a small basement club",""]]}
-{"clip":"000735","keep":2,"edits":[["shot from a descending drone camera over a desert festival","shot from a descending drone camera"]]}
-{"clip":"000298","keep":2,"edits":[]}
-{"clip":"000732","keep":2,"edits":[[" on a festival side stage at night"," at night"]]}
-{"clip":"000463","keep":2,"edits":[["macro lens over a hand-painted WWII battlefield table with felt hills and talcum-powder snow","macro lens over a hand-painted diorama table with felt hills and talcum-powder snow"]]}
-{"clip":"000487","keep":1,"edits":[["over a painted diorama battlefield with felt hills","over a painted diorama table with felt hills"]]}
-{"clip":"000483","keep":1,"edits":[]}
-{"clip":"000471","keep":1,"edits":[]}
-{"clip":"000475","keep":1,"edits":[]}
-{"clip":"000479","keep":1,"edits":[]}
-{"clip":"000467","keep":1,"edits":[]}
-{"clip":"000938","keep":1,"edits":[]}
-{"clip":"000950","keep":1,"edits":[]}
-{"clip":"000963","keep":1,"edits":[[" making a real marathon finish stretch look like a tabletop model",""]]}
-{"clip":"000937","keep":1,"edits":[[" making a real elevated highway interchange look like a tabletop toy model",""]]}
-{"clip":"000934","keep":2,"edits":[]}
-{"clip":"000960","keep":2,"edits":[]}
-{"clip":"000947","keep":2,"edits":[]}
-{"clip":"000939","keep":1,"edits":[]}
-{"clip":"000290","keep":1,"edits":[]}
-{"clip":"000336","keep":1,"edits":[]}
-{"clip":"000337","keep":1,"edits":[]}
-{"clip":"000332","keep":1,"edits":[]}
-{"clip":"000334","keep":1,"edits":[]}
-{"clip":"000333","keep":1,"edits":[]}
-{"clip":"000335","keep":1,"edits":[]}
-{"clip":"000331","keep":2,"edits":[]}
-{"clip":"000005","keep":2,"edits":[]}
-{"clip":"000373","keep":4,"edits":[]}
-{"clip":"000378","keep":4,"edits":[["with dusty golden late-afternoon light through tall windows","with dusty golden late-afternoon light"]]}
-{"clip":"000372","keep":4,"edits":[]}
-{"clip":"000377","keep":4,"edits":[["and simplified rooftop silhouettes","and simplified silhouettes"]]}
-{"clip":"000374","keep":4,"edits":[["with saturated green paddy-field backgrounds","with saturated green backgrounds"]]}
-{"clip":"000371","keep":4,"edits":[]}
-{"clip":"000375","keep":4,"edits":[["with warm kitchen-lamp lighting","with warm lamp lighting"]]}
-{"clip":"000376","keep":4,"edits":[["dense crowd silhouettes","dense silhouettes"]]}
-{"clip":"000362","keep":1,"edits":[]}
-{"clip":"000361","keep":1,"edits":[]}
-{"clip":"000360","keep":1,"edits":[]}
-{"clip":"000363","keep":1,"edits":[]}
-{"clip":"000364","keep":1,"edits":[]}
-{"clip":"000359","keep":3,"edits":[]}
-{"clip":"000368","keep":2,"edits":[]}
-{"clip":"000370","keep":2,"edits":[["on a sunlit-green schoolyard-style board","on a sunlit-green board"]]}
-{"clip":"000365","keep":2,"edits":[]}
-{"clip":"000367","keep":2,"edits":[]}
-{"clip":"000366","keep":2,"edits":[[" inside a simple classroom frame",""]]}
-{"clip":"000369","keep":2,"edits":[]}
-{"clip":"000357","keep":1,"edits":[]}
-{"clip":"000358","keep":1,"edits":[]}
-{"clip":"000352","keep":1,"edits":[]}
-{"clip":"000356","keep":1,"edits":[[" over alpine rooftops",""]]}
-{"clip":"000353","keep":1,"edits":[]}
-{"clip":"000354","keep":1,"edits":[]}
-{"clip":"000355","keep":1,"edits":[]}
-{"clip":"000379","keep":3,"edits":[]}
-{"clip":"000385","keep":3,"edits":[]}
-{"clip":"000386","keep":3,"edits":[]}
-{"clip":"000382","keep":3,"edits":[]}
-{"clip":"000380","keep":3,"edits":[]}
-{"clip":"000392","keep":5,"edits":[]}
-{"clip":"000388","keep":5,"edits":[]}
-{"clip":"000394","keep":5,"edits":[]}
-{"clip":"000390","keep":5,"edits":[]}
-{"clip":"000393","keep":5,"edits":[]}
-{"clip":"000389","keep":5,"edits":[]}
-{"clip":"000387","keep":5,"edits":[]}
-{"clip":"000391","keep":5,"edits":[]}
-{"clip":"000906","keep":2,"edits":[["painted ochre and terracotta figures rendered in flattened profile against a cracked plaster wall that ripples to life","painted ochre and terracotta forms rendered in flattened profile against a cracked plaster wall"]]}
-{"clip":"000920","keep":2,"edits":[[" that crumbles and reforms as the scene shifts",""]]}
-{"clip":"000926","keep":2,"edits":[]}
-{"clip":"000929","keep":2,"edits":[["against a temple wall that ripples","against a painted wall that ripples"]]}
-{"clip":"000912","keep":2,"edits":[]}
-{"clip":"000405","keep":4,"edits":[]}
-{"clip":"000403","keep":4,"edits":[]}
-{"clip":"000409","keep":4,"edits":[]}
-{"clip":"000404","keep":4,"edits":[]}
-{"clip":"000408","keep":4,"edits":[]}
-{"clip":"000921","keep":1,"edits":[]}
-{"clip":"000924","keep":1,"edits":[]}
-{"clip":"000397","keep":5,"edits":[]}
-{"clip":"000396","keep":5,"edits":[]}
-{"clip":"000400","keep":5,"edits":[]}
-{"clip":"000401","keep":5,"edits":[]}
-{"clip":"000395","keep":5,"edits":[]}
-{"clip":"000398","keep":5,"edits":[]}
-{"clip":"000341","keep":1,"edits":[]}
-{"clip":"000338","keep":3,"edits":[]}
-{"clip":"000343","keep":1,"edits":[]}
-{"clip":"000339","keep":1,"edits":[]}
-{"clip":"000342","keep":1,"edits":[]}
-{"clip":"000340","keep":1,"edits":[]}
-{"clip":"000344","keep":1,"edits":[]}
-{"clip":"000922","keep":2,"edits":[]}
-{"clip":"000905","keep":1,"edits":[]}
-{"clip":"000907","keep":1,"edits":[]}
-{"clip":"000349","keep":1,"edits":[["with candy-colored diner interiors","with candy-colored interiors"]]}
-{"clip":"000350","keep":1,"edits":[["color-block fairways","color blocks"]]}
-{"clip":"000345","keep":1,"edits":[]}
-{"clip":"000351","keep":1,"edits":[["with mint-green kitchen color blocks and simplified appliance shapes","with mint-green color blocks and simplified geometric shapes"]]}
-{"clip":"000347","keep":1,"edits":[]}
-{"clip":"000346","keep":1,"edits":[]}
-{"clip":"000348","keep":1,"edits":[]}
-{"clip":"000915","keep":1,"edits":[]}
-{"clip":"000928","keep":1,"edits":[]}
-{"clip":"000443","keep":2,"edits":[]}
-{"clip":"000287","keep":2,"edits":[["dim pre-dawn kitchen light with a single fridge-light glow","dim pre-dawn light with a single warm practical glow"]]}
-{"clip":"000286","keep":2,"edits":[["oversaturated morning kitchen light","oversaturated morning light"]]}
-{"clip":"000412","keep":2,"edits":[["bright saturated morning kitchen lighting","bright saturated morning lighting"]]}
-{"clip":"000931","keep":2,"edits":[[" over a rain-slicked downtown crosswalk at dusk",""]]}
-{"clip":"000957","keep":2,"edits":[]}
-{"clip":"000944","keep":2,"edits":[]}
-{"clip":"000476","keep":1,"edits":[]}
-{"clip":"000484","keep":1,"edits":[]}
-{"clip":"000464","keep":1,"edits":[]}
-{"clip":"000468","keep":1,"edits":[]}
-{"clip":"000480","keep":1,"edits":[]}
-{"clip":"000472","keep":1,"edits":[]}
-{"clip":"000488","keep":1,"edits":[]}
-{"clip":"000214","keep":1,"edits":[[" and an oversized cartoon-apron backdrop",""]]}
-{"clip":"000002","keep":1,"edits":[]}
-{"clip":"000285","keep":1,"edits":[]}
-{"clip":"000697","keep":2,"edits":[]}
-{"clip":"000698","keep":2,"edits":[]}
-{"clip":"000700","keep":2,"edits":[]}
-{"clip":"000696","keep":2,"edits":[]}
-{"clip":"000699","keep":2,"edits":[]}
-{"clip":"000956","keep":1,"edits":[]}
-{"clip":"000943","keep":3,"edits":[]}
-{"clip":"000282","keep":2,"edits":[]}
-{"clip":"000281","keep":1,"edits":[]}
-{"clip":"000284","keep":1,"edits":[]}
-{"clip":"000283","keep":1,"edits":[]}
-{"clip":"000004","keep":1,"edits":[]}
-{"clip":"000187","keep":1,"edits":[]}
-{"clip":"000194","keep":1,"edits":[]}
-{"clip":"000201","keep":1,"edits":[[" and a crystal ball prop on a velvet-draped table",""]]}
-{"clip":"000208","keep":1,"edits":[[" and visible cable clutter along the studio floor",""]]}
-{"clip":"000141","keep":3,"edits":[]}
-{"clip":"000143","keep":3,"edits":[]}
-{"clip":"000142","keep":3,"edits":[["and sun-star lens flares off the snowfield","and sun-star lens flares"]]}
-{"clip":"000149","keep":4,"edits":[]}
-{"clip":"000146","keep":4,"edits":[]}
-{"clip":"000147","keep":4,"edits":[]}
-{"clip":"000150","keep":4,"edits":[]}
-{"clip":"000145","keep":4,"edits":[]}
-{"clip":"000148","keep":4,"edits":[]}
-{"clip":"000144","keep":4,"edits":[]}
-{"clip":"000152","keep":2,"edits":[]}
-{"clip":"000155","keep":4,"edits":[]}
-{"clip":"000151","keep":4,"edits":[]}
-{"clip":"000160","keep":4,"edits":[]}
-{"clip":"000156","keep":2,"edits":[]}
-{"clip":"000153","keep":4,"edits":[]}
-{"clip":"000157","keep":4,"edits":[["and a hazy halo around the streetlights","and a hazy halo around highlights"]]}
-{"clip":"000159","keep":4,"edits":[]}
-{"clip":"000158","keep":4,"edits":[]}
-{"clip":"000154","keep":4,"edits":[]}
-{"clip":"000165","keep":4,"edits":[["and a faint lens flare off the rig's warning beacons","and a faint lens flare"]]}
-{"clip":"000163","keep":4,"edits":[["cool blue cargo-hold lighting","cool blue lighting"],["and a faint anamorphic flare off the hazard lamps","and a faint anamorphic flare"]]}
-{"clip":"000169","keep":4,"edits":[["and a faint anamorphic flare off the emergency bulbs","and a faint anamorphic flare"]]}
-{"clip":"000168","keep":4,"edits":[["and a faint lens flare cutting through the canopy","and a faint lens flare"]]}
-{"clip":"000167","keep":4,"edits":[["and streaking lens flare off the strobes","and streaking lens flare"]]}
-{"clip":"000162","keep":4,"edits":[["and soft halation around the arcade cabinet lights","and soft halation around practical lights"]]}
-{"clip":"000170","keep":4,"edits":[]}
-{"clip":"000166","keep":4,"edits":[["warm gymnasium lighting","warm interior lighting"],["and soft highlight bloom off the sweat-slicked skin","and soft highlight bloom"]]}
-{"clip":"000161","keep":4,"edits":[["and subtle anamorphic lens flare streaking off the city lights","and subtle anamorphic lens flare"]]}
-{"clip":"000164","keep":4,"edits":[]}
-{"clip":"000178","keep":4,"edits":[["and a flickering neon reflection sliding across the wall from the \"VACANCY\" sign outside","and a flickering neon reflection sliding across the wall"]]}
-{"clip":"000173","keep":4,"edits":[]}
-{"clip":"000175","keep":4,"edits":[]}
-{"clip":"000171","keep":4,"edits":[]}
-{"clip":"000177","keep":4,"edits":[]}
-{"clip":"000174","keep":2,"edits":[]}
-{"clip":"000179","keep":2,"edits":[]}
-{"clip":"000180","keep":4,"edits":[["and a soft halation around the sun behind the fence line","and a soft halation around the sun"]]}
-{"clip":"000172","keep":3,"edits":[]}
-{"clip":"000176","keep":3,"edits":[]}
-{"clip":"000093","keep":2,"edits":[]}
-{"clip":"000708","keep":2,"edits":[]}
-{"clip":"000124","keep":4,"edits":[]}
-{"clip":"000125","keep":4,"edits":[["with venetian-blind shadow stripes crossing the bed and wall","with venetian-blind shadow stripes"]]}
-{"clip":"000130","keep":4,"edits":[["and a soft flicker with hard shadow bars from a hallway transom window","and a soft flicker with hard shadow bars"]]}
-{"clip":"000121","keep":5,"edits":[]}
-{"clip":"000128","keep":4,"edits":[]}
-{"clip":"000129","keep":4,"edits":[["under harsh overhead tiled-room lighting","under harsh overhead lighting"]]}
-{"clip":"000126","keep":4,"edits":[["from a single overhead courtroom light","from a single overhead light"]]}
-{"clip":"000122","keep":4,"edits":[]}
-{"clip":"000127","keep":4,"edits":[]}
-{"clip":"000123","keep":4,"edits":[["with venetian-blind shadow bars cutting across the back wall","with venetian-blind shadow bars"]]}
-{"clip":"000111","keep":2,"edits":[]}
-{"clip":"000113","keep":4,"edits":[]}
-{"clip":"000115","keep":4,"edits":[]}
-{"clip":"000112","keep":4,"edits":[]}
-{"clip":"000118","keep":4,"edits":[]}
-{"clip":"000117","keep":4,"edits":[]}
-{"clip":"000120","keep":4,"edits":[]}
-{"clip":"000119","keep":4,"edits":[]}
-{"clip":"000114","keep":4,"edits":[]}
-{"clip":"000116","keep":4,"edits":[]}
-{"clip":"000185","keep":1,"edits":[]}
-{"clip":"000184","keep":1,"edits":[]}
-{"clip":"000181","keep":3,"edits":[]}
-{"clip":"000183","keep":1,"edits":[]}
-{"clip":"000003","keep":1,"edits":[]}
-{"clip":"000191","keep":1,"edits":[[" and confetti cannons rigged along the ceiling trusses",""]]}
-{"clip":"000193","keep":1,"edits":[[" and a live studio audience of children seated on floor mats",""]]}
-{"clip":"000190","keep":1,"edits":[["multi-camera sitcom diner set with","multi-camera sitcom with"]]}
-{"clip":"000188","keep":1,"edits":[]}
-{"clip":"000192","keep":1,"edits":[[" reading \"CASE #4471: FENCE FEUD,\" the camera pedestals down with medium amplitude at slow speed from an establishing angle to bench level as a fiery ju",""]]}
-{"clip":"000198","keep":1,"edits":[[" and an enthusiastic standing studio crowd",""]]}
-{"clip":"000197","keep":1,"edits":[]}
-{"clip":"000195","keep":1,"edits":[["moody blue kitchen lighting","moody blue interior lighting"]]}
-{"clip":"000199","keep":1,"edits":[]}
-{"clip":"000207","keep":1,"edits":[[" and a rigged slime-cannon at the finish line",""]]}
-{"clip":"000205","keep":1,"edits":[[" and a large illuminated answer screen",""]]}
-{"clip":"000204","keep":1,"edits":[]}
-{"clip":"000202","keep":1,"edits":[]}
-{"clip":"000206","keep":1,"edits":[[" drifting slightly among the gallery"," drifting slightly"]]}
-{"clip":"000212","keep":1,"edits":[[" and a glass wind-tunnel booth reading \"$10,000\" on an overhead display",""]]}
-{"clip":"000211","keep":1,"edits":[]}
-{"clip":"000215","keep":1,"edits":[[" and a hand-lettered backdrop banner reading \"WARD 4 CANDIDATES FORUM,\" two rival city-council candidates seated at a folding table lean toward each other as the",""]]}
-{"clip":"000209","keep":1,"edits":[[" sweeping across rows of grapevines",""]]}
-{"clip":"000213","keep":1,"edits":[[" and a large evidence monitor mounted beside the bench",""]]}
-{"clip":"000221","keep":1,"edits":[[" and a glittering curtain backdrop",""]]}
-{"clip":"000218","keep":1,"edits":[]}
-{"clip":"000219","keep":1,"edits":[[" and a rotating reveal wall built into the stage floor",""]]}
-{"clip":"000222","keep":1,"edits":[["with warm kitchen lighting and a hand-painted studio backdrop","with warm studio lighting"]]}
-{"clip":"000220","keep":1,"edits":[[" and a phone-video insert screen mounted beside the bench",""]]}
-{"clip":"000216","keep":1,"edits":[]}
-{"clip":"000224","keep":1,"edits":[[" and a bouncing on-screen lyric bar reading \"WIGGLE! JUMP! SPIN!\" a costumed mascot fox"," and a bouncing on-screen lyric bar"]]}
-{"clip":"000223","keep":1,"edits":[]}
-{"clip":"000225","keep":1,"edits":[[" and a live chat-overlay ticker scrolling text reading \"CHAT: LMAOOO\" along the screen's edge"," and a live chat-overlay ticker along the screen's edge"]]}
-{"clip":"000308","keep":1,"edits":[]}
-{"clip":"000307","keep":1,"edits":[]}
-{"clip":"000310","keep":1,"edits":[]}
-{"clip":"000306","keep":1,"edits":[]}
-{"clip":"000309","keep":1,"edits":[["with warm tungsten kitchen lighting","with warm tungsten lighting"]]}
-{"clip":"000102","keep":5,"edits":[]}
-{"clip":"000110","keep":4,"edits":[]}
-{"clip":"000105","keep":4,"edits":[]}
-{"clip":"000109","keep":4,"edits":[]}
-{"clip":"000101","keep":6,"edits":[]}
-{"clip":"000103","keep":4,"edits":[]}
-{"clip":"000106","keep":4,"edits":[]}
-{"clip":"000107","keep":2,"edits":[]}
-{"clip":"000108","keep":4,"edits":[]}
-{"clip":"000104","keep":5,"edits":[]}
-{"clip":"000131","keep":5,"edits":[]}
-{"clip":"000137","keep":5,"edits":[]}
-{"clip":"000140","keep":5,"edits":[]}
-{"clip":"000135","keep":5,"edits":[]}
-{"clip":"000139","keep":5,"edits":[]}
-{"clip":"000136","keep":5,"edits":[]}
-{"clip":"000132","keep":5,"edits":[]}
-{"clip":"000138","keep":5,"edits":[]}
-{"clip":"000133","keep":5,"edits":[]}
-{"clip":"000134","keep":5,"edits":[]}
+{"clip": "000854", "keep": 2, "edits": []}
+{"clip": "000675", "keep": 2, "edits": []}
+{"clip": "000613", "keep": 2, "edits": [["a telemetry overlay reading \"ALT 210FT\" ticking down in the corner", "a telemetry overlay in the corner"]]}
+{"clip": "000615", "keep": 2, "edits": [["a telemetry overlay reading \"ALT 480FT | 76MPH\" in the corner", "a telemetry overlay in the corner"]]}
+{"clip": "000614", "keep": 2, "edits": [["with dim dusk light filtering through dense branches and a telemetry overlay reading \"SPD 61MPH\" in the corner", "with dim dusk light and a telemetry overlay in the corner"]]}
+{"clip": "000611", "keep": 2, "edits": [["a telemetry overlay reading \"BATT 62% | 94MPH\" in the corner", "a telemetry overlay in the corner"]]}
+{"clip": "000612", "keep": 2, "edits": [["under pulsing purple and green rave lights inside a converted warehouse", "under pulsing purple and green rave lights"]]}
+{"clip": "000676", "keep": 2, "edits": []}
+{"clip": "000677", "keep": 2, "edits": []}
+{"clip": "000678", "keep": 2, "edits": []}
+{"clip": "000673", "keep": 2, "edits": [["a timestamp overlay reading \"02:14:07 AM\" burning in the corner", "a timestamp overlay burning in the corner"]]}
+{"clip": "000674", "keep": 2, "edits": []}
+{"clip": "000873", "keep": 1, "edits": [[" over dry grassland", ""]]}
+{"clip": "000875", "keep": 1, "edits": [[" and the silhouette of a cathedral spire below", ""]]}
+{"clip": "000891", "keep": 1, "edits": [[" reflecting off a wide", ""]]}
+{"clip": "000893", "keep": 1, "edits": [[" raking across a near-vertical concrete dam wall", ""]]}
+{"clip": "000278", "keep": 1, "edits": []}
+{"clip": "000948", "keep": 1, "edits": []}
+{"clip": "000961", "keep": 1, "edits": []}
+{"clip": "000935", "keep": 1, "edits": []}
+{"clip": "000329", "keep": 1, "edits": [["vibrant gym lighting", "vibrant interior lighting"]]}
+{"clip": "000879", "keep": 1, "edits": []}
+{"clip": "000911", "keep": 2, "edits": []}
+{"clip": "000292", "keep": 2, "edits": []}
+{"clip": "000729", "keep": 2, "edits": [[" inside a small basement club", ""]]}
+{"clip": "000735", "keep": 2, "edits": [["shot from a descending drone camera over a desert festival", "shot from a descending drone camera"]]}
+{"clip": "000298", "keep": 2, "edits": []}
+{"clip": "000732", "keep": 2, "edits": [[" on a festival side stage at night", " at night"]]}
+{"clip": "000463", "keep": 2, "edits": [["macro lens over a hand-painted WWII battlefield table with felt hills and talcum-powder snow", "macro lens over a hand-painted diorama table with felt hills and talcum-powder snow"]]}
+{"clip": "000487", "keep": 1, "edits": [["over a painted diorama battlefield with felt hills", "over a painted diorama table with felt hills"]]}
+{"clip": "000483", "keep": 1, "edits": []}
+{"clip": "000471", "keep": 1, "edits": []}
+{"clip": "000475", "keep": 1, "edits": []}
+{"clip": "000479", "keep": 1, "edits": []}
+{"clip": "000467", "keep": 1, "edits": []}
+{"clip": "000938", "keep": 1, "edits": []}
+{"clip": "000950", "keep": 1, "edits": []}
+{"clip": "000963", "keep": 1, "edits": [[" making a real marathon finish stretch look like a tabletop model", ""]]}
+{"clip": "000937", "keep": 1, "edits": [[" making a real elevated highway interchange look like a tabletop toy model", ""]]}
+{"clip": "000934", "keep": 2, "edits": []}
+{"clip": "000960", "keep": 2, "edits": []}
+{"clip": "000947", "keep": 2, "edits": []}
+{"clip": "000939", "keep": 1, "edits": []}
+{"clip": "000290", "keep": 1, "edits": []}
+{"clip": "000336", "keep": 1, "edits": []}
+{"clip": "000337", "keep": 1, "edits": []}
+{"clip": "000332", "keep": 1, "edits": []}
+{"clip": "000334", "keep": 1, "edits": []}
+{"clip": "000333", "keep": 1, "edits": []}
+{"clip": "000335", "keep": 1, "edits": []}
+{"clip": "000331", "keep": 2, "edits": []}
+{"clip": "000005", "keep": 2, "edits": []}
+{"clip": "000373", "keep": 4, "edits": []}
+{"clip": "000378", "keep": 4, "edits": [["with dusty golden late-afternoon light through tall windows", "with dusty golden late-afternoon light"]]}
+{"clip": "000372", "keep": 4, "edits": []}
+{"clip": "000377", "keep": 4, "edits": [["and simplified rooftop silhouettes", "and simplified silhouettes"]]}
+{"clip": "000374", "keep": 4, "edits": [["with saturated green paddy-field backgrounds", "with saturated green backgrounds"]]}
+{"clip": "000371", "keep": 4, "edits": []}
+{"clip": "000375", "keep": 4, "edits": [["with warm kitchen-lamp lighting", "with warm lamp lighting"]]}
+{"clip": "000376", "keep": 4, "edits": [["dense crowd silhouettes", "dense silhouettes"]]}
+{"clip": "000362", "keep": 1, "edits": []}
+{"clip": "000361", "keep": 1, "edits": []}
+{"clip": "000360", "keep": 1, "edits": []}
+{"clip": "000363", "keep": 1, "edits": []}
+{"clip": "000364", "keep": 1, "edits": []}
+{"clip": "000359", "keep": 3, "edits": []}
+{"clip": "000368", "keep": 2, "edits": []}
+{"clip": "000370", "keep": 2, "edits": [["on a sunlit-green schoolyard-style board", "on a sunlit-green board"]]}
+{"clip": "000365", "keep": 2, "edits": []}
+{"clip": "000367", "keep": 2, "edits": []}
+{"clip": "000366", "keep": 2, "edits": [[" inside a simple classroom frame", ""]]}
+{"clip": "000369", "keep": 2, "edits": []}
+{"clip": "000357", "keep": 1, "edits": []}
+{"clip": "000358", "keep": 1, "edits": []}
+{"clip": "000352", "keep": 1, "edits": []}
+{"clip": "000356", "keep": 1, "edits": [[" over alpine rooftops", ""]]}
+{"clip": "000353", "keep": 1, "edits": []}
+{"clip": "000354", "keep": 1, "edits": []}
+{"clip": "000355", "keep": 1, "edits": []}
+{"clip": "000379", "keep": 3, "edits": []}
+{"clip": "000385", "keep": 3, "edits": []}
+{"clip": "000386", "keep": 3, "edits": []}
+{"clip": "000382", "keep": 3, "edits": []}
+{"clip": "000380", "keep": 3, "edits": []}
+{"clip": "000392", "keep": 5, "edits": []}
+{"clip": "000388", "keep": 5, "edits": []}
+{"clip": "000394", "keep": 5, "edits": []}
+{"clip": "000390", "keep": 5, "edits": []}
+{"clip": "000393", "keep": 5, "edits": []}
+{"clip": "000389", "keep": 5, "edits": []}
+{"clip": "000387", "keep": 5, "edits": []}
+{"clip": "000391", "keep": 5, "edits": []}
+{"clip": "000906", "keep": 2, "edits": [["painted ochre and terracotta figures rendered in flattened profile against a cracked plaster wall that ripples to life", "painted ochre and terracotta forms rendered in flattened profile against a cracked plaster wall"]]}
+{"clip": "000920", "keep": 2, "edits": [[" that crumbles and reforms as the scene shifts", ""]]}
+{"clip": "000926", "keep": 2, "edits": []}
+{"clip": "000929", "keep": 2, "edits": [["against a temple wall that ripples", "against a painted wall that ripples"]]}
+{"clip": "000912", "keep": 2, "edits": []}
+{"clip": "000405", "keep": 4, "edits": []}
+{"clip": "000403", "keep": 4, "edits": []}
+{"clip": "000409", "keep": 4, "edits": []}
+{"clip": "000404", "keep": 4, "edits": []}
+{"clip": "000408", "keep": 4, "edits": []}
+{"clip": "000921", "keep": 1, "edits": []}
+{"clip": "000924", "keep": 1, "edits": []}
+{"clip": "000397", "keep": 5, "edits": []}
+{"clip": "000396", "keep": 5, "edits": []}
+{"clip": "000400", "keep": 5, "edits": []}
+{"clip": "000401", "keep": 5, "edits": []}
+{"clip": "000395", "keep": 5, "edits": []}
+{"clip": "000398", "keep": 5, "edits": []}
+{"clip": "000341", "keep": 1, "edits": []}
+{"clip": "000338", "keep": 3, "edits": []}
+{"clip": "000343", "keep": 1, "edits": []}
+{"clip": "000339", "keep": 1, "edits": []}
+{"clip": "000342", "keep": 1, "edits": []}
+{"clip": "000340", "keep": 1, "edits": []}
+{"clip": "000344", "keep": 1, "edits": []}
+{"clip": "000922", "keep": 2, "edits": []}
+{"clip": "000905", "keep": 1, "edits": []}
+{"clip": "000907", "keep": 1, "edits": []}
+{"clip": "000349", "keep": 1, "edits": [["with candy-colored diner interiors", "with candy-colored interiors"]]}
+{"clip": "000350", "keep": 1, "edits": [["color-block fairways", "color blocks"]]}
+{"clip": "000345", "keep": 1, "edits": []}
+{"clip": "000351", "keep": 1, "edits": [["with mint-green kitchen color blocks and simplified appliance shapes", "with mint-green color blocks and simplified geometric shapes"]]}
+{"clip": "000347", "keep": 1, "edits": []}
+{"clip": "000346", "keep": 1, "edits": []}
+{"clip": "000348", "keep": 1, "edits": []}
+{"clip": "000915", "keep": 1, "edits": []}
+{"clip": "000928", "keep": 1, "edits": []}
+{"clip": "000443", "keep": 2, "edits": []}
+{"clip": "000287", "keep": 2, "edits": [["dim pre-dawn kitchen light with a single fridge-light glow", "dim pre-dawn light with a single warm practical glow"]]}
+{"clip": "000286", "keep": 2, "edits": [["oversaturated morning kitchen light", "oversaturated morning light"]]}
+{"clip": "000412", "keep": 2, "edits": [["bright saturated morning kitchen lighting", "bright saturated morning lighting"]]}
+{"clip": "000931", "keep": 2, "edits": [[" over a rain-slicked downtown crosswalk at dusk", ""]]}
+{"clip": "000957", "keep": 2, "edits": []}
+{"clip": "000944", "keep": 2, "edits": []}
+{"clip": "000476", "keep": 1, "edits": []}
+{"clip": "000484", "keep": 1, "edits": []}
+{"clip": "000464", "keep": 1, "edits": []}
+{"clip": "000468", "keep": 1, "edits": []}
+{"clip": "000480", "keep": 1, "edits": []}
+{"clip": "000472", "keep": 1, "edits": []}
+{"clip": "000488", "keep": 1, "edits": []}
+{"clip": "000214", "keep": 1, "edits": [[" and an oversized cartoon-apron backdrop", ""]]}
+{"clip": "000002", "keep": 1, "edits": []}
+{"clip": "000285", "keep": 1, "edits": []}
+{"clip": "000697", "keep": 2, "edits": []}
+{"clip": "000698", "keep": 2, "edits": []}
+{"clip": "000700", "keep": 2, "edits": []}
+{"clip": "000696", "keep": 2, "edits": []}
+{"clip": "000699", "keep": 2, "edits": []}
+{"clip": "000956", "keep": 1, "edits": []}
+{"clip": "000943", "keep": 3, "edits": []}
+{"clip": "000282", "keep": 2, "edits": []}
+{"clip": "000281", "keep": 1, "edits": []}
+{"clip": "000284", "keep": 1, "edits": []}
+{"clip": "000283", "keep": 1, "edits": []}
+{"clip": "000004", "keep": 1, "edits": []}
+{"clip": "000187", "keep": 1, "edits": []}
+{"clip": "000194", "keep": 1, "edits": []}
+{"clip": "000201", "keep": 1, "edits": [[" and a crystal ball prop on a velvet-draped table", ""]]}
+{"clip": "000208", "keep": 1, "edits": [[" and visible cable clutter along the studio floor", ""]]}
+{"clip": "000141", "keep": 3, "edits": []}
+{"clip": "000143", "keep": 3, "edits": []}
+{"clip": "000142", "keep": 3, "edits": [["and sun-star lens flares off the snowfield", "and sun-star lens flares"]]}
+{"clip": "000149", "keep": 4, "edits": []}
+{"clip": "000146", "keep": 4, "edits": []}
+{"clip": "000147", "keep": 4, "edits": []}
+{"clip": "000150", "keep": 4, "edits": []}
+{"clip": "000145", "keep": 4, "edits": []}
+{"clip": "000148", "keep": 4, "edits": []}
+{"clip": "000144", "keep": 4, "edits": []}
+{"clip": "000152", "keep": 2, "edits": []}
+{"clip": "000155", "keep": 4, "edits": []}
+{"clip": "000151", "keep": 4, "edits": []}
+{"clip": "000160", "keep": 4, "edits": []}
+{"clip": "000156", "keep": 2, "edits": []}
+{"clip": "000153", "keep": 4, "edits": []}
+{"clip": "000157", "keep": 4, "edits": [["and a hazy halo around the streetlights", "and a hazy halo around highlights"]]}
+{"clip": "000159", "keep": 4, "edits": []}
+{"clip": "000158", "keep": 4, "edits": []}
+{"clip": "000154", "keep": 4, "edits": []}
+{"clip": "000165", "keep": 4, "edits": [["and a faint lens flare off the rig's warning beacons", "and a faint lens flare"]]}
+{"clip": "000163", "keep": 4, "edits": [["cool blue cargo-hold lighting", "cool blue lighting"], ["and a faint anamorphic flare off the hazard lamps", "and a faint anamorphic flare"]]}
+{"clip": "000169", "keep": 4, "edits": [["and a faint anamorphic flare off the emergency bulbs", "and a faint anamorphic flare"]]}
+{"clip": "000168", "keep": 4, "edits": [["and a faint lens flare cutting through the canopy", "and a faint lens flare"]]}
+{"clip": "000167", "keep": 4, "edits": [["and streaking lens flare off the strobes", "and streaking lens flare"]]}
+{"clip": "000162", "keep": 4, "edits": [["and soft halation around the arcade cabinet lights", "and soft halation around practical lights"]]}
+{"clip": "000170", "keep": 4, "edits": []}
+{"clip": "000166", "keep": 4, "edits": [["warm gymnasium lighting", "warm interior lighting"], ["and soft highlight bloom off the sweat-slicked skin", "and soft highlight bloom"]]}
+{"clip": "000161", "keep": 4, "edits": [["and subtle anamorphic lens flare streaking off the city lights", "and subtle anamorphic lens flare"]]}
+{"clip": "000164", "keep": 4, "edits": []}
+{"clip": "000178", "keep": 4, "edits": [["and a flickering neon reflection sliding across the wall from the \"VACANCY\" sign outside", "and a flickering neon reflection sliding across the wall"]]}
+{"clip": "000173", "keep": 4, "edits": []}
+{"clip": "000175", "keep": 4, "edits": []}
+{"clip": "000171", "keep": 4, "edits": []}
+{"clip": "000177", "keep": 4, "edits": []}
+{"clip": "000174", "keep": 2, "edits": []}
+{"clip": "000179", "keep": 2, "edits": []}
+{"clip": "000180", "keep": 4, "edits": [["and a soft halation around the sun behind the fence line", "and a soft halation around the sun"]]}
+{"clip": "000172", "keep": 3, "edits": []}
+{"clip": "000176", "keep": 3, "edits": []}
+{"clip": "000093", "keep": 2, "edits": []}
+{"clip": "000708", "keep": 2, "edits": []}
+{"clip": "000124", "keep": 4, "edits": []}
+{"clip": "000125", "keep": 4, "edits": [["with venetian-blind shadow stripes crossing the bed and wall", "with venetian-blind shadow stripes"]]}
+{"clip": "000130", "keep": 4, "edits": [["and a soft flicker with hard shadow bars from a hallway transom window", "and a soft flicker with hard shadow bars"]]}
+{"clip": "000121", "keep": 5, "edits": []}
+{"clip": "000128", "keep": 4, "edits": []}
+{"clip": "000129", "keep": 4, "edits": [["under harsh overhead tiled-room lighting", "under harsh overhead lighting"]]}
+{"clip": "000126", "keep": 4, "edits": [["from a single overhead courtroom light", "from a single overhead light"]]}
+{"clip": "000122", "keep": 4, "edits": []}
+{"clip": "000127", "keep": 4, "edits": []}
+{"clip": "000123", "keep": 4, "edits": [["with venetian-blind shadow bars cutting across the back wall", "with venetian-blind shadow bars"]]}
+{"clip": "000111", "keep": 2, "edits": []}
+{"clip": "000113", "keep": 4, "edits": []}
+{"clip": "000115", "keep": 4, "edits": []}
+{"clip": "000112", "keep": 4, "edits": []}
+{"clip": "000118", "keep": 4, "edits": []}
+{"clip": "000117", "keep": 4, "edits": []}
+{"clip": "000120", "keep": 4, "edits": []}
+{"clip": "000119", "keep": 4, "edits": []}
+{"clip": "000114", "keep": 4, "edits": []}
+{"clip": "000116", "keep": 4, "edits": []}
+{"clip": "000185", "keep": 1, "edits": []}
+{"clip": "000184", "keep": 1, "edits": []}
+{"clip": "000181", "keep": 3, "edits": []}
+{"clip": "000183", "keep": 1, "edits": []}
+{"clip": "000003", "keep": 1, "edits": []}
+{"clip": "000191", "keep": 1, "edits": [[" and confetti cannons rigged along the ceiling trusses", ""]]}
+{"clip": "000193", "keep": 1, "edits": [[" and a live studio audience of children seated on floor mats", ""]]}
+{"clip": "000190", "keep": 1, "edits": [["multi-camera sitcom diner set with", "multi-camera sitcom with"]]}
+{"clip": "000188", "keep": 1, "edits": []}
+{"clip": "000192", "keep": 1, "edits": [[" reading \"CASE #4471: FENCE FEUD,\" the camera pedestals down with medium amplitude at slow speed from an establishing angle to bench level as a fiery ju", ""]]}
+{"clip": "000198", "keep": 1, "edits": [[" and an enthusiastic standing studio crowd", ""]]}
+{"clip": "000197", "keep": 1, "edits": []}
+{"clip": "000195", "keep": 1, "edits": [["moody blue kitchen lighting", "moody blue interior lighting"]]}
+{"clip": "000199", "keep": 1, "edits": []}
+{"clip": "000207", "keep": 1, "edits": [[" and a rigged slime-cannon at the finish line", ""]]}
+{"clip": "000205", "keep": 1, "edits": [[" and a large illuminated answer screen", ""]]}
+{"clip": "000204", "keep": 1, "edits": []}
+{"clip": "000202", "keep": 1, "edits": []}
+{"clip": "000206", "keep": 1, "edits": [[" drifting slightly among the gallery", " drifting slightly"]]}
+{"clip": "000212", "keep": 1, "edits": [[" and a glass wind-tunnel booth reading \"$10,000\" on an overhead display", ""]]}
+{"clip": "000211", "keep": 1, "edits": []}
+{"clip": "000215", "keep": 1, "edits": [[" and a hand-lettered backdrop banner reading \"WARD 4 CANDIDATES FORUM,\" two rival city-council candidates seated at a folding table lean toward each other as the", ""]]}
+{"clip": "000209", "keep": 1, "edits": [[" sweeping across rows of grapevines", ""]]}
+{"clip": "000213", "keep": 1, "edits": [[" and a large evidence monitor mounted beside the bench", ""]]}
+{"clip": "000221", "keep": 1, "edits": [[" and a glittering curtain backdrop", ""]]}
+{"clip": "000218", "keep": 1, "edits": []}
+{"clip": "000219", "keep": 1, "edits": [[" and a rotating reveal wall built into the stage floor", ""]]}
+{"clip": "000222", "keep": 1, "edits": [["with warm kitchen lighting and a hand-painted studio backdrop", "with warm studio lighting"]]}
+{"clip": "000220", "keep": 1, "edits": [[" and a phone-video insert screen mounted beside the bench", ""]]}
+{"clip": "000216", "keep": 1, "edits": []}
+{"clip": "000224", "keep": 1, "edits": [[" and a bouncing on-screen lyric bar reading \"WIGGLE! JUMP! SPIN!\" a costumed mascot fox", " and a bouncing on-screen lyric bar"]]}
+{"clip": "000223", "keep": 1, "edits": []}
+{"clip": "000225", "keep": 1, "edits": [[" and a live chat-overlay ticker scrolling text reading \"CHAT: LMAOOO\" along the screen's edge", " and a live chat-overlay ticker along the screen's edge"]]}
+{"clip": "000308", "keep": 1, "edits": []}
+{"clip": "000307", "keep": 1, "edits": []}
+{"clip": "000310", "keep": 1, "edits": []}
+{"clip": "000306", "keep": 1, "edits": []}
+{"clip": "000309", "keep": 1, "edits": [["with warm tungsten kitchen lighting", "with warm tungsten lighting"]]}
+{"clip": "000102", "keep": 5, "edits": []}
+{"clip": "000110", "keep": 4, "edits": []}
+{"clip": "000105", "keep": 4, "edits": []}
+{"clip": "000109", "keep": 4, "edits": []}
+{"clip": "000101", "keep": 6, "edits": []}
+{"clip": "000103", "keep": 4, "edits": []}
+{"clip": "000106", "keep": 4, "edits": []}
+{"clip": "000107", "keep": 2, "edits": []}
+{"clip": "000108", "keep": 4, "edits": []}
+{"clip": "000104", "keep": 5, "edits": []}
+{"clip": "000131", "keep": 5, "edits": []}
+{"clip": "000137", "keep": 5, "edits": []}
+{"clip": "000140", "keep": 5, "edits": []}
+{"clip": "000135", "keep": 5, "edits": []}
+{"clip": "000139", "keep": 5, "edits": []}
+{"clip": "000136", "keep": 5, "edits": []}
+{"clip": "000132", "keep": 5, "edits": []}
+{"clip": "000138", "keep": 5, "edits": []}
+{"clip": "000133", "keep": 5, "edits": []}
+{"clip": "000134", "keep": 5, "edits": []}
+{"clip": "000584", "keep": 2, "edits": [["dim warehouse fluorescent lighting with heavy grain and a fisheye curve bowing the plywood ramp's edges", "dim fluorescent lighting with heavy grain and a fisheye curve"]]}
+{"clip": "000576", "keep": 2, "edits": [["and timecode \"REC 00:22:14\" flickering in the corner", "and a timecode flickering in the corner"]]}
+{"clip": "000556", "keep": 4, "edits": [["and a flickering white timecode \"SP 00:14:07\" burned into the corner", "and a flickering white timecode burned into the corner"]]}
+{"clip": "000572", "keep": 2, "edits": []}
+{"clip": "000580", "keep": 2, "edits": [["and a corner timecode reading \"00:31:09\"", "and a corner timecode"]]}
+{"clip": "000568", "keep": 2, "edits": [["and a red \"● REC 00:07:52\" readout in the corner", "and a red REC readout in the corner"]]}
+{"clip": "000560", "keep": 2, "edits": []}
+{"clip": "000564", "keep": 2, "edits": []}
+{"clip": "000882", "keep": 1, "edits": []}
+{"clip": "000862", "keep": 2, "edits": [["mounted on a dock post", "mounted on a post"]]}
+{"clip": "000868", "keep": 2, "edits": []}
+{"clip": "000872", "keep": 2, "edits": []}
+{"clip": "000865", "keep": 2, "edits": [["on a tripod in a gravel backyard", "on a tripod"]]}
+{"clip": "000883", "keep": 1, "edits": []}
+{"clip": "000900", "keep": 1, "edits": [[" and pigeons scattering in the background", ""]]}
+{"clip": "000886", "keep": 1, "edits": [["sweeping a cramped living room", "sweeping the frame"]]}
+{"clip": "000896", "keep": 1, "edits": [[" and the dark silhouette of a bridge overhead", ""]]}
+{"clip": "000880", "keep": 1, "edits": [["with warm indoor aquarium lighting", "with warm indoor lighting"]]}
+{"clip": "000925", "keep": 2, "edits": [["sweeping a suburban backyard at night", "sweeping the frame at night"]]}
+{"clip": "000877", "keep": 1, "edits": [["and the cool fluorescent wash of a train platform", "and a cool fluorescent wash"]]}
+{"clip": "000890", "keep": 1, "edits": []}
+{"clip": "000884", "keep": 1, "edits": [["with warm lamp light in a cluttered living room", "with warm lamp light"]]}
+{"clip": "000852", "keep": 2, "edits": []}
+{"clip": "000846", "keep": 2, "edits": []}
+{"clip": "000849", "keep": 2, "edits": []}
+{"clip": "000594", "keep": 2, "edits": [["and the timestamp \"02:14:07\" burned into the corner", "and a timestamp burned into the corner"]]}
+{"clip": "000593", "keep": 2, "edits": [[" \"12/20/2024 06:40 PM\"", ""]]}
+{"clip": "000591", "keep": 2, "edits": [[" \"10/31/2024 07:58 PM\"", ""]]}
+{"clip": "000592", "keep": 2, "edits": [[" \"03/14/2024 12:31 PM\"", ""]]}
+{"clip": "000590", "keep": 2, "edits": [["and the timestamp \"06/22/2024 05:03 PM\" burned into the corner", "and a timestamp burned into the corner"]]}
+{"clip": "000599", "keep": 2, "edits": [["from a bank-lobby ceiling dome", "from a ceiling dome"], ["and the timestamp \"01/17/2024 10:04 AM\" burned into the corner", "and a timestamp burned into the corner"]]}
+{"clip": "000595", "keep": 2, "edits": [["from a ceiling-mounted parking-garage unit", "from a ceiling-mounted unit"], ["and the timestamp \"04/02/2024 09:22 PM\" burned into the corner", "and a timestamp burned into the corner"]]}
+{"clip": "000598", "keep": 2, "edits": [["from a gas-station forecourt canopy camera", "from a canopy-mounted camera"], ["and the timestamp \"11:58 PM\" burned into the corner", "and a timestamp burned into the corner"]]}
+{"clip": "000596", "keep": 2, "edits": [["from a warehouse ceiling mount", "from a ceiling mount"], ["and the timestamp \"07/11/2024 02:47 PM\" burned into the corner", "and a timestamp burned into the corner"]]}
+{"clip": "000597", "keep": 2, "edits": [["from an apartment-lobby ceiling dome", "from a ceiling dome"], ["and the timestamp \"09/03/2024 11:10 AM\" burned into the corner", "and a timestamp burned into the corner"]]}
+{"clip": "000007", "keep": 2, "edits": [["and the timestamp \"05/14/2024 07:42 AM\" burned into the lower corner", "and a timestamp burned into the lower corner"]]}
+{"clip": "000601", "keep": 2, "edits": []}
+{"clip": "000586", "keep": 3, "edits": [["dashboard-mounted phone camera on a dark rural road", "dashboard-mounted phone camera at night"]]}
+{"clip": "000562", "keep": 3, "edits": []}
+{"clip": "000558", "keep": 2, "edits": [["and a red \"REC ●\" indicator blinking in the corner", "and a red REC indicator blinking in the corner"]]}
+{"clip": "000582", "keep": 3, "edits": [["grainy low-light dorm room footage", "grainy low-light footage"]]}
+{"clip": "000570", "keep": 2, "edits": []}
+{"clip": "000566", "keep": 3, "edits": []}
+{"clip": "000578", "keep": 3, "edits": [[" bobbing across standing water", " bobbing"]]}
+{"clip": "000574", "keep": 2, "edits": []}
+{"clip": "000968", "keep": 2, "edits": [["smeared across warm reception lighting", "smeared across warm interior lighting"]]}
+{"clip": "000607", "keep": 2, "edits": [["with bright overcast glare bouncing off deep powder on a steep backcountry slope", "with bright overcast glare"]]}
+{"clip": "000608", "keep": 3, "edits": [["footage mounted on a climbing helmet", "footage"], ["with harsh midday sun on red sandstone", "with harsh midday sun"]]}
+{"clip": "000609", "keep": 3, "edits": [["footage on a whitewater kayaker", "footage"], ["ultra-wide fisheye lens with churning white rapids filling the frame", "ultra-wide fisheye lens"]]}
+{"clip": "000606", "keep": 2, "edits": []}
+{"clip": "000610", "keep": 2, "edits": [["footage underwater on a coral reef", "footage underwater"]]}
+{"clip": "000842", "keep": 2, "edits": []}
+{"clip": "000913", "keep": 2, "edits": [["and heat shimmer rippling off red canyon rock", "and heat shimmer"]]}
+{"clip": "000927", "keep": 1, "edits": []}
+{"clip": "000783", "keep": 2, "edits": []}
+{"clip": "000796", "keep": 1, "edits": []}
+{"clip": "000792", "keep": 1, "edits": []}
+{"clip": "000809", "keep": 1, "edits": []}
+{"clip": "000801", "keep": 1, "edits": []}
+{"clip": "000804", "keep": 1, "edits": []}
+{"clip": "000788", "keep": 2, "edits": []}
+{"clip": "000588", "keep": 2, "edits": [[" \"11:47 PM\"", ""]]}
+{"clip": "000909", "keep": 2, "edits": [["near-total darkness cut by headlight glare on a narrow rural bridge", "near-total darkness cut by headlight glare"]]}
+{"clip": "000918", "keep": 2, "edits": [["over glassy dark water on a Scottish loch at dawn", "over glassy dark water at dawn"]]}
+{"clip": "000903", "keep": 2, "edits": [["dusk blue-hour light with lens flare from a truck's headlights", "dusk blue-hour light with headlight lens flare"]]}
+{"clip": "000923", "keep": 2, "edits": [["washing out details at the tent's edge", "washing out detail"]]}
+{"clip": "000837", "keep": 1, "edits": []}
+{"clip": "000839", "keep": 1, "edits": []}
+{"clip": "000816", "keep": 1, "edits": []}
+{"clip": "000830", "keep": 1, "edits": [["mounted on a ranch truck's dashboard", "mounted on a dashboard"]]}
+{"clip": "000824", "keep": 1, "edits": [["lit by sodium parking-lot floodlights and rows of headlights", "lit by sodium floodlights and headlights"]]}
+{"clip": "000579", "keep": 2, "edits": [["bright backyard daylight", "bright outdoor daylight"]]}
+{"clip": "000575", "keep": 2, "edits": []}
+{"clip": "000567", "keep": 2, "edits": []}
+{"clip": "000555", "keep": 4, "edits": [["and a red date stamp \"07/14/1994\" burning in the bottom corner", "and a red date stamp burning in the bottom corner"]]}
+{"clip": "000559", "keep": 2, "edits": []}
+{"clip": "000563", "keep": 2, "edits": [["warm amber banquet-hall lighting", "warm amber interior lighting"], ["and a green timestamp \"06.22.96\" in the corner", "and a green timestamp in the corner"]]}
+{"clip": "000571", "keep": 2, "edits": []}
+{"clip": "000583", "keep": 2, "edits": []}
+{"clip": "000587", "keep": 2, "edits": [["warm reception-hall lighting", "warm interior lighting"]]}
+{"clip": "000529", "keep": 1, "edits": []}
+{"clip": "000526", "keep": 2, "edits": [["bright bathroom ring-light glare bouncing off the mirror behind her", "bright ring-light glare"]]}
+{"clip": "000528", "keep": 1, "edits": []}
+{"clip": "000525", "keep": 2, "edits": []}
+{"clip": "000527", "keep": 2, "edits": [["flat overhead living-room light", "flat overhead light"]]}
+{"clip": "000523", "keep": 2, "edits": []}
+{"clip": "000521", "keep": 2, "edits": []}
+{"clip": "000524", "keep": 2, "edits": [["soft string-light glow strung along the headboard behind her", "soft string-light glow"]]}
+{"clip": "000522", "keep": 2, "edits": []}
+{"clip": "000553", "keep": 3, "edits": [["cramped van-interior lighting", "cramped interior lighting"]]}
+{"clip": "000551", "keep": 3, "edits": [["edited with jump cuts between hallway angles", "edited with jump cuts"]]}
+{"clip": "000548", "keep": 3, "edits": [["flat overhead garage lighting", "flat overhead lighting"], ["edited with jump cuts between setup angles", "edited with jump cuts"]]}
+{"clip": "000554", "keep": 3, "edits": [["garage workshop lighting", "workshop lighting"]]}
+{"clip": "000549", "keep": 3, "edits": [["harsh overhead gym lighting", "harsh overhead lighting"]]}
+{"clip": "000552", "keep": 3, "edits": [["soft nursery lamp lighting", "soft lamp lighting"]]}
+{"clip": "000547", "keep": 3, "edits": []}
+{"clip": "000550", "keep": 3, "edits": [["warm sodium-lit night-market glow", "warm sodium-lit night glow"], ["edited with jump cuts between stalls", "edited with jump cuts"]]}
+{"clip": "000084", "keep": 2, "edits": [["with warm restaurant candlelight", "with warm candlelight"]]}
+{"clip": "000081", "keep": 2, "edits": []}
+{"clip": "000021", "keep": 3, "edits": [["cold gallery security lighting cutting through faint haze that reveals a crosshatched grid of red laser beams", "cold security lighting cutting through faint haze"]]}
+{"clip": "000018", "keep": 3, "edits": [["cool blue security-light grade with hard shadows inside a diamond exchange's basement vault room", "cool blue security-light grade with hard shadows"]]}
+{"clip": "000972", "keep": 3, "edits": [["moonlight and pale security-monitor glow filling a marble museum gallery after hours", "moonlight and pale security-monitor glow"]]}
+{"clip": "000733", "keep": 2, "edits": [["lit by glowing LED headphone rings at night", "lit by glowing colored LEDs at night"]]}
+{"clip": "000723", "keep": 2, "edits": []}
+{"clip": "000275", "keep": 2, "edits": []}
+{"clip": "000744", "keep": 2, "edits": []}
+{"clip": "000546", "keep": 2, "edits": [["bathroom vanity framing", "vanity framing"]]}
+{"clip": "000544", "keep": 2, "edits": [["cozy bedroom framing", "cozy framing"], [" reading \"you're not even that funny lol,\" a Filipina woman in her twenties leans back slowly in a spinning desk chair", ""]]}
+{"clip": "000542", "keep": 2, "edits": [["dim bedroom acoustic-setup framing", "dim acoustic-setup framing"]]}
+{"clip": "000541", "keep": 2, "edits": [["home-gym framing", "fixed framing"]]}
+{"clip": "000538", "keep": 2, "edits": []}
+{"clip": "000540", "keep": 2, "edits": [["ring-light-lit vanity framing", "ring-light-lit framing"]]}
+{"clip": "000545", "keep": 1, "edits": []}
+{"clip": "000539", "keep": 2, "edits": [["slightly compressed kitchen counter framing", "slightly compressed framing"]]}
+{"clip": "000543", "keep": 1, "edits": []}
+{"clip": "000859", "keep": 1, "edits": []}
+{"clip": "000603", "keep": 2, "edits": [["with fluorescent food-court lighting", "with fluorescent interior lighting"]]}
+{"clip": "000589", "keep": 2, "edits": [["and the timestamp \"01/09/2024 08:15 AM\" burned into the corner", "and a timestamp burned into the corner"]]}
+{"clip": "000602", "keep": 2, "edits": []}
+{"clip": "000600", "keep": 2, "edits": []}
+{"clip": "000530", "keep": 1, "edits": []}
+{"clip": "000537", "keep": 1, "edits": []}
+{"clip": "000604", "keep": 2, "edits": [["with dim dusk light filtering through dense pines and", "with dim dusk light and"]]}
+{"clip": "000605", "keep": 2, "edits": [["Utility-worker helmet-camera footage", "Utility helmet-camera footage"], ["under harsh work-truck floodlights against a dark storm-damaged night sky", "under harsh floodlights against a dark night sky"]]}
+{"clip": "000917", "keep": 2, "edits": []}
+{"clip": "000910", "keep": 2, "edits": [["blown-out ship deck lighting", "blown-out deck lighting"]]}
+{"clip": "000577", "keep": 1, "edits": []}
+{"clip": "000569", "keep": 2, "edits": [["cramped karaoke bar with", "cramped bar interior with"]]}
+{"clip": "000565", "keep": 2, "edits": [["dim karaoke bar lit by a single spotlight and scattered candle-lit tables", "dim bar interior lit by a single spotlight and scattered candlelight"]]}
+{"clip": "000561", "keep": 2, "edits": [["dim karaoke bar with", "dim bar interior with"]]}
+{"clip": "000573", "keep": 2, "edits": [["dim karaoke bar with", "dim bar interior with"]]}
+{"clip": "000557", "keep": 2, "edits": [["dim neon-lit karaoke bar with", "dim neon-lit bar interior with"]]}
+{"clip": "000619", "keep": 2, "edits": [["handheld with a gentle shake at a sunlit farmers market", "handheld with a gentle shake in sunlight"]]}
+{"clip": "000617", "keep": 2, "edits": [["handheld with a light shake outside a chain-link skate-park fence at golden hour", "handheld with a light shake at golden hour"]]}
+{"clip": "000618", "keep": 2, "edits": [["and shimmering heat haze rising off the sidewalk", "and shimmering heat haze"]]}
+{"clip": "000616", "keep": 2, "edits": [["and warm midday sun glare on a busy food-cart street", "and warm midday sun glare"]]}
+{"clip": "000620", "keep": 2, "edits": [["under warm string lights on a dusk city sidewalk", "under warm string lights at dusk"]]}
