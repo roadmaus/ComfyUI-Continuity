@@ -1228,8 +1228,11 @@ export function addSubjectToPiece(stored, timeline) {
   if (!stored) return null;
   if (!Array.isArray(timeline.assets)) timeline.assets = [];
   if (!Array.isArray(timeline.subjects)) timeline.subjects = [];
-  const single = (timeline.segments ?? []).length === 1;
-  const host = single ? timeline.segments[0] : timeline;
+  // No segments at all is the pre-stage's H3 still — a lone generation whose
+  // assets *are* the shot's row — so it takes the one-shot treatment with the
+  // piece as its own host.
+  const single = (timeline.segments ?? []).length <= 1;
+  const host = single ? (timeline.segments?.[0] ?? timeline) : timeline;
   if (!Array.isArray(host.assets)) host.assets = [];
   const slots = { from: [], replaces: [] };
   for (const file of stored.files ?? []) {

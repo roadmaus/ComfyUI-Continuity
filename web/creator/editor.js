@@ -307,8 +307,11 @@ export class CreatorEditor {
       // `syncTimeline` mirrors it on as `pool`, the way the canvas rides on.
       // Citable by chip, never attached: the citation is the attachment.
       getPool: () => this.state.pool ?? [],
-      // Mirrored down by `syncTimeline` beside the pool — see `state.cast`.
-      getCast: () => this.state.cast ?? [],
+      // The piece's own list where this body is mounted on the piece — a node
+      // face, or the pre-stage's still, whose request is never under
+      // `syncTimeline` and has no mirror to read. A strip's card falls through
+      // to `state.cast`, mirrored down by `syncTimeline` beside the pool.
+      getCast: () => this.castPiece?.subjects ?? this.state.cast ?? [],
       // Typing `@ann` into the sentence offers the roster, and picking somebody
       // out of it casts them here with their files. The shelf opens with them: they
       // have just arrived, and the card that says what they are made of is the

@@ -1403,6 +1403,16 @@ export class PreStageBody {
       modelPill: () => [this.renderArchPill()],
       extraPills: () => this.renderStillPills(),
       extraTools: () => [this.renderFrameGrabTool()],
+      // The `@` menu's roster, exactly as the video face wires it — a still on
+      // this branch is a video generation, and the request is the piece a
+      // member is cast into: its assets are the shot's row, its subjects the
+      // whole of the cast.
+      castFromLibrary: (member) => {
+        const subject = P.addSubjectToPiece(member, still.request);
+        if (!subject) return null;
+        this.commit();
+        return subject.handle;
+      },
       setRoute: (route) => {
         still.request.models.route = route;
         this.commit();

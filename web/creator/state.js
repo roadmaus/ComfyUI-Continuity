@@ -1314,6 +1314,10 @@ export function emptyState() {
     soundscape: "",
     music: "",
     assets: [],
+    // The cast, where this state is a lone generation — the pre-stage's H3
+    // still. A timeline segment never carries one; the piece's is mirrored
+    // down as `cast`, read-only, and this list stays empty there.
+    subjects: [],
     loras: [],
     duration_s: DEFAULT_DURATION_S,
     // Whether the model picks the length instead. Only a family with a
@@ -1347,6 +1351,27 @@ export function emptyState() {
   };
 }
 
+/** A blob's cast list, stripped to what the shelf and compile.py read. Shared
+ *  by the timeline and by a still's request — the two places a cast is stored,
+ *  and the same shape in both. */
+function parseSubjects(raw) {
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .filter((s) => s && typeof s.handle === "string")
+    .map((s) => ({
+      handle: s.handle,
+      from: Array.isArray(s.from) ? s.from.filter((h) => typeof h === "string") : [],
+      takes: SUBJECT_TAKES.includes(s.takes) ? s.takes : "person",
+      ...(s.description ? { description: String(s.description) } : {}),
+      ...(subjectFeatures(s).length ? { features: subjectFeatures(s) } : {}),
+      ...(s.motion ? { motion: String(s.motion) } : {}),
+      ...(s.voice ? { voice: String(s.voice) } : {}),
+      ...(replacesOf(s).length ? { replaces: replacesOf(s) } : {}),
+      ...(s.replaces_what ? { replaces_what: String(s.replaces_what) } : {}),
+      ...(SUBJECT_MARKERS.includes(s.relationship) ? { relationship: s.relationship } : {}),
+    }));
+}
+
 export function parseState(raw) {
   try {
     const parsed = JSON.parse(raw);
@@ -1376,6 +1401,9 @@ export function parseState(raw) {
       state.turbo = parseTurbo(state.turbo);
       state.guide = parseGuide(state.guide, pieceFamily(state));
       normalizeCheckpoint(state);
+      // The cast, on the same terms a timeline's is read — a still's request
+      // holds one of its own, there being no piece above it to hold it.
+      state.subjects = parseSubjects(state.subjects);
       for (const asset of state.assets) {
         if (asset?.kind !== "video") continue;
         // Workflows saved before the picture/sound split carry the two-state
@@ -1531,6 +1559,10 @@ export function serializeState(state) {
     ...(state.refine_denoise !== DEFAULT_REFINE_DENOISE
       ? { refine_denoise: state.refine_denoise } : {}),
     ...serializeFace(state.face),
+    // The cast, absent when nobody was cast — the same terms as the timeline's.
+    // Not in serializeCommon: a segment's cast is the piece's, mirrored down,
+    // and writing the mirror back would store every subject once per card.
+    ...(state.subjects?.length ? { subjects: state.subjects } : {}),
     // Not in serializeCommon: the weights belong to the node, and a timeline
     // segment goes through that function too. The turbo switch likewise.
     ...serializeModels(state.models),
@@ -2698,21 +2730,7 @@ export function parseTimeline(raw) {
       // hand-edited blob can hold anything; kept as written otherwise, because
       // whether a subject's files are still attached is the band's readout
       // rather than a reason to drop somebody the user cast.
-      if (!Array.isArray(timeline.subjects)) timeline.subjects = [];
-      timeline.subjects = timeline.subjects
-        .filter((s) => s && typeof s.handle === "string")
-        .map((s) => ({
-          handle: s.handle,
-          from: Array.isArray(s.from) ? s.from.filter((h) => typeof h === "string") : [],
-          takes: SUBJECT_TAKES.includes(s.takes) ? s.takes : "person",
-          ...(s.description ? { description: String(s.description) } : {}),
-          ...(subjectFeatures(s).length ? { features: subjectFeatures(s) } : {}),
-          ...(s.motion ? { motion: String(s.motion) } : {}),
-          ...(s.voice ? { voice: String(s.voice) } : {}),
-          ...(replacesOf(s).length ? { replaces: replacesOf(s) } : {}),
-          ...(s.replaces_what ? { replaces_what: String(s.replaces_what) } : {}),
-          ...(SUBJECT_MARKERS.includes(s.relationship) ? { relationship: s.relationship } : {}),
-        }));
+      timeline.subjects = parseSubjects(timeline.subjects);
       timeline.assets = timeline.assets.filter(
         (asset) => asset && typeof asset.handle === "string" && typeof asset.filename === "string");
       for (const asset of timeline.assets) {

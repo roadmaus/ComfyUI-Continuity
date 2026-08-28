@@ -400,15 +400,36 @@ try {
     attached: (shot.assets ?? []).map((asset) => `${asset.handle}=${asset.filename}`).join(","),
     poolLeftAlone: (piece.assets ?? []).length === 0,
     voiceBound: piece.subjects?.[0]?.voice === shot.assets?.[1]?.handle,
-    // Nothing to cast her into, nothing offered: a PreStage's prompt box has no
-    // piece behind it, so the roster stays out of its menu.
-    notOnAPreStage: null,
+    // The H3 still is a video generation with a piece of its own — the nested
+    // request — so its box offers the roster and casting lands there, files as
+    // ordinary attachments. The image branches still offer none: an image
+    // architecture has no piece to cast her into.
+    onTheStill: null,
+    notOnAnImagePreStage: null,
   };
   const still = fakeNode("MiniMaxH3PreStage", "prestage_data",
                          JSON.stringify({ arch: "minimax" }));
   await ext.nodeCreated(still);
-  out.castFromMention.notOnAPreStage =
-    !still.mmcBody.editor?.prompt?.hooks?.castFromLibrary;
+  const stillHooks = still.mmcBody.editor?.prompt?.hooks;
+  if (stillHooks?.castFromLibrary) {
+    const got = await stillHooks.castFromLibrary({
+      handle: "anna", takes: "person", description: "dark coat",
+      files: [{ slot: "from", filename: "anna/face.png", kind: "image" }],
+    });
+    const request = still.mmcBody.state[S.PRESTAGE_STILL_ARCH].request;
+    out.castFromMention.onTheStill = {
+      handle: got,
+      cast: (request.subjects ?? []).length,
+      attached: (request.assets ?? []).map((asset) => `${asset.handle}=${asset.filename}`).join(","),
+      // …and the box knows she is here: the roster dedup and the citation
+      // band both read the cast through this hook.
+      offered: (stillHooks.getCast?.() ?? []).map((subject) => subject.handle).join(","),
+    };
+  }
+  const image = fakeNode("MiniMaxH3PreStage", "prestage_data", "{}");
+  await ext.nodeCreated(image);
+  out.castFromMention.notOnAnImagePreStage =
+    !image.mmcBody.editor?.prompt?.hooks?.castFromLibrary;
 } catch (error) {
   out.errors.push(`castFromMention: ${error.message}`);
 }
@@ -3000,8 +3021,15 @@ check("...and nothing hidden in a pool the face does not draw",
       mention.get("poolLeftAlone"), True)
 check("...and her voice still bound to the file that is her voice",
       mention.get("voiceBound"), True)
-check("a pre-stage is offered no roster — it has no piece to cast her into",
-      mention.get("notOnAPreStage"), True)
+on_still = mention.get("onTheStill") or {}
+check("the H3 still's box offers the roster — its request is a piece of its own",
+      on_still.get("handle"), "anna")
+check("...as one subject on the request", on_still.get("cast"), 1)
+check("...with her file attached as an ordinary reference on it",
+      on_still.get("attached"), "img-1=anna/face.png")
+check("...and the box's own cast hook seeing her", on_still.get("offered"), "anna")
+check("an image pre-stage is offered no roster — it has no piece to cast her into",
+      mention.get("notOnAnImagePreStage"), True)
 
 wrote = report.get("wroteName", {})
 check("her name lands where the @ was typed, not on a lost caret",
