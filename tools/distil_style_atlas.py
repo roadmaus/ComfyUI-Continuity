@@ -69,8 +69,15 @@ LOCATIVE = re.compile(r"^(?:on|in|inside|at|across|along|atop|down|through|under
 LEAK = re.compile(r"\b(?:m[ae]n|wom[ae]n|boy|girl|kid|child|teenager|fisherman|chef|dentist|"
                   r"farmer|worker|driver|soldier|dancer|singer|astronaut|mechanic|clerk|"
                   r"investigator|rider|player|kitchen|classroom|basement|warehouse|hacienda|"
-                  r"balcony|bedroom|garage|stadium|cavern|asylum|corridor)\b", re.I)
-QUOTED = re.compile(r'"[^"]{2,}"')
+                  r"balcony|bedroom|garage|cavern|asylum|corridor)\b", re.I)
+# `stadium` is deliberately not in that list: in this corpus it only ever
+# appears as "stadium floodlights" / "stadium lighting", which names a
+# quality of light rather than a place, and is exactly the kind of thing a
+# style should keep.
+# Burned-in on-screen text, which H3 will render as text if it is left in. A
+# quoted name used as a style reference — `"How It's Made"-style factory
+# footage` — is not that, and is what the negative lookahead spares.
+QUOTED = re.compile(r'"[^"]{2,}"(?!-style)')
 MAXLEN = 260
 
 
