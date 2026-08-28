@@ -49,6 +49,16 @@ const EVENTS = ["progress_state", "b_preview_with_metadata", "b_preview",
  *  checkpoint takes to read off disk. */
 const OPENS_ON_STEPS = 4;
 
+/** The step preview's `src` is an object URL revoked the instant the next frame
+ *  lands (or a base64 `data:` URL just as long-lived), so every action the
+ *  browser's picture menu offers — open in a new tab, save as, copy address —
+ *  aims at a URL that has already stopped existing by the time it is used. On
+ *  ComfyUI Desktop that is not merely a broken link: opening a live preview
+ *  frame in a new window takes the whole app down (#30). The menu is suppressed
+ *  on the transient frame only; the finished render below keeps its own, where
+ *  the `src` is a real `/view` URL and "save image as" does what it says. */
+const noMenu = (event) => event.preventDefault();
+
 export class Stage {
   /**
    * @param {object} spec
@@ -473,6 +483,7 @@ export class Stage {
     if (!this.frameIsClip) {
       return el("img", {
         class: "mmc-stage-img", src: this.frame, alt: "",
+        oncontextmenu: noMenu,
         onload: (event) => this.setAspect(event.currentTarget.naturalWidth,
                                           event.currentTarget.naturalHeight),
       });
@@ -480,6 +491,7 @@ export class Stage {
     const clip = el("video", {
       class: "mmc-stage-video",
       src: this.frame,
+      oncontextmenu: noMenu,
       // Settings → Nodes decides whether it moves before being asked; a stage
       // told to hold still holds the clip's first frame (preload paints it).
       autoplay: uiSetting("autoplay_previews", true),

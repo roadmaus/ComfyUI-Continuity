@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+**Right-clicking a step preview no longer offers to open a picture that is
+already gone — which took ComfyUI Desktop down with it.**
+
+The live preview's `src` is an object URL revoked the moment the next frame
+arrives, so every entry in the browser's picture menu — open in a new tab, save
+as, copy address — aimed at a URL that had stopped existing by the time it was
+used. On ComfyUI Desktop, "open image in new window" crashed the whole app
+([#30](https://github.com/roadmaus/ComfyUI-Continuity/issues/30)). The menu is
+suppressed on the step frame only; the finished render keeps its own, where the
+`src` is a real `/view` URL and "save image as" does what it says.
+
 **The refiner names the handles its pictures belong to, so a reference clip
 stops coming back as `@img-1`.**
 
