@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+**Flux 2 Klein is a family.** BFL's compact Flux 2 — 4B (Apache 2.0) or 9B
+(non-commercial), both the base checkpoint and the 4-step distillation the
+turbo pill swaps in — joins the pre-stage's model pill as `flux2klein`. It
+draws from prose and edits from pictures natively: references are VAE-encoded
+and chained onto the conditioning (`ReferenceLatent`), no adapter LoRA to add,
+and the first picture is the one being edited, so the canvas follows it, with
+*start blank* as the way out — Qwen Image Edit's arrangement. The graph is the
+official template's: `Flux2Scheduler` shapes the schedule from the steps and
+the canvas (so the family declares no scheduler control at all) through
+`SamplerCustomAdvanced`, and the text encoder is the plain Qwen3 loaded as
+CLIPLoader type `flux2` — the text-only cut is correct here, and the vision
+check knows to let it through. One family covers both sizes: pick the
+checkpoint and the Qwen3 encoder that matches it. The `kv` build is left for
+later — it wants a `FluxKVCache` graph this family does not emit yet.
+
 **Replacing a person replaces the person, not just the face.** Casting
 somebody into a clip compiled to the one prompt shape H3 reads as "keep the
 person and re-animate them": the newcomer was marked `attribute_transfer` —

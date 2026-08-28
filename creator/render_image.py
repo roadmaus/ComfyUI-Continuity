@@ -131,7 +131,7 @@ def check(weights, payload):
         )
 
 
-def check_vision(weights, payload):
+def check_vision(weights, payload, family):
     """Refuse a text-only encoder on a render that has pictures to encode.
 
     Both VL encoders ship in two cuts, and the text-only one is the same
@@ -142,11 +142,15 @@ def check_vision(weights, payload):
     instead of noticed in the output.
 
     Only on a render that actually carries references: a text-to-image still on
-    the same weights has nothing to encode and no reason to care. `has_vision`
-    answers `None` for a file it could not read, and that is deliberately not a
-    refusal — see `visionweights`.
+    the same weights has nothing to encode and no reason to care. And only on a
+    family whose references go *through* the encoder — Flux 2 Klein's arrive as
+    VAE latents chained onto the conditioning, its matched encoder is the
+    text-only Qwen3, and refusing that file would ground every reference render
+    the family can do (`REFS_NEED_VISION`). `has_vision` answers `None` for a
+    file it could not read, and that is deliberately not a refusal — see
+    `visionweights`.
     """
-    if not payload.refs:
+    if not payload.refs or not getattr(family, "REFS_NEED_VISION", True):
         return
     import folder_paths
 
@@ -191,7 +195,7 @@ def emit(payload, weights, sampling, unique_id, family, filename_prefix=None):
         raise CompileError("the payload and the weights disagree about the architecture")
     family.require_support()
     check(weights, payload)
-    check_vision(weights, payload)
+    check_vision(weights, payload, family)
 
     graph = GraphBuilder()
 

@@ -63,6 +63,7 @@ MODULES = {
     "krea2_still": "families.krea2.still",
     "ideogram4_still": "families.ideogram4.still",
     "qwenedit_still": "families.qwenedit.still",
+    "flux2klein_still": "families.flux2klein.still",
     "h3_declare": "families.h3.declare",
     "h3_models": "families.h3.models",
     "h3_grammar": "families.h3.grammar",

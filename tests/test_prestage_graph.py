@@ -737,6 +737,137 @@ expect_error("an edition nobody published is refused by name",
              lambda: ci.compile_prestage(edit_blob(edition="2601"), qe),
              "unknown Qwen Image Edit edition")
 
+# ---- Flux 2 Klein ------------------------------------------------------------
+#
+# The template shape: loaders, plain text encodes, the model's own
+# resolution-shifted schedule (`Flux2Scheduler`) through
+# `SamplerCustomAdvanced`, and every reference scaled to ~1MP, VAE-encoded
+# once, and chained onto *both* conditionings as a `ReferenceLatent`. No
+# KSampler, no shift node, no encoder image slots — and the edited picture's
+# latent stays empty, because the instruction reaches the model through the
+# reference conditioning alone.
+
+kl = importlib.import_module(f"{PACKAGE}.creator.families.flux2klein.still")
+MODELS["flux2klein"] = {
+    "model": "flux-2-klein-base-9b-fp8.safetensors",
+    "turbo_model": "flux-2-klein-9b-fp8.safetensors",
+    "clip": "qwen_3_8b_fp8mixed.safetensors",
+    "vae": "flux2-vae.safetensors",
+}
+KL_WEIGHTS = ri.ImageWeights(arch="flux2klein", files=MODELS["flux2klein"])
+
+
+def klein_blob(**overrides):
+    data = {"arch": "flux2klein", "prompt": "a red room", "aspect": "16:9",
+            "short_edge": 1024, "refs": [], "loras": []}
+    data.update(overrides)
+    return data
+
+
+def klein_graph(data=None, size_lookup=None, **row):
+    settings = dict(seed=11, steps=20, cfg=5.0, sampler_name="euler",
+                    scheduler="simple")
+    settings.update(row)
+    payload = ci.compile_prestage(data if data is not None else klein_blob(),
+                                  kl, size_lookup)
+    return payload, by_class(ri.emit(payload, KL_WEIGHTS,
+                                     sampling_mod.Sampling(**settings),
+                                     NODE_ID, kl).finalize())
+
+
+kl_payload, kt2i = klein_graph()
+
+check("the base checkpoint loads and the encoder is typed flux2",
+      (kt2i["UNETLoader"][0][1]["unet_name"], kt2i["CLIPLoader"][0][1]["type"]),
+      (MODELS["flux2klein"]["model"], "flux2"))
+check("the schedule is the model's own, shaped by the canvas",
+      kt2i["Flux2Scheduler"][0][1],
+      {"steps": 20, "width": kl_payload.width, "height": kl_payload.height})
+check("no KSampler and no shift node — the custom stack is the whole sampler",
+      ("KSampler" in kt2i, "ModelSamplingFlux" in kt2i,
+       "SamplerCustomAdvanced" in kt2i), (False, False, True))
+check("real CFG gets a real empty-prompt negative",
+      sorted(i["text"] for _, i in kt2i["CLIPTextEncode"]), ["", "a red room"])
+check("the guider runs the row's cfg", kt2i["CFGGuider"][0][1]["cfg"], 5.0)
+check("the latent is the template's empty Flux 2 one, at the canvas",
+      kt2i["EmptyFlux2LatentImage"][0][1],
+      {"width": kl_payload.width, "height": kl_payload.height, "batch_size": 1})
+
+# The reference chain, and the promotion around it: `Picture 1` is the thing
+# being edited, so the canvas follows it — but its latent contribution is the
+# reference chain, not an init encode about to be noised away.
+kle_payload, kle = klein_graph(klein_blob(
+    prompt="put @img-2 on the table",
+    refs=[{"filename": "room.png", "handle": "img-1"},
+          {"filename": "cup.png", "handle": "img-2"}]))
+
+check("each picture is scaled and encoded exactly once",
+      (len(kle["ImageScaleToTotalPixels"]), len(kle["VAEEncode"])), (2, 2))
+check("...and chained onto both conditionings",
+      len(kle["ReferenceLatent"]), 4)
+kle_guider = kle["CFGGuider"][0][1]
+kle_ref_ids = {node_id for node_id, _ in kle["ReferenceLatent"]}
+check("both branches the guider reads end on the reference chain",
+      (kle_guider["positive"][0] in kle_ref_ids,
+       kle_guider["negative"][0] in kle_ref_ids), (True, True))
+check("a citation becomes the slot's shared label",
+      sorted(i["text"] for _, i in kle["CLIPTextEncode"]),
+      ["", "put Picture 2 on the table"])
+check("the first picture is promoted, so the canvas will follow it",
+      kle_payload.init, {"filename": "room.png", "denoise": 1.0})
+check("...but its latent stays the template's empty one",
+      "EmptyFlux2LatentImage" in kle, True)
+sized_klein = ci.compile_prestage(
+    klein_blob(refs=["room.png"]), kl, lambda name: (1920, 1080))
+check("the canvas takes the edited picture's shape",
+      sized_klein.width > sized_klein.height, True)
+blank_klein, blank_kg = klein_graph(klein_blob(refs=["room.png"],
+                                               start_blank=True))
+check("a blank start releases the picture from being the subject",
+      (blank_klein.init, "EmptyFlux2LatentImage" in blank_kg), (None, True))
+
+# The distilled checkpoint: the turbo pill's file, four steps at cfg 1, and a
+# zeroed negative in place of an encode the guider never evaluates.
+_, kldist = klein_graph(klein_blob(turbo={"flux2klein": {"on": True}}),
+                        steps=4, cfg=1.0)
+check("the turbo pill swaps in the distilled file",
+      kldist["UNETLoader"][0][1]["unet_name"],
+      MODELS["flux2klein"]["turbo_model"])
+check("at cfg 1 the negative is the zeroed copy",
+      ("ConditioningZeroOut" in kldist, len(kldist["CLIPTextEncode"])),
+      (True, 1))
+
+# An explicit partial-denoise init is img2img on the model's own schedule:
+# the sigmas' tail, Ideogram's arrangement.
+_, klinit = klein_graph(klein_blob(init={"filename": "plate.png",
+                                         "denoise": 0.6}),
+                        size_lookup=lambda name: (1024, 1024))
+check("a partial denoise keeps the tail of the model's own schedule",
+      klinit["SplitSigmasDenoise"][0][1]["denoise"], 0.6)
+check("...and the sampler reads the split's low half",
+      klinit["SamplerCustomAdvanced"][0][1]["sigmas"],
+      [klinit["SplitSigmasDenoise"][0][0], 1])
+check("...over the init image encoded, not an empty canvas",
+      ("VAEEncode" in klinit, "EmptyFlux2LatentImage" in klinit), (True, False))
+
+expect_error("a fourth picture is refused with the pack's own reason",
+             lambda: ci.compile_prestage(
+                 klein_blob(refs=["a.png", "b.png", "c.png", "d.png"]), kl),
+             "where this pack caps the reference chain")
+expect_error("a missing distilled file is refused when the pill asks for it",
+             lambda: ri.emit(
+                 ci.compile_prestage(
+                     klein_blob(turbo={"flux2klein": {"on": True}}), kl),
+                 ri.ImageWeights(arch="flux2klein",
+                                 files={k: v for k, v in
+                                        MODELS["flux2klein"].items()
+                                        if k != "turbo_model"}),
+                 sampling_mod.Sampling(seed=1, steps=4, cfg=1.0,
+                                       sampler_name="euler",
+                                       scheduler="simple"),
+                 NODE_ID, kl),
+             "Turbo checkpoint")
+
 # ---- refusals ----------------------------------------------------------------
 
 expect_error("Ideogram with references is refused with directions",

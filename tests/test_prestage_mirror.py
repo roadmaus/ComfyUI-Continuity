@@ -18,12 +18,14 @@ layout.skip_without_node()
 MIRROR = layout.js("state.js")
 
 _pkg = layout.load("canvas", "contextir", "compile", "compile_image", "still",
-                   "krea2_still", "ideogram4_still", "qwenedit_still")
+                   "krea2_still", "ideogram4_still", "qwenedit_still",
+                   "flux2klein_still")
 ci = _pkg.compile_image
 cs = _pkg.still
 k2 = _pkg.krea2_still
 i4 = _pkg.ideogram4_still
 qe = _pkg.qwenedit_still
+kl = _pkg.flux2klein_still
 cv = _pkg.canvas
 
 
@@ -41,6 +43,7 @@ out.max_refs = {
   "qwenedit-2511": s.preStageMaxRefs({ arch: "qwenedit", edition: "2511" }),
   "qwenedit-2509": s.preStageMaxRefs({ arch: "qwenedit", edition: "2509" }),
   "qwenedit-base": s.preStageMaxRefs({ arch: "qwenedit", edition: "base" }),
+  "flux2klein": s.preStageMaxRefs({ arch: "flux2klein" }),
 };
 out.edition_guess = ["Qwen-Image-Edit-2511-fp8.safetensors",
                      "qwen_image_edit_2509_Q4_K_M.gguf",
@@ -52,6 +55,7 @@ out.reads_guides = {
   "qwenedit-2511": s.preStageReadsGuides({ arch: "qwenedit", edition: "2511" }),
   "qwenedit-2509": s.preStageReadsGuides({ arch: "qwenedit", edition: "2509" }),
   "qwenedit-base": s.preStageReadsGuides({ arch: "qwenedit", edition: "base" }),
+  "flux2klein": s.preStageReadsGuides({ arch: "flux2klein" }),
 };
 out.arches = [...s.PRESTAGE_ARCHES];
 out.image_arches = [...s.PRESTAGE_IMAGE_ARCHES];
@@ -141,6 +145,10 @@ check("turbo steps", reflected["turbo"], k2.TURBO_STEPS)
 # is not here: its steps come off the quality preset, which is checked above.
 check("the row each arch arrives on", reflected["base_rows"]["krea2"], k2.KREA_RAW)
 check("...and Qwen Image Edit's own", reflected["base_rows"]["qwenedit"], qe.QWEN_BASE)
+# Klein declares no scheduler at all — the schedule is Flux2Scheduler's — so
+# its arrival row is three values, and the arch pill leaves the widget alone.
+check("...and Flux 2 Klein's, scheduler-less", reflected["base_rows"]["flux2klein"],
+      kl.KLEIN_BASE)
 
 # What an attached picture means, per arch. Three families, three answers, and
 # the pill copy turns on all four of these fields.
@@ -167,7 +175,15 @@ check("what a reference is on each arch", reflected["refs"],
                     "adapter": None, "adapterHints": [],
                     "editions": dict(qe.EDITIONS),
                     "defaultEdition": qe.DEFAULT_EDITION,
-                    "editionHints": [list(pair) for pair in qe.EDITION_HINTS]}})
+                    "editionHints": [list(pair) for pair in qe.EDITION_HINTS]},
+       "flux2klein": {"reads": True, "methods": [],
+                      "needsLora": False, "editsFirst": True,
+                      "noun": list(kl.REFS_NOUN),
+                      "startBlank": ci.START_BLANK_FIELD,
+                      "nativeControl": [], "controlEditions": [],
+                      "adapter": None, "adapterHints": [],
+                      "editions": None, "defaultEdition": None,
+                      "editionHints": []}})
 
 # The cap is the render's, not a constant: the encoder has three image slots on
 # every family, and what the checkpoint was post-trained to read is its own
@@ -178,7 +194,8 @@ check("how many references each render may carry", reflected["max_refs"],
       {"krea2": ci.MAX_STYLE_REFS,
        "qwenedit-2511": qe.EDITIONS["2511"],
        "qwenedit-2509": qe.EDITIONS["2509"],
-       "qwenedit-base": qe.EDITIONS["base"]})
+       "qwenedit-base": qe.EDITIONS["base"],
+       "flux2klein": kl.REFS_LIMIT})
 check("...and which edition a filename looks like", reflected["edition_guess"],
       ["2511", "2509", None, None])
 
@@ -187,7 +204,7 @@ check("...and which edition a filename looks like", reflected["edition_guess"],
 # halves have to agree, or a depth pass goes to the slot that restyles it.
 check("which renders read a guide as one of their pictures",
       reflected["reads_guides"],
-      {"krea2": False, "ideogram4": False,
+      {"krea2": False, "ideogram4": False, "flux2klein": False,
        "qwenedit-2511": True, "qwenedit-2509": True, "qwenedit-base": False})
 
 # ---- the turbo pill, per arch ------------------------------------------------
@@ -201,10 +218,11 @@ check("every image arch has a turbo pill", reflected["turbo_arches"],
       sorted(ci.ARCHES))
 check("which routes each arch offers",
       reflected["turbo_routes"], {"krea2": [True, True], "ideogram4": [False, True],
-                                  "qwenedit": [False, True]})
+                                  "qwenedit": [False, True],
+                                  "flux2klein": [True, False]})
 check("the step ladders are the families' own", reflected["turbo_steps"],
       {"krea2": k2.TURBO_STEPS, "ideogram4": i4.TURBO_STEPS,
-       "qwenedit": qe.TURBO_STEPS})
+       "qwenedit": qe.TURBO_STEPS, "flux2klein": kl.TURBO_STEPS})
 check("a blob from before the split reads as Krea 2's",
       (reflected["legacy_turbo"]["krea2"]["on"],
        reflected["legacy_turbo"]["krea2"]["quality"],

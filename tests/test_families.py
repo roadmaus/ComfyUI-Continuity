@@ -20,7 +20,7 @@ from harness import FAILURES, check, passed
 
 _pkg = layout.load("canvas", "accel", "sampling", "contextir", "compile",
                    "compile_image", "models", "registry", "manifest",
-                   "still", "krea2_still", "ideogram4_still",
+                   "still", "krea2_still", "ideogram4_still", "flux2klein_still",
                    "grammar", "h3_declare", "h3_models", "h3_grammar",
                    "ltx25_declare",
                    "ltx25_models", "ltx25_sampling")
@@ -37,6 +37,7 @@ ci = _pkg.compile_image
 h3s = _pkg.still
 k2 = _pkg.krea2_still
 i4 = _pkg.ideogram4_still
+kl = _pkg.flux2klein_still
 lx = _pkg.ltx25_models
 lxs = _pkg.ltx25_sampling
 
@@ -438,5 +439,35 @@ check("ideogram turbo is a LoRA and only a LoRA — there is no distilled file",
 check("every quality preset names its polish tail",
       {name: preset["polish"] for name, preset in ideo["capabilities"]["qualities"].items()},
       {name: preset["polish"] for name, preset in i4.IDEOGRAM_QUALITIES.items()})
+
+# ---- Flux 2 Klein ------------------------------------------------------------
+
+klein = manifest.describe("flux2klein")
+klwidgets = {w["id"]: w for w in klein["widgets"]}
+for name in ("steps", "cfg", "sampler_name"):
+    check(f"flux2klein {name} default is KLEIN_BASE's",
+          klwidgets[name]["default"], kl.KLEIN_BASE[name])
+check("flux2klein declares no scheduler — the schedule is Flux2Scheduler's",
+      "scheduler" in klwidgets, False)
+check("flux2klein weight slots are the family's fields",
+      [w["id"] for w in klein["weights"]], list(kl.FIELDS))
+check("flux2klein turbo is the distilled checkpoint and only that",
+      klein["capabilities"]["turbo"],
+      {"steps": kl.TURBO_STEPS, "row": kl.KLEIN_TURBO,
+       "default_quality": kl.DEFAULT_TURBO_QUALITY,
+       "lora": False, "checkpoint": True})
+check("flux2klein references are native and the first is the one edited",
+      (klein["capabilities"]["refs"]["methods"],
+       klein["capabilities"]["refs"]["needs_lora"],
+       klein["capabilities"]["refs"]["edits_first"],
+       klein["capabilities"]["refs"]["start_blank"]),
+      ([], False, True, ci.START_BLANK_FIELD))
+check("flux2klein reference cap is the pack's own, not an encoder slot count",
+      klein["prompt"]["max_refs"], kl.REFS_LIMIT)
+check("flux2klein's matched encoder is the text-only cut, and that is declared",
+      kl.REFS_NEED_VISION, False)
+check("flux2klein canvas is the shared /16 grid",
+      (klein["canvas"]["multiple"], klein["canvas"]["max_pixels"]),
+      (ci.CANVAS_MULTIPLE, ci.MAX_PIXELS))
 
 passed("the registry serves every family and the manifests hold their sources")

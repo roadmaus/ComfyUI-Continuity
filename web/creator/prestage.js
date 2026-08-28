@@ -72,6 +72,11 @@ const TURBO_TITLE = {
     medium: "6 steps — a little more than the short LoRA's own number.",
     good: "8 steps — what the 8-step Lightning LoRA was distilled for.",
   },
+  flux2klein: {
+    draft: "2 steps — below the distillation's own number. For framing, not for finals.",
+    medium: "4 steps — what the Klein distillation was trained for.",
+    good: "6 steps — a little headroom over the distillation's own number.",
+  },
 };
 
 /** The distilled-checkpoint answer in the turbo source picker: not a file, and
@@ -1495,7 +1500,10 @@ export class PreStageBody {
       io.set("steps", row.steps);
       io.set("cfg", row.cfg);
       io.set("sampler_name", row.sampler_name);
-      io.set("scheduler", row.scheduler);
+      // A family without a scheduler control (Klein's schedule is the model's
+      // own) declares none, and the widget is left where it was rather than
+      // written undefined.
+      if (row.scheduler !== undefined) io.set("scheduler", row.scheduler);
     } else {
       const row = S.PRESTAGE_STILL_ROW;
       io.set("steps", row.steps);
