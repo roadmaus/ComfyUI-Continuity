@@ -569,6 +569,22 @@ def picked_preview(weights):
     return picked if isinstance(picked, str) and picked else None
 
 
+def _preview_prefs():
+    """`{max_resolution, jpeg_quality}` from the settings file, defaults on any
+    trouble — a preview is worth having at somebody else's numbers, and is never
+    worth failing a render over."""
+    from . import settings
+
+    try:
+        blob = settings.load()
+    except Exception:
+        blob = settings.DEFAULTS
+    return {
+        "max_resolution": int(blob.get("preview_max_px", settings.DEFAULTS["preview_max_px"])),
+        "jpeg_quality": int(blob.get("preview_quality", settings.DEFAULTS["preview_quality"])),
+    }
+
+
 def graph_preview(graph, model, weights, fps):
     """Patch the preview override onto a MODEL link. Returns the new link.
 
@@ -612,6 +628,24 @@ def graph_preview(graph, model, weights, fps):
         # Optional, so it is not in the defaults above and is passed only when
         # there is one — the node's own "none" is the latent2rgb path.
         kwargs["tiny_vae"] = picked
+    # How big the picture is, and how hard it is squeezed. Passed rather than
+    # left at the node's own 1024/80, because the box it lands in is a node body
+    # a few hundred pixels wide and the frame is re-encoded and broadcast on
+    # every sampling step — a full-clip animated WebP at 1024 buys nothing
+    # anybody can see and costs the encode and the bytes each time. It also runs
+    # into a limit: a websocket behind a reverse proxy has a frame cap, and a
+    # frame over it does not arrive late, it takes the socket down mid-render
+    # ([#24](https://github.com/roadmaus/ComfyUI-Continuity/issues/24)).
+    #
+    # Asked of the settings file, so a long clip that still crosses a cap at the
+    # default can be pushed lower and a machine with room to spare can have its
+    # 1024 back. Written only where the installed node declares them: a KJNodes
+    # that names these inputs something else keeps its own values rather than
+    # failing to build.
+    prefs = _preview_prefs()
+    for key, value in prefs.items():
+        if key in kwargs:
+            kwargs[key] = value
     kwargs.update({
         "preview_frames": PREVIEW_FRAMES,
         # The family's own rate, so the loop plays at speed. Read off a constant

@@ -41,13 +41,26 @@ import { t } from "./i18n.js";
  *  reached, the moment it starts encoding. */
 const EVENTS = ["progress_state", "b_preview_with_metadata", "b_preview",
                 "kj_preview_override", "executed", "execution_error", "execution_start",
-                "execution_interrupted", "mmc_segment"];
+                "execution_interrupted", "mmc_segment", "reconnected", "status"];
 
 /** A progress report this long is a sampler; the loaders and decoders report a
  *  step or two each. What lets the stage open on progress rather than waiting
  *  for a first frame, without opening as an empty black box for as long as a
  *  checkpoint takes to read off disk. */
 const OPENS_ON_STEPS = 4;
+
+/** How long a render may go without saying anything before the stage stops
+ *  trusting the wire and starts asking the server directly, and how often it
+ *  asks once it has started. A slow step is silence too, so the first number is
+ *  long enough that an ordinary one never trips it; the ask is a small GET and
+ *  only ever happens while nothing else is arriving. */
+const QUIET_MS = 30000;
+const PROBE_EVERY_MS = 5000;
+
+/** ...and how long before the readout says so. Until then a quiet render is
+ *  just a quiet render; past it, a clock ticking under a frozen preview is
+ *  indistinguishable from a hang unless the stage admits it has lost contact. */
+const STALL_MS = 60000;
 
 /** The step preview's `src` is an object URL revoked the instant the next frame
  *  lands (or a base64 `data:` URL just as long-lived), so every action the
@@ -105,6 +118,14 @@ export class Stage {
     this.result = null;      // {url, name} of the finished video
     this.error = null;
     this.startedAt = 0;
+    // Which queued prompt the stage believes it is watching, and when it last
+    // heard anything about it. Between them they are the whole of the recovery
+    // path in `probe()`: the id says what to ask the server about, and the
+    // silence says when to start asking.
+    this.promptId = null;
+    this.lastNewsAt = 0;
+    this.probedAt = 0;
+    this.probing = false;
     // How long the finished render took, in ms. Held past the run because the
     // clock is the one reading the readout keeps after the picture lands: the
     // whole reason you watch it tick is to know what the next one will cost.
@@ -193,6 +214,28 @@ export class Stage {
         // hidden until the first frame of this one arrives, rather than leaving
         // the previous render up while a different one is being made.
         this.reset();
+        // Kept even though this stage may turn out to have no part in the run:
+        // it is the only place the prompt id is ever said, and by the time the
+        // stage knows the render is its own the message has long gone by.
+        this.promptId = detail.prompt_id ?? null;
+        this.lastNewsAt = Date.now();
+        break;
+
+      case "reconnected":
+        // The wire came back. Nothing that happened while it was gone will be
+        // repeated — `executed` is sent once, to whoever was listening — so the
+        // question goes to the server now rather than after another 30 seconds
+        // of silence.
+        if (this.state !== "sampling") break;
+        this.probedAt = 0;
+        this.probe();
+        break;
+
+      case "status":
+        // Some frontends announce a reattached socket only by sending the queue
+        // state down it. A `status` arriving in the middle of a long silence is
+        // that, near enough, and costs one small GET to act on.
+        if (this.state === "sampling" && this.quiet() > QUIET_MS) this.probe();
         break;
 
       case "progress_state": {
@@ -206,6 +249,7 @@ export class Stage {
           if (!best || (entry.max ?? 0) > (best.max ?? 0)) best = entry;
         }
         if (!best) break;
+        this.news();
         // The stage opens the moment something with real steps is running —
         // not on the loaders (their one-step reports stay below the
         // threshold), and not waiting for a first preview frame either, which
@@ -226,6 +270,7 @@ export class Stage {
         // latent format at a decoder, which nothing does. This is the fallback
         // when KJNodes is not installed, and it beats an empty box.
         if (!this.ours(detail.parentNodeId) && !this.ours(detail.nodeId)) break;
+        this.news();
         this.metaFrameAt = Date.now();
         this.begin();
         this.releaseFrame();
@@ -245,6 +290,7 @@ export class Stage {
         if (this.metaFrameAt && Date.now() - this.metaFrameAt < 2000) break;
         const blob = detail instanceof Blob ? detail : detail.blob;
         if (!blob) break;
+        this.news();
         this.releaseFrame();
         this.frameUrl = URL.createObjectURL(blob);
         this.frame = this.frameUrl;
@@ -255,6 +301,7 @@ export class Stage {
 
       case "kj_preview_override": {
         if (!this.ours(detail.node_id)) break;
+        this.news();
         // The boundary-0 message carries the sigma schedule and often no picture
         // at all. Take the step count from it, but do not open the stage on it —
         // see above.
@@ -273,44 +320,13 @@ export class Stage {
         break;
       }
 
-      case "executed": {
+      case "executed":
         // `render.emit_tail` stamped our id on the save node, so this is our
         // render coming back even though the node that made it is not on the
         // canvas.
         if (String(detail.display_node) !== String(this.nodeId())) break;
-        // Under our own keys, not "images": that is the key core's stock
-        // widgets watch, and they were rendering a second player on the canvas
-        // node right under this stage. MiniMaxH3Save reports mmc_video and
-        // MiniMaxH3SaveImage reports mmc_image instead; which one arrives is
-        // also what says whether the result is a clip or a still.
-        const saved = detail.output?.mmc_video?.[0] ?? detail.output?.mmc_image?.[0];
-        if (!saved) break;
-        // The passes, each as its own file. Reported alongside the piece by
-        // `MiniMaxH3Save` on any render of more than one pass, so a card whose
-        // pass came out right never has to be sampled again.
-        if (detail.output?.mmc_takes?.length) this.onTakes?.(detail.output.mmc_takes);
-        this.state = "done";
-        this.progress = null;
-        // The clock stops here rather than on the next tick, so what the readout
-        // shows after the render is the render's own length and not a second of
-        // whatever happened to follow it.
-        this.tookMs = this.startedAt ? Date.now() - this.startedAt : 0;
-        this.result = { url: outputUrl(saved), name: saved.filename,
-                        isImage: !detail.output?.mmc_video, saved,
-                        // Carried on the result as well as held here: the
-                        // fullscreen reel keeps finished renders past the run
-                        // that made them, and a take without its cost is a
-                        // picture you can only compare on looks.
-                        tookMs: this.tookMs };
-        // The finished clip takes the preview's place, so the last sampled
-        // frame is now a picture that can never be shown again — and the clock
-        // it was ticking under has stopped.
-        clearInterval(this.ticker);
-        this.releaseFrame();
-        this.frame = null;
-        this.render();
+        this.finish(detail.output);
         break;
-      }
 
       case "mmc_segment":
         // The segment node announcing itself as it starts to encode — the one
@@ -318,6 +334,7 @@ export class Stage {
         // until the next announce: the sampler, the decoders and any refine
         // pass that follow all belong to the same segment.
         if (!this.ours(detail.node)) break;
+        this.news();
         this.segment = detail.index ?? null;
         this.renderReadout();
         break;
@@ -355,6 +372,9 @@ export class Stage {
   reset() {
     clearInterval(this.ticker);
     this.metaFrameAt = 0;
+    this.promptId = null;
+    this.lastNewsAt = 0;
+    this.probedAt = 0;
     this.state = "idle";
     this.result = null;
     this.error = null;
@@ -374,10 +394,151 @@ export class Stage {
     if (this.state === "sampling") return;
     this.state = "sampling";
     this.startedAt = Date.now();
+    this.lastNewsAt = Date.now();
     clearInterval(this.ticker);
     // Only the readout, and only once a second: the frames arrive when they
     // arrive, and a full render on a timer would fight the preview for the box.
-    this.ticker = setInterval(() => this.renderReadout(), 1000);
+    this.ticker = setInterval(() => this.tick(), 1000);
+  }
+
+  // ---- the render lands, however it reaches us -----------------------------
+
+  /**
+   * A finished render, from the `executed` message or from the history the
+   * server kept of it — the two are the same payload and this is the one place
+   * that reads it.
+   *
+   * Under our own keys, not "images": that is the key core's stock widgets
+   * watch, and they were rendering a second player on the canvas node right
+   * under this stage. `MiniMaxH3Save` reports `mmc_video` and
+   * `MiniMaxH3SaveImage` reports `mmc_image` instead; which one arrives is also
+   * what says whether the result is a clip or a still.
+   */
+  finish(output) {
+    const saved = output?.mmc_video?.[0] ?? output?.mmc_image?.[0];
+    if (!saved) return;
+    // The passes, each as its own file. Reported alongside the piece by
+    // `MiniMaxH3Save` on any render of more than one pass, so a card whose
+    // pass came out right never has to be sampled again.
+    if (output?.mmc_takes?.length) this.onTakes?.(output.mmc_takes);
+    this.state = "done";
+    this.progress = null;
+    // The clock stops here rather than on the next tick, so what the readout
+    // shows after the render is the render's own length and not a second of
+    // whatever happened to follow it.
+    this.tookMs = this.startedAt ? Date.now() - this.startedAt : 0;
+    this.result = { url: outputUrl(saved), name: saved.filename,
+                    isImage: !output?.mmc_video, saved,
+                    // Carried on the result as well as held here: the
+                    // fullscreen reel keeps finished renders past the run
+                    // that made them, and a take without its cost is a
+                    // picture you can only compare on looks.
+                    tookMs: this.tookMs };
+    // The finished clip takes the preview's place, so the last sampled frame is
+    // now a picture that can never be shown again — and the clock it was
+    // ticking under has stopped.
+    clearInterval(this.ticker);
+    this.releaseFrame();
+    this.frame = null;
+    this.render();
+  }
+
+  /** A step, a frame, a segment — something said this render is still alive. */
+  news() {
+    const wasStalled = this.quiet() > STALL_MS;
+    this.lastNewsAt = Date.now();
+    if (wasStalled) this.renderReadout();
+  }
+
+  /** How long since anything was heard about the render now on the stage. */
+  quiet() {
+    return this.lastNewsAt ? Date.now() - this.lastNewsAt : 0;
+  }
+
+  /** One second of a running render: the clock, and — once the wire has gone
+   *  quiet for longer than a slow step explains — a question to the server. */
+  tick() {
+    this.renderReadout();
+    if (this.state === "sampling" && this.quiet() > QUIET_MS) this.probe();
+  }
+
+  /**
+   * Ask the server what became of this render.
+   *
+   * **`executed` is sent once, to whoever is listening, and is never replayed.**
+   * So a socket that drops mid-render takes the end of the render with it: the
+   * file is written and the queue empties, while the stage sits on a step
+   * preview under a clock that never stops, looking exactly like a hang
+   * ([#24](https://github.com/roadmaus/ComfyUI-Continuity/issues/24)). It does
+   * not take an exotic failure to get there — a reverse proxy with a frame cap,
+   * a laptop that slept, a tab reopened on a render already running.
+   *
+   * `/history/{prompt_id}` holds the same payload the message carried, so the
+   * recovery is to read it back rather than to guess from a timeout. A prompt
+   * that is not in it yet is a render still running, which is the answer as
+   * often as not — a slow step is silence too — and that case does nothing but
+   * let the readout say it has lost contact.
+   */
+  async probe() {
+    if (this.probing || !this.promptId) return;
+    if (Date.now() - this.probedAt < PROBE_EVERY_MS) return;
+    this.probing = true;
+    this.probedAt = Date.now();
+    try {
+      const response = await api.fetchApi(`/history/${encodeURIComponent(this.promptId)}`);
+      if (!response.ok) return;
+      const entry = (await response.json())?.[this.promptId];
+      // The stage may have caught up on its own while this was in flight — the
+      // wire coming back mid-probe is the likeliest moment of all — and a probe
+      // must never overwrite a result that arrived the ordinary way.
+      if (this.state !== "sampling") return;
+      if (!entry) return;
+      const output = this.savedOutput(entry.outputs, entry.meta);
+      if (output) {
+        this.finish(output);
+        return;
+      }
+      // In history, with nothing of ours in it: the render failed or was
+      // cancelled while nobody was listening. Saying so is the point — this is
+      // the state the report describes as costing a 179-second render, because
+      // a stage that cannot tell "running" from "over" gets cancelled by hand.
+      this.state = "failed";
+      this.progress = null;
+      clearInterval(this.ticker);
+      this.error = failureText(entry.status) ?? t("the render ended without a file");
+      this.render();
+    } catch { /* the wire is down as well; the ticker asks again in five seconds */ }
+    finally { this.probing = false; }
+  }
+
+  /**
+   * The `mmc_video`/`mmc_image` output belonging to this node in a history
+   * entry, or null.
+   *
+   * History keys outputs by the node that *made* them, which inside our
+   * expansion is our id with a suffix, and records the id it was displayed
+   * under in `meta` — `render.emit_tail`'s stamp, and the same id the
+   * `executed` message carries. Either identifies it.
+   *
+   * **And if neither does, one unambiguous render still counts.** The keys are
+   * this pack's own, so an `mmc_` output in a prompt this stage was sampling in
+   * is this stage's render — the queue runs one prompt at a time. Only where
+   * there is exactly one, though: a prompt holding two of our nodes is a
+   * question this cannot answer, and guessing there would hand a stage somebody
+   * else's file. The alternative to this fallback is worse than a miss — the
+   * caller reads "no output of ours" as a render that wrote nothing, so an id
+   * shape this does not recognise would report a finished render as failed.
+   */
+  savedOutput(outputs = {}, meta = {}) {
+    const mine = [];
+    const anyOfOurs = [];
+    for (const [id, output] of Object.entries(outputs ?? {})) {
+      if (!output?.mmc_video?.[0] && !output?.mmc_image?.[0]) continue;
+      anyOfOurs.push(output);
+      if (this.ours(id) || this.ours(meta?.[id]?.display_node)) mine.push(output);
+    }
+    if (mine.length) return mine[0];
+    return anyOfOurs.length === 1 ? anyOfOurs[0] : null;
   }
 
   // ---- render --------------------------------------------------------------
@@ -444,6 +605,17 @@ export class Stage {
       left.push(el("span", {
         class: "mmc-stage-chip",
         text: this.progress?.total ? `${this.progress.step} / ${this.progress.total}` : t("sampling"),
+      }));
+      // Nothing has arrived for a long time and the server has not said the
+      // render is over either. Worth saying out loud: a clock ticking under a
+      // frozen preview is indistinguishable from a hang, and the report this
+      // came from describes a healthy render cancelled by hand because of it.
+      if (this.quiet() > STALL_MS) left.push(el("span", {
+        class: "mmc-stage-chip warn",
+        title: t("Nothing has arrived from the server for a while. The render may well still "
+               + "be running — this node is now asking the server directly, and will show the "
+               + "result the moment it lands."),
+        text: t("out of contact {when}", { when: elapsed(this.quiet()) }),
       }));
       right.push(el("span", {
         class: "mmc-stage-chip mmc-stage-clock",
@@ -560,6 +732,16 @@ export class Stage {
  *  problems than its readout. Exported because the fullscreen lip captions each
  *  past take with what it cost, and two clocks in one window that round
  *  differently is one clock too many. */
+/** What a history entry's status says went wrong, if it says anything.
+ *  `messages` holds the events that would have come down the socket, as
+ *  `[name, payload]` pairs — kept by the server for exactly this reason. */
+function failureText(status) {
+  for (const [event, payload] of status?.messages ?? []) {
+    if (event === "execution_error" && payload?.exception_message) return payload.exception_message;
+  }
+  return null;
+}
+
 export function elapsed(ms) {
   const total = Math.max(0, Math.round(ms / 1000));
   return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, "0")}`;

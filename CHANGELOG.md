@@ -2,6 +2,40 @@
 
 ## Unreleased
 
+**A render the node stops hearing about is asked after, rather than waited on
+forever.**
+
+`executed` is broadcast once, to whoever is listening, and is never replayed. So
+a websocket that drops mid-render took the end of the render with it: the file
+was written and the queue emptied while the node sat on a step preview under a
+clock that never stopped, indistinguishable from a hang — and at least one
+healthy 179-second render was cancelled by hand because of it
+([#24](https://github.com/roadmaus/ComfyUI-Continuity/issues/24)). It does not
+take an exotic failure to get there; a reverse proxy with a frame cap, a laptop
+that slept, or a tab reopened on a render already running will all do it.
+
+The stage now watches the silence. Half a minute without a step, a frame or a
+segment and it starts asking `/history/{prompt_id}` directly — which holds the
+same payload the message carried — and a minute of it and the readout says so
+rather than ticking a clock under a frozen picture. A reconnected socket asks
+immediately. A render that finished unheard lands the way it always did; one
+that failed or was cancelled unheard says which, instead of sampling forever.
+
+**The step preview is drawn at the size it is looked at, and both numbers are
+yours.**
+
+The picture the sampler broadcasts is a full clip, re-encoded and sent on every
+step, and it was going out at the override node's own 1024 — several times the
+node face it lands in. Past a few megabytes a frame that is not merely wasteful:
+a websocket behind a reverse proxy has a frame cap (aiohttp's is 4 MiB, and
+nothing raises it by default), and a frame over it does not arrive late, it
+drops the socket mid-render. That is what was breaking the connection above.
+
+The default is now 640px, and Settings → General → Step preview carries the size
+and the quality on two rails — down for a wire that still cannot carry a long
+clip, back up to 1024 for a machine on localhost. Nothing about the render
+changes either way: this is the picture you watch while it happens.
+
 **Right-clicking a step preview no longer offers to open a picture that is
 already gone — which took ComfyUI Desktop down with it.**
 

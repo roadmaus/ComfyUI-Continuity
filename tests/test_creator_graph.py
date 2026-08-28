@@ -564,6 +564,9 @@ class _FakePreview:
             "suppress_default_preview": ("BOOLEAN", {"default": True}),
             "preview_frames": ("INT", {"default": 1}),
             "preview_fps": ("INT", {"default": 12}),
+            # A knob this pack has never heard of, which is the whole case the
+            # read-the-defaults-off-the-class rule exists for.
+            "some_later_knob": ("INT", {"default": 7}),
         }}
 
 
@@ -598,10 +601,34 @@ try:
           models_mod.PREVIEW_FRAMES >= longest, True)
     # Read off the installed class rather than carried here, the way accel.py
     # reads its packs' defaults — a knob the pack retunes must not go stale.
-    # (1024 here is the fake pack's own default, and only coincidentally the same
-    # number as PREVIEW_FRAMES above.)
-    check("the pack's own default survives for anything we do not set",
-          patches[0][1]["max_resolution"], 1024)
+    check("a knob the pack does not name keeps the node's own default",
+          patches[0][1]["some_later_knob"], 7)
+
+    # How big the frame on the wire is. *Not* left at the node's own 1024/80:
+    # the box that shows it is a node face a few hundred pixels wide, the frame
+    # is re-encoded and broadcast every step, and past a few megabytes a proxy's
+    # websocket frame cap does not delay it — it drops the socket mid-render
+    # (issue #24). Both numbers come from the settings file so a wire that still
+    # cannot carry the default has somewhere to say so.
+    settings_mod = importlib.import_module(f"{PACKAGE}.creator.settings")
+    _load = settings_mod.load
+    try:
+        settings_mod.load = lambda: dict(settings_mod.DEFAULTS)
+        stock = by_class(build().expand)["ModelPreviewOverrideKJ"][0][1]
+        check("the frame is sized by this pack rather than by the override node",
+              stock["max_resolution"], settings_mod.DEFAULTS["preview_max_px"])
+        check("...which is smaller than the node would have picked unasked",
+              stock["max_resolution"] < 1024, True)
+        check("...and squeezed by this pack too",
+              stock["jpeg_quality"], settings_mod.DEFAULTS["preview_quality"])
+
+        settings_mod.load = lambda: dict(settings_mod.DEFAULTS,
+                                         preview_max_px=384, preview_quality=55)
+        tuned = by_class(build().expand)["ModelPreviewOverrideKJ"][0][1]
+        check("a machine that has lowered them is followed",
+              (tuned["max_resolution"], tuned["jpeg_quality"]), (384, 55))
+    finally:
+        settings_mod.load = _load
     check("the sampler reads the patch",
           preview_kinds["KSampler"][0][1]["model"][0], patches[0][0])
 

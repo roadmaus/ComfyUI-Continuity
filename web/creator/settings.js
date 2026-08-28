@@ -175,6 +175,20 @@ const SIZE_STOPS = [
   { value: 64 }, { value: 128, label: "128" },
 ];
 
+// What the step preview may be sized and squeezed to. The long edge in pixels,
+// and the encoder's own quality scale. Both are the override node's numbers, so
+// the ends of these rails are the ends of what it accepts.
+const PREVIEW_PX_STOPS = [
+  { value: 128, label: "128" }, { value: 256 }, { value: 384, label: "384" },
+  { value: 512 }, { value: 640, label: "640" }, { value: 768 },
+  { value: 1024, label: "1024" },
+];
+
+const PREVIEW_Q_STOPS = [
+  { value: 40, label: "40" }, { value: 50 }, { value: 60, label: "60" },
+  { value: 70 }, { value: 80, label: "80" }, { value: 90 }, { value: 100, label: "100" },
+];
+
 /** How long a retention reads. The offered stops have names; a hand-typed
  *  number is simply a number of days. */
 function keepFor(days) {
@@ -385,6 +399,70 @@ class SettingsPage {
   // ---- nodes ----------------------------------------------------------------
 
   /**
+   * How big the picture the sampler broadcasts is, and how hard it is squeezed.
+   *
+   * The only thing on this tab that is not purely cosmetic — not because it
+   * changes a render (it cannot; this is the picture you watch while one
+   * happens) but because the frame has to *arrive*. It is a full-clip animated
+   * WebP, re-encoded and sent on every sampling step, and a websocket behind a
+   * reverse proxy has a frame cap: aiohttp's is 4 MiB and nothing raises it by
+   * default. A frame over that does not arrive late — it takes the socket down
+   * mid-render.
+   *
+   * So the default is the size a preview is actually looked at rather than the
+   * override node's 1024, and the rails are here for the two directions that
+   * leaves: a long 720p clip that still crosses a cap, and a machine on
+   * localhost with room to spare that would rather see the detail.
+   */
+  renderPreviewSize() {
+    const px = Number(this.settings.preview_max_px ?? 640);
+    const quality = Number(this.settings.preview_quality ?? 80);
+
+    const size = this.stopSlider({
+      stops: PREVIEW_PX_STOPS,
+      value: px,
+      name: "Draw the step preview at",
+      read: (value) => ({ value: String(value), unit: "px" }),
+      note: (value) => value > 768
+        ? t("Larger than any box that shows it. Costs an encode and the bytes every step.")
+        : value < 384
+          ? t("Small and cheap. For a wire that drops long renders at anything larger.")
+          : t("The long edge. The box that shows it is a node face, or the fullscreen dock."),
+      warn: (value) => value > 768,
+      apply: (value) => this.set({ preview_max_px: value }),
+    });
+
+    const squeeze = this.stopSlider({
+      stops: PREVIEW_Q_STOPS,
+      value: quality,
+      name: "At quality",
+      read: (value) => ({ value: String(value) }),
+      note: (value) => value >= 90
+        ? t("Near-lossless, and several times the bytes of 80 for a decode of a "
+            + "half-finished latent.")
+        : t("The encoder's own scale. 80 is what the override node picks unasked."),
+      warn: (value) => value >= 90,
+      apply: (value) => this.set({ preview_quality: value }),
+    });
+
+    return this.section("Nodes", "Step preview",
+      "How large the picture the sampler broadcasts each step is. It is a whole clip, "
+      + "re-encoded and sent every step, and a websocket behind a proxy has a frame "
+      + "limit — a frame past it takes the connection down mid-render rather than "
+      + "arriving late. Nothing about the render changes: this is the picture you "
+      + "watch while it happens.",
+      [
+        el("div", { class: "mmc-set-field mmc-set-bounds" }, [size, squeeze]),
+        el("div", { class: "mmc-set-foot" }, [
+          el("span", {
+            text: t("Read when a render is queued, so the next one uses it. "
+                + "Only KJNodes' preview override draws these frames at all."),
+          }),
+        ]),
+      ]);
+  }
+
+  /**
    * What the node faces offer, as opposed to what a render writes. First (and
    * so far only) resident: the sampler row's two flow-shift pills, hidden by
    * default because most rows never leave the checkpoints' own schedule.
@@ -573,7 +651,8 @@ class SettingsPage {
     // back.
     const leadIn = this.settings.advanced === true || Number(this.settings.turbo_lead_in) > 0
       ? this.renderLeadIn() : [];
-    return [this.renderAdvanced(), this.renderPreviews(), ...leadIn, this.renderRefCache(),
+    return [this.renderAdvanced(), this.renderPreviews(), this.renderPreviewSize(),
+      ...leadIn, this.renderRefCache(),
       this.section("Nodes", "Flow shift pills",
       "Whether the sampler row offers H3's two flow shifts — the video and audio "
       + "schedule clocks. The values apply either way; this only decides who has "

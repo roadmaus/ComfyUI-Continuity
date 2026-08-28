@@ -139,6 +139,12 @@ export const api = {
     // The compiler's answer, in the shape `server_routes.compiled_prompt`
     // sends it: one entry per pass, and a card -> pass map whose keys are
     // strings because that is what JSON does to Python's int keys.
+    // The server's record of a finished prompt — what the stage reads back when
+    // the `executed` message never reached it. Empty until a test fills it,
+    // which is the "still running" answer.
+    if (String(route).startsWith("/history/")) {
+      return { ok: true, status: 200, json: async () => (globalThis.__history ?? {}) };
+    }
     if (route.endsWith("/compiled_prompt")) {
       return { ok: true, status: 200, json: async () => ({
         passes: [{ index: 0, clip: false, mode: "REF2VA", overridden: false,
@@ -1320,9 +1326,10 @@ try {
   findOpts(page);
   out.settings.shiftRows = opts.map((o) => o.getAttribute("aria-checked"));
 
-  // The reference cache's two rails. Read for their stops and their readouts:
-  // a rail is a list of values as much as it is a control, and a stop list that
-  // silently lost its ends would still draw.
+  // The tab's four rails, in page order: the step preview's size and quality,
+  // then the reference cache's two limits. Read for their stops and their
+  // readouts — a rail is a list of values as much as it is a control, and a
+  // stop list that silently lost its ends would still draw.
   const rails = [];
   const findRails = (node) => {
     if (String(node.className ?? "").split(" ")[0] === "mmc-set-slider") rails.push(node);
@@ -1338,7 +1345,11 @@ try {
     walk(slider);
     return found;
   };
-  out.settings.cacheStops = rails.map((r) => Number(railOf(r).getAttribute("max")) + 1);
+  const previewRails = rails.slice(0, 2);
+  const cacheRails = rails.slice(2);
+  out.settings.previewStops = previewRails.map(
+    (r) => Number(railOf(r).getAttribute("max")) + 1);
+  out.settings.cacheStops = cacheRails.map((r) => Number(railOf(r).getAttribute("max")) + 1);
   const edgeOf = (slider, want) => {
     let found = "";
     const walk = (node) => {
@@ -1348,9 +1359,11 @@ try {
     walk(slider);
     return found;
   };
-  out.settings.cacheReads = rails.map(
-    (r) => [edgeOf(r, "mmc-edge"), edgeOf(r, "mmc-edge-unit")].filter(Boolean).join(" "));
-  out.settings.cacheDisabled = rails.map((r) => railOf(r).getAttribute("disabled") != null);
+  const readOf = (r) => [edgeOf(r, "mmc-edge"), edgeOf(r, "mmc-edge-unit")]
+    .filter(Boolean).join(" ");
+  out.settings.previewReads = previewRails.map(readOf);
+  out.settings.cacheReads = cacheRails.map(readOf);
+  out.settings.cacheDisabled = cacheRails.map((r) => railOf(r).getAttribute("disabled") != null);
 
   // Then turn the advanced controls on — the first section's second row — and
   // count again. The turbo lead-in's three rows are what should appear: it is
@@ -2707,6 +2720,77 @@ try {
   out.errors.push(`navigate: ${error.stack}`);
 }
 
+// ---- a render the stage stopped hearing about --------------------------------
+//
+// The socket dies mid-render. `executed` is sent once, to whoever is listening,
+// and is never replayed — so without a way back the stage sits on a step frame
+// under a clock that never stops while the file lands on disk (#24). Driven
+// through the events themselves rather than through a node body: the stage is
+// the thing under test and it listens to `api` directly.
+try {
+  const { Stage } = await import("./web/creator/stage.js");
+  const stage = new Stage({ nodeId: () => 7 });
+  globalThis.__say("execution_start", { prompt_id: "p-1" });
+  globalThis.__say("progress_state", { nodes: {
+    "7.9": { parent_node_id: "7", state: "running", value: 3, max: 20 },
+  } });
+  const sampling = stage.state;
+
+  // ...and here the wire goes. Nothing else arrives, ever. A minute of silence,
+  // written rather than waited for.
+  stage.lastNewsAt = Date.now() - 90000;
+  stage.renderReadout();
+  const saidSo = (stage.readout.text ?? "").includes("out of contact");
+
+  // Asking while the render is genuinely still going changes nothing: a prompt
+  // the server has not filed yet is a prompt still running, and a slow step is
+  // silence too.
+  globalThis.__history = {};
+  stage.probedAt = 0;
+  await stage.probe();
+  const stillSampling = stage.state;
+
+  // Then it lands. History carries the same payload the message would have,
+  // keyed by the expanded node that made it and naming our id as its display.
+  globalThis.__history = { "p-1": {
+    outputs: { "7.4": { mmc_video: [
+      { filename: "shot_00003_.mp4", subfolder: "", type: "output" }] } },
+    meta: { "7.4": { display_node: "7" } },
+    status: { status_str: "success", completed: true },
+  } };
+  stage.probedAt = 0;
+  await stage.probe();
+  out.recovery = {
+    sampling, saidSo, stillSampling,
+    state: stage.state,
+    file: stage.result?.name ?? null,
+    // The frozen step frame is gone, the way it goes when `executed` arrives.
+    frameCleared: stage.frame === null,
+  };
+  stage.destroy();
+
+  // The other end of it: a run that ended without writing anything — cancelled
+  // or failed while nobody was listening. Silence is not the answer there
+  // either, and "still sampling" least of all.
+  const second = new Stage({ nodeId: () => 7 });
+  globalThis.__say("execution_start", { prompt_id: "p-2" });
+  globalThis.__say("progress_state", { nodes: {
+    "7.9": { parent_node_id: "7", state: "running", value: 1, max: 20 },
+  } });
+  globalThis.__history = { "p-2": { outputs: {}, meta: {}, status: {
+    status_str: "error", completed: false,
+    messages: [["execution_error", { exception_message: "out of memory" }]],
+  } } };
+  second.probedAt = 0;
+  await second.probe();
+  out.recovery.failedState = second.state;
+  out.recovery.failedSays = second.error;
+  second.destroy();
+  globalThis.__history = null;
+} catch (error) {
+  out.errors.push(`recovery: ${error.stack}`);
+}
+
 console.log(JSON.stringify(out));
 """
 
@@ -3020,6 +3104,27 @@ check("...and the room comes back with the press", nav.get("dashGone"), True)
 # "Nodes": it carries a Rendering group as well as a Nodes one, so the old name
 # was the name of half of it.
 settings = report.get("settings", {})
+# The lockup this pack shipped for a while: `executed` is broadcast once, to
+# whoever is listening, and a socket that drops mid-render takes the end of the
+# render with it — the file is written, the queue empties, and the node sits on
+# a step frame under a clock that never stops. `/history/{prompt_id}` holds the
+# same payload the message carried, so there is a way back and this is it.
+#
+# The middle answer matters as much as the recovery: a prompt the server has not
+# filed yet is a prompt still running, and a stage that took silence for failure
+# would call every slow step a dead render.
+recovery = report.get("recovery", {})
+check("the stage says out loud that it has lost contact",
+      (recovery.get("sampling"), recovery.get("saidSo")), ("sampling", True))
+check("...and asking about a render still running changes nothing",
+      recovery.get("stillSampling"), "sampling")
+check("...but a render that finished unheard is read back off the server",
+      (recovery.get("state"), recovery.get("file"), recovery.get("frameCleared")),
+      ("done", "shot_00003_.mp4", True))
+check("...and one that ended without a file says why rather than nothing",
+      (recovery.get("failedState"), recovery.get("failedSays")),
+      ("failed", "out of memory"))
+
 check("the settings page has all four tabs", settings.get("tabs"),
       ["Quality", "Folders", "General", "Appearance"])
 # Every row on the tab, in order, with each setting's default checked on a fresh
@@ -3039,10 +3144,20 @@ check("the settings page has all four tabs", settings.get("tabs"),
 check("the node settings show their defaults checked",
       settings.get("shiftRows"),
       ["true", "false", "true", "false", "true", "false", "true", "false"])
-# The reference cache's two limits. Both rails travel a list of stops rather
-# than a range, because nobody is choosing between 30 days and 31 — and the
-# defaults have to land on a named stop, or the page opens showing a value it
-# does not offer.
+# The step preview's two rails, and the reference cache's two. All four travel a
+# list of stops rather than a range, because nobody is choosing between 30 days
+# and 31 — and the defaults have to land on a named stop, or the page opens
+# showing a value it does not offer.
+#
+# The preview pair is the one setting on this tab that is not purely cosmetic:
+# the frame is broadcast on every sampling step, and a frame past a proxy's
+# websocket cap drops the socket mid-render rather than arriving late (#24). So
+# the page has to open on this pack's own numbers, not the override node's
+# 1024/80 — a page that opened on 1024 would be a page saying the thing that
+# caused the lockup is what is in force.
+check("both preview rails carry their stops", settings.get("previewStops"), [7, 7])
+check("...opening on the pack's own 640 px and quality 80",
+      settings.get("previewReads"), ["640 px", "80"])
 check("both cache rails carry their stops", settings.get("cacheStops"), [6, 9])
 check("...opening on the stored month and 8 GB",
       settings.get("cacheReads"), ["1 month", "8 GB"])

@@ -196,6 +196,26 @@ DEFAULTS = {
     # in-session cache and writes nothing to disk, which is the setting for a
     # box with no room to spare.
     "latent_cache_gb": 8.0,
+    # How large each step's preview may be drawn, in pixels on its long edge,
+    # and at what quality.
+    #
+    # The preview is a full-clip animated WebP, re-encoded and broadcast on
+    # *every sampling step*, and the box it lands in is a node body — a few
+    # hundred pixels wide, or the fullscreen dock at most. Asking for 1024
+    # bought nothing anybody could see and cost the encode and the bytes every
+    # step; worse, past a few megabytes a frame it is a size some deployments
+    # cannot carry at all. A websocket behind a reverse proxy has a frame cap —
+    # aiohttp's is 4 MiB and is not raised by default — and a frame over it
+    # takes the socket down mid-render rather than arriving late
+    # ([#24](https://github.com/roadmaus/ComfyUI-Continuity/issues/24)).
+    #
+    # So the default is the size a preview is actually looked at, and both
+    # numbers are here rather than fixed: a long 720p clip can still cross a cap
+    # at 640, and a machine with room to spare can have its 1024 back. Nothing
+    # about the render changes either way — this is the picture you watch while
+    # it happens, not the one it writes.
+    "preview_max_px": 640,
+    "preview_quality": 80,
     # How long a reference nothing has read is kept, in days. 0 is forever,
     # which is a real answer here rather than a footgun: the ceiling above is
     # what actually bounds the store, and ageing is only for the reference
@@ -236,6 +256,14 @@ MAX_CACHE_GB = 256.0
 # honest setting is 0 — forever — rather than a larger number pretending to be
 # a policy.
 MAX_CACHE_DAYS = 365.0
+
+# What the step preview may be sized and encoded at. The ceiling is the override
+# node's own maximum, so a number this file accepts is a number that node has an
+# answer for; the floor is where a preview stops being one.
+MIN_PREVIEW_PX = 128
+MAX_PREVIEW_PX = 1024
+MIN_PREVIEW_QUALITY = 1
+MAX_PREVIEW_QUALITY = 100
 
 
 def clean(raw):
@@ -317,6 +345,20 @@ def clean(raw):
         if not 0 <= days <= MAX_CACHE_DAYS:
             raise ValueError(f"latent_cache_days must be between 0 and {MAX_CACHE_DAYS}")
         clean_settings["latent_cache_days"] = days
+    for key, low, high, unit in (
+            ("preview_max_px", MIN_PREVIEW_PX, MAX_PREVIEW_PX, " of pixels"),
+            ("preview_quality", MIN_PREVIEW_QUALITY, MAX_PREVIEW_QUALITY, "")):
+        if key in raw and raw[key] is not None:
+            value = raw[key]
+            # `True` is an int in Python and would sail through as 1, the same
+            # trap every count above sets.
+            if isinstance(value, bool) or not isinstance(value, (int, float)) \
+                    or value != int(value):
+                raise ValueError(f"{key} must be a whole number{unit}")
+            value = int(value)
+            if not low <= value <= high:
+                raise ValueError(f"{key} must be between {low} and {high}")
+            clean_settings[key] = value
     if "weights" in raw and raw["weights"] is not None:
         clean_settings["weights"] = clean_weights(raw["weights"])
     for flag in ("show_shift_pills", "autoplay_previews", "advanced", "latent_cache"):
