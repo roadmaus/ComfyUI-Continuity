@@ -30,7 +30,7 @@ from aiohttp import web
 
 from server import PromptServer
 
-from . import compile as compiler, media, preview, refine_local, refine_skill
+from . import compile as compiler, media, preview, refine_local, refine_remote, refine_skill
 from .families import refine
 
 # What one call will look at. Every image rides in the context window for the
@@ -417,6 +417,19 @@ def _shared(shots):
     return handles, refs, labels
 
 
+def _backend(body):
+    """Which half holds the model for this press: `(chat, look)`.
+
+    `look` turns a PIL image into whatever that backend's `chat` attaches —
+    a tensor in-process, a `data:` URL on the wire. The request says which
+    with one word; everything the word guards lives server-side, so a blob
+    carrying `backend` carries no address and no credential.
+    """
+    if body.get("backend") == "remote":
+        return refine_remote.chat, refine_remote.to_data_url
+    return refine_local.chat, refine_local.to_tensor
+
+
 def _run_skill(body, name, mode, shots, pictures, seconds, dropped, piece_text=None):
     """The skill path: the packaged skill is the whole instruction.
 
@@ -443,12 +456,13 @@ def _run_skill(body, name, mode, shots, pictures, seconds, dropped, piece_text=N
         shot = {**shot, "text": compiler._join_prompt(piece_text, shot.get("text"))}
 
     skill = refine_skill.load(name)
-    content = refine_local.chat(
+    chat, look = _backend(body)
+    content = chat(
         body.get("model") or "",
         refine_skill.system_prompt(skill),
         refine_skill.user_message(shot, seconds=seconds, images=len(pictures),
                                   mode=mode, language=body.get("language")),
-        [refine_local.to_tensor(p) for p in pictures],
+        [look(p) for p in pictures],
         temperature=body.get("temperature", 0.7),
         seed=body.get("seed", -1),
         max_tokens=body.get("max_tokens"),
@@ -575,9 +589,10 @@ def _run(body):
         footage=footage,
         cast=cast,
     )
-    content = refine_local.chat(
+    chat, look = _backend(body)
+    content = chat(
         body.get("model") or "",
-        system, message, [refine_local.to_tensor(p) for p in pictures],
+        system, message, [look(p) for p in pictures],
         # Rewriting is a fidelity task, not an ideation one: the default leans
         # cold so that named things survive, and the dial is still the user's.
         temperature=body.get("temperature", 0.3),
@@ -797,6 +812,54 @@ async def refine_models(request):
     return web.json_response({"models": names})
 
 
+@PromptServer.instance.routes.get("/continuity/refine/remote")
+async def refine_remote_status(request):
+    """The stored endpoint, and *whether* a key is set — never the key.
+
+    Write-only credentials are the whole design: the browser learns enough to
+    draw the settings panel and nothing an XSS or a shared screen could carry
+    away. See `refine_remote`'s docstring for the rest of the model.
+    """
+    return web.json_response(refine_remote.status())
+
+
+@PromptServer.instance.routes.post("/continuity/refine/remote")
+async def refine_remote_configure(request):
+    """Store the endpoint and, when one arrives, the key.
+
+    `key` absent means "keep what is stored, if the URL has not moved" — the
+    binding `refine_remote.configure` holds. An empty `key` clears it. The
+    reply is `status()`, so the panel redraws off the same shape it read.
+    """
+    try:
+        body = await request.json()
+    except ValueError:
+        return web.json_response({"error": "the request body was not JSON"}, status=400)
+    try:
+        result = await asyncio.get_running_loop().run_in_executor(
+            None, refine_remote.configure, body.get("url"), body.get("key"))
+    except refine_remote.ConfigError as exc:
+        return web.json_response({"error": str(exc)}, status=400)
+    return web.json_response(result)
+
+
+@PromptServer.instance.routes.get("/continuity/refine/remote/models")
+async def refine_remote_models(request):
+    """The stored server's model listing, proxied.
+
+    Proxied because the browser cannot ask an LM Studio on another origin
+    itself, and *stored* because a proxy that fetched a URL off the query
+    string would be an open relay with the key attached — this one has no
+    parameters at all.
+    """
+    loop = asyncio.get_running_loop()
+    try:
+        names = await loop.run_in_executor(None, refine_remote.list_models)
+    except refine.RefineError as exc:
+        return web.json_response({"error": str(exc), "models": []}, status=502)
+    return web.json_response({"models": names})
+
+
 @PromptServer.instance.routes.get("/continuity/refine/skills")
 async def refine_skills(request):
     """The skill packages under the node's skills/ directory.
@@ -840,6 +903,11 @@ async def refine_prompt(request):
         return web.json_response({"error": "the request body was not JSON"}, status=400)
 
     if not (body.get("model") or "").strip():
+        if body.get("backend") == "remote":
+            return web.json_response({"error":
+                "No model chosen. Pick one of the server's models in the "
+                "refiner's settings."
+            }, status=400)
         return web.json_response({"error":
             "No text encoder chosen. Put a Qwen3-VL 4B or 8B text encoder in "
             "models/text_encoders and pick it in the refiner's settings."

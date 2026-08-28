@@ -2,6 +2,29 @@
 
 ## Unreleased
 
+**The refiner can run on a server you already keep warm — LM Studio, Ollama,
+or any OpenAI-compatible endpoint, hosted APIs included.**
+
+The refiner's settings grew a "runs on" switch
+([#19](https://github.com/roadmaus/ComfyUI-Continuity/issues/19)). "this
+ComfyUI" is what it always did: a Qwen3-VL text encoder in-process, loaded and
+evicted like any other model. "a server" points it at an OpenAI-compatible
+`/v1` instead — LM Studio (`http://localhost:1234/v1`), Ollama
+(`http://localhost:11434/v1`), llama.cpp, vLLM, or a hosted API such as
+OpenRouter, OpenAI, Anthropic or Gemini via their compatibility endpoints —
+with the server's own model list to pick from. Attached references ride along
+as images when the model can see; everything else — templates, handle checks,
+quoted-span fidelity, the whole rewrite contract — is identical on both
+backends.
+
+An API key, where a hosted provider needs one, is handled the way a credential
+should be: stored server-side in its own owner-only file, never written to
+`localStorage`, never sent back to the browser, never saved into a workflow
+`.json`, scrubbed from error messages, refused over plain HTTP to anything but
+loopback — and dropped automatically if the server URL changes without a new
+key arriving with it, so a repointed URL can never inherit a credential meant
+for somewhere else.
+
 **A render the node stops hearing about is asked after, rather than waited on
 forever.**
 

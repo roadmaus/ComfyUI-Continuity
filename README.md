@@ -225,6 +225,11 @@ text encoders *are* Qwen3-VL 4B and 8B, and the refiner reads the same files.
 H3's own 32B encoder is not one of them: it is truncated to its hidden states and
 has no head to decode text with, and the picker says so if you choose it.
 
+Or skip the file entirely: the refiner's settings can point it at an
+OpenAI-compatible server instead — LM Studio, Ollama, llama.cpp, vLLM, or a
+hosted API with a key. The key is kept server-side on your machine and never
+enters the browser or a workflow file.
+
 ### The minimum
 
 One family and its required rows. H3 video is five files; LTX 2.5 video is four;
@@ -383,9 +388,10 @@ with `@`. Neither is required: the file is in the picker either way.
 ## The rest, briefly
 
 - **Refine** rewrites your sentence into the long description the family it is
-  aimed at was trained to read, using a small local vision model, and lands it in
-  an editable box under the prompt. It is a button rather than a queue-time step
-  so you see what the model will read *before* five minutes of sampling.
+  aimed at was trained to read, using a small local vision model — or any
+  OpenAI-compatible server you already run — and lands it in an editable box
+  under the prompt. It is a button rather than a queue-time step so you see
+  what the model will read *before* five minutes of sampling.
 - **Contact sheet** lays a clip out as one picture — nine frames, no gutter — so
   an edit model can be asked about a whole shot at once, and cuts the edited
   sheet back into frames. Browser-side arithmetic: no queue, no weights, and

@@ -43,6 +43,16 @@ const DEFAULTS = {
   // model — which on a machine already offloading H3's own encoder is the
   // difference between a rewrite and a coffee break.
   model: "",
+  // Or a server the user already runs — LM Studio, Ollama, a hosted API —
+  // reached through one OpenAI-compatible client. "local" is the default for
+  // the reason `refine_local.py` states; "remote" is for the machine where
+  // that argument runs the other way. Only the word travels: the URL and the
+  // key live server-side (see `refine_remote.py`), so neither this store nor
+  // the workflow blob ever holds an address or a credential.
+  backend: "local",
+  // The server's model, kept apart from the text encoder's name so switching
+  // backends and back loses neither choice.
+  remoteModel: "",
   // Cold by default: refining is a fidelity task, and at 0.7 a small model
   // paraphrases the very words it was told to keep. Raise it for variety.
   temperature: 0.3,
@@ -119,9 +129,12 @@ export function saveSettings(patch) {
   return next;
 }
 
-/** The text encoder the refiner is set to. Empty means nothing is chosen. */
+/** The model the active backend would use. Empty means nothing is chosen.
+ *  Backend-aware on purpose: this is what the button's tooltip names and what
+ *  the panel stores as the rewrite's author, and both should say the model
+ *  that actually wrote it. */
 export function chosenModel(current = settings()) {
-  return current.model || "";
+  return (current.backend === "remote" ? current.remoteModel : current.model) || "";
 }
 
 /**
@@ -162,6 +175,57 @@ export async function listModels({ force = false } = {}) {
   return modelCache.names;
 }
 
+// What the browser may know about the remote endpoint: the URL, and *whether*
+// a key is set. The key itself is write-only — it goes up in `saveRemote` and
+// never comes back down, so nothing on this side can leak it. See
+// `refine_remote.py` for the whole security model.
+let remoteCache = null;
+
+export async function remoteStatus({ force = false } = {}) {
+  if (!force && remoteCache) return remoteCache;
+  try {
+    const response = await api.fetchApi("/continuity/refine/remote");
+    remoteCache = await response.json();
+  } catch {
+    remoteCache = { url: "", key_set: false };
+  }
+  return remoteCache;
+}
+
+/** Store the endpoint. `key` null means "none arrived in this save" — the
+ *  server keeps the stored one only while the URL stands still; an empty
+ *  string is the explicit "forget it". */
+export async function saveRemote(url, key = null) {
+  const response = await api.fetchApi("/continuity/refine/remote", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(key === null ? { url } : { url, key }),
+  });
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(result.error || t("the refiner settings could not be saved"));
+  remoteCache = result;
+  return result;
+}
+
+let remoteModelCache = { at: 0, names: [], error: "" };
+
+/** The models the stored server offers, with the failure alongside — an
+ *  unreachable server is a state the panel shows, not an empty list. */
+export async function listRemoteModels({ force = false } = {}) {
+  if (!force && Date.now() - remoteModelCache.at < 20000) return remoteModelCache;
+  try {
+    const response = await api.fetchApi("/continuity/refine/remote/models");
+    const body = await response.json().catch(() => ({}));
+    remoteModelCache = {
+      at: Date.now(), names: body.models ?? [],
+      error: response.ok ? "" : (body.error || t("the server could not be reached")),
+    };
+  } catch {
+    remoteModelCache = { at: Date.now(), names: [], error: t("the server could not be reached") };
+  }
+  return remoteModelCache;
+}
+
 let skillCache = { at: 0, names: [] };
 
 /** The skill packages under the node's skills/ folder. */
@@ -194,7 +258,12 @@ export async function listSkills({ force = false } = {}) {
  */
 export async function refine(payload) {
   const current = settings();
-  const { model, temperature, seed, language, maxTokens, skill } = current;
+  const { temperature, seed, language, maxTokens, skill } = current;
+  // One word says which half of the server holds the model; the model is the
+  // active backend's. The URL and the key are already there — nothing about
+  // the endpoint rides in the request.
+  const backend = current.backend === "remote" ? "remote" : "local";
+  const model = chosenModel(current);
   // Read off the blob being sent rather than passed in, because it is a fact
   // about that blob: the server resolves the same field to decide which
   // family's refiner writes the rewrite, and a template pinned for another
@@ -203,7 +272,7 @@ export async function refine(payload) {
   const response = await api.fetchApi("/continuity/refine", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ ...payload, model, temperature, seed, language,
+    body: JSON.stringify({ ...payload, model, backend, temperature, seed, language,
                            max_tokens: maxTokens, skill, template }),
   });
   const body = await response.json().catch(() => ({}));
@@ -267,12 +336,49 @@ function collect(job) {
  */
 export function openSettings(anchor, onChange, family = DEFAULT_VIDEO_FAMILY) {
   const pop = el("div", { class: "mmc-pop mmc-refine-pop" });
+  const backendHost = el("div", { class: "mmc-refine-models" });
   const modelHost = el("div", { class: "mmc-refine-models" });
+  const noteHost = el("div", { class: "mmc-refine-hint mmc-refine-note" });
   const skillHost = el("div", { class: "mmc-refine-models" });
   const templateHost = el("div", { class: "mmc-refine-models" });
   const moreHost = el("div", { class: "mmc-refine-more-body" });
 
   const changed = () => { onChange?.(); drawTemplate(); drawMore(); };
+
+  /** In-process, or a server the user already runs. Two chips, because that is
+   *  the whole choice — everything the word implies is drawn underneath it. */
+  function drawBackend() {
+    const chosen = settings().backend === "remote" ? "remote" : "local";
+    const chip = (label, value, help) => el("button", {
+      class: "mmc-chip",
+      "aria-checked": value === chosen,
+      text: t(label),
+      title: t(help),
+      onclick: () => {
+        saveSettings({ backend: value });
+        changed(); drawBackend(); drawNote(); drawModels();
+      },
+    });
+    backendHost.replaceChildren(
+      el("span", { class: "mmc-note-key", text: t("runs on") }),
+      el("div", { class: "mmc-chips" }, [
+        chip("this ComfyUI", "local",
+             "A text encoder in ComfyUI's own process, loaded and evicted like any other model."),
+        chip("a server", "remote",
+             "An OpenAI-compatible endpoint you already run — LM Studio, Ollama, "
+             + "llama.cpp, vLLM — or a hosted API."),
+      ]),
+    );
+  }
+
+  function drawNote() {
+    noteHost.textContent = settings().backend === "remote"
+      ? t("Works with anything speaking the OpenAI chat API. Your key is kept on "
+          + "this machine's server side and is never sent to the browser or saved "
+          + "into a workflow. Attach images only with a vision-capable model.")
+      : t("A Qwen3-VL text encoder, loaded and evicted like any other model. "
+          + "It also reads your attached images.");
+  }
 
   // What this family's templates are and what each is for — the family's own
   // strings, travelling in its manifest and translated like any other copy.
@@ -346,7 +452,81 @@ export function openSettings(anchor, onChange, family = DEFAULT_VIDEO_FAMILY) {
     );
   }
 
+  /** The endpoint and the server's models, drawn together: the URL, the
+   *  write-only key box, and the listing that doubles as the connection test.
+   *  Redrawn only on save, switch or refresh — the inputs hold carets. */
+  async function drawRemote(force = false) {
+    const status = await remoteStatus({ force });
+    const problem = el("div", { class: "mmc-refine-hint mmc-refine-problem" });
+    const urlBox = el("input", {
+      class: "mmc-shelf-input mmc-refine-field", type: "text",
+      placeholder: "http://localhost:1234/v1", value: status.url,
+      spellcheck: "false", autocomplete: "off",
+    });
+    // Write-only on purpose: the placeholder says a key exists, the value never
+    // comes back to fill it. Typing replaces; the button beside it forgets.
+    const keyBox = el("input", {
+      class: "mmc-shelf-input mmc-refine-field", type: "password",
+      placeholder: status.key_set ? t("key saved — type to replace") : t("API key — hosted providers only"),
+      autocomplete: "new-password",
+    });
+    const store = async (key) => {
+      try {
+        await saveRemote(urlBox.value, key);
+        await listRemoteModels({ force: true });
+        drawRemote();
+      } catch (error) {
+        problem.textContent = String(error.message || error);
+      }
+    };
+    const rows = el("div");
+    modelHost.replaceChildren(
+      el("div", { class: "mmc-refine-row" }, [urlBox]),
+      el("div", { class: "mmc-refine-row" }, [
+        keyBox,
+        status.key_set
+          ? el("button", { class: "mmc-ghost", text: t("Forget key"),
+                           title: t("Delete the stored key from this machine."),
+                           onclick: () => store("") })
+          : null,
+      ]),
+      el("div", { class: "mmc-refine-row" }, [
+        el("button", { class: "mmc-ghost", text: t("Connect"),
+                       onclick: () => store(keyBox.value || null) }),
+      ]),
+      problem,
+      el("div", { class: "mmc-refine-hint",
+                  text: t("LM Studio: http://localhost:1234/v1 · Ollama: http://localhost:11434/v1 "
+                      + "· hosted APIs take their base URL and a key.") }),
+      rows,
+    );
+    if (!status.url) return;
+    rows.replaceChildren(el("div", { class: "mmc-refine-hint", text: t("Looking for models…") }));
+    const { names, error } = await listRemoteModels({ force });
+    if (error) {
+      problem.textContent = error;
+      rows.replaceChildren();
+      return;
+    }
+    if (!names.length) {
+      rows.replaceChildren(el("div", { class: "mmc-refine-hint",
+        text: t("The server lists no models — load one there first.") }));
+      return;
+    }
+    const chosen = settings().remoteModel;
+    rows.replaceChildren(...names.map((name) => el("button", {
+      class: "mmc-opt",
+      "aria-checked": name === chosen,
+      title: name,
+      onclick: () => { saveSettings({ remoteModel: name }); changed(); drawRemote(); },
+    }, [
+      el("span", { class: "mmc-opt-label mmc-refine-name", text: name }),
+      el("span", { class: "mmc-radio" }),
+    ])));
+  }
+
   async function drawModels(force = false) {
+    if (settings().backend === "remote") return drawRemote(force);
     modelHost.replaceChildren(el("div", { class: "mmc-refine-hint", text: t("Looking for models…") }));
     const names = await listModels({ force });
     if (!names.length) {
@@ -359,7 +539,7 @@ export function openSettings(anchor, onChange, family = DEFAULT_VIDEO_FAMILY) {
       ]));
       return;
     }
-    const chosen = chosenModel();
+    const chosen = settings().model;
     modelHost.replaceChildren(...names.map((name) => el("button", {
       class: "mmc-opt",
       "aria-checked": name === chosen,
@@ -445,10 +625,9 @@ export function openSettings(anchor, onChange, family = DEFAULT_VIDEO_FAMILY) {
 
   pop.append(
     el("div", { class: "mmc-pop-title", text: t("Refiner") }),
+    backendHost,
     modelHost,
-    el("div", { class: "mmc-refine-hint mmc-refine-note",
-                text: t("A Qwen3-VL text encoder, loaded and evicted like any other model. "
-                    + "It also reads your attached images.") }),
+    noteHost,
     skillHost,
     templateHost,
     el("details", { class: "mmc-refine-fold" }, [
@@ -460,6 +639,8 @@ export function openSettings(anchor, onChange, family = DEFAULT_VIDEO_FAMILY) {
   document.body.appendChild(pop);
   placeNear(pop, anchor);
   dismissable(pop);
+  drawBackend();
+  drawNote();
   drawModels();
   drawSkills();
   drawTemplate();

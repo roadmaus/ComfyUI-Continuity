@@ -79,6 +79,14 @@ export const css = `
 }
 .mmc-refine-empty .mmc-ghost { font-size: calc(12px * var(--mmc-type)); }
 
+/* The remote endpoint. The URL and the key are the popover's only text inputs;
+   they take the shelf input's dress and the popover's width. The key box is
+   write-only — a placeholder says one is stored, the value never returns. */
+.mmc-refine-field { width: 100%; flex: 1; min-width: 0; }
+.mmc-refine-models .mmc-refine-row { padding: 2px 10px; }
+.mmc-refine-problem { padding: 2px 10px; color: var(--mmc-warn); }
+.mmc-refine-problem:empty { display: none; }
+
 /* Everything but the model, folded away: it is set once and the model is not. */
 .mmc-refine-fold { font-size: calc(12px * var(--mmc-type)); }
 .mmc-refine-fold > summary {

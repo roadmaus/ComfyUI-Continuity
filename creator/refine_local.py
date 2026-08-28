@@ -9,7 +9,10 @@ that takes ten minutes. A text encoder loaded here is an ordinary entry in
 ComfyUI's model list — and one that is *released* the moment its generation
 ends (see `release`), because a button's model idling in VRAM between presses
 serves nobody. The weights wait on the offload device instead, so the next
-press is a copy, not a download.
+press is a copy, not a download. `refine_remote.py` is the deliberate
+exception, for the machine where the argument runs the other way: a server the
+user already keeps resident for other work, where the in-process load would be
+the second copy.
 
 **It is not H3's own encoder.** That checkpoint is Qwen3-VL-32B truncated to the
 first 50 of 64 layers, with no final norm and no `lm_head` — see
