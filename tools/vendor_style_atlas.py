@@ -38,10 +38,18 @@ after an upstream text change costs nothing.
 
 Frames are decoded with PyAV, which ComfyUI already depends on — no ffmpeg binary.
 
+**Re-vendoring does not carry the scene cut with it.** What a style *applies* is
+`presets/atlasstyle.js`, compiled from `tools/style_cuts.jsonl` — one reviewed
+decision per style, see `tools/distil_style_atlas.py`. A style upstream adds has
+no decision here, falls back to its verbatim descriptor, and fails
+`test_style_atlas.py` until one is written. So the sequence below ends with that
+test for a reason.
+
 Updating, when upstream regenerates the atlas:
 
     git clone --depth 1 https://github.com/hoodtronik/minimax-h3-style-atlas /tmp/atlas
     python3 tools/vendor_style_atlas.py /tmp/atlas --clips /tmp/atlas-clips
+    python3 tools/distil_style_atlas.py
     python3 tests/test_style_atlas.py
 
 Pictures for clips upstream dropped are deleted, so the folder never accumulates

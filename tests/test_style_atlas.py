@@ -210,6 +210,46 @@ try {
   out.errors.push(`rows: ${error.stack}`);
 }
 
+// ---- the cut ----------------------------------------------------------------
+//
+// The scene is cut out of every descriptor by hand, once, in
+// `tools/style_cuts.jsonl`. Two things have to hold, and the second is the one
+// that decays: a clip upstream adds in a re-vendor has no decision, falls back
+// to its verbatim descriptor, and would quietly put a chef minifig back in
+// somebody's prompt. That is a red test here rather than a surprise later.
+
+try {
+  const { CUTS } = await import("./web/creator/presets/atlasstyle.js");
+  const applied = rows.map((row) => row.data.style.text);
+  out.cut = {
+    // One cut per *style*, keyed by its first clip — the same handle the row's
+    // own id uses. Twelve styles name more than one clip and share one look.
+    everyClipDecided: rows.every((row) => row.data.style.clips[0] in CUTS),
+    noOrphanCut: Object.keys(CUTS).every((clip) =>
+      rows.some((row) => row.data.style.clips[0] === clip)),
+    // Nothing applied still carries the dataset's subject token, and nothing
+    // carries literal on-screen text — H3 renders a quoted string as a string,
+    // which is how `"ROUND 1 FIGHT"` used to end up burned into a frame. A
+    // quoted *name* used as a style reference (`"How It's Made"-style`) is not
+    // that, and is what the lookahead spares.
+    noSubjectToken: applied.every((text) => !/\(S\d+\)/.test(text)),
+    noScreenText: applied.every((text) => !/"[^"]{2,}"(?!-style)/.test(text)),
+    // The medium is never replaced. It may be *narrowed* — one row opens
+    // "Utility-worker helmet-camera footage", where "worker" says whose helmet
+    // rather than who is in frame, and the cut opens "Utility" — so a compound
+    // may lose a half, but the word cannot become a different word.
+    // (What guarantees the *rest* is `nothing invented` below, in Python, which
+    // can read the decision file and check every word against its edits.)
+    sameOpeningWord: rows.every((row) => {
+      const cut = row.data.style.text.split(/[\s,]/)[0];
+      const caption = (row.note || "").split(/[\s,]/)[0];
+      return cut === caption || caption.startsWith(cut + "-");
+    }),
+  };
+} catch (error) {
+  out.errors.push(`cut: ${error.stack}`);
+}
+
 // ---- the swap ---------------------------------------------------------------
 
 try {
@@ -340,6 +380,60 @@ for label, key in [
     ("the body needs no userdata read", "bodyInline"),
 ]:
     check(label, built.get(key), True)
+
+# ---- the cut ----------------------------------------------------------------
+#
+# `tools/style_cuts.jsonl` takes the scene out of every descriptor, by hand and
+# once. The decay this guards is a re-vendor: a style upstream adds has no
+# decision, falls back to its verbatim descriptor, and puts a chef minifig back
+# in the prompt without anything looking broken.
+
+cut = report.get("cut", {})
+for label, key in [
+    ("every clip has a cut of its own", "everyClipDecided"),
+    ("...and no cut names a clip that is gone", "noOrphanCut"),
+    ("what a style applies carries no subject token", "noSubjectToken"),
+    ("...and no literal on-screen text", "noScreenText"),
+    ("...and never replaces the word its caption opens on", "sameOpeningWord"),
+]:
+    check(label, cut.get(key), True)
+
+# The two things only this side can see: the module on disk is what the decision
+# file compiles to (nobody hand-edited the generated half), and every word in a
+# cut came either from the caption or from a generalisation written down beside
+# it. That second one is what "a cut, never a rewrite" means, checked rather than
+# asserted in a comment.
+
+sys.path.insert(0, os.path.join(ROOT, "tools"))
+import importlib.util
+
+spec = importlib.util.spec_from_file_location(
+    "distil_style_atlas", os.path.join(ROOT, "tools", "distil_style_atlas.py"))
+distil = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(distil)
+
+_, _, cuts, cut_problems, _ = distil.build()
+check("the cuts compile without a complaint", cut_problems, [])
+check("every style has one", len(cuts), len(rows))
+
+fresh = distil.HEADER + "\n".join(
+    ['export const CUTS = {']
+    + ['  "%s": %s,' % (row["clip"], json.dumps(row["style"], ensure_ascii=False))
+       for row in sorted(cuts, key=lambda row: row["clip"])]
+    + ['};']) + "\n"
+on_disk = open(os.path.join(PRESETS, "atlasstyle.js"), encoding="utf-8").read()
+check("the module on disk is what they compile to", on_disk == fresh, True)
+
+WORD = re.compile(r"[A-Za-z0-9']+")
+invented = []
+for row in cuts:
+    allowed = set(WORD.findall(row["source"].lower()))
+    for _, to in row["edits"]:
+        allowed.update(WORD.findall(to.lower()))
+    stray = sorted(set(WORD.findall(row["style"].lower())) - allowed)
+    if stray:
+        invented.append((row["clip"], stray))
+check("no cut carries a word its caption and its edits did not", invented[:4], [])
 
 lead = report.get("lead", {})
 for label, key in [

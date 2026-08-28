@@ -160,18 +160,57 @@ It also carries the credit. The atlas is hoodtronik's work and the dataset under
 it is ostris's, and both are named where a style is used rather than only in a
 readme.
 
-## The one honest wart
+## The wart, and what it cost to take out
 
 Upstream's descriptors are the *opening* of a caption, and H3's captions fuse
-medium and setting: some entries run past the look into "along a brick-built
-jousting lane lined with cheering crowd minifigs". Applying one of those brings
-the setting with it.
+medium and setting: plenty of entries run past the look into "along a brick-built
+jousting lane lined with cheering crowd minifigs". Applied whole, one of those
+brings the setting with it.
 
-This is not trimmed, and the reason is that trimming it means guessing where a
-look stops being a look — and the greedy clause split that makes the card
-readable is a presentation heuristic, not a claim about which half is which.
-"Live-action, 1970s grindhouse style shot on faded 35mm exploitation print" /
-"with a dusty amber color cast, heavy grain, and visible splice marks, at a
-lonely desert gas station…" would lose the grain along with the gas station. So
-the whole descriptor is shown in the inspector before Apply is pressed, and what
-lands in the prompt is a prompt — sitting in the editor, ready to be cut.
+This used to be cut at runtime by three regexes and a list of nouns — fisherman,
+chef, dentist — read off the 941 rows that happened to be vendored. The argument
+for it was that trimming means guessing where a look stops being a look, and a
+guess in code is at least a guess you can read.
+
+Measured, the guess was wrong more often than not. Against a cut made by hand
+over the same 941, the regex **left the scene standing in four hundred of them** —
+no noun in its list appears in "cheering crowd minifigs", so nothing fired and
+the whole chain went into the prompt. It **over-cut thirty**, dropping real grain
+and lighting along with the scene. It let **forty-six** rows through carrying
+literal on-screen text — a timestamp, a scoreboard, `"ROUND 1 FIGHT"` — which H3
+renders as text, burned into the frame. And it left **twenty-two** ending
+mid-word, at the 250-character wall where the atlas page truncates.
+
+So the cut is not computed any more. It is a decision per style, made once and
+reviewed: `tools/style_cuts.jsonl`, compiled by `tools/distil_style_atlas.py`
+into `web/creator/presets/atlasstyle.js`, which `stylelib.js` reads as a lookup.
+
+Two rules made them, and they are what keeps this a cut rather than a rewrite:
+
+- **Extent is a prefix cut.** Walk the clause chain, stop at the first clause
+  about the scene, never reach past it. A style clause stranded inside a scene
+  clause — "in a cramped clay basement lit by a single bare bulb" — is lost
+  rather than salvaged, because salvage means reordering and reordering means
+  the result stops being checkable against its source.
+- **Content inside the kept clauses is generalised**, and every substitution is
+  written down beside it: "warm kitchen lighting" becomes "warm set lighting",
+  `timestamp "09/03/2024 11:10 AM"` becomes `timestamp`.
+
+A decision is stored as a clause count plus those edits — never as prose — so the
+kept text is *reconstructed* from `atlas.js` rather than retyped, and cannot
+drift from upstream's words except exactly where an edit says it does.
+`test_style_atlas.py` checks that directly: no cut may carry a word that its
+caption and its own edits do not account for.
+
+`atlas.js` is untouched by all of this. It stays the mirror, the verbatim
+descriptor still rides along on every row as `note`, and the inspector still
+shows the caption the clip was read off before Apply is pressed.
+
+The one thing the prefix rule costs, kept here so nobody rediscovers it as a bug:
+a look whose only lighting note sits inside its scene clause loses that note. It
+is a few dozen rows, and it buys an output that can be checked against upstream
+word by word.
+
+Re-vendoring does not invalidate the file. Clips upstream keeps carry their
+decision forward; a clip it adds has none, falls back to its verbatim descriptor,
+and turns `test_style_atlas.py` red until somebody writes one line.
