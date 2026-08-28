@@ -114,18 +114,22 @@ export const css = `
 
 /* --- open: the way back out ----------------------------------------------- */
 
-.mmc-cast-shut, .mmc-cast-keepme {
+.mmc-cast-shut, .mmc-cast-keepme, .mmc-cast-swapme {
   display: flex; align-items: center; justify-content: center;
   width: 22px; height: 22px; padding: 0; border: 0; border-radius: 6px;
   background: none; color: var(--mmc-off); cursor: pointer; flex: none;
 }
 .mmc-cast-shut { transform: rotate(180deg); }
-.mmc-cast-shut:hover, .mmc-cast-keepme:hover:not(:disabled) {
+.mmc-cast-shut:hover, .mmc-cast-keepme:hover:not(:disabled),
+.mmc-cast-swapme:hover:not(:disabled) {
   background: var(--mmc-surface-3); color: var(--mmc-text);
 }
-.mmc-cast-keepme:disabled { opacity: .4; cursor: default; }
+.mmc-cast-keepme:disabled, .mmc-cast-swapme:disabled { opacity: .4; cursor: default; }
 /* Kept: the star fills, the way a starred preset's does in the library. */
 .mmc-cast-keepme.on { color: var(--mmc-accent); }
+/* Waiting on the library window: the arrows light and stay lit, so the card says
+   which press the window belongs to when it comes back. */
+.mmc-cast-swapme.on { color: var(--mmc-accent); opacity: 1; }
 .mmc-cast-keepme.on svg { fill: currentColor; }
 
 .mmc-cast-top { display: flex; gap: 12px; align-items: flex-start; min-width: 0; }

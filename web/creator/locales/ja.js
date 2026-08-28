@@ -1342,6 +1342,7 @@ export const ja = {
  "nothing behind them": "背後に何もなし",
  "@{handle} is in the cast library.": "@{handle} はキャストライブラリにあります。",
  "Keep @{handle} in the cast library — they come back with their pictures, into any piece.": "@{handle} をキャストライブラリに保存します — どの作品にも、写真ごと呼び戻せます。",
+ "Recast @{handle} — somebody else out of the library takes their place. The clips they stand in stay, and the prompt is rewritten to the new name.": "@{handle} をキャストし直します — ライブラリの別の人がその役を引き継ぎます。立っているクリップはそのまま残り、プロンプトは新しい名前に書き換えられます。",
  "Could not keep them — {error}": "保存できませんでした — {error}",
  "Search the cast…": "キャストを検索…",
  "Nobody kept yet. Cast somebody on a node, then press the ★ on their card to keep them here — they come back with their pictures.": "まだ誰も保存されていません。ノードで誰かをキャストし、カードの★を押すとここに保存されます — 写真ごと戻ってきます。",

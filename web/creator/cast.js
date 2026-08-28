@@ -231,10 +231,16 @@ function assetThumb(asset, className = "mmc-asset-thumb") {
  * `library`              open the roster so somebody can be taken out of it.
  *                       The host owns this because casting them lands files on a
  *                       node, which is the host's node and not the shelf's.
+ * `rename`               rewrite `@from` as `@to` in every text the host holds.
+ *                       Recasting is the only thing that asks for it — see
+ *                       `recast` — and only the host knows which prose there is.
+ *                       Absent where there is nothing to rewrite, and the swap
+ *                       is offered without it.
  */
 export class CastShelf {
   constructor({ getCast, setCast, getAssets, addAsset, whereCited, cite, touch, commit,
-                keep = null, library = null, dropAssets = null, onShut = null }) {
+                keep = null, library = null, rename = null, dropAssets = null,
+                onShut = null }) {
     this.getCast = getCast;
     this.dropAssets = dropAssets;
     this.setCast = setCast;
@@ -246,6 +252,10 @@ export class CastShelf {
     this.commit = commit;
     this.keep = keep;
     this.library = library;
+    this.rename = rename;
+    // Set while the library is open for a swap, so the card can say which of
+    // its two buttons is waiting and a second press cannot start a second one.
+    this.swapping = null;
     // Fired when the open card is closed from its own chevron. A host that put
     // the shelf on screen *for* one member — the simple view summons it from
     // their name in the prompt — takes it away again on the same press. Hosts
@@ -525,6 +535,18 @@ export class CastShelf {
           // keeping, so it is on their card rather than in a menu — and it is a
           // star, which is the mark this pack already uses for "this goes in the
           // library".
+          // Swapping who is behind the name, beside keeping them — the two
+          // things a finished member is for. It leads, because the clip they
+          // stand in is the thing being recast and this is the only way to
+          // change who is in it without taking the footage apart.
+          ...(this.library ? [el("button", {
+            class: `mmc-cast-swapme${this.swapping === subject ? " on" : ""}`,
+            title: t("Recast @{handle} — somebody else out of the library takes their "
+                   + "place. The clips they stand in stay, and the prompt is "
+                   + "rewritten to the new name.", { handle: subject.handle }),
+            disabled: this.swapping ? true : undefined,
+            onclick: () => this.recast(subject),
+          }, [icon("swap", 13)])] : []),
           ...(this.keep ? [el("button", {
             class: `mmc-cast-keepme${this.kept === subject ? " on" : ""}`,
             title: this.kept === subject
@@ -584,6 +606,81 @@ export class CastShelf {
     const loose = S.soleClaims(subject, this.getCast());
     this.setCast(this.getCast().filter((s) => s !== subject));
     if (loose.length) this.dropAssets?.(loose);
+    this.save();
+  }
+
+  /**
+   * Put somebody else in their place: the swap, done in one gesture.
+   *
+   * The thing this replaces was four: delete the member, which took the clip
+   * they stood in with them (it no longer does — see `state.soleClaims`), cut
+   * the source video again, cast the newcomer, and hang the clip back on them
+   * by hand. Every one of those steps was undoing damage the first one did.
+   *
+   * What the outgoing member leaves behind is *their place* — the clips they
+   * stood in and the sentence about what is being changed in them. That is a
+   * fact about the shot, not about the person: the footage is the shot, and who
+   * is swapped into it is the decision being changed. So it is handed straight
+   * to the newcomer, along with the slot in the cast order, because cast order
+   * is subject order and ordinal order and a newcomer appended to the end
+   * renumbers everybody after them.
+   *
+   * And the prose is rewritten, because the prose is where somebody is actually
+   * cast — compile reads the citations. A swap that left every sentence writing
+   * the departed name would be a piece that refuses to queue until each one is
+   * edited by hand, which is the whole cost this is here to remove.
+   *
+   * A name freed by the departure is taken back: swapping one Anna for another
+   * gives the newcomer `ana_2` while `ana` is still standing, and once that name
+   * is free, `ana_2` is a name nobody chose. Taking it back also means the
+   * sentences never had to move.
+   *
+   * The library is a window the user is in charge of. They may close it having
+   * cast nobody, or three people, or gone off and applied a look instead — so
+   * anything but exactly one arrival leaves the piece as the library left it and
+   * the swap simply does not happen.
+   */
+  async recast(subject) {
+    if (!this.library || this.swapping) return;
+    const before = new Set(this.getCast());
+    this.swapping = subject;
+    this.render();
+    try {
+      await this.library();
+    } finally {
+      this.swapping = null;
+    }
+    const arrived = this.getCast().filter((s) => !before.has(s));
+    if (arrived.length !== 1 || !this.getCast().includes(subject)) { this.render(); return; }
+    const [newcomer] = arrived;
+
+    const place = S.replacesOf(subject);
+    if (place.length) newcomer.replaces = [...place];
+    if (subject.replaces_what && !newcomer.replaces_what) {
+      newcomer.replaces_what = subject.replaces_what;
+    }
+    // The clips they now stand in are narrowed to "edit" for them, over the
+    // default only — a take somebody chose is theirs. The rest of their files
+    // were narrowed on the way in by `addSubjectToPiece`.
+    S.inheritTakes(newcomer, this.getAssets());
+
+    // Their slot in the order, and the outgoing member out of it.
+    const list = this.getCast().filter((s) => s !== newcomer);
+    list.splice(list.indexOf(subject), 1, newcomer);
+    const loose = S.soleClaims(subject, list);
+    this.setCast(list);
+    if (loose.length) this.dropAssets?.(loose);
+
+    // The name the departure just freed, where the library only added a digit to
+    // avoid the member who has now gone.
+    const suffixed = new RegExp(`^${subject.handle}_\\d+$`);
+    if (subject.handle && suffixed.test(newcomer.handle ?? "")) {
+      newcomer.handle = subject.handle;
+    }
+    if (newcomer.handle !== subject.handle) {
+      this.rename?.(subject.handle, newcomer.handle);
+    }
+    if (this.opened === subject) this.opened = newcomer;
     this.save();
   }
 

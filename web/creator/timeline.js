@@ -897,6 +897,20 @@ class Timeline {
       keep: (subject, assets) => P.keepSubject(subject, assets),
       library: () => openPresetLibrary({ target: this.pieceTarget(), scope: "cast" })
         .then(() => { this.renderStrip(); this.renderPool(); this.renderCast(); }),
+      // Recasting somebody rewrites every sentence that wrote their name — the
+      // piece's own three and each card's, because a member cast into the
+      // standing prompt walks on in shots that never mention them by hand.
+      // The three global boxes are built once and hold the caret, so a rename
+      // made from outside them has to be written back in by hand — the same
+      // reason `setGlobalPrompt` exists. A card's own prompt is drawn by the
+      // strip, which `commit` redraws.
+      rename: (from, to) => {
+        S.renameSubjectCitations(
+          [this.timeline, ...(this.timeline.segments ?? [])], from, to);
+        this.promptBox?.setValue(this.timeline.prompt ?? "");
+        if (this.soundscapeBox) this.soundscapeBox.value = this.timeline.soundscape ?? "";
+        if (this.musicBox) this.musicBox.value = this.timeline.music ?? "";
+      },
       // The pool loses what the departing member alone was built out of. Not a
       // file another shot writes by hand — a pool asset can be cited straight
       // from a prompt without any subject in between, and dropping one would

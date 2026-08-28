@@ -1343,6 +1343,7 @@ export const ko = {
  "nothing behind them": "뒤에 아무것도 없음",
  "@{handle} is in the cast library.": "@{handle}은(는) 캐스트 라이브러리에 있습니다.",
  "Keep @{handle} in the cast library — they come back with their pictures, into any piece.": "@{handle}을(를) 캐스트 라이브러리에 보관 — 어떤 작품으로든 사진과 함께 돌아옵니다.",
+ "Recast @{handle} — somebody else out of the library takes their place. The clips they stand in stay, and the prompt is rewritten to the new name.": "@{handle}을(를) 다시 캐스팅 — 라이브러리의 다른 사람이 그 자리를 대신합니다. 대신하고 있는 클립은 그대로 남고, 프롬프트는 새 이름으로 다시 쓰입니다.",
  "Could not keep them — {error}": "보관하지 못했습니다 — {error}",
  "Search the cast…": "캐스트 검색…",
  "Nobody kept yet. Cast somebody on a node, then press the ★ on their card to keep them here — they come back with their pictures.": "아직 저장된 사람이 없습니다. 노드에서 누군가를 캐스팅한 뒤 카드의 ★를 누르면 여기에 저장됩니다 — 사진과 함께 돌아옵니다.",

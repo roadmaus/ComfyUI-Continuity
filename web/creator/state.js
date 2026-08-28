@@ -4633,6 +4633,14 @@ export function subjectFiles(subject) {
  * accumulate pictures nothing points at, and the only way back is to find each
  * one on the asset row and press its own ✕.
  *
+ * **The clip they stand in is not one of them.** That file is what this shot
+ * *is* — the footage being edited, attached and narrowed to "edit" before
+ * anybody was cast into it — and the member is the swap-in, not the source.
+ * Taking it away with them deleted the shot along with the casting decision,
+ * and the only way back was to attach and re-cut the video again. It stays,
+ * with its take, which is exactly what recasting somebody else into it needs.
+ * `subjectFiles` has always said the same thing for the same reason.
+ *
  * Claims only, deliberately. Whether a *prompt* still writes `@img-2` is a
  * question about the host's own texts, and the host is the one that can answer
  * it — see `handleWritten`. A shelf knows the cast and nothing else.
@@ -4642,11 +4650,8 @@ export function soleClaims(subject, cast) {
   for (const other of cast ?? []) {
     if (other === subject) continue;
     for (const handle of subjectFiles(other)) held.add(handle);
-    for (const handle of replacesOf(other)) held.add(handle);
   }
-  const mine = new Set(subjectFiles(subject));
-  for (const handle of replacesOf(subject)) mine.add(handle);
-  return [...mine].filter((handle) => !held.has(handle));
+  return subjectFiles(subject).filter((handle) => !held.has(handle));
 }
 
 /**
@@ -4679,6 +4684,55 @@ export function subjectCitationRe(cast) {
     .sort((a, b) => b.length - a.length)
     .map((n) => n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
   return names.length ? new RegExp(`@(${names.join("|")})\\b`, "g") : null;
+}
+
+/**
+ * Every field of a piece or a card a subject's name can be written into. The
+ * same three `allTexts` reads — named here because renaming has to *write* them
+ * back, and a list of strings cannot be written through.
+ */
+export const CITING_FIELDS = ["prompt", "soundscape", "music"];
+
+/**
+ * Rewrite `@from` as `@to` everywhere in `hosts`, in place.
+ *
+ * What recasting somebody is made of. The prose is where a cast member is
+ * actually cast — compile reads the citations, not the shelf — so putting
+ * somebody else in their place and leaving the sentences writing the departed
+ * name is not a swap at all: it is a piece that refuses to queue until every
+ * line is edited by hand.
+ *
+ * Word-bounded on the same terms `subjectCitationRe` is, which is why `@ana`
+ * leaves `@ana_2` alone: an underscore is a word character, so the boundary
+ * falls after the whole handle rather than in the middle of it.
+ *
+ * Each host is a piece or a card — anything carrying the three fields above.
+ */
+export function renameSubjectCitations(hosts, from, to) {
+  const name = String(from ?? "").trim();
+  const next = String(to ?? "").trim();
+  if (!name || !next || name === next) return false;
+  const pattern = new RegExp(`@(${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})\\b`, "g");
+  let moved = false;
+  const write = (owner, field) => {
+    const text = owner?.[field];
+    if (typeof text !== "string" || !text) return;
+    const written = text.replace(pattern, `@${next}`);
+    if (written !== text) { owner[field] = written; moved = true; }
+  };
+  for (const host of hosts ?? []) {
+    if (!host) continue;
+    for (const field of CITING_FIELDS) write(host, field);
+    // The rewrite as well. A refined body is the prompt that is actually
+    // queued while it is enabled, and a rename that moved the sentence under it
+    // and not the sentence itself would put the departed name back into the
+    // one text compile reads.
+    const refined = host.refined;
+    if (!refined) continue;
+    write(refined, "body");
+    for (const key of Object.keys(refined.sections ?? {})) write(refined.sections, key);
+  }
+  return moved;
 }
 
 /** The subjects the given texts cite, as a Set of names. */

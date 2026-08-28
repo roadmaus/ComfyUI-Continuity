@@ -98,7 +98,8 @@ function host({ cast, assets, texts = [] }) {
 }
 
 const img = (handle) => ({ handle, kind: "image", role: "reference", filename: `${handle}.png` });
-const clip = (handle) => ({ handle, kind: "video", role: "reference", filename: `${handle}.mp4` });
+const clip = (handle, takes = "full") => ({
+  handle, kind: "video", role: "reference", filename: `${handle}.mp4`, takes });
 const left = (state) => state.assets.map((a) => a.handle);
 
 try {
@@ -141,6 +142,21 @@ try {
                          assets: [img("img-1"), img("img-3"), clip("vid-1")] });
     state.shelf.remove(ana);
     out.replaces = { left: left(state), dropped: state.dropped };
+  }
+
+  // ---- the last member standing in a clip ---------------------------------
+  {
+    // The video is the shot: attached, narrowed to "edit", and only then was
+    // anybody cast into it. Taking it away with them deleted the footage along
+    // with the casting decision.
+    const ana = { handle: "ana", takes: "person", from: ["img-1"], replaces: ["vid-1"] };
+    const state = host({ cast: [ana], assets: [img("img-1"), clip("vid-1", "edit")] });
+    state.shelf.remove(ana);
+    out.stood = {
+      left: left(state),
+      dropped: state.dropped,
+      takes: state.assets.find((a) => a.handle === "vid-1")?.takes,
+    };
   }
 
   // ---- a member with nothing behind them ----------------------------------
@@ -236,6 +252,12 @@ check("...though the shelf did offer it",
 replaces = report.get("replaces") or {}
 check("a clip a second member stands in stays",
       sorted(replaces.get("left") or []), ["img-3", "vid-1"])
+
+stood = report.get("stood") or {}
+check("the clip they stood in stays, alone in the cast",
+      sorted(stood.get("left") or []), ["vid-1"])
+check("...and is never offered for dropping", stood.get("dropped"), ["img-1"])
+check("...and keeps the edit it was narrowed to", stood.get("takes"), "edit")
 
 described = report.get("described") or {}
 check("a member with nothing behind them takes nothing", described.get("left"), ["img-1"])

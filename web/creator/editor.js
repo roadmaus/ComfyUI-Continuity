@@ -1692,6 +1692,20 @@ export class CreatorEditor {
         ? () => openPresetLibrary({ target: this.presetTarget(), scope: "cast" })
             .then(() => this.render())
         : null,
+      // Recasting rewrites every sentence that wrote the departed name. This
+      // card's own three and its rewrite, plus the piece's where the cast being
+      // edited is not this shot's — somebody cast into the standing prompt
+      // walks on in cards that never mention them by hand.
+      //
+      // The prompt box is built once and holds the caret, so what a rename
+      // wrote onto the state has to be written into the box as well.
+      rename: (from, to) => {
+        const hosts = this.castPiece === this.state
+          ? [this.state]
+          : [this.state, this.castPiece, ...(this.castPiece.segments ?? [])];
+        S.renameSubjectCitations(hosts, from, to);
+        this.prompt?.setValue(this.state.prompt ?? "");
+      },
       // This shot's own attachments lose what the departing member alone was
       // built out of. The pool is left alone even though `getAssets` merges it
       // in: it belongs to the piece, and one card is not the place a file is

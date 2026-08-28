@@ -2,6 +2,25 @@
 
 ## Unreleased
 
+**Somebody else can take a cast member's place, and the footage stays put.**
+
+Removing a cast member took the clip they stood in with them. That clip is the
+shot — attached, trimmed and narrowed to *edit* before anybody was cast into it
+— so changing your mind about who is swapped into it deleted the shot along
+with the casting decision, and the only way back was to attach and re-cut the
+video again. It stays now, with the narrowing it was given. What still leaves
+with a departing member is what they were *built out of*: their own pictures,
+their voice, the clip they move like.
+
+And there is a way to make the swap in one gesture rather than four. The ⇄ on
+an open cast card opens the roster; whoever you pick takes the outgoing
+member's place — the clips they stood in, the sentence about what is being
+changed in them, and their slot in the cast order, which is also their subject
+number. Every sentence in the piece that wrote the old name is rewritten to the
+new one, the rewrite included, so nothing has to be edited by hand afterwards.
+Swapping one Anna for another takes the name back rather than leaving you with
+`@ana_2`.
+
 **The refiner writes to your instructions, and hands the memory back when it
 is done.** Two things asked for on
 [#19](https://github.com/roadmaus/ComfyUI-Continuity/issues/19) after the

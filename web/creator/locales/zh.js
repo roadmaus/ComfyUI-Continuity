@@ -1344,6 +1344,7 @@ export const zh = {
  "nothing behind them": "身后没有素材",
  "@{handle} is in the cast library.": "@{handle} 已在角色库中。",
  "Keep @{handle} in the cast library — they come back with their pictures, into any piece.": "把 @{handle} 保存到角色库 — TA 可以带着图片回到任何作品中。",
+ "Recast @{handle} — somebody else out of the library takes their place. The clips they stand in stay, and the prompt is rewritten to the new name.": "重新出演 @{handle} — 由角色库中的另一位接替 TA 的位置。TA 所替换的片段保持不变，提示词会改写为新名字。",
  "Could not keep them — {error}": "无法保存 — {error}",
  "Search the cast…": "搜索角色…",
  "Nobody kept yet. Cast somebody on a node, then press the ★ on their card to keep them here — they come back with their pictures.": "还没有保存任何人。在节点上选好一位角色，按下卡片上的 ★ 即可保存到这里 — TA 会连同图片一起回来。",
