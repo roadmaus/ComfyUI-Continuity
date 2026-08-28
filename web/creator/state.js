@@ -4827,10 +4827,22 @@ export const showSeconds = (seconds) => {
 /** Every reference this card is generated against whose length means something,
  *  with the length — the card's own and the pool ones its text cites, because
  *  both ride into this one generation. */
+export function timedAssets(state) {
+  const found = [...references(state), ...citedPool(state)].filter(timed);
+  // The guide as well, and it was the one file on the card this list had never
+  // held. A guide is not a reference — it is never cited, takes no ordinal and
+  // enters no reference plan — but it has a length and the card is cut by it
+  // exactly as it is cut by a reference clip, which is the whole of what this
+  // list is for. Missing it meant the one file whose length the shot is most
+  // bound to was the one length the pill could not offer.
+  const drawing = guideAsset(state);
+  if (drawing && timed(drawing) && !muted(drawing)) found.push(drawing);
+  return found;
+}
+
 export function timedRefs(state, lengthOf) {
   const found = [];
-  for (const asset of [...references(state), ...citedPool(state)]) {
-    if (!timed(asset)) continue;
+  for (const asset of timedAssets(state)) {
     const seconds = refSeconds(asset, lengthOf);
     if (seconds !== null) found.push({ asset, seconds });
   }
@@ -4838,14 +4850,29 @@ export function timedRefs(state, lengthOf) {
 }
 
 /**
+ * How strong a claim a file has on the card's length, for the tiebreak when a
+ * card carries several.
+ *
+ * A guide is the strongest there is. A reference is cut by the card and loses
+ * whatever did not fit; a guide is what every frame of the shot is *aimed at*,
+ * so a card longer than its drawing is a shot that stops moving with it partway
+ * through — `guide.read` holds the last frame for the rest, which is a shot
+ * that freezes and goes on rendering. Then a clip the length leads, then
+ * anything else that has a length at all.
+ */
+const lengthClaim = (asset) =>
+  (roleOf(asset) === "guide" ? 2 : lengthLed(asset) ? 1 : 0);
+
+/**
  * The offer the duration pill makes, or null when there is nothing to say.
  *
- * The longest reference, because that is the one the card is otherwise cutting
- * — but a clip the length leads beats one mined for a look at any length, so a
- * shot carrying a line of dialogue and a forty-second style plate offers the
- * line. `duration` is what the pill would write — `matchSeconds`, not a rounded
- * second — and `matched` is whether the card already lands on the same frame
- * count, which is the only sense in which two lengths can agree here.
+ * The longest file, because that is the one the card is otherwise cutting — but
+ * a stronger claim on the length beats a longer one, so a shot carrying a line
+ * of dialogue and a forty-second style plate offers the line, and a shot with a
+ * drawing on it offers the drawing whatever else is attached. See
+ * `lengthClaim`. `duration` is what the pill would write — `matchSeconds`, not
+ * a rounded second — and `matched` is whether the card already lands on the same
+ * frame count, which is the only sense in which two lengths can agree here.
  */
 export function lengthMatch(state, lengthOf, piece) {
   // The grid the offer lands on is the piece's family's: `matchSeconds` answers
@@ -4854,11 +4881,9 @@ export function lengthMatch(state, lengthOf, piece) {
   const rules = rulesFor(pieceFamily(piece));
   let longest = null;
   for (const entry of timedRefs(state, lengthOf)) {
-    const better = !longest
-      || (lengthLed(entry.asset) && !lengthLed(longest.asset))
-      || (lengthLed(entry.asset) === lengthLed(longest.asset)
-          && entry.seconds > longest.seconds);
-    if (better) longest = entry;
+    const claim = lengthClaim(entry.asset);
+    const held = longest ? lengthClaim(longest.asset) : -1;
+    if (claim > held || (claim === held && entry.seconds > longest.seconds)) longest = entry;
   }
   if (!longest) return null;
   const duration = matchSeconds(longest.seconds, rules);

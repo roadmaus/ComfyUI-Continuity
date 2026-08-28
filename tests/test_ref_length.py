@@ -77,7 +77,7 @@ SCRIPT = """
 const S = await import(process.argv[1]);
 const shot = (assets, duration_s) => ({ prompt: "", assets, loras: [], duration_s });
 const ref = (extra) => ({ handle: "aud-1", kind: "audio", role: "reference", ...extra });
-const lengths = { "song.wav": 9.33, "plate.mp4": 12, "quiet.wav": 3 };
+const lengths = { "song.wav": 9.33, "plate.mp4": 12, "quiet.wav": 3, "short.mp4": 3 };
 const lengthOf = (name) => lengths[name] ?? null;
 
 const out = { led: S.LENGTH_LED, cases: {} };
@@ -133,6 +133,25 @@ const piece = {
 record("cast voice and stand-in", piece);
 record("cast, uncited", { ...piece, prompt: "an empty street" });
 record("cast voice alone", { ...piece, pool: [piece.pool[0]] });
+
+// ---- the drawing ------------------------------------------------------------
+//
+// A guide is not a reference and so was in none of the lists this offer is
+// built from — which left the one file the shot's length is most bound to as
+// the one length that could not be matched to.
+const guide = (extra) => ({ handle: "gde-1", kind: "video", role: "guide",
+                            track: "picture", filename: "plate.mp4", ...extra });
+record("guide alone", shot([guide()], 6));
+record("guide trimmed", shot([guide({ trim: { start: 1, end: 4 } })], 6));
+// It outranks a longer reference, because a reference is cut by the card and a
+// guide is what every frame is aimed at: a card past the end of its drawing is
+// a shot that freezes and goes on rendering.
+record("guide beats a longer clip",
+       shot([guide({ filename: "short.mp4" }),
+             ref({ handle: "vid-1", kind: "video", filename: "plate.mp4" })], 6));
+// A still guide has no length to match to, and a muted one is not this render's.
+record("still guide", shot([guide({ kind: "image", filename: "a.png" })], 6));
+record("muted guide", shot([guide({ enabled: false })], 6));
 console.log(JSON.stringify(out));
 """
 
@@ -171,5 +190,15 @@ check("...their voice on its own just as much",
       cases["cast voice alone"]["handle"], "aud-2")
 check("...and none of it while the card does not name them",
       cases["cast, uncited"], None)
+
+# The drawing the shot is aimed at is a length like any other, and the strongest
+# claim on the card there is.
+check("a guide can be matched to", cases["guide alone"],
+      {"handle": "gde-1", "seconds": 12, "duration": 12.25, "matched": False})
+check("...by its trim, where it has one", cases["guide trimmed"]["seconds"], 3)
+check("...and it beats a longer reference clip",
+      cases["guide beats a longer clip"]["handle"], "gde-1")
+check("a still guide has no length to offer", cases["still guide"], None)
+check("a muted guide is not this render's", cases["muted guide"], None)
 
 passed("a matched card compiles to the reference's own frame count")

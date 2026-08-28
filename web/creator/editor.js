@@ -1163,7 +1163,7 @@ export class CreatorEditor {
           (key) => { asset.ref_size = key; this.commit(); }));
       }
 
-      const note = asset.kind === "image" ? null : this.lengthNote(asset);
+      const note = S.timed(asset) ? this.lengthNote(asset) : null;
       if (note) rows.push(el("div", { class: "mmc-refsheet-row mmc-refsheet-len" }, [
         el("span", { class: "mmc-refsheet-name", text: t("length") }),
         el("span", { class: "mmc-refsheet-note", text: note }),
@@ -1330,8 +1330,11 @@ export class CreatorEditor {
    *  trips; a trimmed clip is not asked either, because the range is the
    *  length. */
   probeLengths() {
-    for (const asset of [...S.references(this.state), ...S.citedPool(this.state)]) {
-      if (asset.kind === "image") continue;
+    // `S.timedAssets` rather than the references alone: the guide has a length
+    // too, and a length nobody asked the server for is a length the pill cannot
+    // offer to match. It was the one file on the card this loop had never
+    // probed.
+    for (const asset of S.timedAssets(this.state)) {
       if (asset.trim || this.lengths.has(asset.filename)) continue;
       this.lengths.set(asset.filename, null);
       probe(asset.filename).then(({ duration }) => {
@@ -2229,12 +2232,23 @@ export class CreatorEditor {
     if (Math.abs(seconds - card) <= 1 / rules.fps) {
       return t("{length} s — the same length as this card.", { length });
     }
+    const guide = S.roleOf(asset) === "guide";
     if (seconds < card) {
-      return t("{length} s, against a card of {card} s.", { length, card: card.toFixed(2) });
+      // A guide that runs out is the one short file with a consequence worth
+      // naming: `guide.read` holds its last frame for the rest of the shot, so
+      // the render goes on being aimed — at a drawing that has stopped moving.
+      return guide
+        ? t("{length} s, against a card of {card} s. The shot holds the drawing's last "
+          + "frame for the rest.", { length, card: card.toFixed(2) })
+        : t("{length} s, against a card of {card} s.", { length, card: card.toFixed(2) });
     }
-    return S.scopeKind(asset) === "audio"
-      ? t("{length} s, against a card of {card} s. Audio is sent whole — the shot ends "
-        + "before the sound does.", { length, card: card.toFixed(2) })
+    if (S.scopeKind(asset) === "audio") {
+      return t("{length} s, against a card of {card} s. Audio is sent whole — the shot ends "
+             + "before the sound does.", { length, card: card.toFixed(2) });
+    }
+    return guide
+      ? t("{length} s, against a card of {card} s. Only the first {card} s is read; the "
+        + "shot ends before the drawing does.", { length, card: card.toFixed(2) })
       : t("{length} s, against a card of {card} s. Only the first {card} s is encoded; "
         + "the rest of the clip is never read.", { length, card: card.toFixed(2) });
   }

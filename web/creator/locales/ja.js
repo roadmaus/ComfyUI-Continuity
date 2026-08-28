@@ -1384,6 +1384,8 @@ export const ja = {
  "length": "長さ",
  "{length} s — the same length as this card.": "{length} 秒 — このカードと同じ長さです。",
  "{length} s, against a card of {card} s.": "{length} 秒（カードは {card} 秒）。",
+ "{length} s, against a card of {card} s. The shot holds the drawing's last frame for the rest.": "{length} 秒（カードは {card} 秒）。残りのあいだ、ショットは線画の最後のフレームを保持します。",
+ "{length} s, against a card of {card} s. Only the first {card} s is read; the shot ends before the drawing does.": "{length} 秒（カードは {card} 秒）。読まれるのは最初の {card} 秒だけで、線画より先にショットが終わります。",
  "{length} s, against a card of {card} s. Audio is sent whole — the shot ends before the sound does.": "{length} 秒（カードは {card} 秒）。音声は丸ごと送られます — 音が終わる前にショットが終わります。",
  "{length} s, against a card of {card} s. Only the first {card} s is encoded; the rest of the clip is never read.": "{length} 秒（カードは {card} 秒）。最初の {card} 秒だけがエンコードされ、残りは読み込まれません。",
  "card · {seconds} s": "カード · {seconds} 秒",

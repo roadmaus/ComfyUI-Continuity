@@ -1384,6 +1384,8 @@ export const ko = {
  "length": "길이",
  "{length} s — the same length as this card.": "{length}초 — 이 카드와 같은 길이입니다.",
  "{length} s, against a card of {card} s.": "{length}초, 카드는 {card}초.",
+ "{length} s, against a card of {card} s. The shot holds the drawing's last frame for the rest.": "{length} 초 (카드는 {card} 초). 나머지 동안 숏은 그림의 마지막 프레임을 유지합니다.",
+ "{length} s, against a card of {card} s. Only the first {card} s is read; the shot ends before the drawing does.": "{length} 초 (카드는 {card} 초). 앞의 {card} 초만 읽히고, 그림보다 숏이 먼저 끝납니다.",
  "{length} s, against a card of {card} s. Audio is sent whole — the shot ends before the sound does.": "{length}초, 카드는 {card}초. 오디오는 통째로 전달됩니다 — 소리가 끝나기 전에 숏이 끝납니다.",
  "{length} s, against a card of {card} s. Only the first {card} s is encoded; the rest of the clip is never read.": "{length}초, 카드는 {card}초. 앞의 {card}초만 인코딩되고 나머지는 읽히지 않습니다.",
  "card · {seconds} s": "카드 · {seconds}초",

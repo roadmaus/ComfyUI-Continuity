@@ -1385,6 +1385,8 @@ export const zh = {
  "length": "长度",
  "{length} s — the same length as this card.": "{length} 秒 — 与本卡片等长。",
  "{length} s, against a card of {card} s.": "{length} 秒，卡片为 {card} 秒。",
+ "{length} s, against a card of {card} s. The shot holds the drawing's last frame for the rest.": "{length} 秒（卡片为 {card} 秒）。余下的时间里，镜头保持线稿的最后一帧。",
+ "{length} s, against a card of {card} s. Only the first {card} s is read; the shot ends before the drawing does.": "{length} 秒（卡片为 {card} 秒）。只读取前 {card} 秒，镜头比线稿先结束。",
  "{length} s, against a card of {card} s. Audio is sent whole — the shot ends before the sound does.": "{length} 秒，卡片为 {card} 秒。音频整段送入 — 镜头会在声音结束前结束。",
  "{length} s, against a card of {card} s. Only the first {card} s is encoded; the rest of the clip is never read.": "{length} 秒，卡片为 {card} 秒。只有前 {card} 秒会被编码，其余部分不会被读取。",
  "card · {seconds} s": "卡片 · {seconds} 秒",
