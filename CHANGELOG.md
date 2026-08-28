@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+**The H3 still's two pills are written in the artist's units, not the VAE's.**
+
+A still on the H3 branch is a video generation with one latent frame decoded,
+and both of its pills used to say so out loud: a length list of "39 frames ·
+12 latent" and a stepper reading "latent 0". Neither number is a thing anyone
+is choosing. Every length yields the same single picture — what a longer one
+buys is distribution, not frames — so the list is now a cost ladder, "Draft"
+through "≈8.5× draft" to "Trained range", with the frame count as the line
+underneath. And the frame index is a time: "first frame" for the causal frame
+the decode is exact for, "+0.42 s" for the same shot a moment on. The stepper
+no longer offers indexes below zero, and it stays hidden at the cheapest
+length, where there are two frames and one of them is right. Saved graphs are
+untouched — the stored values and the compiler's negative-from-the-end
+indexing are exactly what they were.
+
 **The refiner can run on a server you already keep warm — LM Studio, Ollama,
 or any OpenAI-compatible endpoint, hosted APIs included.**
 

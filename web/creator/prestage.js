@@ -1539,44 +1539,74 @@ export class PreStageBody {
 
   // ---- the H3 branch's own pills ---------------------------------------------
 
-  /** What a still costs and which frame of it is kept — the two things H3 has
-   *  that a video render does not, because a video render keeps all of them. */
+  /** What a still costs and which moment of it is kept — the two things H3 has
+   *  that a video render does not, because a video render keeps all of them.
+   *
+   *  Both are written in the artist's units rather than the VAE's. The length
+   *  is a cost against the cheapest pass, because a still is one picture at
+   *  every length and what the longer ones buy is distribution, not frames.
+   *  The index is a time, because "the same shot a moment later" is what
+   *  moving off the causal frame gets you — and it is only offered once there
+   *  is somewhere to move to. */
   renderStillPills() {
     const still = this.state[S.PRESTAGE_STILL_ARCH];
+    const lengths = S.PRESTAGE_STILL_LENGTHS;
+    const cheapest = lengths[0];
+    const longest = lengths[lengths.length - 1];
     const latents = S.stillLatentFrames(still.frames);
 
-    const lengthLabel = (n) => t("{frames} frames · {latents} latent",
-                                 { frames: n, latents: S.stillLatentFrames(n) });
+    // The list is a cost ladder whose top rung is named for what it buys.
+    const lengthLabel = (n) =>
+      (n === cheapest ? t("Draft")
+        : n === longest ? t("Trained range")
+        : t("≈{factor}× draft", { factor: S.stillCostFactor(n) }));
+    const lengthSub = (n) =>
+      (n === cheapest ? t("the cheapest pass — {frames} frames", { frames: n })
+        : n === longest ? t("{frames} frames, what the weights saw — ≈{factor}× draft",
+                            { frames: n, factor: S.stillCostFactor(n) })
+        : t("{frames} frames", { frames: n }));
+
     const length = el("button", {
       class: "mmc-pill",
-      title: t("{frames} frames sampled — {latents} latent frames, of which one is "
-           + "decoded. The shortest clip is the cheapest still; H3's trained range starts at "
-           + "124 frames, so longer is more in-distribution and proportionally slower.",
-           { frames: still.frames, latents }),
+      title: t("How long a clip is sampled to get this one picture. Every length yields the "
+           + "same single frame; a longer one is more in-distribution — the weights were "
+           + "trained from {trained} frames up — and costs proportionally more. Sampling "
+           + "{frames} frames now, ≈{factor}× the cheapest pass.",
+           { trained: longest, frames: still.frames, factor: S.stillCostFactor(still.frames) }),
       onclick: (event) => openChoicePopover(event.currentTarget, {
         title: t("Sampled length"),
-        options: S.PRESTAGE_STILL_LENGTHS.map(lengthLabel),
-        value: lengthLabel(still.frames),
-        onPick: (picked) => {
-          const frames = S.PRESTAGE_STILL_LENGTHS.find((n) => lengthLabel(n) === picked);
-          if (frames == null) return;
+        options: lengths,
+        value: still.frames,
+        label: lengthLabel,
+        sub: lengthSub,
+        onPick: (frames) => {
           still.frames = frames;
           // A shorter clip can leave the kept frame past the end of it.
-          const total = S.stillLatentFrames(still.frames);
+          const total = S.stillLatentFrames(frames);
           if (still.latent_index >= total) still.latent_index = total - 1;
           if (still.latent_index < -total) still.latent_index = 0;
           this.commit();
         },
       }),
     }, [icon("clock", 16), el("span", { text: `${still.frames}f` }),
-        el("span", { class: "mmc-pill-sub", text: t("{latents} latent", { latents }) })]);
+        el("span", { class: "mmc-pill-sub",
+                     text: still.frames === cheapest ? t("draft")
+                       : still.frames === longest ? t("trained")
+                       : t("≈{factor}×", { factor: S.stillCostFactor(still.frames) }) })]);
+
+    // At the cheapest length there are two frames and one of them is right, so
+    // the pill is noise until either the clip is long enough for the choice to
+    // be a choice or a saved graph already made one.
+    if (still.frames === cheapest && still.latent_index === 0) return [length];
 
     const index = stepperPill({
-      value: still.latent_index, min: -latents, max: latents - 1, step: 1, width: "56px",
-      title: t("Which latent frame becomes the picture. 0 is the causal first frame — the only "
-             + "one that is a function of a single video frame, and the one the decode is "
-             + "exact for. Negative counts from the end."),
-      format: (n) => t("latent {n}", { n }),
+      value: still.latent_index, min: 0, max: latents - 1, step: 1, width: "64px",
+      title: t("Which moment of the sampled clip becomes the picture. The first frame is the "
+             + "causal one — a function of that video frame alone, and the only one the "
+             + "decode is exact for. Later frames are the same shot a moment on, blended "
+             + "from a few frames each and correspondingly softer."),
+      format: (n) => (n === 0 ? t("first frame")
+                        : t("+{seconds} s", { seconds: S.stillLatentSeconds(n, still.frames).toFixed(2) })),
       onChange: (next) => { still.latent_index = Math.round(next); this.commit(); },
     });
 

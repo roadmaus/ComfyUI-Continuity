@@ -87,18 +87,26 @@ export function stepperPill({ value, onChange, min = -Infinity, max = Infinity, 
  * `distilled` reads "built-in", and what is picked and stored is still
  * `distilled`. Identity by default, so a caller with nothing to rename passes
  * nothing.
+ *
+ * `sub` puts a second, dimmer line under an option — for a list where the
+ * choice is a word and the number behind it is what makes the word mean
+ * something. Returning nothing leaves the row single-line.
  */
 export function openChoicePopover(anchor, { title, options, value, onPick, extra,
-                                            label = String }) {
+                                            label = String, sub = () => null }) {
   const pop = el("div", { class: "mmc-pop mmc-pop-scroll" },
     title ? [el("div", { class: "mmc-pop-title", text: title })] : []);
   for (const option of options) {
+    const second = sub(option);
     pop.appendChild(el("button", {
       class: "mmc-opt",
       "aria-checked": option === value,
       onclick: () => { close(); onPick(option); },
     }, [
-      el("span", { class: "mmc-opt-label" }, [el("span", { text: label(option) })]),
+      el("span", { class: `mmc-opt-label${second ? " mmc-opt-col" : ""}` }, [
+        el("span", { text: label(option) }),
+        ...(second ? [el("span", { class: "mmc-opt-sub", text: second })] : []),
+      ]),
       el("span", { class: "mmc-radio" }),
     ]));
   }

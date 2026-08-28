@@ -3322,6 +3322,31 @@ export const stillLatentFrames = (frames, grid = stillOf(DEFAULT_VIDEO_FAMILY).l
     : Math.floor((frames - grid.base_frames) / grid.frame_step)
       * grid.latent_step + grid.base_latent);
 
+/** Which moment of the sampled clip a latent index is, in seconds.
+ *
+ *  Latent 0 is pixel frame 0 exactly — the causal frame. The rest of the
+ *  clip's pixels are spread evenly over the rest of its latent frames, so the
+ *  nth one lands n/(latents-1) of the way through: on the 5-frame clip that is
+ *  frame 4, and on every longer one it is the same 3.4-frame step the VAE
+ *  packs at. Approximate on purpose — it is a label on a pill, and what it is
+ *  there to say is "a moment later, and how much later". A negative index is
+ *  resolved from the end first, the way the compiler resolves it. */
+export const stillLatentSeconds = (index, frames) => {
+  const latents = stillLatentFrames(frames);
+  const at = index < 0 ? latents + index : index;
+  if (!(at > 0) || latents < 2) return 0;
+  return Math.round(at * (frames - 1) / (latents - 1)) / STILL_RULES.fps;
+};
+
+/** What a length costs against the cheapest one. Sampling is per latent frame,
+ *  so the ratio of latent frames is the ratio of the pass — which is the thing
+ *  the length pill is actually choosing, the picture it yields being one frame
+ *  either way. */
+export const stillCostFactor = (frames) => {
+  const base = stillLatentFrames(PRESTAGE_STILL_LENGTHS[0]);
+  return Math.round(stillLatentFrames(frames) / base * 2) / 2;
+};
+
 /** What the still branch writes into the sampler row: the Creator node's own
  *  defaults — the family's sampler widgets — because it is the Creator's
  *  sampler. */

@@ -2999,7 +2999,7 @@ check("the model pill leads every piece's row", report["leads"],
 # What a still is set up with. Every one of these is the video nodes' own
 # control, reached by being a video request rather than by being re-described.
 for wanted in ("Add image", "Add video", "Add audio", "Add LoRA", "Gallery", "From video",
-               "Start frame", "End frame", "MiniMax H3", "latent", "T2VA"):
+               "Start frame", "End frame", "MiniMax H3", "5f", "T2VA"):
     if wanted not in (report["still"] or ""):
         FAILURES.append(f"the H3 still's body has no {wanted!r}")
 
