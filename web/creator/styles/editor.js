@@ -7,7 +7,7 @@ export const css = `
    stroke-only path as a solid black blob — which is what a missing per-component
    rule looks like, not a missing icon. Components still override the size and
    weight; equal specificity, so the later rule wins. */
-.mmc-root svg, .mmc-overlay svg, .mmc-pop svg {
+.mmc-root svg, .mmc-overlay svg, .mmc-pop svg, .mmc-mention svg {
   fill: none; stroke: currentColor; stroke-width: 1.6;
   stroke-linecap: round; stroke-linejoin: round;
 }
@@ -490,6 +490,52 @@ export const css = `
   background: var(--mmc-wash); color: var(--mmc-dim); text-decoration: line-through;
 }
 
+/* --- a spoken line --------------------------------------------------------
+ *
+ * Deliberately not a .mmc-ref pill. A reference chip is a label: it stands in
+ * for a file, and reading as a token is the whole of its job. A line of
+ * dialogue is not a label for anything — it is words that are heard, sitting
+ * inside a sentence about what is seen — so it gives the pill up and takes a
+ * rule down its left edge instead. That mark is already in this pack, on
+ * .mmc-compiled-block.mine, where it says "this part of the text is yours".
+ * Here it says: this part is heard.
+ *
+ * Wrapping, unlike a handle: a line can be a sentence long, and a chip that
+ * refused to break would push the box sideways. The rule draws once at the
+ * start rather than on every fragment, which is what slicing already does.
+ *
+ * No ground behind it, and that is the whole of what was learned by looking at
+ * it: a tint under a chip that wraps is drawn again on the continuation, and
+ * the second block reads as a second line of dialogue. It also put two tinted
+ * shapes in a box whose one tinted shape used to mean "a file is cited here".
+ * The rule alone says everything the tint was saying, and says it once.
+ */
+.mmc-say {
+  display: inline; padding-left: 7px; margin-right: 4px;
+  border-left: 2px solid var(--tag, var(--mmc-accent));
+  user-select: all;
+}
+/* A voice in the room and a voice over the picture are the same words and a
+   different sound. A broken line is what that difference looks like. */
+.mmc-say-over { border-left-style: dashed; }
+/* Pressable, and saying so. Clicking the line reopens the menu on it, which is
+   the only way to change who says it or how without deleting the whole thing
+   and typing the quote again — so the chip claims the pointer the way a cast
+   name does, and lifts under it. */
+.mmc-say { cursor: pointer; }
+.mmc-say:hover { background: color-mix(in srgb, var(--tag, var(--mmc-accent)) 12%, transparent); }
+.mmc-say-who { color: var(--tag, var(--mmc-accent)); font-size: .92em; }
+/* The two that are usually silent. Set as the micro-label this pack already
+   uses for a mark on a block (see .mmc-compiled-mine), because that is what
+   they are: not part of the sentence, and not competing with the words. */
+.mmc-say-how, .mmc-say-lang {
+  color: var(--mmc-faint); font-size: calc(9.5px * var(--mmc-type));
+  letter-spacing: .07em; text-transform: uppercase; margin-left: 5px;
+}
+/* The words are the content of the chip and are set as such: the plain body
+   colour, at the box's own size, inside the quotes that say they are spoken. */
+.mmc-say-words { color: var(--mmc-strong); margin-left: 5px; }
+
 /* Somebody's name, where clicking it opens them (see PromptBox's click handler
    and CreatorEditor.openCastMember). Inside a contenteditable the
    cursor is a caret by default, which says "text" about the one thing in the
@@ -535,6 +581,62 @@ export const css = `
   color: var(--mmc-faint); font-size: calc(11px * var(--mmc-type)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .mmc-mention-empty { color: var(--mmc-faint); font-size: calc(13px * var(--mmc-type)); padding: 14px 10px; }
+
+/* --- the quote menu's own rows ---------------------------------------------
+ *
+ * The same rows, answering a different kind of question. Everywhere else in
+ * this menu a row is a result — a file, a person, a look — and choosing one
+ * puts it in the sentence. Here a row is a setting, and one of them is already
+ * in force, so the list has to be able to say which. That mark is the only
+ * thing these rows add.
+ */
+/* The mark, and only the mark. Recolouring the name to the accent was the
+   first try and it took a person's tag colour off them — that colour is who
+   they are everywhere else in this pack, and a row that changes it to say
+   "chosen" is answering a different question from the one it was asked. */
+.mmc-say-row[aria-checked="true"]::after {
+  content: "✓"; color: var(--mmc-accent); font-size: calc(12px * var(--mmc-type));
+  flex: none; padding-right: 2px;
+}
+/* What Enter would write, under the two answers it would write it from.
+   A readout that happens to be pressable rather than three more rows: they are
+   not alternatives to Spoken, they are what Spoken currently means. */
+.mmc-say-bar {
+  display: flex; align-items: center; gap: 5px; flex-wrap: wrap;
+  margin: 4px 2px 0; padding: 8px 6px 2px; border-top: 1px solid var(--mmc-line);
+}
+.mmc-say-dial {
+  padding: 3px 9px; border-radius: 7px; border: 1px solid var(--mmc-line);
+  background: var(--mmc-surface-3); color: var(--mmc-dim);
+  font-family: inherit; font-size: calc(11px * var(--mmc-type));
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer;
+}
+.mmc-say-dial.wide { color: var(--mmc-text); max-width: 150px; }
+.mmc-say-dial:hover { background: var(--mmc-wash); color: var(--mmc-text); }
+.mmc-say-dial:focus-visible { outline: none; border-color: var(--mmc-blue); }
+.mmc-say-more { color: var(--mmc-faint); font-size: calc(14px * var(--mmc-type)); margin-left: auto; }
+/* Describing a voice is casting one, so the menu becomes the one field that
+   asks. Nothing else is left in it: there is no list any more, only a question. */
+.mmc-say-ask { display: flex; flex-direction: column; gap: 6px; padding: 2px 8px 8px; }
+/* Deeper than the card it sits in, and outlined. On the menu's own surface it
+   was neither, and a line of text with no edge to it reads as something being
+   shown rather than something to type in — which is the one thing this field
+   has to say. */
+.mmc-say-field {
+  width: 100%; padding: 9px 11px; border-radius: 9px;
+  border: 1px solid var(--mmc-wash-2); background: var(--mmc-surface-3);
+  color: var(--mmc-text); font-family: inherit; font-size: calc(13.5px * var(--mmc-type));
+}
+.mmc-say-field::placeholder { color: var(--mmc-off); }
+.mmc-say-field:focus { outline: none; border-color: var(--mmc-blue); background: var(--mmc-surface-2); }
+.mmc-say-field::selection { background: color-mix(in srgb, var(--mmc-blue) 40%, transparent); }
+.mmc-say-ask .mmc-mention-sub { white-space: normal; }
+.mmc-say-row .mmc-mention-sub { white-space: normal; }
+.mmc-say-row { align-items: flex-start; }
+.mmc-say-row .mmc-mention-thumb { margin-top: 1px; }
+/* A word on its own still starts where the words beside a tile do, so the two
+   kinds of list read as one menu rather than as two left edges. */
+.mmc-say-bare { padding-left: 18px; }
 
 /* --- the / menu's own rows -------------------------------------------------
  *

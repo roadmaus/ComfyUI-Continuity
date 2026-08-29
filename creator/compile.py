@@ -1425,13 +1425,27 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     except subjects.SubjectError as exc:
         raise CompileError(str(exc)) from exc
     subject_labels = subjects.labels(cast)
+    # Who vocalises, numbered in cast order. Off the *raw* body, because the
+    # `(S@anna)` tokens it is read from are about to be substituted away, and
+    # `sections` below still needs the same numbering to write the voice line.
+    speaker_ids = subjects.speakers(cast, [raw_body])
 
     # The refiner's prose stands in for the user's sentence and is substituted the
     # same way — it holds the same `@handles`, which is the whole reason it is
     # stored in that form. Switching the panel's toggle off falls back here
     # rather than anywhere downstream, so nothing else has to know it exists.
-    body = _substitute_subjects(
-        _substitute(raw_body, labels, assets, muted=muted), cast, subject_labels)
+    #
+    # Speakers before subjects, and it has to be that way round: the `@anna`
+    # inside a `(S@anna)` is a citation like any other, so the subject pass
+    # would reach it first and leave `(S<Subject 1>)` behind.
+    try:
+        body = _substitute_subjects(
+            subjects.substitute_speakers(
+                _substitute(raw_body, labels, assets, muted=muted),
+                subject_labels, speaker_ids),
+            cast, subject_labels)
+    except subjects.SubjectError as exc:
+        raise CompileError(str(exc)) from exc
 
     # Trigger words come from the LoRAs that are actually in this run — an entry
     # set to the other checkpoint contributes neither weights nor words. Keyed on
@@ -1544,7 +1558,8 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     # section always wins: `raw_sections` is merged over these, not under them.
     derived = family_grammar.sections(
         cast=cast, labels=labels, subject_labels=subject_labels, plan=plan,
-        body=body, shots=shots, framed=bool(first_frame or last_frame))
+        body=body, shots=shots, framed=bool(first_frame or last_frame),
+        speaker_ids=speaker_ids)
     if derived:
         merged = {name: text for name, text in derived.items() if str(text or "").strip()}
         for name, text in (sections or {}).items():

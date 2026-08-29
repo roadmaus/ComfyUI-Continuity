@@ -74,6 +74,24 @@ MARKERS = ("fully_preserved", "partially_preserved", "attribute_transfer",
 # shapes can never be confused for one another by eye or by pattern.
 HANDLE_RE = re.compile(r"^[A-Za-z][A-Za-z0-9_]{0,31}$")
 
+# A vocal event, as the prompt box writes one: `(S@anna)`, `(S@anna,@ben)`.
+#
+# The handle rather than a literal `(S1)`, because the number is not the user's
+# to know. It is allocated in cast order — see `speakers` — so reordering the
+# cast is how the numbering is changed, exactly as it already is for
+# `<Subject N>`. A literal ID typed into a sentence would go on pointing at
+# whoever used to be first, silently, and the failure would be a video with the
+# wrong mouth moving.
+#
+# The shape cannot occur in prose: `(S@` is not something anyone writes.
+SPEAKER_RE = re.compile(
+    r"\(S(@[A-Za-z][A-Za-z0-9_]{0,31}(?:\s*,\s*@[A-Za-z][A-Za-z0-9_]{0,31})*)\)")
+
+
+def _spoken(match):
+    """The handles inside one `(S@…)`, in the order they were written."""
+    return [part.strip().lstrip("@") for part in match.group(1).split(",")]
+
 
 class Feature:
     """One thing the reference shows, and what becomes of it.
@@ -503,18 +521,71 @@ def labels(cast):
     return {s.handle: f"<Subject {n}>" for n, s in enumerate(cast, start=1)}
 
 
-def speakers(cast):
-    """handle -> `S1`… for the subjects a voice is bound to, in cast order.
+def speaking(texts):
+    """Every handle cited as a speaker in `texts`, in order of first citation.
+
+    Order is not what the IDs are allocated by — `speakers` uses cast order for
+    that, as it does for `<Subject N>` — it is only how duplicates are dropped.
+    """
+    out = []
+    for text in texts:
+        for match in SPEAKER_RE.finditer(str(text or "")):
+            for handle in _spoken(match):
+                if handle not in out:
+                    out.append(handle)
+    return out
+
+
+def speakers(cast, texts=()):
+    """handle -> `S1`… for the subjects that vocalise, in cast order.
+
+    A subject vocalises if a voice reference is bound to them — §2.3's
+    voice-timbre line names a target speaker, so the binding is itself the claim
+    — or if `texts` cites them as one with `(S@anna)`. Nobody else is in here,
+    and that is section 4.4 to the word: characters who never vocalize receive
+    no speaker ID.
 
     The guide assigns `(Sx)` by the order of actual vocal events in the target
     video, which nothing here can know. Cast order is the substitute, and it is
     the user's to set: move Anna above Ben and Anna becomes S1.
     """
+    heard = set(speaking(texts))
     out = {}
     for subject in cast:
-        if subject.voice:
+        if subject.voice or subject.handle in heard:
             out[subject.handle] = f"S{len(out) + 1}"
     return out
+
+
+def substitute_speakers(text, subject_labels, ids):
+    """Replace every `(S@anna)` with the guide's own two-label speaker form.
+
+    Section 5.4 keeps the two apart on purpose: `<Subject N>` identifies the
+    referenced subject and `(Sx)` identifies the vocal source, and when the
+    subject speaks *both* are written — `<Subject 2> (S1) turns toward the woman
+    and says`. So one token expands to both, and the prompt box never has to
+    write a handle twice to get a line that reads the way the model was trained
+    to read it.
+
+    Several handles are several subjects speaking at once, which 4.4 writes as
+    one compound ID over the list of them: `<Subject 1> and <Subject 2> (S1,S2)`.
+
+    Runs *before* `compile._substitute_subjects`, and has to: the `@anna` inside
+    the token is a citation like any other, so the subject pass would otherwise
+    reach it first and leave `(S<Subject 1>)` behind.
+    """
+    def one(match):
+        handles = _spoken(match)
+        for handle in handles:
+            if handle not in ids:
+                raise SubjectError(
+                    f"@{handle} speaks here, but nobody by that name is in the "
+                    f"cast — cast them, or take the line out"
+                )
+        who = _english([subject_labels[h] for h in handles])
+        return f"{who} ({','.join(ids[h] for h in handles)})"
+
+    return SPEAKER_RE.sub(one, text)
 
 
 def claimed(cast):
@@ -636,7 +707,7 @@ def _described_subject(subject):
     return f"{_NOUN[subject.takes]}, {described}"
 
 
-def definitions(cast, asset_labels, extra_lines=()):
+def definitions(cast, asset_labels, extra_lines=(), ids=None):
     """The `subject_definitions` section: one line per label, cast first.
 
     `asset_labels` is `compile`'s handle -> `<Picture N>` map, so a definition
@@ -650,7 +721,12 @@ def definitions(cast, asset_labels, extra_lines=()):
     no cast byte-identical to one compiled before this module existed.
     """
     subject_labels = labels(cast)
-    voices = speakers(cast)
+    # Handed in by the compiler, which is the only caller that has seen the
+    # prose: a subject who speaks holds an ID whether or not a voice file is
+    # bound to them, and the two sections have to agree about which number they
+    # hold. Falling back to the file-bound half alone keeps a caller with no
+    # text to offer — a test, a preset preview — working as it did.
+    voices = speakers(cast) if ids is None else ids
     lines = []
     for subject in cast:
         label = subject_labels[subject.handle]

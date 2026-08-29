@@ -336,6 +336,20 @@ export class CreatorEditor {
             return subject?.handle ?? null;
           }
         : null,
+      // A voice with no picture. The quote menu's last resort when a line needs
+      // somebody to say it and the piece has cast nobody — §4.4 wants the
+      // speaker's age, timbre and pace written down anyway, so the words that
+      // answer "who is this" are exactly the description a subject is made of.
+      // Same landing as a look and a roster member: onto the piece, where a
+      // cast lives, because this body may be one shot of a piece owned a level
+      // up.
+      castVoice: this.castPiece?.subjects !== undefined || this.nodeId
+        ? (member) => {
+            const subject = castIntoPiece(member, this.castPiece);
+            this.commit();
+            return subject?.handle ?? null;
+          }
+        : null,
       onOverflow: (over) => this.onPromptOverflow(over),
       // The `/` menu's two doors. Both are rail tools already — this only puts
       // them on the keyboard, in the box where the sentence that needs them is

@@ -166,6 +166,12 @@ export const ICONS = {
   // they take the place of whoever is in the clip — and reads as an exchange
   // rather than as a link, which `link` already spends itself on.
   face: `<circle cx="12" cy="8.5" r="3.6"/><path d="M4.8 20a7.2 7.2 0 0114.4 0"/>`,
+  // The two grammars quoted words can be in — a line somebody says, and a sign
+  // the camera can see. Paired deliberately: the quote menu asks which of the
+  // two you meant, and the answer is easier to see than to read.
+  speech: `<path d="M20 15.5A2.5 2.5 0 0117.5 18H9l-4.5 3.5V6.5A2.5 2.5 0 017 4h10.5A2.5 2.5 0 0120 6.5z"/>`,
+  placard: `<rect x="3" y="4" width="18" height="11" rx="2.5"/><path d="M7.5 8.5h9M7.5 11.5h5"/><path d="M12 15v6"/>`,
+  globe: `<circle cx="12" cy="12" r="9"/><path d="M3.3 9.5h17.4M3.3 14.5h17.4"/><path d="M12 3a13 13 0 010 18 13 13 0 010-18"/>`,
   swap: `<path d="M4 8h13l-3.5-3.5"/><path d="M20 16H7l3.5 3.5"/>`,
   // Lucide's `shuffle`, verbatim — the same deal `brain`, `gear` and `eraser`
   // get. One file leaving as another arrives, which is what swapping the file

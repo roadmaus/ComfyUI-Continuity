@@ -53,7 +53,7 @@ class H3Grammar(grammar.Grammar):
         return contextir.shot_body(shots)
 
     def sections(self, *, cast, labels, subject_labels, plan, body, shots,
-                 framed, **rest):
+                 framed, speaker_ids=None, **rest):
         """`subject_definitions`, `retention_analysis` and `summary`.
 
         All three are derived for a reference generation whether or not there is
@@ -84,7 +84,12 @@ class H3Grammar(grammar.Grammar):
             derived["subject_definitions"] = subjects.definitions(
                 cast, labels,
                 contextir.reference_lines(plan, skip=claimed,
-                                          replaced=replaced) if plan else ())
+                                          replaced=replaced) if plan else (),
+                # The compiler allocated these off the prose before it
+                # substituted them away — see `subjects.speakers`. The voice
+                # line here and the `(Sx)` in the body have to be the same
+                # number, and by now the body no longer says which.
+                ids=speaker_ids)
             derived["retention_analysis"] = "\n".join(
                 [subjects.retention(cast, labels, body)]
                 + contextir.retention_lines(plan, skip=claimed, body=body,

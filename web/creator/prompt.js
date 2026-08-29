@@ -15,6 +15,7 @@ import { el, floatAbove, icon, keepScroll, mountOverlay } from "./dom.js";
 import { t } from "./i18n.js";
 import { castFactsLine, listPresets, loadBody } from "./presets.js";
 import { listAssets, viewUrl } from "./api.js";
+import { LANGUAGES, settings as refineSettings } from "./refine.js";
 import { tagIndex } from "./state.js";
 
 const TRIGGER = /@([\w-]*)$/;
@@ -23,7 +24,122 @@ const TRIGGER = /@([\w-]*)$/;
    input folder. Only at the start of a word, or "input/clip" and "and/or" would
    summon a menu mid-sentence. */
 const COMMAND = /\/([\w-]*)$/;
+/* The third opening, and the only one nobody presses a key to summon.
+   `@` and `/` are questions you ask; this one answers something already
+   written. H3 has two grammars for quoted words and no way to tell them apart
+   by shape — §4.4's `<d>` tag is a line somebody says, §4.5's plain double
+   quotes are a sign or a subtitle the camera can see — so the closing quote is
+   the only honest place to ask which of the two you meant.
+
+   Anchored to the caret and to a *closing* quote, so it fires on words that
+   exist rather than on the promise of some. Curly quotes are matched because a
+   keyboard may produce them; what is written back is always the straight pair
+   the guide spells. */
+/* The quote characters are escaped rather than typed. A bare `"` inside a
+   character class reads as the start of a string literal to anything that
+   scans this file without parsing it — tests/test_family_leaks.py is one —
+   and the rest of the line disappears into it. */
+const QUOTED = /[\u0022\u201c]([^\u0022\u201c\u201d\n]{1,400})[\u0022\u201d]$/;
 const MAX_SUGGESTIONS = 40;
+
+/* A finished spoken line, as `sayText` writes one and `build` reads one back.
+
+   Every piece of it is the guide's: `(S@anna)` is the speaker token
+   `subjects.substitute_speakers` resolves to `<Subject 1> (S1)`, the lead-in
+   between it and the tag is the identity, action and delivery §4.4 keeps
+   *outside* `<d>`, and the tail is the lips-closed sentence a voiceover is
+   required to be followed by. */
+const SPOKEN = new RegExp(
+  "\\(S(@[A-Za-z][A-Za-z0-9_]*(?:\\s*,\\s*@[A-Za-z][A-Za-z0-9_]*)*)\\)"
+  + "\\s([^<>\n]{0,60}?)"
+  + "<d>\\[([^\\]\n]{1,24})\\]\\s?([^<>\n]*?)</d>"
+  + "(\\s*while their lips remain completely closed\\.)?", "g");
+
+/* How a line is delivered: the verb outside the tag, in the guide's own forms.
+
+   `lead` ends in the punctuation §4.4's examples end in — a colon before a
+   statement, a comma before one that leans on the clause around it — and
+   `together` is what the same verb becomes when a compound `(S1,S2)` says it,
+   which is the example the guide gives for two speakers at once.
+
+   Voiceover is the one that is not just a verb. §4.4 fixes both halves of it:
+   the exact phrase, and a sentence immediately after the tag saying the lips
+   stay shut. Getting that pair right by hand is most of why this menu exists. */
+const DELIVERY = [
+  { id: "says", lead: "says:", together: "say together:", label: "says" },
+  { id: "asks", lead: "asks:", together: "ask together:", label: "asks" },
+  { id: "replies", lead: "replies,", together: "reply together,", label: "replies" },
+  { id: "whispers", lead: "whispers,", together: "whisper together,", label: "whispers" },
+  { id: "shouts", lead: "shouts,", together: "shout together,", label: "shouts" },
+  { id: "sings", lead: "sings,", together: "sing together,", label: "sings" },
+  { id: "voiceover", lead: "says in an off-screen voiceover:",
+    together: "say in an off-screen voiceover:", label: "voiceover",
+    tail: " while their lips remain completely closed." },
+];
+const SAYS = DELIVERY[0];
+
+/* The lead-in somebody has already written in front of their own quote.
+ *
+ * "@vera is saying" and then the words is how a person actually types this, and
+ * the line the menu writes says who is speaking all over again — so without
+ * this the result is `<Subject 1> is saying <Subject 1> (S1) says:`. The
+ * citation and the verb are the two halves of what the chip is about to write,
+ * so where they are already there they are what it replaces.
+ *
+ * Only a name the cast declares, and only a verb that is one of these. Anything
+ * else in front of a quote is a sentence, and a sentence is not this tool's to
+ * eat — "@vera looks at the sign reading" keeps every word of itself. */
+const VERBS = {
+  say: "says", says: "says", saying: "says", said: "says",
+  ask: "asks", asks: "asks", asking: "asks", asked: "asks",
+  reply: "replies", replies: "replies", replying: "replies", replied: "replies",
+  answer: "replies", answers: "replies", answering: "replies", answered: "replies",
+  whisper: "whispers", whispers: "whispers", whispering: "whispers", whispered: "whispers",
+  shout: "shouts", shouts: "shouts", shouting: "shouts", shouted: "shouts",
+  yell: "shouts", yells: "shouts", yelling: "shouts", yelled: "shouts",
+  sing: "sings", sings: "sings", singing: "sings", sang: "sings",
+};
+const LEAD = /@([A-Za-z][A-Za-z0-9_]*)(?:\s+(?:is\s+|are\s+|then\s+)*([a-z]+))?[\s,:]*$/;
+
+/* The quote menu's own row kinds. `branch` is not among them — the `/` menu's
+   source rows are branches too, and they are drawn by the chain that has always
+   drawn them; a quote-menu branch is told apart by the mode it is in. */
+const SAY_ROWS = new Set(["say", "onscreen", "pick", "saycast", "newvoice", "words"]);
+
+/**
+ * The line a choice and a set of words come to, in the form §4.4 spells it.
+ *
+ * Speaker token, then the delivery, then the tag holding only the language and
+ * the words — and, for a voiceover, the sentence that has to follow it. The
+ * quotes are dropped: inside `<d>` they would be two more characters for the
+ * model to read out.
+ *
+ * A plain function rather than a method, because it is called on the way out:
+ * the menu closes before the box is rewritten, and by then there is no choice
+ * left on the instance to read.
+ */
+function sayLine(say, words) {
+  const how = DELIVERY.find((d) => d.id === say.delivery) ?? SAYS;
+  // `lead` is prose somebody wrote themselves — the guide's own example of one
+  // is "exclaims with light annoyance," — carried through an edit untouched.
+  // Picking a delivery from the list is what clears it, because that is the
+  // gesture that means "use this instead".
+  const lead = say.lead || (say.who.length > 1 ? how.together : how.lead);
+  return `(S${say.who.map((handle) => "@" + handle).join(",")}) ${lead} `
+    + `<d>[${say.language}] ${String(words).trim()}</d>${how.tail ?? ""}`;
+}
+
+/** A voice description -> a handle for the member it becomes. `styleHandle`'s
+ *  twin, and the same three-word rule: enough of what was typed to recognise
+ *  them in the sentence, and nothing that is not a name. */
+function voiceHandle(description) {
+  const words = String(description ?? "").toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, " ")
+    .split(/[\s-]+/).filter(Boolean).slice(0, 3);
+  const handle = words.join("_") || "voice";
+  return (/^[a-z]/.test(handle) ? handle : `voice_${handle}`).slice(0, 32)
+    .replace(/_+$/, "") || "voice";
+}
 
 /* The two fields a description lands in — `contextir.BODY_FIELDS`. Whichever of
    them a compiled prompt carries is the block holding what you actually wrote,
@@ -206,7 +322,15 @@ export class PromptBox {
     // The grace period is for the click that is landing on a menu row: that
     // closes the menu itself, and a dismissal arriving after it would erase the
     // name it just wrote. `dismissMenu` no-ops once the menu is gone.
-    this.root.addEventListener("blur", () => setTimeout(() => this.dismissMenu(false), 120));
+    //
+    // Focus landing *inside* the menu is not the box being left: the quote
+    // menu's "describe a voice" is a text field, and focusing it blurs the box,
+    // so without this exception the field was torn down 120ms after it appeared
+    // and there was no way to type a word into it.
+    this.root.addEventListener("blur", () => setTimeout(() => {
+      if (this.menu?.contains(document.activeElement)) return;
+      this.dismissMenu(false);
+    }, 120));
     // A subject's name, opened on. The chip is contenteditable="false", so a
     // click on it had nowhere to put a caret and did nothing — which makes the
     // gesture free, and it is the right one besides: the name in the sentence is
@@ -218,6 +342,15 @@ export class PromptBox {
     // directly above the box. And deleting one is unaffected — a chip is removed
     // with the caret and Backspace, the same as it always was.
     this.root.addEventListener("click", (event) => {
+      // A spoken line first: it is a chip that holds a name, so the cast test
+      // below would answer for the name inside it and open somebody instead of
+      // the line they are saying.
+      const said = event.target?.closest?.("[data-say]");
+      if (said && this.root.contains(said)) {
+        event.preventDefault();
+        this.editSaid(said);
+        return;
+      }
       const chip = this.castChip(event);
       if (!chip) return;
       event.preventDefault();
@@ -239,7 +372,7 @@ export class PromptBox {
     // Only the names, and only where they open somebody. A file's chip is not a
     // control, so selecting it is the ordinary thing to be doing with it.
     this.root.addEventListener("mousedown", (event) => {
-      if (this.castChip(event)) event.preventDefault();
+      if (this.castChip(event) || event.target?.closest?.("[data-say]")) event.preventDefault();
     });
 
     // The graph canvas swallows keys and drags otherwise, and answers a copy
@@ -514,6 +647,11 @@ export class PromptBox {
       for (const node of parent.childNodes) {
         if (node.nodeType === Node.TEXT_NODE) {
           text += node.nodeValue;
+        } else if (node.dataset?.say !== undefined) {
+          // Before the handle branch and before the walk: a spoken line holds
+          // names inside it, and descending would come back with the speaker
+          // twice and the tag not at all.
+          text += node.dataset.say;
         } else if (node.dataset?.handle) {
           text += `@${node.dataset.handle}`;
         } else if (node.tagName === "BR") {
@@ -560,6 +698,71 @@ export class PromptBox {
    *  never the word "img". A name nobody cast matches the second half, finds no
    *  subject and stays prose — which is the promise the cast is built on. */
   build(text) {
+    const cast = new Set((this.hooks.getCast?.() ?? []).map((s) => s.handle));
+    const out = [];
+    let at = 0;
+    SPOKEN.lastIndex = 0;
+    let said;
+    while ((said = SPOKEN.exec(text)) !== null) {
+      const who = said[1].split(",").map((h) => h.trim().slice(1));
+      // A speaker nobody cast is left as the text it is, exactly as an
+      // uncited `@name` is: the compiler refuses it by name, and a chip drawn
+      // over it would hide the one thing that needs fixing.
+      if (!who.every((handle) => cast.has(handle))) continue;
+      if (said.index > at) out.push(...this.buildRefs(text.slice(at, said.index)));
+      out.push(this.sayChip(said, who));
+      at = said.index + said[0].length;
+    }
+    if (at < text.length) out.push(...this.buildRefs(text.slice(at)));
+    return out;
+  }
+
+  /**
+   * A spoken line, drawn as the one thing it is.
+   *
+   * Not a `.mmc-ref` pill. A reference chip is a *label* — it stands in for a
+   * file, and looking like a token is the whole of its job. A line of dialogue
+   * is not a label for anything: it is words that are heard, sitting inside a
+   * sentence about what is seen. So it keeps the speaker's tag colour and gives
+   * up the pill, and what marks it instead is a rule down its left edge — the
+   * same mark `.mmc-compiled-block.mine` already uses in this pack to say "this
+   * part of the text is yours". Here it says: this part is heard.
+   *
+   * Dashed for a voiceover, because that is the difference the mark is for. A
+   * voice in the room and a voice over the picture are the same words and a
+   * different sound, and a broken line is what that difference looks like.
+   *
+   * The delivery and the language show only when they are not the ordinary
+   * answer. A chip that prints "EN" on every line of an English film has said
+   * nothing, and the room it takes is room the words needed.
+   */
+  sayChip(match, who) {
+    const [source, , lead, language, words, tail] = match;
+    const said = lead.trim();
+    // Prose that is not one of the seven is prose somebody wrote by hand —
+    // "exclaims with light annoyance," is the guide's own example of it — so
+    // the chip shows what is actually there rather than rounding it to `says`.
+    const delivery = DELIVERY.find((d) => said === d.lead || said === d.together);
+    const how = delivery ? t(delivery.label) : said.replace(/[:,]\s*$/, "");
+    const over = !!tail || delivery?.id === "voiceover";
+    return el("span", {
+      class: `mmc-say${over ? " mmc-say-over" : ""} mmc-tag-${tagIndex(who[0])}`,
+      contenteditable: "false",
+      "data-say": source,
+      "data-speakers": who.join(","),
+      title: t("{who} {how} — {language}", {
+        who: who.map((h) => "@" + h).join(", "), how, language }),
+    }, [
+      el("span", { class: "mmc-say-who", text: who.map((h) => "@" + h).join(" ") }),
+      ...(delivery === SAYS ? [] : [el("span", { class: "mmc-say-how", text: how })]),
+      ...(language === "English" ? []
+        : [el("span", { class: "mmc-say-lang", text: language.slice(0, 2).toUpperCase() })]),
+      el("span", { class: "mmc-say-words", text: `“${words}”` }),
+    ]);
+  }
+
+  /** The half of `build` that was all of it: text -> [text nodes, ref chips]. */
+  buildRefs(text) {
     const attached = [...this.hooks.getState().assets,
                       ...(this.hooks.getPool?.() ?? [])];
     const known = new Set(attached.map((a) => a.handle));
@@ -688,7 +891,8 @@ export class PromptBox {
       if (got.nodeType !== want.nodeType) return false;
       if (want.nodeType === 3) return got.textContent === want.textContent;
       return got.className === want.className
-          && got.dataset?.handle === want.dataset?.handle;
+          && got.dataset?.handle === want.dataset?.handle
+          && got.dataset?.say === want.dataset?.say;
     });
   }
 
@@ -703,8 +907,19 @@ export class PromptBox {
    * past.
    */
   censusChips() {
-    this.chipped = new Set(
-      [...this.root.querySelectorAll("[data-handle]")].map((node) => node.dataset.handle));
+    const seen = [...this.root.querySelectorAll("[data-handle]")]
+      .map((node) => node.dataset.handle);
+    // The speakers inside a spoken line count as cited, and have to: a line is
+    // the *only* place @vera appears once the menu has absorbed the lead-in
+    // they were written in, so without this converting a quote read as that
+    // name being deleted — their pictures were detached and they were left on
+    // the piece standing for nothing. The chip carries the handles separately
+    // because its own `data-say` is the source text, which is what `getValue`
+    // reads back.
+    for (const chip of this.root.querySelectorAll("[data-speakers]")) {
+      for (const handle of chip.dataset.speakers.split(",")) seen.push(handle);
+    }
+    this.chipped = new Set(seen);
   }
 
   // ---- editing -------------------------------------------------------------
@@ -730,7 +945,12 @@ export class PromptBox {
       // Measured every keystroke, because dismissal has to erase it and by then
       // there may be no live selection to measure from — see `dismissMenu`.
       const spot = this.triggerSpot();
-      this.typed = spot && { ...spot, text: trigger.mode + trigger.query };
+      // `typed` is what an explicit dismissal erases. A `@` or a `/` is a key
+      // pressed to summon a list, so taking it back with the list is right; a
+      // quote is the words themselves, and eating those would be answering
+      // "none of these" by deleting the sentence.
+      this.typed = trigger.mode === '"' ? null
+        : spot && { ...spot, text: trigger.mode + trigger.query };
       this.openMenu(trigger.query, trigger.mode);
     } else this.closeMenu();
   }
@@ -776,7 +996,7 @@ export class PromptBox {
     // Out of a branch and back to the sources — the arrow that put you in it,
     // reversed. Only while one is open and only in the `/` menu; everywhere
     // else the left arrow is the caret's, which is what it must stay.
-    if (this.menu && this.mode === "/" && this.branch && event.key === "ArrowLeft") {
+    if (this.menu && this.mode !== "@" && this.branch && event.key === "ArrowLeft") {
       event.preventDefault();
       event.stopPropagation();
       this.branch = null;
@@ -787,7 +1007,20 @@ export class PromptBox {
     }
     // The right arrow is the other half of it, on a source row. A leaf row has
     // nothing to go into, so there it stays the caret's.
-    if (this.menu && this.mode === "/" && event.key === "ArrowRight"
+    // Who says it is the one dial worth a key of its own: it is the only one
+    // with no sensible default in a piece that has no cast, and the only one
+    // anybody changes line to line.
+    if (this.menu && this.mode === '"' && !this.branch && event.key === "ArrowRight"
+        && this.flat?.[this.active]?.kind === "say") {
+      event.preventDefault();
+      event.stopPropagation();
+      this.branch = "speaker";
+      this.active = 0;
+      this.signature = null;
+      this.renderMenu();
+      return;
+    }
+    if (this.menu && this.mode !== "@" && event.key === "ArrowRight"
         && this.flat?.[this.active]?.kind === "branch") {
       event.preventDefault();
       event.stopPropagation();
@@ -831,9 +1064,34 @@ export class PromptBox {
       if (match && match.index > 0 && !/\s/.test(text[match.index - 1])) match = null;
       mode = "/";
     }
+    if (!match) {
+      match = QUOTED.exec(text);
+      mode = '"';
+    }
     if (!match) return null;
     return { node, start: range.startOffset - match[0].length, end: range.startOffset,
              query: match[1], mode };
+  }
+
+  /**
+   * The `@name` — and the speech verb after it, if there is one — that the text
+   * before a quote already ends with. Null where there is none.
+   *
+   * A name only, because a name is the only thing here that means something:
+   * `@vera` is a citation because somebody declared Vera, and the same promise
+   * that keeps prose from being reinterpreted keeps this from reaching into a
+   * sentence it was not invited into. A bare pronoun and a verb is not enough
+   * to act on — it says how, but the whole question is who.
+   */
+  leadIn(before) {
+    const match = LEAD.exec(before);
+    if (!match) return null;
+    const cast = new Set((this.hooks.getCast?.() ?? []).map((subject) => subject.handle));
+    if (!cast.has(match[1])) return null;
+    // A word after the name that is not one of the verbs is a sentence carrying
+    // on, and the name in it is being used for something else.
+    if (match[2] && !VERBS[match[2]]) return null;
+    return { start: match.index, who: match[1], delivery: match[2] ? VERBS[match[2]] : null };
   }
 
   /**
@@ -865,6 +1123,7 @@ export class PromptBox {
         if (found !== null) return;
         if (node === trigger.node) { found = at + trigger.start; return; }
         if (node.nodeType === Node.TEXT_NODE) at += node.nodeValue.length;
+        else if (node.dataset?.say !== undefined) at += node.dataset.say.length;
         else if (node.dataset?.handle) at += node.dataset.handle.length + 1;
         else if (node.tagName === "BR") at += 1;
         else {
@@ -874,7 +1133,22 @@ export class PromptBox {
       }
     };
     walk(this.root);
-    return found === null ? null : { at: found, length: trigger.end - trigger.start };
+    if (found === null) return null;
+    let spot = found;
+    let length = trigger.end - trigger.start;
+    // A quote reaches back over the lead-in somebody already wrote in front of
+    // it, because that is what the line is about to say again. Measured here
+    // and not in `triggerRange`: `@vera` in front of a quote is a *chip*, so
+    // the text node the caret is in does not contain it, and the only place the
+    // sentence exists whole is the string this is already counting in.
+    if (trigger.mode === '"') {
+      const lead = this.leadIn(this.getValue().slice(0, spot));
+      if (lead) {
+        length += spot - lead.start;
+        return { at: lead.start, length, lead };
+      }
+    }
+    return { at: spot, length };
   }
 
   /** Put `@handle ` where `spot` was, in the text. With no spot — the box was
@@ -896,6 +1170,7 @@ export class PromptBox {
     for (const node of this.root.childNodes) {
       const length = node.nodeType === Node.TEXT_NODE
         ? node.nodeValue.length
+        : node.dataset?.say !== undefined ? node.dataset.say.length
         : node.dataset?.handle ? node.dataset.handle.length + 1 : 1;
       if (node.nodeType === Node.TEXT_NODE && index <= at + length) {
         const range = document.createRange();
@@ -1003,6 +1278,14 @@ export class PromptBox {
       this.branch = null;
       this.active = 0;
       this.signature = null;
+      this.say = null;
+    }
+    if (mode === '"') {
+      // The words are the trigger, so editing them inside the quotes is
+      // editing what the line will say — read every keystroke. The choices
+      // around them are read once and then kept, because they are answers.
+      this.said = query;
+      this.say ??= this.defaultSay(this.triggerSpot()?.lead);
     }
     if (!this.menu) {
       this.menu = el("div", { class: "mmc-mention" });
@@ -1011,6 +1294,7 @@ export class PromptBox {
       floatAbove(this.menu);
       document.body.appendChild(this.menu);
       this.active = 0;
+      this.watchAway();
     }
     this.place();
     this.renderMenu();          // attached assets are known immediately
@@ -1021,7 +1305,10 @@ export class PromptBox {
     // The looks, as soon as a slash is asking about them: inside the branch, or
     // against any query at all, since a query searches every source at once.
     if (mode === "/" && (this.branch === "style" || this.query)) this.readStyles();
-    const files = listAssets().catch(() => []);
+    // Nothing in the quote menu is a file. The roster below still is — casting
+    // somebody is how a line gets a speaker in a piece that has none.
+    const files = mode === '"' ? Promise.resolve(this.library ?? [])
+      : listAssets().catch(() => []);
     const roster = this.hooks.castFromLibrary
       ? listPresets().then((rows) => rows.filter((row) => row.scope === "cast"))
           .catch(() => [])
@@ -1062,7 +1349,55 @@ export class PromptBox {
     if (refocus) this.placeCaret(spot.at);
   }
 
+  /**
+   * A press anywhere else is "not this", and Escape is the same answer typed.
+   *
+   * The `blur` path in the constructor only fires while the box has focus, and
+   * a menu reopened on a written line never gives it any — the chip is
+   * `contenteditable="false"` and its press is cancelled, on purpose, so that
+   * pressing a line does not select it. That left the menu with no way out
+   * except answering it, which is the one thing a menu must not be.
+   *
+   * A press in the sentence closes it too, but without taking anything with it.
+   * The two are different answers: leaving the box is "never mind", and the
+   * half-typed `@an` that was the way to ask goes with the asking — which is
+   * what blurring has always done. Clicking somewhere else in the same sentence
+   * is not leaving, it is writing; the caret is going where you put it and the
+   * words you typed are still yours.
+   *
+   * `onEdit` cannot be the one to notice: it runs on input, and a click is not
+   * input, so a menu left standing over a caret three words away had no way to
+   * find out it had been abandoned.
+   */
+  watchAway() {
+    this.away = (event) => {
+      if (this.menu?.contains(event.target)) return;
+      if (this.root.contains(event.target)) this.closeMenu();
+      else this.dismissMenu(false);
+    };
+    this.awayKey = (event) => {
+      if (event.key !== "Escape" || !this.menu) return;
+      // A field in the menu answers its own Escape and knows not to write what
+      // is in it. Closing over its head would leave that to the blur.
+      if (this.menu.querySelector("input")) return;
+      event.stopPropagation();
+      this.dismissMenu(false);
+    };
+    // Deferred, or the press that opened the menu closes it again.
+    setTimeout(() => {
+      if (!this.menu) return;
+      document.addEventListener("pointerdown", this.away, true);
+      document.addEventListener("keydown", this.awayKey, true);
+    }, 0);
+  }
+
   closeMenu() {
+    if (this.away) {
+      document.removeEventListener("pointerdown", this.away, true);
+      document.removeEventListener("keydown", this.awayKey, true);
+      this.away = null;
+      this.awayKey = null;
+    }
     this.menu?.remove();
     this.menu = null;
     this.active = 0;
@@ -1071,12 +1406,21 @@ export class PromptBox {
     this.branch = null;
     this.mode = null;
     this.typed = null;
+    this.say = null;
+    this.said = "";
+    this.editing = null;
+    this.anchor = null;
+    this.asking = false;
   }
 
   place() {
+    if (!this.menu) return;
     const selection = window.getSelection();
-    if (!selection?.rangeCount || !this.menu) return;
-    const rect = selection.getRangeAt(0).getBoundingClientRect();
+    // Editing a written line has no caret to measure from — the chip it is
+    // about is the anchor, and it is where the eye already is.
+    const rect = this.anchor ?? (selection?.rangeCount
+      ? selection.getRangeAt(0).getBoundingClientRect() : null);
+    if (!rect) return;
     const anchor = rect.width || rect.height ? rect : this.root.getBoundingClientRect();
     const box = this.menu.getBoundingClientRect();
     const height = box.height || 260;
@@ -1247,6 +1591,153 @@ export class PromptBox {
     return groups;
   }
 
+  // ---- the quote menu ------------------------------------------------------
+
+  /**
+   * What a quote defaults to: the first person in the cast, saying it plainly,
+   * in whatever language the piece is being written in.
+   *
+   * The first person rather than none, because a piece with one member in it
+   * has already answered the question, and a menu that asks it again is a menu
+   * you have to dismiss. Where nobody is cast there is no answer to guess, and
+   * the Spoken row says so instead of pretending.
+   *
+   * The language follows the refiner's setting — that is where this piece
+   * already said which language it is written in, and asking twice would let
+   * the two disagree.
+   */
+  defaultSay(lead = null) {
+    const cast = (this.hooks.getCast?.() ?? []).filter((subject) => subject.handle);
+    return {
+      // What the sentence already says, where it says it. Anybody who wrote
+      // "@vera is saying" has answered both of these questions once, and being
+      // asked them again is the menu not having read what it is standing over.
+      who: lead ? [lead.who] : cast.length ? [cast[0].handle] : [],
+      language: refineSettings().language || "English",
+      delivery: lead?.delivery ?? SAYS.id,
+    };
+  }
+
+  /** The chosen delivery, as an entry of `DELIVERY`. */
+  sayHow() {
+    return DELIVERY.find((d) => d.id === this.say?.delivery) ?? SAYS;
+  }
+
+  /**
+   * The two things quoted words can be, and the three dials behind the first.
+   *
+   * Both rows are the guide's, which is the whole reason the second one exists:
+   * §4.5 reserves plain double quotes for text the camera can actually see — a
+   * sign, a banner, a subtitle — so a menu that silently turned every quote
+   * into speech would be overwriting one grammar with the other. On screen is
+   * therefore a real answer and not a way out, and choosing it writes nothing,
+   * because the quotes already are the syntax.
+   */
+  sayOptions() {
+    const say = this.say;
+    if (this.branch === "speaker") return this.speakerOptions();
+    if (this.branch === "language") {
+      // No glyph and no second line. Eleven identical globes over eleven words
+      // that already say what they are is decoration, and the tag each one
+      // writes is the word itself: `<d>[French] …`.
+      return [{ head: t("The language these words are in"), options: LANGUAGES.map((name) => ({
+        kind: "pick", pick: { language: name }, label: t(name),
+        on: name === say.language,
+      })) }];
+    }
+    if (this.branch === "delivery") {
+      // A second line only where there is something the first does not say.
+      // `says` under "says" is a row telling you twice and teaching you nothing;
+      // the two that differ from their own label are the two worth the space.
+      const plural = say.who.length > 1;
+      // A lead-in this menu did not write is the one in force, so it is in the
+      // list — at the top, marked, and left exactly as it was typed. Leaving it
+      // out would have made the list say the line is delivered some way it is
+      // not, and picking anything would have thrown the words away silently.
+      const own = say.lead
+        ? [{ kind: "pick", pick: { lead: say.lead }, label: say.lead.replace(/[:,]\s*$/, ""),
+             on: true, sub: t("as you wrote it") }]
+        : [];
+      return [{ head: t("How the line is delivered"), options: own.concat(DELIVERY.map((how) => ({
+        kind: "pick", pick: { delivery: how.id, lead: null }, label: t(how.label),
+        on: !say.lead && how.id === say.delivery,
+        sub: how.id === "voiceover"
+          ? t("off-screen, and the lips stay closed — both halves are written for you")
+          : plural ? how.together : "",
+      }))) }];
+    }
+    const named = say.who.map((handle) => "@" + handle).join(" and ");
+    // Only over a line that is already written. While a quote is being typed
+    // the words are still in the box under the caret, and a field standing in
+    // front of them would be a second place to type the same thing.
+    const line = this.editing
+      ? [{ head: t("The line"), options: [
+          { kind: "words", iconName: "pen", label: `“${this.said}”`,
+            sub: t("change what is said") },
+        ] }]
+      : [];
+    return line.concat([{ head: t("What these words are"), options: [
+      { kind: "say", iconName: "speech",
+        label: say.who.length ? t("Spoken by {who}", { who: named }) : t("Spoken"),
+        sub: say.who.length
+          ? this.sayHow().tail
+            ? t("an off-screen voiceover, in {language}", { language: say.language })
+            : t("{how}, in {language}", { how: t(this.sayHow().label), language: say.language })
+          : t("nobody is cast here yet — pick who says it") },
+      { kind: "onscreen", iconName: "placard", label: t("Written in the picture"),
+        // Over a written line the row is not a statement about syntax any
+        // more, it is an undo: it takes the line out of the audio and leaves
+        // the words on screen, which is the other thing §4.5 says quotes are.
+        sub: this.editing
+          ? t("take it out of the audio and leave the words on screen")
+          : t("a sign, a banner, a subtitle — the quotes are already the syntax") },
+    ] }]);
+  }
+
+  /**
+   * Who says it: the cast first, then the library, then somebody new.
+   *
+   * The same three sources the `@` menu offers, for the same reason and in the
+   * same order — but a speaker is not a citation, so picking one sets the line
+   * rather than writing a name into the sentence. The last row is the one this
+   * menu needs that no other does: a voice can be somebody the piece has never
+   * seen, and §4.4 asks for their age, timbre and pace anyway, so describing
+   * them *is* casting them. They land as a member with no files, which is a
+   * subject the compiler has always been able to define.
+   */
+  speakerOptions() {
+    const say = this.say;
+    const cast = (this.hooks.getCast?.() ?? []).filter((subject) => subject.handle)
+      .map((subject) => ({
+        kind: "pick", pick: { who: [subject.handle] }, subject,
+        label: `@${subject.handle}`, on: say.who.includes(subject.handle),
+        sub: subject.description || t("in the cast"),
+      }));
+    // Everybody at once is one compound `(S1,S2)`, which is 4.4's own form for
+    // a line two people say together. Only worth offering once there are two.
+    const together = cast.length > 1 && say.who.length === 1
+      ? [{ kind: "pick", pick: { who: cast.map((row) => row.subject.handle) }, iconName: "speech",
+           label: t("All of them, together"),
+           sub: t("one compound ID over every name — (S1,S2)") }]
+      : [];
+    const here = new Set((this.hooks.getCast?.() ?? []).map((subject) => subject.handle));
+    const roster = !this.hooks.castFromLibrary ? [] : (this.roster ?? [])
+      .filter((row) => !here.has(row.name))
+      .slice(0, MAX_SUGGESTIONS)
+      .map((row) => ({ kind: "saycast", row, label: `@${row.name}`,
+                       sub: castFactsLine(row.facts) }));
+    const groups = [];
+    if (cast.length || together.length) {
+      groups.push({ head: t("In this piece"), options: [...cast, ...together] });
+    }
+    if (roster.length) groups.push({ head: t("Cast library"), options: roster });
+    groups.push({ head: t("Somebody new"), options: [
+      { kind: "newvoice", iconName: "face", label: t("Describe a voice"),
+        sub: t("age, timbre, pace — they join the cast with no files") },
+    ] });
+    return groups;
+  }
+
   /**
    * The groups the menu is showing, head and rows, in the order they read.
    *
@@ -1262,6 +1753,7 @@ export class PromptBox {
    * cases where you are going to type a few letters anyway.
    */
   groups() {
+    if (this.mode === '"') return this.sayOptions();
     if (this.mode === "/") return this.commandOptions();
     const { cast, roster, attached, pool, library } = this.options();
     return [
@@ -1278,6 +1770,11 @@ export class PromptBox {
 
   renderMenu() {
     if (!this.menu) return;
+    // The menu has become a field and is no longer a list. `openMenu` renders
+    // once immediately and again as the roster and the input folder land, so
+    // without this a field opened before those answered was replaced by rows
+    // mid-sentence — and what had been typed into it went with them.
+    if (this.asking) return;
     const groups = this.groups();
     this.flat = groups.flatMap((group) => group.options);
     if (this.active >= this.flat.length) this.active = Math.max(0, this.flat.length - 1);
@@ -1317,6 +1814,10 @@ export class PromptBox {
     let index = 0;
     const row = (option) => {
       const here = index++;
+      // The quote menu's rows answer a different question from every other row
+      // in here — they are choices, not results — so they are drawn by their
+      // own hand rather than by six more branches of the chain below.
+      if (SAY_ROWS.has(option.kind)) return this.sayRow(option, here);
       // A kept member's face is in their index row: it is one of their own
       // pictures, named at the moment they were kept, so the menu draws them
       // without reading a body it does not otherwise need.
@@ -1406,10 +1907,14 @@ export class PromptBox {
     // The way back out of a branch, at the top where the thing it undoes is.
     // Left arrow does it too — see `onKeyDown` — but a menu opened with the
     // mouse has to be closable with it.
-    if (this.mode === "/" && this.branch) {
+    if (this.mode !== "@" && this.branch) {
       this.menu.appendChild(el("button", {
         class: "mmc-mention-back",
         onmouseenter: () => this.highlight(this.active),
+        // As above, and this one has always needed it: the way back out of a
+        // `/` branch could only ever be taken with the left arrow, because
+        // pressing it blurred the box and dismissed the menu under the press.
+        onpointerdown: (event) => event.preventDefault(),
         onclick: (event) => {
           event.preventDefault();
           this.branch = null;
@@ -1417,13 +1922,283 @@ export class PromptBox {
           this.signature = null;
           this.renderMenu();
         },
-      }, [el("span", { text: "‹" }), el("span", { text: t("everything") })]));
+      }, [el("span", { text: "‹" }),
+          el("span", { text: this.mode === '"' ? t("back to the line") : t("everything") })]));
     }
     for (const group of groups) {
       if (!group.options.length) continue;
       this.menu.appendChild(el("div", { class: "mmc-mention-head", text: group.head }));
       for (const option of group.options) this.menu.appendChild(row(option));
     }
+    if (this.mode === '"' && !this.branch) this.menu.appendChild(this.sayBar());
+    this.place();
+  }
+
+  /**
+   * One row of the quote menu: a glyph, a name, and what it means.
+   *
+   * The same skeleton every other row in this menu has — that is the point, it
+   * is one menu — with one thing added that no other row needs. A choice can
+   * already be the one in force, and saying so is the difference between a list
+   * of options and a list of settings: `on` draws the mark, so drilling in to
+   * change the language shows which language you are changing it from.
+   */
+  sayRow(option, here) {
+    const face = option.subject && this.subjectFace(option.subject);
+    const item = el("button", {
+      class: `mmc-mention-row mmc-say-row${option.kind === "branch" ? " mmc-mention-branch" : ""}${
+        !face && !option.iconName && !option.subject && !option.row ? " mmc-say-bare" : ""}`,
+      "aria-selected": here === this.active,
+      "aria-checked": option.on === undefined ? undefined : !!option.on,
+      onmouseenter: () => this.highlight(here),
+      onclick: (event) => { event.preventDefault(); this.choose(here); },
+    }, [
+      // No tile where there is nothing to put in it. A list of eleven languages
+      // is a list of words, and a column of placeholders beside them would be
+      // saying that each one is a thing with a picture.
+      face
+        ? el("img", { class: "mmc-mention-thumb", src: viewUrl(face, { preview: true }), alt: "" })
+        : option.iconName
+        ? el("span", { class: "mmc-mention-thumb mmc-mention-glyph" }, [icon(option.iconName, 15)])
+        : option.subject || option.row
+        ? el("span", { class: "mmc-mention-thumb", text: "☺" })
+        : option.kind === "pick" ? null
+        : el("span", { class: "mmc-mention-thumb", text: "☺" }),
+      el("span", { class: "mmc-mention-text" }, [
+        el("span", {
+          class: `mmc-mention-handle${
+            option.label?.startsWith("@") ? ` mmc-tag-${tagIndex(option.label.slice(1))}` : ""}`,
+          text: option.label,
+        }),
+        ...(option.sub ? [el("span", { class: "mmc-mention-sub", text: option.sub })] : []),
+      ]),
+      ...(option.kind === "branch" ? [el("span", { class: "mmc-mention-more", text: "›" })] : []),
+    ]);
+    item.addEventListener("pointerdown", (event) => event.preventDefault());
+    this.rows.push(item);
+    return item;
+  }
+
+  /** A cast member's own first picture, for the row that offers them. */
+  subjectFace(subject) {
+    const pool = [...(this.hooks.getPool?.() ?? []), ...(this.hooks.getState().assets ?? [])];
+    for (const handle of subject.from ?? []) {
+      const asset = pool.find((a) => a.handle === handle);
+      if (asset?.kind === "image") return asset.filename;
+    }
+    return null;
+  }
+
+  /**
+   * The three dials, under the two answers, showing what Enter would write.
+   *
+   * Not rows. Rows are things you choose between, and these are not
+   * alternatives to Spoken — they are what Spoken currently means, which makes
+   * them a readout that happens to be pressable. Keeping them off the arrow
+   * keys is what leaves Enter as the whole gesture in the ordinary case: one
+   * cast member, saying it plainly, in the language the piece is written in.
+   */
+  sayBar() {
+    const say = this.say;
+    const dial = (branch, text, wide = false) => el("button", {
+      class: `mmc-say-dial${wide ? " wide" : ""}`,
+      title: t("Change this"),
+      onmouseenter: () => this.highlight(this.active),
+      // The same guard every row in this menu carries, and for a harder reason
+      // than the caret: leaving the box blurs it, and a blurred box dismisses
+      // the menu (see the `blur` listener in the constructor). Without this the
+      // press tears the menu down 120ms before the click would have landed on
+      // it, and pressing any of these three does nothing at all.
+      onpointerdown: (event) => event.preventDefault(),
+      onclick: (event) => {
+        event.preventDefault();
+        this.branch = branch;
+        this.active = 0;
+        this.signature = null;
+        this.renderMenu();
+      },
+    }, [el("span", { text })]);
+    const named = say.who.map((handle) => "@" + handle).join(" ");
+    return el("div", { class: "mmc-say-bar" }, [
+      dial("speaker", named || t("nobody yet"), true),
+      dial("language", say.language),
+      dial("delivery", t(this.sayHow().label)),
+      el("span", { class: "mmc-say-more", text: "›" }),
+    ]);
+  }
+
+  /**
+   * Reopen the quote menu on a line that is already written.
+   *
+   * The chip is `contenteditable="false"`, so a click on it had nowhere to put
+   * a caret and did nothing — the same free gesture a cast chip took, and the
+   * right one for the same reason: the line in the sentence is where the
+   * choices *are*, so it is the shortest way to change one. Without it a
+   * finished line could only be changed by deleting it whole and typing the
+   * quote again.
+   *
+   * Everything the menu needs comes back out of the text the chip stands for,
+   * because that text is the only thing that was ever stored.
+   */
+  editSaid(chip) {
+    SPOKEN.lastIndex = 0;
+    const match = SPOKEN.exec(chip.dataset.say);
+    if (!match) return;
+    // Whatever was open belongs to a different question. Closed first, and the
+    // mode set by hand afterwards, because `openMenu` clears the choice on a
+    // change of mode — which is right when a quote is being typed and wrong
+    // here, where the choice is the thing being carried in.
+    this.closeMenu();
+    const [, names, lead, language, words] = match;
+    const said = lead.trim();
+    const known = DELIVERY.find((d) => said === d.lead || said === d.together);
+    this.say = {
+      who: names.split(",").map((handle) => handle.trim().slice(1)),
+      language,
+      delivery: known?.id ?? SAYS.id,
+      // Kept verbatim where this menu did not write it — see `sayLine`.
+      lead: known ? null : said,
+    };
+    // Where the chip sits in the text, so choosing rewrites it in place rather
+    // than adding a second line beside it.
+    let at = 0;
+    for (const node of this.root.childNodes) {
+      if (node === chip) {
+        this.editing = { at, length: chip.dataset.say.length };
+        break;
+      }
+      at += node.nodeType === Node.TEXT_NODE ? node.nodeValue.length
+        : node.dataset?.say !== undefined ? node.dataset.say.length
+        : node.dataset?.handle ? node.dataset.handle.length + 1 : 1;
+    }
+    if (!this.editing) return;
+    // The menu opens over the line rather than over the caret: there is no
+    // caret, and the line is what is being changed.
+    this.anchor = chip.getBoundingClientRect?.() ?? null;
+    this.mode = '"';
+    this.branch = null;
+    this.active = 0;
+    this.signature = null;
+    this.openMenu(words, '"');
+  }
+
+  /**
+   * Where a chosen line goes: the quote that summoned the menu, or the line
+   * being edited. One answer, because every path that writes needs the same
+   * one and the two are the same kind of thing — a span of text to replace.
+   */
+  sayTarget() {
+    return this.editing ?? this.triggerSpot();
+  }
+
+  /**
+   * Put a finished line where the quote was.
+   *
+   * Through the text and an offset rather than through the live selection, for
+   * the reason `writeName` is: casting somebody reads a body off disk and
+   * redraws the box, and by the time that answers the node the caret pointed
+   * into is gone.
+   */
+  writeSaid(before, spot, line) {
+    const text = spot
+      ? `${before.slice(0, spot.at)}${line}${before.slice(spot.at + spot.length)}`
+      : `${before}${before && !/\s$/.test(before) ? " " : ""}${line}`;
+    this.setValue(text);
+    this.hooks.onInput(text);
+    this.placeCaret((spot ? spot.at : text.length - line.length) + line.length);
+  }
+
+  /**
+   * Describe a voice, and be describing somebody: the menu becomes one field.
+   *
+   * §4.4 asks for the age, timbre, pace or accent of a speaker the first time
+   * they are heard, so the words that answer "who is this" are the same words
+   * the cast wants as a description. They land as a member with no files — a
+   * subject the compiler has always been able to define, and the only shape a
+   * voice with no picture could have.
+   */
+  askVoice() {
+    // Held now, because casting closes this menu and the choice goes with it.
+    const before = this.getValue();
+    const spot = this.sayTarget();
+    const say = this.say;
+    const said = this.said;
+    this.ask({
+      head: t("Who is speaking"),
+      placeholder: t("a young woman, quiet and breathy"),
+      hint: t("They join the cast with no files, and the line is written to them."),
+      done: (description) => {
+        const handle = this.hooks.castVoice?.({ takes: "person", description,
+                                                handle: voiceHandle(description) });
+        if (!handle) return;
+        this.writeSaid(before, spot, sayLine({ ...say, who: [handle] }, said));
+      },
+    });
+  }
+
+  /**
+   * The words themselves, in a field, with the line rewritten around them.
+   *
+   * The chip is `contenteditable="false"` — it has to be, or a caret inside it
+   * would be a caret inside `<d>[English]` — so the one thing the sentence
+   * cannot do is let you fix a typo in what somebody says. This is that, and it
+   * is why the row exists at the top of the menu rather than as a fourth dial:
+   * the words are not a setting, they are the line.
+   */
+  askWords() {
+    const before = this.getValue();
+    const spot = this.sayTarget();
+    const say = this.say;
+    this.ask({
+      head: t("What is said"),
+      value: this.said,
+      hint: t("Only the words. Who says them, and how, stay as they are."),
+      done: (words) => this.writeSaid(before, spot, sayLine(say, words)),
+    });
+  }
+
+  /**
+   * The menu, become the one field that asks a question it cannot answer with
+   * a list. Everything else in it is gone: there is no list any more.
+   *
+   * `done` is called with the trimmed text and never with nothing — a field
+   * left empty is a question not answered, and answering it with an empty line
+   * would write `<d>[English] </d>` into the prompt.
+   */
+  ask({ head, hint, value = "", placeholder = "", done }) {
+    if (!this.menu) return;
+    this.asking = true;
+    const field = el("input", {
+      class: "mmc-say-field", type: "text", spellcheck: "false", placeholder,
+    });
+    field.value = value;
+    let closed = false;
+    const finish = () => {
+      if (closed) return;
+      closed = true;
+      const text = field.value.trim();
+      this.closeMenu();
+      if (text) done(text);
+    };
+    this.menu.replaceChildren(
+      el("div", { class: "mmc-mention-head", text: head }),
+      el("div", { class: "mmc-say-ask" }, [
+        field,
+        el("div", { class: "mmc-mention-sub", text: hint }),
+      ]));
+    this.rows = [];
+    this.flat = [];
+    field.addEventListener("keydown", (event) => {
+      event.stopPropagation();
+      if (event.key === "Enter") { event.preventDefault(); finish(); }
+      // Escape is "leave it as it was", so it closes without writing.
+      if (event.key === "Escape") { event.preventDefault(); closed = true; this.closeMenu(); }
+    });
+    field.addEventListener("blur", finish);
+    field.focus();
+    // Selected, so the first keystroke replaces a line you came here to redo
+    // rather than appending to it. The caret is one arrow key away.
+    field.select?.();
     this.place();
   }
 
@@ -1450,6 +2225,85 @@ export class PromptBox {
   async choose(index) {
     const option = this.flat?.[index];
     if (!option) return;
+    // On screen writes nothing, and that is the answer rather than a way out of
+    // one: §4.5's syntax for a sign, a banner or a subtitle is plain double
+    // quotes, so the words are already in the form the model reads. The row
+    // exists to say so — otherwise the only way to learn it is to wonder why
+    // the quote did not become speech.
+    if (option.kind === "onscreen") {
+      // Over a written line it is an undo, and has to write: the words go back
+      // to being a plain quoted string, which is what §4.5 asks for and what
+      // they were before the menu wrapped them. Under a quote being typed
+      // there is nothing to write — they are already in that form.
+      if (this.editing) {
+        const before = this.getValue();
+        const spot = this.editing;
+        const words = this.said;
+        this.closeMenu();
+        this.writeSaid(before, spot, `"${words}"`);
+        return;
+      }
+      this.closeMenu();
+      this.root.focus();
+      return;
+    }
+    if (option.kind === "words") {
+      this.askWords();
+      return;
+    }
+    if (option.kind === "newvoice") {
+      this.askVoice();
+      return;
+    }
+    // A dial, answered. The branch closes behind it: it was opened to ask one
+    // question, and it has been answered.
+    if (option.kind === "pick") {
+      this.say = { ...this.say, ...option.pick };
+      this.branch = null;
+      this.active = 0;
+      this.signature = null;
+      this.renderMenu();
+      return;
+    }
+    // Somebody off the shelf, cast so they can speak. Their files come with
+    // them, as they do everywhere else casting happens — the difference is only
+    // that their name goes into the line rather than into the sentence.
+    if (option.kind === "saycast") {
+      const spot = this.sayTarget();
+      const before = this.getValue();
+      const say = this.say;
+      const said = this.said;
+      this.closeMenu();
+      try {
+        const body = await loadBody(option.row);
+        const member = body?.cast;
+        if (!member) return;
+        const handle = await this.hooks.castFromLibrary(member);
+        if (handle) this.writeSaid(before, spot, sayLine({ ...say, who: [handle] }, said));
+      } catch {
+        // Their body could not be read. The quoted words are left exactly as
+        // they were typed, which is prose and queues as prose.
+      }
+      return;
+    }
+    if (option.kind === "say") {
+      // Nobody to say it. The question the row could not answer is the branch
+      // behind it, so pressing it opens that instead of writing a line with an
+      // empty speaker token in it.
+      if (!this.say.who.length) {
+        this.branch = "speaker";
+        this.active = 0;
+        this.signature = null;
+        this.renderMenu();
+        return;
+      }
+      const spot = this.sayTarget();
+      const before = this.getValue();
+      const line = sayLine(this.say, this.said);
+      this.closeMenu();
+      this.writeSaid(before, spot, line);
+      return;
+    }
     // Drilling in, not picking: the typed text stays exactly as it is, because
     // it is still the query — this only narrows what is being searched.
     if (option.kind === "branch") {

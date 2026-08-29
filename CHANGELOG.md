@@ -2,6 +2,52 @@
 
 ## Unreleased
 
+**Quoted words become a line somebody says.** H3 reads speech in a form nobody
+writes by hand: a stable speaker ID outside a `<d>` tag, the identity and the
+delivery outside it too, and only a language tag and the words inside — with a
+voiceover carrying a fixed phrase and a mandatory sentence saying the lips stay
+closed. Getting that right was the refiner's job or nobody's. Closing a quote in
+the prompt box now opens a small menu instead: **Spoken** writes the whole form
+around your words, and **Written in the picture** writes nothing, because plain
+double quotes already *are* section 4.5's syntax for a sign, a banner or a
+subtitle. Both answers are the guide's, which is why the second one is a row and
+not a way out — a menu that silently turned every quote into speech would be
+overwriting one grammar with the other.
+
+The menu reads what you already wrote. `@vera is saying "take this"` uses Vera
+as the speaker and `saying` as the delivery and replaces both, so the line does
+not end up saying who is speaking twice; a sentence that merely ends in a name —
+`@vera looks at the sign reading` — keeps every word of itself, because only a
+speech verb after a declared name counts. Behind the two rows sit three dials:
+who says it, in which of the eleven languages H3 supports, and how — `says`,
+`asks`, `replies`, `whispers`, `shouts`, `sings`, or an off-screen voiceover
+whose two required halves are written for you. Speakers come from the piece's
+cast, from the cast library, or from a description typed on the spot, which
+joins the cast as a member with no files.
+
+The line is drawn in the sentence as a rule down its left edge in the speaker's
+own colour — dashed for a voiceover, because a voice in the room and a voice over
+the picture are the same words and a different sound — and the delivery and the
+language show only where they are not the ordinary answer. Pressing it reopens
+the menu on it: the words themselves are editable, the speaker and language and
+delivery can be changed, and **Written in the picture** becomes an undo that puts
+the words back on screen. A lead-in the menu did not write is carried through
+untouched.
+
+The `(Sx)` numbers are not typed and never appear in the box. A line holds
+`(S@vera)`, and the compiler resolves it in cast order to the guide's two-label
+form, `<Subject 1> (S1)` — so reordering the cast renumbers the speakers exactly
+as it already renumbers the subjects, and a literal ID cannot rot into pointing
+at whoever used to be first. `subjects.speakers` now numbers anyone who speaks,
+not only those with a voice reference bound to them, and a line by somebody
+nobody cast is refused by name rather than compiled.
+
+Two things fixed on the way. Every glyph in the `@` and `/` menus was drawn as a
+solid blob — the menu floats on `<body>`, outside the three roots that set
+`fill: none` — and the `/` menu's way back out of a branch could only ever be
+taken with the left arrow, because pressing it blurred the box and dismissed the
+menu under the press.
+
 **The second pass no longer melts the soundtrack** (#33). Rendering above the
 native 768 px edge runs two passes, and the refine pass held its audio the wrong
 way: it handed the sampler a clean, un-noised soundtrack part-way down the

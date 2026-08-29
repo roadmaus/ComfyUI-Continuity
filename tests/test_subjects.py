@@ -695,4 +695,53 @@ check("features alone are something behind them",
       [f.text for f in subjects.parse([{"handle": "v", "features": ["a red coat"]}])[0].features],
       ["a red coat"])
 
+# --- speakers ----------------------------------------------------------------
+#
+# `(S@anna)` is the one thing the prompt box writes that the user never types by
+# hand, and the whole reason it holds a handle rather than an `S1` is that the
+# number belongs to cast order. These check the two halves stay married: the
+# body's ID and the voice line's ID are the same number, and reordering the cast
+# moves both.
+
+_spoke = compiler.compile_request(request(
+    "(S@ben) says: <d>[English] Wait.</d> (S@anna) laughs.",
+    [image("img-1"), image("img-2")],
+    [{"handle": "anna", "from": ["img-1"]}, {"handle": "ben", "from": ["img-2"]}]))
+check("a speaker token becomes both labels the guide writes",
+      "<Subject 2> (S2) says: <d>[English] Wait.</d>" in _spoke.body, True)
+check("...and the IDs are cast order, not the order they speak in",
+      "<Subject 1> (S1) laughs." in _spoke.body, True)
+
+check("two speakers at once are one compound ID over both labels",
+      "<Subject 1> and <Subject 2> (S1,S2)" in compiler.compile_request(request(
+          "(S@anna,@ben) shout together.",
+          [image("img-1"), image("img-2")],
+          [{"handle": "anna", "from": ["img-1"]},
+           {"handle": "ben", "from": ["img-2"]}])).body, True)
+
+# A voice file already earned an ID and still does; what is new is that speaking
+# earns one too, and that the two are numbered off the same list.
+_mixed = compiler.compile_request(request(
+    "@anna waits. (S@ben) says: <d>[English] Here.</d>",
+    [image("img-1"), image("img-2"), audio("aud-1", takes="voice")],
+    [{"handle": "anna", "from": ["img-1"], "voice": "aud-1"},
+     {"handle": "ben", "from": ["img-2"]}]))
+check("a voice reference still names its speaker in the definitions",
+      "<Audio 1> is the voice-timbre reference for <Subject 1> (S1)" in _mixed.prompt, True)
+check("...and somebody who only speaks is numbered after her",
+      "<Subject 2> (S2) says:" in _mixed.body, True)
+
+# Silent characters receive no ID — section 4.4 — so nothing is allocated for a
+# cast member who is only looked at.
+check("being in the cast is not being a speaker",
+      "(S" in compiler.compile_request(request(
+          "@anna looks out of the window.", [image("img-1")],
+          [{"handle": "anna", "from": ["img-1"]}])).body, False)
+
+expect_error("a line by somebody nobody cast is refused",
+             lambda: compiler.compile_request(request(
+                 "(S@zoe) says: <d>[English] Hello.</d>", [image("img-1")],
+                 [{"handle": "anna", "from": ["img-1"]}])),
+             "speaks here")
+
 passed("the cast holds: citation, labels, features, both sections, pool, merge and standing in")
