@@ -4,6 +4,11 @@ In the fullscreen editor, press the **Continuity** wordmark at the top to open
 the tools dashboard. The benches live there; the smaller tools live on the
 node's rail.
 
+![The tools dashboard](img/dashboard.png)
+
+**Go to** switches between the pre-stage and the shot, each opening over the
+piece you already have. **Tools** opens a bench on it.
+
 ## ControlNet bench
 
 Turns footage or a photograph you already have into a guide file a render can
