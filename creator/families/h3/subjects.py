@@ -371,13 +371,66 @@ def cited(cast, texts):
     return [s for s in cast if s.handle in found]
 
 
+def here(cast, assets):
+    """The cast as *this* generation has them: claims cut to the files it carries.
+
+    A cast belongs to the piece and the files belong to a generation, so the two
+    disagree the moment a picture is taken off one shot's reference rail. That
+    press means "not out of this one" — the member stays in the piece, keeps the
+    picture on every other card, and is built here out of whatever of theirs is
+    still attached. Refusing instead made one card's deletion a piece-wide edit
+    the user had to undo on the shelf.
+
+    Only handles this generation does not carry at all. A claim on something
+    that *is* attached and is the wrong thing — a keyframe, a still where a clip
+    is wanted — is a mistake about the member rather than about this shot, and
+    `check` still says so.
+
+    A member trimmed down to nothing is refused by name: `parse` already holds
+    that a subject needs something behind it, and one whose whole account was
+    the picture that just went is a `<Subject N>` standing for nothing here.
+    """
+    present = {a.handle for a in assets}
+    out = []
+    for subject in cast:
+        keep = [h for h in subject.sources if h in present]
+        motion = subject.motion if subject.motion in present else None
+        voice = subject.voice if subject.voice in present else None
+        replaces = tuple(h for h in subject.replaces if h in present)
+        if (len(keep) == len(subject.sources) and motion == subject.motion
+                and voice == subject.voice and replaces == subject.replaces):
+            out.append(subject)
+            continue
+        if not keep and not motion and not replaces and not subject.description \
+                and not subject.features:
+            raise SubjectError(
+                f"@{subject.handle} walks on here, and the pictures they are "
+                f"built out of are not attached to this shot — attach one of "
+                f"them again, or describe what they look like, or take the name "
+                f"out of this shot's prompt"
+            )
+        out.append(Subject(
+            handle=subject.handle, sources=keep, takes=subject.takes,
+            description=subject.description, features=subject.features,
+            motion=motion, voice=voice, replaces=replaces,
+            replaces_what=subject.replaces_what if replaces else "",
+            marker=subject.marker, seeded=subject.seeded))
+    return out
+
+
 def check(cast, assets):
     """Every cited subject's files are attached here, and are the right kind.
 
     `assets` is `compile.Asset`s — whatever this one generation carries after the
-    pool has been injected. A source that is not among them is the error worth
-    catching: the label would be defined in terms of a `<Picture N>` that the
-    tokenizer is never shown.
+    pool has been injected. What is caught here is a claim on a file that *is*
+    attached and is the wrong thing for the slot: the label would otherwise be
+    defined in terms of a `<Picture N>` the tokenizer is never shown, or one it
+    is shown as something else entirely.
+
+    A claim on a handle this generation does not carry at all is not caught
+    here, because it is not a mistake — it is a member whose picture is on
+    another card. `here` cuts those away before this runs, and refuses the one
+    case that leaves a name standing for nothing.
     """
     by_handle = {a.handle: a for a in assets}
     names = {s.handle for s in cast}

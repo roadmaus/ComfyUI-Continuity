@@ -1042,6 +1042,7 @@ export const ko = {
  "in no shot yet": "아직 어떤 샷에도 없음",
  "{file} — {who}'s reference, kept with the piece because a strip of more than one segment is the only place every segment can see it. It rides into the segments that write their name; removing it here takes it away from them.": "{file} — {who} 의 레퍼런스입니다. 세그먼트가 둘 이상인 스트립에서는 모든 세그먼트가 볼 수 있는 곳이 작품 레퍼런스뿐이라 여기에 보관됩니다. 그 이름을 적은 세그먼트에 함께 실려 들어가며, 여기서 제거하면 그 인물에게서도 사라집니다.",
  "Remove @{handle} — {who} is built out of this file and loses it. Take them off the cast shelf instead to remove both at once.": "@{handle} 를 제거합니다 — {who} 는 이 파일로 이루어져 있어 함께 잃게 됩니다. 둘을 한 번에 없애려면 출연진 목록에서 제거하세요.",
+ "Remove @{handle} — {who} is built out of it and is built without it in this shot. Every other shot keeps it.": "@{handle} 제거 — {who} 는 이 파일로 이루어져 있지만, 이 숏에서는 이것 없이 구성됩니다. 다른 숏에서는 그대로 남습니다.",
  "not cited — attached to segment {list} instead": "인용되지 않음 — 대신 세그먼트 {list}에 직접 첨부됨",
  "not cited — attached to segments {list} instead": "인용되지 않음 — 대신 세그먼트 {list}에 직접 첨부됨",
  "{file} — {where}": "{file} — {where}",

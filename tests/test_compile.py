@@ -135,6 +135,16 @@ expect_error("a muted handle is still taken",
 # A keyframe is where the shot opens or closes rather than something the prompt
 # reaches for, so there is nothing for it to be out of — and a blob that queued
 # quietly without a frame the node still draws would be the worse answer.
+# A muted reference is still on the node and still on screen, so the refusal for
+# a sentence that cites one has to say which of the two things is wrong.
+expect_error("a cited reference that is muted says so",
+             lambda: build("a room with @img-2 on the table",
+                           assets=[image("img-1"), image("img-2", enabled=False)]),
+             "but it is muted")
+expect_error("...and a citation of nothing still reads as nothing",
+             lambda: build("a room with @img-2 on the table", assets=[image("img-1")]),
+             "no such asset is attached")
+
 expect_error("a keyframe cannot be muted",
              lambda: build(assets=[image("img-1", "first_frame", enabled=False)]),
              "only a reference can be muted")

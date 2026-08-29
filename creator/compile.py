@@ -920,7 +920,7 @@ def _keyframe_labels(first_frame, last_frame, seam_presented=False,
     return labels
 
 
-def _substitute(prompt, labels, assets, where="prompt"):
+def _substitute(prompt, labels, assets, where="prompt", muted=()):
     """Replace every `@handle` with its H3 label.
 
     Only handles that name a real asset are touched, so ordinary prose ("meet me
@@ -939,6 +939,21 @@ def _substitute(prompt, labels, assets, where="prompt"):
     known = {a.handle for a in assets}
     known.update(panel.handle for a in assets for panel in a.panels)
     dangling = sorted({h for h in HANDLE_RE.findall(prompt) if h not in known})
+    # A muted reference is attached and on screen, so "no such asset" is a lie
+    # about the one case where the user is looking straight at the file. It is
+    # still a refusal: the label it would take names a picture this run does not
+    # send, and a sentence about a picture the model never sees is not the
+    # sentence that was written.
+    silent = sorted(h for h in dangling if h in set(muted))
+    if silent:
+        one = len(silent) == 1
+        raise CompileError(
+            f"{where} references " + ", ".join("@" + h for h in silent)
+            + (" but it is muted — unmute it to send the picture, or take the "
+               "mention out to render without it" if one else
+               " but they are muted — unmute them to send the pictures, or take "
+               "the mentions out to render without them")
+        )
     if dangling:
         raise CompileError(
             f"{where} references " + ", ".join("@" + h for h in dangling)
@@ -1267,6 +1282,12 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     family_grammar = grammar.of(family)
 
     assets = _parse_assets(data.get("assets"))
+    # Muted references are dropped by the parse above, so by the time a citation
+    # of one is walked it looks exactly like a citation of nothing. Kept here so
+    # the refusal can say which of the two it is — see `_substitute`.
+    muted = {str(item.get("handle") or "").strip()
+             for item in (data.get("assets") or [])
+             if item.get("enabled") is False}
 
     # The cast, cut down to the subjects this generation actually cites. Read
     # before any substitution, because a citation is `@anna` in what the user
@@ -1394,6 +1415,12 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
                                   family_grammar)
 
     try:
+        # The cast as this generation has them. A member's pictures are the
+        # piece's and the row is a shot's, so a picture taken off one card is
+        # not a claim gone wrong — it is the member as that card has them. See
+        # `subjects.here`; everything else a claim can get wrong is still
+        # `check`'s.
+        cast = subjects.here(cast, assets)
         subjects.check(cast, assets)
     except subjects.SubjectError as exc:
         raise CompileError(str(exc)) from exc
@@ -1404,7 +1431,7 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     # stored in that form. Switching the panel's toggle off falls back here
     # rather than anywhere downstream, so nothing else has to know it exists.
     body = _substitute_subjects(
-        _substitute(raw_body, labels, assets), cast, subject_labels)
+        _substitute(raw_body, labels, assets, muted=muted), cast, subject_labels)
 
     # Trigger words come from the LoRAs that are actually in this run — an entry
     # set to the other checkpoint contributes neither weights nor words. Keyed on
@@ -1480,14 +1507,14 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     # does in a shot body.
     soundscape = _substitute_subjects(
         _substitute(str(data.get("soundscape") or ""), labels, assets,
-                    where="overall_soundscape"), cast, subject_labels)
+                    where="overall_soundscape", muted=muted), cast, subject_labels)
     music = _substitute_subjects(
         _substitute(str(data.get("music") or ""), labels, assets,
-                    where="non_diegetic_music"), cast, subject_labels)
+                    where="non_diegetic_music", muted=muted), cast, subject_labels)
     sections = raw_sections
     if sections:
         sections = {name: _substitute_subjects(
-                        _substitute(text, labels, assets, where=name),
+                        _substitute(text, labels, assets, where=name, muted=muted),
                         cast, subject_labels)
                     for name, text in sections.items()}
 

@@ -803,6 +803,9 @@ kle_payload, kle = klein_graph(klein_blob(
 
 check("each picture is scaled and encoded exactly once",
       (len(kle["ImageScaleToTotalPixels"]), len(kle["VAEEncode"])), (2, 2))
+check("...on the snap the core requires a value for",
+      sorted(i["resolution_steps"] for _, i in kle["ImageScaleToTotalPixels"]),
+      [16, 16])
 check("...and chained onto both conditionings",
       len(kle["ReferenceLatent"]), 4)
 kle_guider = kle["CFGGuider"][0][1]

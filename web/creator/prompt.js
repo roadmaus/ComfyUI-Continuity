@@ -162,6 +162,10 @@ export class PromptBox {
    *   box a keystroke ago and are not in it now. Deleting a chip is how this
    *   redesign takes a reference or a cast member out of a shot, so the host has
    *   to hear about it — see `CreatorEditor.dropCited`.
+   * @param {(handles:string[])=>void} [hooks.onCited]  chips that are in the box
+   *   now and were not a keystroke ago. The other half of `onUncited`: deleting
+   *   a mention mutes the reference, so writing one back has to bring it live
+   *   again — see `CreatorEditor.liveCited`.
    */
   constructor(hooks) {
     this.hooks = hooks;
@@ -713,6 +717,12 @@ export class PromptBox {
     // anywhere" about the text as it now stands rather than as it was.
     const gone = [...before].filter((handle) => !this.chipped.has(handle));
     if (gone.length) this.hooks.onUncited?.(gone);
+    // Both directions off the same census, because both are the same gesture:
+    // the mention is what puts a picture in the shot, so a chip that reappears
+    // — retyped, pasted, undone back into place — is the reference asking to be
+    // sent again.
+    const back = [...this.chipped].filter((handle) => !before.has(handle));
+    if (back.length) this.hooks.onCited?.(back);
     this.syncExcerpt();
     this.reportOverflow();
     const trigger = this.triggerRange();

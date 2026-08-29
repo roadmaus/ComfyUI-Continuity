@@ -353,6 +353,7 @@ export class CreatorEditor {
       // side.
       onCastChip: (handle) => this.openCastMember(handle),
       onUncited: (handles) => this.dropCited(handles),
+      onCited: (handles) => this.liveCited(handles),
     });
     // Leaving the box arms the escalation again — see `onPromptOverflow`.
     this.prompt.root.addEventListener("blur", () => { this.overflowWaived = false; });
@@ -1039,6 +1040,42 @@ export class CreatorEditor {
   }
 
   /**
+   * A mention written back: the reference it names is live again.
+   *
+   * The inverse of `dropCited`, and it exists because the pair is one gesture.
+   * Deleting a chip mutes the picture rather than binning it, so the file, the
+   * handle and the narrowing are all still there to bring back — and writing the
+   * name again is the only thing "bring it back" could mean. Without this the
+   * card queued into a refusal instead: the sentence cites a picture the run
+   * does not send, which `compile._substitute` will not compile.
+   *
+   * References only, and only this card's own. A keyframe is never muted, and
+   * the pool belongs to the piece — an uncited pool asset is simply not injected,
+   * so there is nothing there to wake.
+   */
+  liveCited(handles) {
+    if (!handles?.length) return;
+    let woken = false;
+    for (const asset of this.state.assets) {
+      if (asset.role !== "reference" || !S.muted(asset)) continue;
+      if (!handles.includes(asset.handle)) continue;
+      delete asset.enabled;
+      // A reference coming back can overrun a limit that was legal while it was
+      // muted — the same check the mute button answers to, and the same
+      // rollback, except that here the sentence is what asked.
+      const problem = S.overflow(this.state, this.piece);
+      if (problem) {
+        asset.enabled = false;
+        this.flash(t("@{handle} stays muted — {problem}",
+                     { handle: asset.handle, problem }));
+        continue;
+      }
+      woken = true;
+    }
+    if (woken) this.commit();
+  }
+
+  /**
    * Everything about one reference, opened from its name.
    *
    * The row of chips this replaces had one button per narrowing, sized to fit a
@@ -1300,7 +1337,51 @@ export class CreatorEditor {
 
   remove(handle, { silent = false } = {}) {
     this.state.assets = this.state.assets.filter((a) => a.handle !== handle);
+    this.releaseHere(handle);
     if (!silent) this.commit();
+  }
+
+  /**
+   * A picture leaving this shot's rail: the cast built out of it is built
+   * without it here.
+   *
+   * Taking it off one card is not taking it off the member. The cast belongs to
+   * the piece and the row belongs to a shot, so `subjects.here` builds each
+   * member out of whatever of theirs the generation in hand carries — the card
+   * ahead of this one still has them whole, and nothing on the shelf has to be
+   * put back afterwards.
+   *
+   * What is swept here is only the claim that now names nothing anywhere: no
+   * other card's row and no pool entry holds the handle, so the shelf would
+   * draw a `?` tile for a file that is gone from the piece. A member whose whole
+   * account was that picture keeps the dead claim instead — dropping it would
+   * leave a name standing for nothing, which is the one thing `subjects.parse`
+   * refuses, and the refusal `subjects.here` writes says what to do about it.
+   */
+  releaseHere(handle) {
+    const rows = [
+      ...(this.castPiece.assets ?? []),
+      ...(this.castPiece.segments ?? []).flatMap((segment) => segment.assets ?? []),
+      ...(this.state.assets ?? []),
+    ];
+    if (rows.some((asset) => asset.handle === handle)) return;
+    for (const subject of this.castPiece.subjects ?? []) {
+      const claims = [...S.subjectFiles(subject), ...S.replacesOf(subject)];
+      if (!claims.includes(handle)) continue;
+      const left = claims.filter((h) => h !== handle);
+      if (!left.length && !subject.description && !S.subjectFeatures(subject).length) continue;
+      if (Array.isArray(subject.from)) {
+        subject.from = subject.from.filter((h) => h !== handle);
+      }
+      for (const slot of ["motion", "voice"]) {
+        if (subject[slot] === handle) delete subject[slot];
+      }
+      if (S.replacesOf(subject).includes(handle)) {
+        const rest = S.replacesOf(subject).filter((h) => h !== handle);
+        if (rest.length) subject.replaces = rest;
+        else { delete subject.replaces; delete subject.replaces_what; }
+      }
+    }
   }
 
   /** Pixel sizes for the adaptive-canvas readout: the frames, and every
@@ -2138,8 +2219,19 @@ export class CreatorEditor {
       // already the door onto its card. So it is a glyph beside the ✕, in the
       // row where the other thing you can do to a whole file lives.
       if (asset.role === "reference") parts.push(this.muteButton(asset));
+      // What the press means where a name is built out of the file: this shot
+      // loses it and nobody else does — see `releaseHere`. Said on the button
+      // because the row marks a cast file and does not say what happens to it.
+      const owners = (this.castPiece.subjects ?? []).filter(
+        (subject) => S.subjectFiles(subject).includes(asset.handle)
+                     || S.replacesOf(subject).includes(asset.handle));
       parts.push(el("button", {
-        class: "mmc-asset-x", text: "✕", title: t("Remove @{handle}", { handle: asset.handle }),
+        class: "mmc-asset-x", text: "✕",
+        title: owners.length
+          ? t("Remove @{handle} — {who} is built out of it and is built without it "
+            + "in this shot. Every other shot keeps it.",
+              { handle: asset.handle, who: owners.map((s) => `@${s.handle}`).join(", ") })
+          : t("Remove @{handle}", { handle: asset.handle }),
         onclick: () => this.remove(asset.handle),
       }));
       return el("div", {

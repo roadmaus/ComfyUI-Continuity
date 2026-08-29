@@ -140,8 +140,12 @@ def emit_graph(graph, payload, sampling, weights, clip, vae, model, unique_id,
     # slots and no method to pick — the base weights read the chain natively.
     for name in payload.refs:
         image = graph.node("LoadImage", image=name).out(0)
+        # resolution_steps is required on current cores and gets no default
+        # injected for a prompt that omits it, so it is always sent; 16 is the
+        # family's own snap, the same one the canvas takes.
         scaled = graph.node("ImageScaleToTotalPixels", image=image,
-                            upscale_method="lanczos", megapixels=1.0).out(0)
+                            upscale_method="lanczos", megapixels=1.0,
+                            resolution_steps=16).out(0)
         latent = graph.node("VAEEncode", pixels=scaled, vae=vae).out(0)
         positive = graph.node("ReferenceLatent", conditioning=positive,
                               latent=latent).out(0)

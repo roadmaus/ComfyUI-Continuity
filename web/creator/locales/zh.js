@@ -1043,6 +1043,7 @@ export const zh = {
  "in no shot yet": "尚未出现在任何镜头",
  "{file} — {who}'s reference, kept with the piece because a strip of more than one segment is the only place every segment can see it. It rides into the segments that write their name; removing it here takes it away from them.": "{file} — 这是 {who} 的参考素材。片段多于一个时，只有作品参考区是每个片段都能看到的位置，因此保存在这里。它会随写有该名字的片段一起进入生成；在此删除，该角色也会失去它。",
  "Remove @{handle} — {who} is built out of this file and loses it. Take them off the cast shelf instead to remove both at once.": "移除 @{handle} — {who} 正是由这个文件构成，会一并失去。若要同时移除两者，请在演员表中删除该角色。",
+ "Remove @{handle} — {who} is built out of it and is built without it in this shot. Every other shot keeps it.": "移除 @{handle} — {who} 由它构成，但在这个镜头里将不带它构成。其他镜头仍保留它。",
  "not cited — attached to segment {list} instead": "未被引用——而是直接附加在片段 {list} 上",
  "not cited — attached to segments {list} instead": "未被引用——而是直接附加在片段 {list} 上",
  "{file} — {where}": "{file}——{where}",

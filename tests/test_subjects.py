@@ -313,11 +313,29 @@ _uncited = compiler.compile_request(request(
 check("an uncited subject is not resolved and not refused",
       "<Subject" in _uncited.prompt, False)
 
-expect_error("a cited subject whose files are missing is refused",
+# A picture taken off this shot's reference rail is taken off it *here*. The
+# cast belongs to the piece, so the claim stays on the member and the card ahead
+# of this one still has them whole — this generation simply builds them out of
+# what it carries. See `subjects.here`.
+_partly = compiler.compile_request(request(
+    "@anna walks in.", [image("img-1")],
+    [{"handle": "anna", "from": ["img-1", "img-9"]}]))
+check("a claim this shot does not carry is dropped for this shot",
+      "<Subject 1> is the person in <Picture 1>." in _partly.prompt, True)
+_worded = compiler.compile_request(request(
+    "@anna walks in.", [image("img-1", takes="scene")],
+    [{"handle": "anna", "from": ["img-9"],
+      "description": "a woman in her thirties"}]))
+check("...and somebody left with only their words still walks on",
+      "<Subject 1> is a woman in her thirties." in _worded.prompt, True)
+
+# Nothing left at all is still refused: the name would reach the model standing
+# for a picture nobody sent and a description nobody wrote.
+expect_error("a cited subject whose files are all missing is refused",
              lambda: compiler.compile_request(request(
                  "@anna walks in.", [image("img-1")],
                  [{"handle": "anna", "from": ["img-9"]}])),
-             "not attached to this generation")
+             "not attached to this shot")
 expect_error("a subject cannot be built out of a keyframe",
              lambda: compiler.compile_request(request(
                  "@anna walks in.",
