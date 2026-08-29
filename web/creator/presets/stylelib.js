@@ -38,6 +38,7 @@
 
 import { describe, setStyleVocabulary } from "../presets.js";
 import { ATLAS, CATEGORIES, STYLES } from "./atlas.js";
+import { CUTS } from "./atlasstyle.js";
 
 export { ATLAS } from "./atlas.js";
 
@@ -47,64 +48,45 @@ export { ATLAS } from "./atlas.js";
 // opening clause of the caption's `integrated_multimodal_description` field —
 // the text before the first action beat". The split is by *action*, so a clip's
 // scene and its cast ride along in front of the beat and land in the descriptor
-// whole.
+// whole. Applied unchanged, asking for LEGO also asks for a chef minifig and a
+// stovetop fire, and everybody using this tab deletes half of what Apply wrote.
 //
-// What that costs, measured over all 941: seventy-two carry a literal `(S1)` —
-// the dataset's own subject token, which means nothing to this pack and less to
-// the model — and seventy-six open onto a named character. A hundred and
-// sixty-one are cut off at exactly 250 characters, mid-word, because that is
-// where the atlas page truncates. All of it went into the prompt verbatim, so
-// asking for LEGO used to also ask for a chef minifig and a stovetop fire.
+// This used to be cut here, at runtime, by three regexes and a list of nouns —
+// fisherman, chef, dentist — written by reading the 941 rows that happened to be
+// vendored. Measured against a cut made by hand over the same 941, that rule
+// left the scene standing in **four hundred** of them: no noun in its list
+// appears in "along a brick-built jousting lane lined with cheering crowd
+// minifigs", so nothing fired and the whole chain went into the prompt. It also
+// over-cut thirty, dropping real grain and lighting along with the scene.
 //
-// So the clause chain is walked and stopped at the first clause that is about
-// something rather than about how it looks: one opening on a locative
-// preposition ("inside a brick-built restaurant kitchen set"), one naming a
-// person, or one with a verb in it. The first clause is always kept — it names
-// the medium and it is the one thing every entry has.
+// So the cut is not computed any more. It was made once, per style, reviewed,
+// and committed as `tools/style_cuts.jsonl`; `tools/distil_style_atlas.py`
+// compiles that into `atlasstyle.js` beside this file, and what is left here is
+// a lookup.
 //
-// This is a *cut*, never a rewrite. Nothing is invented, no clause is reordered,
-// and the verbatim descriptor is kept beside it — it is what the search reads
-// and what the inspector shows as provenance. Rewriting nine hundred phrases is
-// how a catalogue stops matching the pictures under it.
+// Nothing in it is a rewrite of upstream. Every cut is a *prefix* of its
+// descriptor's clause chain, so the words are upstream's and in upstream's
+// order; the handful that differ inside those clauses are the generalisations
+// listed one per line in the decision file, made because fifty-seven descriptors
+// carry literal on-screen text that H3 will render as text — a timestamp, a
+// scoreboard, `"ROUND 1 FIGHT"` — and thirty weld the lighting to a room.
 //
-// Here rather than in `atlas.js` deliberately: that file is a mirror of upstream
-// and regenerating it must not be able to undo this.
-
-/** The dataset's subject token — `(S1)`, `(S2)`. A reference to a character
- *  defined elsewhere in a caption this pack never had. */
-const SUBJECT_TOKEN = /\s*\(S\d+\)/g;
-
-/** A clause that opens on one of these is siting the shot, not describing it. */
-const LOCATIVE = /^(?:on|in|inside|at|across|along|atop|down|through|under|over|outside|beside|behind|beneath|from|before|amid|among|against|within|near|past|around|throughout)\s/;
-
-/** Somebody in the frame: a determiner, then within a clause's reach, a person.
- *  Determiner-anchored so "fingerprint ridges across every clay surface" — which
- *  is texture, not cast — survives. Possessives are not in the list: they change
- *  the cut on none of the 941, because a clause that introduces somebody opens on
- *  an article, and a clause that refers back to them has already been cut. */
-const PEOPLE = /\b(?:a|an|the|two|three|four|five|six|their|its)\b.{0,60}?\b(?:m[ae]n|wom[ae]n|boy|girl|kid|child|teen\w*|fisherman|chef|dentist|farmer|punk|figures?|minifigs?|puppet\w*|worker|driver|soldier|dancer|singer|astronaut|alien|mechanic|crew|gnomes?|creatures?|anchor|host|stranger|couple|family|hands?)\b/;
-
-/** Something happening. A style holds still; a beat does not. */
-const ACTION = /\b(?:flips?|bursts?|hoists?|wrench\w*|plants?|blinks?|hops?|swarms?|walks?|runs?|turns?|steps?|leans?|opens?|slams?|lifts?|drops?|reaches?|pulls?|pushes?|sits?|stands?|waits?|enters?|exits?)\b/;
+// The verbatim descriptor is kept where it is cut: it is what the search reads
+// and what the inspector shows as provenance.
+//
+// A clip with no decision falls back to its verbatim descriptor rather than to a
+// guess, and `test_style_atlas.py` fails when there is one — so a re-vendor that
+// adds a style is a red test, not a scene quietly back in somebody's prompt.
 
 /**
- * The look alone, out of one atlas descriptor.
+ * The look alone, for one atlas clip.
  *
- * @param {string} phrase  the descriptor, verbatim
+ * @param {string} clip    the clip id the style was read off
+ * @param {string} phrase  the descriptor, verbatim — the fallback
  * @returns {string}  its style clauses, in their own order and words
  */
-export function distil(phrase) {
-  const clauses = String(phrase).replace(SUBJECT_TOKEN, "").split(", ")
-    .map((clause) => clause.trim()).filter(Boolean);
-  const kept = [];
-  for (const [index, clause] of clauses.entries()) {
-    const lower = clause.toLowerCase();
-    // The first clause names the medium and is never in question — "Claymation",
-    // "Live-action". Every one after it has to earn its place.
-    if (index && (LOCATIVE.test(lower) || PEOPLE.test(lower) || ACTION.test(lower))) break;
-    kept.push(clause);
-  }
-  return kept.join(", ");
+export function distil(clip, phrase) {
+  return CUTS[clip] ?? String(phrase);
 }
 
 /** Where a descriptor stops being the name of a medium and starts being the
@@ -145,9 +127,9 @@ let rows = null;
  */
 export function styleRows() {
   if (rows) return rows;
-  setStyleVocabulary(STYLES.flatMap(([, phrase]) => [distil(phrase), phrase]));
+  setStyleVocabulary(STYLES.flatMap(([, phrase, clips]) => [distil(clips[0], phrase), phrase]));
   rows = STYLES.map(([category, phrase, clips]) => {
-    const style = distil(phrase);
+    const style = distil(clips[0], phrase);
     const { lead, rest } = split(style);
     const data = {
       style: {
