@@ -1353,22 +1353,123 @@ export const css = `
 .mmc-dash-card:active { transform: translateY(0); }
 .mmc-dash-card:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 2px; }
 
-/* The plate, and the one piece of decoration on this surface.
+/* The plate: the piece, in the treatment the tool asks for.
  *
- * It carries the tool's own glyph — the fifteen-pixel drawing off the rail — at
- * poster size, anchored to the plate's lower-left and cropped by its bottom
- * edge. Cropped deliberately: a glyph centred in a box is an icon with padding,
- * and the grid was then eight boxes of the same shape distinguished by a small
- * shape in the middle of each. Run off the edge it is a picture the card is
- * showing, and across a row of them the plates are what the eye tells apart
- * before it reads a single name.
+ * Every card on this surface holds the same picture — whatever frame the piece
+ * behind the surface is carrying — and the difference between one card and the
+ * next is what it does to that picture. So the plate is a window on the work
+ * rather than a coloured box with a symbol in it, and the grid is legible
+ * before a single name is read, which is the job a plate has.
+ *
+ * Sixteen by nine and not a fixed height: what is in it is footage, and footage
+ * has a shape. A frame that is not sixteen by nine is cropped to it rather than
+ * letterboxed — a card is a poster for a piece, not a viewer of it.
  */
 .mmc-dash-plate {
-  position: relative; flex: none; height: 96px; overflow: hidden;
+  position: relative; flex: none; aspect-ratio: 16 / 9; overflow: hidden;
   background: var(--mmc-tint); border-bottom: 1px solid var(--mmc-line);
 }
+/* Any picture on a plate, at the plate's size. */
+.mmc-dash-shot {
+  position: absolute; inset: 0; display: block; width: 100%; height: 100%;
+  object-fit: cover; background: var(--mmc-tint);
+}
+/* The lean toward the card under the pointer. Only the plain plates — a split
+   or a deck has its own move and two at once is a card that swims. */
+.mmc-dash-card:hover > .mmc-dash-plate > .mmc-dash-shot { transform: scale(1.035); }
+.mmc-dash-plate > .mmc-dash-shot { transition: transform 320ms cubic-bezier(.2, .7, .3, 1); }
+
+/* The strip: the frame, ruled into frames.
+   The two hairlines are the whole treatment — they are what says footage rather
+   than photograph, on a card whose shot has not been rendered yet. */
+.mmc-dash-strip { position: absolute; inset: 0; }
+.mmc-dash-strip .mmc-dash-shot { transition: transform 320ms cubic-bezier(.2, .7, .3, 1); }
+.mmc-dash-card:hover .mmc-dash-strip .mmc-dash-shot { transform: scale(1.035); }
+/* The same hairline the seam is drawn in, for the same reason: a light rule with
+   a dark shadow under it is the one line that stays visible over any frame. */
+.mmc-dash-frames {
+  position: absolute; inset: 0;
+  --rule: linear-gradient(to right, rgba(0, 0, 0, .5) 0 1px, rgba(255, 255, 255, .62) 1px 2px);
+  background: var(--rule) 33.33% 0 / 2px 100% no-repeat,
+              var(--rule) 66.66% 0 / 2px 100% no-repeat;
+}
+
+/* The comparison plates — the tracing and the upscale.
+ *
+ * One picture and what the tool makes of it, with a seam across it: on the left
+ * the tool's own output — a depth pass, a low-resolution copy — and on the right
+ * the frame it was handed. The pointer moves the seam, and
+ * it moves in the direction of the tool — the tracing takes the frame over, the
+ * upscale gives it back sharp — so hovering a card is the card demonstrating
+ * itself rather than a card lighting up.
+ */
+/* Registered, because a bare custom property is a string and a string does not
+   tween: without this the seam jumps to its hover position instead of sliding. */
+@property --wipe { syntax: "<percentage>"; inherits: true; initial-value: 55%; }
+.mmc-dash-split {
+  position: absolute; inset: 0; --wipe: 55%;
+  transition: --wipe 340ms cubic-bezier(.2, .7, .3, 1);
+}
+/* The layer the seam cuts. Clipped rather than sized, so both copies stay the
+   same picture in the same place and only how much of one you see changes. */
+.mmc-dash-wipe { position: absolute; inset: 0; clip-path: inset(0 calc(100% - var(--wipe)) 0 0); }
+.mmc-dash-wipe-right { clip-path: inset(0 0 0 var(--wipe)); }
+/* The cut itself. A hairline of light, because a seam that is a border reads as
+   two pictures side by side and this is one picture in two states. */
+.mmc-dash-seam {
+  position: absolute; top: 0; bottom: 0; left: var(--wipe); width: 1px;
+  background: rgba(255, 255, 255, .62); box-shadow: 0 0 6px rgba(0, 0, 0, .55);
+}
+/* And the small copy, blown up. The canvas is thirty-two pixels wide and the
+   browser is told not to smooth it, so what the seam is comparing is resolution
+   and not sharpening. */
+.mmc-dash-blocks { image-rendering: pixelated; }
+/* Under the pointer the seam is dragged rather than animated — see follows() in
+   navigate.js, which writes the property inline and so wins over everything
+   here. While it is being held the tween is off, or the seam trails the hand.
+   The keyboard has no x to read, so a card reached by tabbing plays the move
+   the pointer would have made: the tracing takes the frame over, the upscale
+   hands it back sharp. */
+.mmc-dash-split-held { transition: none; }
+.mmc-dash-card:focus-visible .mmc-dash-split { --wipe: 78%; }
+.mmc-dash-card:focus-visible .mmc-dash-split-out { --wipe: 22%; }
+
+/* The deck: the same frame three times, because a preset is a setup you can put
+   back. The copies behind are dimmed and tilted rather than blurred — they are
+   the same picture at another moment, not an out-of-focus one — and the deck
+   spreads under the pointer. */
+/* The deck needs a table under it. The plate's own tint is a hair off the card
+   and the backs of these cards are nearly black, so the stack merged into the
+   ground and read as one picture with a smudge beside it. A lighter ground with
+   a pool of light where the deck sits: the cards are objects on a surface, which
+   is the only reason the treatment says anything. */
+.mmc-dash-deck {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(120% 95% at 46% 42%,
+                    color-mix(in srgb, var(--mmc-ink) 13%, transparent), transparent 74%),
+    var(--mmc-surface-3);
+}
+.mmc-dash-deck .mmc-dash-shot {
+  border-radius: 6px; transform-origin: 50% 100%;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, .62);
+  transition: transform 320ms cubic-bezier(.2, .7, .3, 1), opacity 220ms ease;
+}
+.mmc-dash-deck-3 { transform: scale(.8) rotate(-9deg) translate(-13%, -5%); opacity: .38; }
+.mmc-dash-deck-2 { transform: scale(.8) rotate(-4.5deg) translate(-6%, -2%); opacity: .62; }
+.mmc-dash-deck-1 { transform: scale(.8) rotate(1.5deg) translate(3%, 1%); }
+.mmc-dash-card:hover .mmc-dash-deck-3 { transform: scale(.8) rotate(-15deg) translate(-22%, -8%); opacity: .5; }
+.mmc-dash-card:hover .mmc-dash-deck-2 { transform: scale(.8) rotate(-7.5deg) translate(-11%, -4%); opacity: .76; }
+.mmc-dash-card:hover .mmc-dash-deck-1 { transform: scale(.8) rotate(3.5deg) translate(6%, 2%); }
+
+/* The first day, and the fallback everywhere else: no picture on the piece, so
+ * the card wears its own glyph at poster size, anchored to the plate's lower
+ * left and cropped by its bottom edge. Cropped deliberately — a glyph centred
+ * in a box is an icon with padding, and a grid of those is eight boxes of the
+ * same shape distinguished by a small shape in the middle of each.
+ */
 .mmc-dash-glyph {
-  position: absolute; left: -4px; bottom: -30px; display: flex;
+  position: absolute; left: -4px; bottom: -34px; display: flex;
   transition: transform 220ms cubic-bezier(.2, .7, .3, 1);
 }
 /* Hairline weight, because the stroke scales with the drawing: the 1.6 the rail
@@ -1416,12 +1517,12 @@ export const css = `
 @media (prefers-reduced-motion: reduce) {
   .mmc-dash-card { animation: none; }
   .mmc-dash-card:hover { transform: none; }
-  .mmc-dash-glyph, .mmc-fs-caret { transition: none; }
+  .mmc-dash-glyph, .mmc-fs-caret, .mmc-dash-split,
+  .mmc-dash-deck .mmc-dash-shot, .mmc-dash-plate > .mmc-dash-shot { transition: none; }
 }
 @media (max-width: 720px) {
   .mmc-dash-sheet { padding: 24px 18px 32px; }
   .mmc-dash-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
-  .mmc-dash-plate { height: 84px; }
 }
 
 `;

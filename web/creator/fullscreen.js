@@ -54,6 +54,7 @@
 
 import { app } from "../../../scripts/app.js";
 import { api } from "../../../scripts/api.js";
+import { viewUrl } from "./api.js";
 import { el, icon, mark } from "./dom.js";
 import { buildDashboard } from "./navigate.js";
 import { openControl } from "./control.js";
@@ -68,6 +69,27 @@ import * as S from "./state.js";
  *  from the entry point, because the entry point imports this. */
 const PIECE = ["MiniMaxH3Creator", "MiniMaxH3Timeline"];
 const PRESTAGE = "MiniMaxH3PreStage";
+
+/**
+ * A tool card's plate.
+ *
+ * The two Go-to cards show the piece, because the piece is what they take you
+ * to. A bench does not: it is a room of its own with its own subject, and the
+ * first cut of this surface — every card cut from whatever frame the piece was
+ * carrying — put the same photograph on the grid five times over.
+ *
+ * So each tool has a picture of its own, shipped beside the code. They are one
+ * set on purpose: a black stage, one warm key, deep falloff, no text and no
+ * faces. And each was chosen for what its card *does* to it — the mannequin and
+ * its rigging because a depth pass over it is a figure you can read at a glance,
+ * the knurled lens barrel because the detail on it visibly dies at forty-four
+ * pixels wide. The ControlNet card ships two: the frame, and the depth map the
+ * bench itself made of it.
+ *
+ * Off `import.meta.url`, so the installed folder's name stays the browser's
+ * business — the same trick `presets/atlasref.js` uses for the atlas.
+ */
+const cardArt = (name) => new URL(`./cards/${name}.webp`, import.meta.url).href;
 
 /** The open editor, or null. One at a time: it is the window. */
 let open = null;
@@ -801,18 +823,29 @@ class Fullscreen {
     const body = this.front?.mmcBody;
     const editor = body?.editor ?? body;
     const strip = this.node.mmcBody?.showsStrip?.();
+    // What the two Go-to cards are made of: the piece itself. The tools carry
+    // their own plates — see `cardArt` for why the two halves of this surface
+    // are pictured differently.
+    const still = this.pieceFrame();
+    const clip = this.shown?.shot && !this.shown.shot.isImage ? this.shown.shot.url : null;
     return [
       { title: t("Go to"), items: [
         { label: t("Pre-stage"), glyph: "image",
           sub: t("The still this shot is built on, alone in the middle of the screen"),
+          art: { kind: "still", url: still },
           go: () => this.goTo("pre") },
         { label: strip ? t("Strip") : t("Shot"), glyph: "video",
           sub: t("The video — the prompt, the cast and everything the render reads"),
+          // The rendered clip if there is one, and the still it was built from
+          // cut into frames if there is not: the card says what the shot *is* so
+          // far, and never repeats the pre-stage card's photograph whole.
+          art: clip ? { kind: "clip", url: clip } : { kind: "strip", url: still },
           go: () => this.goTo("shot") },
       ] },
       { title: t("Tools"), items: [
         { label: t("Presets"), sub: t("Apply a saved setup, or save this one"),
           glyph: "star",
+          art: { kind: "deck", url: cardArt("presets") },
           go: () => openPresetLibrary({
             target: editor?.presetTarget?.() ?? body?.pieceTarget?.() ?? null,
           }).then(() => editor?.render?.()) },
@@ -821,12 +854,15 @@ class Fullscreen {
         // are the two places this piece can take one.
         { label: t("ControlNet"), glyph: "pen",
           sub: t("Trace footage into edges, lines or tones — then aim a render at it"),
+          art: { kind: "trace", url: cardArt("controlnet"),
+                 made: cardArt("controlnet-depth") },
           go: () => openControl({ targets: this.guideTargets(), back: () => this.openDash() }) },
         // The other bench, and the one with no doors: what it makes is the
         // finished file rather than something a render reads, so it lands on a
         // shelf beside the renders and nothing here has to take it anywhere.
         { label: t("Upscale"), glyph: "expand",
           sub: t("Make a still or a clip bigger — the file itself, not a new render"),
+          art: { kind: "scale", url: cardArt("upscale") },
           go: () => openUpscale({
             source: this.lastTake(), targets: this.upscaleTargets(),
             // The way back. A card opened a room; its wordmark is what puts the
@@ -836,6 +872,32 @@ class Fullscreen {
           }) },
       ] },
     ];
+  }
+
+  /**
+   * The piece's frame: what the Go-to cards are pictures of.
+   *
+   * A piece has several places one could come from, and this takes them in the
+   * order of how much each is the thing on the screen right now: the still that
+   * was just rendered, the still it was rendered from, a reference somebody
+   * attached to the pre-stage, a reference on the piece's own shelf.
+   *
+   * Null on a piece with nothing on it at all, and those two cards fall back to
+   * their glyphs — the honest answer on the first day, rather than a stand-in
+   * picture of work nobody has done yet.
+   *
+   * Previews rather than originals: two cards holding the same 4000-pixel PNG
+   * is the picker's old mistake, and core re-encodes on request.
+   */
+  pieceFrame() {
+    const shown = this.shown?.pre ?? (this.shown?.shot?.isImage ? this.shown.shot : null);
+    if (shown?.url) return shown.url;
+    const pre = preStageOf(this.node)?.mmcBody?.state;
+    const attached = pre?.init?.filename
+      ?? (pre?.refs ?? []).find((ref) => ref.filename)?.filename
+      ?? (this.node.mmcBody?.timeline?.assets ?? [])
+           .find((asset) => asset.filename && asset.kind !== "video")?.filename;
+    return attached ? viewUrl(attached, { preview: true }) : null;
   }
 
   /**

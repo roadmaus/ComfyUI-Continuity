@@ -2,6 +2,23 @@
 
 ## Unreleased
 
+**The tools dashboard is pictures now.** Every card behind the wordmark wore the
+same rounded box with a grey glyph cropped into the corner, so the grid was six
+shapes distinguished by their captions — nothing on it invited a press. Each card
+now opens on a picture, and what the card does to that picture is what the tool
+does to a frame: ControlNet's is cut down the middle against a real depth pass of
+itself, upscale's against a low-resolution copy of itself, presets' is dealt out
+as a deck. Both seams are dragged rather than animated — they sit wherever the
+pointer is.
+
+The two Go-to cards show the piece you are on — the pre-stage still, and the same
+still ruled into frames for a shot that has not rendered yet — because that is
+what they take you to. The benches carry plates of their own, shipped in
+`web/creator/cards/`: one set, one warm key on black, each picture chosen for what
+its card does to it — and ControlNet's ships two, the frame and the depth map the
+bench itself made of it, rather than a browser filter standing in for one. A piece
+with nothing on it yet still falls back to the glyph.
+
 **`@` opens on what is attached, not on the cast.** The menu led with everybody
 in the piece, which is an argument about what matters in a prompt rather than
 about the moment somebody types `@` — the picture they just dropped on the card
