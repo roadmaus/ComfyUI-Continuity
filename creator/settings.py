@@ -42,8 +42,7 @@ FILE = "continuity.settings.json"
 
 # What this file was called when the pack was called MiniMax Creator. Read as a
 # fallback and never written, so an install that has one keeps its encoder
-# quality and — more to the point — its output folders. `docs/RENAME.md` has the
-# rule this follows: a rename does not get to move where somebody's renders land.
+# quality and — more to the point — its output folders. The rule this follows: a rename does not get to move where somebody's renders land.
 # Delete this and the `load` branch below one release after the rename ships.
 LEGACY_FILE = "minimax_creator.settings.json"
 

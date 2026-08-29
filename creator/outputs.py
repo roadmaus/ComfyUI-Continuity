@@ -25,8 +25,8 @@ import re
 # in the picker: a shelf chip is just a subfolder, and these are subfolders.
 #
 # **These are the default and only the default.** They were `minimax/` until the
-# pack stopped being named after one of its four families, and an install that
-# already has a settings file keeps whatever is in it — see `docs/RENAME.md`.
+# pack stopped being named after one of its families, and an install that
+# already has a settings file keeps whatever is in it.
 # Where somebody's finished renders land is not something a rename gets to
 # change under them.
 RENDERS = "continuity/renders"

@@ -91,8 +91,7 @@ export async function deleteAsset(filename) {
 const PREFS_FILE = "continuity.picker.json";
 const PREFS_KEY = "continuity-picker-prefs";
 // What both were called when the pack was called MiniMax Creator. Read once, on
-// a first read that finds nothing, and never written — `docs/RENAME.md` has the
-// rule: a rename does not get to lose somebody's favourites. Delete these one
+// a first read that finds nothing, and never written — and the rule stands: a rename does not get to lose somebody's favourites. Delete these one
 // release after the rename ships.
 const LEGACY_PREFS_FILE = "minimax_creator.picker.json";
 const LEGACY_PREFS_KEY = "mmc-picker-prefs";

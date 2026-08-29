@@ -89,7 +89,7 @@ CORE_ANCHORS_ANYWHERE = (
 # were not renamed when the pack was, because they are not the pack's name —
 # they are the surface the `AUDIO_END_KEY` repair matches against inside core's
 # conditioning dict on every core release, and the one thing a compatibility
-# probe cannot afford is to be a moving target. See `docs/RENAME.md`.
+# probe cannot afford is to be a moving target.
 WRAPPER_KEY = "minimax_creator_cond_video_latents"
 
 # On a keyframe dict: the pixel-frame index this guide is really pinned at, on

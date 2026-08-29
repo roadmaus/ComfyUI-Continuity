@@ -55,7 +55,7 @@ const INDEX_KEY = "continuity-presets";
 const BODY_KEY = (id) => `continuity-preset-${id}`;
 
 // All four under the pack's old name, read as a fallback and never written.
-// This is the one that mattered enough to make `docs/RENAME.md` a migration
+// This is the one that mattered enough to make the rename a migration
 // rather than a delete: a preset is work — a 24-shot strip somebody arranged by
 // hand — and it lives in userdata rather than in the workflow, so nothing else
 // would carry it across a rename. Delete these one release after it ships.
