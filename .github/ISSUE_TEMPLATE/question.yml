@@ -6,6 +6,6 @@ body:
     id: question
     attributes:
       label: Your question
-      description: Check the README first — it covers install, weights, @ mentions, LoRAs, Refine and PreStage. If it didn't answer you, say what you read and what's still unclear, so we can fix the docs too.
+      description: Check the docs folder first — it covers install, weights, @ mentions, LoRAs, Refine and the pre-stage. If it didn't answer you, say what you read and what's still unclear, so we can fix the docs too.
     validations:
       required: true

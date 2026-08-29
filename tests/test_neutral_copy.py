@@ -39,8 +39,11 @@ ALLOWED = re.compile(r"man at the counter|<Subject 1> is the young woman", re.IG
 
 
 def files():
-    for name in ("README.md", "CHANGELOG.md"):
-        yield os.path.join(ROOT, name)
+    yield os.path.join(ROOT, "README.md")
+    docs = os.path.join(ROOT, "docs")
+    for name in sorted(os.listdir(docs)):
+        if name.endswith(".md"):
+            yield os.path.join(docs, name)
     for base, dirs, names in os.walk(os.path.join(ROOT, "web")):
         dirs[:] = [d for d in dirs if d != "atlas"]
         for name in names:

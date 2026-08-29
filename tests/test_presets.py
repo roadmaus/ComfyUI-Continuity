@@ -838,7 +838,7 @@ try {
 }
 
 // A library written when the pack was called MiniMax Creator still opens. This
-// is the migration `docs/RENAME.md` exists for: a preset is work somebody did by
+// is the migration the rename owed: a preset is work somebody did by
 // hand, and it lives in userdata rather than in the workflow, so a rename is the
 // one thing that could quietly lose it.
 try {

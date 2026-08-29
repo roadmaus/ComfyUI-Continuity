@@ -6,7 +6,7 @@ body:
     attributes:
       value: |
         Thanks for the report. Two things before you start:
-        - If the node **refused** your render with a message naming a field and a folder, that is usually a missing weight file, not a bug — check the install table in the README first.
+        - If the node **refused** your render with a message naming a field and a folder, that is usually a missing weight file, not a bug — check the model tables in docs/models.md first.
         - Please fill in the environment section even if it feels irrelevant. Most reports we can't act on are missing exactly that.
 
   - type: dropdown

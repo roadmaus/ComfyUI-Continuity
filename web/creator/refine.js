@@ -35,7 +35,7 @@ import { api } from "../../../scripts/api.js";
 // time the temperature moved.
 const STORE = "continuity.refiner";
 // The same settings under the pack's old name. Read as a fallback and never
-// written; see `docs/RENAME.md`. Delete one release after the rename ships.
+// written. Delete one release after the rename ships.
 const LEGACY_STORE = "minimax_creator.refiner";
 
 const DEFAULTS = {

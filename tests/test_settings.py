@@ -284,7 +284,7 @@ with tempfile.TemporaryDirectory() as directory:
 # ---- the file the pack wrote when it was called MiniMax Creator ---------------
 #
 # The rename's one real risk. An install that had typed an output folder must
-# still be filing renders there afterwards — `docs/RENAME.md` is explicit that a
+# still be filing renders there afterwards — a
 # rename does not get to move where somebody's finished work lands.
 
 with tempfile.TemporaryDirectory() as directory:
