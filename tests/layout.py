@@ -53,6 +53,7 @@ MODULES = {
     "encode": "families.h3.encode",
     "faces": "families.h3.faces",
     "facepass": "families.h3.facepass",
+    "h3_pdd": "h3lora.pdd",
     "hires": "families.h3.hires",
     "h3_segment": "families.h3.segment",
     "refine": "families.h3.refine",

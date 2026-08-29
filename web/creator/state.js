@@ -765,17 +765,35 @@ export const TURBO_RESET = TURBO.reset;
 /** What the switch engages a file at — strength and the flow shifts its card
  *  was distilled against, guessed off the filename by the family's preset
  *  table; the manager's slider and the shift pills override it like any
- *  other value. */
+ *  other value.
+ *
+ *  A preset may also own the sampler row and the step counts. Most distills do
+ *  not care past "euler and few steps", but a parallel-decoded one is trained
+ *  against fixed places on the flow grid and only lands on them at certain step
+ *  counts under one scheduler — so where a file says which, the switch sets
+ *  what it says instead of the family's own. */
 export function turboPreset(name, family = DEFAULT_VIDEO_FAMILY) {
   const TURBO = turboOf(family) ?? turboOf(DEFAULT_VIDEO_FAMILY);
   const hit = TURBO.presets.find((p) => new RegExp(p.match, "i").test(name || ""));
-  if (hit) return { strength: hit.strength, shift_video: hit.shift_video, shift_audio: hit.shift_audio };
+  if (hit) {
+    return { strength: hit.strength, shift_video: hit.shift_video, shift_audio: hit.shift_audio,
+             row: hit.row ?? TURBO.row, steps: hit.steps ?? TURBO.steps, note: hit.note ?? "" };
+  }
   return { strength: TURBO.default_strength,
-           shift_video: TURBO_RESET.shift_video, shift_audio: TURBO_RESET.shift_audio };
+           shift_video: TURBO_RESET.shift_video, shift_audio: TURBO_RESET.shift_audio,
+           row: TURBO.row, steps: TURBO.steps, note: "" };
 }
 
 export const turboStrength = (name, family = DEFAULT_VIDEO_FAMILY) =>
   turboPreset(name, family).strength;
+
+/** The step table the switch's qualities write for one file, and the sampler
+ *  row it sets. Both are the family's unless the file's preset owns them. */
+export const turboSteps = (name, family = DEFAULT_VIDEO_FAMILY) =>
+  turboPreset(name, family).steps;
+
+export const turboRow = (name, family = DEFAULT_VIDEO_FAMILY) =>
+  turboPreset(name, family).row;
 
 /** The switch's block, off. `family` decides only the quality it starts on —
  *  a family with no turbo switch never draws the pill, and the block rides its

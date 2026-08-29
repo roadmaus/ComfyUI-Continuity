@@ -118,11 +118,55 @@ const fakeWidgets = (values) =>
       JSON.stringify({ version: 2, prompt: "x" }))));
 }
 
+// ---- the turbo preset -------------------------------------------------------
+//
+// The switch writes the sampler row, so what a file's preset resolves to is
+// part of this agreement. Most files take the family's row and step table; one
+// kind does not — a parallel-decoded acceleration LoRA only lands on the grid
+// it was distilled against at certain counts under one scheduler, so its
+// preset carries its own and the switch sets those instead.
+out.turboPresets = Object.fromEntries(
+  ["turbo/minimax_h3_ref2va_pdd_acc_8step_comfyui.safetensors",
+   "MiniMax-H3-FL2VA-Acc-8Step.safetensors",
+   "turbo/lightx2v_4step.safetensors",
+   "turbo/minimax_h3_turbo_v4.safetensors"].map(
+    (name) => [name, { steps: S.turboSteps(name, "h3"), row: S.turboRow(name, "h3"),
+                       strength: S.turboStrength(name, "h3") }]));
+
 console.log(JSON.stringify(out));
 """
 
 with layout.pack(skip=["atlas"]) as target:
     reflected = layout.in_pack(SCRIPT, target)
+
+# ---- what a turbo file engages at --------------------------------------------
+#
+# Held against the declaration rather than against numbers written here: the
+# table is `families/h3/manifest.TURBO` and both halves are supposed to be
+# reading it. `render.LeadIn` reads the same entry for the other half of what a
+# parallel decoder needs; that is pinned in `test_creator_graph.py`.
+
+turbo_block = next(f for f in json.loads(layout.catalog_json())["families"]
+                   if f["id"] == "h3")["capabilities"]["turbo"]
+own = next(p for p in turbo_block["presets"] if "pdd" in p["match"])
+
+for name in ("turbo/minimax_h3_ref2va_pdd_acc_8step_comfyui.safetensors",
+             "MiniMax-H3-FL2VA-Acc-8Step.safetensors"):
+    check(f"{name.split('/')[-1]} brings its own row and steps",
+          reflected["turboPresets"][name],
+          {"steps": own["steps"], "row": own["row"], "strength": own["strength"]})
+
+for name in ("turbo/lightx2v_4step.safetensors", "turbo/minimax_h3_turbo_v4.safetensors"):
+    check(f"{name.split('/')[-1]} takes the family's",
+          (reflected["turboPresets"][name]["steps"],
+           reflected["turboPresets"][name]["row"]),
+          (turbo_block["steps"], turbo_block["row"]))
+
+check("and the ordinary files still engage at the strengths they always did",
+      [reflected["turboPresets"][n]["strength"] for n in
+       ("turbo/lightx2v_4step.safetensors", "turbo/minimax_h3_turbo_v4.safetensors")],
+      [0.6, turbo_block["default_strength"]])
+
 
 # ---- the field list ----------------------------------------------------------
 #

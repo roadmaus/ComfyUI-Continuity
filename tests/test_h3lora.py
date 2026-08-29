@@ -36,6 +36,7 @@ try:
     import torch
     import torch.nn as nn
     import comfy.model_patcher
+    import comfy.patcher_extension
 except Exception as exc:  # noqa: BLE001
     skip(f"ComfyUI not importable ({type(exc).__name__}: {exc})")
 
@@ -69,6 +70,9 @@ MODALITIES = 3      # video, text, audio — the three H3 packs into one sequenc
 ADALN_DIM = 8       # a curve bake: the pruned checkpoints' table width
 BLOCKS = 4
 RANK = 4
+VIDEO_DIM = 6
+AUDIO_DIM = 2
+INTERVALS = 8   # the toy stand-in for the released files' 32
 
 
 class AdalnProj(nn.Module):
@@ -102,10 +106,20 @@ class Block(nn.Module):
         self.adaln_proj = AdalnProj()
 
 
+class FinalLayer(nn.Module):
+    """The two output heads, which is all a parallel decoder replaces."""
+
+    def __init__(self):
+        super().__init__()
+        self.video_out = nn.Linear(HIDDEN, VIDEO_DIM)
+        self.audio_out = nn.Linear(HIDDEN, AUDIO_DIM)
+
+
 class DiT(nn.Module):
     def __init__(self, table):
         super().__init__()
         self.blocks = nn.ModuleList(Block() for _ in range(BLOCKS))
+        self.final_layer = FinalLayer()
         self.adaln_t_table = table
 
 
@@ -312,11 +326,86 @@ check("a scheduled branch still scales the rank slice and adds the ported bias",
 check("and it too accumulates in place",
       got.data_ptr() == seen["out"].data_ptr(), True)
 
+# ---- a parallel decoder, end to end -----------------------------------------
+#
+# alibaba-pai's acceleration files are a trunk LoRA in diffusers' names plus a
+# bank of per-interval output heads. `pdd.py` owns the arithmetic and
+# `tests/test_pdd.py` pins it; what is under test here is that `apply_stack`
+# takes such a file apart and puts both halves where they go — the trunk through
+# the ordinary path, the bank onto the two heads — rather than placing the trunk
+# and dropping the rest with a line in the log, which is what every LoRA loader
+# does with it.
+
+# The module `apply` already imported, not a second execution of it: two
+# copies of a module are two `ParallelHead` classes, and only one of them is
+# the one the stack patched in.
+pdd = sys.modules["mmc.h3lora.pdd"]
+RANK = 4
+torch.manual_seed(0)
+
+
+def released_pdd():
+    """One block's worth of the released form: diffusers names, no alphas."""
+    sd = {}
+    for name, out_dim, in_dim in (("attn.to_q", HEADS * HEAD_DIM, HIDDEN),
+                                  ("attn.to_k", HEADS * HEAD_DIM, HIDDEN),
+                                  ("attn.to_v", HEADS * HEAD_DIM, HIDDEN),
+                                  ("attn.to_out.0", HIDDEN, HEADS * HEAD_DIM),
+                                  ("ff.net.0.proj", 4 * HIDDEN, HIDDEN),
+                                  ("ff.net.2", HIDDEN, 2 * HIDDEN),
+                                  ("adaln_proj.linear", EXPAND * MODALITIES * HIDDEN, ADALN_DIM)):
+        up, down = lora_pair(out_dim, in_dim, scale=0.01)
+        sd[f"blocks.0.{name}.lora_up"] = up
+        sd[f"blocks.0.{name}.lora_down"] = down
+    sd["proj_out.weight"] = torch.randn(INTERVALS, VIDEO_DIM, HIDDEN)
+    sd["proj_out.bias"] = torch.randn(INTERVALS, VIDEO_DIM)
+    sd["audio_proj_out.weight"] = torch.randn(INTERVALS, AUDIO_DIM, HIDDEN)
+    sd["audio_proj_out.bias"] = torch.randn(INTERVALS, AUDIO_DIM)
+    return sd
+
+
+accel = released_pdd()
+held = dict(accel)
+model = patcher()
+patched, report = h3lora.apply_stack(model, [entry("h3-acc-8step", accel)])
+
+check("the trunk lands whole", (report.merged + report.branched), 5)
+check("nothing of it goes unmatched", "unmatched" in report.text(), False)
+check("the parallel decoder is reported",
+      f"parallel decoder: {INTERVALS} intervals" in report.text(), True)
+# The caller's dict is the one `lora.py` caches, so the bank has to survive
+# being read: stripping it in place would leave the next queue of the same
+# graph with a file that is only half of itself.
+check("the file it was handed is not emptied", accel == held, True)
+
+head_forward = patched.get_model_object("diffusion_model.final_layer.video_out.forward")
+check("the video head is the bank's", isinstance(head_forward, pdd.ParallelHead), True)
+check("so is the audio head",
+      isinstance(patched.get_model_object("diffusion_model.final_layer.audio_out.forward"),
+                 pdd.ParallelHead), True)
+check("the bank is registered for accounting",
+      bool(patched.get_additional_models_with_key("h3_pdd_heads_0")), True)
+check("and something arms it every step",
+      "h3_pdd_plan_0" in patched.wrappers.get(
+          comfy.patcher_extension.WrappersMP.APPLY_MODEL, {}), True)
+
+# Armed at a block, the head is that block's mixed head and not the checkpoint's.
+plan = pdd.block_plan(pdd.time_grid(12.0, INTERVALS), 4, 2)[4:6].float()
+head_forward.state.set({pdd.VIDEO_BANK: (4, plan)})
+x = torch.randn(3, HIDDEN)
+want = torch.nn.functional.linear(
+    x, torch.einsum("n,noi->oi", plan, held["proj_out.weight"][4:6]),
+    torch.einsum("n,no->o", plan, held["proj_out.bias"][4:6]))
+check("the patched head is the block's mixed head",
+      torch.allclose(head_forward(x), want, atol=1e-5), True)
+head_forward.state.clear()
+
 # Every patcher built here is dropped while ComfyUI is still importable.
 # `ModelPatcher.__del__` reaches for `comfy.patcher_extension` on the way out,
 # and at interpreter shutdown that module is already None — which prints a
 # traceback under a suite that passed.
-del model, patched
+# `head_forward` holds the bank's own patcher, so it is a third one to drop.
+del model, patched, head_forward
 gc.collect()
 
-passed("the vendored H3 LoRA stack holds: keys, merge, branch, fusion and adaLN")
+passed("the vendored H3 LoRA stack holds: keys, merge, branch, fusion, adaLN and the parallel decoder")

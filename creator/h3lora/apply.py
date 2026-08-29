@@ -16,6 +16,7 @@ from . import branch as branch_mod
 from . import gain
 from . import keymap
 from . import modality as modality_mod
+from . import pdd as pdd_mod
 from . import schedule as schedule_mod
 
 LOG = logging.getLogger("h3.powerlorastack")
@@ -143,6 +144,11 @@ def apply_stack(model, entries, mode="auto", adaln_mode="auto", grid_path="",
 
     per_module: "OrderedDict[str, list]" = OrderedDict()
     compute_dtype = model.model_dtype()
+    # One stack holds at most one parallel decoder: the heads are a replacement,
+    # not a contribution, so a second file's would overwrite the first's rather
+    # than compose with it.
+    pdd_banks = None
+    pdd_name = ""
 
     for fallback_row, entry in enumerate(entries, start=1):
         row_index = int(entry.get("row", fallback_row))
@@ -156,6 +162,23 @@ def apply_stack(model, entries, mode="auto", adaln_mode="auto", grid_path="",
         lora_sd = entry.get("weights")
         if lora_sd is None:
             lora_sd = comfy.utils.load_torch_file(entry["path"], safe_load=True)
+
+        # A PDD acceleration file is a trunk LoRA and a bank of per-interval
+        # output heads; `pdd.take_heads` lifts the bank out so what follows is
+        # an ordinary LoRA, and the bank is attached after the stack is built.
+        # Copied first because the caller's dict is the one it caches — the next
+        # queue of the same graph would otherwise get a file with no bank in it.
+        lora_sd = dict(lora_sd)
+        banks = pdd_mod.take_heads(lora_sd)
+        if banks is not None:
+            if pdd_mod.is_diffusers(lora_sd):
+                lora_sd = pdd_mod.convert_trunk(lora_sd)
+            if pdd_banks is None:
+                pdd_banks, pdd_name = banks, name
+            else:
+                report.add(f"  ! {name}'s parallel decoder is ignored: "
+                           f"{pdd_name} already holds the output heads")
+                banks = None
 
         normalized, unmatched = keymap.normalize(lora_sd, index)
         # MMC: cached on the file — see `gain.measure_state_dict`.
@@ -243,6 +266,12 @@ def apply_stack(model, entries, mode="auto", adaln_mode="auto", grid_path="",
                     f"  ! {len(merge)} patches on {name} cannot be scheduled "
                     f"(merged at {strength:.2f})"
                 )
+        if banks is not None:
+            report.add(f"  parallel decoder: {pdd_mod.num_steps(banks)} intervals, "
+                       f"{pdd_mod.bank_bytes(banks) / (1024 ** 2):.0f} MB")
+            if abs(strength - 1.0) > 1e-6:
+                report.add(f"  ! the output heads are a replacement and ignore "
+                           f"strength {strength:g}; only the trunk is scaled")
         if measured.get("rel"):
             # what this LoRA actually does to the weights, so a strength that is
             # far off the calibrated unit is visible without the UI button
@@ -270,5 +299,16 @@ def apply_stack(model, entries, mode="auto", adaln_mode="auto", grid_path="",
             )
         report.add(f"branch bank: {len(per_module)} layers, "
                    f"{report.bank_bytes / (1024 ** 2):.0f} MB")
+
+    if pdd_banks is not None:
+        n = 0
+        while patcher.get_additional_models_with_key(f"h3_pdd_heads_{n}"):
+            n += 1
+        controller = pdd_mod.attach(patcher, pdd_banks, f"h3_pdd_heads_{n}", pdd_name)
+        patcher.add_wrapper_with_key(
+            comfy.patcher_extension.WrappersMP.APPLY_MODEL,
+            f"h3_pdd_plan_{n}",
+            controller,
+        )
 
     return patcher, report

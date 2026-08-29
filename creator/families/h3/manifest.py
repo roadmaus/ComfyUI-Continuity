@@ -162,6 +162,55 @@ _TEMPLATE_HELP = {
 }
 
 
+# The turbo switch: a distillation LoRA over the same checkpoints,
+# not a checkpoint swap like Krea's. The declarations here are the
+# H3 turbo community's numbers, said once. `row` is what engaging
+# the switch sets the sampler to (euler + beta — the joint audio
+# warbles on res_multistep at turbo step counts); `reset` is where
+# the row returns when the switch is thrown off and nothing was
+# saved — the node's own defaults. `presets` name what a distill
+# file engages at, by filename match: strength and the flow shifts
+# its card was distilled against — lightx2v's runs at ~0.6 with
+# the video clock at 6, everything else at 1.0 on the checkpoints'
+# own schedule.
+#
+# Hoisted out of the catalog rather than written inside it because it is the
+# longest declaration in this file by a distance, and the catalog reads better
+# for having one name where the whole switch used to sit.
+TURBO = {
+    "steps": {"draft": 4, "medium": 6, "good": 8},
+    "default_quality": "medium",
+    "row": {"sampler_name": "euler", "scheduler": "beta"},
+    "reset": {key: sampling.DEFAULTS[key]
+              for key in ("steps", "sampler_name", "scheduler",
+                          "shift_video", "shift_audio")},
+    "lead_max": settings.MAX_LEAD_IN,
+    # A preset may also own the row and the step table. Only one
+    # does: alibaba-pai's PDD acceleration files carry a bank of
+    # per-interval output heads beside the trunk LoRA
+    # (`h3lora/pdd.py`), and those heads were distilled against
+    # fixed places on the flow grid. A render lands on them at a
+    # step count that divides the 32-interval grid, under the
+    # scheduler that walks the grid evenly — 4 or 8 steps on
+    # `simple`, which is what the two published counts are. `beta`
+    # at six steps is a different schedule and the file quietly
+    # stops being what it was trained as, so the switch sets what
+    # the file needs rather than what the family usually wants.
+    "presets": [{"match": "lightx2v", "strength": 0.6,
+                 "shift_video": 6, "shift_audio": 3},
+                {"match": r"pdd|acc[-_]?8step", "strength": 1.0,
+                 "shift_video": sampling.DEFAULTS["shift_video"],
+                 "shift_audio": sampling.DEFAULTS["shift_audio"],
+                 "row": {"sampler_name": "euler", "scheduler": "simple"},
+                 "steps": {"draft": 4, "medium": 8, "good": 8},
+                 "note": "Parallel decoding: this file holds one output head "
+                         "per interval of the grid it was distilled against, "
+                         "and only steps on them at 4 or 8 steps with the "
+                         "simple scheduler."}],
+    "default_strength": 1.0,
+}
+
+
 def manifest():
     from .. import registry
 
@@ -238,29 +287,7 @@ def manifest():
             # the run's last element — so there is nothing there to pin twice
             # and no switch worth drawing.
             "seam_pin": True,
-            # The turbo switch: a distillation LoRA over the same checkpoints,
-            # not a checkpoint swap like Krea's. The declarations here are the
-            # H3 turbo community's numbers, said once. `row` is what engaging
-            # the switch sets the sampler to (euler + beta — the joint audio
-            # warbles on res_multistep at turbo step counts); `reset` is where
-            # the row returns when the switch is thrown off and nothing was
-            # saved — the node's own defaults. `presets` name what a distill
-            # file engages at, by filename match: strength and the flow shifts
-            # its card was distilled against — lightx2v's runs at ~0.6 with
-            # the video clock at 6, everything else at 1.0 on the checkpoints'
-            # own schedule.
-            "turbo": {
-                "steps": {"draft": 4, "medium": 6, "good": 8},
-                "default_quality": "medium",
-                "row": {"sampler_name": "euler", "scheduler": "beta"},
-                "reset": {key: sampling.DEFAULTS[key]
-                          for key in ("steps", "sampler_name", "scheduler",
-                                      "shift_video", "shift_audio")},
-                "lead_max": settings.MAX_LEAD_IN,
-                "presets": [{"match": "lightx2v", "strength": 0.6,
-                             "shift_video": 6, "shift_audio": 3}],
-                "default_strength": 1.0,
-            },
+            "turbo": TURBO,
             # The guide pill: a ControlNet branch loaded beside the checkpoint,
             # aimed at a clip the bench traced. `method` is the whole of what
             # separates this from Qwen-Image-Edit's answer to the same question —

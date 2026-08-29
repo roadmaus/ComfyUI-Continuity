@@ -122,9 +122,14 @@ function throwOn(container, { value, set }) {
     };
   }
   turbo.on = true;
-  set("steps", S.TURBO_STEPS[turbo.quality] ?? S.TURBO_STEPS.medium);
-  set("sampler_name", S.TURBO_SAMPLER);
-  set("scheduler", S.TURBO_SCHEDULER);
+  // The row and the step table are the family's unless the picked file's preset
+  // owns them — see `state.turboPreset`. With no file at all they are the
+  // family's by definition: a merged checkpoint has no card to read.
+  const steps = S.turboSteps(turbo.lora, family);
+  const row = S.turboRow(turbo.lora, family);
+  set("steps", steps[turbo.quality] ?? steps.medium ?? S.TURBO_STEPS.medium);
+  set("sampler_name", row.sampler_name);
+  set("scheduler", row.scheduler);
   // The flow shifts the picked family's card was distilled against — part of
   // the same contract as the step count, so they are thrown and released with
   // the row. Merged-checkpoint mode keeps the row's own values: the schedule
@@ -215,21 +220,27 @@ export function turboPills({ container, value, set, onCommit }) {
   // the first fetch, and only started at all while no file is picked yet.
   if (!turbo.lora) loadLoraNames();
 
+  // The row the switch is setting, named rather than assumed: it is the
+  // family's for every ordinary distill and the file's own for one that was
+  // trained against a particular schedule.
+  const rowOf = S.turboRow(turbo.lora, S.pieceFamily(container));
+  const rowName = `${rowOf.sampler_name} + ${rowOf.scheduler}`;
+
   pills.push(el("div", { class: `mmc-pill mmc-pill-group${on ? " accel-on" : ""}` }, [
     el("button", {
       class: "mmc-turbo-main",
       title: on
         ? turbo.lora
-          ? t("Turbo — running on {lora} at {steps} steps, euler + beta. "
+          ? t("Turbo — running on {lora} at {steps} steps, {row}. "
             + "Switching off removes the LoRA and puts the sampler row back.",
-            { lora: turbo.lora, steps: value("steps", "?") })
-          : t("Turbo — {steps} steps, euler + beta, no LoRA: the checkpoint is "
+            { lora: turbo.lora, steps: value("steps", "?"), row: rowName })
+          : t("Turbo — {steps} steps, {row}, no LoRA: the checkpoint is "
             + "taken to be a merged distill. Switching off puts the sampler row back.",
-            { steps: value("steps", "?") })
+            { steps: value("steps", "?"), row: rowName })
         : turbo.lora
           ? t("Turbo off. On, it adds {lora}, drops the steps to the picked quality and "
-            + "switches the sampler to euler + beta — H3's soundtrack warbles on "
-            + "res_multistep at turbo step counts.", { lora: turbo.lora })
+            + "switches the sampler to {row} — H3's soundtrack warbles on "
+            + "res_multistep at turbo step counts.", { lora: turbo.lora, row: rowName })
           : t("Turbo off. The first press picks which distillation LoRA it engages — or none, "
             + "for a checkpoint with the distillation already merged in."),
       onclick: (event) => {
@@ -291,20 +302,28 @@ export function turboPills({ container, value, set, onCommit }) {
   // qualities are a setting for a feature not in use.
   if (on) {
     const steps = Number(value("steps", 0));
+    // The picked file's table, which is the family's for everything that does
+    // not name its own. A file with its own counts describes them itself rather
+    // than through the three stock sentences, which would be about numbers it
+    // is not running.
+    const table = S.turboSteps(turbo.lora, S.pieceFamily(container));
+    const own = S.turboPreset(turbo.lora, S.pieceFamily(container)).note;
     pills.push(el("div", { class: "mmc-pill mmc-turbo-seg" }, S.TURBO_QUALITIES.map((quality) => el("button", {
       class: "mmc-turbo-opt",
       // Pressed is derived from the real steps widget, so a hand-edited step
       // count un-presses all three rather than one of them lying about it.
-      "aria-pressed": steps === S.TURBO_STEPS[quality],
-      title: t(QUALITY_TITLE[quality]),
+      "aria-pressed": steps === table[quality],
+      title: own
+        ? t("{steps} steps.", { steps: table[quality] }) + " " + t(own)
+        : t(QUALITY_TITLE[quality]),
       onclick: () => {
         turbo.quality = quality;
-        set("steps", S.TURBO_STEPS[quality]);
+        set("steps", table[quality]);
         onCommit();
       },
     }, [
       el("span", { text: t(quality === "medium" ? "med" : quality) }),
-      el("span", { class: "mmc-pill-sub", text: String(S.TURBO_STEPS[quality]) }),
+      el("span", { class: "mmc-pill-sub", text: String(table[quality]) }),
     ]))));
   }
 
