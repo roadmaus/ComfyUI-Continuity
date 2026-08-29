@@ -19,16 +19,31 @@ workflow this borrows from, works around the hard way:
   one tensor and breaks on it.
 - A stock partial-denoise KSampler noises the *whole* pack, so the soundtrack
   the first pass already resolved — the one the user heard — would be melted
-  and re-drawn. Here only the picture is re-noised. H3's flow schedule mixes
-  noise in as a lerp (``x = sigma*noise + (1-sigma)*x0``, `CONST`), so handing
-  the sampler zero noise for the audio half still scales it by ``1 - sigma``;
-  the audio is pre-divided by exactly that so it enters the first step
-  unchanged. Exact, because `MiniMaxH3AV.scale_factor` is 1.0 and the AV
-  audio_scale is a bare multiplier — there is no shift to break the division.
+  and re-drawn. Here only the picture is re-noised, and the soundtrack is held
+  by a nested denoise mask: ones for the picture, zeros for the sound, which is
+  core's own convention and the same one the face pass and supplied sound use.
 
-The audio still rides through the steps (the model attends across the pack),
-so it is not bit-identical to the first pass — but it is its sound, not a
-re-roll of it.
+**Why the mask and not zero noise for the audio half.** Handing the sampler no
+noise for the sound is not enough to leave it alone, and this node used to try:
+it pre-divided the audio by ``1 - sigma`` so a single-schedule lerp would put it
+back, and let it ride. Two things are wrong with that, and together they were
+issue #33 — the picture came back sharp and the sound came back as noise.
+
+- H3 is `FLOW_AV`: the audio stream has its *own* flow shift (12 for video, 3
+  for audio) and the sampler carries it as ``(sigma_v / sigma_a) * x_audio``,
+  not as the constant ``audio_scale = shift / audio_shift`` that
+  `process_latent_in` applies. At denoise 0.5 that is 2.5 against 4 — the
+  injected sound was 1.6x too hot.
+- Nothing held it after the first step. The model is told the audio's timestep
+  is ``t_a``, mid-schedule, unless an ``audio_denoise_mask`` says otherwise, so
+  it predicted a velocity for a stream with no noise in it and the sampler
+  applied that velocity for the whole refine.
+
+With the mask, `comfy/samplers.py` re-injects the sound every step through
+`MiniMaxH3.scale_latent_inpaint` — which applies the sigma-dependent factor
+itself — and the model pins the audio rows at the cond timestep, so it *reads*
+the soundtrack while it redraws the picture. It comes back exactly as the first
+pass left it.
 """
 
 import torch
@@ -61,8 +76,8 @@ class MiniMaxH3RefinePass(io.ComfyNode):
             display_name="H3 Refine Pass",
             category="Continuity/internal",
             description="Second pass of a two-pass render: upscales the video half of an "
-                        "H3 AV latent and re-samples it partway down the schedule, leaving "
-                        "the soundtrack un-noised. Written into the graph by render.emit.",
+                        "H3 AV latent and re-samples it partway down the schedule, holding "
+                        "the soundtrack out of the denoise. Written into the graph by render.emit.",
             is_dev_only=True,
             inputs=[
                 io.Model.Input("model"),
@@ -79,8 +94,7 @@ class MiniMaxH3RefinePass(io.ComfyNode):
                 io.Combo.Input("scheduler", options=comfy.samplers.KSampler.SCHEDULERS),
                 io.Float.Input("denoise", default=0.5, min=0.01, max=0.99, step=0.01,
                     tooltip="How much of the schedule the refinement runs. Strictly under "
-                            "1.0: at 1.0 nothing of the first pass survives, and the "
-                            "audio carry-through divides by (1 - the starting sigma)."),
+                            "1.0: at 1.0 nothing of the first pass survives to refine."),
             ],
             outputs=[io.Latent.Output()],
         )
@@ -94,40 +108,35 @@ class MiniMaxH3RefinePass(io.ComfyNode):
         video, audio = samples.unbind()
         video = upscale_video_latent(video, width, height)
 
-        # The sigma the refinement starts at: the same slice of the schedule
-        # KSampler takes for this denoise, computed up front because the audio
-        # compensation needs it before sampling begins. Built through the same
-        # class so the two cannot drift.
-        sigma0 = float(comfy.samplers.KSampler(
-            model, steps=steps, device=model.load_device, sampler=sampler_name,
-            scheduler=scheduler, denoise=denoise, model_options=model.model_options,
-        ).sigmas[0])
-        if not 0.0 < sigma0 < 1.0:
-            raise ValueError(
-                f"refine denoise {denoise} starts the schedule at sigma {sigma0}, "
-                f"which leaves nothing of the first pass to refine — it must be "
-                f"strictly between 0 and 1."
-            )
-
-        # Noise for the picture, none for the sound — and the sound pre-divided
-        # by the (1 - sigma) its zero-noise lerp will multiply it by, so it
-        # enters the first step exactly as the first pass left it.
+        # Noise for the picture, none for the sound. The zeros are not what
+        # preserves the audio — the mask below is — but noising a stream the
+        # sampler is about to overwrite would only waste the draw.
         noise_video = torch.randn(
             video.size(), dtype=torch.float32, layout=video.layout,
             generator=torch.manual_seed(seed), device="cpu").to(video.dtype)
         noise = comfy.nested_tensor.NestedTensor(
             (noise_video, torch.zeros_like(audio, device="cpu")))
-        start = comfy.nested_tensor.NestedTensor((video, audio / (1.0 - sigma0)))
+
+        # One mask, two statements: redraw the picture (ones), hold the sound
+        # exactly (zeros). Built fresh rather than carried through from the
+        # first pass — a supplied-sound mask is at the first pass's canvas, and
+        # the whole soundtrack is held here regardless of which of it was given.
+        mask = comfy.nested_tensor.NestedTensor(
+            (torch.ones_like(video, dtype=torch.float32),
+             torch.zeros_like(audio, dtype=torch.float32)))
 
         refined = comfy.sample.sample(
             model, noise, steps, cfg, sampler_name, scheduler,
-            positive, negative, start,
-            denoise=denoise, seed=seed,
+            positive, negative, comfy.nested_tensor.NestedTensor((video, audio)),
+            denoise=denoise, noise_mask=mask, seed=seed,
             callback=latent_preview.prepare_callback(model, steps),
             disable_pbar=not comfy.utils.PROGRESS_BAR_ENABLED)
 
         out = dict(latent)
         out["samples"] = refined
+        # The incoming mask, if there was one, is the first pass's canvas and
+        # says nothing about this latent.
+        out.pop("noise_mask", None)
         return io.NodeOutput(out)
 
 

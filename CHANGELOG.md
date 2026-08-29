@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+**The second pass no longer melts the soundtrack** (#33). Rendering above the
+native 768 px edge runs two passes, and the refine pass held its audio the wrong
+way: it handed the sampler a clean, un-noised soundtrack part-way down the
+schedule and trusted it to ride through untouched. It does not. H3 carries the
+audio stream on its own flow shift — the model is told the sound is as noisy as
+the picture unless a mask says otherwise — so it predicted a velocity for a
+stream with no noise in it and applied that velocity for the whole refine, on an
+audio latent that was also 1.6x too hot for where the schedule was. The picture
+came back sharp and the sound came back as static, on generated and supplied
+audio alike. The refine now holds the sound with the same nested denoise mask
+the face pass and supplied sound already use — ones for the picture, zeros for
+the sound — so the model reads the soundtrack while it redraws the frames and
+hands it back exactly as the first pass left it. One-pass renders were never
+affected, which is why setting the render to a single pass worked around it.
+
 **The tools dashboard is pictures now.** Every card behind the wordmark wore the
 same rounded box with a grey glyph cropped into the corner, so the grid was six
 shapes distinguished by their captions — nothing on it invited a press. Each card
