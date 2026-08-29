@@ -394,6 +394,71 @@ node is added and no workflow is touched. **Send to pre-stage** makes it the
 still's init image; **Send to the shot** attaches it as a reference you can name
 with `@`. Neither is required: the file is in the picker either way.
 
+## The upscale bench
+
+The other question a folder of renders eventually asks: here is a file, make it
+bigger. Press the wordmark and open **Upscale**. It takes any still or clip —
+last night's render, something off a phone, a frame somebody sent you — and it
+does not care which family made it or whether this pack made it at all. The card
+you opened it from lends it its newest render as a starting point, and you can
+drop or choose anything else instead.
+
+Two backends, and choosing between them is choosing what to promise about the
+result.
+
+**Sharpen** is a GAN — ESRGAN, DAT, SwinIR, SPAN, anything spandrel loads —
+through core's own tiling. Put a model in
+`models/upscale_models` (`RealESRGAN_x4plus` is the one core's templates use,
+`4x-UltraSharp` the usual pick for photographs) and choose it on the same
+**weights** pill everything else in this pack uses. It resolves the detail that
+is already in the picture and invents none: a face comes back the same face.
+Soft footage comes back soft and bigger, which is the honest answer for it and
+not a fault in the model. **Bigger by** is what you get, whatever factor the
+model itself was trained at — a x4 model asked for x2 runs once and comes back
+down, which is sharper than a x2 model would have been.
+
+The glass shows **one square of the source at the size it will actually come
+out**, because a 4K frame fitted into a light box is a picture of everything
+except the detail you are judging. Move the square on the locator in the left
+column. The seam across it is not the source against the result — it is plain
+resampling against the model, which is the comparison worth making: what you
+would have had for free, beside what the model gives you.
+
+The resampled half follows the dials. The model half is a press — **Try it
+here**, in the corner of the glass — and it runs the backend on that square
+alone, seconds instead of the whole file. Nothing here loads a checkpoint until
+you ask it to, so you can read what a backend is for, and dial it, without
+starting it.
+
+A clip comes back as a clip, its soundtrack copied across untouched and its
+timing intact, and the trim bar cuts the span first — worth doing on anything
+long, because every frame is a model pass. **This frame** takes the single frame
+under the playhead as a picture instead, which is usually what you want when one
+shot in a strip is the one worth blowing up.
+
+**Restore** is SeedVR2, which ComfyUI ships nodes for. It does not enlarge the
+picture so much as repair it at the size you asked for: compression artefacts,
+grain, and the softness of a frame that was small to begin with. On a clip it
+reads several frames at once, which is what keeps movement from boiling — the
+bench chunks the clip, blends one chunk into the next so the joins do not show,
+and **Frames at a time** is the dial to bring down when a long shot runs out of
+VRAM. Put `seedvr2_3b_int8_convrot.safetensors` in `models/diffusion_models` and
+`seedvr2_ema_vae_fp16.safetensors` in `models/vae` (both from Comfy-Org/SeedVR2)
+and it turns on. It is much slower than Sharpen and it is the right answer for
+footage that has something wrong with it.
+
+The result lands in `output/continuity/upscaled/`, on a shelf beside your
+renders, where the gallery already looks — and from there **Attach to the shot**
+makes it a reference you can name with `@`, **Attach to the pre-stage** makes it
+one of the pictures the still is drawn from, and **Open it** opens the file. On
+a clip, a door that wants a picture upscales the frame under the playhead rather
+than refusing. None of it is required: the file is on the shelf either way.
+
+Re-detail is deliberately *not* offered here. It re-renders rather than
+resolves — the LTX 2.5 pass that invents detail as it goes — so it belongs to a
+render's own settings, and a bench that offered it under the same verb as these
+would be promising the same picture back when it cannot.
+
 ## The rest, briefly
 
 - **Refine** rewrites your sentence into the long description the family it is

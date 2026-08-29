@@ -57,6 +57,7 @@ import { api } from "../../../scripts/api.js";
 import { el, icon, mark } from "./dom.js";
 import { buildDashboard } from "./navigate.js";
 import { openControl } from "./control.js";
+import { openUpscale } from "./upscale.js";
 import { openPresetLibrary } from "./presetlib.js";
 import { elapsed } from "./stage.js";
 import { t } from "./i18n.js";
@@ -820,9 +821,83 @@ class Fullscreen {
         // are the two places this piece can take one.
         { label: t("ControlNet"), glyph: "pen",
           sub: t("Trace footage into edges, lines or tones — then aim a render at it"),
-          go: () => openControl({ targets: this.guideTargets() }) },
+          go: () => openControl({ targets: this.guideTargets(), back: () => this.openDash() }) },
+        // The other bench, and the one with no doors: what it makes is the
+        // finished file rather than something a render reads, so it lands on a
+        // shelf beside the renders and nothing here has to take it anywhere.
+        { label: t("Upscale"), glyph: "expand",
+          sub: t("Make a still or a clip bigger — the file itself, not a new render"),
+          go: () => openUpscale({
+            source: this.lastTake(), targets: this.upscaleTargets(),
+            // The way back. A card opened a room; its wordmark is what puts the
+            // cards up again, so leaving a tool is the same press that entered
+            // it rather than the ✕ at the other end of the bar.
+            back: () => this.openDash(),
+          }) },
       ] },
     ];
+  }
+
+  /**
+   * Where a finished upscale can go.
+   *
+   * Fewer doors than a tracing has, and that is the difference between the two
+   * benches rather than an omission: a tracing is an instruction to the sampler
+   * and there are three different ones it can be, where an upscale is a
+   * *picture* — so both doors here are the same act, attaching it, and what
+   * changes is which card it lands on. The file is on the shelf either way;
+   * these only save the trip through the picker.
+   */
+  upscaleTargets() {
+    const targets = [];
+    const shot = this.node.mmcBody;
+    if (shot?.takeReference) {
+      targets.push({
+        id: "shot", label: t("Attach to the shot"),
+        does: t("Read as a look, and named in the prompt with @."),
+        take: (result) => shot.takeReference({ path: result.path, kind: result.kind }),
+      });
+    }
+    const pre = preStageOf(this.node)?.mmcBody;
+    if (pre?.attachFromMention) {
+      targets.push({
+        // Pictures only, and the bench answers that by upscaling the frame under
+        // its playhead rather than by greying the door out — the encoder's slots
+        // are pictures and a clip has to be a frame first.
+        id: "pre", kinds: ["image"], label: t("Attach to the pre-stage"),
+        does: t("A picture the still is drawn from, cited by its handle."),
+        take: (result) => {
+          const handle = pre.attachFromMention({ path: result.path, kind: result.kind });
+          // The pool has three slots and it can be full. Said on the card the
+          // file was going to, which is where somebody would go looking for it.
+          if (handle === null) pre.flash?.(t("The pre-stage has no slot free for it."));
+          this.paintFrame();
+          this.revealPreStage();
+        },
+      });
+    }
+    return targets;
+  }
+
+  /**
+   * The newest finished render on this card, in the shape a bench takes a
+   * source in — or null, on a card that has not rendered yet.
+   *
+   * It is a convenience and not a wiring: the upscale bench takes any file at
+   * all, and this only saves somebody going and finding in the picker the thing
+   * that is on the screen behind them. `saved` carries the folder ComfyUI wrote
+   * to, so the path is annotated the way the gallery's own paths are and
+   * `media.resolve` reads it without a second species of path being invented.
+   */
+  lastTake() {
+    const shown = this.shown?.shot ?? this.shown?.pre ?? null;
+    const saved = shown?.saved;
+    if (!saved?.filename) return null;
+    const folder = saved.subfolder ? `${saved.subfolder}/` : "";
+    return {
+      path: `${folder}${saved.filename} [${saved.type || "output"}]`,
+      kind: shown.isImage ? "image" : "video",
+    };
   }
 
   /** Put the pre-stage in front, wherever this shell happens to be.

@@ -2,6 +2,97 @@
 
 ## Unreleased
 
+**`@` opens on what is attached, not on the cast.** The menu led with everybody
+in the piece, which is an argument about what matters in a prompt rather than
+about the moment somebody types `@` — the picture they just dropped on the card
+is what they are reaching for, and it was sitting under a list of names. Order
+is now attached, cast, cast library, piece references, input folder.
+
+**Pulling the seam no longer drags the picture.** A pointer that presses an
+`<img>` and moves is a drag of that image as far as the browser is concerned, so
+the light box would sometimes lift a ghost of the frame, hand it to the room's
+own drop zone — which lit up as though a file were arriving — and stop following
+the hand. Three fixes, because it took three: every picture in a bench is
+`draggable="false"`, the frame and the locator refuse `dragstart`, and the drop
+zone now only wakes for a drag that is actually carrying files (`dom.dragsFiles`),
+rather than for every drag that crosses it. The CSS `-webkit-user-drag` that was
+supposed to cover this says it to one engine out of three.
+
+**The wordmark is the way out of a bench, not just into one.** A tool opened
+from the dashboard could only be left by the ✕ at the far end of the bar, while
+the mark in the corner — the thing that drops the tools everywhere else in this
+pack — sat there as inert text. It is the same button on both benches now: it
+closes the room and puts the cards back up, so leaving a tool is the press that
+entered it. It is only a button where there is somewhere to go back to; a bench
+opened with no dashboard behind it keeps the plain wordmark.
+
+**The render preview has lost its tooltip.** "Double-click for fullscreen"
+popped up over every finished still and clip whenever the pointer rested on
+them — a hint charged against the one element in the node body worth looking at.
+The double-click still opens fullscreen.
+
+**An upscale bench, for stills and clips.** The pack's three ways of enlarging
+anything were all attached to a render — the two-pass first stage, a family's
+own second stage, the LTX re-detail — and none of them answered *here is a file,
+make it bigger*. A second bench does, on the wordmark's dashboard beside the
+ControlNet one: any still or clip goes in, and a bigger one lands in
+`output/continuity/upscaled/` beside the renders, and the doors the tracing
+bench offers are here too — a finished upscale is usually the next shot's
+reference or the picture the next still is drawn from, and the trip through the
+picker to find it was the part worth saving.
+
+Two backends, and the choice between them is a choice between promises.
+**Sharpen** is a GAN through core's `UpscaleModelLoader` and its tiling, so
+ESRGAN, DAT, SwinIR and SPAN all load and nothing new is depended on; it
+resolves what the pixels already imply and invents nothing. **Restore** is
+SeedVR2 through the nodes core ships in `comfy_extras/nodes_seedvr.py` — one
+step at cfg 1 over a source latent, so it is a repair rather than a generation:
+compression, grain and the softness of a frame that was small to begin with. On
+a clip it reads several frames at once, because a restoration done frame by
+frame boils. *Bigger by* means what it says on both, whatever factor the model
+was trained at — a x4 GAN asked for x2 runs once and comes back down, and
+SeedVR2 works at the size the picture is resampled to.
+
+A clip keeps its soundtrack and its timing; the trim bar cuts the span first,
+and one press takes just the frame under the playhead. The light box shows a
+*tile at output size* rather than the whole frame, wiped against plain
+resampling instead of against the source, because a model that beats a picture a
+quarter of the size has not shown you anything. The resampled half follows the
+dials; the model half is a press — **Try it here**, in the corner of the glass.
+Every backend on this bench is weights, so a preview that followed the sliders
+put a multi-gigabyte checkpoint load behind a click on a *row*, and reading what
+Restore was for started running it. Re-detail stays where it is: it
+re-renders rather than resolves, and one verb over two different promises would
+be a lie about one of them.
+
+**The benches are one room, and the rail is a film edge.** Both of them drew a
+very wide column of four labelled groups, each under a hairline ruled across the
+whole width, with the operators as a wrapping row of pills — and at this pack's
+larger text scales that read as a page of documentation with some sliders in it,
+the ragged pills carrying "no model" tags that made the operators you *cannot*
+use the loudest things in the list. The room is now one stylesheet
+(`styles/bench.js`) that both benches wear, and the rail is a strip of film: a
+line down its edge, a tick at every stop, the stop's name set small against it.
+The operators are rows with a left edge to read down, the missing-model state is
+a ring rather than a tag, prose is clamped to two lines and opens on a press, a
+stepped dial draws the stops it actually has, and the foot of the rail says
+which folder the file will land in. The amber is spent in three places and
+nowhere else: the tick on the stop you are on, the seam under your hand, and the
+button that runs the job.
+
+**Both benches now stand on the same plumbing.** Reading a frame off whatever
+was dropped in, filling a dial from the model folders, clamping what the sliders
+sent, naming the file and transcoding a clip frame by frame with its sound and
+its timestamps intact — all of it was written for the tracing bench, all of it
+was general, and it is `creator/bench.py` now. Nothing about tracing changed;
+what came with the move is a progress bar on an untrimmed clip, which the shared
+transcode now counts out of the container's own frame count instead of only
+reporting on a cut span — and the chunking Restore needs, which is the shared
+transcode's too: `work` takes a run of frames rather than one, `chunk` says how
+many, and `overlap` says how many the next chunk re-does so the two can be
+crossfaded on core's own curve. Chunks sampled independently do not join
+invisibly, and a step every few seconds is the artefact somebody notices first.
+
 **Flux 2 Klein is a family.** BFL's compact Flux 2 — 4B (Apache 2.0) or 9B
 (non-commercial), both the base checkpoint and the 4-step distillation the
 turbo pill swaps in — joins the pre-stage's model pill as `flux2klein`. It

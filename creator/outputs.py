@@ -19,10 +19,10 @@ here is relative to whatever that resolved to.
 
 import re
 
-# The two shelves. Both live under `continuity/` so the pack keeps one shelf in
-# somebody else's output folder, and they are split one level deeper so the
+# The shelves. All of them live under `continuity/` so the pack keeps one shelf
+# in somebody else's output folder, and they are split one level deeper so the
 # gallery sorts finished videos apart from PreStage stills with no special case
-# in the picker: a shelf chip is just a subfolder, and these are two subfolders.
+# in the picker: a shelf chip is just a subfolder, and these are subfolders.
 #
 # **These are the default and only the default.** They were `minimax/` until the
 # pack stopped being named after one of its four families, and an install that
@@ -31,6 +31,15 @@ import re
 # change under them.
 RENDERS = "continuity/renders"
 STILLS = "continuity/stills"
+
+# The third shelf, and the odd one out: nothing sampled it. What lands here came
+# off the upscale bench, which writes the file itself rather than handing a
+# prefix to a save node — so this one is a directory under the output folder and
+# not a `filename_prefix`, and none of the cleaning below applies to it. It is
+# named here anyway because where this pack's finished files go is one question
+# with one answer, and a second module quietly spelling "continuity/upscaled"
+# would be the start of two.
+UPSCALED = "continuity/upscaled"
 
 # What the two shelves held before there was a second family: one folder each,
 # with H3's name on the files in both. Kept because `settings.py` has to be able

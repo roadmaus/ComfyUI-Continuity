@@ -25,6 +25,23 @@ export function el(tag, props = {}, children = []) {
 }
 
 /**
+ * Whether a drag is carrying files from outside the page.
+ *
+ * A drop zone wants files. What it *gets* offered is every drag that crosses
+ * it, including the ones the page started itself — a picture dragged inside the
+ * browser is a drag with `text/uri-list` and `text/html` on it and no files at
+ * all. Without this a light box lights up as a drop target while its own seam
+ * is being pulled across it, which is what it did.
+ *
+ * `types` is readable during dragover where the data itself is not, which is
+ * exactly why the check is on it.
+ */
+export function dragsFiles(event) {
+  const types = event.dataTransfer?.types;
+  return types ? Array.prototype.includes.call(types, "Files") : false;
+}
+
+/**
  * Copy the frame a <video> is sitting on onto a canvas, sizing the backing
  * store to the clip's own aspect and capping it — neither a 230 px card nor a
  * 46vh modal has any use for a 4K canvas.

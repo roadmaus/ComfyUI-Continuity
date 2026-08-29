@@ -885,3 +885,66 @@ export async function controlRun(body) {
   invalidate("input");
   return answer;
 }
+
+// ---- the upscale bench ------------------------------------------------------
+
+/**
+ * What can be upscaled with, and with which dials.
+ *
+ * The same contract as `controlTracings` and for the same reasons — the
+ * catalogue is the server's (`creator/upscale.py`), and which backends are
+ * *ready* is a walk of the model folders, so it is cached for the session with
+ * `fresh` as the way past it.
+ */
+let backends = null;
+
+export async function upscaleBackends({ fresh = false } = {}) {
+  if (backends && !fresh) return backends;
+  const response = await api.fetchApi("/continuity/upscale/backends");
+  if (!response.ok) throw new Error(t("the upscalers could not be read ({status})", { status: response.status }));
+  backends = (await response.json()).backends ?? [];
+  return backends;
+}
+
+/**
+ * One tile of a source, at the size it will come out — as a URL for an `<img>`.
+ *
+ * A URL rather than a fetch, for the reasons `controlPreviewUrl` is one. What
+ * is extra here is `centre` and `plain`: which part of the picture is being
+ * judged is something you move around, and `plain` asks for the same tile
+ * resampled with no model in it, which is the thing worth holding a backend
+ * against.
+ */
+export function upscalePreviewUrl(path, op, params, { at = 0, centre = [0.5, 0.5], plain = false } = {}) {
+  const query = new URLSearchParams({
+    filename: path, op, at: String(at),
+    cx: String(centre[0]), cy: String(centre[1]),
+  });
+  if (plain) query.set("plain", "1");
+  for (const [key, value] of Object.entries(params ?? {})) {
+    query.set(key, typeof value === "boolean" ? (value ? "1" : "0") : String(value));
+  }
+  return api.apiURL(`/continuity/upscale/preview?${query}`);
+}
+
+/**
+ * Upscale the whole file onto the shelf in the output folder.
+ *
+ * `token` tells this run's progress apart from anybody else's on the way back —
+ * the server sends it under `continuity.upscale` on ComfyUI's own websocket.
+ * Resolves to `{path, kind, root}`, where `root` is "output": what comes back
+ * is the finished file rather than an ingredient, so it lands beside the renders
+ * and not in the input folder.
+ */
+export async function upscaleRun(body) {
+  const response = await api.fetchApi("/continuity/upscale/run", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const answer = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(answer.error || t("the upscale failed ({status})", { status: response.status }));
+  // The file is new and the gallery's listing is a few seconds stale.
+  invalidate("output");
+  return answer;
+}

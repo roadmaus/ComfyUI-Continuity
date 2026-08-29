@@ -1237,16 +1237,27 @@ export class PromptBox {
     return groups;
   }
 
-  /** The groups the menu is showing, head and rows, in the order they read.
-   *  Two shapes over one renderer: `@` cites what is here, `/` says where a
-   *  thing comes from — see `options` and `commandOptions`. */
+  /**
+   * The groups the menu is showing, head and rows, in the order they read.
+   *
+   * Two shapes over one renderer: `@` cites what is here, `/` says where a
+   * thing comes from — see `options` and `commandOptions`.
+   *
+   * **What is attached comes first.** The cast used to, on the argument that a
+   * person is the more important citation — but that is an argument about the
+   * prompt rather than about the moment `@` is typed. What somebody has just
+   * dropped on this card is the thing they are reaching for, and it was under a
+   * list of everybody in the piece; the cast is second because citing somebody
+   * is the next most common thing, and the two libraries and the pool are the
+   * cases where you are going to type a few letters anyway.
+   */
   groups() {
     if (this.mode === "/") return this.commandOptions();
     const { cast, roster, attached, pool, library } = this.options();
     return [
+      { head: this.hooks.attachedLabel?.() ?? t("Attached"), options: attached },
       { head: t("Cast"), options: cast },
       { head: t("Cast library — cast them with their files"), options: roster },
-      { head: this.hooks.attachedLabel?.() ?? t("Attached"), options: attached },
       { head: t("Piece references"), options: pool },
       { head: this.hooks.attachBlocked("reference")
           ? t("Input folder — unavailable while a start/end frame is set")

@@ -738,7 +738,10 @@ export class Stage {
       class: "mmc-stage-img",
       src: this.result.url,
       alt: this.result.name,
-      title: t("Double-click for fullscreen"),
+      // No tooltip. The double-click is still there and still opens fullscreen;
+      // what is gone is the label that popped up over every finished render
+      // whenever the pointer rested on it — a hint that costs the picture it is
+      // covering, on the one element in the body worth looking at.
       ondblclick: toFullscreen,
       onload: (event) => this.setAspect(event.currentTarget.naturalWidth,
                                         event.currentTarget.naturalHeight),
@@ -771,7 +774,7 @@ export class Stage {
     return el("video", {
       class: "mmc-stage-video",
       src: this.result.url,
-      title: t("Double-click for fullscreen"),
+      // No tooltip, for the reason `still` gives.
       ondblclick: toFullscreen,
       autoplay: uiSetting("autoplay_previews", true),
       controls: true, loop: true, muted: true, playsinline: true, preload: "metadata",

@@ -18,6 +18,7 @@ from .creator import server_routes  # noqa: F401  (registers /continuity/assets)
 from .creator.creator_node import comfy_entrypoint  # noqa: F401
 from .creator.routes import control  # noqa: F401  (registers /continuity/control)
 from .creator.routes import families  # noqa: F401  (registers /continuity/families)
+from .creator.routes import upscale  # noqa: F401  (registers /continuity/upscale)
 
 WEB_DIRECTORY = "./web"
 

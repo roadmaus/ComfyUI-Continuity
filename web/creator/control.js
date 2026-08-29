@@ -34,7 +34,8 @@
 // reference on the shot — and both of those are doors this bench opens rather
 // than wiring it owns.
 
-import { el, icon, mark, drawFrame, mountOverlay, keepScroll, placeNear, dismissable } from "./dom.js";
+import { el, icon, mark, drawFrame, dragsFiles, mountOverlay, keepScroll, placeNear,
+         dismissable } from "./dom.js";
 import { controlPreviewUrl, controlRun, controlTracings, probe, viewUrl, upload,
          uiSetting, patchSettings, primeSettings } from "./api.js";
 import { openChoicePopover } from "./pills.js";
@@ -46,6 +47,12 @@ import { api } from "../../../scripts/api.js";
 /** Where an uploaded source lands. Its own shelf, so dragging a phone clip onto
  *  the bench does not put it in the root of everybody's picker. */
 const SUBFOLDER = "continuity/footage";
+
+/** Where a finished tracing lands, for the line at the foot of the rail. The
+ *  server owns it (`control.SUBFOLDER`) and this is the display copy of it —
+ *  the file is named in the result row once one exists, and this is what the
+ *  rail can say before that. */
+const WRITES = "continuity/control/";
 
 /** How long the dials wait after the last movement before the picture is asked
  *  for again. Short enough that letting go of a slider feels like the picture
@@ -73,6 +80,21 @@ function remember(op, picks) {
   patchSettings({ control_weights: { ...remembered(), [op]: picks } });
 }
 
+/**
+ * The stops a dial actually has, drawn under its track — or nothing.
+ *
+ * Only where there are few enough to count. A dial with forty steps is a
+ * continuous one as far as the hand is concerned, and forty ticks under it is a
+ * texture rather than information; a dial with six is a switch with a slider's
+ * shape, and the ticks are what say so before it is dragged.
+ */
+function ticks(spec) {
+  const steps = Math.round((Number(spec.max) - Number(spec.min)) / Number(spec.step)) + 1;
+  if (!Number.isFinite(steps) || steps < 2 || steps > 12) return null;
+  return el("div", { class: "mmc-bn-ticks" },
+    Array.from({ length: steps }, () => el("span")));
+}
+
 /** The bench, or null. One at a time: it is the room. */
 let open = null;
 
@@ -83,6 +105,8 @@ let open = null;
  * @param {Array}  [options.targets]  where a finished guide can be sent:
  *   `[{ id, label, note, kinds, take(result) }]`. Empty is legitimate — the
  *   bench still writes the file, and the picker can find it.
+   * @param {Function} [options.back]  where the wordmark goes: called after the
+   *   bench closes. Absent means the wordmark is not a door — see `mount`.
  * @param {object} [options.source]  a file to start on, `{path, kind}`
  * @returns {Promise<void>}  resolves when the bench is closed
  */
@@ -99,6 +123,7 @@ class Bench {
     this.targets = options.targets ?? [];
     this.resolve = resolve;
     this.source = options.source ?? null;
+    this.back = options.back ?? null;
     this.tracings = [];
     this.op = "as_shot";
     // Per tracing, so switching from Edges to Lines and back finds the
@@ -141,25 +166,55 @@ class Bench {
   // ---- the room --------------------------------------------------------------
 
   mount() {
-    this.bench = keepScroll(el("div", { class: "mmc-ctl-bench" }));
-    this.frame = el("div", { class: "mmc-ctl-frame" });
-    this.box = el("div", { class: "mmc-ctl-box" }, [this.frame]);
+    // The rail: the stops hung off the film edge, and one line at the foot
+    // saying where what this makes will end up. See styles/bench.js.
+    this.stops = el("div", { class: "mmc-bn-stops" });
+    this.bench = keepScroll(el("div", { class: "mmc-bn-rail" }, [
+      this.stops,
+      el("div", { class: "mmc-bn-where" }, [
+        el("b", { text: t("Writes into") }),
+        el("span", { class: "mmc-bn-path", text: `input/${WRITES}` }),
+      ]),
+    ]));
+    this.frame = el("div", { class: "mmc-bn-frame" });
+    this.box = el("div", { class: "mmc-bn-box" }, [this.frame]);
     // Where the trim editor's bar goes, for a clip. Empty for a picture: a
     // still has no span, and an inert bar under one is a control claiming the
     // file has a length.
-    this.cut = el("div", { class: "mmc-ctl-cut" });
-    this.foot = el("div", { class: "mmc-ctl-foot" });
-    this.work = el("div", { class: "mmc-ctl-work" }, [this.box, this.cut, this.foot]);
+    this.cut = el("div", { class: "mmc-bn-cut" });
+    this.foot = el("div", { class: "mmc-bn-foot" });
+    this.work = el("div", { class: "mmc-bn-work" }, [this.box, this.cut, this.foot]);
 
-    this.room = el("div", { class: "mmc-ctl-room" }, [this.bench, this.work]);
-    this.sheet = el("div", { class: "mmc-ctl" }, [
-      el("div", { class: "mmc-ctl-bar" }, [
-        el("span", { class: "mmc-ctl-mark" }, [mark(20)]),
-        // The pack's name, not a sentence: the shell writes it untranslated too.
-        el("span", { class: "mmc-ctl-word", text: "Continuity" }),
-        el("span", { class: "mmc-ctl-slash", text: "/" }),
-        el("span", { class: "mmc-ctl-here", text: t("ControlNet") }),
-        el("span", { class: "mmc-ctl-gap" }),
+    this.room = el("div", { class: "mmc-bn-room" }, [this.bench, this.work]);
+    this.sheet = el("div", { class: "mmc-bn" }, [
+      el("div", { class: "mmc-bn-bar" }, [
+        // The wordmark is the door, here as much as in the shell — it is the
+        // same mark in the same corner, and somewhere that reads as the way out
+        // has to be the way out. Pressing it closes the bench and puts the
+        // tools back up, so leaving is one press on the thing you already know
+        // rather than a hunt for the ✕ at the far end of the bar.
+        //
+        // Without a `back` it is not a button at all. A bench opened from
+        // somewhere with no dashboard behind it would otherwise offer a door
+        // onto nothing.
+        this.back
+          ? el("button", {
+              class: "mmc-bn-home", title: t("Back to the tools"),
+              onclick: () => { this.close(); this.back(); },
+            }, [
+              el("span", { class: "mmc-bn-logo" }, [mark(20)]),
+              // A product name rather than copy, so it is not translated — the
+              // shell writes it the same way.
+              el("span", { text: "Continuity" }),
+              el("span", { class: "mmc-bn-caret" }, [icon("chevron", 12)]),
+            ])
+          : el("span", { class: "mmc-bn-mark" }, [
+              el("span", { class: "mmc-bn-logo" }, [mark(20)]),
+              el("span", { class: "mmc-bn-word", text: "Continuity" }),
+            ]),
+        el("span", { class: "mmc-bn-slash", text: "/" }),
+        el("span", { class: "mmc-bn-here", text: t("ControlNet") }),
+        el("span", { class: "mmc-bn-gap" }),
         el("button", {
           class: "mmc-close", text: "✕", title: t("Close the bench"),
           onclick: () => this.close(),
@@ -169,14 +224,23 @@ class Bench {
     ]);
 
     this.overlay = el("div", {
-      class: "mmc-overlay mmc-ctl-over",
+      class: "mmc-overlay mmc-bn-over",
       // A file dropped anywhere on the bench is the source. The whole surface
       // takes it rather than a well in the corner, because the gesture is
       // "here, work on this" and asking somebody to aim it is asking them to
       // find the target first.
-      ondragover: (event) => { event.preventDefault(); this.overlay.classList.add("dropping"); },
+      // Files only. Every drag inside the page crosses this surface too — the
+      // seam is dragged across it a hundred times a session — and a room that
+      // lit up as a drop target while its own control was being used was
+      // telling the user they were about to drop something they never picked up.
+      ondragover: (event) => {
+        if (!dragsFiles(event)) return;
+        event.preventDefault();
+        this.overlay.classList.add("dropping");
+      },
       ondragleave: (event) => { if (event.target === this.overlay) this.overlay.classList.remove("dropping"); },
       ondrop: (event) => {
+        if (!dragsFiles(event)) return;
         event.preventDefault();
         this.overlay.classList.remove("dropping");
         const file = event.dataTransfer?.files?.[0];
@@ -502,7 +566,7 @@ class Bench {
     this.overVideo = null;
     if (!wanted || !this.over?.isConnected) return;
     this.overVideo = el("video", {
-      class: "mmc-ctl-layer mmc-ctl-traced", src: wanted,
+      class: "mmc-bn-layer mmc-bn-over-layer", src: wanted, draggable: "false",
       playsinline: true, preload: "auto", style: { visibility: "hidden" },
     });
     // The property, not only the attribute: a muted attribute set after the
@@ -778,58 +842,71 @@ class Bench {
     this.paintFoot();
   }
 
-  /** A titled section of the bench. The rule is the section's width, drawn —
-   *  the same eyebrow the shell's columns and the dashboard's groups wear, so
-   *  the three surfaces of this pack are labelled in one voice. */
+  /** One stop on the rail: a tick on the film edge, its name, and what is under
+   *  it. The tick is drawn by the stylesheet off the name, so a stop is a title
+   *  and a list of children here and nothing else. */
   section(title, children) {
-    return el("div", { class: "mmc-ctl-sect" }, [
-      el("div", { class: "mmc-ctl-eyebrow" }, [
-        el("span", { text: title }),
-        el("span", { class: "mmc-ctl-rule" }),
-      ]),
+    return el("div", { class: "mmc-bn-stop" }, [
+      el("div", { class: "mmc-bn-stopname", text: title }),
       ...children.filter(Boolean),
     ]);
   }
 
   paintBench() {
     const source = this.source;
-    this.bench.replaceChildren(
+    this.stops.replaceChildren(
       this.section(t("Source"), [
         source
-          ? el("div", { class: "mmc-ctl-file" }, [
-              el("span", { class: "mmc-ctl-filename", text: source.path.split("/").pop(), title: source.path }),
-              el("span", { class: "mmc-ctl-filenote", text: this.sourceLine() }),
+          ? el("div", { class: "mmc-bn-file" }, [
+              el("span", { class: "mmc-bn-filename", text: source.path.split("/").pop(), title: source.path }),
+              el("span", { class: "mmc-bn-filenote", text: this.sourceLine() }),
             ])
-          : el("p", { class: "mmc-ctl-empty", text: t("Nothing on the bench yet.") }),
+          : el("p", { class: "mmc-bn-empty", text: t("Nothing on the bench yet.") }),
         // One door, not two. The picker already carries an Upload of its own, so
         // a second one here would be the same act reachable two ways — and a
         // file dragged onto the room does not need a button at all.
         el("button", {
-          class: "mmc-ctl-verb", onclick: () => this.browse(), disabled: this.busy,
+          class: "mmc-bn-verb", onclick: () => this.browse(), disabled: this.busy,
         }, [icon("folder", 14), el("span", {
           text: this.busy ? t("Uploading…") : source ? t("Change the footage") : t("Choose footage"),
         })]),
       ]),
       this.section(t("Tracing"), [
-        el("div", { class: "mmc-ctl-ops" }, this.tracings.map((tracing) => el("button", {
-          class: `mmc-ctl-op${tracing.id === this.op ? " on" : ""}${tracing.ready === false ? " unready" : ""}`,
+        // A row apiece rather than a wrapping row of pills. Nine of them at
+        // three different widths had no left edge to read down, and the ones
+        // that carried a "no model" tag inside the pill were the loudest things
+        // in the list — which is backwards. See styles/bench.js.
+        el("div", { class: "mmc-bn-list" }, this.tracings.map((tracing) => el("button", {
+          class: `mmc-bn-pick${tracing.id === this.op ? " on" : ""}`,
           "aria-pressed": tracing.id === this.op,
           title: t(tracing.note),
           onclick: () => this.setOp(tracing.id),
         }, [
-          el("span", { class: "mmc-ctl-opname", text: t(tracing.label) }),
-          tracing.ready === false
-            ? el("span", { class: "mmc-ctl-lack", text: t("no model") }) : null,
+          el("span", { class: "mmc-bn-pickname", text: t(tracing.label) }),
+          tracing.ready === false ? el("span", {
+            class: "mmc-bn-pickmark", title: t("Its model is not on this disk yet."),
+          }) : null,
         ]))),
-        el("p", { class: "mmc-ctl-note", text: this.tracing() ? t(this.tracing().note) : "" }),
-        // What is missing, in full, and only for the tracing being looked at.
-        // A pill that says "no model" and nothing else is a dead end; this is
-        // the file to download and the folder to put it in.
-        this.ready() ? null : el("p", { class: "mmc-ctl-needs", text:
-          t("Not ready. This needs {what}", { what: t(this.tracing().needs) }) }),
+        // Two lines, and the whole of it on a press — the rail says what a
+        // tracing is *for*, and the paragraph that explains it is one click
+        // away rather than permanently in the way.
+        el("p", {
+          class: "mmc-bn-note", text: this.tracing() ? t(this.tracing().note) : "",
+          title: t("Press for the rest"),
+          onclick: (event) => event.currentTarget.classList.toggle("open"),
+        }),
+        // What is missing, and only for the tracing being looked at. A ring on
+        // the row is a dead end on its own; this is the file to download and
+        // the folder to put it in.
+        this.ready() ? null : el("p", {
+          class: "mmc-bn-needs",
+          text: t("Not ready. This needs {what}", { what: t(this.tracing().needs) }),
+          title: t("Press for the rest"),
+          onclick: (event) => event.currentTarget.classList.toggle("open"),
+        }),
         // Under the tracing it belongs to rather than among the dials: it is
         // part of choosing Depth, not part of aiming it.
-        this.models().length ? el("div", { class: "mmc-ctl-weights" }, [this.weightsPill()]) : null,
+        this.models().length ? el("div", { class: "mmc-bn-weights" }, [this.weightsPill()]) : null,
       ]),
       ...(this.dials().length ? [this.section(t("Dials"), this.dials())] : []),
     );
@@ -952,7 +1029,7 @@ class Bench {
     return (tracing.params ?? []).filter((spec) => spec.kind !== "choice").map((spec) => {
       const held = this.values[this.op]?.[spec.key] ?? spec.default;
       if (spec.kind === "switch") {
-        return el("label", { class: "mmc-ctl-switch", title: t(spec.note) }, [
+        return el("label", { class: "mmc-bn-switch", title: t(spec.note) }, [
           el("input", {
             type: "checkbox", checked: held || null,
             onchange: (event) => this.setValue(spec.key, event.target.checked),
@@ -963,22 +1040,22 @@ class Bench {
       if (spec.kind === "text") {
         // Free words — the matte's "who". Committed on change rather than on
         // input: a heavy tracing must not be re-asked per keystroke.
-        return el("div", { class: "mmc-ctl-dial", title: t(spec.note) }, [
-          el("div", { class: "mmc-ctl-diallabel" }, [el("span", { text: t(spec.label) })]),
+        return el("div", { class: "mmc-bn-dial", title: t(spec.note) }, [
+          el("div", { class: "mmc-bn-diallabel" }, [el("span", { text: t(spec.label) })]),
           el("input", {
-            type: "text", class: "mmc-ctl-text", value: String(held ?? ""),
+            type: "text", class: "mmc-bn-text", value: String(held ?? ""),
             placeholder: String(spec.default ?? ""),
             onchange: (event) => this.setValue(spec.key, event.target.value),
           }),
         ]);
       }
-      const readout = el("span", { class: "mmc-ctl-value", text: String(held) });
-      return el("div", { class: "mmc-ctl-dial", title: t(spec.note) }, [
-        el("div", { class: "mmc-ctl-diallabel" }, [
+      const readout = el("span", { class: "mmc-bn-value", text: String(held) });
+      return el("div", { class: "mmc-bn-dial", title: t(spec.note) }, [
+        el("div", { class: "mmc-bn-diallabel" }, [
           el("span", { text: t(spec.label) }), readout,
         ]),
         el("input", {
-          type: "range", class: "mmc-ctl-range",
+          type: "range", class: "mmc-bn-range",
           min: String(spec.min), max: String(spec.max), step: String(spec.step),
           value: String(held),
           oninput: (event) => {
@@ -986,6 +1063,7 @@ class Bench {
             this.setValue(spec.key, Number(event.target.value));
           },
         }),
+        ticks(spec),
       ]);
     });
   }
@@ -1001,10 +1079,10 @@ class Bench {
    */
   paintBox() {
     if (!this.source) {
-      this.frame.replaceChildren(el("div", { class: "mmc-ctl-drop" }, [
+      this.frame.replaceChildren(el("div", { class: "mmc-bn-drop" }, [
         icon("image", 40),
-        el("p", { class: "mmc-ctl-dropline", text: t("Drop a picture or a clip here") }),
-        el("p", { class: "mmc-ctl-dropnote", text: t("Or upload one from the bench on the left.") }),
+        el("p", { class: "mmc-bn-dropline", text: t("Drop a picture or a clip here") }),
+        el("p", { class: "mmc-bn-dropnote", text: t("Or upload one from the bench on the left.") }),
       ]));
       this.natural = null;
       this.frame.style.width = this.frame.style.height = "";
@@ -1012,9 +1090,18 @@ class Bench {
       return;
     }
     this.box.classList.remove("bare");
+    // `draggable="false"` on every picture in the box, and a dragstart stopped
+    // on the frame itself. A pointer that presses an <img> and moves is a drag
+    // of the picture as far as the browser is concerned: it lifts a ghost of the
+    // frame, hands it to the room's own drop zone, and the seam stops following
+    // the hand. The CSS `-webkit-user-drag` that was here says the same thing to
+    // one engine out of three.
     this.under = this.source.kind === "video"
-      ? el("canvas", { class: "mmc-ctl-layer" })
-      : el("img", { class: "mmc-ctl-layer", src: viewUrl(this.source.path), alt: "" });
+      ? el("canvas", { class: "mmc-bn-layer", draggable: "false" })
+      : el("img", {
+          class: "mmc-bn-layer", src: viewUrl(this.source.path), alt: "",
+          draggable: "false",
+        });
     if (this.under.tagName === "IMG") {
       const sized = () => this.fit(this.under.naturalWidth, this.under.naturalHeight);
       // `complete` as well as the event: a picture already in the browser's
@@ -1023,33 +1110,38 @@ class Bench {
       if (this.under.complete) sized();
     }
     this.over = el("img", {
-      class: "mmc-ctl-layer mmc-ctl-traced", alt: "",
+      class: "mmc-bn-layer mmc-bn-over-layer", alt: "", draggable: "false",
       style: { visibility: "hidden" },
     });
     // A new element has nothing on it, whatever the old one had.
     this.overReady = false;
     this.overVideo = null;
-    this.seamEl = el("div", { class: "mmc-ctl-seam" }, [
-      el("span", { class: "mmc-ctl-grip" }, [icon("swap", 14)]),
+    this.seamEl = el("div", { class: "mmc-bn-seam" }, [
+      el("span", { class: "mmc-bn-grip" }, [icon("swap", 14)]),
     ]);
     this.frame.replaceChildren(
       this.under, this.over, this.seamEl,
-      el("span", { class: "mmc-ctl-tag left", text: t("Footage") }),
+      el("span", { class: "mmc-bn-tag left", text: t("Footage") }),
       // Kept, because it is the one label on the glass that changes: for the
       // length of the arrival sweep it says the name of the file that was just
       // written, and then goes back to saying which tracing this is. See
       // `arrive`.
       this.tagRight = el("span", {
-        class: "mmc-ctl-tag right", text: t(this.tracing()?.label ?? ""),
+        class: "mmc-bn-tag right", text: t(this.tracing()?.label ?? ""),
       }),
     );
     this.frame.onpointerdown = (event) => this.dragSeam(event);
+    this.frame.ondragstart = (event) => event.preventDefault();
     this.paintSeam();
     this.mountTraced();
     this.paintUnder();
   }
 
   dragSeam(event) {
+    // The press itself is stopped from meaning anything else. Between this and
+    // the frame's `dragstart`, there is no path left by which pulling the seam
+    // becomes the browser dragging a picture.
+    event.preventDefault();
     const move = (at) => {
       const box = this.frame.getBoundingClientRect();
       if (!box.width) return;
@@ -1124,7 +1216,7 @@ class Bench {
    */
   paintFoot() {
     const run = el("button", {
-      class: "mmc-ctl-run", disabled: !this.source || this.busy || !this.ready() || null,
+      class: "mmc-bn-run", disabled: !this.source || this.busy || !this.ready() || null,
       onclick: () => this.trace(),
       text: this.busy
         ? (this.progress != null
@@ -1138,7 +1230,7 @@ class Bench {
       // Only for a clip that has a soundtrack to keep. A switch over a silent
       // file does nothing whichever way it is thrown, and the probe is what
       // settles it — no browser answers the question portably.
-      this.hasAudio ? el("label", { class: "mmc-ctl-switch", title: t(
+      this.hasAudio ? el("label", { class: "mmc-bn-switch", title: t(
         "Carry the clip's own soundtrack into the file this writes. Off, the guide "
         + "comes out silent — which is what a guide usually wants to be.") }, [
         el("input", {
@@ -1147,8 +1239,8 @@ class Bench {
         }),
         el("span", { text: t("Keep the sound") }),
       ]) : null,
-      el("span", { class: "mmc-ctl-gap" }),
-      this.error ? el("span", { class: "mmc-ctl-bad", text: this.error }) : null,
+      el("span", { class: "mmc-bn-gap" }),
+      this.error ? el("span", { class: "mmc-bn-bad", text: this.error }) : null,
       run,
     ].filter(Boolean));
     this.paintResult();
@@ -1173,7 +1265,7 @@ class Bench {
    */
   paintResult() {
     if (!this.resultRow) {
-      this.resultRow = el("div", { class: "mmc-ctl-out" });
+      this.resultRow = el("div", { class: "mmc-bn-out" });
       this.work.appendChild(this.resultRow);
     }
     if (!this.result) {
@@ -1185,17 +1277,17 @@ class Bench {
     const doors = this.doors();
     const lead = doors.find((door) => !door.frame) ?? null;
     this.resultRow.replaceChildren(
-      el("div", { class: "mmc-ctl-outword" }, [
-        el("span", { class: "mmc-ctl-outname", text: this.result.path.split("/").pop() }),
-        el("span", { class: "mmc-ctl-outnote", text: this.outLine() }),
+      el("div", { class: "mmc-bn-outword" }, [
+        el("span", { class: "mmc-bn-outname", text: this.result.path.split("/").pop() }),
+        el("span", { class: "mmc-bn-outnote", text: this.outLine() }),
       ]),
-      el("span", { class: "mmc-ctl-gap" }),
+      el("span", { class: "mmc-bn-gap" }),
       doors.length
-        ? el("div", { class: "mmc-ctl-doors" }, doors.map((door) => this.door(door, door === lead)))
+        ? el("div", { class: "mmc-bn-doors" }, doors.map((door) => this.door(door, door === lead)))
         // No piece to send to — the bench was opened without targets. Not a
         // failure and not worth a warning: the file is on the disk under a name
         // the picker lists, which is the whole of what happened.
-        : el("span", { class: "mmc-ctl-outnote", text:
+        : el("span", { class: "mmc-bn-outnote", text:
             t("Pick it up from the picker whenever you want it.") }),
     );
   }
@@ -1220,12 +1312,12 @@ class Bench {
     const busy = this.sending === id;
     const done = this.sentTo.has(id);
     return el("button", {
-      class: `mmc-ctl-door${lead ? " lead" : ""}${done ? " done" : ""}`,
+      class: `mmc-bn-door${lead ? " lead" : ""}${done ? " done" : ""}`,
       disabled: Boolean(this.sending) || null,
       onclick: () => this.send(door),
     }, [
-      el("span", { class: "mmc-ctl-doorname", text: door.target.label }),
-      el("span", { class: "mmc-ctl-doordoes", text: this.doorLine(door, busy, done) }),
+      el("span", { class: "mmc-bn-doorname", text: door.target.label }),
+      el("span", { class: "mmc-bn-doordoes", text: this.doorLine(door, busy, done) }),
     ]);
   }
 
