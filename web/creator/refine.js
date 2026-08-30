@@ -23,11 +23,12 @@
 // a draft: it can be corrected, switched off without being thrown away, and
 // reverted to the sentence it came from.
 
-import { el, icon, dismissable, keepScroll, placeNear } from "./dom.js";
+import { el, icon, spinner, dismissable, keepScroll, placeNear } from "./dom.js";
 import { stepperPill } from "./pills.js";
 import { t } from "./i18n.js";
 import { DEFAULT_VIDEO_FAMILY, pieceFamily, templatesOf } from "./state.js";
 import { api } from "../../../scripts/api.js";
+import { busy as queueBusy, run as runJob } from "./queue.js";
 
 // Machine-level, not workflow-level. Which text encoder is on this disk is a
 // fact about this computer; putting it in `creator_data` would ship it to
@@ -281,7 +282,7 @@ export function chosenSkillMode(name, entries = skillCache.entries, current = se
  *   `scope: "shot"` marks bodies that compile joins the global prompt onto,
  *   like typed text; chained reference cards carry their own `sections`.
  */
-export async function refine(payload) {
+export async function refine(payload, options) {
   const current = settings();
   const { temperature, seed, language, maxTokens, skill } = current;
   // Only a mode the user actually picked travels. Absent, the server reads the
@@ -298,62 +299,13 @@ export async function refine(payload) {
   // family's refiner writes the rewrite, and a template pinned for another
   // one must not ride along with it.
   const template = chosenTemplate(pieceFamily(payload.data), current);
-  const response = await api.fetchApi("/continuity/refine", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ ...payload, model, backend, temperature, seed, language,
-                           max_tokens: maxTokens, skill, skill_mode: skillMode,
-                           template,
-                           // Meaningless to the in-process backend, which frees
-                           // its weights after every generation regardless.
-                           eject: backend === "remote" && current.eject === true }),
-  });
-  const body = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(body.error || t("the refiner failed ({status})", { status: response.status }));
-  return await collect(body.job);
-}
-
-/**
- * Wait for a started job and hand back its result.
- *
- * A rewrite runs for many minutes with nothing on the wire, and no browser
- * holds a silent HTTP request open that long — Chromium drops one flat at five
- * minutes, a proxy in between usually sooner. So the POST above only starts
- * the job; the server announces the end on the websocket, and the result is
- * collected here with a GET. The event is just the nudge — a slow poll backs
- * it up, so a dropped websocket costs seconds, not the rewrite.
- */
-function collect(job) {
-  return new Promise((resolve, reject) => {
-    let timer = null;
-    let inFlight = false;
-    const settle = (fn, value) => {
-      clearInterval(timer);
-      api.removeEventListener("continuity.refine.done", nudge);
-      fn(value);
-    };
-    const check = async () => {
-      if (inFlight) return;
-      inFlight = true;
-      try {
-        const response = await api.fetchApi(`/continuity/refine/job/${job}`);
-        const body = await response.json().catch(() => ({}));
-        if (response.status === 404) {
-          settle(reject, new Error(body.error || t("the refine was lost — the server may have restarted")));
-        } else if (body.done && body.error) {
-          settle(reject, new Error(body.error));
-        } else if (body.done) {
-          settle(resolve, body.result);
-        }
-        // Anything else is "still writing", or a blip the next poll retries.
-      } catch { /* a network blip; the next poll retries */ }
-      inFlight = false;
-    };
-    const nudge = ({ detail }) => { if (detail?.job === job) check(); };
-    api.addEventListener("continuity.refine.done", nudge);
-    timer = setInterval(check, 5000);
-    check(); // it may have finished before the listener existed
-  });
+  return await runJob("/continuity/refine", {
+    ...payload, model, backend, temperature, seed, language,
+    max_tokens: maxTokens, skill, skill_mode: skillMode, template,
+    // Meaningless to the in-process backend, which frees its weights after
+    // every generation regardless.
+    eject: backend === "remote" && current.eject === true,
+  }, options);
 }
 
 // ---- settings popover -------------------------------------------------------
@@ -1172,13 +1124,20 @@ export function refineButton({ run, family = null, label = "Refine", title,
                                className = "mmc-tool" }) {
   let busy = false;
   const text = el("span", { text: t(label) });
-  // The generation ticks ComfyUI's own progress channel once per token, under
-  // the refiner's id — `refine_local.PROGRESS_ID` — so the button can count
-  // tokens instead of promising vaguely. Best effort: with no event the label
-  // just stays "Refining…".
-  const onProgress = ({ detail }) => {
-    if (detail?.prompt_id !== "continuity-refine") return;
-    text.textContent = `${t("Refining…")} ${detail.value}/${detail.max}`;
+  // Put into the button on the press and taken out again, rather than built in
+  // and hidden: `.mmc-spin` sets `display`, and a class selector beats the user
+  // agent's `[hidden]` rule — so the first version of this spun on every pill
+  // from the moment the page loaded, with nothing running anywhere. There is a
+  // `.mmc-spin[hidden]` rule now too; this deliberately does not rely on it.
+  const ring = spinner();
+  // How many tokens in. The generation ticks its own job's progress bar once
+  // per token — `refine_local` under `jobs.progress`'s node — so the pill can
+  // count instead of promising vaguely. Best effort: with nothing on the wire
+  // the label just stays "Refining…".
+  const onProgress = (fraction, step, total) => {
+    text.textContent = total
+      ? `${t("Refining…")} ${step}/${total}`
+      : t("Refining…");
   };
   const button = el("button", {
     class: className,
@@ -1188,14 +1147,19 @@ export function refineButton({ run, family = null, label = "Refine", title,
       if (busy) return;
       busy = true;
       button.classList.add("busy");
-      text.textContent = t("Refining…");
-      api.addEventListener("progress", onProgress);
+      // Waiting and working are different things and the pill says which. A
+      // local refine is a queued job now, so it can sit behind a render — and a
+      // pill that said "Refining…" for the ten minutes before it started would
+      // be a pill nobody could trust. The remote backend never waits: it spends
+      // somebody else's GPU and is answered in the request.
+      text.textContent = queueBusy() ? t("Waiting for the render…") : t("Refining…");
+      button.insertBefore(ring, text);
       try {
-        await run();
+        await run({ onProgress });
       } finally {
         busy = false;
         button.classList.remove("busy");
-        api.removeEventListener("progress", onProgress);
+        ring.remove();
         text.textContent = t(label);
       }
     },

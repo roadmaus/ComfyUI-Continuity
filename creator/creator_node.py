@@ -54,9 +54,9 @@ import json
 
 from comfy_api.latest import ComfyExtension, io
 
-from . import (accel, canvas, compile as compiler, guide as guides, media,
-               models, outputs, prestage, redetail, redetailpass, sampling,
-               settings, timeline)
+from . import (accel, canvas, compile as compiler, guide as guides, job_node,
+               media, models, outputs, prestage, redetail, redetailpass,
+               sampling, settings, timeline)
 from .core import emit as loop
 from .families import registry
 from .families.h3 import declare as h3, facepass, hires
@@ -358,7 +358,7 @@ class MiniMaxCreatorExtension(ComfyExtension):
         # The families' segment nodes are asked of the registry rather than
         # imported here: a family registers its own node by being a family, and
         # this list stops being a place anyone has to remember to edit.
-        return [MiniMaxH3Creator, MiniMaxH3Timeline,
+        return [MiniMaxH3Creator, MiniMaxH3Timeline, job_node.ContinuityJob,
                 *timeline.NODES, *registry.segment_nodes(),
                 *prestage.NODES, *hires.NODES, *facepass.NODES,
                 *redetailpass.NODES]

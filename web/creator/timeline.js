@@ -1437,7 +1437,7 @@ class Timeline {
       // One call for the whole strip, not one per card: continuity across a cut
       // is only kept by a rewrite that wrote both sides of it.
       refineButton({
-        run: () => this.refineAll(),
+        run: (options) => this.refineAll(options),
         family: () => S.pieceFamily(this.timeline),
         label: refined ? t("Refine again") : t("Refine all"),
         className: "mmc-pill mmc-tl-refine",
@@ -2670,13 +2670,13 @@ class Timeline {
    * wrote both — the look, the people, the light and the speakers carry because
    * the model saw them, not because anything here copied them forward.
    */
-  async refineAll() {
+  async refineAll(options) {
     this.refineError = null;
     try {
       const result = await refine({
         kind: "timeline",
         data: JSON.parse(S.serializeTimeline(this.timeline)),
-      });
+      }, options);
       for (const shot of result.shots ?? []) {
         const segment = this.timeline.segments[shot.index];
         if (!segment || !shot.body) continue;

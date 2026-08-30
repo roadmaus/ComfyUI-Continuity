@@ -816,6 +816,11 @@ export const css = `
    Everything inside the tracks is positioned as a percentage of the whole, so
    the lane survives the modal being resized without measuring anything. */
 .mmc-snd { display: flex; flex-direction: column; gap: 6px; }
+/* An author rule that sets display beats the user agent's hidden-attribute rule
+   whatever the specificity, so the lane this hides (timeline.js, for a family
+   that supplies no audio) stayed on screen with the attribute set. The spinner
+   in base.js carries the same line for the same reason. */
+.mmc-snd[hidden] { display: none; }
 .mmc-snd-head {
   display: flex; align-items: center; gap: 10px;
   font-size: calc(11px * var(--mmc-type));

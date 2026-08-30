@@ -218,9 +218,20 @@ PROGRESS_ID = "continuity-refine"
 
 
 def _progress_context():
-    """A named context for work that is real but is not a node."""
-    from comfy_execution.utils import CurrentNodeContext
+    """A name for this generation's ticks, where there is not one already.
 
+    A queued refine (`creator/jobs.py`) is a node inside a real prompt and has a
+    real context, which this must not overwrite — the token count belongs on that
+    job's own bar. Only the paths still outside a prompt need a name of their
+    own, and `cutout._node_context` explains at length what taking one where it
+    was not needed did to the last render's progress registry.
+    """
+    import contextlib
+
+    from comfy_execution.utils import CurrentNodeContext, get_executing_context
+
+    if get_executing_context() is not None:
+        return contextlib.nullcontext()
     return CurrentNodeContext(prompt_id=PROGRESS_ID, node_id=PROGRESS_ID)
 
 

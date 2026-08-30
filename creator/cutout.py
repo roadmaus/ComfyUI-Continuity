@@ -72,19 +72,36 @@ PROGRESS_ID = "continuity-cutout"
 def _node_context():
     """The two contexts a queued prompt would have given this call.
 
-    The progress context above, and no-grad: `PromptExecutor.execute` runs
-    every node under inference mode, and the nodes rely on it — SAM3 returns
-    its mask with grad attached when called bare, and the first `.numpy()`
-    downstream refuses it. Reproduced here because the picker calls the nodes
-    directly, outside any queued prompt.
+    No-grad, always: `PromptExecutor.execute` runs every node under inference
+    mode and the nodes rely on it — SAM3 returns its mask with grad attached
+    when called bare, and the first `.numpy()` downstream refuses it. Entering
+    it twice inside a real prompt costs nothing.
+
+    The progress context, only when there is not one already. A `ProgressBar`
+    outside a queued prompt falls back to `PromptServer.last_prompt_id`, which
+    `main.py` only ever *assigns* when a prompt runs — so a matte taken in the
+    picker before the session's first queue crashed on an attribute that did not
+    exist yet. Naming ourselves fixed that and cost something worse: the ticks
+    landed in whatever `ProgressRegistry` the last render left behind, under that
+    render's `prompt_id`, dragging its whole node map along and leaving a phantom
+    node `Running` in it — which is how a cancelled render's card went back to
+    saying "Sampling" the next time somebody used a bench, and stayed there
+    through a browser refresh.
+
+    Now that this work is queued (`creator/jobs.py`), the ordinary case is that a
+    real context is already set and ours would *overwrite* it — reporting a
+    node's progress under a name its own prompt does not know. So it is only
+    entered where it was ever needed: the preview paths, which are still plain
+    HTTP and still outside any prompt.
     """
     import contextlib
 
     import torch
-    from comfy_execution.utils import CurrentNodeContext
+    from comfy_execution.utils import CurrentNodeContext, get_executing_context
 
     stack = contextlib.ExitStack()
-    stack.enter_context(CurrentNodeContext(prompt_id=PROGRESS_ID, node_id=PROGRESS_ID))
+    if get_executing_context() is None:
+        stack.enter_context(CurrentNodeContext(prompt_id=PROGRESS_ID, node_id=PROGRESS_ID))
     stack.enter_context(torch.no_grad())
     return stack
 

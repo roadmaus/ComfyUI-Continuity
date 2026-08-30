@@ -197,6 +197,41 @@ export function icon(name, size = 22) {
  * Ids are prefixed because a gradient id is document-wide and this is drawn
  * inside a page ComfyUI also owns.
  */
+/** The waiting ring — one element, styled in `styles/base.js`.
+ *
+ *  A function rather than a constant because every caller puts it in the
+ *  document, and one shared node would move to whichever button was painted
+ *  last. `aria-hidden`: the label beside it already says what is happening, and
+ *  a screen reader announcing a decoration twice is worse than not at all. */
+export function spinner() {
+  return el("span", { class: "mmc-spin", "aria-hidden": "true" });
+}
+
+/**
+ * The corner slate: what a light box says while the queue has the GPU.
+ *
+ * A held preview is the one state on a bench that looks exactly like a working
+ * one — the picture is real, the dials move, and nothing arrives. So it is said
+ * on the glass, in the corner, the way a monitor says what it is doing: the two
+ * bottom corners already name the halves of the wipe, and this is the corner
+ * they leave free.
+ *
+ * `role="status"` so it is announced when it turns up rather than only seen;
+ * the ring inside it is `aria-hidden` and the sentence carries the meaning.
+ *
+ * Returned detached, and put in the document only while it has something to
+ * say — see `paintHeld`. Not toggled with `hidden`: this is a class that sets
+ * `display`, and a class selector beats the user agent's `[hidden]` rule, so
+ * the attribute would go on and the slate would stay up. `.mmc-spin` carries
+ * the same warning in `styles/base.js` and got there the same way. Mounting and
+ * unmounting has nothing to override and replays the entrance each time.
+ */
+export function heldNote(text, title) {
+  return el("div", { class: "mmc-bn-held", role: "status", title },
+            [spinner(), el("span", { text })]);
+}
+
+
 export function mark(size = 20) {
   return svg(
     `<defs>

@@ -548,9 +548,9 @@ export class CreatorEditor {
    * the soundscape and the score describe the piece — so the shot body lands
    * here and the rest goes wherever the owner keeps it.
    */
-  async refine() {
+  async refine(options) {
     try {
-      const result = await refine(this.refineTarget());
+      const result = await refine(this.refineTarget(), options);
       const shot = result.shots?.[0];
       if (!shot?.body) throw new Error(t("the refiner returned nothing for this prompt"));
       this.refinePanel.apply(result, shot);
@@ -2015,7 +2015,7 @@ export class CreatorEditor {
         // written against the references and the duration, so it wants them
         // settled first.
         ...(this.refineTarget ? [refineButton({
-          run: () => this.refine(),
+          run: (options) => this.refine(options),
           // Off the same blob the press sends, so the templates the popover
           // offers cannot disagree with the refiner that will write the prose.
           family: () => S.pieceFamily(this.refineTarget().data),

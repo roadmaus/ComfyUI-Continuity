@@ -54,8 +54,9 @@
 
 import { app } from "../../../scripts/app.js";
 import { api } from "../../../scripts/api.js";
+import { watch as watchQueue } from "./queue.js";
 import { viewUrl } from "./api.js";
-import { el, icon, mark } from "./dom.js";
+import { el, icon, mark, spinner } from "./dom.js";
 import { buildDashboard } from "./navigate.js";
 import { openControl } from "./control.js";
 import { openUpscale } from "./upscale.js";
@@ -459,19 +460,16 @@ class Fullscreen {
     };
     document.addEventListener("keydown", this.onKey);
 
-    // The queue is global; the button reports it. `status` is how ComfyUI says
-    // how much is left, and it fires on every change to the queue including the
-    // one our own Render caused.
-    this.onStatus = (event) => {
-      const left = event.detail?.exec_info?.queue_remaining;
-      if (typeof left !== "number") return;
-      this.remaining = left;
+    // How deep the queue is, from the one place that tracks it — the benches and
+    // the refine pill read the same state, which is what lets a bench say it is
+    // waiting for *this* render. See `web/creator/queue.js`.
+    this.unwatchQueue = watchQueue(({ remaining }) => {
+      this.remaining = remaining;
       // Optimism spent: the server has the job, so the flag stops standing in
       // for it and the real state takes over.
-      if (left === 0) for (const run of Object.values(this.runs)) run.queued = false;
+      if (remaining === 0) for (const run of Object.values(this.runs)) run.queued = false;
       this.paint();
-    };
-    api.addEventListener("status", this.onStatus);
+    });
 
     // Whether anything actually reached the queue. ComfyUI's `queuePrompt`
     // catches a refused prompt itself — it shows the dialog and resolves — so
@@ -1553,7 +1551,7 @@ class Fullscreen {
     // collected. Stopped rather than dropped.
     this.endReview({ animate: false });
     document.removeEventListener("keydown", this.onKey);
-    api.removeEventListener("status", this.onStatus);
+    this.unwatchQueue?.();
     api.removeEventListener("promptQueued", this.onQueued);
     this.release(this.node);
     this.release(this.hosted);
@@ -1636,7 +1634,7 @@ class Fullscreen {
     // an optional child, and el() is where this pack drops the ones that are not
     // there. replaceChildren would take the null and throw.
     button.replaceChildren(el("span", { class: "mmc-fs-label" }, [
-      icon(busy ? "clock" : "play", 16),
+      busy ? spinner() : icon("play", 16),
       el("span", { text: busy ? t("Sampling") : label }),
       busy && run.progress?.total
         ? el("span", {

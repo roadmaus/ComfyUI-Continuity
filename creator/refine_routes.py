@@ -25,13 +25,12 @@ button rewrote every family's prompt into Context-IR.
 import asyncio
 import functools
 import os
-import uuid
 
 from aiohttp import web
 
 from server import PromptServer
 
-from . import compile as compiler, media, preview, refine_local, refine_remote, refine_skill
+from . import compile as compiler, jobs, media, preview, refine_local, refine_remote, refine_skill
 from .families import refine
 
 # What one call will look at. Every image rides in the context window for the
@@ -912,39 +911,55 @@ async def refine_skills(request):
                               "entries": entries})
 
 
-# Refines in flight and finished ones waiting to be picked up, newest last.
-#
-# A whole-timeline rewrite runs for many minutes with nothing on the wire, and
-# no browser holds a silent HTTP request open that long — Chromium drops one
-# flat at five minutes, a proxy in between usually sooner. So the POST answers
-# immediately with a job id, the result waits here, and the websocket carries
-# the "done" nudge. A handful of slots is plenty: one press is one job, and a
-# result nobody collects — a closed tab — is evicted by the presses after it.
-_jobs = {}
-_JOBS_KEPT = 8
+def _run_job(body):
+    """One refine, on the queue. See `creator/jobs.py`.
+
+    Errors keep the shapes the route used to answer with, because the panel puts
+    the sentence where the button was either way: the pack's own three become a
+    message about the request, and anything else is a bug reported as one.
+    """
+    try:
+        return _run(body)
+    except (refine.RefineError, compiler.CompileError, media.MediaError) as exc:
+        raise jobs.JobError(str(exc)) from exc
+
+
+jobs.register("refine", _run_job)
 
 
 @PromptServer.instance.routes.post("/continuity/refine")
 async def refine_prompt(request):
     """Start rewriting one prompt, one card, or a whole timeline.
 
-    Replies `{"job": id}` at once; the work runs on a thread and its end is
-    announced as the `continuity.refine.done` websocket event, after which
-    the result is collected from the job route below. The event is only the
-    nudge — the reply can be big, and every listening tab hears it, so the tab
-    that owns the job is the one that fetches.
+    Replies `{"prompt_id": id}` at once; the work is a job on ComfyUI's queue and
+    its result arrives on `executed`, which is the socket every tab is already
+    listening to for its renders.
+
+    This used to be a job table of its own — eight slots, a uuid, a
+    `continuity.refine.done` nudge and a second route to collect from — because a
+    whole-timeline rewrite runs for minutes and no browser holds an HTTP request
+    open that long. All of that was a queue with one customer. The real one does
+    it better: a local refine is a 4B or 8B model on the same GPU the render
+    wants, so being *behind* the render rather than beside it is the point, and
+    Cancel reaching a refine comes free.
+
+    The remote backend is the exception and is still answered inside this
+    request. It spends somebody else's GPU, so there is nothing for it to queue
+    behind, and making somebody wait for a render to finish before a cloud call
+    could start would be a rule with no reason under it.
 
     What is knowable *now* still fails now: bad JSON and a missing model come
     back as 400 on this request, and the panel shows the message where the
-    button was. Errors from the work itself take the same shape, one GET later.
+    button was.
     """
     try:
         body = await request.json()
     except ValueError:
         return web.json_response({"error": "the request body was not JSON"}, status=400)
 
+    remote = body.get("backend") == "remote"
     if not (body.get("model") or "").strip():
-        if body.get("backend") == "remote":
+        if remote:
             return web.json_response({"error":
                 "No model chosen. Pick one of the server's models in the "
                 "refiner's settings."
@@ -954,50 +969,20 @@ async def refine_prompt(request):
             "models/text_encoders and pick it in the refiner's settings."
         }, status=400)
 
-    collected = [key for key, entry in _jobs.items() if entry["done"]]
-    while len(_jobs) >= _JOBS_KEPT and collected:
-        del _jobs[collected.pop(0)]
-
-    job = uuid.uuid4().hex
-    entry = _jobs[job] = {"done": False, "result": None, "error": None,
-                          "status": 200, "task": None}
-    loop = asyncio.get_running_loop()
-
-    async def _work():
+    if remote:
+        # Off the event loop even so: the call to the server blocks, and this
+        # loop is also the prompt queue and the websocket.
+        loop = asyncio.get_running_loop()
         try:
-            # Decoding images and waiting on a local model are both long enough
-            # that doing them on the event loop would stall the prompt queue
-            # and the websocket for the whole call.
-            entry["result"] = await loop.run_in_executor(None, _run, body)
+            result = await loop.run_in_executor(None, _run, body)
         except (refine.RefineError, compiler.CompileError, media.MediaError) as exc:
-            entry.update(error=str(exc), status=400)
+            return web.json_response({"error": str(exc)}, status=400)
         except Exception as exc:  # noqa: BLE001
-            entry.update(error=f"{type(exc).__name__}: {exc}", status=500)
-        entry["done"] = True
-        PromptServer.instance.send_sync("continuity.refine.done", {"job": job})
+            return web.json_response({"error": f"{type(exc).__name__}: {exc}"}, status=500)
+        return web.json_response({"result": result})
 
-    # Held on the entry: a bare create_task is garbage-collectable mid-flight.
-    entry["task"] = asyncio.create_task(_work())
-    return web.json_response({"job": job})
-
-
-@PromptServer.instance.routes.get("/continuity/refine/job/{job}")
-async def refine_job(request):
-    """One refine job's outcome, once the done event (or a poll) asks for it.
-
-    `{"done": false}` while the model is still writing; the result or the
-    error, with the status the old one-request route would have used, once it
-    is not. 404 is a job this server never started or has already evicted —
-    seen after a restart, and worth its own words because the generation is
-    gone with the process.
-    """
-    entry = _jobs.get(request.match_info["job"])
-    if entry is None:
-        return web.json_response(
-            {"error": "unknown refine job — the server may have restarted"}, status=404)
-    if not entry["done"]:
-        return web.json_response({"done": False})
-    if entry["error"] is not None:
-        return web.json_response({"done": True, "error": entry["error"]},
-                                 status=entry["status"])
-    return web.json_response({"done": True, "result": entry["result"]})
+    try:
+        prompt_id = await jobs.submit("refine", body, body.get("client_id"))
+    except jobs.JobError as exc:
+        return web.json_response({"error": str(exc)}, status=500)
+    return web.json_response({"prompt_id": prompt_id})

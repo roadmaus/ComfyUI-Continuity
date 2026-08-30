@@ -32,6 +32,7 @@ from harness import FAILURES, check, passed
 COMFY = os.environ.get("COMFYUI_PATH", os.path.expanduser("~/ComfyUI"))
 sys.path.insert(0, COMFY)
 try:
+    import av
     import numpy as np
 
     import folder_paths  # noqa: F401
@@ -136,6 +137,92 @@ with tempfile.TemporaryDirectory() as shelf:
 
 check("an odd dimension is brought down", bench.even(1081), 1080)
 check("an even one is left alone", bench.even(1080), 1080)
+
+# ---- carrying a clip through ---------------------------------------------------
+#
+# `transcode` is the long one — decode the chosen span, put every frame through
+# `work`, encode it again with its sound and its timing intact — and it had never
+# been run in this suite. What that cost was every clip with an audio track: the
+# audio fifo's walrus was named `chunk`, which is also this function's
+# frames-per-work parameter, so the first audio frame rebound it and the loop
+# left it None, and the next video frame died on `max(1, None)`. It was reached
+# by the upscale bench on ordinary settings, `keep_sound` defaulting to true
+# there, after the model had already run on the frames before it.
+
+
+def clip_with_sound(path, frames=24, rate=24):
+    """A short clip that really has both streams — the shape that broke."""
+    with av.open(path, "w") as out:
+        video = out.add_stream("libx264", rate=rate)
+        video.width, video.height = 64, 64
+        video.pix_fmt = "yuv420p"
+        audio = out.add_stream("aac", rate=48000)
+        audio.layout = "stereo"
+        for index in range(frames):
+            out.mux(video.encode(av.VideoFrame.from_ndarray(
+                np.full((64, 64, 3), index * 10 % 255, np.uint8), format="rgb24")))
+        samples = av.AudioFrame.from_ndarray(
+            np.zeros((2, 48000 * frames // rate), np.float32),
+            format="fltp", layout="stereo")
+        samples.rate = 48000
+        fifo = av.AudioFifo()
+        fifo.write(samples)
+        while (piece := fifo.read(audio.frame_size)) is not None:
+            out.mux(audio.encode(piece))
+        out.mux(audio.encode(None))
+        out.mux(video.encode(None))
+
+
+def streams_of(path):
+    """-> (frames written, whether the sound came with them)."""
+    with av.open(path) as container:
+        written = sum(1 for _ in container.decode(container.streams.video[0]))
+        return written, bool(list(container.streams.audio))
+
+
+with tempfile.TemporaryDirectory() as shelf:
+    source = os.path.join(shelf, "clip.mp4")
+    clip_with_sound(source)
+
+    # One frame at a time, sound kept: the upscale bench's Sharpen, exactly.
+    name = bench.transcode(source, shelf, "one", work=lambda frames: frames,
+                           chunk=1, keep_sound=True)
+    check("a clip with sound comes through", streams_of(os.path.join(shelf, name)),
+          (24, True))
+
+    # And in chunks with a crossfade: Restore's shape, where `chunk` being read
+    # correctly decides how many frames reach `work` at a time.
+    seen = []
+    name = bench.transcode(source, shelf, "many",
+                           work=lambda frames: (seen.append(len(frames)), frames)[1],
+                           chunk=4, overlap=2, keep_sound=True)
+    check("chunked work sees its chunk", max(seen), 4)
+    check("and the clip still comes through",
+          streams_of(os.path.join(shelf, name)), (24, True))
+
+    # Sound left behind on purpose — the tracing bench's default.
+    name = bench.transcode(source, shelf, "silent", work=lambda frames: frames,
+                           chunk=1, keep_sound=False)
+    check("and is dropped when it is not asked for",
+          streams_of(os.path.join(shelf, name)), (24, False))
+
+    # A run that dies partway has already created its file, and `free_name`
+    # counts up — so a bench pressed three times left three unplayable mp4s on
+    # the shelf beside the renders.
+    class BenchExploded(Exception):
+        pass
+
+    def explode(frames):
+        raise BenchExploded("the work gave up")
+
+    before = sorted(os.listdir(shelf))
+    try:
+        bench.transcode(source, shelf, "doomed", work=explode, chunk=1, keep_sound=True)
+        FAILURES.append("a work that raised was reported as a finished file")
+    except BenchExploded:
+        pass
+    check("a failed run leaves nothing behind", sorted(os.listdir(shelf)), before)
+
 
 # ---- the upscale bench ----------------------------------------------------------
 

@@ -307,4 +307,29 @@ export const css = `
 .mmc-prestage-host { display: flex; flex-direction: column; height: 100%; min-height: 0; }
 .mmc-prestage-host > * { flex: 1 1 auto; min-height: 0; }
 
+/* The waiting mark. One ring, drawn with a border and turned — no SVG, no image,
+   and it works at whatever size the thing it sits in gives it, which is why the
+   colour is currentColor and the size is an em. It appears wherever a press is
+   in the air: on a bench's run row, on the refine pill, on a Render button, and
+   on a preview that is holding while the queue is busy. */
+@keyframes mmc-spin { to { transform: rotate(360deg); } }
+.mmc-spin {
+  display: inline-block; flex: none;
+  width: 1em; height: 1em; box-sizing: border-box;
+  border: 2px solid currentColor; border-top-color: transparent;
+  border-radius: 50%; opacity: .8;
+  animation: mmc-spin 700ms linear infinite;
+}
+/* A class selector beats the user agent's [hidden] rule, so the display above
+   would keep the ring on screen for a button that hid it — which is exactly what
+   the refine pill did: it spun from the moment the page loaded, on every tab,
+   with nothing running. Anything that toggles the ring by attribute needs this
+   line to exist. */
+.mmc-spin[hidden] { display: none; }
+/* A person who has asked not to see motion still has to be able to tell a
+   button that is waiting from one that is not, so the ring stays and stops. */
+@media (prefers-reduced-motion: reduce) {
+  .mmc-spin { animation-duration: 0s; border-top-color: currentColor; opacity: .45; }
+}
+
 `;

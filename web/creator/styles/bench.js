@@ -348,6 +348,50 @@ export const css = `
 /* The wait, on the glass rather than in the corner: the picture is what is being
    asked for, so the picture is what says it is coming. */
 .mmc-bn-box.waiting .mmc-bn-over-layer { opacity: .5; }
+
+/* --- held, which is not the same as waiting ------------------------------- */
+/* A request in the air is the rule above: the half being replaced steps back
+   because something is on its way. Held is the other thing entirely — nothing
+   is on its way, a render has the GPU, and what is on the glass is a true
+   picture of where the dials stood the last time this bench could ask. So it
+   does not fade toward absent. It cools and goes still: the colour comes out of
+   it, which is what a frame looks like when it has stopped being current, and
+   it stays sharp enough to keep judging against. Fading it would say "loading",
+   and it is not. */
+.mmc-bn-box.held .mmc-bn-over-layer {
+  opacity: .88; filter: saturate(.45) contrast(.95);
+  transition: opacity 200ms ease, filter 200ms ease;
+}
+/* The slate. The two tags at the foot of the glass are labels and are set like
+   labels — uppercase, tracked out, naming a half. This one is a sentence, so it
+   is set like one; the difference in case is how you can tell at a glance that
+   something is being said rather than named. */
+.mmc-bn-held {
+  position: absolute; top: 10px; right: 10px; z-index: 2;
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 11px 6px 10px; border-radius: 9px;
+  background: var(--mmc-scrim-3);
+  border: 1px solid var(--mmc-line-2);
+  color: var(--mmc-text); font-size: calc(11.5px * var(--mmc-type));
+  max-width: calc(100% - 20px); pointer-events: none;
+  box-shadow: 0 2px 10px var(--mmc-shadow-soft);
+  animation: mmc-bn-held-in 200ms ease both;
+}
+/* The ring is the only warm thing on the slate, and the only warm thing left on
+   a frame that has just had its colour taken away. The accent in this room means
+   the control is in use, and a preview that has been asked for and not answered
+   is exactly that — but it is said once. An amber edge around the slate as well
+   would spend the accent twice on one sentence. */
+.mmc-bn-held .mmc-spin { border-width: 1.5px; color: var(--mmc-accent); opacity: 1; }
+.mmc-bn-held span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@keyframes mmc-bn-held-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mmc-bn-held { animation: none; }
+  .mmc-bn-box.held .mmc-bn-over-layer { transition: none; }
+}
 /* Before there is a second picture there is nothing to wipe between, so the seam
    and the tags that name its two halves stay out of the way. A wipe drawn over
    one picture is a control that does nothing, sitting on the only thing there is

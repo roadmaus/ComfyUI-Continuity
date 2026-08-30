@@ -34,7 +34,7 @@ from aiohttp import web
 import folder_paths
 from server import PromptServer
 
-from . import (compile as compiler, latents, lorameta, media, models, plate,
+from . import (compile as compiler, jobs, latents, lorameta, media, models, plate,
                preview, settings)
 
 # The picker builds its grid lazily and paginates, so the cap only bounds the
@@ -666,6 +666,17 @@ def _plate_models(body):
             "segment": str(body.get("segment") or "")}
 
 
+def _plate_job(body):
+    """One accepted sheet, on the queue. See `creator/jobs.py`."""
+    return plate.build(_plate_panels(body), _plate_models(body),
+                       float(body.get("backdrop", 0.5)),
+                       int(body.get("width") or 1280),
+                       int(body.get("height") or 704))
+
+
+jobs.register("plate", _plate_job)
+
+
 @PromptServer.instance.routes.post("/continuity/plate")
 async def build_plate(request):
     """Write the accepted sheet. See `creator/plate.py`.
@@ -683,27 +694,18 @@ async def build_plate(request):
     where the picture would have been.
     """
     body = await request.json()
-    panels = _plate_panels(body)
-    if not panels:
+    if not _plate_panels(body):
         return web.json_response({"error": "a plate needs at least one picture"},
                                  status=400)
 
-    # Off the event loop: a matte is a forward pass through BiRefNet and the
-    # loop it would otherwise run on is also the prompt queue. Same reason the
-    # listing routes above hand their walks to an executor.
-    loop = asyncio.get_running_loop()
+    # Queued rather than run on a thread beside the prompt queue: a matte is a
+    # forward pass through BiRefNet, and a sheet is one per panel. See
+    # `creator/jobs.py`.
     try:
-        built = await loop.run_in_executor(None, lambda: plate.build(
-            panels,
-            _plate_models(body),
-            float(body.get("backdrop", 0.5)),
-            int(body.get("width") or 1280),
-            int(body.get("height") or 704),
-        ))
-    except Exception as exc:                       # noqa: BLE001 — reported, not swallowed
-        logging.exception("[MiniMax] building a plate failed")
-        return web.json_response({"error": str(exc)}, status=400)
-    return web.json_response(built)
+        prompt_id = await jobs.submit("plate", body, body.get("client_id"))
+    except jobs.JobError as exc:
+        return web.json_response({"error": str(exc)}, status=500)
+    return web.json_response({"prompt_id": prompt_id})
 
 
 # The sheet editor's per-panel cutouts, encoded once and held — bounded, and
@@ -742,6 +744,9 @@ def _panel_png(panel, models):
 async def cut_plate_panel(request):
     """One panel of the sheet being edited, cut out, as a PNG — from memory,
     never from a file. This is what the editor's live preview is made of."""
+    refused = jobs.refuse_if_busy()
+    if refused is not None:
+        return refused
     body = await request.json()
     panels = _plate_panels(body)
     if len(panels) != 1:

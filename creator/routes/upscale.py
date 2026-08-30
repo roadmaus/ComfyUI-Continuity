@@ -23,7 +23,7 @@ import json
 from aiohttp import web
 from server import PromptServer
 
-from .. import media, upscale
+from .. import jobs, media, upscale
 
 # The preview is asked for whenever a dial or the centre moves and the answer is
 # a picture — long enough that going back to a setting is free, short enough
@@ -57,7 +57,15 @@ def _number(query, key, fallback=0.0):
 
 @PromptServer.instance.routes.get("/continuity/upscale/preview")
 async def preview_tile(request):
-    """One tile of the source, upscaled, as a PNG."""
+    """One tile of the source, upscaled, as a PNG.
+
+    Gated while the queue is busy rather than queued behind it — see the same
+    route in `routes/control.py` for why a slider's previews must not become
+    queue items.
+    """
+    refused = jobs.refuse_if_busy()
+    if refused is not None:
+        return refused
     filename = request.query.get("filename", "")
     op = request.query.get("op", "sharpen")
     at = max(0.0, _number(request.query, "at"))
@@ -78,14 +86,27 @@ async def preview_tile(request):
     return web.Response(body=png, content_type="image/png", headers={"Cache-Control": CACHE})
 
 
+def _run_job(body):
+    """One upscale, on the queue. See `creator/jobs.py`."""
+    return upscale.run(body.get("filename", ""), body.get("op", "sharpen"),
+                       body.get("params") or {}, body.get("trim"),
+                       bool(body.get("keep_sound", True)), jobs.progress(),
+                       body.get("at"))
+
+
+jobs.register("upscale", _run_job)
+
+
 @PromptServer.instance.routes.post("/continuity/upscale/run")
 async def run_upscale(request):
     """Upscale the whole file and put the result on the shelf.
 
-    Progress goes out on ComfyUI's own websocket, on a channel of this bench's
-    own: the client asking for this is already listening to that socket for
-    every render it queues, and a bench that invented a second channel for the
-    same job would be a second thing to keep alive.
+    Queued, for the reasons `routes/control.py` gives — and more so here, since
+    a Restore is a sampler and a VAE and was the heaviest thing in this pack
+    that ran beside the prompt queue instead of in it.
+
+    The validation stays: it is knowable now, and a sentence under the button
+    beats an error dialog once the queue reaches the job.
     """
     try:
         body = await request.json()
@@ -109,24 +130,15 @@ async def run_upscale(request):
         except (TypeError, ValueError):
             return web.json_response({"error": "at must be a mark in seconds"}, status=400)
 
-    token = str(body.get("token") or "")
-
-    def tell(fraction):
-        # Fire and forget from a worker thread: the socket is the loop's, so the
-        # send has to be scheduled onto it rather than awaited here.
-        PromptServer.instance.send_sync("continuity.upscale", {
-            "token": token, "progress": fraction,
-        })
-
     try:
-        loop = asyncio.get_running_loop()
-        result = await loop.run_in_executor(
-            None, lambda: upscale.run(
-                body.get("filename", ""), body.get("op", "sharpen"),
-                body.get("params") or {}, trim,
-                bool(body.get("keep_sound", True)), tell if token else None, at))
-    except (upscale.UpscaleError, media.MediaError) as exc:
-        return web.json_response({"error": str(exc)}, status=400)
-    except Exception as exc:  # noqa: BLE001
+        prompt_id = await jobs.submit("upscale", {
+            "filename": body.get("filename", ""),
+            "op": body.get("op", "sharpen"),
+            "params": body.get("params") or {},
+            "trim": list(trim) if trim else None,
+            "keep_sound": bool(body.get("keep_sound", True)),
+            "at": at,
+        }, body.get("client_id"))
+    except jobs.JobError as exc:
         return web.json_response({"error": str(exc)}, status=500)
-    return web.json_response(result)
+    return web.json_response({"prompt_id": prompt_id})

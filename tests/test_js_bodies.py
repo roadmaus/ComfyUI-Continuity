@@ -29,6 +29,7 @@ import shutil
 import subprocess
 import sys
 
+import harness
 import layout
 import tempfile
 
@@ -65,11 +66,12 @@ for name in sorted(os.listdir(STYLES)):
             if inside and ("`" in line or "${" in line):
                 stray.append(f"{name}:{number}: {line.strip()[:70]}")
 if stray:
-    print("a stylesheet has a backtick or ${} outside its delimiters — the module "
-          "will not parse:")
-    for line in stray:
-        print("  -", line)
-    sys.exit(1)
+    # `harness.died`, not a bare `sys.exit(1)`: the harness reports from
+    # `atexit`, so exiting on its own printed the diagnostic and then the
+    # suite's success line right under it. Anything reading the output — a
+    # person, or a runner that greps rather than checking the code — saw a pass.
+    harness.died("a stylesheet has a backtick or ${} outside its delimiters — "
+                 "the module will not parse:\n  " + "\n  ".join(stray))
 
 
 if shutil.which("node") is None:

@@ -1,6 +1,7 @@
 // Talking to the server: list the input folder, upload into it, build view URLs.
 
 import { api } from "../../../scripts/api.js";
+import { run as runJob } from "./queue.js";
 import { t } from "./i18n.js";
 import { atlasUrl, isAtlasRef } from "./presets/atlasref.js";
 import { applyTextScale, applySurfaceLift, applyTheme } from "./styles.js";
@@ -748,16 +749,7 @@ export async function cutPanel(body) {
  * built an hour ago findable in the grid like any other picture.
  */
 export async function buildPlate(body) {
-  const response = await api.fetchApi("/continuity/plate", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-  const answer = await response.json().catch(() => ({}));
-  if (!response.ok) {
-    throw new Error(answer.error || t("building the plate failed ({status})",
-                                      { status: response.status }));
-  }
+  const answer = await runJob("/continuity/plate", body);
   const name = answer.path.split("/").pop();
   remember("input", {
     path: answer.path,
@@ -865,20 +857,14 @@ export function controlPreviewUrl(path, op, params, at = 0) {
 /**
  * Trace the whole file and write it into the input folder.
  *
- * `token` is how the progress on the way back is told apart from anybody else's
- * — the server sends it back on ComfyUI's own websocket under
- * `continuity.control`, which is the socket the page is already listening to.
- * Resolves to `{path, kind}`: a file in the input folder, which is the shape
+ * Queued rather than run in the request: pass `{onProgress}` for the fraction,
+ * which now rides ComfyUI's own progress channel under the job's prompt id
+ * rather than a per-bench channel keyed by a token this invented. Resolves to
+ * `{path, kind}`: a file in the input folder, which is the shape
  * the pre-stage and the shot both take a reference in.
  */
-export async function controlRun(body) {
-  const response = await api.fetchApi("/continuity/control/run", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-  const answer = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(answer.error || t("the tracing failed ({status})", { status: response.status }));
+export async function controlRun(body, options) {
+  const answer = await runJob("/continuity/control/run", body, options);
   // The file is new and the picker's listing is a few seconds stale — without
   // this the guide is missing from the grid it was just written into.
   invalidate("input");
@@ -929,20 +915,13 @@ export function upscalePreviewUrl(path, op, params, { at = 0, centre = [0.5, 0.5
 /**
  * Upscale the whole file onto the shelf in the output folder.
  *
- * `token` tells this run's progress apart from anybody else's on the way back —
- * the server sends it under `continuity.upscale` on ComfyUI's own websocket.
- * Resolves to `{path, kind, root}`, where `root` is "output": what comes back
+ * Queued, with `{onProgress}` for the fraction — see `controlRun` above and
+ * `web/creator/queue.js`. Resolves to `{path, kind, root}`, where `root` is "output": what comes back
  * is the finished file rather than an ingredient, so it lands beside the renders
  * and not in the input folder.
  */
-export async function upscaleRun(body) {
-  const response = await api.fetchApi("/continuity/upscale/run", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-  const answer = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(answer.error || t("the upscale failed ({status})", { status: response.status }));
+export async function upscaleRun(body, options) {
+  const answer = await runJob("/continuity/upscale/run", body, options);
   // The file is new and the gallery's listing is a few seconds stale.
   invalidate("output");
   return answer;

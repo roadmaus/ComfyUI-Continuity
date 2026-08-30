@@ -21,7 +21,7 @@ import json
 from aiohttp import web
 from server import PromptServer
 
-from .. import control, media
+from .. import control, jobs, media
 
 # The preview is asked for on every drag of a slider and the answer is a picture.
 # Long enough that dragging back and forth is free, short enough that a source
@@ -47,7 +47,17 @@ def _values(query):
 
 @PromptServer.instance.routes.get("/continuity/control/preview")
 async def preview_frame(request):
-    """One frame of the source, traced, as a PNG."""
+    """One frame of the source, traced, as a PNG.
+
+    Gated rather than queued. A preview is asked for on every drag of a slider
+    and the browser's coalescing is what makes that feel like a control, so one
+    queue item per drag position would replay the whole drag once the render
+    ahead of it finished. The surface holds the `src` while the queue is busy;
+    this 409 is what stands under that for the tab that has not heard yet.
+    """
+    refused = jobs.refuse_if_busy()
+    if refused is not None:
+        return refused
     filename = request.query.get("filename", "")
     op = request.query.get("op", "as_shot")
     try:
@@ -69,15 +79,31 @@ async def preview_frame(request):
     return web.Response(body=png, content_type="image/png", headers={"Cache-Control": CACHE})
 
 
+def _run_job(body):
+    """One tracing, on the queue. See `creator/jobs.py`."""
+    return control.run(body.get("filename", ""), body.get("op", "as_shot"),
+                       body.get("params") or {}, body.get("trim"),
+                       bool(body.get("keep_sound")), jobs.progress(),
+                       body.get("at"))
+
+
+jobs.register("control", _run_job)
+
+
 @PromptServer.instance.routes.post("/continuity/control/run")
 async def run_tracing(request):
     """Trace the whole file and put the result in the input folder.
 
-    Progress goes out on ComfyUI's own websocket rather than as a streamed
-    response, because the client that asked for this is the client that is
-    already listening to that socket for every render it queues — and a bench
-    that invented a second channel for the same job would be a second thing to
-    keep alive.
+    Queued rather than run here. Every tracing worth waiting for is a model over
+    every frame of a clip, and this used to go onto a thread pool beside the
+    prompt queue rather than into it — so a Trace pressed during a render put a
+    second model on the same GPU. It is a job now: `jobs.submit` answers with a
+    `prompt_id`, ComfyUI's Cancel reaches it, its progress is on the real bar,
+    and the client picks the result up off `executed`.
+
+    What did not move is the validation below. A trim that ends before it starts
+    is knowable now and is worth a 400 with a sentence in it, where the same
+    thing discovered inside a queued job would be an error dialog a minute later.
     """
     try:
         body = await request.json()
@@ -103,24 +129,15 @@ async def run_tracing(request):
         except (TypeError, ValueError):
             return web.json_response({"error": "at must be a mark in seconds"}, status=400)
 
-    token = str(body.get("token") or "")
-
-    def tell(fraction):
-        # Fire and forget from a worker thread: the socket is the loop's, so the
-        # send has to be scheduled onto it rather than awaited here.
-        PromptServer.instance.send_sync("continuity.control", {
-            "token": token, "progress": fraction,
-        })
-
     try:
-        loop = asyncio.get_running_loop()
-        result = await loop.run_in_executor(
-            None, lambda: control.run(
-                body.get("filename", ""), body.get("op", "as_shot"),
-                body.get("params") or {}, trim,
-                bool(body.get("keep_sound")), tell if token else None, at))
-    except (control.ControlError, media.MediaError) as exc:
-        return web.json_response({"error": str(exc)}, status=400)
-    except Exception as exc:  # noqa: BLE001
+        prompt_id = await jobs.submit("control", {
+            "filename": body.get("filename", ""),
+            "op": body.get("op", "as_shot"),
+            "params": body.get("params") or {},
+            "trim": list(trim) if trim else None,
+            "keep_sound": bool(body.get("keep_sound")),
+            "at": at,
+        }, body.get("client_id"))
+    except jobs.JobError as exc:
         return web.json_response({"error": str(exc)}, status=500)
-    return web.json_response(result)
+    return web.json_response({"prompt_id": prompt_id})

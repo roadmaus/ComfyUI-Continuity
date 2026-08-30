@@ -968,3 +968,19 @@ for _family in _registry.DECLARED:
         continue
     check(f"{_family.ID}'s segment node is registered",
           _family.SEGMENT_NODE in _listed, True)
+
+# The node the benches, the refiner and the plate editor are queued as. It has to
+# be registered — `jobs.submit` names it in every prompt it builds, and a prompt
+# naming a node the server does not have is refused — and it has to stay out of
+# the node search, because nobody puts one of these on a canvas by hand.
+_job = next((node for node in _extension
+             if node.define_schema().node_id == "ContinuityJob"), None)
+check("the job node is registered", _job is not None, True)
+if _job is not None:
+    check("and hidden from the node search", _job.define_schema().is_dev_only, True)
+    check("and is an output node, or a prompt holding only it has nothing to run",
+          _job.define_schema().is_output_node, True)
+    # Two presses with the same dials are two tracings, so the execution cache
+    # must never hand the second one the first one's answer.
+    check("and is never cached",
+          _job.fingerprint_inputs(job="{}") != _job.fingerprint_inputs(job="{}"), True)

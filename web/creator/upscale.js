@@ -45,8 +45,8 @@
 // built on, so the same doors the tracing bench offers are here too. The file
 // exists either way; a door only saves the trip through the picker.
 
-import { el, icon, mark, drawFrame, dragsFiles, mountOverlay, keepScroll, placeNear,
-         dismissable } from "./dom.js";
+import { el, icon, mark, spinner, heldNote, drawFrame, dragsFiles, mountOverlay,
+         keepScroll, placeNear, dismissable } from "./dom.js";
 import { upscaleBackends, upscalePreviewUrl, upscaleRun, outputUrl, probe, viewUrl,
          upload, uiSetting, patchSettings, primeSettings } from "./api.js";
 import { openChoicePopover } from "./pills.js";
@@ -54,6 +54,7 @@ import { openPicker } from "./picker.js";
 import { formatTime, mountTrim } from "./trim.js";
 import { t } from "./i18n.js";
 import { api } from "../../../scripts/api.js";
+import { busy as queueBusy, watch as watchQueue } from "./queue.js";
 
 /** Where an uploaded source lands — the same shelf the tracing bench uploads
  *  to, because it is the same act: footage brought in from outside to be worked
@@ -160,7 +161,12 @@ class Bench {
     // The door whose frame is being cut right now — see `send`.
     this.sending = null;
     this.error = null;
-    this.token = `ups-${Math.random().toString(36).slice(2)}`;
+    // Whether a plain tile was asked for while something else had the GPU, and
+    // so is owed once the queue drains. One flag, not a list: what is owed is
+    // the tile the dials describe *then*.
+    this.heldPreview = false;
+    // What the queue is doing. See `web/creator/queue.js`.
+    this.queue = { remaining: 0, running: false };
   }
 
   // ---- the room --------------------------------------------------------------
@@ -177,6 +183,11 @@ class Bench {
       ]),
     ]));
     this.frame = el("div", { class: "mmc-bn-frame" });
+    // Made once and re-adopted by `paintHeld` — the frame it sits in is rebuilt
+    // whenever the layers are. The argument is `control.js`'s, and so is the slate.
+    this.held = heldNote(
+      t("Preview waiting for the render"),
+      t("The dials still work. This refreshes as soon as the render is done."));
     this.box = el("div", { class: "mmc-bn-box" }, [this.frame]);
     // Where the trim editor's bar goes, for a clip. Empty for a picture: a still
     // has no span, and an inert bar under one is a control claiming the file has
@@ -257,12 +268,27 @@ class Bench {
     }, [this.sheet]);
 
     this.unmount = mountOverlay(this.overlay, () => this.close());
-    this.onProgress = ({ detail }) => {
-      if (detail?.token !== this.token) return;
-      this.progress = detail.progress;
-      this.paintFoot();
-    };
-    api.addEventListener("continuity.upscale", this.onProgress);
+    // The queue, watched rather than guessed at: the held tile goes out when
+    // nothing else has the GPU, and the run row and Try press say which of them
+    // is waiting and which is working.
+    let wasBusy = queueBusy();
+    this.unwatchQueue = watchQueue((state) => {
+      this.queue = state;
+      const nowBusy = queueBusy();
+      if (!nowBusy && this.heldPreview) {
+        // Cleared here rather than inside `askForTile`, which bails on a bench
+        // with no source — see `control.js`.
+        this.heldPreview = false;
+        this.paintHeld();
+        this.askForTile();
+      }
+      // Only when the answer changed: `status` fires on every step of every
+      // render, and a repaint per step is not a report, it is a cost.
+      if (nowBusy !== wasBusy) {
+        wasBusy = nowBusy;
+        if (this.overlay.isConnected) { this.paintFoot(); this.paintTry(); }
+      }
+    });
 
     this.render();
     this.watchBox();
@@ -329,7 +355,7 @@ class Bench {
 
   close() {
     if (open === this) open = null;
-    api.removeEventListener("continuity.upscale", this.onProgress);
+    this.unwatchQueue?.();
     clearTimeout(this.settle);
     this.watcher?.disconnect();
     this.cutter?.destroy();
@@ -522,7 +548,36 @@ class Bench {
     // one where seeing what you would get for free is worth most.
     if (!this.source) return;
     clearTimeout(this.settle);
+    // Held rather than queued while something else has the GPU — the argument
+    // is `control.js`'s and is the same one: a tile per drag position, replayed
+    // after the render ahead of it, is not what anybody asked for by moving a
+    // dial. `jobs.refuse_if_busy` stands under this on the server.
+    if (queueBusy()) {
+      this.heldPreview = true;
+      this.paintHeld();
+      return;
+    }
+    this.heldPreview = false;
+    this.paintHeld();
     this.settle = setTimeout(() => this.fetchPlain(), SETTLE_MS);
+  }
+
+  /** The held state on the glass. The same two marks the tracing bench puts up,
+   *  and for the same reason: the slate says why nothing is arriving, and the
+   *  frame goes cold so the tile under it is not read as the answer to the dial
+   *  that was just moved. See `control.js`. */
+  paintHeld() {
+    // Into the frame rather than the box: the frame is the picture's own
+    // rectangle — the box is letterboxed around it — and a slate anchored to the
+    // box would sit half on the glass and half on the black beside it at any
+    // aspect but one. In and out rather than shown and hidden, because
+    // `.mmc-bn-held` sets `display` and a class selector beats `[hidden]`; see
+    // `heldNote`. Appended on every held paint, since `mountLayers` rebuilds the
+    // frame's children and would otherwise drop it.
+    if (this.heldPreview) this.frame.appendChild(this.held);
+    else this.held.remove();
+    this.box.classList.toggle("held", this.heldPreview);
+    if (this.heldPreview) this.box.classList.remove("waiting");
   }
 
   /** The tile as plain arithmetic would enlarge it. A resize on the server and
@@ -623,8 +678,10 @@ class Bench {
         trim: frameOnly ? null : this.trim,
         at: frameOnly ? this.at : null,
         keep_sound: this.keepSound,
-        token: this.token,
-      });
+      }, { onProgress: (fraction) => {
+        this.progress = fraction;
+        if (this.overlay.isConnected) this.paintFoot();
+      } });
       this.result.op = this.backend()?.label ?? this.op;
       this.result.scale = this.scale();
       this.sentTo.clear();
@@ -656,13 +713,42 @@ class Bench {
   paintTry() {
     if (!this.tryButton) return;
     const backend = t(this.backend()?.label ?? "");
-    this.tryButton.disabled = this.trying;
-    this.tryButton.textContent = this.trying
-      ? t("Trying…") : this.overReady ? t("Try it again") : t("Try it here");
-    this.tryButton.title = t(
-      "Runs {backend} on this square alone, so you can see it before spending the file.",
-      { backend });
-    this.tryButton.style.display = this.canTry() || this.trying ? "" : "none";
+    // A tile is a model pass and is not queued — it is the thing a person is
+    // dragging dials against, and it goes behind nothing. So while the queue has
+    // the GPU the press is not offered: it would be refused (`jobs.refuse_if_busy`)
+    // and a button that fails on principle is worse than one that says why.
+    const held = queueBusy();
+    this.tryButton.disabled = this.trying || held;
+    this.tryButton.replaceChildren(...[
+      this.trying || held ? spinner() : null,
+      el("span", {
+        text: held ? t("Waiting for the render…")
+          : this.trying ? t("Trying…")
+          : this.overReady ? t("Try it again") : t("Try it here"),
+      }),
+    ].filter(Boolean));
+    this.tryButton.classList.toggle("busy", this.trying || held);
+    this.tryButton.title = held
+      ? t("This runs once the render ahead of it is done.")
+      : t("Runs {backend} on this square alone, so you can see it before spending the file.",
+          { backend });
+    this.tryButton.style.display = this.canTry() || this.trying || held ? "" : "none";
+  }
+
+  /**
+   * What the run row says, in whichever of its four states it is in.
+   *
+   * The fourth is the one the queue brought: a press that has been accepted but
+   * is behind somebody else's render is not upscaling yet, and until the queue
+   * reaches it there is no progress to report. See `control.js` for the same
+   * four states on the other bench.
+   */
+  runLabel(clip) {
+    if (!this.busy) return clip ? t("Upscale the clip") : t("Upscale");
+    if (this.progress != null) {
+      return t("Upscaling… {percent}%", { percent: Math.round(this.progress * 100) });
+    }
+    return this.queue.remaining > 1 ? t("Waiting for the render…") : t("Upscaling…");
   }
 
   /** A titled section of the bench — the same eyebrow the tracing bench and the
@@ -1006,6 +1092,7 @@ class Bench {
     this.frame.onpointerdown = (event) => this.dragSeam(event);
     this.frame.ondragstart = (event) => event.preventDefault();
     this.paintSeam();
+    this.paintHeld();
     this.paintTry();
   }
 
@@ -1076,14 +1163,13 @@ class Bench {
     const clip = this.source?.kind === "video";
     const stop = !this.source || this.busy || !this.ready() || null;
     const run = el("button", {
-      class: "mmc-bn-run", disabled: stop,
+      class: this.busy ? "mmc-bn-run busy" : "mmc-bn-run",
+      disabled: stop,
       onclick: () => this.enlarge(false),
-      text: this.busy
-        ? (this.progress != null
-            ? t("Upscaling… {percent}%", { percent: Math.round(this.progress * 100) })
-            : t("Upscaling…"))
-        : clip ? t("Upscale the clip") : t("Upscale"),
-    });
+    }, [
+      this.busy ? spinner() : null,
+      el("span", { text: this.runLabel(clip) }),
+    ].filter(Boolean));
     // Filtered, not spread with holes: `replaceChildren` takes strings as well
     // as nodes, so a null reaches the document as the word "null".
     this.foot.replaceChildren(...[
