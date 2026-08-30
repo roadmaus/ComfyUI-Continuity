@@ -158,3 +158,36 @@ re-render.
 - Accelerator pills (caches, sage attention, low vram, and so on) appear when
   the matching optional pack is installed. All caches trade fidelity for
   speed, so A/B against a native render before trusting one on a final piece.
+
+## Sampling on two GPUs
+
+H3 can sample one shot across several cards, which on a pair is roughly half
+the wall clock. Install the [Raylight community
+fork](https://github.com/Karmabu/raylight) — the upstream Raylight has no H3
+path — and a **Sampling** row appears at the top of the weights popover. Pick
+`Raylight · 2 GPUs` and queue as usual: the checkpoint is loaded into one Ray
+worker per card and the sequence is split across them, while the prompt is
+still encoded and the video still decoded on your own card. Preview frames keep
+working if you have KJNodes and `taeh3.safetensors`.
+
+It carries the first sampling pass and nothing else. These are **refused before
+the queue starts**, with a message saying what to switch off, rather than
+quietly dropped from the render:
+
+- the refine (two-pass upscale), faces and re-detail passes,
+- the turbo lead-in,
+- sound seams — a shot continuing the previous one's soundtrack,
+- ControlNet guides: they reach H3 through the conditioning, so they would
+  arrive intact and then be ignored by Raylight's own forward pass,
+- every accelerator except sage attention, which Raylight runs itself,
+- device pins from ComfyUI-MultiGPU: the Ray workers want the cards,
+- a strip that routes to both checkpoints. Force the route to Ref2VA; it takes
+  everything FL2VA does.
+
+One thing changes without being refused: LoRAs are merged inside the workers by
+ComfyUI's own loader instead of this pack's H3 stack, which is worse on
+quantized checkpoints. Picture seams, the sigma shift, GGUF checkpoints and
+everything the compiler does are unaffected.
+
+The pre-stage's stills always sample on one card. Starting a Ray cluster to make
+one frame costs far more than it saves.

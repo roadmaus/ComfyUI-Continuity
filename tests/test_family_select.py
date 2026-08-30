@@ -321,6 +321,10 @@ switched = probed["switched"]
 check("the piece is on the probe", switched["family"], "probe")
 check("the weights block is the probe's, empty",
       switched["models"], {"dtype": "default", "route": "p_ref2va", "devices": {},
+                           # The sampling backend is remembered across a family
+                           # switch in the shape a fresh block has it, because
+                           # it is not a statement about the family's files.
+                           "backend": "default", "gpus": 2,
                            "p_fl2va": "", "p_ref2va": "", **{
                                f"p_{slot['id']}": ""
                                for slot in catalog["families"][0]["weights"]}})

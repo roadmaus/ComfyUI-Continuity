@@ -301,6 +301,15 @@ def manifest():
             # and no switch worth drawing.
             "seam_pin": True,
             "turbo": TURBO,
+            # Whether this family can sample through Raylight's Ray workers —
+            # the multi-GPU backend in the weights popover. H3's alone so far,
+            # and a fact about the *fork* rather than about the architecture:
+            # Karmabu's community fork is the only Raylight that carries an H3
+            # sequence-parallel forward, and `creator/raylight.py` is written
+            # against its node ids. A family declaring nothing here draws no
+            # switch, which is the honest answer for LTX 2.5 — upstream Raylight
+            # has an LTX path and this pack has never emitted it.
+            "raylight": True,
             # The guide pill: a ControlNet branch loaded beside the checkpoint,
             # aimed at a clip the bench traced. `method` is the whole of what
             # separates this from Qwen-Image-Edit's answer to the same question —

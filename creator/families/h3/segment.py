@@ -24,7 +24,7 @@ import json
 
 from comfy_api.latest import io
 
-from ... import compile as compiler, lora, media
+from ... import compile as compiler, lora, media, raylight
 from . import declare, encode as encoder, payload as payload_repair
 
 SEGMENT_NODE = declare.SEGMENT_NODE
@@ -123,6 +123,19 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
                 # the cache key — it had before this existed.
                 io.String.Input("hold_lora", optional=True,
                     tooltip="A LoRA to leave off the 'lead model' output — the distillation, for a turbo lead-in."),
+                # Which side of the wire this segment's transformer is on.
+                # "raylight" means there is none here at all: the workers loaded
+                # it themselves from a filename, the two MODEL outputs below go
+                # unwired, and this node's whole job is the conditioning and the
+                # latent. See `creator/raylight.py`.
+                #
+                # An input rather than an inference from the absent MODEL
+                # sockets, because a segment that is genuinely missing its
+                # checkpoint is a graph error worth keeping — and written into
+                # the graph only in that mode, so a single-GPU render keeps the
+                # inputs, and so the cache key, it had before this existed.
+                io.String.Input("sampler_backend", optional=True,
+                    tooltip="'raylight' when the transformer is loaded in Ray workers rather than wired to this node."),
             ],
             outputs=[
                 io.Model.Output(display_name="model"),
@@ -153,7 +166,8 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
                 vae_name=None, audio_vae_name=None,
                 model_fl2va=None, model_ref2va=None,
                 prev_image=None, prev_audio=None,
-                next_image=None, next_audio=None, hold_lora="") -> io.NodeOutput:
+                next_image=None, next_audio=None, hold_lora="",
+                sampler_backend="") -> io.NodeOutput:
         payload = _parse(segment_data)
 
         # Which segment the queue has reached, told to the stage the moment
@@ -198,21 +212,30 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
         if override:
             compiled.prompt = override
 
-        model = {"fl2va": model_fl2va, "ref2va": model_ref2va}[compiled.checkpoint]
-        if model is None:
-            raise ValueError(
-                f"This segment is {compiled.mode}, which needs the "
-                f"{compiled.checkpoint.upper()} checkpoint — connect it to "
-                f"'model_{compiled.checkpoint}'."
-            )
-        entries = payload["request"].get("loras")
-        # The lead-in's model first, off the same unpatched weights: it is the
-        # stack minus the distillation, so it carries whatever character or
-        # style LoRAs the piece is wearing. Only built when one is named —
-        # otherwise the second output is this one, and no LoRA is loaded twice.
-        lead = lora.apply(model, entries, compiled.checkpoint,
-                          without=hold_lora) if hold_lora else None
-        model = lora.apply(model, entries, compiled.checkpoint)
+        # Nothing to patch, and nothing to hand back: the multi-GPU backend
+        # loads the transformer inside Ray's workers and merges the LoRAs there,
+        # so both MODEL outputs are None and the graph wires neither of them.
+        # Everything below this line — the seams, the encode — is unchanged,
+        # because all of it happens on this side of the wire either way.
+        distributed = sampler_backend == raylight.RAYLIGHT
+        model = lead = None
+        if not distributed:
+            model = {"fl2va": model_fl2va, "ref2va": model_ref2va}[compiled.checkpoint]
+            if model is None:
+                raise ValueError(
+                    f"This segment is {compiled.mode}, which needs the "
+                    f"{compiled.checkpoint.upper()} checkpoint — connect it to "
+                    f"'model_{compiled.checkpoint}'."
+                )
+            entries = payload["request"].get("loras")
+            # The lead-in's model first, off the same unpatched weights: it is
+            # the stack minus the distillation, so it carries whatever character
+            # or style LoRAs the piece is wearing. Only built when one is named
+            # — otherwise the second output is this one, and no LoRA is loaded
+            # twice.
+            lead = lora.apply(model, entries, compiled.checkpoint,
+                              without=hold_lora) if hold_lora else None
+            model = lora.apply(model, entries, compiled.checkpoint)
 
         loaded = media.load_all(compiled)
         if compiled.continues:
@@ -262,7 +285,12 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
             # before the forward; `payload.py` says exactly what and why. Inert
             # on a seam that needs neither, so every seam wears it rather than
             # this node re-deriving which ones do.
-            model = payload_repair.repair(model)
+            # Not on a distributed render, where there is no model here to
+            # wrap — which is why `raylight.refuse_run` refuses the seams that
+            # actually need the repair before a node is built. The rest reach
+            # this line with nothing for it to do anyway.
+            if model is not None:
+                model = payload_repair.repair(model)
             if lead is not None:
                 lead = payload_repair.repair(lead)
 

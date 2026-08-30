@@ -92,8 +92,14 @@ class Family:
         through unread. H3's is the turbo lead-in; most families have none."""
         return None
 
-    def preflight(self, sampling, acceleration):
-        """Raise for a run that cannot happen — before anything compiles."""
+    def preflight(self, sampling, acceleration, weights):
+        """Raise for a run that cannot happen — before anything compiles.
+
+        `weights` because what a run needs installed is not decided by the
+        sampler row alone: H3's multi-GPU backend is picked in the weights
+        block, and it depends on a different set of packs from the one the
+        accelerator switches do.
+        """
         raise NotImplementedError(f"{self.id}.preflight")
 
     def compile(self, payload, image_size):
@@ -168,9 +174,16 @@ class Family:
         """
         return segment
 
-    def emit_sampler(self, graph, segment, payload, compiled, sampling,
+    def emit_sampler(self, graph, links, segment, payload, compiled, sampling,
                      acceleration, weights, seed, run):
-        """The sampler subgraph over one segment. -> the sampled latent link."""
+        """The sampler subgraph over one segment. -> the sampled latent link.
+
+        `links` is what `emit_loaders` returned, for the same reason the refine
+        and face hooks take it: a sampler is not always downstream of the
+        segment node alone. H3's multi-GPU backend samples in Ray workers the
+        loaders object is holding, and there is nowhere else in a render that
+        is made once and seen by every hook.
+        """
         raise NotImplementedError(f"{self.id}.emit_sampler")
 
     def emit_refine(self, graph, links, segment, payload, compiled, weights,

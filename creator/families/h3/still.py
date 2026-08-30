@@ -51,7 +51,7 @@ because they are the video model's.
 
 from dataclasses import dataclass
 
-from ... import canvas, models as core, outputs
+from ... import canvas, models as core, outputs, raylight
 from ...compile import CHECKPOINTS, CompileError, active_loras, collect_triggers
 from . import declare, models as slots
 
@@ -266,8 +266,17 @@ def weights_from_blob(data):
     editor, so the request carries a weights block in exactly the shape the
     video nodes' does — checkpoints, text encoder, VAEs, precision, devices, and
     the standing route.
+
+    One thing is taken back off it: the multi-GPU backend. A still is one latent
+    frame of a five-frame generation, and starting a Ray cluster and loading the
+    checkpoint into every worker to make one costs far more than the sampling it
+    would spread. So the pre-stage always samples on this machine's own card,
+    whatever the piece's video renders do — which is a statement about what a
+    still *is* rather than a gap in the backend.
     """
-    return slots.weights_from_blob(data)
+    weights = slots.weights_from_blob(data)
+    weights.backend = raylight.DEFAULT
+    return weights
 
 
 def emit(plan, weights, sampling, unique_id, filename_prefix=FILENAME_PREFIX,

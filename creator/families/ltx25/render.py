@@ -65,6 +65,7 @@ route, where a tail of a computed schedule is exactly what it names.
 
 from ... import canvas
 from ... import models as core
+from ... import raylight
 from .. import base
 from . import models, sampling as sampling_mod, segment as segment_node
 from . import declare
@@ -88,7 +89,19 @@ class LTX25(base.Family):
     def resolve_sampling(self, data, widgets):
         return sampling_mod.resolve(data, widgets)
 
-    def preflight(self, sampling, acceleration):
+    def preflight(self, sampling, acceleration, weights):
+        if raylight.enabled(weights):
+            # Not reachable from the UI — the switch is drawn only for a family
+            # that declares the capability, and switching families rebuilds the
+            # weights block. Reachable from a hand-edited blob, though, and the
+            # honest answer there is a sentence rather than a render that
+            # quietly sampled on one card after being told to use four.
+            raise ValueError(
+                f"{self.label} has no multi-GPU path in this pack: "
+                f"`creator/raylight.py` is written against the Karmabu fork's "
+                f"MiniMax H3 nodes. Set the backend back to single-GPU in the "
+                f"node's 'weights' control."
+            )
         # Nothing to refuse. `sampling.resolve` hands this family an empty
         # accelerator set by construction — every accelerator this pack knows
         # about is an H3 patch — so there is no pack to check for and no plan to
@@ -292,8 +305,11 @@ class LTX25(base.Family):
                           video_latent=crop.out(2),
                           audio_latent=split.out(1)).out(0), crop
 
-    def emit_sampler(self, graph, segment, payload, compiled, sampling,
+    def emit_sampler(self, graph, links, segment, payload, compiled, sampling,
                      acceleration, weights, seed, run):
+        # `links` is unused: this family's sampler is entirely downstream of the
+        # segment node, which is the ordinary case the hook's signature has to
+        # allow for anyway.
         latent = segment.out(2)
         sigmas, patch = self._schedule(graph, latent, sampling,
                                        declare.DISTILLED_SIGMAS)

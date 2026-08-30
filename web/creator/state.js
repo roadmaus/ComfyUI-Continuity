@@ -79,6 +79,11 @@ const NO_ROUTING = { options: ["auto"], default: "auto" };
 export const routesOf = (id) => videoFamily(id).routes ?? NO_ROUTING;
 export const modesOf = (id) => videoFamily(id).modes;
 export const turboOf = (id) => videoFamily(id).capabilities.turbo;
+
+/** Whether this family can sample through Raylight's Ray workers. Declared by
+ *  the family rather than assumed, and false for every family that does not say
+ *  so: the switch would otherwise offer a graph nothing can build. */
+export const raylightOf = (id) => videoFamily(id).capabilities.raylight === true;
 /** How this family takes a ControlNet guide, or undefined where it has no
  *  answer at all. `method` is the whole of the difference between the two that
  *  exist: `branch` loads a control model beside the checkpoint and puts it on
@@ -472,6 +477,15 @@ export const MODEL_HINT = modelHints(DEFAULT_VIDEO_FAMILY);
  *  checkpoint slot on any machine. */
 export const MODEL_DTYPES = ["default", "fp8_e4m3fn", "fp8_e4m3fn_fast", "fp8_e5m2"];
 
+// Where the transformer is loaded and sampled. "default" is this machine's own
+// card, which is what every render before the Raylight backend existed did and
+// what a blob with no `backend` at all still means. "raylight" hands the
+// checkpoint to Ray workers, one per GPU, and samples the sequence split across
+// them — see `creator/raylight.py` for what that costs and what it refuses.
+export const MODEL_BACKENDS = ["default", "raylight"];
+export const DEFAULT_GPUS = 2;
+export const MAX_GPUS = 8;
+
 /**
  * What `models.route` may hold — the family's standing instruction to run
  * everything on one checkpoint whatever the mode works out to. Worth having
@@ -529,6 +543,11 @@ export function emptyModels(family = DEFAULT_VIDEO_FAMILY) {
     // ComfyUI-MultiGPU. Empty is the normal state and means wherever ComfyUI
     // would have put it.
     devices: {},
+    // Which side of the wire the transformer is on, and how many cards it is
+    // split over when it is Ray's. `gpus` is stored whatever the backend is, so
+    // switching the backend off and on again does not forget the number.
+    backend: "default",
+    gpus: DEFAULT_GPUS,
   };
   for (const field of modelFields(family)) empty[field] = "";
   return empty;
@@ -552,6 +571,13 @@ export function parseModels(raw, family = DEFAULT_VIDEO_FAMILY) {
   // saved on a two-card box and opened on a one-card one, and silently dropping
   // the pin would lose the setting rather than report it. `models.loader_for`
   // refuses at queue time, naming the pack.
+  if (MODEL_BACKENDS.includes(raw.backend)) out.backend = raw.backend;
+  // Clamped rather than dropped, for the reason the device pins below are not
+  // validated either: a blob saved on an eight-card box should open on a
+  // two-card one saying something sensible, and how many cards Ray can actually
+  // see is Ray's to complain about.
+  const gpus = Number.parseInt(raw.gpus, 10);
+  if (Number.isFinite(gpus)) out.gpus = Math.max(2, Math.min(MAX_GPUS, gpus));
   if (raw.devices && typeof raw.devices === "object") {
     for (const field of deviceFields(family)) {
       if (typeof raw.devices[field] === "string" && raw.devices[field].trim()) {
@@ -649,6 +675,13 @@ function serializeModels(models, family = DEFAULT_VIDEO_FAMILY) {
   if (picked.route !== routesOf(family).default) out.route = picked.route;
   // Absent means "wherever ComfyUI would", so a single-GPU blob adds nothing.
   if (Object.keys(picked.devices).length) out.devices = { ...picked.devices };
+  // Both absent on the default backend, so every workflow saved before this
+  // existed still serialises identically — and so does every one that never
+  // touches the switch.
+  if (picked.backend !== "default") {
+    out.backend = picked.backend;
+    out.gpus = picked.gpus;
+  }
   return { models: out };
 }
 

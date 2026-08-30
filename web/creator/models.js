@@ -89,6 +89,13 @@ export const catalogDevices = () => catalog?.devices ?? [];
  *  anything should say why rather than look broken. */
 export const hasPreviewOverride = () => catalog?.preview_override !== false;
 
+/** Whether the Raylight community fork is installed — what the multi-GPU switch
+ *  keys off, on the same terms as the device control above. Without the pack
+ *  the switch is not drawn at all: it would offer a render nothing can build.
+ *  Defaults false, so a catalog that failed to load offers nothing rather than
+ *  offering everything. */
+export const hasRaylight = () => catalog?.raylight === true;
+
 /**
  * The pill. Reports first and configures second, which is the right way round
  * for something you look at far more often than you change.
@@ -128,13 +135,20 @@ export function weightsPill({ piece, models, checkpoints, onChange, turbo, face 
   // changes about the run: which cards it is spread over first, then precision,
   // then nothing worth saying.
   const spread = new Set(S.deviceFields(family).map((f) => models.devices[f]).filter(Boolean));
-  const settled = models.route !== "auto"
-    ? t("weights · always {checkpoint}", { checkpoint: S.checkpointLabels(family)[models.route] })
-    : spread.size
-      ? (spread.size > 1
-          ? t("weights · {count} devices", { count: spread.size })
-          : t("weights · {device}", { device: [...spread][0] }))
-      : models.dtype === "default" ? t("weights") : t("weights · {dtype}", { dtype: models.dtype.replace("fp8_", "fp8 ") });
+  const settled = models.backend === "raylight"
+    // First of all, because it is the biggest thing the pill can be hiding: a
+    // render that samples somewhere else entirely. It outranks the route, which
+    // a multi-GPU render has had to settle anyway — Ray's workers hold one
+    // checkpoint, so the backend cannot be on with the route on "auto" over a
+    // strip that reaches for both.
+    ? t("weights · {count} GPUs", { count: models.gpus })
+    : models.route !== "auto"
+      ? t("weights · always {checkpoint}", { checkpoint: S.checkpointLabels(family)[models.route] })
+      : spread.size
+        ? (spread.size > 1
+            ? t("weights · {count} devices", { count: spread.size })
+            : t("weights · {device}", { device: [...spread][0] }))
+        : models.dtype === "default" ? t("weights") : t("weights · {dtype}", { dtype: models.dtype.replace("fp8_", "fp8 ") });
   const label = missing.length
     ? (missing.length === 1
         ? t("no {model}", { model: missing[0].toLowerCase() })
@@ -314,6 +328,9 @@ export function openWeightsPopover(anchor, { piece, models, checkpoints, onChang
   const deviceFields = S.deviceFields(family);
   const routes = S.routeOptions(family);
   const routedSlots = S.checkpointsOf(family);
+  // Two through eight, which is the range Raylight's initializer is worth
+  // asking for. One card is the other backend and is spelled as such.
+  const rayCounts = Array.from({ length: S.MAX_GPUS - 1 }, (_, i) => i + 2);
 
   // Recomputed inside `render` rather than captured: forcing a route changes
   // which of the two checkpoints is required, and that has to show on the row
@@ -514,7 +531,57 @@ export function openWeightsPopover(anchor, { piece, models, checkpoints, onChang
       }));
     }
 
-    body.replaceChildren(...(routeRow ? [routeRow] : []), ...rows);
+    // Where this piece samples. Below the route and above the files, because
+    // it is the same kind of standing decision the route is — and after it,
+    // because Ray's workers hold one checkpoint and the route is how you say
+    // which. Drawn only where the fork is installed and only for a family that
+    // has a Ray path: it is H3's, and offering it on LTX would be offering a
+    // graph nothing can build.
+    const rayRow = !(hasRaylight() && S.raylightOf(family)) ? null
+      : el("div", { class: "mmc-weight-row" }, [
+        el("span", { class: "mmc-weight-name", text: t("Sampling") }),
+        el("button", {
+          class: `mmc-weight-file${models.backend === "raylight" ? " forced" : ""}`,
+          title: t("Where the transformer is loaded and sampled.\n\n"
+               + "One GPU is this machine's own card, as every render has been.\n"
+               + "Raylight loads the checkpoint into one Ray worker per card and splits "
+               + "the sequence across them, which is roughly half the wall clock on two.\n\n"
+               + "It carries the first pass and nothing else: the refine, face and "
+               + "re-detail passes, the turbo lead-in, sound seams, ControlNet guides "
+               + "and every accelerator but the attention backend are refused rather "
+               + "than quietly dropped, and LoRAs are merged by ComfyUI's own loader "
+               + "instead of this pack's H3 stack."),
+          text: models.backend === "raylight"
+            ? t("Raylight · {count} GPUs", { count: models.gpus })
+            : t("one GPU"),
+          onclick: (event) => openChoicePopover(event.currentTarget, {
+            title: t("Sampling"),
+            // The count is folded into the options rather than given a pill of
+            // its own: "how many cards" is not a question worth asking of a
+            // render that is not spread over any, and every answer to it is
+            // also an answer to "which backend".
+            options: [t("one GPU"), ...rayCounts.map(
+              (count) => t("Raylight · {count} GPUs", { count }))],
+            value: models.backend === "raylight"
+              ? t("Raylight · {count} GPUs", { count: models.gpus })
+              : t("one GPU"),
+            onPick: (picked) => {
+              if (picked === t("one GPU")) models.backend = "default";
+              else {
+                models.backend = "raylight";
+                models.gpus = rayCounts.find(
+                  (count) => t("Raylight · {count} GPUs", { count }) === picked)
+                  ?? S.DEFAULT_GPUS;
+              }
+              commit();
+              render();
+            },
+          }),
+        }),
+      ]);
+
+    body.replaceChildren(...(routeRow ? [routeRow] : []),
+                         ...(rayRow ? [rayRow] : []), ...rows);
   };
 
   pop.append(el("div", { class: "mmc-pop-title", text: t("Weights") }), body);

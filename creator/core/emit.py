@@ -206,7 +206,7 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
     # cannot make, a request that cannot compile, or weights that were never
     # picked should say so before anything is queued rather than after the
     # first segment has sampled.
-    family.preflight(sampling, acceleration)
+    family.preflight(sampling, acceleration, weights)
     # Before compiling, and before the payloads become segment cache keys: a
     # standing route is the same statement the per-request pin makes, said once
     # for every generation instead of once per generation.
@@ -343,7 +343,7 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
         if guide is not None and one.guide is not None:
             segment = family.emit_control(graph, links, segment, one, weights,
                                           guide)
-        latent = family.emit_sampler(graph, segment, payloads[index], one,
+        latent = family.emit_sampler(graph, links, segment, payloads[index], one,
                                      sampling, acceleration, weights,
                                      seed_for(index), run)
         if one.refine:

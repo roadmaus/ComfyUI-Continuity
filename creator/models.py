@@ -67,7 +67,7 @@ import importlib
 from dataclasses import dataclass, field
 from typing import Any, Optional
 
-from . import accel
+from . import accel, raylight
 
 PREVIEW_NODE = "ModelPreviewOverrideKJ"
 PREVIEW_SOURCE = "https://github.com/kijai/ComfyUI-KJNodes"
@@ -192,13 +192,21 @@ class Weights:
     """
 
     def __init__(self, slots, picked=None, dtype=DEFAULT_DTYPE, route=DEFAULT_ROUTE,
-                 devices=None, routes=()):
+                 devices=None, routes=(), backend=raylight.DEFAULT,
+                 gpus=raylight.DEFAULT_GPUS):
         self.slots = dict(slots)
         self.routes = tuple(routes)
         self._picked = {name: (picked or {}).get(name) for name in self.slots}
         self.dtype = dtype
         self.route = route
         self.devices = dict(devices or {})
+        # Which side of the wire this render's transformer lives on, and how
+        # many cards it is split over. In the weights block rather than beside
+        # the sampler row because it is a statement about how the *weights* are
+        # loaded: "raylight" means no loader here builds a MODEL at all — see
+        # `creator/raylight.py`.
+        self.backend = backend
+        self.gpus = gpus
 
     @classmethod
     def from_blob(cls, data, slots, routes=(), block="models"):
@@ -229,10 +237,20 @@ class Weights:
                 if chosen:
                     devices[name] = chosen
         route = raw.get("route")
+        backend = raw.get("backend")
+        # Clamped rather than refused: the blob may have been saved on an
+        # eight-card box and opened on a two-card one, and a number nobody can
+        # honour is Ray's to complain about with the cards in front of it.
+        try:
+            gpus = max(2, min(raylight.MAX_GPUS, int(raw.get("gpus"))))
+        except (TypeError, ValueError):
+            gpus = raylight.DEFAULT_GPUS
         return cls(slots, picked,
                    dtype=dtype if isinstance(dtype, str) and dtype else DEFAULT_DTYPE,
                    route=route if route in (DEFAULT_ROUTE, *routes) else DEFAULT_ROUTE,
-                   devices=devices, routes=tuple(routes))
+                   devices=devices, routes=tuple(routes),
+                   backend=backend if backend in raylight.BACKENDS else raylight.DEFAULT,
+                   gpus=gpus)
 
     def routed(self, payload):
         """`payload` with the standing route stamped onto its request, or
@@ -458,6 +476,12 @@ def available():
         # choice and does nothing.
         "devices": device_options(),
         "multigpu_source": MULTIGPU_SOURCE,
+        # Whether the multi-GPU backend can be picked at all — the community
+        # Raylight fork, installed. False is a switch the weights popover does
+        # not draw, on the same terms as the device control above: no pack, no
+        # control, rather than a control that offers a render nothing can build.
+        "raylight": raylight.available(),
+        "raylight_source": raylight.SOURCE,
     }
 
 
@@ -500,7 +524,7 @@ class Links:
     with the DiT and not. Nothing pinned is the core loader unchanged.
     """
 
-    def __init__(self, graph, weights, routes=(), audio=True):
+    def __init__(self, graph, weights, routes=(), audio=True, skip=()):
         self._graph = graph
         self._weights = weights
         self._table = dict(weights.slots)
@@ -508,6 +532,15 @@ class Links:
         links = {}
         for name, slot in self._table.items():
             if slot.loader is None or slot.optional:
+                continue
+            if name in skip:
+                # A slot whose weights this render does not load here at all.
+                # The Raylight backend's checkpoint, and nothing else so far: it
+                # is loaded inside the Ray workers from a filename, so a loader
+                # emitted here would open a second copy on the driver that
+                # nothing samples with. Left out of `_slots` entirely rather
+                # than set to None, so a reader that reaches for it hears the
+                # attribute error instead of passing a None into a socket.
                 continue
             if slot.routed and name not in routes:
                 continue

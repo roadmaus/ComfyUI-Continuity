@@ -22,7 +22,7 @@ from dataclasses import dataclass
 import comfy.sample
 
 from ... import (accel, canvas, compile as compiler, guide as guides,
-                 models as core, sampling as sampling_mod, settings)
+                 models as core, raylight, sampling as sampling_mod, settings)
 from .. import base
 from . import declare, models as slots
 
@@ -199,7 +199,16 @@ class H3(base.Family):
     def run_context(self, data):
         return LeadIn.of(data)
 
-    def preflight(self, sampling, acceleration):
+    def preflight(self, sampling, acceleration, weights):
+        if raylight.enabled(weights):
+            # A different set of packs entirely: the accelerator nodes are not
+            # this render's dependencies, and asking for them here would refuse
+            # a Ray render for the absence of a KJNodes patch it was never going
+            # to emit. What it does need is the fork, and what it cannot carry
+            # is most of the accelerator row — both said now, before a payload
+            # is compiled, rather than at the sampler.
+            raylight.preflight(acceleration)
+            return
         # An accelerator whose pack is not installed should say so before
         # anything is queued rather than after the first segment has sampled.
         accel.plan(acceleration, sampling.steps)
@@ -214,7 +223,25 @@ class H3(base.Family):
         core.check(weights, slots.needs(where, audio=audio, face=face), where)
 
     def emit_loaders(self, graph, weights, routes):
-        return core.Links(graph, weights, routes)
+        if not raylight.enabled(weights):
+            return core.Links(graph, weights, routes)
+        # The multi-GPU backend. The checkpoint is loaded inside Ray's workers
+        # from a filename, so the loader that would have opened it here is
+        # skipped — everything else on the table is unchanged, because
+        # everything else still runs on this side of the wire: the text encoder
+        # encodes the prompt here, and both VAEs decode here.
+        #
+        # Refused before a single node is built, which is why this is the first
+        # thing the hook does: a device pin or a two-checkpoint route is not
+        # something Ray can be asked to do differently, it is a render that has
+        # to be set up another way.
+        raylight.refuse_weights(weights, routes)
+        links = core.Links(graph, weights, routes, skip=slots.ROUTED_SLOTS)
+        # Carried on the links object because that is the one thing in a render
+        # that is made once and handed to every hook — see `raylight.Actors` for
+        # why the workers have to be built once and asked for late.
+        links.actors = raylight.Actors(graph, weights, raylight.Spread(weights.gpus))
+        return links
 
     def _segment_inputs(self, links, payload, compiled, weights, seams, splits, run):
         """The segment node's inputs, shared by the pass and its refine.
@@ -251,12 +278,23 @@ class H3(base.Family):
         if compiled.encodes_audio():
             inputs["audio_vae"] = links.audio_vae
             inputs["audio_vae_name"] = weights.audio_vae or ""
-        # The segment node's MODEL input names are its schema and are frozen —
-        # `model_<slot>` happens to spell them, but it is the slot table that
-        # decides which loaders exist to wire.
-        for name in slots.ROUTED_SLOTS:
-            if links.get(name) is not None:
-                inputs[f"model_{name}"] = links.get(name)
+        if raylight.enabled(weights):
+            # No MODEL sockets at all on a Ray render: the transformer is in the
+            # workers, and this node's two model outputs go unwired. Said in the
+            # payload rather than inferred from the absent sockets, because a
+            # segment that is *missing* its checkpoint is a graph error worth
+            # keeping — see the node's own `sampler_backend` input.
+            #
+            # Written only in this mode, so a single-GPU render carries the
+            # inputs, and therefore the cache key, it had before this existed.
+            inputs["sampler_backend"] = raylight.RAYLIGHT
+        else:
+            # The segment node's MODEL input names are its schema and are frozen
+            # — `model_<slot>` happens to spell them, but it is the slot table
+            # that decides which loaders exist to wire.
+            for name in slots.ROUTED_SLOTS:
+                if links.get(name) is not None:
+                    inputs[f"model_{name}"] = links.get(name)
         inputs.update(seams)
         return inputs
 
@@ -308,6 +346,11 @@ class H3(base.Family):
         is not a contradiction: a guided text-only shot is one that encodes a
         picture after all, and the picture is the drawing.
         """
+        if raylight.enabled(weights):
+            # Before the branch is loaded rather than after: six gigabytes of
+            # ControlNet for a render that is about to be refused would be six
+            # gigabytes read off disk for nothing.
+            raylight.refuse_guide()
         if getattr(compiled.guide, "op", "") == "matte":
             return self._emit_inpaint(graph, links, segment, compiled, guide)
         frames = guides.guide_frames(graph, compiled.guide, compiled,
@@ -373,9 +416,14 @@ class H3(base.Family):
         )
         return guides.Controlled(segment, positive=applied.out(0))
 
-    def emit_sampler(self, graph, segment, payload, compiled, sampling,
+    def emit_sampler(self, graph, links, segment, payload, compiled, sampling,
                      acceleration, weights, seed, run):
         splits = run.within(sampling, compiled, payload)
+
+        if raylight.enabled(weights):
+            return self._emit_ray_sampler(graph, links, segment, payload,
+                                          compiled, sampling, acceleration,
+                                          weights, seed, splits)
 
         # The distilled H3 checkpoints run at cfg 1.0, where the negative is
         # skipped outright, so there is nothing here worth a socket on the node.
@@ -431,6 +479,115 @@ class H3(base.Family):
                 "KSampler", model=model, latent_image=segment.out(2),
                 seed=seed, denoise=1.0, **common)
         return sampled.out(0)
+
+    def _emit_ray_sampler(self, graph, links, segment, payload, compiled,
+                          sampling, acceleration, weights, seed, splits):
+        """The same generation, sampled across the cards by Raylight's workers.
+
+        The custom-sampler arrangement rather than `XFuserKSamplerAdvanced`,
+        which is otherwise `KSamplerAdvanced` with actors where the model goes:
+
+            RayCFGGuider(actors, positive, zeroed negative, cfg)  -> RAY_GUIDER
+            RayBasicScheduler(actors, scheduler, steps)           -> SIGMAS
+            KSamplerSelect(sampler_name)                          -> SAMPLER
+            XFuserSamplerCustomAdvanced(...)                      -> LATENT
+
+        Three more nodes, and what they buy is the preview: the K3U bridge hands
+        the sampler a context only in this form, and a distributed render is the
+        one you least want to sit in front of as an empty box.
+
+        `patched()` has no counterpart here and deliberately no equivalent: of
+        the three things it does, the sigma shift is an actor patch the fork
+        ships, the accelerators are refused above, and the preview comes in
+        through the bridge below.
+        """
+        from .payload import CORE_ANCHORS_ANYWHERE
+
+        # Everything this generation asks for that the workers cannot carry,
+        # said before a node is built. The label is the card's number where the
+        # loop stamped one — a strip's fourth shot should say so.
+        progress = payload.get("progress") or {}
+        label = f"Segment {progress['index']}" if progress.get("index") else None
+        raylight.refuse_run(compiled, splits, label)
+        raylight.refuse_seam(compiled, CORE_ANCHORS_ANYWHERE, label)
+
+        actors = links.actors.of(compiled.checkpoint,
+                                 self._ray_loras(payload, compiled),
+                                 acceleration)
+        if sampling.shifted():
+            # Core's own node, run inside the workers — the fork wraps it rather
+            # than reimplementing it, so this is the same schedule the
+            # single-GPU path emits, said to a different object.
+            actors = graph.node(
+                raylight.SHIFT_NODE, ray_actors=actors,
+                shift_video=sampling.shift_video,
+                shift_audio=sampling.shift_audio).out(0)
+
+        # The preview bridge. Export hands out a stand-in MODEL that carries the
+        # actors as an attachment, KJNodes' override wraps it exactly as it
+        # wraps a real one, and Import reads the wrapper back off it as a
+        # context the sampler runs on the driver while the workers step. The
+        # adapter refuses a model carrying patches it did not register, which is
+        # the second reason `refuse_accel` is not a matter of taste.
+        context = None
+        if core.preview_available():
+            exported = graph.node(raylight.K3U_EXPORT_NODE, ray_actors=actors).out(0)
+            previewed = core.graph_preview(graph, exported, weights,
+                                           declare.RULES.fps)
+            imported = graph.node(raylight.K3U_IMPORT_NODE, model=previewed)
+            context, actors = imported.out(0), imported.out(1)
+
+        against = graph.node("ConditioningZeroOut", conditioning=segment.out(1)).out(0)
+        guider = graph.node(
+            raylight.GUIDER_NODE, ray_actors=actors,
+            positive=segment.out(1), negative=against, cfg=sampling.cfg).out(0)
+        # `denoise` is 1.0 for the same reason the single-GPU pass runs a whole
+        # schedule: this is the first pass, and the refine that would re-noise
+        # partway down one is refused above.
+        sigmas = graph.node(
+            raylight.SCHEDULER_NODE, ray_actors=actors,
+            scheduler=sampling.scheduler, steps=sampling.steps, denoise=1.0).out(0)
+        sampler = graph.node("KSamplerSelect",
+                             sampler_name=sampling.sampler_name).out(0)
+        return graph.node(
+            raylight.SAMPLER_NODE,
+            add_noise=True, noise_seed=seed,
+            guider=guider, sampler=sampler, sigmas=sigmas,
+            latent_image=segment.out(2),
+            **({"k3u_adapter_context": context} if context is not None else {}),
+        ).out(0)
+
+    def _ray_loras(self, payload, compiled):
+        """This generation's LoRA stack, as the workers take it.
+
+        The stack is read the same way the segment node reads it — `active_loras`
+        against the routed checkpoint — but it stops at the filenames: the
+        adapters are opened and merged inside the workers by `RayLoraLoader`,
+        through core's patcher rather than through `h3lora`. That is the one
+        thing this backend silently does differently and it is silent nowhere
+        else: the switch says so, and `h3lora`'s own docstring says what is lost.
+
+        The modality dial is the exception, because it is not a strength anybody
+        could read off the result: it slices adaLN rows, which is `h3lora`'s and
+        has no counterpart in a merge. A file carrying one is refused rather
+        than merged at full strength into the soundtrack it was damped off.
+        """
+        from ... import lora as lora_mod
+
+        entries = compiler.active_loras(payload["request"].get("loras"),
+                                        compiled.checkpoint, self.id)
+        loras = []
+        for entry in entries:
+            if lora_mod.modality(entry):
+                raise ValueError(
+                    f"'{entry['name']}' has its audio dial turned down, which "
+                    f"slices the adapter's modulation rows — a thing this pack's "
+                    f"own LoRA stack does and a merge inside Raylight's workers "
+                    f"cannot. Put the dial back to 1.0 (the file will reach the "
+                    f"soundtrack again), or set the backend back to single-GPU."
+                )
+            loras.append((entry["name"], float(entry.get("strength", 1.0))))
+        return loras
 
     def emit_refine(self, graph, links, segment, payload, compiled, weights,
                     seams, latent, sampling, acceleration, seed, run):
