@@ -185,6 +185,36 @@ export async function deletePreset(id) {
   await deleteUserData(BODY_FILE(id), BODY_KEY(id));
 }
 
+/**
+ * Throw away every stored preset of one scope, or all of them with no scope.
+ *
+ * The bodies go one at a time and the index is written once at the end, which
+ * is the order that survives being interrupted: a body with no row is invisible
+ * and harmless, where a row with no body is a card that opens onto nothing.
+ *
+ * Builtins are not touched and cannot be — they are shipped, not stored, and
+ * carry their sections inline (see `loadBody`). What comes back is how many
+ * rows went.
+ */
+export async function deletePresets(scope = null) {
+  const rows = await listPresets({ force: true });
+  const going = rows.filter((row) => !row.builtin && (!scope || row.scope === scope));
+  if (!going.length) return 0;
+  for (const row of going) await deleteUserData(BODY_FILE(row.id), BODY_KEY(row.id));
+  await writeIndex(rows.filter((row) => !going.includes(row)));
+  return going.length;
+}
+
+/** How many stored rows each scope holds, keyed by scope. Builtins are left
+ *  out: they are not somebody's work and nothing can remove them. */
+export async function presetCounts() {
+  const counts = Object.fromEntries(SCOPES.map((scope) => [scope, 0]));
+  for (const row of await listPresets({ force: true })) {
+    if (!row.builtin && counts[row.scope] !== undefined) counts[row.scope] += 1;
+  }
+  return counts;
+}
+
 /** Re-store a body under an existing row — "Save over this preset". */
 export async function replaceBody(id, { data, scope, cover }) {
   await writeUserData(BODY_FILE(id), BODY_KEY(id), { version: PRESET_VERSION, id, data });

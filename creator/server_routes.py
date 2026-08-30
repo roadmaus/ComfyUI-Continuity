@@ -58,7 +58,16 @@ def _classify(filename):
 
 
 def _scan(root, annotation=""):
-    """Walk one media folder. `annotation` is ComfyUI's ` [output]` suffix.
+    """Walk one media folder -> `(assets, folders)`.
+
+    `annotation` is ComfyUI's ` [output]` suffix.
+
+    The folders come back because the folders *are* the answer: a shelf in the
+    picker is a directory on this disk and nothing else, so the listing has to
+    report every one of them — including the ones holding no media, which the
+    file rows alone can never mention. A shelf that came from anywhere but here
+    is a shelf that outlives the directory it named (#40): delete the input
+    folder from a terminal and the picker went on offering its contents.
 
     Carried inside `path` rather than as a separate field because the path is
     the one thing that survives into creator_data: every consumer downstream —
@@ -78,6 +87,8 @@ def _scan(root, annotation=""):
     that lists in a second here listed in minutes on someone's Windows
     server (#4).
     """
+    assets = []
+    folders = []
     pending = [root]
     index = 0
     while index < len(pending):
@@ -90,6 +101,8 @@ def _scan(root, annotation=""):
             continue
         subfolder = os.path.relpath(directory, root)
         subfolder = "" if subfolder == "." else subfolder.replace(os.sep, "/")
+        if subfolder:
+            folders.append(subfolder)
         for entry in entries:
             if entry.name.startswith("."):
                 continue
@@ -124,14 +137,15 @@ def _scan(root, annotation=""):
             except OSError:
                 continue
             relative = f"{subfolder}/{entry.name}" if subfolder else entry.name
-            yield {
+            assets.append({
                 "path": relative + annotation,
                 "name": entry.name,
                 "subfolder": subfolder,
                 "kind": kind,
                 "size": stat.st_size,
                 "mtime": stat.st_mtime,
-            }
+            })
+    return assets, folders
 
 
 def _input_path(request):
@@ -525,15 +539,34 @@ async def list_assets(request):
     else:
         root, annotation = folder_paths.get_input_directory(), ""
     if not os.path.isdir(root):
-        return web.json_response({"assets": [], "truncated": False})
+        return web.json_response({"assets": [], "folders": [], "truncated": False})
 
     # A walk with two stat calls per file is nothing on a local disk and minutes
     # on a network share, and the event loop is also the prompt queue.
     loop = asyncio.get_running_loop()
-    assets = await loop.run_in_executor(
-        None, lambda: sorted(_scan(root, annotation), key=lambda a: a["mtime"], reverse=True))
+    assets, folders = await loop.run_in_executor(None, _scan, root, annotation)
+    assets.sort(key=lambda a: a["mtime"], reverse=True)
     truncated = len(assets) > MAX_ASSETS
-    return web.json_response({"assets": assets[:MAX_ASSETS], "truncated": truncated})
+    # Not capped with the assets. `MAX_ASSETS` is there so a folder of ten
+    # thousand renders does not become a ten-megabyte JSON body, and the shelf
+    # row is the one part of a truncated listing that must still be whole:
+    # dropping folders would hide the places the missing files are in.
+    return web.json_response({"assets": assets[:MAX_ASSETS], "folders": sorted(folders),
+                              "truncated": truncated})
+
+
+def _picker_root(name):
+    """The absolute path of a root the picker browses, or None.
+
+    Named rather than derived from a file, because the two folder routes below
+    act on a directory and a directory has no ` [output]` suffix to read a root
+    out of. Same two roots either way — nothing here rearranges `[temp]`.
+    """
+    if name == "output":
+        return os.path.realpath(folder_paths.get_output_directory())
+    if name in ("input", "", None):
+        return os.path.realpath(folder_paths.get_input_directory())
+    return None
 
 
 def _clean_subfolder(raw):
@@ -638,6 +671,66 @@ async def delete_asset(request):
     if not folder_paths.is_within_directory(root, path) or not os.path.isfile(path):
         return web.json_response({"error": "no such file"}, status=404)
     os.remove(path)
+    return web.json_response({"ok": True})
+
+
+@PromptServer.instance.routes.post("/continuity/folder")
+async def make_folder(request):
+    """Make a shelf — which is to say: make the directory.
+
+    A shelf used to be a name in the user's preferences that a directory caught
+    up with the first time a file was dragged onto it. That put the same fact in
+    two places and let them disagree, and they did: the preferences outlived the
+    disk, so a folder deleted from a terminal went on being offered by the picker
+    for as long as the browser remembered typing it (#40).
+
+    So there is one copy of it now, and it is the filesystem. Making a shelf
+    makes the folder; the listing walks the disk and reports what is there;
+    nothing is remembered anywhere else.
+    """
+    body = await request.json()
+    root = _picker_root(body.get("root"))
+    if root is None:
+        return web.json_response({"error": "not a folder the picker browses"}, status=400)
+    subfolder = _clean_subfolder(body.get("subfolder", ""))
+    if not subfolder:
+        return web.json_response({"error": "bad folder name"}, status=400)
+    target = os.path.realpath(os.path.join(root, subfolder))
+    if not folder_paths.is_within_directory(root, target):
+        return web.json_response({"error": "bad folder name"}, status=400)
+    if os.path.isfile(target):
+        return web.json_response({"error": "a file with that name is already there"}, status=409)
+    os.makedirs(target, exist_ok=True)
+    return web.json_response({"folder": subfolder})
+
+
+@PromptServer.instance.routes.post("/continuity/folder/delete")
+async def remove_folder(request):
+    """Remove an empty shelf.
+
+    Empty is the whole of it: `os.rmdir` refuses anything else, and that refusal
+    is the guard rather than a check this could get wrong. Deleting a folder of
+    renders is a thing to do in a file manager, where what is about to go is
+    visible; here it would be one press against a chip that says only how many.
+
+    The counterpart of the route above, and it exists because that one is real
+    now: a shelf typed by mistake used to be a preference nobody could see, and
+    is a directory on the disk.
+    """
+    body = await request.json()
+    root = _picker_root(body.get("root"))
+    if root is None:
+        return web.json_response({"error": "not a folder the picker browses"}, status=400)
+    subfolder = _clean_subfolder(body.get("subfolder", ""))
+    if not subfolder:
+        return web.json_response({"error": "bad folder name"}, status=400)
+    target = os.path.realpath(os.path.join(root, subfolder))
+    if not folder_paths.is_within_directory(root, target) or not os.path.isdir(target):
+        return web.json_response({"error": "no such folder"}, status=404)
+    try:
+        os.rmdir(target)
+    except OSError:
+        return web.json_response({"error": "that folder is not empty"}, status=409)
     return web.json_response({"ok": True})
 
 
@@ -791,6 +884,21 @@ async def write_settings(request):
         return web.json_response({"error": str(problem)}, status=400)
     except OSError as problem:
         return web.json_response({"error": f"could not write the settings file: {problem}"},
+                                 status=500)
+    return web.json_response({"settings": stored})
+
+
+@PromptServer.instance.routes.post("/continuity/settings/reset")
+async def reset_settings(request):
+    """Put every setting back to what this pack ships with. See `settings.reset`.
+
+    Answers in the same shape the two routes above do, because the page treats
+    it as one more write: what comes back is what is now in force.
+    """
+    try:
+        stored = settings.reset()
+    except OSError as problem:
+        return web.json_response({"error": f"could not remove the settings file: {problem}"},
                                  status=500)
     return web.json_response({"settings": stored})
 

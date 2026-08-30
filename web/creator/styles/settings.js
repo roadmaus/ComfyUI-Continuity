@@ -142,4 +142,55 @@ export const css = `
 .mmc-set-wait { color: var(--mmc-dim); font-size: calc(13px * var(--mmc-type)); padding: 28px 0 24px; }
 .mmc-set-problem { color: var(--mmc-warn); font-size: calc(12px * var(--mmc-type)); line-height: 1.45; padding: 14px 0 0; }
 
+
+/* --- stored data ---------------------------------------------------------- */
+/* The inventory. Same box the chosen settings sit in, because it is the same
+   kind of thing: a list of rows you read down before acting on one. What makes
+   it different is the middle column — every row reports what is behind it, in
+   the same fixed place, so the page can be read as "what does this pack have of
+   mine" without pressing anything. */
+.mmc-zone { padding: 4px; }
+.mmc-zone-row {
+  display: grid; grid-template-columns: 1fr auto auto; gap: 14px;
+  align-items: center; padding: 11px 12px; border-radius: 11px;
+}
+.mmc-zone-row + .mmc-zone-row { border-top: 1px solid var(--mmc-line); border-radius: 0; }
+.mmc-zone-what { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.mmc-zone-name { font-size: calc(14px * var(--mmc-type)); }
+.mmc-zone-note { color: var(--mmc-dim); font-size: calc(11.5px * var(--mmc-type)); line-height: 1.45; }
+/* The count, in the value column's own type. It is an instrument reading and it
+   is the reason this tab is a list rather than a paragraph and a button. */
+.mmc-zone-held {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: calc(11.5px * var(--mmc-type)); color: var(--mmc-text);
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+/* A row holding nothing goes quiet all the way across. Nothing here is hidden —
+   knowing a store is empty is worth a line, and it is the same line that will
+   carry a number tomorrow. */
+.mmc-zone-row[data-empty="true"] .mmc-zone-name,
+.mmc-zone-row[data-empty="true"] .mmc-zone-held { color: var(--mmc-off); }
+.mmc-zone-go {
+  height: calc(30px * var(--mmc-type)); padding: 0 14px; border-radius: 15px;
+  border: 1px solid var(--mmc-line); background: var(--mmc-surface-2);
+  color: var(--mmc-dim); font-family: inherit; font-size: calc(12px * var(--mmc-type));
+  white-space: nowrap; cursor: pointer;
+  /* Wide enough for "Really remove?" from the start, so arming a row does not
+     shove the count beside it sideways. A confirmation that moves the thing you
+     were reading is a confirmation you read after pressing. */
+  min-width: calc(118px * var(--mmc-type));
+}
+.mmc-zone-go:hover:not(:disabled) { color: var(--mmc-warn); border-color: var(--mmc-warn); }
+.mmc-zone-go:disabled { color: var(--mmc-off); cursor: not-allowed; }
+/* Armed is the only red on the tab. The gravity belongs to the second press —
+   a page that is red before you have touched it has spent the warning early. */
+.mmc-zone-go.armed,
+.mmc-zone-go.armed:hover {
+  background: var(--mmc-bad-solid); color: var(--mmc-strong); border-color: transparent;
+}
+.mmc-zone-all { width: 100%; height: calc(38px * var(--mmc-type)); border-radius: 19px; }
+@media (max-width: 520px) {
+  .mmc-zone-row { grid-template-columns: 1fr auto; }
+  .mmc-zone-what { grid-column: 1 / -1; }
+}
 `;

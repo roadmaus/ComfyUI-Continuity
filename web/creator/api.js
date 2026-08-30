@@ -6,7 +6,7 @@ import { t } from "./i18n.js";
 import { atlasUrl, isAtlasRef } from "./presets/atlasref.js";
 import { applyTextScale, applySurfaceLift, applyTheme } from "./styles.js";
 
-const cache = new Map();   // root -> {at, assets}
+const cache = new Map();   // root -> {at, assets, folders}
 const CACHE_MS = 4000;
 
 /** The media listing: `root: "input"` (the default) is the upload folder,
@@ -18,8 +18,48 @@ export async function listAssets({ force = false, root = "input" } = {}) {
   if (!response.ok) throw new Error(t("asset listing failed ({status})", { status: response.status }));
   const body = await response.json();
   const assets = body.assets ?? [];
-  cache.set(root, { at: Date.now(), assets, truncated: body.truncated === true });
+  cache.set(root, { at: Date.now(), assets, folders: body.folders ?? [],
+                    truncated: body.truncated === true });
   return assets;
+}
+
+/** Every folder under `root`, as the last listing found them on disk. Read
+ *  after listAssets, which is what fetches them; empty before any call.
+ *
+ *  Separate from the rows because they are separate facts: a folder holding no
+ *  media has no row and is still a place, and a listing capped at MAX_ASSETS
+ *  still names every folder the files it dropped were in. */
+export function listedFolders(root = "input") {
+  return cache.get(root)?.folders ?? [];
+}
+
+/** Make a folder under a picker root. Returns its root-relative path. */
+export async function makeFolder(root, subfolder) {
+  const response = await api.fetchApi("/continuity/folder", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ root, subfolder }),
+  });
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(body.error || t("could not make the folder ({status})", { status: response.status }));
+  }
+  invalidate(root);
+  return body.folder;
+}
+
+/** Remove an empty folder under a picker root. The server refuses a full one. */
+export async function removeFolder(root, subfolder) {
+  const response = await api.fetchApi("/continuity/folder/delete", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ root, subfolder }),
+  });
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(body.error || t("could not remove the folder ({status})", { status: response.status }));
+  }
+  invalidate(root);
 }
 
 /** Whether the last listing of `root` hit the server's cap — the folder holds
@@ -78,16 +118,20 @@ export async function deleteAsset(filename) {
 
 // ---- picker preferences -----------------------------------------------------
 //
-// Favorites, hand-made shelves, and the folder each root was last left in.
-// Stored per ComfyUI user via the userdata API, so they follow the user across
-// browsers; localStorage is the fallback for frontends without it. One object:
-// {favorites: [path], folders: [name], renderFolders: [name],
-//  lastShelf: {input, renders}}.
+// Favorites and the folder each root was last left in. Stored per ComfyUI user
+// via the userdata API, so they follow the user across browsers; localStorage is
+// the fallback for frontends without it. One object:
+// {favorites: [path], lastShelf: {input, renders}}.
 //
-// Two folder lists because the picker browses two folders — `folders` is the
-// input one and keeps its name so prefs written before the gallery could be
-// organized load unchanged. Favorites need no such split: a gallery path
-// carries its ` [output]` annotation, so the two roots cannot collide.
+// Shelves are *not* here, and used to be: `folders` and `renderFolders` held the
+// names typed into the picker's "+", and the directory caught up with them the
+// first time something was dragged on. Two copies of one fact, and the copy that
+// survived was the wrong one — a folder deleted on disk went on being offered
+// for as long as the browser remembered its name (#40). The disk is the only
+// copy now; both keys are read as nothing and dropped on the next write.
+//
+// Favorites need no such treatment: they name files, and a gallery path carries
+// its ` [output]` annotation, so the two roots cannot collide.
 
 const PREFS_FILE = "continuity.picker.json";
 const PREFS_KEY = "continuity-picker-prefs";
@@ -104,8 +148,6 @@ const shelfName = (value) => (typeof value === "string" ? value : "all");
 function normalizePrefs(raw) {
   return {
     favorites: names(raw?.favorites),
-    folders: names(raw?.folders),
-    renderFolders: names(raw?.renderFolders),
     // Where the picker was last left, one per root. The picker checks the
     // folder is still there before opening on it — a remembered place can be
     // renamed or emptied between sessions.
@@ -143,6 +185,25 @@ export function savePickerPrefs(prefs) {
   try { api.storeUserData(PREFS_FILE, prefsCache, { stringify: true }); } catch { /* offline */ }
 }
 
+/** Forget the stars and the remembered shelves. The folders themselves are on
+ *  the disk and are not this function's business — see `listedFolders`. */
+export async function clearPickerPrefs() {
+  prefsCache = null;
+  for (const key of [PREFS_KEY, LEGACY_PREFS_KEY]) {
+    try { localStorage.removeItem(key); } catch { /* nothing to remove */ }
+  }
+  for (const file of [PREFS_FILE, LEGACY_PREFS_FILE]) {
+    try { await api.deleteUserData?.(file); } catch { /* already gone, or no API */ }
+  }
+}
+
+/** What the stars and the remembered shelves amount to, for a page that has to
+ *  say what it is about to remove. */
+export async function pickerPrefsHeld() {
+  const prefs = await loadPickerPrefs();
+  return prefs.favorites.length;
+}
+
 // ---- settings ---------------------------------------------------------------
 //
 // Not the userdata API the picker prefs above go through, and the difference
@@ -165,6 +226,15 @@ export async function saveSettings(patch) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(patch),
   });
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(body.error || t("settings failed ({status})", { status: response.status }));
+  return body.settings ?? {};
+}
+
+/** Put every setting back to what this pack ships with -> the whole stored
+ *  object, which is what the page then shows. */
+export async function resetSettings() {
+  const response = await api.fetchApi("/continuity/settings/reset", { method: "POST" });
   const body = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(body.error || t("settings failed ({status})", { status: response.status }));
   return body.settings ?? {};
@@ -470,6 +540,27 @@ export function saveLoraPrefs(prefs) {
   // instant, and losing one write is recoverable in a way a blocked click is not.
   try { api.storeUserData(LORA_PREFS_FILE, loraPrefsCache, { stringify: true }); } catch { /* offline */ }
   return loraPrefsCache;
+}
+
+/** Forget the LoRA manager's stars, its pins, and everything it remembers about
+ *  how each file was last used. The files are untouched — this is the pack's
+ *  notes on them, not the collection. */
+export async function clearLoraPrefs() {
+  loraPrefsCache = null;
+  for (const key of [LORA_PREFS_KEY, LEGACY_LORA_PREFS_KEY, LEGACY_FOLDER_KEY]) {
+    try { localStorage.removeItem(key); } catch { /* nothing to remove */ }
+  }
+  for (const file of [LORA_PREFS_FILE, LEGACY_LORA_PREFS_FILE]) {
+    try { await api.deleteUserData?.(file); } catch { /* already gone, or no API */ }
+  }
+}
+
+/** How many files the manager has notes on: starred, pinned, or used. What the
+ *  danger zone counts before offering to forget them. */
+export async function loraPrefsHeld() {
+  const prefs = await loadLoraPrefs();
+  return new Set([...prefs.favorites, ...Object.keys(prefs.used),
+                  ...Object.values(prefs.pinned)]).size;
 }
 
 /** The card's image or clip, from wherever the server found one — a sidecar's

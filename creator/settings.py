@@ -515,6 +515,26 @@ def save(raw):
     return stored
 
 
+def reset():
+    """Throw the settings file away and hand back the defaults.
+
+    Deleted rather than overwritten with `DEFAULTS`: a file holding every
+    default is indistinguishable on disk from a file somebody set every value in
+    by hand, and this pack's own rule is that an absent file *is* the defaults
+    (see `load`). Taking the legacy one with it, or the next `load` would find
+    the old name and put the old choices straight back.
+
+    A file that is already gone is not a failure — the end state is what was
+    asked for either way.
+    """
+    for candidate in (path(), legacy_path()):
+        try:
+            os.remove(candidate)
+        except FileNotFoundError:
+            pass
+    return clean({})
+
+
 def video_crf():
     """The quality target for every video this pack writes."""
     return load()["video_crf"]

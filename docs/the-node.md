@@ -23,6 +23,13 @@ The rail buttons open the same library as a full picker: a tab per kind,
 search, shelves, favourites and upload, plus a **Renders** tab over your
 output folder, so a clip you just made can go straight back in as a reference.
 
+A shelf is a folder on disk and nothing else. The "+" makes the directory,
+dragging a thumbnail onto a chip moves the file into it, and the row shows what
+is actually there — so a folder you delete from a terminal is gone from the
+picker on the next listing. An empty one you made by mistake has a *Remove
+shelf* at the end of the row; a folder with anything in it is a file manager's
+job.
+
 ![Two references cited in a prompt](img/mentions.png)
 
 Every attachment gets a colour, and its chip in the sentence wears the same

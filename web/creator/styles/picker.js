@@ -187,6 +187,15 @@ export const css = `
 /* While a cell is riding, the chips announce they are drop targets. */
 .mmc-modal.dragging .mmc-shelf { border-style: dashed; }
 .mmc-shelf-new { font-size: calc(15px * var(--mmc-type)); line-height: 1; }
+/* Throwing an empty shelf away. Quiet until it is armed — it sits at the end of
+   a row you click along, and a red chip beside the "+" would read as the danger
+   being the row rather than the second press. */
+.mmc-shelf-drop { color: var(--mmc-dim); }
+.mmc-shelf-drop:hover { color: var(--mmc-warn); border-color: var(--mmc-warn); }
+.mmc-shelf-drop.armed,
+.mmc-shelf-drop.armed:hover {
+  color: var(--mmc-strong); background: var(--mmc-bad-solid); border-color: transparent;
+}
 .mmc-shelf-input {
   height: calc(30px * var(--mmc-type)); width: calc(140px * var(--mmc-type)); border-radius: 15px; background: var(--mmc-surface);
   border: 1px solid var(--mmc-accent); color: var(--mmc-text); padding: 0 12px;

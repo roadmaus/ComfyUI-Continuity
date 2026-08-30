@@ -2,7 +2,8 @@
 // a slot counter that stops you selecting more than the model accepts.
 
 import { el, ICONS, svg, icon, mountOverlay, dismissable } from "./dom.js";
-import { listAssets, listingTruncated, viewUrl, stillUrl, upload, moveAsset,
+import { listAssets, listingTruncated, listedFolders, makeFolder, removeFolder,
+         viewUrl, stillUrl, upload, moveAsset,
          deleteAsset, loadPickerPrefs, savePickerPrefs, buildPlate,
          cutPanel } from "./api.js";
 import { openTrim, trimLabel } from "./trim.js";
@@ -97,7 +98,7 @@ class Picker {
     // Set once the first listing has landed and the remembered folder has been
     // opened; every later reload leaves the shelf alone.
     this.restored = false;
-    this.prefs = { favorites: [], folders: [], renderFolders: [], lastShelf: {} };
+    this.prefs = { favorites: [], lastShelf: {} };
     // path -> {trim, track}. Set only for files the user opened the segment
     // editor on; everything else is attached whole and silent, as before.
     this.settings = new Map();
@@ -347,13 +348,9 @@ class Picker {
     this.renderGrid();
   }
 
-  /** Which hand-made shelf names belong to the folder being browsed. Two lists
-   *  because they are two folders: a shelf typed while filing renders should
-   *  not appear as an empty chip over the input folder, where nothing can ever
-   *  land on it. `folders` keeps its name so prefs saved before the gallery
-   *  could be organized load unchanged. */
-  folderKey() {
-    return this.kind === "renders" ? "renderFolders" : "folders";
+  /** Which root the tab is browsing, as the server names it. */
+  rootName() {
+    return this.kind === "renders" ? "output" : "input";
   }
 
   /** Which root the tab is browsing. The shelf is remembered per root, not per
@@ -382,18 +379,24 @@ class Picker {
     savePickerPrefs(this.prefs);
   }
 
-  /** Every place a file can live: real subfolders seen in the listing (any
-   *  kind — a folder is shared) plus shelves made by hand that are still
-   *  empty. A nested path brings its ancestors with it — a render written to
-   *  "2026-08/take3" makes "2026-08" a place too, even though no file sits
-   *  directly in it. Sorted. */
+  /** Every place a file can live, as the disk has them.
+   *
+   *  One source, and it is the filesystem: the listing walks the root and says
+   *  which directories are under it, empty ones included. Nothing is added from
+   *  memory — a shelf the picker remembers and the disk does not is a shelf that
+   *  outlives the folder it named, which is exactly what went wrong (#40).
+   *
+   *  A nested path still brings its ancestors, because a walk can miss one an
+   *  asset path implies: the subfolders of the files are folded in for the same
+   *  reason, so a listing and its rows can never disagree about where a file is.
+   *  Sorted. */
   folders() {
     const seen = new Set();
     const add = (path) => {
       const parts = path.split("/");
       for (let i = 1; i <= parts.length; i++) seen.add(parts.slice(0, i).join("/"));
     };
-    for (const name of this.prefs[this.folderKey()] ?? []) add(name);
+    for (const name of listedFolders(this.rootName())) add(name);
     for (const asset of this.activeAssets()) if (asset.subfolder) add(asset.subfolder);
     return [...seen].sort((a, b) => a.localeCompare(b));
   }
@@ -525,7 +528,9 @@ class Picker {
       strip.scrollLeft += event.deltaY;
     }, { passive: false });
 
-    this.shelfRow.replaceChildren(crumbs, strip, this.newShelfChip(here));
+    const drop = this.emptyShelfChip(here);
+    this.shelfRow.replaceChildren(crumbs, strip, this.newShelfChip(here),
+                                  ...(drop ? [drop] : []));
     requestAnimationFrame(() => this.markStripEdges(strip));
   }
 
@@ -538,10 +543,15 @@ class Picker {
     strip.classList.toggle("more-r", slack > 2 && strip.scrollLeft < slack - 2);
   }
 
-  /** The trailing "+" that flips into a name field. A new shelf is only a
-   *  remembered name until a file lands on it — the directory itself is
-   *  created by the first upload or move. It lands inside the folder being
-   *  browsed, so the row makes the tree it navigates. */
+  /** The trailing "+" that flips into a name field. A new shelf is the folder:
+   *  the name goes straight to `mkdir` and the next listing finds it there.
+   *
+   *  It used to be a name the picker remembered until a file landed on it, which
+   *  is how a shelf came to outlive its directory (#40). Making it now costs one
+   *  round trip and means the row is never showing a place that is not there.
+   *
+   *  It lands inside the folder being browsed, so the row makes the tree it
+   *  navigates. */
   newShelfChip(parent = "") {
     const add = el("button", { class: "mmc-shelf mmc-shelf-new", text: "+", title: t("New shelf") });
     add.addEventListener("click", () => {
@@ -553,13 +563,7 @@ class Picker {
           if (event.key !== "Enter") return;
           const typed = field.value.trim().replace(/^\/+|\/+$/g, "");
           if (!typed || /(^|\/)\.|\\/.test(typed)) { this.warn(t("Shelf names cannot start with a dot.")); return; }
-          const name = parent ? `${parent}/${typed}` : typed;
-          const key = this.folderKey();
-          if (!this.prefs[key].includes(name)) {
-            this.prefs = { ...this.prefs, [key]: [...this.prefs[key], name] };
-            savePickerPrefs(this.prefs);
-          }
-          this.setShelf(name);
+          this.addShelf(parent ? `${parent}/${typed}` : typed);
         },
         onblur: () => this.renderShelves(),
       });
@@ -567,6 +571,63 @@ class Picker {
       field.focus();
     });
     return add;
+  }
+
+  /** The "throw this shelf away" chip, or null where there is nothing to throw.
+   *
+   *  Only over an empty folder, and only the one being browsed. A shelf used to
+   *  be a name nobody could get rid of because nobody could see it; it is a
+   *  directory now, and a directory somebody made by mistake has to be
+   *  removable from where they made it. Full ones are a file manager's job —
+   *  the server refuses those, and this does not offer them.
+   *
+   *  Asks once, the way Delete does: the press is irreversible and it sits at
+   *  the end of a row you click along. */
+  emptyShelfChip(here) {
+    if (!here) return null;
+    if (this.childFolders(here).length) return null;
+    if (this.activeAssets().some((asset) => this.under(asset.subfolder, here))) return null;
+    const label = el("span", { text: t("Remove shelf") });
+    const node = el("button", {
+      class: "mmc-shelf mmc-shelf-drop",
+      title: t("Remove this empty folder from the disk."),
+      onclick: () => {
+        if (node.classList.contains("armed")) { this.dropShelf(here); return; }
+        node.classList.add("armed");
+        label.textContent = t("Really remove?");
+        setTimeout(() => { if (node.isConnected) this.renderShelves(); }, 5000);
+      },
+    }, [icon("close", 13), label]);
+    return node;
+  }
+
+  /** Make the folder, then open it. A refusal — a name the server will not take,
+   *  a read-only disk — leaves the row exactly as it was and says why, which is
+   *  the honest answer now that a shelf is a thing that can fail to exist. */
+  async addShelf(name) {
+    try {
+      await makeFolder(this.rootName(), name);
+    } catch (error) {
+      this.warn(error.message);
+      this.renderShelves();
+      return;
+    }
+    await this.load({ force: true });
+    this.setShelf(name);
+  }
+
+  /** Throw away the shelf being browsed, which the server allows only while it
+   *  is empty. Back up to its parent afterwards — the place you were is gone. */
+  async dropShelf(name) {
+    try {
+      await removeFolder(this.rootName(), name);
+    } catch (error) {
+      this.warn(error.message);
+      return;
+    }
+    const parent = name.includes("/") ? name.slice(0, name.lastIndexOf("/")) : "all";
+    await this.load({ force: true });
+    this.setShelf(parent);
   }
 
   /** Drop a dragged cell onto a shelf. In organize mode a marked cell carries

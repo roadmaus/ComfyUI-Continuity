@@ -117,6 +117,16 @@ const PLATE_CATCH = 0.03;
 
 const clampPlate = (value) => Math.min(PLATE_MAX, Math.max(PLATE_MIN, value));
 
+/** Forget the view the shell opens in and how large it draws the picture. Both
+ *  are switches you flip while working rather than settings, so they are not in
+ *  the settings file — which is why the danger zone has to reach for them by
+ *  name to be able to say it cleared everything. */
+export function forgetLayout() {
+  for (const key of [VIEW_KEY, PLATE_KEY]) {
+    try { localStorage.removeItem(key); } catch { /* nothing to remove */ }
+  }
+}
+
 function storedPlate() {
   try {
     const seen = Number(localStorage.getItem(PLATE_KEY));

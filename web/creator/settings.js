@@ -21,7 +21,13 @@
 // than the workflow's, which is the only reason they share a page.
 
 import { el, mountOverlay } from "./dom.js";
-import { loadSettings, saveSettings, noteSettings, loadLatentCache, clearLatentCache } from "./api.js";
+import { loadSettings, saveSettings, resetSettings, noteSettings, loadLatentCache,
+         clearLatentCache, clearPickerPrefs, pickerPrefsHeld, clearLoraPrefs,
+         loraPrefsHeld } from "./api.js";
+import * as P from "./presets.js";
+import { resetSettings as resetRefiner, settingsStored as refinerStored,
+         remoteStatus, saveRemote } from "./refine.js";
+import { forgetLayout } from "./fullscreen.js";
 import { t } from "./i18n.js";
 import { CLOCK_TOKENS, FRAME_TOKENS, cleanPrefix, folderOf, stemOf, examplePath,
          splitTokens, tokenLabel, tokenValues } from "./outputs.js";
@@ -220,13 +226,147 @@ const TABS = [
   // it now holds two groups, and "Nodes" is the name of one of them.
   { key: "nodes", label: "General" },
   { key: "appearance", label: "Appearance" },
+  // Last, and named for what it holds rather than for how it feels about it.
+  // "Danger" as a tab label is a warning with nothing behind it yet — the
+  // gravity belongs on the press, where the thing actually happens.
+  { key: "data", label: "Stored data" },
 ];
+
+/** What each preset scope is, in the words somebody deciding whether to keep it
+ *  needs. Beside `SCOPE_LABEL` rather than in it: that one names a tab, and a
+ *  tab is not a warning. */
+const PRESET_ROW = {
+  piece: { name: "Pieces",
+           note: "Whole timelines you saved: the strip, the cast, the weights and "
+               + "the settings that rendered them." },
+  shot: { name: "Shots",
+          note: "One card's worth — its prompt, its duration and its seam." },
+  prestage: { name: "Pre-stages",
+              note: "A still and the arch that made it." },
+  cast: { name: "Cast",
+          note: "People you kept, with the files they are built out of and every "
+              + "feature written down about them." },
+  style: { name: "Styles",
+           note: "A look on its own, without the piece it came off." },
+};
+
+/** What each group is and who else it belongs to. The heading has to answer
+ *  "where does this live" before a press can be an informed one. */
+const GROUP_TITLE = {
+  "The library": {
+    title: "Presets and cast",
+    note: "Everything you starred into the preset library. It is stored against "
+        + "your ComfyUI user rather than in a workflow, so it follows you across "
+        + "browsers — and nothing else carries it, which is why it is the half of "
+        + "this page worth reading twice.",
+  },
+  "This browser": {
+    title: "How you left things",
+    note: "What the pack remembers about the way you work, rather than about "
+        + "what you made. Losing any of it costs a few clicks, never a file.",
+  },
+  "This machine": {
+    title: "Files and settings on this disk",
+    note: "Files on this disk and settings this install renders by. Shared by "
+        + "every workflow that opens here, and by nobody else.",
+  },
+};
+
+/**
+ * Everything this pack has written down, one row each.
+ *
+ * The list is the whole design. A settings page can only be honest about what
+ * it is holding if it says so item by item — so each row reports what is
+ * actually there before it offers to remove it, and a row with nothing behind
+ * it is visibly inert rather than a button that would silently do nothing.
+ *
+ * `held` reads the inventory the page loaded; `remove` is the one that acts.
+ * "Remove everything" below is nothing but this list run in order, which is why
+ * there is no second description of what everything means.
+ *
+ * `group` is where it lives, because where a thing lives is what you need to
+ * know before throwing it away: the library follows the ComfyUI user across
+ * browsers, the browser rows are this machine's browser alone, and the machine
+ * rows are files on this disk that a render reads.
+ */
+const STORED = [
+  ...P.SCOPES.map((scope) => ({
+    id: `preset:${scope}`,
+    group: "The library",
+    name: PRESET_ROW[scope].name,
+    note: PRESET_ROW[scope].note,
+    held: (kept) => kept.presets?.[scope] ?? 0,
+    remove: () => P.deletePresets(scope),
+  })),
+  {
+    id: "picker",
+    group: "This browser",
+    name: "Stars and where you left off",
+    note: "Starred files, the folder each picker tab opens on, and how large the "
+        + "fullscreen editor draws a take. No file is touched.",
+    held: (kept) => kept.picker ?? 0,
+    remove: async () => { await clearPickerPrefs(); forgetLayout(); },
+  },
+  {
+    id: "loras",
+    group: "This browser",
+    name: "The LoRA manager's notes",
+    note: "Stars, pinned versions, and the strength and trigger words each file "
+        + "was last used at. The LoRAs themselves stay on the disk.",
+    held: (kept) => kept.loras ?? 0,
+    remove: () => clearLoraPrefs(),
+  },
+  {
+    id: "refiner",
+    group: "This browser",
+    name: "Refiner choices",
+    note: "Which model rewrites a prompt, at what temperature, and any template "
+        + "or skill pinned to a family.",
+    held: (kept) => (kept.refiner ? "set" : 0),
+    remove: async () => resetRefiner(),
+  },
+  {
+    id: "cache",
+    group: "This machine",
+    name: "The reference cache",
+    note: "Encoded references kept between renders. Deleting them costs the next "
+        + "render one encode each and changes nothing about what it produces.",
+    held: (kept) => (kept.cacheBytes ? said(kept.cacheBytes) : 0),
+    remove: () => clearLatentCache(),
+  },
+  {
+    id: "remote",
+    group: "This machine",
+    name: "The refiner's server",
+    note: "The endpoint the remote refiner calls and the key it calls with. The "
+        + "key never leaves this machine, and this is how it goes.",
+    held: (kept) => (kept.remote ? "set" : 0),
+    remove: () => saveRemote("", ""),
+  },
+  {
+    id: "settings",
+    group: "This machine",
+    name: "Every setting on this page",
+    note: "Quality, output folders, previews and appearance, back to what the "
+        + "pack ships with.",
+    // Always offered: there is no count of "how default" a settings file is,
+    // and a page cannot honestly report one.
+    held: () => "in force",
+    remove: () => resetSettings(),
+  },
+];
+
 
 class SettingsPage {
   constructor(resolve) {
     this.resolve = resolve;
     this.settings = null;   // until the server answers
     this.cache = null;      // what the reference cache is holding, once asked
+    // What is stored, by row id, once the Stored data tab has asked. Null until
+    // then: the tab counts presets by reading every index on disk, and a page
+    // opened to change the video quality has no business doing that.
+    this.kept = null;
+    this.sweeping = false;  // the "remove everything" pass, while it runs
     this.problem = null;
     this.tab = TABS[0].key;
   }
@@ -328,6 +468,33 @@ class SettingsPage {
     // follow you to a tab where it means nothing.
     this.problem = null;
     this.render();
+    if (tab === "data") this.takeStock();
+  }
+
+  /**
+   * Count everything the Stored data tab is about to offer to remove.
+   *
+   * Every reader is allowed to fail on its own: an install with no preset index
+   * yet, a frontend with no userdata API, a server too old to answer for the
+   * remote refiner. A row whose count could not be read says so and stays
+   * pressable — the remove call is the one that decides, and it is idempotent.
+   */
+  async takeStock() {
+    const [presets, picker, loras, remote] = await Promise.all([
+      P.presetCounts().catch(() => ({})),
+      pickerPrefsHeld().catch(() => 0),
+      loraPrefsHeld().catch(() => 0),
+      remoteStatus({ force: true }).catch(() => ({ url: "", key_set: false })),
+    ]);
+    this.kept = {
+      presets,
+      picker,
+      loras,
+      refiner: refinerStored(),
+      cacheBytes: Number(this.cache?.bytes ?? 0),
+      remote: !!(remote.url || remote.key_set),
+    };
+    if (this.tab === "data") this.render();
   }
 
   close() {
@@ -350,6 +517,7 @@ class SettingsPage {
       ...(this.tab === "quality" ? [this.renderQuality()]
         : this.tab === "nodes" ? this.renderNodes()
         : this.tab === "appearance" ? this.renderAppearance()
+        : this.tab === "data" ? this.renderStored()
         : this.renderFolders()),
     );
   }
@@ -1365,6 +1533,152 @@ class SettingsPage {
         ...FRAME_TOKENS.map(chip),
       ]),
     ]);
+  }
+
+  // ---- stored data ----------------------------------------------------------
+
+  /**
+   * What this pack is holding, and how to take any of it back.
+   *
+   * An inventory rather than a row of red buttons. Everything on this tab is
+   * irreversible and most of it is invisible from anywhere else — a preset
+   * library lives in ComfyUI's user directory, the LoRA notes and the refiner's
+   * choices in this browser — so the question the page has to answer first is
+   * not "are you sure" but "what is there". Each row says what it holds before
+   * it offers to remove it, and a row holding nothing is plainly inert.
+   *
+   * Grouped by where the thing lives, because that is what decides who else
+   * loses it: the library follows the ComfyUI user, the browser rows are this
+   * browser's alone, and the machine rows are files on this disk.
+   */
+  renderStored() {
+    const groups = [];
+    for (const row of STORED) {
+      const last = groups[groups.length - 1];
+      if (last && last.name === row.group) last.rows.push(row);
+      else groups.push({ name: row.group, rows: [row] });
+    }
+    return [
+      ...groups.map(({ name, rows }) => this.section(name, GROUP_TITLE[name].title,
+        GROUP_TITLE[name].note,
+        [el("div", { class: "mmc-set-field mmc-zone" }, rows.map((row) => this.storedRow(row)))])),
+      this.section("Everything", "Start over",
+        "Every row above, in one press: the library, this browser's memory of "
+        + "how you work, and every setting back to default. Nothing here touches "
+        + "a render, a reference or a workflow — those are files, and this page "
+        + "does not delete files.",
+        [el("div", { class: "mmc-set-field" }, [this.sweepButton()])]),
+    ];
+  }
+
+  /** One row: what it is, what is behind it, and the press. */
+  storedRow(row) {
+    const kept = this.kept ? row.held(this.kept) : null;
+    const empty = kept === 0;
+    const held = this.kept === null ? t("Counting…")
+      : empty ? t("none")
+      : typeof kept === "number" ? String(kept) : t(kept);
+    const press = el("button", {
+      class: "mmc-zone-go",
+      disabled: this.kept === null || empty || this.sweeping ? true : undefined,
+      text: t("Remove"),
+      onclick: () => this.armRow(row, press),
+    });
+    return el("div", { class: "mmc-zone-row", "data-empty": String(empty) }, [
+      el("div", { class: "mmc-zone-what" }, [
+        el("span", { class: "mmc-zone-name", text: t(row.name) }),
+        el("span", { class: "mmc-zone-note", text: t(row.note) }),
+      ]),
+      el("span", { class: "mmc-zone-held", text: held }),
+      press,
+    ]);
+  }
+
+  /** The press asks once. Same bargain the picker's Delete and the rail's Clear
+   *  strike, and for the same reason: there is no undo, and a row of them is a
+   *  row you can slip on. Anything but a second press puts it back. */
+  armRow(row, press) {
+    if (press.classList.contains("armed")) { this.runStored([row]); return; }
+    // Only ever one armed at a time, so a stray press cannot fire the row above
+    // the one being read.
+    this.disarm();
+    press.classList.add("armed");
+    press.textContent = t("Really remove?");
+    this.armTimer = setTimeout(() => this.render(), 5000);
+  }
+
+  disarm() {
+    clearTimeout(this.armTimer);
+    for (const press of this.body.querySelectorAll(".armed")) {
+      press.classList.remove("armed");
+    }
+  }
+
+  /** The whole list, armed the same way. Says how many rows it is about to
+   *  empty rather than "everything", which is a word and not a number. */
+  sweepButton() {
+    const standing = this.kept
+      ? STORED.filter((row) => row.held(this.kept) !== 0).length
+      : 0;
+    const press = el("button", {
+      class: "mmc-zone-go mmc-zone-all",
+      disabled: this.kept === null || !standing || this.sweeping ? true : undefined,
+      text: this.sweeping ? t("Removing…")
+        : this.kept === null ? t("Counting…")
+        : standing ? t("Remove everything")
+        : t("Nothing stored"),
+      onclick: () => {
+        if (press.classList.contains("armed")) {
+          this.runStored(STORED.filter((row) => row.held(this.kept) !== 0));
+          return;
+        }
+        this.disarm();
+        press.classList.add("armed");
+        press.textContent = t("Really remove all {count}?", { count: standing });
+        this.armTimer = setTimeout(() => this.render(), 5000);
+      },
+    });
+    return press;
+  }
+
+  /**
+   * Do it, then re-count.
+   *
+   * Row by row, and a row that fails does not stop the ones after it: these are
+   * separate stores in separate places, and stopping at the first refusal would
+   * leave a "remove everything" that removed some of it and said nothing about
+   * which. What went wrong comes back named, so the row that survived is the
+   * row you can see.
+   */
+  async runStored(rows) {
+    this.disarm();
+    this.problem = null;
+    this.sweeping = true;
+    this.render();
+    const failures = [];
+    for (const row of rows) {
+      try {
+        await row.remove();
+      } catch (error) {
+        failures.push(t("{name}: {error}", { name: t(row.name), error: error.message }));
+      }
+    }
+    this.sweeping = false;
+    // The settings row rewrites the page's own subject, so what is now in force
+    // is read back rather than assumed — and the stylesheet is told, since the
+    // text scale and the palette are drawn from it.
+    try {
+      this.settings = await loadSettings();
+      noteSettings(this.settings);
+    } catch { /* the page keeps what it had; the row's own failure says why */ }
+    try {
+      this.cache = await loadLatentCache();
+    } catch { /* the line stays absent */ }
+    if (failures.length) {
+      this.problem = failures.length === 1 ? failures[0]
+        : t("{count} did not go — {first}", { count: failures.length, first: failures[0] });
+    }
+    await this.takeStock();
   }
 
   /** One setting, under a section heading. The heading repeats down the page as

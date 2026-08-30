@@ -143,6 +143,25 @@ export function saveSettings(patch) {
   return next;
 }
 
+/** Forget every refiner choice: the model, the temperature, the pinned
+ *  templates, the skill and its mode. The endpoint and the key are not here —
+ *  they live server-side and are cleared through `/continuity/refine/remote`,
+ *  which is the only thing that has ever been able to touch them. */
+export function resetSettings() {
+  for (const key of [STORE, LEGACY_STORE]) {
+    try { localStorage.removeItem(key); } catch { /* nothing to remove */ }
+  }
+}
+
+/** Whether anything has been chosen here at all — what the danger zone asks
+ *  before offering to forget it. */
+export function settingsStored() {
+  for (const key of [STORE, LEGACY_STORE]) {
+    try { if (localStorage.getItem(key)) return true; } catch { return false; }
+  }
+  return false;
+}
+
 /** The model the active backend would use. Empty means nothing is chosen.
  *  Backend-aware on purpose: this is what the button's tooltip names and what
  *  the panel stores as the rewrite's author, and both should say the model

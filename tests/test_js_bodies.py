@@ -1461,6 +1461,57 @@ try {
   await new Promise((done) => setTimeout(done, 0));
   out.settings.liftPosted = globalThis.__posted.at(-1);
   out.settings.liftVar = document.documentElement.style["--mmc-lift"];
+
+  // The Stored data tab. It is an inventory before it is a set of buttons, so
+  // what is checked is that it counts what is there: a row over an empty store
+  // is inert, and a row over three saved shots offers to remove three.
+  const presets = { version: 1, presets: [
+    { id: "a", scope: "shot", name: "one", updated: 3 },
+    { id: "b", scope: "shot", name: "two", updated: 2 },
+    { id: "c", scope: "cast", name: "vera", updated: 1 },
+  ] };
+  localStorage.setItem("continuity-presets", JSON.stringify(presets));
+  tabButtons[4].listeners.click[0]();
+  // Two turns: one for the render, one for the counts to land behind it.
+  await new Promise((done) => setTimeout(done, 0));
+  await new Promise((done) => setTimeout(done, 0));
+  const zoneRows = () => {
+    const found = [];
+    const walk = (node) => {
+      if (node.className === "mmc-zone-row") found.push(node);
+      (node.children ?? []).forEach(walk);
+    };
+    walk(page);
+    return found;
+  };
+  const heldOf = (row) => {
+    let found = "";
+    const walk = (node) => {
+      if (node.className === "mmc-zone-held") found = node.textContent;
+      (node.children ?? []).forEach(walk);
+    };
+    walk(row);
+    return found;
+  };
+  const pressOf = (row) => (row.children ?? []).find(
+    (kid) => String(kid.className ?? "").includes("mmc-zone-go"));
+  out.stored = {
+    rows: zoneRows().length,
+    held: zoneRows().map(heldOf),
+    empty: zoneRows().map((row) => row.getAttribute("data-empty")),
+  };
+
+  // Arming and firing the Shots row. The first press only asks; the second is
+  // what removes, and afterwards the row has to say so on its own rather than
+  // still offering two.
+  const shots = zoneRows()[1];
+  pressOf(shots).listeners.click[0]();
+  out.stored.armedLabel = pressOf(zoneRows()[1]).textContent;
+  pressOf(zoneRows()[1]).listeners.click[0]();
+  for (let i = 0; i < 6; i += 1) await new Promise((done) => setTimeout(done, 0));
+  out.stored.afterHeld = zoneRows().map(heldOf);
+  out.stored.afterStored = JSON.parse(localStorage.getItem("continuity-presets")).presets
+    .map((row) => row.id);
 } catch (error) {
   out.errors.push(`settings page: ${error.message}`);
 }
@@ -3155,8 +3206,35 @@ check("...and one that ended without a file says why rather than nothing",
       (recovery.get("failedState"), recovery.get("failedSays")),
       ("failed", "out of memory"))
 
-check("the settings page has all four tabs", settings.get("tabs"),
-      ["Quality", "Folders", "General", "Appearance"])
+# --- what the pack is holding, and taking it back -----------------------------
+#
+# The rows of the Stored data tab, in page order, against a fake user whose only
+# saved work is two shots and one cast member. Spelled out rather than derived
+# from the JS: the point of the tab is that it reports what is really there, and
+# a check that recomputed the same list from the same table would pass on a tab
+# that counted nothing at all.
+STORED_ROWS = ["Pieces", "Shots", "Pre-stages", "Cast", "Styles",
+               "Stars and where you left off", "The LoRA manager's notes",
+               "Refiner choices", "The reference cache", "The refiner's server",
+               "Every setting on this page"]
+NOTHING = "none"
+STORED_HELD = [NOTHING, "2", NOTHING, "1", NOTHING, NOTHING, NOTHING, NOTHING,
+               NOTHING, NOTHING, "in force"]
+STORED_EMPTY = ["true", "false", "true", "false", "true", "true", "true", "true",
+                "true", "true", "false"]
+
+stored = report.get("stored", {})
+check("the stored-data tab lists every store", stored.get("rows"), len(STORED_ROWS))
+check("...and counts what is actually in each one", stored.get("held"), STORED_HELD)
+check("...marking the empty ones as empty", stored.get("empty"), STORED_EMPTY)
+check("a remove press asks before it acts", stored.get("armedLabel"), "Really remove?")
+check("...and the second press empties that store and nothing else",
+      stored.get("afterStored"), ["c"])
+check("...after which the row says it is empty",
+      (stored.get("afterHeld") or [None])[1], "none")
+
+check("the settings page has all five tabs", settings.get("tabs"),
+      ["Quality", "Folders", "General", "Appearance", "Stored data"])
 # Every row on the tab, in order, with each setting's default checked on a fresh
 # settings file: previews ship playing, the reference cache ships on, and the
 # advanced controls and the shift pills ship off. Advanced leads, because it

@@ -75,7 +75,11 @@ def _tree(root):
 
 
 def paths(root, annotation=""):
-    return sorted(row["path"] for row in _scan(root, annotation))
+    return sorted(row["path"] for row in _scan(root, annotation)[0])
+
+
+def folders(root):
+    return sorted(_scan(root)[1])
 
 
 def test_finds_media_and_skips_the_rest():
@@ -88,7 +92,7 @@ def test_finds_media_and_skips_the_rest():
 def test_rows_carry_what_a_cell_draws():
     with tempfile.TemporaryDirectory() as root:
         _tree(root)
-        rows = {row["path"]: row for row in _scan(root)}
+        rows = {row["path"]: row for row in _scan(root)[0]}
 
         top = rows["a.png"]
         assert top["name"] == "a.png"
@@ -101,6 +105,29 @@ def test_rows_carry_what_a_cell_draws():
         assert nested["subfolder"] == "deep/nested", "a subfolder is posix-separated at any depth"
         assert nested["name"] == "d.mp3"
         assert nested["kind"] == "audio"
+
+
+def test_folders_are_reported_whether_or_not_they_hold_media():
+    """The shelf row is drawn off these and off nothing else.
+
+    A shelf used to be a name the browser remembered, so it outlived the folder
+    it named: delete the input folder from a terminal and the picker went on
+    offering its contents. The listing has to answer for the empty ones too, or
+    a folder made by the picker would vanish again the moment it was made.
+    """
+    with tempfile.TemporaryDirectory() as root:
+        _tree(root)
+        os.makedirs(os.path.join(root, "keepers"))
+        os.makedirs(os.path.join(root, "papers"))         # only a .txt in it
+        _touch(os.path.join(root, "papers", "notes.txt"))
+        assert folders(root) == ["clips", "deep", "deep/nested", "keepers", "papers"], \
+            "an empty shelf, or one holding no media, is still a place a file can go"
+
+
+def test_a_hidden_folder_is_not_a_shelf():
+    with tempfile.TemporaryDirectory() as root:
+        os.makedirs(os.path.join(root, ".git", "objects"))
+        assert folders(root) == []
 
 
 def test_annotation_rides_on_the_path():
