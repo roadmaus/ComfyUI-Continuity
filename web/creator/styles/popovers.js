@@ -105,6 +105,62 @@ export const css = `
    takes the pill's own colour — and greys out with it when the ratio is coming
    from a keyframe and the pill is disabled. */
 .mmc-pill .mmc-aspect-glyph > span { border-color: currentColor; border-width: 1.25px; }
+/* --- the aspect grid ------------------------------------------------------
+   Six shapes across two rows instead of ten rows of near-identical text: the
+   glyph is what is being chosen here, so it is what the tile is mostly made
+   of, and the numbers under it are the caption. Ordered widest to squarest, so
+   the grid is aimed at rather than read.
+
+   Not .mmc-seg for the switch: that name belongs to two other controls already
+   (styles/loras.js, styles/overlays.js) and both load after this file, so a
+   switch wearing it would be redrawn by whichever won. */
+.mmc-aspect-head { display: flex; align-items: center; gap: 8px; padding: 2px 2px 6px; }
+.mmc-aspect-title { flex: 1; padding: 0 0 0 8px; }
+.mmc-aspect-flip {
+  flex: 1; display: flex; height: 26px; border-radius: 13px; overflow: hidden;
+  background: var(--mmc-surface-2); border: 1px solid var(--mmc-line);
+}
+.mmc-flip-opt {
+  flex: 1; padding: 0 10px; cursor: pointer; background: none; border: 0;
+  border-left: 1px solid var(--mmc-line);
+  color: var(--mmc-dim); font-size: calc(12px * var(--mmc-type)); font-family: inherit;
+}
+.mmc-flip-opt:first-child { border-left: 0; }
+.mmc-flip-opt:hover { color: var(--mmc-text); }
+.mmc-flip-opt[aria-pressed="true"] {
+  background: color-mix(in srgb, var(--mmc-blue) 22%, transparent); color: var(--mmc-text);
+}
+.mmc-aspect-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+.mmc-aspect-tile {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px;
+  padding: 10px 4px; background: none; border: 0; border-radius: 10px; cursor: pointer;
+  color: var(--mmc-dim); font-family: inherit;
+  font-size: calc(12px * var(--mmc-type)); font-variant-numeric: tabular-nums;
+}
+.mmc-aspect-tile:hover { background: var(--mmc-surface-2); color: var(--mmc-text); }
+.mmc-aspect-tile[aria-checked="true"] {
+  background: color-mix(in srgb, var(--mmc-blue) 14%, transparent); color: var(--mmc-text);
+  box-shadow: inset 0 0 0 1px var(--mmc-blue);
+}
+.mmc-aspect-tile[aria-checked="true"] .mmc-aspect-glyph > span { border-color: var(--mmc-blue); }
+/* A shape the family lists one way up only, seen the other way: it holds its
+   column so the grid does not change width under the switch, and goes dead so
+   that a tile which looks identical in both settings cannot read as a switch
+   that did nothing. Still lit when it is the ratio in force — that pairing is
+   the whole message, "what you have is not available tall". */
+.mmc-aspect-tile:disabled { color: var(--mmc-off); cursor: not-allowed; }
+.mmc-aspect-tile:disabled:hover { background: none; color: var(--mmc-off); }
+.mmc-aspect-tile:disabled .mmc-aspect-glyph > span,
+.mmc-aspect-tile:disabled[aria-checked="true"] .mmc-aspect-glyph > span {
+  border-color: var(--mmc-off); border-style: dashed;
+}
+.mmc-aspect-tile:disabled[aria-checked="true"] {
+  background: none; box-shadow: inset 0 0 0 1px var(--mmc-line-2);
+}
+.mmc-flip-opt:focus-visible, .mmc-aspect-tile:focus-visible {
+  outline: 2px solid var(--mmc-accent); outline-offset: -2px;
+}
+
 .mmc-radio {
   width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--mmc-edge); flex: none;
 }

@@ -123,6 +123,15 @@ ROUTED = ()
 # - `max_short_edge` is the slider's ceiling rather than a claim: 2048 is where
 #   a stage-one render plus the x2 upscaler lands, and the pill warns above the
 #   native edge long before here.
+# - The ratio envelope is 9:21..21:9, which is wider on the tall side than the
+#   published range (9:16..21:9). Deliberate, and a decision rather than a
+#   reading of the card: the published range is asymmetric where the weights
+#   are not, and what this clamp is actually for is keeping an *arbitrary donor
+#   picture* — any photo somebody attaches — inside something the model can
+#   hold, not vetoing a shape the user picked on purpose. A list that offered
+#   21:9 with no 9:21 to turn it into also made the orientation switch look
+#   broken, which is how this surfaced. Off-distribution stays off-distribution
+#   and the pill still says so; it is not the pack's call to refuse it.
 # - The trained frame range is the duration head's own default clamp — 1 s to
 #   20 s at 24 fps, snapped to the grid — which is Lightricks saying which
 #   durations the weights were taught to hold. The seconds range below it is
@@ -135,15 +144,24 @@ RULES = canvas.Rules(
     native_max_pixels=544 * 960,
     min_short_edge=256,
     max_short_edge=2048,
-    min_ratio=9 / 16,
+    min_ratio=9 / 21,
     max_ratio=21 / 9,
     aspects={
+        # The full set is six shapes, each offered both ways up; the popover
+        # draws them as a grid with one orientation switch rather than twelve
+        # rows. 16:9 stays first: the first entry is the fallback a family
+        # switch lands on when nothing nearer is listed.
         "16:9": 16 / 9,
-        "4:3": 4 / 3,
-        "1:1": 1.0,
-        "3:4": 3 / 4,
-        "9:16": 9 / 16,
         "21:9": 21 / 9,
+        "3:2": 3 / 2,
+        "4:3": 4 / 3,
+        "5:4": 5 / 4,
+        "1:1": 1.0,
+        "4:5": 4 / 5,
+        "3:4": 3 / 4,
+        "2:3": 2 / 3,
+        "9:16": 9 / 16,
+        "9:21": 9 / 21,
     },
     frame_step=8,
     frame_offset=1,

@@ -88,7 +88,15 @@ ROUTED = ("fl2va", "ref2va")
 #   around 3 MP, and a 2K checkpoint is expected. A ceiling the
 #   hardware and the warning already govern is better than one that has to be
 #   raised again the day those weights land.
-# - The 9:16..21:9 ratio envelope is the official H3 aspect range.
+# - The ratio envelope is 9:21..21:9, which is wider on the tall side than the
+#   published range (9:16..21:9). Deliberate, and a decision rather than a
+#   reading of the card: the published range is asymmetric where the weights
+#   are not, and what this clamp is actually for is keeping an *arbitrary donor
+#   picture* — any photo somebody attaches — inside something the model can
+#   hold, not vetoing a shape the user picked on purpose. A list that offered
+#   21:9 with no 9:21 to turn it into also made the orientation switch look
+#   broken, which is how this surfaced. Off-distribution stays off-distribution
+#   and the pill still says so; it is not the pack's call to refuse it.
 # - The trained frame range is ~5.2 s to ~15.1 s. Not a limit: the
 #   architecture takes any 17n+5 count and clips well past the top do come
 #   out; the pair exists so the UI can say when you have left the
@@ -105,15 +113,24 @@ RULES = canvas.Rules(
     native_max_pixels=768 * 1344,
     min_short_edge=384,
     max_short_edge=2048,
-    min_ratio=9 / 16,
+    min_ratio=9 / 21,
     max_ratio=21 / 9,
     aspects={
+        # The full set is six shapes, each offered both ways up; the popover
+        # draws them as a grid with one orientation switch rather than twelve
+        # rows. 16:9 stays first: the first entry is the fallback a family
+        # switch lands on when nothing nearer is listed.
         "16:9": 16 / 9,
-        "4:3": 4 / 3,
-        "1:1": 1.0,
-        "3:4": 3 / 4,
-        "9:16": 9 / 16,
         "21:9": 21 / 9,
+        "3:2": 3 / 2,
+        "4:3": 4 / 3,
+        "5:4": 5 / 4,
+        "1:1": 1.0,
+        "4:5": 4 / 5,
+        "3:4": 3 / 4,
+        "2:3": 2 / 3,
+        "9:16": 9 / 16,
+        "9:21": 9 / 21,
     },
     frame_step=17,
     frame_offset=5,

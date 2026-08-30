@@ -57,15 +57,21 @@ MAX_PIXELS = 2048 * 2048
 MIN_RATIO = 1 / 3
 MAX_RATIO = 3.0
 
+# Six shapes, each offered both ways up. The popover draws them as a grid under
+# one orientation switch, so the list growing does not cost a row apiece. 16:9
+# stays first: the first entry is what a lookup falls back to.
 ASPECT_PRESETS = {
     "16:9": 16 / 9,
+    "21:9": 21 / 9,
     "3:2": 3 / 2,
     "4:3": 4 / 3,
+    "5:4": 5 / 4,
     "1:1": 1.0,
+    "4:5": 4 / 5,
     "3:4": 3 / 4,
     "2:3": 2 / 3,
     "9:16": 9 / 16,
-    "21:9": 21 / 9,
+    "9:21": 9 / 21,
 }
 DEFAULT_ASPECT = "16:9"
 

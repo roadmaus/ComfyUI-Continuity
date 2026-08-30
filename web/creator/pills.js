@@ -140,6 +140,146 @@ export function aspectGlyph(ratio, long = 18) {
 export const PILL_GLYPH = 16;
 
 /**
+ * The ratio presets, as the two facts they are made of: a shape, and which way
+ * up it stands.
+ *
+ * A flat list prints every shape twice — 16:9 and 9:16 are one rectangle — so
+ * ten offered ratios cost ten rows, and eight of those rows are four shapes
+ * seen again. Grouped, it is six tiles under one switch, and the switch says
+ * something the list could not: turn what I have, without hunting the list for
+ * its reciprocal.
+ *
+ * The pairing is read off the manifest rather than written down here, so a
+ * family that lists a shape one way up only still gets a tile — that tile just
+ * shows the one label it has, whichever way the switch is set.
+ *
+ * @param {Array<[string, number]>} presets  [label, ratio], the manifest's own
+ * @returns {Array<{wide: [string,number]|null, tall: [string,number]|null, key: number}>}
+ *   widest first and the square last, so the grid is a gradient you aim at
+ *   rather than a column you read.
+ */
+function aspectShapes(presets) {
+  const near = (a, b) => Math.abs(a - b) < 1e-6;
+  const shapes = [];
+  const placed = new Set();
+  for (const entry of presets) {
+    const [label, ratio] = entry;
+    if (placed.has(label)) continue;
+    placed.add(label);
+    if (near(ratio, 1)) {
+      shapes.push({ wide: entry, tall: entry, key: 1 });
+      continue;
+    }
+    const twin = presets.find(([other, r]) => other !== label && near(r * ratio, 1));
+    if (twin) placed.add(twin[0]);
+    const [wide, tall] = ratio > 1 ? [entry, twin] : [twin, entry];
+    shapes.push({ wide: wide ?? null, tall: tall ?? null, key: Math.max(ratio, 1 / ratio) });
+  }
+  return shapes.sort((a, b) => b.key - a.key);
+}
+
+/**
+ * The shape grid and the orientation switch that turns it — the preset half of
+ * every aspect popover in the pack.
+ *
+ * @param {Array<[string, number]>} presets  [label, ratio] pairs, in manifest order
+ * @param {string|null} checked  the label the caller counts as chosen, or null
+ *   when something else is — a donor picture, say
+ * @param {string} facing  the label the opening orientation is read off, so a
+ *   portrait piece opens on the portrait grid even when a picture is supplying
+ *   the ratio and nothing in the grid is lit
+ * @param {(label: string, close: boolean) => void} apply  told the new label.
+ *   `close` is true for a tile: a tile is a whole answer and the popover has
+ *   done its job. It is false for the switch, which only turns an answer that
+ *   was already given — the user may well want to turn it straight back, and a
+ *   popover that vanished under the flip would have to be reopened to see what
+ *   the flip did.
+ * @param {string|null} [title]  the label beside the switch, where the section
+ *   needs naming — it does not when the popover's own title is the only thing
+ *   above it
+ */
+export function aspectGrid(presets, checked, facing, apply, title = null) {
+  const shapes = aspectShapes(presets);
+  const grid = el("div", { class: "mmc-aspect-grid", role: "radiogroup" });
+  const ratioOf = (label) => presets.find(([other]) => other === label)?.[1] ?? 1;
+  // The label the shape would wear the other way up, for naming the one the
+  // family does not offer. A ratio label is its two edges in order, so turning
+  // it is turning them around.
+  const flipped = (label) => label.split(":").reverse().join(":");
+  let tall = ratioOf(facing) < 1;
+  let chosen = checked;
+
+  // Which of a shape's two labels the tile is offering right now, and whether
+  // the family lists that shape this way up at all. Every family shipped here
+  // offers all six both ways — the manifests were widened so they could, after
+  // a 21:9 with no 9:21 behind it made the switch look broken. This is what
+  // happens to the next list that does not: the tile keeps its column so the
+  // grid does not change width under the switch, and goes dead, because a tile
+  // that looks identical in both settings reads as a switch that did nothing.
+  const showing = (shape) => {
+    const here = tall ? shape.tall : shape.wide;
+    return [here ?? shape.tall ?? shape.wide, here == null];
+  };
+
+  const draw = () => {
+    grid.replaceChildren(...shapes.map((shape) => {
+      const [[label, ratio], missing] = showing(shape);
+      return el("button", {
+        class: "mmc-aspect-tile",
+        role: "radio",
+        "aria-checked": label === chosen,
+        disabled: missing,
+        // `label` is the form the family does have, since a missing one falls
+        // back to its twin — so the one it does not have is that turned around.
+        title: missing
+          ? t("{missing} is outside this family's aspect range. {have} is the only way up "
+              + "this shape is offered.", { missing: flipped(label), have: label })
+          : null,
+        onclick: () => { chosen = label; apply(label, true); },
+      }, [aspectGlyph(ratio, 26), el("span", { class: "mmc-aspect-num", text: label })]);
+    }));
+  };
+
+  const switcher = el("div", { class: "mmc-aspect-flip" }, [
+    el("button", { class: "mmc-flip-opt", text: t("Wide"), onclick: () => flip(false) }),
+    el("button", { class: "mmc-flip-opt", text: t("Tall"), onclick: () => flip(true) }),
+  ]);
+  const turn = () => {
+    switcher.children[0].setAttribute("aria-pressed", String(!tall));
+    switcher.children[1].setAttribute("aria-pressed", String(tall));
+  };
+  const flip = (want) => {
+    if (want === tall) return;
+    tall = want;
+    turn();
+    draw();
+    // The switch turns the grid always, and the piece only when the piece is
+    // what the grid is showing. With a picture supplying the ratio there is no
+    // preset choice to turn, and turning one over the picture's head would be
+    // the switch making a choice the user did not make. A square has the same
+    // label both ways up and so has nothing to write either.
+    const now = chosen
+      && shapes.find((shape) => shape.wide?.[0] === chosen || shape.tall?.[0] === chosen);
+    if (!now) return;
+    const [[label]] = showing(now);
+    if (label === chosen) return;
+    chosen = label;
+    draw();
+    apply(label, false);
+  };
+
+  draw();
+  turn();
+  return el("div", { class: "mmc-aspect-picker" }, [
+    el("div", { class: "mmc-aspect-head" }, [
+      ...(title ? [el("span", { class: "mmc-pop-title mmc-aspect-title", text: title })] : []),
+      switcher,
+    ]),
+    grid,
+  ]);
+}
+
+/**
  * @param {HTMLElement} anchor  the pill to hang the popover off
  * @param {object} target       anything with an `aspect` field — a state or a timeline
  * @param {() => void} commit   called once, after a choice
@@ -151,17 +291,19 @@ export const PILL_GLYPH = 16;
  *   frame square and says nothing it does not know.
  */
 export function openAspectPopover(anchor, target, commit, sources = null) {
-  // The ratios this family offers. The same six today for both, and read off
+  // The ratios this family offers. The same set today for both, and read off
   // the piece anyway: an aspect envelope is a property of what the weights saw,
   // and the list is the manifest's to declare.
   const presets = rulesFor(pieceFamily(target)).aspects;
   const donors = sources?.donors?.length ? sources.donors : null;
   const current = target.aspect_source ?? "auto";
   const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
-  const pick = (value) => {
+  // `shut` is false for the orientation switch, which turns the choice without
+  // ending it; everything else here is a whole answer and closes.
+  const pick = (value, shut = true) => {
     if (value === undefined) delete target.aspect_source;
     else target.aspect_source = value;
-    close();
+    if (shut) close();
     commit();
   };
 
@@ -202,27 +344,22 @@ export function openAspectPopover(anchor, target, commit, sources = null) {
         el("span", { class: "mmc-radio" }),
       ]));
     }
-    pop.appendChild(el("div", { class: "mmc-pop-title", text: t("Preset") }));
   }
 
-  for (const [label, ratio] of presets) {
-    pop.appendChild(el("button", {
-      class: "mmc-opt",
-      "aria-checked": target.aspect === label
-        && (!donors || current === "pill" || current === "auto"),
-      onclick: () => {
-        target.aspect = label;
-        // With pictures on offer, choosing a preset is choosing it *over*
-        // them — written down as "pill" so a clip or keyframe cannot quietly
-        // outrank a choice the user just made. With nothing on offer the
-        // preset already rules and the blob stays exactly as it always was.
-        pick(donors ? "pill" : undefined);
-      },
-    }, [
-      el("span", { class: "mmc-opt-label" }, [aspectGlyph(ratio), el("span", { text: label })]),
-      el("span", { class: "mmc-radio" }),
-    ]));
-  }
+  // Lit only while the preset is the ratio in force — with pictures on offer a
+  // donor outranks it. The orientation still opens off `target.aspect`, which
+  // is the shape the piece falls back to and the one worth showing turned the
+  // right way.
+  const checked = !donors || current === "pill" || current === "auto" ? target.aspect : null;
+  pop.appendChild(aspectGrid(presets, checked, target.aspect, (label, shut) => {
+    target.aspect = label;
+    // With pictures on offer, choosing a preset is choosing it *over* them —
+    // written down as "pill" so a clip or keyframe cannot quietly outrank a
+    // choice the user just made. With nothing on offer the preset already
+    // rules and the blob stays exactly as it always was.
+    pick(donors ? "pill" : undefined, shut);
+  }, donors ? t("Preset") : null));
+
   document.body.appendChild(pop);
   placeNear(pop, anchor);
   const close = dismissable(pop);

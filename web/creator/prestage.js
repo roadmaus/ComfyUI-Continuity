@@ -33,7 +33,7 @@ import { openPicker } from "./picker.js";
 import { openLoras, loraBlock, loraBase } from "./loras.js";
 import { openFrameGrab } from "./framegrab.js";
 import { openContactSheet } from "./contact.js";
-import { openChoicePopover, stepperPill, aspectGlyph, edgeSlider, PILL_GLYPH } from "./pills.js";
+import { openChoicePopover, stepperPill, aspectGlyph, aspectGrid, edgeSlider, PILL_GLYPH } from "./pills.js";
 import { revealPreStage } from "./fullscreen.js";
 import { CreatorEditor } from "./editor.js";
 import { openPresetLibrary } from "./presetlib.js";
@@ -1241,16 +1241,12 @@ export class PreStageEditor {
 
   openAspect(anchor) {
     const pop = el("div", { class: "mmc-pop" }, [el("div", { class: "mmc-pop-title", text: t("Aspect Ratio") })]);
-    for (const [label, ratio] of S.PRESTAGE_ASPECTS) {
-      pop.appendChild(el("button", {
-        class: "mmc-opt",
-        "aria-checked": this.state.aspect === label,
-        onclick: () => { this.state.aspect = label; close(); this.commit(); },
-      }, [
-        el("span", { class: "mmc-opt-label" }, [aspectGlyph(ratio), el("span", { text: label })]),
-        el("span", { class: "mmc-radio" }),
-      ]));
-    }
+    pop.appendChild(aspectGrid(
+      S.PRESTAGE_ASPECTS, this.state.aspect, this.state.aspect, (label, shut) => {
+        this.state.aspect = label;
+        if (shut) close();
+        this.commit();
+      }));
     document.body.appendChild(pop);
     placeNear(pop, anchor);
     const close = dismissable(pop);
