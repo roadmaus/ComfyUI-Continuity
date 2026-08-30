@@ -100,6 +100,31 @@ try {
     };
   }
 
+  // The chip, wherever the box put it. Not `childNodes[0]`: the box pads a
+  // leading chip with a zero-width text node so there is a caret position in
+  // front of it, and a click finds the chip with `closest` rather than by index.
+  const sayChip = () => [...box.root.childNodes].find((n) => n.dataset?.say !== undefined);
+
+  // A chip is contenteditable="false", and Gecko puts no caret at a spot with no
+  // text node beside it — so a sentence that *ends* in a spoken line had no
+  // writing position after it at all: the caret sat past the closing quote and
+  // no key, Backspace included, did anything. The pad either side is what makes
+  // one, and it must not show up in the text.
+  {
+    const ends = "She waits. " + cases.plain;
+    box.setValue(ends);
+    const kids = [...box.root.childNodes];
+    box.setValue(cases.plain);
+    const alone = [...box.root.childNodes];
+    out.caret = {
+      afterALine: kids[kids.length - 1].nodeType === 3,
+      beforeALine: alone[0].nodeType === 3,
+      afterALoneLine: alone[alone.length - 1].nodeType === 3,
+      // ...and none of it in what the state and the compiler read.
+      unchanged: box.getValue() === cases.plain,
+    };
+  }
+
   // The offsets the caret and the menu are measured in count a spoken line as
   // the text it stands for, not as one node.
   box.setValue(cases.inSentence);
@@ -109,7 +134,7 @@ try {
   // into the menu, and everything the menu needs comes back out of the text.
   {
     box.setValue("(S@ben) whispers, <d>[French] Reste encore un peu.</d>");
-    const chip = box.root.childNodes[0];
+    const chip = sayChip();
     box.editSaid(chip);
     out.edit = { say: box.say, said: box.said, editing: box.editing };
     box.closeMenu();
@@ -118,7 +143,7 @@ try {
     // example of one — and picking a delivery is what replaces it.
     const custom = "(S@ben) exclaims with light annoyance, <d>[English] hey!</d>";
     box.setValue(custom);
-    box.editSaid(box.root.childNodes[0]);
+    box.editSaid(sayChip());
     const lead = box.say.lead;
     // Straight through the real path: pick Spoken and read back what landed.
     await box.choose(0);
@@ -370,6 +395,15 @@ check("...in the delivery it already used",
 for kind, guarded in report["pressable"]:
     check(f"a {kind} in the quote menu survives its own press", guarded, True)
 check("all three dials are there", sum(1 for k, _ in report["pressable"] if k == "dial"), 3)
+
+# --- somewhere to put the caret -----------------------------------------------
+caret = report["caret"]
+check("a sentence ending in a spoken line has a writing position after it",
+      caret["afterALine"], True)
+check("...and one in front of a line that opens the sentence",
+      caret["beforeALine"], True)
+check("...at both ends of a box that is only a line", caret["afterALoneLine"], True)
+check("and the pad is not part of the prompt", caret["unchanged"], True)
 
 # --- changing a line that is already written -----------------------------------
 edit = report["edit"]

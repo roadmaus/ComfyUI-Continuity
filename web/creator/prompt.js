@@ -106,6 +106,55 @@ const LEAD = /@([A-Za-z][A-Za-z0-9_]*)(?:\s+(?:is\s+|are\s+|then\s+)*([a-z]+))?[
    drawn them; a quote-menu branch is told apart by the mode it is in. */
 const SAY_ROWS = new Set(["say", "onscreen", "pick", "saycast", "newvoice", "words"]);
 
+/* A caret needs a text node to sit in.
+ *
+ * Every chip in here is contenteditable="false", and Gecko will not put a
+ * writing position at a spot that has no text node on either side of it. So a
+ * box whose last child is a chip has no position after that chip at all: click
+ * past a spoken line and the caret parks visibly after the closing quote, and
+ * then every key goes nowhere — not a letter, not Backspace, not the arrow that
+ * would get you out. On Linux that is where a dialogue line ends the sentence,
+ * which is most of them. Blink is more forgiving about the same DOM, which is
+ * why it took a Firefox to find it.
+ *
+ * So `build` pads: a zero-width space wherever two chips touch, and at either
+ * end a chip would otherwise be. It is a place to put the caret and nothing
+ * else — `getValue` strips it, so no pad ever reaches the state, the compiler
+ * or a `.json` somebody shares.
+ */
+const PAD = "\u200B";
+
+/** A string as `getValue` reports it: the pads are not part of the text. */
+const bare = (value) => value.split(PAD).join("");
+
+/** Where offset `n` of a node's bare value sits in the raw one. Lands *after* a
+ *  leading pad, which is the position the pad was inserted to provide. */
+function rawOffset(value, n) {
+  let seen = 0;
+  for (let i = 0; i < value.length; i += 1) {
+    if (value[i] === PAD) continue;
+    if (seen === n) return i;
+    seen += 1;
+  }
+  return value.length;
+}
+
+/** A built list with a caret position wherever the chips would leave none. */
+function padded(nodes) {
+  const out = [];
+  let previous = null;
+  for (const node of nodes) {
+    const chip = node.nodeType !== Node.TEXT_NODE;
+    if (chip && (previous === null || previous.nodeType !== Node.TEXT_NODE)) {
+      out.push(document.createTextNode(PAD));
+    }
+    out.push(node);
+    previous = node;
+  }
+  if (previous && previous.nodeType !== Node.TEXT_NODE) out.push(document.createTextNode(PAD));
+  return out;
+}
+
 /**
  * The line a choice and a set of words come to, in the form §4.4 spells it.
  *
@@ -646,7 +695,7 @@ export class PromptBox {
     const walk = (parent) => {
       for (const node of parent.childNodes) {
         if (node.nodeType === Node.TEXT_NODE) {
-          text += node.nodeValue;
+          text += bare(node.nodeValue);
         } else if (node.dataset?.say !== undefined) {
           // Before the handle branch and before the walk: a spoken line holds
           // names inside it, and descending would come back with the speaker
@@ -714,7 +763,7 @@ export class PromptBox {
       at = said.index + said[0].length;
     }
     if (at < text.length) out.push(...this.buildRefs(text.slice(at)));
-    return out;
+    return padded(out);
   }
 
   /**
@@ -1054,7 +1103,10 @@ export class PromptBox {
     const range = selection.getRangeAt(0);
     const node = range.startContainer;
     if (node.nodeType !== Node.TEXT_NODE || !this.root.contains(node)) return null;
-    const text = node.nodeValue.slice(0, range.startOffset);
+    // Bare, and the offsets below with it: a pad sitting between a chip and the
+    // caret is not a character anybody typed, and `COMMAND`'s "only at the start
+    // of a word" guard would read one as the word carrying on.
+    const text = bare(node.nodeValue.slice(0, range.startOffset));
     let mode = "@";
     let match = TRIGGER.exec(text);
     if (!match) {
@@ -1069,7 +1121,7 @@ export class PromptBox {
       mode = '"';
     }
     if (!match) return null;
-    return { node, start: range.startOffset - match[0].length, end: range.startOffset,
+    return { node, start: text.length - match[0].length, end: text.length,
              query: match[1], mode };
   }
 
@@ -1122,7 +1174,7 @@ export class PromptBox {
       for (const node of parent.childNodes) {
         if (found !== null) return;
         if (node === trigger.node) { found = at + trigger.start; return; }
-        if (node.nodeType === Node.TEXT_NODE) at += node.nodeValue.length;
+        if (node.nodeType === Node.TEXT_NODE) at += bare(node.nodeValue).length;
         else if (node.dataset?.say !== undefined) at += node.dataset.say.length;
         else if (node.dataset?.handle) at += node.dataset.handle.length + 1;
         else if (node.tagName === "BR") at += 1;
@@ -1169,12 +1221,12 @@ export class PromptBox {
     let at = 0;
     for (const node of this.root.childNodes) {
       const length = node.nodeType === Node.TEXT_NODE
-        ? node.nodeValue.length
+        ? bare(node.nodeValue).length
         : node.dataset?.say !== undefined ? node.dataset.say.length
         : node.dataset?.handle ? node.dataset.handle.length + 1 : 1;
       if (node.nodeType === Node.TEXT_NODE && index <= at + length) {
         const range = document.createRange();
-        range.setStart(node, Math.max(0, index - at));
+        range.setStart(node, rawOffset(node.nodeValue, Math.max(0, index - at)));
         range.collapse(true);
         const selection = window.getSelection();
         selection?.removeAllRanges();
@@ -2067,7 +2119,7 @@ export class PromptBox {
         this.editing = { at, length: chip.dataset.say.length };
         break;
       }
-      at += node.nodeType === Node.TEXT_NODE ? node.nodeValue.length
+      at += node.nodeType === Node.TEXT_NODE ? bare(node.nodeValue).length
         : node.dataset?.say !== undefined ? node.dataset.say.length
         : node.dataset?.handle ? node.dataset.handle.length + 1 : 1;
     }
