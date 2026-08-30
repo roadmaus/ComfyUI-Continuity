@@ -110,6 +110,18 @@ Each entry names the checkpoints it claims. A LoRA that would match no keys on
 the checkpoint it lands on is refused rather than quietly rendering an
 unchanged video.
 
+On MiniMax H3 each card also carries a **Soundtrack** dial. H3 generates picture
+and sound together through one transformer, so an adapter conditions the audio
+whether it was trained to or not — and it was: video and audio are denoised
+jointly during training, so a file built from clips whose sound was silent,
+scraped or absent has learned that too, and emits it under every render it is
+in. The usual symptom is mumbled speech in a shot where nobody was meant to
+speak. Turning the dial down damps that file's hold on the soundtrack while
+leaving its hold on the picture at full strength. It damps rather than mutes:
+H3 attends over video, text and audio as one sequence, so the adapter still
+reaches the sound through the tower. Full is the default and what you set is
+remembered per file.
+
 ## ReDetail
 
 LTX 2.5 only: a second pass over a finished render through Lightricks' x2

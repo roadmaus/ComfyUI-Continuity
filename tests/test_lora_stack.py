@@ -92,6 +92,38 @@ check("a family that routes between nothing selects on no claim",
                       "modes": ["fl2va"]}], "", family="ltx25")],
       ["one.safetensors", "two.safetensors", "h3-only.safetensors"])
 
+# ---- how much of a LoRA reaches the soundtrack --------------------------------
+#
+# H3 denoises audio and video through one tower, so an adapter conditions the
+# sound whether it was trained to or not. The dial is per file because whether
+# it *should* is a property of the file — see `lora.modality`.
+
+check("an ordinary entry names no modality at all",
+      [row.get("modality") for row in lora.stack(ENTRIES, "fl2va", family="h3")],
+      [None, None])
+check("...so a stack of them is upstream's own path, untouched",
+      "modality" in lora.stack(ENTRIES, "fl2va", family="h3")[0], False)
+
+damped = lora.stack([{"name": "one.safetensors", "strength": 0.8, "audio": 0.0},
+                     {"name": "two.safetensors", "strength": 1.0}],
+                    "fl2va", family="h3")
+check("a damped entry carries the scales, and only for audio",
+      damped[0]["modality"], {"video": 1.0, "text": 1.0, "audio": 0.0})
+check("...and the entry beside it is not damped with it",
+      damped[1].get("modality"), None)
+check("a partial setting is passed through as the number it is",
+      lora.stack([{"name": "one.safetensors", "audio": 0.35}],
+                 "fl2va", family="h3")[0]["modality"]["audio"], 0.35)
+check("out of range is clamped rather than refused",
+      [lora.modality({"name": "x", "audio": v})["audio"] for v in (-1, 4)],
+      [0.0, 1.0])
+# creator_data is hand-editable, so the box can hold a word.
+try:
+    lora.modality({"name": "x", "audio": "loud"})
+    check("a non-number is refused", "no error", "ValueError")
+except ValueError as exc:
+    check("a non-number is refused", "audio must be a number" in str(exc), True)
+
 # ---- core's path, on a patcher that counts -----------------------------------
 
 lora._apply_core = _apply_core          # the real one from here on

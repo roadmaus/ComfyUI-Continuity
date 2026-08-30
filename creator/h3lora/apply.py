@@ -108,7 +108,8 @@ def apply_stack(model, entries, mode="auto", adaln_mode="auto", grid_path="",
     (stock behaviour) or ``branch`` (never touch a weight).
 
     ``modality`` optionally scales each LoRA's adaLN modulation per modality;
-    see :mod:`h3lora.modality`.
+    see :mod:`h3lora.modality`. MMC: an entry may carry its own ``modality`` and
+    is scaled by that instead.
     """
     report = report or StackReport()
     patcher = model.clone()
@@ -131,16 +132,26 @@ def apply_stack(model, entries, mode="auto", adaln_mode="auto", grid_path="",
         adaln_ctx = adaln_mod.AdalnContext(target_dim, table, grid_path)
 
     mod_values = modality_mod.normalize_scales(modality)
-    mod_geom = None if modality_mod.is_identity(mod_values) else modality_mod.geometry(diffusion_model)
+    # MMC: an entry may carry its own `modality`, which overrides the stack's.
+    # Whether an adapter should reach the soundtrack is a property of how that
+    # file was trained — H3 denoises audio and video through one tower, so a
+    # character LoRA trained on clips with junk audio drags the sound of every
+    # render it is in — and that is per file, not per stack. Upstream's
+    # stack-level argument stays the default for a row that names none.
+    row_modality = [modality_mod.normalize_scales(e.get("modality")) or mod_values
+                    for e in entries]
+    wanted = [v for v in [mod_values, *row_modality] if not modality_mod.is_identity(v)]
+    mod_geom = modality_mod.geometry(diffusion_model) if wanted else None
 
     report.add(f"base: {detect_quantization(patcher)}")
     report.add(f"adaLN: {'curve' if table is not None else 'dense'} (input dim {target_dim})")
-    if not modality_mod.is_identity(mod_values) and mod_geom is None:
+    if wanted and mod_geom is None:
         report.add("  ! adaLN modality control requested but this model's adaLN "
                    "does not split into the expected modalities - ignored")
         # the header carries the reason; keep the per-LoRA notes from blaming it
         # on the LoRAs, which are not at fault here
         mod_values = None
+        row_modality = [None] * len(row_modality)
 
     per_module: "OrderedDict[str, list]" = OrderedDict()
     compute_dtype = model.model_dtype()
@@ -186,9 +197,11 @@ def apply_stack(model, entries, mode="auto", adaln_mode="auto", grid_path="",
 
         # before porting: the port derives its bias delta as ``B @ const``, so
         # scaling B's rows here carries through to the emitted .diff_b
+        # MMC: this row's scales, which are the stack's unless it named its own.
+        entry_modality = row_modality[fallback_row - 1]
         normalized, mod_stats = modality_mod.apply_to_state_dict(
-            normalized, mod_values, mod_geom)
-        mod_note = modality_mod.describe(mod_values, mod_stats)
+            normalized, entry_modality, mod_geom)
+        mod_note = modality_mod.describe(entry_modality, mod_stats)
         adaln_note = ""
         if adaln_ctx is not None and target_dim:
             source_table = normalized.pop("adaln_t_table", None)

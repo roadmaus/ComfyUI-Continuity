@@ -92,10 +92,43 @@ def stack(entries, target, without="", family=registry.DEFAULT_VIDEO):
         if without and entry["name"] == without:
             continue
         path = resolve(entry["name"])
-        rows.append({"name": entry["name"], "path": path,
-                     "strength": float(entry.get("strength", 1.0)),
-                     "weights": _load(path), "row": len(rows) + 1})
+        row = {"name": entry["name"], "path": path,
+               "strength": float(entry.get("strength", 1.0)),
+               "weights": _load(path), "row": len(rows) + 1}
+        scales = modality(entry)
+        if scales:
+            row["modality"] = scales
+        rows.append(row)
     return rows
+
+
+def modality(entry):
+    """`{"video": 1.0, "text": 1.0, "audio": a}` for an entry that damps one, or
+    `None` for the ordinary case where it does not.
+
+    H3 is one tower over a packed sequence of video, text and audio tokens, and
+    the four modality-specific tensors in the checkpoint are ones no observed
+    LoRA touches — so an adapter reaches the soundtrack whether or not it was
+    trained to. Which matters because the training does the same: video and
+    audio are denoised jointly, so a file trained on clips whose audio was
+    silent, scraped or absent has learned that as surely as it learned the face,
+    and it emits it under every render it is in.
+
+    `h3lora.modality` is why there is a dial at all: adaLN is the one place H3
+    separates cleanly, so a slice of `lora_B`'s rows is that modality's
+    modulation exactly. It is not a mute — attention is joint, so the adapter
+    still reaches audio positions through the tower — which is the whole reason
+    this is a number the user sets per file and not a flag this decides for
+    them. `video` and `text` stay at 1.0: what is being turned down is the
+    LoRA's hold on the soundtrack, not its hold on the picture.
+    """
+    try:
+        audio = float(entry.get("audio", 1.0))
+    except (TypeError, ValueError):
+        raise ValueError(f"LoRA {entry.get('name')}: audio must be a number")
+    if audio == 1.0:
+        return None
+    return {"video": 1.0, "text": 1.0, "audio": max(0.0, min(1.0, audio))}
 
 
 def apply(model, entries, target, without="", family=registry.DEFAULT_VIDEO):

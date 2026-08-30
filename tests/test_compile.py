@@ -295,10 +295,35 @@ def lora_entry(name, **rest):
     return {"name": name, "strength": 1.0, **rest}
 
 
+# H3 denoises audio and video together and always emits a soundtrack, so a
+# description that names no voice and a piece that names no score are both
+# things the prompt has to *say* rather than leave blank — left open the model
+# fills them, with mumbling and with a score nobody asked for. Every composed
+# prompt below therefore carries these two. See `contextir.SILENCE_LINE`.
+SILENT = (" No character speaks, sings or narrates at any point in the video, "
+          "and every mouth remains completely closed.")
+NO_MUSIC = "\n\nnon_diegetic_music: N/A"
+
 t2va = build("a walk")
 check("T2VA has no instruction line",
-      t2va.prompt, "integrated_multimodal_description: [Shot 1] a walk")
+      t2va.prompt,
+      "integrated_multimodal_description: [Shot 1] a walk." + SILENT + NO_MUSIC)
 check("...and an empty prompt composes to nothing", build("").prompt, "")
+
+# H3 emits a soundtrack for every render, so the two things a prompt leaves
+# open are the two the model fills on its own. Both are said rather than left
+# blank — and neither is said over somebody who said it themselves.
+check("a description that names a speaker keeps its own speech",
+      SILENT in build("the man (S1) says: <d>[English] hello</d>").prompt, False)
+check("...and so does one that only quotes",
+      SILENT in build('she reads the sign, "closed"').prompt, False)
+check("...and one that sings",
+      SILENT in build("a busker sings on the platform").prompt, False)
+check("a piece that named its own score keeps it",
+      "non_diegetic_music: a slow piano" in build("a walk", music="a slow piano").prompt,
+      True)
+check("...and a blank soundscape still emits nothing, which N/A would not be",
+      "overall_soundscape" in build("a walk").prompt, False)
 
 i2va = build("a walk", assets=[image("img-1", "first_frame")])
 check("I2VA opens with the alignment instruction",
@@ -306,7 +331,8 @@ check("I2VA opens with the alignment instruction",
       "For the target video, at 0.00 seconds into the target video, "
       "<Picture 1> (from [Shot 1]) is fully referenced.")
 check("...and the body follows as a field",
-      i2va.prompt.endswith("integrated_multimodal_description: [Shot 1] a walk"), True)
+      "integrated_multimodal_description: [Shot 1] a walk." + SILENT in i2va.prompt,
+      True)
 
 # 6 s on the pill is 149 frames, which is 6.208333... s of video. The instruction
 # states the *real* duration, because that is what the model aligns against.
@@ -1354,7 +1380,8 @@ check("...and is wrapped by contextir like any other body",
       compiler.compile_request({"prompt": "a courier waits",
                                 "refined": refined(body="A courier waits, in 16mm."),
                                 "duration_s": 6}).prompt,
-      "integrated_multimodal_description: [Shot 1] A courier waits, in 16mm.")
+      "integrated_multimodal_description: [Shot 1] A courier waits, in 16mm."
+      + SILENT + NO_MUSIC)
 
 # The point of storing handles: a second reference in front of it moves the
 # ordinal, and the rewrite has to move with it rather than keep pointing at 1.
@@ -1388,12 +1415,13 @@ sectioned = compiler.compile_request(
 check("a refined reference prompt gets the six-section form",
       [line.split(":")[0] for line in sectioned.prompt.split("\n\n")],
       ["subject_definitions", "summary", "retention_analysis",
-       "detailed_description", "overall_soundscape"])
+       "detailed_description", "overall_soundscape", "non_diegetic_music"])
 check("...and the derived one carries the same sections in the same order",
       [line.split(":")[0] for line in compiler.compile_request(
           {"prompt": "her face is @img-1",
            "assets": [ref("img-1", "her.png")], "duration_s": 6}).prompt.split("\n\n")],
-      ["subject_definitions", "summary", "retention_analysis", "detailed_description"])
+      ["subject_definitions", "summary", "retention_analysis",
+       "detailed_description", "non_diegetic_music"])
 check("...with the refiner's summary kept over the derived one",
       "[Ref2VA] a portrait" in sectioned.prompt, True)
 

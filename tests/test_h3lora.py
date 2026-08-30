@@ -58,6 +58,7 @@ def _load(name):
 
 keymap = _load("keymap")
 adaln = _load("adaln")
+modality = _load("modality")
 h3lora = _load("apply")
 
 # ---- a miniature H3 ---------------------------------------------------------
@@ -223,6 +224,51 @@ check("both files are accounted for",
       ("style @ 1" in report.text(), "motion @ 0.5" in report.text()), (True, True))
 check("two files on one layer are one bank of layers, not two",
       report.text().count("branch bank:"), 1)
+
+# ---- the soundtrack dial is per file ----------------------------------------
+#
+# MMC. Upstream's `modality` is one setting for the whole stack, which cannot
+# say the thing that is actually true: whether an adapter belongs on the
+# soundtrack is a property of how that file was trained, and a stack holds
+# several. adaLN is the one place H3's modalities separate, so a slice of
+# `lora_B`'s rows is that modality's modulation exactly — see `h3lora.modality`.
+
+BLOCK = EXPAND * HIDDEN            # one modality's rows, in tag order
+
+
+def adaln_rows(state_dict):
+    """The first block's adaLN `lora_B`, which is what a scale lands on."""
+    return state_dict["diffusion_model.blocks.0.adaln_proj.linear.lora_B.weight"]
+
+
+quiet, loud = diffusers_lora(), diffusers_lora()
+was_quiet, was_loud = adaln_rows(quiet).clone(), adaln_rows(loud).clone()
+model = patcher()
+patched, report = h3lora.apply_stack(
+    model,
+    [{**entry("character", quiet, row=1),
+      "modality": {"video": 1.0, "text": 1.0, "audio": 0.0}},
+     entry("motion", loud, row=2)],
+    mode="branch")
+# The dicts the stack normalises are copies, so the fixtures still hold what
+# they were built with; what is checked is the note the report carries and that
+# the row beside it was not scaled with it.
+check("the damped file says so in its own line",
+      "modality video/text/audio = 1/1/0" in report.text(), True)
+check("...and the file beside it does not",
+      report.text().count("modality video/text/audio"), 1)
+
+# The arithmetic itself, on the module rather than through the stack: audio's
+# rows are the third block of three, and nothing above them moves.
+geom = (EXPAND, MODALITIES, HIDDEN)
+scaled, stats = modality.apply_to_state_dict(
+    {"diffusion_model.blocks.0.adaln_proj.linear.lora_B.weight": was_quiet},
+    modality.normalize_scales({"video": 1.0, "text": 1.0, "audio": 0.0}), geom)
+rows = scaled["diffusion_model.blocks.0.adaln_proj.linear.lora_B.weight"]
+check("the audio rows are zeroed", float(rows[2 * BLOCK:].abs().sum()), 0.0)
+check("...and the video and text rows are exactly what they were",
+      torch.equal(rows[:2 * BLOCK], was_quiet[:2 * BLOCK]), True)
+check("...and the layer is counted as scaled", stats["scaled"], 1)
 
 # ---- the adaLN basis is per source table, not per stack ----------------------
 #

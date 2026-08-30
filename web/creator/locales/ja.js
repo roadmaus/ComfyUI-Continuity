@@ -381,6 +381,8 @@ export const ja = {
  "Ref2VA": "Ref2VA",
  "Both": "両方",
  "Strength": "強度",
+ "Soundtrack": "サウンドトラック",
+ "How much of this LoRA reaches the soundtrack. Turn it down for a file whose training clips had poor sound: H3 generates picture and sound together, so an adapter carries what it heard as well as what it saw. It damps rather than mutes.": "この LoRA がサウンドトラックにどれだけ届くか。学習クリップの音声が悪かったファイルでは下げてください。H3 は映像と音声を同時に生成するため、アダプターは見たものだけでなく聞いたものも持ち込みます。ミュートではなく減衰です。",
  "Idle — {targets} are routed here.": "アイドル — {targets} がここにルーティングされています。",
  "Idle — {targets} is routed here.": "アイドル — {targets} がここにルーティングされています。",
  "nothing": "なし",

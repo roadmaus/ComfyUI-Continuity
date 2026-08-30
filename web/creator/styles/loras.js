@@ -82,6 +82,17 @@ export const css = `
   color: var(--mmc-text); font-family: inherit; font-size: calc(11px * var(--mmc-type));
   font-variant-numeric: tabular-nums; padding: 1px 4px; outline: none;
 }
+/* The soundtrack dial's readout. An output rather than an input: the strength
+   is the one control worth being able to type an exact value into, and a second
+   typable box on the same card would say the two are the same kind of setting.
+   Numbers stay tabular so the row does not shift while the slider moves. */
+.mmc-lora-read {
+  flex: none; text-align: right; color: var(--mmc-text);
+  font-size: calc(11px * var(--mmc-type)); font-variant-numeric: tabular-nums;
+}
+/* Its own group, so the label and the track it belongs to stay together when
+   the card's gap opens between the other rows. */
+.mmc-lora-sound { display: flex; flex-direction: column; gap: 4px; }
 .mmc-lora-num:hover { border-color: var(--mmc-line); }
 .mmc-lora-num:focus { border-color: var(--mmc-blue); background: var(--mmc-float); }
 /* How far the track under this row reaches. A constant everywhere else in the

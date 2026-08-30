@@ -382,6 +382,8 @@ export const zh = {
  "Ref2VA": "Ref2VA",
  "Both": "两者",
  "Strength": "强度",
+ "Soundtrack": "音轨",
+ "How much of this LoRA reaches the soundtrack. Turn it down for a file whose training clips had poor sound: H3 generates picture and sound together, so an adapter carries what it heard as well as what it saw. It damps rather than mutes.": "这个 LoRA 对音轨的影响程度。训练片段声音不好的文件请调低。H3 同时生成画面与声音，所以适配器会把听到的和看到的一起带进来。这是衰减，不是静音。",
  "Idle — {targets} are routed here.": "闲置——路由到这里的是{targets}。",
  "Idle — {targets} is routed here.": "闲置——路由到这里的是{targets}。",
  "nothing": "无",

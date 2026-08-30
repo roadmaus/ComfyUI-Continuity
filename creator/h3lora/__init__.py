@@ -48,5 +48,10 @@ MODIFIED — local deltas, each marked `# MMC:` at its site:
   silently rebased onto the first one's basis), and table-to-table fitting moves
   both tables to the CPU first (H5: it raised on CUDA tables).
 - `apply.py` — an entry may carry a preloaded `weights` state dict, so the file
-  this pack already holds in memory is not read off disk again per segment.
+  this pack already holds in memory is not read off disk again per segment; and
+  an entry may carry its own `modality`, overriding the stack-level argument.
+  Whether an adapter belongs on the soundtrack is a property of the file — H3
+  runs audio and video through one tower, so a LoRA trained on clips with poor
+  audio drags the sound of every render it is in — and upstream's one setting
+  for the whole stack cannot say that about one file out of six.
 """

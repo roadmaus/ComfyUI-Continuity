@@ -701,6 +701,9 @@ class LoraManager {
         // when nothing has been clicked at all.
         scale: Number.isFinite(entry.strength) ? this.scaleOf(entry, row) : (previous?.scale ?? null),
         on: [...(entry.triggers ?? [])],
+        // Remembered beside the strength and for the same reason: which files
+        // drag the sound is a property of the collection, learned once.
+        audio: Number.isFinite(entry.audio) ? entry.audio : null,
         custom,
         modes: {
           ...(previous?.modes ?? {}),
@@ -744,6 +747,7 @@ class LoraManager {
     const entry = S.addLora(this.state, row.name, memory ? memory.on : (row.trained_words || []),
                             strength, this.family);
     if (!entry) return;
+    if (Number.isFinite(memory?.audio)) entry.audio = memory.audio;
     const claim = memory?.modes?.[this.family];
     if (this.checkpointModes && claim?.length) entry.modes = [...claim];
     if (memory) this.restored.add(row.name);
@@ -1504,6 +1508,51 @@ class LoraManager {
     return { readout, span, slider };
   }
 
+  /**
+   * How much of this LoRA reaches the soundtrack.
+   *
+   * H3 runs video and audio through one tower, so an adapter conditions the
+   * sound whether it was trained to or not — and it was trained to: video and
+   * audio latents are denoised jointly, so a file built from clips with silent
+   * or scraped audio has learned that as surely as it learned the face. The
+   * symptom is mumbling under a shot in which nobody was meant to speak.
+   *
+   * Not a mute, and the label does not promise one: attention is joint over the
+   * packed sequence, so turning this down damps where the LoRA is applied
+   * rather than everything it eventually reaches. See `lora.modality`.
+   */
+  audioBox(entry, row) {
+    // Read rather than written: full is the default, and a card that has only
+    // been *looked at* should not leave a setting behind in the saved piece.
+    const audio = Number.isFinite(entry.audio) ? entry.audio : 1;
+    const readout = el("output", { class: "mmc-lora-read", value: audio.toFixed(2) });
+    const slider = el("input", {
+      type: "range", min: 0, max: 1, step: 0.05, value: audio,
+      // Same reason as the strength slider: a re-render mid-drag takes the
+      // pointer's target out from under it.
+      oninput: (event) => {
+        entry.audio = Number(event.target.value);
+        readout.value = entry.audio.toFixed(2);
+      },
+      onchange: () => this.changed(),
+      onpointerdown: (event) => event.stopPropagation(),
+    });
+    return el("div", { class: "mmc-lora-sound" }, [
+      el("div", { class: "mmc-lora-row" }, [
+        el("span", {
+          class: "mmc-lora-label",
+          title: t("How much of this LoRA reaches the soundtrack. Turn it down "
+                   + "for a file whose training clips had poor sound: H3 generates "
+                   + "picture and sound together, so an adapter carries what it "
+                   + "heard as well as what it saw. It damps rather than mutes."),
+          text: t("Soundtrack"),
+        }),
+        readout,
+      ]),
+      slider,
+    ]);
+  }
+
   controls(entry, row) {
     // A hand-edited creator_data can carry anything; the slider needs a number.
     if (!Number.isFinite(entry.strength)) entry.strength = S.DEFAULT_STRENGTH;
@@ -1535,6 +1584,7 @@ class LoraManager {
         el("span", { class: "mmc-lora-label", text: t("Strength") }), mute, span, readout]),
       slider,
       ...(this.checkpointModes ? [modes] : []),
+      ...(S.loraAudioOf(this.family) ? [this.audioBox(entry, row)] : []),
       this.triggerBox(entry, row),
     ];
     // Where the settings came from, when it was not this file's author. A

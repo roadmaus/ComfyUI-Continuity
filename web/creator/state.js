@@ -89,6 +89,10 @@ export const turboOf = (id) => videoFamily(id).capabilities.turbo;
 export const controlOf = (id) => videoFamily(id).capabilities.control;
 export const stillOf = (id) => videoFamily(id).still;
 
+/** Whether this family's LoRAs can be held off the soundtrack — see the same
+ *  entry in `families/h3/manifest.py` for why it is a fact about the family. */
+export const loraAudioOf = (id) => Boolean(videoFamily(id).capabilities?.lora?.audio);
+
 /** How a family runs a second pass, or a falsy value where it has none.
  *
  *  Declared as *what kind* rather than as a flag because the two families do

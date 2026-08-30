@@ -275,6 +275,19 @@ def manifest():
                        "segment": "sam3"},
             # Chained seams with feathering — the strip's whole grammar.
             "seams": True,
+            # Whether a LoRA on this family can be held off the soundtrack.
+            #
+            # A capability rather than a control every family draws, because it
+            # is a fact about H3's architecture and about the stack that loads
+            # it. H3 denoises video and audio jointly through one tower, so an
+            # adapter reaches the sound whether or not it was trained to, and a
+            # file trained on clips whose audio was silent or scraped emits that
+            # under every render. adaLN is the one place the modalities separate
+            # cleanly, which is what makes a dial possible at all — see
+            # `h3lora/modality.py` and `lora.modality`. LTX 2.5 duplicates its
+            # tower per modality and its LoRAs go through core's loader, so
+            # there is nothing here for it to answer.
+            "lora": {"audio": True},
             # Whether a blended seam can *also* name its boundary frame to the
             # text encoder, on top of the run it pins for the DiT. Off by
             # default and offered as a switch; see `Compiled.feather_pin`.
