@@ -48,6 +48,8 @@ no download, no queue — the renderer is arithmetic in the browser, and what is
 on the glass is exactly what gets written into
 `input/continuity/blockout/`.
 
+![The blockout bench: the stage against the Depth pass, a block playing @anna, and the staging narrated in the foot](img/blockout.png)
+
 There is no second camera. The light box is the lens, and getting around the
 set is operating it: drag pans and tilts, shift-drag trucks and pedestals, the
 wheel pushes in and pulls out. Frame the shot and press **Mark**, frame the
