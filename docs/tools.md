@@ -66,11 +66,25 @@ Four outputs, three of them wearing the ControlNet bench's own names:
 The floor grid and the selection ring are staging aids and never reach the
 written file.
 
-The foot narrates the camera move as you mark it — *"The camera pushes in at
-slow speed."* — in the motion-type, amplitude and speed vocabulary the H3
-prompt spec defines, so **Copy** hands you the move as prose to paste straight
-into a prompt. The finished guide goes through the same doors a tracing does,
-and the scene itself is saved as a small `.json` beside the clip.
+A piece can be told who or what it is. **Plays** hands it to a cast member —
+the block wears their chip hue on the stage side, never in the written file —
+and **Called** gives a thing its word ("table", "doorway"). Named pieces are
+written into the staging: the bench computes who stands where in frame from
+its own projection, and the foot narrates the whole of it as you work —
+*"@anna stands at centre in the midground; a table at frame left in the
+foreground. The camera pushes in toward @anna at slow speed."* — the camera
+half in the motion-type, amplitude and speed vocabulary the H3 prompt spec
+defines. **Copy** hands you the prose to paste straight into a prompt, where
+`@anna` becomes her references by the same substitution every prompt already
+does. No model reads identity out of pixels — a depth map is identity-free by
+construction, and even mask-injection systems bind a reference to its region
+through the prompt — which is why the words are the mechanism, and why they
+are generated rather than hand-written.
+
+The finished guide goes through the same doors a tracing does, and the scene
+itself is saved as a small `.json` beside the clip — including each named
+piece's screen box at every mark, for conditioning schemes that can ground
+against layout when one arrives.
 
 ## Upscale bench
 

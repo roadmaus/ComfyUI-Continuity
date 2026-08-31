@@ -14,6 +14,15 @@ still never touches the server at all. The foot writes the move in the H3
 spec's own camera vocabulary, ready to paste into a prompt, and the scene rides
 beside the clip as a sidecar.
 
+**A blockout piece can play a cast member, or be called a word.** The bench
+writes the staging for you — who stands where in frame, computed from its own
+projection — ahead of the camera move: *"@anna stands at centre in the
+midground; a table at frame left. The camera pushes in toward @anna at slow
+speed."* The handle is the prompt's own citation, so pasting the prose binds
+the words to her references with no new machinery; the block wears her chip
+hue on the stage side only. The sidecar gains each named piece's screen box at
+every mark.
+
 **H3 across two GPUs, through the Karmabu Raylight fork.** Picked in the weights
 popover. Everything this pack does between a loader and a sampler is a patch on a
 MODEL and a Ray render has none, so the refine, face and re-detail passes, the

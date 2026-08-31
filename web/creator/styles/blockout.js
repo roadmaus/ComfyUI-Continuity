@@ -37,6 +37,25 @@ export const css = `
 .mmc-bo-remove:hover { color: var(--mmc-text); }
 .mmc-bo-remove:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 1px; border-radius: 4px; }
 
+/* --- who a piece is --------------------------------------------------------- */
+/* The chooser reads like the pack's other pills: the member's dot wears the
+   same hue their chip does everywhere else, which is the whole point of it. */
+.mmc-bo-who {
+  display: flex; align-items: center; gap: 7px; width: 100%;
+  height: calc(28px * var(--mmc-type)); padding: 0 9px; border-radius: 7px;
+  cursor: pointer; text-align: left; font-family: inherit;
+  background: var(--mmc-wash); border: 1px solid var(--mmc-line-2);
+  color: var(--mmc-text); font-size: calc(12px * var(--mmc-type));
+}
+.mmc-bo-who:hover { border-color: var(--mmc-line-3); }
+.mmc-bo-who:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 1px; }
+.mmc-bo-who svg { margin-left: auto; flex: none; stroke: var(--mmc-off); fill: none; stroke-width: 1.6; }
+.mmc-bo-whodot {
+  flex: none; width: 8px; height: 8px; border-radius: 50%;
+  background: var(--tag, var(--mmc-off));
+}
+.mmc-bo-whoname { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
 /* --- the path, in the rail -------------------------------------------------- */
 .mmc-bo-marks {
   display: flex; flex-direction: column;

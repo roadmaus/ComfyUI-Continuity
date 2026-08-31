@@ -874,7 +874,15 @@ class Fullscreen {
           sub: t("Stage a scene out of boxes, walk one camera through it — then render along it"),
           art: { kind: "trace", url: cardArt("blockout"),
                  made: cardArt("blockout-depth") },
-          go: () => openBlockout({ targets: this.guideTargets(), back: () => this.openDash() }) },
+          go: () => openBlockout({
+            targets: this.guideTargets(),
+            // The piece's cast, as handles: who a block can play. The bench
+            // writes staging prose around them; the prompt's own substitution
+            // is what makes the handles mean their references.
+            cast: (this.node.mmcBody?.timeline?.subjects ?? [])
+              .map((subject) => subject.handle).filter(Boolean),
+            back: () => this.openDash(),
+          }) },
         // The other bench, and the one with no doors: what it makes is the
         // finished file rather than something a render reads, so it lands on a
         // shelf beside the renders and nothing here has to take it anywhere.

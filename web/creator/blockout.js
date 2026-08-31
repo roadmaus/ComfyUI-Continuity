@@ -43,6 +43,19 @@
 // holds even for As staged, where the two halves differ only by the aids: the
 // comparison is what you are handling against what the file will hold.
 //
+// **A piece can be told who or what it is, and the sentence is where that
+// pays.** No family here reads identity out of pixels — a depth map is
+// identity-free by construction, and even VACE-style masked injection binds a
+// reference to its region through the prompt. The one channel that can say
+// "who is where" is prose, and the pack already owns the machinery that makes
+// a name mean something: the cast. So a block can *play* a cast member, or be
+// *called* a word ("table", "doorway"), and the bench writes the staging for
+// you — who stands where in frame, computed from the projection it is already
+// doing — with `@anna` left as a handle for `compile._substitute` to turn into
+// `<Subject N>` the way it does in any other prose. The hue on the stage side
+// is the member's own chip hue; like every staging aid it never reaches the
+// written file.
+//
 // **The output is a file in the input folder, and a sentence.** The passes
 // wear the tracing bench's own names — Depth, Blocks, Lines — because a user
 // who has traced footage already knows what each word buys, and As staged is
@@ -54,6 +67,8 @@
 
 import { el, icon, mark, spinner, mountOverlay, keepScroll } from "./dom.js";
 import { upload, blockoutFrames, blockoutWrite } from "./api.js";
+import { openChoicePopover } from "./pills.js";
+import { tagIndex } from "./state.js";
 import { t } from "./i18n.js";
 
 /** Where a written blockout lands. The server owns it (`blockout.SUBFOLDER`);
@@ -119,6 +134,9 @@ const SHAPES = {
 // person reads as a person in a depth map, and the pack's Pose tracing is the
 // tool for actual bodies. What matters here is masses and the move.
 
+// Any piece can also carry an identity: `plays` is a cast member's handle and
+// `word` is what to call it in prose. Neither changes a pixel of any pass —
+// they exist for the staging sentence, and for the hue the stage side wears.
 const KINDS = {
   block: { label: "Block", w: 1.2, h: 0.9, d: 0.8 },
   wall: { label: "Wall", w: 3.2, h: 2.6, d: 0.14 },
@@ -142,6 +160,26 @@ function defaultSet() {
 }
 
 const clamp = (value, low, high) => Math.min(high, Math.max(low, value));
+
+/** The eight identity hues, as drawn ink. Read off the stylesheet so the tint
+ *  on the glass is exactly the hue the member's chip wears; the literals are
+ *  `--mmc-tag-0..7`'s own values, for a document that has no tokens loaded
+ *  (the test shim). */
+const TAG_FALLBACK = ["#5cb8f0", "#63c98e", "#9d95f5", "#f07da0",
+                      "#45c4c0", "#f0906b", "#d57de8", "#a8c858"];
+const tagInk = [];
+function tagRGB(index) {
+  if (!tagInk[index]) {
+    let hex = "";
+    try {
+      hex = getComputedStyle(document.documentElement)
+        .getPropertyValue(`--mmc-tag-${index}`).trim();
+    } catch { /* no document: the fallback is the same eight values */ }
+    if (!/^#[0-9a-fA-F]{6}$/.test(hex)) hex = TAG_FALLBACK[index % 8];
+    tagInk[index] = [1, 3, 5].map((at) => parseInt(hex.slice(at, at + 2), 16));
+  }
+  return tagInk[index];
+}
 
 // ---- the renderer ------------------------------------------------------------
 //
@@ -320,7 +358,7 @@ class Raster {
    * for no stage half at all, which is what the run uses: the file carries the
    * guide and only the guide.
    */
-  shade(context, pass, { seamX = -1, selected = 0 } = {}) {
+  shade(context, pass, { seamX = -1, selected = 0, tints = null } = {}) {
     const { w, h } = this;
     if (!this.image || this.image.width !== w || this.image.height !== h) {
       this.image = context.createImageData(w, h);
@@ -355,6 +393,15 @@ class Raster {
           } else {
             const l = this.lit[at] / 255;
             r = 70 + 112 * l; g = 68 + 108 * l; b = 64 + 102 * l;
+            // The member's chip hue, worn as a wash on the clay — stage side
+            // only, the way every staging aid is. The lambert stays underneath
+            // so the piece keeps reading as a solid.
+            const tint = stage && tints ? tints[id] : null;
+            if (tint) {
+              r = r * 0.68 + tint[0] * 0.32;
+              g = g * 0.68 + tint[1] * 0.32;
+              b = b * 0.68 + tint[2] * 0.32;
+            }
             if (stage && id === selected && this.edgeOf(at, x, y)) {
               r = 107; g = 163; b = 214;   // the trim bar's blue: held, not run
             }
@@ -423,6 +470,106 @@ class Raster {
   }
 }
 
+// ---- where things stand, in words ----------------------------------------------
+//
+// The models' one channel for "who is where" is prose (even VACE's masked
+// injection binds a reference to its region through the prompt), and the bench
+// is the one tool holding both halves of that sentence: it knows the set and it
+// knows the lens. So placement is computed, not guessed — the same projection
+// the rasterizer applies, run over each named piece at the first and last mark.
+
+/** One world point through a camera, at a buffer size -> screen x/y and view
+ *  depth, or null behind the near plane. `Raster.raster`'s arithmetic, applied
+ *  to a single point. */
+function project(cam, point, width, height) {
+  const sy = Math.sin(cam.yaw), cy = Math.cos(cam.yaw);
+  const sp = Math.sin(cam.pitch), cp = Math.cos(cam.pitch);
+  const x = point[0] - cam.x, y = point[1] - cam.y, z = point[2] - cam.z;
+  const x1 = cy * x - sy * z, z1 = sy * x + cy * z;
+  const y2 = cp * y - sp * z1, z2 = sp * y + cp * z1;
+  if (z2 < NEARZ) return null;
+  const fl = (height / 2) / Math.tan(vfovOf(cam.mm) / 2);
+  return { x: width / 2 + (fl * x1) / z2, y: height / 2 - (fl * y2) / z2, z: z2 };
+}
+
+/** Where a piece sits in this frame, as words — or null when it is out of shot.
+ *  Thirds across, three depth bands away: the vocabulary a shot list uses, and
+ *  coarse on purpose — "at frame left in the midground" survives the model's
+ *  own judgement where pixel coordinates would only pretend precision. */
+function placeOf(piece, cam, width, height) {
+  const at = project(cam, [piece.x, piece.h / 2, piece.z], width, height);
+  if (!at || at.x < 0 || at.x > width || at.y < -0.2 * height || at.y > 1.2 * height) return null;
+  const third = at.x < width * 0.36 ? t("at frame left")
+    : at.x > width * 0.64 ? t("at frame right") : t("at centre");
+  const band = at.z < 3.2 ? t("in the foreground")
+    : at.z < 9 ? t("in the midground") : t("in the distance");
+  return { words: `${third} ${band}`, depth: at.z };
+}
+
+/** A word with its article, unless it arrived wearing one. */
+function articled(word) {
+  const said = String(word).trim();
+  if (/^(a|an|the|some|its|his|her|their|two|three|four)\b/i.test(said)) return said;
+  return `${/^[aeiou]/i.test(said) ? t("an") : t("a")} ${said}`;
+}
+
+/** The cast member the move ends on, or null: the piece playing somebody whose
+ *  centre the last mark's frame holds nearest its own. What "pushes in toward
+ *  @anna" is decided by, and decided from geometry rather than a checkbox. */
+function moveTarget(objects, marks, cam, width, height) {
+  const last = marks.length ? marks[marks.length - 1] : cam;
+  let best = null;
+  for (const piece of objects) {
+    if (!piece.plays) continue;
+    const at = project(last, [piece.x, piece.h / 2, piece.z], width, height);
+    if (!at) continue;
+    const off = Math.hypot(at.x - width / 2, at.y - height / 2) / width;
+    if (off < 0.22 && (!best || off < best.off)) best = { handle: piece.plays, off };
+  }
+  return best ? best.handle : null;
+}
+
+/**
+ * The staging and the move, as one piece of prose.
+ *
+ * Who stands where at the first mark, in shot-list vocabulary; a cast member
+ * out of shot at the start but in it by the end is said to arrive; then the
+ * move sentence, aimed at whoever it lands on. Handles stay handles — `@anna`
+ * is exactly what the prompt's own substitution reads — so pasting this into a
+ * prompt binds the words to the cast's references with no new machinery.
+ */
+export function stagingSentence(objects, marks, duration, cam, size = { w: 16, h: 9 }) {
+  const first = marks.length ? marks[0] : cam;
+  const clauses = [];
+  const entering = [];
+  const placed = [];
+  for (const piece of objects) {
+    if (!piece.plays && !piece.word) continue;
+    const here = placeOf(piece, first, size.w, size.h);
+    if (here) placed.push({ piece, here });
+    else if (piece.plays && marks.length > 1
+             && placeOf(piece, marks[marks.length - 1], size.w, size.h)) {
+      entering.push(piece);
+    }
+  }
+  // The cast before the props, and nearer before farther — the order a shot
+  // list reads in, and the order the eye does.
+  placed.sort((p, q) => ((q.piece.plays ? 1 : 0) - (p.piece.plays ? 1 : 0))
+    || (p.here.depth - q.here.depth));
+  for (const { piece, here } of placed) {
+    clauses.push(piece.plays
+      ? t("@{who} stands {place}", { who: piece.plays, place: here.words })
+      : t("{what} {place}", { what: articled(piece.word), place: here.words }));
+  }
+  for (const piece of entering) {
+    clauses.push(t("@{who} comes into frame as the camera moves", { who: piece.plays }));
+  }
+  const move = moveSentence(marks, duration, moveTarget(objects, marks, cam, size.w, size.h));
+  if (!clauses.length) return move;
+  const staging = clauses.join("; ") + ".";
+  return `${staging.charAt(0).toUpperCase()}${staging.slice(1)} ${move}`;
+}
+
 // ---- the move, in words --------------------------------------------------------
 //
 // H3's prompt spec (`families/h3/prompts/base-en.txt`, §4.3) defines camera
@@ -436,7 +583,7 @@ class Raster {
 
 const DEG = 180 / Math.PI;
 
-export function moveSentence(marks, duration) {
+export function moveSentence(marks, duration, target = null) {
   if (!marks || marks.length < 2) return t("The camera holds a static shot.");
   const a = marks[0], b = marks[marks.length - 1];
   const right = rightOf(a), ahead = flatForwardOf(a);
@@ -448,13 +595,22 @@ export function moveSentence(marks, duration) {
   // An arc is sideways travel with the pan fighting it — the camera keeps
   // looking at what it is circling. Named as one move, not two.
   if (Math.abs(dx) > 0.6 && Math.abs(dyaw * DEG) > 8 && Math.sign(dyaw) !== Math.sign(dx)) {
+    // Around whom is geometry's answer where there is one: the cast member the
+    // last frame holds at its centre. "The subject" is the honest fallback.
+    const around = target ? `@${target}` : t("the subject");
     moves.push({ mag: Math.abs(dx) / 1.5,
-                 words: dx > 0 ? t("arcs right around the subject") : t("arcs left around the subject") });
+                 words: dx > 0 ? t("arcs right around {who}", { who: around })
+                               : t("arcs left around {who}", { who: around }) });
   } else {
     if (Math.abs(dx) > 0.25) moves.push({ mag: Math.abs(dx) / 1.5, words: dx > 0 ? t("trucks right") : t("trucks left") });
     if (Math.abs(dyaw * DEG) > 5) moves.push({ mag: Math.abs(dyaw * DEG) / 25, words: dyaw > 0 ? t("pans right") : t("pans left") });
   }
-  if (Math.abs(dz) > 0.3) moves.push({ mag: Math.abs(dz) / 2, words: dz > 0 ? t("pushes in") : t("pulls out") });
+  if (Math.abs(dz) > 0.3) {
+    moves.push({ mag: Math.abs(dz) / 2,
+                 words: dz > 0
+                   ? (target ? t("pushes in toward @{who}", { who: target }) : t("pushes in"))
+                   : t("pulls out") });
+  }
   if (Math.abs(dy) > 0.25) moves.push({ mag: Math.abs(dy), words: dy > 0 ? t("pedestals up") : t("pedestals down") });
   if (Math.abs(dpitch * DEG) > 5) moves.push({ mag: Math.abs(dpitch * DEG) / 25, words: dpitch > 0 ? t("tilts up") : t("tilts down") });
   if (Math.abs(dmm) > 6) moves.push({ mag: Math.abs(dmm) / 30, words: dmm > 0 ? t("zooms in") : t("zooms out") });
@@ -528,6 +684,11 @@ class Bench {
     this.targets = options.targets ?? [];
     this.back = options.back ?? null;
     this.resolve = resolve;
+    // The piece's cast, as handles — who a block can play. Handed over by the
+    // shell the way the targets are, because a bench does not know where a
+    // roster lives, and resolved at open: the cast a sentence cites is the
+    // cast that was on the shelf when the bench went up.
+    this.cast = (options.cast ?? []).filter((handle) => typeof handle === "string" && handle);
 
     this.objects = defaultSet();
     this.nextId = this.objects.length + 1;
@@ -567,6 +728,11 @@ class Bench {
             w: clamp(Number(piece.w) || KINDS[piece.kind].w, 0.1, 8),
             h: clamp(Number(piece.h) || KINDS[piece.kind].h, 0.1, 8),
             d: clamp(Number(piece.d) || KINDS[piece.kind].d, 0.1, 8),
+            // Kept even when the handle is no longer on the shelf: the sentence
+            // still cites it, and a stale citation is the user's to notice —
+            // the same rule a prompt's own chips follow.
+            plays: String(piece.plays ?? "").slice(0, 32),
+            word: String(piece.word ?? "").slice(0, 48),
           }));
         this.nextId = this.objects.length + 1;
       }
@@ -587,13 +753,49 @@ class Bench {
     }
   }
 
-  /** What rides in the sidecar — enough to put all of this back. */
+  /** What rides in the sidecar — enough to put all of this back, plus the one
+   *  thing written for readers other than this bench: `layout`, each named
+   *  piece's screen box at every mark. No family reads it today; the
+   *  layout-grounded conditioning the research is converging on does, and the
+   *  boxes cost nothing here where they would cost a tracker anywhere else. */
   scene() {
+    const { w, h } = SHAPES[this.shape];
+    const stops = this.marks.length ? this.marks : [this.cam];
+    const layout = this.objects
+      .filter((piece) => piece.plays || piece.word)
+      .map((piece) => ({
+        who: piece.plays || undefined, what: piece.word || undefined,
+        boxes: stops.map((markAt) => this.screenBox(piece, markAt, w, h)),
+      }));
     return {
       objects: this.objects.map(({ id, ...piece }) => piece),
       marks: this.marks.map((markAt) => ({ ...markAt })),
       duration: this.duration, shape: this.shape, pass: this.pass,
+      layout: layout.length ? layout : undefined,
     };
+  }
+
+  /** A piece's bounding box on a mark's frame, normalised — or null when the
+   *  whole of it is behind the lens. Clamped to the frame, so a box is what a
+   *  reader could actually ground against the written pixels. */
+  screenBox(piece, cam, width, height) {
+    const cr = Math.cos(piece.rot), sr = Math.sin(piece.rot);
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity, seen = false;
+    for (const ux of [-1, 1]) for (const uy of [0, 1]) for (const uz of [-1, 1]) {
+      const lx = (ux * piece.w) / 2, lz = (uz * piece.d) / 2;
+      const at = project(cam,
+        [piece.x + lx * cr + lz * sr, uy * piece.h, piece.z - lx * sr + lz * cr],
+        width, height);
+      if (!at) continue;
+      seen = true;
+      x0 = Math.min(x0, at.x); y0 = Math.min(y0, at.y);
+      x1 = Math.max(x1, at.x); y1 = Math.max(y1, at.y);
+    }
+    if (!seen) return null;
+    const box = [clamp(x0 / width, 0, 1), clamp(y0 / height, 0, 1),
+                 clamp(x1 / width, 0, 1), clamp(y1 / height, 0, 1)];
+    if (box[2] - box[0] <= 0 || box[3] - box[1] <= 0) return null;
+    return box.map((edge) => Math.round(edge * 1000) / 1000);
   }
 
   // ---- the room --------------------------------------------------------------
@@ -786,6 +988,44 @@ class Bench {
           },
         }),
       ]),
+      // Who this piece is. Two answers and they are different kinds of answer:
+      // a cast member, whose handle the prompt's substitution already knows how
+      // to spend, or a plain word for a thing. A piece playing somebody needs
+      // no word — the handle is the word.
+      this.cast.length ? el("div", { class: "mmc-bn-dial" }, [
+        el("div", { class: "mmc-bn-diallabel" }, [el("span", { text: t("Plays") })]),
+        el("button", {
+          class: "mmc-bo-who",
+          title: t("Which cast member this piece stands for. Their handle is "
+            + "written into the staging sentence, where the prompt turns it "
+            + "into their references."),
+          onclick: (event) => this.openWho(event.currentTarget, piece),
+        }, [
+          piece.plays
+            ? el("span", { class: `mmc-bo-whodot mmc-tag-${tagIndex(piece.plays)}` })
+            : null,
+          el("span", { class: "mmc-bo-whoname",
+                       text: piece.plays ? `@${piece.plays}` : t("Nobody") }),
+          icon("chevron", 11),
+        ]),
+      ]) : null,
+      piece.plays ? null : el("div", { class: "mmc-bn-dial" }, [
+        el("div", { class: "mmc-bn-diallabel" }, [el("span", { text: t("Called") })]),
+        el("input", {
+          class: "mmc-bn-text", type: "text", value: piece.word ?? "",
+          placeholder: t("table, doorway, car…"), maxlength: "48",
+          "aria-label": t("What to call this piece in the prompt"),
+          oninput: (event) => {
+            piece.word = event.target.value.trim();
+            this.markStale();
+            this.paintSay();
+            this.paint();
+          },
+        }),
+      ]),
+      (piece.plays || piece.word) ? el("p", { class: "mmc-bn-note", text:
+        t("Named pieces are written into the staging — who stands where, in the "
+          + "prompt's own words.") }) : null,
       this.dial(t("Width"), piece.w, 0.1, 8, 0.05, redial("w"), metres),
       this.dial(t("Height"), piece.h, 0.1, 8, 0.05, redial("h"), metres),
       this.dial(t("Depth"), piece.d, 0.1, 8, 0.05, redial("d"), metres),
@@ -793,6 +1033,24 @@ class Bench {
         (value) => { piece.rot = value / DEG; this.paint(); },
         (value) => `${Math.round(value)}°`),
     ]);
+  }
+
+  /** The cast, offered. `openChoicePopover` is the pack's own chooser, so the
+   *  row reads the way every other choice in the pack reads. */
+  openWho(anchor, piece) {
+    openChoicePopover(anchor, {
+      title: t("Who this piece plays"),
+      options: ["", ...this.cast],
+      value: piece.plays || "",
+      label: (option) => (option ? `@${option}` : t("Nobody")),
+      onPick: (option) => {
+        piece.plays = option;
+        this.markStale();
+        this.paintBench();
+        this.paintSay();
+        this.paint();
+      },
+    });
   }
 
   markRow(markAt, index) {
@@ -910,13 +1168,46 @@ class Bench {
     requestAnimationFrame(() => {
       this.painting = false;
       if (!this.overlay.isConnected) return;
+      const seamX = Math.round(this.seam * this.raster.w);
+      const tints = {};
+      for (const piece of this.objects) {
+        if (piece.plays) tints[piece.id] = tagRGB(tagIndex(piece.plays));
+      }
       this.raster.raster(this.objects, this.cam);
       this.raster.shade(this.context, this.pass, {
-        seamX: Math.round(this.seam * this.raster.w),
-        selected: this.selected,
+        seamX, selected: this.selected, tints,
       });
+      this.paintNames(seamX);
       this.paintSay();
     });
+  }
+
+  /** Each named piece's name, floated over it — stage side only, like every
+   *  other aid. A handle wears its hue; a word is quiet. Drawn after the
+   *  buffer lands because it is ink over the picture, not part of it. */
+  paintNames(seamX) {
+    const context = this.context;
+    const size = Math.max(9, Math.round(this.raster.w * 0.017));
+    context.font = `600 ${size}px system-ui, sans-serif`;
+    context.textAlign = "center";
+    context.textBaseline = "bottom";
+    for (const piece of this.objects) {
+      if (!piece.plays && !piece.word) continue;
+      const at = project(this.cam, [piece.x, piece.h + 0.12, piece.z],
+                         this.raster.w, this.raster.h);
+      if (!at || at.x < 8 || at.x > seamX - 8 || at.y < size || at.y > this.raster.h) continue;
+      const said = piece.plays ? `@${piece.plays}` : piece.word;
+      context.lineWidth = 3;
+      context.strokeStyle = "rgba(10,10,10,.75)";
+      context.strokeText(said, at.x, at.y);
+      if (piece.plays) {
+        const [r, g, b] = tagRGB(tagIndex(piece.plays));
+        context.fillStyle = `rgb(${r},${g},${b})`;
+      } else {
+        context.fillStyle = "rgba(233,231,226,.8)";
+      }
+      context.fillText(said, at.x, at.y);
+    }
   }
 
   // ---- the pointer, and which of three things a press is ---------------------
@@ -989,7 +1280,10 @@ class Bench {
       }
       this.paint();
     }
-    this.frame.setPointerCapture(event.pointerId);
+    // Guarded: a pointer can be gone by the time this runs — a pen lifted
+    // mid-press, a test harness's synthetic event — and a capture that failed
+    // only costs the drag following off the element, not the press itself.
+    try { this.frame.setPointerCapture(event.pointerId); } catch { /* see above */ }
     const up = () => {
       this.frame.removeEventListener("pointermove", move);
       this.frame.removeEventListener("pointerup", up);
@@ -1068,7 +1362,7 @@ class Bench {
       if (rect.width) this.applyPath((at.clientX - rect.left) / rect.width);
     };
     move(event);
-    this.track.setPointerCapture(event.pointerId);
+    try { this.track.setPointerCapture(event.pointerId); } catch { /* as press() */ }
     const up = () => {
       this.track.removeEventListener("pointermove", move);
       this.track.removeEventListener("pointerup", up);
@@ -1117,8 +1411,19 @@ class Bench {
 
   // ---- the foot, the run, the doors ------------------------------------------
 
+  /** The whole of the prose — staging and move — as the bench stands now. */
+  said() {
+    return stagingSentence(this.objects, this.marks, this.duration, this.cam,
+                           { w: this.raster.w, h: this.raster.h });
+  }
+
   paintSay() {
-    if (this.say) this.say.textContent = moveSentence(this.marks, this.duration);
+    if (!this.say) return;
+    const words = this.said();
+    this.say.textContent = words;
+    // The foot clips a long staging to one line; the whole of it is a hover
+    // away, which is the note-clamping rule the rail already follows.
+    this.say.title = words;
   }
 
   runLabel() {
@@ -1131,12 +1436,12 @@ class Bench {
     // as nodes, so a null reaches the document as the word "null".
     this.foot.replaceChildren(...[
       el("span", { class: "mmc-bo-say" }, [
-        this.say = el("span", { text: moveSentence(this.marks, this.duration) }),
+        this.say = el("span", { text: this.said() }),
       ]),
       el("button", {
         class: "mmc-bn-second mmc-bo-copy", title: t("Copy the move, to be pasted into the prompt as prose."),
         onclick: (event) => {
-          navigator.clipboard?.writeText(moveSentence(this.marks, this.duration)).catch(() => {});
+          navigator.clipboard?.writeText(this.said()).catch(() => {});
           const button = event.currentTarget;
           button.textContent = t("Copied");
           setTimeout(() => { if (button.isConnected) button.textContent = t("Copy"); }, 1200);
@@ -1212,9 +1517,9 @@ class Bench {
       const pass = this.passOf();
       this.result.op = pass.label;
       this.result.opId = pass.opId;
-      // The move, stamped on the file's record: a door's take() sees it, and a
-      // target that wants to do something with the words has them.
-      this.result.words = moveSentence(this.marks, this.duration);
+      // The prose, stamped on the file's record: staging and move together, so
+      // a door's take() — and anything later that wants the words — has them.
+      this.result.words = this.said();
     } catch (error) {
       this.error = String(error.message || error);
     }
