@@ -4,8 +4,20 @@ __pycache__/
 *.egg-info/
 .pytest_cache/
 
-# Local Claude Code permissions, not shared config
-.claude/settings.local.json
+# Claude Code's working files. The whole directory, not just the settings: notes
+# and resume files land in here too, and `git add -A` does not know the difference.
+.claude/
+
+# Anything a run actually writes lives in ComfyUI's user/, temp/ and input/ dirs,
+# reached through folder_paths — never in here. These patterns are the guard for
+# the one way that changes: a settings, credentials or preset file copied into the
+# repo to look at. A preset library and an API key are the two worst things to push.
+continuity.credentials.json
+continuity.settings.json
+continuity.presets.json
+continuity.preset.*.json
+.env
+.env.*
 
 # Screen recordings the README GIFs are cut from — big, and the GIF is what ships
 docs/vid/
@@ -14,6 +26,11 @@ docs/vid/
 # tools/vendor_style_atlas.py and kept only so a re-vendor is free; the frames
 # are what ships. Safe to delete.
 .atlas-clips/
+
+# Envs / logs
+.venv/
+venv/
+*.log
 
 # Editors / OS
 .DS_Store
