@@ -24,6 +24,7 @@ Restart ComfyUI. Nothing to pip install.
 - [Model families](docs/families.md) - what each model can do
 - [Tools](docs/tools.md) - ControlNet, upscaling, presets, LoRAs
 - [FAQ and troubleshooting](docs/faq.md)
+- [Changelog](CHANGELOG.md) - what changed, release by release
 
 ![The node in the simple view](docs/img/simple.png)
 
