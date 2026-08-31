@@ -1,8 +1,10 @@
 # Continuity
 
 One node for AI video and stills in ComfyUI. Write a prompt, attach media with
-`@`, press Render. Drives six model families through ComfyUI core, local open
-weights only, no API key.
+`@`, press Render. Six model families, all through ComfyUI core, all local
+open weights. The one thing that can talk to the outside is the prompt
+refiner, and only if you point it at your own server or provider - LM Studio,
+Ollama, or a hosted API with your key.
 
 ![A shot sampling, with the render beside it](docs/img/hero.png)
 

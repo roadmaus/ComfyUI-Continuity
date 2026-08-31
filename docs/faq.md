@@ -110,9 +110,11 @@ Old graphs load and old files stay where they are.
 
 ### Does anything leave my machine?
 
-No. Local open weights through ComfyUI core, no API key, nothing uploaded.
-The one exception is opt-in: if you point the Refine button at a hosted API,
-that request goes to the server you configured.
+No. Rendering is local open weights through ComfyUI core, and nothing is
+uploaded. The one exception is opt-in: the refiner can run on a server of
+your own - LM Studio, Ollama, or a hosted API with your key - and those
+requests go to the server you chose, references included when the model can
+see them.
 
 ### Where do renders go?
 

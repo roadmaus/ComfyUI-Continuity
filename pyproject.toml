@@ -1,7 +1,7 @@
 [project]
 name = "continuity"
 version = "3.0.0"
-description = "One node for AI video and stills across six model families - MiniMax H3, LTX 2.5, Krea 2, Ideogram 4.0, Qwen Image Edit, Flux 2 Klein. Write a sentence, attach media with @, press Render: get a finished clip with sound. Local open weights only, no API key."
+description = "One node for AI video and stills across six model families: MiniMax H3, LTX 2.5, Krea 2, Ideogram 4.0, Qwen Image Edit and Flux 2 Klein. Write a prompt, attach media with @, press Render. Everything renders locally from open weights. The optional prompt refiner can run in-process or on your own server or API provider."
 license = { file = "LICENSE" }
 requires-python = ">=3.10"
 dependencies = []
