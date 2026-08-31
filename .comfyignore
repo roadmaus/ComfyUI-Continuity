@@ -3,3 +3,4 @@ docs/
 __pycache__/
 .github/
 tools/
+CHANGELOG.md
