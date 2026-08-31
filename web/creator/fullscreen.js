@@ -58,6 +58,7 @@ import { watch as watchQueue } from "./queue.js";
 import { viewUrl } from "./api.js";
 import { el, icon, mark, spinner } from "./dom.js";
 import { buildDashboard } from "./navigate.js";
+import { openBlockout } from "./blockout.js";
 import { openControl } from "./control.js";
 import { openUpscale } from "./upscale.js";
 import { openPresetLibrary } from "./presetlib.js";
@@ -865,6 +866,23 @@ class Fullscreen {
           art: { kind: "trace", url: cardArt("controlnet"),
                  made: cardArt("controlnet-depth") },
           go: () => openControl({ targets: this.guideTargets(), back: () => this.openDash() }) },
+        // The bench that needs no footage: the scene is staged in the browser
+        // and rendered there too, so the card's targets are the tracing
+        // bench's own — what comes off the glass is a guide by the same rules,
+        // whichever pass drew it, As staged included.
+        { label: t("Blockout"), glyph: "cube",
+          sub: t("Stage a scene out of boxes, walk one camera through it — then render along it"),
+          art: { kind: "trace", url: cardArt("blockout"),
+                 made: cardArt("blockout-depth") },
+          go: () => openBlockout({
+            targets: this.guideTargets(),
+            // The piece's cast, as handles: who a block can play. The bench
+            // writes staging prose around them; the prompt's own substitution
+            // is what makes the handles mean their references.
+            cast: (this.node.mmcBody?.timeline?.subjects ?? [])
+              .map((subject) => subject.handle).filter(Boolean),
+            back: () => this.openDash(),
+          }) },
         // The other bench, and the one with no doors: what it makes is the
         // finished file rather than something a render reads, so it lands on a
         // shelf beside the renders and nothing here has to take it anywhere.

@@ -23,6 +23,7 @@ import { css as fullscreen } from "./styles/fullscreen.js";
 import { css as bench } from "./styles/bench.js";
 import { css as control } from "./styles/control.js";
 import { css as upscale } from "./styles/upscale.js";
+import { css as blockout } from "./styles/blockout.js";
 
 const CSS = [
   base,
@@ -50,6 +51,7 @@ const CSS = [
   bench,
   control,
   upscale,
+  blockout,
   // Last: the shell hosts every body in the pack and lifts the caps the node
   // face put on them, so its rules have to win over the sections that set them.
   fullscreen,
