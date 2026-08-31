@@ -1017,3 +1017,52 @@ export async function upscaleRun(body, options) {
   invalidate("output");
   return answer;
 }
+
+// ---- the blockout bench -----------------------------------------------------
+//
+// No catalogue and no preview URL: the scene lives in the browser and so does
+// the renderer, so there is nothing to ask the server until the frames exist.
+// What is here is the two halves of the handover — batches of drawn frames
+// against a token the bench minted, and the write that turns them into a clip.
+// Neither goes through `runJob`: an encode wants no GPU, and a queue item that
+// waited behind a render to run libx264 would be waiting for nothing it needs
+// (`creator/routes/blockout.py` says the rest).
+
+/**
+ * One batch of rendered frames into the server's staging. -> how many it holds.
+ *
+ * `frames` is `[{index, blob}]`. Multipart, with each part named by its frame
+ * index, so batches can land in any order and a retried batch overwrites
+ * instead of duplicating.
+ */
+export async function blockoutFrames(token, frames) {
+  const form = new FormData();
+  form.append("token", token);
+  for (const { index, blob } of frames) {
+    form.append(String(index), blob, `${index}.png`);
+  }
+  const response = await api.fetchApi("/continuity/blockout/frames", { method: "POST", body: form });
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(body.error || t("the frames could not be sent ({status})", { status: response.status }));
+  return body.held ?? 0;
+}
+
+/**
+ * Encode the staged frames into the input folder. -> `{path, kind}`.
+ *
+ * The scene rides along and is written beside the clip as a sidecar, so a
+ * saved set can be put back on the bench later.
+ */
+export async function blockoutWrite(body) {
+  const response = await api.fetchApi("/continuity/blockout/write", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const answer = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(answer.error || t("the clip could not be written ({status})", { status: response.status }));
+  // The file is new and the picker's listing is a few seconds stale — without
+  // this the guide is missing from the grid it was just written into.
+  invalidate("input");
+  return answer;
+}

@@ -40,6 +40,38 @@ right.
 shot** attaches it as a reference you can cite with `@`. Neither is required;
 the file is in the picker either way.
 
+## Blockout bench
+
+Starts from nothing at all: block a scene out of grey boxes, frame it through
+the one camera there is, and render a guide along the camera's path. No model,
+no download, no queue — the renderer is arithmetic in the browser, and what is
+on the glass is exactly what gets written into
+`input/continuity/blockout/`.
+
+There is no second camera. The light box is the lens, and getting around the
+set is operating it: drag pans and tilts, shift-drag trucks and pedestals, the
+wheel pushes in and pulls out. Frame the shot and press **Mark**, frame the
+next one and mark that; the clip walks the marks in order over a duration you
+set. One mark (or none) writes a still instead.
+
+Four outputs, three of them wearing the ControlNet bench's own names:
+
+| Pass | What it writes |
+|---|---|
+| As staged | no tracing — the clay render itself, as footage, for the families that read a plain clip or picture as a reference or an init |
+| Depth | near bright, far dark, the map Depth Anything draws — from the geometry, so nothing is guessed |
+| Blocks | each piece one flat field of colour |
+| Lines | the set's edges, white on black |
+
+The floor grid and the selection ring are staging aids and never reach the
+written file.
+
+The foot narrates the camera move as you mark it — *"The camera pushes in at
+slow speed."* — in the motion-type, amplitude and speed vocabulary the H3
+prompt spec defines, so **Copy** hands you the move as prose to paste straight
+into a prompt. The finished guide goes through the same doors a tracing does,
+and the scene itself is saved as a small `.json` beside the clip.
+
 ## Upscale bench
 
 Takes any still or clip (from this pack or not) and makes it bigger or

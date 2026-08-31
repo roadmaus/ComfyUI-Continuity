@@ -5,6 +5,15 @@ and everything under it is kept exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**A third bench: Blockout.** A scene staged out of grey boxes, one camera walked
+through it on marks, and a guide rendered along the path — Depth, Blocks or
+Lines in the tracing bench's own names, or As staged, the clay render itself as
+plain footage for the families that read footage raw. The renderer is a software
+rasterizer in the browser; the server only encodes, off the render queue, and a
+still never touches the server at all. The foot writes the move in the H3
+spec's own camera vocabulary, ready to paste into a prompt, and the scene rides
+beside the clip as a sidecar.
+
 **H3 across two GPUs, through the Karmabu Raylight fork.** Picked in the weights
 popover. Everything this pack does between a loader and a sampler is a patch on a
 MODEL and a Ray render has none, so the refine, face and re-detail passes, the

@@ -81,6 +81,7 @@ export function svg(paths, size = 22, box = "0 0 24 24") {
 export const ICONS = {
   image: `<rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>`,
   video: `<rect x="2" y="6" width="14" height="12" rx="2.5"/><path d="M16 10.5L22 7v10l-6-3.5z"/>`,
+  cube: `<path d="M12 2.6l8.4 4.85v9.1L12 21.4l-8.4-4.85v-9.1z"/><path d="M12 12.15L3.6 7.45M12 12.15l8.4-4.7M12 12.15v9.25"/>`,
   audio: `<path d="M4 10v4M8 6v12M12 3v18M16 7v10M20 10v4"/>`,
   effect: `<path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M18.5 15.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z"/>`,
   clock: `<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 1.9"/>`,
