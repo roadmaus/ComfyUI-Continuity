@@ -1029,6 +1029,7 @@ export const ja = {
  "turbo · {name}": "turbo · {name}",
  "merged": "統合済み",
  "Pick a different turbo LoRA — now {lora}.": "別の turbo LoRA を選択 — 現在は {lora}。",
+ "Pick a turbo LoRA — now none: the checkpoint is taken to be a merged distill.": "turbo LoRA を選択 — 現在はなし：チェックポイントは統合済み蒸留として扱われます。",
  "Swapped in place: the run never carries both distills at once.": "その場で入れ替え: 実行が 2 つの蒸留を同時に持つことはありません。",
  "4 steps — the fast look. Softer detail; heavy motion can smear.": "4 ステップ — 高速な仕上がり。ディテールはソフトになり、激しい動きはにじむことがあります。",
  "6 steps — the comfort zone the turbo LoRAs were tuned for.": "6 ステップ — turbo LoRA が調整された快適域です。",

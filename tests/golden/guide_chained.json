@@ -52,6 +52,20 @@
     }
   },
   "12": {
+    "class_type": "ContinuityTake",
+    "inputs": {
+      "card": 1,
+      "crf": 23,
+      "filename_prefix": "continuity/renders/h3/H3",
+      "fps": 24.0,
+      "seed": 100,
+      "source": [
+        "11",
+        1
+      ]
+    }
+  },
+  "13": {
     "class_type": "MiniMaxH3PassFrames",
     "inputs": {
       "source": [
@@ -60,7 +74,7 @@
       ]
     }
   },
-  "13": {
+  "14": {
     "class_type": "MiniMaxH3TimelineSegment",
     "inputs": {
       "clip": [
@@ -72,7 +86,7 @@
         0
       ],
       "prev_image": [
-        "12",
+        "13",
         0
       ],
       "segment_data": "{\"canvas\": {\"clamped\": false, \"from_image\": false, \"height\": 768, \"label\": \"16:9\", \"ratio\": 1.7777777777777777, \"width\": 1344}, \"continue\": true, \"continue_audio\": false, \"progress\": {\"index\": 2}, \"request\": {\"aspect\": \"16:9\", \"audio_tail_s\": 1.0, \"duration_s\": 5, \"loras\": [], \"music\": \"\", \"prompt\": \"a house at dusk\\ncloser\", \"short_edge\": 768, \"soundscape\": \"\"}}",
@@ -83,34 +97,34 @@
       "vae_name": "h3/video_vae.safetensors"
     }
   },
-  "14": {
+  "15": {
     "class_type": "ConditioningZeroOut",
     "inputs": {
       "conditioning": [
-        "13",
+        "14",
         1
       ]
     }
   },
-  "15": {
+  "16": {
     "class_type": "KSampler",
     "inputs": {
       "cfg": 1.0,
       "denoise": 1.0,
       "latent_image": [
-        "13",
+        "14",
         2
       ],
       "model": [
-        "13",
-        0
-      ],
-      "negative": [
         "14",
         0
       ],
+      "negative": [
+        "15",
+        0
+      ],
       "positive": [
-        "13",
+        "14",
         1
       ],
       "sampler_name": "res_multistep",
@@ -119,7 +133,7 @@
       "steps": 20
     }
   },
-  "16": {
+  "17": {
     "class_type": "MiniMaxH3Reel",
     "inputs": {
       "audio_vae": [
@@ -127,12 +141,16 @@
         0
       ],
       "fps": 24.0,
+      "match": [
+        "13",
+        0
+      ],
       "reel": [
         "11",
         0
       ],
       "samples": [
-        "15",
+        "16",
         0
       ],
       "vae": [
@@ -141,16 +159,37 @@
       ]
     }
   },
-  "17": {
-    "class_type": "MiniMaxH3PassFrames",
+  "18": {
+    "class_type": "ContinuityTake",
     "inputs": {
+      "card": 2,
+      "crf": 23,
+      "filename_prefix": "continuity/renders/h3/H3",
+      "fps": 24.0,
+      "seed": 100,
       "source": [
-        "16",
+        "17",
         1
       ]
     }
   },
-  "18": {
+  "19": {
+    "class_type": "MiniMaxH3PassFrames",
+    "inputs": {
+      "source": [
+        "17",
+        1
+      ]
+    }
+  },
+  "2": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "h3/text_encoder.safetensors",
+      "type": "minimax"
+    }
+  },
+  "20": {
     "class_type": "MiniMaxH3TimelineSegment",
     "inputs": {
       "clip": [
@@ -162,7 +201,7 @@
         0
       ],
       "prev_image": [
-        "17",
+        "19",
         0
       ],
       "segment_data": "{\"canvas\": {\"clamped\": false, \"from_image\": false, \"height\": 768, \"label\": \"16:9\", \"ratio\": 1.7777777777777777, \"width\": 1344}, \"continue\": true, \"continue_audio\": false, \"progress\": {\"index\": 3}, \"request\": {\"aspect\": \"16:9\", \"audio_tail_s\": 1.0, \"duration_s\": 5, \"loras\": [], \"music\": \"\", \"prompt\": \"a house at dusk\\nher face\", \"short_edge\": 768, \"soundscape\": \"\"}}",
@@ -173,7 +212,7 @@
       "vae_name": "h3/video_vae.safetensors"
     }
   },
-  "19": {
+  "21": {
     "class_type": "ContinuityGuideFrames",
     "inputs": {
       "end": 15.0,
@@ -185,14 +224,7 @@
       "width": 1344
     }
   },
-  "2": {
-    "class_type": "CLIPLoader",
-    "inputs": {
-      "clip_name": "h3/text_encoder.safetensors",
-      "type": "minimax"
-    }
-  },
-  "20": {
+  "22": {
     "class_type": "MiniMaxH3FunControlNetApply",
     "inputs": {
       "control_net": [
@@ -200,12 +232,12 @@
         0
       ],
       "control_video": [
-        "19",
+        "21",
         0
       ],
       "end_percent": 0.7,
       "positive": [
-        "18",
+        "20",
         1
       ],
       "start_percent": 0.0,
@@ -216,34 +248,34 @@
       ]
     }
   },
-  "21": {
+  "23": {
     "class_type": "ConditioningZeroOut",
     "inputs": {
       "conditioning": [
-        "20",
+        "22",
         0
       ]
     }
   },
-  "22": {
+  "24": {
     "class_type": "KSampler",
     "inputs": {
       "cfg": 1.0,
       "denoise": 1.0,
       "latent_image": [
-        "18",
+        "20",
         2
       ],
       "model": [
-        "18",
+        "20",
         0
       ],
       "negative": [
-        "21",
+        "23",
         0
       ],
       "positive": [
-        "20",
+        "22",
         0
       ],
       "sampler_name": "res_multistep",
@@ -252,7 +284,7 @@
       "steps": 20
     }
   },
-  "23": {
+  "25": {
     "class_type": "MiniMaxH3Reel",
     "inputs": {
       "audio_vae": [
@@ -260,12 +292,16 @@
         0
       ],
       "fps": 24.0,
+      "match": [
+        "19",
+        0
+      ],
       "reel": [
-        "16",
+        "17",
         0
       ],
       "samples": [
-        "22",
+        "24",
         0
       ],
       "vae": [
@@ -274,17 +310,31 @@
       ]
     }
   },
-  "24": {
+  "26": {
+    "class_type": "ContinuityTake",
+    "inputs": {
+      "card": 3,
+      "crf": 23,
+      "filename_prefix": "continuity/renders/h3/H3",
+      "fps": 24.0,
+      "seed": 100,
+      "source": [
+        "25",
+        1
+      ]
+    }
+  },
+  "27": {
     "class_type": "MiniMaxH3Save",
     "inputs": {
       "crf": 23,
       "filename_prefix": "continuity/renders/h3/H3",
       "fps": 24.0,
       "reel": [
-        "23",
+        "25",
         0
       ],
-      "takes": "{\"cards\": [1, 2, 3], \"seeds\": [100, 100, 100]}"
+      "takes": ""
     }
   },
   "3": {

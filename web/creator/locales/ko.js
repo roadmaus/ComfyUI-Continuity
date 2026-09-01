@@ -1030,6 +1030,7 @@ export const ko = {
  "turbo · {name}": "turbo · {name}",
  "merged": "병합됨",
  "Pick a different turbo LoRA — now {lora}.": "다른 turbo LoRA 선택 — 현재는 {lora}입니다.",
+ "Pick a turbo LoRA — now none: the checkpoint is taken to be a merged distill.": "turbo LoRA 선택 — 현재는 없음: 체크포인트가 병합된 증류로 취급됩니다.",
  "Swapped in place: the run never carries both distills at once.": "제자리 교체: 실행이 두 증류를 동시에 갖는 일은 없습니다.",
  "4 steps — the fast look. Softer detail; heavy motion can smear.": "4스텝 — 빠른 룩. 디테일이 더 부드럽고 격한 모션은 번질 수 있습니다.",
  "6 steps — the comfort zone the turbo LoRAs were tuned for.": "6스텝 — turbo LoRA가 맞춰 조정된 편안한 구간입니다.",

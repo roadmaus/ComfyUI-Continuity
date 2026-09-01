@@ -1031,6 +1031,7 @@ export const zh = {
  "turbo · {name}": "turbo · {name}",
  "merged": "已合并",
  "Pick a different turbo LoRA — now {lora}.": "换一个 turbo LoRA——当前是 {lora}。",
+ "Pick a turbo LoRA — now none: the checkpoint is taken to be a merged distill.": "选择一个 turbo LoRA——当前为无：检查点被视为已合并蒸馏。",
  "Swapped in place: the run never carries both distills at once.": "原地替换：运行中绝不会同时携带两个蒸馏。",
  "4 steps — the fast look. Softer detail; heavy motion can smear.": "4 步——最快的观感。细节偏软；剧烈运动可能拖影。",
  "6 steps — the comfort zone the turbo LoRAs were tuned for.": "6 步——turbo LoRA 调校时的舒适区。",

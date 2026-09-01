@@ -227,6 +227,17 @@ sampler_id = graph[reel_node_id]["inputs"]["samples"][0]
 check("...which came from segment 1's sampler",
       graph[sampler_id]["inputs"]["model"][0], segments[0][0])
 
+# The seam's colour match: the continuing pass's reel node is handed the very
+# frames its seam inherited, so `_match_seam` can pin the pass's statistics
+# back to them — and only the continuing pass, so a hard cut's reel node keeps
+# the inputs it always had.
+check("only the continuing pass's reel node carries a colour match",
+      sorted("match" in i for _, i in by_type["MiniMaxH3Reel"]),
+      [False, False, True])
+_matched = [i for _, i in by_type["MiniMaxH3Reel"] if "match" in i]
+check("...wired to the same frames its seam inherited",
+      _matched[0]["match"], [last_frame_id, 0])
+
 # One seed for the piece. It used to be seed + k, which meant the number on the
 # node named segment 1's noise and nothing else — a shot could not be reproduced
 # from it, and moving a card re-rolled every shot after it.
@@ -778,6 +789,31 @@ seam_sound = tl.MiniMaxH3PassAudio.execute(source=spilled, seconds=0.5).result[0
 check("...and the tail of its sound",
       int(seam_sound["waveform"].shape[-1]), int(0.5 * RATE))
 
+# The seam colour match. A continued pass drifts in contrast and brightness
+# against the frames it inherited; measured on the overlap — the frames that
+# re-generate the reference — and applied to the whole pass, the drift is gone
+# at the seam and the correction is constant across the shot.
+_ref = _torch.rand(2, 8, 8, 3) * 0.5 + 0.25
+_drift = ((_ref - _ref.mean()) * 1.3 + _ref.mean() + 0.08).clamp(0, 1)
+_pass = _torch.cat([_drift, _torch.rand(3, 8, 8, 3)])
+_fixed = tl._match_seam(_pass.clone(), _ref)
+check("the matched overlap carries the reference's brightness",
+      [round(float(x), 2) for x in
+       (_fixed[:2].reshape(-1, 3).mean(0) - _ref.reshape(-1, 3).mean(0)).abs()],
+      [0.0, 0.0, 0.0])
+check("...and its contrast",
+      [round(float(x), 2) for x in
+       (_fixed[:2].reshape(-1, 3).std(0) - _ref.reshape(-1, 3).std(0)).abs()],
+      [0.0, 0.0, 0.0])
+check("...and the whole pass moved with it, not just the overlap",
+      bool(_torch.equal(_fixed[2:], _pass[2:])), False)
+# A flat overlap has no contrast to measure; the gain clamp keeps the repair
+# from stretching the pass to invent some.
+_flat = tl._match_seam(_torch.rand(4, 8, 8, 3), _torch.full((1, 8, 8, 3), 0.5))
+check("a flat reference cannot blow the pass up",
+      bool(_flat.isfinite().all() and (_flat <= 1).all() and (_flat >= 0).all()),
+      True)
+
 # ---- accelerators -----------------------------------------------------------
 #
 # The packs themselves are optional and usually absent, so what is pinned here is
@@ -1003,11 +1039,21 @@ check("the card being shot is announced by its number on the strip",
       json.loads(stepped["MiniMaxH3TimelineSegment"][0][1]["segment_data"])["progress"],
       {"index": 2})
 
-# The takes the save node is told to write: the cards that were actually
-# sampled, and the seed each ran on.
-plan = json.loads(stepped["MiniMaxH3Save"][0][1]["takes"])
-check("the save node is told which card each part is", plan["cards"], [1, 2])
-check("...and what seed it ran on", plan["seeds"], [100, 100])
+# The takes, written by the passes themselves: one `ContinuityTake` per
+# generated pass, off the reel node's pass output, carrying the card's number
+# and the seed it ran on — and nothing for the kept take, which is already the
+# file it would be written from. The save node is told nothing: a tail-written
+# take only exists if every pass after it succeeded, which is when takes
+# matter least.
+check("each sampled pass writes its own take", len(stepped["ContinuityTake"]), 1)
+check("...against the card's number on the strip",
+      stepped["ContinuityTake"][0][1]["card"], 2)
+check("...on the seed it ran on", stepped["ContinuityTake"][0][1]["seed"], 100)
+check("...off the pass the reel node wrote",
+      stepped["ContinuityTake"][0][1]["source"],
+      [stepped["MiniMaxH3Reel"][0][0], 1])
+check("...and the save node is told nothing",
+      stepped["MiniMaxH3Save"][0][1]["takes"], "")
 
 # A card's own seed. The node's everywhere it is absent, which is every card
 # until somebody rolls one.
@@ -1017,8 +1063,8 @@ seeded = by_class(with_clip(
 ))
 check("a card with no seed of its own runs on the node's",
       sorted(i["seed"] for _, i in seeded["KSampler"]), [100, 4242])
-check("...and the save node records the same two",
-      json.loads(seeded["MiniMaxH3Save"][0][1]["takes"])["seeds"], [100, 4242])
+check("...and the takes record the same two",
+      sorted(i["seed"] for _, i in seeded["ContinuityTake"]), [100, 4242])
 
 # A lone generation has one take and it is the render — which is a statement
 # about the *file*, not about the card. The plan still goes out, because the

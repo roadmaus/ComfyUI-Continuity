@@ -5,6 +5,31 @@ and everything under it is kept exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**Continued shots stop hardening in contrast** (#41). Every continued pass
+drifts a little against the frames it inherited — the model's own bias, not
+the seam arithmetic, and it compounds across a strip. The pass's opening
+frames re-generate the very frames the seam handed it, so the reel node now
+measures the drift there and pins the whole pass's colour statistics back to
+the seam before anything is written.
+
+**Takes are written as each pass lands, not at the end** (#41). A strip that
+failed on its last pass used to keep nothing — fourteen good passes and every
+one sampled again. Each generated pass now writes its own take the moment it
+exists, and the strip picks them up mid-render and after a failure alike. A
+quality change also re-muxes the takes from the cached passes instead of
+sampling anything.
+
+**The turbo pill's LoRA list heals itself** (#41). A fetch that failed while
+ComfyUI was still loading used to pin every turbo picker to an empty list
+until the page reloaded, and Rescan could not reach it. Failure is no longer
+cached, the pickers retry on the next press, and the manager's Rescan now
+clears this list too.
+
+**"No LoRA · merged checkpoint" is no longer a life sentence** (#41). Picking
+it left the turbo pill with no way back into the picker for that node's whole
+life. The re-pick control now shows in merged mode too, and choosing between
+a file and merged is the same gesture everywhere.
+
 **A third bench: Blockout.** A scene staged out of grey boxes on a bare floor —
 or one of five starting arrangements — a camera walked through it on marks, and
 a guide rendered along the path: Depth, Blocks or Lines in the tracing bench's
