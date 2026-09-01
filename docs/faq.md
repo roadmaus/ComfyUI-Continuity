@@ -15,31 +15,29 @@ The gear on the node's rail opens the pack's settings.
   `web/creator/locales/`.
 - **Appearance** has a text size, and the pack takes its colours from
   ComfyUI's palette.
-- **Stored data** lists everything the pack has written down — the preset
-  library scope by scope, the stars and the LoRA notes this browser holds, the
-  reference cache, the refiner's server, and the settings themselves — with a
-  count beside each one and a press to remove it. Nothing there deletes a
+- **Stored data** lists everything the pack has written down, with a count
+  beside each one and a press to remove it: the preset library scope by scope,
+  the stars and the LoRA notes this browser holds, the reference cache, the
+  refiner's server, and the settings themselves. Nothing there deletes a
   render, a reference or a workflow: those are files.
 
 ## Common errors
 
 ### I installed Continuity and now no node shows up at all
 
-Look in `ComfyUI/custom_nodes` for a second copy of this pack — usually
-`ComfyUI-MiniMax-Creator` beside a fresh `ComfyUI-Continuity`. The rename left
-the node ids alone, on purpose, so that saved workflows kept loading; the cost
-is that two folders of this pack are two packs registering the same node ids.
-ComfyUI refuses at least one of them over that, and what people report is
-neither name reaching the node search. The startup console log says so,
-somewhere above wherever you are looking.
+Look in `ComfyUI/custom_nodes` for a second copy of this pack, usually
+`ComfyUI-MiniMax-Creator` sitting beside a fresh `ComfyUI-Continuity`. The node
+ids stayed the same through the rename, on purpose, so that saved workflows
+kept loading. The cost is that two folders of this pack are two packs
+registering the same ids, and you end up with neither in the node search. The
+startup console log says so, somewhere above wherever you are looking.
 
-Delete one of them and restart. Which one doesn't matter much: the old clone
-pulls this repo through GitHub's redirect, so `git remote set-url origin
-https://github.com/roadmaus/ComfyUI-Continuity.git && git pull` inside it is a
-complete install under an old folder name, and the folder name means nothing to
-ComfyUI. Nothing you have made is in either folder — presets, settings,
-favourites and LoRA memory sit in ComfyUI's `user/` directory. If the copy you
-want gone came from the ComfyUI Manager, uninstall it there.
+Delete one of them and restart. Which one is up to you: the old address
+redirects here, so a `git pull` in the MiniMax Creator folder leaves you fully
+up to date under an old folder name, and the name means nothing to ComfyUI.
+Nothing you made is in either folder, since presets, settings, favourites and
+LoRA memory sit in ComfyUI's `user/` directory. If the copy you want gone came
+from the ComfyUI Manager, uninstall it there.
 
 ### "Render refused, naming a field and a folder"
 

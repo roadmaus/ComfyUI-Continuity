@@ -25,7 +25,7 @@ output folder, so a clip you just made can go straight back in as a reference.
 
 A shelf is a folder on disk and nothing else. The "+" makes the directory,
 dragging a thumbnail onto a chip moves the file into it, and the row shows what
-is actually there — so a folder you delete from a terminal is gone from the
+is actually there, so a folder you delete from a terminal is gone from the
 picker on the next listing. An empty one you made by mistake has a *Remove
 shelf* at the end of the row; a folder with anything in it is a file manager's
 job.
@@ -163,8 +163,8 @@ re-render.
 
 H3 can sample one shot across several cards, which on a pair is roughly half
 the wall clock. Install the [Raylight community
-fork](https://github.com/Karmabu/raylight) — the upstream Raylight has no H3
-path — and a **Sampling** row appears at the top of the weights popover. Pick
+fork](https://github.com/Karmabu/raylight), since the upstream Raylight has no
+H3 path, and a **Sampling** row appears at the top of the weights popover. Pick
 `Raylight · 2 GPUs` and queue as usual: the checkpoint is loaded into one Ray
 worker per card and the sequence is split across them, while the prompt is
 still encoded and the video still decoded on your own card. Preview frames keep
@@ -176,7 +176,7 @@ quietly dropped from the render:
 
 - the refine (two-pass upscale), faces and re-detail passes,
 - the turbo lead-in,
-- sound seams — a shot continuing the previous one's soundtrack,
+- sound seams, meaning a shot continuing the previous one's soundtrack,
 - ControlNet guides: they reach H3 through the conditioning, so they would
   arrive intact and then be ignored by Raylight's own forward pass,
 - every accelerator except sage attention, which Raylight runs itself,
