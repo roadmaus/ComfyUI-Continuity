@@ -22,6 +22,17 @@ Selectors that qualify themselves are not this suite's business: `.mmc-fs
 .mmc-panel` is a statement *about* the editor's panel inside the fullscreen
 shell, which is what a cascade is for. Only the unqualified ones are counted,
 because only those claim the class outright.
+
+It also holds the other whole-sheet invariant, because this is the suite that
+already opens every stylesheet: **each one is exactly one template literal, so
+from `export const css =` on there are exactly two backticks.** A third — and the one that has actually
+happened twice is a backtick around an identifier inside a CSS *comment*, where
+it reads as ordinary prose — ends the literal early and turns the rest of the
+file into JavaScript. What makes that worth a check rather than a habit is that
+nothing else catches it: `node --check` passes, because what follows the stray
+backtick usually still parses as a valid expression; the class scan above passes,
+because it reads the file as text; and the failure only appears in a browser, as
+the whole frontend refusing to load.
 """
 
 import collections
@@ -70,6 +81,26 @@ def owners():
                     claimed[match.group(1)].add(name)
     return claimed
 
+
+# Two backticks from `export const css =` on: the one that opens the literal and
+# the one that closes it. Counted from there rather than from the top of the
+# file, because the header comment above it is JavaScript and quotes class and
+# module names in backticks all day, harmlessly. See the docstring for why this
+# lives here and why nothing else would notice.
+fenced = []
+for name in sorted(os.listdir(STYLES)):
+    if not name.endswith(".js"):
+        continue
+    with open(os.path.join(STYLES, name), encoding="utf-8") as handle:
+        text = handle.read()
+    at = text.find("export const css =")
+    if at < 0:
+        fenced.append(f"{name}: no css export")
+        continue
+    ticks = text[at:].count("`")
+    if ticks != 2:
+        fenced.append(f"{name}: {ticks}")
+check("every stylesheet is one unbroken template literal", fenced, [])
 
 claimed = owners()
 check("the sheet is not empty", len(claimed) > 200, True)

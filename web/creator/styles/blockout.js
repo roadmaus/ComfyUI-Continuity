@@ -1,17 +1,27 @@
-// What is the blockout bench's own.
+// What the blockout bench's own controls look like.
 //
 // The room is `styles/bench.js`, shared with the other two benches. What is
-// here is the three controls this bench has that they do not: the timeline the
-// camera path lives on (the trim bar's species, drawn in the trim bar's blue,
-// but over marks rather than a waveform — there is no media to decode), the
-// piece card in the rail, and the foot's narration of the move. The glass gets
-// one qualified override: its cursor is a hand, because dragging it operates a
-// camera rather than a seam.
+// here is what this bench has that they do not: a viewport HUD, a properties
+// panel, a timeline over marks rather than a waveform, and the foot's
+// narration of the move.
+//
+// **The HUD does not use the pack's tokens, and that is deliberate.** Every
+// other surface in the pack sits on the page's own ground and takes its colour
+// from the theme. The HUD sits on the *canvas*, which paints its own dark sky
+// whatever the theme is, so a light-theme `--mmc-surface` would put a white
+// pill on a near-black picture. Its greys are therefore literals, tuned against
+// the clay the rasterizer draws — the one place in the pack where that is the
+// correct answer rather than a shortcut.
+//
+// **The axis letters in the rail wear the gizmo's colours.** X warm, Y green,
+// Z cool, and W/H/D the same three because a piece's width runs along its own
+// X. It is the only tie between a number in the rail and a handle on the glass,
+// and it costs three declarations.
 
 export const css = `
 /* --- the glass ------------------------------------------------------------ */
-/* A hand, not the seam's ew-resize: most of this surface operates the camera,
-   and the seam still says what it is by its own grip. */
+/* A hand: the whole of this surface is either a camera or a thing being moved,
+   and both are grabbed. */
 .mmc-bo .mmc-bo-frame { cursor: grab; }
 .mmc-bo .mmc-bo-frame:active { cursor: grabbing; }
 /* The canvas is the one layer there is; it holds the frame's whole rectangle
@@ -139,8 +149,89 @@ export const css = `
 .mmc-bo-say::after { content: "\\201D"; color: var(--mmc-off); }
 .mmc-bo-copy { flex: none; }
 
+/* --- the viewport HUD -------------------------------------------------------- */
+/* Floating over the canvas: the two questions you are always answering while
+   working — which camera am I, and am I looking at the stage or the file. */
+.mmc-bo-hud {
+  position: absolute; left: 10px; right: 10px; z-index: 2;
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  pointer-events: none;
+}
+.mmc-bo-hud.top { top: 10px; }
+.mmc-bo-hud.bottom { bottom: 10px; }
+.mmc-bo-hud .mmc-bo-switch { pointer-events: auto; }
+.mmc-bo-switch {
+  display: flex; gap: 2px; padding: 2px; border-radius: 9px;
+  background: rgba(14, 15, 17, .74); border: 1px solid rgba(255, 255, 255, .1);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+}
+.mmc-bo-seg {
+  height: calc(24px * var(--mmc-type)); padding: 0 10px; border: 0; border-radius: 7px;
+  background: none; cursor: pointer; white-space: nowrap;
+  font-family: inherit; font-size: calc(11.5px * var(--mmc-type));
+  color: rgba(233, 231, 226, .58);
+}
+.mmc-bo-seg:hover { color: rgba(233, 231, 226, .92); }
+.mmc-bo-seg.on { background: rgba(233, 231, 226, .15); color: #f0ede7; }
+.mmc-bo-seg:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: -1px; }
+
+/* --- the frame's shape -------------------------------------------------------- */
+/* The strip's own pill, in a rail rather than a bar: it fills the row the three
+   shape buttons used to, and reads left to right like every dial above it. */
+.mmc-bo-aspect { width: 100%; justify-content: flex-start; }
+.mmc-bo-aspect .mmc-pill-sub { margin-left: auto; }
+
+/* --- starting points --------------------------------------------------------- */
+.mmc-bo-presets { display: flex; flex-wrap: wrap; gap: 5px; }
+.mmc-bo-preset {
+  height: calc(24px * var(--mmc-type)); padding: 0 9px; border-radius: 6px; cursor: pointer;
+  background: var(--mmc-surface); border: 1px solid var(--mmc-line);
+  color: var(--mmc-dim); font-family: inherit; font-size: calc(11px * var(--mmc-type));
+}
+.mmc-bo-preset:hover { background: var(--mmc-surface-2); color: var(--mmc-text); }
+.mmc-bo-preset:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 1px; }
+.mmc-bo-verbs { display: flex; gap: 6px; }
+.mmc-bo-verbs .mmc-bn-verb { flex: 1; min-width: 0; }
+
+/* --- the properties panel's numbers ------------------------------------------ */
+.mmc-bo-vec { display: flex; gap: 5px; }
+.mmc-bo-vecslot {
+  flex: 1; min-width: 0; display: flex; align-items: center; gap: 6px;
+  height: calc(26px * var(--mmc-type)); padding: 0 7px; border-radius: 7px;
+  background: var(--mmc-wash); border: 1px solid var(--mmc-line-2);
+}
+.mmc-bo-vecslot:focus-within { border-color: var(--mmc-line-3); }
+.mmc-bo-axis {
+  flex: none; font-size: calc(9.5px * var(--mmc-type));
+  font-weight: 600; letter-spacing: .06em;
+}
+.mmc-bo-axis.is-x, .mmc-bo-axis.is-w { color: #e05a52; }
+.mmc-bo-axis.is-y, .mmc-bo-axis.is-h { color: #79c85a; }
+.mmc-bo-axis.is-z, .mmc-bo-axis.is-d { color: #4f8fe2; }
+.mmc-bo-num {
+  width: 100%; min-width: 0; padding: 0; border: 0; background: none;
+  color: var(--mmc-text); font-family: inherit;
+  font-size: calc(11.5px * var(--mmc-type)); font-variant-numeric: tabular-nums;
+  -moz-appearance: textfield; appearance: textfield;
+}
+.mmc-bo-num:focus { outline: none; }
+.mmc-bo-num::-webkit-outer-spin-button,
+.mmc-bo-num::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+/* --- a mark, as a place to go back to ---------------------------------------- */
+.mmc-bo-markgo {
+  padding: 0; border: 0; background: none; cursor: pointer;
+  font: inherit; color: inherit; text-align: left;
+}
+.mmc-bo-markgo:hover { color: var(--mmc-text); }
+.mmc-bo-markgo:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 2px; border-radius: 4px; }
+
 @media (max-width: 900px) {
   .mmc-bo-cut { flex-wrap: wrap; }
   .mmc-bo-say { white-space: normal; }
+  /* A narrow glass cannot hold both switches on one line; the top one wraps
+     rather than either of them shrinking its words away. */
+  .mmc-bo-hud { gap: 6px; }
+  .mmc-bo-hud .mmc-bn-gap { flex-basis: 100%; height: 0; }
 }
 `;

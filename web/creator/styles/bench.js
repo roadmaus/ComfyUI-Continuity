@@ -425,6 +425,7 @@ export const css = `
 /* --- run, and what came of it --------------------------------------------- */
 .mmc-bn-foot { flex: none; display: flex; align-items: center; gap: 14px; }
 .mmc-bn-run {
+  flex: none; white-space: nowrap;
   height: calc(40px * var(--mmc-type)); padding: 0 28px; border-radius: 20px; border: 0;
   background: var(--mmc-accent); color: var(--mmc-on-accent); cursor: pointer;
   font-family: inherit; font-size: calc(13.5px * var(--mmc-type)); font-weight: 600;

@@ -5,14 +5,22 @@ and everything under it is kept exactly as it was written, wall of text and all.
 
 ## Unreleased
 
-**A third bench: Blockout.** A scene staged out of grey boxes, one camera walked
-through it on marks, and a guide rendered along the path — Depth, Blocks or
-Lines in the tracing bench's own names, or As staged, the clay render itself as
-plain footage for the families that read footage raw. The renderer is a software
-rasterizer in the browser; the server only encodes, off the render queue, and a
-still never touches the server at all. The foot writes the move in the H3
-spec's own camera vocabulary, ready to paste into a prompt, and the scene rides
-beside the clip as a sidecar.
+**A third bench: Blockout.** A scene staged out of grey boxes on a bare floor —
+or one of five starting arrangements — a camera walked through it on marks, and
+a guide rendered along the path: Depth, Blocks or Lines in the tracing bench's
+own names, or As staged, the clay render itself as plain footage for the
+families that read footage raw. It is an editor: pieces move, turn and size on
+three axes by their handles or by the figures in the rail, with snapping. The
+shot camera stands in the set as a frustum with its path drawn on the floor,
+and a second camera flies around it — WASD, orbit, focus — without touching a
+thing that gets written. The glass shows the stage or the pass, whole, on a
+switch, and the frame's shape is picked from the pack's own aspect popover —
+the family's ratios, not three of this bench's own — at that family's native
+canvas. The renderer is a software rasterizer in the browser drawing at the
+frame's own pixels; the server only encodes, off the render queue, and a still
+never touches the server at all. The foot writes the move in the H3 spec's own
+camera vocabulary, ready to paste into a prompt, and the scene rides beside the
+clip as a sidecar.
 
 **A blockout piece can play a cast member, or be called a word.** The bench
 writes the staging for you — who stands where in frame, computed from its own

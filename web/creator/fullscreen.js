@@ -881,6 +881,9 @@ class Fullscreen {
             // is what makes the handles mean their references.
             cast: (this.node.mmcBody?.timeline?.subjects ?? [])
               .map((subject) => subject.handle).filter(Boolean),
+            // And the family it renders with, which is what decides the ratios
+            // the frame pill offers and the canvas a guide is written at.
+            family: this.node.mmcBody?.timeline?.family ?? null,
             back: () => this.openDash(),
           }) },
         // The other bench, and the one with no doors: what it makes is the

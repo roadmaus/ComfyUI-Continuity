@@ -42,19 +42,60 @@ the file is in the picker either way.
 
 ## Blockout bench
 
-Starts from nothing at all: block a scene out of grey boxes, frame it through
-the one camera there is, and render a guide along the camera's path. No model,
-no download, no queue — the renderer is arithmetic in the browser, and what is
-on the glass is exactly what gets written into
-`input/continuity/blockout/`.
+Starts from nothing at all: block a scene out of grey boxes, walk a camera
+through it, and render a guide along the camera's path. No model, no download,
+no queue — the renderer is arithmetic in the browser, and what is on the glass
+is exactly what gets written into `input/continuity/blockout/`.
 
-![The blockout bench: the stage against the Depth pass, a block playing @anna, and the staging narrated in the foot](img/blockout.png)
+![The blockout bench: a subject block selected with its move handles, the shot camera drawn as a frustum with its path on the floor, and the staging narrated in the foot](img/blockout.png)
 
-There is no second camera. The light box is the lens, and getting around the
-set is operating it: drag pans and tilts, shift-drag trucks and pedestals, the
-wheel pushes in and pulls out. Frame the shot and press **Mark**, frame the
-next one and mark that; the clip walks the marks in order over a duration you
-set. One mark (or none) writes a still instead.
+The floor opens bare. Add a **Block**, **Wall** or **Post**, or start from one
+of the five arrangements in the rail — Two-shot, Corridor, Interview, Street
+corner, or Bare floor — each of which brings its own camera and its own move,
+so what lands on the glass is a shot rather than an assembly kit. Starting from
+one replaces whatever is there.
+
+### Two cameras
+
+The **shot camera** is the one that gets written. It is drawn where it stands,
+as a frustum in blue, with its path along the floor and a diamond at every
+mark. **Free look** flies a second camera around it that touches nothing: WASD
+walks, Q and E drop and rise, drag orbits, shift-drag slides, the wheel zooms,
+and `F` (or a double-click) swings the view round to look at whatever is
+selected. Nothing you do in free look changes the file, stales a result, or
+alters a word of the prose.
+
+**Through the lens** stands you in the shot camera, where the glass is the lens
+and every gesture is a word the model was trained on: drag pans and tilts,
+shift-drag trucks and pedestals, the wheel pushes in and pulls out. **Put the
+camera here** moves the shot camera to where you are standing; **Go to the
+camera** flies the view back to it.
+
+Frame the shot and press **Mark**, frame the next one and mark that; the clip
+walks the marks in order over a duration you set. One mark (or none) writes a
+still instead. Pressing a mark's name puts the camera back on it.
+
+### Editing the set
+
+Click a piece to select it. Its handles hang off it on the glass — **Move**
+(`1`) slides it along the world axes or, dragged by its body, across the floor;
+**Turn** (`2`) gives it three rings; **Size** (`3`) three square caps. `Shift+D`
+duplicates the selection, `X` removes it, and **Snap** rounds a place to 0.25 m
+or a metre and a turn to 15°. The rail carries the same numbers as figures, in
+the handles' own colours, and they stay in step with whatever the glass does.
+
+The **Frame** pill carries the same aspect popover the strip does — the shape
+grid over one orientation switch, off the family's own manifest, so what is on
+offer is what the weights will accept. The pill says the pixels beside the
+ratio, because a guide is written at that family's native canvas for the shape
+you pick: what the file holds is the size the render will read it at.
+
+### What the glass shows
+
+**Stage** is the set as you handle it — clay, the grid with its five-metre
+lines and coloured world axes, the selection ring, the handles, the camera, the
+names. **Depth** (or whichever pass is selected in Output) is the frame exactly
+as the file will hold it, with no staging aids on it at all.
 
 Four outputs, three of them wearing the ControlNet bench's own names:
 
@@ -65,8 +106,8 @@ Four outputs, three of them wearing the ControlNet bench's own names:
 | Blocks | each piece one flat field of colour |
 | Lines | the set's edges, white on black |
 
-The floor grid and the selection ring are staging aids and never reach the
-written file.
+The grid, the selection ring, the handles, the camera and the names are staging
+aids: they live on the Stage view and never reach the written file.
 
 A piece can be told who or what it is. **Plays** hands it to a cast member —
 the block wears their chip hue on the stage side, never in the written file —
