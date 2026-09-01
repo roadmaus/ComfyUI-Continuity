@@ -15,10 +15,10 @@ The gear on the node's rail opens the pack's settings.
   `web/creator/locales/`.
 - **Appearance** has a text size, and the pack takes its colours from
   ComfyUI's palette.
-- **Stored data** lists everything the pack has written down — the preset
-  library scope by scope, the stars and the LoRA notes this browser holds, the
-  reference cache, the refiner's server, and the settings themselves — with a
-  count beside each one and a press to remove it. Nothing there deletes a
+- **Stored data** lists everything the pack has written down, with a count
+  beside each one and a press to remove it: the preset library scope by scope,
+  the stars and the LoRA notes this browser holds, the reference cache, the
+  refiner's server, and the settings themselves. Nothing there deletes a
   render, a reference or a workflow: those are files.
 
 ## Common errors

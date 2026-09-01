@@ -44,14 +44,14 @@ the file is in the picker either way.
 
 Starts from nothing at all: block a scene out of grey boxes, walk a camera
 through it, and render a guide along the camera's path. No model, no download,
-no queue — the renderer is arithmetic in the browser, and what is on the glass
+no queue. The renderer is arithmetic in the browser, and what is on the glass
 is exactly what gets written into `input/continuity/blockout/`.
 
 ![The blockout bench: a subject block selected with its move handles, the shot camera drawn as a frustum with its path on the floor, and the staging narrated in the foot](img/blockout.png)
 
 The floor opens bare. Add a **Block**, **Wall** or **Post**, or start from one
-of the five arrangements in the rail — Two-shot, Corridor, Interview, Street
-corner, or Bare floor — each of which brings its own camera and its own move,
+of the five arrangements in the rail (Two-shot, Corridor, Interview, Street
+corner, or Bare floor), each of which brings its own camera and its own move,
 so what lands on the glass is a shot rather than an assembly kit. Starting from
 one replaces whatever is there.
 
@@ -77,14 +77,14 @@ still instead. Pressing a mark's name puts the camera back on it.
 
 ### Editing the set
 
-Click a piece to select it. Its handles hang off it on the glass — **Move**
+Click a piece to select it. Its handles hang off it on the glass. **Move**
 (`1`) slides it along the world axes or, dragged by its body, across the floor;
 **Turn** (`2`) gives it three rings; **Size** (`3`) three square caps. `Shift+D`
 duplicates the selection, `X` removes it, and **Snap** rounds a place to 0.25 m
 or a metre and a turn to 15°. The rail carries the same numbers as figures, in
 the handles' own colours, and they stay in step with whatever the glass does.
 
-The **Frame** pill carries the same aspect popover the strip does — the shape
+The **Frame** pill carries the same aspect popover the strip does: the shape
 grid over one orientation switch, off the family's own manifest, so what is on
 offer is what the weights will accept. The pill says the pixels beside the
 ratio, because a guide is written at that family's native canvas for the shape
@@ -92,7 +92,7 @@ you pick: what the file holds is the size the render will read it at.
 
 ### What the glass shows
 
-**Stage** is the set as you handle it — clay, the grid with its five-metre
+**Stage** is the set as you handle it: clay, the grid with its five-metre
 lines and coloured world axes, the selection ring, the handles, the camera, the
 names. **Depth** (or whichever pass is selected in Output) is the frame exactly
 as the file will hold it, with no staging aids on it at all.
@@ -101,31 +101,31 @@ Four outputs, three of them wearing the ControlNet bench's own names:
 
 | Pass | What it writes |
 |---|---|
-| As staged | no tracing — the clay render itself, as footage, for the families that read a plain clip or picture as a reference or an init |
-| Depth | near bright, far dark, the map Depth Anything draws — from the geometry, so nothing is guessed |
+| As staged | no tracing, just the clay render itself, as footage, for the families that read a plain clip or picture as a reference or an init |
+| Depth | near bright, far dark, the map Depth Anything draws, taken from the geometry, so nothing is guessed |
 | Blocks | each piece one flat field of colour |
 | Lines | the set's edges, white on black |
 
 The grid, the selection ring, the handles, the camera and the names are staging
 aids: they live on the Stage view and never reach the written file.
 
-A piece can be told who or what it is. **Plays** hands it to a cast member —
-the block wears their chip hue on the stage side, never in the written file —
+A piece can be told who or what it is. **Plays** hands it to a cast member
+(the block wears their chip hue on the stage side, never in the written file),
 and **Called** gives a thing its word ("table", "doorway"). Named pieces are
 written into the staging: the bench computes who stands where in frame from
-its own projection, and the foot narrates the whole of it as you work —
+its own projection, and the foot narrates the whole of it as you work:
 *"@anna stands at centre in the midground; a table at frame left in the
-foreground. The camera pushes in toward @anna at slow speed."* — the camera
-half in the motion-type, amplitude and speed vocabulary the H3 prompt spec
+foreground. The camera pushes in toward @anna at slow speed."* The camera half
+is in the motion-type, amplitude and speed vocabulary the H3 prompt spec
 defines. **Copy** hands you the prose to paste straight into a prompt, where
 `@anna` becomes her references by the same substitution every prompt already
-does. No model reads identity out of pixels — a depth map is identity-free by
+does. No model reads identity out of pixels. A depth map is identity-free by
 construction, and even mask-injection systems bind a reference to its region
-through the prompt — which is why the words are the mechanism, and why they
-are generated rather than hand-written.
+through the prompt, which is why the words are the mechanism, and why they are
+generated rather than hand-written.
 
 The finished guide goes through the same doors a tracing does, and the scene
-itself is saved as a small `.json` beside the clip — including each named
+itself is saved as a small `.json` beside the clip, including each named
 piece's screen box at every mark, for conditioning schemes that can ground
 against layout when one arrives.
 
@@ -201,7 +201,7 @@ unchanged video.
 
 On MiniMax H3 each card also carries a **Soundtrack** dial. H3 generates picture
 and sound together through one transformer, so an adapter conditions the audio
-whether it was trained to or not — and it was: video and audio are denoised
+whether it was trained to or not. And it was: video and audio are denoised
 jointly during training, so a file built from clips whose sound was silent,
 scraped or absent has learned that too, and emits it under every render it is
 in. The usual symptom is mumbled speech in a shot where nobody was meant to
