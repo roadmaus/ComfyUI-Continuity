@@ -15,7 +15,25 @@ cd ComfyUI/custom_nodes
 git clone https://github.com/roadmaus/ComfyUI-Continuity
 ```
 
-Restart ComfyUI.
+That leaves one folder, `ComfyUI-Continuity`, inside `custom_nodes/`. Restart
+ComfyUI.
+
+**If you already have MiniMax Creator installed, don't clone alongside it.**
+This pack used to be called MiniMax Creator and kept its node ids through the
+rename, so the old folder and a new clone are two packs claiming the same
+nodes — and what people report is not one of them winning, it is neither of
+them appearing. Update the old clone in place instead:
+
+```
+cd ComfyUI/custom_nodes/ComfyUI-MiniMax-Creator
+git remote set-url origin https://github.com/roadmaus/ComfyUI-Continuity.git
+git pull
+```
+
+Or delete the old folder and then clone. Nothing you have made is inside it —
+presets, settings and favourites live in ComfyUI's `user/` directory and are
+read back under their old names. If the old copy came from the ComfyUI
+Manager, uninstall it there rather than deleting the folder.
 
 ## Download one family's weights
 

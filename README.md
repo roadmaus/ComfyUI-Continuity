@@ -13,7 +13,33 @@ cd ComfyUI/custom_nodes
 git clone https://github.com/roadmaus/ComfyUI-Continuity
 ```
 
-Restart ComfyUI. Nothing to pip install.
+That leaves one folder, `ComfyUI-Continuity`, inside `custom_nodes/`. Restart
+ComfyUI. Nothing to pip install.
+
+### Already have MiniMax Creator installed
+
+Read this one before you clone. This pack used to be called MiniMax Creator,
+and the rename left the node ids alone, so the old folder and a fresh clone are
+two packs claiming the same nodes. ComfyUI refuses at least one of them over
+that, and the symptom people report is worse than the wrong one winning:
+nothing shows up at all — no Continuity in the node search, no MiniMax Creator
+either — with a duplicate-node complaint buried in the startup console.
+
+So keep one copy. The old clone is already this repo behind a redirect, so the
+shortest fix is to update it where it stands:
+
+```
+cd ComfyUI/custom_nodes/ComfyUI-MiniMax-Creator
+git remote set-url origin https://github.com/roadmaus/ComfyUI-Continuity.git
+git pull
+```
+
+The folder name is nothing to ComfyUI; rename it or don't. If you would rather
+clone fresh, delete the old folder first — your presets, settings, favourites
+and LoRA memory are in ComfyUI's `user/` directory, not in the pack, and the
+new install reads them under their old names. If MiniMax Creator came from the
+ComfyUI Manager rather than a `git clone`, uninstall it there instead of
+deleting the folder by hand.
 
 ## Documentation
 
