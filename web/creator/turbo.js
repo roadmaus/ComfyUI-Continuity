@@ -13,8 +13,8 @@
 // the switch notices on the next commit and gives the sampler row back.
 
 import { el, icon } from "./dom.js";
-import { openChoicePopover, stepperPill } from "./pills.js";
-import { listLoras, uiSetting, patchSettings } from "./api.js";
+import { openChoicePopover, openNotePopover, stepperPill } from "./pills.js";
+import { listLoraNames, uiSetting, patchSettings } from "./api.js";
 import * as S from "./state.js";
 import { t } from "./i18n.js";
 
@@ -25,13 +25,18 @@ import { t } from "./i18n.js";
 // unloaded so the next draw or press simply asks again. Caching the failure was
 // the old behaviour, and a request racing the extension's routes at load time
 // pinned every picker on this page to an empty list until reload.
+//
+// Names only, off their own route: the folder listing stats every file and
+// reads a sidecar per row, which on a fresh start of a large folder is minutes
+// during which a press opened nothing (issue #41) — and it is capped at the
+// newest files, so a distillation older than the cap was never offered.
 let names = null;
 let inflight = null;
 
 export function loadLoraNames(onReady) {
   if (names) { onReady?.(); return; }
-  inflight ??= listLoras({ folder: "" })
-    .then((body) => { names = (body.loras ?? []).map((row) => row.name); })
+  inflight ??= listLoraNames()
+    .then((listed) => { names = listed; })
     .catch(() => {})
     .finally(() => { inflight = null; });
   if (onReady) inflight.then(onReady);
@@ -61,10 +66,23 @@ export const NO_LORA = "— no LoRA · merged checkpoint —";
  */
 function openTurboChoice(anchor, { value, onPick, includeNone = false, all = false, retried = false }) {
   // Not loaded yet — the first fetch is started lazily and can have failed
-  // once. One retry per press: fetch, then open with whatever arrived.
+  // once. One retry per press: fetch, then open with whatever arrived. The
+  // press is answered at once with a note, because on a cold start core is
+  // still walking the model folders and a press that shows nothing for the
+  // length of that walk reads as a pill that does not work. The note is
+  // replaced by the list when it lands, and is left standing, reworded, when
+  // it does not.
   if (names === null && !retried) {
-    loadLoraNames(() => anchor.isConnected
-      && openTurboChoice(anchor, { value, onPick, includeNone, all, retried: true }));
+    const closeNote = openNotePopover(anchor, t("Scanning models/loras…"));
+    loadLoraNames(() => {
+      closeNote();
+      if (!anchor.isConnected) return;
+      if (names === null) {
+        openNotePopover(anchor, t("Could not list models/loras — press again to retry."));
+        return;
+      }
+      openTurboChoice(anchor, { value, onPick, includeNone, all, retried: true });
+    });
     return;
   }
   const matched = loraNames().filter(looksTurbo);

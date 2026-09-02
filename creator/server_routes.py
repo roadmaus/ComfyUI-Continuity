@@ -374,6 +374,21 @@ def _collect_loras(folder, refresh=False):
     }
 
 
+@PromptServer.instance.routes.get("/continuity/lora_names")
+async def list_lora_names(request):
+    """Every LoRA's name and nothing else — the turbo pickers' listing.
+
+    They used to read the folder listing above and keep the names off its rows,
+    which cost a stat per file and a sidecar read per row on the first press
+    after a fresh start — minutes on a large folder, during which a press did
+    nothing (issue #41) — and handed back only the newest MAX_LORAS, so a
+    distillation older than the cap was not offered at all. This is the name
+    list core already holds, off the loop for the one scan a cold start pays.
+    """
+    loop = asyncio.get_running_loop()
+    return web.json_response({"names": await loop.run_in_executor(None, _lora_names)})
+
+
 @PromptServer.instance.routes.get("/continuity/loras")
 async def list_loras(request):
     # Thousands of files means thousands of stat calls and hundreds of sidecar

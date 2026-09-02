@@ -1016,6 +1016,8 @@ export const ja = {
  "Reading the clip…": "クリップを読み込み中…",
  "Whole clip · {time}": "クリップ全体 · {time}",
  "{length} s": "{length} 秒",
+ "Scanning models/loras…": "models/loras をスキャン中…",
+ "Could not list models/loras — press again to retry.": "models/loras を一覧できませんでした。もう一度押すと再試行します。",
  "Turbo LoRA — all files": "Turbo LoRA — 全ファイル",
  "Turbo LoRA": "Turbo LoRA",
  "— no LoRA · merged checkpoint —": "— LoRA なし · 統合済みチェックポイント —",

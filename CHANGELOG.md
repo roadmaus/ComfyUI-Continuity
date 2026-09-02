@@ -22,6 +22,14 @@ exists, and the strip picks them up mid-render and after a failure alike. A
 quality change also re-muxes the takes from the cached passes instead of
 sampling anything.
 
+**The turbo picker answers a press at once** (#41). It used to fetch the
+whole LoRA listing — a stat per file and a sidecar read per row — before it
+would open, which on a fresh start of a large folder was minutes of a pill
+that did nothing when pressed. It now lists names alone off their own route,
+says "Scanning models/loras…" while that first scan runs, and shows the list
+the moment it lands. The names are no longer capped at the newest six
+hundred files either, so a distillation older than the cap is offered again.
+
 **The turbo pill's LoRA list heals itself** (#41). A fetch that failed while
 ComfyUI was still loading used to pin every turbo picker to an empty list
 until the page reloaded, and Rescan could not reach it. Failure is no longer

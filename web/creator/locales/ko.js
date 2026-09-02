@@ -1017,6 +1017,8 @@ export const ko = {
  "Reading the clip…": "클립을 읽는 중…",
  "Whole clip · {time}": "클립 전체 · {time}",
  "{length} s": "{length}초",
+ "Scanning models/loras…": "models/loras 스캔 중…",
+ "Could not list models/loras — press again to retry.": "models/loras 를 나열할 수 없습니다. 다시 누르면 재시도합니다.",
  "Turbo LoRA — all files": "Turbo LoRA — 전체 파일",
  "Turbo LoRA": "Turbo LoRA",
  "— no LoRA · merged checkpoint —": "— LoRA 없음 · 병합된 체크포인트 —",

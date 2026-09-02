@@ -121,6 +121,16 @@ export function openChoicePopover(anchor, { title, options, value, onPick, extra
   pop.querySelector('[aria-checked="true"]')?.scrollIntoView({ block: "center" });
 }
 
+/** A popover that only says something — "scanning…", a reason nothing opened
+ *  — where a choice list will follow or nothing can. -> its close function,
+ *  so the caller can replace it the moment there is a list to show. */
+export function openNotePopover(anchor, text) {
+  const pop = el("div", { class: "mmc-pop" }, [el("div", { class: "mmc-pop-title", text })]);
+  document.body.appendChild(pop);
+  placeNear(pop, anchor);
+  return dismissable(pop);
+}
+
 /** A frame drawn at the ratio itself, so portrait and landscape are legible
  *  without reading the numbers. Sized to fit `long` on its long edge; the box
  *  is square, which keeps every glyph on the same baseline and left edge.

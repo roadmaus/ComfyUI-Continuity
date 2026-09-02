@@ -1018,6 +1018,8 @@ export const zh = {
  "Reading the clip…": "读取剪辑中…",
  "Whole clip · {time}": "整段剪辑 · {time}",
  "{length} s": "{length} 秒",
+ "Scanning models/loras…": "正在扫描 models/loras…",
+ "Could not list models/loras — press again to retry.": "无法列出 models/loras。再按一次重试。",
  "Turbo LoRA — all files": "Turbo LoRA——全部文件",
  "Turbo LoRA": "Turbo LoRA",
  "— no LoRA · merged checkpoint —": "— 无 LoRA · 已合并检查点 —",

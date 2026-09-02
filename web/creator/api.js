@@ -376,6 +376,14 @@ const loraCache = new Map();   // folder -> {at, body}
  * @returns {Promise<{loras: object[], folders: {path: string, count: number}[],
  *                    folder: string, matched: number, truncated: boolean}>}
  */
+/** Every LoRA's name, uncapped, in core's own order. What the turbo pickers
+ *  list: names alone are cheap where the listing below is not. */
+export async function listLoraNames() {
+  const response = await api.fetchApi("/continuity/lora_names");
+  if (!response.ok) throw new Error(t("LoRA listing failed ({status})", { status: response.status }));
+  return (await response.json()).names ?? [];
+}
+
 export async function listLoras({ folder = "", force = false } = {}) {
   const hit = loraCache.get(folder);
   if (!force && hit && Date.now() - hit.at < CACHE_MS) return hit.body;
