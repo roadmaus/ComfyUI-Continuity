@@ -2597,6 +2597,7 @@ function syncCanvas(timeline) {
   // is never written where `compile_request` would read it as a no anyway.
   const predicts = canDo(timeline, "duration");
   const pins = canDo(timeline, "seam_pin");
+  const restores = canDo(timeline, "seam_restore");
   timeline.segments.forEach((segment, index) => {
     if (!predicts) segment.auto_duration = false;
     const from = segment.continue_from;
@@ -2626,6 +2627,12 @@ function syncCanvas(timeline) {
     // boundary frame is the seam and is named whatever this says, and on a
     // family with one conditioning channel there is nothing to pin twice.
     if (segment.feather_pin && (!segment.feather || !pins)) delete segment.feather_pin;
+    // The restore is a fact about a seam: on a hard cut, on a family without
+    // the pass, or at zero it says nothing and is dropped for the same reason.
+    if (segment.seam_restore !== undefined
+        && (!segment.continue || !restores || !(Number(segment.seam_restore) > 0))) {
+      delete segment.seam_restore;
+    }
     // Nothing runs into a clip that has no generation in front of it — two
     // clips end to end have no sampler between them to condition.
     if (isClip(segment) && (!index || isClip(timeline.segments[index - 1]))) {
@@ -5166,6 +5173,20 @@ export function featherPin(segment, piece) {
   return segment.feather_pin === true
     && feather(segment, piece) > 1
     && canDo(piece, "seam_pin");
+}
+
+/** The seam restore's strengths, as the popover offers them: how far down the
+ *  schedule the run a seam inherits is re-noised before the next shot
+ *  continues from it. `compile.py` clamps to 0.1..0.9, so a hand-edited blob
+ *  can sit between these; the popover shows the nearest. 0 is off. */
+export const SEAM_RESTORE_LEVELS = [0, 0.3, 0.45, 0.6];
+
+/** How far the seam re-draws the run it inherits, or 0 for as written. Only on
+ *  a seam, and only where the family has the pass (`seam_restore`). */
+export function seamRestore(segment, piece) {
+  const value = Number(segment.seam_restore);
+  if (!(value > 0) || !segment.continue || !canDo(piece, "seam_restore")) return 0;
+  return value;
 }
 
 /** The seam's width in frames — a valid grid value, or the classic 1. */

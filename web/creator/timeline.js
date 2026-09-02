@@ -67,6 +67,53 @@ const blendSetsTail = (segment, piece) =>
  * (`seam_pin`), and only alongside a blend: at width 1 the boundary frame is
  * the seam and is always named.
  */
+/** The seam restore, drawn under the width list: whether the run this seam
+ *  hands over is re-drawn against the source shot's references before the next
+ *  shot continues from it, and how far. Every continued shot comes out a
+ *  little softer than the one it continues, and the next seam anchors on that
+ *  tail, so the loss compounds down a strip (issue #41); restoring the run
+ *  first breaks the chain at each seam. Off by default. Only where the family
+ *  has the pass (`seam_restore`). Mirrors `compile.seam_restore_denoise`. */
+function seamRestoreRow(piece, segment, commit) {
+  if (!S.canDo(piece, "seam_restore")) return null;
+  const names = ["Off", "Light", "Medium", "Strong"];
+  return (close) => {
+    const current = S.seamRestore(segment, piece);
+    const nearest = S.SEAM_RESTORE_LEVELS.reduce((best, level) =>
+      (Math.abs(level - current) < Math.abs(best - current) ? level : best));
+    return el("div", { class: "mmc-twopass" }, [
+      el("div", { class: "mmc-opt-label mmc-opt-col" }, [
+        el("span", { text: t("Restore the frames it hands over") }),
+        el("span", { class: "mmc-opt-sub",
+                     text: t("Re-draws the run the seam inherits against the source "
+                           + "shot's references before this shot continues from it, "
+                           + "so the softening does not compound down the strip. "
+                           + "One short generation per seam.") }),
+      ]),
+      ...S.SEAM_RESTORE_LEVELS.map((level, index) => el("button", {
+        class: "mmc-opt",
+        "aria-checked": level === nearest,
+        onclick: () => {
+          if (level > 0) segment.seam_restore = level; else delete segment.seam_restore;
+          close();
+          commit();
+        },
+      }, [
+        el("span", { class: "mmc-opt-label",
+                     text: level > 0 ? `${t(names[index])} · ${level}` : t(names[index]) }),
+        el("span", { class: "mmc-radio" }),
+      ])),
+    ]);
+  };
+}
+
+/** The rows a seam popover draws under its list, in order, or null. */
+function seamRows(...rows) {
+  const drawn = rows.filter(Boolean);
+  if (!drawn.length) return null;
+  return (close) => el("div", {}, drawn.map((row) => row(close)));
+}
+
 function seamPinRow(piece, segment, width, commit) {
   if (width <= 1 || !S.canDo(piece, "seam_pin")) return null;
   return (close) => {
@@ -1955,8 +2002,10 @@ class Timeline {
       title: t("Blend into segment {n}", { n: index + 1 }),
       options: grid.filter((f) => f <= max).map(label),
       value: label(Math.min(S.feather(segment, this.timeline), max)),
-      extra: seamPinRow(this.timeline, segment, S.feather(segment, this.timeline),
-                        () => this.commit()),
+      extra: seamRows(
+        seamPinRow(this.timeline, segment, S.feather(segment, this.timeline),
+                   () => this.commit()),
+        seamRestoreRow(this.timeline, segment, () => this.commit())),
       onPick: (choice) => {
         const width = grid.find((f) => label(f) === choice) ?? 1;
         if (width > 1) segment.feather = width;

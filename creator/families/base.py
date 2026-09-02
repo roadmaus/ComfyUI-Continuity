@@ -211,3 +211,18 @@ class Family:
         own. -> the node whose out(0) is the reel and out(1) the pass link,
         the same shape the reel node hands out."""
         raise NotImplementedError(f"{self.id}.emit_face")
+
+    # Whether `emit_seam_restore` is written for this family. The loop reads
+    # this before it widens the run it reads back for the seam, so a family
+    # without the pass keeps the seam wiring — and the cache keys — it had.
+    restores_seams = False
+
+    def emit_seam_restore(self, graph, links, frames, payload, compiled, denoise,
+                          weights, sampling, acceleration, seed):
+        """The run a seam inherits, re-sampled before the next pass conditions
+        on it. `frames` is the link carrying the source pass's tail at a length
+        the family's video VAE encodes standalone; `payload`/`compiled` are the
+        *source* shot's, whose picture these frames are; `denoise` is
+        `Compiled.seam_restore`. -> an IMAGE link the same length as `frames`.
+        Called only where `restores_seams` is True."""
+        raise NotImplementedError(f"{self.id}.emit_seam_restore")

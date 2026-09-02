@@ -298,10 +298,9 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
         # which pass a segment inherits from is a fact about the strip, not
         # about the family. The links land on the segment node in this order,
         # so a graph without a seam keeps the inputs it always had.
-        source = decoded[payloads[index].get("continue_from", index - 1)] \
-            if index else (None, None)
+        source_index = payloads[index].get("continue_from", index - 1)
+        source = decoded[source_index] if index else (None, None)
         seams = {}
-        match = None
         if one.continues:
             # Only the tail, not the whole batch: the source segment's images
             # are a video and what this one inherits is its last moment — or,
@@ -310,12 +309,23 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
             # Creator render has none at all. The count rides only on feathered
             # seams, so a classic seam's node inputs stay byte-identical.
             #
-            # The same link feeds the reel node's colour match: the pass's
-            # opening re-generates exactly these frames, and pinning its
-            # statistics back to them is what stops each continued shot
-            # hardening in contrast over the one before — see `_match_seam`.
-            match = inherited_frames(graph, source, one.feather)
-            seams["prev_image"] = match
+            # A restored seam reads the run at a length the family's video VAE
+            # encodes standalone — a single-frame seam widens to the grid's
+            # first member, and the segment node keeps only the last `feather`
+            # of whatever it is handed — and re-draws it before the segment
+            # sees it. Not off a clip: supplied footage has lost nothing. See
+            # `Compiled.seam_restore`.
+            restoring = bool(one.seam_restore) and family.restores_seams \
+                and not is_clip_source(source)
+            width = max(one.feather, family.rules.frame_offset) if restoring \
+                else one.feather
+            frames = inherited_frames(graph, source, width)
+            if restoring:
+                frames = family.emit_seam_restore(
+                    graph, links, frames, payloads[source_index],
+                    compiled[source_index], one.seam_restore, weights, sampling,
+                    acceleration, seed_for(index))
+            seams["prev_image"] = frames
         if one.continues_audio:
             # `one.audio_tail_s` rather than the timeline's setting directly:
             # compile clamps it to a feathered seam's overlap, and this is
@@ -388,7 +398,6 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
             fps=float(family.rules.fps),
             **({"head": one.feather} if one.feather > 1 else {}),
             **({"tail": one.ends_feather} if one.ends_feather > 1 else {}),
-            **({"match": match} if match is not None else {}),
             **({"reel": reel} if reel is not None else {}))
         source = written
 

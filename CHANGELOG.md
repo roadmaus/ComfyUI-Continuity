@@ -5,12 +5,15 @@ and everything under it is kept exactly as it was written, wall of text and all.
 
 ## Unreleased
 
-**Continued shots stop hardening in contrast** (#41). Every continued pass
-drifts a little against the frames it inherited — the model's own bias, not
-the seam arithmetic, and it compounds across a strip. The pass's opening
-frames re-generate the very frames the seam handed it, so the reel node now
-measures the drift there and pins the whole pass's colour statistics back to
-the seam before anything is written.
+**A seam can restore the frames it hands over** (#41). Every continued shot
+comes out a little softer than the one it continues, and because the next seam
+anchors on that tail the loss compounds down a strip — the model's own bias
+when it continues from its own output, which no arrangement of the handoff
+cures. The seam popover now has a restore switch: the run the seam inherits is
+re-noised partway down the schedule and re-drawn against the source shot's own
+references and prompt, at the same canvas, and *that* is what the next shot
+continues from. One short generation per seam, H3 only, off by default. Three
+strengths; start with Medium.
 
 **Takes are written as each pass lands, not at the end** (#41). A strip that
 failed on its last pass used to keep nothing — fourteen good passes and every

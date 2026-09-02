@@ -59,7 +59,7 @@ from . import (accel, canvas, compile as compiler, guide as guides, job_node,
                sampling, settings, timeline)
 from .core import emit as loop
 from .families import registry
-from .families.h3 import declare as h3, facepass, hires
+from .families.h3 import declare as h3, facepass, hires, seamrestore
 
 DEFAULT_DATA = json.dumps({
     "version": 2,
@@ -360,7 +360,7 @@ class MiniMaxCreatorExtension(ComfyExtension):
         # this list stops being a place anyone has to remember to edit.
         return [MiniMaxH3Creator, MiniMaxH3Timeline, job_node.ContinuityJob,
                 *timeline.NODES, *registry.segment_nodes(),
-                *prestage.NODES, *hires.NODES, *facepass.NODES,
+                *prestage.NODES, *hires.NODES, *facepass.NODES, *seamrestore.NODES,
                 *redetailpass.NODES]
 
 

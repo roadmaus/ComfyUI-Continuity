@@ -154,32 +154,6 @@ def labels(runs, segments=None, whole_piece=True):
             for start, end in runs]
 
 
-def _match_seam(images, reference):
-    """Pin the pass's colour to the seam it continues, in place.
-
-    Every continued pass drifts: the DiT conditioned on its own output nudges
-    contrast and saturation the same direction each generation, and over a
-    strip the shots visibly harden. Not this pack's arithmetic — a pure
-    latent-space handoff drifts the same way (see issue #41 and H3-Continuum's
-    #13) — so the repair is corrective rather than architectural, and it is
-    exact where it is applied: the pass's opening frames re-generate the very
-    frames `reference` holds, so any statistical gap between the two *is* the
-    drift, measured on the same picture. The per-channel gain and offset that
-    close that gap are then applied to the whole pass — constant across it, so
-    lighting the prompt changes mid-shot still changes.
-
-    The gain is clamped: a nearly flat overlap (a held black frame, a fade)
-    has no contrast to measure and would otherwise ask for a wild stretch.
-    In place, because the pass is the largest tensor in the render and this
-    runs at its peak.
-    """
-    overlap = images[: reference.shape[0]]
-    flat = overlap.reshape(-1, overlap.shape[-1])
-    ref = reference.reshape(-1, reference.shape[-1]).to(flat)
-    mean, std = flat.mean(0), flat.std(0)
-    gain = (ref.std(0) / std.clamp(min=1e-4)).clamp(0.5, 2.0)
-    return images.sub_(mean).mul_(gain).add_(ref.mean(0)).clamp_(0.0, 1.0)
-
 
 class MiniMaxH3Reel(io.ComfyNode):
     """One pass: decoded, trimmed, written to disk, added to the reel.
@@ -247,11 +221,6 @@ class MiniMaxH3Reel(io.ComfyNode):
                 # before either could happen.
                 io.Int.Input("head", default=0, min=0, max=64, optional=True),
                 io.Int.Input("tail", default=0, min=0, max=64, optional=True),
-                # The frames this pass's seam inherited, when it continues from
-                # an earlier part — the same link the segment conditions on.
-                # Only wired on continuing passes, so everything else keeps the
-                # inputs — and the cache keys — it always had. See `_match_seam`.
-                io.Image.Input("match", optional=True),
                 io.Custom(REEL_TYPE).Input("reel", optional=True,
                     tooltip="The passes in front of this one. Absent on the first."),
             ],
@@ -261,17 +230,12 @@ class MiniMaxH3Reel(io.ComfyNode):
 
     @classmethod
     def execute(cls, samples, vae, audio_vae, fps, head=0, tail=0,
-                match=None, reel=None) -> io.NodeOutput:
+                reel=None) -> io.NodeOutput:
         import nodes
         from comfy_extras.nodes_audio import vae_decode_audio
 
         images = nodes.VAEDecode().decode(vae, samples)[0]
         audio = vae_decode_audio(audio_vae, samples)
-
-        # Before the trim: the overlap the correction is measured on is the
-        # run the trim is about to drop.
-        if match is not None:
-            images = _match_seam(images, match)
 
         head, tail = max(0, int(head)), max(0, int(tail))
         if head or tail:

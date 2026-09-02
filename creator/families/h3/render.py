@@ -21,7 +21,7 @@ from dataclasses import dataclass
 
 import comfy.sample
 
-from ... import (accel, canvas, compile as compiler, guide as guides,
+from ... import (accel, canvas, compile as compiler, guide as guides, media,
                  models as core, raylight, sampling as sampling_mod, settings)
 from .. import base
 from . import declare, models as slots
@@ -44,6 +44,7 @@ CORE_EMPTY_NOISE_IS_NESTED = hasattr(comfy.sample, "prepare_empty_noise")
 SEGMENT_NODE = declare.SEGMENT_NODE
 REFINE_NODE = "MiniMaxH3RefinePass"
 FACE_NODE = "MiniMaxH3FacePass"
+SEAM_RESTORE_NODE = "MiniMaxH3SeamRestore"
 
 
 @dataclass(frozen=True)
@@ -178,6 +179,29 @@ def face_payload(payload, face):
     return {"request": request,
             "canvas": {"width": face.width, "height": face.height, "ratio": 1.0,
                        "label": "1:1", "from_image": False, "clamped": False}}
+
+
+def restore_payload(payload, compiled):
+    """The payload the seam restore's *conditioning* is built from.
+
+    The source shot's request with the same two things taken out that
+    `face_payload` takes out, for the same reasons — its own second passes, so
+    the payload compiled here asks for none, and its keyframes, which are
+    statements about a whole shot's composition and the run being restored is
+    a few frames off its end. References survive: they are what the restore
+    is pulling the picture back toward. The canvas is the source's own, since
+    the frames are re-drawn at the size they were written.
+    """
+    request = {key: value for key, value in payload["request"].items() if key != "face"}
+    assets = [asset for asset in (request.get("assets") or [])
+              if isinstance(asset, dict) and asset.get("role") == "reference"]
+    if assets or "assets" in request:
+        request["assets"] = assets
+    return {"request": request,
+            "canvas": {"width": compiled.width, "height": compiled.height,
+                       "ratio": compiled.ratio, "label": compiled.ratio_label,
+                       "from_image": compiled.ratio_from_image,
+                       "clamped": compiled.ratio_clamped}}
 
 
 class H3(base.Family):
@@ -669,6 +693,44 @@ class H3(base.Family):
             seed=seed, steps=sampling.steps, cfg=sampling.cfg,
             sampler_name=sampling.sampler_name, scheduler=sampling.scheduler,
             denoise=face.denoise)
+
+
+    restores_seams = True
+
+    def emit_seam_restore(self, graph, links, frames, payload, compiled, denoise,
+                          weights, sampling, acceleration, seed):
+        # A segment node of its own, compiled from the source shot at its own
+        # canvas, so the references are encoded at the size the run is drawn
+        # at. No seam links: the run *is* the seam, and it is being re-drawn in
+        # place rather than continued from anything.
+        source = restore_payload(payload, compiled)
+        restore = compiler.compile_segment(source, image_size_lookup=media.image_size)
+        inputs = {"clip": links.clip,
+                  "segment_data": json.dumps(source, sort_keys=True)}
+        if restore.encodes_video():
+            inputs["vae"] = links.vae
+            inputs["vae_name"] = weights.vae or ""
+        if restore.encodes_audio():
+            inputs["audio_vae"] = links.audio_vae
+            inputs["audio_vae_name"] = weights.audio_vae or ""
+        for name in slots.ROUTED_SLOTS:
+            if links.get(name) is not None:
+                inputs[f"model_{name}"] = links.get(name)
+        segment = graph.node(SEGMENT_NODE, **inputs)
+
+        # Patched as the passes are — same LoRAs off the segment node, cfg 1.0
+        # behind a zeroed negative, the same accelerators — because it is the
+        # same model re-drawing a few frames of its own picture. No lead-in:
+        # like the refine, this resumes partway down the schedule.
+        model = patched(graph, segment.out(0), sampling, acceleration, weights)
+        return graph.node(
+            SEAM_RESTORE_NODE, model=model, positive=segment.out(1),
+            negative=graph.node("ConditioningZeroOut",
+                                conditioning=segment.out(1)).out(0),
+            vae=links.vae, frames=frames,
+            seed=seed, steps=sampling.steps, cfg=sampling.cfg,
+            sampler_name=sampling.sampler_name, scheduler=sampling.scheduler,
+            denoise=float(denoise)).out(0)
 
 
 FAMILY = H3()

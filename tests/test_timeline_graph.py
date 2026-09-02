@@ -227,16 +227,41 @@ sampler_id = graph[reel_node_id]["inputs"]["samples"][0]
 check("...which came from segment 1's sampler",
       graph[sampler_id]["inputs"]["model"][0], segments[0][0])
 
-# The seam's colour match: the continuing pass's reel node is handed the very
-# frames its seam inherited, so `_match_seam` can pin the pass's statistics
-# back to them — and only the continuing pass, so a hard cut's reel node keeps
-# the inputs it always had.
-check("only the continuing pass's reel node carries a colour match",
-      sorted("match" in i for _, i in by_type["MiniMaxH3Reel"]),
-      [False, False, True])
-_matched = [i for _, i in by_type["MiniMaxH3Reel"] if "match" in i]
-check("...wired to the same frames its seam inherited",
-      _matched[0]["match"], [last_frame_id, 0])
+# The seam restore (issue #41). Off, the graph above is what it always was: no
+# restore node, and the seam reads exactly `feather` frames. On, the seam reads
+# a run the video VAE encodes standalone — H3's grid starts at 5, so a classic
+# single-frame seam widens to 5 and the segment node keeps the last one — and
+# the run is re-drawn by a node conditioned on the *source* shot, whose picture
+# it is, before the continuing segment sees it.
+check("no restore node unless a seam asks for one", "MiniMaxH3SeamRestore" in by_type, False)
+_restored = {}
+_data = json.loads(DATA)
+_data["segments"][1]["seam_restore"] = 0.45
+for node_id, node in build(json.dumps(_data)).expand.items():
+    _restored.setdefault(node["class_type"], []).append((node_id, node["inputs"]))
+check("a restored seam adds one restore node", len(_restored.get("MiniMaxH3SeamRestore", [])), 1)
+_restore_id, _restore = _restored["MiniMaxH3SeamRestore"][0]
+_run_id, _run = _restored["MiniMaxH3PassFrames"][0]
+check("...reading a 5-frame run off the source pass", _run.get("count"), 5)
+check("...which is what it restores", _restore["frames"], [_run_id, 0])
+check("...at the strength the seam asked for", _restore["denoise"], 0.45)
+_restore_segments = in_order(_restored["MiniMaxH3TimelineSegment"],
+                             ["a red room\nwide", "a red room\ncloser", "a red room\ncut away"])
+check("the continuing segment inherits the restored run, not the raw one",
+      _restore_segments[1][1]["prev_image"], [_restore_id, 0])
+_restore_source = {node_id for node_id, i in _restored["MiniMaxH3TimelineSegment"]
+                   if json.loads(i["segment_data"]).get("progress") is None}
+check("the restore is conditioned on a segment node of its own",
+      len(_restore_source), 1)
+check("...compiled from the source shot, whose picture the run is",
+      json.loads(_restored["MiniMaxH3TimelineSegment"][
+          [n for n, _ in _restored["MiniMaxH3TimelineSegment"]].index(next(iter(_restore_source)))
+      ][1]["segment_data"])["request"]["prompt"], "a red room\nwide")
+check("...and no seam links, since the run is re-drawn in place",
+      any(key in i for n, i in _restored["MiniMaxH3TimelineSegment"]
+          if n in _restore_source for key in ("prev_image", "prev_audio")), False)
+check("the restore's positive is that segment's conditioning",
+      _restore["positive"][0] in _restore_source, True)
 
 # One seed for the piece. It used to be seed + k, which meant the number on the
 # node named segment 1's noise and nothing else — a shot could not be reproduced
@@ -788,31 +813,6 @@ check("a seam reads the last frames off the pass",
 seam_sound = tl.MiniMaxH3PassAudio.execute(source=spilled, seconds=0.5).result[0]
 check("...and the tail of its sound",
       int(seam_sound["waveform"].shape[-1]), int(0.5 * RATE))
-
-# The seam colour match. A continued pass drifts in contrast and brightness
-# against the frames it inherited; measured on the overlap — the frames that
-# re-generate the reference — and applied to the whole pass, the drift is gone
-# at the seam and the correction is constant across the shot.
-_ref = _torch.rand(2, 8, 8, 3) * 0.5 + 0.25
-_drift = ((_ref - _ref.mean()) * 1.3 + _ref.mean() + 0.08).clamp(0, 1)
-_pass = _torch.cat([_drift, _torch.rand(3, 8, 8, 3)])
-_fixed = tl._match_seam(_pass.clone(), _ref)
-check("the matched overlap carries the reference's brightness",
-      [round(float(x), 2) for x in
-       (_fixed[:2].reshape(-1, 3).mean(0) - _ref.reshape(-1, 3).mean(0)).abs()],
-      [0.0, 0.0, 0.0])
-check("...and its contrast",
-      [round(float(x), 2) for x in
-       (_fixed[:2].reshape(-1, 3).std(0) - _ref.reshape(-1, 3).std(0)).abs()],
-      [0.0, 0.0, 0.0])
-check("...and the whole pass moved with it, not just the overlap",
-      bool(_torch.equal(_fixed[2:], _pass[2:])), False)
-# A flat overlap has no contrast to measure; the gain clamp keeps the repair
-# from stretching the pass to invent some.
-_flat = tl._match_seam(_torch.rand(4, 8, 8, 3), _torch.full((1, 8, 8, 3), 0.5))
-check("a flat reference cannot blow the pass up",
-      bool(_flat.isfinite().all() and (_flat <= 1).all() and (_flat >= 0).all()),
-      True)
 
 # ---- accelerators -----------------------------------------------------------
 #
