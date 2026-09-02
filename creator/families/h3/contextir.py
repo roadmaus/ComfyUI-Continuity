@@ -56,40 +56,6 @@ BASE_MODES = ("T2VA", "I2VA", "L2VA", "FL2VA")
 # `[Shot 1]`, `[Shot 12]` — the marker the description is segmented by.
 SHOT_RE = re.compile(r"\[Shot\s+\d+\]")
 
-# A dialogue tag or a speaker ID, anywhere in the description.
-#
-# H3 denoises video and audio latents together and always emits a soundtrack —
-# there is no "no audio" to ask for, only a specified one and an unspecified
-# one. An unspecified one is where the reported mumbling comes from: with no
-# voice named and no line written, the audio half of the tower invents
-# speech-like noise to fill the space. So this is the test for "nobody in this
-# description was given a voice", and the answer to it is `SILENCE_LINE`.
-# `<d>` and `(S1)` are the guide's own two markers and are what this pack's own
-# prompt box writes (`web/creator/prompt.js`, `sayLine`). The rest of the
-# alternation is for prose that arrived some other way — pasted, or typed past
-# the chip UI — because the cost of the two mistakes is not symmetric: missing a
-# line of speech only leaves today's behaviour, while asserting silence over a
-# line somebody wrote would delete their dialogue.
-SPEECH_RE = re.compile(
-    r"<d>|\(\s*S\d+\s*(?:,\s*S\d+\s*)*\)|[\"\u201c\u201d\u2018\u2019]"
-    r"|\b(?:says?|said|saying|speaks?|speaking|spoke|shouts?|whispers?|yells?"
-    r"|calls? out|replies|replied|asks?|answers?|exclaims?|mutters?|murmurs?"
-    r"|sings?|singing|sang|singers?|songs?|choir|chants?|narrat\w*"
-    r"|voice-?over|voiceover|dialogue"
-    r"|lyrics?|recites?)\b",
-    re.IGNORECASE,
-)
-
-# Said in the guide's own vocabulary — §4.4 writes a non-speaking mouth as
-# `while his lips remain completely closed`, and that is the phrase the weights
-# were trained to read. It goes in the description rather than in
-# `overall_soundscape` because §4.1 puts speech there and §4.3 explicitly says
-# not to repeat dialogue in the soundscape.
-SILENCE_LINE = (
-    "No character speaks, sings or narrates at any point in the video, and every "
-    "mouth remains completely closed."
-)
-
 # The guide's value for "there is deliberately none of this". A blank
 # `non_diegetic_music` used to emit nothing at all, which reads to the model as
 # a free hand rather than as a decision; `N/A` is the decision written down, and
@@ -825,20 +791,6 @@ def compose(mode, body, soundscape="", music="", seconds=0.0, preamble="", shots
             # several shots into one generation and knowing that they are.
             if not SHOT_RE.search(body):
                 body = f"[Shot 1] {body}"
-            # H3 always emits a soundtrack — it denoises audio and video latents
-            # through one tower, so there is no "no audio" to ask for, only a
-            # specified soundtrack and an unspecified one. Left unspecified it
-            # invents speech, which is the mumbling under a shot nobody was
-            # meant to speak in. Saying so is the fix, and it is only said where
-            # the description names no voice at all.
-            #
-            # Inside this branch and not outside it, for the same reason the
-            # wrapper is: a body that arrived already sectioned is somebody's own
-            # rewrite, and this module adds what is missing rather than editing
-            # what is there.
-            if not SPEECH_RE.search(body):
-                stop = "" if body.rstrip().endswith((".", "!", "?")) else "."
-                body = f"{body.rstrip()}{stop} {SILENCE_LINE}"
             body = f"{field}: {body}"
         out.append(body)
 

@@ -39,10 +39,10 @@ the ControlNet guide all refuse on this path, each naming what to switch off.
 LoRAs merge through ComfyUI's loader inside the workers, which is worse on the
 quantized checkpoints; the switch says so.
 
-**A shot in which nobody speaks stops mumbling.** H3 always emits a soundtrack,
-so leaving one unspecified is asking it to invent — and what it invents is
-speech-like. A description that names no voice now gets a sentence saying so, and
-a piece that named no score gets the guide's `N/A`.
+**A piece that names no score gets the guide's `N/A`.** H3 always emits a
+soundtrack, so an empty `non_diegetic_music` reads as a free hand rather than as
+a decision. The description itself is never added to: what you wrote about who
+speaks is the whole of what the model is told.
 
 **A LoRA can be kept off the soundtrack.** An entry carries its own adaLN
 modality scales, drawn as a Soundtrack dial on the card. It damps rather than

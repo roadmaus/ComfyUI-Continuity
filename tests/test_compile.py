@@ -295,30 +295,26 @@ def lora_entry(name, **rest):
     return {"name": name, "strength": 1.0, **rest}
 
 
-# H3 denoises audio and video together and always emits a soundtrack, so a
-# description that names no voice and a piece that names no score are both
-# things the prompt has to *say* rather than leave blank — left open the model
-# fills them, with mumbling and with a score nobody asked for. Every composed
-# prompt below therefore carries these two. See `contextir.SILENCE_LINE`.
-SILENT = (" No character speaks, sings or narrates at any point in the video, "
-          "and every mouth remains completely closed.")
+# H3 always emits a soundtrack, and a piece that names no score is the one thing
+# the prompt still says rather than leaves blank — left open the model fills it
+# with a score nobody asked for. Every composed prompt below therefore carries
+# `non_diegetic_music`. The description itself is never added to: whatever the
+# user wrote about who speaks is the whole of what the model is told.
 NO_MUSIC = "\n\nnon_diegetic_music: N/A"
 
 t2va = build("a walk")
 check("T2VA has no instruction line",
       t2va.prompt,
-      "integrated_multimodal_description: [Shot 1] a walk." + SILENT + NO_MUSIC)
+      "integrated_multimodal_description: [Shot 1] a walk" + NO_MUSIC)
 check("...and an empty prompt composes to nothing", build("").prompt, "")
 
-# H3 emits a soundtrack for every render, so the two things a prompt leaves
-# open are the two the model fills on its own. Both are said rather than left
-# blank — and neither is said over somebody who said it themselves.
-check("a description that names a speaker keeps its own speech",
-      SILENT in build("the man (S1) says: <d>[English] hello</d>").prompt, False)
-check("...and so does one that only quotes",
-      SILENT in build('she reads the sign, "closed"').prompt, False)
-check("...and one that sings",
-      SILENT in build("a busker sings on the platform").prompt, False)
+# The description is the user's sentence and nothing else. Nothing about speech
+# is inferred from it and nothing is appended to it — a shot the model mumbles
+# under is answered by writing that into the prompt, not by this module deciding
+# on the user's behalf that nobody speaks.
+check("a description is passed through with nothing added",
+      build("a man walks across a rainy street").prompt.splitlines()[0],
+      "integrated_multimodal_description: [Shot 1] a man walks across a rainy street")
 check("a piece that named its own score keeps it",
       "non_diegetic_music: a slow piano" in build("a walk", music="a slow piano").prompt,
       True)
@@ -331,7 +327,7 @@ check("I2VA opens with the alignment instruction",
       "For the target video, at 0.00 seconds into the target video, "
       "<Picture 1> (from [Shot 1]) is fully referenced.")
 check("...and the body follows as a field",
-      "integrated_multimodal_description: [Shot 1] a walk." + SILENT in i2va.prompt,
+      "integrated_multimodal_description: [Shot 1] a walk" in i2va.prompt,
       True)
 
 # 6 s on the pill is 149 frames, which is 6.208333... s of video. The instruction
@@ -1381,7 +1377,7 @@ check("...and is wrapped by contextir like any other body",
                                 "refined": refined(body="A courier waits, in 16mm."),
                                 "duration_s": 6}).prompt,
       "integrated_multimodal_description: [Shot 1] A courier waits, in 16mm."
-      + SILENT + NO_MUSIC)
+      + NO_MUSIC)
 
 # The point of storing handles: a second reference in front of it moves the
 # ordinal, and the rewrite has to move with it rather than keep pointing at 1.
