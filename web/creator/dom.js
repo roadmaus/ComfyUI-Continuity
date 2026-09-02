@@ -321,7 +321,9 @@ export function dismissable(node, onClose) {
     if (!node.contains(event.target)) close();
   };
   const key = (event) => {
-    if (event.key === "Escape") { event.stopPropagation(); close(); }
+    // A popover with something to clear first — a find line holding a query —
+    // says so on itself, and Escape is its to answer this once.
+    if (event.key === "Escape" && node.dataset.holdEscape !== "1") { event.stopPropagation(); close(); }
   };
   function close() {
     document.removeEventListener("pointerdown", away, true);

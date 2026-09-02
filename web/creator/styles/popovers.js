@@ -25,6 +25,34 @@ export const css = `
 }
 .mmc-pop-title { color: var(--mmc-dim); font-size: calc(12px * var(--mmc-type)); padding: 6px 10px 8px; }
 
+/* The find line on a long list. It sits where the title sits and is set like
+   the title — dim, small, no box — so a list of files opens looking as it did
+   and answers typing at once. It stays put while the list scrolls under it. */
+.mmc-pop-findrow {
+  display: flex; align-items: baseline; gap: 10px;
+  position: sticky; top: -8px; z-index: 1;
+  margin: -8px -8px 2px; padding: 14px 18px 8px;
+  background: var(--mmc-float); border-bottom: 1px solid var(--mmc-line);
+}
+.mmc-pop-find {
+  flex: 1; min-width: 0; padding: 0; background: none; border: 0; outline: 0;
+  color: var(--mmc-text); font: inherit; font-size: calc(12.5px * var(--mmc-type));
+}
+.mmc-pop-find::placeholder { color: var(--mmc-dim); }
+.mmc-pop-count {
+  flex: none; color: var(--mmc-faint); font-size: calc(11px * var(--mmc-type));
+  font-variant-numeric: tabular-nums;
+}
+.mmc-pop-none { color: var(--mmc-dim); font-size: calc(12.5px * var(--mmc-type)); padding: 10px 10px 8px; }
+/* What the query found, inside a name: underlined in the accent rather than
+   set bold, because a filename is long and a bold fragment breaks its rhythm. */
+.mmc-hit {
+  text-decoration: underline; text-decoration-color: var(--mmc-accent);
+  text-decoration-thickness: 1.5px; text-underline-offset: 3px;
+}
+/* The keyboard's row while finding — Enter picks it, the arrows move it. */
+.mmc-opt[data-cursor="true"] { background: var(--mmc-surface-2); }
+
 /* The output-prefix field and its live reading — Settings → Folders is the only
    place these appear now that the per-node popover is gone. */
 .mmc-out-field {

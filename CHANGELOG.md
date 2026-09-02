@@ -22,6 +22,14 @@ exists, and the strip picks them up mid-render and after a failure alike. A
 quality change also re-muxes the takes from the cached passes instead of
 sampling anything.
 
+**Type to find, in every long picker.** A list of eight or more — every
+checkpoint, VAE, encoder, LoRA and upscaler picker, and the sampler lists —
+opens with a find line where its title was. Typing narrows the list as you
+go, each word of the query has to appear somewhere in the name, and what it
+found is underlined in the name. Enter takes the first match, the arrows move
+between them, Escape clears the query before it closes the list. Short lists
+are drawn as they always were.
+
 **The turbo picker answers a press at once** (#41). It used to fetch the
 whole LoRA listing — a stat per file and a sidecar read per row — before it
 would open, which on a fresh start of a large folder was minutes of a pill
