@@ -235,6 +235,33 @@ export const css = `
   background: var(--mmc-surface-3); box-shadow: 0 0 0 2px var(--mmc-surface);
   color: var(--mmc-text);
 }
+/* The other two corners. Top-left: the file is encoded at full detail, in the
+   marker's monospace — it is what the model is handed, and it is the setting
+   that costs. Top-right: words are attached to this file; the tooltip and the
+   tile's menu carry them. Both shared with the library sheet's tiles, which say
+   the same two things about the same files. */
+.mmc-cast-size {
+  position: absolute; left: -3px; top: -3px; padding: 0 3px; border-radius: 4px;
+  line-height: 12px; font-size: calc(8.5px * var(--mmc-type)); letter-spacing: .04em;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  background: var(--mmc-surface-3); color: var(--mmc-dim);
+  box-shadow: 0 0 0 2px var(--mmc-surface);
+}
+.mmc-cast-noted {
+  position: absolute; right: -2px; top: -2px; width: 7px; height: 7px; border-radius: 999px;
+  background: var(--mmc-accent); box-shadow: 0 0 0 2px var(--mmc-surface);
+}
+/* The words themselves, at the head of the tile's menu. */
+.mmc-cast-menu-lead { padding: 2px 8px 6px; }
+.mmc-cast-menu-field {
+  width: 100%; box-sizing: border-box; min-width: 260px;
+  padding: 5px 8px; border-radius: 6px; border: 1px solid var(--mmc-line);
+  background: var(--mmc-surface-2); color: var(--mmc-text);
+  font: inherit; font-size: calc(12px * var(--mmc-type)); outline: none;
+}
+.mmc-cast-menu-field:focus { border-color: var(--mmc-accent); }
+.mmc-cast-menu-field::placeholder { color: var(--mmc-off); }
+
 /* Their looks are the default and wear no badge at all — see refTile in cast.js. These
    three are the departures from it, and each says which. */
 .mmc-cast-badge-motion { color: var(--mmc-role-motion); }

@@ -44,13 +44,15 @@ Each reference chip has a scope dial that narrows what the file is for:
 
 | Kind | Scopes |
 |---|---|
-| Image | `full`, `person`, `object`, `scene`, `style` |
-| Video | the image scopes, plus `motion`, `camera`, `edit`, `continue` |
+| Image | `full`, `person`, `object`, `scene`, `style`, `action` |
+| Video | the image scopes, plus `camera`, `edit`, `continue` |
 | Audio | `full`, `voice`, `music`, `ambience`, `copy` |
 
 On `person`, "them from @img-1" stops dragging that image's background,
-palette and pose along with the face. On a clip, `camera` borrows the camera
-move without the people in it, `edit` means "change something in this
+palette and pose along with the face. `action` is the opposite cut: the
+action alone, carried onto whoever the prompt puts in the shot - a clip lends
+the whole movement, a still lends its pose. On a clip, `camera` borrows the
+camera move without the people in it, `edit` means "change something in this
 footage", and `continue` picks up where the clip ends.
 
 ### Trimming, and picture vs sound
@@ -84,6 +86,23 @@ valid subject too, and it is what keeps a character consistent from shot 1 to
 shot 9.
 
 Hanging a file on a cast member sets its scope dial for you.
+
+Each file on a member has its own menu, from its tile. At its head is a line
+for what the file shows of them - "her face, front-lit", "the green coat",
+"the golf swing" - which is written after that file's label in the subject
+definition, so the model knows which picture is which and what the clip is
+of. Under the roles is the size the file is encoded at, `match` or `max`, the
+same choice the reference card offers, and it is kept with the member: a
+member taken out of the cast library comes back with each picture at the size
+it was kept at. A tile wears a small `max` when it is encoded at full detail
+and a dot when words are attached to it.
+
+To have somebody perform an action the way another person does it, hang the
+clip or still of that person on them as "their action comes from this", and
+say what the action is on the tile. (The blob and the prompt keep the guide's
+own word for it, `motion`.) The definition then reads "whose appearance comes
+from Picture 1 and whose motion comes from Video 1 (the golf swing)", and the
+retention line says the movement is followed.
 
 A cast member can be swapped for another from the card's swap button: the
 replacement takes over their clips, their slot in the cast order, and every

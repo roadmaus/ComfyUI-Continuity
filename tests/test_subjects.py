@@ -165,6 +165,43 @@ check("appearance and motion are one subject from two files",
       "<Subject 1> is the person whose appearance comes from <Picture 1> and "
       "whose motion comes from <Video 1>.")
 
+# What each file lends them, in the user's words — the guide's combined-source
+# form says what each asset contributes, and this is how three pictures and a
+# clip say which is which.
+_noted = subjects.parse([{"handle": "anna", "from": ["img-1", "img-2"], "motion": "vid-1",
+                         "notes": {"img-1": "her face, front-lit", "img-2": "",
+                                   "vid-1": "the golf swing.", "img-9": "gone"}}])
+_noted_labels = {"img-1": "<Picture 1>", "img-2": "<Picture 2>", "vid-1": "<Video 1>"}
+check("a note rides after its file's label, and a blank one is dropped",
+      subjects.definitions(_noted, _noted_labels),
+      "<Subject 1> is the person whose appearance comes from <Picture 1> (her face, "
+      "front-lit) and <Picture 2> and whose motion comes from <Video 1> (the golf swing).")
+_noted_ret = subjects.retention(_noted, _noted_labels, "[Shot 1] <Subject 1> swings.")
+check("...and the retention line says the movement is followed",
+      "the movement in <Video 1> (the golf swing), its path, its timing and its "
+      "weight, is followed by <Subject 1>" in _noted_ret, True)
+check("...while her own looks stay retained",
+      "their face, hair, build, and clothing are retained" in _noted_ret, True)
+check("a note on a file nobody claims is kept out of the prose",
+      "gone" in subjects.definitions(_noted, _noted_labels), False)
+expect_error("notes must be a map",
+             lambda: subjects.parse([{"handle": "a", "from": ["img-1"], "notes": ["x"]}]),
+             "notes must be an object")
+
+# A still lends a pose the way a clip lends a movement.
+_posed = subjects.parse([{"handle": "anna", "from": ["img-1"], "motion": "img-2"}])
+check("motion may come off a still",
+      subjects.check(_posed, compiler._parse_assets([image("img-1", "person"),
+                                                      image("img-2", "motion")])),
+      None)
+expect_error("...but not off a sound",
+             lambda: subjects.check(
+                 subjects.parse([{"handle": "anna", "from": ["img-1"], "motion": "aud-1"}]),
+                 compiler._parse_assets([image("img-1"),
+                                         {"handle": "aud-1", "kind": "audio", "role": "reference",
+                                          "filename": "aud-1.wav"}])),
+             "not a reference picture or video")
+
 _swap = subjects.parse([{"handle": "anna", "from": ["img-1"], "replaces": "vid-1",
                          "replaces_what": "the man at the counter"}])
 _swap_labels = {"img-1": "<Picture 1>", "vid-1": "<Video 1>"}

@@ -363,6 +363,15 @@ export const scopeKind = (asset) =>
 export const takeOptions = (asset) =>
   (asset.role === "reference" && TAKES[scopeKind(asset)]) || [];
 
+/** What a take is called on screen, where that differs from what the blob
+ *  stores. "motion" is the guide's word and the stored value — its own example
+ *  is "whose walking motion comes from <Video 1>" — but the thing somebody
+ *  hangs on a cast member is an action: the golf swing, the turn at the door.
+ *  So the chip, the role and the facts line say "action", and the blob, the
+ *  compiled prose and the refiner's glossary go on saying motion. */
+export const TAKE_WORD = { motion: "action" };
+export const takeWord = (key) => TAKE_WORD[key] ?? key;
+
 /** The narrowing in force for an asset — the stored one, or the whole file. */
 export const takes = (asset) =>
   (takeOptions(asset).includes(asset.takes) ? asset.takes : "full");
@@ -1429,6 +1438,7 @@ function parseSubjects(raw) {
       ...(replacesOf(s).length ? { replaces: replacesOf(s) } : {}),
       ...(s.replaces_what ? { replaces_what: String(s.replaces_what) } : {}),
       ...(SUBJECT_MARKERS.includes(s.relationship) ? { relationship: s.relationship } : {}),
+      ...(Object.keys(subjectNotes(s)).length ? { notes: subjectNotes(s) } : {}),
     }));
 }
 
@@ -2360,6 +2370,11 @@ function promoteCastFiles(timeline) {
     for (const slot of ["motion", "voice"]) {
       if (renamed.has(subject[slot])) subject[slot] = renamed.get(subject[slot]);
     }
+    // The words attached to a file are keyed by its handle, so they move with it.
+    if (subject.notes) {
+      subject.notes = Object.fromEntries(Object.entries(subject.notes)
+        .map(([handle, text]) => [renamed.get(handle) ?? handle, text]));
+    }
     const stood = replacesOf(subject);
     if (stood.length) subject.replaces = stood.map((h) => renamed.get(h) ?? h);
   }
@@ -2436,6 +2451,11 @@ function collapsePool(timeline) {
     }
     for (const slot of ["motion", "voice"]) {
       if (renamed.has(subject[slot])) subject[slot] = renamed.get(subject[slot]);
+    }
+    // The words attached to a file are keyed by its handle, so they move with it.
+    if (subject.notes) {
+      subject.notes = Object.fromEntries(Object.entries(subject.notes)
+        .map(([handle, text]) => [renamed.get(handle) ?? handle, text]));
     }
     const stood = replacesOf(subject);
     if (stood.length) subject.replaces = stood.map((h) => renamed.get(h) ?? h);
@@ -4670,6 +4690,23 @@ export function subjectMarker(subject) {
   if (SUBJECT_MARKERS.includes(subject?.relationship)) return subject.relationship;
   if (subjectFeatures(subject).some((feature) => feature.instead)) return "partially_preserved";
   return "fully_preserved";
+}
+
+/**
+ * What each file lends a subject, in the user's words, by handle. "her face,
+ * front-lit" on one picture and "the golf swing" on the clip: the words that
+ * tell three pictures and a clip apart in the definition the compiler writes
+ * ("whose appearance comes from <Picture 1> (her face, front-lit)"). Blank
+ * entries are dropped, and so are entries on files the subject no longer
+ * claims. Mirrors `subjects._parse_notes`.
+ */
+export function subjectNotes(subject) {
+  const raw = subject?.notes;
+  if (!raw || typeof raw !== "object") return {};
+  const claimed = new Set(subjectFiles(subject));
+  return Object.fromEntries(Object.entries(raw)
+    .map(([handle, text]) => [String(handle).trim(), String(text ?? "").trim()])
+    .filter(([handle, text]) => handle && text && claimed.has(handle)));
 }
 
 export function subjectFiles(subject) {

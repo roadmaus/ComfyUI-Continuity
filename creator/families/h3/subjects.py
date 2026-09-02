@@ -154,17 +154,17 @@ class Subject:
 
     __slots__ = ("handle", "sources", "takes", "description", "features",
                  "motion", "voice", "replaces", "replaces_what", "marker",
-                 "seeded")
+                 "seeded", "notes")
 
     def __init__(self, handle, sources, takes="person", description="",
                  features=(), motion=None, voice=None, replaces=(),
-                 replaces_what="", marker=None, seeded=False):
+                 replaces_what="", marker=None, seeded=False, notes=None):
         self.handle = handle
         self.sources = tuple(sources)      # asset handles defining its appearance
         self.takes = takes                 # one of TAKES
         self.description = description     # the user's own words, folded into the definition
         self.features = tuple(features)    # what the reference shows, one phrase each
-        self.motion = motion               # a reference video its movement comes from
+        self.motion = motion               # a reference clip or still its movement comes from
         self.voice = voice                 # an audio reference that is its voice
         # The reference videos it stands in for someone in. A tuple, because one
         # person can occupy the same role in several clips — a medium shot and a
@@ -189,6 +189,14 @@ class Subject:
         # False is every piece written before the rows existed, and `_RETAINED`
         # is what those compile to: the same sentence the seeded rows compose.
         self.seeded = bool(seeded)
+        # What each file lends them, in the user's words, by handle: "her face,
+        # front-lit" on one picture, "the golf swing" on the clip. Section 2.1's
+        # combined-source form says what each asset contributes ("whose
+        # appearance comes from <Picture 1> and whose walking motion comes from
+        # <Video 1>"), and the words are how a subject built out of three
+        # pictures and a clip says which is which. Only files the subject claims
+        # are kept — a note on a file that left with its owner is dropped.
+        self.notes = {h: t for h, t in (notes or {}).items() if h and t}
 
     @property
     def changed(self):
@@ -283,6 +291,7 @@ def parse(raw):
                          if h)
         description = str(item.get("description") or "").strip()
         features = _parse_features(handle, item.get("features"))
+        notes = _parse_notes(handle, item.get("notes"))
         # A subject with nothing behind it defines nothing: the label would be
         # written into the prompt and the model would be told a name and no
         # appearance. Three things count as something behind it, and a cast entry
@@ -321,8 +330,19 @@ def parse(raw):
             replaces=replaces,
             replaces_what=str(item.get("replaces_what") or "").strip(),
             marker=marker,
+            notes=notes,
         ))
     return cast
+
+
+def _parse_notes(handle, raw):
+    """The blob's `notes` map -> handle -> words. Blank entries are dropped."""
+    if raw is None:
+        return {}
+    if not isinstance(raw, dict):
+        raise SubjectError(f"@{handle}: notes must be an object of handle -> words")
+    return {str(k).strip(): str(v or "").strip() for k, v in raw.items()
+            if str(k).strip() and str(v or "").strip()}
 
 
 def _parse_features(handle, raw):
@@ -432,7 +452,8 @@ def here(cast, assets):
             description=subject.description, features=subject.features,
             motion=motion, voice=voice, replaces=replaces,
             replaces_what=subject.replaces_what if replaces else "",
-            marker=subject.marker, seeded=subject.seeded))
+            marker=subject.marker, seeded=subject.seeded,
+            notes=subject.notes))
     return out
 
 
@@ -489,19 +510,23 @@ def check(cast, assets):
         # `<Video N>` definition an unclaimed reference gets, and only its
         # occupant moves. Which means its presence is checked here rather than
         # by the loop above.
-        pairs = [(subject.motion, "motion")] if subject.motion else []
-        pairs += [(handle, "place") for handle in subject.replaces]
-        for handle, what in pairs:
+        # Motion may come off a still as well as a clip — the guide counts
+        # actions and poses among what a subject denotes, and a photograph of
+        # the swing is one pose of it. A soundtrack is neither.
+        pairs = [(subject.motion, "motion", ("image", "video"))] if subject.motion else []
+        pairs += [(handle, "place", ("video",)) for handle in subject.replaces]
+        for handle, what, kinds in pairs:
             asset = by_handle.get(handle)
             if asset is None:
                 raise SubjectError(
                     f"@{subject.handle} takes its {what} from @{handle}, which "
                     f"is not attached to this generation"
                 )
-            if asset.kind != "video" or _is_audio(asset):
+            if asset.kind not in kinds or _is_audio(asset):
+                wanted = "a reference video" if kinds == ("video",) else "a reference picture or video"
                 raise SubjectError(
                     f"@{subject.handle} takes its {what} from @{handle}, which "
-                    f"is not a reference video"
+                    f"is not {wanted}"
                 )
 
 
@@ -686,9 +711,17 @@ def _all_attributes(takes):
 _RETAINED = {takes: _all_attributes(takes) for takes in TAKES}
 
 
-def _cite(handles, asset_labels):
-    """Asset handles -> the labels the tokenizer will see them as."""
-    return _english([asset_labels.get(h, f"@{h}") for h in handles])
+def _cite(handles, asset_labels, notes=None):
+    """Asset handles -> the labels the tokenizer will see them as.
+
+    A file the user said something about carries it in a parenthetical after
+    its label — "<Picture 1> (her face, front-lit)" — which is the one form
+    that reads the same in a list of three pictures and after a lone clip.
+    """
+    notes = notes or {}
+    return _english([asset_labels.get(h, f"@{h}")
+                     + (f" ({notes[h].rstrip('.')})" if notes.get(h) else "")
+                     for h in handles])
 
 
 def _described_subject(subject):
@@ -739,14 +772,15 @@ def definitions(cast, asset_labels, extra_lines=(), ids=None):
         # an either/or a pictured subject's "in place of" clause was written
         # nowhere at all.
         clauses = []
+        notes = subject.notes
         if subject.sources:
             clauses.append("whose appearance comes from "
-                           f"{_cite(subject.sources, asset_labels)}"
+                           f"{_cite(subject.sources, asset_labels, notes)}"
                            if subject.motion or subject.replaces else
-                           f"in {_cite(subject.sources, asset_labels)}")
+                           f"in {_cite(subject.sources, asset_labels, notes)}")
         if subject.motion:
             clauses.append("whose motion comes from "
-                           f"{_cite([subject.motion], asset_labels)}")
+                           f"{_cite([subject.motion], asset_labels, notes)}")
         if subject.replaces:
             # The clips are where the vacancy is. Several of them read as one
             # list — the same person in a medium shot and a close-up is one
@@ -924,6 +958,16 @@ def retention(cast, asset_labels, body):
         for feature in subject.changed:
             clauses.append(
                 f"{feature.phrase(subject.takes)} is replaced by {feature.instead}")
+
+        # The movement, where it is borrowed. The definition names the clip and
+        # this line has to say what becomes of it, or the model is told a golf
+        # swing exists and never that the swing is followed. Positive, like the
+        # rest: the performer, the setting and the camera of the source are not
+        # named as losses, because section 4.1 says not to count them.
+        if subject.motion:
+            clauses.append(
+                f"the movement in {_cite([subject.motion], asset_labels, subject.notes)}, "
+                f"its path, its timing and its weight, is followed by {label}")
 
         # A subject with nothing to say still has to say something: the marker
         # is not a sentence and a line that is only a marker claims a scope it

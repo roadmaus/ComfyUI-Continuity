@@ -164,7 +164,12 @@ DEFAULT_REF_SIZE = {"image": "match", "video": "max"}
 # is where H3's reference form expresses it (`retention_analysis`) — so the
 # field is read by the refiner's glossary and by nothing on the encode path.
 #
-# A clip can be narrowed the same four ways, and four more that only a moving
+# A still can also be narrowed to "motion": the guide lists actions and poses
+# among what a `<Subject N>` may denote, and a photograph of somebody mid-swing
+# lends that swing to whoever the cast puts in the shot — one pose, where a clip
+# lends the whole movement.
+#
+# A clip can be narrowed the same five ways, and three more that only a moving
 # picture has. They are the roles H3's reference guide gives a video, and each
 # one is a different label in the rewrite: "motion" and the four content takes
 # mine the clip for a `<Subject N>` and leave its structure behind, while
@@ -177,8 +182,8 @@ DEFAULT_REF_SIZE = {"image": "match", "video": "max"}
 # texture. Those are the two task-type prefixes ("audio reuse" against "audio
 # reference") and the two ends of the audio retention scale, so naming the role
 # on the chip is what decides both.
-IMAGE_TAKES = ("full", "person", "object", "scene", "style")
-VIDEO_TAKES = IMAGE_TAKES + ("motion", "camera", "edit", "continue")
+IMAGE_TAKES = ("full", "person", "object", "scene", "style", "motion")
+VIDEO_TAKES = IMAGE_TAKES + ("camera", "edit", "continue")
 AUDIO_TAKES = ("full", "voice", "music", "ambience", "copy")
 TAKES = {"image": IMAGE_TAKES, "video": VIDEO_TAKES, "audio": AUDIO_TAKES}
 
@@ -3088,6 +3093,7 @@ def _renamed(subject, rename):
         description=subject.description,
         motion=pick(subject.motion),
         voice=pick(subject.voice),
+        notes={pick(h): text for h, text in subject.notes.items()},
         features=subject.features,
         seeded=subject.seeded,
         replaces=[pick(h) for h in subject.replaces],
@@ -3122,6 +3128,8 @@ def _subject_dict(subject):
     # carries, but nothing writes one any more.
     if subject.replaces:
         out["replaces"] = list(subject.replaces)
+    if subject.notes:
+        out["notes"] = dict(subject.notes)
     for key, value in (("description", subject.description),
                        ("motion", subject.motion),
                        ("voice", subject.voice),
