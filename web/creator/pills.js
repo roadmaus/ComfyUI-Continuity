@@ -133,12 +133,16 @@ function lit(text, ranges) {
 }
 
 export function openChoicePopover(anchor, { title, options, value, onPick, extra,
-                                            label = String, sub = () => null }) {
+                                            label = String, sub = () => null,
+                                            find = options.length >= FILTER_FROM }) {
   // Capturing the wheel is the frontend's contract for a DOM widget holding
   // focus (see creator.js): with the find line focused, a scroll over the
   // list would otherwise zoom the canvas under the popover.
   const pop = el("div", { class: "mmc-pop mmc-pop-scroll", "data-capture-wheel": "true" });
-  const finding = options.length >= FILTER_FROM;
+  // `find` is the caller's say: a picker of files gets the line however few
+  // are on disk today, since a folder fills up and a list that changes shape
+  // at eight is a list that changes shape. Anything else gets it by length.
+  const finding = Boolean(find);
   const list = el("div", { class: "mmc-pop-list" });
   let close = () => {};
   let shown = options;

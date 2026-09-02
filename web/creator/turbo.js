@@ -90,6 +90,7 @@ function openTurboChoice(anchor, { value, onPick, includeNone = false, all = fal
   const listed = showAll ? loraNames() : matched;
   openChoicePopover(anchor, {
     title: showAll ? t("Turbo LoRA — all files") : t("Turbo LoRA"),
+    find: true,
     options: [
       ...(includeNone ? [typeof includeNone === "string" ? t(includeNone) : t("— none —")] : []),
       ...listed,

@@ -1197,6 +1197,7 @@ export class PreStageEditor {
           text: side[field] || t("not set"),
           onclick: (event) => openChoicePopover(event.currentTarget, {
             title: t(S.PRESTAGE_FIELD_LABEL[field]),
+            find: true,
             options: [NONE, ...lists[field]],
             value: side[field] || NONE,
             onPick: (picked) => {
