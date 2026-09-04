@@ -253,9 +253,15 @@ def _request(url, key, payload=None):
         detail = ""
         try:
             body = json.loads(exc.read(4096).decode("utf-8", "replace"))
-            detail = ((body.get("error") or {}).get("message")
-                      if isinstance(body.get("error"), dict)
-                      else body.get("error")) or ""
+            error = body.get("error")
+            detail = (error.get("message") if isinstance(error, dict) else error) or ""
+            # OpenAI names the offending field in `param` and leaves it out of
+            # the sentence ("Invalid value: 'none'. Supported values are…"), and
+            # `adapt` is deliberately literal about which parameter to shed —
+            # so the name is put where the complaint can be read for it.
+            param = error.get("param") if isinstance(error, dict) else None
+            if param and str(param) not in str(detail):
+                detail = f"{detail} (param: {param})"
         except (OSError, ValueError):
             pass
         detail = _scrub(str(detail)[:ERROR_EXCERPT], key)
@@ -374,7 +380,7 @@ def to_data_url(image):
 # the reply-length budget survives the newer dialect. `ttl` is only ever sent
 # by an eject, and only LM Studio knows the word; anything else that bothers to
 # complain about it sheds it here and refines anyway.
-NEGOTIABLE = ("temperature", "seed", "max_tokens", "ttl")
+NEGOTIABLE = ("temperature", "seed", "max_tokens", "ttl", "reasoning_effort")
 
 
 def adapt(detail, payload):
@@ -413,7 +419,14 @@ def messages(system, message, images=()):
 
 
 def _content(body):
-    """`choices[0].message.content`, whatever shape the server gave it."""
+    """`choices[0].message.content`, whatever shape the server gave it.
+
+    -> `(content, finish_reason, thought)`. `thought` is whether the message
+    carried a reasoning trace beside its content — `reasoning` on Ollama and
+    OpenRouter, `reasoning_content` on vLLM and DeepSeek — which is the one
+    fact that tells an empty reply from a thinking model apart from an empty
+    reply from a broken one.
+    """
     try:
         message = body["choices"][0]["message"]
     except (KeyError, IndexError, TypeError):
@@ -424,7 +437,9 @@ def _content(body):
     if isinstance(content, list):  # some servers return content parts
         content = "".join(part.get("text", "") for part in content
                           if isinstance(part, dict))
-    return content or "", (body.get("choices") or [{}])[0].get("finish_reason")
+    thought = any(str(message.get(key) or "").strip()
+                  for key in ("reasoning", "reasoning_content"))
+    return content or "", (body.get("choices") or [{}])[0].get("finish_reason"), thought
 
 
 def chat(model, system, message, images=(), temperature=0.7, seed=-1,
@@ -456,6 +471,14 @@ def chat(model, system, message, images=(), temperature=0.7, seed=-1,
     }
     if int(seed) >= 0:
         payload["seed"] = int(seed)
+    # Reasoning off. The in-process path prefills an empty `<think>` block for
+    # this; chat-completions has no prefill, and a thinking model left to its
+    # default spends the whole reply budget on a trace and returns no content
+    # at all. `"none"` is the OpenAI spelling Ollama and vLLM honour; a
+    # provider that rejects the value 400s and `adapt` sheds it. Not every
+    # build listens — Ollama's Qwen3-VL template reasons whatever it is told,
+    # and the empty-reply message below is where that is said.
+    payload["reasoning_effort"] = "none"
     # Asked for in the same breath as the generation, because LM Studio 0.3 has
     # no unload call and this is the only thing it will hear. Local servers
     # only: `ttl` is a word no hosted provider knows, and the ones that check
@@ -480,8 +503,17 @@ def chat(model, system, message, images=(), temperature=0.7, seed=-1,
         # memory.
         if eject:
             unload(model)
-    content, finish = _content(body)
+    content, finish, thought = _content(body)
     if not content.strip():
+        if thought:
+            spent = (body.get("usage") or {}).get("completion_tokens")
+            raise refine.RefineError(
+                f"'{model}' spent its whole reply"
+                + (f" of {spent} tokens" if spent else "")
+                + " thinking and never reached the answer. This build reasons "
+                "even when asked not to: raise the reply length in the refiner's "
+                "settings, or pick a model that does not think."
+            )
         raise refine.RefineError(
             f"'{model}' returned nothing — a reasoning model may have spent the "
             f"whole budget thinking. Raise the reply length, or pick another model."

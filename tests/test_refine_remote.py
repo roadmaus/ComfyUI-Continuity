@@ -233,14 +233,58 @@ check("…and nothing went out to it", calls, [])
 remote._request = real_request
 remote.configure("http://localhost:1234/v1", "")
 
+# ---- thinking -----------------------------------------------------------------
+#
+# Chat-completions has no prefill slot, so reasoning is switched off by the one
+# field the dialect has for it — and shed like any other parameter where the
+# provider does not know the value. Where a build reasons regardless, the
+# empty reply is named for what it is rather than reported as a broken server.
+
+# OpenAI's actual wording names the field only in `param`, which `_request`
+# appends to the detail; this is the detail as `adapt` then sees it.
+check("reasoning is negotiable",
+      remote.adapt("Invalid value: 'none'. Supported values are: 'low', 'medium', "
+                   "and 'high'. (param: reasoning_effort)",
+                   {"model": "m", "reasoning_effort": "none"}), "reasoning_effort")
+
+remote.configure("http://localhost:1234/v1", "")
+calls.clear()
+remote._request = _fake({"http://localhost:1234/v1/chat/completions": {
+    "choices": [{"message": {"role": "assistant", "content": "{\"shots\": []}"},
+                 "finish_reason": "stop"}]}})
+check("the request asks for no reasoning", remote.chat("m", "sys", "hi"), '{"shots": []}')
+check("…in the OpenAI spelling", calls[-1][1].get("reasoning_effort"), "none")
+
+remote._request = _fake({"http://localhost:1234/v1/chat/completions": {
+    "choices": [{"message": {"role": "assistant", "content": "",
+                             "reasoning": "Hmm, the user wants a video…"},
+                 "finish_reason": "length"}],
+    "usage": {"completion_tokens": 6144}}})
+try:
+    remote.chat("qwen3-vl:4b", "sys", "hi")
+    check("an empty reply with a trace beside it is refused", False, True)
+except refine.RefineError as exc:
+    check("an empty reply with a trace beside it names the thinking",
+          "spent its whole reply of 6144 tokens thinking" in str(exc), True)
+
+remote._request = _fake({"http://localhost:1234/v1/chat/completions": {
+    "choices": [{"message": {"role": "assistant", "content": ""}, "finish_reason": "stop"}]}})
+try:
+    remote.chat("m", "sys", "hi")
+    check("an empty reply with no trace is refused", False, True)
+except refine.RefineError as exc:
+    check("an empty reply with no trace is not blamed on thinking",
+          "returned nothing" in str(exc), True)
+remote._request = real_request
+
 
 # ---- the reply shapes --------------------------------------------------------
 
-content, finish = remote._content(
+content, finish, _ = remote._content(
     {"choices": [{"message": {"content": "{\"a\": 1}"}, "finish_reason": "stop"}]})
 check("a string content passes through", (content, finish), ('{"a": 1}', "stop"))
 
-content, _ = remote._content(
+content, _, _ = remote._content(
     {"choices": [{"message": {"content": [
         {"type": "text", "text": "{\"a\":"}, {"type": "text", "text": " 1}"}]}}]})
 check("content parts are joined", content, '{"a": 1}')

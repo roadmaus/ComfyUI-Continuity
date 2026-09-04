@@ -143,7 +143,9 @@ Two ways to run it, chosen in the refiner's settings:
   vLLM, or a hosted API with a key. The key is stored server-side on your
   machine, never in the browser or a workflow file. "Eject when done" asks a
   local server to unload the model as soon as the rewrite is in, so the
-  sampler gets the memory back.
+  sampler gets the memory back. Reasoning is asked off; a build that thinks
+  anyway (Ollama's Qwen3-VL tags do) needs a larger reply length than the
+  default, or it spends the whole reply on the trace and returns nothing.
 
 ### Your own prompting
 

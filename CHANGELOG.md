@@ -5,6 +5,14 @@ and everything under it is kept exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**The server refiner asks for no reasoning.** A thinking model on the OpenAI
+route spent the whole reply budget on its trace and returned no content, which
+the panel reported as a server that returned nothing. The request now carries
+`reasoning_effort: none`, shed like any other parameter where a provider
+rejects it, and a reply that is empty beside a reasoning trace says so, with
+the tokens it burned — Ollama's Qwen3-VL builds reason whatever they are told,
+and the fix there is a larger reply length.
+
 **The refiner writes the cast's names, and nothing about their pictures.** On
 a piece with a cast the built-in refiner asked a small model for two things at
 once: the six-section reference form, whose worked example defines
