@@ -167,6 +167,35 @@ def _schema(node_id, display_name, blob, deprecated=False):
                 tooltip="Low VRAM: run H3's feed-forward in chunks over the packed sequence (KJNodes' Chunk FFN). Lowers the peak a render has to fit in, and the frames are the same ones — activations are quantized per token, so chunking is a rearrangement rather than a trade. Needs ComfyUI-KJNodes. Composes with everything above."),
             io.Boolean.Input("fp16_accumulation", default=False,
                 tooltip="Fast math: let cuBLAS accumulate fp16 matmuls in fp16 while this model runs, and put the flag back afterwards (KJNodes' fp16 accumulation). It reaches fp16 matmuls only — the released H3 checkpoints run bf16, and their quantized layers go through comfy-kitchen's kernels rather than cuBLAS, so on those there is nothing for it to change. For a genuinely fp16 model it is faster where the card supports it, at some precision. Needs ComfyUI-KJNodes and torch 2.7 or newer, and raises rather than pretending on a torch without the flag."),
+            # Sparse attention, from the H3-Optimizations pack — see `accel.py`.
+            # A different idea from the `attention` backend: it skips most of the
+            # video tokens' keys and values rather than quantizing one full call,
+            # so it composes with whatever backend is active underneath. Off until
+            # asked for, like every other accelerator here. Appended after
+            # `fp16_accumulation` on purpose: widget values restore by position, so
+            # a new slot at the end cannot hand an old workflow somebody else's value.
+            io.Boolean.Input("sparse", default=False,
+                tooltip="Sparse attention (H3-Optimizations): skip most of the video tokens' keys and values instead of computing them. Composes with the attention backend above and with every cache. Needs H3-Optimizations."),
+            io.Float.Input("sparse_budget", default=0.15, min=0.0, max=1.0, step=0.01,
+                tooltip="Sparse attention's video budget: the share of keys and values kept. Lower is faster and further from a native render. Ignored unless 'sparse' is on."),
+            io.Combo.Input("sparse_backend", options=accel.SPARSE_BACKENDS, default="Kitchen INT8",
+                tooltip="Which sparse kernel H3-Optimizations runs. Ignored unless 'sparse' is on."),
+            io.Combo.Input("sparse_schedule", options=accel.SPARSE_SCHEDULES, default="Ramp",
+                tooltip="How the sparse budget ramps across steps: 'Hold' keeps it flat, 'Ramp' eases it in. Ignored unless 'sparse' is on."),
+            io.Combo.Input("sparse_token_order", options=accel.SPARSE_TOKEN_ORDERS, default="1x8x8",
+                tooltip="The token order the sparse budget is applied in. 'Raster (stock H3 order)' is the checkpoint's own. Ignored unless 'sparse' is on."),
+            # Memory optimization, from the same pack: chunked QKV and bounded MLP
+            # execution with a precision policy. It lowers peak VRAM rather than
+            # skipping steps, so it composes with everything above. Appended for the
+            # same position-restore reason as the sparse block.
+            io.Boolean.Input("memory", default=False,
+                tooltip="Memory optimization (H3-Optimizations): chunked QKV and bounded MLP execution to lower peak VRAM. Composes with every other accelerator. Needs H3-Optimizations."),
+            io.Combo.Input("memory_precision_mode", options=accel.MEMORY_PRECISION_MODES, default="Auto",
+                tooltip="The precision policy the memory optimization runs under. Ignored unless 'memory' is on."),
+            io.Combo.Input("memory_qkv_streaming", options=accel.MEMORY_QKV_STREAMING_MODES, default="Auto",
+                tooltip="Whether QKV is streamed in chunks: 'Off', 'Auto', or 'Forced'. Ignored unless 'memory' is on."),
+            io.Combo.Input("memory_attention_memory", options=accel.MEMORY_ATTENTION_MEMORY_MODES, default="Standard",
+                tooltip="The attention memory mode: 'Standard', or 'Lower VRAM (slower)'. Ignored unless 'memory' is on."),
         ],
         # Nothing comes out either: the render is saved and shown in the node
         # body, so there is no socket for a graph to hang off.
@@ -194,7 +223,11 @@ def _render(blob, seed, steps, cfg, sampler_name, scheduler,
             shift_video=sampling.SHIFT_DEFAULTS[0],
             shift_audio=sampling.SHIFT_DEFAULTS[1],
             sage=False, attention="default", chunk_ffn=False,
-            fp16_accumulation=False):
+            fp16_accumulation=False, sparse=False, sparse_budget=0.15,
+            sparse_backend="Kitchen INT8", sparse_schedule="Ramp",
+            sparse_token_order="1x8x8", memory=False,
+            memory_precision_mode="Auto", memory_qkv_streaming="Auto",
+            memory_attention_memory="Standard"):
     """The whole of what either node id does. See the module docstring."""
     try:
         data = compiler.as_piece(json.loads(blob))
@@ -218,6 +251,12 @@ def _render(blob, seed, steps, cfg, sampler_name, scheduler,
         "block_cache": block_cache, "spectrum": spectrum,
         "spectrum_blend": spectrum_blend, "sage": sage, "attention": attention,
         "chunk_ffn": chunk_ffn, "fp16_accumulation": fp16_accumulation,
+        "sparse": sparse, "sparse_budget": sparse_budget,
+        "sparse_backend": sparse_backend, "sparse_schedule": sparse_schedule,
+        "sparse_token_order": sparse_token_order, "memory": memory,
+        "memory_precision_mode": memory_precision_mode,
+        "memory_qkv_streaming": memory_qkv_streaming,
+        "memory_attention_memory": memory_attention_memory,
     })
 
     # The piece as this queue will make it, which is not always the piece on the
@@ -302,12 +341,22 @@ class MiniMaxH3Creator(io.ComfyNode):
                 shift_video=sampling.SHIFT_DEFAULTS[0],
                 shift_audio=sampling.SHIFT_DEFAULTS[1],
                 sage=False, attention="default", chunk_ffn=False,
-                fp16_accumulation=False) -> io.NodeOutput:
+                fp16_accumulation=False, sparse=False, sparse_budget=0.15,
+                sparse_backend="Kitchen INT8", sparse_schedule="Ramp",
+                sparse_token_order="1x8x8", memory=False,
+                memory_precision_mode="Auto", memory_qkv_streaming="Auto",
+                memory_attention_memory="Standard") -> io.NodeOutput:
         return _render(creator_data, seed, steps, cfg, sampler_name, scheduler,
                        block_cache, spectrum, spectrum_blend, cls.hidden.unique_id,
                        shift_video=shift_video, shift_audio=shift_audio, sage=sage,
                        attention=attention, chunk_ffn=chunk_ffn,
-                       fp16_accumulation=fp16_accumulation)
+                       fp16_accumulation=fp16_accumulation, sparse=sparse,
+                       sparse_budget=sparse_budget, sparse_backend=sparse_backend,
+                       sparse_schedule=sparse_schedule,
+                       sparse_token_order=sparse_token_order, memory=memory,
+                       memory_precision_mode=memory_precision_mode,
+                       memory_qkv_streaming=memory_qkv_streaming,
+                       memory_attention_memory=memory_attention_memory)
 
 
 class MiniMaxH3Timeline(io.ComfyNode):
@@ -345,12 +394,22 @@ class MiniMaxH3Timeline(io.ComfyNode):
                 shift_video=sampling.SHIFT_DEFAULTS[0],
                 shift_audio=sampling.SHIFT_DEFAULTS[1],
                 sage=False, attention="default", chunk_ffn=False,
-                fp16_accumulation=False) -> io.NodeOutput:
+                fp16_accumulation=False, sparse=False, sparse_budget=0.15,
+                sparse_backend="Kitchen INT8", sparse_schedule="Ramp",
+                sparse_token_order="1x8x8", memory=False,
+                memory_precision_mode="Auto", memory_qkv_streaming="Auto",
+                memory_attention_memory="Standard") -> io.NodeOutput:
         return _render(timeline_data, seed, steps, cfg, sampler_name, scheduler,
                        block_cache, spectrum, spectrum_blend, cls.hidden.unique_id,
                        shift_video=shift_video, shift_audio=shift_audio, sage=sage,
                        attention=attention, chunk_ffn=chunk_ffn,
-                       fp16_accumulation=fp16_accumulation)
+                       fp16_accumulation=fp16_accumulation, sparse=sparse,
+                       sparse_budget=sparse_budget, sparse_backend=sparse_backend,
+                       sparse_schedule=sparse_schedule,
+                       sparse_token_order=sparse_token_order, memory=memory,
+                       memory_precision_mode=memory_precision_mode,
+                       memory_qkv_streaming=memory_qkv_streaming,
+                       memory_attention_memory=memory_attention_memory)
 
 
 class MiniMaxCreatorExtension(ComfyExtension):

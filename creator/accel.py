@@ -94,6 +94,8 @@ SAGE_NODE = "MiniMaxH3MemoryEfficientSageAttentionPatch"
 KITCHEN_NODE = "ModelAttentionBackend"
 CHUNK_FFN_NODE = "MiniMaxChunkFeedForward"
 TORCH_SETTINGS_NODE = "ModelPatchTorchSettings"
+SPARSE_NODE = "H3SparseAttentionAdvanced"
+MEMORY_NODE = "H3MemoryOptimization"
 
 # What core's node calls the kernel. Matched against the options the installed
 # class actually offers rather than passed blind: `ModelAttentionBackend` leaves
@@ -114,12 +116,41 @@ SOURCES = {
     KITCHEN_NODE: "ComfyUI core (comfy_extras/nodes_model_advanced.py) — update ComfyUI",
     CHUNK_FFN_NODE: "https://github.com/kijai/ComfyUI-KJNodes",
     TORCH_SETTINGS_NODE: "https://github.com/kijai/ComfyUI-KJNodes",
+    SPARSE_NODE: "https://github.com/HM-Running-Horse/H3-Optimizations",
+    MEMORY_NODE: "https://github.com/HM-Running-Horse/H3-Optimizations",
 }
 
 # What the `attention` widget offers. One backend at a time, because a model has
 # one attention and two patches would mean the last one applied quietly won.
 # "default" is the checkpoint's own and emits no node at all.
 ATTENTION_MODES = ["default", "sage", "kitchen"]
+
+# Sparse attention, from the H3-Optimizations pack. It is a different idea from
+# the `attention` backend: rather than quantizing one full attention call it
+# skips most of the video tokens' keys and values, so it composes with whatever
+# backend is active underneath. The option lists mirror the pack's own node so
+# the pill offers exactly what the installed class accepts; a name this build
+# does not offer would otherwise be passed blind and answered by a fallback the
+# user did not ask for.
+SPARSE_BACKENDS = [
+    "Kitchen INT8",
+    "Kitchen INT8 64x128 (experimental)",
+    "FROST BF16 (SM89)",
+    "Sparse Sage",
+    "BF16 Triton",
+    "FP8 FlexAttention",
+]
+SPARSE_SCHEDULES = ["Hold", "Ramp"]
+SPARSE_TOKEN_ORDERS = ["1x8x8", "1x16x4", "4x4x4", "Raster (stock H3 order)"]
+
+# Memory optimization, from the H3-Optimizations pack. Chunked QKV and bounded
+# MLP execution with a precision policy — it lowers peak VRAM rather than
+# skipping steps, so it composes with every other accelerator here. The option
+# lists mirror the pack's own node so the pill offers exactly what the installed
+# class accepts.
+MEMORY_PRECISION_MODES = ["Auto", "BF16", "Preserve native", "Force quant"]
+MEMORY_QKV_STREAMING_MODES = ["Off", "Auto", "Forced"]
+MEMORY_ATTENTION_MEMORY_MODES = ["Standard", "Lower VRAM (slower)"]
 
 # KJNodes' own defaults are 2 chunks over 4096 tokens; 4 is what the H3 workflows
 # that use it settle on and what issue #18 asked for. Named here rather than read
@@ -149,12 +180,21 @@ class Settings:
     attention: str = "default"
     chunk_ffn: bool = False
     fp16_accumulation: bool = False
+    sparse: bool = False
+    sparse_budget: float = 0.15
+    sparse_backend: str = "Kitchen INT8"
+    sparse_schedule: str = "Ramp"
+    sparse_token_order: str = "1x8x8"
+    memory: bool = False
+    memory_precision_mode: str = "Auto"
+    memory_qkv_streaming: str = "Auto"
+    memory_attention_memory: str = "Standard"
 
     @property
     def any(self):
         return (self.block_cache != "off" or self.spectrum
                 or self.attention != "default" or self.chunk_ffn
-                or self.fp16_accumulation)
+                or self.fp16_accumulation or self.sparse or self.memory)
 
 
 def uncached(settings):
@@ -215,6 +255,31 @@ def node_defaults(node, skip=("model",)):
     return out
 
 
+def _combo_options(node, field):
+    """The option list a combo input offers, whatever API the node was written on.
+
+    A V1 node's `INPUT_TYPES` puts the options straight in: `[options, {...}]`.
+    A New-API (`io.ComfyNode`) node's compat shim instead returns the *type name*
+    in that slot — for a combo the literal string `"COMBO"` — so reading it as a
+    list would split the word into characters and every backend check would fail
+    against `['C', 'O', 'M', 'B', 'O']`. The real options live on the schema's
+    input objects, so fall back to those when the V1 slot is not a list.
+    """
+    declared = node.INPUT_TYPES().get("required", {}).get(field)
+    if isinstance(declared, (tuple, list)) and len(declared) > 0:
+        first = declared[0]
+        if isinstance(first, (list, tuple)):
+            return list(first)
+    schema = getattr(node, "define_schema", None)
+    if callable(schema):
+        for inp in getattr(schema(), "inputs", []) or []:
+            if getattr(inp, "id", None) == field and hasattr(inp, "options"):
+                return list(inp.options)
+    raise ValueError(
+        f"'{node.__name__}' declares no options for '{field}' — the pack has "
+        f"changed its inputs; pick another value or switch the accelerator off.")
+
+
 def _block_cache_kwargs(node, mode):
     """The pack's own arguments for one of our three preset names."""
     kwargs = node_defaults(node)
@@ -269,6 +334,58 @@ def _spectrum_kwargs(node, blend):
     kwargs = node_defaults(node)
     kwargs["enabled"] = True
     kwargs["blend_weight"] = float(blend)
+    return kwargs
+
+
+def _sparse_kwargs(node, budget, backend, schedule, token_order):
+    """The pack's own arguments for sparse attention, with our overrides.
+
+    The early/late step windows come off the class so a knob the pack gains
+    arrives with its own default; only the four the user can see in the pill are
+    set here. The backend is matched against what the installed class actually
+    offers, on the same terms as kitchen: an explicit name this build does not
+    offer would otherwise fail rather than switch to another kernel, so refusing
+    it here says so before a render is queued.
+    """
+    kwargs = node_defaults(node)
+    kwargs["video_budget"] = float(budget)
+    options = _combo_options(node, "backend")
+    if backend not in options:
+        raise ValueError(
+            f"This build cannot run sparse attention with '{backend}' — "
+            f"'{SPARSE_NODE}' offers {options}. The kernel ships with the "
+            f"H3-Optimizations pack and needs a card it supports; pick another "
+            f"backend or switch sparse off.")
+    kwargs["backend"] = backend
+    kwargs["early_schedule"] = schedule
+    kwargs["video_token_order"] = token_order
+    return kwargs
+
+
+def _memory_kwargs(node, precision_mode, qkv_streaming, attention_memory):
+    """The pack's own arguments for memory optimization, with our overrides.
+
+    Everything else (mlp_memory, chunk_rows, legacy slots) comes off the class
+    so a knob the pack gains arrives with its own default. The three combos are
+    matched against what the installed class actually offers, on the same terms
+    as sparse: an explicit name this build does not offer would otherwise fail
+    rather than switch to another mode, so refusing it here says so before a
+    render is queued.
+    """
+    kwargs = node_defaults(node)
+    for field, value in (
+        ("precision_mode", precision_mode),
+        ("qkv_streaming_mode", qkv_streaming),
+        ("kitchen_v_memory_mode", attention_memory),
+    ):
+        options = _combo_options(node, field)
+        if value not in options:
+            raise ValueError(
+                f"This build cannot run memory optimization with "
+                f"{field}='{value}' — '{MEMORY_NODE}' offers {options}. "
+                f"The pack has changed its options; pick another or switch "
+                f"memory off.")
+        kwargs[field] = value
     return kwargs
 
 
@@ -328,6 +445,24 @@ def plan(settings, sampler_steps=None):
     if settings.spectrum:
         node = _require(SPECTRUM_NODE)
         steps.append((SPECTRUM_NODE, _spectrum_kwargs(node, settings.spectrum_blend)))
+    # Sparse attention last of the model patches: it wraps whatever backend and
+    # caches sit under it and skips video tokens' keys and values inside each
+    # call, so it composes with every one of them. It is a different idea from
+    # the `attention` backend (which quantizes a full call), not a rival to it.
+    if settings.sparse:
+        node = _require(SPARSE_NODE)
+        steps.append((SPARSE_NODE, _sparse_kwargs(
+            node, settings.sparse_budget, settings.sparse_backend,
+            settings.sparse_schedule, settings.sparse_token_order)))
+    # Memory optimization last: it wraps everything and bounds the peak VRAM of
+    # each call rather than skipping any of them, so it composes with every
+    # patch above. It is a different idea from sparse (which skips tokens) —
+    # this one chunks the work that does run.
+    if settings.memory:
+        node = _require(MEMORY_NODE)
+        steps.append((MEMORY_NODE, _memory_kwargs(
+            node, settings.memory_precision_mode,
+            settings.memory_qkv_streaming, settings.memory_attention_memory)))
     return steps
 
 

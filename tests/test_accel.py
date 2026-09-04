@@ -232,8 +232,74 @@ class FakeTorchSettings:
         return (("torch_settings", model, tuple(sorted(kwargs.items()))),)
 
 
+# ---- stand-ins for the H3-Optimizations pack (New-API nodes) ----------------
+
+class _SchemaInput:
+    """Enough of `io.Combo.Input` to carry an id and its options."""
+
+    def __init__(self, id, options):
+        self.id = id
+        self.options = list(options)
+
+
+class _Schema:
+    def __init__(self, inputs):
+        self.inputs = inputs
+
+
+def _v3_combo(node_id, fields):
+    """A New-API (`io.ComfyNode`) stand-in for `node_id`.
+
+    Its `INPUT_TYPES` is the compat shim's shape: a combo's type slot holds the
+    literal string `"COMBO"` rather than the options list, and its real options
+    live on the schema. That is exactly the shape that made `list("COMBO")` read
+    as `['C', 'O', 'M', 'B', 'O']`, so pinning it here is the point of the test.
+    """
+
+    class Node:
+        FUNCTION = "EXECUTE_NORMALIZED"
+
+        @classmethod
+        def INPUT_TYPES(cls):
+            required = {"model": ["MODEL", {}]}
+            for name, (options, default) in fields.items():
+                required[name] = ["COMBO", {"default": default}]
+            return {"required": required}
+
+        @classmethod
+        def define_schema(cls):
+            return _Schema([_SchemaInput(name, options)
+                            for name, (options, default) in fields.items()])
+
+        def EXECUTE_NORMALIZED(self, model, **kwargs):
+            return ((node_id, model, tuple(sorted(kwargs.items()))),)
+
+    Node.__name__ = node_id
+    return Node
+
+
+FakeSparse = _v3_combo(accel.SPARSE_NODE, {
+    "video_budget": ([0.0], 0.15),
+    "early_steps": ([0], 8),
+    "early_kv": ([0.0], 0.6833),
+    "late_steps": ([0], 0),
+    "late_kv": ([0.0], 0.25),
+    "backend": (accel.SPARSE_BACKENDS, "Kitchen INT8"),
+    "early_schedule": (accel.SPARSE_SCHEDULES, "Ramp"),
+    "video_token_order": (accel.SPARSE_TOKEN_ORDERS, "1x8x8"),
+})
+
+FakeMemory = _v3_combo(accel.MEMORY_NODE, {
+    "mlp_memory": (["auto", "off"], "auto"),
+    "chunk_rows": ([4096], 4096),
+    "precision_mode": (accel.MEMORY_PRECISION_MODES, "Auto"),
+    "qkv_streaming_mode": (accel.MEMORY_QKV_STREAMING_MODES, "Auto"),
+    "kitchen_v_memory_mode": (accel.MEMORY_ATTENTION_MEMORY_MODES, "Standard"),
+})
+
+
 def install(*, block_cache=True, spectrum=True, easycache=True, teacache=True, sage=True,
-            kitchen=True, chunk_ffn=True, torch_settings=True):
+            kitchen=True, chunk_ffn=True, torch_settings=True, sparse=True, memory=True):
     NODES.NODE_CLASS_MAPPINGS = {}
     if block_cache:
         NODES.NODE_CLASS_MAPPINGS[accel.BLOCK_CACHE_NODE] = FakeBlockCache
@@ -251,6 +317,10 @@ def install(*, block_cache=True, spectrum=True, easycache=True, teacache=True, s
         NODES.NODE_CLASS_MAPPINGS[accel.CHUNK_FFN_NODE] = FakeChunkFFN
     if torch_settings:
         NODES.NODE_CLASS_MAPPINGS[accel.TORCH_SETTINGS_NODE] = FakeTorchSettings
+    if sparse:
+        NODES.NODE_CLASS_MAPPINGS[accel.SPARSE_NODE] = FakeSparse
+    if memory:
+        NODES.NODE_CLASS_MAPPINGS[accel.MEMORY_NODE] = FakeMemory
 
 
 class FakeGraph:
@@ -548,5 +618,43 @@ check("direct_apply is a no-op when off", accel.direct_apply("MODEL", accel.Sett
 # comes back through `[0]`.
 check("direct_apply runs a V3 node through its shim",
       accel.direct_apply("MODEL", accel.Settings(attention="sage"))[:2], ("sage", "MODEL"))
+
+# ---- sparse attention (New-API node) ----------------------------------------
+
+install()
+kwargs = accel.plan(accel.Settings(sparse=True))[0][1]
+check("sparse is planned when asked for", kwargs["video_budget"], 0.15)
+check("sparse takes our backend", kwargs["backend"], "Kitchen INT8")
+check("sparse takes our schedule", kwargs["early_schedule"], "Ramp")
+check("sparse takes our token order", kwargs["video_token_order"], "1x8x8")
+# The V3 shim's type slot is the string "COMBO"; reading it as a list would have
+# refused every backend. Reaching this line at all means the options were read
+# off the schema instead.
+check("sparse reads combo options off the schema",
+      accel._combo_options(FakeSparse, "backend"), accel.SPARSE_BACKENDS)
+
+expect_error("sparse refuses a backend the build does not offer",
+             lambda: accel.plan(accel.Settings(sparse=True, sparse_backend="Nope")),
+             "offers")
+
+# ---- memory optimization (New-API node) -------------------------------------
+
+install()
+kwargs = accel.plan(accel.Settings(memory=True))[0][1]
+check("memory is planned when asked for", kwargs["precision_mode"], "Auto")
+check("memory takes our qkv streaming", kwargs["qkv_streaming_mode"], "Auto")
+check("memory takes our attention memory mode", kwargs["kitchen_v_memory_mode"], "Standard")
+check("memory reads combo options off the schema",
+      accel._combo_options(FakeMemory, "precision_mode"), accel.MEMORY_PRECISION_MODES)
+
+expect_error("memory refuses a mode the build does not offer",
+             lambda: accel.plan(accel.Settings(memory=True, memory_precision_mode="Nope")),
+             "offers")
+
+# Sparse and memory compose: both land in the plan, sparse before memory.
+install()
+steps = accel.plan(accel.Settings(sparse=True, memory=True))
+check("sparse and memory both planned",
+      [node_id for node_id, _ in steps], [accel.SPARSE_NODE, accel.MEMORY_NODE])
 
 passed("all accelerator tests passed")

@@ -32,7 +32,10 @@ export const SAMPLING_WIDGETS = [
   "seed", "control_after_generate", "steps", "cfg", "sampler_name", "scheduler",
   "shift_video", "shift_audio",
   "block_cache", "spectrum", "spectrum_blend", "sage", "attention", "chunk_ffn",
-  "fp16_accumulation",
+  "fp16_accumulation", "sparse", "sparse_budget", "sparse_backend",
+  "sparse_schedule", "sparse_token_order",
+  "memory", "memory_precision_mode", "memory_qkv_streaming",
+  "memory_attention_memory",
 ];
 
 // `sage` is in that list and is never drawn: it is the switch `attention`
@@ -760,6 +763,145 @@ export function samplingBar({ widgets, value, set, perSegment = false,
             format: (n) => t("blend {n}", { n: n.toFixed(2) }),
             onChange: (next) => set("spectrum_blend", next),
           })
+        : null,
+    ]));
+  }
+
+  if (widgets.sparse) {
+    const on = Boolean(value("sparse", false));
+    // Sparse attention in one pill, right by the attention backend it composes
+    // with. The switch and its budget extend the control you just pressed, the
+    // way Spectrum's blend does; the three combos are advanced — they are the
+    // pack's own tuning and only appear when the advanced controls are asked
+    // for or the switch is on.
+    const backend = String(value("sparse_backend", "Kitchen INT8"));
+    const schedule = String(value("sparse_schedule", "Ramp"));
+    const tokenOrder = String(value("sparse_token_order", "1x8x8"));
+    pills.push(pillSet([
+      (seg) => el("button", {
+        class: accelClass(seg, on),
+        title: on
+          ? t("Sparse attention on — most video tokens' keys and values are skipped inside each call. Composes with the attention backend underneath it. Needs H3-Optimizations.")
+          : t("Sparse attention off. Skips most video tokens' keys and values for speed; composes with the attention backend. Needs H3-Optimizations."),
+        onclick: () => set("sparse", !on),
+      }, [el("span", { text: on ? t("sparse") : t("sparse off") })]),
+      on && widgets.sparse_budget
+        ? (seg) => stepperPill({
+            seg,
+            value: Number(value("sparse_budget", 0.15)), min: 0.01, max: 1, step: 0.01, width: "52px",
+            title: t("Sparse budget — fraction of video tokens kept dense. Lower is faster and cheaper; too low loses detail."),
+            format: (n) => t("budget {n}", { n: n.toFixed(2) }),
+            onChange: (next) => set("sparse_budget", next),
+          })
+        : null,
+      on && widgets.sparse_backend
+        ? (seg) => {
+            const options = widgets.sparse_backend.options?.values || [];
+            return el("button", {
+              class: accelClass(seg, true),
+              title: t("Sparse backend — the kernel that runs the sparse attention."),
+              onclick: (event) => openChoicePopover(event.currentTarget, {
+                title: t("Sparse backend"),
+                options: typeof options === "function" ? options(widgets.sparse_backend) : options,
+                value: backend,
+                onPick: (picked) => set("sparse_backend", picked),
+              }),
+            }, [el("span", { text: t(backend) })]);
+          }
+        : null,
+      on && widgets.sparse_schedule
+        ? (seg) => {
+            const options = widgets.sparse_schedule.options?.values || [];
+            return el("button", {
+              class: accelClass(seg, true),
+              title: t("Sparse schedule — how the early steps ramp into the sparse budget."),
+              onclick: (event) => openChoicePopover(event.currentTarget, {
+                title: t("Sparse schedule"),
+                options: typeof options === "function" ? options(widgets.sparse_schedule) : options,
+                value: schedule,
+                onPick: (picked) => set("sparse_schedule", picked),
+              }),
+            }, [el("span", { text: t(schedule) })]);
+          }
+        : null,
+      on && widgets.sparse_token_order
+        ? (seg) => {
+            const options = widgets.sparse_token_order.options?.values || [];
+            return el("button", {
+              class: accelClass(seg, true),
+              title: t("Sparse token order — the layout video tokens are read in before sparsifying."),
+              onclick: (event) => openChoicePopover(event.currentTarget, {
+                title: t("Sparse token order"),
+                options: typeof options === "function" ? options(widgets.sparse_token_order) : options,
+                value: tokenOrder,
+                onPick: (picked) => set("sparse_token_order", picked),
+              }),
+            }, [el("span", { text: t(tokenOrder) })]);
+          }
+        : null,
+    ]));
+  }
+
+  if (widgets.memory) {
+    const on = Boolean(value("memory", false));
+    // Memory optimization in one pill: it chunks QKV and bounds MLP execution to
+    // lower peak VRAM. The three combos are the pack's own tuning and only
+    // appear when the switch is on.
+    const precision = String(value("memory_precision_mode", "Auto"));
+    const qkvStreaming = String(value("memory_qkv_streaming", "Auto"));
+    const attnMemory = String(value("memory_attention_memory", "Standard"));
+    pills.push(pillSet([
+      (seg) => el("button", {
+        class: accelClass(seg, on),
+        title: on
+          ? t("Memory optimization on — QKV is chunked and MLP execution is bounded to lower peak VRAM. Composes with every other accelerator. Needs H3-Optimizations.")
+          : t("Memory optimization off. Chunks QKV and bounds MLP execution to reduce peak VRAM; composes with every other accelerator. Needs H3-Optimizations."),
+        onclick: () => set("memory", !on),
+      }, [el("span", { text: on ? t("memory") : t("memory off") })]),
+      on && widgets.memory_precision_mode
+        ? (seg) => {
+            const options = widgets.memory_precision_mode.options?.values || [];
+            return el("button", {
+              class: accelClass(seg, true),
+              title: t("Precision mode — how weights are converted for execution."),
+              onclick: (event) => openChoicePopover(event.currentTarget, {
+                title: t("Precision mode"),
+                options: typeof options === "function" ? options(widgets.memory_precision_mode) : options,
+                value: precision,
+                onPick: (picked) => set("memory_precision_mode", picked),
+              }),
+            }, [el("span", { text: t(precision) })]);
+          }
+        : null,
+      on && widgets.memory_qkv_streaming
+        ? (seg) => {
+            const options = widgets.memory_qkv_streaming.options?.values || [];
+            return el("button", {
+              class: accelClass(seg, true),
+              title: t("QKV streaming — whether this node replaces dense attention with a bounded carrier."),
+              onclick: (event) => openChoicePopover(event.currentTarget, {
+                title: t("QKV streaming"),
+                options: typeof options === "function" ? options(widgets.memory_qkv_streaming) : options,
+                value: qkvStreaming,
+                onPick: (picked) => set("memory_qkv_streaming", picked),
+              }),
+            }, [el("span", { text: t(qkvStreaming) })]);
+          }
+        : null,
+      on && widgets.memory_attention_memory
+        ? (seg) => {
+            const options = widgets.memory_attention_memory.options?.values || [];
+            return el("button", {
+              class: accelClass(seg, true),
+              title: t("Attention memory — standard prioritizes speed; lower VRAM uses additional attention work to reduce peak memory."),
+              onclick: (event) => openChoicePopover(event.currentTarget, {
+                title: t("Attention memory"),
+                options: typeof options === "function" ? options(widgets.memory_attention_memory) : options,
+                value: attnMemory,
+                onPick: (picked) => set("memory_attention_memory", picked),
+              }),
+            }, [el("span", { text: t(attnMemory) })]);
+          }
         : null,
     ]));
   }

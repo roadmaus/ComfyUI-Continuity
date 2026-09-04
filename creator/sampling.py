@@ -91,17 +91,32 @@ DEFAULTS = {
     "attention": "default",
     "chunk_ffn": False,
     "fp16_accumulation": False,
+    "sparse": False,
+    "sparse_budget": 0.15,
+    "sparse_backend": "Kitchen INT8",
+    "sparse_schedule": "Ramp",
+    "sparse_token_order": "1x8x8",
+    "memory": False,
+    "memory_precision_mode": "Auto",
+    "memory_qkv_streaming": "Auto",
+    "memory_attention_memory": "Standard",
 }
 
 # What each field has to be. Anything else in the blob is refused by name rather
 # than coerced: a hand-edited `"steps": "twenty"` should say so before a loader
 # is built, not sample once at whatever `int()` made of it.
 _WHOLE = ("steps",)
-_NUMBER = ("cfg", "shift_video", "shift_audio", "spectrum_blend")
-_FLAG = ("spectrum", "chunk_ffn", "fp16_accumulation")
+_NUMBER = ("cfg", "shift_video", "shift_audio", "spectrum_blend", "sparse_budget")
+_FLAG = ("spectrum", "chunk_ffn", "fp16_accumulation", "sparse", "memory")
 _CHOICE = {
     "block_cache": accel.BLOCK_CACHE_MODES,
     "attention": accel.ATTENTION_MODES,
+    "sparse_backend": accel.SPARSE_BACKENDS,
+    "sparse_schedule": accel.SPARSE_SCHEDULES,
+    "sparse_token_order": accel.SPARSE_TOKEN_ORDERS,
+    "memory_precision_mode": accel.MEMORY_PRECISION_MODES,
+    "memory_qkv_streaming": accel.MEMORY_QKV_STREAMING_MODES,
+    "memory_attention_memory": accel.MEMORY_ATTENTION_MEMORY_MODES,
 }
 
 
@@ -158,6 +173,15 @@ def resolve(data, widgets):
                                  named="attention" in stored),
             chunk_ffn=pick("chunk_ffn"),
             fp16_accumulation=pick("fp16_accumulation"),
+            sparse=pick("sparse"),
+            sparse_budget=pick("sparse_budget"),
+            sparse_backend=pick("sparse_backend"),
+            sparse_schedule=pick("sparse_schedule"),
+            sparse_token_order=pick("sparse_token_order"),
+            memory=pick("memory"),
+            memory_precision_mode=pick("memory_precision_mode"),
+            memory_qkv_streaming=pick("memory_qkv_streaming"),
+            memory_attention_memory=pick("memory_attention_memory"),
         ),
     )
 
