@@ -584,11 +584,15 @@ class LTX25Prompting(harness.Prompting):
         `prompts/multishot.txt`."""
         return 1
 
-    def reply_shape(self, mode, shots, cuts=0, shown=(), piece=False, ref_shots=()):
+    # `cast` is accepted and unused: this family has no subject grammar, so a
+    # declared cast changes nothing about what the model is asked for.
+    def reply_shape(self, mode, shots, cuts=0, shown=(), piece=False, ref_shots=(),
+                    cast=()):
         return reply_shape(shots, shown=shown, piece=piece,
                            sheet=mode == self.modes_reference())
 
-    def system_prompt(self, mode, language="English", shape=None, cuts=0, extra=""):
+    def system_prompt(self, mode, language="English", shape=None, cuts=0, extra="",
+                      cast=()):
         return system_prompt(mode, language, shape=shape, extra=extra)
 
     def user_message(self, shots, seconds=None, shown=(), mode=None, piece=None,

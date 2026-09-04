@@ -515,18 +515,25 @@ class Prompting:
         """
         return None
 
-    def reply_shape(self, mode, shots, cuts=0, shown=(), piece=False, ref_shots=()):
-        """The JSON contract, written out for the model to read."""
+    def reply_shape(self, mode, shots, cuts=0, shown=(), piece=False, ref_shots=(),
+                    cast=()):
+        """The JSON contract, written out for the model to read.
+
+        `cast` is the piece's declared subjects, for a family whose contract
+        changes when the compiler writes part of the document itself; a
+        family with no subject grammar ignores it.
+        """
         raise NotImplementedError(f"{self.id}.reply_shape")
 
-    def system_prompt(self, mode, language="English", shape=None, cuts=0, extra=""):
+    def system_prompt(self, mode, language="English", shape=None, cuts=0, extra="",
+                      cast=()):
         """The whole instruction: rules, craft, the mode's template, the contract.
 
         `extra` is the user's own instructions, from a prompt file they put in
         the node's skills/ folder and set to add to the built-in prompting
         rather than replace it. It goes after the family's own craft and before
         the reply contract — late enough to bind, early enough that the shape
-        of the reply is still the last thing read.
+        of the reply is still the last thing read. `cast` as in `reply_shape`.
         """
         raise NotImplementedError(f"{self.id}.system_prompt")
 

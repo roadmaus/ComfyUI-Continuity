@@ -262,6 +262,11 @@ def _plan(body):
         raise compiler.CompileError(
             "every card in this timeline is supplied footage — there is nothing to rewrite")
 
+    # The piece's cast, whole rather than per shot: the glossary says who exists
+    # in this piece, and any shot may put any of them on screen — the citation
+    # is what casts them into that generation, exactly as it is for the pool.
+    cast = compiler.timeline_cast(data)
+
     shots, images = [], []
     lone = len(wanted) == 1
     # One compile per pass, not per card: the members of a merged run all read
@@ -302,6 +307,20 @@ def _plan(body):
             # to accept the handle there rather than flag it as unattached —
             # at queue time the citation itself is what attaches it.
             shot["handles"] |= pool["handles"]
+        if cast:
+            # The whole cast, on every shot, for the same reason as the pool:
+            # writing `@anna` into a card that never mentioned her is the one
+            # thing refining a cast piece is *for*, and it was being reported
+            # as a reference to nothing because the compile — rightly — only
+            # carries the members the card's own text already cites.
+            shot["handles"] |= {subject.handle for subject in cast}
+            shot["cast"] = list(cast)
+            # A card that cites nobody yet compiles as T2VA, and a T2VA prompt
+            # tells the model nothing is attached while the members' pictures
+            # ride beside it. Written as the reference form instead, which is
+            # what the card becomes at queue time the moment a name is in it.
+            if shot["mode"] == "T2VA":
+                shot["mode"] = "REF2VA"
         shots.append(shot)
         images.extend(pictures)
 
@@ -321,10 +340,6 @@ def _plan(body):
                 written += 1
 
     piece = str(data.get("prompt") or "")
-    # The piece's cast, whole rather than per shot: the glossary says who exists
-    # in this piece, and any shot may put any of them on screen — the citation
-    # is what casts them into that generation, exactly as it is for the pool.
-    cast = compiler.timeline_cast(data)
     # Which of the strip's modes the system prompt is written for is the
     # family's answer — H3 reaches for its reference form because that is the
     # superset of everything else it can be asked, and a family with no such
@@ -609,9 +624,9 @@ def _run(body):
     # reply to a shape — so the shape is written into the instruction as words
     # and the reply is started mid-object.
     shape = prompting.reply_shape(mode, len(shots), cuts=cuts, shown=shown,
-                                  piece=ask_piece, ref_shots=ref_shots)
+                                  piece=ask_piece, ref_shots=ref_shots, cast=cast)
     system = prompting.system_prompt(mode, body.get("language") or "English",
-                                     shape=shape, cuts=cuts, extra=extra)
+                                     shape=shape, cuts=cuts, extra=extra, cast=cast)
     message = prompting.user_message(
         shots,
         seconds=seconds,

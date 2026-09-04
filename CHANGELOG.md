@@ -5,6 +5,19 @@ and everything under it is kept exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**The refiner writes the cast's names, and nothing about their pictures.** On
+a piece with a cast the built-in refiner asked a small model for two things at
+once: the six-section reference form, whose worked example defines
+`<Subject 1>` from a picture, and a note saying to define nothing and write
+the name — with `@anna` as its example, one line above the real names. A 4B
+model copied the example: every rewrite was about Anna, and the pictures were
+cited by their file handles, invented, or dropped. Now the cast's own names are
+written into the note, the reference template and the contract with a cast ask
+for the summary and the bodies alone, a member's picture is listed under the
+member as "[image N]" and nowhere else, and every card in a cast piece is
+refined as a reference request with every member's name accepted — a card that
+says only "she" comes back saying `@juno`.
+
 **A cast member's files carry words and a size.** Every tile on a cast card
 opens a menu with a line at its head for what that file shows of them - "her
 face, front-lit", "the golf swing" - written after the file's label in the

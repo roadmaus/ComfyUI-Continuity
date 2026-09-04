@@ -103,6 +103,16 @@ CRAFT = (_MODE_DIR / "craft.txt").read_text(encoding="utf-8").strip()
 MODE_TEMPLATE = {mode: (_MODE_DIR / f"{mode.lower()}.txt").read_text(encoding="utf-8").strip()
                  for mode in ("T2VA", "I2VA", "L2VA", "FL2VA", "REF2VA")}
 
+# The reference form with a cast declared. Not a sixth mode — the request is
+# still REF2VA, and the queue-time document is still the six-section one — but
+# the model is writing a different part of it: the compiler writes
+# `subject_definitions` and `retention_analysis` from the cast, so the rewrite
+# names the members and writes the summary and the bodies. The REF2VA template
+# teaches the opposite by example (`<Subject 1> is the young woman in @img-1`),
+# and a 4B model imitates the example over any rule placed beside it, so with a
+# cast the template is swapped rather than annotated.
+CAST_TEMPLATE = (_MODE_DIR / "cast.txt").read_text(encoding="utf-8").strip()
+
 
 # ---- the instructions -------------------------------------------------------
 #
@@ -262,6 +272,30 @@ MODE_NOTES = {
               "across all of them.",
 }
 
+# The same sentence with a cast: the two sections the compiler writes are not
+# asked for, so the mode note must not ask for them either.
+CAST_MODE_NOTE = ("The piece has a cast, and reference pictures are attached. "
+                  "Write the summary, the per-shot bodies, overall_soundscape "
+                  "and non_diegetic_music, naming each cast member by handle "
+                  "where they appear.")
+
+
+def owners(cast):
+    """file handle -> the cast member it belongs to, for every claimed file.
+
+    A picture behind a member is that member's face, not a reference in its
+    own right: the glossary lists it under the name, `what_i_see` opens its
+    sentence with the name, and the rewrite is told to write the name and never
+    the file. This is the one map every place that shows the picture reads.
+    """
+    return {handle: subject.handle for subject in cast or () for handle in subject.files}
+
+
+def shown_names(shown, cast):
+    """The handle each attached picture is named by: a member's picture is the member."""
+    own = owners(cast)
+    return tuple(own.get(handle, handle) for handle in shown)
+
 def choose_template(choice, mode):
     """Which template the rewrite is written in -> `(template, forced)`.
 
@@ -292,6 +326,11 @@ def choose_template(choice, mode):
 
 _REF_SECTIONS = ("subject_definitions", "summary", "retention_analysis")
 
+# The two a declared cast writes for itself — `compile.compile_request` derives
+# both from the cast at queue time — so with a cast the model is asked for the
+# summary alone. `H3Prompting.cast_sections` is this same tuple, for the route.
+CAST_SECTIONS = ("subject_definitions", "retention_analysis")
+
 
 def join_shots(bodies, cuts, seconds):
     """The model's shots -> the one `[Shot n]`-marked description they make.
@@ -316,7 +355,7 @@ def join_shots(bodies, cuts, seconds):
     return contextir.shot_body(plan_cuts(clean, times, seconds))
 
 
-def reply_shape(mode, shots, cuts=0, shown=(), piece=False, ref_shots=()):
+def reply_shape(mode, shots, cuts=0, shown=(), piece=False, ref_shots=(), cast=()):
     """The JSON contract, written out for the model to read.
 
     Nothing in ComfyUI's generation loop constrains a reply to a shape —
@@ -345,23 +384,32 @@ def reply_shape(mode, shots, cuts=0, shown=(), piece=False, ref_shots=()):
     pool, so each reference card needs its own `subject_definitions` and
     `retention_analysis` — the top-level set, which describes one document,
     moves inside those entries instead.
+
+    `cast` narrows the reference sections to the one the model still writes:
+    the compiler writes the other two from the cast and the route drops
+    whatever came back for them, so asking would spend the reply budget on
+    text nobody reads — and teach the model, by the contract itself, to define
+    the subjects it was just told are defined. A member's picture is named by
+    the member in the `what_i_see` instruction, for the reason `owners` gives.
     """
     timed = int(cuts) >= 2
     ref_shots = set(ref_shots or ())
-    shown = tuple(shown)
+    shown = shown_names(shown, cast)
+    sections = tuple(name for name in _REF_SECTIONS
+                     if not cast or name not in CAST_SECTIONS)
     lines = ["Return exactly this JSON object, and nothing before or after it:", "{"]
     if shown:
         lines.append('  "%s": "...",' % SEEN_FIELD)
     if piece:
         lines.append('  "%s": "...",' % PIECE_FIELD)
     if mode == "REF2VA" and not ref_shots:
-        lines += ['  "%s": "...",' % name for name in _REF_SECTIONS]
+        lines += ['  "%s": "...",' % name for name in sections]
     if timed:
         lines.append('  "shots": [{"at_seconds": 0, "body": "..."}],')
     else:
         entry = '{"body": "..."}'
         sectioned = '{%s, "body": "..."}' % ", ".join(
-            '"%s": "..."' % name for name in _REF_SECTIONS)
+            '"%s": "..."' % name for name in sections)
         lines.append('  "shots": [%s],' % ", ".join(
             sectioned if index in ref_shots else entry for index in range(shots)))
     lines.append('  "overall_soundscape": "...",')
@@ -380,9 +428,11 @@ def reply_shape(mode, shots, cuts=0, shown=(), piece=False, ref_shots=()):
         lines.append(
             ("Shot entry %s carries its own" if len(ref_shots) == 1
              else "Shot entries %s each carry their own") % which
-            + " subject_definitions, summary and retention_analysis, "
-            "describing only the references attached to that shot. Entries "
-            "without references have only a body."
+            + (" summary, describing that shot. "
+               if cast else
+               " subject_definitions, summary and retention_analysis, "
+               "describing only the references attached to that shot. ")
+            + "Entries without references have only a body."
         )
     if timed:
         lines.append(
@@ -412,8 +462,12 @@ def reply_shape(mode, shots, cuts=0, shown=(), piece=False, ref_shots=()):
     return "\n".join(lines)
 
 
-def system_prompt(mode, language="English", shape=None, cuts=0, extra=""):
+def system_prompt(mode, language="English", shape=None, cuts=0, extra="", cast=()):
     """The whole instruction: rules, craft, the mode's template, the contract.
+
+    With a `cast`, the reference form's template and mode note are the cast
+    ones — see `CAST_TEMPLATE` for why the template is swapped rather than
+    annotated.
 
     Recency does the heavy lifting on a small model — whatever it read last is
     what it is still holding when it starts writing — so the order runs from the
@@ -433,9 +487,11 @@ def system_prompt(mode, language="English", shape=None, cuts=0, extra=""):
         parts.append(_CUTS_RULE.format(limit=int(cuts), floor=MIN_SHOT_S))
     if language and language != "English":
         parts.append(_LANGUAGE_RULE.format(language=language))
-    parts.append(f"MODE\nThis request is {mode}. {MODE_NOTES[mode]}")
+    with_cast = bool(cast) and mode == "REF2VA"
+    note = CAST_MODE_NOTE if with_cast else MODE_NOTES[mode]
+    parts.append(f"MODE\nThis request is {mode}. {note}")
     parts.append(CRAFT)
-    parts.append(MODE_TEMPLATE[mode])
+    parts.append(CAST_TEMPLATE if with_cast else MODE_TEMPLATE[mode])
     if (extra or "").strip():
         parts.append(harness.EXTRA_RULE.format(extra=extra.strip()))
     if shape:
@@ -457,15 +513,18 @@ _CAST_WHAT = {
 }
 
 
-def describe_cast(cast):
+def describe_cast(cast, images=None):
     """The cast glossary, one line per declared subject.
 
     Handles rather than labels, like the pool's: a subject's ordinal depends on
     which shots cite it, and the model's job is to write the name. What each
-    subject is *made of* is listed after it so the model can tell that naming
-    the files behind Anna as well as Anna would be saying the same thing twice —
-    which is the mistake the whole block exists to prevent.
+    subject is *made of* is listed after it, as the `[image N]` mark of each
+    picture where one rides with the message (`images` is handle -> number)
+    and as the file's handle where none does — so the model can find the
+    member's face among the attachments without being handed a second handle
+    to write for the same person.
     """
+    images = images or {}
     lines = []
     for subject in cast:
         head = f"@{subject.handle}: {_CAST_WHAT.get(subject.takes, 'a subject')}"
@@ -482,10 +541,11 @@ def describe_cast(cast):
                      if feature.changed else f", {feature.text}")
         # Each file with what the user said it lends them, so the rewrite can
         # tell the face picture from the outfit picture instead of guessing.
-        said = lambda h: f"@{h}" + (f" ({subject.notes[h]})" if subject.notes.get(h) else "")
+        said = lambda h: (f"[image {images[h]}]" if h in images else f"@{h}") + (
+            f" ({subject.notes[h]})" if subject.notes.get(h) else "")
         made_of = []
         if subject.sources:
-            made_of.append("from " + ", ".join(said(h) for h in subject.sources))
+            made_of.append("pictured in " + ", ".join(said(h) for h in subject.sources))
         if subject.motion:
             made_of.append(f"moving as in {said(subject.motion)}")
         if subject.voice:
@@ -499,17 +559,25 @@ def describe_cast(cast):
     return lines
 
 
-CAST_NOTE = (
-    "The user has cast this piece: these subjects are pinned, and at generation "
-    "time each one is already written into `subject_definitions` with its own "
-    "`<Subject N>` and its own line in `retention_analysis`. So do not define "
-    "them and do not analyse them — write neither of those two sections, and "
-    "write no `<Subject N>` label of your own. What you write instead is the "
-    "name: `@anna`, in the shot where they appear, exactly as you would write a "
-    "file's handle. Do not also name the files behind a subject — they are "
-    "cited inside their definition already, and naming them again tells the model "
-    "the same thing twice in two voices."
-)
+def cast_note(cast):
+    """What the cast block asks for, naming the members it is about.
+
+    The names are written into the sentence itself. This used to say "the
+    name: `@anna`" with the real names one line below, and a 4B model copied
+    the example: every rewrite of every piece was about Anna, whoever had been
+    cast. An instruction to a small model names the thing it is about.
+    """
+    names = ", ".join(f"@{subject.handle}" for subject in cast)
+    return (
+        f"The user has cast this piece: {names}. At generation time each of them "
+        f"is already written into `subject_definitions` with its own `<Subject N>` "
+        f"and its own line in `retention_analysis`, from the pictures listed "
+        f"beside them. Write neither section and no `<Subject N>` of your own. "
+        f"What you write is the name — {names} — in every shot where they "
+        f"appear, exactly as you would write a file's handle, even where the "
+        f"request says only \"she\" or \"he\". Do not write the handle of a "
+        f"picture behind a member: it is cited inside their definition already."
+    )
 
 
 # What each role is, in the words the glossary uses. The reference guide names
@@ -745,8 +813,18 @@ def user_message(shots, seconds=None, shown=(), mode=None, piece=None, pool=None
     a cut that is going to hold somebody else's footage.
     """
     many = len(shots) > 1
-    shown = tuple(shown)
+    shown = shown_names(shown, cast)
     lines = []
+
+    # A member's picture is listed under the member and nowhere else: the pool
+    # line for it would carry a second handle for the same face and a scope note
+    # written for a file cited in its own right, and the block below would then
+    # say not to write that handle — two instructions about one picture.
+    claimed = owners(cast)
+    free = lambda slots: [slot for slot in slots if slot["handle"] not in claimed]
+    numbered = {slot["handle"]: slot["image"]
+                for group in [pool or []] + [shot.get("slots") or [] for shot in shots]
+                for slot in group if slot.get("image") and slot["handle"] in claimed}
 
     if len(shown) == 1:
         lines.append(f"One image is attached to this message: it is the picture of "
@@ -817,7 +895,7 @@ def user_message(shots, seconds=None, shown=(), mode=None, piece=None, pool=None
                 "without restating it."
             )
 
-    if pool:
+    if pool and free(pool):
         lines.append("")
         lines.append("ATTACHED TO THE PIECE")
         lines.append(
@@ -828,7 +906,7 @@ def user_message(shots, seconds=None, shown=(), mode=None, piece=None, pool=None
             "shot at once. Cite each one where its subject appears — per shot, "
             "or globally when it runs through the whole piece."
         )
-        lines.extend("  " + line for line in describe_slots(pool))
+        lines.extend("  " + line for line in describe_slots(free(pool)))
 
     # After the pool, because a subject is made out of what the pool holds and
     # reads as nonsense above it — and before the shots, because every shot may
@@ -836,8 +914,8 @@ def user_message(shots, seconds=None, shown=(), mode=None, piece=None, pool=None
     if cast:
         lines.append("")
         lines.append("THE CAST")
-        lines.append(CAST_NOTE)
-        lines.extend("  " + line for line in describe_cast(cast))
+        lines.append(cast_note(cast))
+        lines.extend("  " + line for line in describe_cast(cast, numbered))
     lines.append("")
 
     for number, shot in enumerate(shots, start=1):
@@ -849,20 +927,25 @@ def user_message(shots, seconds=None, shown=(), mode=None, piece=None, pool=None
         # Only where it differs from the one the system prompt already stated, so
         # the common case of a strip of plain shots says it once.
         note = MODE_NOTES.get(shot.get("mode"))
-        if note and shot.get("mode") != mode:
+        # A T2VA card in a cast piece is not "nothing attached, describe from
+        # nothing": the members' pictures are in the message and their names
+        # are what the card is meant to gain. The route already writes such a
+        # card as REF2VA; this is the belt to that brace.
+        if note and shot.get("mode") != mode and not (cast and shot.get("mode") == "T2VA"):
             lines.append(note)
         if shot.get("continues"):
             lines.append(CONTINUES_NOTE)
 
-        if shot.get("slots"):
+        own = free(shot.get("slots") or [])
+        if own:
             lines.append("Attached here:")
-            lines.extend("  " + line for line in describe_slots(shot["slots"]))
+            lines.extend("  " + line for line in describe_slots(own))
             # Said again, here, next to the handles it is about. The count at the
             # top of the message is thousands of tokens back by the time the
             # model reaches this shot — behind the whole glossary in a timeline
             # refine — and the sentence that matters is the one adjacent to the
             # thing it governs.
-            shown = [slot["image"] for slot in shot["slots"] if slot.get("image")]
+            shown = [slot["image"] for slot in own if slot.get("image")]
             if shown:
                 which = ", ".join(f"[image {n}]" for n in shown)
                 lines.append(
@@ -987,7 +1070,7 @@ class H3Prompting(harness.Prompting):
     # writes both from the cast and would override whatever the model returned,
     # so a stored copy would show the user a definition of Anna that is not the
     # one the model will be handed.
-    cast_sections = ("subject_definitions", "retention_analysis")
+    cast_sections = CAST_SECTIONS
 
     def choose_template(self, choice, mode):
         return choose_template(choice, mode)
@@ -1045,12 +1128,15 @@ class H3Prompting(harness.Prompting):
                 f"which may degrade the result. The pinned template was honoured; "
                 f"set it to auto if that is not what you wanted.")
 
-    def reply_shape(self, mode, shots, cuts=0, shown=(), piece=False, ref_shots=()):
+    def reply_shape(self, mode, shots, cuts=0, shown=(), piece=False, ref_shots=(),
+                    cast=()):
         return reply_shape(mode, shots, cuts=cuts, shown=shown, piece=piece,
-                           ref_shots=ref_shots)
+                           ref_shots=ref_shots, cast=cast)
 
-    def system_prompt(self, mode, language="English", shape=None, cuts=0, extra=""):
-        return system_prompt(mode, language, shape=shape, cuts=cuts, extra=extra)
+    def system_prompt(self, mode, language="English", shape=None, cuts=0, extra="",
+                      cast=()):
+        return system_prompt(mode, language, shape=shape, cuts=cuts, extra=extra,
+                             cast=cast)
 
     def user_message(self, shots, seconds=None, shown=(), mode=None, piece=None,
                      pool=None, footage=(), cast=()):

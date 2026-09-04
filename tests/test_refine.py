@@ -26,11 +26,11 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Through `layout.load`, which knows where a module that moved into a family
 # package went — the hand-rolled loader this replaces knew only `PY_ROOT`.
-pkg = layout.load("prompting", "refine")
+pkg = layout.load("prompting", "refine", "subjects")
 # The two halves the refiner came apart into: `prompting` is the harness —
 # handles, checks, the ChatML turns, the reply budget — and `refine` is H3's
 # own templates, contract and glossary. See `families/refine.py`.
-prompting, refine = pkg.prompting, pkg.refine
+prompting, refine, subjects = pkg.prompting, pkg.refine, pkg.subjects
 
 from harness import FAILURES, check, passed
 
@@ -646,6 +646,69 @@ check("with a pool, the piece may cite it",
 check("...and without one, the old rule stands",
       "Write no @handle and no <Picture N> label" in refine.user_message(
           [{"text": "x"}], piece={"text": "y", "rewrite": True}), True)
+
+
+# ---- the cast ---------------------------------------------------------------
+#
+# With a cast the compiler writes `subject_definitions` and `retention_analysis`
+# itself, so the model's whole job is to write the members' names. Everything
+# below pins what a 4B model was actually doing with the old prompt: copying
+# the note's example name over the real one, defining subjects it was told
+# were defined, and citing the picture behind a member as a second handle.
+
+cast = subjects.parse([
+    {"handle": "juno", "from": ["img-1"], "takes": "person", "description": "a pale young person"},
+    {"handle": "wren", "from": ["img-3", "vid-1"], "takes": "person"},
+])
+pool = [
+    {"handle": "img-1", "what": "a person reference (juno.png)", "note": "only the person", "image": 1},
+    {"handle": "img-2", "what": "a scene reference (room.jpg)", "note": "only the place", "image": 2},
+    {"handle": "img-3", "what": "a person reference (wren.png)", "note": "only the person", "image": 3},
+    {"handle": "vid-1", "what": "a reference video, for the person in it (wren.mp4)", "image": 4},
+]
+cast_message = refine.user_message(
+    [{"text": "she sits down", "seconds": 5, "mode": "T2VA", "slots": []}],
+    seconds=5, shown=("img-1", "img-2", "img-3", "vid-1"), mode="REF2VA", pool=pool, cast=cast)
+
+check("the cast note names the members, not an example", "@juno" in refine.cast_note(cast), True)
+check("...and no member is called Anna", "anna" in cast_message.lower(), False)
+check("a member's picture is listed under the member as the image it is",
+      "@juno: a person, a pale young person — pictured in [image 1]" in cast_message, True)
+check("...with every file of theirs", "@wren: a person — pictured in [image 3], [image 4]" in cast_message, True)
+check("...and nowhere else: the pool line for it is gone",
+      "(juno.png)" in cast_message or "(wren.png)" in cast_message, False)
+check("a reference no member claims keeps its pool line", "(room.jpg)" in cast_message, True)
+check("the attached pictures are named by member where a member owns them",
+      "the pictures of @juno, @img-2, @wren, @wren" in cast_message, True)
+check("a card that cites nobody is not told nothing is attached",
+      refine.MODE_NOTES["T2VA"] in cast_message, False)
+check("a cast note is not written for a piece without one", "THE CAST" in refine.user_message(
+    [{"text": "x", "slots": []}], pool=pool), False)
+
+cast_shape = refine.reply_shape("REF2VA", 1, shown=("img-1", "img-2"), cast=cast)
+check("the contract asks for the summary alone", '"summary"' in cast_shape, True)
+check("...not the sections the compiler writes",
+      "subject_definitions" in cast_shape or "retention_analysis" in cast_shape, False)
+check("what_i_see opens a member's sentence with the member",
+      "The pictures attached here are @juno, @img-2" in cast_shape, True)
+check("per-card sections with a cast are the summary alone",
+      "carries its own summary, describing that shot" in
+      refine.reply_shape("REF2VA", 2, ref_shots=(1,), cast=cast), True)
+check("without a cast the contract is unchanged",
+      "subject_definitions" in refine.reply_shape("REF2VA", 1, shown=("img-1",)), True)
+
+cast_system = refine.system_prompt("REF2VA", shape=cast_shape, cast=cast)
+check("the cast template replaces the reference one", refine.CAST_TEMPLATE in cast_system, True)
+check("...so no example defines a subject from a picture",
+      "<Subject 1> is" in cast_system, False)
+check("...and the mode note asks for nothing the compiler writes",
+      refine.CAST_MODE_NOTE in cast_system and refine.MODE_NOTES["REF2VA"] not in cast_system, True)
+check("a keyframe request with a cast keeps its own template",
+      refine.MODE_TEMPLATE["I2VA"] in refine.system_prompt("I2VA", cast=cast), True)
+check("no cast, no cast template",
+      refine.CAST_TEMPLATE in refine.system_prompt("REF2VA"), False)
+check("writing the member cites the files behind them",
+      prompting.uncited("@wren walks in", {"img-3", "vid-1"}, {}, cast), [])
 
 
 passed("all refiner tests passed")
