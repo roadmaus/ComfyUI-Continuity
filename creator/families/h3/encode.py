@@ -380,7 +380,7 @@ def _seam_blocks(audio_vae, compiled, loaded, frame_count):
     shown — see `_encode_frames`.
     """
     blocks = []
-    if compiled.continues_audio:
+    if compiled.continues_audio and compiled.seam_mode != "mask":
         blocks.append(_seam_audio(
             audio_vae, loaded[PREV_AUDIO]["audio"],
             compiled.feather if compiled.feather > 1 else None))
@@ -450,28 +450,36 @@ def _encode_frames(clip, vae, audio_vae, compiled, loaded):
     keyframes = []
 
     if compiled.continues:
-        # The source segment's tail. It was generated on this same canvas
-        # — the timeline pins one geometry across every segment — so the resize
-        # is a no-op that exists only so a hand-built request cannot skip it.
-        tail = _resize(loaded[PREV_FRAME]["image"], compiled.width, compiled.height, "center")
-        # What Qwen is shown, and it is no longer "the last frame either way".
-        # On the classic seam the boundary frame is the whole seam, so it is
-        # presented and the prompt names it. On a blended one the run goes to
-        # the DiT as pinned guides and Qwen is told nothing unless the user
-        # asked — presenting it said "this exact still is <Picture 1>" while
-        # the DiT was reading a run of motion that merely ends on that still,
-        # which is a pin arguing with the blend. `_encode_references` has never
-        # presented a seam; this is the two roads agreeing at last.
-        #
-        # `compiled.presents_head_frame` rather than the test spelled out here:
-        # `_keyframe_labels` and the prompt's alignment line ask the same
-        # question, and them each answering it separately is how they drifted.
-        if compiled.presents_head_frame:
-            images.append(tail[-1:])
-        if compiled.feather > 1:
-            keyframes.extend(_context_keyframes(vae, tail[-compiled.feather:], compiled.feather))
+        # A masked seam carries its whole protected prefix through the splice
+        # `core/emit.py` builds between this node and the sampler — pinning a
+        # keyframe here on top of it would be the "pin arguing with the
+        # blend" problem all over again, so this contributes nothing to
+        # either list for one.
+        if compiled.seam_mode == "mask":
+            pass
         else:
-            keyframes.append(_pin({"image": tail[-1:]}, 0))
+            # The source segment's tail. It was generated on this same canvas
+            # — the timeline pins one geometry across every segment — so the resize
+            # is a no-op that exists only so a hand-built request cannot skip it.
+            tail = _resize(loaded[PREV_FRAME]["image"], compiled.width, compiled.height, "center")
+            # What Qwen is shown, and it is no longer "the last frame either way".
+            # On the classic seam the boundary frame is the whole seam, so it is
+            # presented and the prompt names it. On a blended one the run goes to
+            # the DiT as pinned guides and Qwen is told nothing unless the user
+            # asked — presenting it said "this exact still is <Picture 1>" while
+            # the DiT was reading a run of motion that merely ends on that still,
+            # which is a pin arguing with the blend. `_encode_references` has never
+            # presented a seam; this is the two roads agreeing at last.
+            #
+            # `compiled.presents_head_frame` rather than the test spelled out here:
+            # `_keyframe_labels` and the prompt's alignment line ask the same
+            # question, and them each answering it separately is how they drifted.
+            if compiled.presents_head_frame:
+                images.append(tail[-1:])
+            if compiled.feather > 1:
+                keyframes.extend(_context_keyframes(vae, tail[-compiled.feather:], compiled.feather))
+            else:
+                keyframes.append(_pin({"image": tail[-1:]}, 0))
     elif compiled.first_frame is not None:
         # Geometry anchor: plain stretch when the canvas was derived from this
         # image's own aspect ratio (`ratio_from_image`) and already matches it.
@@ -707,18 +715,23 @@ def _encode_references(clip, vae, audio_vae, compiled, loaded, checkpoints=None)
 
     keyframes = []
     if compiled.continues:
-        # The seam alongside references — a combination old core's node
-        # surface stops short of. The inherited frames ride as guides pinned
-        # at their real positions: with references in the layout the target
-        # clip no longer starts where old stock computes keyframe anchors, so
-        # even the classic single-frame seam is pinned — natively on a core
-        # with the general anchor, via `payload.py` on an older one, which
-        # also rebuilds the latent list that core's `extra_conds` overwrites.
-        tail = _resize(loaded[PREV_FRAME]["image"], compiled.width, compiled.height, "center")
-        if compiled.feather > 1:
-            keyframes.extend(_context_keyframes(vae, tail[-compiled.feather:], compiled.feather))
+        # Same as `_encode_frames`: a masked seam is spliced downstream of
+        # this node, so there is nothing here to pin.
+        if compiled.seam_mode == "mask":
+            pass
         else:
-            keyframes.append(_pin({"latent": vae.encode(tail[-1:])}, 0))
+            # The seam alongside references — a combination old core's node
+            # surface stops short of. The inherited frames ride as guides pinned
+            # at their real positions: with references in the layout the target
+            # clip no longer starts where old stock computes keyframe anchors, so
+            # even the classic single-frame seam is pinned — natively on a core
+            # with the general anchor, via `payload.py` on an older one, which
+            # also rebuilds the latent list that core's `extra_conds` overwrites.
+            tail = _resize(loaded[PREV_FRAME]["image"], compiled.width, compiled.height, "center")
+            if compiled.feather > 1:
+                keyframes.extend(_context_keyframes(vae, tail[-compiled.feather:], compiled.feather))
+            else:
+                keyframes.append(_pin({"latent": vae.encode(tail[-1:])}, 0))
     elif compiled.first_frame is not None:
         # The segment's own start frame, riding with references the same way
         # the seam does — pinned at frame 0 on this segment's own timeline.

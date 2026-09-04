@@ -238,7 +238,14 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
             model = lora.apply(model, entries, compiled.checkpoint)
 
         loaded = media.load_all(compiled)
-        if compiled.continues:
+        # A masked seam is wired entirely in `core/emit.py`, between this node
+        # and the sampler — its protected prefix replaces the empty latent
+        # this node still builds below, and the source's own latent stands in
+        # for a keyframe. So neither `prev_image` nor `prev_audio` ever reaches
+        # here for one, on either seam: pinning a keyframe *and* protecting the
+        # same instants as a verbatim prefix is the same "pin arguing with the
+        # blend" problem a blended seam's own boundary pin was corrected for.
+        if compiled.continues and compiled.seam_mode != "mask":
             if prev_image is None:
                 raise ValueError(
                     "This segment continues from an earlier one but no frame "
@@ -251,7 +258,7 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
                     f"or lengthen the source segment"
                 )
             loaded[encoder.PREV_FRAME] = {"image": prev_image[-compiled.feather:]}
-        if compiled.continues_audio:
+        if compiled.continues_audio and compiled.seam_mode != "mask":
             if prev_audio is None:
                 raise ValueError(
                     "This segment's sound continues from an earlier one but no "
