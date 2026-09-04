@@ -571,6 +571,72 @@ check("the pin is dropped with the blend it modifies", pins["unblended"], False)
 check("a blended seam does not pin its boundary frame by default",
       pins["byDefault"], False)
 
+# ---- the seam's restore ---------------------------------------------------------
+#
+# The same shape as the pin — a capability-gated fact about a seam — and the one
+# that went wrong: the row wrote `seam_restore` onto the live segment and
+# `serializeTimeline` never wrote it out, so the switch moved, the blob did not,
+# and the queue re-ran the bytes it already had. Issue #41. What is checked here
+# is the round trip, because that is the half that was missing.
+
+RESTORE_JS = """
+const S = await import(process.argv[1]);
+const strip = (family, extra, donor) => {
+  const t = S.emptyTimeline();
+  t.family = family;
+  t.segments = [donor ?? S.emptySegment(), S.emptySegment()];
+  Object.assign(t.segments[1], { continue: true, ...extra });
+  S.syncTimeline(t);
+  return t;
+};
+const clip = () => ({ kind: "clip", filename: "footage/plate.mp4", duration_s: 6 });
+const written = (family, extra, donor) =>
+  JSON.parse(S.serializeTimeline(strip(family, extra, donor))).segments[1];
+console.log(JSON.stringify({
+  canDo: [S.canDo(strip("h3", {}), "seam_restore"),
+          S.canDo(strip("ltx25", {}), "seam_restore")],
+  // The bug: set on a live seam, it has to survive being written down.
+  written: [written("h3", { seam_restore: 0.45 }).seam_restore ?? 0,
+            written("ltx25", { seam_restore: 0.45 }).seam_restore ?? 0],
+  // ...and come back as itself, which is what the node reloading depends on.
+  reopened: (() => {
+    const blob = S.serializeTimeline(strip("h3", { seam_restore: 0.45 }));
+    return S.parseTimeline(blob).segments[1].seam_restore ?? 0;
+  })(),
+  // A single-frame seam restores too — the pass widens it — so the key must not
+  // ride on the blend the way the pin does.
+  unblended: written("h3", { seam_restore: 0.3 }).seam_restore ?? 0,
+  // Neither side may be footage: nothing samples a clip, and a run inherited
+  // from one has lost nothing. `emit.is_clip_source` agrees.
+  fromClip: written("h3", { seam_restore: 0.45 }, clip()).seam_restore ?? 0,
+  onClip: (() => {
+    const t = S.emptyTimeline();
+    t.segments = [S.emptySegment(), { ...clip(), continue: true, seam_restore: 0.45 }];
+    S.syncTimeline(t);
+    return t.segments[1].seam_restore ?? 0;
+  })(),
+  // A hard cut has no frames to hand over.
+  hardCut: (() => {
+    const t = strip("h3", { seam_restore: 0.45 });
+    t.segments[1].continue = false;
+    S.syncTimeline(t);
+    return t.segments[1].seam_restore ?? 0;
+  })(),
+  // Absent is off, so every strip written before the pass existed is unchanged.
+  byDefault: written("h3", {}).seam_restore ?? 0,
+}));
+"""
+
+restores = layout.run(RESTORE_JS, STATE)
+check("only a family with the pass offers the restore", restores["canDo"], [True, False])
+check("a restore set on a seam is written to the blob", restores["written"], [0.45, 0])
+check("...and reopens as itself", restores["reopened"], 0.45)
+check("the restore does not ride on the blend", restores["unblended"], 0.3)
+check("a run inherited from footage has nothing to restore", restores["fromClip"], 0)
+check("...and a clip card is played, not sampled", restores["onClip"], 0)
+check("a hard cut hands over no frames to restore", restores["hardCut"], 0)
+check("a seam does not restore by default", restores["byDefault"], 0)
+
 # ---- multishot advice ----------------------------------------------------------
 #
 # Both families cut inside one generation; what differs is the number each one's

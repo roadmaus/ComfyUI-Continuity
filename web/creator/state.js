@@ -2629,8 +2629,16 @@ function syncCanvas(timeline) {
     if (segment.feather_pin && (!segment.feather || !pins)) delete segment.feather_pin;
     // The restore is a fact about a seam: on a hard cut, on a family without
     // the pass, or at zero it says nothing and is dropped for the same reason.
+    // Neither side may be supplied footage: a clip card is played rather than
+    // sampled, so there is no pass to re-draw its frames in, and a run
+    // inherited *from* a clip has lost nothing to restore. `emit.is_clip_source`
+    // reads it the same way, so dropping it here is what keeps the pill and the
+    // graph saying the same thing.
+    const donor = timeline.segments[Number.isInteger(segment.continue_from)
+      ? segment.continue_from : index - 1];
     if (segment.seam_restore !== undefined
-        && (!segment.continue || !restores || !(Number(segment.seam_restore) > 0))) {
+        && (!segment.continue || !restores || !(Number(segment.seam_restore) > 0)
+            || isClip(segment) || !donor || isClip(donor))) {
       delete segment.seam_restore;
     }
     // Nothing runs into a clip that has no generation in front of it — two
@@ -3067,6 +3075,11 @@ export function serializeTimeline(timeline) {
         // blob written before the switch existed says.
         if (featherPin(segment, timeline)) out.feather_pin = true;
       }
+      // The restore, on the same terms as the rest of the seam — but not tied
+      // to the blend: a single-frame seam restores too, widened to the grid's
+      // first member by `emit`. Absent is off, which is the default and what
+      // every blob written before the pass existed says.
+      if (seamRestore(segment, timeline)) out.seam_restore = seamRestore(segment, timeline);
       // Out of the next render, and the render it already has. Only the
       // deliberate states are written: a card nobody has held and nothing has
       // rendered writes exactly what it always did.

@@ -73,9 +73,13 @@ const blendSetsTail = (segment, piece) =>
  *  little softer than the one it continues, and the next seam anchors on that
  *  tail, so the loss compounds down a strip (issue #41); restoring the run
  *  first breaks the chain at each seam. Off by default. Only where the family
- *  has the pass (`seam_restore`). Mirrors `compile.seam_restore_denoise`. */
-function seamRestoreRow(piece, segment, commit) {
+ *  has the pass (`seam_restore`), and only between two generated shots — see
+ *  the same gate in `syncTimeline`. Mirrors `compile.seam_restore_denoise`. */
+function seamRestoreRow(piece, segment, index, commit) {
   if (!S.canDo(piece, "seam_restore")) return null;
+  const donor = piece.segments[Number.isInteger(segment.continue_from)
+    ? segment.continue_from : index - 1];
+  if (S.isClip(segment) || !donor || S.isClip(donor)) return null;
   const names = ["Off", "Light", "Medium", "Strong"];
   return (close) => {
     const current = S.seamRestore(segment, piece);
@@ -2005,7 +2009,7 @@ class Timeline {
       extra: seamRows(
         seamPinRow(this.timeline, segment, S.feather(segment, this.timeline),
                    () => this.commit()),
-        seamRestoreRow(this.timeline, segment, () => this.commit())),
+        seamRestoreRow(this.timeline, segment, index, () => this.commit())),
       onPick: (choice) => {
         const width = grid.find((f) => label(f) === choice) ?? 1;
         if (width > 1) segment.feather = width;

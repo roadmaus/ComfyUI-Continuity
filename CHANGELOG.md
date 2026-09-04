@@ -12,8 +12,8 @@ when it continues from its own output, which no arrangement of the handoff
 cures. The seam popover now has a restore switch: the run the seam inherits is
 re-noised partway down the schedule and re-drawn against the source shot's own
 references and prompt, at the same canvas, and *that* is what the next shot
-continues from. One short generation per seam, H3 only, off by default. Three
-strengths; start with Medium.
+continues from. One short generation per seam, H3 only, between two generated
+shots, off by default. Three strengths; start with Medium.
 
 **Takes are written as each pass lands, not at the end** (#41). A strip that
 failed on its last pass used to keep nothing — fourteen good passes and every
