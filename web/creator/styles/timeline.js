@@ -190,6 +190,13 @@ export const css = `
   display: grid; grid-auto-flow: column; grid-auto-columns: min-content;
   grid-template-rows: auto 1fr auto; row-gap: 6px;
   overflow-x: auto; padding-bottom: 10px; min-height: 190px;
+  /* Never squeezed to make the modal fit. The body is a flex column that
+     scrolls, and a child that may shrink is shrunk *before* the body scrolls
+     — which left the strip a hundred pixels shorter than its cards, and since
+     a horizontal scroller clips on the vertical too, that was a second
+     scrollbar down the side of the strip with the cards' own buttons under
+     it. The strip is as tall as its cards; the body scrolls. */
+  flex: none;
 }
 /* The cards row, which is all a seam or the add button occupies: they have no
    rail above them and nothing to say underneath. */
@@ -233,6 +240,11 @@ export const css = `
 .mmc-tl-card-face.on { background: color-mix(in srgb, var(--mmc-blue) 18%, transparent); color: var(--mmc-blue); }
 .mmc-tl-card-face:hover { filter: brightness(1.25); }
 .mmc-tl-card-foot { display: flex; align-items: center; gap: 4px; }
+/* The ✕ after one press: the question, in the warning colour, where the ✕
+   was. Kept to the ✕'s own height so the foot does not jump. */
+.mmc-tl-card-foot .mmc-asset-x.armed {
+  color: var(--mmc-warn); font-size: calc(11px * var(--mmc-type)); white-space: nowrap;
+}
 .mmc-tl-edit {
   height: calc(26px * var(--mmc-type)); padding: 0 12px; border-radius: 8px; background: var(--mmc-surface-3);
   border: 0; color: var(--mmc-text); font-size: calc(12px * var(--mmc-type)); font-family: inherit; cursor: pointer;

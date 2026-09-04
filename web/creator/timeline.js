@@ -268,6 +268,12 @@ class Timeline {
     // was opened *by* growing a shot into it: the new card is where the writing
     // is going, so it opens ready rather than waiting to be found.
     this.openOnMount = edit;
+    // The card whose ✕ has been pressed once. Removing a card is the one
+    // thing in here that cannot be undone, and its button sits where the strip
+    // is scrolled and scrubbed — so it asks twice, the way the library's
+    // Delete does, and the arming is forgotten the moment the pointer leaves
+    // the card. Never a browser confirm(): see `presetlib.saveCurrent`.
+    this.armed = null;
   }
 
   commit() {
@@ -2031,6 +2037,7 @@ class Timeline {
       class: "mmc-tl-card mmc-tl-clip",
       style: { width: `${cardWidth(seconds)}px` },
       ondblclick: () => this.editClip(index),
+      onpointerleave: () => this.disarm(index),
     }, [
       el("div", { class: "mmc-tl-card-head" }, [
         el("span", { class: "mmc-tl-index", text: String(index + 1) }),
@@ -2081,10 +2088,7 @@ class Timeline {
           disabled: index === this.timeline.segments.length - 1 || undefined,
           onclick: () => this.move(index, 1),
         }),
-        el("button", {
-          class: "mmc-asset-x", text: "✕", title: t("Remove this clip"),
-          onclick: () => this.remove(index),
-        }),
+        this.removeButton(index, t("Remove this clip")),
       ]),
     ]);
   }
@@ -2347,6 +2351,7 @@ class Timeline {
       // Double-click anywhere on the card, because "Edit" is a small target and
       // opening a segment is the thing you do most in here.
       ondblclick: () => this.edit(index),
+      onpointerleave: () => this.disarm(index),
     }, [
       el("div", { class: "mmc-tl-card-head" }, [
         this.soloBadge(index),
@@ -2437,10 +2442,7 @@ class Timeline {
           disabled: S.addSegmentRefusal(this.timeline, segment.duration_s) ? true : undefined,
           onclick: () => this.duplicate(index),
         }),
-        el("button", {
-          class: "mmc-asset-x", text: "✕", title: t("Remove this segment"),
-          onclick: () => this.remove(index),
-        }),
+        this.removeButton(index, t("Remove this segment")),
       ]),
     ]);
   }
@@ -2536,7 +2538,34 @@ class Timeline {
     this.commit();
   }
 
+  /**
+   * The card's ✕, which asks twice. The first press turns it into the
+   * question, in words, where the ✕ was; the second answers it. Anything else
+   * — the pointer leaving the card, the strip redrawing for another reason —
+   * puts the ✕ back, so a card is never left standing armed.
+   */
+  removeButton(index, title) {
+    if (this.armed === index) {
+      return el("button", {
+        class: "mmc-asset-x armed", text: t("Really remove?"),
+        title: t("Press again to remove it. Leave the card to keep it."),
+        onclick: () => this.remove(index),
+      });
+    }
+    return el("button", {
+      class: "mmc-asset-x", text: "✕", title,
+      onclick: () => { this.armed = index; this.renderStrip(); },
+    });
+  }
+
+  disarm(index) {
+    if (this.armed !== index) return;
+    this.armed = null;
+    this.renderStrip();
+  }
+
   remove(index) {
+    this.armed = null;
     this.timeline.segments.splice(index, 1);
     // A seam that named the removed segment falls back to the previous one;
     // one naming a later segment follows it up a card.
@@ -3667,7 +3696,32 @@ export class TimelineBody {
     // shot among twenty long ones should not make that decision for it.
     const per = width / blocks.length;
     const dense = per < 46;
-    const crowded = per < 30;
+    let crowded = per < 30;
+
+    // What the number itself needs — shot 7 fits where shot 47 does not, and
+    // dropping a digit that would have fitted reads as a blank block rather
+    // than as a tight one. Measured from the block at full label, never from
+    // the block as it was left last time: a hidden label makes a block
+    // narrower, so measuring the trimmed one would find it narrower still and
+    // never give the label back. Laid-out width, not painted width:
+    // getBoundingClientRect() reports the box *after* every transform on the
+    // way up the tree, and the fullscreen card is turned on its vertical axis
+    // while it swaps steps — so a fit that ran during the turn measured every
+    // block as a few pixels wide, went bare on all of them, and stayed that
+    // way. offsetWidth is the layout answer, which is the question.
+    for (const block of blocks) block.classList.remove("narrow", "bare");
+    const bare = (block) => {
+      const digits = block.querySelector(".mmc-tl-tick-n")?.textContent.length ?? 2;
+      return block.offsetWidth < 16 + 9 * digits;
+    };
+    // On a band, all the numbers or none of them. A tile with no number among
+    // tiles that have them is a tile that is short; a bare cell at the head of
+    // a band with no gaps in it is a band that looks cut off at the edge —
+    // three short opening shots on a seventeen-shot piece read as "3 4 5 …"
+    // with something missing before it. So one short shot on a band takes the
+    // whole band to the edge reading, where the counting is done beside the
+    // film and no cell has to hold a numeral.
+    if (dense && !crowded && blocks.some(bare)) crowded = true;
     lane.classList.toggle("dense", dense);
     lane.classList.toggle("crowded", crowded);
 
@@ -3678,25 +3732,9 @@ export class TimelineBody {
       // twenty is a quarter of its width, and giving both the same labels is
       // how the short one ends up with a clipped one.
       this.edge.replaceChildren();
-      // Measured from the block at full label, never from the block as it was
-      // left last time: a hidden label makes a block narrower, so measuring the
-      // trimmed one would find it narrower still and never give the label back.
-      for (const block of blocks) block.classList.remove("narrow", "bare");
       for (const block of blocks) {
-        // Laid-out width, not painted width. getBoundingClientRect() reports
-        // the box *after* every transform on the way up the tree, and the
-        // fullscreen card is turned on its vertical axis while it swaps steps
-        // — so a fit that ran during the turn measured every block as a few
-        // pixels wide, went bare on all of them, and stayed that way: the turn
-        // changes nothing a ResizeObserver reports, so nothing ever asked
-        // again. offsetWidth is the layout answer, which is the question.
-        const room = block.offsetWidth;
-        block.classList.toggle("narrow", room < 46);
-        // What the number itself needs — shot 7 fits where shot 47 does not,
-        // and dropping a digit that would have fitted reads as a blank block
-        // rather than as a tight one.
-        const digits = block.querySelector(".mmc-tl-tick-n")?.textContent.length ?? 2;
-        block.classList.toggle("bare", room < 16 + 9 * digits);
+        block.classList.toggle("narrow", block.offsetWidth < 46);
+        block.classList.toggle("bare", bare(block));
       }
       return;
     }

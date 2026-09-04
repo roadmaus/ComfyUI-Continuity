@@ -1204,6 +1204,8 @@ export const zh = {
  "feather {n}": "羽化 {n}",
  "{n} s": "{n} 秒",
  "Really delete?": "确定删除？",
+ "Really remove?": "确定移除？",
+ "Press again to remove it. Leave the card to keep it.": "再按一次即移除。移开指针则保留。",
  "faces": "面部",
  "faces off": "面部关",
  "Face pass": "面部处理",

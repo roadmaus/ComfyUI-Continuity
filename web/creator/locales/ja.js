@@ -1202,6 +1202,8 @@ export const ja = {
  "feather {n}": "フェザー {n}",
  "{n} s": "{n} 秒",
  "Really delete?": "本当に削除しますか？",
+ "Really remove?": "本当に削除しますか？",
+ "Press again to remove it. Leave the card to keep it.": "もう一度押すと削除されます。カードから離れると残ります。",
  "faces": "顔パス",
  "faces off": "顔パスオフ",
  "Face pass": "顔パス",

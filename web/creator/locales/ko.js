@@ -1203,6 +1203,8 @@ export const ko = {
  "feather {n}": "페더 {n}",
  "{n} s": "{n}초",
  "Really delete?": "정말 삭제할까요?",
+ "Really remove?": "정말 제거할까요?",
+ "Press again to remove it. Leave the card to keep it.": "한 번 더 누르면 제거됩니다. 카드에서 벗어나면 유지됩니다.",
  "faces": "얼굴 패스",
  "faces off": "얼굴 패스 꺼짐",
  "Face pass": "얼굴 패스",

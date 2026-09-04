@@ -16,6 +16,27 @@ read through one decoder, so the run handed to the sampler is the run the file
 plays before the cut, and a guide clip is read by timestamp the same way.
 Issue #46.
 
+**The strip is as tall as its cards.** The timeline modal's body is a
+column that scrolls, and the strip in it was allowed to shrink before the body
+did — so on a short window it came up shorter than its own cards, and since a
+horizontal scroller clips on the vertical too, that was a second scrollbar
+down the side of the strip with each card's buttons under it, the ✕ among
+them. The strip keeps its height now and the body scrolls; there is one
+scrollbar. Issue #46.
+
+**Removing a card asks twice.** The ✕ on a card was one press away from the
+one thing in the strip that cannot be undone. It now turns into "Really
+remove?" on the first press and removes on the second; the pointer leaving the
+card puts the ✕ back. The library's Delete has always worked this way.
+Issue #46.
+
+**A crowded reel counts along its edge rather than going blank at the
+head.** On the node's band a short shot beside long ones gave up its number
+while the others kept theirs, and three short opening shots on a seventeen-
+shot piece read as "3 4 5 …" with something cut off before it. A band that
+cannot number every cell now numbers none of them and counts along the edge
+instead, the way a band too narrow for any label already did. Issue #46.
+
 **The server refiner asks for no reasoning.** A thinking model on the OpenAI
 route spent the whole reply budget on its trace and returned no content, which
 the panel reported as a server that returned nothing. The request now carries
