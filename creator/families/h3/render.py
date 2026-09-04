@@ -430,10 +430,9 @@ class H3(base.Family):
 
         if source_latent_path is not None:
             loaded = maskseam.load_latent(graph, source_latent_path)
-            return maskseam.splice_saved(graph, segment, loaded,
-                                         compiler.MASK_SEAM_FEATHER)
+            return maskseam.splice_saved(graph, segment, loaded, compiled.feather)
         return maskseam.splice_live(graph, segment, links, source_frames,
-                                    source_audio, compiler.MASK_SEAM_FEATHER)
+                                    source_audio, compiled.feather)
 
     def emit_save_latent(self, graph, latent, filename_prefix, clip_index):
         """Save this pass's sampled latent, for a masked seam to load later.
