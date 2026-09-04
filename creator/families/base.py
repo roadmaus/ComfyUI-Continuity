@@ -174,6 +174,44 @@ class Family:
         """
         return segment
 
+    def emit_seam_mask(self, graph, links, segment, compiled,
+                       source_latent_path=None, source_frames=None, source_audio=None):
+        """Splice this segment's fresh latent with a masked continuation.
+
+        Called only where `compiled.seam_mode == "mask"`, between
+        `emit_control` and `emit_sampler` — the same slot a guide is spliced
+        into, and for the same reason: what comes back must answer `.out(i)`
+        for the segment contract's four indices, replacing only the latent
+        (index 2). -> `(segment-shaped node, trim_frames link)`, where
+        `trim_frames` is the frame count `core/emit.py` trims off this pass's
+        head instead of `compiled.feather` — see `creator/compile.py`'s
+        `Compiled.seam_mode`.
+
+        Exactly one of `source_latent_path` (the seam's source has a saved
+        latent to load — a link or a plain string either way; loading it is
+        this hook's own job, not `core/emit.py`'s) or
+        `source_frames`/`source_audio` (it does not, and `core/emit.py` read
+        its window back the ordinary way — the same nodes a blended seam
+        already reads through) is given. A family with no masked-continuation
+        story never has this called at all, because `compile.py` refuses
+        `seam_mode="mask"` for anything but H3.
+        """
+        raise NotImplementedError(f"{self.id}.emit_seam_mask")
+
+    def emit_save_latent(self, graph, latent, filename_prefix, clip_index):
+        """Save a sampled pass's latent, for a future masked seam to load.
+
+        Called for **every** pass, unconditionally — the same way
+        `MiniMaxH3Reel` spills every pass's frames and audio regardless of
+        whether a later seam will ever read them back — so a card locked
+        before masking was ever used still has a latent ready if a masked
+        continuation is added later. -> a STRING link naming the saved file,
+        or `None` when this family has nothing that can read one back. The
+        default is exactly that: a no-op, so a family with no masked-
+        continuation story saves nothing and costs nothing.
+        """
+        return None
+
     def emit_sampler(self, graph, links, segment, payload, compiled, sampling,
                      acceleration, weights, seed, run):
         """The sampler subgraph over one segment. -> the sampled latent link.

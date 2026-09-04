@@ -356,6 +356,15 @@ class Compiled:
     # seam and is always presented; normalised to False there so the two ways of
     # saying the same thing cannot disagree.
     feather_pin: bool = False
+    # Timeline only: how a live head seam carries the source's content across —
+    # "blend" re-generates the inherited run from the keyframes above (the
+    # only mode before this), "mask" copies the source's own latent tail
+    # verbatim into this segment's prefix and protects it with a noise mask, so
+    # the boundary never re-denoises. Meaningless without `continues`, and
+    # normalised to "blend" there for the same reason `feather_pin` is —
+    # `compile_request` is where both are enforced. See
+    # `creator/families/h3/maskseam.py`.
+    seam_mode: str = "blend"
     # Timeline only: the previous segment's audio tail rides in as a reference so
     # the sound carries across the seam. Independent of `continues` — a hard cut
     # whose music keeps playing is an ordinary thing to want.
@@ -1236,8 +1245,56 @@ def _check_feather(width, live, what, rules):
     return width
 
 
+# What a head seam's `seam_mode` may be. "blend" is every seam before this and
+# stays the default; "mask" is latent-mask continuation — see `Compiled.seam_mode`
+# and `creator/families/h3/maskseam.py`.
+SEAM_MODES = ("blend", "mask")
+
+# The one width `canvas.feather_grid` offers that also lands on H3's shared
+# 24 fps video / 40 Hz audio boundary (39, 90, 141, ... frames — see
+# `creator/families/h3/maskseam.py`). The picker's grid stops at three widths
+# above the classic single frame (`feather_grid`'s own docstring), and this is
+# the only one of them a masked seam can use; the other two are pure video-VAE
+# runs with no exact audio endpoint.
+MASK_SEAM_FEATHER = 39
+
+
+def _check_seam_mode(mode, continues, feather, family):
+    """A head seam's mode, validated against the seam and the family.
+
+    Unlike `feather`'s grid, there is nothing to snap here: `canvas.feather_grid`
+    already offers only one width that lands on a shared AV boundary
+    (`MASK_SEAM_FEATHER`), so a masked seam either asks for exactly that or is
+    refused with the number to ask for instead — the same choice
+    `MiniMaxH3GeneratedAVMaskedContext` would otherwise refuse mid-render, said
+    here where a render has not been queued yet.
+    """
+    mode = str(mode or "blend")
+    if mode not in SEAM_MODES:
+        raise CompileError(f"a seam's mode is one of {SEAM_MODES}, not {mode!r}")
+    if mode == "mask":
+        if not continues:
+            raise CompileError(
+                "a masked seam is a property of a live seam — this segment "
+                "does not continue from an earlier one"
+            )
+        if family != "h3":
+            raise CompileError(
+                "masked continuation is only implemented for the MiniMax H3 "
+                "family — set this seam back to 'blend'"
+            )
+        if feather != MASK_SEAM_FEATHER:
+            raise CompileError(
+                f"a masked seam needs the blend width at its maximum "
+                f"({MASK_SEAM_FEATHER} frames) — the only width that lands on "
+                f"H3's shared 24 fps video / 40 Hz audio boundary"
+            )
+    return mode
+
+
 def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=None,
                     continues_audio=False, shots=1, feather=1, feather_pin=False,
+                    seam_mode="blend",
                     ends_on=False, ends_on_audio=False, ends_feather=1,
                     ends_feather_pin=False, family=registry.DEFAULT_VIDEO):
     """`creator_data` dict -> `Compiled`.
@@ -1361,6 +1418,7 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
 
     feather = _check_feather(feather, continues, "continue from an earlier one", rules)
     ends_feather = _check_feather(ends_feather, ends_on, "run into a clip", rules)
+    seam_mode = _check_seam_mode(seam_mode, continues, feather, family)
     # Only a blended seam has anything to pin *in addition*: on the classic
     # single-frame one the boundary frame is the seam, and `presents_head_frame`
     # answers True whatever this says. Normalised rather than refused, because a
@@ -1724,6 +1782,7 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
         continues_audio=continues_audio,
         audio_tail_s=audio_tail_s,
         feather=feather,
+        seam_mode=seam_mode,
         ends_on=ends_on,
         ends_on_audio=ends_on_audio,
         ends_feather=ends_feather,
@@ -1815,6 +1874,11 @@ def clip_spec(segment, index):
             continue
         if value > 0:
             spec[f"source_{key}"] = value
+    # Only ever present on a held/kept card rewritten by `take_spec` — a
+    # hand-attached clip has no take and so nothing was ever saved for it.
+    latent = str(segment.get("latent") or "").strip()
+    if latent:
+        spec["latent"] = latent
     return spec
 
 
@@ -1937,6 +2001,14 @@ def take_spec(segment, index):
             continue
         if value > 0:
             card[key] = value
+    # The pass that made this take may have saved its own latent tail —
+    # every H3 pass does, unconditionally, see `creator/families/h3/maskseam.py`.
+    # Carried forward here so a masked seam behind this card can load it
+    # instead of re-encoding the card's pixels; absent on a take saved before
+    # this existed, which `clip_spec`/`emit.py` read as "nothing to load".
+    latent = str(take.get("latent") or "").strip()
+    if latent:
+        card["latent"] = latent
     return card
 
 
@@ -2687,6 +2759,14 @@ def timeline_payloads(data, image_size_lookup=None):
                 # says anything — see `Compiled.feather_pin`.
                 if head.get("feather_pin"):
                     payload["feather_pin"] = True
+            # The seam's carrying mode. Only meaningful with the classic seam
+            # already read above; `compile_request` is where "mask" is checked
+            # against the width and the family, not here — this only carries
+            # what the card said. Absent means "blend", like every seam before
+            # this one had no other way of saying.
+            mode = str(head.get("seam_mode") or "").strip()
+            if mode and mode != "blend":
+                payload["seam_mode"] = mode
 
     _stamp_sound(data, segments, runs, payloads, rules, frames)
 
@@ -3403,6 +3483,7 @@ def compile_segment(payload, image_size_lookup=None, family=registry.DEFAULT_VID
         shots=int(payload.get("shots", 1)),
         feather=int(payload.get("feather", 1)),
         feather_pin=bool(payload.get("feather_pin")),
+        seam_mode=str(payload.get("seam_mode") or "blend"),
         # The seam on this pass's *far* side, stamped on by `timeline_payloads`
         # when the pass after it is supplied footage.
         ends_on=bool(payload.get("ends_on")),

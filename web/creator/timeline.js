@@ -93,6 +93,56 @@ function seamPinRow(piece, segment, width, commit) {
   };
 }
 
+/** The seam's carrying mode, drawn under the width list beside the pin switch.
+ *
+ * Only where the family wired in masked continuation (`canDo(piece,
+ * "seam_mask")`) and only at the one width that lands on a shared AV boundary
+ * (`state.maskSeamFeather`) — `compile._check_seam_mode` refuses every other
+ * combination, so there is nothing to offer for them. Off ("blend", the
+ * default) re-generates the inherited run from a hint, same as every seam
+ * before this; on ("mask") copies the source's own latent into this pass and
+ * protects it, so the join cannot drift.
+ */
+function seamModeRow(piece, segment, width, commit) {
+  if (!S.canMaskSeam({ ...segment, feather: width }, piece)) return null;
+  return (close) => {
+    const on = S.seamMode(segment, piece) === "mask";
+    return el("div", { class: "mmc-twopass" }, [
+      el("button", {
+        class: "mmc-opt",
+        "aria-checked": on,
+        onclick: () => {
+          if (on) delete segment.seam_mode; else segment.seam_mode = "mask";
+          close();
+          commit();
+        },
+      }, [
+        el("span", { class: "mmc-opt-label mmc-opt-col" }, [
+          el("span", { text: t("Carry the exact frames across, not a re-generated blend") }),
+          el("span", { class: "mmc-opt-sub",
+                       text: t("Copies the previous pass's own latent into this one and "
+                             + "protects it, instead of re-generating the overlap from a "
+                             + "hint — the join cannot drift. Needs "
+                             + "ComfyUI-H3-Motion-Context-MultiRef installed.") }),
+        ]),
+        el("span", { class: "mmc-radio" }),
+      ]),
+    ]);
+  };
+}
+
+/** Both of a blended seam's after-the-list switches, stacked under one rule.
+ *  `openChoicePopover` takes one `extra` slot, so this is where the pin
+ *  (`seamPinRow`) and the mask-mode switch (`seamModeRow`) share it — each
+ *  draws only where it has something to say, so a seam with neither
+ *  capability adds nothing here at all. */
+function seamExtras(piece, segment, width, commit) {
+  const rows = [seamPinRow(piece, segment, width, commit),
+                seamModeRow(piece, segment, width, commit)].filter(Boolean);
+  if (!rows.length) return null;
+  return (close) => el("div", {}, rows.map((row) => row(close)));
+}
+
 /** filename -> {width, height}, null while a probe is out. Module-level so the
  *  modal bar and the node face — two views of the same strip — measure a file
  *  once between them. Clip cards never land here: they store their own size. */
@@ -1848,15 +1898,20 @@ class Timeline {
       ...(on ? [(() => {
         const width = S.feather(segment, this.timeline);
         const rules = rulesFor(S.pieceFamily(this.timeline));
+        const masked = S.seamMode(segment, this.timeline) === "mask";
         return el("button", {
         class: `mmc-tl-join mmc-tl-join-from${width > 1 ? " on" : ""}`,
         title: (width > 1
-          ? t("The last {s} s of segment {from}'s motion "
-            + "carries across this cut, so the movement flows through instead of restarting "
-            + "from a still. That blended moment is redone at the start of segment {n} "
-            + "and removed from the final video, so it plays about "
-            + "{s} s shorter than its set length.",
-              { s: blendSeconds(width, rules), from, n: index + 1 })
+          ? (masked
+            ? t("The last {s} s of segment {from}'s own latent is copied into segment "
+              + "{n} and protected, so the join is exact rather than re-generated — "
+              + "nothing there can drift.", { s: blendSeconds(width, rules), from, n: index + 1 })
+            : t("The last {s} s of segment {from}'s motion "
+              + "carries across this cut, so the movement flows through instead of restarting "
+              + "from a still. That blended moment is redone at the start of segment {n} "
+              + "and removed from the final video, so it plays about "
+              + "{s} s shorter than its set length.",
+                { s: blendSeconds(width, rules), from, n: index + 1 }))
           : t("This cut picks up from segment {from}'s last frame. Click to blend a moment "
             + "of its motion across instead — a smoother handoff, in exchange for segment "
             + "{n} playing slightly shorter.", { from, n: index + 1 }))
@@ -1876,7 +1931,9 @@ class Timeline {
         onclick: (event) => this.pickFeather(event.currentTarget, segment, index),
       }, [el("span", {
         text: width > 1
-          ? t("blend {s} s", { s: blendSeconds(width, rules) }) : t("no blend"),
+          ? (masked ? t("preserve {s} s", { s: blendSeconds(width, rules) })
+                    : t("blend {s} s", { s: blendSeconds(width, rules) }))
+          : t("no blend"),
       })]);
       })()] : []),
       // The third answer to what happens here, and the only structural one: no
@@ -1955,12 +2012,12 @@ class Timeline {
       title: t("Blend into segment {n}", { n: index + 1 }),
       options: grid.filter((f) => f <= max).map(label),
       value: label(Math.min(S.feather(segment, this.timeline), max)),
-      extra: seamPinRow(this.timeline, segment, S.feather(segment, this.timeline),
+      extra: seamExtras(this.timeline, segment, S.feather(segment, this.timeline),
                         () => this.commit()),
       onPick: (choice) => {
         const width = grid.find((f) => label(f) === choice) ?? 1;
         if (width > 1) segment.feather = width;
-        else { delete segment.feather; delete segment.feather_pin; }
+        else { delete segment.feather; delete segment.feather_pin; delete segment.seam_mode; }
         this.commit();
       },
     });

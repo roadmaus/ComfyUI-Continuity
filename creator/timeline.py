@@ -220,6 +220,15 @@ class MiniMaxH3Reel(io.ComfyNode):
                 # before either could happen.
                 io.Int.Input("head", default=0, min=0, max=64, optional=True),
                 io.Int.Input("tail", default=0, min=0, max=64, optional=True),
+                # Where `families/base.py`'s `emit_save_latent` wrote this
+                # pass's own latent, if a family with a masked-continuation
+                # story wrote one at all. Carried onto the pass's own spec
+                # rather than read back separately, so a take built from this
+                # pass (`MiniMaxH3Save._reported`) can report it the same way
+                # it reports `filename` — see `compile.take_spec`. Absent on
+                # a family with no such story, or when nothing this render
+                # produced needed one.
+                io.String.Input("latent_path", default="", optional=True),
                 io.Custom(REEL_TYPE).Input("reel", optional=True,
                     tooltip="The passes in front of this one. Absent on the first."),
             ],
@@ -229,7 +238,7 @@ class MiniMaxH3Reel(io.ComfyNode):
 
     @classmethod
     def execute(cls, samples, vae, audio_vae, fps, head=0, tail=0,
-                reel=None) -> io.NodeOutput:
+                latent_path="", reel=None) -> io.NodeOutput:
         import nodes
         from comfy_extras.nodes_audio import vae_decode_audio
 
@@ -263,6 +272,8 @@ class MiniMaxH3Reel(io.ComfyNode):
         # what this node exists to guarantee is that nothing holds a pass once
         # it is on disk, and the largest thing in this scope is that pass.
         del images, audio
+        if latent_path:
+            written["latent_path"] = str(latent_path)
 
         # A new list rather than an append: the reel this was handed is another
         # node's cached output, and growing it in place would rewrite history
@@ -703,7 +714,7 @@ class MiniMaxH3Save(io.ComfyNode):
         from — the same number, arrived at without a probe.
         """
         spec = part["pass"]
-        return {
+        report = {
             "segment": card,
             "filename": filename,
             "subfolder": subfolder,
@@ -714,6 +725,14 @@ class MiniMaxH3Save(io.ComfyNode):
             "has_audio": "audio_path" in spec,
             "seed": seed,
         }
+        # This pass's own saved latent, if `families/base.py`'s
+        # `emit_save_latent` wrote one — see `MiniMaxH3Reel`'s `latent_path`
+        # input. Absent on a family with no masked-continuation story, or on
+        # a piece rendered before this existed; `state.js:takeFrom` mirrors it
+        # onto the take the same way it mirrors every other field here.
+        if spec.get("latent_path"):
+            report["latent"] = spec["latent_path"]
+        return report
 
 
 # Registered by `creator_node.MiniMaxCreatorExtension` — one extension for the

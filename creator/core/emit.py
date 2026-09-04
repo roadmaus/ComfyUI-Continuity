@@ -156,6 +156,21 @@ def inherited_audio(graph, source, seconds):
     return graph.node(PASS_AUDIO_NODE, source=source[1], seconds=seconds).out(0)
 
 
+def _source_latent(source):
+    """The saved latent a masked seam's source can be spliced from, or None.
+
+    A generated pass carries its own Save output (`emit`'s `latent_prefix`,
+    below); a clip carries one only when it is a held/kept card
+    `compile.take_spec` rewrote from a take that had one — `compile.clip_spec`
+    copies it across as `"latent"`. Genuine supplied footage never has one.
+    Either absence reads the same way to `emit`: nothing to load, so the
+    seam's `emit_seam_mask` call falls back to its live-encode path instead.
+    """
+    if is_clip_source(source):
+        return source[1].get("latent")
+    return source[2] if len(source) > 2 else None
+
+
 def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
          filename_prefix=None, cards=None, seeds=None,
          whole_piece=True, run=None, upscaler=None, guide=None):
@@ -266,6 +281,13 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
     decoded = []            # every payload as (kind, what to read it back from),
                             # in order — a seam defaults to the previous one but
                             # may name any earlier one via `continue_from`
+    # The piece-scoped folder a pass's latent lands under, one level deeper
+    # than its take — see `families/base.py`'s `emit_save_latent`. `cards`
+    # gates it the same way `takes` below does: a lone generation has no card
+    # to lock and nothing later could ever load this back, so there is
+    # nothing worth writing. A family with no masked-continuation story
+    # writes nothing regardless — `emit_save_latent`'s default is a no-op.
+    latent_prefix = f"{outputs.takes(filename_prefix)}/latent" if cards else None
 
     for index, one in enumerate(compiled):
         if one is None:
@@ -290,7 +312,15 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
         source = decoded[payloads[index].get("continue_from", index - 1)] \
             if index else (None, None)
         seams = {}
-        if one.continues:
+        # A masked seam carries its whole AV prefix through the splice below
+        # rather than through conditioning — see `Compiled.seam_mode` — so
+        # neither keyframe seam is built for it; either would argue with the
+        # protected prefix the same way an unblended seam's pin already argues
+        # with a blend. This is independent of `continues_audio`: a masked
+        # seam's protected prefix is one joint AV run and always carries both
+        # streams, whatever the separate audio switch says.
+        masked = one.continues and one.seam_mode == "mask"
+        if one.continues and not masked:
             # Only the tail, not the whole batch: the source segment's images
             # are a video and what this one inherits is its last moment — or,
             # feathered, its last few. Inserted here rather than after every
@@ -298,7 +328,7 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
             # Creator render has none at all. The count rides only on feathered
             # seams, so a classic seam's node inputs stay byte-identical.
             seams["prev_image"] = inherited_frames(graph, source, one.feather)
-        if one.continues_audio:
+        if one.continues_audio and not masked:
             # `one.audio_tail_s` rather than the timeline's setting directly:
             # compile clamps it to a feathered seam's overlap, and this is
             # where that decision reaches the graph.
@@ -343,6 +373,25 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
         if guide is not None and one.guide is not None:
             segment = family.emit_control(graph, links, segment, one, weights,
                                           guide)
+        # The masked splice, on the same terms as the guide just above and for
+        # the same reason: what it changes is what the sampler is handed.
+        # `trim_frames` is this pass's own protected-prefix length, standing in
+        # for `one.feather` at the reel below — the prefix is real content
+        # this pass delivers rather than a re-generated overlap, but it still
+        # duplicates frames the source already played, so it is trimmed off
+        # the same way a blend's inherited run is.
+        trim_frames = None
+        if masked:
+            saved_latent = _source_latent(source)
+            if saved_latent is not None:
+                segment, trim_frames = family.emit_seam_mask(
+                    graph, links, segment, one, source_latent_path=saved_latent)
+            else:
+                segment, trim_frames = family.emit_seam_mask(
+                    graph, links, segment, one,
+                    source_frames=inherited_frames(graph, source, one.feather),
+                    source_audio=inherited_audio(
+                        graph, source, one.feather / float(family.rules.fps)))
         latent = family.emit_sampler(graph, links, segment, payloads[index], one,
                                      sampling, acceleration, weights,
                                      seed_for(index), run)
@@ -350,6 +399,17 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
             latent = family.emit_refine(graph, links, segment, payloads[index],
                                         one, weights, seams, latent, sampling,
                                         acceleration, seed_for(index), run)
+
+        # Every pass saves its own latent, unconditionally, before it is ever
+        # known whether a masked seam will read it — the same standing
+        # `MiniMaxH3Reel` already takes with frames and audio. This is what
+        # lets a card be locked today and given a masked continuation next
+        # week without a regenerate: the latent is already on disk from the
+        # run that produced the take. `emit_save_latent`'s default is a no-op,
+        # so a family with no masked-continuation story writes nothing here.
+        latent_path = (family.emit_save_latent(graph, latent, latent_prefix,
+                                               cards[index])
+                      if latent_prefix is not None else None)
 
         # Decoded, trimmed, written to disk and added to the reel, all in the
         # one node. The decode is not a node of its own because a node's output
@@ -368,9 +428,11 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
             # the frame counts were snapped to it, so the seam trim's sample
             # arithmetic and the spill's stamp are both wrong at any other.
             fps=float(family.rules.fps),
-            **({"head": one.feather} if one.feather > 1 else {}),
+            **({"head": trim_frames} if trim_frames is not None
+               else {"head": one.feather} if one.feather > 1 else {}),
             **({"tail": one.ends_feather} if one.ends_feather > 1 else {}),
-            **({"reel": reel} if reel is not None else {}))
+            **({"reel": reel} if reel is not None else {}),
+            **({"latent_path": latent_path} if latent_path is not None else {}))
         source = written
 
         if one.face:
@@ -387,7 +449,7 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
                                       seed_for(index))
 
         reel = source.out(0)
-        decoded.append(("pass", source.out(1)))
+        decoded.append(("pass", source.out(1), latent_path))
 
     # The re-detail pass, on the finished reel. After the loop and not inside it,
     # which is the opposite of where the face pass goes and for the same reason

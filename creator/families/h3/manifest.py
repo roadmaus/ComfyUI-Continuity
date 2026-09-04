@@ -325,6 +325,16 @@ def manifest():
             # the run's last element — so there is nothing there to pin twice
             # and no switch worth drawing.
             "seam_pin": True,
+            # Whether a live seam can carry its source's own latent tail
+            # across the cut instead of a re-generated overlap — the
+            # blend-width picker's own maximum width, protected verbatim
+            # rather than re-denoised. See `Compiled.seam_mode` and
+            # `creator/families/h3/maskseam.py`. A capability rather than a
+            # control every family draws: it is wired in from an external
+            # pack against H3's own joint AV latent shape, and LTX 2.5's is
+            # packed differently — see the plan this shipped against,
+            # `PLAN-latent-mask-continuation.md`.
+            "seam_mask": True,
             "turbo": TURBO,
             # Whether this family can sample through Raylight's Ray workers —
             # the multi-GPU backend in the weights popover. H3's alone so far,

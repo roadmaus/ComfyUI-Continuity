@@ -68,6 +68,7 @@ MODULES = {
     "h3_declare": "families.h3.declare",
     "h3_models": "families.h3.models",
     "h3_grammar": "families.h3.grammar",
+    "maskseam": "families.h3.maskseam",
     "ltx25_grammar": "families.ltx25.grammar",
     "ltx25_declare": "families.ltx25.declare",
     "registry": "families.registry",

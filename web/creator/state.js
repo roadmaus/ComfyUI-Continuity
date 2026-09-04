@@ -1860,6 +1860,10 @@ function takeFrom(report, stamp) {
       ? { width: Number(report.width), height: Number(report.height) } : {}),
     has_audio: report.has_audio !== false,
     ...(Number.isInteger(report.seed) ? { seed: report.seed } : {}),
+    // Where this pass's own latent landed, if the family saved one — see
+    // `MiniMaxH3Reel`'s `latent_path`. Not a path this pack ever opens on its
+    // own; carried only so a masked seam behind a *later* card can name it.
+    ...(report.latent ? { latent: String(report.latent) } : {}),
     stamp,
   };
 }
@@ -2626,6 +2630,10 @@ function syncCanvas(timeline) {
     // boundary frame is the seam and is named whatever this says, and on a
     // family with one conditioning channel there is nothing to pin twice.
     if (segment.feather_pin && (!segment.feather || !pins)) delete segment.feather_pin;
+    // The mask mode goes with the blend it replaces, on the same terms: gone
+    // the moment the seam is no longer live, no longer at the one width that
+    // qualifies, or the family has no masked-continuation story at all.
+    if (segment.seam_mode && !canMaskSeam(segment, timeline)) delete segment.seam_mode;
     // Nothing runs into a clip that has no generation in front of it — two
     // clips end to end have no sampler between them to condition.
     if (isClip(segment) && (!index || isClip(timeline.segments[index - 1]))) {
@@ -2895,6 +2903,11 @@ export function parseTimeline(raw) {
         const width = Number(raw?.feather);
         if (featherGridOf(timeline).includes(width) && width > 1) segment.feather = width;
         if (raw?.feather_pin === true) segment.feather_pin = true;
+        // The seam's carrying mode. "mask" only means anything alongside a
+        // live, maximally-blended seam — `syncTimeline` prunes it the moment
+        // either stops being true, the same way it prunes `feather_pin`.
+        delete segment.seam_mode;
+        if (raw?.seam_mode === "mask") segment.seam_mode = "mask";
         // Whether this card is in the next render, and the render it already
         // has. Both survive a reload for the same reason the prompt does: a
         // piece shot a pass at a time is shot over days, and a strip that
@@ -2911,6 +2924,7 @@ export function parseTimeline(raw) {
               ? { width: Number(take.width), height: Number(take.height) } : {}),
             has_audio: take.has_audio !== false,
             ...(Number.isInteger(take.seed) ? { seed: take.seed } : {}),
+            ...(take.latent ? { latent: String(take.latent) } : {}),
             ...(take.stamp ? { stamp: String(take.stamp) } : {}),
           };
         }
@@ -3059,6 +3073,10 @@ export function serializeTimeline(timeline) {
         // "the blend speaks for itself", which is the default and what every
         // blob written before the switch existed says.
         if (featherPin(segment, timeline)) out.feather_pin = true;
+        // Only ever "mask", and only where it is actually choosable — a strip
+        // switched to a family with no masked-continuation story, or a blend
+        // narrowed back off the one qualifying width, carries no leftover.
+        if (seamMode(segment, timeline) === "mask") out.seam_mode = "mask";
       }
       // Out of the next render, and the render it already has. Only the
       // deliberate states are written: a card nobody has held and nothing has
@@ -5172,6 +5190,34 @@ export function featherPin(segment, piece) {
 export function feather(segment, piece) {
   const grid = featherGridOf(piece);
   return grid.includes(segment.feather) && segment.feather > 1 ? segment.feather : 1;
+}
+
+/** The one blend width that lands on a shared 24 fps video / 40 Hz audio
+ *  boundary — the picker grid's own maximum, and the only width a masked seam
+ *  may use. Mirrors `compile.MASK_SEAM_FEATHER`; not a fixed number here
+ *  because the grid, and so its last entry, is the family's own. */
+export function maskSeamFeather(piece) {
+  const grid = featherGridOf(piece);
+  return grid[grid.length - 1];
+}
+
+/** Whether a masked seam is choosable at all right now: the family wired it
+ *  in (`canDo(piece, "seam_mask")`), the seam is live, and its blend is
+ *  already at the one width that qualifies. Mirrors
+ *  `compile._check_seam_mode`'s own three checks — the family and the width
+ *  are refused there, not snapped, so this asks rather than assumes. */
+export function canMaskSeam(segment, piece) {
+  return canDo(piece, "seam_mask")
+    && continues(segment)
+    && feather(segment, piece) === maskSeamFeather(piece);
+}
+
+/** Whether this live seam carries its source's own latent tail across the cut
+ *  instead of a re-generated overlap, protected by a noise mask rather than
+ *  conditioned on a hint. "blend" is every seam before this and stays the
+ *  default. Mirrors `Compiled.seam_mode`. */
+export function seamMode(segment, piece) {
+  return segment.seam_mode === "mask" && canMaskSeam(segment, piece) ? "mask" : "blend";
 }
 
 /** The widest feather this segment's duration allows. Mirrors compile: the
