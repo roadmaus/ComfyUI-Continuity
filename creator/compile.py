@@ -1250,24 +1250,45 @@ def _check_feather(width, live, what, rules):
 # and `creator/families/h3/maskseam.py`.
 SEAM_MODES = ("blend", "mask")
 
-# The one width `canvas.feather_grid` offers that also lands on H3's shared
-# 24 fps video / 40 Hz audio boundary (39, 90, 141, ... frames — see
-# `creator/families/h3/maskseam.py`). The picker's grid stops at three widths
-# above the classic single frame (`feather_grid`'s own docstring), and this is
-# the only one of them a masked seam can use; the other two are pure video-VAE
-# runs with no exact audio endpoint.
+# The first — and shortest — of the AV-shared boundaries: every H3 video-VAE
+# run (`17k+5` frames) whose length also lands exactly on the 40 Hz audio
+# latent grid. `canvas.feather_grid`'s blend widths stop here ("the picker has
+# room for three" above the classic single frame, and this is the third), but
+# a masked seam is not re-generated and so is not bound by that reasoning —
+# see `mask_seam_grid`.
 MASK_SEAM_FEATHER = 39
+
+# The boundaries repeat every 51 frames past the first: 39, 90, 141, 192, ...
+# — the spacing between two consecutive H3 video-VAE runs that both divide
+# evenly into 40 Hz audio ticks. Wired here rather than derived from
+# `families/h3/maskseam.py`'s external pack, which snaps to whichever of these
+# it is handed but does not enumerate them for a picker to offer.
+_MASK_SEAM_STEP = 51
+
+
+def mask_seam_grid(count=4):
+    """The first `count` AV-shared boundaries a masked seam may protect,
+    ascending from `MASK_SEAM_FEATHER`. -> a tuple.
+
+    Four by default — the same count `canvas.feather_grid` offers for a blend,
+    for the same picker-sized reason, though nothing about a masked seam's own
+    arithmetic caps it there. A segment too short for a wider one is refused
+    on its own terms further down, by the general overlap-vs-duration check
+    every seam already goes through — this is only which numbers exist to ask
+    for at all.
+    """
+    return tuple(MASK_SEAM_FEATHER + _MASK_SEAM_STEP * k for k in range(count))
 
 
 def _check_seam_mode(mode, continues, feather, family):
-    """A head seam's mode, validated against the seam and the family.
+    """A head seam's mode, validated against the seam, the family and the
+    width — in that order, so a seam that fails two of these at once is told
+    about the one that would still be true regardless of the others.
 
-    Unlike `feather`'s grid, there is nothing to snap here: `canvas.feather_grid`
-    already offers only one width that lands on a shared AV boundary
-    (`MASK_SEAM_FEATHER`), so a masked seam either asks for exactly that or is
-    refused with the number to ask for instead — the same choice
-    `MiniMaxH3GeneratedAVMaskedContext` would otherwise refuse mid-render, said
-    here where a render has not been queued yet.
+    Unlike a blend's width, there is nothing to snap here: a masked seam's
+    width has to be exactly one of `mask_seam_grid`'s boundaries or
+    `MiniMaxH3GeneratedAVMaskedContext` would refuse it mid-render, so this is
+    the same refusal said before a render has been queued instead.
     """
     mode = str(mode or "blend")
     if mode not in SEAM_MODES:
@@ -1283,11 +1304,12 @@ def _check_seam_mode(mode, continues, feather, family):
                 "masked continuation is only implemented for the MiniMax H3 "
                 "family — set this seam back to 'blend'"
             )
-        if feather != MASK_SEAM_FEATHER:
+        grid = mask_seam_grid()
+        if feather not in grid:
             raise CompileError(
-                f"a masked seam needs the blend width at its maximum "
-                f"({MASK_SEAM_FEATHER} frames) — the only width that lands on "
-                f"H3's shared 24 fps video / 40 Hz audio boundary"
+                f"a masked seam can protect {', '.join(map(str, grid))} frames — "
+                f"the boundaries H3's 24 fps video and 40 Hz audio share — "
+                f"not {feather}"
             )
     return mode
 
@@ -1416,7 +1438,8 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     mode = _derive_mode(family_grammar, first_frame, last_frame,
                         ref_images, ref_videos, ref_audios, continues, ends_on)
 
-    feather = _check_feather(feather, continues, "continue from an earlier one", rules)
+    feather = int(feather or 1) if str(seam_mode or "blend") == "mask" else \
+        _check_feather(feather, continues, "continue from an earlier one", rules)
     ends_feather = _check_feather(ends_feather, ends_on, "run into a clip", rules)
     seam_mode = _check_seam_mode(seam_mode, continues, feather, family)
     # Only a blended seam has anything to pin *in addition*: on the classic

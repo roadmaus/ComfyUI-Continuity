@@ -62,12 +62,12 @@ def expect_error(label, fn, fragment):
 # `seam` is a plain dict rather than keyword arguments because its keys are the
 # blob's own — "continue" is a reserved word and cannot be a Python kwarg.
 
-def second_segment(seam):
+def second_segment(seam, seconds=6):
     blob = {
         "version": 2, "render": "chained", "prompt": "", "aspect": "16:9",
         "short_edge": 768,
-        "segments": [{"duration_s": 6, "prompt": "one"},
-                     {"duration_s": 6, "prompt": "two", **seam}],
+        "segments": [{"duration_s": seconds, "prompt": "one"},
+                     {"duration_s": seconds, "prompt": "two", **seam}],
     }
     return compiler.timeline_payloads(blob)[1]
 
@@ -79,11 +79,34 @@ check("mask at the qualifying width compiles",
       compiler.compile_segment(
           second_segment({"continue": True, "feather": 39,
                           "seam_mode": "mask"})).seam_mode, "mask")
-check("MASK_SEAM_FEATHER is the grid's own maximum for H3",
+check("MASK_SEAM_FEATHER is the grid's first, shortest boundary",
       compiler.MASK_SEAM_FEATHER, 39)
+check("mask_seam_grid is four ascending AV-shared boundaries",
+      compiler.mask_seam_grid(), (39, 90, 141, 192))
 check("SEAM_MODES", compiler.SEAM_MODES, ("blend", "mask"))
 
-expect_error("mask needs the blend at its maximum width",
+# Every boundary the grid offers compiles, given a segment long enough to
+# afford it — the general overlap-vs-duration check every seam goes through
+# is what bounds this per segment, not the grid itself.
+for width in compiler.mask_seam_grid():
+    check(f"mask accepts the shared boundary at {width} frames",
+          compiler.compile_segment(
+              second_segment({"continue": True, "feather": width,
+                             "seam_mode": "mask"}, seconds=20)).feather,
+          width)
+
+expect_error("a width between two shared boundaries is still refused",
+             lambda: compiler.compile_segment(
+                 second_segment({"continue": True, "feather": 91,
+                                "seam_mode": "mask"}, seconds=20)),
+             "not 91")
+expect_error("a masked seam still cannot outgrow its own segment",
+             lambda: compiler.compile_segment(
+                 second_segment({"continue": True, "feather": 192,
+                                "seam_mode": "mask"})),
+             "192")
+
+expect_error("mask needs one of the shared boundaries, not a blend-only width",
              lambda: compiler.compile_segment(
                  second_segment({"continue": True, "feather": 22,
                                 "seam_mode": "mask"})),

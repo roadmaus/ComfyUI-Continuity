@@ -2595,6 +2595,7 @@ function syncCanvas(timeline) {
   // read, so reordering and deleting cannot leave a stale source behind.
   const rules = rulesFor(pieceFamily(timeline));
   const grid = featherGrid(rules);
+  const maskGrid = maskSeamGridOf(timeline);
   // "Let the model choose" is meaningless on a family with no weights that
   // can. Cleared here, like every other stale flag, so a hand-edited blob and
   // a piece switched away from LTX arrive in the same shape — and so the flag
@@ -2617,11 +2618,14 @@ function syncCanvas(timeline) {
     // has to be one its video VAE can encode standalone, and a strip switched
     // between families carries the old family's numbers until something drops
     // them. `compile_request` refuses them, so this is what keeps the pill and
-    // the queue saying the same thing.
+    // the queue saying the same thing. Off *both* grids — the ordinary blend
+    // widths and, once masked, the wider AV-shared boundaries — since a card
+    // can be reading from either one.
     if (segment.feather) {
       const paying = isClip(segment) ? timeline.segments[index - 1] : segment;
+      const onGrid = grid.includes(segment.feather) || maskGrid.includes(segment.feather);
       if (!paying || isClip(paying)
-          || !grid.includes(segment.feather)
+          || !onGrid
           || 2 * segment.feather > framesForSeconds(paying.duration_s, rules)) {
         delete segment.feather;
       }
@@ -2896,12 +2900,14 @@ export function parseTimeline(raw) {
         delete segment.continue_from;
         const from = Number(raw?.continue_from);
         if (Number.isInteger(from)) segment.continue_from = from;
-        // The seam's width. Off the grid means the classic single frame,
-        // which is also what absence means.
+        // The seam's width. Off both grids means the classic single frame,
+        // which is also what absence means — see `feather`'s own dual-grid
+        // reading for why a mask-only boundary is not "off the grid" here.
         delete segment.feather;
         delete segment.feather_pin;
         const width = Number(raw?.feather);
-        if (featherGridOf(timeline).includes(width) && width > 1) segment.feather = width;
+        if ((featherGridOf(timeline).includes(width) || maskSeamGridOf(timeline).includes(width))
+            && width > 1) segment.feather = width;
         if (raw?.feather_pin === true) segment.feather_pin = true;
         // The seam's carrying mode. "mask" only means anything alongside a
         // live, maximally-blended seam — `syncTimeline` prunes it the moment
@@ -5186,30 +5192,45 @@ export function featherPin(segment, piece) {
     && canDo(piece, "seam_pin");
 }
 
-/** The seam's width in frames — a valid grid value, or the classic 1. */
+/** The seam's width in frames — a valid grid value, or the classic 1.
+ *  "Valid" means either grid: the ordinary blend widths, or, once a seam is
+ *  masked, the wider AV-shared boundaries `maskSeamGridOf` offers — a value
+ *  off both reads as the classic single frame, same as before either grid
+ *  existed. */
 export function feather(segment, piece) {
-  const grid = featherGridOf(piece);
-  return grid.includes(segment.feather) && segment.feather > 1 ? segment.feather : 1;
+  const value = segment.feather;
+  if (featherGridOf(piece).includes(value) && value > 1) return value;
+  if (maskSeamGridOf(piece).includes(value)) return value;
+  return 1;
 }
 
-/** The one blend width that lands on a shared 24 fps video / 40 Hz audio
- *  boundary — the picker grid's own maximum, and the only width a masked seam
- *  may use. Mirrors `compile.MASK_SEAM_FEATHER`; not a fixed number here
- *  because the grid, and so its last entry, is the family's own. */
+/** The AV-shared boundaries a masked seam may protect, ascending — every H3
+ *  video-VAE run whose length also lands exactly on the 40 Hz audio latent
+ *  grid. Mirrors `compile.mask_seam_grid`; empty on a family with no
+ *  masked-continuation story, so a control gated on its length draws nothing
+ *  for one. Not derived from `featherGridOf`: a masked seam is never
+ *  re-generated, so it is not bound by "the picker has room for three" the
+ *  way a blend's own grid is — it reaches further on purpose. */
+export function maskSeamGridOf(piece) {
+  if (!canDo(piece, "seam_mask")) return [];
+  const first = 39;
+  const step = 51;
+  return [first, first + step, first + 2 * step, first + 3 * step];
+}
+
+/** The narrowest width a masked seam may use — the grid's own first entry,
+ *  and what a seam is set to the moment mask mode is first turned on. */
 export function maskSeamFeather(piece) {
-  const grid = featherGridOf(piece);
-  return grid[grid.length - 1];
+  return maskSeamGridOf(piece)[0] ?? 1;
 }
 
 /** Whether a masked seam is choosable at all right now: the family wired it
- *  in (`canDo(piece, "seam_mask")`), the seam is live, and its blend is
- *  already at the one width that qualifies. Mirrors
- *  `compile._check_seam_mode`'s own three checks — the family and the width
- *  are refused there, not snapped, so this asks rather than assumes. */
+ *  in, the seam is live, and its width is already one of the boundaries that
+ *  qualify. Mirrors `compile._check_seam_mode`'s own three checks — the
+ *  family and the width are refused there, not snapped, so this asks rather
+ *  than assumes. */
 export function canMaskSeam(segment, piece) {
-  return canDo(piece, "seam_mask")
-    && continues(segment)
-    && feather(segment, piece) === maskSeamFeather(piece);
+  return continues(segment) && maskSeamGridOf(piece).includes(feather(segment, piece));
 }
 
 /** Whether this live seam carries its source's own latent tail across the cut
@@ -5220,12 +5241,16 @@ export function seamMode(segment, piece) {
   return segment.seam_mode === "mask" && canMaskSeam(segment, piece) ? "mask" : "blend";
 }
 
-/** The widest feather this segment's duration allows. Mirrors compile: the
- *  overlap is trimmed off after decode, so it must stay under half the clip. */
+/** The widest width this segment's duration allows, on whichever grid the
+ *  seam is currently reading from — the ordinary blend widths, or, once
+ *  masked, the wider AV-shared boundaries. Mirrors compile: the overlap is
+ *  trimmed off after decode, so it must stay under half the clip. */
 export function maxFeather(segment, piece) {
   const rules = rulesFor(pieceFamily(piece));
   const frames = framesForSeconds(segment.duration_s, rules);
-  return featherGrid(rules).filter((f) => 2 * f <= frames).pop() ?? 1;
+  const grid = seamMode(segment, piece) === "mask"
+    ? maskSeamGridOf(piece) : featherGrid(rules);
+  return grid.filter((f) => 2 * f <= frames).pop() ?? 1;
 }
 
 /** The 1-based number of the segment the seam in front of `index` inherits

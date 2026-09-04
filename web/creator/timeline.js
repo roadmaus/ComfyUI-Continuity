@@ -95,13 +95,14 @@ function seamPinRow(piece, segment, width, commit) {
 
 /** The seam's carrying mode, drawn under the width list beside the pin switch.
  *
- * Only where the family wired in masked continuation (`canDo(piece,
- * "seam_mask")`) and only at the one width that lands on a shared AV boundary
- * (`state.maskSeamFeather`) — `compile._check_seam_mode` refuses every other
- * combination, so there is nothing to offer for them. Off ("blend", the
- * default) re-generates the inherited run from a hint, same as every seam
- * before this; on ("mask") copies the source's own latent into this pass and
- * protects it, so the join cannot drift.
+ * Only where the family wired in masked continuation and only at one of the
+ * AV-shared boundaries (`state.maskSeamGridOf`) — `compile._check_seam_mode`
+ * refuses every other width, so there is nothing to offer at them. Off
+ * ("blend", the default) re-generates the inherited run from a hint, same as
+ * every seam before this; on ("mask") copies the source's own latent into
+ * this pass and protects it, so the join cannot drift. Turning it on at 39 —
+ * the only width the ordinary blend list and the mask grid share — is what
+ * first reveals the wider boundaries in `pickFeather`'s own list.
  */
 function seamModeRow(piece, segment, width, commit) {
   if (!S.canMaskSeam({ ...segment, feather: width }, piece)) return null;
@@ -1998,26 +1999,42 @@ class Timeline {
     this.commit();
   }
 
-  /** The seam's width. The options are the runs the video VAE can encode
-   *  standalone (`state.featherGridOf`), named by what the user hears and sees:
-   *  how long a moment of motion crosses the cut. */
+  /** The seam's width. Two grids, never both at once: the ordinary blend
+   *  widths (`state.featherGridOf`), or, once this seam is masked, the wider
+   *  AV-shared boundaries (`state.maskSeamGridOf`) — a masked seam is never
+   *  re-generated, so it is not bound by "the picker has room for three" the
+   *  blend grid's own reasoning stops at. Which one is on screen is decided
+   *  by the seam's *current* mode, on the same reopen-to-reveal terms the
+   *  mask switch itself already works on — see `seamModeRow`. */
   pickFeather(anchor, segment, index) {
+    const masked = S.seamMode(segment, this.timeline) === "mask";
     const max = S.maxFeather(segment, this.timeline);
-    const grid = S.featherGridOf(this.timeline);
+    const grid = masked ? S.maskSeamGridOf(this.timeline) : S.featherGridOf(this.timeline);
     const rules = rulesFor(S.pieceFamily(this.timeline));
-    const label = (f) => (f === 1 ? t("None — start from the last frame")
-      : t("{name} · {s} s of motion",
-          { name: t(BLEND_NAMES[grid.indexOf(f)] ?? "Blend"), s: blendSeconds(f, rules) }));
+    const label = masked
+      ? (f) => t("preserve {s} s exactly", { s: blendSeconds(f, rules) })
+      : (f) => (f === 1 ? t("None — start from the last frame")
+          : t("{name} · {s} s of motion",
+              { name: t(BLEND_NAMES[grid.indexOf(f)] ?? "Blend"), s: blendSeconds(f, rules) }));
     openChoicePopover(anchor, {
-      title: t("Blend into segment {n}", { n: index + 1 }),
+      title: t(masked ? "Preserve into segment {n}" : "Blend into segment {n}",
+              { n: index + 1 }),
       options: grid.filter((f) => f <= max).map(label),
       value: label(Math.min(S.feather(segment, this.timeline), max)),
       extra: seamExtras(this.timeline, segment, S.feather(segment, this.timeline),
                         () => this.commit()),
       onPick: (choice) => {
         const width = grid.find((f) => label(f) === choice) ?? 1;
-        if (width > 1) segment.feather = width;
-        else { delete segment.feather; delete segment.feather_pin; delete segment.seam_mode; }
+        if (masked) {
+          // Every option here is a valid masked width — there is no "none"
+          // to fall back to, and the mode itself is switched off from the
+          // extras row below the list, not by a pick in it.
+          segment.feather = width;
+        } else if (width > 1) {
+          segment.feather = width;
+        } else {
+          delete segment.feather; delete segment.feather_pin; delete segment.seam_mode;
+        }
         this.commit();
       },
     });
