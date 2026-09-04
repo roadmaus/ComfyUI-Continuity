@@ -175,4 +175,28 @@ check("VFR: a 48-frame guide is 48 frames", hint.shape[0], 48)
 close("VFR: the guide shows the 1.5 s frame at 1.5 s", grey(hint, AT_1_5), 198 / 255, TOL)
 close("VFR: the guide starts on the first frame", grey(hint, 0), 30 / 255, TOL)
 
+# --- a phone clip reaches the seam upright ------------------------------------
+
+# Stored landscape with "turn me -90" in the container: portrait to its player,
+# and the bright top-left corner of the storage picture at the top right.
+turned = os.path.join(SCRATCH, "phone.mp4")
+with av.open(turned, mode="w") as out:
+    video = out.add_stream("libx264", rate=FPS)
+    video.width, video.height, video.pix_fmt = 64, 32, "yuv420p"
+    video.options = {"crf": "1"}
+    video.set_display_rotation(-90)
+    lopsided = np.zeros((32, 64, 3), np.uint8)
+    lopsided[:16, :32] = 255
+    for _ in range(FPS):
+        out.mux(video.encode(av.VideoFrame.from_ndarray(lopsided, format="rgb24")))
+    out.mux(video.encode(None))
+
+check("the probe reports the size the player shows", media.image_size(turned), (32, 64))
+tail = media.clip_frames({"filename": turned, "start": 0.0, "duration": 1.0}, 3, at="tail")
+check("the seam's frames are portrait", tuple(tail.shape[1:3]), (64, 32))
+quarters = [float(tail[-1, :32, :16].mean()), float(tail[-1, :32, 16:].mean()),
+            float(tail[-1, 32:, :16].mean()), float(tail[-1, 32:, 16:].mean())]
+check("...and turned the way the player turns them",
+      ["TL", "TR", "BL", "BR"][quarters.index(max(quarters))], "TR")
+
 passed("all VFR seam tests passed")

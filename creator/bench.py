@@ -40,7 +40,7 @@ from PIL import Image, ImageOps, UnidentifiedImageError
 
 import folder_paths
 
-from . import settings
+from . import media, settings
 
 # The long edge a preview frame is cut to before anything is done to it. A
 # preview exists to answer "is this dial right", and that question is answered
@@ -472,8 +472,11 @@ def transcode(path, out_dir, name_stem, work, size=None, trim=None, chunk=1,
             rate = stream.guessed_rate or stream.average_rate or 24
             # The display size, not the storage size: a rotated phone clip stores
             # landscape and plays portrait, and the result has to match the play.
+            # The frames are turned to match below, and the file written here
+            # carries no rotation of its own.
+            rotation = media.stream_rotation(source, stream)
             width, height = int(stream.width), int(stream.height)
-            if int(getattr(stream, "rotation", 0) or 0) % 180:
+            if rotation % 180:
                 width, height = height, width
             if size is not None:
                 width, height = size(width, height)
@@ -575,7 +578,8 @@ def transcode(path, out_dir, name_stem, work, size=None, trim=None, chunk=1,
                             continue
                         if zero is None:
                             zero = frame.pts
-                        waiting.append((frame.pts, frame.to_ndarray(format="rgb24")))
+                        waiting.append((frame.pts,
+                                        media.turned(frame.to_ndarray(format="rgb24"), rotation)))
                         if len(waiting) >= max(1, chunk):
                             run_chunk(last=False)
                     elif audio_out is not None:

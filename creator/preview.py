@@ -23,7 +23,7 @@ import hashlib
 import json
 import os
 
-from PIL import Image
+from PIL import Image, ImageOps, UnidentifiedImageError
 
 import folder_paths
 
@@ -146,6 +146,30 @@ def _seek_past_the_leader(container, stream):
 
 
 def _render_thumb(path, out):
+    """A thumbnail of a picture or a clip, as its player shows it.
+
+    A still goes through PIL with its orientation tag applied — a phone stores
+    the photo the sensor took and writes "turn this" beside it, and the browser
+    obeys the tag on the full picture, so a thumbnail that ignores it is the
+    one thing on the page lying sideways. A clip's frame is turned by the
+    container's display matrix for the same reason; PyAV hands the storage
+    picture back and puts the turn on the frame as `rotation`.
+
+    webp rather than JPEG so a still with transparency keeps it.
+    """
+    try:
+        with Image.open(path) as picture:
+            image = ImageOps.exif_transpose(picture)
+            image.load()
+    except UnidentifiedImageError:
+        image = _clip_still(path)
+    image.thumbnail((THUMB_LONG_EDGE, THUMB_LONG_EDGE), Image.LANCZOS)
+    if image.mode not in ("RGB", "RGBA"):
+        image = image.convert("RGBA" if "A" in image.getbands() else "RGB")
+    image.save(out, "WEBP", quality=THUMB_QUALITY, method=4)
+
+
+def _clip_still(path):
     import av
 
     with av.open(path) as container:
@@ -160,14 +184,14 @@ def _render_thumb(path, out):
         if frame is None:
             raise ValueError("no decodable video frame")
         image = frame.to_image()
-
-    image.thumbnail((THUMB_LONG_EDGE, THUMB_LONG_EDGE), Image.LANCZOS)
-    image.convert("RGB").save(out, "JPEG", quality=THUMB_QUALITY, optimize=True)
+        # PIL turns counter-clockwise, which is the sense the matrix is read in.
+        turn = int(round(float(frame.rotation or 0) / 90.0)) % 4
+        return image.rotate(90 * turn, expand=True) if turn else image
 
 
 async def thumbnail(path):
-    """-> path to a JPEG still of this clip, or None if it has no readable frame."""
-    return await _produce(path, "thumb", "jpg", _render_thumb)
+    """-> path to a webp still of this file, or None if it has no readable picture."""
+    return await _produce(path, "thumb", "webp", _render_thumb)
 
 
 # ---- waveform ---------------------------------------------------------------

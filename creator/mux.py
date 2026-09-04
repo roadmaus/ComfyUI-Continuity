@@ -303,7 +303,7 @@ def _write_pass(av, target, spec, at_frame, at_sample):
 def _clip_graph(av, stream, frame, frame_rate, width=None, height=None):
     """The filter chain a supplied clip is conformed through.
 
-    Three things, and ffmpeg does all three properly so this does not:
+    Four things, and ffmpeg does all four properly so this does not:
 
     - `fps` resamples the source's rate to the render's, duplicating or
       dropping frames **by timestamp**. The reel is one constant-rate stream,
@@ -311,6 +311,12 @@ def _clip_graph(av, stream, frame, frame_rate, width=None, height=None):
       — and a variable-rate source (a phone, a screen recording) has no rate to
       hand over at all: its frames are wherever their timestamps say they are,
       and only a filter that reads them lands each one where it belongs.
+    - `transpose` turns a phone clip the way its player does. A portrait
+      phone recording is stored landscape with a rotation in the container,
+      and a decoder hands back the storage picture; the display matrix rides
+      on the frame as `rotation`, counter-clockwise degrees, and this is the
+      turn ffmpeg's own autorotate makes of it. Before the scale, so the
+      cover-crop is of the picture as seen.
     - `scale` with `increase` fills the canvas rather than fitting inside it,
       and `crop` takes the middle of what overflows. Cover, not letterbox: the
       generated passes have no bars and a supplied clip with them would read as
@@ -322,7 +328,8 @@ def _clip_graph(av, stream, frame, frame_rate, width=None, height=None):
       their storage size here, which is wrong by their pixel aspect; it is rare
       enough to be worth naming rather than carrying a DAR calculation.
 
-    `fps` comes first so the scaler only ever touches frames that survive.
+    `fps` comes first so the scaler only ever touches frames that survive,
+    and the turn comes next so the scaler is fitting the picture as seen.
 
     Returns the graph along with its two ends, and the caller has to hold it:
     the filter contexts do not own it, so a graph nothing references is
@@ -333,7 +340,7 @@ def _clip_graph(av, stream, frame, frame_rate, width=None, height=None):
     source = graph.add_buffer(width=frame.width, height=frame.height,
                               format=frame.format.name,
                               time_base=stream.time_base)
-    steps = [("fps", f"fps={frame_rate}")]
+    steps = [("fps", f"fps={frame_rate}"), *_upright(frame.rotation)]
     if width and height:
         steps += [("scale", f"{width}:{height}:force_original_aspect_ratio=increase"),
                   ("crop", f"{width}:{height}")]
@@ -349,6 +356,23 @@ def _clip_graph(av, stream, frame, frame_rate, width=None, height=None):
     return graph, source, sink
 
 
+def _upright(rotation):
+    """The filter steps that turn a decoded frame the way its player shows it.
+
+    `rotation` is the frame's, in counter-clockwise degrees as PyAV reads the
+    container's display matrix; ffmpeg's autorotate resolves the same number
+    to the same transposes, checked against it on all three turns.
+    """
+    turns = int(round(float(rotation or 0) / 90.0)) % 4
+    if turns == 1:
+        return [("transpose", "cclock")]
+    if turns == 2:
+        return [("hflip", ""), ("vflip", "")]
+    if turns == 3:
+        return [("transpose", "clock")]
+    return []
+
+
 def conform(av, path, start, duration, frame_rate, width=None, height=None):
     """The frames of `path`'s `start`..`start + duration` window, at `frame_rate`.
 
@@ -361,7 +385,8 @@ def conform(av, path, start, duration, frame_rate, width=None, height=None):
     rate footage and disagree on variable-rate footage, and a seam that
     continued from a frame the reel never showed was the result.
 
-    `duration` of 0 reads to the end of the file. The frames are yielded as
+    `duration` of 0 reads to the end of the file. The frames come out upright
+    — a portrait phone clip is portrait here — see `_upright`. They are yielded as
     they leave the filter, one at a time, so a caller that only wants the last
     second of a long clip holds a second and not the clip. Raises `ValueError`
     when the container has no picture; the callers name the clip themselves.

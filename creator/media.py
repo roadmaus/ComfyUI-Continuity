@@ -134,6 +134,27 @@ class Deferred(dict):
         return super().__contains__(key)
 
 
+def stream_rotation(container, stream):
+    """How far a clip's player turns it, in counter-clockwise degrees.
+
+    Off the first decoded frame, because that is the only place PyAV puts it:
+    the container's display matrix is read by the decoder and handed out as
+    `VideoFrame.rotation`, and the stream object has no such attribute — a
+    `getattr(stream, "rotation", 0)` was silently zero on every file. One
+    frame is decoded and the container is wound back, so a caller that goes
+    on to read the clip starts where it did.
+    """
+    frame = next(container.decode(stream), None)
+    container.seek(0)
+    return int(round(float(getattr(frame, "rotation", 0) or 0)))
+
+
+def turned(array, rotation):
+    """A decoded `[H, W, C]` frame as its player shows it — see `stream_rotation`."""
+    turns = int(round(float(rotation or 0) / 90.0)) % 4
+    return np.rot90(array, k=turns).copy() if turns else array
+
+
 def image_size(filename):
     """(width, height) without decoding pixels — used for the adaptive canvas.
 
@@ -155,7 +176,7 @@ def image_size(filename):
         if stream is None:
             raise MediaError(f"{filename!r} has no picture to take a size from")
         width, height = int(stream.width), int(stream.height)
-        if int(getattr(stream, "rotation", 0) or 0) % 180:
+        if stream_rotation(container, stream) % 180:
             width, height = height, width
         return width, height
 

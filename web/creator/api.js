@@ -665,7 +665,7 @@ export async function renderMeta(path) {
  * Takes the input-relative path ("3d/foo.png"), not an asset row: only the path
  * survives into creator_data, so a reloaded workflow has nothing else to go on.
  */
-export function viewUrl(path, { preview = false } = {}) {
+export function viewUrl(path, { preview = false, version = null } = {}) {
   // A cast look's frame is not in the input folder and never was: it is a file
   // this pack ships, served out of WEB_DIRECTORY. Answered here rather than at
   // each of the dozen call sites, for the reason `media.resolve` answers it on
@@ -683,10 +683,12 @@ export function viewUrl(path, { preview = false } = {}) {
     subfolder: at < 0 ? "" : clean.slice(0, at),
     type: annotated ? annotated[2] : "input",
   });
-  // Core re-encodes to webp when asked. It does not downscale, but a 4000px
-  // PNG served as q70 webp is a fraction of the bytes, and a picker showing
-  // thirty of them at 140px has no use for the originals.
-  if (preview) params.set("preview", "webp;70");
+  // A preview is this pack's thumb route, not core's `/view?preview=`: core
+  // re-encodes without the picture's orientation tag, so a phone photo stored
+  // sideways came back sideways in every cell beside a full picture the
+  // browser had turned upright. Ours applies the tag and downscales — a picker
+  // showing thirty 4000px PNGs at 140px has no use for the originals.
+  if (preview) return thumbUrl(path, version);
   return api.apiURL(`/view?${params}`);
 }
 
@@ -712,11 +714,10 @@ export function thumbUrl(path, version) {
  * The URL that shows one media file as a still picture, or null for a file that
  * has none.
  *
- * The two routes above answer for different kinds and the choice is not
- * cosmetic: an image is core's `/view` re-encoded to webp, while a clip has to
- * come through this pack's thumb route, because an `<img>` pointed at an `.mp4`
- * renders nothing at all. Audio has no picture and gets an icon from whoever is
- * drawing.
+ * Both kinds come through this pack's thumb route: a clip has to, because an
+ * `<img>` pointed at an `.mp4` renders nothing at all, and a picture does so
+ * that its orientation tag is honoured — see `viewUrl`. Audio has no picture
+ * and gets an icon from whoever is drawing.
  *
  * One implementation, because every grid in this pack asks the same question —
  * the picker's cells, the gallery, the preset library's cards. Takes an asset row
@@ -725,9 +726,8 @@ export function thumbUrl(path, version) {
  */
 export function stillUrl(asset) {
   if (!asset?.path) return null;
-  if (asset.kind === "video") return thumbUrl(asset.path, asset.mtime);
-  if (asset.kind === "image") return viewUrl(asset.path, { preview: true });
-  return null;
+  if (asset.kind !== "video" && asset.kind !== "image") return null;
+  return viewUrl(asset.path, { preview: true, version: asset.mtime });
 }
 
 /**

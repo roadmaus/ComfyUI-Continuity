@@ -267,6 +267,44 @@ with av.open(covered) as container:
 if int(edge[edge.shape[0] // 2, 0, 0]) < 128:
     FAILURES.append("a spliced clip is letterboxed: the left edge came back black")
 
+# A phone clip: stored landscape, with a display matrix saying "turn me". The
+# reel carries no such matrix — it is one constant stream of pixels — so the
+# turn has to be made of the pixels, the way the player makes it. Read
+# counter-clockwise: -90 is the common phone case, and it puts the bright
+# top-left corner of the storage picture at the top right of a portrait frame.
+def turned_clip(rotation):
+    path = os.path.join(tempfile.mkdtemp(), "phone.mp4")
+    with av.open(path, mode="w") as out:
+        video = out.add_stream("h264", rate=SRC_FPS)
+        video.width, video.height, video.pix_fmt = 64, 32, "yuv420p"
+        video.options = {"crf": "1"}
+        video.set_display_rotation(rotation)
+        pic = torch.zeros(32, 64, 3)
+        pic[:16, :32] = 1.0
+        for index in range(SRC_FPS):
+            frame = av.VideoFrame.from_ndarray((pic * 255).byte().numpy(), format="rgb24")
+            frame.pts = index
+            frame.time_base = Fraction(1, SRC_FPS)
+            out.mux(video.encode(frame.reformat(format="yuv420p")))
+        out.mux(video.encode(None))
+    return path
+
+
+def bright_corner(path):
+    with av.open(path) as container:
+        frame = next(container.decode(video=0))
+        a = frame.to_ndarray(format="rgb24").astype("float32")
+    h, w = a.shape[:2]
+    quarters = [a[:h // 2, :w // 2].mean(), a[:h // 2, w // 2:].mean(),
+                a[h // 2:, :w // 2].mean(), a[h // 2:, w // 2:].mean()]
+    return ["TL", "TR", "BL", "BR"][max(range(4), key=lambda i: quarters[i])], (w, h)
+
+
+_, _, _, upright = written([clip_part(turned_clip(-90), sound=False, size=(32, 64))])
+check("a phone clip is spliced the way its player shows it", bright_corner(upright), ("TR", (32, 64)))
+_, _, _, flat = written([clip_part(turned_clip(0), sound=False, size=(64, 32))])
+check("an unturned clip is spliced as stored", bright_corner(flat), ("TL", (64, 32)))
+
 # ---- what it refuses --------------------------------------------------------
 #
 # These were the pairwise join's checks and they say the same thing they always

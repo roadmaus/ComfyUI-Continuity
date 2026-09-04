@@ -5,6 +5,23 @@ and everything under it is kept exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**A phone clip plays upright everywhere it is read.** A portrait phone
+recording is stored landscape with a turn written in the container. The reel
+spliced the storage picture, so the clip lay on its side in the finished file;
+the seam beside it inherited the same sideways frames; and the three places
+that swapped a clip's width and height for the turn were reading a stream
+attribute PyAV does not have, so they never did. The turn now comes off the
+first decoded frame, where PyAV actually puts it, and the shared decoder
+makes it with ffmpeg's own transposes before the crop, so the reel, the seams,
+the references, the guides and the bench cut all agree with the player.
+
+**Thumbnails honour a photo's orientation.** A picture's thumbnail was core's
+`/view?preview=` re-encode, which saves without the orientation tag, so a
+phone photo stored sideways came back sideways in every cell beside a full
+picture the browser had turned upright. Stills come through the pack's own
+thumb route now, with the tag applied, downscaled, and as webp so transparency
+survives; a clip's still is turned the same way.
+
 **A seam beside a supplied clip continues from the frame the reel plays.**
 The frames a generation inherited from a clip were read through core's video
 decoder and resampled to 24 fps by the stream's average rate, while the clip

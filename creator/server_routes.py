@@ -169,8 +169,7 @@ def _read_header(path):
         width = height = None
         if stream is not None:
             width, height = int(stream.width), int(stream.height)
-            rotation = int(getattr(stream, "rotation", 0) or 0) % 180
-            if rotation:
+            if media.stream_rotation(container, stream) % 180:
                 width, height = height, width
         return {
             "has_audio": bool(container.streams.audio),
@@ -271,7 +270,12 @@ async def render_meta(request):
 
 @PromptServer.instance.routes.get("/continuity/thumb")
 async def asset_thumb(request):
-    """A JPEG still of one clip, for a picker cell.
+    """A small webp of one clip or picture, the way its player shows it.
+
+    Pictures too, and not core's `/view?preview=`: that re-encode opens the
+    file and saves it without its orientation tag, so a phone photo stored
+    sideways and tagged upright came back as a sideways thumbnail beside a
+    full picture the browser had turned. See `preview._render_thumb`.
 
     404 rather than a placeholder: the cell falls back to an icon, and inventing
     an image here would make an undecodable file look like a fine one.
@@ -282,11 +286,13 @@ async def asset_thumb(request):
     thumb = await preview.thumbnail(path)
     if thumb is None:
         return web.Response(status=404)
+    # A caller that stamped the source's mtime into the URL has made it name one
+    # immutable frame — replacing the file changes the URL. One that did not is
+    # revalidated every time; the response carries an ETag, so that is a 304.
+    versioned = bool(request.query.get("v"))
     return web.FileResponse(thumb, headers={
-        "Content-Type": "image/jpeg",
-        # The caller stamps the source mtime into the URL, so a given URL really
-        # does name one immutable frame — replacing the file changes the URL.
-        "Cache-Control": "public, max-age=31536000, immutable",
+        "Content-Type": "image/webp",
+        "Cache-Control": "public, max-age=31536000, immutable" if versioned else "no-cache",
     })
 
 
