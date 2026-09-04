@@ -165,12 +165,13 @@ _SLACK_FRAMES = 2
 def read(filename, trim, frames, width, height, fps):
     """One shot's worth of the guide — `[frames, height, width, 3]`.
 
-    Its own decoder rather than `media.load_video`, and that is the reason this
-    feature is family-neutral at all: that function resamples to 24 fps because
-    that is the rate H3 reads *references* at, and a guide is not a reference —
-    it is the picture the sampler is aimed at frame for frame, at whatever rate
-    the family renders. Handing LTX's 30 fps a 24 fps guide would slow the
-    drawing to three-quarters speed against the shot it is guiding.
+    Read at the render's rate rather than through `media.load_video`, and that
+    is the reason this feature is family-neutral at all: that function
+    resamples to 24 fps because that is the rate H3 reads *references* at, and
+    a guide is not a reference — it is the picture the sampler is aimed at
+    frame for frame, at whatever rate the family renders. Handing LTX's 30 fps
+    a 24 fps guide would slow the drawing to three-quarters speed against the
+    shot it is guiding.
 
     **Resized here rather than left to the apply node.** Core fits the hint to
     the latent canvas itself, so this is not needed for correctness — it is
@@ -187,7 +188,6 @@ def read(filename, trim, frames, width, height, fps):
     """
     import comfy.utils
     import torch
-    from comfy_api.latest import InputImpl
 
     from . import media
 
@@ -212,21 +212,19 @@ def read(filename, trim, frames, width, height, fps):
     if trim:
         span = min(span, max(0.0, float(trim[1]) - start) + _SLACK_FRAMES / rate)
 
-    components = InputImpl.VideoFromFile(
-        media.resolve(filename), start_time=start, duration=span).get_components()
-    got = components.images
-    if got is None or got.shape[0] == 0:
+    # The same timestamp-driven resample a supplied clip is spliced with, at
+    # the render's rate rather than H3's — see `media._frames_at` for why the
+    # average-rate index it replaced put variable-rate footage on the wrong
+    # frames.
+    try:
+        got = media._frames_at(filename, start, span, rate)
+    except ValueError as exc:
+        raise GuideError(f"the guide {filename!r} has no picture in it") from exc
+    if got.shape[0] == 0:
         raise GuideError(
             f"the guide {filename!r} has nothing at {start:.2f} s. Re-trim it on "
             f"the card, or trace it again on the ControlNet bench."
         )
-    got = got[..., :3]
-
-    source_fps = float(components.frame_rate or 0.0)
-    if source_fps > 0 and abs(source_fps - rate) > 1e-3:
-        count = max(1, round(got.shape[0] / source_fps * rate))
-        index = (torch.arange(count, dtype=torch.float64) * (source_fps / rate))
-        got = got[index.floor().clamp(0, got.shape[0] - 1).long()]
 
     if got.shape[0] < want:
         # Held rather than looped or padded black. A guide that ran out should

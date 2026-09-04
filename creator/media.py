@@ -15,7 +15,6 @@ import torch
 from PIL import Image, ImageOps, UnidentifiedImageError
 
 import folder_paths
-from comfy_api.latest import InputImpl
 # Core's PyAV-based loader, not torchaudio.load: recent torchaudio routes load()
 # through torchcodec, which ComfyUI does not ship. This is the same decoder
 # LoadAudio uses, so we accept exactly the files the rest of ComfyUI accepts.
@@ -23,6 +22,8 @@ from comfy_extras.nodes_audio import load as _load_audio_file
 # The same snapping `encode` will do, so `load_all` can work out how much of a
 # reference clip can possibly survive it.
 from comfy_extras.nodes_minimax_h3 import align_frame_count
+
+from . import mux
 
 TARGET_FPS = 24
 
@@ -203,9 +204,9 @@ def load_audio(filename, trim=None):
 def _decode_window(trim, max_seconds):
     """-> (start_time, duration) for the decoder. A duration of 0 means "to EOF".
 
-    `VideoFromFile` takes a window, seeks to it and stops demuxing at the end of
-    it, so frames outside the window are never decoded. Handing it the window is
-    the whole difference between reading a 60-second source and reading the two
+    The decoder seeks to the window and stops demuxing at the end of it, so
+    frames outside the window are never decoded. Handing it the window is the
+    whole difference between reading a 60-second source and reading the two
     seconds of it that were asked for — and decode is where a long clip hurts,
     because frames arrive as float32 and cost ~25 MB each at 1080p.
     """
@@ -220,49 +221,67 @@ def _decode_window(trim, max_seconds):
     return start, duration
 
 
+def _frames_at(filename, start, duration, fps):
+    """The window's picture at `fps` -> [N, H, W, 3] float32, or empty.
+
+    Through `mux.conform` — the same timestamp-driven resample the finished
+    file splices a clip with — rather than through core's `VideoFromFile`,
+    which hands back a bare stack of frames and the stream's *average* rate.
+    Resampling that stack by the average is right for constant-rate footage
+    and wrong for anything else: a phone clip or a screen recording carries
+    its frames at whatever intervals they were captured, an average says
+    nothing about where any one of them falls, and a seam that read its tail
+    that way continued from a frame the reel never showed. Reading both
+    through one filter is what makes them the same frame.
+    """
+    frames = [
+        torch.from_numpy(frame.to_ndarray(format="rgb24"))
+        for frame in mux.conform(av, resolve(filename), start, duration, fps)
+    ]
+    if not frames:
+        return torch.zeros(0, 1, 1, 3)
+    return torch.stack(frames).float() / 255.0
+
+
 def load_video(filename, want_audio=False, trim=None, max_seconds=None):
     """-> (frames [N, H, W, 3] resampled to 24 fps, audio dict or None).
 
     H3 reads reference video at 24 fps, so a clip shot at any other rate is
-    resampled by nearest-frame index here rather than being handed over at the
-    wrong tempo — the model would read a 30 fps clip as 25% slow motion.
+    resampled here rather than being handed over at the wrong tempo — the
+    model would read a 30 fps clip as 25% slow motion. The resample is by
+    timestamp, see `_frames_at`.
 
     `trim` is (start, end) in seconds and `max_seconds` bounds how much of the
     clip can matter downstream. Both go to the decoder as one seek window rather
     than being sliced off a fully decoded clip — see `_decode_window`. The
-    soundtrack is cut to that same window by the decoder, which is what keeps
-    the picture and the sound from drifting apart.
+    soundtrack is cut to that same window, which is what keeps the picture and
+    the sound from drifting apart.
 
-    The window anchors the resample at the requested second rather than at a
-    24 fps index counted from the head of the file. On a trim that lands on a
-    frame boundary the two agree exactly; off one they can pick a source frame
-    either side of it, which is a difference of one frame at 24 fps and is the
-    more faithful of the two readings of what was asked for.
+    The window anchors the resample at the requested second: the first frame
+    out is the source frame nearest the window's start, and the rest fall on a
+    24 fps grid from there.
     """
     start, duration = _decode_window(trim, max_seconds)
-    components = InputImpl.VideoFromFile(
-        resolve(filename), start_time=start, duration=duration).get_components()
-    frames = components.images
-    if frames is None or frames.shape[0] == 0:
+    try:
+        frames = _frames_at(filename, start, duration, TARGET_FPS)
+    except ValueError as exc:
+        raise MediaError(f"{filename!r} has no video frames") from exc
+    if frames.shape[0] == 0:
         if trim is not None:
             raise MediaError(
                 f"{filename!r}: the {trim[0]:.2f}–{trim[1]:.2f} s segment is past the end of the clip"
             )
         raise MediaError(f"{filename!r} has no video frames")
-    frames = frames[..., :3]
-
-    source_fps = float(components.frame_rate)
-    if source_fps > 0 and abs(source_fps - TARGET_FPS) > 1e-3:
-        count = max(1, round(frames.shape[0] / source_fps * TARGET_FPS))
-        index = torch.arange(count, dtype=torch.float64) * (source_fps / TARGET_FPS)
-        index = index.floor().clamp(0, frames.shape[0] - 1).long()
-        frames = frames[index]
 
     audio = None
     if want_audio:
-        if components.audio is None:
-            raise MediaError(f"{filename!r} has no audio track to use as a reference")
-        audio = components.audio
+        # The window's own soundtrack, cut in seconds: the picture's frame count
+        # was decided by the timestamps, so the sound is cut by them too. Read
+        # to the end of the file when the window is; a bare start still cuts.
+        audio = load_audio(filename)
+        end = start + duration if duration else \
+            audio["waveform"].shape[-1] / audio["sample_rate"]
+        audio = _cut_audio(filename, audio, (start, end))
 
     return frames, audio
 

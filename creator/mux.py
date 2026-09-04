@@ -43,7 +43,8 @@ something to re-encode would cost 35 GB to say nothing; it is demuxed,
 conformed and re-encoded a frame at a time into the same streams instead, so a
 five-minute clip costs what a five-second one does. What the *seams* need out
 of either kind — a first frame, a last feathered run — is a separate bounded
-read that never comes through here.
+read; for a clip it goes through the same `conform` the splice does, so the
+frame a generation continues from is the frame the file plays before it.
 
 The audio is written part by part too, and each part's soundtrack is held to
 its own picture's length. That is not tidiness: the parts are laid end to end,
@@ -299,20 +300,24 @@ def _write_pass(av, target, spec, at_frame, at_sample):
     return count, wanted
 
 
-def _clip_graph(av, stream, frame, width, height, frame_rate):
+def _clip_graph(av, stream, frame, frame_rate, width=None, height=None):
     """The filter chain a supplied clip is conformed through.
 
     Three things, and ffmpeg does all three properly so this does not:
 
     - `fps` resamples the source's rate to the render's, duplicating or
-      dropping frames. The reel is one constant-rate stream, so a 30 fps source
-      cannot simply be handed over — it would play 25% slow.
+      dropping frames **by timestamp**. The reel is one constant-rate stream,
+      so a 30 fps source cannot simply be handed over — it would play 25% slow
+      — and a variable-rate source (a phone, a screen recording) has no rate to
+      hand over at all: its frames are wherever their timestamps say they are,
+      and only a filter that reads them lands each one where it belongs.
     - `scale` with `increase` fills the canvas rather than fitting inside it,
       and `crop` takes the middle of what overflows. Cover, not letterbox: the
       generated passes have no bars and a supplied clip with them would read as
       a different piece rather than as a different shot. Which half of the
       overflow to keep is a real editorial choice and the middle is the only
-      defensible default.
+      defensible default. Skipped when no canvas is given — a reader that
+      wants the source's own size goes through the resample alone.
     - `setsar` makes the output square-pixel. Anamorphic sources are scaled by
       their storage size here, which is wrong by their pixel aspect; it is rare
       enough to be worth naming rather than carrying a DAR calculation.
@@ -328,14 +333,13 @@ def _clip_graph(av, stream, frame, width, height, frame_rate):
     source = graph.add_buffer(width=frame.width, height=frame.height,
                               format=frame.format.name,
                               time_base=stream.time_base)
+    steps = [("fps", f"fps={frame_rate}")]
+    if width and height:
+        steps += [("scale", f"{width}:{height}:force_original_aspect_ratio=increase"),
+                  ("crop", f"{width}:{height}")]
+    steps.append(("setsar", "1"))
     tail = source
-    for name, args in (("fps", f"fps={frame_rate}"),
-                       (
-                           "scale",
-                           f"{width}:{height}:force_original_aspect_ratio=increase",
-                       ),
-                       ("crop", f"{width}:{height}"),
-                       ("setsar", "1")):
+    for name, args in steps:
         step = graph.add(name, args)
         tail.link_to(step)
         tail = step
@@ -343,6 +347,61 @@ def _clip_graph(av, stream, frame, width, height, frame_rate):
     tail.link_to(sink)
     graph.configure()
     return graph, source, sink
+
+
+def conform(av, path, start, duration, frame_rate, width=None, height=None):
+    """The frames of `path`'s `start`..`start + duration` window, at `frame_rate`.
+
+    A generator of decoded `av.VideoFrame`s, conformed through `_clip_graph`,
+    and **the one reading of a supplied clip there is**. The reel splices the
+    clip through it, and so does the seam beside the clip when it reads the
+    frames a generation continues from — so the run handed to the sampler is,
+    by construction, the run the finished file plays right before the cut.
+    Two readers with two ideas of where a frame falls would agree on constant-
+    rate footage and disagree on variable-rate footage, and a seam that
+    continued from a frame the reel never showed was the result.
+
+    `duration` of 0 reads to the end of the file. The frames are yielded as
+    they leave the filter, one at a time, so a caller that only wants the last
+    second of a long clip holds a second and not the clip. Raises `ValueError`
+    when the container has no picture; the callers name the clip themselves.
+    """
+    with av.open(path) as container:
+        if not container.streams.video:
+            raise ValueError(f"{path!r} has no video stream")
+        stream = container.streams.video[0]
+        first_pts = start / stream.time_base
+        end = (start + duration) / stream.time_base if duration else None
+        if start:
+            container.seek(int(first_pts), stream=stream)
+        chain = source = sink = None
+
+        def drain():
+            while True:
+                try:
+                    yield sink.pull()
+                except (av.error.BlockingIOError, av.error.EOFError):
+                    return
+
+        for frame in container.decode(stream):
+            if frame.pts is not None:
+                if frame.pts < first_pts:
+                    continue
+                if end is not None and frame.pts >= end:
+                    break
+            if source is None:
+                # `chain` is held for as long as its two ends are used — see
+                # `_clip_graph`.
+                chain, source, sink = _clip_graph(av, stream, frame, frame_rate,
+                                                  width, height)
+            source.push(frame)
+            yield from drain()
+        if source is not None:
+            # The fps filter holds a frame back to decide its duration; without
+            # the flush a clip is short by one every time.
+            source.push(None)
+            yield from drain()
+        del chain
 
 
 def _write_clip(av, target, spec, at_frame, at_sample):
@@ -361,49 +420,15 @@ def _write_clip(av, target, spec, at_frame, at_sample):
     path = spec["path"]
 
     count = 0
-
-    def drain(sink):
-        """Every frame the filter chain has ready, encoded into the stream."""
-        nonlocal count
-        while True:
-            try:
-                out = sink.pull()
-            except (av.error.BlockingIOError, av.error.EOFError):
-                return
+    try:
+        for out in conform(av, path, start, duration, target.frame_rate, width, height):
             out = out.reformat(format=target.pix_fmt)
             out.pts = at_frame + count
             out.time_base = target.video_time_base
             target.output.mux(target.video.encode(out))
             count += 1
-
-    with av.open(path) as container:
-        if not container.streams.video:
-            raise MuxError(f"{spec.get('name') or path!r} has no video to play")
-        stream = container.streams.video[0]
-        first_pts = start / stream.time_base
-        end = (start + duration) / stream.time_base if duration else None
-        if start:
-            container.seek(int(first_pts), stream=stream)
-        chain = source = sink = None
-        for frame in container.decode(stream):
-            if frame.pts is not None:
-                if frame.pts < first_pts:
-                    continue
-                if end is not None and frame.pts >= end:
-                    break
-            if source is None:
-                # `chain` is held for as long as its two ends are used — see
-                # `_clip_graph`.
-                chain, source, sink = _clip_graph(av, stream, frame, width, height,
-                                                  target.frame_rate)
-            source.push(frame)
-            drain(sink)
-        if source is not None:
-            # The fps filter holds a frame back to decide its duration; without
-            # the flush a clip is short by one every time.
-            source.push(None)
-            drain(sink)
-        del chain
+    except ValueError as exc:
+        raise MuxError(f"{spec.get('name') or path!r} has no video to play") from exc
 
     if not count:
         raise MuxError(

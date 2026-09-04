@@ -5,6 +5,17 @@ and everything under it is kept exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**A seam beside a supplied clip continues from the frame the reel plays.**
+The frames a generation inherited from a clip were read through core's video
+decoder and resampled to 24 fps by the stream's average rate, while the clip
+itself was spliced into the finished file by timestamp through ffmpeg's `fps`
+filter. On constant-rate footage the two agree; on variable-rate footage — a
+phone, a screen recording — the average describes none of the frames, so the
+seam read the wrong ones, or too few of them and refused the blend. Both now
+read through one decoder, so the run handed to the sampler is the run the file
+plays before the cut, and a guide clip is read by timestamp the same way.
+Issue #46.
+
 **The server refiner asks for no reasoning.** A thinking model on the OpenAI
 route spent the whole reply budget on its trace and returned no content, which
 the panel reported as a server that returned nothing. The request now carries

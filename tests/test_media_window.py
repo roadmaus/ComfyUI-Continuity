@@ -4,10 +4,11 @@
 
 `media.load_video` hands its trim and its length cap to PyAV as a seek window,
 so the frames outside it are never decoded. That is worth a real file rather than
-a mock: the saving depends on `VideoFromFile` honouring `start_time`/`duration`,
-on the container seek landing before the window and the frames ahead of it being
-discarded, and on the soundtrack being cut to the same span. None of that is our
-code, and all of it is what the speed-up rests on.
+a mock: the saving depends on the container seek landing before the window, on
+the frames ahead of it being discarded, on ffmpeg's `fps` filter putting the
+resampled frames where the timestamps say, and on the soundtrack being cut to
+the same span. Most of that is not our code, and all of it is what the speed-up
+rests on.
 
 The assertions avoid absolute colour entirely — a synthetic clip goes through
 yuv420p and comes back through swscale, so the levels shift. Instead each second
