@@ -548,13 +548,16 @@ export const SUBJECT_SLOTS = ["from", "motion", "voice", "replaces"];
 /** What of an asset row travels with a cast member. The handle is deliberately
  *  not in it — see above — and neither is `role`, which is `reference` for
  *  everything a subject can be built out of. */
-function storedFile(asset, slot) {
+function storedFile(asset, slot, note = "") {
   return {
     slot,
     filename: asset.filename,
     kind: asset.kind ?? "image",
     ...(asset.track ? { track: asset.track } : {}),
     ...(asset.ref_size ? { ref_size: asset.ref_size } : {}),
+    // What it lends them, in the user's words — the half of a picture's
+    // meaning that neither its filename nor its slot can say.
+    ...(note ? { note } : {}),
     ...(asset.trim ? { trim: asset.trim } : {}),
     // A plate's panels, in the shape a picker answer carries them (`path`,
     // not `filename`) and without their handles — handles are the piece's,
@@ -582,14 +585,15 @@ function storedFile(asset, slot) {
  */
 export function captureSubject(subject, assets) {
   const byHandle = new Map((assets ?? []).map((asset) => [asset.handle, asset]));
+  const notes = S.subjectNotes(subject);
   const files = [];
   for (const handle of subject.from ?? []) {
     const asset = byHandle.get(handle);
-    if (asset?.filename) files.push(storedFile(asset, "from"));
+    if (asset?.filename) files.push(storedFile(asset, "from", notes[handle]));
   }
   for (const slot of ["motion", "voice"]) {
     const asset = byHandle.get(subject[slot]);
-    if (asset?.filename) files.push(storedFile(asset, slot));
+    if (asset?.filename) files.push(storedFile(asset, slot, notes[subject[slot]]));
   }
   // Several, where somebody stands in for the same person in more than one clip.
   for (const handle of S.replacesOf(subject)) {
@@ -640,7 +644,7 @@ export function castFactsLine(facts = {}) {
       ? t(pictures === 1 ? "{count} picture" : "{count} pictures", { count: pictures })
       : null,
     clips ? t(clips === 1 ? "{count} clip" : "{count} clips", { count: clips }) : null,
-    facts.motion ? t("moves") : null,
+    facts.motion ? t("action") : null,
     facts.voice ? t("voice") : null,
     facts.replaces ? t("their place") : null,
     // How much of them is written down, feature by feature. Worth a card's
@@ -1275,6 +1279,7 @@ export function addSubjectToPiece(stored, timeline) {
   const host = single ? (timeline.segments?.[0] ?? timeline) : timeline;
   if (!Array.isArray(host.assets)) host.assets = [];
   const slots = { from: [], replaces: [] };
+  const notes = {};
   for (const file of stored.files ?? []) {
     if (!file?.filename) continue;
     const kind = file.kind ?? "image";
@@ -1307,7 +1312,13 @@ export function addSubjectToPiece(stored, timeline) {
         };
       }
       host.assets.push(asset);
+    } else if (file.ref_size && asset.role === "reference") {
+      // The size is theirs and it was kept on purpose: picture 1 at full
+      // detail and picture 2 at match is a decision about this person, so it
+      // lands on a file the piece already held as much as on a new one.
+      asset.ref_size = file.ref_size;
     }
+    if (file.note) notes[asset.handle] = String(file.note);
     // Their looks and the place they take hold several files each; the other
     // two hold one. See `cast.LIST_ROLES`.
     if (file.slot === "from" || file.slot === "replaces") slots[file.slot].push(asset.handle);
@@ -1337,6 +1348,7 @@ export function addSubjectToPiece(stored, timeline) {
     ...(S.SUBJECT_MARKERS.includes(stored.relationship)
       ? { relationship: stored.relationship } : {}),
     ...(stored.seeded ? { seeded: true } : {}),
+    ...(Object.keys(notes).length ? { notes } : {}),
   };
   // A member kept before the rows existed gets them here, on the way into a
   // piece — the same repair `parseSubjects` does for a piece written then.

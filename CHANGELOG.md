@@ -5,6 +5,16 @@ and everything under it is kept exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**A cast member's files carry words and a size.** Every tile on a cast card
+opens a menu with a line at its head for what that file shows of them - "her
+face, front-lit", "the golf swing" - written after the file's label in the
+subject definition, and the size it is encoded at under the roles. Both are
+kept with the member in the cast library. A still can now lend its pose the
+way a clip lends its movement, and a subject whose motion is borrowed gets a
+retention clause saying the movement is followed, which nothing wrote before.
+On screen that role is now called *action* — the chip, the role and the facts
+line — while the stored value and the prompt keep the guide's word, motion.
+
 **A third bench: Blockout.** A scene staged out of grey boxes on a bare floor —
 or one of five starting arrangements — a camera walked through it on marks, and
 a guide rendered along the path: Depth, Blocks or Lines in the tracing bench's

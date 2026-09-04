@@ -449,6 +449,11 @@ export const css = `
   background: var(--mmc-surface-3); box-shadow: 0 0 0 2px var(--mmc-float);
   color: var(--role);
 }
+/* The shelf's two corner marks on a sheet tile: the sheet floats, so the ring
+   that lifts them off the picture is the float's colour rather than the node's. */
+.mmc-cast-sheet-tile .mmc-cast-size, .mmc-cast-sheet-tile .mmc-cast-noted {
+  box-shadow: 0 0 0 2px var(--mmc-float);
+}
 .mmc-cast-sheet-cap {
   margin-top: 7px; font-size: calc(10.5px * var(--mmc-type)); color: var(--role); text-align: center;
   white-space: nowrap;

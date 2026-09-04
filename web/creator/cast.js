@@ -73,11 +73,16 @@ export const ROLES = [
     fits: (asset) => asset.kind !== "audio" && asset.track !== "sound",
   },
   {
-    key: "motion", glyph: "play", label: "moves",
-    lead: "They move like this",
-    note: "Their movement is taken from the clip and their appearance stays their "
-        + "pictures'. This is how a face from a still walks like somebody in a clip.",
-    fits: (asset) => asset.kind === "video" && asset.track !== "sound",
+    // Stored as `motion`, the guide's word; said as an action, which is what
+    // somebody hangs on a person. See `state.TAKE_WORD`.
+    key: "motion", glyph: "play", label: "action",
+    lead: "Their action comes from this",
+    note: "Their movement is taken from it and their appearance stays their "
+        + "pictures'. A clip lends the whole action; a still lends its pose. This is "
+        + "how a face from one picture swings a club like somebody in another.",
+    // A still as well as a clip: the guide counts actions and poses among what
+    // a subject may denote, and a photograph of the swing is one pose of it.
+    fits: (asset) => asset.kind !== "audio" && asset.track !== "sound",
   },
   {
     key: "voice", glyph: "audio", label: "voice",
@@ -152,11 +157,16 @@ export const MARKER_NOTE = {
 
 /** A popover of rows, each of which may be a picture and two lines rather than
  *  a word. `openChoicePopover` takes strings, which is right for a sampler and
- *  wrong for "which of these four files is their voice". */
-export function openMenu(anchor, { title, sections }) {
+ *  wrong for "which of these four files is their voice".
+ *
+ *  `lead`, where given, is called with the popover's own close and answers a
+ *  node drawn under the title before the rows — the one place a menu about a
+ *  file can hold the words the user attaches to it. */
+export function openMenu(anchor, { title, lead = null, sections, onClose = null }) {
   const pop = el("div", { class: "mmc-pop mmc-pop-scroll mmc-cast-menu" },
                  title ? [el("div", { class: "mmc-pop-title", text: title })] : []);
   let close = () => {};
+  if (lead) pop.appendChild(lead(() => close()));
   for (const section of sections) {
     if (!section.rows.length) continue;
     if (section.head) pop.appendChild(el("div", { class: "mmc-cast-menu-head", text: section.head }));
@@ -179,7 +189,7 @@ export function openMenu(anchor, { title, sections }) {
   }
   document.body.appendChild(pop);
   placeNear(pop, anchor);
-  close = dismissable(pop);
+  close = dismissable(pop, onClose);
   pop.querySelector('[aria-checked="true"]')?.scrollIntoView({ block: "center" });
 }
 
@@ -196,6 +206,56 @@ function assetThumb(asset, className = "mmc-asset-thumb") {
   }
   return el("span", { class: `${className} mmc-tag-${S.tagIndex(asset.handle)}` },
             [icon(asset.kind === "video" ? "video" : "audio", 15)]);
+}
+
+/** The size mark on a tile, where the file is encoded at full detail. "max"
+ *  is the setting that costs — reference tokens ride through every sampling
+ *  step — so it is the one worth reading off a row at a glance, and the mark is
+ *  set in the same monospace the marker wears: this is what the model is handed.
+ *  Exported for the library sheet, whose tiles say the same thing. */
+export function sizeMark(asset) {
+  if (!asset || !S.sizeable(asset) || S.refSize(asset) !== "max") return [];
+  return [el("span", { class: "mmc-cast-size", text: "max" })];
+}
+
+/** The two sizes a reference can be encoded at, as menu rows. The words are
+ *  the reference card's own, shortened to the difference that matters here. */
+export function sizeRows(file, pick) {
+  const current = file.ref_size || S.DEFAULT_REF_SIZE[file.kind ?? "image"];
+  const video = file.kind === "video";
+  return [
+    { label: t("match"), checked: current === "match",
+      note: t("Scaled to the generation's own pixel area. The quick one."),
+      onPick: () => pick("match") },
+    { label: t("max"), checked: current === "max",
+      note: video
+        ? t("The 768 reference canvas — more detail, and much the slower of the two.")
+        : t("2048 short edge — better identity, several times slower."),
+      onPick: () => pick("max") },
+  ];
+}
+
+/** The words attached to one file, as the field at the head of its menu.
+ *  `write` is called on every keystroke and `done` on Enter, so the words are
+ *  on the blob before the menu goes and the tile can wear its dot. */
+export function noteField({ value, write, done }) {
+  const field = el("input", {
+    class: "mmc-cast-menu-field",
+    value,
+    spellcheck: "false",
+    placeholder: t("what it shows of them — her face, front-lit; the golf swing"),
+    title: t("Written after this file's label in their definition, so the model "
+           + "knows which picture is the face and which is the coat, and what the "
+           + "clip is of."),
+    oninput: (event) => write(event.target.value.trim()),
+    onkeydown: (event) => {
+      // The canvas's own shortcuts must not fire off a sentence about a coat.
+      event.stopPropagation();
+      if (event.key === "Enter") { event.preventDefault(); done(); }
+    },
+  });
+  field.addEventListener("pointerdown", (event) => event.stopPropagation());
+  return el("div", { class: "mmc-cast-menu-lead" }, [field]);
 }
 
 /**
@@ -1076,16 +1136,23 @@ export class CastShelf {
 
   refTile(subject, handle, role, assets) {
     const asset = assets.find((a) => a.handle === handle);
+    const note = S.subjectNotes(subject)[handle] ?? "";
     return el("button", {
       class: `mmc-cast-ref${asset ? "" : " missing"}`,
       title: asset
-        ? t("@{handle} — {what}. Click to change what it lends them, or take it off.",
-            { handle, what: t(ROLE[role].lead).toLowerCase() })
+        ? (note ? `@${handle} — ${note}\n` : "")
+          + t("@{handle} — {what}. Click to say what it shows of them, change what it "
+              + "lends them, or take it off.",
+              { handle, what: t(ROLE[role].lead).toLowerCase() })
         : t("@{handle} is not attached here any more, so this card cannot queue "
           + "until it is put back or taken off them.", { handle }),
       onclick: (event) => this.pickRole(event.currentTarget, subject, handle, role),
     }, [
       assetThumb(asset, "mmc-cast-ref-thumb"),
+      ...sizeMark(asset),
+      // Words attached to this file: a dot, because the words themselves are a
+      // sentence and the tile is 38 pixels. The tooltip carries them.
+      ...(note ? [el("span", { class: "mmc-cast-noted" })] : []),
       // No badge on a picture that only says what they look like. That is what
       // four out of five tiles are, and a badge on every one of them is a badge
       // that means nothing — where a badge on the fifth means "this one is not
@@ -1114,7 +1181,30 @@ export class CastShelf {
       label: t("Take it off @{handle}", { handle: subject.handle }),
       onPick: () => { this.clearRole(subject, handle, current); this.save(); },
     });
-    openMenu(anchor, { title: `@${handle}`, sections: [{ rows }] });
+    // The size, on the tile's own menu rather than on the reference row: the
+    // person is where you decide that picture 1 is the face at full detail
+    // and picture 2 is the coat at match, and the library keeps it with them.
+    const sizes = asset && S.sizeable(asset) ? sizeRows(asset, (key) => {
+      asset.ref_size = key;
+      this.save();
+    }) : [];
+    openMenu(anchor, {
+      title: `@${handle}`,
+      lead: (close) => noteField({
+        value: S.subjectNotes(subject)[handle] ?? "",
+        write: (text) => {
+          subject.notes = { ...S.subjectNotes(subject), [handle]: text };
+          if (!text) delete subject.notes[handle];
+          if (!Object.keys(subject.notes).length) delete subject.notes;
+          this.touch?.();
+        },
+        done: () => { close(); this.save(); },
+      }),
+      sections: [{ rows }, ...(sizes.length ? [{ head: t("Encoded at"), rows: sizes }] : [])],
+      // Words typed and then clicked away from are on the blob already; the
+      // tile has to catch up and wear its dot.
+      onClose: () => this.renderSoon(),
+    });
   }
 
   /** Move a handle between slots. Their looks and the place they take are lists
@@ -1148,8 +1238,13 @@ export class CastShelf {
       else delete subject[role];
     }
     // The words naming who they stand in for belong to the whole slot, so they
-    // only go when the last clip does.
+    // only go when the last clip does. The words on the file itself go with the
+    // file, unless it is still on them in another slot.
     if (role === "replaces" && !S.replacesOf(subject).length) delete subject.replaces_what;
+    if (subject.notes && !S.subjectFiles(subject).includes(handle)) {
+      delete subject.notes[handle];
+      if (!Object.keys(subject.notes).length) delete subject.notes;
+    }
   }
 
   /** The "+" tile: everything attached that is not already on them, then the way

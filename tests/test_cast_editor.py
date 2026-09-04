@@ -149,6 +149,26 @@ try {
   await wait(); await wait();
   out.afterMove = lib.body.cast.files.map((f) => `${f.filename.split("/")[1]}:${f.slot}`);
 
+  // ---- what a file shows of them, and how big it is encoded ----------------
+  // Both live on the tile's own menu: the words at its head, the size under
+  // the roles. Typed words land without Enter — clicking away is enough.
+  press(all(sheet, "mmc-cast-sheet-tile")[0]);
+  await wait();
+  const menu = one(globalThis.document.body, "mmc-cast-menu");
+  out.menuHasField = Boolean(menu && one(menu, "mmc-cast-menu-field"));
+  type(one(menu, "mmc-cast-menu-field"), "her face, front-lit");
+  const matchRow = all(menu, "mmc-opt").find((b) => /^match\b/.test(b.text.replace(/\s+/g, " ").trim()));
+  out.menuOffersSize = Boolean(matchRow);
+  press(matchRow);
+  await lib.flushSave();
+  await wait(); await wait();
+  out.noted = lib.body.cast.files.map((f) => f.note ?? "");
+  out.sized = lib.body.cast.files.map((f) => f.ref_size ?? "");
+  // The tile says both: words attached, and no "max" mark once it is match.
+  const tiles = all(one(sheet, "mmc-cast-sheet-refs"), "mmc-cast-sheet-tile");
+  out.tileMarks = tiles.map((tile) =>
+    `${one(tile, "mmc-cast-noted") ? "noted" : "-"}:${one(tile, "mmc-cast-size") ? "max" : "-"}`);
+
   // ---- their description ---------------------------------------------------
   const desc = one(sheet, "mmc-cast-sheet-desc");
   out.hasDescription = Boolean(desc);
@@ -254,6 +274,13 @@ check("a file's slot is guessed from what it is",
       report.get("guessedSlots"), ["from", "from", "voice"])
 # Moving the picture onto `motion` evicts the clip that was there, back to the
 # slot everything can hold, rather than dropping it.
+check("a file's menu opens on the words it lends them", report.get("menuHasField"), True)
+check("...and offers the size it is encoded at", report.get("menuOffersSize"), True)
+check("the words are kept on the file", report.get("noted"), ["her face, front-lit", "", ""])
+check("...and so is the size", report.get("sized"), ["match", "", ""])
+# A kept file lands at max unless it says otherwise, so a silent one wears the
+# mark and the one set to match does not; the voice has no size at all.
+check("the tiles say which is which", report.get("tileMarks"), ["noted:-", "-:max", "-:-"])
 check("...and a slot that holds one file evicts rather than drops",
       report.get("afterMove"),
       ["ana.png:from", "walk.mp4:motion", "voice.wav:voice"])
@@ -288,7 +315,7 @@ check("the card carries their prose",
 check("...and their face is the still, not the clip",
       card.get("portrait"), "people/ana.png")
 check("the facts line reads as an instrument",
-      report.get("factsLine"), "person · 1 picture · moves · voice")
+      report.get("factsLine"), "person · 1 picture · action · voice")
 
 # ---- and back out -----------------------------------------------------------
 

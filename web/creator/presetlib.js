@@ -38,7 +38,7 @@ import { t } from "./i18n.js";
 import { renderMeta, stillUrl, viewUrl } from "./api.js";
 import { atlasRef } from "./presets/atlasref.js";
 import { openPicker } from "./picker.js";
-import { openMenu, MARKER_LABEL, MARKER_NOTE, ROLES, TAKES_NOTE } from "./cast.js";
+import { openMenu, noteField, sizeRows, MARKER_LABEL, MARKER_NOTE, ROLES, TAKES_NOTE } from "./cast.js";
 import { SUBJECT_TAKES, seedFeatures, showSeconds, tagIndex } from "./state.js";
 import { BUILTIN } from "./presets/builtin.js";
 import * as P from "./presets.js";
@@ -1026,8 +1026,9 @@ class PresetLibrary {
     const role = ROLE[file.slot] ?? ROLE.from;
     const tile = el("button", {
       class: "mmc-cast-sheet-tile",
-      title: t("{lead} — press to change what it lends them, or take it off.",
-               { lead: t(role.lead) }),
+      title: (file.note ? `${file.note}\n` : "")
+        + t("{lead} — press to say what it shows of them, change what it lends "
+            + "them, or take it off.", { lead: t(role.lead) }),
       onclick: (event) => this.pickSlot(event.currentTarget, member, index),
     }, [
       kind === "image"
@@ -1043,6 +1044,11 @@ class PresetLibrary {
       // it each say which, the way the shelf's own tiles do.
       ...(file.slot === "from" ? [] : [el("span", { class: "mmc-cast-sheet-badge" },
                                           [icon(role.glyph, 10)])]),
+      // The shelf's own two marks: full detail, and words attached. A kept
+      // file lands at max unless it says otherwise, so absent reads as max.
+      ...(kind !== "audio" && (file.ref_size ?? "max") === "max"
+        ? [el("span", { class: "mmc-cast-size", text: "max" })] : []),
+      ...(file.note ? [el("span", { class: "mmc-cast-noted" })] : []),
     ]);
     // The role colour rides on the wrapper as one variable that the badge and
     // the caption both read, rather than a colour class on each: they are one
@@ -1201,8 +1207,27 @@ class PresetLibrary {
   pickSlot(anchor, member, index) {
     const file = member.files[index];
     const kind = file.kind ?? "image";
+    // A kept file lands at max unless it says otherwise — `addSubjectToPiece`'s
+    // default — so the menu shows that as the standing answer.
+    const sizes = kind === "audio" ? [] : sizeRows({ ...file, ref_size: file.ref_size ?? "max" }, (key) => {
+      member.files = member.files.map((entry, at) =>
+        (at === index ? { ...entry, ref_size: key } : entry));
+      this.flushSave().then(() => this.renderSheet());
+    });
     openMenu(anchor, {
       title: t("What this file lends them"),
+      lead: (close) => noteField({
+        value: file.note ?? "",
+        write: (text) => {
+          member.files = member.files.map((entry, at) => {
+            if (at !== index) return entry;
+            const { note, ...rest } = entry;
+            return text ? { ...rest, note: text } : rest;
+          });
+          this.queueSave();
+        },
+        done: () => { close(); this.flushSave().then(() => this.renderSheet()); },
+      }),
       sections: [{
         rows: [
           ...ROLES.filter((role) => role.fits({ kind })).map((role) => ({
@@ -1219,7 +1244,8 @@ class PresetLibrary {
             },
           },
         ],
-      }],
+      }, ...(sizes.length ? [{ head: t("Encoded at"), rows: sizes }] : [])],
+      onClose: () => this.flushSave().then(() => this.renderSheet()),
     });
   }
 

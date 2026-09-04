@@ -110,6 +110,12 @@ _DEFINE = {
     ("image", "style"): "%s is a style reference: its medium, palette, light "
                         "and rendering are retained, and its subjects, layout "
                         "and content are not.",
+    # A still lending a pose: one moment of a movement, carried onto somebody
+    # else, the way a clip's motion is. Whoever is in the picture stays out.
+    ("image", "motion"): "%s is a motion reference: the action and pose in it "
+                         "are carried onto the target video's own subject, and "
+                         "nobody and nothing visible in the picture appears in "
+                         "the target video.",
 
     ("video", "full"): "%s is a reference video.",
     ("video", "person"): "%s is a person reference: the face, hair, build and "
@@ -252,6 +258,7 @@ _MARKER = {
     ("image", "object"): "fully_preserved",
     ("image", "scene"): "fully_preserved",
     ("image", "style"): "fully_preserved",
+    ("image", "motion"): "attribute_transfer",
 
     ("video", "full"): "fully_preserved",
     ("video", "person"): "fully_preserved",
@@ -296,6 +303,9 @@ _BECOMES = {
                         "the target video and whoever stood in it is not",
     ("image", "style"): "the medium, palette, light and rendering are carried "
                         "into the target video and the source's own subject is not",
+    ("image", "motion"): "the action and pose are carried onto the target "
+                         "video's own subject, and nobody visible in the picture "
+                         "appears in it",
 
     ("video", "full"): "what the clip shows is carried into the target video",
     ("video", "person"): "the likeness is carried onto the target video's own "

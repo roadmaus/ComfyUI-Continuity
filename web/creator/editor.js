@@ -54,11 +54,13 @@ export const IMAGE_TAKES_HELP =
   "What of this picture is the reference. full: the whole image. "
   + "person / object / scene / style: only that — a person reference keeps the "
   + "likeness and drops the picture's background, palette, pose and action. "
-  + "Read by Refine, and worth saying in the prompt too if you skip refining.";
+  + "action: the pose and action alone, carried onto whoever the prompt puts in "
+  + "the shot. Read by Refine, and worth saying in the prompt too if you skip "
+  + "refining.";
 export const VIDEO_TAKES_HELP =
   "What of this clip is the reference. full: the whole thing. "
   + "person / object / scene / style: only that much of what it shows. "
-  + "motion: the action alone, carried onto whoever the prompt puts in the "
+  + "action: the action alone, carried onto whoever the prompt puts in the "
   + "shot. camera: the camera move, cuts and pacing, with nothing in it "
   + "appearing. edit: the clip is the video being edited. continue: the video "
   + "picks up where it ends. Read by Refine, and worth saying in the prompt "
@@ -86,7 +88,7 @@ export const takesHelp = (asset) =>
  */
 export function referenceSummary(asset) {
   const said = [];
-  if (S.takeable(asset) && S.takes(asset) !== "full") said.push(t(S.takes(asset)));
+  if (S.takeable(asset) && S.takes(asset) !== "full") said.push(t(S.takeWord(S.takes(asset))));
   if (asset.kind !== "image" && asset.trim) said.push(trimLabel(asset));
   if (asset.kind === "video" && (asset.track ?? S.DEFAULT_TRACK) !== S.DEFAULT_TRACK) {
     said.push(t(TRACK_CHIP[asset.track]?.text ?? ""));
@@ -103,8 +105,8 @@ export function pickTakes(anchor, asset, commit) {
   const options = S.takeOptions(asset);
   openChoicePopover(anchor, {
     title: t("@{handle} is a reference to", { handle: asset.handle }),
-    options: options.map((key) => t(key)),
-    value: t(S.takes(asset)),
+    options: options.map((key) => t(S.takeWord(key))),
+    value: t(S.takeWord(S.takes(asset))),
     onPick: (choice) => {
       const key = options.find((k) => t(k) === choice) ?? "full";
       if (key === "full") delete asset.takes;
@@ -1184,7 +1186,7 @@ export class CreatorEditor {
         // The one people came here for. "Reads as" rather than "takes": it says
         // what the model does with the file, which is the question being asked.
         rows.push(choose(t("reads as"), t(takesHelp(asset)),
-          S.takeOptions(asset).map((key) => ({ key, label: t(key) })),
+          S.takeOptions(asset).map((key) => ({ key, label: t(S.takeWord(key)) })),
           S.takes(asset),
           (key) => {
             if (key === "full") delete asset.takes;
@@ -1389,6 +1391,10 @@ export class CreatorEditor {
       }
       for (const slot of ["motion", "voice"]) {
         if (subject[slot] === handle) delete subject[slot];
+      }
+      if (subject.notes) {
+        delete subject.notes[handle];
+        if (!Object.keys(subject.notes).length) delete subject.notes;
       }
       if (S.replacesOf(subject).includes(handle)) {
         const rest = S.replacesOf(subject).filter((h) => h !== handle);
@@ -2289,13 +2295,13 @@ export class CreatorEditor {
           title: key === (panel.takes ?? "full") || S.canCut(key) || !panel.cut
             ? ""
             : t("This panel is cut out, and a {key} reference is its background — "
-              + "edit the sheet to keep it.", { key: t(key) }),
+              + "edit the sheet to keep it.", { key: t(S.takeWord(key)) }),
           onclick: () => {
             if (key === "full") delete panel.takes;
             else panel.takes = key;
             this.commit();
           },
-        }, [el("span", { text: t(key) })]))),
+        }, [el("span", { text: t(S.takeWord(key)) })]))),
       panel.cut
         ? el("span", { class: "mmc-pl-cut on", title: t("Cut out of its background") },
              [icon("scissors", 12)])

@@ -3749,7 +3749,7 @@ check("a reference's handle is a button", sheet.get("hasDoor"), True)
 check("...that opens the card", sheet.get("opened"), True)
 check("...leading with what the picture is for, then every narrowing, defaults included",
       sheet.get("offers"),
-      "start,end,reference,guide,full,person,object,scene,style,match,max")
+      "start,end,reference,guide,full,person,object,scene,style,action,match,max")
 # A still is a guide — the shape is the shot's question, not the file's, and
 # `compile._parse_assets` says the same. What decides the row is the weights:
 # on a family with no ControlNet a guide is a file the render ignores.

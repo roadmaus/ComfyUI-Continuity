@@ -761,7 +761,7 @@ class Timeline {
         class: "mmc-ghost",
         style: { fontSize: "11px" },
         title: t(takesHelp(asset)),
-        text: t(S.takes(asset)),
+        text: t(S.takeWord(S.takes(asset))),
         onclick: (event) => pickTakes(event.currentTarget, asset, () => this.commit()),
       })] : []),
       // What the reference is encoded at. The pool's copy is the only place a

@@ -480,11 +480,14 @@ def describe_cast(cast):
         for feature in subject.features:
             head += (f", {feature.text} — but in the target video {feature.instead}"
                      if feature.changed else f", {feature.text}")
+        # Each file with what the user said it lends them, so the rewrite can
+        # tell the face picture from the outfit picture instead of guessing.
+        said = lambda h: f"@{h}" + (f" ({subject.notes[h]})" if subject.notes.get(h) else "")
         made_of = []
         if subject.sources:
-            made_of.append("from " + ", ".join("@" + h for h in subject.sources))
+            made_of.append("from " + ", ".join(said(h) for h in subject.sources))
         if subject.motion:
-            made_of.append(f"moving as in @{subject.motion}")
+            made_of.append(f"moving as in {said(subject.motion)}")
         if subject.voice:
             made_of.append(f"speaking with the voice in @{subject.voice}")
         if subject.replaces:
@@ -526,6 +529,7 @@ _TAKES_WHAT = {
     "object": "an object reference",
     "scene": "a scene reference",
     "style": "a style reference",
+    "motion": "a reference image, for the action in it",
 }
 _TAKES_NOTE = {
     "person": "only the person is the reference — face, hair, skin, build and "
@@ -545,6 +549,12 @@ _TAKES_NOTE = {
              "rendering. The picture's subjects, layout and content are not "
              "part of it. Nothing the request names is in this picture unless "
              "you can actually see it there",
+    "motion": "only the action is the reference — the pose, the gesture, what "
+              "the body is doing. Whoever performs it, where it happens and how "
+              "it is framed are not part of it: define the target subject as "
+              "taking its action from this picture, mark that line "
+              "attribute_transfer in retention_analysis, and give the picture "
+              "no <Picture N> entry of its own",
 }
 
 # The un-narrowed case. `takes` defaults to "full", so this is what most
