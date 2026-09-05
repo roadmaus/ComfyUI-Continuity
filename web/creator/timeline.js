@@ -7,6 +7,7 @@
 // LoRAs, same routing badge. There is no reduced "segment UI" to keep in step
 // with the node's, because there is only one editor.
 
+import { api } from "../../../scripts/api.js";
 import { compiledPrompt, probe, viewUrl, primeSettings, buildPlate } from "./api.js";
 import { CastShelf } from "./cast.js";
 import { clearButton } from "./clear.js";
@@ -2946,6 +2947,13 @@ export class TimelineBody {
     // clip, and what it is making is one picture whatever the strip looks like.
     // attach() floats it beside the node in a Satellite; it never mounts here.
     this.root = el("div", { class: "mmc-root" });
+    // The strip as it went out, for the takes that come back — see
+    // `queuedCards`. `promptQueued` is the frontend's one word on a prompt
+    // leaving, and it is said for every prompt: a snapshot taken on somebody
+    // else's queue is the same strip a moment later, and costs a hash.
+    this.queued = null;
+    this.onQueued = () => { this.queued = S.queuedCards(this.timeline); };
+    api.addEventListener("promptQueued", this.onQueued);
     this.stage = new Stage({
       nodeId,
       // Which generation the queue is on, said over the preview: the strip runs
@@ -2959,7 +2967,7 @@ export class TimelineBody {
       // is not held by it: what came back is a take, and whether to keep it is
       // the point of looking at it. See `takeTakes`.
       onTakes: (reported) => {
-        if (S.attachTakes(this.timeline, reported)) this.commit();
+        if (S.attachTakes(this.timeline, reported, this.queued)) this.commit();
       },
       // View-only: a timeline's references live on its segments, so a pick from
       // here would have no card to land on. The Creator attaches; this browses.
@@ -2978,6 +2986,7 @@ export class TimelineBody {
   }
 
   destroy() {
+    api.removeEventListener("promptQueued", this.onQueued);
     this.stage?.destroy();
     this.laneFit?.disconnect();
     this.dropFaceEditor();

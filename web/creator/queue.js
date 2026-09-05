@@ -91,19 +91,31 @@ export function watch(listener) {
  * no GPU here, nothing to queue behind — and this hands that straight back.
  */
 export async function run(route, body, { onProgress } = {}) {
-  const response = await api.fetchApi(route, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ ...body, client_id: api.clientId }),
-  });
-  const answer = await response.json().catch(() => ({}));
-  if (!response.ok) {
-    throw new Error(answer.error || t("that job could not be started ({status})",
-                                      { status: response.status }));
+  // Listening before asking. The server puts the job on the queue before it
+  // answers, so a job short enough to finish inside the round trip had said
+  // `executed` to a listener that did not exist yet, and the promise never
+  // settled (issue #47). The collector is armed first, with the prompt id
+  // filled in once the reply names it; what arrived in between is replayed.
+  const pending = collect(onProgress);
+  try {
+    const response = await api.fetchApi(route, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...body, client_id: api.clientId }),
+    });
+    const answer = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      throw new Error(answer.error || t("that job could not be started ({status})",
+                                        { status: response.status }));
+    }
+    if (answer.result !== undefined) { pending.abandon(); return answer.result; }
+    if (!answer.prompt_id) throw new Error(t("the server queued nothing"));
+    pending.expect(answer.prompt_id);
+  } catch (error) {
+    pending.abandon();
+    throw error;
   }
-  if (answer.result !== undefined) return answer.result;
-  if (!answer.prompt_id) throw new Error(t("the server queued nothing"));
-  return await collect(answer.prompt_id, onProgress);
+  return await pending.promise;
 }
 
 /**
@@ -118,20 +130,38 @@ export async function run(route, body, { onProgress } = {}) {
  * resolves once and is called once per press, so one left on would be a handler
  * per press for the life of the tab.
  */
-function collect(promptId, onProgress) {
-  return new Promise((resolve, reject) => {
-    const off = [];
-    const done = (finish) => (...args) => {
-      for (const remove of off) remove();
-      finish(...args);
-    };
-    const settle = done(resolve);
-    const fail = done(reject);
+function collect(onProgress) {
+  let resolve, reject;
+  const promise = new Promise((res, rej) => { resolve = res; reject = rej; });
+  const off = [];
+  const done = (finish) => (...args) => {
+    for (const remove of off) remove();
+    finish(...args);
+  };
+  const settle = done(resolve);
+  const fail = done(reject);
 
-    const on = (name, handler) => {
-      api.addEventListener(name, handler);
-      off.push(() => api.removeEventListener(name, handler));
+  // Until the reply names the prompt, every event is somebody's and is kept;
+  // `expect` replays the kept ones against the id and drops the rest. Each
+  // handler is wrapped the same way, so the ordering rule lives in one place.
+  let promptId = null;
+  const held = [];
+  const on = (name, handler) => {
+    const gated = (event) => {
+      if (promptId === null) { held.push([name, event]); return; }
+      if (event.detail?.prompt_id !== promptId) return;
+      handler(event);
     };
+    api.addEventListener(name, gated);
+    off.push(() => api.removeEventListener(name, gated));
+    return gated;
+  };
+  const handlers = {};
+  const expect = (id) => {
+    promptId = id;
+    for (const [name, event] of held.splice(0)) handlers[name]?.(event);
+  };
+  const abandon = () => { for (const remove of off) remove(); };
 
     // The bar this job's node ticks — `jobs.progress()` on the server — arrives
     // on ComfyUI's own channel now, where it used to come back on a channel per
@@ -139,8 +169,7 @@ function collect(promptId, onProgress) {
     // busiest entry in it is ours; taking the max rather than the sole entry
     // keeps this honest if a job ever expands into more than one.
     if (onProgress) {
-      on("progress_state", ({ detail }) => {
-        if (detail?.prompt_id !== promptId) return;
+      handlers.progress_state = on("progress_state", ({ detail }) => {
         let best = null;
         for (const entry of Object.values(detail.nodes ?? {})) {
           if (!best || (entry.max ?? 0) > (best.max ?? 0)) best = entry;
@@ -155,8 +184,7 @@ function collect(promptId, onProgress) {
       });
     }
 
-    on("executed", ({ detail }) => {
-      if (detail?.prompt_id !== promptId) return;
+    handlers.executed = on("executed", ({ detail }) => {
       const result = detail.output?.continuity?.[0];
       // An `executed` for our prompt with nothing of ours in it is a node that
       // ran and returned a shape this does not know — a version skew worth
@@ -165,16 +193,15 @@ function collect(promptId, onProgress) {
       else settle(result);
     });
 
-    on("execution_error", ({ detail }) => {
-      if (detail?.prompt_id !== promptId) return;
+    handlers.execution_error = on("execution_error", ({ detail }) => {
       fail(new Error(detail.exception_message || t("the job failed")));
     });
 
-    on("execution_interrupted", ({ detail }) => {
-      if (detail?.prompt_id !== promptId) return;
+    handlers.execution_interrupted = on("execution_interrupted", ({ detail }) => {
       const cancelled = new Error(t("cancelled"));
       cancelled.cancelled = true;
       fail(cancelled);
     });
-  });
+
+  return { promise, expect, abandon };
 }

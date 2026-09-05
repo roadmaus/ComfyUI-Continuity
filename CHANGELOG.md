@@ -5,6 +5,88 @@ and everything under it is kept exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**A music cue over a first shot no longer dies looking for an encoder.** A
+sound-lane block over a pass with no seam and no reference audio is still an
+encode — the cue is written into the audio latent through the audio VAE — but
+the predicate that wires the VAE in did not count it, so a first shot with a
+cue and nothing else with sound in it reached the fill with no encoder at all.
+The lane counts now. Issue #47.
+
+**A take lands on the card that made it, wherever that card is now.** The save
+node names a take by the card's number as it was queued, and the strip stays
+editable while a render runs, so a card moved or removed meanwhile put its take
+on whoever slid under the number — stamped so that the "edited since" mark
+stayed quiet. The strip is snapshotted as it is queued and a take is matched to
+the card object, or by its stamp where the body was rebuilt; a removed card's
+take stays in the history rather than going to a neighbour. A card edited while
+its own render ran is marked afterwards, which it never was. Issue #47.
+
+**A cue over supplied footage is heard.** The lane's tooltip said sound over a
+clip is mixed, and the compiler dropped it on the strength of a comment saying
+the muxer read the lane itself, which it never did. The blocks now ride on the
+clip's own spec and the writer mixes them from their files, at the frame the
+lane put them, under whatever sound the clip plays with; a muted clip is
+silence under the cue. A cue dragged over a clip re-runs that clip's reel node,
+which decodes nothing, and no pass. Issue #47.
+
+**A frame held across a trim's edge reaches it.** The shared decoder dropped
+every frame before a window's start — including the one still showing when it
+opened — and stopped at the last frame captured inside it rather than at the
+window's end. On constant-rate footage nothing visible; on a screen recording
+that holds a frame for seconds, a trim opened on the next frame and came out
+short of the seconds the strip was told it plays, and the seam beside it found
+too few frames and refused the blend. The frame showing at the start is pushed
+first and the last frame is held to the window's end, bounded by the file's
+own. Issue #47.
+
+**A clip whose sound starts late keeps its silence.** A soundtrack whose first
+packet sits a second in was laid at the window's start, a second early, with the
+missing second padded onto the end. It stays where the file had it. Issue #47.
+
+**A guide trimmed to a cut holds a frame from inside the trim.** The two frames
+of decoder slack past the trim's end were decoded and the last of them held for
+the rest of the shot — the next scene, on a trim that ends on a cut. The trim is
+enforced before anything is held. Issue #47.
+
+**A merged pass keeps its plate's panels, its guide's op and its audio tail.**
+The merged request's asset list was written back without a plate's panels —
+the handles the joined prompt cites, so the merged pass refused its own prompt
+— and without a guide's tracing op, so a matte guide went down the ordinary
+control-video path instead of the inpaint one. The unblended sound seam's tail
+fell back to the default on a merged pass too. All four are kept. Issue #47.
+
+**The aspect source follows its card.** The piece's aspect source names a card
+by number, and the number stayed put through a move, a copy or a removal in
+front of it while the seams' sources were remapped — the canvas quietly took
+the shape of whatever card slid under the number. It follows the card now, and
+is dropped with it. On a render that holds cards back, the donor is found by
+the number it wears on the strip rather than by its position in the shorter
+list, and a donor held out with nothing to play is refused by name. Issue #47.
+
+**A queued tool's answer is heard whichever side of the reply it lands on.**
+The plate, refine, control and upscale tools posted their job and only then
+listened for its result, while the server queues the job before it answers —
+so a job that finished inside the round trip had answered nobody and the tool
+waited forever. The listener is armed first and what arrived meanwhile is
+replayed. Issue #47.
+
+**The bench and the refiners see a picture the way its player does.** The
+bench's video frame came off the decoder unturned, so a phone clip's preview
+and the still it exports lay on their side while the reel, the seams and the
+guides had been put upright; and the refiners were handed a photo without its
+orientation tag applied while the thumbnail beside it had been. Both turned.
+Issue #47.
+
+**A plate remembers what cut it.** A sheet accepted under one matte model and
+re-accepted under another with the same pictures found the first file and
+returned it before consulting the model. The model is part of the name where a
+panel is cut, and an uncut sheet keeps the name it had. Issue #47.
+
+**A sound file replaced under its own name is read again.** The lane's cues
+were the one kind of file a render reads that its cache stamps did not walk,
+so swapping the file's contents under the same name was a cache hit — on the
+piece's fingerprint and on the segment's. Both walk the lane now. Issue #47.
+
 **A phone clip plays upright everywhere it is read.** A portrait phone
 recording is stored landscape with a turn written in the container. The reel
 spliced the storage picture, so the clip lay on its side in the finished file;

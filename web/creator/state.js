@@ -1843,19 +1843,55 @@ export function segmentSeed(segment) {
  * it. The cost of closing that is a queue-time hook, for a mark that only ever
  * says "look at this again".
  */
-export function attachTakes(timeline, reports) {
+export function attachTakes(timeline, reports, queued = null) {
   // One serialization for the whole report rather than one per take: the strip
   // is the thing being hashed, and it is the same strip for all of them.
   const stamps = stampsOf(timeline);
   let landed = false;
   for (const report of reports ?? []) {
-    const index = Number(report.segment) - 1;
+    const number = Number(report.segment);
+    const index = queued ? queuedIndex(timeline, queued, number, stamps) : number - 1;
+    if (index < 0) continue;
     const segment = timeline.segments[index];
     if (!segment || isClip(segment)) continue;
-    segment.take = takeFrom(report, stamps[index]);
+    // Stamped as the card was when it was queued where that is known, so an
+    // edit made while its own render ran is marked rather than shipped.
+    segment.take = takeFrom(report, queued?.stamps[number - 1] ?? stamps[index]);
     landed = true;
   }
   return landed;
+}
+
+/**
+ * The strip as it went out: the card objects in queue order and each one's
+ * stamp. Taken on `promptQueued` by the timeline body, and what `attachTakes`
+ * reads a report's card number against — the number is the card's position
+ * *then*, and a card moved or removed while the render ran is not the card
+ * now at that position (issue #47).
+ */
+export function queuedCards(timeline) {
+  return { cards: [...timeline.segments], stamps: stampsOf(timeline) };
+}
+
+/**
+ * Where the card that was number `number` at queue time sits now, or -1.
+ *
+ * By identity first: the strip is edited in place, so a moved card is the
+ * same object at another index. Failing that — the body was rebuilt from the
+ * widget, say on a reload — by the stamp: the card now at that number is
+ * accepted only when it is byte-for-byte the card that was queued there. A
+ * card that was removed matches neither and its take is left in the history
+ * rather than pinned on whoever slid into its place.
+ */
+function queuedIndex(timeline, queued, number, stamps) {
+  const card = queued.cards[number - 1];
+  if (card) {
+    const index = timeline.segments.indexOf(card);
+    if (index >= 0) return index;
+  }
+  const stamp = queued.stamps[number - 1];
+  if (stamp !== undefined && stamps[number - 1] === stamp) return number - 1;
+  return -1;
 }
 
 function takeFrom(report, stamp) {
@@ -5272,6 +5308,15 @@ export function remapContinueFrom(timeline, map) {
     if (Number.isInteger(next) && next >= 1) segment.continue_from = next;
     else delete segment.continue_from;
   }
+  // The piece's aspect source names a card by the same number, and follows
+  // it the same way. It used to keep its old position through a move, a copy
+  // or a removal in front of it, and the canvas silently took the shape of
+  // whatever card slid under the number (issue #47).
+  const source = timeline.aspect_source;
+  if (!source || typeof source !== "object" || !Number.isInteger(source.card) || source.card < 1) return;
+  const next = map(source.card);
+  if (Number.isInteger(next) && next >= 1) source.card = next;
+  else delete timeline.aspect_source;
 }
 
 /** ...and one whose sound carries on from it. Not implied by the above. */
