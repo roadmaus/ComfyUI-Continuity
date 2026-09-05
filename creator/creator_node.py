@@ -176,17 +176,25 @@ def _schema(node_id, display_name, blob, deprecated=False):
 
 
 def _fingerprint(blob):
-    """Re-run when a referenced file changes on disk.
+    """Re-run when a referenced file changes on disk, or a setting the graph is
+    built from.
 
     Media is addressed by filename, not by a wired tensor, so ComfyUI has
     nothing else to notice a replaced file by. Lifted first, so an old blob's
     keyframes are walked as the shot's rather than missed for sitting where a
     piece keeps its reference pool.
+
+    The two settings are the ones `_render` reads off the file when it builds
+    the graph — the seam handoff and the turbo lead-in. They are not node inputs,
+    so without this a changed setting left the node's inputs identical, the
+    expansion was a cache hit, and the switch on the settings page did nothing
+    until something else about the render moved.
     """
+    graph_settings = (settings.seam_handoff(), settings.turbo_lead_in())
     try:
-        return (blob, timeline.stamps(compiler.as_piece(json.loads(blob))))
+        return (blob, timeline.stamps(compiler.as_piece(json.loads(blob))), graph_settings)
     except Exception:
-        return (blob, ())
+        return (blob, (), graph_settings)
 
 
 def _render(blob, seed, steps, cfg, sampler_name, scheduler,

@@ -739,6 +739,16 @@ def _shape(graph, drop=()):
     return re.sub(r"\.0\.\d+\.", ".N.", text)
 check("...and the graph is otherwise the one above",
       _shape(_off), _shape(feathered, drop=("prev_latent",)))
+# The setting is read off the file when the graph is built, not off a node
+# input, so it has to reach the node's cache key by hand or flipping it on the
+# settings page changes nothing until the seed does.
+_settings.seam_handoff = lambda: "frames"
+try:
+    _fp_frames = cn.MiniMaxH3Timeline.fingerprint_inputs(timeline_data=DATA)
+finally:
+    _settings.seam_handoff = _was
+check("the seam handoff is part of the node's cache key",
+      _fp_frames != cn.MiniMaxH3Timeline.fingerprint_inputs(timeline_data=DATA), True)
 check("the latent road wires no anchor",
       any("anchor_latent" in n["inputs"] for n in feathered.values()), False)
 
