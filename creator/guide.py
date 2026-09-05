@@ -226,6 +226,12 @@ def read(filename, trim, frames, width, height, fps):
             f"the card, or trace it again on the ControlNet bench."
         )
 
+    if trim:
+        # The slack was decoder context, not picture: cut back to the trim
+        # before anything is held, or the frame held for the rest of the shot
+        # is one from *past* the selection — the next scene, on a trim that
+        # ends on a cut (issue #47).
+        got = got[:max(1, int(round((float(trim[1]) - start) * rate)))]
     if got.shape[0] < want:
         # Held rather than looped or padded black. A guide that ran out should
         # leave the shot pointing where it last pointed; black would drive the

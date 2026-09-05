@@ -72,12 +72,15 @@ def _picture(asset):
     says what a reference holds, and decoding more here would put minutes of
     PyAV on a request the user is waiting on with a spinner.
     """
-    from PIL import Image
+    from PIL import Image, ImageOps
 
     try:
         path = media.resolve(asset.filename)
         if asset.kind == "image":
-            return Image.open(path)
+            # With its orientation tag applied, the way the thumbnail beside it
+            # already is: a phone photo stored sideways was reaching both
+            # refiners sideways (issue #47).
+            return ImageOps.exif_transpose(Image.open(path))
         if asset.kind == "video" and asset.track != "sound":
             return _still(path)
     except Exception:  # noqa: BLE001 — an unreadable file is a slot without a picture

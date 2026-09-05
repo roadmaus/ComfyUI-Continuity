@@ -199,4 +199,28 @@ quarters = [float(tail[-1, :32, :16].mean()), float(tail[-1, :32, 16:].mean()),
 check("...and turned the way the player turns them",
       ["TL", "TR", "BL", "BR"][quarters.index(max(quarters))], "TR")
 
+# --- a guide trimmed to a cut holds the last frame *inside* the trim -------------
+
+# Dark for a second, then bright. A guide trimmed to the dark second on a
+# three-second shot must hold a dark frame, not the two frames of decoder slack
+# past the cut (issue #47).
+cut = write_clip("cut.mp4", [(n * 1000 // FPS, 20 if n < FPS else 220) for n in range(3 * FPS)],
+                 Fraction(1, 1000))
+held = guide.read(cut, (0.0, 1.0), 3 * FPS, SIZE, SIZE, FPS)
+check("a guide trimmed to a cut is the shot's length", held.shape[0], 3 * FPS)
+close("...opens dark", grey(held, 0), 20 / 255, TOL)
+close("...is still dark on the trim's last frame", grey(held, FPS - 1), 20 / 255, TOL)
+close("...and holds a dark frame past the trim, not the bright one after the cut",
+      grey(held, 3 * FPS - 1), 20 / 255, TOL)
+
+# --- the bench reads a phone clip upright too -----------------------------------
+
+bench = _load("bench")
+still = bench.video_frame(turned, 0.0)
+check("the bench's frame is portrait", tuple(still.shape[:2]), (64, 32))
+quarters = [float(still[:32, :16].mean()), float(still[:32, 16:].mean()),
+            float(still[32:, :16].mean()), float(still[32:, 16:].mean())]
+check("...and turned the way the player turns it",
+      ["TL", "TR", "BL", "BR"][quarters.index(max(quarters))], "TR")
+
 passed("all VFR seam tests passed")

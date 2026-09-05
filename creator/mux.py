@@ -147,7 +147,8 @@ def _audio_format(parts):
             # to the reel's on the way in — so what it declares here is the
             # target the graph gave it, read off the audio VAE. A clip playing
             # silent declares nothing and takes the reel's.
-            if not part["clip"].get("sound") or part["clip"].get("rate") is None:
+            if not (part["clip"].get("sound") or part["clip"].get("mix")) \
+                    or part["clip"].get("rate") is None:
                 continue
             part_rate = int(part["clip"]["rate"])
             part_channels = int(part["clip"]["channels"])
@@ -373,6 +374,15 @@ def _upright(rotation):
     return []
 
 
+def _file_end(av, container, stream):
+    """Where the picture stops, in seconds, or None where the file does not say."""
+    if stream.duration is not None and stream.time_base:
+        return float(stream.duration * stream.time_base)
+    if container.duration is not None:
+        return float(container.duration) / av.time_base
+    return None
+
+
 def conform(av, path, start, duration, frame_rate, width=None, height=None):
     """The frames of `path`'s `start`..`start + duration` window, at `frame_rate`.
 
@@ -400,6 +410,29 @@ def conform(av, path, start, duration, frame_rate, width=None, height=None):
         if start:
             container.seek(int(first_pts), stream=stream)
         chain = source = sink = None
+        # How many frames the window is, or None to read to the end of the file.
+        # The count is the window's, not the footage's: a frame shown across the
+        # window's end is held to it, and the filter stops at it. Without both,
+        # a source that holds a frame for seconds — a screen recording with
+        # nothing moving, the sparse fixture in issue #47 — came out short of
+        # the seconds the strip was told it plays, and the seam beside it read
+        # too few frames and refused the blend.
+        want = int(round(duration * float(frame_rate))) if duration else None
+        # ...bounded by the file: a window that runs past the footage is held
+        # to the footage's end, and one that starts past it holds nothing —
+        # `media.clip_frames` says "past the end of the clip" for that, and a
+        # frame held there would be an answer to a question nobody asked.
+        ends = _file_end(av, container, stream)
+        if ends is not None and start >= ends:
+            return
+        made = 0
+        last = None
+        # Where the last frame captured in the window was, so the hold after the
+        # flush can be bounded by the footage: the later of the file's stated
+        # end and that frame plus its period, since a container's duration is
+        # often the last frame's timestamp with nothing said about how long it
+        # showed.
+        seen = None
 
         def drain():
             while True:
@@ -408,24 +441,78 @@ def conform(av, path, start, duration, frame_rate, width=None, height=None):
                 except (av.error.BlockingIOError, av.error.EOFError):
                     return
 
+        def graph_for(frame):
+            # `chain` is held for as long as its two ends are used — see
+            # `_clip_graph`.
+            return _clip_graph(av, stream, frame, frame_rate, width, height)
+
+        # The frame still showing when the window opens. A seek lands on the
+        # keyframe at or before the start, and every frame from there up to the
+        # start used to be dropped — including the one whose display interval
+        # the start falls inside. On constant-rate footage that costs nothing
+        # visible; on variable-rate footage it is the frame the player shows at
+        # that instant, and the window opened on the *next* one, however far off
+        # it was. It is pushed first, re-stamped to the window's start, so the
+        # fps filter counts from where the window opens rather than from where
+        # the frame was captured.
+        showing = None
         for frame in container.decode(stream):
             if frame.pts is not None:
                 if frame.pts < first_pts:
+                    showing = frame
                     continue
                 if end is not None and frame.pts >= end:
                     break
+                seen = float(frame.pts * stream.time_base)
             if source is None:
-                # `chain` is held for as long as its two ends are used — see
-                # `_clip_graph`.
-                chain, source, sink = _clip_graph(av, stream, frame, frame_rate,
-                                                  width, height)
+                chain, source, sink = graph_for(showing if showing is not None else frame)
+                if showing is not None and frame.pts is not None and frame.pts > first_pts:
+                    showing.pts = int(first_pts)
+                    source.push(showing)
+                showing = None
             source.push(frame)
-            yield from drain()
+            for out in drain():
+                yield out
+                last = out
+                made += 1
+                if want is not None and made >= want:
+                    del chain
+                    return
+        if source is None and showing is not None:
+            # The whole window sits inside one frame's hold: nothing was
+            # captured after it opened. That frame is the picture.
+            chain, source, sink = graph_for(showing)
+            showing.pts = int(first_pts)
+            source.push(showing)
+            for out in drain():
+                yield out
+                last = out
+                made += 1
+                if want is not None and made >= want:
+                    del chain
+                    return
         if source is not None:
             # The fps filter holds a frame back to decide its duration; without
             # the flush a clip is short by one every time.
             source.push(None)
-            yield from drain()
+            for out in drain():
+                yield out
+                last = out
+                made += 1
+                if want is not None and made >= want:
+                    break
+        # The window runs past the last frame captured in it: the last frame is
+        # what the player keeps showing, so it is what the reel plays — up to
+        # where the footage itself stops, and no further.
+        if want is not None and made < want and last is not None:
+            stops = ends
+            if seen is not None:
+                stops = max(stops or 0.0, seen + 1.0 / float(frame_rate))
+            if stops is not None:
+                want = min(want, int(round((stops - start) * float(frame_rate))))
+            while made < want:
+                yield last
+                made += 1
         del chain
 
 
@@ -466,8 +553,37 @@ def _write_clip(av, target, spec, at_frame, at_sample):
     wanted = int(round(count / float(target.frame_rate) * target.rate))
     waveform = _clip_sound(av, path, spec, start, duration, target) \
         if spec.get("sound") else torch.zeros(target.channels, 0)
-    _mux_sound(av, target, _fit(waveform, wanted), at_sample)
+    waveform = _fit(waveform, wanted)
+    if spec.get("mix"):
+        waveform = _mixed(av, waveform, spec["mix"], target)
+    _mux_sound(av, target, waveform, at_sample)
     return count, wanted
+
+
+def _mixed(av, waveform, blocks, target):
+    """The lane's cues over a clip, laid onto its soundtrack. -> a new waveform.
+
+    Each block is a window of a file at a frame on the clip's own clock — the
+    shape `compile._stamp_sound` writes for a pass, resolved by the clip's reel
+    node — and is read the way the clip's own sound is, through the same
+    resampler to the reel's rate and layout. Summed rather than substituted:
+    the lane's tooltip says *mixed*, the clip's dialogue stays under the cue,
+    and a muted clip is silence under it either way. Clamped after, since two
+    full-scale tracks add to more than the encoder takes.
+    """
+    out = waveform.clone()
+    length = out.shape[-1]
+    for block in blocks:
+        at = int(round(float(block["at"]) / float(target.frame_rate) * target.rate))
+        room = length - at
+        if room < 1:
+            continue
+        cue = _clip_sound(av, block["path"], block, float(block.get("in_s") or 0.0),
+                          float(block.get("seconds") or 0.0), target)
+        cue = cue[..., :room]
+        if cue.shape[-1]:
+            out[..., at:at + cue.shape[-1]] += cue.to(out.dtype)
+    return out.clamp_(-1.0, 1.0)
 
 
 def _clip_sound(av, path, spec, start, duration, target):
@@ -509,9 +625,20 @@ def _clip_sound(av, path, spec, start, duration, target):
     if not blocks:
         return torch.zeros(target.channels, 0)
     waveform = torch.cat(blocks, dim=-1)
-    early = int(round(max(0.0, start - (began if began is not None else start))
-                      * target.rate))
-    return waveform[..., early:] if early else waveform
+    # ...and the other way round: sound that begins *after* the window opens
+    # — a track whose first packet sits a second in — used to be laid at the
+    # window's start, a second early, with the missing second padded onto the
+    # end by `_fit`. Its place is where it was in the file (issue #47).
+    offset = (began if began is not None else start) - start
+    if offset < 0:
+        early = int(round(-offset * target.rate))
+        return waveform[..., early:] if early else waveform
+    late = int(round(offset * target.rate))
+    if late:
+        waveform = torch.cat(
+            [torch.zeros(waveform.shape[:-1] + (late,), dtype=waveform.dtype), waveform],
+            dim=-1)
+    return waveform
 
 
 def write(path, parts, fps, crf, metadata=None):

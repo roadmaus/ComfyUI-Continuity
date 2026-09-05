@@ -310,6 +310,9 @@ def video_frame(path, at):
     with av.open(path) as container:
         stream = container.streams.video[0]
         stream.thread_type = "AUTO"
+        # Read before the seek: it decodes one frame and winds the container
+        # back to the top, so it has to come before anything positions it.
+        rotation = media.stream_rotation(container, stream)
         if at > 0 and stream.time_base:
             try:
                 container.seek(int(at / stream.time_base), stream=stream)
@@ -322,7 +325,11 @@ def video_frame(path, at):
                 break
         if last is None:
             raise BenchError(f"{os.path.basename(path)} has no decodable frame")
-        return last.to_ndarray(format="rgb24")
+        # Turned like every other reading of the clip — the reel, the seams and
+        # the guides all go through `mux._upright` — so the bench's preview and
+        # the still it exports are the picture the player shows, not the
+        # storage picture lying on its side (issue #47).
+        return media.turned(last.to_ndarray(format="rgb24"), rotation)
 
 
 def source_frame(path, at=0.0, long_edge=PREVIEW_LONG_EDGE):

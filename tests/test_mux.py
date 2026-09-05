@@ -374,4 +374,77 @@ large = os.path.getsize(written(noisy, crf=8)[3])
 if not small < large:
     FAILURES.append(f"crf changes nothing: crf 40 wrote {small} bytes, crf 8 wrote {large}")
 
+# --- the lane over supplied footage ------------------------------------------
+#
+# A cue over a clip is mixed by the writer from the cue's own file, at the frame
+# the lane put it — the clip's reel node hands the blocks over as `mix` (issue
+# #47: they used to be dropped between the compiler and here). Read back by
+# the loudness of each half second: silence, the cue, silence.
+
+
+def tone_file(seconds=1.0, hz=440):
+    path = os.path.join(tempfile.mkdtemp(), "cue.wav")
+    with av.open(path, mode="w") as out:
+        stream = out.add_stream("pcm_s16le", rate=SRC_RATE, layout="stereo")
+        t = torch.arange(int(seconds * SRC_RATE)) / SRC_RATE
+        wave = (0.5 * torch.sin(2 * torch.pi * hz * t) * 32767).to(torch.int16)
+        frame = av.AudioFrame.from_ndarray(wave.repeat(2, 1).contiguous().numpy(),
+                                           format="s16p", layout="stereo")
+        frame.sample_rate = SRC_RATE
+        frame.pts = 0
+        out.mux(stream.encode(frame))
+        out.mux(stream.encode(None))
+    return path
+
+
+def loudness(path, step_s=0.5):
+    """RMS of the written reel's sound per `step_s`, in play order."""
+    with av.open(path) as container:
+        blocks = [torch.from_numpy(f.to_ndarray()) for f in container.decode(audio=0)]
+    wave = torch.cat(blocks, dim=-1)[0].float()
+    if wave.abs().max() > 1.5:          # integer samples
+        wave = wave / 32768.0
+    size = int(step_s * RATE)
+    return [round(float(wave[i:i + size].pow(2).mean().sqrt()), 3)
+            for i in range(0, wave.shape[-1] - size + 1, size)]
+
+
+cue = tone_file(seconds=1.0)
+mixed = clip_part(src, duration=2.0, sound=False)
+mixed["clip"]["mix"] = [{"path": cue, "at": 12, "frames": 24, "in_s": 0.0, "seconds": 1.0}]
+frames, _, samples, path = written([mixed])
+check("a cue over a muted clip keeps the clip's frames", frames, 48)
+loud = loudness(path)
+check("...and is heard where the lane put it, and nowhere else",
+      [level > 0.1 for level in loud[:4]], [False, True, True, False])
+
+# Two seconds of picture whose sound begins a second in, as a container may
+# carry it. The writer used to lay the sound at the window's start and pad the
+# missing second onto the end — the tone a second early (issue #47).
+late = os.path.join(tempfile.mkdtemp(), "late.mkv")
+with av.open(late, mode="w") as out:
+    video = out.add_stream("h264", rate=SRC_FPS)
+    video.width, video.height, video.pix_fmt = SRC_W, SRC_H, "yuv420p"
+    sound_stream = out.add_stream("pcm_s16le", rate=SRC_RATE, layout="stereo")
+    for index in range(int(2.0 * SRC_FPS)):
+        frame = av.VideoFrame.from_ndarray(torch.full((SRC_H, SRC_W, 3), 255, dtype=torch.uint8).numpy(),
+                                           format="rgb24")
+        frame.pts = index
+        frame.time_base = Fraction(1, SRC_FPS)
+        out.mux(video.encode(frame.reformat(format="yuv420p")))
+    out.mux(video.encode(None))
+    t = torch.arange(SRC_RATE) / SRC_RATE
+    wave = (0.5 * torch.sin(2 * torch.pi * 440 * t) * 32767).to(torch.int16)
+    frame = av.AudioFrame.from_ndarray(wave.repeat(2, 1).contiguous().numpy(),
+                                       format="s16p", layout="stereo")
+    frame.sample_rate = SRC_RATE
+    frame.pts = SRC_RATE          # one second in, in the stream's own ticks
+    frame.time_base = Fraction(1, SRC_RATE)
+    out.mux(sound_stream.encode(frame))
+    out.mux(sound_stream.encode(None))
+frames, _, _, path = written([clip_part(late, duration=2.0)])
+check("a clip whose sound starts late keeps its frames", frames, 48)
+check("...and the sound stays where the file had it",
+      [level > 0.1 for level in loudness(path)[:4]], [False, False, True, True])
+
 passed("all mux tests passed — reels written and read back")

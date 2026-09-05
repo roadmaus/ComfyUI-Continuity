@@ -236,13 +236,18 @@ def compose(images, width, height, backdrop, rects=None):
     return sheet
 
 
-def key(panels, backdrop, width, height):
+def key(panels, backdrop, width, height, models=None):
     """The plate's identity: everything that changes what the file looks like.
 
     The panels' *stamps* rather than their names (`media.stamp` — path, mtime,
     size), so replacing a source picture in place under the same filename builds
     a new plate instead of finding the old one still sitting there. Same
     argument as the latent cache's, said about a composite.
+
+    `models` is the matte weights (`build`'s), part of the name only where a
+    panel is cut: the matte is what those pixels are, so a sheet accepted
+    under model A and re-accepted under model B is two plates, not one file
+    found by the first (issue #47). An uncut sheet keeps the name it had.
     """
     material = []
     for panel in panels:
@@ -258,6 +263,8 @@ def key(panels, backdrop, width, height):
                            bool(p.get("include", True))] for p in panel["points"]])
         material.append(entry)
     material.append([round(float(backdrop), 4), int(width), int(height)])
+    if models and any(panel.get("cut") for panel in panels):
+        material.append([str(models.get("cutout") or ""), str(models.get("segment") or "")])
     blob = json.dumps(material, separators=(",", ":")).encode("utf-8")
     return hashlib.sha1(blob).hexdigest()[:12]
 
@@ -300,7 +307,7 @@ def build(panels, models, backdrop, width, height):
     if not panels:
         raise ValueError("a plate needs at least one picture")
 
-    name = f"plate-{key(panels, backdrop, width, height)}.png"
+    name = f"plate-{key(panels, backdrop, width, height, models)}.png"
     relative = f"{PLATE_DIR}/{name}"
     existing = os.path.join(folder_paths.get_input_directory(), relative)
     if os.path.isfile(existing):
