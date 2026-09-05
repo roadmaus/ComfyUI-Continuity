@@ -31,6 +31,7 @@
 import { el, ICONS, svg, drawFrame, mountOverlay } from "./dom.js";
 import { listLoras, listLorasNamed, loraPreviewUrl, loadLoraPrefs, saveLoraPrefs } from "./api.js";
 import { openLoraDetail } from "./loradetail.js";
+import { forgetLoraNames } from "./turbo.js";
 import { listPresets, loadBody, savePreset, deletePreset } from "./presets.js";
 import { t } from "./i18n.js";
 import * as S from "./state.js";
@@ -564,6 +565,9 @@ class LoraManager {
   }
 
   async load({ force = false } = {}) {
+    // Rescan reaches every copy of the list: the turbo pickers hold the names
+    // for the life of the page, and "look again" includes them.
+    if (force) forgetLoraNames();
     const scope = this.scope;
     this.loaded = false;
     this.renderGrid();

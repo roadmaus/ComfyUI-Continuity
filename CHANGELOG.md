@@ -85,6 +85,50 @@ retention clause saying the movement is followed, which nothing wrote before.
 On screen that role is now called *action* — the chip, the role and the facts
 line — while the stored value and the prompt keep the guide's word, motion.
 
+**A seam can restore the frames it hands over** (#41). Every continued shot
+comes out a little softer than the one it continues, and because the next seam
+anchors on that tail the loss compounds down a strip — the model's own bias
+when it continues from its own output, which no arrangement of the handoff
+cures. The seam popover now has a restore switch: the run the seam inherits is
+re-noised partway down the schedule and re-drawn against the source shot's own
+references and prompt, at the same canvas, and *that* is what the next shot
+continues from. One short generation per seam, H3 only, between two generated
+shots, off by default. Three strengths; start with Medium.
+
+**Takes are written as each pass lands, not at the end** (#41). A strip that
+failed on its last pass used to keep nothing — fourteen good passes and every
+one sampled again. Each generated pass now writes its own take the moment it
+exists, and the strip picks them up mid-render and after a failure alike. A
+quality change also re-muxes the takes from the cached passes instead of
+sampling anything.
+
+**Type to find, in every long picker.** A list of eight or more — every
+checkpoint, VAE, encoder, LoRA and upscaler picker, and the sampler lists —
+opens with a find line where its title was. Typing narrows the list as you
+go, each word of the query has to appear somewhere in the name, and what it
+found is underlined in the name. Enter takes the first match, the arrows move
+between them, Escape clears the query before it closes the list. Short lists
+are drawn as they always were.
+
+**The turbo picker answers a press at once** (#41). It used to fetch the
+whole LoRA listing — a stat per file and a sidecar read per row — before it
+would open, which on a fresh start of a large folder was minutes of a pill
+that did nothing when pressed. It now lists names alone off their own route,
+says "Scanning models/loras…" while that first scan runs, and shows the list
+the moment it lands. The names are no longer capped at the newest six
+hundred files either, so a distillation older than the cap is offered again.
+
+**The turbo pill's LoRA list heals itself** (#41). A fetch that failed while
+ComfyUI was still loading used to pin every turbo picker to an empty list
+until the page reloaded, and Rescan could not reach it. Failure is no longer
+cached, the pickers retry on the next press, and the manager's Rescan now
+clears this list too.
+
+**"No LoRA · merged checkpoint" is no longer a life sentence** (#41). Picking
+it left the turbo pill with no way back into the picker for that node's whole
+life. The re-pick control now shows in merged mode too, and choosing between
+a file and merged is the same gesture everywhere.
+
 **A third bench: Blockout.** A scene staged out of grey boxes on a bare floor —
 or one of five starting arrangements — a camera walked through it on marks, and
 a guide rendered along the path: Depth, Blocks or Lines in the tracing bench's

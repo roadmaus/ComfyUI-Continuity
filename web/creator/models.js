@@ -47,10 +47,12 @@ export function loadCatalog(onReady) {
     catalog = body;
     onReady?.(body);
   }).catch(() => {
-    // A failed listing is an empty one: the pill says the folders are empty
-    // rather than the node breaking over a route that did not answer.
-    catalog = { files: {}, dtypes: S.MODEL_DTYPES, preview_override: false };
-    onReady?.(catalog);
+    // A failed listing is an empty one *for this draw*: the pill says the
+    // folders are empty rather than the node breaking over a route that did
+    // not answer. Not kept as the catalog — a request that raced the routes
+    // at load time used to pin every picker on the page to "none" until
+    // reload. Left unset, the next `loadCatalog` asks again.
+    onReady?.({ files: {}, dtypes: S.MODEL_DTYPES, preview_override: false });
   });
   return catalog;
 }
@@ -435,6 +437,7 @@ export function openWeightsPopover(anchor, { piece, models, checkpoints, onChang
           text: chosen || (unavailable ? t("unavailable") : t("not set")),
           onclick: (event) => openChoicePopover(event.currentTarget, {
             title: t(label_[field]),
+            find: true,
             // "none" is a real answer for the optional fields and for a
             // checkpoint this graph does not route to, so it is offered rather
             // than only reachable by clearing the blob by hand.
@@ -504,6 +507,7 @@ export function openWeightsPopover(anchor, { piece, models, checkpoints, onChang
               text: chosen || t("not set"),
               onclick: (event) => openChoicePopover(event.currentTarget, {
                 title: t(slot.title),
+                find: true,
                 options: [t(NONE), ...(files[id] ?? [])],
                 value: chosen || t(NONE),
                 onPick: (choice) => {

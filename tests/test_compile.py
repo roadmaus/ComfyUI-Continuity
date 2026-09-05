@@ -945,6 +945,25 @@ check("the seam line rides a classic sound seam's prompt",
       "<Audio 1> is the end of the preceding shot's soundtrack"
       in timeline([segment(), segment(**{"continue": True, "continue_audio": True})])[1].prompt,
       True)
+# The seam restore (issue #41): how far the inherited run is re-drawn before the
+# segment continues from it. Clamped like the refine's denoise, carried only on
+# a seam, and a leftover on a hard cut like the other seam keys.
+check("a restored seam carries its strength",
+      timeline([segment(), segment(**{"continue": True, "seam_restore": 0.45})])[1].seam_restore,
+      0.45)
+check("off by default",
+      timeline([segment(), segment(**{"continue": True})])[1].seam_restore, 0.0)
+check("a restore on a hard cut is dropped, not refused",
+      timeline([segment(), segment(**{"seam_restore": 0.45})])[1].seam_restore, 0.0)
+check("the strength is clamped to the schedule",
+      timeline([segment(), segment(**{"continue": True, "seam_restore": 3})])[1].seam_restore,
+      compiler.MAX_SEAM_RESTORE)
+check("zero is off, not the floor",
+      timeline([segment(), segment(**{"continue": True, "seam_restore": 0})])[1].seam_restore, 0.0)
+expect_error("a restore that is not a number is refused",
+             lambda: timeline([segment(), segment(**{"continue": True, "seam_restore": "hard"})]),
+             "seam_restore must be a number")
+
 # A blended sound seam pins its tail on this segment's own timeline instead of
 # sending it as a reference, so it takes no <Audio N> and the prompt carries no
 # line naming one. Asserted about the line itself: this used to compare the

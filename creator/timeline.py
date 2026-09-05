@@ -154,6 +154,7 @@ def labels(runs, segments=None, whole_piece=True):
             for start, end in runs]
 
 
+
 class MiniMaxH3Reel(io.ComfyNode):
     """One pass: decoded, trimmed, written to disk, added to the reel.
 
@@ -528,6 +529,96 @@ class ContinuityGuideFrames(io.ComfyNode):
             filename, trim, int(frames), int(width), int(height), float(fps)))
 
 
+def reported_take(part, card, filename, subfolder, fps, seed):
+    """One take, as the strip reads it back: which card, and what the file is.
+
+    The length off the pass's own frame count rather than off the file,
+    because the file is not open here and the count is what it was written
+    from — the same number, arrived at without a probe.
+    """
+    spec = part["pass"]
+    return {
+        "segment": card,
+        "filename": filename,
+        "subfolder": subfolder,
+        "type": "output",
+        "duration_s": round(int(spec["frames"]) / float(fps), 6),
+        "width": int(spec["width"]),
+        "height": int(spec["height"]),
+        "has_audio": "audio_path" in spec,
+        "seed": seed,
+    }
+
+
+class ContinuityTake(io.ComfyNode):
+    """One generated pass, written out as a file of its own — as it lands.
+
+    The takes used to be written by the save node, all together, after the
+    whole reel existed. Which meant a strip that failed on its last pass kept
+    nothing: fourteen good passes sat as spills in a temp directory core wipes
+    on restart, no take was ever muxed from them, and the next queue sampled
+    all fourteen again. This node is the fix — it hangs off each reel node's
+    pass output and is an output node, so the executor writes each take the
+    moment its pass exists, whatever happens to the passes after it.
+
+    It also makes a quality change cheap: CRF rides in as an input, so
+    re-queueing with a new quality re-muxes every take from its spill instead
+    of hitting the cache — and instead of sampling anything.
+
+    Failures are logged and swallowed, the same trade `MiniMaxH3Save._takes`
+    has always made: a take that cannot be written must not take the render
+    down with it.
+
+    Not emitted for a single-pass render, whose take is the piece's own file
+    (see `MiniMaxH3Save._takes`), nor under ReDetail, which rebuilds the reel
+    at another size after the passes exist — there the save node still writes
+    the takes from the finished reel.
+    """
+
+    @classmethod
+    def define_schema(cls):
+        return io.Schema(
+            node_id="ContinuityTake",
+            display_name="Continuity Take",
+            category="Continuity/internal",
+            description="Writes one pass's own file the moment the pass exists.",
+            is_dev_only=True,
+            is_output_node=True,
+            inputs=[
+                io.Custom(PASS_TYPE).Input("source"),
+                io.Float.Input("fps", default=24.0, min=1.0, max=120.0),
+                io.String.Input("filename_prefix", default="continuity/H3"),
+                # An input for `MiniMaxH3Save`'s reason: read from settings
+                # here, a re-queue after a quality change would be a cache hit.
+                io.Int.Input("crf", default=settings.DEFAULT_CRF,
+                             min=settings.MIN_CRF, max=settings.MAX_CRF),
+                io.Int.Input("card", default=1, min=1, max=9999),
+                io.Int.Input("seed", default=0, min=0, max=0xffffffffffffffff),
+            ],
+            outputs=[],
+        )
+
+    @classmethod
+    def execute(cls, source, fps, filename_prefix, crf, card, seed) -> io.NodeOutput:
+        import os
+
+        import folder_paths
+
+        directory, name, counter, subfolder, _ = folder_paths.get_save_image_path(
+            outputs.takes(filename_prefix), folder_paths.get_output_directory(),
+            int(source["width"]), int(source["height"]))
+        filename = f"{name}_{counter:05}_s{int(card):02}.mp4"
+        try:
+            mux.write(os.path.join(directory, filename), [{"pass": source}],
+                      fps=float(fps), crf=int(crf))
+        except Exception as exc:      # noqa: BLE001 - see the docstring
+            logging.warning("MiniMax: could not write the take for segment "
+                            "%s: %s", card, exc)
+            return io.NodeOutput(ui={})
+        return io.NodeOutput(ui={"mmc_takes": [reported_take(
+            {"pass": source}, int(card), filename, subfolder, fps, int(seed))]})
+
+
 class MiniMaxH3Save(io.ComfyNode):
     """The last node of every render: the reel, muxed and written out.
 
@@ -694,26 +785,9 @@ class MiniMaxH3Save(io.ComfyNode):
                                          fps, seed_of(index)))
         return written
 
-    @staticmethod
-    def _reported(part, card, filename, subfolder, fps, seed):
-        """One take, as the strip reads it back: which card, and what the file is.
-
-        The length off the pass's own frame count rather than off the file,
-        because the file is not open here and the count is what it was written
-        from — the same number, arrived at without a probe.
-        """
-        spec = part["pass"]
-        return {
-            "segment": card,
-            "filename": filename,
-            "subfolder": subfolder,
-            "type": "output",
-            "duration_s": round(int(spec["frames"]) / float(fps), 6),
-            "width": int(spec["width"]),
-            "height": int(spec["height"]),
-            "has_audio": "audio_path" in spec,
-            "seed": seed,
-        }
+    # One take's report — shared with `ContinuityTake`, which writes the same
+    # shape from inside the render.
+    _reported = staticmethod(reported_take)
 
 
 # Registered by `creator_node.MiniMaxCreatorExtension` — one extension for the
@@ -722,4 +796,4 @@ NODES = [MiniMaxH3Reel,
          MiniMaxH3PassFrames, MiniMaxH3PassAudio,
          MiniMaxH3ClipReel, MiniMaxH3ClipFrames, MiniMaxH3ClipAudio,
          ContinuityGuideFrames,
-         MiniMaxH3Save]
+         ContinuityTake, MiniMaxH3Save]

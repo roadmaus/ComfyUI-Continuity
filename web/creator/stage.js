@@ -469,12 +469,14 @@ export class Stage {
    * what says whether the result is a clip or a still.
    */
   finish(output) {
+    // The passes, each as its own file, so a card whose pass came out right
+    // never has to be sampled again. Before the `saved` gate: most takes now
+    // arrive one at a time from `ContinuityTake` while the render is still
+    // running — an executed message with a take and no piece in it — and the
+    // rest still ride the save node's report the way they always did.
+    if (output?.mmc_takes?.length) this.onTakes?.(output.mmc_takes);
     const saved = output?.mmc_video?.[0] ?? output?.mmc_image?.[0];
     if (!saved) return;
-    // The passes, each as its own file. Reported alongside the piece by
-    // `MiniMaxH3Save` on any render of more than one pass, so a card whose
-    // pass came out right never has to be sampled again.
-    if (output?.mmc_takes?.length) this.onTakes?.(output.mmc_takes);
     this.state = "done";
     this.progress = null;
     // The clock stops here rather than on the next tick, so what the readout
@@ -547,6 +549,13 @@ export class Stage {
       // must never overwrite a result that arrived the ordinary way.
       if (this.state !== "sampling") return;
       if (!entry) return;
+      // The takes first, wherever the entry holds them: `ContinuityTake`
+      // reports them one node at a time, so they are scattered across the
+      // entry's outputs rather than riding the save node's. The failed render
+      // is the case this exists for — the passes that landed before the
+      // failure are exactly the ones worth keeping.
+      const takes = this.takesOf(entry.outputs, entry.meta);
+      if (takes.length) this.onTakes?.(takes);
       const output = this.savedOutput(entry.outputs, entry.meta);
       if (output) {
         this.finish(output);
@@ -583,6 +592,18 @@ export class Stage {
    * caller reads "no output of ours" as a render that wrote nothing, so an id
    * shape this does not recognise would report a finished render as failed.
    */
+  /** Every take of ours in a history entry's outputs, in one list. */
+  takesOf(outputs = {}, meta = {}) {
+    const takes = [];
+    for (const [id, output] of Object.entries(outputs ?? {})) {
+      if (!output?.mmc_takes?.length) continue;
+      if (this.ours(id) || this.ours(meta?.[id]?.display_node)) {
+        takes.push(...output.mmc_takes);
+      }
+    }
+    return takes;
+  }
+
   savedOutput(outputs = {}, meta = {}) {
     const mine = [];
     const anyOfOurs = [];

@@ -300,6 +300,11 @@ def manifest():
             # the run's last element — so there is nothing there to pin twice
             # and no switch worth drawing.
             "seam_pin": True,
+            # Whether a seam can re-draw the run it inherits before the next
+            # pass conditions on it — `Compiled.seam_restore`. H3's own pass
+            # (`seamrestore.py`); a family declaring nothing here draws no
+            # switch and the compiler's value is ignored by its loop.
+            "seam_restore": True,
             "turbo": TURBO,
             # Whether this family can sample through Raylight's Ray workers —
             # the multi-GPU backend in the weights popover. H3's alone so far,

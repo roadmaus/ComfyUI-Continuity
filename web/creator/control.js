@@ -1077,6 +1077,7 @@ class Bench {
           disabled: options.length ? null : true,
           onclick: (event) => openChoicePopover(event.currentTarget, {
             title: t(spec.label),
+            find: true,
             options,
             value: held,
             onPick: (picked) => { this.setModel(spec.key, picked); render(); },

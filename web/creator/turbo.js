@@ -13,22 +13,38 @@
 // the switch notices on the next commit and gives the sampler row back.
 
 import { el, icon } from "./dom.js";
-import { openChoicePopover, stepperPill } from "./pills.js";
-import { listLoras, uiSetting, patchSettings } from "./api.js";
+import { openChoicePopover, openNotePopover, stepperPill } from "./pills.js";
+import { listLoraNames, uiSetting, patchSettings } from "./api.js";
 import * as S from "./state.js";
 import { t } from "./i18n.js";
 
 // The LoRA names, for the two pickers here. The manager's listing carries
 // cards and sidecars; a choice popover only needs the names.
+//
+// Cached for the life of the page once a fetch *succeeds* — a failure leaves it
+// unloaded so the next draw or press simply asks again. Caching the failure was
+// the old behaviour, and a request racing the extension's routes at load time
+// pinned every picker on this page to an empty list until reload.
+//
+// Names only, off their own route: the folder listing stats every file and
+// reads a sidecar per row, which on a fresh start of a large folder is minutes
+// during which a press opened nothing (issue #41) — and it is capped at the
+// newest files, so a distillation older than the cap was never offered.
 let names = null;
+let inflight = null;
 
 export function loadLoraNames(onReady) {
   if (names) { onReady?.(); return; }
-  listLoras({ folder: "" }).then((body) => {
-    names = (body.loras ?? []).map((row) => row.name);
-    onReady?.();
-  }).catch(() => { names = []; });
+  inflight ??= listLoraNames()
+    .then((listed) => { names = listed; })
+    .catch(() => {})
+    .finally(() => { inflight = null; });
+  if (onReady) inflight.then(onReady);
 }
+
+/** The manager's Rescan reaches this cache too: a button that says "look
+ *  again" has to reach every copy of the list, not just the manager's own. */
+export function forgetLoraNames() { names = null; }
 
 export const loraNames = () => names ?? [];
 
@@ -48,12 +64,33 @@ export const NO_LORA = "— no LoRA · merged checkpoint —";
  * one press away. A wrongly-named distill is reachable, not hidden — and when
  * nothing matches the filter at all, the full list is what opens.
  */
-function openTurboChoice(anchor, { value, onPick, includeNone = false, all = false }) {
+function openTurboChoice(anchor, { value, onPick, includeNone = false, all = false, retried = false }) {
+  // Not loaded yet — the first fetch is started lazily and can have failed
+  // once. One retry per press: fetch, then open with whatever arrived. The
+  // press is answered at once with a note, because on a cold start core is
+  // still walking the model folders and a press that shows nothing for the
+  // length of that walk reads as a pill that does not work. The note is
+  // replaced by the list when it lands, and is left standing, reworded, when
+  // it does not.
+  if (names === null && !retried) {
+    const closeNote = openNotePopover(anchor, t("Scanning models/loras…"));
+    loadLoraNames(() => {
+      closeNote();
+      if (!anchor.isConnected) return;
+      if (names === null) {
+        openNotePopover(anchor, t("Could not list models/loras — press again to retry."));
+        return;
+      }
+      openTurboChoice(anchor, { value, onPick, includeNone, all, retried: true });
+    });
+    return;
+  }
   const matched = loraNames().filter(looksTurbo);
   const showAll = all || !matched.length;
   const listed = showAll ? loraNames() : matched;
   openChoicePopover(anchor, {
     title: showAll ? t("Turbo LoRA — all files") : t("Turbo LoRA"),
+    find: true,
     options: [
       ...(includeNone ? [typeof includeNone === "string" ? t(includeNone) : t("— none —")] : []),
       ...listed,
@@ -283,15 +320,21 @@ export function turboPills({ container, value, set, onCommit }) {
     // Which file, as its own control — the seed pill's shape: the big half
     // throws the switch, the small half changes what it throws. Only once
     // there is something to change; before that the big half is the picker.
-    ...(turbo.lora ? [el("button", {
+    // Merged mode counts as something to change: without this the choice
+    // "no LoRA" was final for the node's whole life, because the big half
+    // remembers it and never asks again.
+    ...(turbo.lora || turbo.merged ? [el("button", {
       class: "mmc-step mmc-turbo-pick",
-      title: t("Pick a different turbo LoRA — now {lora}.", { lora: turbo.lora })
+      title: (turbo.lora
+          ? t("Pick a different turbo LoRA — now {lora}.", { lora: turbo.lora })
+          : t("Pick a turbo LoRA — now none: the checkpoint is taken to be a merged distill."))
            + (on ? " " + t("Swapped in place: the run never carries both distills at once.") : ""),
       onclick: (event) => openTurboChoice(event.currentTarget, {
-        includeNone: true,
-        value: turbo.lora,
+        includeNone: NO_LORA,
+        value: turbo.lora || t(NO_LORA),
         onPick: (picked) => {
-          setTurboLora(container, picked === t("— none —") ? "" : picked, { value, set });
+          turbo.merged = picked === t(NO_LORA);
+          setTurboLora(container, picked === t(NO_LORA) ? "" : picked, { value, set });
           onCommit();
         },
       }),

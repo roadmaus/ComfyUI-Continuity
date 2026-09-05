@@ -70,6 +70,7 @@ CLIP_NODE = "MiniMaxH3ClipReel"
 CLIP_FRAMES_NODE = "MiniMaxH3ClipFrames"
 CLIP_AUDIO_NODE = "MiniMaxH3ClipAudio"
 SAVE_NODE = "MiniMaxH3Save"
+TAKE_NODE = "ContinuityTake"
 
 
 def default_prefix(family):
@@ -238,6 +239,16 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
     compiled = compile_all(family, payloads, labels)
     where = family.routes(compiled, labels)
 
+    # Whether each pass writes its own take the moment it exists, off the reel
+    # node's pass output. Yes on any strip of more than one part — a take
+    # written from the tail only exists if every pass after it succeeded, which
+    # is exactly when takes matter least. Not for a lone pass, whose take is
+    # the piece's own file (see `MiniMaxH3Save._takes`), and not under
+    # ReDetail, which rebuilds the reel at another size after the loop — there
+    # the save node keeps writing the takes from the reel it actually saved.
+    redetailing = any(one is not None and one.redetail for one in compiled)
+    per_pass_takes = bool(cards) and len(payloads) > 1 and not redetailing
+
     # The face pass's conditioning is a second compile of the same segment at
     # the crop canvas, and dropping the keyframes can land it on the other
     # checkpoint — so it is compiled here, before the loaders are built, and its
@@ -287,8 +298,8 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
         # which pass a segment inherits from is a fact about the strip, not
         # about the family. The links land on the segment node in this order,
         # so a graph without a seam keeps the inputs it always had.
-        source = decoded[payloads[index].get("continue_from", index - 1)] \
-            if index else (None, None)
+        source_index = payloads[index].get("continue_from", index - 1)
+        source = decoded[source_index] if index else (None, None)
         seams = {}
         if one.continues:
             # Only the tail, not the whole batch: the source segment's images
@@ -297,7 +308,24 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
             # segment, so a render of hard cuts has no dead nodes in it and a
             # Creator render has none at all. The count rides only on feathered
             # seams, so a classic seam's node inputs stay byte-identical.
-            seams["prev_image"] = inherited_frames(graph, source, one.feather)
+            #
+            # A restored seam reads the run at a length the family's video VAE
+            # encodes standalone — a single-frame seam widens to the grid's
+            # first member, and the segment node keeps only the last `feather`
+            # of whatever it is handed — and re-draws it before the segment
+            # sees it. Not off a clip: supplied footage has lost nothing. See
+            # `Compiled.seam_restore`.
+            restoring = bool(one.seam_restore) and family.restores_seams \
+                and not is_clip_source(source)
+            width = max(one.feather, family.rules.frame_offset) if restoring \
+                else one.feather
+            frames = inherited_frames(graph, source, width)
+            if restoring:
+                frames = family.emit_seam_restore(
+                    graph, links, frames, payloads[source_index],
+                    compiled[source_index], one.seam_restore, weights, sampling,
+                    acceleration, seed_for(index))
+            seams["prev_image"] = frames
         if one.continues_audio:
             # `one.audio_tail_s` rather than the timeline's setting directly:
             # compile clamps it to a feathered seam's overlap, and this is
@@ -389,6 +417,17 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
         reel = source.out(0)
         decoded.append(("pass", source.out(1)))
 
+        if per_pass_takes:
+            # The pass's own file, written now rather than by the save node at
+            # the end — see `ContinuityTake`. Stamped with the caller's id so
+            # its report lands on the stage the way the save node's does.
+            take = graph.node(TAKE_NODE, source=source.out(1),
+                              fps=float(family.rules.fps),
+                              filename_prefix=filename_prefix,
+                              crf=settings.video_crf(),
+                              card=int(cards[index]), seed=seed_for(index))
+            take.set_override_display_id(unique_id)
+
     # The re-detail pass, on the finished reel. After the loop and not inside it,
     # which is the opposite of where the face pass goes and for the same reason
     # the face pass goes where it does: what comes back is a *different size*,
@@ -396,24 +435,21 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
     # the canvas it is about to sample at. Every part is re-rendered or none is —
     # the muxer holds a reel's parts to one geometry, and `timeline_payloads`
     # has already refused a strip carrying footage this cannot re-render.
-    if any(one is not None and one.redetail for one in compiled):
+    if redetailing:
         from .. import redetailpass
 
         reel = redetailpass.emit(graph, family, links, upscaler, compiled, reel,
                                  seed_for(0))
 
-    # What the save node needs to keep each pass as a take: which card it is and
-    # what seed it ran on. Asked for on every render that knows its cards,
-    # including the lone generation — a piece of one card is where a piece shot
-    # a pass at a time *starts*, and a strip whose first card came back with no
-    # take could only go on by shooting it again. The old gate read "the whole
-    # piece in one go has nothing to keep, because that take is the render",
-    # which is true about the file and wrong about the card: the render is the
-    # take, so the save node reports the piece's own file as one rather than
-    # writing it twice. See `MiniMaxH3Save._takes`.
+    # What the save node needs to keep each pass as a take: which card it is
+    # and what seed it ran on. Only where the passes did not write their own
+    # (`per_pass_takes` above): the lone generation, whose take is the piece's
+    # own file — the save node reports it rather than encoding the same frames
+    # twice — and a ReDetail render, whose takes have to come off the rebuilt
+    # reel. See `MiniMaxH3Save._takes`.
     takes = json.dumps({"cards": list(cards),
                         "seeds": [seed_for(index) for index in range(len(payloads))]},
-                       sort_keys=True) if cards else ""
+                       sort_keys=True) if cards and not per_pass_takes else ""
     emit_tail(graph, reel, unique_id, filename_prefix, takes,
               fps=float(family.rules.fps))
     return graph

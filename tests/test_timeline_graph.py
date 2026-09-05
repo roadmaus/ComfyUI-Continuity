@@ -227,6 +227,42 @@ sampler_id = graph[reel_node_id]["inputs"]["samples"][0]
 check("...which came from segment 1's sampler",
       graph[sampler_id]["inputs"]["model"][0], segments[0][0])
 
+# The seam restore (issue #41). Off, the graph above is what it always was: no
+# restore node, and the seam reads exactly `feather` frames. On, the seam reads
+# a run the video VAE encodes standalone — H3's grid starts at 5, so a classic
+# single-frame seam widens to 5 and the segment node keeps the last one — and
+# the run is re-drawn by a node conditioned on the *source* shot, whose picture
+# it is, before the continuing segment sees it.
+check("no restore node unless a seam asks for one", "MiniMaxH3SeamRestore" in by_type, False)
+_restored = {}
+_data = json.loads(DATA)
+_data["segments"][1]["seam_restore"] = 0.45
+for node_id, node in build(json.dumps(_data)).expand.items():
+    _restored.setdefault(node["class_type"], []).append((node_id, node["inputs"]))
+check("a restored seam adds one restore node", len(_restored.get("MiniMaxH3SeamRestore", [])), 1)
+_restore_id, _restore = _restored["MiniMaxH3SeamRestore"][0]
+_run_id, _run = _restored["MiniMaxH3PassFrames"][0]
+check("...reading a 5-frame run off the source pass", _run.get("count"), 5)
+check("...which is what it restores", _restore["frames"], [_run_id, 0])
+check("...at the strength the seam asked for", _restore["denoise"], 0.45)
+_restore_segments = in_order(_restored["MiniMaxH3TimelineSegment"],
+                             ["a red room\nwide", "a red room\ncloser", "a red room\ncut away"])
+check("the continuing segment inherits the restored run, not the raw one",
+      _restore_segments[1][1]["prev_image"], [_restore_id, 0])
+_restore_source = {node_id for node_id, i in _restored["MiniMaxH3TimelineSegment"]
+                   if json.loads(i["segment_data"]).get("progress") is None}
+check("the restore is conditioned on a segment node of its own",
+      len(_restore_source), 1)
+check("...compiled from the source shot, whose picture the run is",
+      json.loads(_restored["MiniMaxH3TimelineSegment"][
+          [n for n, _ in _restored["MiniMaxH3TimelineSegment"]].index(next(iter(_restore_source)))
+      ][1]["segment_data"])["request"]["prompt"], "a red room\nwide")
+check("...and no seam links, since the run is re-drawn in place",
+      any(key in i for n, i in _restored["MiniMaxH3TimelineSegment"]
+          if n in _restore_source for key in ("prev_image", "prev_audio")), False)
+check("the restore's positive is that segment's conditioning",
+      _restore["positive"][0] in _restore_source, True)
+
 # One seed for the piece. It used to be seed + k, which meant the number on the
 # node named segment 1's noise and nothing else — a shot could not be reproduced
 # from it, and moving a card re-rolled every shot after it.
@@ -1003,11 +1039,21 @@ check("the card being shot is announced by its number on the strip",
       json.loads(stepped["MiniMaxH3TimelineSegment"][0][1]["segment_data"])["progress"],
       {"index": 2})
 
-# The takes the save node is told to write: the cards that were actually
-# sampled, and the seed each ran on.
-plan = json.loads(stepped["MiniMaxH3Save"][0][1]["takes"])
-check("the save node is told which card each part is", plan["cards"], [1, 2])
-check("...and what seed it ran on", plan["seeds"], [100, 100])
+# The takes, written by the passes themselves: one `ContinuityTake` per
+# generated pass, off the reel node's pass output, carrying the card's number
+# and the seed it ran on — and nothing for the kept take, which is already the
+# file it would be written from. The save node is told nothing: a tail-written
+# take only exists if every pass after it succeeded, which is when takes
+# matter least.
+check("each sampled pass writes its own take", len(stepped["ContinuityTake"]), 1)
+check("...against the card's number on the strip",
+      stepped["ContinuityTake"][0][1]["card"], 2)
+check("...on the seed it ran on", stepped["ContinuityTake"][0][1]["seed"], 100)
+check("...off the pass the reel node wrote",
+      stepped["ContinuityTake"][0][1]["source"],
+      [stepped["MiniMaxH3Reel"][0][0], 1])
+check("...and the save node is told nothing",
+      stepped["MiniMaxH3Save"][0][1]["takes"], "")
 
 # A card's own seed. The node's everywhere it is absent, which is every card
 # until somebody rolls one.
@@ -1017,8 +1063,8 @@ seeded = by_class(with_clip(
 ))
 check("a card with no seed of its own runs on the node's",
       sorted(i["seed"] for _, i in seeded["KSampler"]), [100, 4242])
-check("...and the save node records the same two",
-      json.loads(seeded["MiniMaxH3Save"][0][1]["takes"])["seeds"], [100, 4242])
+check("...and the takes record the same two",
+      sorted(i["seed"] for _, i in seeded["ContinuityTake"]), [100, 4242])
 
 # A lone generation has one take and it is the render — which is a statement
 # about the *file*, not about the card. The plan still goes out, because the

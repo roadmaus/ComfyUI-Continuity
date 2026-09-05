@@ -202,6 +202,19 @@ frozen("chained_seam", piece(
     ],
 ))
 
+# The same seam, restored (issue #41): the run the seam inherits is re-drawn
+# against the source shot's conditioning before the continuing pass sees it,
+# which adds a segment node and a restore node between the frames read and the
+# seam link — and nothing else.
+frozen("chained_restore", piece(
+    prompt="a house at dusk",
+    segments=[
+        {"prompt": "wide", "duration_s": 5},
+        {"prompt": "closer", "duration_s": 5, "continue": True, "seam_restore": 0.45},
+        {"prompt": "cut away", "duration_s": 5},
+    ],
+))
+
 # The same strip read the other way: one generation whose description holds all
 # three shots. Nothing is decoded mid-clip, so the graph loses the seam nodes and
 # the loop runs once — the largest structural difference any blob field makes.

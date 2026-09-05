@@ -92,33 +92,167 @@ export function stepperPill({ value, onChange, min = -Infinity, max = Infinity, 
  * choice is a word and the number behind it is what makes the word mean
  * something. Returning nothing leaves the row single-line.
  */
+// A list this long gets a find line: eight is where a list of files stops
+// being read and starts being searched, and where the pills' own lists —
+// aspect, blend width, upscale mode — all stop short.
+const FILTER_FROM = 8;
+
+/** The words of a query, lower-cased; every one has to appear in a row. */
+const terms = (query) => query.toLowerCase().split(/\s+/).filter(Boolean);
+
+/** Where the query's words sit in `text`, as merged [from, to) ranges — what
+ *  the row underlines. Each word's first occurrence, which is the one the eye
+ *  found too. */
+function hits(text, words) {
+  const lower = text.toLowerCase();
+  const found = words.map((word) => lower.indexOf(word))
+    .map((at, i) => (at < 0 ? null : [at, at + words[i].length]))
+    .filter(Boolean)
+    .sort((a, b) => a[0] - b[0]);
+  const merged = [];
+  for (const range of found) {
+    const last = merged[merged.length - 1];
+    if (last && range[0] <= last[1]) last[1] = Math.max(last[1], range[1]);
+    else merged.push([...range]);
+  }
+  return merged;
+}
+
+/** `text` as spans, the hit ranges underlined. */
+function lit(text, ranges) {
+  if (!ranges.length) return [el("span", { text })];
+  const parts = [];
+  let at = 0;
+  for (const [from, to] of ranges) {
+    if (from > at) parts.push(el("span", { text: text.slice(at, from) }));
+    parts.push(el("span", { class: "mmc-hit", text: text.slice(from, to) }));
+    at = to;
+  }
+  if (at < text.length) parts.push(el("span", { text: text.slice(at) }));
+  return parts;
+}
+
 export function openChoicePopover(anchor, { title, options, value, onPick, extra,
-                                            label = String, sub = () => null }) {
-  const pop = el("div", { class: "mmc-pop mmc-pop-scroll" },
-    title ? [el("div", { class: "mmc-pop-title", text: title })] : []);
-  for (const option of options) {
-    const second = sub(option);
-    pop.appendChild(el("button", {
-      class: "mmc-opt",
-      "aria-checked": option === value,
-      onclick: () => { close(); onPick(option); },
-    }, [
-      el("span", { class: `mmc-opt-label${second ? " mmc-opt-col" : ""}` }, [
-        el("span", { text: label(option) }),
-        ...(second ? [el("span", { class: "mmc-opt-sub", text: second })] : []),
-      ]),
-      el("span", { class: "mmc-radio" }),
+                                            label = String, sub = () => null,
+                                            find = options.length >= FILTER_FROM }) {
+  // Capturing the wheel is the frontend's contract for a DOM widget holding
+  // focus (see creator.js): with the find line focused, a scroll over the
+  // list would otherwise zoom the canvas under the popover.
+  const pop = el("div", { class: "mmc-pop mmc-pop-scroll", "data-capture-wheel": "true" });
+  // `find` is the caller's say: a picker of files gets the line however few
+  // are on disk today, since a folder fills up and a list that changes shape
+  // at eight is a list that changes shape. Anything else gets it by length.
+  const finding = Boolean(find);
+  const list = el("div", { class: "mmc-pop-list" });
+  let close = () => {};
+  let shown = options;
+  let cursor = -1;
+
+  const pick = (option) => { close(); onPick(option); };
+  const draw = (query = "") => {
+    const words = terms(query);
+    shown = words.length
+      ? options.filter((option) => {
+        const text = `${label(option)} ${sub(option) ?? ""}`.toLowerCase();
+        return words.every((word) => text.includes(word));
+      })
+      : options;
+    // The keyboard's row: the first match while searching, nothing otherwise
+    // — the pointer is what picks from an unsearched list, as it always has.
+    cursor = words.length && shown.length ? 0 : -1;
+    list.replaceChildren(...shown.map((option, index) => {
+      const text = label(option);
+      const second = sub(option);
+      return el("button", {
+        class: "mmc-opt",
+        "aria-checked": option === value,
+        ...(index === cursor ? { "data-cursor": "true" } : {}),
+        onclick: () => pick(option),
+      }, [
+        el("span", { class: `mmc-opt-label${second ? " mmc-opt-col" : ""}` }, [
+          el("span", {}, lit(text, hits(text, words))),
+          ...(second ? [el("span", { class: "mmc-opt-sub" }, lit(second, hits(second, words)))] : []),
+        ]),
+        el("span", { class: "mmc-radio" }),
+      ]);
+    }), ...(shown.length ? [] : [
+      el("div", { class: "mmc-pop-none", text: t("Nothing named \u201c{q}\u201d", { q: query.trim() }) }),
     ]));
+  };
+
+  if (finding) {
+    // The title line is the find line: a placeholder that names the list until
+    // something is typed, and a count that says how much of it is left. No box
+    // — a field drawn as a field above a list of files is a second thing to
+    // look at, and the list is the thing.
+    const field = el("input", {
+      class: "mmc-pop-find", type: "text", spellcheck: "false", autocomplete: "off",
+      placeholder: title ? t("{title} — type to find", { title }) : t("Type to find"),
+    });
+    const count = el("span", { class: "mmc-pop-count", text: String(options.length) });
+    const move = (step) => {
+      if (!shown.length) return;
+      cursor = (cursor + step + shown.length) % shown.length;
+      list.querySelectorAll(".mmc-opt").forEach((row, index) => {
+        if (index === cursor) row.setAttribute("data-cursor", "true");
+        else row.removeAttribute("data-cursor");
+      });
+      list.children[cursor]?.scrollIntoView({ block: "nearest" });
+    };
+    field.oninput = () => {
+      draw(field.value);
+      count.textContent = terms(field.value).length
+        ? t("{shown} of {count}", { shown: shown.length, count: options.length })
+        : String(options.length);
+      // Escape clears a query before it closes the popover — `dismissable`
+      // reads this and stands down while there is something to clear.
+      pop.dataset.holdEscape = field.value ? "1" : "";
+    };
+    field.onkeydown = (event) => {
+      if (event.key === "ArrowDown") { event.preventDefault(); move(1); }
+      else if (event.key === "ArrowUp") { event.preventDefault(); move(-1); }
+      else if (event.key === "Enter") {
+        event.preventDefault();
+        if (cursor >= 0 && shown[cursor] !== undefined) pick(shown[cursor]);
+      } else if (event.key === "Escape" && field.value) {
+        event.stopPropagation();
+        field.value = "";
+        field.oninput();
+      }
+    };
+    pop.appendChild(el("div", { class: "mmc-pop-findrow" }, [field, count]));
+    pop.appendChild(list);
+    draw();
+    document.body.appendChild(pop);
+    placeNear(pop, anchor);
+    close = dismissable(pop);
+    field.focus();
+  } else {
+    if (title) pop.appendChild(el("div", { class: "mmc-pop-title", text: title }));
+    pop.appendChild(list);
+    draw();
   }
   // A section under a rule for a switch that modifies the choice above rather
   // than being one of them — the seam's boundary pin is the case it exists
   // for. `extra` is built by the caller and closes the popover itself, which
   // is what every option row does.
   if (extra) pop.appendChild(extra(() => close()));
+  if (!finding) {
+    document.body.appendChild(pop);
+    placeNear(pop, anchor);
+    close = dismissable(pop);
+  }
+  pop.querySelector('[aria-checked="true"]')?.scrollIntoView({ block: "center" });
+}
+
+/** A popover that only says something — "scanning…", a reason nothing opened
+ *  — where a choice list will follow or nothing can. -> its close function,
+ *  so the caller can replace it the moment there is a list to show. */
+export function openNotePopover(anchor, text) {
+  const pop = el("div", { class: "mmc-pop" }, [el("div", { class: "mmc-pop-title", text })]);
   document.body.appendChild(pop);
   placeNear(pop, anchor);
-  const close = dismissable(pop);
-  pop.querySelector('[aria-checked="true"]')?.scrollIntoView({ block: "center" });
+  return dismissable(pop);
 }
 
 /** A frame drawn at the ratio itself, so portrait and landscape are legible

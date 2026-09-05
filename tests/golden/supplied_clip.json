@@ -7,16 +7,30 @@
     }
   },
   "10": {
+    "class_type": "MiniMaxH3ClipReel",
+    "inputs": {
+      "audio_vae": [
+        "4",
+        0
+      ],
+      "clip_data": "{\"duration\": 4.0, \"filename\": \"footage.mp4\", \"height\": 768, \"sound\": true, \"source_height\": 1080, \"source_width\": 1920, \"start\": 0.0, \"width\": 1344}",
+      "reel": [
+        "8",
+        0
+      ]
+    }
+  },
+  "11": {
     "class_type": "MiniMaxH3Save",
     "inputs": {
       "crf": 23,
       "filename_prefix": "continuity/renders/h3/H3",
       "fps": 24.0,
       "reel": [
-        "9",
+        "10",
         0
       ],
-      "takes": "{\"cards\": [1, 2], \"seeds\": [100, 100]}"
+      "takes": ""
     }
   },
   "2": {
@@ -107,16 +121,16 @@
     }
   },
   "9": {
-    "class_type": "MiniMaxH3ClipReel",
+    "class_type": "ContinuityTake",
     "inputs": {
-      "audio_vae": [
-        "4",
-        0
-      ],
-      "clip_data": "{\"duration\": 4.0, \"filename\": \"footage.mp4\", \"height\": 768, \"sound\": true, \"source_height\": 1080, \"source_width\": 1920, \"start\": 0.0, \"width\": 1344}",
-      "reel": [
+      "card": 1,
+      "crf": 23,
+      "filename_prefix": "continuity/renders/h3/H3",
+      "fps": 24.0,
+      "seed": 100,
+      "source": [
         "8",
-        0
+        1
       ]
     }
   }

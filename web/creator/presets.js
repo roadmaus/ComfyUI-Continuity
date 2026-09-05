@@ -481,7 +481,7 @@ export function captureShot(timeline, index, io) {
     refs: segment.assets ?? [],
     loras: segment.loras ?? [],
     shot: pick(segment, ["duration_s", "checkpoint", "continue", "continue_audio",
-                         "continue_from", "feather", "merge", "kind", "filename",
+                         "continue_from", "feather", "seam_restore", "merge", "kind", "filename",
                          "sound", "width", "height", "trim"]),
     speed: { family, row: readRow(io, speedNames(family)) },
   };
@@ -1495,7 +1495,7 @@ export function applyToShot(body, keys, segment, io, { from = "shot", piece } = 
     for (const flag of ["continue", "continue_audio"]) {
       segment[flag] = shot[flag] === true;
     }
-    for (const key of ["continue_from", "feather", "merge"]) {
+    for (const key of ["continue_from", "feather", "seam_restore", "merge"]) {
       if (shot[key] === undefined) delete segment[key];
       // The blend is retargeted rather than copied: a preset is family-neutral
       // and a width is not, so the run this one names has to become the nearest
