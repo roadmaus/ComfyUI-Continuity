@@ -19,6 +19,10 @@ then the source's own last frames against a continuation that started from a
 sharper copy of them, and at these strengths that is a step in detail, not in
 composition; it is the trade the pass makes on purpose.
 
+The restored latent leaves beside the frames. The next segment slices its seam
+off that (`encode._context_slice`), so a restored seam pays the VAE round trip
+no more than an unrestored one does.
+
 The mechanics are the face pass's (`facepass.py`): the frames are encoded with
 the video VAE, packed with an empty audio latent, and sampled behind a nested
 denoise mask — ones for the picture, zeros for the sound — so the sampler
@@ -72,7 +76,11 @@ class MiniMaxH3SeamRestore(io.ComfyNode):
                 io.Combo.Input("scheduler", options=comfy.samplers.KSampler.SCHEDULERS),
                 io.Float.Input("denoise", default=0.45, min=0.01, max=0.99, step=0.01),
             ],
-            outputs=[io.Image.Output()],
+            outputs=[io.Image.Output(),
+                     # The restored run as the sampler left it, for the next
+                     # segment to slice its seam off (`encode._context_slice`)
+                     # rather than re-encode the decode above.
+                     io.Latent.Output()],
         )
 
     @classmethod
@@ -114,7 +122,7 @@ class MiniMaxH3SeamRestore(io.ComfyNode):
             disable_pbar=not comfy.utils.PROGRESS_BAR_ENABLED)
 
         images = nodes.VAEDecode().decode(vae, {"samples": restored})[0]
-        return io.NodeOutput(images[..., :3].clamp(0.0, 1.0))
+        return io.NodeOutput(images[..., :3].clamp(0.0, 1.0), {"samples": restored})
 
 
 NODES = [MiniMaxH3SeamRestore]

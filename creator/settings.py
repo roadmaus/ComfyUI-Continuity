@@ -76,6 +76,12 @@ def default_prefixes():
     return registry.default_prefixes()
 
 
+# The roads a blended seam can take, see `DEFAULTS["seam_handoff"]`.
+SEAM_HANDOFFS = ("frames", "latent", "levelled")
+# The drift guard's ceiling, see `DEFAULTS["drift_guard"]`. Past the schedule
+# the node averages all of it; the page offers up to 8.
+MAX_DRIFT_GUARD = 99
+
 DEFAULTS = {
     "video_crf": DEFAULT_CRF,
     # `{family: prefix}` apiece — see `default_prefixes` above. Asked of the
@@ -121,6 +127,22 @@ DEFAULTS = {
     # the workflow's; this only says where in that schedule the distillation
     # takes over.
     "turbo_lead_in": 0,
+    # What a blended seam hands the next shot. "latent": the run sliced off the
+    # source pass's sampler latent (`encode._context_slice`). "levelled": the
+    # same slice, pulled back to the first pass's channel statistics before it
+    # is pinned (`encode._level`), so the model's own brightening and
+    # sharpening stop stacking down a strip. "frames": the decoded tail encoded
+    # again — the road every render took before either existed, kept so the
+    # three can be compared on the same strip.
+    "seam_handoff": "latent",
+    # The drift guard: how many of the model's last guesses at a pass its
+    # latent is the average of. 0 is off — the sampler's last step, as every
+    # render before this, and on a Euler run the same as 1. Each guess beyond
+    # is steadier and a little softer; many loosen faces and objects. Counted
+    # in steps rather than the paper's sigma so one setting means the same on
+    # a 20-step schedule and a turbo one. See `families/h3/truncate.py`; H3
+    # only.
+    "drift_guard": 0,
     # The weight files this machine last picked, by family: `{family: {slot:
     # filename, dtype, route, devices}}` — the same block a piece carries, in
     # the same shape.
@@ -360,6 +382,18 @@ def clean(raw):
             clean_settings[key] = value
     if "weights" in raw and raw["weights"] is not None:
         clean_settings["weights"] = clean_weights(raw["weights"])
+    if "seam_handoff" in raw and raw["seam_handoff"] is not None:
+        if raw["seam_handoff"] not in SEAM_HANDOFFS:
+            raise ValueError(f"seam_handoff must be one of {', '.join(SEAM_HANDOFFS)}")
+        clean_settings["seam_handoff"] = raw["seam_handoff"]
+    if "drift_guard" in raw and raw["drift_guard"] is not None:
+        value = raw["drift_guard"]
+        if isinstance(value, bool) or not isinstance(value, (int, float)) \
+                or value != int(value):
+            raise ValueError("drift_guard must be a whole number")
+        if not 0 <= value <= MAX_DRIFT_GUARD:
+            raise ValueError(f"drift_guard must be between 0 and {MAX_DRIFT_GUARD}")
+        clean_settings["drift_guard"] = int(value)
     for flag in ("show_shift_pills", "autoplay_previews", "advanced", "latent_cache"):
         if flag in raw and raw[flag] is not None:
             if not isinstance(raw[flag], bool):
@@ -555,3 +589,13 @@ def image_prefix(family):
 def turbo_lead_in():
     """How many opening steps a turbo render samples without the distillation."""
     return load()["turbo_lead_in"]
+
+
+def seam_handoff():
+    """What a blended seam hands the next shot: one of `SEAM_HANDOFFS`."""
+    return load()["seam_handoff"]
+
+
+def drift_guard():
+    """How many of a pass's last steps make its latent; 0 is off."""
+    return load()["drift_guard"]

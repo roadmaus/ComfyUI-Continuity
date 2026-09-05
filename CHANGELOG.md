@@ -5,6 +5,46 @@ and everything under it is kept exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**A drift guard for chained shots.** Every continued shot came out a little
+brighter and harsher than the one before it, until the end of a long strip
+looked fried (issues #41, #46). A flow sampler's output is, exactly, the
+step-weighted average of every step's own guess at the clean picture, and
+"Towards Error-Free Long Video Generation" (arXiv 2606.22370) finds the drift
+in the late guesses on a chained Wan model and stops it, with no training, by
+handing on a window of the schedule instead. The settings page's new "Drift
+guard" rail does that for H3 passes and their turbo lead-in: off, or the
+average of the model's last two to eight guesses at each shot. Two departures
+from the paper. It is counted in guesses rather than sigma, so one setting
+means the same on a 20-step schedule and a turbo one — H3 samples at shift 12,
+where a turbo schedule's steps all start above sigma 0.6. And the guess is the
+model's own prediction at each step rather than the paper's noise-minus-
+velocity, which assumes one consistent model along the run and made a turbo
+render with a lead-in worse, not better. On an eight-shot 20-step strip the
+frying was gone; fewer guesses look most like a plain render, more are
+steadier and softer. A model patch records the predictions and swaps the
+sampler's output for their average once the schedule reaches zero; the sound
+row leaves as the sampler made it. Off by default and off emits nothing.
+
+**A blended seam continues from the latent the model made, not from a VAE
+round trip of it.** The run a seam inherits used to be read off the source
+pass's decode and encoded again; measured on H3, that trip darkens the run by
+about 1.3/255 and hardens its contrast by about half a percent, in the same
+direction every time, and since every seam re-encodes a tail that was itself
+decoded from the pass before, it walked down a strip. The segment node now
+takes the source pass's sampler latent beside its frames and slices the run off
+that, in phase on the same grid; a restored seam hands over the restore's own
+latent. The frames still travel for the text encoder's boundary picture, and a
+seam whose source was face-passed, trimmed at its tail, or finished at another
+canvas reads them as before. The settings page's "Seam handoff" row offers the
+three roads: the frames, the latent, and the latent *levelled* — the same slice
+pulled back to the first pass's channel mean and spread before the model reads
+it. Measured on an eight-shot strip, the picture brightened about 1.5/255 per
+pass on raw H3 and twice that under a turbo LoRA, and the plain latent handoff
+changed none of it: the drift is the model continuing from its own output and
+adding its bias again. Levelling breaks the stacking at the conditioning, so
+each pass drifts within itself and the next starts where the first did; the
+finished frames are untouched. Issues #41, #46.
+
 **A music cue over a first shot no longer dies looking for an encoder.** A
 sound-lane block over a pass with no seam and no reference audio is still an
 encode — the cue is written into the audio latent through the audio VAE — but

@@ -43,21 +43,6 @@ def _parse(data):
         raise ValueError(f"segment data is not valid JSON: {exc}") from exc
 
 
-def _announce(unique_id, progress):
-    """Broadcast which segment is being built, keyed to the emitting node.
-
-    `mmc_segment` carries the expanded node's own id — the Timeline's plus a
-    GraphBuilder prefix — which `stage.js` prefix-matches exactly as it does
-    for the sampler's preview frames. Sent through the running PromptServer;
-    a graph executed without one (the test harness) has nobody to tell.
-    """
-    from server import PromptServer
-
-    server = getattr(PromptServer, "instance", None)
-    if server is not None:
-        server.send_sync("mmc_segment", {"node": unique_id, **progress})
-
-
 class MiniMaxH3TimelineSegment(io.ComfyNode):
     """One segment of a timeline — the Creator node's job for one shot.
 
@@ -110,6 +95,24 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
                 io.Model.Input("model_ref2va", optional=True),
                 io.Image.Input("prev_image", optional=True,
                     tooltip="An earlier segment's last frame, when this segment continues from it."),
+                # The source pass's sampler output, beside its frames. On a
+                # blended seam the run is sliced off this rather than encoded
+                # from the decode — `encode._context_slice` — so the next pass
+                # continues from what the model made and not from a VAE round
+                # trip of it. The frames still arrive: the boundary frame the
+                # text encoder is shown is a picture, and a latent at another
+                # canvas falls back to them. Written into the graph only where
+                # the loop has a latent to hand over, so every other seam keeps
+                # the inputs, and the cache key, it had.
+                io.Latent.Input("prev_latent", optional=True,
+                    tooltip="That segment's sampler latent, so a blended seam can slice its run instead of re-encoding it."),
+                # The first pass's sampler latent, on a levelled seam: the run
+                # sliced off `prev_latent` is pulled back to this latent's
+                # channel statistics before it is pinned — `encode._level` —
+                # so what the model brightens and sharpens within a pass is
+                # not handed forward to be brightened and sharpened again.
+                io.Latent.Input("anchor_latent", optional=True,
+                    tooltip="The first pass's sampler latent, whose tone a levelled seam is pulled back to."),
                 io.Audio.Input("prev_audio", optional=True,
                     tooltip="The tail of an earlier segment's soundtrack, when this segment's sound continues from it."),
                 io.Image.Input("next_image", optional=True,
@@ -168,6 +171,7 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
                 model_fl2va=None, model_ref2va=None,
                 prev_image=None, prev_audio=None,
                 next_image=None, next_audio=None, hold_lora="",
+                prev_latent=None, anchor_latent=None,
                 sampler_backend="") -> io.NodeOutput:
         payload = _parse(segment_data)
 
@@ -180,7 +184,9 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
         # right: the stage should name the segment actually being made.
         progress = payload.get("progress")
         if progress:
-            _announce(cls.hidden.unique_id, progress)
+            from ... import timeline
+
+            timeline.announce(cls.hidden.unique_id, progress)
 
         compiled = compiler.compile_segment(payload, image_size_lookup=media.image_size)
 
@@ -252,6 +258,12 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
                     f"or lengthen the source segment"
                 )
             loaded[encoder.PREV_FRAME] = {"image": prev_image[-compiled.feather:]}
+            if prev_latent is not None and compiled.feather > 1:
+                # Only a blended seam: a classic one pins a single frame, and
+                # no single latent step is one frame on the (1,4,4,4,4) grid.
+                loaded[encoder.PREV_LATENT] = {"latent": prev_latent["samples"]}
+                if anchor_latent is not None:
+                    loaded[encoder.ANCHOR_LATENT] = {"latent": anchor_latent["samples"]}
         if compiled.continues_audio:
             if prev_audio is None:
                 raise ValueError(

@@ -615,6 +615,16 @@ finally:
 # second that sits still is what that costs.
 
 ltx_segment = importlib.import_module(f"{PACKAGE}.creator.families.ltx25.segment")
+tl_mod = importlib.import_module(f"{PACKAGE}.creator.timeline")
+
+# The progress announcer lives on the timeline module, where both families'
+# segment nodes reach for it. It moved into H3's package once and LTX kept
+# calling it here, so every multi-shot LTX strip died on its first segment.
+import inspect  # noqa: E402
+
+check("the LTX segment announces through the timeline module",
+      "timeline.announce(" in inspect.getsource(ltx_segment), True)
+check("...and that announcer exists", callable(getattr(tl_mod, "announce", None)), True)
 media = importlib.import_module(f"{PACKAGE}.creator.media")
 
 import torch  # noqa: E402

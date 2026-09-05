@@ -368,7 +368,7 @@ class MiniMaxLTX25Segment(io.ComfyNode):
         payload = json.loads(segment_data)
         progress = payload.get("progress")
         if progress:
-            timeline._announce(cls.hidden.unique_id, progress)
+            timeline.announce(cls.hidden.unique_id, progress)
 
         compiled = compiler.compile_segment(
             payload, image_size_lookup=media.image_size, family="ltx25")

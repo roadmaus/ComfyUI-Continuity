@@ -680,6 +680,125 @@ seg3_last_frame = feathered[fchain[2][1]["prev_image"][0]]
 check("the next seam inherits from the trimmed pass",
       seg3_last_frame["inputs"]["source"][0], trim_id)
 
+# The latent handoff (issues #41, #46). A blended seam is also handed the
+# source pass's sampler latent, beside its frames, and slices its run off that
+# rather than re-encoding the decode — the round trip darkens and hardens the
+# run a little in the same direction every time, and it walks down a strip. A
+# classic single-frame seam is not: one frame is not a latent step.
+seg1_sampler = [node_id for node_id, n in feathered.items()
+                if n["class_type"] == "KSampler"
+                and n["inputs"]["model"][0] == fchain[0][0]][0]
+check("the blended seam is handed the source pass's sampler latent",
+      fchain[1][1].get("prev_latent"), [seg1_sampler, 0])
+check("...and its frames still, for the text encoder and the fallback",
+      "prev_image" in fchain[1][1], True)
+check("a classic seam is handed no latent", "prev_latent" in fchain[2][1], False)
+check("the reel decodes that same latent — the handoff is the delivered pass",
+      trim_sampler["inputs"]["model"][0] == fchain[1][0]
+      and feathered[fchain[1][1]["prev_latent"][0]]["inputs"]["model"][0] == fchain[0][0],
+      True)
+
+# A restored blended seam hands over the *restore's* latent: that is the run the
+# segment continues from, and re-encoding the restore's decode would put the
+# round trip straight back.
+_rf = build(blob(segments=[
+    {"prompt": "one", "duration_s": 5},
+    {"prompt": "two", "duration_s": 5, "continue": True, "feather": 22,
+     "seam_restore": 0.45},
+])).expand
+_rf_segments = in_order([(n_id, n["inputs"]) for n_id, n in _rf.items()
+                         if n["class_type"] == "MiniMaxH3TimelineSegment"], ["one", "two"])
+_rf_restore = [n_id for n_id, n in _rf.items() if n["class_type"] == "MiniMaxH3SeamRestore"]
+check("a restored blended seam takes the restore node's frames",
+      _rf_segments[1][1]["prev_image"], [_rf_restore[0], 0])
+check("...and the restore node's latent", _rf_segments[1][1].get("prev_latent"),
+      [_rf_restore[0], 1])
+
+# The road can be closed from the settings file to compare the two joins on
+# one strip; closed, the graph is byte-for-byte what it was before it existed.
+_settings = importlib.import_module(f"{PACKAGE}.creator.settings")
+_was = _settings.seam_handoff
+_settings.seam_handoff = lambda: "frames"
+try:
+    _off = build(blob(audio_tail_s=2.0, segments=[
+        {"prompt": "one", "duration_s": 5},
+        {"prompt": "two", "duration_s": 5, "continue": True, "continue_audio": True,
+         "feather": 22},
+        {"prompt": "three", "duration_s": 5, "continue": True},
+    ])).expand
+finally:
+    _settings.seam_handoff = _was
+check("with latent seams off no segment is handed a latent",
+      any("prev_latent" in n["inputs"] for n in _off.values()
+          if n["class_type"] == "MiniMaxH3TimelineSegment"), False)
+def _shape(graph, drop=()):
+    """A graph's inputs with the builder's per-run id prefix taken off."""
+    import re
+    text = json.dumps({k: {kk: vv for kk, vv in n["inputs"].items() if kk not in drop}
+                       for k, n in graph.items()}, sort_keys=True)
+    return re.sub(r"\.0\.\d+\.", ".N.", text)
+check("...and the graph is otherwise the one above",
+      _shape(_off), _shape(feathered, drop=("prev_latent",)))
+# The setting is read off the file when the graph is built, not off a node
+# input, so it has to reach the node's cache key by hand or flipping it on the
+# settings page changes nothing until the seed does.
+_settings.seam_handoff = lambda: "frames"
+try:
+    _fp_frames = cn.MiniMaxH3Timeline.fingerprint_inputs(timeline_data=DATA)
+finally:
+    _settings.seam_handoff = _was
+check("the seam handoff is part of the node's cache key",
+      _fp_frames != cn.MiniMaxH3Timeline.fingerprint_inputs(timeline_data=DATA), True)
+check("the latent road wires no anchor",
+      any("anchor_latent" in n["inputs"] for n in feathered.values()), False)
+
+# Levelled: every blended seam past the first also gets the first pass's latent
+# to level against. Not the seam off the first pass itself — its source *is* the
+# anchor, and levelling a run to its own statistics is the identity.
+_settings.seam_handoff = lambda: "levelled"
+try:
+    _lv = build(blob(segments=[
+        {"prompt": "one", "duration_s": 5},
+        {"prompt": "two", "duration_s": 5, "continue": True, "feather": 22},
+        {"prompt": "three", "duration_s": 5, "continue": True, "feather": 22},
+        {"prompt": "four", "duration_s": 5, "continue": True},
+    ])).expand
+finally:
+    _settings.seam_handoff = _was
+_lv_chain = in_order([(n_id, n["inputs"]) for n_id, n in _lv.items()
+                      if n["class_type"] == "MiniMaxH3TimelineSegment"],
+                     ["one", "two", "three", "four"])
+_lv_first_sampler = [n_id for n_id, n in _lv.items() if n["class_type"] == "KSampler"
+                     and n["inputs"]["model"][0] == _lv_chain[0][0]][0]
+check("levelled: the seam off the first pass has the latent and no anchor",
+      ("prev_latent" in _lv_chain[1][1], "anchor_latent" in _lv_chain[1][1]), (True, False))
+check("levelled: the next blended seam is anchored to the first pass's sampler",
+      _lv_chain[2][1].get("anchor_latent"), [_lv_first_sampler, 0])
+check("levelled: a classic seam gets neither",
+      any(k in _lv_chain[3][1] for k in ("prev_latent", "anchor_latent")), False)
+
+# The drift guard. Off by default and off emits nothing; on, one patch per
+# generation sits between the accelerators and the sampler carrying the count,
+# and the sampler runs on it. Read off the file like the seam handoff, so it is in the cache key for the
+# same reason.
+check("off, no drift guard node is emitted", "MiniMaxH3TruncatedFlow" in by_type, False)
+_was_dg = _settings.drift_guard
+_settings.drift_guard = lambda: 3
+try:
+    _dg = build().expand
+    _fp_three = cn.MiniMaxH3Timeline.fingerprint_inputs(timeline_data=DATA)
+finally:
+    _settings.drift_guard = _was_dg
+_dg_nodes = {n_id: n["inputs"] for n_id, n in _dg.items()
+             if n["class_type"] == "MiniMaxH3TruncatedFlow"}
+check("three guesses emits one drift guard per generation", len(_dg_nodes), 3)
+check("...carrying the count", {i["guesses"] for i in _dg_nodes.values()}, {3})
+check("...and every sampler runs on it",
+      all(n["inputs"]["model"][0] in _dg_nodes
+          for n in _dg.values() if n["class_type"] == "KSampler"), True)
+check("the drift guard is part of the node's cache key",
+      _fp_three != cn.MiniMaxH3Timeline.fingerprint_inputs(timeline_data=DATA), True)
+
 # The encoder's guide arithmetic, against a stand-in VAE: one call over the
 # run, one block per latent step, pinned at the offsets core's temporal grid
 # dictates — and a refusal when the two stop agreeing.
@@ -714,6 +833,60 @@ try:
     FAILURES.append("a coverage mismatch should refuse to render, got no error")
 except ValueError:
     pass
+
+# The slice: the same seven blocks off the tail of a 124-frame pass's latent
+# (37 steps), in phase because both lengths are on the 17k+5 grid — and None,
+# for the pixel road, when the latent is at another canvas or too short.
+_pass_latent = _torch.arange(37, dtype=_torch.float32).view(1, 1, 37, 1, 1).expand(1, 24, 37, 4, 4)
+sliced = encoder_mod._context_slice(_pass_latent, 22, 64, 64)
+check("22 frames are the last 7 steps of the source latent", len(sliced), 7)
+check("...the last seven, in order",
+      [float(g["latent"][0, 0, 0, 0, 0]) for g in sliced], [30.0, 31, 32, 33, 34, 35, 36])
+_anchor = "resolved_frame_index" if payload_mod.CORE_ANCHORS_ANYWHERE else payload_mod.FRAME_INDEX_KEY
+check("...pinned where the encode road pins them",
+      [g[_anchor] for g in sliced], [g[_anchor] for g in guides])
+check("a latent at another canvas is not sliced",
+      encoder_mod._context_slice(_pass_latent, 22, 128, 64), None)
+check("a latent shorter than the run is not sliced",
+      encoder_mod._context_slice(_pass_latent[:, :, :5], 22, 64, 64), None)
+
+# Levelling: per channel, the run's mean and spread become the anchor's tail's,
+# and nothing else about it moves — the order of the frames, the spatial shape.
+_g = _torch.Generator().manual_seed(7)
+_run_latent = _torch.randn(1, 24, 37, 4, 4, generator=_g) * 3.0 + 2.0
+_anchor_latent = _torch.randn(1, 24, 37, 4, 4, generator=_g) * 0.5 - 1.0
+_levelled = _torch.cat([g["latent"] for g in encoder_mod._context_slice(
+    _run_latent, 22, 64, 64, anchor=_anchor_latent)], dim=2)
+_ref = _anchor_latent[:, :, -7:]
+check("a levelled run carries the anchor tail's channel means",
+      _torch.allclose(_levelled.mean(dim=(0, 2, 3, 4)), _ref.mean(dim=(0, 2, 3, 4)), atol=1e-4), True)
+check("...and its channel spreads",
+      _torch.allclose(_levelled.std(dim=(0, 2, 3, 4)), _ref.std(dim=(0, 2, 3, 4)), atol=1e-4), True)
+_plain = _torch.cat([g["latent"] for g in encoder_mod._context_slice(
+    _run_latent, 22, 64, 64)], dim=2)
+check("...while its structure is the run's own (correlation 1 per channel)",
+      bool(((_plain - _plain.mean(dim=(0, 2, 3, 4), keepdim=True))
+            * (_levelled - _levelled.mean(dim=(0, 2, 3, 4), keepdim=True))).mean(dim=(0, 2, 3, 4))
+           .div(_plain.std(dim=(0, 2, 3, 4), unbiased=False)
+                * _levelled.std(dim=(0, 2, 3, 4), unbiased=False))
+           .sub(1).abs().max() < 1e-3), True)
+check("an anchor shorter than the run leaves it as sliced",
+      _torch.equal(_torch.cat([g["latent"] for g in encoder_mod._context_slice(
+          _run_latent, 22, 64, 64, anchor=_anchor_latent[:, :, :3])], dim=2), _plain), True)
+
+# The announcer, against a stand-in server: the event the stage listens for,
+# stamped with the emitting node's id and the progress it was handed.
+import server as _server  # noqa: E402
+
+_sent = []
+_real_server = getattr(_server.PromptServer, "instance", None)
+_server.PromptServer.instance = type("S", (), {"send_sync": lambda self, kind, data: _sent.append((kind, data))})()
+try:
+    tl.announce("node-7", {"index": 3})
+finally:
+    _server.PromptServer.instance = _real_server
+check("a segment announces itself on the stage's channel",
+      _sent, [("mmc_segment", {"node": "node-7", "index": 3})])
 
 # ---- the reel node, run rather than drawn -----------------------------------
 #

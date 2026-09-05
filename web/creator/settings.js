@@ -189,6 +189,13 @@ const PREVIEW_PX_STOPS = [
   { value: 512 }, { value: 640, label: "640" }, { value: 768 },
   { value: 1024, label: "1024" },
 ];
+// The drift guard's stops: off, then how many of the model's last guesses at
+// a pass are averaged. One guess is the plain render, so the rail starts at
+// two; past eight the early, generic guesses are most of the average.
+const DRIFT_STOPS = [
+  { value: 0, label: "Off" }, { value: 2, label: "Lightest" }, { value: 3 }, { value: 4 },
+  { value: 6 }, { value: 8, label: "Steadiest" },
+];
 
 const PREVIEW_Q_STOPS = [
   { value: 40, label: "40" }, { value: 50 }, { value: 60, label: "60" },
@@ -642,6 +649,107 @@ class SettingsPage {
    * same rule the Custom quality row lives by.
    */
   /**
+   * The drift guard (issues #41, #46). At every step the model makes a full
+   * guess at the clean picture, and the render is its last one; the guard
+   * averages the last few instead, which is where a continued shot's
+   * brightening and sharpening are added. One rail, counted in guesses rather
+   * than sigma so it means the same on a 20-step schedule and a turbo one. Per machine like the seam
+   * handoff: it is a statement about how a pass is read, not about the piece.
+   * H3 only.
+   */
+  renderDriftGuard() {
+    const current = Number(this.settings.drift_guard) || 0;
+    const rail = this.stopSlider({
+      stops: DRIFT_STOPS,
+      value: current,
+      name: "Drift guard",
+      read: (value) => ({
+        value: value === 0 ? t("Off") : t("Last {n} guesses", { n: value }),
+      }),
+      note: (value) => value === 0
+        ? t("The clip is the model's final guess, as before. Continued shots drift.")
+        : value <= 3
+          ? t("Closest to a plain render, with the drift taken out. Start here.")
+          : t("Steadier and softer. Faces and objects may loosen a little."),
+      apply: (value) => this.set({ drift_guard: value }),
+    });
+    return this.section("Rendering", "Drift guard",
+      "Every continued shot comes out a little brighter and harsher than the "
+      + "one before it, until the end of a long strip looks fried. The guard "
+      + "averages the model's last few guesses at each shot instead of keeping "
+      + "only its final one, and the drift stops. Fewer guesses look most like "
+      + "a plain render; more are steadier and softer.",
+      [
+        el("div", { class: "mmc-set-field" }, [rail]),
+        el("div", { class: "mmc-set-foot" }, [
+          el("span", {
+            text: t("MiniMax H3 shots, turbo included. Refine, face and restore "
+                + "passes are unaffected. Read when a render is queued."),
+          }),
+        ]),
+      ]);
+  }
+
+  /**
+   * What a blended seam hands the next shot (issues #41, #46). The latent is
+   * the better join — the run is sliced off what the sampler made, so nothing
+   * is decoded and re-encoded on the way — and the frames are the road every
+   * render took before it existed, kept so the two can be compared on one
+   * strip. Per machine, like the lead-in: it is a statement about how a seam is
+   * conditioned, not about the piece, and the family decides whether it can
+   * take a latent at all (`base.Family.hands_latents`).
+   */
+  /**
+   * Which steps of a pass's schedule its latent is read off (issues #41, #46).
+   * A flow sampler's output is, exactly, the average of every step's own guess
+   * at the clean picture, weighted by the step; the late steps' guesses carry
+   * the texture, and with it the sharpening and the brightness bias a continued
+   * shot inherits and adds to again. Per machine like the seam handoff: it is
+   * a statement about how a pass is read, not about the piece. H3 only.
+   */
+  renderLatentSeams() {
+    const current = this.settings.seam_handoff || "latent";
+    const rows = [
+      { value: "frames", label: "The frames",
+        note: "The road every render took before: the tail is read off the decode "
+            + "and encoded again. Kept for a side-by-side on the same strip." },
+      { value: "latent", label: "The latent",
+        note: "The run is sliced off what the sampler made. Nothing is decoded and "
+            + "encoded again on the way, so the next shot starts from the picture "
+            + "the model actually drew." },
+      { value: "levelled", label: "The latent, levelled",
+        note: "The same slice, pulled back to the first shot's tone and contrast "
+            + "before the model reads it. Each shot still drifts a little within "
+            + "itself, but the next one starts where the first did, so it stops "
+            + "stacking down the strip. The finished frames are not touched." },
+    ];
+    return this.section("Rendering", "Seam handoff",
+      "What a blended seam hands the next shot. Every continued shot comes out a "
+      + "little brighter and harder than the one it continues, and the next seam "
+      + "is pinned on that, so it walks down a strip.",
+      [
+        el("div", { class: "mmc-set-choices" }, rows.map((row) => el("button", {
+          class: "mmc-opt mmc-set-opt",
+          "aria-checked": row.value === current,
+          onclick: () => row.value !== current && this.set({ seam_handoff: row.value }),
+        }, [
+          el("span", { class: "mmc-radio" }),
+          el("span", { class: "mmc-set-opt-text" }, [
+            el("span", { class: "mmc-set-opt-label", text: t(row.label) }),
+            el("span", { class: "mmc-set-opt-note", text: t(row.note) }),
+          ]),
+        ]))),
+        el("div", { class: "mmc-set-foot" }, [
+          el("span", {
+            text: t("Only blended seams between two generated shots. A seam off a clip, "
+                + "a face-passed shot or a shot finished at another canvas reads the "
+                + "frames either way. Read when a render is queued."),
+          }),
+        ]),
+      ]);
+  }
+
+  /**
    * Whether the stage plays what it shows, or waits to be asked. On by
    * default — it is what the stage has always done — and off for the people
    * whose complaint is real: a canvas with a dozen finished renders on it is
@@ -820,7 +928,7 @@ class SettingsPage {
     const leadIn = this.settings.advanced === true || Number(this.settings.turbo_lead_in) > 0
       ? this.renderLeadIn() : [];
     return [this.renderAdvanced(), this.renderPreviews(), this.renderPreviewSize(),
-      ...leadIn, this.renderRefCache(),
+      ...leadIn, this.renderLatentSeams(), this.renderDriftGuard(), this.renderRefCache(),
       this.section("Nodes", "Flow shift pills",
       "Whether the sampler row offers H3's two flow shifts — the video and audio "
       + "schedule clocks. The values apply either way; this only decides who has "

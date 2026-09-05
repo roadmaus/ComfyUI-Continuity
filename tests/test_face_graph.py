@@ -242,6 +242,16 @@ check("the second face pass takes the reel through the first",
       kinds["MiniMaxH3FacePass"][1][1]["reel"][0] in
       {node_id for node_id, _ in kinds["MiniMaxH3Reel"]}, True)
 
+# A blended seam off a face-passed shot reads frames only: the sampler's latent
+# is no longer the delivered pass once the face has been re-drawn over it.
+blended = by_class(build(piece(face=FACE, segments=[
+    {"prompt": "a woman crossing a market", "duration_s": 5},
+    {"prompt": "she stops at a stall", "duration_s": 5, "continue": True, "feather": 22},
+])))
+check("a blended seam off a repaired pass is handed no latent",
+      any("prev_latent" in inputs for _, inputs in blended["MiniMaxH3TimelineSegment"]),
+      False)
+
 
 # --- refusals ------------------------------------------------------------------
 

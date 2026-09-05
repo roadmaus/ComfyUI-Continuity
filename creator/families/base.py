@@ -217,12 +217,21 @@ class Family:
     # without the pass keeps the seam wiring — and the cache keys — it had.
     restores_seams = False
 
+    # Whether this family's segment node takes the source pass's sampler
+    # latent on `prev_latent` and slices a blended seam's run off it rather
+    # than re-encoding the decoded frames. The loop wires the latent only where
+    # this is True, so a family without the socket keeps the seam wiring — and
+    # the cache keys — it had.
+    hands_latents = False
+
     def emit_seam_restore(self, graph, links, frames, payload, compiled, denoise,
                           weights, sampling, acceleration, seed):
         """The run a seam inherits, re-sampled before the next pass conditions
         on it. `frames` is the link carrying the source pass's tail at a length
         the family's video VAE encodes standalone; `payload`/`compiled` are the
         *source* shot's, whose picture these frames are; `denoise` is
-        `Compiled.seam_restore`. -> an IMAGE link the same length as `frames`.
-        Called only where `restores_seams` is True."""
+        `Compiled.seam_restore`. -> `(frames, latent)`: an IMAGE link the same
+        length as `frames`, and the restored run's LATENT link — or None where
+        the family does not hand latents. Called only where `restores_seams`
+        is True."""
         raise NotImplementedError(f"{self.id}.emit_seam_restore")

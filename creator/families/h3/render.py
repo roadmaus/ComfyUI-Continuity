@@ -24,7 +24,7 @@ import comfy.sample
 from ... import (accel, canvas, compile as compiler, guide as guides, media,
                  models as core, raylight, sampling as sampling_mod, settings)
 from .. import base
-from . import declare, models as slots
+from . import declare, models as slots, truncate
 
 # Whether this core can start a sampler with the noise switched off on an H3
 # audio+video latent. The lead-in's second sitting does exactly that — the noise
@@ -149,6 +149,22 @@ def patched(graph, model, sampling, acceleration, weights):
             shift_audio=sampling.shift_audio).out(0)
     model = accel.graph_apply(graph, model, acceleration, sampling.steps)
     return core.graph_preview(graph, model, weights, declare.RULES.fps)
+
+
+def truncated(graph, model):
+    """`model` behind the drift guard, when the settings page asks for it.
+
+    Off by default, and off means nothing is emitted. On, the pass's latent is
+    the average of the model's last few guesses at it rather than its last
+    step (`truncate.py`). Only
+    the pass and its lead-in: the refine, the face crop and the restore resume
+    partway down the schedule and redraw texture on purpose, which is the part
+    this averages away.
+    """
+    guard = settings.drift_guard()
+    if guard <= 0:
+        return model
+    return graph.node(truncate.TRUNCATE_NODE, model=model, guesses=guard).out(0)
 
 
 def face_payload(payload, face):
@@ -456,7 +472,8 @@ class H3(base.Family):
         # Patched after the segment node, which is where the LoRAs go on. Off,
         # every one of these adds nothing and this is the segment's model
         # unchanged.
-        model = patched(graph, segment.out(0), sampling, acceleration, weights)
+        model = truncated(graph, patched(graph, segment.out(0), sampling,
+                                         acceleration, weights))
 
         # What every sampler below this line is handed, whether the schedule is
         # run in one sitting or two. The seed is not in here because the two
@@ -483,8 +500,8 @@ class H3(base.Family):
             # and skips nothing.
             opening = graph.node(
                 "KSamplerAdvanced",
-                model=patched(graph, segment.out(3), sampling,
-                              accel.uncached(acceleration), weights),
+                model=truncated(graph, patched(graph, segment.out(3), sampling,
+                                                 accel.uncached(acceleration), weights)),
                 latent_image=segment.out(2),
                 add_noise="enable", noise_seed=seed,
                 start_at_step=0, end_at_step=run.steps,
@@ -696,6 +713,7 @@ class H3(base.Family):
 
 
     restores_seams = True
+    hands_latents = True
 
     def emit_seam_restore(self, graph, links, frames, payload, compiled, denoise,
                           weights, sampling, acceleration, seed):
@@ -723,14 +741,15 @@ class H3(base.Family):
         # same model re-drawing a few frames of its own picture. No lead-in:
         # like the refine, this resumes partway down the schedule.
         model = patched(graph, segment.out(0), sampling, acceleration, weights)
-        return graph.node(
+        restored = graph.node(
             SEAM_RESTORE_NODE, model=model, positive=segment.out(1),
             negative=graph.node("ConditioningZeroOut",
                                 conditioning=segment.out(1)).out(0),
             vae=links.vae, frames=frames,
             seed=seed, steps=sampling.steps, cfg=sampling.cfg,
             sampler_name=sampling.sampler_name, scheduler=sampling.scheduler,
-            denoise=float(denoise)).out(0)
+            denoise=float(denoise))
+        return restored.out(0), restored.out(1)
 
 
 FAMILY = H3()

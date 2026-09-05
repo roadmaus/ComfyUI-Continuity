@@ -123,9 +123,11 @@ def is_clip_source(source):
     """Whether a seam is inheriting from supplied footage rather than a pass.
 
     `decoded` holds one entry per pass in play order, tagged by kind: a
-    generated pass leaves `("pass", link)`, the link its reel node hands out
-    naming what it spilled to disk, and a clip leaves `("clip", spec)`, since
-    there is nothing in the graph for it to point at.
+    generated pass leaves `("pass", link, latent)` — the link its reel node
+    hands out naming what it spilled to disk, and its sampler latent where a
+    later seam may slice a run off it, else None — and a clip leaves
+    `("clip", spec, None)`, since there is nothing in the graph for it to
+    point at.
     """
     return source[0] == "clip"
 
@@ -274,9 +276,13 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
     graph = GraphBuilder()
     links = family.emit_loaders(graph, weights, set(where))
     reel = None             # the reel link holding every pass emitted so far
-    decoded = []            # every payload as (kind, what to read it back from),
-                            # in order — a seam defaults to the previous one but
-                            # may name any earlier one via `continue_from`
+    decoded = []            # every payload as (kind, what to read it back from,
+                            # its sampler latent or None), in order — a seam
+                            # defaults to the previous one but may name any
+                            # earlier one via `continue_from`
+    handing = settings.seam_handoff()
+    anchor = None           # the first generated pass's latent, the tone every
+                            # levelled seam is pulled back to
 
     for index, one in enumerate(compiled):
         if one is None:
@@ -291,7 +297,7 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
             if spec.get("sound") or spec.get("mix"):
                 clip_inputs["audio_vae"] = links.audio_vae
             reel = graph.node(CLIP_NODE, **clip_inputs).out(0)
-            decoded.append(("clip", spec))
+            decoded.append(("clip", spec, None))
             continue
 
         # The seams, wired here because they are the loop's own bookkeeping —
@@ -299,7 +305,7 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
         # about the family. The links land on the segment node in this order,
         # so a graph without a seam keeps the inputs it always had.
         source_index = payloads[index].get("continue_from", index - 1)
-        source = decoded[source_index] if index else (None, None)
+        source = decoded[source_index] if index else (None, None, None)
         seams = {}
         if one.continues:
             # Only the tail, not the whole batch: the source segment's images
@@ -320,12 +326,29 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
             width = max(one.feather, family.rules.frame_offset) if restoring \
                 else one.feather
             frames = inherited_frames(graph, source, width)
+            # The run's latent, beside its frames, on a blended seam whose
+            # source has one to give (`handoff` below): the segment slices the
+            # run off it rather than re-encoding the decode. A restored seam
+            # hands over the restore's own latent, since that is the run the
+            # segment continues from. Never on a classic seam — a single frame
+            # is not a latent step — so those keep the inputs they had.
+            handoff = source[2] if one.feather > 1 else None
             if restoring:
-                frames = family.emit_seam_restore(
+                frames, handoff = family.emit_seam_restore(
                     graph, links, frames, payloads[source_index],
                     compiled[source_index], one.seam_restore, weights, sampling,
                     acceleration, seed_for(index))
+                handoff = handoff if one.feather > 1 else None
             seams["prev_image"] = frames
+            if handoff is not None:
+                seams["prev_latent"] = handoff
+                # Levelled: the first pass's latent rides along as the anchor,
+                # and the segment pulls the slice back to its statistics before
+                # pinning (`encode._level`). Not on the seam off the first pass
+                # itself, where the anchor is the source and the levelling is
+                # the identity.
+                if handing == "levelled" and anchor is not None and anchor is not source[2]:
+                    seams["anchor_latent"] = anchor
         if one.continues_audio:
             # `one.audio_tail_s` rather than the timeline's setting directly:
             # compile clamps it to a feathered seam's overlap, and this is
@@ -415,7 +438,16 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
                                       seed_for(index))
 
         reel = source.out(0)
-        decoded.append(("pass", source.out(1)))
+        # What a later blended seam may slice its run off. Only while the
+        # sampler's latent still *is* the delivered pass: a face pass rewrote
+        # the frames, and a tail blend trimmed the frames the latent ends on.
+        # A family whose segment node has no socket for it, or a machine that
+        # picked the frames road to compare (`settings.seam_handoff`), hands none.
+        handoff = latent if (family.hands_latents and handing != "frames"
+                             and not one.face and one.ends_feather <= 1) else None
+        decoded.append(("pass", source.out(1), handoff))
+        if anchor is None and handoff is not None:
+            anchor = handoff
 
         if per_pass_takes:
             # The pass's own file, written now rather than by the save node at

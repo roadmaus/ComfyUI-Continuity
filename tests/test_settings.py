@@ -117,6 +117,26 @@ refuses("a fractional lead-in", {"turbo_lead_in": 1.5}, "whole number")
 # a one-step lead-in nobody picked.
 refuses("a boolean lead-in", {"turbo_lead_in": True}, "whole number")
 
+check("the seam handoff is the latent by default", settings.clean({})["seam_handoff"], "latent")
+check("...and can be any of the three roads",
+      [settings.clean({"seam_handoff": road})["seam_handoff"] for road in settings.SEAM_HANDOFFS],
+      list(settings.SEAM_HANDOFFS))
+check("a null is the default", settings.clean({"seam_handoff": None})["seam_handoff"], "latent")
+refuses("a road that does not exist", {"seam_handoff": "pixels"}, "one of")
+refuses("the old boolean", {"seam_handoff": True}, "one of")
+
+check("the drift guard is off by default", settings.clean({})["drift_guard"], 0)
+check("...and takes a count up to the ceiling",
+      (settings.clean({"drift_guard": 3})["drift_guard"],
+       settings.clean({"drift_guard": settings.MAX_DRIFT_GUARD})["drift_guard"]),
+      (3, settings.MAX_DRIFT_GUARD))
+check("a null guard is the default", settings.clean({"drift_guard": None})["drift_guard"], 0)
+refuses("a guard past the ceiling", {"drift_guard": settings.MAX_DRIFT_GUARD + 1}, "between")
+refuses("a negative guard", {"drift_guard": -1}, "between")
+refuses("a fractional guard", {"drift_guard": 2.5}, "whole number")
+refuses("a boolean guard", {"drift_guard": True}, "whole number")
+refuses("the old road", {"drift_guard": "middle"}, "whole number")
+
 # The reference cache's two numbers. Both are magnitudes with a meaningful
 # zero, which is the thing to hold down: 0 GB is not "no cache", it is the
 # in-session one with nothing written to disk, and 0 days is not "drop

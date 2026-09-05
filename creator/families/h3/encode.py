@@ -47,6 +47,17 @@ except ImportError:  # core before 2026-08-13: a static method on the node
 # are the user's namespace and this frame is not something they attached.
 PREV_FRAME = "__prev__"
 
+# Where the source pass's *latent* arrives, when the loop could hand one over.
+# The seam then pins the run as a slice of what the sampler made rather than
+# as `vae.encode` of its decode — see `_context_slice` for why that matters.
+# Always beside PREV_FRAME, never instead of it: the boundary frame is still
+# presented to the text encoder off the pixels.
+PREV_LATENT = "__prev_latent__"
+
+# Where the first pass's latent arrives on a levelled seam — the statistics the
+# inherited run is pulled back to before it is pinned. See `_level`.
+ANCHOR_LATENT = "__anchor_latent__"
+
 # Where time is on an H3 audio latent, and the rate its VAE is assumed to run at
 # when it does not name one. `_empty_av_latent` builds `[B, 32, 2, audio_t]`, so
 # time is the *last* axis and the 2 before it is not a channel count worth
@@ -308,12 +319,32 @@ def _frames_covered(steps):
     return sum(FRAME_PER_TOKEN[k % 5] for k in range(steps))
 
 
+def _pinned_run(encoded, feather, at):
+    """A run's latent `[B, C, steps, h, w]` -> one pinned guide per step.
+
+    Each block is pinned (`_pin`) at the pixel offset its step's content starts
+    at. The coverage check is the seam's integrity check: `compile` only allows
+    feathers on the VAE's own grid, so steps that cover a different span mean
+    the temporal grid changed underneath us — the pinned run would end short of
+    the source's last frame and the join would jump by the difference.
+    """
+    steps = int(encoded.shape[2])
+    covered = _frames_covered(steps)
+    if covered != feather:
+        raise ValueError(
+            f"{feather} inherited frames span {steps} latent steps covering "
+            f"{covered} frames — the video VAE's temporal grid no longer "
+            f"matches the seam's. Refusing to render a shifted join."
+        )
+    return [_pin({"latent": encoded[:, :, k:k + 1]}, at + _frames_covered(k))
+            for k in range(steps)]
+
+
 def _context_keyframes(vae, tail, feather, at=0):
     """The inherited run as pinned guides on this segment's own timeline.
 
     One video-VAE call over the whole tail — the motion lives inside the
-    temporal compression — then one guide block per latent step, each pinned
-    (`_pin`) at the pixel offset that step's content starts at.
+    temporal compression — then one guide block per latent step (`_pinned_run`).
 
     `at` is where the run starts on this segment's timeline: 0 for the run
     inherited from the pass in front, and `frames - feather` for the opening of
@@ -323,11 +354,6 @@ def _context_keyframes(vae, tail, feather, at=0):
     frame 17(n-m) — a whole number of the VAE's seventeen-frame cycles from the
     origin, and therefore in phase with the five-step pattern `_frames_covered`
     walks. A run pinned anywhere else would sit between latent steps.
-
-    The coverage check is the seam's integrity check: `compile` only allows
-    feathers on the VAE's own grid, so steps that cover a different span mean
-    the VAE's downscale changed underneath us — the pinned run would end short
-    of the source's last frame and the join would jump by the difference.
     """
     encoded = vae.encode(tail)
     if getattr(encoded, "ndim", 0) != 5:
@@ -338,16 +364,106 @@ def _context_keyframes(vae, tail, feather, at=0):
             f"{tuple(getattr(encoded, 'shape', ()))}, expected [B, C, T, H, W] "
             f"— is the H3 video VAE wired to 'vae'?"
         )
-    steps = int(encoded.shape[2])
-    covered = _frames_covered(steps)
-    if covered != feather:
+    return _pinned_run(encoded, feather, at)
+
+
+def _context_slice(latent, feather, width, height, anchor=None):
+    """The inherited run sliced off the source pass's own latent, or None.
+
+    The same pinned guides `_context_keyframes` builds, taken from the tail of
+    the latent the sampler made instead of from `vae.encode` of its decode. The
+    round trip is not free: measured on H3 it darkens the run by about 1.3/255
+    and hardens its contrast by about half a percent, in the same direction
+    every time, and since every seam re-encodes a tail that was itself decoded
+    from the pass before, that walks down a strip (issue #41, #46). The slice
+    hands the next pass the numbers the model actually made.
+
+    The slice is in phase for the same reason the encode is: a pass is 17n+5
+    frames and 5n+2 steps, a feather 17m+5 frames and 5m+2 steps, so the last
+    5m+2 steps begin at step 5(n-m) — on the (1,4,4,4,4) cycle. `_pinned_run`
+    still checks the coverage.
+
+    None when the latent cannot stand in for the frames: a canvas other than
+    this segment's — a latent cannot be resized, and the first pass of a
+    refined shot samples at a smaller canvas than the pass it continues was
+    finished at — or fewer steps than the run. The caller then encodes the
+    pixels as it always did; that road is never wrong, only lossier.
+
+    With an `anchor` — the first pass's latent — the slice is levelled to the
+    anchor's own tail of the same length before it is pinned (`_level`). An
+    anchor too short for that is skipped, not an error: it changes the tone of
+    a join, not whether there is one.
+    """
+    video = _video(latent)
+    if tuple(video.shape[-2:]) != (height // 16, width // 16):
+        return None
+    steps = next((s for s in range(1, int(video.shape[2]) + 1)
+                  if _frames_covered(s) == feather), None)
+    if steps is None:
+        return None
+    run = video[:, :, -steps:]
+    if anchor is not None:
+        reference = _video(anchor)
+        if int(reference.shape[2]) >= steps:
+            run = _level(run.float(), reference[:, :, -steps:].float().to(run.device))
+        else:
+            logging.info("[MiniMax] seam: the anchor pass is shorter than the run; not levelled")
+    return _pinned_run(run, feather, 0)
+
+
+def _video(latent):
+    """A LATENT's video stream as `[B, C, T, h, w]`, off the AV pair if nested."""
+    video = latent.unbind()[0] if getattr(latent, "is_nested", False) else latent
+    if getattr(video, "ndim", 0) != 5:
         raise ValueError(
-            f"{feather} inherited frames encoded to {steps} latent steps "
-            f"covering {covered} frames — the video VAE's temporal grid no "
-            f"longer matches the seam's. Refusing to render a shifted join."
+            f"the inherited latent has shape {tuple(getattr(video, 'shape', ()))}, "
+            f"expected [B, C, T, H, W]"
         )
-    return [_pin({"latent": encoded[:, :, k:k + 1]}, at + _frames_covered(k))
-            for k in range(steps)]
+    return video
+
+
+def _level(run, anchor):
+    """`run` with each channel's mean and spread moved to `anchor`'s.
+
+    Every continued pass comes out a little brighter and a little harder than
+    the pass it continues — measured at about 1.5/255 of luma per pass on raw
+    H3 and twice that under a turbo LoRA — and because the next seam is pinned
+    on that tail, the next pass starts from the drifted tone and adds its own.
+    Levelling breaks the stacking at the conditioning: the run the model is
+    about to read is moved back to the first pass's statistics, so each pass
+    still drifts within itself but the next one starts where the first did. A
+    per-channel affine map, so the structure of the run — the motion, the
+    edges — is untouched; only its tone and its spread move. The delivered
+    frames are never touched by this; the step it leaves at a join is the one
+    pass's own drift, not the strip's.
+
+    `anchor` is the first pass's tail at the run's own length, so like is
+    matched to like: the same moment of a shot, the same phase of steps.
+    """
+    dims = (0, 2, 3, 4)
+    run_mean, run_std = run.mean(dim=dims, keepdim=True), run.std(dim=dims, keepdim=True)
+    anchor_mean, anchor_std = anchor.mean(dim=dims, keepdim=True), anchor.std(dim=dims, keepdim=True)
+    levelled = (run - run_mean) / run_std.clamp(min=1e-6) * anchor_std + anchor_mean
+    logging.info(
+        "[MiniMax] seam: levelled the inherited run to the first pass — channel "
+        "mean moved %.3f on average, spread x%.4f",
+        float((anchor_mean - run_mean).abs().mean()),
+        float(anchor_std.mean() / run_std.mean().clamp(min=1e-6)))
+    return levelled
+
+
+def _inherited_run(vae, compiled, loaded, tail):
+    """The head seam's run as pinned guides: off the latent when one reached
+    this segment and fits its canvas, off the pixels otherwise. Levelled to the
+    anchor first when one rode along (`_level`)."""
+    latent = loaded.get(PREV_LATENT, {}).get("latent")
+    if latent is not None:
+        guides = _context_slice(latent, compiled.feather, compiled.width, compiled.height,
+                                anchor=loaded.get(ANCHOR_LATENT, {}).get("latent"))
+        if guides is not None:
+            return guides
+        logging.info("[MiniMax] seam: the inherited latent is at another canvas; encoding the frames")
+    return _context_keyframes(vae, tail[-compiled.feather:], compiled.feather)
 
 
 def _seam_audio(audio_vae, audio, ends_at=None):
@@ -469,7 +585,7 @@ def _encode_frames(clip, vae, audio_vae, compiled, loaded):
         if compiled.presents_head_frame:
             images.append(tail[-1:])
         if compiled.feather > 1:
-            keyframes.extend(_context_keyframes(vae, tail[-compiled.feather:], compiled.feather))
+            keyframes.extend(_inherited_run(vae, compiled, loaded, tail))
         else:
             keyframes.append(_pin({"image": tail[-1:]}, 0))
     elif compiled.first_frame is not None:
@@ -716,7 +832,7 @@ def _encode_references(clip, vae, audio_vae, compiled, loaded, checkpoints=None)
         # also rebuilds the latent list that core's `extra_conds` overwrites.
         tail = _resize(loaded[PREV_FRAME]["image"], compiled.width, compiled.height, "center")
         if compiled.feather > 1:
-            keyframes.extend(_context_keyframes(vae, tail[-compiled.feather:], compiled.feather))
+            keyframes.extend(_inherited_run(vae, compiled, loaded, tail))
         else:
             keyframes.append(_pin({"latent": vae.encode(tail[-1:])}, 0))
     elif compiled.first_frame is not None:
