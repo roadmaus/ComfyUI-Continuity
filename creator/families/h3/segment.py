@@ -157,7 +157,8 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
     def fingerprint_inputs(cls, segment_data, **kwargs):
         try:
             payload = json.loads(segment_data)
-            return (segment_data, stamps({"segments": [payload.get("request", {})]}))
+            return (segment_data, stamps({"segments": [payload.get("request", {})],
+                                          "sound": payload.get("sound")}))
         except Exception:
             return (segment_data, ())
 

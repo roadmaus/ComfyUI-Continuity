@@ -1654,6 +1654,89 @@ def merged(prompt="", **rest):
     return segment(prompt, merge=True, **rest)
 
 
+# --- what a merged pass keeps of its cards (issue #47) --------------------------
+#
+# `group_payload` serializes the merged asset list back into blob shape, and
+# three parsed fields were falling off on the way: a plate's panels (the handles
+# the joined prompt cites), a guide's tracing op (what routes a matte to the
+# inpaint branch), and the cut-out flag. The unblended sound seam's tail fell
+# off with them. Each is asserted as the merged request compiling to the same
+# thing the lone card did.
+
+plate = image("img-1", panels=[{"handle": "p-1", "filename": "p-1.png", "takes": "person",
+                                "cut": True, "rect": [0, 0, 0.5, 1]},
+                               {"handle": "p-2", "filename": "p-2.png"}])
+kept = compiler.timeline_payloads({"segments": [
+    segment("@p-1 walks past @p-2", assets=[plate]),
+    merged("and turns"),
+]})
+check("a merged pass is one payload", len(kept), 1)
+kept_plate = next(a for a in kept[0]["request"]["assets"] if a["handle"] == "img-1")
+check("the merged plate keeps its panels",
+      [(p["handle"], p.get("takes", "full"), p.get("cut", False), p.get("rect"))
+       for p in kept_plate["panels"]],
+      [("p-1", "person", True, [0, 0, 0.5, 1]), ("p-2", "full", False, None)])
+try:
+    compiler.compile_segment(kept[0])
+except compiler.CompileError as exc:
+    FAILURES.append(f"the merged plate no longer compiles: {exc}")
+
+matte = {"handle": "g-1", "kind": "video", "role": "guide", "filename": "g.mp4", "op": "matte"}
+kept_guide = compiler.timeline_payloads({"segments": [
+    segment("a room", assets=[matte, {"handle": "src", "kind": "video", "role": "reference",
+                                      "filename": "src.mp4"}]),
+    merged("still a room"),
+]})
+# By role rather than handle: a card's assets are renamed onto the merged list.
+check("the merged guide keeps its op",
+      next(a for a in kept_guide[0]["request"]["assets"] if a["role"] == "guide").get("op"),
+      "matte")
+check("...and compiles as a matte",
+      compiler.compile_segment(kept_guide[0]).guide.op, "matte")
+
+kept_tail = compiler.timeline_payloads({"audio_tail_s": 4.0, "segments": [
+    segment("one"),
+    segment("two", **{"continue_audio": True}),
+    merged("three"),
+]})
+check("a merged pass keeps the timeline's unblended audio tail",
+      compiler.compile_segment(kept_tail[1]).audio_tail_s, 4.0)
+check("...the same one its unmerged neighbour would have",
+      compiler.compile_segment(compiler.timeline_payloads({"audio_tail_s": 4.0, "segments": [
+          segment("one"), segment("two", **{"continue_audio": True})]})[1]).audio_tail_s, 4.0)
+
+# --- the aspect donor under a part-render (issue #47) ---------------------------
+#
+# The piece's aspect source names a card by its number on the strip. A render
+# that holds a card back is a shorter list, and the number used to be read as a
+# position in it: hold card 1 with card 2 as the donor, and card 3 sat under
+# the number — the canvas flipped to its shape. The donor is found by the number
+# it wears now (`card_no`), and a donor held out with nothing to play is refused
+# by name rather than answered with somebody else's picture.
+
+sizes = {"wide.png": (1920, 1080), "tall.png": (1080, 1920)}
+donor_strip = {
+    "aspect": "16:9", "short_edge": 384,
+    "aspect_source": {"handle": "img-1", "card": 2},
+    "segments": [
+        segment("one", assets=[image("img-0", "first_frame", filename="wide.png")], hold=True),
+        segment("two", assets=[image("img-1", "first_frame", filename="tall.png")]),
+        segment("three", assets=[image("img-2", "first_frame", filename="wide.png")]),
+    ],
+}
+shortened = compiler.rendered_piece(donor_strip)
+check("holding the first card drops it from the render", len(shortened["segments"]), 2)
+donor_payloads = compiler.timeline_payloads(shortened, image_size_lookup=lambda f: sizes[f])
+donor_canvas = compiler.compile_segment(donor_payloads[0], image_size_lookup=lambda f: sizes[f])
+check("...and the canvas still follows the card that wears the number",
+      donor_canvas.width < donor_canvas.height, True)
+expect_error("a donor held out of the render is refused by name",
+             lambda: compiler.timeline_payloads(
+                 compiler.rendered_piece({**donor_strip, "aspect_source": {"handle": "img-0", "card": 1}}),
+                 image_size_lookup=lambda f: sizes[f]),
+             "held out of this render")
+
+
 check("no flags is one pass per segment",
       runs([segment(), segment(), segment()]), [(0, 1), (1, 2), (2, 3)])
 check("a merged segment joins the one before it",

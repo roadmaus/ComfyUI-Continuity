@@ -100,6 +100,12 @@ def stamps(data):
         stamp(lora.resolve, entry, "name")
     for asset in data.get("assets", []) or []:
         stamp(media.resolve, asset, "filename")
+    # The lane's cues, whether the piece's whole lane or the stretch cut onto
+    # one pass (`_stamp_sound`): both name files by `filename`, and a file
+    # replaced under its name used to be a cache hit (issue #47).
+    for block in data.get("sound", []) or []:
+        if isinstance(block, dict):
+            stamp(media.resolve, block, "filename")
     for segment in data.get("segments", []):
         if not isinstance(segment, dict):
             continue
@@ -108,6 +114,10 @@ def stamps(data):
         # render would keep playing the clip that is no longer there.
         if segment.get("filename"):
             stamp(media.resolve, segment, "filename")
+        # ...and the cues mixed over it, which are files of their own.
+        for block in segment.get("mix", []) or []:
+            if isinstance(block, dict):
+                stamp(media.resolve, block, "filename")
         for asset in segment.get("assets", []) or []:
             stamp(media.resolve, asset, "filename")
         for entry in segment.get("loras", []) or []:
@@ -382,13 +392,18 @@ class MiniMaxH3ClipReel(io.ComfyNode):
         # ComfyUI's folders and is loadable on its own because of it.
         spec["name"] = spec["filename"]
         spec["path"] = media.resolve(spec.pop("filename"))
-        if spec.get("sound"):
+        # The lane's cues over this clip, each resolved the same way: the
+        # muxer mixes them from their files (`mux._write_clip`).
+        spec["mix"] = [{**block, "path": media.resolve(block["filename"])}
+                       for block in spec.get("mix") or []]
+        if spec.get("sound") or spec["mix"]:
             if audio_vae is None:
-                # The graph wires it whenever the clip plays with its sound, so
-                # reaching here means a hand-built graph — say which input is
-                # missing rather than writing the clip at the wrong pitch.
+                # The graph wires it whenever the clip plays with its sound or
+                # has a cue over it, so reaching here means a hand-built graph
+                # — say which input is missing rather than writing the clip at
+                # the wrong pitch.
                 raise ValueError(
-                    "this clip plays with its sound, so it needs the audio VAE "
+                    "this clip plays with sound, so it needs the audio VAE "
                     "on 'audio_vae' to know what rate to resample it to."
                 )
             spec["rate"] = mux.decode_sample_rate(audio_vae)

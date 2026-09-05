@@ -2782,31 +2782,41 @@ def _stamp_sound(data, segments, runs, payloads, rules, total_frames):
     re-runs shot five and nothing else. Handing every pass the whole lane would
     make one drag invalidate the entire strip.
 
-    A clip is skipped. It is played, not sampled, so there is no latent to fix
-    part of — what a supplied track does over supplied footage is a mix, and the
-    muxer does that from the lane directly (`mux.write`), without the payload
-    needing to carry it.
+    A clip is played, not sampled, so there is no latent to fix part of — what
+    a supplied track does over supplied footage is a mix, and the muxer does
+    that (`mux._write_clip`). The blocks reach it on the clip's own spec as
+    `mix`, in the same shape and on the same clock, so a cue dragged over a
+    clip re-runs that clip's reel node — which decodes nothing — and no pass.
+    They used to be dropped here on the strength of a comment saying the muxer
+    read the lane itself, which it never did (issue #47).
     """
     lane = sound.parse(data.get("sound"), rules, total_frames)
     if not lane:
         return
     windows = timeline_windows(data, segments, runs)
     for payload, window in zip(payloads, windows):
-        if "clip" in payload or window.clip:
-            continue
         blocks = sound.for_window(lane, window, rules)
-        if blocks:
-            payload["sound"] = [
-                {"filename": block.filename, "at": block.at,
-                 "frames": block.frames, "in_s": round(block.in_s, 6),
-                 # The window's real duration, resolved here rather than left
-                 # for the tensor half to divide out again: this is the side
-                 # that knows the piece's frame rate, and two answers to one
-                 # question can differ in the last decimal and cut a file a
-                 # sample short of where it was dragged.
-                 "seconds": round(block.seconds(rules), 6)}
-                for block in blocks
-            ]
+        if not blocks:
+            continue
+        if "clip" in payload or window.clip:
+            payload["clip"]["mix"] = _block_dicts(blocks, rules)
+        else:
+            payload["sound"] = _block_dicts(blocks, rules)
+
+
+def _block_dicts(blocks, rules):
+    """Lane blocks -> the dicts a payload carries, on the pass's own clock."""
+    return [
+        {"filename": block.filename, "at": block.at,
+         "frames": block.frames, "in_s": round(block.in_s, 6),
+         # The window's real duration, resolved here rather than left for the
+         # tensor half to divide out again: this is the side that knows the
+         # piece's frame rate, and two answers to one question can differ in
+         # the last decimal and cut a file a sample short of where it was
+         # dragged.
+         "seconds": round(block.seconds(rules), 6)}
+        for block in blocks
+    ]
 
 
 def _stamp_clip_seams(segments, runs, payloads):
@@ -2973,10 +2983,20 @@ def _source_canvas(data, segments, source, image_size_lookup):
             raise CompileError(f"@{handle} has no picture to take an aspect ratio from")
         return _sized_canvas(data, image_size_lookup, pooled.filename)
 
-    if not 1 <= card <= len(segments):
+    # By the number on the strip rather than by position: a render that holds
+    # cards back (`rendered_piece`) is a shorter list whose cards carry their
+    # strip number as `card_no`, and the donor is whichever card wears it. A
+    # strip nothing is held from has no `card_no` and the two agree.
+    segment = next((one for index, one in enumerate(segments)
+                    if int(one.get("card_no") or index + 1) == card), None)
+    if segment is None:
+        if any(one.get("card_no") for one in segments):
+            raise CompileError(
+                f"aspect source names card {card}, which is held out of this "
+                f"render with no take to play — put it back in, or pick another "
+                f"picture to take the aspect from")
         raise CompileError(
             f"aspect source names card {card}, but the strip has {len(segments)}")
-    segment = segments[card - 1]
     if is_clip(segment):
         spec = clip_spec(segment, card - 1)
         return _clip_canvas(data, (spec.get("source_width"), spec.get("source_height")))
@@ -3133,6 +3153,28 @@ def _asset_dict(asset):
         out["trim"] = {"start": asset.trim[0], "end": asset.trim[1]}
     if asset.takes != "full":
         out["takes"] = asset.takes
+    # The fields `_parse_assets` reads that used to be lost here: a plate's
+    # panels — the handles the merged prompt cites — a guide's tracing op, which
+    # is what routes a matte to the inpaint branch, and the cut-out flag. Each
+    # was parsed on a card and silently absent from the merged pass (issue #47).
+    if asset.cut:
+        out["cut"] = True
+    if asset.op:
+        out["op"] = asset.op
+    if asset.panels:
+        out["panels"] = [_panel_dict(panel) for panel in asset.panels]
+    return out
+
+
+def _panel_dict(panel):
+    """`Asset` (a panel) -> the blob shape `_parse_panels` reads."""
+    out = {"handle": panel.handle, "filename": panel.filename}
+    if panel.takes != "full":
+        out["takes"] = panel.takes
+    if panel.cut:
+        out["cut"] = True
+    if panel.rect:
+        out["rect"] = list(panel.rect)
     return out
 
 
@@ -3389,6 +3431,10 @@ def group_payload(data, start=0, end=None):
         "short_edge": data.get("short_edge", rules_of(data).native_short_edge),
         # The two-pass choice is the timeline's, like the canvas it belongs to.
         **{key: data[key] for key in ("upscale", "sample_edge", "refine_denoise") if key in data},
+        # The unblended sound seam's tail is the timeline's setting, the same
+        # one `_chained_request` writes; a merged pass used to fall back to the
+        # default on its own seam (issue #47).
+        "audio_tail_s": data.get("audio_tail_s", DEFAULT_AUDIO_TAIL_S),
     }
     for key in ("soundscape", "music"):
         request[key] = _agree(

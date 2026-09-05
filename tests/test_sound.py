@@ -182,15 +182,27 @@ check("payloads: an uncovered pass is untouched",
       [p == q for p, q in zip(with_lane[1:], without[1:])], [True, True])
 check("payloads: the covered one is not", with_lane[0] == without[0], False)
 
-# A clip is played, not sampled — there is no latent to fix part of, so nothing
-# is stamped on it however far a cue reaches over it.
+# A clip is played, not sampled — there is no latent to fix part of, so no
+# `sound` is stamped on it. What reaches over it goes to the muxer instead, as
+# `mix` on the clip's own spec: the same block shape, on the clip's own clock,
+# so a cue over supplied footage is a fact about that clip's reel node and no
+# pass re-runs for it. It used to be dropped on the floor (issue #47).
 CLIPPED = piece([(5, False, False, 1)])
 CLIPPED["segments"].append({"kind": "clip", "filename": "b.mp4",
                             "duration_s": 4, "trim": {"start": 0, "end": 4}})
 clipped = compiler.timeline_payloads(
     dict(CLIPPED, sound=[{"filename": "score.mp3", "at_s": 0.0,
                           "in_s": 0.0, "out_s": 8.5}]))
-check("payloads: supplied footage is never handed a block",
+check("payloads: supplied footage is never handed a block to sample",
       "sound" in clipped[1], False)
+mix = clipped[1]["clip"].get("mix") or []
+check("payloads: ...but the cue over it rides on the clip's spec", len(mix), 1)
+check("payloads: ...on the clip's own clock", mix[0]["at"], 0)
+check("payloads: ...opening the file where the pass in front stopped",
+      round(mix[0]["in_s"], 4), round(clipped[0]["sound"][0]["seconds"], 4))
+check("payloads: ...and no wider than the cue",
+      mix[0]["frames"], sound.at_frame(8.5, H3) - clipped[0]["sound"][0]["frames"])
+unmixed = compiler.timeline_payloads(CLIPPED)
+check("payloads: a clip with nothing over it carries no mix", "mix" in unmixed[1]["clip"], False)
 
 passed("the sound lane lands where it should, and a seam costs it nothing")

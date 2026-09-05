@@ -977,6 +977,17 @@ check("a clip with sound is wired to the audio VAE",
 muted = by_class(with_clip({"prompt": "wide", "duration_s": 5}, {**CLIP, "sound": False}))
 check("a muted clip needs no VAE at all",
       "audio_vae" in muted["MiniMaxH3ClipReel"][0][1], False)
+# ...unless the lane reaches over it: the cue is mixed at the reel's rate, and
+# the rate is the audio VAE's. The cue rides on the clip's spec (issue #47).
+cued_clip = by_class(with_clip({"prompt": "wide", "duration_s": 5}, {**CLIP, "sound": False},
+                               sound=[{"filename": "score.mp3", "at_s": 6.0,
+                                       "in_s": 0.0, "out_s": 2.0}]))
+cued_inputs = cued_clip["MiniMaxH3ClipReel"][0][1]
+check("a muted clip with a cue over it is wired to the audio VAE for the rate",
+      "audio_vae" in cued_inputs, True)
+check("...and carries the cue as its mix",
+      [(b["filename"], b["frames"]) for b in json.loads(cued_inputs["clip_data"])["mix"]],
+      [("score.mp3", 48)])
 
 # A clip alone is a whole render: nothing is sampled, nothing is decoded, and
 # the file is copied through the writer.

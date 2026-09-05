@@ -288,7 +288,7 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
             clip_inputs = {"clip_data": json.dumps(spec, sort_keys=True)}
             if reel is not None:
                 clip_inputs["reel"] = reel
-            if spec.get("sound"):
+            if spec.get("sound") or spec.get("mix"):
                 clip_inputs["audio_vae"] = links.audio_vae
             reel = graph.node(CLIP_NODE, **clip_inputs).out(0)
             decoded.append(("clip", spec))

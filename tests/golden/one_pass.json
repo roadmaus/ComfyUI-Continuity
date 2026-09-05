@@ -36,7 +36,7 @@
         "1",
         0
       ],
-      "segment_data": "{\"continue\": false, \"continue_audio\": false, \"request\": {\"aspect\": \"16:9\", \"assets\": [], \"duration_s\": 15.0, \"loras\": [], \"music\": \"\", \"prompt\": \"[Shot 1] a house at dusk. wide [Shot 2] At 00:05.000, closer [Shot 3] At 00:10.000, cut away\", \"short_edge\": 768, \"soundscape\": \"\"}, \"shots\": 3}"
+      "segment_data": "{\"continue\": false, \"continue_audio\": false, \"request\": {\"aspect\": \"16:9\", \"assets\": [], \"audio_tail_s\": 1.0, \"duration_s\": 15.0, \"loras\": [], \"music\": \"\", \"prompt\": \"[Shot 1] a house at dusk. wide [Shot 2] At 00:05.000, closer [Shot 3] At 00:10.000, cut away\", \"short_edge\": 768, \"soundscape\": \"\"}, \"shots\": 3}"
     }
   },
   "6": {

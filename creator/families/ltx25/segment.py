@@ -353,7 +353,8 @@ class MiniMaxLTX25Segment(io.ComfyNode):
         try:
             payload = json.loads(segment_data)
             return (segment_data,
-                    timeline.stamps({"segments": [payload.get("request", {})]}))
+                    timeline.stamps({"segments": [payload.get("request", {})],
+                                     "sound": payload.get("sound")}))
         except Exception:
             return (segment_data, ())
 
