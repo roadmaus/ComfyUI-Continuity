@@ -195,9 +195,9 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
             )
         if audio_vae is None and compiled.encodes_audio():
             raise ValueError(
-                "This generation carries sound — reference audio, or a seam "
-                "continuing the previous segment's — so it needs the audio VAE "
-                "on 'audio_vae'."
+                "This generation carries sound — reference audio, a seam "
+                "continuing the previous segment's, or a sound-lane cue over it "
+                "— so it needs the audio VAE on 'audio_vae'."
             )
 
         # `prompt_override` replaces the composed prompt verbatim, after

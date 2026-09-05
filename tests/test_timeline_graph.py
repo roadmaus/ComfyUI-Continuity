@@ -505,6 +505,22 @@ for socket in ("vae", "audio_vae", "vae_name", "audio_vae_name"):
     check(f"a text-only pass leaves {socket!r} off the encoder",
           socket in built["MiniMaxH3TimelineSegment"][0][1], False)
 
+# ...but a sound-lane cue over that same text-only pass is an encode: the fill
+# writes the cue into the audio latent through `audio_vae.encode`, so the audio
+# VAE has to be on the encoder — and only the audio one, since the picture is
+# still plain text. Issue #47 item 1: a first shot with a music cue and nothing
+# else with sound in it used to reach the fill with no encoder at all.
+cued = build(blob(segments=[{"prompt": "x", "duration_s": 6}],
+                  sound=[{"filename": "score.mp3", "at_s": 0.0,
+                          "in_s": 0.0, "out_s": 4.0}])).expand
+cued_inputs = next(n["inputs"] for n in cued.values()
+                   if n["class_type"] == "MiniMaxH3TimelineSegment")
+check("a lane cue over a text-only pass wires the audio VAE into the encoder",
+      sorted(k for k in cued_inputs if k in ("vae", "audio_vae", "vae_name", "audio_vae_name")),
+      ["audio_vae", "audio_vae_name"])
+check("...and the cue itself is on the payload",
+      len(json.loads(cued_inputs["segment_data"]).get("sound") or []), 1)
+
 # Where a VAE *is* wired, its filename rides beside it. The reference cache keys
 # its latents to that name, because a name is the same string across restarts
 # where a loaded VAE object is not — without it the cache falls back to

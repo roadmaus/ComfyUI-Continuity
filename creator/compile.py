@@ -385,6 +385,11 @@ class Compiled:
     # whose music keeps playing is an ordinary thing to want.
     continues_audio: bool = False
     audio_tail_s: float = 0.0
+    # Timeline only: the piece's sound lane has a block over this pass, cut to
+    # it by `_stamp_sound`. A fact about the payload rather than the request,
+    # which is why it arrives as its own flag — and it is an encode, so it
+    # counts for `encodes_audio` exactly as a seam's sound does.
+    carries_sound: bool = False
     # The seam running the other way: the pass after this one is supplied
     # footage, and this generation ends on the clip's opening frame rather than
     # cutting to it. `ends_feather` is the same idea as `feather` at the other
@@ -448,15 +453,21 @@ class Compiled:
     def encodes_audio(self):
         """Whether building this segment's conditioning calls `audio_vae.encode`.
 
-        True for a continuing sound seam, a reference-audio block, or a reference
-        video cited with its soundtrack — the three things the encoder turns into
-        an audio latent (`_encode_ref_audio`). A picture-only video reference does
-        not count, which is the same line `families/h3/still.py` draws when it decides
-        whether to build the audio loader at all. Otherwise the audio VAE is a
-        decode-time loader only — the counterpart to `encodes_video`, gated the
-        same way for the same reason.
+        True for a continuing sound seam, a reference-audio block, a reference
+        video cited with its soundtrack, or a sound-lane block over this pass —
+        the things the encoder turns into an audio latent (`_encode_ref_audio`,
+        `audiolatent.fill`). A picture-only video reference does not count, which
+        is the same line `families/h3/still.py` draws when it decides whether to
+        build the audio loader at all. Otherwise the audio VAE is a decode-time
+        loader only — the counterpart to `encodes_video`, gated the same way for
+        the same reason.
+
+        The lane used to be missing here, so a first shot with a music cue under
+        it and no seam or reference audio was handed no audio VAE and the fill
+        died on `None.encode` (issue #47).
         """
         return bool(self.continues_audio or self.ends_on_audio or self.ref_audios
+                    or self.carries_sound
                     or any(v.track == "picture+sound" for v in self.ref_videos))
 
 
@@ -1275,7 +1286,7 @@ def _check_feather(width, live, what, rules):
 
 def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=None,
                     continues_audio=False, shots=1, feather=1, feather_pin=False,
-                    seam_restore=0.0,
+                    seam_restore=0.0, carries_sound=False,
                     ends_on=False, ends_on_audio=False, ends_feather=1,
                     ends_feather_pin=False, family=registry.DEFAULT_VIDEO):
     """`creator_data` dict -> `Compiled`.
@@ -1763,6 +1774,7 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
         auto_duration=auto_duration,
         continues=continues,
         continues_audio=continues_audio,
+        carries_sound=bool(carries_sound),
         audio_tail_s=audio_tail_s,
         feather=feather,
         seam_restore=seam_restore,
@@ -3451,6 +3463,7 @@ def compile_segment(payload, image_size_lookup=None, family=registry.DEFAULT_VID
         payload["request"], image_size_lookup, family=family,
         continues=bool(payload.get("continue")),
         continues_audio=bool(payload.get("continue_audio")),
+        carries_sound=bool(payload.get("sound")),
         shots=int(payload.get("shots", 1)),
         feather=int(payload.get("feather", 1)),
         feather_pin=bool(payload.get("feather_pin")),
