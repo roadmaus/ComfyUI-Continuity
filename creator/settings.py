@@ -300,10 +300,6 @@ def clean(raw):
         if not 0 <= lead <= MAX_LEAD_IN:
             raise ValueError(f"turbo_lead_in must be between 0 and {MAX_LEAD_IN}")
         clean_settings["turbo_lead_in"] = lead
-    if "latent_seams" in raw and raw["latent_seams"] is not None:
-        if not isinstance(raw["latent_seams"], bool):
-            raise ValueError("latent_seams must be true or false")
-        clean_settings["latent_seams"] = raw["latent_seams"]
     if "text_scale" in raw and raw["text_scale"] is not None:
         scale = raw["text_scale"]
         # `True` is an int in Python and would sail through as scale 1, the same
@@ -369,7 +365,8 @@ def clean(raw):
             clean_settings[key] = value
     if "weights" in raw and raw["weights"] is not None:
         clean_settings["weights"] = clean_weights(raw["weights"])
-    for flag in ("show_shift_pills", "autoplay_previews", "advanced", "latent_cache"):
+    for flag in ("show_shift_pills", "autoplay_previews", "advanced", "latent_cache",
+                 "latent_seams"):
         if flag in raw and raw[flag] is not None:
             if not isinstance(raw[flag], bool):
                 raise ValueError(f"{flag} must be true or false")

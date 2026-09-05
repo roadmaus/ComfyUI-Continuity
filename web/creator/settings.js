@@ -642,6 +642,53 @@ class SettingsPage {
    * same rule the Custom quality row lives by.
    */
   /**
+   * What a blended seam hands the next shot (issues #41, #46). The latent is
+   * the better join — the run is sliced off what the sampler made, so nothing
+   * is decoded and re-encoded on the way — and the frames are the road every
+   * render took before it existed, kept so the two can be compared on one
+   * strip. Per machine, like the lead-in: it is a statement about how a seam is
+   * conditioned, not about the piece, and the family decides whether it can
+   * take a latent at all (`base.Family.hands_latents`).
+   */
+  renderLatentSeams() {
+    const latent = this.settings.latent_seams !== false;
+    const rows = [
+      { value: true, label: "The latent",
+        note: "The run is sliced off what the sampler made. Nothing is decoded and "
+            + "encoded again on the way, so the next shot starts from the picture "
+            + "the model actually drew." },
+      { value: false, label: "The frames",
+        note: "The road every render took before: the tail is read off the decode "
+            + "and encoded again. Kept for a side-by-side on the same strip." },
+    ];
+    return this.section("Rendering", "Seam handoff",
+      "What a blended seam hands the next shot: the source pass's own latent, or "
+      + "its frames decoded and encoded again. The round trip darkens the run a "
+      + "little and hardens its contrast, in the same direction at every seam, "
+      + "and that walks down a strip.",
+      [
+        el("div", { class: "mmc-set-choices" }, rows.map((row) => el("button", {
+          class: "mmc-opt mmc-set-opt",
+          "aria-checked": row.value === latent,
+          onclick: () => row.value !== latent && this.set({ latent_seams: row.value }),
+        }, [
+          el("span", { class: "mmc-radio" }),
+          el("span", { class: "mmc-set-opt-text" }, [
+            el("span", { class: "mmc-set-opt-label", text: t(row.label) }),
+            el("span", { class: "mmc-set-opt-note", text: t(row.note) }),
+          ]),
+        ]))),
+        el("div", { class: "mmc-set-foot" }, [
+          el("span", {
+            text: t("Only blended seams between two generated shots. A seam off a clip, "
+                + "a face-passed shot or a shot finished at another canvas reads the "
+                + "frames either way. Read when a render is queued."),
+          }),
+        ]),
+      ]);
+  }
+
+  /**
    * Whether the stage plays what it shows, or waits to be asked. On by
    * default — it is what the stage has always done — and off for the people
    * whose complaint is real: a canvas with a dozen finished renders on it is
@@ -820,7 +867,7 @@ class SettingsPage {
     const leadIn = this.settings.advanced === true || Number(this.settings.turbo_lead_in) > 0
       ? this.renderLeadIn() : [];
     return [this.renderAdvanced(), this.renderPreviews(), this.renderPreviewSize(),
-      ...leadIn, this.renderRefCache(),
+      ...leadIn, this.renderLatentSeams(), this.renderRefCache(),
       this.section("Nodes", "Flow shift pills",
       "Whether the sampler row offers H3's two flow shifts — the video and audio "
       + "schedule clocks. The values apply either way; this only decides who has "
