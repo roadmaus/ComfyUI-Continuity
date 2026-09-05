@@ -280,6 +280,9 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
                             # its sampler latent or None), in order — a seam
                             # defaults to the previous one but may name any
                             # earlier one via `continue_from`
+    handing = settings.seam_handoff()
+    anchor = None           # the first generated pass's latent, the tone every
+                            # levelled seam is pulled back to
 
     for index, one in enumerate(compiled):
         if one is None:
@@ -339,6 +342,13 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
             seams["prev_image"] = frames
             if handoff is not None:
                 seams["prev_latent"] = handoff
+                # Levelled: the first pass's latent rides along as the anchor,
+                # and the segment pulls the slice back to its statistics before
+                # pinning (`encode._level`). Not on the seam off the first pass
+                # itself, where the anchor is the source and the levelling is
+                # the identity.
+                if handing == "levelled" and anchor is not None and anchor is not source[2]:
+                    seams["anchor_latent"] = anchor
         if one.continues_audio:
             # `one.audio_tail_s` rather than the timeline's setting directly:
             # compile clamps it to a feathered seam's overlap, and this is
@@ -432,10 +442,12 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
         # sampler's latent still *is* the delivered pass: a face pass rewrote
         # the frames, and a tail blend trimmed the frames the latent ends on.
         # A family whose segment node has no socket for it, or a machine that
-        # turned the road off to compare (`settings.latent_seams`), hands none.
-        handoff = latent if (family.hands_latents and settings.latent_seams()
+        # picked the frames road to compare (`settings.seam_handoff`), hands none.
+        handoff = latent if (family.hands_latents and handing != "frames"
                              and not one.face and one.ends_feather <= 1) else None
         decoded.append(("pass", source.out(1), handoff))
+        if anchor is None and handoff is not None:
+            anchor = handoff
 
         if per_pass_takes:
             # The pass's own file, written now rather than by the save node at

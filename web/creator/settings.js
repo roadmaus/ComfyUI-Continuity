@@ -651,26 +651,30 @@ class SettingsPage {
    * take a latent at all (`base.Family.hands_latents`).
    */
   renderLatentSeams() {
-    const latent = this.settings.latent_seams !== false;
+    const current = this.settings.seam_handoff || "latent";
     const rows = [
-      { value: true, label: "The latent",
+      { value: "frames", label: "The frames",
+        note: "The road every render took before: the tail is read off the decode "
+            + "and encoded again. Kept for a side-by-side on the same strip." },
+      { value: "latent", label: "The latent",
         note: "The run is sliced off what the sampler made. Nothing is decoded and "
             + "encoded again on the way, so the next shot starts from the picture "
             + "the model actually drew." },
-      { value: false, label: "The frames",
-        note: "The road every render took before: the tail is read off the decode "
-            + "and encoded again. Kept for a side-by-side on the same strip." },
+      { value: "levelled", label: "The latent, levelled",
+        note: "The same slice, pulled back to the first shot's tone and contrast "
+            + "before the model reads it. Each shot still drifts a little within "
+            + "itself, but the next one starts where the first did, so it stops "
+            + "stacking down the strip. The finished frames are not touched." },
     ];
     return this.section("Rendering", "Seam handoff",
-      "What a blended seam hands the next shot: the source pass's own latent, or "
-      + "its frames decoded and encoded again. The round trip darkens the run a "
-      + "little and hardens its contrast, in the same direction at every seam, "
-      + "and that walks down a strip.",
+      "What a blended seam hands the next shot. Every continued shot comes out a "
+      + "little brighter and harder than the one it continues, and the next seam "
+      + "is pinned on that, so it walks down a strip.",
       [
         el("div", { class: "mmc-set-choices" }, rows.map((row) => el("button", {
           class: "mmc-opt mmc-set-opt",
-          "aria-checked": row.value === latent,
-          onclick: () => row.value !== latent && this.set({ latent_seams: row.value }),
+          "aria-checked": row.value === current,
+          onclick: () => row.value !== current && this.set({ seam_handoff: row.value }),
         }, [
           el("span", { class: "mmc-radio" }),
           el("span", { class: "mmc-set-opt-text" }, [

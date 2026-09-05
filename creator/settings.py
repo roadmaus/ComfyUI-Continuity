@@ -76,6 +76,9 @@ def default_prefixes():
     return registry.default_prefixes()
 
 
+# The roads a blended seam can take, see `DEFAULTS["seam_handoff"]`.
+SEAM_HANDOFFS = ("frames", "latent", "levelled")
+
 DEFAULTS = {
     "video_crf": DEFAULT_CRF,
     # `{family: prefix}` apiece — see `default_prefixes` above. Asked of the
@@ -121,11 +124,14 @@ DEFAULTS = {
     # the workflow's; this only says where in that schedule the distillation
     # takes over.
     "turbo_lead_in": 0,
-    # Whether a blended seam takes its run off the source pass's sampler latent
-    # (on) or re-encodes the decoded frames (off). On is the better join — see
-    # `encode._context_slice` — and off is the road every render took before
-    # it existed, kept so the two can be compared on the same strip.
-    "latent_seams": True,
+    # What a blended seam hands the next shot. "latent": the run sliced off the
+    # source pass's sampler latent (`encode._context_slice`). "levelled": the
+    # same slice, pulled back to the first pass's channel statistics before it
+    # is pinned (`encode._level`), so the model's own brightening and
+    # sharpening stop stacking down a strip. "frames": the decoded tail encoded
+    # again — the road every render took before either existed, kept so the
+    # three can be compared on the same strip.
+    "seam_handoff": "latent",
     # The weight files this machine last picked, by family: `{family: {slot:
     # filename, dtype, route, devices}}` — the same block a piece carries, in
     # the same shape.
@@ -365,8 +371,11 @@ def clean(raw):
             clean_settings[key] = value
     if "weights" in raw and raw["weights"] is not None:
         clean_settings["weights"] = clean_weights(raw["weights"])
-    for flag in ("show_shift_pills", "autoplay_previews", "advanced", "latent_cache",
-                 "latent_seams"):
+    if "seam_handoff" in raw and raw["seam_handoff"] is not None:
+        if raw["seam_handoff"] not in SEAM_HANDOFFS:
+            raise ValueError(f"seam_handoff must be one of {', '.join(SEAM_HANDOFFS)}")
+        clean_settings["seam_handoff"] = raw["seam_handoff"]
+    for flag in ("show_shift_pills", "autoplay_previews", "advanced", "latent_cache"):
         if flag in raw and raw[flag] is not None:
             if not isinstance(raw[flag], bool):
                 raise ValueError(f"{flag} must be true or false")
@@ -563,6 +572,6 @@ def turbo_lead_in():
     return load()["turbo_lead_in"]
 
 
-def latent_seams():
-    """Whether a blended seam slices the source pass's latent rather than re-encoding its frames."""
-    return load()["latent_seams"]
+def seam_handoff():
+    """What a blended seam hands the next shot: one of `SEAM_HANDOFFS`."""
+    return load()["seam_handoff"]

@@ -15,10 +15,15 @@ takes the source pass's sampler latent beside its frames and slices the run off
 that, in phase on the same grid; a restored seam hands over the restore's own
 latent. The frames still travel for the text encoder's boundary picture, and a
 seam whose source was face-passed, trimmed at its tail, or finished at another
-canvas reads them as before. `"latent_seams": false` in the settings file
-brings the old road back for a side-by-side. This does not cure the model's own
-drift down a strip, which is issue #41 proper; it removes the part of it the
-VAE added. Issues #41, #46.
+canvas reads them as before. The settings page's "Seam handoff" row offers the
+three roads: the frames, the latent, and the latent *levelled* — the same slice
+pulled back to the first pass's channel mean and spread before the model reads
+it. Measured on an eight-shot strip, the picture brightened about 1.5/255 per
+pass on raw H3 and twice that under a turbo LoRA, and the plain latent handoff
+changed none of it: the drift is the model continuing from its own output and
+adding its bias again. Levelling breaks the stacking at the conditioning, so
+each pass drifts within itself and the next starts where the first did; the
+finished frames are untouched. Issues #41, #46.
 
 **A music cue over a first shot no longer dies looking for an encoder.** A
 sound-lane block over a pass with no seam and no reference audio is still an

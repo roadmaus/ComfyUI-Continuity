@@ -3240,10 +3240,11 @@ check("the settings page has all five tabs", settings.get("tabs"),
 # ship on, and the advanced controls and the shift pills ship off. Advanced
 # leads, because it decides how much of the rest of the tab there is — the turbo
 # lead-in is an advanced control and its three rows are simply not on the page
-# while it is off, which is what makes this list five pairs and not five pairs
-# plus a triple. Then preview playback, which governs the biggest thing a node
-# draws, the seam handoff, the reference cache, and the shift pills last, which
-# change only what is drawn.
+# while it is off, which is what makes this list four pairs and a triple and
+# not that plus another triple. Then preview playback, which governs the
+# biggest thing a node draws, the seam handoff's three roads with the plain
+# latent checked, the reference cache, and the shift pills last, which change
+# only what is drawn.
 #
 # There used to be a fourth pair here, for whether the compiler wrote each
 # reference's scope into the prompt. It is not a choice any more — a label the
@@ -3251,7 +3252,7 @@ check("the settings page has all five tabs", settings.get("tabs"),
 # and the prompt box shows what is actually sent instead.
 check("the node settings show their defaults checked",
       settings.get("shiftRows"),
-      ["true", "false", "true", "false", "true", "false", "true", "false", "true", "false"])
+      ["true", "false", "true", "false", "false", "true", "false", "true", "false", "true", "false"])
 # The step preview's two rails, and the reference cache's two. All four travel a
 # list of stops rather than a range, because nobody is choosing between 30 days
 # and 31 — and the defaults have to land on a named stop, or the page opens
@@ -3274,11 +3275,11 @@ check("...opening on the stored month and 8 GB",
 check("...both live while there is a store to bound", settings.get("cacheDisabled"), [False, False])
 
 # And with the advanced controls on, the turbo lead-in is back on the page: the
-# five pairs (the seam handoff among them) plus its three rows. That is the
-# whole of what the switch does to this tab — it adds a section, it never
+# four pairs and the seam handoff's three rows, plus its own three rows. That is
+# the whole of what the switch does to this tab — it adds a section, it never
 # disables one.
 check("advanced controls bring the turbo lead-in back to the page",
-      (settings.get("advancedRows"), settings.get("advancedLeadIn")), (13, True))
+      (settings.get("advancedRows"), settings.get("advancedLeadIn")), (14, True))
 check("the quality tab shows the encoder value", settings.get("quality"), True)
 # The text scale: four points with the drawn sizes checked on a fresh file, each
 # row saying what it is as a percentage the way the quality rows say their crf.

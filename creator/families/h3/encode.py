@@ -54,6 +54,10 @@ PREV_FRAME = "__prev__"
 # presented to the text encoder off the pixels.
 PREV_LATENT = "__prev_latent__"
 
+# Where the first pass's latent arrives on a levelled seam — the statistics the
+# inherited run is pulled back to before it is pinned. See `_level`.
+ANCHOR_LATENT = "__anchor_latent__"
+
 # Where time is on an H3 audio latent, and the rate its VAE is assumed to run at
 # when it does not name one. `_empty_av_latent` builds `[B, 32, 2, audio_t]`, so
 # time is the *last* axis and the 2 before it is not a channel count worth
@@ -363,7 +367,7 @@ def _context_keyframes(vae, tail, feather, at=0):
     return _pinned_run(encoded, feather, at)
 
 
-def _context_slice(latent, feather, width, height):
+def _context_slice(latent, feather, width, height, anchor=None):
     """The inherited run sliced off the source pass's own latent, or None.
 
     The same pinned guides `_context_keyframes` builds, taken from the tail of
@@ -384,28 +388,78 @@ def _context_slice(latent, feather, width, height):
     refined shot samples at a smaller canvas than the pass it continues was
     finished at — or fewer steps than the run. The caller then encodes the
     pixels as it always did; that road is never wrong, only lossier.
+
+    With an `anchor` — the first pass's latent — the slice is levelled to the
+    anchor's own tail of the same length before it is pinned (`_level`). An
+    anchor too short for that is skipped, not an error: it changes the tone of
+    a join, not whether there is one.
     """
-    video = latent.unbind()[0] if getattr(latent, "is_nested", False) else latent
-    if getattr(video, "ndim", 0) != 5:
-        raise ValueError(
-            f"the inherited latent has shape {tuple(getattr(video, 'shape', ()))}, "
-            f"expected [B, C, T, H, W]"
-        )
+    video = _video(latent)
     if tuple(video.shape[-2:]) != (height // 16, width // 16):
         return None
     steps = next((s for s in range(1, int(video.shape[2]) + 1)
                   if _frames_covered(s) == feather), None)
     if steps is None:
         return None
-    return _pinned_run(video[:, :, -steps:], feather, 0)
+    run = video[:, :, -steps:]
+    if anchor is not None:
+        reference = _video(anchor)
+        if int(reference.shape[2]) >= steps:
+            run = _level(run.float(), reference[:, :, -steps:].float().to(run.device))
+        else:
+            logging.info("[MiniMax] seam: the anchor pass is shorter than the run; not levelled")
+    return _pinned_run(run, feather, 0)
+
+
+def _video(latent):
+    """A LATENT's video stream as `[B, C, T, h, w]`, off the AV pair if nested."""
+    video = latent.unbind()[0] if getattr(latent, "is_nested", False) else latent
+    if getattr(video, "ndim", 0) != 5:
+        raise ValueError(
+            f"the inherited latent has shape {tuple(getattr(video, 'shape', ()))}, "
+            f"expected [B, C, T, H, W]"
+        )
+    return video
+
+
+def _level(run, anchor):
+    """`run` with each channel's mean and spread moved to `anchor`'s.
+
+    Every continued pass comes out a little brighter and a little harder than
+    the pass it continues — measured at about 1.5/255 of luma per pass on raw
+    H3 and twice that under a turbo LoRA — and because the next seam is pinned
+    on that tail, the next pass starts from the drifted tone and adds its own.
+    Levelling breaks the stacking at the conditioning: the run the model is
+    about to read is moved back to the first pass's statistics, so each pass
+    still drifts within itself but the next one starts where the first did. A
+    per-channel affine map, so the structure of the run — the motion, the
+    edges — is untouched; only its tone and its spread move. The delivered
+    frames are never touched by this; the step it leaves at a join is the one
+    pass's own drift, not the strip's.
+
+    `anchor` is the first pass's tail at the run's own length, so like is
+    matched to like: the same moment of a shot, the same phase of steps.
+    """
+    dims = (0, 2, 3, 4)
+    run_mean, run_std = run.mean(dim=dims, keepdim=True), run.std(dim=dims, keepdim=True)
+    anchor_mean, anchor_std = anchor.mean(dim=dims, keepdim=True), anchor.std(dim=dims, keepdim=True)
+    levelled = (run - run_mean) / run_std.clamp(min=1e-6) * anchor_std + anchor_mean
+    logging.info(
+        "[MiniMax] seam: levelled the inherited run to the first pass — channel "
+        "mean moved %.3f on average, spread x%.4f",
+        float((anchor_mean - run_mean).abs().mean()),
+        float(anchor_std.mean() / run_std.mean().clamp(min=1e-6)))
+    return levelled
 
 
 def _inherited_run(vae, compiled, loaded, tail):
     """The head seam's run as pinned guides: off the latent when one reached
-    this segment and fits its canvas, off the pixels otherwise."""
+    this segment and fits its canvas, off the pixels otherwise. Levelled to the
+    anchor first when one rode along (`_level`)."""
     latent = loaded.get(PREV_LATENT, {}).get("latent")
     if latent is not None:
-        guides = _context_slice(latent, compiled.feather, compiled.width, compiled.height)
+        guides = _context_slice(latent, compiled.feather, compiled.width, compiled.height,
+                                anchor=loaded.get(ANCHOR_LATENT, {}).get("latent"))
         if guides is not None:
             return guides
         logging.info("[MiniMax] seam: the inherited latent is at another canvas; encoding the frames")

@@ -717,8 +717,8 @@ check("...and the restore node's latent", _rf_segments[1][1].get("prev_latent"),
 # The road can be closed from the settings file to compare the two joins on
 # one strip; closed, the graph is byte-for-byte what it was before it existed.
 _settings = importlib.import_module(f"{PACKAGE}.creator.settings")
-_was = _settings.latent_seams
-_settings.latent_seams = lambda: False
+_was = _settings.seam_handoff
+_settings.seam_handoff = lambda: "frames"
 try:
     _off = build(blob(audio_tail_s=2.0, segments=[
         {"prompt": "one", "duration_s": 5},
@@ -727,7 +727,7 @@ try:
         {"prompt": "three", "duration_s": 5, "continue": True},
     ])).expand
 finally:
-    _settings.latent_seams = _was
+    _settings.seam_handoff = _was
 check("with latent seams off no segment is handed a latent",
       any("prev_latent" in n["inputs"] for n in _off.values()
           if n["class_type"] == "MiniMaxH3TimelineSegment"), False)
@@ -739,6 +739,33 @@ def _shape(graph, drop=()):
     return re.sub(r"\.0\.\d+\.", ".N.", text)
 check("...and the graph is otherwise the one above",
       _shape(_off), _shape(feathered, drop=("prev_latent",)))
+check("the latent road wires no anchor",
+      any("anchor_latent" in n["inputs"] for n in feathered.values()), False)
+
+# Levelled: every blended seam past the first also gets the first pass's latent
+# to level against. Not the seam off the first pass itself — its source *is* the
+# anchor, and levelling a run to its own statistics is the identity.
+_settings.seam_handoff = lambda: "levelled"
+try:
+    _lv = build(blob(segments=[
+        {"prompt": "one", "duration_s": 5},
+        {"prompt": "two", "duration_s": 5, "continue": True, "feather": 22},
+        {"prompt": "three", "duration_s": 5, "continue": True, "feather": 22},
+        {"prompt": "four", "duration_s": 5, "continue": True},
+    ])).expand
+finally:
+    _settings.seam_handoff = _was
+_lv_chain = in_order([(n_id, n["inputs"]) for n_id, n in _lv.items()
+                      if n["class_type"] == "MiniMaxH3TimelineSegment"],
+                     ["one", "two", "three", "four"])
+_lv_first_sampler = [n_id for n_id, n in _lv.items() if n["class_type"] == "KSampler"
+                     and n["inputs"]["model"][0] == _lv_chain[0][0]][0]
+check("levelled: the seam off the first pass has the latent and no anchor",
+      ("prev_latent" in _lv_chain[1][1], "anchor_latent" in _lv_chain[1][1]), (True, False))
+check("levelled: the next blended seam is anchored to the first pass's sampler",
+      _lv_chain[2][1].get("anchor_latent"), [_lv_first_sampler, 0])
+check("levelled: a classic seam gets neither",
+      any(k in _lv_chain[3][1] for k in ("prev_latent", "anchor_latent")), False)
 
 # The encoder's guide arithmetic, against a stand-in VAE: one call over the
 # run, one block per latent step, pinned at the offsets core's temporal grid
@@ -790,6 +817,30 @@ check("a latent at another canvas is not sliced",
       encoder_mod._context_slice(_pass_latent, 22, 128, 64), None)
 check("a latent shorter than the run is not sliced",
       encoder_mod._context_slice(_pass_latent[:, :, :5], 22, 64, 64), None)
+
+# Levelling: per channel, the run's mean and spread become the anchor's tail's,
+# and nothing else about it moves — the order of the frames, the spatial shape.
+_g = _torch.Generator().manual_seed(7)
+_run_latent = _torch.randn(1, 24, 37, 4, 4, generator=_g) * 3.0 + 2.0
+_anchor_latent = _torch.randn(1, 24, 37, 4, 4, generator=_g) * 0.5 - 1.0
+_levelled = _torch.cat([g["latent"] for g in encoder_mod._context_slice(
+    _run_latent, 22, 64, 64, anchor=_anchor_latent)], dim=2)
+_ref = _anchor_latent[:, :, -7:]
+check("a levelled run carries the anchor tail's channel means",
+      _torch.allclose(_levelled.mean(dim=(0, 2, 3, 4)), _ref.mean(dim=(0, 2, 3, 4)), atol=1e-4), True)
+check("...and its channel spreads",
+      _torch.allclose(_levelled.std(dim=(0, 2, 3, 4)), _ref.std(dim=(0, 2, 3, 4)), atol=1e-4), True)
+_plain = _torch.cat([g["latent"] for g in encoder_mod._context_slice(
+    _run_latent, 22, 64, 64)], dim=2)
+check("...while its structure is the run's own (correlation 1 per channel)",
+      bool(((_plain - _plain.mean(dim=(0, 2, 3, 4), keepdim=True))
+            * (_levelled - _levelled.mean(dim=(0, 2, 3, 4), keepdim=True))).mean(dim=(0, 2, 3, 4))
+           .div(_plain.std(dim=(0, 2, 3, 4), unbiased=False)
+                * _levelled.std(dim=(0, 2, 3, 4), unbiased=False))
+           .sub(1).abs().max() < 1e-3), True)
+check("an anchor shorter than the run leaves it as sliced",
+      _torch.equal(_torch.cat([g["latent"] for g in encoder_mod._context_slice(
+          _run_latent, 22, 64, 64, anchor=_anchor_latent[:, :, :3])], dim=2), _plain), True)
 
 # ---- the reel node, run rather than drawn -----------------------------------
 #

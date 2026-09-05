@@ -117,10 +117,13 @@ refuses("a fractional lead-in", {"turbo_lead_in": 1.5}, "whole number")
 # a one-step lead-in nobody picked.
 refuses("a boolean lead-in", {"turbo_lead_in": True}, "whole number")
 
-check("latent seams are on by default", settings.clean({})["latent_seams"], True)
-check("...and can be turned off", settings.clean({"latent_seams": False})["latent_seams"], False)
-check("a null is the default", settings.clean({"latent_seams": None})["latent_seams"], True)
-refuses("a non-boolean latent_seams", {"latent_seams": 1}, "true or false")
+check("the seam handoff is the latent by default", settings.clean({})["seam_handoff"], "latent")
+check("...and can be any of the three roads",
+      [settings.clean({"seam_handoff": road})["seam_handoff"] for road in settings.SEAM_HANDOFFS],
+      list(settings.SEAM_HANDOFFS))
+check("a null is the default", settings.clean({"seam_handoff": None})["seam_handoff"], "latent")
+refuses("a road that does not exist", {"seam_handoff": "pixels"}, "one of")
+refuses("the old boolean", {"seam_handoff": True}, "one of")
 
 # The reference cache's two numbers. Both are magnitudes with a meaningful
 # zero, which is the thing to hold down: 0 GB is not "no cache", it is the
