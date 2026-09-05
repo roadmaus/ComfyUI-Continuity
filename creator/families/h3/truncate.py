@@ -1,32 +1,35 @@
 """The drift guard: a pass's clip read off the model's last few guesses at it,
 averaged, rather than off its final one.
 
-A rectified-flow sampler walks from noise to picture in steps, and the picture
-it ends on is, exactly, the noise minus the velocity it predicted at each step
-times that step's width. Regroup the same sum and every step is a full guess at
-the clean latent — `x_s - s * v_i`, the picture the model would have finished
-on had it kept the velocity it predicted there — and the sampler's output is
-the average of those guesses, each weighted by its step. "Towards Error-Free
-Long Video Generation" (arXiv 2606.22370) looks at the guesses one at a time
-on a chained Wan model and finds where the drift lives: the late steps, which
-add texture and with it the over-sharpening and the small brightness bias that
-each continued shot inherits and adds to again, and the very early ones, which
-carry the colour cast. It keeps the guesses from a window of the schedule,
-renormalises, and hands *that* on as the clip — training-free, and on their
-chain it is what stops the compounding. Issues #41 and #46 describe the same
-ramp on H3, and on an eight-shot strip this took the frying out of it.
+A rectified-flow sampler walks from noise to picture in steps, and at every
+step the model makes a full guess at the clean picture — the `denoised` the
+sampler steps toward. The picture the run ends on is, on a Euler step to zero,
+exactly the last of those guesses. "Towards Error-Free Long Video Generation"
+(arXiv 2606.22370) writes the output as the step-weighted average of the
+guesses instead, looks at them one at a time on a chained Wan model, and finds
+where the drift lives: the late steps, which add texture and with it the
+over-sharpening and the small brightness bias each continued shot inherits and
+adds to again. It hands on the average over a window of the schedule and, on
+their chain, that stops the compounding with no training. Issues #41 and #46
+describe the same ramp on H3, and on an eight-shot strip averaging the last
+few guesses took the frying out of it.
 
-This is that, as a model patch, counted in guesses rather than in the paper's
-sigma. H3 samples at flow shift 12, where a 20-step schedule's last three
-steps start at sigma 0.68, 0.57 and 0.39 and a turbo schedule's steps all
-start above 0.6: a window on sigma is about the last few steps of a long
-schedule and catches one step or none of a short one. "The last N guesses"
-means the same thing on both, and it is what the settings page's one rail
-says. Fewer guesses hold the shot before more truly and come out softer; every
-guess comes out crisper and a little less faithful, since the early guesses
-are the model's generic ones. Measured, not derived: the strip said so.
+This is that, as a model patch, with two departures from the paper. It is
+counted in guesses rather than sigma: H3 samples at flow shift 12, where a
+20-step schedule's last three steps start at sigma 0.68, 0.57 and 0.39 and a
+turbo schedule's steps all start above 0.6, so a window on sigma is about the
+last few steps of a long schedule and catches one step or none of a short one,
+while "the last N guesses" means the same thing on both. And the guess is the
+model's own prediction at the step, not the paper's `noise - velocity`: the
+two agree only when every velocity along the run came from one consistent
+model, which a 20-step base run is and a turbo run is not — three lead-in
+steps on the base weights and five on the distillation disagree wildly, and
+the paper's form folds that disagreement into every guess. Averaging the
+predictions themselves needs no such assumption, and one guess is the plain
+render. Each guess beyond it is steadier and a little softer; the early guesses
+are the model's generic picture, so many of them loosen faces and objects.
 
-A post-cfg hook records each step's velocity while the sampler runs, and a
+A post-cfg hook records each step's prediction while the sampler runs, and a
 wrapper round the sampler swaps its output for the average once the schedule
 reaches zero. Only the picture: H3's latent packs the sound beside it, and the
 sound row leaves as the sampler made it. The patch sees a schedule sampled in
@@ -49,15 +52,13 @@ TRUNCATE_NODE = "MiniMaxH3TruncatedFlow"
 class Trajectory:
     """One schedule's worth of steps, whatever number of sittings sample it.
 
-    `record` keeps the last `guesses` steps' `d_i * v_i` and `d_i` — every
-    step's, when `guesses` is 0 — beside where the schedule was entered and the
-    sigma there. `finish` reads the average off them.
+    `record` keeps the last `guesses` steps' predictions, each with its step's
+    width — every step's, when `guesses` is 0. `finish` reads the weighted
+    average off them.
     """
 
     def __init__(self, guesses=0):
         self.guesses = int(guesses)
-        self.start = None
-        self.s = None
         self.terms = deque(maxlen=self.guesses or None)
         self.last = None        # the sigma the latest sitting stopped on
 
@@ -65,14 +66,12 @@ class Trajectory:
         """Whether a sitting starting on `sigma` is this schedule's next one."""
         return self.last is not None and abs(self.last - float(sigma)) < 1e-6
 
-    def record(self, sigma, width, x, denoised):
-        """One model call: `x` at `sigma`, and what the model made of it."""
-        sigma, width = float(sigma), float(width)
+    def record(self, width, denoised):
+        """One model call: its prediction, and the width of the step it opens."""
+        width = float(width)
         if width <= 0:
             return
-        if self.start is None:
-            self.start, self.s = _float(x), sigma
-        self.terms.append((_float((x - denoised) / sigma) * width, width))
+        self.terms.append((_float(denoised) * width, width))
 
     def finish(self, samples):
         """The average of the kept guesses, or `samples` where none was kept."""
@@ -83,7 +82,7 @@ class Trajectory:
         for term, width in self.terms:
             acc = term if acc is None else acc + term
             weight += width
-        out = self.start - acc * (self.s / weight)
+        out = acc * (1.0 / weight)
         if getattr(samples, "is_nested", False):
             # The picture is redrawn from the guesses; the sound row leaves as
             # the sampler made it.
@@ -122,7 +121,7 @@ def _patch(model, guesses):
         if _open is not None:
             sigmas = args["model_options"]["transformer_options"]["sample_sigmas"]
             sigma = float(args["sigma"].flatten()[0])
-            _open.record(sigma, _step_width(sigma, sigmas), args["input"], args["denoised"])
+            _open.record(_step_width(sigma, sigmas), args["denoised"])
         return args["denoised"]
 
     def sample(executor, guider, sigmas, *rest):
@@ -152,14 +151,14 @@ class MiniMaxH3TruncatedFlow(io.ComfyNode):
             node_id=TRUNCATE_NODE,
             display_name="MiniMax H3 Drift Guard",
             category="MiniMax/internal",
-            description=("Hands on the step-weighted average of the sampler's last "
-                         "few clean-latent guesses instead of its last step, so the "
-                         "over-sharpening and brightness bias a continued shot adds "
-                         "stay out of the clip the next seam continues from. 0 "
-                         "guesses means every step's."),
+            description=("Hands on the step-weighted average of the model's last "
+                         "few clean-picture predictions instead of the sampler's last "
+                         "step, so the over-sharpening and brightness bias a continued "
+                         "shot adds stay out of the clip the next seam continues from. "
+                         "One guess is the plain render; 0 means every step's."),
             inputs=[
                 io.Model.Input("model"),
-                io.Int.Input("guesses", default=3, min=0, max=999,
+                io.Int.Input("guesses", default=3, min=0, max=99,
                              tooltip="How many of the schedule's last steps are averaged; 0 for all of them."),
             ],
             outputs=[io.Model.Output()],

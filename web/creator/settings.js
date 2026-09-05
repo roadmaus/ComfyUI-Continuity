@@ -189,14 +189,12 @@ const PREVIEW_PX_STOPS = [
   { value: 512 }, { value: 640, label: "640" }, { value: 768 },
   { value: 1024, label: "1024" },
 ];
-// The drift guard's stops: off, then how many of a pass's last guesses are
-// averaged, then every one of them. `EVERY_GUESS` mirrors settings.py — no
-// schedule has this many steps, and the node reads a count past the schedule
-// as all of it.
-const EVERY_GUESS = 99;
+// The drift guard's stops: off, then how many of the model's last guesses at
+// a pass are averaged. One guess is the plain render, so the rail starts at
+// two; past eight the early, generic guesses are most of the average.
 const DRIFT_STOPS = [
-  { value: 0, label: "Off" }, { value: 2 }, { value: 3, label: "Truest" }, { value: 4 },
-  { value: 6 }, { value: 8 }, { value: 12 }, { value: EVERY_GUESS, label: "Crispest" },
+  { value: 0, label: "Off" }, { value: 2, label: "Lightest" }, { value: 3 }, { value: 4 },
+  { value: 6 }, { value: 8, label: "Steadiest" },
 ];
 
 const PREVIEW_Q_STOPS = [
@@ -651,12 +649,11 @@ class SettingsPage {
    * same rule the Custom quality row lives by.
    */
   /**
-   * The drift guard (issues #41, #46). A flow sampler's output is, exactly,
-   * the average of every step's own guess at the clean picture, weighted by
-   * the step; the guard averages the last few of those instead of taking the
-   * final one, which is where a continued shot's brightening and sharpening
-   * are added. One rail, counted in guesses rather than sigma so it means the
-   * same on a 20-step schedule and a turbo one. Per machine like the seam
+   * The drift guard (issues #41, #46). At every step the model makes a full
+   * guess at the clean picture, and the render is its last one; the guard
+   * averages the last few instead, which is where a continued shot's
+   * brightening and sharpening are added. One rail, counted in guesses rather
+   * than sigma so it means the same on a 20-step schedule and a turbo one. Per machine like the seam
    * handoff: it is a statement about how a pass is read, not about the piece.
    * H3 only.
    */
@@ -667,25 +664,21 @@ class SettingsPage {
       value: current,
       name: "Drift guard",
       read: (value) => ({
-        value: value === 0 ? t("Off")
-          : value >= EVERY_GUESS ? t("Every guess")
-          : t("Last {n} guesses", { n: value }),
+        value: value === 0 ? t("Off") : t("Last {n} guesses", { n: value }),
       }),
       note: (value) => value === 0
         ? t("The clip is the model's final guess, as before. Continued shots drift.")
         : value <= 3
-          ? t("Truest to the shot before: faces and objects hold. Softest picture.")
-          : value < EVERY_GUESS
-            ? t("Between the two: a little crisper, a little freer.")
-            : t("Crispest picture, least faithful to the shot before."),
+          ? t("Closest to a plain render, with the drift taken out. Start here.")
+          : t("Steadier and softer. Faces and objects may loosen a little."),
       apply: (value) => this.set({ drift_guard: value }),
     });
     return this.section("Rendering", "Drift guard",
       "Every continued shot comes out a little brighter and harsher than the "
       + "one before it, until the end of a long strip looks fried. The guard "
       + "averages the model's last few guesses at each shot instead of keeping "
-      + "only its final one, and the drift stops. Fewer guesses stay truer to "
-      + "the shot before; more come out crisper.",
+      + "only its final one, and the drift stops. Fewer guesses look most like "
+      + "a plain render; more are steadier and softer.",
       [
         el("div", { class: "mmc-set-field" }, [rail]),
         el("div", { class: "mmc-set-foot" }, [

@@ -78,11 +78,9 @@ def default_prefixes():
 
 # The roads a blended seam can take, see `DEFAULTS["seam_handoff"]`.
 SEAM_HANDOFFS = ("frames", "latent", "levelled")
-# The drift guard's "every guess" stop, see `DEFAULTS["drift_guard"]`. No
-# schedule here has this many steps, and the node reads a count past the
-# schedule as all of it.
-EVERY_GUESS = 99
-MAX_DRIFT_GUARD = EVERY_GUESS
+# The drift guard's ceiling, see `DEFAULTS["drift_guard"]`. Past the schedule
+# the node averages all of it; the page offers up to 8.
+MAX_DRIFT_GUARD = 99
 
 DEFAULTS = {
     "video_crf": DEFAULT_CRF,
@@ -137,13 +135,13 @@ DEFAULTS = {
     # again — the road every render took before either existed, kept so the
     # three can be compared on the same strip.
     "seam_handoff": "latent",
-    # The drift guard: how many of a pass's last steps its latent is the
-    # average of. 0 is off — the sampler's last step, as every render before
-    # this. A small count holds the shot before most truly and comes out
-    # softest; `EVERY_GUESS` averages the whole schedule, crisper and a little
-    # less faithful. Counted in steps rather than the paper's sigma so one
-    # setting means the same on a 20-step schedule and a turbo one. See
-    # `families/h3/truncate.py`; H3 only.
+    # The drift guard: how many of the model's last guesses at a pass its
+    # latent is the average of. 0 is off — the sampler's last step, as every
+    # render before this, and on a Euler run the same as 1. Each guess beyond
+    # is steadier and a little softer; many loosen faces and objects. Counted
+    # in steps rather than the paper's sigma so one setting means the same on
+    # a 20-step schedule and a turbo one. See `families/h3/truncate.py`; H3
+    # only.
     "drift_guard": 0,
     # The weight files this machine last picked, by family: `{family: {slot:
     # filename, dtype, route, devices}}` — the same block a piece carries, in

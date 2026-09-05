@@ -779,8 +779,7 @@ check("levelled: a classic seam gets neither",
 
 # The drift guard. Off by default and off emits nothing; on, one patch per
 # generation sits between the accelerators and the sampler carrying the count,
-# and the sampler runs on it. The page's "every guess" stop is the node's 0.
-# Read off the file like the seam handoff, so it is in the cache key for the
+# and the sampler runs on it. Read off the file like the seam handoff, so it is in the cache key for the
 # same reason.
 check("off, no drift guard node is emitted", "MiniMaxH3TruncatedFlow" in by_type, False)
 _was_dg = _settings.drift_guard
@@ -788,9 +787,6 @@ _settings.drift_guard = lambda: 3
 try:
     _dg = build().expand
     _fp_three = cn.MiniMaxH3Timeline.fingerprint_inputs(timeline_data=DATA)
-    _settings.drift_guard = lambda: _settings.EVERY_GUESS
-    _every = {n["inputs"]["guesses"] for n in build().expand.values()
-              if n["class_type"] == "MiniMaxH3TruncatedFlow"}
 finally:
     _settings.drift_guard = _was_dg
 _dg_nodes = {n_id: n["inputs"] for n_id, n in _dg.items()
@@ -800,7 +796,6 @@ check("...carrying the count", {i["guesses"] for i in _dg_nodes.values()}, {3})
 check("...and every sampler runs on it",
       all(n["inputs"]["model"][0] in _dg_nodes
           for n in _dg.values() if n["class_type"] == "KSampler"), True)
-check("every guess is the node's zero", _every, {0})
 check("the drift guard is part of the node's cache key",
       _fp_three != cn.MiniMaxH3Timeline.fingerprint_inputs(timeline_data=DATA), True)
 

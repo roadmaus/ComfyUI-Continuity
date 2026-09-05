@@ -156,7 +156,7 @@ def truncated(graph, model):
 
     Off by default, and off means nothing is emitted. On, the pass's latent is
     the average of the model's last few guesses at it rather than its last
-    step (`truncate.py`); the page's "every guess" stop is the node's 0. Only
+    step (`truncate.py`). Only
     the pass and its lead-in: the refine, the face crop and the restore resume
     partway down the schedule and redraw texture on purpose, which is the part
     this averages away.
@@ -164,8 +164,7 @@ def truncated(graph, model):
     guard = settings.drift_guard()
     if guard <= 0:
         return model
-    return graph.node(truncate.TRUNCATE_NODE, model=model,
-                      guesses=0 if guard >= settings.EVERY_GUESS else guard).out(0)
+    return graph.node(truncate.TRUNCATE_NODE, model=model, guesses=guard).out(0)
 
 
 def face_payload(payload, face):
