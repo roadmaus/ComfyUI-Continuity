@@ -121,6 +121,11 @@ DEFAULTS = {
     # the workflow's; this only says where in that schedule the distillation
     # takes over.
     "turbo_lead_in": 0,
+    # Whether a blended seam takes its run off the source pass's sampler latent
+    # (on) or re-encodes the decoded frames (off). On is the better join — see
+    # `encode._context_slice` — and off is the road every render took before
+    # it existed, kept so the two can be compared on the same strip.
+    "latent_seams": True,
     # The weight files this machine last picked, by family: `{family: {slot:
     # filename, dtype, route, devices}}` — the same block a piece carries, in
     # the same shape.
@@ -295,6 +300,10 @@ def clean(raw):
         if not 0 <= lead <= MAX_LEAD_IN:
             raise ValueError(f"turbo_lead_in must be between 0 and {MAX_LEAD_IN}")
         clean_settings["turbo_lead_in"] = lead
+    if "latent_seams" in raw and raw["latent_seams"] is not None:
+        if not isinstance(raw["latent_seams"], bool):
+            raise ValueError("latent_seams must be true or false")
+        clean_settings["latent_seams"] = raw["latent_seams"]
     if "text_scale" in raw and raw["text_scale"] is not None:
         scale = raw["text_scale"]
         # `True` is an int in Python and would sail through as scale 1, the same
@@ -555,3 +564,8 @@ def image_prefix(family):
 def turbo_lead_in():
     """How many opening steps a turbo render samples without the distillation."""
     return load()["turbo_lead_in"]
+
+
+def latent_seams():
+    """Whether a blended seam slices the source pass's latent rather than re-encoding its frames."""
+    return load()["latent_seams"]

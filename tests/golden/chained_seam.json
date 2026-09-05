@@ -50,6 +50,10 @@
         "10",
         0
       ],
+      "prev_latent": [
+        "7",
+        0
+      ],
       "segment_data": "{\"canvas\": {\"clamped\": false, \"from_image\": false, \"height\": 768, \"label\": \"16:9\", \"ratio\": 1.7777777777777777, \"width\": 1344}, \"continue\": true, \"continue_audio\": true, \"feather\": 5, \"progress\": {\"index\": 2}, \"request\": {\"aspect\": \"16:9\", \"audio_tail_s\": 1.0, \"duration_s\": 5, \"loras\": [], \"music\": \"\", \"prompt\": \"a house at dusk\\ncloser\", \"short_edge\": 768, \"soundscape\": \"\"}}",
       "vae": [
         "3",

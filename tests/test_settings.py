@@ -117,6 +117,11 @@ refuses("a fractional lead-in", {"turbo_lead_in": 1.5}, "whole number")
 # a one-step lead-in nobody picked.
 refuses("a boolean lead-in", {"turbo_lead_in": True}, "whole number")
 
+check("latent seams are on by default", settings.clean({})["latent_seams"], True)
+check("...and can be turned off", settings.clean({"latent_seams": False})["latent_seams"], False)
+check("a null is the default", settings.clean({"latent_seams": None})["latent_seams"], True)
+refuses("a non-boolean latent_seams", {"latent_seams": 1}, "true or false")
+
 # The reference cache's two numbers. Both are magnitudes with a meaningful
 # zero, which is the thing to hold down: 0 GB is not "no cache", it is the
 # in-session one with nothing written to disk, and 0 days is not "drop

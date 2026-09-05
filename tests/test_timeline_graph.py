@@ -680,6 +680,66 @@ seg3_last_frame = feathered[fchain[2][1]["prev_image"][0]]
 check("the next seam inherits from the trimmed pass",
       seg3_last_frame["inputs"]["source"][0], trim_id)
 
+# The latent handoff (issues #41, #46). A blended seam is also handed the
+# source pass's sampler latent, beside its frames, and slices its run off that
+# rather than re-encoding the decode — the round trip darkens and hardens the
+# run a little in the same direction every time, and it walks down a strip. A
+# classic single-frame seam is not: one frame is not a latent step.
+seg1_sampler = [node_id for node_id, n in feathered.items()
+                if n["class_type"] == "KSampler"
+                and n["inputs"]["model"][0] == fchain[0][0]][0]
+check("the blended seam is handed the source pass's sampler latent",
+      fchain[1][1].get("prev_latent"), [seg1_sampler, 0])
+check("...and its frames still, for the text encoder and the fallback",
+      "prev_image" in fchain[1][1], True)
+check("a classic seam is handed no latent", "prev_latent" in fchain[2][1], False)
+check("the reel decodes that same latent — the handoff is the delivered pass",
+      trim_sampler["inputs"]["model"][0] == fchain[1][0]
+      and feathered[fchain[1][1]["prev_latent"][0]]["inputs"]["model"][0] == fchain[0][0],
+      True)
+
+# A restored blended seam hands over the *restore's* latent: that is the run the
+# segment continues from, and re-encoding the restore's decode would put the
+# round trip straight back.
+_rf = build(blob(segments=[
+    {"prompt": "one", "duration_s": 5},
+    {"prompt": "two", "duration_s": 5, "continue": True, "feather": 22,
+     "seam_restore": 0.45},
+])).expand
+_rf_segments = in_order([(n_id, n["inputs"]) for n_id, n in _rf.items()
+                         if n["class_type"] == "MiniMaxH3TimelineSegment"], ["one", "two"])
+_rf_restore = [n_id for n_id, n in _rf.items() if n["class_type"] == "MiniMaxH3SeamRestore"]
+check("a restored blended seam takes the restore node's frames",
+      _rf_segments[1][1]["prev_image"], [_rf_restore[0], 0])
+check("...and the restore node's latent", _rf_segments[1][1].get("prev_latent"),
+      [_rf_restore[0], 1])
+
+# The road can be closed from the settings file to compare the two joins on
+# one strip; closed, the graph is byte-for-byte what it was before it existed.
+_settings = importlib.import_module(f"{PACKAGE}.creator.settings")
+_was = _settings.latent_seams
+_settings.latent_seams = lambda: False
+try:
+    _off = build(blob(audio_tail_s=2.0, segments=[
+        {"prompt": "one", "duration_s": 5},
+        {"prompt": "two", "duration_s": 5, "continue": True, "continue_audio": True,
+         "feather": 22},
+        {"prompt": "three", "duration_s": 5, "continue": True},
+    ])).expand
+finally:
+    _settings.latent_seams = _was
+check("with latent seams off no segment is handed a latent",
+      any("prev_latent" in n["inputs"] for n in _off.values()
+          if n["class_type"] == "MiniMaxH3TimelineSegment"), False)
+def _shape(graph, drop=()):
+    """A graph's inputs with the builder's per-run id prefix taken off."""
+    import re
+    text = json.dumps({k: {kk: vv for kk, vv in n["inputs"].items() if kk not in drop}
+                       for k, n in graph.items()}, sort_keys=True)
+    return re.sub(r"\.0\.\d+\.", ".N.", text)
+check("...and the graph is otherwise the one above",
+      _shape(_off), _shape(feathered, drop=("prev_latent",)))
+
 # The encoder's guide arithmetic, against a stand-in VAE: one call over the
 # run, one block per latent step, pinned at the offsets core's temporal grid
 # dictates — and a refusal when the two stop agreeing.
@@ -714,6 +774,22 @@ try:
     FAILURES.append("a coverage mismatch should refuse to render, got no error")
 except ValueError:
     pass
+
+# The slice: the same seven blocks off the tail of a 124-frame pass's latent
+# (37 steps), in phase because both lengths are on the 17k+5 grid — and None,
+# for the pixel road, when the latent is at another canvas or too short.
+_pass_latent = _torch.arange(37, dtype=_torch.float32).view(1, 1, 37, 1, 1).expand(1, 24, 37, 4, 4)
+sliced = encoder_mod._context_slice(_pass_latent, 22, 64, 64)
+check("22 frames are the last 7 steps of the source latent", len(sliced), 7)
+check("...the last seven, in order",
+      [float(g["latent"][0, 0, 0, 0, 0]) for g in sliced], [30.0, 31, 32, 33, 34, 35, 36])
+_anchor = "resolved_frame_index" if payload_mod.CORE_ANCHORS_ANYWHERE else payload_mod.FRAME_INDEX_KEY
+check("...pinned where the encode road pins them",
+      [g[_anchor] for g in sliced], [g[_anchor] for g in guides])
+check("a latent at another canvas is not sliced",
+      encoder_mod._context_slice(_pass_latent, 22, 128, 64), None)
+check("a latent shorter than the run is not sliced",
+      encoder_mod._context_slice(_pass_latent[:, :, :5], 22, 64, 64), None)
 
 # ---- the reel node, run rather than drawn -----------------------------------
 #

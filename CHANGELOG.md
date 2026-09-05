@@ -5,6 +5,21 @@ and everything under it is kept exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**A blended seam continues from the latent the model made, not from a VAE
+round trip of it.** The run a seam inherits used to be read off the source
+pass's decode and encoded again; measured on H3, that trip darkens the run by
+about 1.3/255 and hardens its contrast by about half a percent, in the same
+direction every time, and since every seam re-encodes a tail that was itself
+decoded from the pass before, it walked down a strip. The segment node now
+takes the source pass's sampler latent beside its frames and slices the run off
+that, in phase on the same grid; a restored seam hands over the restore's own
+latent. The frames still travel for the text encoder's boundary picture, and a
+seam whose source was face-passed, trimmed at its tail, or finished at another
+canvas reads them as before. `"latent_seams": false` in the settings file
+brings the old road back for a side-by-side. This does not cure the model's own
+drift down a strip, which is issue #41 proper; it removes the part of it the
+VAE added. Issues #41, #46.
+
 **A music cue over a first shot no longer dies looking for an encoder.** A
 sound-lane block over a pass with no seam and no reference audio is still an
 encode — the cue is written into the audio latent through the audio VAE — but

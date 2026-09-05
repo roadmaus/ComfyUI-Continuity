@@ -696,6 +696,7 @@ class H3(base.Family):
 
 
     restores_seams = True
+    hands_latents = True
 
     def emit_seam_restore(self, graph, links, frames, payload, compiled, denoise,
                           weights, sampling, acceleration, seed):
@@ -723,14 +724,15 @@ class H3(base.Family):
         # same model re-drawing a few frames of its own picture. No lead-in:
         # like the refine, this resumes partway down the schedule.
         model = patched(graph, segment.out(0), sampling, acceleration, weights)
-        return graph.node(
+        restored = graph.node(
             SEAM_RESTORE_NODE, model=model, positive=segment.out(1),
             negative=graph.node("ConditioningZeroOut",
                                 conditioning=segment.out(1)).out(0),
             vae=links.vae, frames=frames,
             seed=seed, steps=sampling.steps, cfg=sampling.cfg,
             sampler_name=sampling.sampler_name, scheduler=sampling.scheduler,
-            denoise=float(denoise)).out(0)
+            denoise=float(denoise))
+        return restored.out(0), restored.out(1)
 
 
 FAMILY = H3()
