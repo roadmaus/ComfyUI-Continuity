@@ -56,7 +56,7 @@ import logging
 from comfy_api.latest import io
 
 from . import (compile as compiler, guide, lora, media, mux,
-               outputs, settings, spill)
+               outputs, seamprobe, settings, spill)
 
 # The reel's own socket type: the parts of the finished video in play order,
 # each of them a file — a pass `spill.py` wrote, or a clip the user supplied.
@@ -246,6 +246,8 @@ class MiniMaxH3Reel(io.ComfyNode):
 
         images = nodes.VAEDecode().decode(vae, samples)[0]
         audio = vae_decode_audio(audio_vae, samples)
+        if seamprobe.enabled():
+            seamprobe.run(samples, vae, images)
 
         head, tail = max(0, int(head)), max(0, int(tail))
         if head or tail:
