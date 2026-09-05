@@ -5,24 +5,23 @@ and everything under it is kept exactly as it was written, wall of text and all.
 
 ## Unreleased
 
-**A pass's clip can be read off the middle of its schedule.** A flow sampler's
-output is, exactly, the average of every step's own guess at the clean picture,
-each weighted by its step; "Towards Error-Free Long Video Generation" (arXiv
-2606.22370) takes those guesses apart on a chained Wan model and finds the
-drift in the late ones — the texture steps, which add the sharpening and the
-small brightening every continued shot inherits and adds to again — and the
-colour cast in the earliest. Keeping the guesses from a window of the schedule
-and renormalising is what stopped the walk on their chain, with no training.
-The settings page's new "Flow truncation" row does that here for H3 passes and
-their turbo lead-in: off, the late steps dropped (sigma 0.3 and up), both
-ends (0.3 to 0.7, the paper's window), or a custom pair of sigmas on two
-rails. A model patch records each step's velocity and swaps the sampler's
-output for the windowed average once the schedule reaches zero; the sound row
-leaves as the sampler made it. Off by default and off emits nothing. On an
-eight-shot 20-step strip the frying at the end of the strip was gone under
-either named window; the custom pair is there because H3 samples at shift 12,
-where a turbo schedule's steps all start above sigma 0.6 and the named windows
-catch one of them or none. Issues #41, #46.
+**A drift guard for chained shots.** Every continued shot came out a little
+brighter and harsher than the one before it, until the end of a long strip
+looked fried (issues #41, #46). A flow sampler's output is, exactly, the
+step-weighted average of every step's own guess at the clean picture, and
+"Towards Error-Free Long Video Generation" (arXiv 2606.22370) finds the drift
+in the late guesses on a chained Wan model and stops it, with no training, by
+handing on a window of the schedule instead. The settings page's new "Drift
+guard" rail does that for H3 passes and their turbo lead-in: off, or the
+average of the model's last few guesses at each shot, up to every one of them.
+Counted in guesses rather than the paper's sigma, so one setting means the
+same on a 20-step schedule and a turbo one — H3 samples at shift 12, where a
+turbo schedule's steps all start above sigma 0.6. On an eight-shot 20-step
+strip the frying was gone at every setting; fewer guesses held faces and
+objects truer and came out softer, every guess crisper and a little less
+faithful. A model patch records each step's velocity and swaps the sampler's
+output for the average once the schedule reaches zero; the sound row leaves as
+the sampler made it. Off by default and off emits nothing.
 
 **A blended seam continues from the latent the model made, not from a VAE
 round trip of it.** The run a seam inherits used to be read off the source

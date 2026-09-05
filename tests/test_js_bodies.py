@@ -1369,7 +1369,11 @@ try {
     return found;
   };
   const previewRails = rails.slice(0, 2);
-  const cacheRails = rails.slice(2);
+  const guardRail = rails[2];
+  const cacheRails = rails.slice(3);
+  out.settings.guardStops = Number(railOf(guardRail).getAttribute("max")) + 1;
+  out.settings.guardReads = guardRail.children?.[1]?.children?.[0]?.children?.[0]?.text
+    ?? guardRail.children?.[1]?.children?.[0]?.text ?? null;
   out.settings.previewStops = previewRails.map(
     (r) => Number(railOf(r).getAttribute("max")) + 1);
   out.settings.cacheStops = cacheRails.map((r) => Number(railOf(r).getAttribute("max")) + 1);
@@ -3243,8 +3247,9 @@ check("the settings page has all five tabs", settings.get("tabs"),
 # while it is off, which is what makes this list four pairs and a triple and
 # not that plus another triple. Then preview playback, which governs the
 # biggest thing a node draws, the seam handoff's three roads with the plain
-# latent checked, the flow truncation's four windows with off checked, the
-# reference cache, and the shift pills last, which change only what is drawn.
+# latent checked, the reference cache, and the shift pills last, which change
+# only what is drawn. The drift guard between the seam handoff and the cache is
+# a rail, not a list, and is read with the rails below.
 #
 # There used to be a fourth pair here, for whether the compiler wrote each
 # reference's scope into the prompt. It is not a choice any more — a label the
@@ -3252,8 +3257,7 @@ check("the settings page has all five tabs", settings.get("tabs"),
 # and the prompt box shows what is actually sent instead.
 check("the node settings show their defaults checked",
       settings.get("shiftRows"),
-      ["true", "false", "true", "false", "false", "true", "false",
-       "true", "false", "false", "false", "true", "false", "true", "false"])
+      ["true", "false", "true", "false", "false", "true", "false", "true", "false", "true", "false"])
 # The step preview's two rails, and the reference cache's two. All four travel a
 # list of stops rather than a range, because nobody is choosing between 30 days
 # and 31 — and the defaults have to land on a named stop, or the page opens
@@ -3269,6 +3273,11 @@ check("both preview rails carry their stops", settings.get("previewStops"), [7, 
 check("...opening on the pack's own 640 px and quality 80",
       settings.get("previewReads"), ["640 px", "80"])
 check("both cache rails carry their stops", settings.get("cacheStops"), [6, 9])
+# The drift guard: one rail from off to every guess, opening on off — a count
+# in force would be a strip rendering differently from every strip before it
+# with nothing on the page saying so.
+check("the drift guard rail carries its stops", settings.get("guardStops"), 8)
+check("...opening on off", settings.get("guardReads"), "Off")
 check("...opening on the stored month and 8 GB",
       settings.get("cacheReads"), ["1 month", "8 GB"])
 # The retention rail is live: the ceiling ships at 8 GB, so there is a store for
@@ -3276,11 +3285,10 @@ check("...opening on the stored month and 8 GB",
 check("...both live while there is a store to bound", settings.get("cacheDisabled"), [False, False])
 
 # And with the advanced controls on, the turbo lead-in is back on the page: the
-# four pairs, the seam handoff's three rows and the flow truncation's four,
-# plus its own three rows. That is the whole of what the switch does to this
+# four pairs and the seam handoff's three rows, plus its own three rows. That is the whole of what the switch does to this
 # tab — it adds a section, it never disables one.
 check("advanced controls bring the turbo lead-in back to the page",
-      (settings.get("advancedRows"), settings.get("advancedLeadIn")), (18, True))
+      (settings.get("advancedRows"), settings.get("advancedLeadIn")), (14, True))
 check("the quality tab shows the encoder value", settings.get("quality"), True)
 # The text scale: four points with the drawn sizes checked on a fresh file, each
 # row saying what it is as a percentage the way the quality rows say their crf.

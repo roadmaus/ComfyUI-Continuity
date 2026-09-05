@@ -189,9 +189,15 @@ const PREVIEW_PX_STOPS = [
   { value: 512 }, { value: 640, label: "640" }, { value: 768 },
   { value: 1024, label: "1024" },
 ];
-// The custom flow window's rails, in twentieths of sigma. The low rail leaves
-// out 1 and the high rail leaves out 0: a window from 1 or to 0 is no window.
-const SIGMA_STOPS = Array.from({ length: 21 }, (_, i) => ({ value: i / 20 }));
+// The drift guard's stops: off, then how many of a pass's last guesses are
+// averaged, then every one of them. `EVERY_GUESS` mirrors settings.py — no
+// schedule has this many steps, and the node reads a count past the schedule
+// as all of it.
+const EVERY_GUESS = 99;
+const DRIFT_STOPS = [
+  { value: 0, label: "Off" }, { value: 2 }, { value: 3, label: "Truest" }, { value: 4 },
+  { value: 6 }, { value: 8 }, { value: 12 }, { value: EVERY_GUESS, label: "Crispest" },
+];
 
 const PREVIEW_Q_STOPS = [
   { value: 40, label: "40" }, { value: 50 }, { value: 60, label: "60" },
@@ -645,6 +651,53 @@ class SettingsPage {
    * same rule the Custom quality row lives by.
    */
   /**
+   * The drift guard (issues #41, #46). A flow sampler's output is, exactly,
+   * the average of every step's own guess at the clean picture, weighted by
+   * the step; the guard averages the last few of those instead of taking the
+   * final one, which is where a continued shot's brightening and sharpening
+   * are added. One rail, counted in guesses rather than sigma so it means the
+   * same on a 20-step schedule and a turbo one. Per machine like the seam
+   * handoff: it is a statement about how a pass is read, not about the piece.
+   * H3 only.
+   */
+  renderDriftGuard() {
+    const current = Number(this.settings.drift_guard) || 0;
+    const rail = this.stopSlider({
+      stops: DRIFT_STOPS,
+      value: current,
+      name: "Drift guard",
+      read: (value) => ({
+        value: value === 0 ? t("Off")
+          : value >= EVERY_GUESS ? t("Every guess")
+          : t("Last {n} guesses", { n: value }),
+      }),
+      note: (value) => value === 0
+        ? t("The clip is the model's final guess, as before. Continued shots drift.")
+        : value <= 3
+          ? t("Truest to the shot before: faces and objects hold. Softest picture.")
+          : value < EVERY_GUESS
+            ? t("Between the two: a little crisper, a little freer.")
+            : t("Crispest picture, least faithful to the shot before."),
+      apply: (value) => this.set({ drift_guard: value }),
+    });
+    return this.section("Rendering", "Drift guard",
+      "Every continued shot comes out a little brighter and harsher than the "
+      + "one before it, until the end of a long strip looks fried. The guard "
+      + "averages the model's last few guesses at each shot instead of keeping "
+      + "only its final one, and the drift stops. Fewer guesses stay truer to "
+      + "the shot before; more come out crisper.",
+      [
+        el("div", { class: "mmc-set-field" }, [rail]),
+        el("div", { class: "mmc-set-foot" }, [
+          el("span", {
+            text: t("MiniMax H3 shots, turbo included. Refine, face and restore "
+                + "passes are unaffected. Read when a render is queued."),
+          }),
+        ]),
+      ]);
+  }
+
+  /**
    * What a blended seam hands the next shot (issues #41, #46). The latent is
    * the better join — the run is sliced off what the sampler made, so nothing
    * is decoded and re-encoded on the way — and the frames are the road every
@@ -661,84 +714,6 @@ class SettingsPage {
    * shot inherits and adds to again. Per machine like the seam handoff: it is
    * a statement about how a pass is read, not about the piece. H3 only.
    */
-  renderFlowTruncation() {
-    const current = this.settings.flow_truncation || "off";
-    const rows = [
-      { value: "off", label: "Off",
-        note: "The latent is the sampler's last step, as every render before this." },
-      { value: "tail", label: "Late steps dropped",
-        note: "The average of every step from sigma 0.3 up. The texture the last "
-            + "steps add stays out, and so does the sharpening and brightening "
-            + "that ride on it down a strip. A little softer than the full run." },
-      { value: "middle", label: "Both ends dropped",
-        note: "Sigma 0.3 to 0.7, the window the paper settled on: the late steps "
-            + "and the earliest ones, whose guesses carry the colour cast." },
-      { value: "custom", label: "Custom",
-        note: "A window placed by hand, for a schedule the two above were not "
-            + "written for. H3 samples at shift 12: a 20-step schedule's last "
-            + "three steps start at sigma 0.68, 0.57 and 0.39, and a turbo "
-            + "schedule's steps all start above 0.6 — 0.63, 0.80, 0.88, 0.92 "
-            + "and up on three plus five." },
-    ];
-    // The custom pair, shown only while it is the choice: two rails on sigma,
-    // the low held under the high. Which steps a value catches depends on the
-    // schedule, so the notes say the arithmetic rather than a step count.
-    const low = Number(this.settings.flow_low ?? 0.3);
-    const high = Number(this.settings.flow_high ?? 0.7);
-    const sigma = (value) => ({ value: value.toFixed(2) });
-    const custom = current !== "custom" ? [] : [
-      el("div", { class: "mmc-set-field mmc-set-bounds" }, [
-        this.stopSlider({
-          stops: SIGMA_STOPS.filter((stop) => stop.value < 1),
-          value: low, name: "From sigma", read: sigma,
-          note: (value) => value >= high
-            ? t("At or above the high end: the window catches nothing, which is off.")
-            : t("Steps starting below this are dropped."),
-          warn: (value) => value >= high,
-          apply: (value) => this.set({ flow_low: value }),
-        }),
-        this.stopSlider({
-          stops: SIGMA_STOPS.filter((stop) => stop.value > 0),
-          value: high, name: "To sigma", read: sigma,
-          note: (value) => value <= low
-            ? t("At or below the low end: the window catches nothing, which is off.")
-            : t("Steps starting above this are dropped."),
-          warn: (value) => value <= low,
-          apply: (value) => this.set({ flow_high: value }),
-        }),
-      ]),
-    ];
-    return this.section("Rendering", "Flow truncation",
-      "Which of a pass's steps make its clip. Every continued shot brightens and "
-      + "hardens within itself once it is conditioned on the shot before, and the "
-      + "late steps of the schedule are where that is added. Reading the clip off "
-      + "the middle of the schedule instead is what stopped the walk on a chained "
-      + "Wan model (\"Towards Error-Free Long Video Generation\").",
-      [
-        el("div", { class: "mmc-set-choices" }, rows.map((row) => el("button", {
-          class: "mmc-opt mmc-set-opt",
-          "aria-checked": row.value === current,
-          onclick: () => row.value !== current && this.set({ flow_truncation: row.value }),
-        }, [
-          el("span", { class: "mmc-radio" }),
-          el("span", { class: "mmc-set-opt-text" }, [
-            el("span", { class: "mmc-set-opt-label", text: t(row.label) }),
-            el("span", { class: "mmc-set-opt-note", text: t(row.note) }),
-          ]),
-        ]))),
-        ...custom,
-        el("div", { class: "mmc-set-foot" }, [
-          el("span", {
-            text: t("MiniMax H3 passes and their turbo lead-in. The refine, face and "
-                + "restore passes are untouched: they resume partway down the "
-                + "schedule to redraw texture, which is the part this leaves out. "
-                + "Read when a render is queued. Best judged with the turbo LoRA "
-                + "off: a four-step schedule lands one or two steps in the window."),
-          }),
-        ]),
-      ]);
-  }
-
   renderLatentSeams() {
     const current = this.settings.seam_handoff || "latent";
     const rows = [
@@ -960,7 +935,7 @@ class SettingsPage {
     const leadIn = this.settings.advanced === true || Number(this.settings.turbo_lead_in) > 0
       ? this.renderLeadIn() : [];
     return [this.renderAdvanced(), this.renderPreviews(), this.renderPreviewSize(),
-      ...leadIn, this.renderLatentSeams(), this.renderFlowTruncation(), this.renderRefCache(),
+      ...leadIn, this.renderLatentSeams(), this.renderDriftGuard(), this.renderRefCache(),
       this.section("Nodes", "Flow shift pills",
       "Whether the sampler row offers H3's two flow shifts — the video and audio "
       + "schedule clocks. The values apply either way; this only decides who has "

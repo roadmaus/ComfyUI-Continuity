@@ -185,13 +185,13 @@ def _fingerprint(blob):
     piece keeps its reference pool.
 
     The settings are the ones `_render` reads off the file when it builds
-    the graph — the seam handoff, the turbo lead-in and the flow truncation. They are not node inputs,
+    the graph — the seam handoff, the turbo lead-in and the drift guard. They are not node inputs,
     so without this a changed setting left the node's inputs identical, the
     expansion was a cache hit, and the switch on the settings page did nothing
     until something else about the render moved.
     """
     graph_settings = (settings.seam_handoff(), settings.turbo_lead_in(),
-                      settings.flow_truncation(), settings.flow_window())
+                      settings.drift_guard())
     try:
         return (blob, timeline.stamps(compiler.as_piece(json.loads(blob))), graph_settings)
     except Exception:

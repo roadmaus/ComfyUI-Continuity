@@ -78,8 +78,11 @@ def default_prefixes():
 
 # The roads a blended seam can take, see `DEFAULTS["seam_handoff"]`.
 SEAM_HANDOFFS = ("frames", "latent", "levelled")
-# Which of a pass's steps make its latent, see `DEFAULTS["flow_truncation"]`.
-FLOW_TRUNCATIONS = ("off", "tail", "middle", "custom")
+# The drift guard's "every guess" stop, see `DEFAULTS["drift_guard"]`. No
+# schedule here has this many steps, and the node reads a count past the
+# schedule as all of it.
+EVERY_GUESS = 99
+MAX_DRIFT_GUARD = EVERY_GUESS
 
 DEFAULTS = {
     "video_crf": DEFAULT_CRF,
@@ -134,22 +137,14 @@ DEFAULTS = {
     # again — the road every render took before either existed, kept so the
     # three can be compared on the same strip.
     "seam_handoff": "latent",
-    # Which steps of a pass's schedule its latent is read off. "off": the
-    # sampler's last step, as every render before this. "tail": the average
-    # of the clean-latent guesses from every step with sigma >= 0.3, so the
-    # late steps' texture — and the over-sharpening and brightness bias that
-    # ride on it down a strip — stay out of the clip. "middle": sigma in
-    # [0.3, 0.7], the paper's window, which also drops the earliest steps'
-    # colour cast. "custom": the two numbers below. See
+    # The drift guard: how many of a pass's last steps its latent is the
+    # average of. 0 is off — the sampler's last step, as every render before
+    # this. A small count holds the shot before most truly and comes out
+    # softest; `EVERY_GUESS` averages the whole schedule, crisper and a little
+    # less faithful. Counted in steps rather than the paper's sigma so one
+    # setting means the same on a 20-step schedule and a turbo one. See
     # `families/h3/truncate.py`; H3 only.
-    "flow_truncation": "off",
-    # The custom window, on the model's own sigma. H3 runs at shift 12, where
-    # a turbo schedule's steps all start above 0.6 and the named windows
-    # above catch one of them or none; these are how a window is placed on
-    # a schedule the names were not written for. A low at or above the high
-    # catches nothing, and a window that catches nothing is off.
-    "flow_low": 0.3,
-    "flow_high": 0.7,
+    "drift_guard": 0,
     # The weight files this machine last picked, by family: `{family: {slot:
     # filename, dtype, route, devices}}` — the same block a piece carries, in
     # the same shape.
@@ -393,19 +388,14 @@ def clean(raw):
         if raw["seam_handoff"] not in SEAM_HANDOFFS:
             raise ValueError(f"seam_handoff must be one of {', '.join(SEAM_HANDOFFS)}")
         clean_settings["seam_handoff"] = raw["seam_handoff"]
-    if "flow_truncation" in raw and raw["flow_truncation"] is not None:
-        if raw["flow_truncation"] not in FLOW_TRUNCATIONS:
-            raise ValueError(
-                f"flow_truncation must be one of {', '.join(FLOW_TRUNCATIONS)}")
-        clean_settings["flow_truncation"] = raw["flow_truncation"]
-    for key in ("flow_low", "flow_high"):
-        if key in raw and raw[key] is not None:
-            value = raw[key]
-            if isinstance(value, bool) or not isinstance(value, (int, float)):
-                raise ValueError(f"{key} must be a number")
-            if not 0.0 <= value <= 1.0:
-                raise ValueError(f"{key} must be between 0 and 1")
-            clean_settings[key] = float(value)
+    if "drift_guard" in raw and raw["drift_guard"] is not None:
+        value = raw["drift_guard"]
+        if isinstance(value, bool) or not isinstance(value, (int, float)) \
+                or value != int(value):
+            raise ValueError("drift_guard must be a whole number")
+        if not 0 <= value <= MAX_DRIFT_GUARD:
+            raise ValueError(f"drift_guard must be between 0 and {MAX_DRIFT_GUARD}")
+        clean_settings["drift_guard"] = int(value)
     for flag in ("show_shift_pills", "autoplay_previews", "advanced", "latent_cache"):
         if flag in raw and raw[flag] is not None:
             if not isinstance(raw[flag], bool):
@@ -608,12 +598,6 @@ def seam_handoff():
     return load()["seam_handoff"]
 
 
-def flow_truncation():
-    """Which steps make a pass's latent: one of `FLOW_TRUNCATIONS`."""
-    return load()["flow_truncation"]
-
-
-def flow_window():
-    """The custom window as `(low, high)` on sigma, whether or not it is picked."""
-    stored = load()
-    return (stored["flow_low"], stored["flow_high"])
+def drift_guard():
+    """How many of a pass's last steps make its latent; 0 is off."""
+    return load()["drift_guard"]

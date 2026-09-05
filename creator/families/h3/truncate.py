@@ -1,37 +1,41 @@
-"""Truncation-rectified flow: the pass's latent, read off the middle of the
-schedule rather than the end of it.
+"""The drift guard: a pass's clip read off the model's last few guesses at it,
+averaged, rather than off its final one.
 
 A rectified-flow sampler walks from noise to picture in steps, and the picture
 it ends on is, exactly, the noise minus the velocity it predicted at each step
 times that step's width. Regroup the same sum and every step is a full guess at
-the clean latent — `x_s - s * v_i`, the estimate the model would have finished
+the clean latent — `x_s - s * v_i`, the picture the model would have finished
 on had it kept the velocity it predicted there — and the sampler's output is
 the average of those guesses, each weighted by its step. "Towards Error-Free
 Long Video Generation" (arXiv 2606.22370) looks at the guesses one at a time
 on a chained Wan model and finds where the drift lives: the late steps, which
 add texture and with it the over-sharpening and the small brightness bias that
 each continued shot inherits and adds to again, and the very early ones, which
-carry the colour cast. The middle of the schedule guesses cleanly. So it keeps
-only the guesses whose timestep falls in a window, renormalises the weights,
-and hands *that* on as the clip — training-free, and on their chain it is what
-stops the compounding. Issues #41 and #46 describe the same ramp on H3.
+carry the colour cast. It keeps the guesses from a window of the schedule,
+renormalises, and hands *that* on as the clip — training-free, and on their
+chain it is what stops the compounding. Issues #41 and #46 describe the same
+ramp on H3, and on an eight-shot strip this took the frying out of it.
 
-This is that, as a model patch. A post-cfg hook records each step's velocity
-while the sampler runs, and a wrapper round the sampler swaps its output for
-the windowed average once the schedule reaches zero. Only the picture: H3's
-latent packs the sound beside it, and the sound row leaves as the sampler made
-it. The patch sees a schedule sampled in two sittings — the turbo lead-in's
-split — as one, because the second sitting starts on the sigma the first
-stopped at; a schedule that starts partway, the refine's or the restore's, is
-its own trajectory from wherever it starts. A window no step of the schedule
-lands in leaves the sampler's output alone.
+This is that, as a model patch, counted in guesses rather than in the paper's
+sigma. H3 samples at flow shift 12, where a 20-step schedule's last three
+steps start at sigma 0.68, 0.57 and 0.39 and a turbo schedule's steps all
+start above 0.6: a window on sigma is about the last few steps of a long
+schedule and catches one step or none of a short one. "The last N guesses"
+means the same thing on both, and it is what the settings page's one rail
+says. Fewer guesses hold the shot before more truly and come out softer; every
+guess comes out crisper and a little less faithful, since the early guesses
+are the model's generic ones. Measured, not derived: the strip said so.
 
-The maths is the sampler's own: nothing here filters in space or time, and a
-window of the whole schedule returns exactly what the sampler returned. What
-is thrown away is the late steps' texture, and the paper's [0.3, 0.7] on their
-model is a picture slightly softer than the full run and a chain that does not
-walk; the windows here are named in `WINDOWS`, and the settings page picks one.
+A post-cfg hook records each step's velocity while the sampler runs, and a
+wrapper round the sampler swaps its output for the average once the schedule
+reaches zero. Only the picture: H3's latent packs the sound beside it, and the
+sound row leaves as the sampler made it. The patch sees a schedule sampled in
+two sittings — the turbo lead-in's split — as one, because the second sitting
+starts on the sigma the first stopped at; a schedule that starts partway, the
+refine's or the restore's, is its own trajectory from wherever it starts.
 """
+
+from collections import deque
 
 import torch
 
@@ -41,32 +45,20 @@ from comfy_api.latest import io
 
 TRUNCATE_NODE = "MiniMaxH3TruncatedFlow"
 
-# The settings page's named choices, as `(t_low, t_high)` on the model's own
-# sigma — `None` is off. "middle" is the paper's window; "tail" drops the late
-# steps alone, its Table 3's other column, and keeps the early ones' structure.
-# The page's fourth choice, "custom", is two numbers off the settings file and
-# not in here. Mind the shift: H3 samples at flow shift 12, so a 20-step
-# schedule's last three steps start at sigma 0.68, 0.57 and 0.39 and a turbo
-# schedule's steps all start above 0.6 — on sigma, the named windows are about
-# the last few steps of a long schedule and catch one step or none of a short
-# one, which is what the custom pair is for.
-WINDOWS = {"off": None, "tail": (0.3, 1.0), "middle": (0.3, 0.7)}
-
 
 class Trajectory:
     """One schedule's worth of steps, whatever number of sittings sample it.
 
-    `record` is the sum being built: `start` and `s` are where the schedule was
-    entered and the sigma there, and `acc`/`weight` are the windowed steps'
-    `d_i * v_i` and `d_i`. `finish` reads the windowed average off them.
+    `record` keeps the last `guesses` steps' `d_i * v_i` and `d_i` — every
+    step's, when `guesses` is 0 — beside where the schedule was entered and the
+    sigma there. `finish` reads the average off them.
     """
 
-    def __init__(self, low, high):
-        self.low, self.high = float(low), float(high)
+    def __init__(self, guesses=0):
+        self.guesses = int(guesses)
         self.start = None
         self.s = None
-        self.acc = None
-        self.weight = 0.0
+        self.terms = deque(maxlen=self.guesses or None)
         self.last = None        # the sigma the latest sitting stopped on
 
     def continues_at(self, sigma):
@@ -80,18 +72,20 @@ class Trajectory:
             return
         if self.start is None:
             self.start, self.s = _float(x), sigma
-        if self.low <= sigma <= self.high:
-            term = _float((x - denoised) / sigma) * width
-            self.acc = term if self.acc is None else self.acc + term
-            self.weight += width
+        self.terms.append((_float((x - denoised) / sigma) * width, width))
 
     def finish(self, samples):
-        """The windowed average, or `samples` where no step fell in the window."""
-        if self.acc is None or self.weight <= 0:
+        """The average of the kept guesses, or `samples` where none was kept."""
+        if not self.terms:
             return samples
-        out = self.start - self.acc * (self.s / self.weight)
+        acc = None
+        weight = 0.0
+        for term, width in self.terms:
+            acc = term if acc is None else acc + term
+            weight += width
+        out = self.start - acc * (self.s / weight)
         if getattr(samples, "is_nested", False):
-            # The picture is redrawn from the window; the sound row leaves as
+            # The picture is redrawn from the guesses; the sound row leaves as
             # the sampler made it.
             video, *rest = samples.unbind()
             picture = out.unbind()[0].to(video.dtype)
@@ -121,7 +115,7 @@ def _step_width(sigma, sigmas):
 _open = None
 
 
-def _patch(model, low, high):
+def _patch(model, guesses):
     """`model` cloned, with the recorder and the wrapper on it."""
 
     def record(args):
@@ -135,7 +129,7 @@ def _patch(model, low, high):
         global _open
         first, end = float(sigmas[0]), float(sigmas[-1])
         if _open is None or not _open.continues_at(first):
-            _open = Trajectory(low, high)
+            _open = Trajectory(guesses)
         trajectory = _open
         samples = executor(guider, sigmas, *rest)
         trajectory.last = end
@@ -156,23 +150,24 @@ class MiniMaxH3TruncatedFlow(io.ComfyNode):
     def define_schema(cls):
         return io.Schema(
             node_id=TRUNCATE_NODE,
-            display_name="MiniMax H3 Truncated Flow",
+            display_name="MiniMax H3 Drift Guard",
             category="MiniMax/internal",
-            description=("Hands on the average of the sampler's clean-latent guesses "
-                         "from the steps whose sigma falls in [t_low, t_high] instead "
-                         "of its last step, so the late steps' over-sharpening and "
-                         "brightness bias stay out of the clip a seam continues from."),
+            description=("Hands on the step-weighted average of the sampler's last "
+                         "few clean-latent guesses instead of its last step, so the "
+                         "over-sharpening and brightness bias a continued shot adds "
+                         "stay out of the clip the next seam continues from. 0 "
+                         "guesses means every step's."),
             inputs=[
                 io.Model.Input("model"),
-                io.Float.Input("t_low", default=0.3, min=0.0, max=1.0, step=0.01),
-                io.Float.Input("t_high", default=0.7, min=0.0, max=1.0, step=0.01),
+                io.Int.Input("guesses", default=3, min=0, max=999,
+                             tooltip="How many of the schedule's last steps are averaged; 0 for all of them."),
             ],
             outputs=[io.Model.Output()],
         )
 
     @classmethod
-    def execute(cls, model, t_low, t_high) -> io.NodeOutput:
-        return io.NodeOutput(_patch(model, t_low, t_high))
+    def execute(cls, model, guesses) -> io.NodeOutput:
+        return io.NodeOutput(_patch(model, guesses))
 
 
 NODES = [MiniMaxH3TruncatedFlow]
