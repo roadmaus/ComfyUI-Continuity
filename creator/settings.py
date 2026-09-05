@@ -79,7 +79,7 @@ def default_prefixes():
 # The roads a blended seam can take, see `DEFAULTS["seam_handoff"]`.
 SEAM_HANDOFFS = ("frames", "latent", "levelled")
 # Which of a pass's steps make its latent, see `DEFAULTS["flow_truncation"]`.
-FLOW_TRUNCATIONS = ("off", "tail", "middle")
+FLOW_TRUNCATIONS = ("off", "tail", "middle", "custom")
 
 DEFAULTS = {
     "video_crf": DEFAULT_CRF,
@@ -140,8 +140,16 @@ DEFAULTS = {
     # late steps' texture — and the over-sharpening and brightness bias that
     # ride on it down a strip — stay out of the clip. "middle": sigma in
     # [0.3, 0.7], the paper's window, which also drops the earliest steps'
-    # colour cast. See `families/h3/truncate.py`; H3 only.
+    # colour cast. "custom": the two numbers below. See
+    # `families/h3/truncate.py`; H3 only.
     "flow_truncation": "off",
+    # The custom window, on the model's own sigma. H3 runs at shift 12, where
+    # a turbo schedule's steps all start above 0.6 and the named windows
+    # above catch one of them or none; these are how a window is placed on
+    # a schedule the names were not written for. A low at or above the high
+    # catches nothing, and a window that catches nothing is off.
+    "flow_low": 0.3,
+    "flow_high": 0.7,
     # The weight files this machine last picked, by family: `{family: {slot:
     # filename, dtype, route, devices}}` — the same block a piece carries, in
     # the same shape.
@@ -390,6 +398,14 @@ def clean(raw):
             raise ValueError(
                 f"flow_truncation must be one of {', '.join(FLOW_TRUNCATIONS)}")
         clean_settings["flow_truncation"] = raw["flow_truncation"]
+    for key in ("flow_low", "flow_high"):
+        if key in raw and raw[key] is not None:
+            value = raw[key]
+            if isinstance(value, bool) or not isinstance(value, (int, float)):
+                raise ValueError(f"{key} must be a number")
+            if not 0.0 <= value <= 1.0:
+                raise ValueError(f"{key} must be between 0 and 1")
+            clean_settings[key] = float(value)
     for flag in ("show_shift_pills", "autoplay_previews", "advanced", "latent_cache"):
         if flag in raw and raw[flag] is not None:
             if not isinstance(raw[flag], bool):
@@ -595,3 +611,9 @@ def seam_handoff():
 def flow_truncation():
     """Which steps make a pass's latent: one of `FLOW_TRUNCATIONS`."""
     return load()["flow_truncation"]
+
+
+def flow_window():
+    """The custom window as `(low, high)` on sigma, whether or not it is picked."""
+    stored = load()
+    return (stored["flow_low"], stored["flow_high"])

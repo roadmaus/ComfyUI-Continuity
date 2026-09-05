@@ -160,7 +160,8 @@ def truncated(graph, model):
     resume partway down the schedule and redraw texture on purpose, which is
     the part this throws away.
     """
-    window = truncate.WINDOWS[settings.flow_truncation()]
+    road = settings.flow_truncation()
+    window = settings.flow_window() if road == "custom" else truncate.WINDOWS[road]
     if window is None:
         return model
     return graph.node(truncate.TRUNCATE_NODE, model=model,

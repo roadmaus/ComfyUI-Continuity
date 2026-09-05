@@ -191,7 +191,7 @@ def _fingerprint(blob):
     until something else about the render moved.
     """
     graph_settings = (settings.seam_handoff(), settings.turbo_lead_in(),
-                      settings.flow_truncation())
+                      settings.flow_truncation(), settings.flow_window())
     try:
         return (blob, timeline.stamps(compiler.as_piece(json.loads(blob))), graph_settings)
     except Exception:

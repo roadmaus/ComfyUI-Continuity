@@ -189,6 +189,9 @@ const PREVIEW_PX_STOPS = [
   { value: 512 }, { value: 640, label: "640" }, { value: 768 },
   { value: 1024, label: "1024" },
 ];
+// The custom flow window's rails, in twentieths of sigma. The low rail leaves
+// out 1 and the high rail leaves out 0: a window from 1 or to 0 is no window.
+const SIGMA_STOPS = Array.from({ length: 21 }, (_, i) => ({ value: i / 20 }));
 
 const PREVIEW_Q_STOPS = [
   { value: 40, label: "40" }, { value: 50 }, { value: 60, label: "60" },
@@ -670,6 +673,40 @@ class SettingsPage {
       { value: "middle", label: "Both ends dropped",
         note: "Sigma 0.3 to 0.7, the window the paper settled on: the late steps "
             + "and the earliest ones, whose guesses carry the colour cast." },
+      { value: "custom", label: "Custom",
+        note: "A window placed by hand, for a schedule the two above were not "
+            + "written for. H3 samples at shift 12: a 20-step schedule's last "
+            + "three steps start at sigma 0.68, 0.57 and 0.39, and a turbo "
+            + "schedule's steps all start above 0.6 — 0.63, 0.80, 0.88, 0.92 "
+            + "and up on three plus five." },
+    ];
+    // The custom pair, shown only while it is the choice: two rails on sigma,
+    // the low held under the high. Which steps a value catches depends on the
+    // schedule, so the notes say the arithmetic rather than a step count.
+    const low = Number(this.settings.flow_low ?? 0.3);
+    const high = Number(this.settings.flow_high ?? 0.7);
+    const sigma = (value) => ({ value: value.toFixed(2) });
+    const custom = current !== "custom" ? [] : [
+      el("div", { class: "mmc-set-field mmc-set-bounds" }, [
+        this.stopSlider({
+          stops: SIGMA_STOPS.filter((stop) => stop.value < 1),
+          value: low, name: "From sigma", read: sigma,
+          note: (value) => value >= high
+            ? t("At or above the high end: the window catches nothing, which is off.")
+            : t("Steps starting below this are dropped."),
+          warn: (value) => value >= high,
+          apply: (value) => this.set({ flow_low: value }),
+        }),
+        this.stopSlider({
+          stops: SIGMA_STOPS.filter((stop) => stop.value > 0),
+          value: high, name: "To sigma", read: sigma,
+          note: (value) => value <= low
+            ? t("At or below the low end: the window catches nothing, which is off.")
+            : t("Steps starting above this are dropped."),
+          warn: (value) => value <= low,
+          apply: (value) => this.set({ flow_high: value }),
+        }),
+      ]),
     ];
     return this.section("Rendering", "Flow truncation",
       "Which of a pass's steps make its clip. Every continued shot brightens and "
@@ -689,6 +726,7 @@ class SettingsPage {
             el("span", { class: "mmc-set-opt-note", text: t(row.note) }),
           ]),
         ]))),
+        ...custom,
         el("div", { class: "mmc-set-foot" }, [
           el("span", {
             text: t("MiniMax H3 passes and their turbo lead-in. The refine, face and "

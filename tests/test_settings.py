@@ -132,6 +132,19 @@ check("...and can be any of the three windows",
 check("a null truncation is the default", settings.clean({"flow_truncation": None})["flow_truncation"], "off")
 refuses("a window that does not exist", {"flow_truncation": "late"}, "one of")
 refuses("a boolean truncation", {"flow_truncation": True}, "one of")
+check("the custom window opens on the paper's",
+      (settings.clean({})["flow_low"], settings.clean({})["flow_high"]), (0.3, 0.7))
+check("...and takes any pair inside the unit interval, as floats",
+      (settings.clean({"flow_low": 0, "flow_high": 0.95})["flow_low"],
+       settings.clean({"flow_low": 0, "flow_high": 0.95})["flow_high"]), (0.0, 0.95))
+# An inverted pair is stored: the two rails are set one at a time, and a
+# refusal here would make the order you move them in matter. Inverted, the
+# window catches nothing and the render is off.
+check("...inverted included", settings.clean({"flow_low": 0.8, "flow_high": 0.7})["flow_low"], 0.8)
+refuses("a window end past one", {"flow_high": 1.5}, "between")
+refuses("a negative window end", {"flow_low": -0.1}, "between")
+refuses("a boolean window end", {"flow_low": True}, "number")
+refuses("a string window end", {"flow_high": "0.7"}, "number")
 
 # The reference cache's two numbers. Both are magnitudes with a meaningful
 # zero, which is the thing to hold down: 0 GB is not "no cache", it is the

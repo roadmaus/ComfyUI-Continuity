@@ -41,9 +41,15 @@ from comfy_api.latest import io
 
 TRUNCATE_NODE = "MiniMaxH3TruncatedFlow"
 
-# The settings page's choices, as `(t_low, t_high)` on the model's own sigma —
-# `None` is off. "middle" is the paper's window; "tail" drops the late steps
-# alone, its Table 3's other column, and keeps the early ones' structure.
+# The settings page's named choices, as `(t_low, t_high)` on the model's own
+# sigma — `None` is off. "middle" is the paper's window; "tail" drops the late
+# steps alone, its Table 3's other column, and keeps the early ones' structure.
+# The page's fourth choice, "custom", is two numbers off the settings file and
+# not in here. Mind the shift: H3 samples at flow shift 12, so a 20-step
+# schedule's last three steps start at sigma 0.68, 0.57 and 0.39 and a turbo
+# schedule's steps all start above 0.6 — on sigma, the named windows are about
+# the last few steps of a long schedule and catch one step or none of a short
+# one, which is what the custom pair is for.
 WINDOWS = {"off": None, "tail": (0.3, 1.0), "middle": (0.3, 0.7)}
 
 

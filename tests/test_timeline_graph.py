@@ -808,6 +808,20 @@ try:
 finally:
     _settings.flow_truncation = _was_tr
 check("the tail window keeps every step from 0.3 up", _tail, {(0.3, 1.0)})
+_was_win = _settings.flow_window
+_settings.flow_truncation = lambda: "custom"
+_settings.flow_window = lambda: (0.75, 0.95)
+try:
+    _custom = {(n["inputs"]["t_low"], n["inputs"]["t_high"]) for n in build().expand.values()
+              if n["class_type"] == "MiniMaxH3TruncatedFlow"}
+    _fp_custom = cn.MiniMaxH3Timeline.fingerprint_inputs(timeline_data=DATA)
+    _settings.flow_window = lambda: (0.6, 0.9)
+    _fp_moved = cn.MiniMaxH3Timeline.fingerprint_inputs(timeline_data=DATA)
+finally:
+    _settings.flow_truncation = _was_tr
+    _settings.flow_window = _was_win
+check("a custom window carries the file's two numbers", _custom, {(0.75, 0.95)})
+check("...and moving them moves the cache key", _fp_custom != _fp_moved, True)
 
 # The encoder's guide arithmetic, against a stand-in VAE: one call over the
 # run, one block per latent step, pinned at the offsets core's temporal grid

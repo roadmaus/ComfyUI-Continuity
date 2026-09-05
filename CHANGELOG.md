@@ -14,12 +14,15 @@ small brightening every continued shot inherits and adds to again — and the
 colour cast in the earliest. Keeping the guesses from a window of the schedule
 and renormalising is what stopped the walk on their chain, with no training.
 The settings page's new "Flow truncation" row does that here for H3 passes and
-their turbo lead-in: off, the late steps dropped (sigma 0.3 and up), or both
-ends (0.3 to 0.7, the paper's window). A model patch records each step's
-velocity and swaps the sampler's output for the windowed average once the
-schedule reaches zero; the sound row leaves as the sampler made it. Off by
-default and off emits nothing. Untested on a strip as of this entry; the row
-is there to be tried. Issues #41, #46.
+their turbo lead-in: off, the late steps dropped (sigma 0.3 and up), both
+ends (0.3 to 0.7, the paper's window), or a custom pair of sigmas on two
+rails. A model patch records each step's velocity and swaps the sampler's
+output for the windowed average once the schedule reaches zero; the sound row
+leaves as the sampler made it. Off by default and off emits nothing. On an
+eight-shot 20-step strip the frying at the end of the strip was gone under
+either named window; the custom pair is there because H3 samples at shift 12,
+where a turbo schedule's steps all start above sigma 0.6 and the named windows
+catch one of them or none. Issues #41, #46.
 
 **A blended seam continues from the latent the model made, not from a VAE
 round trip of it.** The run a seam inherits used to be read off the source
