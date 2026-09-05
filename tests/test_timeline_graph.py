@@ -852,6 +852,20 @@ check("an anchor shorter than the run leaves it as sliced",
       _torch.equal(_torch.cat([g["latent"] for g in encoder_mod._context_slice(
           _run_latent, 22, 64, 64, anchor=_anchor_latent[:, :, :3])], dim=2), _plain), True)
 
+# The announcer, against a stand-in server: the event the stage listens for,
+# stamped with the emitting node's id and the progress it was handed.
+import server as _server  # noqa: E402
+
+_sent = []
+_real_server = getattr(_server.PromptServer, "instance", None)
+_server.PromptServer.instance = type("S", (), {"send_sync": lambda self, kind, data: _sent.append((kind, data))})()
+try:
+    tl.announce("node-7", {"index": 3})
+finally:
+    _server.PromptServer.instance = _real_server
+check("a segment announces itself on the stage's channel",
+      _sent, [("mmc_segment", {"node": "node-7", "index": 3})])
+
 # ---- the reel node, run rather than drawn -----------------------------------
 #
 # Everything above is the graph's shape. This is the one node whose *execution*

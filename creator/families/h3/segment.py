@@ -43,21 +43,6 @@ def _parse(data):
         raise ValueError(f"segment data is not valid JSON: {exc}") from exc
 
 
-def _announce(unique_id, progress):
-    """Broadcast which segment is being built, keyed to the emitting node.
-
-    `mmc_segment` carries the expanded node's own id — the Timeline's plus a
-    GraphBuilder prefix — which `stage.js` prefix-matches exactly as it does
-    for the sampler's preview frames. Sent through the running PromptServer;
-    a graph executed without one (the test harness) has nobody to tell.
-    """
-    from server import PromptServer
-
-    server = getattr(PromptServer, "instance", None)
-    if server is not None:
-        server.send_sync("mmc_segment", {"node": unique_id, **progress})
-
-
 class MiniMaxH3TimelineSegment(io.ComfyNode):
     """One segment of a timeline — the Creator node's job for one shot.
 
@@ -199,7 +184,9 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
         # right: the stage should name the segment actually being made.
         progress = payload.get("progress")
         if progress:
-            _announce(cls.hidden.unique_id, progress)
+            from ... import timeline
+
+            timeline.announce(cls.hidden.unique_id, progress)
 
         compiled = compiler.compile_segment(payload, image_size_lookup=media.image_size)
 

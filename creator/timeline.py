@@ -58,6 +58,25 @@ from comfy_api.latest import io
 from . import (compile as compiler, guide, lora, media, mux,
                outputs, settings, spill)
 
+def announce(unique_id, progress):
+    """Broadcast which segment is being built, keyed to the emitting node.
+
+    `mmc_segment` carries the expanded node's own id — the Timeline's plus a
+    GraphBuilder prefix — which `stage.js` prefix-matches exactly as it does
+    for the sampler's preview frames. Sent through the running PromptServer;
+    a graph executed without one (the test harness) has nobody to tell.
+
+    Here and not in a family's package because every family's segment node
+    sends it: it lived in H3's for a while and LTX's kept calling it here, so
+    a multi-shot LTX strip failed on its first segment.
+    """
+    from server import PromptServer
+
+    server = getattr(PromptServer, "instance", None)
+    if server is not None:
+        server.send_sync("mmc_segment", {"node": unique_id, **progress})
+
+
 # The reel's own socket type: the parts of the finished video in play order,
 # each of them a file — a pass `spill.py` wrote, or a clip the user supplied.
 # See `MiniMaxH3Reel` for why a pass is on disk rather than in the socket.
