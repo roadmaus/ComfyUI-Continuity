@@ -650,6 +650,57 @@ class SettingsPage {
    * conditioned, not about the piece, and the family decides whether it can
    * take a latent at all (`base.Family.hands_latents`).
    */
+  /**
+   * Which steps of a pass's schedule its latent is read off (issues #41, #46).
+   * A flow sampler's output is, exactly, the average of every step's own guess
+   * at the clean picture, weighted by the step; the late steps' guesses carry
+   * the texture, and with it the sharpening and the brightness bias a continued
+   * shot inherits and adds to again. Per machine like the seam handoff: it is
+   * a statement about how a pass is read, not about the piece. H3 only.
+   */
+  renderFlowTruncation() {
+    const current = this.settings.flow_truncation || "off";
+    const rows = [
+      { value: "off", label: "Off",
+        note: "The latent is the sampler's last step, as every render before this." },
+      { value: "tail", label: "Late steps dropped",
+        note: "The average of every step from sigma 0.3 up. The texture the last "
+            + "steps add stays out, and so does the sharpening and brightening "
+            + "that ride on it down a strip. A little softer than the full run." },
+      { value: "middle", label: "Both ends dropped",
+        note: "Sigma 0.3 to 0.7, the window the paper settled on: the late steps "
+            + "and the earliest ones, whose guesses carry the colour cast." },
+    ];
+    return this.section("Rendering", "Flow truncation",
+      "Which of a pass's steps make its clip. Every continued shot brightens and "
+      + "hardens within itself once it is conditioned on the shot before, and the "
+      + "late steps of the schedule are where that is added. Reading the clip off "
+      + "the middle of the schedule instead is what stopped the walk on a chained "
+      + "Wan model (\"Towards Error-Free Long Video Generation\").",
+      [
+        el("div", { class: "mmc-set-choices" }, rows.map((row) => el("button", {
+          class: "mmc-opt mmc-set-opt",
+          "aria-checked": row.value === current,
+          onclick: () => row.value !== current && this.set({ flow_truncation: row.value }),
+        }, [
+          el("span", { class: "mmc-radio" }),
+          el("span", { class: "mmc-set-opt-text" }, [
+            el("span", { class: "mmc-set-opt-label", text: t(row.label) }),
+            el("span", { class: "mmc-set-opt-note", text: t(row.note) }),
+          ]),
+        ]))),
+        el("div", { class: "mmc-set-foot" }, [
+          el("span", {
+            text: t("MiniMax H3 passes and their turbo lead-in. The refine, face and "
+                + "restore passes are untouched: they resume partway down the "
+                + "schedule to redraw texture, which is the part this leaves out. "
+                + "Read when a render is queued. Best judged with the turbo LoRA "
+                + "off: a four-step schedule lands one or two steps in the window."),
+          }),
+        ]),
+      ]);
+  }
+
   renderLatentSeams() {
     const current = this.settings.seam_handoff || "latent";
     const rows = [
@@ -871,7 +922,7 @@ class SettingsPage {
     const leadIn = this.settings.advanced === true || Number(this.settings.turbo_lead_in) > 0
       ? this.renderLeadIn() : [];
     return [this.renderAdvanced(), this.renderPreviews(), this.renderPreviewSize(),
-      ...leadIn, this.renderLatentSeams(), this.renderRefCache(),
+      ...leadIn, this.renderLatentSeams(), this.renderFlowTruncation(), this.renderRefCache(),
       this.section("Nodes", "Flow shift pills",
       "Whether the sampler row offers H3's two flow shifts — the video and audio "
       + "schedule clocks. The values apply either way; this only decides who has "

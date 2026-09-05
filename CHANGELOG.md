@@ -5,6 +5,22 @@ and everything under it is kept exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**A pass's clip can be read off the middle of its schedule.** A flow sampler's
+output is, exactly, the average of every step's own guess at the clean picture,
+each weighted by its step; "Towards Error-Free Long Video Generation" (arXiv
+2606.22370) takes those guesses apart on a chained Wan model and finds the
+drift in the late ones — the texture steps, which add the sharpening and the
+small brightening every continued shot inherits and adds to again — and the
+colour cast in the earliest. Keeping the guesses from a window of the schedule
+and renormalising is what stopped the walk on their chain, with no training.
+The settings page's new "Flow truncation" row does that here for H3 passes and
+their turbo lead-in: off, the late steps dropped (sigma 0.3 and up), or both
+ends (0.3 to 0.7, the paper's window). A model patch records each step's
+velocity and swaps the sampler's output for the windowed average once the
+schedule reaches zero; the sound row leaves as the sampler made it. Off by
+default and off emits nothing. Untested on a strip as of this entry; the row
+is there to be tried. Issues #41, #46.
+
 **A blended seam continues from the latent the model made, not from a VAE
 round trip of it.** The run a seam inherits used to be read off the source
 pass's decode and encoded again; measured on H3, that trip darkens the run by

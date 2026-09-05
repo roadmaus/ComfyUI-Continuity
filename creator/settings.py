@@ -78,6 +78,8 @@ def default_prefixes():
 
 # The roads a blended seam can take, see `DEFAULTS["seam_handoff"]`.
 SEAM_HANDOFFS = ("frames", "latent", "levelled")
+# Which of a pass's steps make its latent, see `DEFAULTS["flow_truncation"]`.
+FLOW_TRUNCATIONS = ("off", "tail", "middle")
 
 DEFAULTS = {
     "video_crf": DEFAULT_CRF,
@@ -132,6 +134,14 @@ DEFAULTS = {
     # again — the road every render took before either existed, kept so the
     # three can be compared on the same strip.
     "seam_handoff": "latent",
+    # Which steps of a pass's schedule its latent is read off. "off": the
+    # sampler's last step, as every render before this. "tail": the average
+    # of the clean-latent guesses from every step with sigma >= 0.3, so the
+    # late steps' texture — and the over-sharpening and brightness bias that
+    # ride on it down a strip — stay out of the clip. "middle": sigma in
+    # [0.3, 0.7], the paper's window, which also drops the earliest steps'
+    # colour cast. See `families/h3/truncate.py`; H3 only.
+    "flow_truncation": "off",
     # The weight files this machine last picked, by family: `{family: {slot:
     # filename, dtype, route, devices}}` — the same block a piece carries, in
     # the same shape.
@@ -375,6 +385,11 @@ def clean(raw):
         if raw["seam_handoff"] not in SEAM_HANDOFFS:
             raise ValueError(f"seam_handoff must be one of {', '.join(SEAM_HANDOFFS)}")
         clean_settings["seam_handoff"] = raw["seam_handoff"]
+    if "flow_truncation" in raw and raw["flow_truncation"] is not None:
+        if raw["flow_truncation"] not in FLOW_TRUNCATIONS:
+            raise ValueError(
+                f"flow_truncation must be one of {', '.join(FLOW_TRUNCATIONS)}")
+        clean_settings["flow_truncation"] = raw["flow_truncation"]
     for flag in ("show_shift_pills", "autoplay_previews", "advanced", "latent_cache"):
         if flag in raw and raw[flag] is not None:
             if not isinstance(raw[flag], bool):
@@ -575,3 +590,8 @@ def turbo_lead_in():
 def seam_handoff():
     """What a blended seam hands the next shot: one of `SEAM_HANDOFFS`."""
     return load()["seam_handoff"]
+
+
+def flow_truncation():
+    """Which steps make a pass's latent: one of `FLOW_TRUNCATIONS`."""
+    return load()["flow_truncation"]

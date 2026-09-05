@@ -24,7 +24,7 @@ import comfy.sample
 from ... import (accel, canvas, compile as compiler, guide as guides, media,
                  models as core, raylight, sampling as sampling_mod, settings)
 from .. import base
-from . import declare, models as slots
+from . import declare, models as slots, truncate
 
 # Whether this core can start a sampler with the noise switched off on an H3
 # audio+video latent. The lead-in's second sitting does exactly that — the noise
@@ -149,6 +149,22 @@ def patched(graph, model, sampling, acceleration, weights):
             shift_audio=sampling.shift_audio).out(0)
     model = accel.graph_apply(graph, model, acceleration, sampling.steps)
     return core.graph_preview(graph, model, weights, declare.RULES.fps)
+
+
+def truncated(graph, model):
+    """`model` behind the flow truncation, when the settings page asks for it.
+
+    Off by default, and off means nothing is emitted. On, the pass's latent is
+    read off a window of the schedule rather than its last step (`truncate.py`).
+    Only the pass and its lead-in: the refine, the face crop and the restore
+    resume partway down the schedule and redraw texture on purpose, which is
+    the part this throws away.
+    """
+    window = truncate.WINDOWS[settings.flow_truncation()]
+    if window is None:
+        return model
+    return graph.node(truncate.TRUNCATE_NODE, model=model,
+                      t_low=window[0], t_high=window[1]).out(0)
 
 
 def face_payload(payload, face):
@@ -456,7 +472,8 @@ class H3(base.Family):
         # Patched after the segment node, which is where the LoRAs go on. Off,
         # every one of these adds nothing and this is the segment's model
         # unchanged.
-        model = patched(graph, segment.out(0), sampling, acceleration, weights)
+        model = truncated(graph, patched(graph, segment.out(0), sampling,
+                                         acceleration, weights))
 
         # What every sampler below this line is handed, whether the schedule is
         # run in one sitting or two. The seed is not in here because the two
@@ -483,8 +500,8 @@ class H3(base.Family):
             # and skips nothing.
             opening = graph.node(
                 "KSamplerAdvanced",
-                model=patched(graph, segment.out(3), sampling,
-                              accel.uncached(acceleration), weights),
+                model=truncated(graph, patched(graph, segment.out(3), sampling,
+                                                 accel.uncached(acceleration), weights)),
                 latent_image=segment.out(2),
                 add_noise="enable", noise_seed=seed,
                 start_at_step=0, end_at_step=run.steps,

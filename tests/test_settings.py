@@ -125,6 +125,14 @@ check("a null is the default", settings.clean({"seam_handoff": None})["seam_hand
 refuses("a road that does not exist", {"seam_handoff": "pixels"}, "one of")
 refuses("the old boolean", {"seam_handoff": True}, "one of")
 
+check("the flow truncation is off by default", settings.clean({})["flow_truncation"], "off")
+check("...and can be any of the three windows",
+      [settings.clean({"flow_truncation": w})["flow_truncation"] for w in settings.FLOW_TRUNCATIONS],
+      list(settings.FLOW_TRUNCATIONS))
+check("a null truncation is the default", settings.clean({"flow_truncation": None})["flow_truncation"], "off")
+refuses("a window that does not exist", {"flow_truncation": "late"}, "one of")
+refuses("a boolean truncation", {"flow_truncation": True}, "one of")
+
 # The reference cache's two numbers. Both are magnitudes with a meaningful
 # zero, which is the thing to hold down: 0 GB is not "no cache", it is the
 # in-session one with nothing written to disk, and 0 days is not "drop

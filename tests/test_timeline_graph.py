@@ -777,6 +777,38 @@ check("levelled: the next blended seam is anchored to the first pass's sampler",
 check("levelled: a classic seam gets neither",
       any(k in _lv_chain[3][1] for k in ("prev_latent", "anchor_latent")), False)
 
+# The flow truncation. Off by default and off emits nothing; on, one patch per
+# generation sits between the accelerators and the sampler, carrying the window
+# the setting names, and the sampler runs on it. Read off the file like the
+# seam handoff, so it is in the cache key for the same reason.
+check("off, no truncation node is emitted", "MiniMaxH3TruncatedFlow" in by_type, False)
+_was_tr = _settings.flow_truncation
+_settings.flow_truncation = lambda: "middle"
+try:
+    _tr = build().expand
+    _fp_middle = cn.MiniMaxH3Timeline.fingerprint_inputs(timeline_data=DATA)
+finally:
+    _settings.flow_truncation = _was_tr
+_tr_nodes = {n_id: n["inputs"] for n_id, n in _tr.items()
+             if n["class_type"] == "MiniMaxH3TruncatedFlow"}
+check("the middle window emits one truncation node per generation", len(_tr_nodes), 3)
+check("...carrying the paper's window",
+      {(i["t_low"], i["t_high"]) for i in _tr_nodes.values()}, {(0.3, 0.7)})
+check("...and every sampler runs on it",
+      all(n["inputs"]["model"][0] in _tr_nodes
+          for n in _tr.values() if n["class_type"] == "KSampler"), True)
+check("...downstream of the accelerators",
+      all(_tr[i["model"][0]]["class_type"] != "KSampler" for i in _tr_nodes.values()), True)
+check("the truncation is part of the node's cache key",
+      _fp_middle != cn.MiniMaxH3Timeline.fingerprint_inputs(timeline_data=DATA), True)
+_settings.flow_truncation = lambda: "tail"
+try:
+    _tail = {(n["inputs"]["t_low"], n["inputs"]["t_high"]) for n in build().expand.values()
+             if n["class_type"] == "MiniMaxH3TruncatedFlow"}
+finally:
+    _settings.flow_truncation = _was_tr
+check("the tail window keeps every step from 0.3 up", _tail, {(0.3, 1.0)})
+
 # The encoder's guide arithmetic, against a stand-in VAE: one call over the
 # run, one block per latent step, pinned at the offsets core's temporal grid
 # dictates — and a refusal when the two stop agreeing.
