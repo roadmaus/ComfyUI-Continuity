@@ -22,7 +22,7 @@ keeps both video checkpoints.
 
 from dataclasses import dataclass, field
 
-from . import models as core, outputs
+from . import models as core, neural, outputs
 from .compile import CompileError
 from .models import is_gguf, loader_for
 
@@ -249,15 +249,38 @@ def emit_latent(graph, payload, vae, empty_node):
     return encoded, payload.init["denoise"]
 
 
-def emit_tail(graph, samples, vae, unique_id, filename_prefix):
-    """Decode and save, reported against the node the user is looking at.
+def refined(graph, image, request):
+    """`image` through the DLSS 5 refine node when `request` asks; else as is.
+
+    `request` is the payload's `neural` dict (`compile_image.neural_block`) or
+    None. A dict rather than the object because the payload is a plain,
+    comparable, JSON-shaped record — and a dict with `on` false is off.
+    """
+    if isinstance(request, dict):
+        request = neural.Request(**request)
+    if not request:
+        return image
+    from . import neuralpass
+
+    return neuralpass.emit_still(graph, image, request)
+
+
+def emit_tail(graph, samples, vae, unique_id, filename_prefix, request=None):
+    """Decode, refine if asked, and save — reported against the node the user
+    is looking at.
 
     The display-id stamp is the same mechanism `render.emit_tail` uses and
     exists for the same reason: the save node lives in an expanded graph on
     nobody's canvas, and the stamp files its `executed` message under the
     PreStage node so the stage card can show what it just made.
+
+    `request` is the payload's DLSS 5 refiner block (`payload.neural`) or
+    None. On, the refine node sits between the decode and the save, so the
+    file written is the refined picture and the stage shows it; off or absent,
+    the graph is exactly what it was before the refiner existed.
     """
     image = graph.node("VAEDecode", samples=samples, vae=vae).out(0)
+    image = refined(graph, image, request)
     save = graph.node(SAVE_NODE, images=image, filename_prefix=filename_prefix)
     save.set_override_display_id(unique_id)
     return save

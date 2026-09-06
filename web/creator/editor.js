@@ -22,7 +22,7 @@ import { castIntoPiece, keepSubject } from "./presets.js";
 import { openTrim, trimLabel } from "./trim.js";
 import { PromptBox, focusEnd, openEditorSheet } from "./prompt.js";
 import { RefinePanel, refineButton, refine } from "./refine.js";
-import { openAspectPopover, openResolutionPopover, openChoicePopover, facesPill, aspectGlyph,
+import { openAspectPopover, openResolutionPopover, openChoicePopover, facesPill, neuralPill, aspectGlyph,
          resolutionPillText,
          PILL_GLYPH, pillSet, pillClass } from "./pills.js";
 import { blobIO, samplingBar, segmentSeedPill } from "./sampling.js";
@@ -1567,6 +1567,12 @@ export class CreatorEditor {
         // render that says what is wrong and one that stops.
         ...(S.canDo(this.piece, "face") || this.piece.face?.on
           ? [facesPill({ target: this.piece, commit: () => this.commit() })] : []),
+        // The DLSS 5 refiner, family-neutral: it runs over decoded frames.
+        neuralPill({ target: this.piece, commit: () => this.commit(),
+                     geometry: () => {
+                       const asset = S.aspectSourceAsset(this.state);
+                       return S.resolved(this.state, asset ? this.sizes.get(asset.filename) : null, this.piece);
+                     } }),
         weightsPill({
           piece: this.piece,
           models: this.piece.models,

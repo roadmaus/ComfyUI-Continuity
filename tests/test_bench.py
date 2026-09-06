@@ -227,12 +227,22 @@ with tempfile.TemporaryDirectory() as shelf:
 # ---- the upscale bench ----------------------------------------------------------
 
 backends = upscale.catalogue()["backends"]
-check("the backends, weakest promise first", [entry["id"] for entry in backends],
-      ["sharpen", "restore"])
+check("the backends, weakest promise first, the refiner last", [entry["id"] for entry in backends],
+      ["sharpen", "restore", "neural"])
+# The "then refine" switch rides on the two upscalers only while the refiner
+# can run — this machine has no mlxdlss, so the dials are what they were.
+refiner_ready = backends[2]["ready"]
+after = ["neural"] if refiner_ready else []
 check("Sharpen's dials", [spec["key"] for spec in backends[0]["params"]],
-      ["model", "scale"])
+      ["model", "scale", *after])
 check("Restore's dials", [spec["key"] for spec in backends[1]["params"]],
-      ["model", "vae", "scale", "colour", "frames"])
+      ["model", "vae", "scale", "colour", "frames", *after])
+check("the refiner's dials", [spec["key"] for spec in backends[2]["params"]],
+      ["profile", "processing", "detail", "colour", "intensity", "precision", "temporal"])
+check("the refiner has no scale dial: it enlarges nothing",
+      "scale" in [spec["key"] for spec in backends[2]["params"]], False)
+check("the refiner says what it needs when it is not ready",
+      bool(backends[2]["needs"]) or refiner_ready, True)
 for entry in backends:
     check(f"{entry['id']} is model work", entry["heavy"], True)
     check(f"{entry['id']} readiness is a verdict", isinstance(entry["ready"], bool), True)
@@ -271,6 +281,8 @@ check("and never turns back", all(a >= b for a, b in zip(fade, fade[1:])), True)
 check("x2 of an odd size rounds", upscale.target(1067, 601, {"scale": 2}), (2134, 1202))
 check("x1.5 rounds to the nearest pixel", upscale.target(101, 101, {"scale": 1.5}), (152, 152))
 check("nothing collapses to nothing", upscale.target(1, 1, {"scale": 1.5}), (2, 2))
+check("no scale dial at all is the size it is — the refiner's entry",
+      upscale.target(1067, 601, {}), (1067, 601))
 
 # The tile: a square of `PREVIEW_TILE`, or the whole frame where the frame is
 # smaller, and never running off an edge — a tile that did would show the model's

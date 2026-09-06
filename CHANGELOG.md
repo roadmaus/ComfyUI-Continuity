@@ -5,6 +5,23 @@ and everything under it is kept exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**A neural refiner, from DLSS 5.** NVIDIA's DLSS 5 neural renderer — the
+material network, not the upscaler — as a pass over finished stills and
+clips, through the open-source MLX-DLSS port's PyTorch backend. Skin, hair,
+fabric, contact shadows and subsurface are re-drawn at the size the picture
+already is. A `DLSS 5` pill on the pre-stage, Creator and Timeline sampler
+rows; a *Refine (DLSS 5)* entry on the upscale bench with a *Then refine*
+switch on Sharpen and Restore; a *Continuity Neural Refine* node for any
+IMAGE, with a MASK socket that drives where it refines. A clip is refined
+after the whole reel with the previous frame reprojected into the next, so it
+does not boil, and after ReDetail where that is on. Every surface prints the
+memory it will want — about a gigabyte per megapixel, squared by the
+processing scale — before it runs. Nothing of NVIDIA's ships with the pack:
+the port's inference and extraction code is vendored (Apache-2.0, pinned,
+`tools/vendor_mlxdlss.py`), and the weights are extracted, on the settings
+page, from the user's own DLSS DLL after a hash check. Without them the pack
+loads and renders exactly as before, and the pills say what is missing.
+
 **A drift guard for chained shots.** Every continued shot came out a little
 brighter and harsher than the one before it, until the end of a long strip
 looked fried (issues #41, #46). A flow sampler's output is, exactly, the

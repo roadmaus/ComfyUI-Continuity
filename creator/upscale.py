@@ -32,6 +32,17 @@ shelf in the output folder next to the renders, where the gallery already looks.
   restoration done frame by frame boils, and the temporal chunk is what stops
   it. `bench.transcode` carries the chunking and the crossfade between chunks;
   what is here is which frames go in and what comes back.
+- **Refine (DLSS 5)** is the odd one out and is labelled as such: NVIDIA's
+  neural renderer as a material pass, at the size the picture already is. It
+  enlarges nothing. It is on this bench because the comparison somebody wants
+  to make is "the same tile, with and without it", which is exactly what the
+  light box draws — and because it *composes* with the two above: each of them
+  carries a switch to run it as a second stage over their result, which is
+  the composition that makes sense (material drawn onto the enlarged picture).
+  Optional in the strongest sense: the package and the weights are the user's
+  own, and without them the entry reads as not ready and says why
+  (`neural.py`).
+
 - **Re-detail is not offered here at all**, and that is a decision rather than an
   omission. It re-renders rather than resolves — see `redetail.py`, where the
   freckles that were never on the face are written down — so it is a promise
@@ -55,6 +66,7 @@ from PIL import Image
 import folder_paths
 
 from . import bench
+from . import neural
 from . import outputs
 
 log = logging.getLogger(__name__)
@@ -125,6 +137,7 @@ BACKENDS = (
              "note": "How much larger the result is than the source, whatever the "
                      "model's own factor happens to be. Past the model's factor "
                      "it is run a second time over its own output."},
+            neural.AFTER_SWITCH,
         ),
     },
 
@@ -169,8 +182,14 @@ BACKENDS = (
                      "movement together better and costs memory for it. This is "
                      "the dial to bring down when a clip runs out of VRAM. It "
                      "does nothing to a still."},
+            neural.AFTER_SWITCH,
         ),
     },
+
+    # The refiner's own entry, declared in `neural.py` beside everything else
+    # about it. No `choice` dial: its one file has one name in one folder, so
+    # readiness is a question for `neural.status` rather than for a folder walk.
+    neural.BENCH,
 )
 
 BY_ID = {backend["id"]: backend for backend in BACKENDS}
@@ -180,8 +199,22 @@ def catalogue():
     """The backends, as the frontend reads them — with this machine filled in.
 
     Walks the model directories, so callers run it off the event loop.
+
+    The refiner's readiness is not a folder walk, so its entry is filled in by
+    its own module; and the "then refine" switch the two upscalers carry is
+    dropped from their dials while it cannot run — a switch for something that
+    is not there would be a control that only knows how to refuse.
     """
-    return {"backends": bench.catalogue(BACKENDS)}
+    out = []
+    refiner = neural.bench_entry()
+    for entry in bench.catalogue(BACKENDS):
+        if entry["id"] == neural.BENCH["id"]:
+            entry.update(refiner)
+        elif not refiner["ready"]:
+            entry["params"] = [spec for spec in entry["params"]
+                               if spec["key"] != neural.AFTER_SWITCH["key"]]
+        out.append(entry)
+    return {"backends": out}
 
 
 def _params(op, raw, weights=True):
@@ -213,7 +246,7 @@ def target(width, height, values):
     shows. The rounding is here rather than in any of them because a preview
     that was a pixel wider than the file would be a preview of something else.
     """
-    scale = float(values["scale"])
+    scale = float(values.get("scale", 1))
     return max(1, round(width * scale)), max(1, round(height * scale))
 
 
@@ -350,17 +383,80 @@ def _restore(frames, values):
     return [picture for picture in out[:len(frames)]]
 
 
-def enlarge_many(frames, op, values):
+def _refine(frames, request, sequence=None, first_index=0):
+    """The DLSS 5 refiner over a run of frames, at the size they are.
+
+    `sequence` is a `neural.Sequence` when a clip is being carried through with
+    history — it lives across chunks, which is why the caller owns it — and
+    None for a still or for frames refined on their own, which are seeded by
+    their index so a tile in the light box and the file agree.
+    """
+    out = []
+    for offset, frame in enumerate(frames):
+        if sequence is not None:
+            picture = sequence.process(frame)
+        else:
+            picture = neural.refine_frame(frame, request, frame_index=first_index + offset)
+        out.append((picture * 255.0).round().clip(0, 255).astype(np.uint8))
+    return out
+
+
+class Refiner:
+    """What one run holds for the refiner: its request, and its history.
+
+    Built once per `run` or `preview` and handed through `enlarge_many`, so a
+    clip's chunks share one temporal session rather than each chunk starting
+    its history afresh — and so a still never builds one at all.
+    """
+
+    def __init__(self, op, values, clip=False):
+        self.on = op == neural.BENCH["id"] or bool(values.get(neural.AFTER_SWITCH["key"]))
+        if not self.on:
+            self.request = None
+            self.sequence = None
+            return
+        missing = neural.needs()
+        if missing:
+            raise UpscaleError(f"Refine (DLSS 5) needs {missing}")
+        # The refiner's own entry reads its dials; an upscaler's switch runs it
+        # at the entry's defaults, which is what the switch's note promises.
+        self.request = (neural.request_from_values(values)
+                        if op == neural.BENCH["id"] else neural.Request(on=True))
+        temporal = bench.truthy(values.get("temporal"), True) if op == neural.BENCH["id"] else True
+        self.sequence = neural.Sequence(self.request) if clip and temporal else None
+        self.count = 0
+
+    def __call__(self, frames):
+        if not self.on:
+            return frames
+        # The same one-at-a-time lock the two upscalers take inside their own
+        # functions: a preview dragged in two tabs must not race for the graph.
+        with bench.ONE_AT_A_TIME:
+            done = _refine(frames, self.request, self.sequence, first_index=self.count)
+        self.count += len(frames)
+        return done
+
+
+def enlarge_many(frames, op, values, refiner=None):
     """A run of frames, upscaled. In and out are (H, W, 3) uint8 RGB.
 
     The answer is always exactly the target size, whatever the backend's own
     factor was, so nothing downstream has to know which model ran — an encoder
     was opened at that size before a frame was decoded.
+
+    `refiner` is this run's `Refiner`, built by the caller; None reads as one
+    built here for these frames alone. The refiner runs *after* the fit, at the
+    target size, on every backend: for its own entry that is the whole job, and
+    for the two upscalers it is their second stage.
     """
+    if refiner is None:
+        refiner = Refiner(op, values)
     if op == "sharpen":
         done = [_sharpen(frame, values) for frame in frames]
     elif op == "restore":
         done = _restore(frames, values)
+    elif op == neural.BENCH["id"]:
+        done = list(frames)
     else:
         raise UpscaleError(f"{op!r} is not a backend this pack knows")
     fitted = []
@@ -369,7 +465,7 @@ def enlarge_many(frames, op, values):
         if (picture.shape[1], picture.shape[0]) != wanted:
             picture = np.asarray(Image.fromarray(picture).resize(wanted, Image.LANCZOS))
         fitted.append(picture)
-    return fitted
+    return refiner(fitted)
 
 
 def enlarge(frame, op, values):
@@ -456,9 +552,12 @@ def run(filename, op, raw, trim=None, keep_sound=True, on_progress=None, at=None
         name = bench.write_still(frame, out_dir, bench.stem(path, op, None, at))
         kind = "image"
     elif bench.is_video(path):
+        # One refiner for the whole clip, so its history runs across the
+        # chunks `transcode` hands over rather than restarting at each.
+        refiner = Refiner(op, values, clip=True)
         name = bench.transcode(
             path, out_dir, bench.stem(path, op, trim),
-            lambda frames: enlarge_many(frames, op, values),
+            lambda frames: enlarge_many(frames, op, values, refiner),
             size=lambda width, height: target(width, height, values),
             trim=trim, chunk=chunk_of(op, values), overlap=overlap_of(op, values),
             keep_sound=keep_sound, on_progress=on_progress,

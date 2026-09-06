@@ -1026,6 +1026,41 @@ export async function upscaleRun(body, options) {
   return answer;
 }
 
+// ---- the DLSS 5 refiner -----------------------------------------------------
+//
+// Not a bench: the refiner runs inside renders and on the upscale bench. What
+// is here is its diagnostic surface — the questions the settings page asks so
+// that setting it up needs no issue filed (`creator/routes/neural.py`).
+
+/** Where the refiner stands on this machine: package, weights, the last DLL. */
+export async function neuralStatus() {
+  const response = await api.fetchApi("/continuity/neural/status");
+  if (!response.ok) throw new Error(t("the refiner's status could not be read ({status})", { status: response.status }));
+  return response.json();
+}
+
+/** Hash a DLL and say whether it is the supported build; the path is remembered. */
+export async function neuralCheck(path) {
+  const response = await api.fetchApi("/continuity/neural/check", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ path }),
+  });
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(body.error || t("the check failed ({status})", { status: response.status }));
+  return body;
+}
+
+/** Run upstream's extraction over the DLL into models/dlss. -> the status after. */
+export async function neuralExtract(path) {
+  const response = await api.fetchApi("/continuity/neural/extract", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ path }),
+  });
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(body.error || t("the extraction failed ({status})", { status: response.status }));
+  return body;
+}
+
 // ---- the blockout bench -----------------------------------------------------
 //
 // No catalogue and no preview URL: the scene lives in the browser and so does

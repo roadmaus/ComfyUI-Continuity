@@ -53,6 +53,7 @@ import { openChoicePopover } from "./pills.js";
 import { openPicker } from "./picker.js";
 import { formatTime, mountTrim } from "./trim.js";
 import { t } from "./i18n.js";
+import { neuralEstimateGb } from "./state.js";
 import { api } from "../../../scripts/api.js";
 import { busy as queueBusy, watch as watchQueue } from "./queue.js";
 
@@ -523,8 +524,36 @@ class Bench {
 
   /** How much bigger the result is, as the dials stand. */
   scale() {
-    return Number(this.values[this.op]?.scale ?? this.backend()?.params
-      ?.find((spec) => spec.key === "scale")?.default ?? 2);
+    // A backend with no scale dial — the DLSS 5 refiner — enlarges nothing.
+    const spec = this.backend()?.params?.find((entry) => entry.key === "scale");
+    if (!spec) return 1;
+    return Number(this.values[this.op]?.scale ?? spec.default ?? 2);
+  }
+
+  /**
+   * About how much device memory the refiner will want on this source, or
+   * null when it is not going to run. Printed on the source line before the
+   * press, because an out-of-memory three minutes into a clip is the one
+   * failure this bench can predict: the network costs about a gigabyte per
+   * megapixel of its input, and the processing scale squares it. The server
+   * owns the rule (`neural.estimate_gb`); this is its mirror in `state.js`.
+   */
+  refinerGb() {
+    const size = this.naturalSize();
+    if (!size) return null;
+    const backend = this.backend();
+    const held = this.values[this.op] ?? {};
+    const own = Boolean(backend?.cost);
+    const after = backend?.params?.some((spec) => spec.key === "neural") && Boolean(held.neural);
+    if (!own && !after) return null;
+    // The refiner runs after the fit, at the target size — and with history
+    // on, a clip runs at that size unscaled.
+    const width = Math.round(size.width * this.scale());
+    const height = Math.round(size.height * this.scale());
+    const temporal = this.source?.kind === "video" && (held.temporal ?? true);
+    const scale = own && !temporal ? Number(held.processing ?? 1) : 1;
+    const precision = own ? (held.precision ?? "reference") : "reference";
+    return neuralEstimateGb(width, height, scale, precision);
   }
 
   // ---- the tile ----------------------------------------------------------------
@@ -883,10 +912,14 @@ class Bench {
     if (this.source.kind === "video" && this.cutter?.media?.duration) {
       parts.push(formatTime(this.cutter.media.duration));
     }
-    if (size) {
+    if (size && this.scale() !== 1) {
       parts.push(`→ ${Math.round(size.width * this.scale())}×${Math.round(size.height * this.scale())}`);
-    } else {
+    } else if (!size) {
       parts.push(this.source.kind === "video" ? t("video") : t("picture"));
+    }
+    const gigabytes = this.refinerGb();
+    if (gigabytes != null) {
+      parts.push(t("about {gb} GB to refine", { gb: gigabytes.toFixed(1) }));
     }
     return parts.join(" · ");
   }

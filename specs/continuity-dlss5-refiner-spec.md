@@ -26,8 +26,15 @@ subsurface scattering. Resolution in equals resolution out.
 - **The dependency is optional.** Continuity must install, load and run
   normally with the refiner absent. Missing weights degrade to a disabled
   control with an explanatory state, never an import error.
-- **Upstream is vendored by reference, not forked.** Four days old at time of
-  writing. Pin a version, track upstream, do not absorb the code.
+- **Upstream is vendored at a pin, not forked.** Four days old at time of
+  writing. *Amended 2026-09-06:* the first build installed the port from a git
+  URL; that was a second install step buying nothing, since the port's Python
+  half is 400 KB of pure Python on dependencies ComfyUI already has. The
+  inference path and the extraction modules are now copied into
+  `creator/mlxdlss/` by `tools/vendor_mlxdlss.py` on the `h3lora` model —
+  pinned commit stamped in, LICENSE and NOTICE beside, local edits held as a
+  patch that fails loudly when upstream moves under it. Track upstream by
+  re-syncing; do not edit the copy in place.
 
 ## 3. Integration surfaces
 

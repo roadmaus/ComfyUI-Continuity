@@ -256,6 +256,10 @@ export const css = `
    section above, plus one line saying what it costs. Fixed width so the note
    does not reflow the popover as the knobs change. */
 .mmc-faces-pop { width: 260px; }
+/* The DLSS 5 refiner's popover: the face pass's shape with two rows of short
+   stops for the profile and the precision. */
+.mmc-neural-pop { width: 280px; }
+.mmc-neural-opts { display: flex; gap: 4px; flex-wrap: wrap; }
 .mmc-pop-note {
   color: var(--mmc-dim); font-size: calc(11px * var(--mmc-type)); line-height: 1.45;
   padding: 8px 10px 2px; border-top: 1px solid var(--mmc-line); margin-top: 6px;

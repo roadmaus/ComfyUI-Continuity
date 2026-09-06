@@ -160,3 +160,16 @@ Matte uses the SAM 3 checkpoint from the cutouts table above.
 |---|---|---|
 | Sharpen | any GAN upscaler spandrel loads (`RealESRGAN_x4plus`, `4x-UltraSharp`, DAT, SwinIR, SPAN) | `upscale_models` |
 | Restore | `seedvr2_3b_int8_convrot.safetensors` and `seedvr2_ema_vae_fp16.safetensors` (from Comfy-Org/SeedVR2) | `diffusion_models`, `vae` |
+| Refine (DLSS 5) | `dlssnr-weights-logical.safetensors`, extracted on the settings page from your own `nvngx_dlssnr.dll` — see below | `dlss` |
+
+## The neural refiner (DLSS 5)
+
+No download. The weights are NVIDIA's, inside `nvngx_dlssnr.dll` file
+version 310.8.0.0 (SHA-256 `ceb6432f…2650`), which NVIDIA ships in its
+Streamline SDK and with games that carry DLSS 5. This pack neither hosts nor
+bundles that file or anything derived from it: the settings page checks the
+DLL you point it at by hash and runs the
+[MLX-DLSS](https://github.com/iamwavecut/MLX-DLSS) port's extraction tool on it
+locally, writing `models/dlss/dlssnr-weights-logical.safetensors`. The port's
+code is carried in the pack, so nothing else is installed. See
+[tools.md](tools.md#neural-refiner-dlss-5).

@@ -23,7 +23,7 @@ import { openSettings } from "./settings.js";
 import { SoundLane } from "./soundlane.js";
 import { openSubjectView } from "./subject.js";
 import { openTrim } from "./trim.js";
-import { openAspectPopover, openResolutionPopover, openChoicePopover, facesPill, stepperPill,
+import { openAspectPopover, openResolutionPopover, openChoicePopover, facesPill, neuralPill, stepperPill,
          aspectGlyph, resolutionPillText, PILL_GLYPH } from "./pills.js";
 import { refine, refineButton, chosenModel as refineModel } from "./refine.js";
 import { adopted, blobIO, samplingBar } from "./sampling.js";
@@ -3976,6 +3976,9 @@ export class TimelineBody {
         // see the same gate, and the same reason, on the Creator's own row.
         ...(S.canDo(this.timeline, "face") || S.faceAnywhere(this.timeline)
           ? [facesPill({ target: this.timeline, commit: () => this.commit() })] : []),
+        // The DLSS 5 refiner, family-neutral: it runs over decoded frames.
+        neuralPill({ target: this.timeline, commit: () => this.commit(),
+                     geometry: () => this.geometry() }),
         weightsPill({
           piece: this.timeline,
           models: this.timeline.models,

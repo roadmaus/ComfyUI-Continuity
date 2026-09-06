@@ -140,6 +140,31 @@ export const css = `
   margin-top: 9px; padding: 3px 12px; font-size: calc(11.5px * var(--mmc-type));
 }
 .mmc-set-wait { color: var(--mmc-dim); font-size: calc(13px * var(--mmc-type)); padding: 28px 0 24px; }
+/* The DLSS 5 refiner's standing: two lines that each say installed-or-not,
+   then the DLL path with its two presses and the verdict under it. */
+.mmc-neural-standing { display: flex; flex-direction: column; gap: 4px; padding: 6px 2px 10px; }
+.mmc-neural-line {
+  display: grid; grid-template-columns: 16px 64px 1fr; gap: 8px; align-items: baseline;
+  color: var(--mmc-dim); font-size: calc(12px * var(--mmc-type)); line-height: 1.45;
+}
+.mmc-neural-line.ok { color: var(--mmc-ink); }
+.mmc-neural-mark { text-align: center; color: var(--mmc-off); }
+.mmc-neural-line.ok .mmc-neural-mark { color: var(--mmc-accent); }
+.mmc-neural-label { font-weight: 600; }
+.mmc-neural-note { overflow-wrap: anywhere; }
+.mmc-neural-field { padding: 10px 12px 8px; }
+.mmc-neural-row { display: flex; gap: 8px; align-items: center; }
+.mmc-neural-path {
+  flex: 1; min-width: 0; padding: 5px 8px; border-radius: 6px;
+  border: 1px solid var(--mmc-line); background: var(--mmc-wash); color: var(--mmc-ink);
+  font-family: ui-monospace, Menlo, monospace; font-size: calc(11.5px * var(--mmc-type));
+}
+.mmc-neural-path:focus { outline: none; border-color: var(--mmc-accent); }
+.mmc-neural-verdict {
+  padding: 8px 2px 0; font-size: calc(11.5px * var(--mmc-type)); line-height: 1.45; color: var(--mmc-dim);
+}
+.mmc-neural-verdict.ok { color: var(--mmc-accent); }
+.mmc-neural-verdict.bad { color: var(--mmc-warn); }
 .mmc-set-problem { color: var(--mmc-warn); font-size: calc(12px * var(--mmc-type)); line-height: 1.45; padding: 14px 0 0; }
 
 

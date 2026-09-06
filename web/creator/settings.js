@@ -23,7 +23,7 @@
 import { el, mountOverlay } from "./dom.js";
 import { loadSettings, saveSettings, resetSettings, noteSettings, loadLatentCache,
          clearLatentCache, clearPickerPrefs, pickerPrefsHeld, clearLoraPrefs,
-         loraPrefsHeld } from "./api.js";
+         loraPrefsHeld, neuralStatus, neuralCheck, neuralExtract } from "./api.js";
 import * as P from "./presets.js";
 import { resetSettings as resetRefiner, settingsStored as refinerStored,
          remoteStatus, saveRemote } from "./refine.js";
@@ -374,6 +374,14 @@ class SettingsPage {
     // opened to change the video quality has no business doing that.
     this.kept = null;
     this.sweeping = false;  // the "remove everything" pass, while it runs
+    // The DLSS 5 refiner's standing on this machine, once the General tab has
+    // asked. Null until then, for the same reason `kept` is: the answer hashes
+    // nothing, but it is a route, and a page opened for the video quality has
+    // no business asking it. `neuralBusy` names the press in flight — "check"
+    // or "extract" — and `neuralNote` is what the last press said.
+    this.neural = null;
+    this.neuralBusy = null;
+    this.neuralNote = null;
     this.problem = null;
     this.tab = TABS[0].key;
   }
@@ -691,6 +699,172 @@ class SettingsPage {
   }
 
   /**
+   * The DLSS 5 neural refiner: where it stands on this machine, and the two
+   * presses that set it up.
+   *
+   * This section exists because of the support tail the refiner brings with
+   * it. The weights live inside NVIDIA's own DLL and this pack ships none of
+   * it — not the DLL, not the weights, not the extraction tool — so every
+   * install goes: install the package, find the DLL, check it is the right
+   * build, extract. Each of those can go wrong in a way nobody here can fix
+   * over an issue, which is why every state of it is written on this page:
+   * what is installed, what is not, whether the file at that path is the
+   * build the decoder was verified against, and where the weights landed.
+   */
+  renderNeural() {
+    if (this.neural === null && !this.neuralBusy) this.loadNeural();
+    const state = this.neural;
+    const dll = this.settings.neural_dll ?? "";
+    const busy = Boolean(this.neuralBusy);
+    const checked = state?.dll ?? null;
+
+    const line = (label, ok, note) => el("div", { class: `mmc-neural-line${ok ? " ok" : ""}` }, [
+      el("span", { class: "mmc-neural-mark", text: ok ? "✓" : "–" }),
+      el("span", { class: "mmc-neural-label", text: label }),
+      el("span", { class: "mmc-neural-note", text: note }),
+    ]);
+
+    const standing = state === null
+      ? [el("div", { class: "mmc-set-wait", text: t("Asking…") })]
+      : [
+        line(t("Weights"), Boolean(state.weights),
+             state.weights
+               ? t("Extracted, in {folder}/{file}.", { folder: state.folder, file: state.weights_file })
+               : t("Not extracted yet. They come out of your own {dll} (file version {version}) below.",
+                   { dll: state.dll_name, version: state.dll_version })),
+      ];
+
+    // The box is not re-rendered while it is typed in — that would drop the
+    // caret — so the Check button's readiness is flipped by hand on input
+    // rather than read off the render. The first version computed `disabled`
+    // once from the empty box and nothing pasted in afterwards could enable it.
+    let checkButton = null;
+    const field = el("input", {
+      type: "text", class: "mmc-neural-path", value: dll, spellcheck: "false",
+      placeholder: t("…/Streamline/bin/x64/nvngx_dlssnr.dll"),
+      "aria-label": t("Path to your nvngx_dlssnr.dll"),
+      disabled: busy || null,
+      oninput: (event) => {
+        this.settings = { ...this.settings, neural_dll: event.target.value };
+        if (checkButton) checkButton.disabled = busy || !event.target.value.trim();
+      },
+      onkeydown: (event) => {
+        event.stopPropagation();
+        if (event.key === "Enter") { event.preventDefault(); this.checkNeural(); }
+      },
+      onpaste: (event) => event.stopPropagation(),
+    });
+
+    const verdict = checked
+      ? el("div", { class: `mmc-neural-verdict${checked.supported ? " ok" : " bad"}` }, [
+          el("span", { text: checked.verified
+            ? t("This is the build upstream verified ({version}).", { version: state.dll_version })
+            : checked.supported
+              ? t("Usable: {reason}", { reason: checked.reason })
+              : t(checked.reason ?? "Not the supported build.") }),
+        ])
+      : null;
+
+    const note = this.neuralNote
+      ? el("div", { class: `mmc-neural-verdict${this.neuralNote.ok ? " ok" : " bad"}`,
+                    text: this.neuralNote.text })
+      : null;
+
+    return this.section("Rendering", "Neural refiner (DLSS 5)",
+      "NVIDIA's DLSS 5 neural renderer as a material pass — skin, hair, fabric, "
+      + "contact shadows — over finished stills and clips, at the size they already "
+      + "are. Nothing of NVIDIA's ships with this pack: the weights are extracted "
+      + "here from your own copy of the DLSS DLL, which NVIDIA distributes in its "
+      + "Streamline SDK and with games that carry DLSS 5. The DLL is never read "
+      + "again after that, and nothing is downloaded.",
+      [
+        el("div", { class: "mmc-neural-standing" }, standing),
+        el("div", { class: "mmc-set-field mmc-neural-field" }, [
+          el("div", { class: "mmc-neural-row" }, [
+            field,
+            (checkButton = el("button", {
+              class: "mmc-set-reset", text: this.neuralBusy === "check" ? t("Checking…") : t("Check"),
+              disabled: busy || !dll.trim() || null,
+              title: t("Hash the file and say whether it is the build the weights come out of."),
+              onclick: () => this.checkNeural(),
+            })),
+            el("button", {
+              class: "mmc-set-reset mmc-neural-extract",
+              text: this.neuralBusy === "extract" ? t("Extracting…") : t("Extract weights"),
+              disabled: busy || !checked?.supported || null,
+              title: t("Run the port's extraction over the DLL, locally, into {folder}.",
+                       { folder: state?.folder ?? "models/dlss" }),
+              onclick: () => this.extractNeural(),
+            }),
+          ]),
+          verdict,
+          note,
+        ]),
+        el("div", { class: "mmc-set-foot" }, [
+          el("span", {
+            text: t("The code is the open-source port {upstream} (Apache-2.0), carried "
+                  + "in this pack at commit {commit}. Its figures — within 0.005 of the "
+                  + "driver on game renders — are its own, not this pack's. Trained on "
+                  + "game frames: expect strong results on figures and faces, and odd "
+                  + "ones on flat or abstract work.",
+                    { upstream: state?.upstream ?? "iamwavecut/MLX-DLSS",
+                      commit: (state?.commit ?? "").slice(0, 7) }),
+          }),
+        ]),
+      ]);
+  }
+
+  async loadNeural() {
+    this.neuralBusy = "load";
+    try {
+      this.neural = await neuralStatus();
+      if (this.neural.dll_path && !("neural_dll" in (this.settings ?? {}))) {
+        this.settings = { ...this.settings, neural_dll: this.neural.dll_path };
+      }
+    } catch (error) {
+      this.neural = { installed: false, weights: null, needs: String(error?.message ?? error) };
+    } finally {
+      this.neuralBusy = null;
+      this.render();
+    }
+  }
+
+  async checkNeural() {
+    const path = (this.settings.neural_dll ?? "").trim();
+    if (!path || this.neuralBusy) return;
+    this.neuralBusy = "check";
+    this.neuralNote = null;
+    this.render();
+    try {
+      const checked = await neuralCheck(path);
+      this.neural = { ...(this.neural ?? {}), dll: checked };
+    } catch (error) {
+      this.neuralNote = { ok: false, text: String(error?.message ?? error) };
+    } finally {
+      this.neuralBusy = null;
+      this.render();
+    }
+  }
+
+  async extractNeural() {
+    const path = (this.settings.neural_dll ?? "").trim();
+    if (!path || this.neuralBusy) return;
+    this.neuralBusy = "extract";
+    this.neuralNote = null;
+    this.render();
+    try {
+      this.neural = await neuralExtract(path);
+      this.neuralNote = { ok: true, text: t("Extracted. The refiner is ready; pills and the upscale bench "
+                                           + "pick it up on their next open.") };
+    } catch (error) {
+      this.neuralNote = { ok: false, text: String(error?.message ?? error) };
+    } finally {
+      this.neuralBusy = null;
+      this.render();
+    }
+  }
+
+  /**
    * What a blended seam hands the next shot (issues #41, #46). The latent is
    * the better join — the run is sliced off what the sampler made, so nothing
    * is decoded and re-encoded on the way — and the frames are the road every
@@ -928,7 +1102,8 @@ class SettingsPage {
     const leadIn = this.settings.advanced === true || Number(this.settings.turbo_lead_in) > 0
       ? this.renderLeadIn() : [];
     return [this.renderAdvanced(), this.renderPreviews(), this.renderPreviewSize(),
-      ...leadIn, this.renderLatentSeams(), this.renderDriftGuard(), this.renderRefCache(),
+      ...leadIn, this.renderLatentSeams(), this.renderDriftGuard(), this.renderNeural(),
+      this.renderRefCache(),
       this.section("Nodes", "Flow shift pills",
       "Whether the sampler row offers H3's two flow shifts — the video and audio "
       + "schedule clocks. The values apply either way; this only decides who has "

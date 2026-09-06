@@ -34,7 +34,7 @@ import json
 
 from comfy_api.latest import io
 
-from . import canvas, compile_image, media, render_image, sampling
+from . import canvas, compile_image, media, neural, render_image, sampling
 from .core import emit as loop
 from .compile import CompileError
 from .families import registry
@@ -70,6 +70,9 @@ DEFAULT_DATA = json.dumps({
     # pill's own arches rather than written down, so a family registering
     # itself gets a block here too and this cannot go stale behind one.
     "models": {arch: {} for arch in registry.STILL_ARCHES},
+    # The DLSS 5 refiner over the finished still. Off, and the whole block is
+    # what the pill writes when it is on — see `neural.DEFAULTS`.
+    "neural": dict(neural.DEFAULTS),
     # A hint for the frontend's peer discovery, never authoritative: node ids
     # renumber on paste, so the pill re-derives the relationship by scan.
     "peer": None,

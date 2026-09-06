@@ -31,6 +31,7 @@ modelled here at all.
 
 from dataclasses import dataclass, field
 
+from . import neural
 from .compile import HANDLE_RE, CompileError, collect_triggers
 from .families import registry
 
@@ -117,6 +118,17 @@ class ImagePayload:
     # family whose schedule the sampler row already states in full.
     schedule: dict = field(default_factory=dict)
     ratio_clamped: bool = False
+    # The DLSS 5 refiner over the decoded still, as `neural.Request.as_dict()`,
+    # or None when the pill is off. Read off the blob here so the emitters
+    # never need the blob — the same reason the checkpoint field is resolved
+    # above rather than in the graph.
+    neural: dict = None
+
+
+def neural_block(data):
+    """The blob's refiner request as a plain dict, or None while it is off."""
+    request = neural.Request.of(data)
+    return request.as_dict() if request else None
 
 
 def active_image_loras(entries):
@@ -386,4 +398,5 @@ def compile_prestage(data, family, image_size_lookup=None):
         # graph loads these by name, in this order, into the encoder's slots.
         refs=[filename for _, filename in refs], init=init,
         schedule=schedule or {}, ratio_clamped=ratio_clamped,
+        neural=neural_block(data),
     )

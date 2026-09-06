@@ -237,6 +237,14 @@ DEFAULTS = {
     # it happens, not the one it writes.
     "preview_max_px": 640,
     "preview_quality": 80,
+    # Where the user's own `nvngx_dlssnr.dll` is, for the DLSS 5 refiner's
+    # extraction on the settings page. A path and nothing else: the pack
+    # never reads the DLL to render — it reads the weights the extraction
+    # wrote into models/dlss — so this is only what the page shows in its box
+    # next time, and empty is the ordinary state of a machine that has not
+    # set the refiner up. Per machine by definition: it is a path on this
+    # disk. See `neural.py`.
+    "neural_dll": "",
     # How long a reference nothing has read is kept, in days. 0 is forever,
     # which is a real answer here rather than a footgun: the ceiling above is
     # what actually bounds the store, and ageing is only for the reference
@@ -317,6 +325,11 @@ def clean(raw):
         if not 0 <= lead <= MAX_LEAD_IN:
             raise ValueError(f"turbo_lead_in must be between 0 and {MAX_LEAD_IN}")
         clean_settings["turbo_lead_in"] = lead
+    if "neural_dll" in raw and raw["neural_dll"] is not None:
+        dll = raw["neural_dll"]
+        if not isinstance(dll, str):
+            raise ValueError("neural_dll must be a path")
+        clean_settings["neural_dll"] = dll.strip()
     if "text_scale" in raw and raw["text_scale"] is not None:
         scale = raw["text_scale"]
         # `True` is an int in Python and would sail through as scale 1, the same
@@ -599,3 +612,8 @@ def seam_handoff():
 def drift_guard():
     """How many of a pass's last steps make its latent; 0 is off."""
     return load()["drift_guard"]
+
+
+def neural_dll():
+    """Where the settings page last pointed at the user's DLSS DLL; "" if never."""
+    return load()["neural_dll"]

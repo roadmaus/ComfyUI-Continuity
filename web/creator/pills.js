@@ -12,8 +12,10 @@ import { UPSCALE_MODES, DEFAULT_REFINE_DENOISE, MIN_REFINE_DENOISE, MAX_REFINE_D
          twoPass, sampleEdge, emptyFace, isClip, pieceFamily, refineOf,
          redetailTarget, capabilityOf,
          MIN_FACE_CANVAS, MAX_FACE_CANVAS,
-         MIN_FACE_DENOISE, MAX_FACE_DENOISE } from "./state.js";
-import { UPSCALERS } from "./manifest.js";
+         MIN_FACE_DENOISE, MAX_FACE_DENOISE,
+         emptyNeural, NEURAL_PROFILES, NEURAL_PRECISIONS, NEURAL_RANGES,
+         neuralEstimateGb } from "./state.js";
+import { UPSCALERS, NEURAL } from "./manifest.js";
 
 /**
  * Closely related controls as one pill, divided by hairlines.
@@ -967,6 +969,165 @@ export function openFacesPopover(anchor, { target, commit }) {
       rows.push(el("div", { class: "mmc-pop-note",
                             text: t("Costs a second, smaller generation per pass, and "
                                   + "needs a SAM3 checkpoint picked under weights.") }));
+    }
+    body.replaceChildren(...rows);
+  };
+
+  render();
+  pop.appendChild(body);
+  document.body.appendChild(pop);
+  placeNear(pop, anchor);
+  dismissable(pop);
+}
+
+
+/**
+ * The DLSS 5 neural refiner, as a pill on the sampler row.
+ *
+ * NVIDIA's neural renderer as a material pass over the finished frames — skin,
+ * hair, fabric, contact shadows, subsurface — at the size they already are. It
+ * sits with the face pass because it is the same kind of statement: a thing
+ * done to the render rather than a thing the piece is, and off reads as off.
+ *
+ * On a machine that has not set it up the pill still draws, unlit, and says
+ * what is missing — the package, or the weights extracted from the user's own
+ * DLL — because the answer to "why is this greyed out" has to be on the pill.
+ * Switching it on there is allowed: the render will refuse with the same
+ * sentence, and a piece set up on one machine is still a piece on another.
+ *
+ * @param {object} spec
+ * @param {object} spec.target  a piece, timeline or pre-stage state, mutated in place
+ * @param {() => void} spec.commit
+ * @param {boolean} [spec.still]  a pre-stage: the processing scale is offered
+ * @param {() => ({width:number, height:number})|null} [spec.geometry]  for the estimate
+ */
+export function neuralPill({ target, commit, still = false, geometry = null }) {
+  const block = target.neural ?? emptyNeural();
+  const ready = NEURAL.ready !== false;
+  const title = block.on
+    ? t("The neural refiner is on: every frame gets NVIDIA's DLSS 5 material pass "
+      + "— skin, hair, fabric, contact shadows — at the size it already is. "
+      + "About a gigabyte of VRAM per megapixel.")
+    : ready
+      ? t("The neural refiner is off. Switch it on for figurative work — faces, "
+        + "hair, cloth. It does not enlarge anything, and flat or graphic "
+        + "material may come back odd.")
+      : t("The neural refiner is not set up on this machine. It needs {what}",
+          { what: NEURAL.needs || t("the weights extracted from your own DLSS DLL") });
+  return el("button", {
+    class: `mmc-pill${block.on ? " accel-on" : ""}${ready ? "" : " mmc-pill-unready"}`,
+    title,
+    onclick: (event) => openNeuralPopover(event.currentTarget, { target, commit, still, geometry }),
+  }, [el("span", { text: block.on ? t("refine · DLSS 5") : t("DLSS 5 off") })]);
+}
+
+
+/** On or off, and — on — the profile, the three strengths, and for a still
+ *  the processing scale, with the memory it will want printed under them. */
+export function openNeuralPopover(anchor, { target, commit, still = false, geometry = null }) {
+  const pop = el("div", { class: "mmc-pop mmc-neural-pop" });
+  const body = el("div");
+
+  const knob = (label, key, { title, format = (n) => n.toFixed(2), width = "44px" }) => {
+    const block = target.neural;
+    const range = NEURAL_RANGES[key];
+    return el("div", { class: "mmc-refine-row" }, [
+      el("span", { class: "mmc-refine-label", text: label }),
+      stepperPill({
+        value: Number(block[key]), min: range.min, max: range.max, step: range.step,
+        width, title, format,
+        onChange: (next) => { block[key] = next; render(); commit(); },
+      }),
+    ]);
+  };
+
+  const choice = (label, key, options, titles) => {
+    const block = target.neural;
+    return el("div", { class: "mmc-refine-row" }, [
+      el("span", { class: "mmc-refine-label", text: label }),
+      el("div", { class: "mmc-neural-opts" }, options.map((option) => el("button", {
+        class: `mmc-bn-opt${block[key] === option ? " on" : ""}`,
+        "aria-pressed": block[key] === option,
+        title: titles[option] ? t(titles[option]) : null,
+        text: t(option),
+        onclick: () => { block[key] = option; render(); commit(); },
+      }))),
+    ]);
+  };
+
+  const render = () => {
+    const block = target.neural ?? (target.neural = emptyNeural());
+    const ready = NEURAL.ready !== false;
+    const rows = [
+      el("div", { class: "mmc-pop-title", text: t("Neural refiner (DLSS 5)") }),
+      el("button", {
+        class: "mmc-opt",
+        "aria-checked": !block.on,
+        onclick: () => { block.on = false; render(); commit(); },
+      }, [
+        el("span", { class: "mmc-opt-label mmc-opt-col" }, [
+          el("span", { text: t("off") }),
+          el("span", { class: "mmc-opt-sub", text: t("the frames as decoded, as it always was") }),
+        ]),
+        el("span", { class: "mmc-radio" }),
+      ]),
+      el("button", {
+        class: "mmc-opt",
+        "aria-checked": block.on,
+        onclick: () => { block.on = true; render(); commit(); },
+      }, [
+        el("span", { class: "mmc-opt-label mmc-opt-col" }, [
+          el("span", { text: t("on") }),
+          el("span", { class: "mmc-opt-sub",
+                       text: still
+                         ? t("re-draw the material after the decode")
+                         : t("re-draw the material over every pass, history carried") }),
+        ]),
+        el("span", { class: "mmc-radio" }),
+      ]),
+    ];
+    if (block.on) {
+      rows.push(choice(t("profile"), "profile", NEURAL_PROFILES, {
+        standard: "What the driver runs.",
+        natural: "The model's style index one step up.",
+        cinematic: "The model's style index two steps up.",
+        neutral: "Local tone and structure off.",
+      }));
+      rows.push(knob(t("detail"), "detail", {
+        title: t("How much of the model's high-frequency change is kept. 1 is its own answer; 0 keeps only its colour."),
+      }));
+      rows.push(knob(t("colour"), "colour", {
+        title: t("How much of the model's low-frequency change — tone and colour — is kept. 0 keeps only its detail."),
+      }));
+      rows.push(knob(t("blend"), "intensity", {
+        title: t("The refined picture over the source. 1 is all of it."),
+      }));
+      if (still) {
+        rows.push(knob(t("scale"), "scale", {
+          title: t("Run the network on the picture resampled by this factor and bring the "
+                 + "result back. Finer material at 2, and about four times the memory."),
+          format: (n) => `×${n}`,
+        }));
+      }
+      rows.push(choice(t("precision"), "precision", NEURAL_PRECISIONS, {
+        reference: "float32 with the driver's own rounding — matches it to 0.005.",
+        fast: "float16 on the GPU — half the memory.",
+      }));
+      const size = geometry?.();
+      const gigabytes = size
+        ? neuralEstimateGb(size.width, size.height, still ? block.scale : 1, block.precision)
+        : null;
+      rows.push(el("div", { class: "mmc-pop-note", text: [
+        gigabytes != null
+          ? t("About {gb} GB of VRAM per frame at {width} × {height}.",
+              { gb: gigabytes.toFixed(1), width: size.width, height: size.height })
+          : t("About a gigabyte of VRAM per megapixel."),
+        still ? "" : t("A clip runs at the frame's own size, each frame carrying the last one's result."),
+        ready ? "" : t("Not set up on this machine: the settings page's 'Neural refiner' section says what is missing."),
+      ].filter(Boolean).join(" ") }));
+    } else if (!ready) {
+      rows.push(el("div", { class: "mmc-pop-note",
+                            text: t("Not set up on this machine: the settings page's 'Neural refiner' section says what is missing.") }));
     }
     body.replaceChildren(...rows);
   };

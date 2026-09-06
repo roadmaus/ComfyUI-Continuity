@@ -116,9 +116,9 @@ def release_all():
     In a `finally`, and each half in its own `try`: a job that failed is exactly
     when the weights are most likely to be stranded.
     """
-    from . import bench, refine_local
+    from . import bench, neural, refine_local
 
-    for give_back in (bench.release, refine_local.release):
+    for give_back in (bench.release, refine_local.release, neural.release):
         try:
             give_back()
         except Exception:  # noqa: BLE001 — freeing is best effort; the work already happened

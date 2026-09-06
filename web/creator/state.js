@@ -1315,6 +1315,81 @@ export const MIN_FACE_DENOISE = 0.1;
 export const MAX_FACE_DENOISE = 0.9;
 export const FACE_OVERRIDES = ["on", "off"];
 
+/**
+ * The DLSS 5 neural refiner: a material pass over the finished frames.
+ *
+ * Mirrors `neural.py` — its profiles, its ranges and its defaults — and the
+ * same one block rides on a piece, a timeline and a pre-stage, because the
+ * request is the same three questions whatever made the picture: which style,
+ * how much of the model's detail and colour, how strongly it is blended. The
+ * scale is read by stills only (a clip's history runs at the frame's own size)
+ * and is carried on every block anyway, so a still made from a piece's
+ * settings asks for what the piece asked for.
+ *
+ * Off is nothing: the block is written only while it is on, so every blob that
+ * never asked round-trips to the bytes it always did.
+ */
+export const NEURAL_PROFILES = ["standard", "natural", "cinematic", "neutral"];
+export const NEURAL_PRECISIONS = ["reference", "fast"];
+export const NEURAL_RANGES = {
+  scale: { min: 1, max: 4, step: 0.25, default: 1 },
+  detail: { min: 0, max: 8, step: 0.25, default: 1 },
+  colour: { min: 0, max: 4, step: 0.25, default: 1 },
+  intensity: { min: 0, max: 1, step: 0.05, default: 1 },
+};
+export const NEURAL_DEFAULTS = {
+  on: false, profile: "standard", scale: 1, detail: 1, colour: 1, intensity: 1,
+  precision: "reference",
+};
+
+export const emptyNeural = () => ({ ...NEURAL_DEFAULTS });
+
+/** Upstream's extent rule, mirrored from `neural.py`: the network runs on the
+ *  frame resampled by the scale, on a 64 grid of at least 320 a side, and costs
+ *  about a gigabyte per megapixel of *that* at float32 — half in fast. */
+export const NEURAL_MIN_EXTENT = 320;
+export const NEURAL_EXTENT_MULTIPLE = 64;
+export const NEURAL_GB_PER_MEGAPIXEL = 1.0;
+export const NEURAL_FAST_FRACTION = 0.5;
+
+const neuralAligned = (extent) =>
+  Math.ceil(Math.max(NEURAL_MIN_EXTENT, extent) / NEURAL_EXTENT_MULTIPLE) * NEURAL_EXTENT_MULTIPLE;
+
+/** The network's extent for a frame at `scale`. Mirrors `neural.network_extent`. */
+export function neuralNetworkExtent(width, height, scale = 1) {
+  return [neuralAligned(Math.round(width * scale)), neuralAligned(Math.round(height * scale))];
+}
+
+/** About how many gigabytes one frame costs. Mirrors `neural.estimate_gb`. */
+export function neuralEstimateGb(width, height, scale = 1, precision = "reference") {
+  const [w, h] = neuralNetworkExtent(width, height, scale);
+  const gigabytes = (w * h / 1_000_000) * NEURAL_GB_PER_MEGAPIXEL
+    * (precision === "fast" ? NEURAL_FAST_FRACTION : 1);
+  return Math.round(gigabytes * 100) / 100;
+}
+
+const neuralNumber = (value, range) => {
+  const number = Number(value);
+  return Number.isFinite(number)
+    ? Math.min(range.max, Math.max(range.min, number)) : range.default;
+};
+
+/** Whatever was in the blob, clamped onto `neural.py`'s ranges. */
+export function parseNeural(raw) {
+  const block = { ...emptyNeural(), ...(raw && typeof raw === "object" ? raw : {}) };
+  block.on = block.on === true;
+  if (!NEURAL_PROFILES.includes(block.profile)) block.profile = NEURAL_DEFAULTS.profile;
+  if (!NEURAL_PRECISIONS.includes(block.precision)) block.precision = NEURAL_DEFAULTS.precision;
+  for (const key of Object.keys(NEURAL_RANGES)) block[key] = neuralNumber(block[key], NEURAL_RANGES[key]);
+  return block;
+}
+
+/** Absent while it is off, so every blob that never asked for one is unchanged. */
+export const serializeNeural = (block) => (block?.on
+  ? { neural: { on: true, profile: block.profile, scale: block.scale, detail: block.detail,
+                colour: block.colour, intensity: block.intensity, precision: block.precision } }
+  : {});
+
 export const emptyFace = () => ({
   on: false, canvas: DEFAULT_FACE_CANVAS, denoise: DEFAULT_FACE_DENOISE,
 });
@@ -1398,6 +1473,8 @@ export function emptyState() {
     refine_denoise: DEFAULT_REFINE_DENOISE,
     // The face pass, off until asked for. Owned wherever the canvas is owned.
     face: emptyFace(),
+    // The DLSS 5 refiner over the finished frames, off until asked for.
+    neural: emptyNeural(),
     // "auto" follows the mode. Pinning it runs the same payload on the other
     // weights; compile.py decides which pins it will accept.
     checkpoint: "auto",
@@ -1466,6 +1543,7 @@ export function parseState(raw) {
                                           rulesFor(pieceFamily(state)));
       state.refine_denoise = clampRefineDenoise(state.refine_denoise);
       state.face = parseFace(state.face);
+      state.neural = parseNeural(state.neural);
       state.models = parseModels(state.models);
       state.upscale_models = parseUpscalerModels(state.upscale_models);
       state.turbo = parseTurbo(state.turbo);
@@ -1629,6 +1707,7 @@ export function serializeState(state) {
     ...(state.refine_denoise !== DEFAULT_REFINE_DENOISE
       ? { refine_denoise: state.refine_denoise } : {}),
     ...serializeFace(state.face),
+    ...serializeNeural(state.neural),
     // The cast, absent when nobody was cast — the same terms as the timeline's.
     // Not in serializeCommon: a segment's cast is the piece's, mirrored down,
     // and writing the mirror back would store every subject once per card.
@@ -2008,6 +2087,8 @@ export function emptyTimeline() {
     // The face pass, off until asked for. One answer for the whole piece; a
     // card may still opt out of it.
     face: emptyFace(),
+    // The DLSS 5 refiner over the finished frames, off until asked for.
+    neural: emptyNeural(),
     // Patched onto every segment, in front of whatever that segment adds. What
     // a turbo LoRA is for: you want it on the whole clip, not shot by shot.
     loras: [],
@@ -2899,6 +2980,7 @@ export function parseTimeline(raw) {
                                              rulesFor(pieceFamily(timeline)));
       timeline.refine_denoise = clampRefineDenoise(timeline.refine_denoise);
       timeline.face = parseFace(timeline.face);
+      timeline.neural = parseNeural(timeline.neural);
       timeline.models = parseModels(timeline.models, timeline.family);
       timeline.models_spare = parseSpareModels(timeline.models_spare);
       timeline.sampling_spare = parseSamplingSpare(timeline.sampling_spare);
@@ -3052,6 +3134,7 @@ export function serializeTimeline(timeline) {
     ...(timeline.refine_denoise !== DEFAULT_REFINE_DENOISE
       ? { refine_denoise: timeline.refine_denoise } : {}),
     ...serializeFace(timeline.face),
+    ...serializeNeural(timeline.neural),
     loras: serializeLoras(timeline.loras ?? [], pieceFamily(timeline)),
     // The reference pool. Absent when empty, so a timeline that never used one
     // round-trips exactly as it always did.
@@ -3788,6 +3871,8 @@ export function emptyPreStage() {
     // back to the widget it always used.
     sampling: {},
     models: emptyPreStageModels(),
+    // The DLSS 5 refiner over the finished still, off until asked for.
+    neural: emptyNeural(),
     // A hint for peer discovery, never authoritative — ids renumber on paste,
     // so the pre-stage pill re-derives the pairing by scan.
     peer: null,
@@ -3889,6 +3974,7 @@ export function parsePreStage(raw) {
         state.edition = PRESTAGE_DEFAULT_EDITION;
       }
       state.turbo = parsePreStageTurbo(state.turbo);
+      state.neural = parseNeural(state.neural);
       const models = state.models && typeof state.models === "object" ? state.models : {};
       state.models = emptyPreStageModels();
       for (const arch of PRESTAGE_IMAGE_ARCHES) {
@@ -3938,6 +4024,7 @@ export function serializePreStage(state) {
     })) } : {}),
     loras: serializeLoras(state.loras),
     ...serializePreStageTurbo(state.turbo),
+    ...serializeNeural(state.neural),
     ...(state.quality !== "default" ? { quality: state.quality } : {}),
     ...(state.ref_method !== PRESTAGE_DEFAULT_REF_METHOD ? { ref_method: state.ref_method } : {}),
     ...(state.ref_lora ? { ref_lora: state.ref_lora } : {}),
