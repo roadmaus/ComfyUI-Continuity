@@ -61,8 +61,9 @@ import { buildDashboard } from "./navigate.js";
 import { openBlockout } from "./blockout.js";
 import { openControl } from "./control.js";
 import { openUpscale } from "./upscale.js";
+import { openLoupe } from "./loupe.js";
 import { openPresetLibrary } from "./presetlib.js";
-import { elapsed } from "./stage.js";
+import { elapsed, stageSource } from "./stage.js";
 import { t } from "./i18n.js";
 import { noteFullscreen } from "./styles.js";
 import * as S from "./state.js";
@@ -981,14 +982,7 @@ class Fullscreen {
    * `media.resolve` reads it without a second species of path being invented.
    */
   lastTake() {
-    const shown = this.shown?.shot ?? this.shown?.pre ?? null;
-    const saved = shown?.saved;
-    if (!saved?.filename) return null;
-    const folder = saved.subfolder ? `${saved.subfolder}/` : "";
-    return {
-      path: `${folder}${saved.filename} [${saved.type || "output"}]`,
-      kind: shown.isImage ? "image" : "video",
-    };
+    return stageSource(this.shown?.shot ?? this.shown?.pre ?? null);
   }
 
   /** Put the pre-stage in front, wherever this shell happens to be.
@@ -1167,6 +1161,13 @@ class Fullscreen {
       class: "mmc-fs-take", title: result.name,
       "aria-label": t("Show this render on the picture"),
       onclick: () => this.review(result, tile),
+      // The same gesture the plate has: one press puts a take back on the
+      // picture, two opens it in the loupe. A shelf of thumbnails is exactly
+      // where somebody decides they need to look at one properly.
+      ondblclick: () => {
+        const source = stageSource(result);
+        if (source) openLoupe({ source });
+      },
       onkeydown: (event) => this.takeKey(event, tile),
       onpointerenter: () => media.play?.().catch(() => {}),
       onpointerleave: () => {

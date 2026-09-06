@@ -16,6 +16,14 @@ export const css = `
   touch-action: none; cursor: crosshair; line-height: 0;
 }
 .mmc-up-locshot { display: block; width: 100%; height: auto; }
+/* The locator and the line under it. The line is the one place the square's
+   *size* is said in numbers — the square itself says where, and how much of the
+   picture is being judged is the other half of that answer. */
+.mmc-up-locwrap { display: flex; flex-direction: column; gap: 6px; }
+.mmc-up-locnote {
+  font-size: calc(10.5px * var(--mmc-type)); color: var(--mmc-faint);
+  font-variant-numeric: tabular-nums;
+}
 /* The square. Ringed rather than filled, and the ring is the accent because this
    is a control being aimed — the same reading the seam gets under the hand. The
    shadow is what keeps it visible over a white frame. */
@@ -48,6 +56,7 @@ export const css = `
    finished file on a shelf, so the press that matters is the one that opens it. */
 .mmc-up-open {
   flex: none; padding: 8px 15px; border-radius: 10px; text-decoration: none;
+  cursor: pointer; font-family: inherit;
   background: var(--mmc-surface-2); border: 1px solid var(--mmc-line-2);
   color: var(--mmc-text); font-size: calc(12.5px * var(--mmc-type)); font-weight: 600;
   transition: border-color 120ms ease, background 120ms ease;

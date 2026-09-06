@@ -23,6 +23,8 @@ import { css as fullscreen } from "./styles/fullscreen.js";
 import { css as bench } from "./styles/bench.js";
 import { css as control } from "./styles/control.js";
 import { css as upscale } from "./styles/upscale.js";
+import { css as neural } from "./styles/neural.js";
+import { css as loupe } from "./styles/loupe.js";
 import { css as blockout } from "./styles/blockout.js";
 
 const CSS = [
@@ -51,6 +53,10 @@ const CSS = [
   bench,
   control,
   upscale,
+  // The refiner's dials before the room that holds them, so a rail can narrow
+  // one of its own rows without the dial sheet winning it back.
+  neural,
+  loupe,
   blockout,
   // Last: the shell hosts every body in the pack and lifts the caps the node
   // face put on them, so its rules have to win over the sections that set them.

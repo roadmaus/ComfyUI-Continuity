@@ -78,6 +78,16 @@ log = logging.getLogger(__name__)
 # the time it takes to look up, large enough to hold a face.
 PREVIEW_TILE = 384
 
+# ...and how far the caller may move that. A fixed 384 was the right tile for a
+# bench that always shows one square at 1:1; it is the wrong one for a viewer
+# that compares whatever part of the picture is on screen, where the region is
+# whatever the zoom makes it. So the side is the caller's, bounded: below the
+# floor a tile is too small to judge anything by, and above the ceiling one
+# preview is a model pass over four megapixels, which is a render rather than a
+# glance. Squares only — both halves of a wipe have to be the same rectangle,
+# and one number is what guarantees it.
+MIN_PREVIEW_TILE, MAX_PREVIEW_TILE = 128, 1024
+
 # What Restore samples at. One step at cfg 1 is not a shortcut — it is the model:
 # SeedVR2 is a one-step restorer, and a second step is a second guess at a
 # picture that was already answered. `denoise` is 1 because the source is not in
@@ -495,15 +505,24 @@ def overlap_of(op, values):
 # A tile for the light box, and a file for the shelf.
 
 
-def _tile(frame, centre):
-    """The `PREVIEW_TILE` square of `frame` around a point given in 0..1.
+def preview_side(side=None):
+    """The square a caller asked for, in source pixels, bounded. -> int"""
+    try:
+        wanted = int(round(float(side)))
+    except (TypeError, ValueError):
+        return PREVIEW_TILE
+    return max(MIN_PREVIEW_TILE, min(MAX_PREVIEW_TILE, wanted))
+
+
+def _tile(frame, centre, side=None):
+    """A square of `frame` around a point given in 0..1.
 
     Clamped to the frame rather than padded: a tile that ran off the edge would
     show the model's answer for a border that is not in the file. A source
     smaller than the tile is simply the whole source.
     """
     height, width = frame.shape[:2]
-    side = min(PREVIEW_TILE, width, height)
+    side = min(preview_side(side), width, height)
     x, y = centre
     left = int(round(min(max(0.0, x), 1.0) * width - side / 2))
     top = int(round(min(max(0.0, y), 1.0) * height - side / 2))
@@ -512,16 +531,20 @@ def _tile(frame, centre):
     return frame[top:top + side, left:left + side]
 
 
-def preview(path, op, raw, at=0.0, centre=(0.5, 0.5), plain=False):
+def preview(path, op, raw, at=0.0, centre=(0.5, 0.5), plain=False, side=None):
     """-> (PNG bytes, `(width, height)`) of one tile, at the size it will be.
 
     `plain` is the other half of the comparison: the same tile enlarged by
     Lanczos to the same size, which is what the file would look like with no
     model in it at all. That is the honest thing to hold a backend against — not
     the source at half the size, which would flatter anything.
+
+    `side` is how much of the source that tile covers, for a caller that is
+    looking at a region rather than at the bench's fixed square. Both halves
+    must be asked for with the same one or the wipe stops lining up.
     """
     values = _params(op, raw, weights=not plain)
-    cut = _tile(bench.source_frame(path, at, long_edge=0), centre)
+    cut = _tile(bench.source_frame(path, at, long_edge=0), centre, side)
     if plain:
         wanted = target(cut.shape[1], cut.shape[0], values)
         return bench.png(np.asarray(Image.fromarray(cut).resize(wanted, Image.LANCZOS)))

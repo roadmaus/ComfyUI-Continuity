@@ -42,7 +42,7 @@ import * as P from "./presets.js";
 import { PromptBox, focusEnd, openEditorSheet } from "./prompt.js";
 import { blobIO, samplingBar } from "./sampling.js";
 import { loadLoraNames, loraNames } from "./turbo.js";
-import { Stage } from "./stage.js";
+import { Stage, stageSource } from "./stage.js";
 import { loadCatalog, refreshCatalog, catalogByFolder } from "./models.js";
 import { viewUrl } from "./api.js";
 import { t } from "./i18n.js";
@@ -541,7 +541,8 @@ export class PreStageEditor {
         // The DLSS 5 refiner over the still, with the processing scale a still
         // can afford and a clip cannot.
         neuralPill({ target: this.state, commit: () => this.commit(), still: true,
-                     geometry: () => S.resolvedPreStage(this.state, this.sourceSize()) }),
+                     geometry: () => S.resolvedPreStage(this.state, this.sourceSize()),
+                     picture: () => stageSource(this.stage?.result) }),
         this.renderWeightsPill(),
       ],
     })] : []));

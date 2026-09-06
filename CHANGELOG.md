@@ -5,6 +5,51 @@ and everything under it is kept exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**A viewer for finished work, with a wipe in it.** Double-clicking a render
+opened the browser's own fullscreen: a banner across the top of the screen in
+Firefox, the picture fitted to the display and impossible to look into, and
+nowhere to put a comparison. There is a room for it now — wheel to zoom about
+the pointer, drag to pan, double-click between fit and 1:1, Escape to leave —
+and it carries the seam the upscale bench used to have to itself. It opens from
+the stage, from a take on the fullscreen lip, from the upscale bench's result,
+and from the refiner pill's own *See what it does*.
+
+**Compare is the same render, not the same picture refined twice.** A finished
+file carries the prompt that made it, and the DLSS 5 refiner is one boolean in
+that prompt's blob — so the honest other half of the seam is that render with
+the boolean moved, and it is nearly free: ComfyUI keys an expanding node's
+subcache by its id rather than by its inputs, so the twin re-expands the node
+and hits every sampler underneath it. What runs is the pass and the save. The
+viewer offers *Render it without the refiner* on a render made with one and
+*Render it with the refiner* on one made without, puts the file that comes back
+on the other side of the wipe at full frame, and leaves it on the shelf as the
+ordinary take it is. Only where there is no render to re-queue — a photograph,
+footage, somebody else's file — does it fall back to running the pass on the
+square you are looking at. The upscale bench says the same thing where it
+matters: a source that was already refined now says so before its *Refine
+(DLSS 5)* entry is read as a before-and-after.
+
+**The refiner's dials, and setups worth keeping.** The DLSS 5 popover was a
+radio pair, three steppers and a paragraph — `detail` runs 0 to 8 in quarters,
+which is thirty-two presses end to end, with the picture it changes nowhere on
+screen. It is a switch and a column of sliders now, the same dials the bench and
+the viewer draw, each one back to its default on a double-click. Under them: a
+shelf of **saved setups**, per machine, and *Start here*, which is what a
+piece's refiner begins at the first time it is switched on. The two benches'
+remembered checkpoints are kept now too — they were being written to a settings
+file that had never had a home for them.
+
+**The upscale bench was describing a picture nobody had.** It took a source's
+size off the thumbnail in its own locator, which `/continuity/thumb` caps at 320
+pixels. So on a 1080p still the locator's square covered more than half the
+frame while the glass showed a fifth of it, the size under the glass was not the
+file's, and the refiner's memory estimate was out by the square of the ratio.
+The size comes off the file's header now, for a picture exactly as for a clip,
+and the square is drawn from the same arithmetic the server cuts with
+(`web/creator/tile.js`, mirrored in `tests/test_bench.py`). How much of the
+picture is on the glass is a control as well: the wheel over the locator opens
+the square out to 1024 source pixels or closes it to 128.
+
 **A neural refiner, from DLSS 5.** NVIDIA's DLSS 5 neural renderer — the
 material network, not the upscaler — as a pass over finished stills and
 clips, through the open-source MLX-DLSS port's PyTorch backend. Skin, hair,

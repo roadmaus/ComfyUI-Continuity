@@ -174,6 +174,12 @@ export const ICONS = {
   placard: `<rect x="3" y="4" width="18" height="11" rx="2.5"/><path d="M7.5 8.5h9M7.5 11.5h5"/><path d="M12 15v6"/>`,
   globe: `<circle cx="12" cy="12" r="9"/><path d="M3.3 9.5h17.4M3.3 14.5h17.4"/><path d="M12 3a13 13 0 010 18 13 13 0 010-18"/>`,
   swap: `<path d="M4 8h13l-3.5-3.5"/><path d="M20 16H7l3.5 3.5"/>`,
+  // The loupe's two. Lucide's `zoom-in` and `zoom-out`, verbatim: a lens with a
+  // plus and a lens with a minus, which is the one drawing of magnification
+  // nobody has to be taught. `expand` is already spent on the other meaning of
+  // bigger — the bench that writes a larger file.
+  zoomIn: `<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><path d="M11 8v6"/><path d="M8 11h6"/>`,
+  zoomOut: `<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><path d="M8 11h6"/>`,
   // Lucide's `shuffle`, verbatim — the same deal `brain`, `gear` and `eraser`
   // get. One file leaving as another arrives, which is what swapping the file
   // under a LoRA chip is. `swap` above is the cast's and reads as two things

@@ -26,7 +26,7 @@ import { openAspectPopover, openResolutionPopover, openChoicePopover, facesPill,
          resolutionPillText,
          PILL_GLYPH, pillSet, pillClass } from "./pills.js";
 import { blobIO, samplingBar, segmentSeedPill } from "./sampling.js";
-import { Stage } from "./stage.js";
+import { Stage, stageSource } from "./stage.js";
 import { familyPill, weightsPill, loadCatalog, adoptWeights } from "./models.js";
 import * as Turbo from "./turbo.js";
 import * as Guide from "./guide.js";
@@ -1572,7 +1572,11 @@ export class CreatorEditor {
                      geometry: () => {
                        const asset = S.aspectSourceAsset(this.state);
                        return S.resolved(this.state, asset ? this.sizes.get(asset.filename) : null, this.piece);
-                     } }),
+                     },
+                     // What the popover's door opens on: the last thing this
+                     // node rendered. Read late — the pill is built long before
+                     // there is a render, and the answer changes on every one.
+                     picture: () => stageSource(this.stage?.result) }),
         weightsPill({
           piece: this.piece,
           models: this.piece.models,

@@ -47,13 +47,15 @@
 
 import { el, icon, mark, spinner, heldNote, drawFrame, dragsFiles, mountOverlay,
          keepScroll, placeNear, dismissable } from "./dom.js";
-import { upscaleBackends, upscalePreviewUrl, upscaleRun, outputUrl, probe, viewUrl,
-         upload, uiSetting, patchSettings, primeSettings } from "./api.js";
+import { upscaleBackends, upscalePreviewUrl, upscaleRun, probe, viewUrl,
+         upload, uiSetting, patchSettings, primeSettings, neuralOf } from "./api.js";
 import { openChoicePopover } from "./pills.js";
 import { openPicker } from "./picker.js";
 import { formatTime, mountTrim } from "./trim.js";
 import { t } from "./i18n.js";
 import { neuralEstimateGb } from "./state.js";
+import { tileShare, tileSide, DEFAULT_TILE, MIN_TILE, MAX_TILE } from "./tile.js";
+import { openLoupe } from "./loupe.js";
 import { api } from "../../../scripts/api.js";
 import { busy as queueBusy, watch as watchQueue } from "./queue.js";
 
@@ -136,7 +138,14 @@ class Bench {
     // middle to start with, which is where the subject usually is and always
     // where the eye goes first.
     this.centre = [0.5, 0.5];
-    // The source's own pixel size, once something has reported one. Both the
+    // ...and how much of it. The glass holds one square at the size it will
+    // come out, and 384 source pixels is the right square for judging a 2×
+    // enlargement of a 1080p frame — it is a fifth of a 4K one, which is a
+    // postage stamp of a picture somebody is trying to see the whole of. So the
+    // side is a control: the wheel over the locator opens it out and closes it
+    // in, between what is too small to judge and what is a render to produce.
+    this.side = DEFAULT_TILE;
+    // The source's own pixel size, once the probe has reported one. Both the
     // locator's square and the readout under the glass are derived from it.
     this.natural = null;
     this.trim = null;
@@ -406,10 +415,12 @@ class Bench {
     this.trim = null;
     this.at = 0;
     this.centre = [0.5, 0.5];
+    this.side = DEFAULT_TILE;
     this.stale = false;
     this.trying = false;
     this.hasAudio = false;
     this.natural = null;
+    this.made = null;
     this.sized = false;
     this.cutter?.destroy();
     this.cutter = null;
@@ -426,24 +437,62 @@ class Bench {
       });
       this.cut.replaceChildren(this.cutter.root);
       this.cutter.media.addEventListener("pause", () => this.onPark());
-      this.askAboutSound(asset.path);
     } else {
       this.cut.replaceChildren();
     }
+    // Both kinds: a picture's size is as much the bench's business as a clip's,
+    // and asking only clips is what left every still on this bench described by
+    // its own thumbnail.
+    this.askAboutFile(asset.path);
     this.render();
     this.askForTile();
   }
 
-  /** Whether this clip has a soundtrack to carry across. Not guessed: no
-   *  browser answers it portably, and a silent clip offered a switch is a switch
-   *  that does nothing whichever way it is thrown. */
-  async askAboutSound(path) {
+  /**
+   * What this file is, off its header: how big it is, and whether it has a
+   * soundtrack to carry across.
+   *
+   * Both kinds ask, and the size is why. Everything the rail says about a
+   * source is derived from its pixels — the locator's square, the line under
+   * the glass, the target size, the refiner's memory estimate — and the only
+   * honest source for those is the file itself. The sound is a clip's question
+   * and is not guessed either: no browser answers it portably, and a silent
+   * clip offered a switch is a switch that does nothing whichever way it is
+   * thrown.
+   */
+  async askAboutFile(path) {
     const { hasAudio, width, height } = await probe(path);
     if (this.source?.path !== path) return;
     this.hasAudio = hasAudio === true;
-    if (width && height && !this.natural) this.natural = { width, height };
+    if (width && height) this.natural = { width, height };
     this.paintFoot();
     this.paintBench();
+    this.askForTile();
+    // And what made it, which matters to exactly one backend — see `refinedNote`.
+    this.made = await neuralOf(path);
+    if (this.source?.path === path) this.paintBench();
+  }
+
+  /**
+   * The one thing a file's own history changes about this bench.
+   *
+   * Refining a render that was already refined is a second pass over the first
+   * one, and the light box shows it against the same picture resampled — so
+   * what looks like a before-and-after is one pass against two. It is a real
+   * thing to want (a second pass is stronger, and sometimes that is the
+   * answer), but nobody should arrive at it by accident. The comparison that
+   * answers "what did the refiner do here" is the render without it, which is
+   * the loupe's, and this says so.
+   */
+  refinedNote() {
+    if (!this.made?.on) return null;
+    const refining = this.op === "neural"
+      || Boolean(this.values[this.op]?.neural);
+    if (!refining) return null;
+    return el("p", { class: "mmc-bn-needs open", text: t(
+      "This file was already refined when it was rendered. Another pass here is a "
+      + "second one over the first, not a before-and-after — for that, open it in "
+      + "the viewer and render it without the refiner.") });
   }
 
   /** The bar reporting where the cut is now. The span is what will be written;
@@ -624,7 +673,7 @@ class Bench {
 
   tileUrl({ plain = false } = {}) {
     return upscalePreviewUrl(this.source.path, this.op, this.values[this.op] ?? {},
-                             { at: this.at, centre: this.centre, plain });
+                             { at: this.at, centre: this.centre, side: this.side, plain });
   }
 
   /** Whether pressing Try would ask for something the glass is not already
@@ -836,6 +885,7 @@ class Bench {
           onclick: (event) => event.currentTarget.classList.toggle("open"),
         }),
         this.models().length ? el("div", { class: "mmc-bn-weights" }, [this.weightsPill()]) : null,
+        this.refinedNote(),
       ]),
       ...(this.dials().length ? [this.section(t("Dials"), this.dials())] : []),
       ...(source ? [this.section(t("Where to look"), [this.locator()])] : []),
@@ -999,24 +1049,46 @@ class Bench {
           class: "mmc-up-locshot", src: viewUrl(this.source.path, { preview: true }),
           alt: "", draggable: "false",
         });
-    if (shot.tagName === "IMG") {
-      const sized = () => {
-        this.natural = { width: shot.naturalWidth, height: shot.naturalHeight };
-        this.paintBench();
-      };
-      // `complete` as well as the event: a picture already in the browser's
-      // cache is decoded before this listener exists, and `load` never fires.
-      shot.addEventListener("load", sized);
-      if (shot.complete && shot.naturalWidth && !this.natural) sized();
-    }
+    // Nothing is read off this element. It is a thumbnail — `/continuity/thumb`
+    // caps its long edge at 320 — and the bench used to take the source's size
+    // from it, which made every figure derived from that size a description of a
+    // 320-pixel copy of the picture nobody had: the locator's square covered
+    // half the frame where the server was cutting a fifth of it, the readout
+    // under the glass named a size that was not the file's, and the refiner's
+    // memory estimate was off by the square of the ratio. The size comes off
+    // the probe now, for a picture exactly as for a clip — see `askAboutSize`.
+    //
+    // It also ends a loop: the repaint that landing a size triggers rebuilds
+    // this element, a fresh <img> fires `load` even out of the browser's cache,
+    // and that fired the repaint again at the speed the tab could decode.
     this.locShot = shot;
     this.locSquare = el("div", { class: "mmc-up-locsquare" });
     const pad = el("div", { class: "mmc-up-loc" }, [shot, this.locSquare]);
     pad.onpointerdown = (event) => this.dragLocator(event, pad);
     pad.ondragstart = (event) => event.preventDefault();
+    // How much of the picture, on the wheel. The gesture is the one every map
+    // and every viewer has — the square is what is being looked through, and
+    // scrolling over it opens it out.
+    pad.addEventListener("wheel", (event) => this.zoomLocator(event), { passive: false });
+    this.locNote = el("div", { class: "mmc-up-locnote" });
     this.paintSquare();
     if (this.source.kind === "video") this.paintLocator();
-    return pad;
+    return el("div", { class: "mmc-up-locwrap" }, [pad, this.locNote]);
+  }
+
+  /** The square, wider or narrower. Every step is a preview, so it settles the
+   *  way a dial does rather than firing per notch. */
+  zoomLocator(event) {
+    const size = this.naturalSize();
+    if (!size) return;
+    event.preventDefault();
+    const next = this.side * (event.deltaY > 0 ? 1.2 : 1 / 1.2);
+    const bounded = Math.max(MIN_TILE, Math.min(MAX_TILE, Math.round(next)));
+    if (bounded === this.side) return;
+    this.side = bounded;
+    this.paintSquare();
+    this.askForTile();
+    this.markStale();
   }
 
   dragLocator(event, pad) {
@@ -1044,21 +1116,30 @@ class Bench {
     pad.addEventListener("pointercancel", up);
   }
 
-  /** The square, placed and sized as a share of the frame. The server clamps the
-   *  tile to the edges of the picture, so this clamps too — a square drawn half
-   *  off the frame would be pointing at pixels the glass is not showing. */
+  /**
+   * The square, placed and sized as a share of the frame.
+   *
+   * Through `tile.js`, which mirrors what the server actually does — the same
+   * side, the same clamp to the edges of the picture. Doing the arithmetic here
+   * a second time is how the two came apart: the square was drawn from a 384
+   * written into this file against a size read off a 320-pixel thumbnail, while
+   * the server cut 384 pixels of the full-size file, and the locator ended up
+   * pointing at a rectangle that had nothing to do with what was on the glass.
+   */
   paintSquare() {
     if (!this.locSquare) return;
     const size = this.naturalSize();
     if (!size) { this.locSquare.style.display = "none"; return; }
-    const side = Math.min(384, size.width, size.height);
-    const wide = side / size.width;
-    const tall = side / size.height;
+    const share = tileShare(size, this.centre, this.side);
     this.locSquare.style.display = "";
-    this.locSquare.style.width = `${wide * 100}%`;
-    this.locSquare.style.height = `${tall * 100}%`;
-    this.locSquare.style.left = `${Math.max(0, Math.min(1 - wide, this.centre[0] - wide / 2)) * 100}%`;
-    this.locSquare.style.top = `${Math.max(0, Math.min(1 - tall, this.centre[1] - tall / 2)) * 100}%`;
+    this.locSquare.style.width = `${share.width * 100}%`;
+    this.locSquare.style.height = `${share.height * 100}%`;
+    this.locSquare.style.left = `${share.left * 100}%`;
+    this.locSquare.style.top = `${share.top * 100}%`;
+    if (this.locNote) {
+      this.locNote.textContent = t("{side} px square · drag to move, scroll to resize",
+                                   { side: tileSide(size, this.side) });
+    }
   }
 
   /** The clip's current frame, drawn into the locator. Called once per displayed
@@ -1361,9 +1442,16 @@ class Bench {
       el("span", { class: "mmc-bn-gap" }),
       el("div", { class: "mmc-bn-doors" }, [
         ...doors.map((door) => this.door(door, door === lead)),
-        el("a", {
-          class: "mmc-up-open", href: outputUrl({ filename: name, subfolder, type: "output" }),
-          target: "_blank", rel: "noreferrer", text: t("Open it"),
+        // In the loupe rather than a new tab. What was written is a *bigger*
+        // file — the one thing worth doing with it immediately is looking into
+        // it at 1:1, which is exactly what a browser tab fitting it to a window
+        // cannot do.
+        el("button", {
+          class: "mmc-up-open", text: t("Look at it"),
+          title: t("Open it in the viewer, at its own pixels."),
+          onclick: () => openLoupe({
+            source: { path: `${this.result.path} [output]`, kind: this.result.kind },
+          }),
         }),
       ]),
     );

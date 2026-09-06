@@ -32,6 +32,7 @@
 import { api } from "../../../scripts/api.js";
 import { el } from "./dom.js";
 import { outputUrl, uiSetting } from "./api.js";
+import { openLoupe } from "./loupe.js";
 import { t } from "./i18n.js";
 
 /** Every event this listens to. `b_preview` is the metadata-less legacy frame:
@@ -73,34 +74,44 @@ const STALL_MS = 60000;
 const noMenu = (event) => event.preventDefault();
 
 /**
- * Double-click the finished picture for the browser's own fullscreen.
+ * Double-click the finished picture to open it in the loupe.
  *
  * The stage is as large as the room it is in and no larger — a card beside a
  * node, a plate in the shell — and neither is the size a 4K render was made to
- * be looked at. The way out was to find the file in the gallery and open it in
- * a tab, which is a detour around a picture that is already on screen.
+ * be looked at.
  *
- * The browser's fullscreen rather than a lightbox of our own: it is the whole
- * display rather than the whole window, the video keeps its own transport, and
- * Escape already means what everyone expects it to. Toggled, because a second
- * double-click on the same picture is the obvious way back and the first one is
- * how you got here.
+ * This used to be `requestFullscreen` on the picture element, which was the
+ * cheap answer: the whole display rather than the whole window, Escape already
+ * meaning what everyone expects. What it cost was everything a render is
+ * actually looked at *for*. Firefox lays its own banner over the top of the
+ * screen every time; the picture is fitted to the display and cannot be
+ * magnified into; and there is nowhere to put the comparison — which for a
+ * render made with the neural refiner on is the whole question. `loupe.js` is
+ * the room that answers those, and it is this pack's, so it can carry them.
  *
  * On the finished render only. The step preview is an object URL that the next
- * frame revokes, so a fullscreen of it would go blank a second later — the same
- * reason that one has no context menu.
+ * frame revokes, so a viewer pointed at it would go blank a second later — the
+ * same reason that one has no context menu.
  */
-const toFullscreen = (event) => {
-  const media = event.currentTarget;
-  event.preventDefault();
-  if (document.fullscreenElement === media) {
-    document.exitFullscreen?.();
-    return;
-  }
-  // webkit's prefixed name is the one Safari has on a non-video element.
-  const open = media.requestFullscreen ?? media.webkitRequestFullscreen;
-  try { open?.call(media)?.catch?.(() => {}); } catch { /* refused; nothing to do */ }
-};
+
+/**
+ * A finished render as a file anyone can open: `{path, kind}`, or null.
+ *
+ * The shape every room in this pack takes a source in — the benches, the picker,
+ * the loupe — assembled from what the save node reported. Exported because four
+ * surfaces were each doing these three lines from their own copy of a result,
+ * and the annotation ("name.png [output]") is the kind of detail that is right
+ * in three of four places for a while.
+ */
+export function stageSource(result) {
+  const saved = result?.saved;
+  if (!saved?.filename) return null;
+  const folder = saved.subfolder ? `${saved.subfolder}/` : "";
+  return {
+    path: `${folder}${saved.filename} [${saved.type || "output"}]`,
+    kind: result.isImage ? "image" : "video",
+  };
+}
 
 export class Stage {
   /**
@@ -752,6 +763,18 @@ export class Stage {
     return clip;
   }
 
+  /**
+   * The finished render, in the loupe.
+   *
+   * The file rather than the element: the loupe fetches its own copy at full
+   * size and probes it for its own dimensions, because what is on the stage is
+   * fitted to a card and a viewer built on that would be magnifying a thumbnail.
+   */
+  toLoupe() {
+    const source = stageSource(this.result);
+    if (source) openLoupe({ source });
+  }
+
   /** A finished still. An <img> and nothing else — no transport to draw, and
    *  the hand-off chips live in the readout overlay with the gallery. */
   still() {
@@ -763,7 +786,7 @@ export class Stage {
       // what is gone is the label that popped up over every finished render
       // whenever the pointer rested on it — a hint that costs the picture it is
       // covering, on the one element in the body worth looking at.
-      ondblclick: toFullscreen,
+      ondblclick: () => this.toLoupe(),
       onload: (event) => this.setAspect(event.currentTarget.naturalWidth,
                                         event.currentTarget.naturalHeight),
       onpointerdown: (event) => event.stopPropagation(),
@@ -796,7 +819,7 @@ export class Stage {
       class: "mmc-stage-video",
       src: this.result.url,
       // No tooltip, for the reason `still` gives.
-      ondblclick: toFullscreen,
+      ondblclick: () => this.toLoupe(),
       autoplay: uiSetting("autoplay_previews", true),
       controls: true, loop: true, muted: true, playsinline: true, preload: "metadata",
       onloadedmetadata: (event) => this.setAspect(event.currentTarget.videoWidth,
