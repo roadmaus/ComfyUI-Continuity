@@ -44,6 +44,7 @@ import torch
 
 import comfy.nested_tensor
 import comfy.patcher_extension
+import comfy.utils
 from comfy_api.latest import io
 
 TRUNCATE_NODE = "MiniMaxH3TruncatedFlow"
@@ -73,8 +74,15 @@ class Trajectory:
             return
         self.terms.append((_float(denoised) * width, width))
 
-    def finish(self, samples):
-        """The average of the kept guesses, or `samples` where none was kept."""
+    def finish(self, samples, latent_shapes=None):
+        """The average of the kept guesses, or `samples` where none was kept.
+
+        Only the picture. The sampler runs H3's two streams as one flat pack
+        — `latent_shapes` is how core cuts it, set on the model for the run —
+        so the pack is opened, the video slice replaced, and the sound slice
+        put back as the sampler made it. A nested pair is the same two
+        streams already apart.
+        """
         if not self.terms:
             return samples
         acc = None
@@ -84,11 +92,13 @@ class Trajectory:
             weight += width
         out = acc * (1.0 / weight)
         if getattr(samples, "is_nested", False):
-            # The picture is redrawn from the guesses; the sound row leaves as
-            # the sampler made it.
             video, *rest = samples.unbind()
             picture = out.unbind()[0].to(video.dtype)
             return comfy.nested_tensor.NestedTensor([picture, *rest])
+        if latent_shapes is not None and len(latent_shapes) > 1:
+            averaged = comfy.utils.unpack_latents(out, latent_shapes)
+            kept = comfy.utils.unpack_latents(samples, latent_shapes)
+            return comfy.utils.pack_latents([averaged[0].to(samples.dtype), *kept[1:]])[0]
         return out.to(samples.dtype)
 
 
@@ -135,7 +145,10 @@ def _patch(model, guesses):
         if end > 1e-6:
             return samples          # a sitting with more schedule to come
         _open = None
-        return trajectory.finish(samples)
+        # Set on the model by core's `inner_sample` before the sampler runs,
+        # so it is there for every sitting this wrapper sees.
+        shapes = getattr(getattr(guider, "inner_model", None), "latent_shapes", None)
+        return trajectory.finish(samples, shapes)
 
     patched = model.clone()
     patched.set_model_sampler_post_cfg_function(record)

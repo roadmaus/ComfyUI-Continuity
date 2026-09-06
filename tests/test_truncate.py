@@ -140,6 +140,23 @@ check("a nested latent comes back nested", getattr(out, "is_nested", False), Tru
 check("...its picture from the last three guesses", close(out.unbind()[0], by_hand(SEEN, 3)), True)
 check("...and its sound row the sampler's own", out.unbind()[1] is nested_end.unbind()[1], True)
 
+# Packed: the sampler runs the two streams as one flat tensor and the model
+# carries how to cut it. The video slice is averaged and the sound slice is the
+# sampler's own, bit for bit.
+import comfy.utils as _utils
+packed_v = [_utils.pack_latents([v, a])[0] for v, a in zip(VELOCITIES, audio_v)]
+packed_x = _utils.pack_latents([NOISE, nested_x.unbind()[1]])[0]
+trajectory, packed_end = run(3, SIGMAS, packed_v, packed_x)
+shapes = [NOISE.shape, audio_v[0].shape]
+packed_out = trajectory.finish(packed_end, shapes)
+_pv, _pa = _utils.unpack_latents(packed_out, shapes)
+check("a packed pair comes back packed", tuple(packed_out.shape), tuple(packed_end.shape))
+check("...its picture from the last three guesses", close(_pv, by_hand(SEEN, 3)), True)
+check("...and its sound slice the sampler's own",
+      torch.equal(_pa, _utils.unpack_latents(packed_end, shapes)[1]), True)
+check("without shapes a flat tensor is averaged whole",
+      close(trajectory.finish(packed_end), by_hand(predictions(SIGMAS, packed_v, packed_x), 3)), True)
+
 # The sampler's own tensor is never held: a prediction is copied as it is seen.
 trajectory = truncate.Trajectory(2)
 d = NOISE.clone()
