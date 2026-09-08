@@ -23,7 +23,7 @@ import { uiSetting, patchSettings } from "./api.js";
 import { el } from "./dom.js";
 import { t } from "./i18n.js";
 import { NEURAL_DEFAULTS, NEURAL_PRECISIONS, NEURAL_PROFILES, NEURAL_RANGES,
-         parseNeural } from "./state.js";
+         neuralDefaultsFor, parseNeural } from "./state.js";
 
 /** Mirrors `settings.MAX_PROFILE_NAME` / `MAX_NEURAL_PROFILES`. */
 export const MAX_NAME = 40;
@@ -103,6 +103,21 @@ export function setStartingBlock(block) {
 export function applyProfile(target, block) {
   for (const key of PROFILE_KEYS) target[key] = block[key];
   return target;
+}
+
+/** Move `block` to preset `next`, carrying the preset's opening strengths with
+ *  it — but only over dials still sitting where the outgoing preset put them.
+ *  A dial someone has moved is an answer, and switching style is not a reason
+ *  to throw it away; a dial nobody has touched is just the old preset showing
+ *  through, and leaving it there would make the presets differ in name only. */
+export function adoptProfileDefaults(block, next) {
+  const was = neuralDefaultsFor(block.profile);
+  const now = neuralDefaultsFor(next);
+  for (const key of ["detail", "colour", "intensity"]) {
+    if (Number(block[key]) === was[key]) block[key] = now[key];
+  }
+  block.profile = next;
+  return block;
 }
 
 // ---- the dials ---------------------------------------------------------------
@@ -254,7 +269,11 @@ export function neuralRail({ block, onChange, redraw = null, still = false, rang
     neuralChoice({
       label: t("profile"), value: block.profile, options: NEURAL_PROFILES,
       notes: PROFILE_NOTES,
-      onChange: (next) => { block.profile = next; onChange(); (redraw ?? onChange)(); },
+      onChange: (next) => {
+        adoptProfileDefaults(block, next);
+        onChange();
+        (redraw ?? onChange)();
+      },
     }),
   ];
   const labels = { detail: t("detail"), colour: t("colour"), intensity: t("blend"),

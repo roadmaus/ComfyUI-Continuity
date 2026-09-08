@@ -5,6 +5,18 @@ and everything under it is kept exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**The refiner's presets carry their own numbers now, and the colour dial starts
+at nothing.** The DLSS 5 pass shipped opening at the model's own answer, 1 on
+both strengths, which is right for detail and wrong for colour: that half is a
+grade, and at 1 it darkened skin, flattened knitwear and muddied brick on every
+still it was measured against. Every preset opens at colour 0 — `standard` and
+`cinematic` at detail 1.25, `natural` at 1 — and switching preset carries the
+new one's strengths onto the dials you have not moved yourself. Detail stops at
+4 rather than 8, where the pass had begun putting blue-orange fringes on lit
+edges, which also settles a dial that read one range in the popover and another
+on the bench. `neutral` is documented for what it is: upstream switches the
+model's local tone and structure off there, so no strength does anything.
+
 **A viewer for finished work, with a wipe in it.** Double-clicking a render
 opened the browser's own fullscreen: a banner across the top of the screen in
 Firefox, the picture fitted to the display and impossible to look into, and

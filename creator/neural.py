@@ -75,15 +75,48 @@ DLL_SHA256 = "ceb6432f6fbdf44d886014bcd47241932bf8b67439feef9bbdd0961436662650"
 PROFILES = ("standard", "natural", "cinematic", "neutral")
 PRECISIONS = ("reference", "fast")
 
-# The controls, with upstream's ranges and defaults. Working defaults over
-# exposed knobs: `detail_strength` 1 and `colour_strength` 1 are the model's
-# own answer, `intensity` 1 is all of it, scale 1 is the frame as it is.
+# The controls, with upstream's ranges and this pack's defaults.
+#
+# The bounds are narrower than the model accepts, because the width upstream
+# exposes is not usable width. `detail` past 2 etches skin and embosses brick,
+# and by 8 it puts blue-orange fringes on every lit edge — a stop nobody should
+# be able to reach by dragging. `colour` past 2 is the same story in tone. Both
+# stop where the bench already stopped, which also settles a dial that used to
+# read one range in the popover and another on the bench.
 MIN_SCALE, MAX_SCALE, DEFAULT_SCALE = 1.0, 4.0, 1.0
-MIN_DETAIL, MAX_DETAIL, DEFAULT_DETAIL = 0.0, 8.0, 1.0
-MIN_COLOUR, MAX_COLOUR, DEFAULT_COLOUR = 0.0, 4.0, 1.0
+MIN_DETAIL, MAX_DETAIL = 0.0, 4.0
+MIN_COLOUR, MAX_COLOUR = 0.0, 2.0
 MIN_INTENSITY, MAX_INTENSITY, DEFAULT_INTENSITY = 0.0, 1.0, 1.0
 DEFAULT_PROFILE = "standard"
 DEFAULT_PRECISION = "reference"
+
+# What each style preset opens at, measured rather than assumed.
+#
+# The model's own answer is 1 on both strengths, and that is what this shipped
+# with. It was wrong on `colour`: the low-frequency half is a grade, and at 1 it
+# darkens skin, flattens knitwear and muddies brick on every source tried —
+# a tone change nobody asked the refiner for. At 0 the tone is left alone and
+# the material work survives intact, so 0 is where every preset starts.
+#
+# `detail` then differs by preset only because the presets sit at different
+# style indices and so arrive at the same place from different distances:
+# natural is the most eager on skin and wants the least, standard and cinematic
+# take a quarter more. Measured on three 1024x1360 Krea 2 stills — a face, a
+# still life, a wet street — compared against the source at 1:1.
+#
+# `neutral` is in the table for completeness and not because the numbers do
+# anything there: upstream defines it with local tone *and* local structure at
+# zero, so both strengths scale nothing and the pass is within half a level of
+# the source at every setting. It is an off switch, not a style.
+PROFILE_DEFAULTS = {
+    "standard": {"detail": 1.25, "colour": 0.0, "intensity": 1.0},
+    "natural": {"detail": 1.0, "colour": 0.0, "intensity": 1.0},
+    "cinematic": {"detail": 1.25, "colour": 0.0, "intensity": 1.0},
+    "neutral": {"detail": 1.0, "colour": 0.0, "intensity": 1.0},
+}
+
+DEFAULT_DETAIL = PROFILE_DEFAULTS[DEFAULT_PROFILE]["detail"]
+DEFAULT_COLOUR = PROFILE_DEFAULTS[DEFAULT_PROFILE]["colour"]
 
 # Upstream's measurement: about 1 GB per megapixel of network input at float32
 # (1080p 2.0 GB, 2560x2880 5.5 GB), half of that in fast precision. Rounded
@@ -104,6 +137,13 @@ DEFAULTS = {
     "intensity": DEFAULT_INTENSITY,
     "precision": DEFAULT_PRECISION,
 }
+
+
+def defaults_for(profile):
+    """The whole block a preset opens at — its own name and strengths, the
+    shared rest. An unknown name opens the default preset, as `Request` does."""
+    name = profile if profile in PROFILES else DEFAULT_PROFILE
+    return {**DEFAULTS, "profile": name, **PROFILE_DEFAULTS[name]}
 
 
 class NeuralError(RuntimeError):
@@ -391,11 +431,19 @@ class Request:
 
     @classmethod
     def of(cls, data):
-        """The blob's `neural` block, or an off request where there is none."""
+        """The blob's `neural` block, or an off request where there is none.
+
+        A missing strength falls back to the *preset's* default rather than the
+        table's, so a block that names only a profile opens where that profile
+        is meant to open. Every block this pack writes carries all seven fields;
+        the partial ones are hand edits and blobs from before the presets had
+        their own numbers.
+        """
         raw = (data or {}).get("neural") if isinstance(data, dict) else None
         if not isinstance(raw, dict):
             return cls()
-        return cls(**{key: raw.get(key, DEFAULTS[key]) for key in DEFAULTS})
+        fallback = defaults_for(raw.get("profile"))
+        return cls(**{key: raw.get(key, fallback[key]) for key in DEFAULTS})
 
     def __bool__(self):
         return self.on
@@ -615,20 +663,23 @@ BENCH = {
         {"key": "profile", "kind": "option",
          "options": PROFILES, "default": DEFAULT_PROFILE,
          "label": "Profile",
-         "note": "The model's own style presets. Standard is what the driver "
-                 "runs; natural and cinematic move its style index; neutral "
-                 "switches the local tone and structure off."},
+         "note": "The model's own style presets, each with its own opening "
+                 "strengths. Standard is what the driver runs; natural and "
+                 "cinematic move its style index; neutral switches the local "
+                 "tone and structure off, which leaves the strengths nothing "
+                 "to scale.",
+         "defaults": {name: dict(row) for name, row in PROFILE_DEFAULTS.items()}},
         {"key": "processing", "kind": "range", "min": MIN_SCALE, "max": 2.0,
          "step": 0.25, "default": DEFAULT_SCALE, "label": "Processing scale",
          "note": "Run the network on the picture resampled by this factor and "
                  "bring the result back. Finer material at 2, and about four "
                  "times the memory — the estimate under the dials is the "
                  "number to watch."},
-        {"key": "detail", "kind": "range", "min": MIN_DETAIL, "max": 4.0,
+        {"key": "detail", "kind": "range", "min": MIN_DETAIL, "max": MAX_DETAIL,
          "step": 0.25, "default": DEFAULT_DETAIL, "label": "Detail",
          "note": "How much of the model's high-frequency change is kept. 1 is "
                  "the model's answer; 0 keeps only its colour."},
-        {"key": "colour", "kind": "range", "min": MIN_COLOUR, "max": 2.0,
+        {"key": "colour", "kind": "range", "min": MIN_COLOUR, "max": MAX_COLOUR,
          "step": 0.25, "default": DEFAULT_COLOUR, "label": "Colour",
          "note": "How much of the model's low-frequency change — tone and "
                  "colour — is kept. 0 keeps only its detail."},

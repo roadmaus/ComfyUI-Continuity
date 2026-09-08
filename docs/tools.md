@@ -172,10 +172,32 @@ motion vectors it loses to Lanczos. Expect strong results on figures and
 faces, and odd ones on flat, graphic or abstract work: it was trained on game
 frames.
 
+![Each style preset at its default, against the source, at 1:1](img/dlss-presets.png)
+
+**The presets and what they open at.** `standard` is what the driver runs;
+`natural` and `cinematic` move the model's style index one and two steps; and
+each arrives with its own opening strengths, measured on stills rather than
+taken from the model's own answer. That answer is 1 on both strengths, and on
+the colour half it is a grade: at 1 it darkens skin, flattens knitwear and
+muddies brick, which is a tone change nobody asks a material pass for. So every
+preset opens at colour 0, where the tone is left alone and the material work
+survives — `standard` and `cinematic` at detail 1.25, `natural`, which is the
+most eager of the three on skin, at 1. Switching preset carries the new one's
+strengths onto any dial you have not moved yourself.
+
+`neutral` is the exception, and it is not a style: upstream defines it with the
+model's local tone *and* local structure at zero, so both strengths have nothing
+to scale and the pass comes back within half a level of the source whatever the
+dials say. It is there to turn the character off, not to tune.
+
+Above detail 2 the pass stops describing material and starts inventing it —
+skin goes waxy, brick embosses, and lit edges pick up blue-orange fringes — so
+the dial stops at 4 rather than at the model's own 8.
+
 It is available wherever this pack handles a picture:
 
 - **On a pre-stage still** — the `DLSS 5` pill on the sampler row, with the
-  profile, the detail and colour strengths, the blend, and a processing scale
+  preset, the detail and colour strengths, the blend, and a processing scale
   (the network run on the picture resampled up and brought back; finer at 2,
   about four times the memory).
 - **On a render** — the same pill on the Creator and the Timeline. Every pass

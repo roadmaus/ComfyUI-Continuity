@@ -28,7 +28,8 @@ const cases = JSON.parse(process.argv[2]);
 const sizes = JSON.parse(process.argv[3]);
 const out = {
   profiles: s.NEURAL_PROFILES, precisions: s.NEURAL_PRECISIONS, defaults: s.NEURAL_DEFAULTS,
-  ranges: s.NEURAL_RANGES, parsed: {}, serialized: {}, extents: {}, gb: {},
+  ranges: s.NEURAL_RANGES, profileDefaults: s.NEURAL_PROFILE_DEFAULTS,
+  openAt: {}, parsed: {}, serialized: {}, extents: {}, gb: {},
   piece: JSON.parse(s.serializeState(s.parseState(JSON.stringify({ version: 2, neural: cases.full })))).neural,
   piece_off: "neural" in JSON.parse(s.serializeState(s.parseState(JSON.stringify({ version: 2 })))),
   timeline: JSON.parse(s.serializeTimeline(s.parseTimeline(JSON.stringify({ neural: cases.full })))).neural,
@@ -39,6 +40,7 @@ for (const [name, raw] of Object.entries(cases)) {
   out.parsed[name] = s.parseNeural(raw);
   out.serialized[name] = s.serializeNeural(s.parseNeural(raw));
 }
+for (const name of s.NEURAL_PROFILES) out.openAt[name] = s.neuralDefaultsFor(name);
 for (const [w, h, scale, precision] of sizes) {
   const key = `${w}x${h}@${scale}/${precision}`;
   out.extents[key] = s.neuralNetworkExtent(w, h, scale);
@@ -56,6 +58,7 @@ CASES = {
     "clamped": {"on": True, "profile": "vivid", "scale": 9, "detail": -1, "colour": "lots",
                 "intensity": 3, "precision": "int4"},
     "strings": {"on": "true", "scale": "1.5", "detail": "2"},
+    "preset only": {"on": True, "profile": "natural"},
 }
 SIZES = [[256, 256, 1, "reference"], [1920, 1080, 1, "reference"], [1920, 1080, 1, "fast"],
          [640, 360, 2, "reference"], [1024, 576, 1.5, "fast"], [1067, 601, 1, "reference"],
@@ -74,6 +77,11 @@ check("ranges", js["ranges"], {
                   "default": neural.DEFAULT_INTENSITY},
 })
 
+check("profile defaults", js["profileDefaults"],
+      {name: dict(row) for name, row in neural.PROFILE_DEFAULTS.items()})
+for name in neural.PROFILES:
+    check(f"{name} opens at", js["openAt"][name], neural.defaults_for(name))
+
 for name, raw in CASES.items():
     want = neural.Request.of({"neural": raw}).as_dict()
     check(f"{name}: parsed alike", js["parsed"][name], want)
@@ -91,3 +99,33 @@ for w, h, scale, precision in SIZES:
     key = f"{w}x{h}@{scale}/{precision}"
     check(f"{key}: network extent", js["extents"][key], list(neural.network_extent(w, h, scale)))
     check(f"{key}: estimate", js["gb"][key], neural.estimate_gb(w, h, scale, precision))
+
+
+# ---- the preset switch -------------------------------------------------------
+#
+# `adoptProfileDefaults` lives in `neural.js`, which imports ComfyUI's api, so it
+# needs the packed tree rather than a bare import of the mirror.
+
+SWITCH = """
+const nm = await import("./web/creator/neural.js");
+const s = await import("./web/creator/state.js");
+const out = {};
+for (const name of s.NEURAL_PROFILES) {
+  const untouched = { ...s.neuralDefaultsFor("standard") };
+  const moved = { ...s.neuralDefaultsFor("standard"), detail: 3.5 };
+  out[name] = [nm.adoptProfileDefaults(untouched, name),
+               nm.adoptProfileDefaults(moved, name)];
+}
+console.log(JSON.stringify(out));
+"""
+
+with layout.pack(skip=["atlas"]) as target:
+    switched = layout.in_pack(SWITCH, target)
+
+for name in neural.PROFILES:
+    untouched, moved = switched[name]
+    check(f"{name}: an untouched rail follows the preset", untouched,
+          {**neural.defaults_for(name), "on": False})
+    check(f"{name}: a moved dial survives the switch", moved["detail"], 3.5)
+    check(f"{name}: its untouched neighbours still follow", moved["colour"],
+          neural.PROFILE_DEFAULTS[name]["colour"])

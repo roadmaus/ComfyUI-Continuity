@@ -1333,13 +1333,30 @@ export const NEURAL_PROFILES = ["standard", "natural", "cinematic", "neutral"];
 export const NEURAL_PRECISIONS = ["reference", "fast"];
 export const NEURAL_RANGES = {
   scale: { min: 1, max: 4, step: 0.25, default: 1 },
-  detail: { min: 0, max: 8, step: 0.25, default: 1 },
-  colour: { min: 0, max: 4, step: 0.25, default: 1 },
+  detail: { min: 0, max: 4, step: 0.25, default: 1.25 },
+  colour: { min: 0, max: 2, step: 0.25, default: 0 },
   intensity: { min: 0, max: 1, step: 0.05, default: 1 },
 };
+
+/** What each style preset opens at, mirrored from `neural.PROFILE_DEFAULTS`.
+ *  The strengths are the preset's; everything else on a block is shared. See
+ *  that table for why colour starts at 0 and why neutral's row changes nothing. */
+export const NEURAL_PROFILE_DEFAULTS = {
+  standard: { detail: 1.25, colour: 0, intensity: 1 },
+  natural: { detail: 1, colour: 0, intensity: 1 },
+  cinematic: { detail: 1.25, colour: 0, intensity: 1 },
+  neutral: { detail: 1, colour: 0, intensity: 1 },
+};
+
 export const NEURAL_DEFAULTS = {
-  on: false, profile: "standard", scale: 1, detail: 1, colour: 1, intensity: 1,
-  precision: "reference",
+  on: false, profile: "standard", scale: 1, precision: "reference",
+  ...NEURAL_PROFILE_DEFAULTS.standard,
+};
+
+/** The whole block a preset opens at. Mirrors `neural.defaults_for`. */
+export const neuralDefaultsFor = (profile) => {
+  const name = NEURAL_PROFILES.includes(profile) ? profile : NEURAL_DEFAULTS.profile;
+  return { ...NEURAL_DEFAULTS, profile: name, ...NEURAL_PROFILE_DEFAULTS[name] };
 };
 
 export const emptyNeural = () => ({ ...NEURAL_DEFAULTS });
@@ -1376,7 +1393,9 @@ const neuralNumber = (value, range) => {
 
 /** Whatever was in the blob, clamped onto `neural.py`'s ranges. */
 export function parseNeural(raw) {
-  const block = { ...emptyNeural(), ...(raw && typeof raw === "object" ? raw : {}) };
+  const given = raw && typeof raw === "object" ? raw : {};
+  // A missing strength opens where its *preset* opens, as `Request.of` does.
+  const block = { ...neuralDefaultsFor(given.profile), ...given };
   block.on = block.on === true;
   if (!NEURAL_PROFILES.includes(block.profile)) block.profile = NEURAL_DEFAULTS.profile;
   if (!NEURAL_PRECISIONS.includes(block.precision)) block.precision = NEURAL_DEFAULTS.precision;
