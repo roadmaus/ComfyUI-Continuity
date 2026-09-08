@@ -33,7 +33,8 @@ import { openPicker } from "./picker.js";
 import { openLoras, loraBlock, loraBase } from "./loras.js";
 import { openFrameGrab } from "./framegrab.js";
 import { openContactSheet } from "./contact.js";
-import { openChoicePopover, stepperPill, aspectGlyph, aspectGrid, edgeSlider, PILL_GLYPH } from "./pills.js";
+import { openChoicePopover, stepperPill, aspectGlyph, aspectGrid, edgeSlider, PILL_GLYPH,
+         neuralPill } from "./pills.js";
 import { revealPreStage } from "./fullscreen.js";
 import { CreatorEditor } from "./editor.js";
 import { openPresetLibrary } from "./presetlib.js";
@@ -41,7 +42,7 @@ import * as P from "./presets.js";
 import { PromptBox, focusEnd, openEditorSheet } from "./prompt.js";
 import { blobIO, samplingBar } from "./sampling.js";
 import { loadLoraNames, loraNames } from "./turbo.js";
-import { Stage } from "./stage.js";
+import { Stage, stageSource } from "./stage.js";
 import { loadCatalog, refreshCatalog, catalogByFolder } from "./models.js";
 import { viewUrl } from "./api.js";
 import { t } from "./i18n.js";
@@ -536,7 +537,14 @@ export class PreStageEditor {
       set: (name, value) => { this.widgetIO().set(name, value); this.render(); },
       perSegment: false,
       turbo: this.renderTurbo(),
-      trailing: [this.renderWeightsPill()],
+      trailing: [
+        // The DLSS 5 refiner over the still, with the processing scale a still
+        // can afford and a clip cannot.
+        neuralPill({ target: this.state, commit: () => this.commit(), still: true,
+                     geometry: () => S.resolvedPreStage(this.state, this.sourceSize()),
+                     picture: () => stageSource(this.stage?.result) }),
+        this.renderWeightsPill(),
+      ],
     })] : []));
     this.sheetEditor?.render();
   }

@@ -12,8 +12,13 @@ import { UPSCALE_MODES, DEFAULT_REFINE_DENOISE, MIN_REFINE_DENOISE, MAX_REFINE_D
          twoPass, sampleEdge, emptyFace, isClip, pieceFamily, refineOf,
          redetailTarget, capabilityOf,
          MIN_FACE_CANVAS, MAX_FACE_CANVAS,
-         MIN_FACE_DENOISE, MAX_FACE_DENOISE } from "./state.js";
-import { UPSCALERS } from "./manifest.js";
+         MIN_FACE_DENOISE, MAX_FACE_DENOISE,
+         emptyNeural, NEURAL_DEFAULTS, NEURAL_RANGES,
+         neuralEstimateGb } from "./state.js";
+import { UPSCALERS, NEURAL } from "./manifest.js";
+import { neuralRail, neuralSwitch, savedProfiles, saveProfile, forgetProfile,
+         sameProfile, applyProfile, profileOf, startingBlock } from "./neural.js";
+import { openLoupe } from "./loupe.js";
 
 /**
  * Closely related controls as one pill, divided by hairlines.
@@ -969,6 +974,203 @@ export function openFacesPopover(anchor, { target, commit }) {
                                   + "needs a SAM3 checkpoint picked under weights.") }));
     }
     body.replaceChildren(...rows);
+  };
+
+  render();
+  pop.appendChild(body);
+  document.body.appendChild(pop);
+  placeNear(pop, anchor);
+  dismissable(pop);
+}
+
+
+/**
+ * The DLSS 5 neural refiner, as a pill on the sampler row.
+ *
+ * NVIDIA's neural renderer as a material pass over the finished frames — skin,
+ * hair, fabric, contact shadows, subsurface — at the size they already are. It
+ * sits with the face pass because it is the same kind of statement: a thing
+ * done to the render rather than a thing the piece is, and off reads as off.
+ *
+ * On a machine that has not set it up the pill still draws, unlit, and says
+ * what is missing — the package, or the weights extracted from the user's own
+ * DLL — because the answer to "why is this greyed out" has to be on the pill.
+ * Switching it on there is allowed: the render will refuse with the same
+ * sentence, and a piece set up on one machine is still a piece on another.
+ *
+ * @param {object} spec
+ * @param {object} spec.target  a piece, timeline or pre-stage state, mutated in place
+ * @param {() => void} spec.commit
+ * @param {boolean} [spec.still]  a pre-stage: the processing scale is offered
+ * @param {() => ({width:number, height:number})|null} [spec.geometry]  for the estimate
+ * @param {() => ({path:string, kind:string})|null} [spec.picture]  a finished
+ *   picture this surface can name, for the door into the loupe. Absent — or
+ *   answering null — leaves the door out: there is nothing to compare on.
+ */
+export function neuralPill({ target, commit, still = false, geometry = null,
+                             picture = null }) {
+  const block = target.neural ?? emptyNeural();
+  const ready = NEURAL.ready !== false;
+  const title = block.on
+    ? t("The neural refiner is on: every frame gets NVIDIA's DLSS 5 material pass "
+      + "— skin, hair, fabric, contact shadows — at the size it already is. "
+      + "About a gigabyte of VRAM per megapixel.")
+    : ready
+      ? t("The neural refiner is off. Switch it on for figurative work — faces, "
+        + "hair, cloth. It does not enlarge anything, and flat or graphic "
+        + "material may come back odd.")
+      : t("The neural refiner is not set up on this machine. It needs {what}",
+          { what: NEURAL.needs || t("the weights extracted from your own DLSS DLL") });
+  return el("button", {
+    class: `mmc-pill${block.on ? " accel-on" : ""}${ready ? "" : " mmc-pill-unready"}`,
+    title,
+    onclick: (event) => openNeuralPopover(event.currentTarget,
+                                          { target, commit, still, geometry, picture }),
+  }, [el("span", { text: block.on ? t("refine · DLSS 5") : t("DLSS 5 off") })]);
+}
+
+
+/**
+ * The refiner's settings, as a panel.
+ *
+ * What was here was a radio pair, three steppers and two segmented rows, in
+ * that order, with a paragraph under them. Two of those were wrong. A boolean
+ * does not need two rows and two sentences — it is a switch, and it goes beside
+ * the title where a switch goes. And a stepper is the wrong control for these
+ * numbers entirely: `detail` runs from 0 to 8 in quarters, which is thirty-two
+ * presses from one end to the other, and a reading of "1.00" says nothing about
+ * where 1 sits between them. They are sliders now, drawn by `neural.js` — the
+ * same dial the loupe's rail draws, so the six numbers read one way wherever
+ * they are set.
+ *
+ * The two things below the dials are what the refiner was missing rather than
+ * what it drew badly. **Saved setups**, because these values are found by eye
+ * on one picture and then wanted on every piece after it, and until now every
+ * card started at the defaults. And **a door to the loupe**, because a panel of
+ * dials over a material pass, with the material nowhere on the screen, is a
+ * request to imagine the result — which is what the wipe in the loupe exists to
+ * stop anybody having to do.
+ */
+export function openNeuralPopover(anchor, { target, commit, still = false, geometry = null,
+                                            picture = null }) {
+  const pop = el("div", { class: "mmc-pop mmc-neural-pop" });
+  const body = el("div");
+  // Whether the shelf is asking for a name right now. Here rather than in the
+  // row that draws it, because that row is rebuilt on every repaint.
+  let naming = false;
+
+  const render = () => {
+    const block = target.neural ?? (target.neural = emptyNeural());
+    const ready = NEURAL.ready !== false;
+    const rows = [
+      el("div", { class: "mmc-neural-head" }, [
+        el("span", { class: "mmc-pop-title", text: t("Neural refiner (DLSS 5)") }),
+        neuralSwitch({
+          on: block.on, label: t("Neural refiner (DLSS 5)"),
+          onChange: (next) => {
+            block.on = next;
+            // Switched on for the first time, it starts where this machine said
+            // to start. Only while the dials are still the pack's own defaults:
+            // a block somebody has already tuned keeps what it was tuned to, so
+            // saving a profile elsewhere never reaches back into a card that
+            // had an answer of its own.
+            if (next && sameProfile(block, profileOf(NEURAL_DEFAULTS))) {
+              applyProfile(block, startingBlock());
+            }
+            render();
+            commit();
+          },
+        }),
+      ]),
+      el("p", { class: "mmc-neural-lead", text: block.on
+        ? (still
+            ? t("Every still gets NVIDIA's material pass after the decode — skin, hair, "
+              + "fabric, contact shadows — at the size it already is.")
+            : t("Every frame gets NVIDIA's material pass — skin, hair, fabric, contact "
+              + "shadows — at the size it already is, each frame carrying the last one's "
+              + "result."))
+        : t("Off: the frames as decoded, as it always was. Switch it on for figurative "
+          + "work — faces, hair, cloth. It does not enlarge anything.") }),
+    ];
+    if (block.on) {
+      rows.push(...neuralRail({
+        block, ranges: NEURAL_RANGES, still,
+        onChange: () => commit(),
+        redraw: () => render(),
+      }));
+      rows.push(profileRow(block, render, commit));
+      const size = geometry?.();
+      const gigabytes = size
+        ? neuralEstimateGb(size.width, size.height, still ? block.scale : 1, block.precision)
+        : null;
+      rows.push(el("div", { class: "mmc-pop-note", text: [
+        gigabytes != null
+          ? t("About {gb} GB of VRAM per frame at {width} × {height}.",
+              { gb: gigabytes.toFixed(1), width: size.width, height: size.height })
+          : t("About a gigabyte of VRAM per megapixel."),
+        ready ? "" : t("Not set up on this machine: the settings page's 'Neural refiner' section says what is missing."),
+      ].filter(Boolean).join(" ") }));
+      const shot = picture?.();
+      if (shot) {
+        rows.push(el("button", {
+          class: "mmc-neural-see",
+          title: t("Open the last picture in the viewer and wipe between it and this pass."),
+          onclick: () => {
+            openLoupe({ source: shot, compare: true, neural: block, onNeural: commit });
+          },
+        }, [icon("swap", 14), el("span", { text: t("See what it does") })]));
+      }
+    } else if (!ready) {
+      rows.push(el("div", { class: "mmc-pop-note",
+                            text: t("Not set up on this machine: the settings page's 'Neural refiner' section says what is missing.") }));
+    }
+    body.replaceChildren(...rows);
+    if (naming) body.querySelector(".mmc-neural-name")?.focus();
+  };
+
+  /** The saved setups, and the one press that adds to them. The loupe's shelf
+   *  says the same thing at more length, because that is where a setup is
+   *  actually arrived at; here it is a row of chips and a plus. */
+  const profileRow = (block, render_, commit_) => {
+    const saved = savedProfiles();
+    const current = saved.find((entry) => sameProfile(entry.block, block));
+    return el("div", { class: "mmc-neural-shelf" }, [
+      el("span", { class: "mmc-nr-label", text: t("saved") }),
+      el("div", { class: "mmc-neural-chips" }, [
+        ...saved.map((entry) => el("button", {
+          class: `mmc-neural-chip${entry === current ? " on" : ""}`,
+          "aria-pressed": entry === current,
+          title: t("Put these dials on. Hold Alt and press to forget it."),
+          text: entry.name,
+          onclick: (event) => {
+            if (event.altKey) { forgetProfile(entry.name).then(render_); return; }
+            applyProfile(block, entry.block);
+            render_();
+            commit_();
+          },
+        })),
+        naming
+          ? el("input", {
+              type: "text", class: "mmc-neural-name", placeholder: t("Name this setup"),
+              spellcheck: "false",
+              // The popover is dismissed by a keystroke reaching the document,
+              // and every key typed into a field inside one is one of those.
+              onkeydown: (event) => {
+                event.stopPropagation();
+                if (event.key === "Enter") {
+                  saveProfile(event.target.value, block).then(() => { naming = false; render_(); });
+                }
+                if (event.key === "Escape") { naming = false; render_(); }
+              },
+              onblur: () => { naming = false; render_(); },
+            })
+          : el("button", {
+              class: "mmc-neural-keep", text: saved.length ? "+" : t("Save these"),
+              title: t("Keep this setup on this machine, under a name."),
+              onclick: () => { naming = true; render_(); },
+            }),
+      ]),
+    ]);
   };
 
   render();

@@ -7,10 +7,10 @@ landed. `routes/control.py` is worth reading for the argument behind the GET.
 
 Two things differ, and both come from what an upscale *is*.
 
-The preview is a tile rather than a frame, so it carries a centre as well as a
-mark: which part of the picture is being judged is a thing the person judging
-moves around. And `plain` asks for the same tile with no model in it, which is
-what the surface holds the backend against.
+The preview is a tile rather than a frame, so it carries a centre and a side as
+well as a mark: which part of the picture is being judged, and how much of it,
+are things the person judging moves around. And `plain` asks for the same tile
+with no model in it, which is what the surface holds the backend against.
 
 The run answers with a path under the *output* folder. A tracing is an
 ingredient and lands in `input/` for a render to reference; this is the finished
@@ -45,7 +45,7 @@ def _values(query):
     not the request's own.
     """
     return {key: value for key, value in query.items()
-            if key not in ("filename", "op", "at", "cx", "cy", "plain")}
+            if key not in ("filename", "op", "at", "cx", "cy", "plain", "side")}
 
 
 def _number(query, key, fallback=0.0):
@@ -71,6 +71,10 @@ async def preview_tile(request):
     at = max(0.0, _number(request.query, "at"))
     centre = (_number(request.query, "cx", 0.5), _number(request.query, "cy", 0.5))
     plain = str(request.query.get("plain", "")).lower() in ("1", "true", "yes", "on")
+    # How much of the source the tile covers. The bench asks for its own fixed
+    # square and leaves this out; the viewer asks for whatever the zoom has put
+    # on screen. `upscale.preview_side` owns the bounds.
+    side = request.query.get("side")
     try:
         path = media.resolve(filename)
     except media.MediaError as exc:
@@ -78,7 +82,7 @@ async def preview_tile(request):
     try:
         loop = asyncio.get_running_loop()
         png, _ = await loop.run_in_executor(
-            None, upscale.preview, path, op, _values(request.query), at, centre, plain)
+            None, upscale.preview, path, op, _values(request.query), at, centre, plain, side)
     except upscale.UpscaleError as exc:
         return web.json_response({"error": str(exc)}, status=400)
     except Exception as exc:  # noqa: BLE001 — an unreadable source is the caller's problem

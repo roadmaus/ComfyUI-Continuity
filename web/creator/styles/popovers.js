@@ -256,6 +256,64 @@ export const css = `
    section above, plus one line saying what it costs. Fixed width so the note
    does not reflow the popover as the knobs change. */
 .mmc-faces-pop { width: 260px; }
+/* The DLSS 5 refiner's popover.
+   A column of the refiner's own dials (styles/neural.js) under a title with a
+   switch on it, and its two additions at the foot: the shelf of saved setups,
+   and the door to the loupe. The rows come with no padding of their own — they
+   are drawn identically on the loupe's rail, which is a panel and not a
+   popover — so the padding is put on here, once, around the column. */
+.mmc-neural-pop { width: 296px; padding: 10px 12px 12px; display: flex; flex-direction: column; }
+.mmc-neural-pop > div { display: flex; flex-direction: column; gap: 11px; }
+.mmc-neural-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.mmc-neural-pop .mmc-pop-title { padding: 0; color: var(--mmc-strong); font-weight: 600; }
+/* One sentence about what the switch does, in the state it is in. It replaced
+   two of them — one under each of two radio rows — which is the same sentence
+   twice for the price of a quarter of the panel. */
+.mmc-neural-lead {
+  margin: -5px 0 0; color: var(--mmc-faint); line-height: 1.45;
+  font-size: calc(11px * var(--mmc-type));
+}
+.mmc-neural-pop .mmc-pop-note { padding: 9px 0 0; margin: 0; }
+
+/* The shelf. A row of what has been kept, and the press that keeps one more. */
+.mmc-neural-shelf {
+  display: flex; align-items: baseline; gap: 10px;
+  border-top: 1px solid var(--mmc-line); padding-top: 10px;
+}
+.mmc-neural-chips { display: flex; flex-wrap: wrap; gap: 4px; flex: 1; justify-content: flex-end; }
+.mmc-neural-chip {
+  padding: 3px 9px; border-radius: 999px; cursor: pointer; font-family: inherit;
+  background: var(--mmc-wash); border: 1px solid transparent; color: var(--mmc-text);
+  font-size: calc(11px * var(--mmc-type));
+  transition: color 120ms ease, border-color 120ms ease;
+}
+.mmc-neural-chip:hover { border-color: var(--mmc-line-2); }
+.mmc-neural-chip.on { color: var(--mmc-accent); border-color: var(--mmc-accent); }
+.mmc-neural-keep {
+  padding: 3px 9px; border-radius: 999px; cursor: pointer; font-family: inherit;
+  background: none; border: 1px dashed var(--mmc-line-2); color: var(--mmc-dim);
+  font-size: calc(11px * var(--mmc-type));
+  transition: color 120ms ease, border-color 120ms ease;
+}
+.mmc-neural-keep:hover { color: var(--mmc-text); border-color: var(--mmc-line-3); }
+.mmc-neural-name {
+  flex: 1; min-width: 110px; padding: 3px 9px; border-radius: 999px;
+  background: var(--mmc-bg); border: 1px solid var(--mmc-accent); color: var(--mmc-text);
+  font-family: inherit; font-size: calc(11px * var(--mmc-type));
+}
+.mmc-neural-name:focus { outline: none; }
+
+/* The door. It is the only press in the popover that opens a room, so it is
+   drawn as the one thing to do here that is not a number. */
+.mmc-neural-see {
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  padding: 7px 12px; border-radius: 9px; cursor: pointer; font-family: inherit;
+  background: var(--mmc-surface-2); border: 1px solid var(--mmc-line-2);
+  color: var(--mmc-text); font-size: calc(11.5px * var(--mmc-type)); font-weight: 600;
+  transition: border-color 120ms ease, color 120ms ease;
+}
+.mmc-neural-see svg { stroke: currentColor; fill: none; stroke-width: 1.7; }
+.mmc-neural-see:hover { border-color: var(--mmc-accent); color: var(--mmc-accent); }
 .mmc-pop-note {
   color: var(--mmc-dim); font-size: calc(11px * var(--mmc-type)); line-height: 1.45;
   padding: 8px 10px 2px; border-top: 1px solid var(--mmc-line); margin-top: 6px;

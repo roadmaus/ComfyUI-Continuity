@@ -159,6 +159,25 @@ DEFAULTS = {
     # frontend reads each one back through that family's own slot table, where a
     # key it does not have is dropped.
     "weights": {},
+    # The same answer for the two benches: which checkpoint each of their
+    # backends was last run with. They have no piece to record it in — a bench
+    # writes a file and forgets — so the pick comes here, keyed by the backend's
+    # id the way `weights` is keyed by a family's. Both were being written by
+    # the frontend long before this file had a home for them, which meant the
+    # pick survived exactly as long as the tab did.
+    "upscale_weights": {},
+    "control_weights": {},
+    # The DLSS refiner's saved setups, in the order they were saved:
+    # `[{"name": "...", "block": {...}}]`. Six numbers is not much to keep, and
+    # keeping them is the difference between a profile somebody found by eye and
+    # a profile they have to find again on every piece. The block is stored as
+    # written and read back through `state.parseNeural`, which clamps it onto
+    # this build's ranges — the same deal `weights` has with its slot table.
+    "neural_profiles": [],
+    # And which of them a piece starts from, as a block rather than a name: a
+    # profile deleted after being made the starting one should leave the numbers
+    # standing, not send every new piece back to the defaults.
+    "neural_start": None,
     # How large this pack draws its own text, as a multiplier on every size in
     # it. 1 is what those sizes were written to be; the Appearance tab offers
     # four points and this file will hold anything between MIN and MAX_TEXT_SCALE
@@ -237,6 +256,14 @@ DEFAULTS = {
     # it happens, not the one it writes.
     "preview_max_px": 640,
     "preview_quality": 80,
+    # Where the user's own `nvngx_dlssnr.dll` is, for the DLSS 5 refiner's
+    # extraction on the settings page. A path and nothing else: the pack
+    # never reads the DLL to render — it reads the weights the extraction
+    # wrote into models/dlss — so this is only what the page shows in its box
+    # next time, and empty is the ordinary state of a machine that has not
+    # set the refiner up. Per machine by definition: it is a path on this
+    # disk. See `neural.py`.
+    "neural_dll": "",
     # How long a reference nothing has read is kept, in days. 0 is forever,
     # which is a real answer here rather than a footgun: the ceiling above is
     # what actually bounds the store, and ageing is only for the reference
@@ -317,6 +344,11 @@ def clean(raw):
         if not 0 <= lead <= MAX_LEAD_IN:
             raise ValueError(f"turbo_lead_in must be between 0 and {MAX_LEAD_IN}")
         clean_settings["turbo_lead_in"] = lead
+    if "neural_dll" in raw and raw["neural_dll"] is not None:
+        dll = raw["neural_dll"]
+        if not isinstance(dll, str):
+            raise ValueError("neural_dll must be a path")
+        clean_settings["neural_dll"] = dll.strip()
     if "text_scale" in raw and raw["text_scale"] is not None:
         scale = raw["text_scale"]
         # `True` is an int in Python and would sail through as scale 1, the same
@@ -382,6 +414,13 @@ def clean(raw):
             clean_settings[key] = value
     if "weights" in raw and raw["weights"] is not None:
         clean_settings["weights"] = clean_weights(raw["weights"])
+    for key in ("upscale_weights", "control_weights"):
+        if key in raw and raw[key] is not None:
+            clean_settings[key] = clean_weights(raw[key], key)
+    if "neural_profiles" in raw and raw["neural_profiles"] is not None:
+        clean_settings["neural_profiles"] = clean_neural_profiles(raw["neural_profiles"])
+    if "neural_start" in raw and raw["neural_start"] is not None:
+        clean_settings["neural_start"] = clean_neural_block(raw["neural_start"], "neural_start")
     if "seam_handoff" in raw and raw["seam_handoff"] is not None:
         if raw["seam_handoff"] not in SEAM_HANDOFFS:
             raise ValueError(f"seam_handoff must be one of {', '.join(SEAM_HANDOFFS)}")
@@ -455,7 +494,7 @@ def clean_prefixes(key, raw, defaults, legacy):
     return defaults
 
 
-def clean_weights(raw):
+def clean_weights(raw, label="weights"):
     """The remembered weights, as this file will store them.
 
     Structural only: family -> slot -> filename, plus the `devices` map and the
@@ -464,26 +503,95 @@ def clean_weights(raw):
     so a block naming a slot this install has never heard of is stored as
     written rather than refused. What is enforced is that it is a nest of
     strings, because that is what makes the file safe to read back.
+
+    `label` is which setting is being read: the two benches store the same shape
+    keyed by a backend id rather than a family, and a refusal has to name the
+    key the caller actually sent.
     """
     if not isinstance(raw, dict):
-        raise ValueError("weights must be an object")
+        raise ValueError(f"{label} must be an object")
     out = {}
     for family, block in raw.items():
         if not isinstance(family, str) or not isinstance(block, dict):
-            raise ValueError("weights must map a family id to a block of files")
+            raise ValueError(f"{label} must map a family id to a block of files")
         kept = {}
         for key, value in block.items():
             if not isinstance(key, str):
-                raise ValueError("weights: a slot id must be a string")
+                raise ValueError(f"{label}: a slot id must be a string")
             if isinstance(value, str):
                 kept[key] = value
             elif key == "devices" and isinstance(value, dict):
                 kept[key] = {slot: device for slot, device in value.items()
                              if isinstance(slot, str) and isinstance(device, str)}
             else:
-                raise ValueError(f"weights: {family}.{key} must be a filename")
+                raise ValueError(f"{label}: {family}.{key} must be a filename")
         if kept:
             out[family] = kept
+    return out
+
+
+# How long a saved refiner setup's name may be, and how many may be kept. Both
+# are about the popover that lists them rather than about the file: a name that
+# does not fit on a row is a name nobody can tell from the one above it, and a
+# list past this length has stopped being a shelf of favourites.
+MAX_PROFILE_NAME = 40
+MAX_NEURAL_PROFILES = 24
+
+
+def clean_neural_block(raw, label):
+    """One refiner setup: the fields `neural.Request` is built from.
+
+    Numbers are stored as sent, not clamped. `neural.py` clamps every one of
+    them at the point it builds a request, and `state.parseNeural` does the same
+    on the way into a popover, so a profile saved on a build with wider ranges
+    comes back narrowed rather than refused — which is what keeps a settings
+    file readable by the build before and after this one.
+    """
+    if not isinstance(raw, dict):
+        raise ValueError(f"{label} must be an object")
+    block = {}
+    for key in ("profile", "precision"):
+        value = raw.get(key)
+        if value is not None:
+            if not isinstance(value, str):
+                raise ValueError(f"{label}: {key} must be a word")
+            block[key] = value
+    for key in ("scale", "detail", "colour", "intensity"):
+        value = raw.get(key)
+        if value is not None:
+            if isinstance(value, bool) or not isinstance(value, (int, float)):
+                raise ValueError(f"{label}: {key} must be a number")
+            block[key] = float(value)
+    if raw.get("on") is not None:
+        if not isinstance(raw["on"], bool):
+            raise ValueError(f"{label}: on must be true or false")
+        block["on"] = raw["on"]
+    return block
+
+
+def clean_neural_profiles(raw):
+    """The saved refiner setups: a list of `{name, block}`, in order.
+
+    A list rather than a map because the order is the user's — they are read
+    back as a row of chips, and a map would hand that order to whatever the JSON
+    decoder felt like. Names are unique: saving over one is how a setup is
+    edited, and two chips reading the same is not a shelf anybody can use.
+    """
+    if not isinstance(raw, list):
+        raise ValueError("neural_profiles must be a list")
+    out, seen = [], set()
+    for entry in raw[:MAX_NEURAL_PROFILES]:
+        if not isinstance(entry, dict):
+            raise ValueError("neural_profiles: each entry must be an object")
+        name = entry.get("name")
+        if not isinstance(name, str) or not name.strip():
+            raise ValueError("neural_profiles: each entry needs a name")
+        name = name.strip()[:MAX_PROFILE_NAME]
+        if name in seen:
+            continue
+        seen.add(name)
+        out.append({"name": name,
+                    "block": clean_neural_block(entry.get("block"), f"neural_profiles: {name}")})
     return out
 
 
@@ -599,3 +707,8 @@ def seam_handoff():
 def drift_guard():
     """How many of a pass's last steps make its latent; 0 is off."""
     return load()["drift_guard"]
+
+
+def neural_dll():
+    """Where the settings page last pointed at the user's DLSS DLL; "" if never."""
+    return load()["neural_dll"]

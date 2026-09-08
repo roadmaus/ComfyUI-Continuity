@@ -269,11 +269,16 @@ def catalog():
     a finished pass through LTX 2.5's weights whatever family made it, so its
     files and its copy are served beside the families rather than inside one.
     """
-    from .. import redetail
+    from .. import neural, redetail
 
     return {
         "families": [describe(family) for family in registry.FAMILIES],
         "upscalers": [redetail.manifest()],
+        # Whether the DLSS 5 refiner can run here, for the pills that offer
+        # it: what is missing is a sentence, and the settings page is where it
+        # is put right. Served beside the families because, like ReDetail, it
+        # belongs to none of them.
+        "neural": neural.status(),
         "still_arches": dict(registry.STILL_ARCHES),
         "default_still_arch": registry.DEFAULT_STILL_ARCH,
         "video_families": list(registry.video_families()),

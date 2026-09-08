@@ -55,8 +55,8 @@ import json
 from comfy_api.latest import ComfyExtension, io
 
 from . import (accel, canvas, compile as compiler, guide as guides, job_node,
-               media, models, outputs, prestage, redetail, redetailpass,
-               sampling, settings, timeline)
+               media, models, neural, neuralpass, outputs, prestage, redetail,
+               redetailpass, sampling, settings, timeline)
 from .core import emit as loop
 from .families import registry
 from .families.h3 import declare as h3, facepass, hires, seamrestore, truncate
@@ -292,7 +292,11 @@ def _render(blob, seed, steps, cfg, sampler_name, scheduler,
         # and holding a card back does not change it. Family-neutral — which
         # file, how strongly, over how much of the schedule — so it is read here
         # beside the weights rather than through the family.
-        guide=guides.Guide.of(data))
+        guide=guides.Guide.of(data),
+        # The DLSS 5 refiner, off `data` like the guide and for the same reason:
+        # a pass over the finished frames is a property of the piece as it
+        # stands. Family-neutral, so it is read here beside the guide.
+        neural=neural.Request.of(data))
     return loop.expanded(graph)
 
 
@@ -371,7 +375,7 @@ class MiniMaxCreatorExtension(ComfyExtension):
                 *timeline.NODES, *registry.segment_nodes(),
                 *prestage.NODES, *hires.NODES, *facepass.NODES, *seamrestore.NODES,
                 *truncate.NODES,
-                *redetailpass.NODES]
+                *redetailpass.NODES, *neuralpass.NODES]
 
 
 async def comfy_entrypoint() -> MiniMaxCreatorExtension:

@@ -161,7 +161,7 @@ def inherited_audio(graph, source, seconds):
 
 def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
          filename_prefix=None, cards=None, seeds=None,
-         whole_piece=True, run=None, upscaler=None, guide=None):
+         whole_piece=True, run=None, upscaler=None, guide=None, neural=None):
     """-> the graph, which the caller finalizes. Nothing comes back out of it.
 
     `labels[i]` names payload i in any error raised about it — "Segment 2", or
@@ -196,6 +196,13 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
     payload asks for the pass. It belongs to no family — ReDetail re-renders an
     H3 pass through LTX 2.5's files — which is exactly why it arrives beside
     `weights` rather than inside it.
+
+    `neural` is the piece's DLSS 5 refiner request (`creator/neural.Request`)
+    or None, read off the blob by the caller the way `guide` is. Family-neutral
+    like the guide: it runs over decoded frames, so it neither knows nor cares
+    what sampled them. Off, it emits nothing; on, one node over the finished
+    reel after the loop and after ReDetail — see `neuralpass.py` for why the
+    end and not the seam.
 
     `whole_piece` is whether this render covers the strip the user is looking
     at. Everything below that used to ask "is there only one payload" is really
@@ -249,7 +256,9 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
     # ReDetail, which rebuilds the reel at another size after the loop — there
     # the save node keeps writing the takes from the reel it actually saved.
     redetailing = any(one is not None and one.redetail for one in compiled)
-    per_pass_takes = bool(cards) and len(payloads) > 1 and not redetailing
+    refining = bool(neural)
+    per_pass_takes = (bool(cards) and len(payloads) > 1
+                      and not redetailing and not refining)
 
     # The face pass's conditioning is a second compile of the same segment at
     # the crop canvas, and dropping the keyframes can land it on the other
@@ -472,6 +481,15 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
 
         reel = redetailpass.emit(graph, family, links, upscaler, compiled, reel,
                                  seed_for(0))
+
+    # The DLSS 5 refiner, over the finished reel — after ReDetail, so it draws
+    # its material onto the frames at the size they leave at. One node for the
+    # whole reel, history carried across the parts in play order. Off is
+    # nothing: a piece that never asked emits the graph it always did.
+    if refining:
+        from .. import neuralpass
+
+        reel = neuralpass.emit(graph, reel, neural, seed_for(0))
 
     # What the save node needs to keep each pass as a take: which card it is
     # and what seed it ran on. Only where the passes did not write their own

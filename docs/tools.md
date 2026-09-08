@@ -154,7 +154,83 @@ settings in seconds instead of re-running the whole file. On a clip, the trim
 bar cuts the span first, and **This frame** takes just the frame under the
 playhead as a picture.
 
+A third entry, **Refine (DLSS 5)**, is the neural refiner below at the size
+the picture already is — on the bench so the tile can be judged against the
+plain source, and offered as a **Then refine** switch on Sharpen and Restore
+so the material is drawn onto the enlarged picture.
+
 Files for both backends: [models.md](models.md#the-upscale-bench).
+
+## Neural refiner (DLSS 5)
+
+NVIDIA's DLSS 5 neural renderer, run outside a game through the open-source
+[MLX-DLSS](https://github.com/iamwavecut/MLX-DLSS) port (Apache-2.0), as a
+**material pass**: skin, hair, fabric, contact shadows and subsurface,
+re-drawn at the size the picture already is. It is not an upscaler — the port
+measured DLSS Super Resolution and left it out, because without a game's
+motion vectors it loses to Lanczos. Expect strong results on figures and
+faces, and odd ones on flat, graphic or abstract work: it was trained on game
+frames.
+
+![Each style preset at its default, against the source, at 1:1](img/dlss-presets.png)
+
+**The presets and what they open at.** `standard` is what the driver runs;
+`natural` and `cinematic` move the model's style index one and two steps; and
+each arrives with its own opening strengths, measured on stills rather than
+taken from the model's own answer. That answer is 1 on both strengths, and on
+the colour half it is a grade: at 1 it darkens skin, flattens knitwear and
+muddies brick, which is a tone change nobody asks a material pass for. So every
+preset opens at colour 0, where the tone is left alone and the material work
+survives — `standard` and `cinematic` at detail 1.25, `natural`, which is the
+most eager of the three on skin, at 1. Switching preset carries the new one's
+strengths onto any dial you have not moved yourself.
+
+`neutral` is the exception, and it is not a style: upstream defines it with the
+model's local tone *and* local structure at zero, so both strengths have nothing
+to scale and the pass comes back within half a level of the source whatever the
+dials say. It is there to turn the character off, not to tune.
+
+Above detail 2 the pass stops describing material and starts inventing it —
+skin goes waxy, brick embosses, and lit edges pick up blue-orange fringes — so
+the dial stops at 4 rather than at the model's own 8.
+
+It is available wherever this pack handles a picture:
+
+- **On a pre-stage still** — the `DLSS 5` pill on the sampler row, with the
+  preset, the detail and colour strengths, the blend, and a processing scale
+  (the network run on the picture resampled up and brought back; finer at 2,
+  about four times the memory).
+- **On a render** — the same pill on the Creator and the Timeline. Every pass
+  is refined after the whole reel is finished, with the previous frame's
+  result reprojected into the next through optical flow, so a clip does not
+  boil. It runs after ReDetail if that is on, at whatever size the frames
+  leave at, and a clip always runs at its own size.
+- **On the upscale bench** — the Refine entry, and the Then refine switch on
+  the other two.
+- **As a node** — *Continuity Neural Refine (DLSS 5)* takes any IMAGE and an
+  optional MASK. The mask drives where it refines, per pixel.
+
+Memory is about a gigabyte of VRAM per megapixel of the picture at float32,
+half in the fast precision, and the processing scale multiplies it by its
+square. Every surface prints the estimate before it runs.
+
+**Setting it up.** Nothing of NVIDIA's ships with this pack. The weights live
+inside `nvngx_dlssnr.dll` (file version 310.8.0.0), which NVIDIA distributes
+in its Streamline SDK (`bin/x64/nvngx_dlssnr.dll`) and with games that carry
+DLSS 5. On the settings page, under *Neural refiner*:
+
+1. Point the box at your DLL and press **Check**. The file is hashed and
+   compared against the port's table; only the supported build is accepted.
+2. Press **Extract weights**. The port's extraction code runs locally and
+   writes `models/dlss/dlssnr-weights-logical.safetensors`. The DLL is never
+   read again, and nothing is downloaded at any step.
+
+The pills and the bench say what is missing until that is done. The port's
+code travels with the pack (`creator/mlxdlss/`, Apache-2.0, re-synced by
+`tools/vendor_mlxdlss.py`), so there is nothing else to install. Its accuracy
+figures — within 0.005 of the driver on game renders — are its own, not this
+pack's. Optical flow for the clip history uses OpenCV where a ComfyUI already
+has it and falls back to zero motion where it does not; the log says which.
 
 ## Contact sheet
 

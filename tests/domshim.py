@@ -193,7 +193,16 @@ class Node {
     return found;
   }
   querySelector(selector) { return this.querySelectorAll(selector)[0] ?? null; }
-  getBoundingClientRect() { return { top: 0, left: 0, width: 100, height: 100, bottom: 0, right: 0 }; }
+  // Nothing here has layout, so every element is 100 by 100 at the origin — big
+  // enough that a measure returns something and a division by it is not
+  // infinite. A test that needs a *particular* rectangle sets `node.rect`: the
+  // loupe's zoom is arithmetic over the room's shape against the picture's, and
+  // the one thing worth checking about it cannot be checked in a square room
+  // the size of a thumbnail.
+  getBoundingClientRect() {
+    const own = this.rect ?? {};
+    return { top: 0, left: 0, width: 100, height: 100, bottom: 0, right: 0, ...own };
+  }
   scrollIntoView() {}
   get firstChild() { return this.children[0] ?? null; }
   get childNodes() { return this.children; }

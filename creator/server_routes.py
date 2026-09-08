@@ -156,7 +156,47 @@ def _input_path(request):
     return folder_paths.get_annotated_filepath(filename)
 
 
+# What is answered by opening a picture rather than a container. Extensions
+# rather than a try/except chain around `av`: PyAV will happily open a PNG as a
+# one-frame container and spend a decode doing it, so "is this a picture" has to
+# be asked before the reader is chosen, not after it fails.
+_STILL_SUFFIXES = (".png", ".jpg", ".jpeg", ".webp", ".bmp", ".gif", ".tif", ".tiff")
+
+
+def _read_still_header(path):
+    """A picture's own size, without decoding it.
+
+    `Image.open` reads the header and stops, so this costs a few kilobytes of a
+    file that may be a 60 MB PNG. The orientation tag is applied as a swap
+    rather than by transposing the picture — for the reason `preview.py` gives
+    when it does transpose one: the browser turns the full picture, so anything
+    reporting its size has to report the turned one.
+    """
+    from PIL import Image
+
+    with Image.open(path) as image:
+        width, height = image.size
+        try:
+            orientation = image.getexif().get(274)
+        except Exception:  # noqa: BLE001 — a picture with no readable tags is not turned
+            orientation = None
+    if orientation in (5, 6, 7, 8):
+        width, height = height, width
+    return {"has_audio": False, "duration": None, "width": width, "height": height}
+
+
 def _read_header(path):
+    """What this file is, off its header. -> the probe's four fields.
+
+    A still answers here too, and not only because a surface that asks "how big
+    is this" should get one answer for both kinds. The upscale bench used to
+    take a picture's size off the thumbnail it had already loaded, which is
+    capped at 320 pixels — so every figure derived from it, the locator's square
+    included, described a picture 320 pixels wide that nobody had.
+    """
+    if os.path.splitext(path)[1].lower() in _STILL_SUFFIXES:
+        return _read_still_header(path)
+
     import av  # ComfyUI's own decoder stack; imported here so the listing route never needs it.
 
     with av.open(path) as container:
@@ -181,7 +221,7 @@ def _read_header(path):
 
 @PromptServer.instance.routes.get("/continuity/probe")
 async def probe_asset(request):
-    """Does this clip carry a soundtrack?
+    """What is in this file: a soundtrack, a length, a size.
 
     A reference video is attached with its sound on by default, which is only the
     right default when there is sound to bind — otherwise the generation would

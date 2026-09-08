@@ -144,6 +144,25 @@ export const api = {
     // The server's record of a finished prompt — what the stage reads back when
     // the `executed` message never reached it. Empty until a test fills it,
     // which is the "still running" answer.
+    // What a file is, off its header. Every surface that draws a source at a
+    // size asks this — the bench's locator and the loupe's zoom both — and a
+    // stub that answered nothing would leave both describing a picture with no
+    // size, which is the state the bug guarded below actually produced.
+    // What a render says about the refiner, and the queue item that renders its
+    // twin. Both answer out of globals so one test can be a file with a prompt
+    // in it and the next a photograph.
+    if (String(route).startsWith("/continuity/neural/of")) {
+      return { ok: true, status: 200, json: async () => (globalThis.__neuralOf
+        ?? { ours: false, on: false, settings: null, node: null }) };
+    }
+    if (String(route).startsWith("/continuity/neural/twin")) {
+      globalThis.__twinAsked = JSON.parse(options.body);
+      return { ok: true, status: 200, json: async () => ({ prompt_id: "twin-1" }) };
+    }
+    if (String(route).startsWith("/continuity/probe")) {
+      return { ok: true, status: 200, json: async () => (globalThis.__probe
+        ?? { has_audio: false, duration: null, width: 1920, height: 1080 }) };
+    }
     if (String(route).startsWith("/history/")) {
       return { ok: true, status: 200, json: async () => (globalThis.__history ?? {}) };
     }
@@ -2869,6 +2888,138 @@ try {
   out.errors.push(`recovery: ${error.stack}`);
 }
 
+// ---- the upscale bench's locator says where the tile actually is ----------
+//
+// Two bugs in one place, and the second was the visible one. The bench took a
+// picture's size off the thumbnail in its own locator — `/continuity/thumb`
+// caps that at 320 pixels — so the square it drew described a 320-pixel copy of
+// the file while the server cut 384 pixels out of the full-size one: on a 1080p
+// still the square covered more than half the frame while the glass showed a
+// fifth of it. And the repaint that landing a size triggered rebuilt the
+// thumbnail, whose fresh `load` fired the repaint again, at the speed the tab
+// could decode — which is what froze the tab.
+//
+// So the size comes off the probe now, and the thumbnail is inert.
+try {
+  const { openUpscale } = await import("./web/creator/upscale.js");
+  openUpscale({ source: { path: "in/vera.png", kind: "image" } });
+  for (let n = 0; n < 8; n += 1) await new Promise((done) => setTimeout(done, 0));
+  const shots = [];
+  const findShots = (node) => {
+    if (node.className === "mmc-up-locshot") shots.push(node);
+    (node.children ?? []).forEach(findShots);
+  };
+  findShots(document.body);
+  const shot = shots.at(-1);
+  const column = document.body.querySelector(".mmc-bn-stops");
+  const before = [...column.children];
+  // The thumbnail arriving, three times over. It is a thumbnail: nothing is
+  // read off it, so nothing may be redrawn because of it.
+  shot.naturalWidth = 320; shot.naturalHeight = 180;
+  for (let n = 0; n < 3; n += 1) (shot.listeners?.load ?? []).forEach((fire) => fire());
+  const square = document.body.querySelector(".mmc-up-locsquare");
+  out.upscaleLocator = {
+    stillSameColumn: before.length > 0 && [...column.children].every((child, i) => child === before[i]),
+    width: square.style.width,
+    height: square.style.height,
+  };
+  const close = document.body.querySelector(".mmc-close");
+  (close.onclick ?? close.listeners.click[0])();
+} catch (error) {
+  out.errors.push(`upscaleLocator: ${error.stack}`);
+}
+
+// ---- a render of ours compares against its own other version --------------
+//
+// The point of the whole room. Refining a picture that was already refined
+// compares one pass against two; the honest other half is the same render with
+// the refiner off, which is one boolean on a prompt the file already carries —
+// and nearly free, because ComfyUI keys an expanding node's subcache by its id
+// rather than by its inputs (`creator/neuraltwin.py`).
+try {
+  const { openLoupe } = await import("./web/creator/loupe.js");
+  globalThis.__neuralOf = { ours: true, on: true, node: "7",
+                            settings: { on: true, profile: "natural", scale: 1, detail: 1.5,
+                                        colour: 1, intensity: 0.85, precision: "reference" } };
+  openLoupe({ source: { path: "renders/shot.png [output]", kind: "image" }, compare: true });
+  for (let n = 0; n < 8; n += 1) await new Promise((done) => setTimeout(done, 0));
+  const rail = document.body.querySelector(".mmc-lp-rail");
+  const run = rail.querySelector(".mmc-lp-run");
+  const twin = {
+    // No dials over a press that takes the pass *out*: there is nothing to set,
+    // and sliders above it would suggest the render on the left had options.
+    dials: rail.querySelectorAll(".mmc-nr-range").length,
+    said: (rail.querySelector(".mmc-lp-was")?.textContent ?? ""),
+    // The label is in a span beside the spinner's place, and this DOM does not
+    // gather a parent's text for it.
+    label: run.querySelector("span").textContent,
+  };
+  (run.onclick ?? run.listeners.click[0])();
+  for (let n = 0; n < 6; n += 1) await new Promise((done) => setTimeout(done, 0));
+  twin.asked = globalThis.__twinAsked;
+  // The queue answering, on the wire, the way a render answers.
+  globalThis.__say("executed", { prompt_id: "twin-1",
+                                 output: { mmc_image: [{ filename: "shot-2.png",
+                                                         subfolder: "continuity/stills",
+                                                         type: "output" }] } });
+  await new Promise((done) => setTimeout(done, 0));
+  const box = document.body.querySelector(".mmc-lp-tilebox");
+  twin.boxUp = box.hidden === false;
+  // Whole-frame, not a square: the twin is the same render at the same size.
+  twin.width = box.style.width;
+  twin.tags = [box.querySelector(".mmc-lp-tag.left").textContent,
+               box.querySelector(".mmc-lp-tag.right").textContent];
+  out.twin = twin;
+  const closes = document.body.querySelectorAll(".mmc-close");
+  (closes[closes.length - 1].onclick ?? closes[closes.length - 1].listeners.click[0])();
+  globalThis.__neuralOf = null;
+} catch (error) {
+  out.errors.push(`twin: ${error.stack}`);
+}
+
+// ---- the loupe opens, zooms, and compares ---------------------------------
+//
+// The room that replaced `requestFullscreen` on a finished render. What is
+// checked is the arithmetic nothing else can see: that a picture opens fitted
+// to the room, that 1:1 is 1:1, and that Compare puts up the refiner's own
+// dials rather than a panel of nothing.
+try {
+  const { openLoupe } = await import("./web/creator/loupe.js");
+  openLoupe({ source: { path: "renders/shot.png [output]", kind: "image" } });
+  const glass = document.body.querySelector(".mmc-lp-glass");
+  // 800 by 600 of room over a 1920 by 1080 picture. Set before the probe lands,
+  // so the fit that lands with it is measured against this.
+  glass.rect = { width: 800, height: 600 };
+  for (let n = 0; n < 8; n += 1) await new Promise((done) => setTimeout(done, 0));
+  const zoom = () => document.body.querySelector(".mmc-lp-zoom").textContent;
+  // By class: a button whose label is an icon and a span has no textContent of
+  // its own in this DOM, and the compare press is one of those.
+  const press = (selector, label = null) => {
+    const found = [...document.body.querySelectorAll(selector)]
+      .find((button) => label === null || (button.textContent ?? "") === label);
+    (found.onclick ?? found.listeners.click[0])({ currentTarget: found });
+  };
+  const opened = zoom();
+  press(".mmc-lp-jump", "1:1");
+  const actual = zoom();
+  press(".mmc-lp-compare");
+  const rail = document.body.querySelector(".mmc-lp-rail");
+  out.loupe = {
+    opened,
+    actual,
+    railUp: rail.hidden === false,
+    dials: rail.querySelectorAll(".mmc-nr-range").length,
+    // At 1:1 in an 800 by 600 room, the square offered for comparison is the
+    // 600 pixels of picture on the glass — not the whole 1920-pixel frame.
+    estimate: document.body.querySelector(".mmc-lp-estimate")?.textContent ?? "",
+  };
+  const closes = document.body.querySelectorAll(".mmc-close");
+  const close = closes[closes.length - 1];
+  (close.onclick ?? close.listeners.click[0])();
+} catch (error) {
+  out.errors.push(`loupe: ${error.stack}`);
+}
+
 console.log(JSON.stringify(out));
 """
 
@@ -3820,3 +3971,38 @@ check("...and a look's frame is cited, not copied into the input folder",
       str(atlas.get("cited") or "").startswith("atlas:"), True)
 
 passed(f"the frontend loads and all {len(report['nodes'])} bodies mount")
+
+# The upscale bench's locator. The size behind it comes off the probe, so the
+# square it draws is the square the server cuts — and the thumbnail under it is
+# inert, which is what ends the repaint loop that froze the tab (2026-09-06).
+locator = report.get("upscaleLocator", {})
+check("the thumbnail arriving repaints nothing", locator.get("stillSameColumn"), True)
+check("the locator square is 384 of 1920 across", locator.get("width"), "20%")
+check("...and 384 of 1080 down", locator.get("height"), f"{384 / 1080 * 100}%")
+
+# The loupe: the room that replaced the browser's own fullscreen.
+loupe = report.get("loupe", {})
+check("a picture opens fitted to the room", loupe.get("opened"), "42%")
+check("...and 1:1 is one pixel to one pixel", loupe.get("actual"), "100%")
+check("Compare puts the rail up", loupe.get("railUp"), True)
+# Three strengths and, for a still, the processing scale. A clip's rail has
+# three: its history has to run at the frame's own size.
+check("...with the refiner's dials on it", loupe.get("dials"), 4)
+check("...and the compared square is what is on the glass",
+      "600" in loupe.get("estimate", ""), True)
+
+# A render of this pack's compares against the same render with the refiner
+# flipped, not against itself refined twice.
+twin = report.get("twin", {})
+check("the press renders the other version", twin.get("label"),
+      "Render it without the refiner")
+check("...with no dials over it, because taking the pass out has no settings",
+      twin.get("dials"), 0)
+check("...and it says what the render did run", "natural" in twin.get("said", ""), True)
+check("...asking for the refiner off, on this file",
+      {key: twin.get("asked", {}).get(key) for key in ("filename", "on", "block")},
+      {"filename": "renders/shot.png [output]", "on": False, "block": None})
+check("the file it wrote goes on the other half of the seam", twin.get("boxUp"), True)
+check("...over the whole frame rather than a square", twin.get("width"), "100%")
+check("...with each half named for what it is", twin.get("tags"),
+      ["Refiner on", "Refiner off"])

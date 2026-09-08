@@ -51,7 +51,7 @@ because they are the video model's.
 
 from dataclasses import dataclass
 
-from ... import canvas, models as core, outputs, raylight
+from ... import canvas, models as core, neural, outputs, raylight, render_image
 from ...compile import CHECKPOINTS, CompileError, active_loras, collect_triggers
 from . import declare, models as slots
 
@@ -114,6 +114,10 @@ class StillPlan:
     # Whether anything attached will be encoded as sound. False for almost every
     # still, and that is what leaves the audio VAE unloaded.
     audio: bool = False
+    # The DLSS 5 refiner over the decoded frame — `compile_image.neural_block`'s
+    # dict, or None. Carried on the plan for the reason the shared payload
+    # carries it: the emitter has no blob.
+    neural: dict = None
 
     @property
     def payload(self):
@@ -247,6 +251,7 @@ def compile_still(data, image_size_lookup=None):
         index=resolve_index(index, frames),
         prompt_override=override,
         audio=needs_audio(request),
+        neural=neural.Request.of(data).as_dict() if neural.Request.of(data) else None,
     )
 
 
@@ -373,6 +378,7 @@ def emit(plan, weights, sampling, unique_id, filename_prefix=FILENAME_PREFIX,
     # the token; the rest are the VAE unrolling its duplicate.
     clip = graph.node("VAEDecode", samples=still, vae=links.vae).out(0)
     image = graph.node("ImageFromBatch", image=clip, batch_index=0, length=1).out(0)
+    image = render_image.refined(graph, image, plan.neural)
     save = graph.node(SAVE_NODE, images=image, filename_prefix=filename_prefix)
     # The save node lives in an expanded graph on nobody's canvas; the stamp
     # files its result under the PreStage the user is looking at, which is what

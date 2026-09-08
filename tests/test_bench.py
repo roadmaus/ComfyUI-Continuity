@@ -20,6 +20,7 @@ what a dial reads its options from, and there is no answering that without it.
 """
 
 import os
+import shutil
 import sys
 import tempfile
 
@@ -227,12 +228,22 @@ with tempfile.TemporaryDirectory() as shelf:
 # ---- the upscale bench ----------------------------------------------------------
 
 backends = upscale.catalogue()["backends"]
-check("the backends, weakest promise first", [entry["id"] for entry in backends],
-      ["sharpen", "restore"])
+check("the backends, weakest promise first, the refiner last", [entry["id"] for entry in backends],
+      ["sharpen", "restore", "neural"])
+# The "then refine" switch rides on the two upscalers only while the refiner
+# can run — this machine has no mlxdlss, so the dials are what they were.
+refiner_ready = backends[2]["ready"]
+after = ["neural"] if refiner_ready else []
 check("Sharpen's dials", [spec["key"] for spec in backends[0]["params"]],
-      ["model", "scale"])
+      ["model", "scale", *after])
 check("Restore's dials", [spec["key"] for spec in backends[1]["params"]],
-      ["model", "vae", "scale", "colour", "frames"])
+      ["model", "vae", "scale", "colour", "frames", *after])
+check("the refiner's dials", [spec["key"] for spec in backends[2]["params"]],
+      ["profile", "processing", "detail", "colour", "intensity", "precision", "temporal"])
+check("the refiner has no scale dial: it enlarges nothing",
+      "scale" in [spec["key"] for spec in backends[2]["params"]], False)
+check("the refiner says what it needs when it is not ready",
+      bool(backends[2]["needs"]) or refiner_ready, True)
 for entry in backends:
     check(f"{entry['id']} is model work", entry["heavy"], True)
     check(f"{entry['id']} readiness is a verdict", isinstance(entry["ready"], bool), True)
@@ -271,6 +282,8 @@ check("and never turns back", all(a >= b for a, b in zip(fade, fade[1:])), True)
 check("x2 of an odd size rounds", upscale.target(1067, 601, {"scale": 2}), (2134, 1202))
 check("x1.5 rounds to the nearest pixel", upscale.target(101, 101, {"scale": 1.5}), (152, 152))
 check("nothing collapses to nothing", upscale.target(1, 1, {"scale": 1.5}), (2, 2))
+check("no scale dial at all is the size it is — the refiner's entry",
+      upscale.target(1067, 601, {}), (1067, 601))
 
 # The tile: a square of `PREVIEW_TILE`, or the whole frame where the frame is
 # smaller, and never running off an edge — a tile that did would show the model's
@@ -288,5 +301,51 @@ check("a small source is the whole source", upscale._tile(small, (0.5, 0.5)).sha
 
 check("the shelf is under the pack's own folder",
       outputs.UPSCALED.startswith("continuity/"), True)
+
+# ---- and the browser draws the same square -----------------------------------
+#
+# Two surfaces draw a rectangle over a picture to say which part of it the
+# server cut: the bench's locator, and the loupe's compared square. Both take it
+# from `web/creator/tile.js`, which is this arithmetic again in another
+# language — and the reason it is a mirror rather than an approximation is what
+# happened when it *was* an approximation. The locator carried its own copy of
+# the 384 and applied it to a size read off a 320-pixel thumbnail, so on any
+# picture larger than a thumbnail the square it drew and the tile the server
+# sent were unrelated rectangles.
+#
+# The cases below are the edges: the middle, both corners, a picture smaller
+# than the tile, and a side the caller asked to widen past what is allowed.
+TILES = [
+    # (width, height, cx, cy, side or None)
+    (1000, 500, 0.5, 0.5, None), (1000, 500, 0.0, 0.0, None), (1000, 500, 1.0, 1.0, None),
+    (1920, 1080, 0.5, 0.5, 600), (1920, 1080, 0.12, 0.9, 128), (1920, 1080, 0.5, 0.5, 4000),
+    (1920, 1080, 0.5, 0.5, 10), (200, 120, 0.5, 0.5, None), (200, 120, 0.5, 0.5, 900),
+]
+
+MIRROR_SCRIPT = """
+const m = await import(process.argv[1]);
+const out = { constants: { min: m.MIN_TILE, max: m.MAX_TILE, tile: m.DEFAULT_TILE }, rects: [] };
+for (const [width, height, cx, cy, side] of JSON.parse(process.argv[2])) {
+  const rect = m.tileRect({ width, height }, [cx, cy], side ?? undefined);
+  out.rects.push([rect.left, rect.top, rect.side]);
+}
+console.log(JSON.stringify(out));
+"""
+
+if shutil.which("node"):
+    reflected = layout.run(MIRROR_SCRIPT, layout.js("tile.js"), TILES)
+    check("the mirror's floor matches", reflected["constants"]["min"], upscale.MIN_PREVIEW_TILE)
+    check("the mirror's ceiling matches", reflected["constants"]["max"], upscale.MAX_PREVIEW_TILE)
+    check("the mirror's own square matches", reflected["constants"]["tile"], upscale.PREVIEW_TILE)
+    for (width, height, cx, cy, side), got in zip(TILES, reflected["rects"]):
+        # The server does not report where it cut, so the rectangle is recovered
+        # from the mark it leaves: a lit pixel at the tile's own corner.
+        picture = np.zeros((height, width, 3), dtype=np.uint8)
+        picture[:, :, 0] = np.arange(width, dtype=np.uint8)[None, :]
+        picture[:, :, 1] = np.arange(height, dtype=np.uint8)[:, None]
+        cut = upscale._tile(picture, (cx, cy), side)
+        want = [int(cut[0, 0, 0]) % 256, int(cut[0, 0, 1]) % 256, cut.shape[0]]
+        check(f"tileRect({width}x{height} at {cx},{cy} side {side})",
+              [got[0] % 256, got[1] % 256, got[2]], want)
 
 passed("the bench plumbing holds, and the upscale bench with it")

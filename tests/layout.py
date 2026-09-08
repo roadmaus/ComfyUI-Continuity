@@ -76,6 +76,9 @@ MODULES = {
     "guide": "guide",
     "grammar": "families.grammar",
     "prompting": "families.refine",
+    # A package rather than a module: the vendored MLX-DLSS copy, imported as
+    # one so its own relative imports resolve.
+    "mlxdlss": "mlxdlss",
 }
 
 

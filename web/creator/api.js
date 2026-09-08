@@ -994,16 +994,22 @@ export async function upscaleBackends({ fresh = false } = {}) {
  * One tile of a source, at the size it will come out — as a URL for an `<img>`.
  *
  * A URL rather than a fetch, for the reasons `controlPreviewUrl` is one. What
- * is extra here is `centre` and `plain`: which part of the picture is being
- * judged is something you move around, and `plain` asks for the same tile
- * resampled with no model in it, which is the thing worth holding a backend
- * against.
+ * is extra here is `centre`, `side` and `plain`: which part of the picture is
+ * being judged, and how much of it, are things you move around, and `plain`
+ * asks for the same tile resampled with no model in it, which is the thing
+ * worth holding a backend against.
+ *
+ * `side` is in source pixels and is the bench's own square when it is left out.
+ * Both halves of a wipe have to be asked for with the same one — a tile of a
+ * different region drawn over another is not a comparison of anything.
  */
-export function upscalePreviewUrl(path, op, params, { at = 0, centre = [0.5, 0.5], plain = false } = {}) {
+export function upscalePreviewUrl(path, op, params,
+                                  { at = 0, centre = [0.5, 0.5], plain = false, side = null } = {}) {
   const query = new URLSearchParams({
     filename: path, op, at: String(at),
     cx: String(centre[0]), cy: String(centre[1]),
   });
+  if (side) query.set("side", String(Math.round(side)));
   if (plain) query.set("plain", "1");
   for (const [key, value] of Object.entries(params ?? {})) {
     query.set(key, typeof value === "boolean" ? (value ? "1" : "0") : String(value));
@@ -1024,6 +1030,81 @@ export async function upscaleRun(body, options) {
   // The file is new and the gallery's listing is a few seconds stale.
   invalidate("output");
   return answer;
+}
+
+// ---- the DLSS 5 refiner -----------------------------------------------------
+//
+// Not a bench: the refiner runs inside renders and on the upscale bench. What
+// is here is its diagnostic surface — the questions the settings page asks so
+// that setting it up needs no issue filed (`creator/routes/neural.py`).
+
+/**
+ * What one finished file says about the refiner.
+ *
+ * `{ours, on, settings, node}`. `ours` is whether the file carries a prompt
+ * this pack can put back on the queue — a photo or somebody else's render does
+ * not, and the surface that asked has to offer it something else.
+ */
+export async function neuralOf(path) {
+  const response = await api.fetchApi(
+    `/continuity/neural/of?filename=${encodeURIComponent(path)}`);
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok) return { ours: false, on: false, settings: null };
+  return body;
+}
+
+/**
+ * Queue this render again with the refiner the other way round. -> `prompt_id`.
+ *
+ * Not a job in `queue.js`'s sense — what goes on the queue is the user's own
+ * prompt, not a `ContinuityJob` — so there is no `executed` envelope to wait
+ * for here. The caller watches the wire for the id this returns; see
+ * `loupe.js`, and `creator/neuraltwin.py` for why this costs the save rather
+ * than the render.
+ */
+export async function neuralTwin(path, on, block = null) {
+  const client = api.clientId ?? api.initialClientId ?? null;
+  const response = await api.fetchApi("/continuity/neural/twin", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ filename: path, on, block, ...(client ? { client_id: client } : {}) }),
+  });
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(body.error || t("that render could not be queued ({status})",
+                                    { status: response.status }));
+  }
+  // The file it writes is a new take on the shelf the gallery already lists.
+  invalidate("output");
+  return body.prompt_id;
+}
+
+/** Where the refiner stands on this machine: package, weights, the last DLL. */
+export async function neuralStatus() {
+  const response = await api.fetchApi("/continuity/neural/status");
+  if (!response.ok) throw new Error(t("the refiner's status could not be read ({status})", { status: response.status }));
+  return response.json();
+}
+
+/** Hash a DLL and say whether it is the supported build; the path is remembered. */
+export async function neuralCheck(path) {
+  const response = await api.fetchApi("/continuity/neural/check", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ path }),
+  });
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(body.error || t("the check failed ({status})", { status: response.status }));
+  return body;
+}
+
+/** Run upstream's extraction over the DLL into models/dlss. -> the status after. */
+export async function neuralExtract(path) {
+  const response = await api.fetchApi("/continuity/neural/extract", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ path }),
+  });
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(body.error || t("the extraction failed ({status})", { status: response.status }));
+  return body;
 }
 
 // ---- the blockout bench -----------------------------------------------------

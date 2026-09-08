@@ -84,6 +84,12 @@ export const VIDEO = videoFamily(DEFAULT_VIDEO_FAMILY);
  *  manifest would read as H3 having grown a transformer. */
 export const UPSCALERS = catalog.upscalers ?? [];
 
+/** Whether the DLSS 5 refiner can run on this machine, as the server saw it at
+ *  boot — `neural.status()`: installed, weights, ready, and the sentence about
+ *  what is missing. The settings page asks the live route; the pills read this
+ *  so a strip can say "not set up" without a fetch per node. */
+export const NEURAL = catalog.neural ?? { weights: null, ready: false, needs: "" };
+
 /** One backend's manifest, by the id `piece.upscale` names. Undefined where
  *  the mode is a family's own pass — `two_pass` and `direct` are not
  *  backends, they are what the family does by itself. */

@@ -671,6 +671,9 @@ export const css = `
   color: var(--mmc-text); font-size: calc(13px * var(--mmc-type)); font-family: inherit; cursor: pointer;
   white-space: nowrap; transition: background .12s ease;
 }
+/* A pill for something this machine has not set up — the DLSS 5 refiner
+   without its weights. Still pressable: the popover says what is missing. */
+.mmc-pill-unready { opacity: 0.6; }
 .mmc-pill:hover:not(:disabled) { background: var(--mmc-surface-3); }
 .mmc-pill:disabled { cursor: not-allowed; color: var(--mmc-off); }
 .mmc-pill svg { width: 16px; height: 16px; stroke: currentColor; fill: none;

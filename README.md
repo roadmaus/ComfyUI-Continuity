@@ -70,6 +70,13 @@ directory, not in the pack folder.
 
 See [docs/models.md](docs/models.md) for which files you need and where they go.
 
+There is also an optional **neural refiner**: NVIDIA's DLSS 5 neural renderer
+as a material pass over finished stills and clips (skin, hair, fabric, contact
+shadows), through the open-source [MLX-DLSS](https://github.com/iamwavecut/MLX-DLSS)
+port, which travels with the pack. It is not an upscaler and it ships with
+nothing of NVIDIA's — the weights are extracted from your own copy of the DLSS
+DLL on the settings page. See [docs/tools.md](docs/tools.md#neural-refiner-dlss-5).
+
 ## Thanks
 
 This pack is glue. The work underneath it belongs to other people:
