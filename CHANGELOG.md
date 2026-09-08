@@ -1,418 +1,438 @@
 # Changelog
 
-Back by request. Entries from here on are a line or two each — the 3.0 section
-and everything under it is kept exactly as it was written, wall of text and all.
+Back by request. Every entry opens with a line saying what changed; the
+paragraph under it says how and why, and from 3.0 down that paragraph is kept
+exactly as it was written, wall of text and all.
 
 ## Unreleased
 
-**The refiner's presets carry their own numbers now, and the colour dial starts
-at nothing.** The DLSS 5 pass shipped opening at the model's own answer, 1 on
-both strengths, which is right for detail and wrong for colour: that half is a
-grade, and at 1 it darkened skin, flattened knitwear and muddied brick on every
-still it was measured against. Every preset opens at colour 0 — `standard` and
-`cinematic` at detail 1.25, `natural` at 1 — and switching preset carries the
-new one's strengths onto the dials you have not moved yourself. Detail stops at
-4 rather than 8, where the pass had begun putting blue-orange fringes on lit
-edges, which also settles a dial that read one range in the popover and another
-on the bench. `neutral` is documented for what it is: upstream switches the
-model's local tone and structure off there, so no strength does anything.
+**Better DLSS 5 defaults: each style preset now opens at its own detail
+strength, with colour off.** The DLSS 5 pass shipped opening at the model's own
+answer, 1 on both strengths, which is right for detail and wrong for colour:
+that half is a grade, and at 1 it darkened skin, flattened knitwear and muddied
+brick on every still it was measured against. Every preset opens at colour 0 —
+`standard` and `cinematic` at detail 1.25, `natural` at 1 — and switching preset
+carries the new one's strengths onto the dials you have not moved yourself.
+Detail stops at 4 rather than 8, where the pass had begun putting blue-orange
+fringes on lit edges, which also settles a dial that read one range in the
+popover and another on the bench. `neutral` is documented for what it is:
+upstream switches the model's local tone and structure off there, so no strength
+does anything.
 
-**A viewer for finished work, with a wipe in it.** Double-clicking a render
-opened the browser's own fullscreen: a banner across the top of the screen in
-Firefox, the picture fitted to the display and impossible to look into, and
-nowhere to put a comparison. There is a room for it now — wheel to zoom about
-the pointer, drag to pan, double-click between fit and 1:1, Escape to leave —
-and it carries the seam the upscale bench used to have to itself. It opens from
-the stage, from a take on the fullscreen lip, from the upscale bench's result,
-and from the refiner pill's own *See what it does*.
+**A zoom and pan viewer for finished renders, with a before/after wipe.**
+Double-clicking a render opened the browser's own fullscreen: a banner across
+the top of the screen in Firefox, the picture fitted to the display and
+impossible to look into, and nowhere to put a comparison. There is a room for it
+now — wheel to zoom about the pointer, drag to pan, double-click between fit and
+1:1, Escape to leave — and it carries the seam the upscale bench used to have to
+itself. It opens from the stage, from a take on the fullscreen lip, from the
+upscale bench's result, and from the refiner pill's own *See what it does*.
 
-**Compare is the same render, not the same picture refined twice.** A finished
-file carries the prompt that made it, and the DLSS 5 refiner is one boolean in
-that prompt's blob — so the honest other half of the seam is that render with
-the boolean moved, and it is nearly free: ComfyUI keys an expanding node's
-subcache by its id rather than by its inputs, so the twin re-expands the node
-and hits every sampler underneath it. What runs is the pass and the save. The
-viewer offers *Render it without the refiner* on a render made with one and
-*Render it with the refiner* on one made without, puts the file that comes back
-on the other side of the wipe at full frame, and leaves it on the shelf as the
-ordinary take it is. Only where there is no render to re-queue — a photograph,
-footage, somebody else's file — does it fall back to running the pass on the
-square you are looking at. The upscale bench says the same thing where it
-matters: a source that was already refined now says so before its *Refine
-(DLSS 5)* entry is read as a before-and-after.
+**Before/after compare re-renders the shot with the refiner switched off,
+instead of refining the output twice.** A finished file carries the prompt that
+made it, and the DLSS 5 refiner is one boolean in that prompt's blob — so the
+honest other half of the seam is that render with the boolean moved, and it is
+nearly free: ComfyUI keys an expanding node's subcache by its id rather than by
+its inputs, so the twin re-expands the node and hits every sampler underneath
+it. What runs is the pass and the save. The viewer offers *Render it without the
+refiner* on a render made with one and *Render it with the refiner* on one made
+without, puts the file that comes back on the other side of the wipe at full
+frame, and leaves it on the shelf as the ordinary take it is. Only where there
+is no render to re-queue — a photograph, footage, somebody else's file — does it
+fall back to running the pass on the square you are looking at. The upscale
+bench says the same thing where it matters: a source that was already refined
+now says so before its *Refine (DLSS 5)* entry is read as a before-and-after.
 
-**The refiner's dials, and setups worth keeping.** The DLSS 5 popover was a
-radio pair, three steppers and a paragraph — `detail` runs 0 to 8 in quarters,
-which is thirty-two presses end to end, with the picture it changes nowhere on
-screen. It is a switch and a column of sliders now, the same dials the bench and
-the viewer draw, each one back to its default on a double-click. Under them: a
-shelf of **saved setups**, per machine, and *Start here*, which is what a
-piece's refiner begins at the first time it is switched on. The two benches'
-remembered checkpoints are kept now too — they were being written to a settings
-file that had never had a home for them.
+**The DLSS 5 controls are sliders now, with saved setups you can name and
+reuse.** The DLSS 5 popover was a radio pair, three steppers and a paragraph —
+`detail` runs 0 to 8 in quarters, which is thirty-two presses end to end, with
+the picture it changes nowhere on screen. It is a switch and a column of sliders
+now, the same dials the bench and the viewer draw, each one back to its default
+on a double-click. Under them: a shelf of **saved setups**, per machine, and
+*Start here*, which is what a piece's refiner begins at the first time it is
+switched on. The two benches' remembered checkpoints are kept now too — they
+were being written to a settings file that had never had a home for them.
 
-**The upscale bench was describing a picture nobody had.** It took a source's
-size off the thumbnail in its own locator, which `/continuity/thumb` caps at 320
-pixels. So on a 1080p still the locator's square covered more than half the
-frame while the glass showed a fifth of it, the size under the glass was not the
-file's, and the refiner's memory estimate was out by the square of the ratio.
-The size comes off the file's header now, for a picture exactly as for a clip,
-and the square is drawn from the same arithmetic the server cuts with
-(`web/creator/tile.js`, mirrored in `tests/test_bench.py`). How much of the
+**Fixed: the upscale bench read the source size off a 320-pixel thumbnail, so
+its preview area, size readout and memory estimate were all wrong.** It took a
+source's size off the thumbnail in its own locator, which `/continuity/thumb`
+caps at 320 pixels. So on a 1080p still the locator's square covered more than
+half the frame while the glass showed a fifth of it, the size under the glass
+was not the file's, and the refiner's memory estimate was out by the square of
+the ratio. The size comes off the file's header now, for a picture exactly as
+for a clip, and the square is drawn from the same arithmetic the server cuts
+with (`web/creator/tile.js`, mirrored in `tests/test_bench.py`). How much of the
 picture is on the glass is a control as well: the wheel over the locator opens
 the square out to 1024 source pixels or closes it to 128.
 
-**A neural refiner, from DLSS 5.** NVIDIA's DLSS 5 neural renderer — the
-material network, not the upscaler — as a pass over finished stills and
-clips, through the open-source MLX-DLSS port's PyTorch backend. Skin, hair,
-fabric, contact shadows and subsurface are re-drawn at the size the picture
-already is. A `DLSS 5` pill on the pre-stage, Creator and Timeline sampler
-rows; a *Refine (DLSS 5)* entry on the upscale bench with a *Then refine*
-switch on Sharpen and Restore; a *Continuity Neural Refine* node for any
-IMAGE, with a MASK socket that drives where it refines. A clip is refined
-after the whole reel with the previous frame reprojected into the next, so it
-does not boil, and after ReDetail where that is on. Every surface prints the
-memory it will want — about a gigabyte per megapixel, squared by the
-processing scale — before it runs. Nothing of NVIDIA's ships with the pack:
-the port's inference and extraction code is vendored (Apache-2.0, pinned,
-`tools/vendor_mlxdlss.py`), and the weights are extracted, on the settings
-page, from the user's own DLSS DLL after a hash check. Without them the pack
-loads and renders exactly as before, and the pills say what is missing.
+**DLSS 5 neural refiner support, for stills and clips.** NVIDIA's DLSS 5 neural
+renderer — the material network, not the upscaler — as a pass over finished
+stills and clips, through the open-source MLX-DLSS port's PyTorch backend. Skin,
+hair, fabric, contact shadows and subsurface are re-drawn at the size the
+picture already is. A `DLSS 5` pill on the pre-stage, Creator and Timeline
+sampler rows; a *Refine (DLSS 5)* entry on the upscale bench with a *Then
+refine* switch on Sharpen and Restore; a *Continuity Neural Refine* node for any
+IMAGE, with a MASK socket that drives where it refines. A clip is refined after
+the whole reel with the previous frame reprojected into the next, so it does not
+boil, and after ReDetail where that is on. Every surface prints the memory it
+will want — about a gigabyte per megapixel, squared by the processing scale —
+before it runs. Nothing of NVIDIA's ships with the pack: the port's inference
+and extraction code is vendored (Apache-2.0, pinned, `tools/vendor_mlxdlss.py`),
+and the weights are extracted, on the settings page, from the user's own DLSS
+DLL after a hash check. Without them the pack loads and renders exactly as
+before, and the pills say what is missing.
 
-**A drift guard for chained shots.** Every continued shot came out a little
-brighter and harsher than the one before it, until the end of a long strip
-looked fried (issues #41, #46). A flow sampler's output is, exactly, the
-step-weighted average of every step's own guess at the clean picture, and
-"Towards Error-Free Long Video Generation" (arXiv 2606.22370) finds the drift
-in the late guesses on a chained Wan model and stops it, with no training, by
-handing on a window of the schedule instead. The settings page's new "Drift
-guard" rail does that for H3 passes and their turbo lead-in: off, or the
-average of the model's last two to eight guesses at each shot. Two departures
-from the paper. It is counted in guesses rather than sigma, so one setting
-means the same on a 20-step schedule and a turbo one — H3 samples at shift 12,
-where a turbo schedule's steps all start above sigma 0.6. And the guess is the
-model's own prediction at each step rather than the paper's noise-minus-
-velocity, which assumes one consistent model along the run and made a turbo
-render with a lead-in worse, not better. On an eight-shot 20-step strip the
-frying was gone; fewer guesses look most like a plain render, more are
-steadier and softer. A model patch records the predictions and swaps the
-sampler's output for their average once the schedule reaches zero; the sound
-row leaves as the sampler made it. Off by default and off emits nothing.
+**A drift guard that stops chained shots getting brighter and harsher down a
+long strip (#41, #46).** Every continued shot came out a little brighter and
+harsher than the one before it, until the end of a long strip looked fried
+(issues #41, #46). A flow sampler's output is, exactly, the step-weighted
+average of every step's own guess at the clean picture, and "Towards Error-Free
+Long Video Generation" (arXiv 2606.22370) finds the drift in the late guesses on
+a chained Wan model and stops it, with no training, by handing on a window of
+the schedule instead. The settings page's new "Drift guard" rail does that for
+H3 passes and their turbo lead-in: off, or the average of the model's last two
+to eight guesses at each shot. Two departures from the paper. It is counted in
+guesses rather than sigma, so one setting means the same on a 20-step schedule
+and a turbo one — H3 samples at shift 12, where a turbo schedule's steps all
+start above sigma 0.6. And the guess is the model's own prediction at each step
+rather than the paper's noise-minus- velocity, which assumes one consistent
+model along the run and made a turbo render with a lead-in worse, not better. On
+an eight-shot 20-step strip the frying was gone; fewer guesses look most like a
+plain render, more are steadier and softer. A model patch records the
+predictions and swaps the sampler's output for their average once the schedule
+reaches zero; the sound row leaves as the sampler made it. Off by default and
+off emits nothing.
 
-**A blended seam continues from the latent the model made, not from a VAE
-round trip of it.** The run a seam inherits used to be read off the source
-pass's decode and encoded again; measured on H3, that trip darkens the run by
-about 1.3/255 and hardens its contrast by about half a percent, in the same
-direction every time, and since every seam re-encodes a tail that was itself
-decoded from the pass before, it walked down a strip. The segment node now
-takes the source pass's sampler latent beside its frames and slices the run off
-that, in phase on the same grid; a restored seam hands over the restore's own
-latent. The frames still travel for the text encoder's boundary picture, and a
-seam whose source was face-passed, trimmed at its tail, or finished at another
-canvas reads them as before. The settings page's "Seam handoff" row offers the
-three roads: the frames, the latent, and the latent *levelled* — the same slice
-pulled back to the first pass's channel mean and spread before the model reads
-it. Measured on an eight-shot strip, the picture brightened about 1.5/255 per
-pass on raw H3 and twice that under a turbo LoRA, and the plain latent handoff
-changed none of it: the drift is the model continuing from its own output and
-adding its bias again. Levelling breaks the stacking at the conditioning, so
-each pass drifts within itself and the next starts where the first did; the
-finished frames are untouched. Issues #41, #46.
+**A seam can continue from the model's own latent instead of a VAE round trip
+(#41, #46).** The run a seam inherits used to be read off the source pass's
+decode and encoded again; measured on H3, that trip darkens the run by about
+1.3/255 and hardens its contrast by about half a percent, in the same direction
+every time, and since every seam re-encodes a tail that was itself decoded from
+the pass before, it walked down a strip. The segment node now takes the source
+pass's sampler latent beside its frames and slices the run off that, in phase on
+the same grid; a restored seam hands over the restore's own latent. The frames
+still travel for the text encoder's boundary picture, and a seam whose source
+was face-passed, trimmed at its tail, or finished at another canvas reads them
+as before. The settings page's "Seam handoff" row offers the three roads: the
+frames, the latent, and the latent *levelled* — the same slice pulled back to
+the first pass's channel mean and spread before the model reads it. Measured on
+an eight-shot strip, the picture brightened about 1.5/255 per pass on raw H3 and
+twice that under a turbo LoRA, and the plain latent handoff changed none of it:
+the drift is the model continuing from its own output and adding its bias again.
+Levelling breaks the stacking at the conditioning, so each pass drifts within
+itself and the next starts where the first did; the finished frames are
+untouched. Issues #41, #46.
 
-**A music cue over a first shot no longer dies looking for an encoder.** A
-sound-lane block over a pass with no seam and no reference audio is still an
-encode — the cue is written into the audio latent through the audio VAE — but
-the predicate that wires the VAE in did not count it, so a first shot with a
-cue and nothing else with sound in it reached the fill with no encoder at all.
-The lane counts now. Issue #47.
+**Fixed: music over a first shot was dropped because the audio encoder was never
+wired in (#47).** A sound-lane block over a pass with no seam and no reference
+audio is still an encode — the cue is written into the audio latent through the
+audio VAE — but the predicate that wires the VAE in did not count it, so a first
+shot with a cue and nothing else with sound in it reached the fill with no
+encoder at all. The lane counts now. Issue #47.
 
-**A take lands on the card that made it, wherever that card is now.** The save
-node names a take by the card's number as it was queued, and the strip stays
-editable while a render runs, so a card moved or removed meanwhile put its take
-on whoever slid under the number — stamped so that the "edited since" mark
-stayed quiet. The strip is snapshotted as it is queued and a take is matched to
-the card object, or by its stamp where the body was rebuilt; a removed card's
-take stays in the history rather than going to a neighbour. A card edited while
-its own render ran is marked afterwards, which it never was. Issue #47.
+**Fixed: a take could land on the wrong card when the strip was edited
+mid-render (#47).** The save node names a take by the card's number as it was
+queued, and the strip stays editable while a render runs, so a card moved or
+removed meanwhile put its take on whoever slid under the number — stamped so
+that the "edited since" mark stayed quiet. The strip is snapshotted as it is
+queued and a take is matched to the card object, or by its stamp where the body
+was rebuilt; a removed card's take stays in the history rather than going to a
+neighbour. A card edited while its own render ran is marked afterwards, which it
+never was. Issue #47.
 
-**A cue over supplied footage is heard.** The lane's tooltip said sound over a
-clip is mixed, and the compiler dropped it on the strength of a comment saying
-the muxer read the lane itself, which it never did. The blocks now ride on the
-clip's own spec and the writer mixes them from their files, at the frame the
-lane put them, under whatever sound the clip plays with; a muted clip is
-silence under the cue. A cue dragged over a clip re-runs that clip's reel node,
-which decodes nothing, and no pass. Issue #47.
+**Fixed: sound cues placed over supplied footage were silently dropped (#47).**
+The lane's tooltip said sound over a clip is mixed, and the compiler dropped it
+on the strength of a comment saying the muxer read the lane itself, which it
+never did. The blocks now ride on the clip's own spec and the writer mixes them
+from their files, at the frame the lane put them, under whatever sound the clip
+plays with; a muted clip is silence under the cue. A cue dragged over a clip
+re-runs that clip's reel node, which decodes nothing, and no pass. Issue #47.
 
-**A frame held across a trim's edge reaches it.** The shared decoder dropped
-every frame before a window's start — including the one still showing when it
-opened — and stopped at the last frame captured inside it rather than at the
-window's end. On constant-rate footage nothing visible; on a screen recording
-that holds a frame for seconds, a trim opened on the next frame and came out
-short of the seconds the strip was told it plays, and the seam beside it found
-too few frames and refused the blend. The frame showing at the start is pushed
-first and the last frame is held to the window's end, bounded by the file's
-own. Issue #47.
+**Fixed: trimming supplied footage could come out short, and drop the frame
+showing at the trim's start (#47).** The shared decoder dropped every frame
+before a window's start — including the one still showing when it opened — and
+stopped at the last frame captured inside it rather than at the window's end. On
+constant-rate footage nothing visible; on a screen recording that holds a frame
+for seconds, a trim opened on the next frame and came out short of the seconds
+the strip was told it plays, and the seam beside it found too few frames and
+refused the blend. The frame showing at the start is pushed first and the last
+frame is held to the window's end, bounded by the file's own. Issue #47.
 
-**A clip whose sound starts late keeps its silence.** A soundtrack whose first
-packet sits a second in was laid at the window's start, a second early, with the
-missing second padded onto the end. It stays where the file had it. Issue #47.
+**Fixed: a clip whose audio starts late had its sound pulled to the front
+(#47).** A soundtrack whose first packet sits a second in was laid at the
+window's start, a second early, with the missing second padded onto the end. It
+stays where the file had it. Issue #47.
 
-**A guide trimmed to a cut holds a frame from inside the trim.** The two frames
-of decoder slack past the trim's end were decoded and the last of them held for
-the rest of the shot — the next scene, on a trim that ends on a cut. The trim is
-enforced before anything is held. Issue #47.
+**Fixed: a guide trimmed to a cut held a frame from past the trim (#47).** The
+two frames of decoder slack past the trim's end were decoded and the last of
+them held for the rest of the shot — the next scene, on a trim that ends on a
+cut. The trim is enforced before anything is held. Issue #47.
 
-**A merged pass keeps its plate's panels, its guide's op and its audio tail.**
-The merged request's asset list was written back without a plate's panels —
-the handles the joined prompt cites, so the merged pass refused its own prompt
-— and without a guide's tracing op, so a matte guide went down the ordinary
-control-video path instead of the inpaint one. The unblended sound seam's tail
-fell back to the default on a merged pass too. All four are kept. Issue #47.
-
-**The aspect source follows its card.** The piece's aspect source names a card
-by number, and the number stayed put through a move, a copy or a removal in
-front of it while the seams' sources were remapped — the canvas quietly took
-the shape of whatever card slid under the number. It follows the card now, and
-is dropped with it. On a render that holds cards back, the donor is found by
-the number it wears on the strip rather than by its position in the shorter
-list, and a donor held out with nothing to play is refused by name. Issue #47.
-
-**A queued tool's answer is heard whichever side of the reply it lands on.**
-The plate, refine, control and upscale tools posted their job and only then
-listened for its result, while the server queues the job before it answers —
-so a job that finished inside the round trip had answered nobody and the tool
-waited forever. The listener is armed first and what arrived meanwhile is
-replayed. Issue #47.
-
-**The bench and the refiners see a picture the way its player does.** The
-bench's video frame came off the decoder unturned, so a phone clip's preview
-and the still it exports lay on their side while the reel, the seams and the
-guides had been put upright; and the refiners were handed a photo without its
-orientation tag applied while the thumbnail beside it had been. Both turned.
+**Fixed: a merged pass lost its plate's panels, its guide's tracing op and its
+audio tail (#47).** The merged request's asset list was written back without a
+plate's panels — the handles the joined prompt cites, so the merged pass refused
+its own prompt — and without a guide's tracing op, so a matte guide went down
+the ordinary control-video path instead of the inpaint one. The unblended sound
+seam's tail fell back to the default on a merged pass too. All four are kept.
 Issue #47.
 
-**A plate remembers what cut it.** A sheet accepted under one matte model and
-re-accepted under another with the same pictures found the first file and
-returned it before consulting the model. The model is part of the name where a
-panel is cut, and an uncut sheet keeps the name it had. Issue #47.
+**Fixed: the aspect source pointed at the wrong card after a move, copy or
+removal (#47).** The piece's aspect source names a card by number, and the
+number stayed put through a move, a copy or a removal in front of it while the
+seams' sources were remapped — the canvas quietly took the shape of whatever
+card slid under the number. It follows the card now, and is dropped with it. On
+a render that holds cards back, the donor is found by the number it wears on the
+strip rather than by its position in the shorter list, and a donor held out with
+nothing to play is refused by name. Issue #47.
 
-**A sound file replaced under its own name is read again.** The lane's cues
-were the one kind of file a render reads that its cache stamps did not walk,
-so swapping the file's contents under the same name was a cache hit — on the
-piece's fingerprint and on the segment's. Both walk the lane now. Issue #47.
+**Fixed: a tool could wait forever for a job that finished before its listener
+was armed (#47).** The plate, refine, control and upscale tools posted their job
+and only then listened for its result, while the server queues the job before it
+answers — so a job that finished inside the round trip had answered nobody and
+the tool waited forever. The listener is armed first and what arrived meanwhile
+is replayed. Issue #47.
 
-**A phone clip plays upright everywhere it is read.** A portrait phone
-recording is stored landscape with a turn written in the container. The reel
-spliced the storage picture, so the clip lay on its side in the finished file;
-the seam beside it inherited the same sideways frames; and the three places
-that swapped a clip's width and height for the turn were reading a stream
-attribute PyAV does not have, so they never did. The turn now comes off the
-first decoded frame, where PyAV actually puts it, and the shared decoder
-makes it with ffmpeg's own transposes before the crop, so the reel, the seams,
-the references, the guides and the bench cut all agree with the player.
+**Fixed: the upscale bench and the refiners ignored a picture's or clip's
+rotation (#47).** The bench's video frame came off the decoder unturned, so a
+phone clip's preview and the still it exports lay on their side while the reel,
+the seams and the guides had been put upright; and the refiners were handed a
+photo without its orientation tag applied while the thumbnail beside it had
+been. Both turned. Issue #47.
 
-**Thumbnails honour a photo's orientation.** A picture's thumbnail was core's
-`/view?preview=` re-encode, which saves without the orientation tag, so a
-phone photo stored sideways came back sideways in every cell beside a full
-picture the browser had turned upright. Stills come through the pack's own
-thumb route now, with the tag applied, downscaled, and as webp so transparency
-survives; a clip's still is turned the same way.
+**Fixed: a plate re-cut under a different matte model returned the first model's
+file (#47).** A sheet accepted under one matte model and re-accepted under
+another with the same pictures found the first file and returned it before
+consulting the model. The model is part of the name where a panel is cut, and an
+uncut sheet keeps the name it had. Issue #47.
 
-**A seam beside a supplied clip continues from the frame the reel plays.**
-The frames a generation inherited from a clip were read through core's video
-decoder and resampled to 24 fps by the stream's average rate, while the clip
-itself was spliced into the finished file by timestamp through ffmpeg's `fps`
-filter. On constant-rate footage the two agree; on variable-rate footage — a
-phone, a screen recording — the average describes none of the frames, so the
-seam read the wrong ones, or too few of them and refused the blend. Both now
-read through one decoder, so the run handed to the sampler is the run the file
-plays before the cut, and a guide clip is read by timestamp the same way.
-Issue #46.
+**Fixed: replacing a sound file under the same name was a cache hit, so the old
+audio was reused (#47).** The lane's cues were the one kind of file a render
+reads that its cache stamps did not walk, so swapping the file's contents under
+the same name was a cache hit — on the piece's fingerprint and on the segment's.
+Both walk the lane now. Issue #47.
 
-**The strip is as tall as its cards.** The timeline modal's body is a
-column that scrolls, and the strip in it was allowed to shrink before the body
-did — so on a short window it came up shorter than its own cards, and since a
-horizontal scroller clips on the vertical too, that was a second scrollbar
-down the side of the strip with each card's buttons under it, the ✕ among
-them. The strip keeps its height now and the body scrolls; there is one
-scrollbar. Issue #46.
+**Fixed: portrait phone clips played on their side in renders, seams, references
+and guides.** A portrait phone recording is stored landscape with a turn written
+in the container. The reel spliced the storage picture, so the clip lay on its
+side in the finished file; the seam beside it inherited the same sideways
+frames; and the three places that swapped a clip's width and height for the turn
+were reading a stream attribute PyAV does not have, so they never did. The turn
+now comes off the first decoded frame, where PyAV actually puts it, and the
+shared decoder makes it with ffmpeg's own transposes before the crop, so the
+reel, the seams, the references, the guides and the bench cut all agree with the
+player.
 
-**Removing a card asks twice.** The ✕ on a card was one press away from the
-one thing in the strip that cannot be undone. It now turns into "Really
-remove?" on the first press and removes on the second; the pointer leaving the
-card puts the ✕ back. The library's Delete has always worked this way.
-Issue #46.
+**Fixed: thumbnails ignored a photo's orientation tag, so phone photos showed
+sideways.** A picture's thumbnail was core's `/view?preview=` re-encode, which
+saves without the orientation tag, so a phone photo stored sideways came back
+sideways in every cell beside a full picture the browser had turned upright.
+Stills come through the pack's own thumb route now, with the tag applied,
+downscaled, and as webp so transparency survives; a clip's still is turned the
+same way.
 
-**A crowded reel counts along its edge rather than going blank at the
-head.** On the node's band a short shot beside long ones gave up its number
-while the others kept theirs, and three short opening shots on a seventeen-
-shot piece read as "3 4 5 …" with something cut off before it. A band that
-cannot number every cell now numbers none of them and counts along the edge
+**Fixed: a seam beside variable-rate footage read the wrong frames, or too few
+to blend (#46).** The frames a generation inherited from a clip were read
+through core's video decoder and resampled to 24 fps by the stream's average
+rate, while the clip itself was spliced into the finished file by timestamp
+through ffmpeg's `fps` filter. On constant-rate footage the two agree; on
+variable-rate footage — a phone, a screen recording — the average describes none
+of the frames, so the seam read the wrong ones, or too few of them and refused
+the blend. Both now read through one decoder, so the run handed to the sampler
+is the run the file plays before the cut, and a guide clip is read by timestamp
+the same way. Issue #46.
+
+**Fixed: the timeline strip could shrink below its cards and grow a second
+scrollbar (#46).** The timeline modal's body is a column that scrolls, and the
+strip in it was allowed to shrink before the body did — so on a short window it
+came up shorter than its own cards, and since a horizontal scroller clips on the
+vertical too, that was a second scrollbar down the side of the strip with each
+card's buttons under it, the ✕ among them. The strip keeps its height now and
+the body scrolls; there is one scrollbar. Issue #46.
+
+**Removing a card now asks for confirmation (#46).** The ✕ on a card was one
+press away from the one thing in the strip that cannot be undone. It now turns
+into "Really remove?" on the first press and removes on the second; the pointer
+leaving the card puts the ✕ back. The library's Delete has always worked this
+way. Issue #46.
+
+**Fixed: a crowded reel band dropped some shot numbers instead of numbering
+along the edge (#46).** On the node's band a short shot beside long ones gave up
+its number while the others kept theirs, and three short opening shots on a
+seventeen- shot piece read as "3 4 5 …" with something cut off before it. A band
+that cannot number every cell now numbers none of them and counts along the edge
 instead, the way a band too narrow for any label already did. Issue #46.
 
-**The server refiner asks for no reasoning.** A thinking model on the OpenAI
-route spent the whole reply budget on its trace and returned no content, which
-the panel reported as a server that returned nothing. The request now carries
-`reasoning_effort: none`, shed like any other parameter where a provider
-rejects it, and a reply that is empty beside a reasoning trace says so, with
-the tokens it burned — Ollama's Qwen3-VL builds reason whatever they are told,
-and the fix there is a larger reply length.
+**Fixed: reasoning models on the OpenAI refiner route returned an empty reply.**
+A thinking model on the OpenAI route spent the whole reply budget on its trace
+and returned no content, which the panel reported as a server that returned
+nothing. The request now carries `reasoning_effort: none`, shed like any other
+parameter where a provider rejects it, and a reply that is empty beside a
+reasoning trace says so, with the tokens it burned — Ollama's Qwen3-VL builds
+reason whatever they are told, and the fix there is a larger reply length.
 
-**The refiner writes the cast's names, and nothing about their pictures.** On
-a piece with a cast the built-in refiner asked a small model for two things at
-once: the six-section reference form, whose worked example defines
-`<Subject 1>` from a picture, and a note saying to define nothing and write
-the name — with `@anna` as its example, one line above the real names. A 4B
-model copied the example: every rewrite was about Anna, and the pictures were
-cited by their file handles, invented, or dropped. Now the cast's own names are
-written into the note, the reference template and the contract with a cast ask
-for the summary and the bodies alone, a member's picture is listed under the
-member as "[image N]" and nowhere else, and every card in a cast piece is
-refined as a reference request with every member's name accepted — a card that
-says only "she" comes back saying `@juno`.
+**Fixed: on a piece with a cast, the built-in refiner rewrote every card as the
+example name and invented picture citations.** On a piece with a cast the
+built-in refiner asked a small model for two things at once: the six-section
+reference form, whose worked example defines `<Subject 1>` from a picture, and a
+note saying to define nothing and write the name — with `@anna` as its example,
+one line above the real names. A 4B model copied the example: every rewrite was
+about Anna, and the pictures were cited by their file handles, invented, or
+dropped. Now the cast's own names are written into the note, the reference
+template and the contract with a cast ask for the summary and the bodies alone,
+a member's picture is listed under the member as "[image N]" and nowhere else,
+and every card in a cast piece is refined as a reference request with every
+member's name accepted — a card that says only "she" comes back saying `@juno`.
 
-**A cast member's files carry words and a size.** Every tile on a cast card
-opens a menu with a line at its head for what that file shows of them - "her
-face, front-lit", "the golf swing" - written after the file's label in the
-subject definition, and the size it is encoded at under the roles. Both are
-kept with the member in the cast library. A still can now lend its pose the
-way a clip lends its movement, and a subject whose motion is borrowed gets a
-retention clause saying the movement is followed, which nothing wrote before.
-On screen that role is now called *action* — the chip, the role and the facts
-line — while the stored value and the prompt keep the guide's word, motion.
+**Cast files can carry a description and an encoding size, and a still can lend
+its pose.** Every tile on a cast card opens a menu with a line at its head for
+what that file shows of them - "her face, front-lit", "the golf swing" - written
+after the file's label in the subject definition, and the size it is encoded at
+under the roles. Both are kept with the member in the cast library. A still can
+now lend its pose the way a clip lends its movement, and a subject whose motion
+is borrowed gets a retention clause saying the movement is followed, which
+nothing wrote before. On screen that role is now called *action* — the chip, the
+role and the facts line — while the stored value and the prompt keep the guide's
+word, motion.
 
-**A seam can restore the frames it hands over** (#41). Every continued shot
-comes out a little softer than the one it continues, and because the next seam
-anchors on that tail the loss compounds down a strip — the model's own bias
-when it continues from its own output, which no arrangement of the handoff
-cures. The seam popover now has a restore switch: the run the seam inherits is
-re-noised partway down the schedule and re-drawn against the source shot's own
-references and prompt, at the same canvas, and *that* is what the next shot
-continues from. One short generation per seam, H3 only, between two generated
-shots, off by default. Three strengths; start with Medium.
+**A seam can restore the frames it hands over, so a long strip stops going soft
+(#41).** (#41). Every continued shot comes out a little softer than the one it
+continues, and because the next seam anchors on that tail the loss compounds
+down a strip — the model's own bias when it continues from its own output, which
+no arrangement of the handoff cures. The seam popover now has a restore switch:
+the run the seam inherits is re-noised partway down the schedule and re-drawn
+against the source shot's own references and prompt, at the same canvas, and
+*that* is what the next shot continues from. One short generation per seam, H3
+only, between two generated shots, off by default. Three strengths; start with
+Medium.
 
-**Takes are written as each pass lands, not at the end** (#41). A strip that
-failed on its last pass used to keep nothing — fourteen good passes and every
-one sampled again. Each generated pass now writes its own take the moment it
-exists, and the strip picks them up mid-render and after a failure alike. A
-quality change also re-muxes the takes from the cached passes instead of
-sampling anything.
+**Takes are written as each pass lands, so a failed strip keeps the passes that
+worked (#41).** (#41). A strip that failed on its last pass used to keep nothing
+— fourteen good passes and every one sampled again. Each generated pass now
+writes its own take the moment it exists, and the strip picks them up mid-render
+and after a failure alike. A quality change also re-muxes the takes from the
+cached passes instead of sampling anything.
 
-**Type to find, in every long picker.** A list of eight or more — every
-checkpoint, VAE, encoder, LoRA and upscaler picker, and the sampler lists —
-opens with a find line where its title was. Typing narrows the list as you
-go, each word of the query has to appear somewhere in the name, and what it
-found is underlined in the name. Enter takes the first match, the arrows move
-between them, Escape clears the query before it closes the list. Short lists
-are drawn as they always were.
+**Type-to-find in every long picker: checkpoints, VAEs, encoders, LoRAs,
+upscalers and samplers.** A list of eight or more — every checkpoint, VAE,
+encoder, LoRA and upscaler picker, and the sampler lists — opens with a find
+line where its title was. Typing narrows the list as you go, each word of the
+query has to appear somewhere in the name, and what it found is underlined in
+the name. Enter takes the first match, the arrows move between them, Escape
+clears the query before it closes the list. Short lists are drawn as they always
+were.
 
-**The turbo picker answers a press at once** (#41). It used to fetch the
-whole LoRA listing — a stat per file and a sidecar read per row — before it
-would open, which on a fresh start of a large folder was minutes of a pill
-that did nothing when pressed. It now lists names alone off their own route,
-says "Scanning models/loras…" while that first scan runs, and shows the list
-the moment it lands. The names are no longer capped at the newest six
-hundred files either, so a distillation older than the cap is offered again.
+**The turbo LoRA picker opens instantly instead of scanning the whole folder
+first (#41).** (#41). It used to fetch the whole LoRA listing — a stat per file
+and a sidecar read per row — before it would open, which on a fresh start of a
+large folder was minutes of a pill that did nothing when pressed. It now lists
+names alone off their own route, says "Scanning models/loras…" while that first
+scan runs, and shows the list the moment it lands. The names are no longer
+capped at the newest six hundred files either, so a distillation older than the
+cap is offered again.
 
-**The turbo pill's LoRA list heals itself** (#41). A fetch that failed while
-ComfyUI was still loading used to pin every turbo picker to an empty list
-until the page reloaded, and Rescan could not reach it. Failure is no longer
-cached, the pickers retry on the next press, and the manager's Rescan now
-clears this list too.
+**Fixed: a failed LoRA fetch pinned the turbo picker to an empty list until
+reload (#41).** (#41). A fetch that failed while ComfyUI was still loading used
+to pin every turbo picker to an empty list until the page reloaded, and Rescan
+could not reach it. Failure is no longer cached, the pickers retry on the next
+press, and the manager's Rescan now clears this list too.
 
-**"No LoRA · merged checkpoint" is no longer a life sentence** (#41). Picking
-it left the turbo pill with no way back into the picker for that node's whole
-life. The re-pick control now shows in merged mode too, and choosing between
-a file and merged is the same gesture everywhere.
+**Fixed: picking "No LoRA · merged checkpoint" left no way back to the turbo
+picker (#41).** (#41). Picking it left the turbo pill with no way back into the
+picker for that node's whole life. The re-pick control now shows in merged mode
+too, and choosing between a file and merged is the same gesture everywhere.
 
-**A third bench: Blockout.** A scene staged out of grey boxes on a bare floor —
-or one of five starting arrangements — a camera walked through it on marks, and
-a guide rendered along the path: Depth, Blocks or Lines in the tracing bench's
-own names, or As staged, the clay render itself as plain footage for the
-families that read footage raw. It is an editor: pieces move, turn and size on
-three axes by their handles or by the figures in the rail, with snapping. The
-shot camera stands in the set as a frustum with its path drawn on the floor,
-and a second camera flies around it — WASD, orbit, focus — without touching a
-thing that gets written. The glass shows the stage or the pass, whole, on a
-switch, and the frame's shape is picked from the pack's own aspect popover —
-the family's ratios, not three of this bench's own — at that family's native
-canvas. The renderer is a software rasterizer in the browser drawing at the
-frame's own pixels; the server only encodes, off the render queue, and a still
-never touches the server at all. The foot writes the move in the H3 spec's own
-camera vocabulary, ready to paste into a prompt, and the scene rides beside the
-clip as a sidecar.
+**A third bench: Blockout — stage a scene in grey boxes, walk a camera through
+it, and render a guide.** A scene staged out of grey boxes on a bare floor — or
+one of five starting arrangements — a camera walked through it on marks, and a
+guide rendered along the path: Depth, Blocks or Lines in the tracing bench's own
+names, or As staged, the clay render itself as plain footage for the families
+that read footage raw. It is an editor: pieces move, turn and size on three axes
+by their handles or by the figures in the rail, with snapping. The shot camera
+stands in the set as a frustum with its path drawn on the floor, and a second
+camera flies around it — WASD, orbit, focus — without touching a thing that gets
+written. The glass shows the stage or the pass, whole, on a switch, and the
+frame's shape is picked from the pack's own aspect popover — the family's
+ratios, not three of this bench's own — at that family's native canvas. The
+renderer is a software rasterizer in the browser drawing at the frame's own
+pixels; the server only encodes, off the render queue, and a still never touches
+the server at all. The foot writes the move in the H3 spec's own camera
+vocabulary, ready to paste into a prompt, and the scene rides beside the clip as
+a sidecar.
 
-**A blockout piece can play a cast member, or be called a word.** The bench
-writes the staging for you — who stands where in frame, computed from its own
-projection — ahead of the camera move: *"@anna stands at centre in the
-midground; a table at frame left. The camera pushes in toward @anna at slow
-speed."* The handle is the prompt's own citation, so pasting the prose binds
-the words to her references with no new machinery; the block wears her chip
-hue on the stage side only. The sidecar gains each named piece's screen box at
-every mark.
+**A blockout piece can play a cast member, and the bench writes the staging as
+prompt text.** The bench writes the staging for you — who stands where in frame,
+computed from its own projection — ahead of the camera move: *"@anna stands at
+centre in the midground; a table at frame left. The camera pushes in toward
+@anna at slow speed."* The handle is the prompt's own citation, so pasting the
+prose binds the words to her references with no new machinery; the block wears
+her chip hue on the stage side only. The sidecar gains each named piece's screen
+box at every mark.
 
 **H3 across two GPUs, through the Karmabu Raylight fork.** Picked in the weights
-popover. Everything this pack does between a loader and a sampler is a patch on a
-MODEL and a Ray render has none, so the refine, face and re-detail passes, the
+popover. Everything this pack does between a loader and a sampler is a patch on
+a MODEL and a Ray render has none, so the refine, face and re-detail passes, the
 turbo lead-in, blended sound seams, the accelerators, MultiGPU device pins and
 the ControlNet guide all refuse on this path, each naming what to switch off.
 LoRAs merge through ComfyUI's loader inside the workers, which is worse on the
 quantized checkpoints; the switch says so.
 
-**A piece that names no score gets the guide's `N/A`.** H3 always emits a
-soundtrack, so an empty `non_diegetic_music` reads as a free hand rather than as
-a decision. The description itself is never added to: what you wrote about who
-speaks is the whole of what the model is told.
+**A piece that names no score now gets the guide's `N/A` instead of an empty
+field.** H3 always emits a soundtrack, so an empty `non_diegetic_music` reads as
+a free hand rather than as a decision. The description itself is never added to:
+what you wrote about who speaks is the whole of what the model is told.
 
-**A LoRA can be kept off the soundtrack.** An entry carries its own adaLN
-modality scales, drawn as a Soundtrack dial on the card. It damps rather than
-mutes: attention is joint over the packed sequence.
+**A LoRA can be damped on the soundtrack, with its own dial on the card.** An
+entry carries its own adaLN modality scales, drawn as a Soundtrack dial on the
+card. It damps rather than mutes: attention is joint over the packed sequence.
 
-**Six shapes and a Wide/Tall switch, where the aspect popover was a column of
-ratios** (#36). 2:3, 3:2, 5:4 and 4:5 are there, without printing four
+**Six aspect shapes and a Wide/Tall switch, replacing the column of ratios
+(#36).** (#36). 2:3, 3:2, 5:4 and 4:5 are there, without printing four
 rectangles twice. The video envelope opens to 9:21..21:9 — the clamp is for
 bounding a donor picture, not for vetoing a shape somebody picked.
 
-**The shelf list is the filesystem's, not the browser's.** Delete an input folder
-from a terminal and the picker no longer goes on offering its contents. An empty
-shelf made by mistake can be removed.
+**The shelf list now comes from the filesystem, so deleted folders stop being
+offered.** Delete an input folder from a terminal and the picker no longer goes
+on offering its contents. An empty shelf made by mistake can be removed.
 
-**Settings says what the pack has written down about you**, item by item — preset
-library, this browser's stars and LoRA notes and refiner choices, the reference
-cache, the refiner's server, the settings themselves — each row reporting what is
-actually there before it offers to remove it. Nothing on it deletes a render, a
-reference or a workflow.
+**Settings lists everything the pack has stored about you, item by item, before
+offering to remove it.** The preset library, this browser's stars and LoRA notes
+and refiner choices, the reference cache, the refiner's server, the settings
+themselves — each row reports what is actually there before it offers to remove
+it. Nothing on it deletes a render, a reference or a workflow.
 
-**A sentence can end in a spoken line again.** Firefox will not put a caret after
-a chip with no text node beside it, so a sentence ending in dialogue could not be
-typed past, backspaced or arrowed out of.
+**Fixed: in Firefox, a sentence ending in a spoken line could not be typed past
+or backspaced.** Firefox will not put a caret after a chip with no text node
+beside it, so a sentence ending in dialogue could not be typed past, backspaced
+or arrowed out of.
 
-**Bench presses, refines and plates go on ComfyUI's own queue.** They ran in a
-thread pool beside `prompt_worker` rather than behind it, so four of them could
-hold the one card at once. Cancel reaches them now, `queue_remaining` counts
-them, and the progress bar is the real one — which also fixes a cancelled
-render's stale sampler state reappearing under the next bench press. Previews
-stay off the queue deliberately and are gated instead.
+**Bench presses, refines and plates go on ComfyUI's own queue, so Cancel and the
+progress bar work.** They ran in a thread pool beside `prompt_worker` rather
+than behind it, so four of them could hold the one card at once. Cancel reaches
+them now, `queue_remaining` counts them, and the progress bar is the real one —
+which also fixes a cancelled render's stale sampler state reappearing under the
+next bench press. Previews stay off the queue deliberately and are gated
+instead.
 
-**The eight steps are in the heads, not only in the trunk** (#34).
-alibaba-pai's MiniMax-H3-Acc-LoRAs carry 32 output heads beside the rank-64
-trunk, one per interval of the flow grid; loaded as an ordinary LoRA they fell
-out as passenger keys and the render just looked like a weak distill. They ride
-as an object patch now, armed off each step's own sigmas.
+**Support for the eight output heads in alibaba-pai's MiniMax-H3-Acc-LoRAs
+(#34).** (#34). alibaba-pai's MiniMax-H3-Acc-LoRAs carry 32 output heads beside
+the rank-64 trunk, one per interval of the flow grid; loaded as an ordinary LoRA
+they fell out as passenger keys and the render just looked like a weak distill.
+They ride as an object patch now, armed off each step's own sigmas.
 
 ## 3.0
 
-**Quoted words become a line somebody says.** H3 reads speech in a form nobody
-writes by hand: a stable speaker ID outside a `<d>` tag, the identity and the
-delivery outside it too, and only a language tag and the words inside — with a
-voiceover carrying a fixed phrase and a mandatory sentence saying the lips stay
-closed. Getting that right was the refiner's job or nobody's. Closing a quote in
-the prompt box now opens a small menu instead: **Spoken** writes the whole form
-around your words, and **Written in the picture** writes nothing, because plain
-double quotes already *are* section 4.5's syntax for a sign, a banner or a
-subtitle. Both answers are the guide's, which is why the second one is a row and
-not a way out — a menu that silently turned every quote into speech would be
-overwriting one grammar with the other.
+**Quoted words in a prompt can become a spoken line, with a speaker, a language
+and a delivery.** H3 reads speech in a form nobody writes by hand: a stable
+speaker ID outside a `<d>` tag, the identity and the delivery outside it too,
+and only a language tag and the words inside — with a voiceover carrying a fixed
+phrase and a mandatory sentence saying the lips stay closed. Getting that right
+was the refiner's job or nobody's. Closing a quote in the prompt box now opens a
+small menu instead: **Spoken** writes the whole form around your words, and
+**Written in the picture** writes nothing, because plain double quotes already
+*are* section 4.5's syntax for a sign, a banner or a subtitle. Both answers are
+the guide's, which is why the second one is a row and not a way out — a menu
+that silently turned every quote into speech would be overwriting one grammar
+with the other.
 
 The menu reads what you already wrote. `@vera is saying "take this"` uses Vera
 as the speaker and `saying` as the delivery and replaces both, so the line does
@@ -448,28 +468,30 @@ solid blob — the menu floats on `<body>`, outside the three roots that set
 taken with the left arrow, because pressing it blurred the box and dismissed the
 menu under the press.
 
-**The second pass no longer melts the soundtrack** (#33). Rendering above the
-native 768 px edge runs two passes, and the refine pass held its audio the wrong
-way: it handed the sampler a clean, un-noised soundtrack part-way down the
-schedule and trusted it to ride through untouched. It does not. H3 carries the
-audio stream on its own flow shift — the model is told the sound is as noisy as
-the picture unless a mask says otherwise — so it predicted a velocity for a
-stream with no noise in it and applied that velocity for the whole refine, on an
-audio latent that was also 1.6x too hot for where the schedule was. The picture
-came back sharp and the sound came back as static, on generated and supplied
-audio alike. The refine now holds the sound with the same nested denoise mask
-the face pass and supplied sound already use — ones for the picture, zeros for
-the sound — so the model reads the soundtrack while it redraws the frames and
-hands it back exactly as the first pass left it. One-pass renders were never
-affected, which is why setting the render to a single pass worked around it.
+**Fixed: the second pass turned the soundtrack to static on renders above 768 px
+(#33).** (#33). Rendering above the native 768 px edge runs two passes, and the
+refine pass held its audio the wrong way: it handed the sampler a clean,
+un-noised soundtrack part-way down the schedule and trusted it to ride through
+untouched. It does not. H3 carries the audio stream on its own flow shift — the
+model is told the sound is as noisy as the picture unless a mask says otherwise
+— so it predicted a velocity for a stream with no noise in it and applied that
+velocity for the whole refine, on an audio latent that was also 1.6x too hot for
+where the schedule was. The picture came back sharp and the sound came back as
+static, on generated and supplied audio alike. The refine now holds the sound
+with the same nested denoise mask the face pass and supplied sound already use —
+ones for the picture, zeros for the sound — so the model reads the soundtrack
+while it redraws the frames and hands it back exactly as the first pass left it.
+One-pass renders were never affected, which is why setting the render to a
+single pass worked around it.
 
-**The tools dashboard is pictures now.** Every card behind the wordmark wore the
-same rounded box with a grey glyph cropped into the corner, so the grid was six
-shapes distinguished by their captions — nothing on it invited a press. Each card
-now opens on a picture, and what the card does to that picture is what the tool
-does to a frame: ControlNet's is cut down the middle against a real depth pass of
-itself, upscale's against a low-resolution copy of itself, presets' is dealt out
-as a deck. Both seams are dragged rather than animated — they sit wherever the
+**The tools dashboard shows what each tool does to a real picture, instead of
+grey glyphs.** Every card behind the wordmark wore the same rounded box with a
+grey glyph cropped into the corner, so the grid was six shapes distinguished by
+their captions — nothing on it invited a press. Each card now opens on a
+picture, and what the card does to that picture is what the tool does to a
+frame: ControlNet's is cut down the middle against a real depth pass of itself,
+upscale's against a low-resolution copy of itself, presets' is dealt out as a
+deck. Both seams are dragged rather than animated — they sit wherever the
 pointer is.
 
 The two Go-to cards show the piece you are on — the pre-stage still, and the same
@@ -480,44 +502,47 @@ its card does to it — and ControlNet's ships two, the frame and the depth map 
 bench itself made of it, rather than a browser filter standing in for one. A piece
 with nothing on it yet still falls back to the glyph.
 
-**`@` opens on what is attached, not on the cast.** The menu led with everybody
-in the piece, which is an argument about what matters in a prompt rather than
-about the moment somebody types `@` — the picture they just dropped on the card
-is what they are reaching for, and it was sitting under a list of names. Order
-is now attached, cast, cast library, piece references, input folder.
+**The `@` menu now opens on what is attached to the card, before the cast.** The
+menu led with everybody in the piece, which is an argument about what matters in
+a prompt rather than about the moment somebody types `@` — the picture they just
+dropped on the card is what they are reaching for, and it was sitting under a
+list of names. Order is now attached, cast, cast library, piece references,
+input folder.
 
-**Pulling the seam no longer drags the picture.** A pointer that presses an
-`<img>` and moves is a drag of that image as far as the browser is concerned, so
-the light box would sometimes lift a ghost of the frame, hand it to the room's
-own drop zone — which lit up as though a file were arriving — and stop following
-the hand. Three fixes, because it took three: every picture in a bench is
-`draggable="false"`, the frame and the locator refuse `dragstart`, and the drop
-zone now only wakes for a drag that is actually carrying files (`dom.dragsFiles`),
-rather than for every drag that crosses it. The CSS `-webkit-user-drag` that was
-supposed to cover this says it to one engine out of three.
+**Fixed: dragging a bench seam could drag the picture out of the page instead.**
+A pointer that presses an `<img>` and moves is a drag of that image as far as
+the browser is concerned, so the light box would sometimes lift a ghost of the
+frame, hand it to the room's own drop zone — which lit up as though a file were
+arriving — and stop following the hand. Three fixes, because it took three:
+every picture in a bench is `draggable="false"`, the frame and the locator
+refuse `dragstart`, and the drop zone now only wakes for a drag that is actually
+carrying files (`dom.dragsFiles`), rather than for every drag that crosses it.
+The CSS `-webkit-user-drag` that was supposed to cover this says it to one
+engine out of three.
 
-**The wordmark is the way out of a bench, not just into one.** A tool opened
-from the dashboard could only be left by the ✕ at the far end of the bar, while
-the mark in the corner — the thing that drops the tools everywhere else in this
-pack — sat there as inert text. It is the same button on both benches now: it
-closes the room and puts the cards back up, so leaving a tool is the press that
-entered it. It is only a button where there is somewhere to go back to; a bench
-opened with no dashboard behind it keeps the plain wordmark.
+**The wordmark closes a bench as well as opening one.** A tool opened from the
+dashboard could only be left by the ✕ at the far end of the bar, while the mark
+in the corner — the thing that drops the tools everywhere else in this pack —
+sat there as inert text. It is the same button on both benches now: it closes
+the room and puts the cards back up, so leaving a tool is the press that entered
+it. It is only a button where there is somewhere to go back to; a bench opened
+with no dashboard behind it keeps the plain wordmark.
 
-**The render preview has lost its tooltip.** "Double-click for fullscreen"
-popped up over every finished still and clip whenever the pointer rested on
-them — a hint charged against the one element in the node body worth looking at.
-The double-click still opens fullscreen.
+**The "Double-click for fullscreen" tooltip is gone from render previews.**
+"Double-click for fullscreen" popped up over every finished still and clip
+whenever the pointer rested on them — a hint charged against the one element in
+the node body worth looking at. The double-click still opens fullscreen.
 
-**An upscale bench, for stills and clips.** The pack's three ways of enlarging
-anything were all attached to a render — the two-pass first stage, a family's
-own second stage, the LTX re-detail — and none of them answered *here is a file,
-make it bigger*. A second bench does, on the wordmark's dashboard beside the
-ControlNet one: any still or clip goes in, and a bigger one lands in
-`output/continuity/upscaled/` beside the renders, and the doors the tracing
-bench offers are here too — a finished upscale is usually the next shot's
-reference or the picture the next still is drawn from, and the trip through the
-picker to find it was the part worth saving.
+**An upscale bench for stills and clips, with two backends: Sharpen (GAN) and
+Restore (SeedVR2).** The pack's three ways of enlarging anything were all
+attached to a render — the two-pass first stage, a family's own second stage,
+the LTX re-detail — and none of them answered *here is a file, make it bigger*.
+A second bench does, on the wordmark's dashboard beside the ControlNet one: any
+still or clip goes in, and a bigger one lands in `output/continuity/upscaled/`
+beside the renders, and the doors the tracing bench offers are here too — a
+finished upscale is usually the next shot's reference or the picture the next
+still is drawn from, and the trip through the picker to find it was the part
+worth saving.
 
 Two backends, and the choice between them is a choice between promises.
 **Sharpen** is a GAN through core's `UpscaleModelLoader` and its tiling, so
@@ -543,75 +568,79 @@ Restore was for started running it. Re-detail stays where it is: it
 re-renders rather than resolves, and one verb over two different promises would
 be a lie about one of them.
 
-**The benches are one room, and the rail is a film edge.** Both of them drew a
-very wide column of four labelled groups, each under a hairline ruled across the
-whole width, with the operators as a wrapping row of pills — and at this pack's
-larger text scales that read as a page of documentation with some sliders in it,
-the ragged pills carrying "no model" tags that made the operators you *cannot*
-use the loudest things in the list. The room is now one stylesheet
-(`styles/bench.js`) that both benches wear, and the rail is a strip of film: a
-line down its edge, a tick at every stop, the stop's name set small against it.
-The operators are rows with a left edge to read down, the missing-model state is
-a ring rather than a tag, prose is clamped to two lines and opens on a press, a
-stepped dial draws the stops it actually has, and the foot of the rail says
-which folder the file will land in. The amber is spent in three places and
-nowhere else: the tick on the stop you are on, the seam under your hand, and the
-button that runs the job.
+**Both benches share one look: a film-edge rail, operators as rows, and less
+shouting about missing models.** Both of them drew a very wide column of four
+labelled groups, each under a hairline ruled across the whole width, with the
+operators as a wrapping row of pills — and at this pack's larger text scales
+that read as a page of documentation with some sliders in it, the ragged pills
+carrying "no model" tags that made the operators you *cannot* use the loudest
+things in the list. The room is now one stylesheet (`styles/bench.js`) that both
+benches wear, and the rail is a strip of film: a line down its edge, a tick at
+every stop, the stop's name set small against it. The operators are rows with a
+left edge to read down, the missing-model state is a ring rather than a tag,
+prose is clamped to two lines and opens on a press, a stepped dial draws the
+stops it actually has, and the foot of the rail says which folder the file will
+land in. The amber is spent in three places and nowhere else: the tick on the
+stop you are on, the seam under your hand, and the button that runs the job.
 
-**Both benches now stand on the same plumbing.** Reading a frame off whatever
-was dropped in, filling a dial from the model folders, clamping what the sliders
-sent, naming the file and transcoding a clip frame by frame with its sound and
-its timestamps intact — all of it was written for the tracing bench, all of it
-was general, and it is `creator/bench.py` now. Nothing about tracing changed;
-what came with the move is a progress bar on an untrimmed clip, which the shared
-transcode now counts out of the container's own frame count instead of only
-reporting on a cut span — and the chunking Restore needs, which is the shared
-transcode's too: `work` takes a run of frames rather than one, `chunk` says how
-many, and `overlap` says how many the next chunk re-does so the two can be
-crossfaded on core's own curve. Chunks sampled independently do not join
-invisibly, and a step every few seconds is the artefact somebody notices first.
+**Both benches share one backend (`creator/bench.py`), which brings chunked clip
+work and a real progress bar.** Reading a frame off whatever was dropped in,
+filling a dial from the model folders, clamping what the sliders sent, naming
+the file and transcoding a clip frame by frame with its sound and its timestamps
+intact — all of it was written for the tracing bench, all of it was general, and
+it is `creator/bench.py` now. Nothing about tracing changed; what came with the
+move is a progress bar on an untrimmed clip, which the shared transcode now
+counts out of the container's own frame count instead of only reporting on a cut
+span — and the chunking Restore needs, which is the shared transcode's too:
+`work` takes a run of frames rather than one, `chunk` says how many, and
+`overlap` says how many the next chunk re-does so the two can be crossfaded on
+core's own curve. Chunks sampled independently do not join invisibly, and a step
+every few seconds is the artefact somebody notices first.
 
-**Flux 2 Klein is a family.** BFL's compact Flux 2 — 4B (Apache 2.0) or 9B
-(non-commercial), both the base checkpoint and the 4-step distillation the
-turbo pill swaps in — joins the pre-stage's model pill as `flux2klein`. It
-draws from prose and edits from pictures natively: references are VAE-encoded
-and chained onto the conditioning (`ReferenceLatent`), no adapter LoRA to add,
-and the first picture is the one being edited, so the canvas follows it, with
-*start blank* as the way out — Qwen Image Edit's arrangement. The graph is the
-official template's: `Flux2Scheduler` shapes the schedule from the steps and
-the canvas (so the family declares no scheduler control at all) through
-`SamplerCustomAdvanced`, and the text encoder is the plain Qwen3 loaded as
-CLIPLoader type `flux2` — the text-only cut is correct here, and the vision
-check knows to let it through. One family covers both sizes: pick the
-checkpoint and the Qwen3 encoder that matches it. The `kv` build is left for
-later — it wants a `FluxKVCache` graph this family does not emit yet.
+**Flux 2 Klein is a family: BFL's compact Flux 2 at 4B or 9B, base or 4-step
+turbo.** BFL's compact Flux 2 — 4B (Apache 2.0) or 9B (non-commercial), both the
+base checkpoint and the 4-step distillation the turbo pill swaps in — joins the
+pre-stage's model pill as `flux2klein`. It draws from prose and edits from
+pictures natively: references are VAE-encoded and chained onto the conditioning
+(`ReferenceLatent`), no adapter LoRA to add, and the first picture is the one
+being edited, so the canvas follows it, with *start blank* as the way out — Qwen
+Image Edit's arrangement. The graph is the official template's: `Flux2Scheduler`
+shapes the schedule from the steps and the canvas (so the family declares no
+scheduler control at all) through `SamplerCustomAdvanced`, and the text encoder
+is the plain Qwen3 loaded as CLIPLoader type `flux2` — the text-only cut is
+correct here, and the vision check knows to let it through. One family covers
+both sizes: pick the checkpoint and the Qwen3 encoder that matches it. The `kv`
+build is left for later — it wants a `FluxKVCache` graph this family does not
+emit yet.
 
-**Replacing a person replaces the person, not just the face.** Casting
-somebody into a clip compiled to the one prompt shape H3 reads as "keep the
-person and re-animate them": the newcomer was marked `attribute_transfer` —
-whose meaning in the reference guide is that the *target* subject stays
-identifiable — and the retention line said their features were "transferred
-onto" the outgoing person, whose framing was kept. The model did what it was
-told and moved the face. The swap now compiles the way the guide's own
-combined-source example is written: the newcomer is `fully_preserved` with
-their appearance from the picture and the vacancy named in their definition,
-and the clip's own line is where the swap is scoped — `partially_preserved`,
-everything and everyone else kept, "while ⟨who⟩ is replaced by ⟨Subject N⟩".
-A clip somebody is cast into counts as an edit source even if its chip was
-never narrowed to *edit* by hand.
+**Fixed: casting somebody into a clip swapped only their face, not the whole
+person.** Casting somebody into a clip compiled to the one prompt shape H3 reads
+as "keep the person and re-animate them": the newcomer was marked
+`attribute_transfer` — whose meaning in the reference guide is that the *target*
+subject stays identifiable — and the retention line said their features were
+"transferred onto" the outgoing person, whose framing was kept. The model did
+what it was told and moved the face. The swap now compiles the way the guide's
+own combined-source example is written: the newcomer is `fully_preserved` with
+their appearance from the picture and the vacancy named in their definition, and
+the clip's own line is where the swap is scoped — `partially_preserved`,
+everything and everyone else kept, "while ⟨who⟩ is replaced by ⟨Subject N⟩". A
+clip somebody is cast into counts as an edit source even if its chip was never
+narrowed to *edit* by hand.
 
-**And the swap can be held in place with a mask.** A new *Matte* tracing on
-the ControlNet bench asks SAM 3 — the same checkpoint the face pass and the
-picker's click-scissors read — who goes, in words ("person", or "the man in
-the red shirt"), and writes them as white on black, grown past their outline
-by a dial so the replacement has room to be a different build. Thrown as a
-guide on a shot that carries an edit clip, it runs the Fun ControlNet-Union's
-other trained mode, video inpainting: everything outside the white is
-conditioned to stay the source clip at latent level rather than asked to in
-prose, and only the person is regenerated. Inverted, it is the other job —
-keep the named subject, replace the world around them.
+**A Matte tracing on the ControlNet bench masks the swap, so only the named
+person is regenerated.** A new *Matte* tracing on the ControlNet bench asks SAM
+3 — the same checkpoint the face pass and the picker's click-scissors read — who
+goes, in words ("person", or "the man in the red shirt"), and writes them as
+white on black, grown past their outline by a dial so the replacement has room
+to be a different build. Thrown as a guide on a shot that carries an edit clip,
+it runs the Fun ControlNet-Union's other trained mode, video inpainting:
+everything outside the white is conditioned to stay the source clip at latent
+level rather than asked to in prose, and only the person is regenerated.
+Inverted, it is the other job — keep the named subject, replace the world around
+them.
 
-**Somebody else can take a cast member's place, and the footage stays put.**
+**Swap one cast member for another in one gesture, keeping their clips, their
+slot and every mention of them.**
 
 Removing a cast member took the clip they stood in with them. That clip is the
 shot — attached, trimmed and narrowed to *edit* before anybody was cast into it
@@ -630,10 +659,10 @@ new one, the rewrite included, so nothing has to be edited by hand afterwards.
 Swapping one Anna for another takes the name back rather than leaving you with
 `@ana_2`.
 
-**The refiner writes to your instructions, and hands the memory back when it
-is done.** Two things asked for on
-[#19](https://github.com/roadmaus/ComfyUI-Continuity/issues/19) after the
-remote backend shipped.
+**The refiner's prompting can be your own `.md` file, and a remote server can be
+told to unload the model when it is done (#19).** Two things asked for on
+[#19](https://github.com/roadmaus/ComfyUI-Continuity/issues/19) after the remote
+backend shipped.
 
 The prompting is yours to write. A `.md` file in the node's `creator/skills/`
 folder is offered in the refiner's settings by name, with a switch under it:
@@ -656,7 +685,8 @@ failing the press. Only ever asked of a server on your own machine or LAN: a
 hosted API has nothing to evict. The in-process backend never needed the switch
 — it has always handed its weights back after every generation.
 
-**The H3 still's two pills are written in the artist's units, not the VAE's.**
+**The H3 still's length and frame pills are written as cost and time, not as
+frames and latent indexes.**
 
 A still on the H3 branch is a video generation with one latent frame decoded,
 and both of its pills used to say so out loud: a length list of "39 frames ·
@@ -671,8 +701,8 @@ length, where there are two frames and one of them is right. Saved graphs are
 untouched — the stored values and the compiler's negative-from-the-end
 indexing are exactly what they were.
 
-**The refiner can run on a server you already keep warm — LM Studio, Ollama,
-or any OpenAI-compatible endpoint, hosted APIs included.**
+**The refiner can run on LM Studio, Ollama, or any OpenAI-compatible endpoint,
+hosted APIs included (#19).**
 
 The refiner's settings grew a "runs on" switch
 ([#19](https://github.com/roadmaus/ComfyUI-Continuity/issues/19)). "this
@@ -694,8 +724,8 @@ loopback — and dropped automatically if the server URL changes without a new
 key arriving with it, so a repointed URL can never inherit a credential meant
 for somewhere else.
 
-**A render the node stops hearing about is asked after, rather than waited on
-forever.**
+**Fixed: a dropped websocket left a finished render ticking forever under a
+frozen preview (#24).**
 
 `executed` is broadcast once, to whoever is listening, and is never replayed. So
 a websocket that drops mid-render took the end of the render with it: the file
@@ -713,8 +743,8 @@ rather than ticking a clock under a frozen picture. A reconnected socket asks
 immediately. A render that finished unheard lands the way it always did; one
 that failed or was cancelled unheard says which, instead of sampling forever.
 
-**The step preview is drawn at the size it is looked at, and both numbers are
-yours.**
+**Step previews are 640 px by default, with size and quality on their own
+settings rails.**
 
 The picture the sampler broadcasts is a full clip, re-encoded and sent on every
 step, and it was going out at the override node's own 1024 — several times the
@@ -728,8 +758,8 @@ and the quality on two rails — down for a wire that still cannot carry a long
 clip, back up to 1024 for a machine on localhost. Nothing about the render
 changes either way: this is the picture you watch while it happens.
 
-**Right-clicking a step preview no longer offers to open a picture that is
-already gone — which took ComfyUI Desktop down with it.**
+**Fixed: right-clicking a step preview offered a dead picture URL, which crashed
+ComfyUI Desktop (#30).**
 
 The live preview's `src` is an object URL revoked the moment the next frame
 arrives, so every entry in the browser's picture menu — open in a new tab, save
@@ -739,8 +769,8 @@ used. On ComfyUI Desktop, "open image in new window" crashed the whole app
 suppressed on the step frame only; the finished render keeps its own, where the
 `src` is a real `/view` URL and "save image as" does what it says.
 
-**The refiner names the handles its pictures belong to, so a reference clip
-stops coming back as `@img-1`.**
+**Fixed: the refiner invented `@img-1` for a reference clip instead of using its
+real handle (#31).**
 
 Every worked example in the built-in prompts is written with `@img-1` and
 `@img-2`, and the instruction that asks the model to describe the attached
@@ -758,8 +788,8 @@ handles are its own. A `what_i_see` that comes back when nothing was attached is
 dropped rather than shown — it was never asked for, and a panel headed "what the
 model saw in your images" is a claim about attachments there are none of.
 
-**An H3 still is decoded by the VAE that renders the shot, and needs no file of
-its own.**
+**An H3 still is decoded by the VAE that renders the shot, so it needs no VAE
+file of its own.**
 
 The PreStage's H3 branch took one latent frame off a sampled clip and handed it
 to the VAE alone. That shape is off the model's grid — H3 packs 17k+5 pixel
@@ -780,7 +810,8 @@ function of the first token alone and never sees the copy. Nothing else about
 the branch changes, and the file you need is the video VAE already in the slot.
 If you fetched the image VAE for this, you can stop pointing at it.
 
-**Qwen Image Edit joins the pre-stage, and it is the one that edits.**
+**Qwen Image Edit joins the pre-stage as a fifth family, and it is the one that
+edits a picture you already have.**
 
 The pre-stage could draw a picture from a sentence, twice over — Krea 2 and
 Ideogram 4.0 — and it could not do the thing this pack is named after: take the
@@ -814,7 +845,8 @@ a four-step render.
 Switching the model pill now writes the arriving family's own sampler row rather
 than Krea 2's for everyone.
 
-**References are checked for the things that fail quietly.**
+**References are now refused with a reason when they would be silently ignored —
+wrong LoRA, wrong edition, text-only encoder, mismatched aspect.**
 
 Every way a reference image can be attached and then not read has been made a
 refusal rather than a worse picture.
@@ -848,8 +880,8 @@ Krea 2 also warns when a reference's shape does not match the canvas: those
 adapters were trained on pairs whose aspects agreed, and what they preserve
 falls off when they do not.
 
-**An attached picture is called what it is, and the first one need not be the
-subject.**
+**Attached pictures are labelled for what the family reads them as, and the
+first one can be cited rather than edited.**
 
 On Qwen Image Edit the second and third chips said `style`, which names the one
 property those weights do not read an attached picture for — an edit model is
@@ -868,8 +900,8 @@ an empty canvas at the aspect pill's shape, with every picture merely cited. An
 init image still overrides both, since it is the only way to ask for a partial
 denoise.
 
-**Qwen Image Edit's built-in ControlNet is reachable, and a guide lands where
-it is followed.**
+**Qwen Image Edit's built-in ControlNet works: a guide goes to a picture slot
+instead of the init image.**
 
 2509 and 2511 have ControlNet post-trained into the weights: a depth pass, an
 edge map or a pose skeleton arriving in an ordinary image slot is followed, with
@@ -887,7 +919,7 @@ edition is refused outright rather than quietly edited. A tracing outside the
 three the weights were trained on (`lines`, `blocks`, a raw frame) is flagged on
 the chip: it will be read as a picture of a drawing, not as something to aim at.
 
-**Sending to the pre-stage opens the pre-stage.**
+**Sending a picture to the pre-stage now opens the pre-stage.**
 
 A picture handed over used to land in a blob nobody was looking at, and the
 press that sends it is followed every time by writing the instruction that goes
@@ -896,7 +928,8 @@ front: the step, inside the fullscreen shell, and the window on the canvas. The
 bench closes behind the send, since the guide exists to be written a prompt
 around.
 
-**The finished still can go back in.**
+**`↻ edit` puts a finished still back into the pre-stage as the next render's
+subject.**
 
 Three chips on a result send it *on* — to the shot, as a start frame, an end
 frame or a reference. There is a fourth now and it is the loop: `↻ edit` puts
@@ -918,7 +951,8 @@ appeared. It looks for `takeGuide` on the node's body and the method was one
 class further in, so the target was silently dropped every time. It is on the
 body now.
 
-**A strip of footage as one picture, and back again.**
+**A Contact sheet tool: lay a clip out as nine frames in one picture, edit it,
+and cut the frames back out.**
 
 The observation Qwen-Video-Edit is built on is that an image editor will edit a
 *contact sheet* of frames as though it were one picture, and hold the subject
@@ -936,7 +970,8 @@ need not divide by three. There is no server half; a browser already decodes
 video and already draws to a canvas, and every frame this touches was on its way
 to the input folder anyway.
 
-**The LoRA grid groups a model's versions, and the strength slider fits the LoRA.**
+**The LoRA grid groups a model's versions onto one card, with a pill for each
+version.**
 
 A LoRA you have retrained four times was four cards: four near-identical
 thumbnails under four identical titles, with nothing on any of them saying that
@@ -964,19 +999,21 @@ the sheet redraws around whichever version you pick, so the showcase and the
 recipe are what you compare rather than two filenames — with the sidecar's full
 published list below it.
 
-**And the weight's range now follows the LoRA.** Slider LoRAs are trained as a
-signed axis and are meant to be driven to ±10 and past it; the track ran -1 to 2,
-so half of what those files can do was unreachable and the other half was four
-pixels of travel. The row carries the span as a control — ±2, ±5, ±10, ±25, each
-one about eighty notches wide, so the drag feels the same at every scale — and it
-is picked for you: a file whose own name says slider opens at ±10, one your last
-setup left at 6.5 opens wide enough to show 6.5, everything else opens at ±2,
-where an ordinary LoRA's whole useful range finally gets the full track. The
-weight beside it is typed rather than read, which is the one control that reaches
-any value at all; typing past the track widens the span instead of clipping what
-you asked for.
+**The LoRA weight slider's range follows the file — ±2 up to ±25, so slider
+LoRAs are reachable.** Slider LoRAs are trained as a signed axis and are meant
+to be driven to ±10 and past it; the track ran -1 to 2, so half of what those
+files can do was unreachable and the other half was four pixels of travel. The
+row carries the span as a control — ±2, ±5, ±10, ±25, each one about eighty
+notches wide, so the drag feels the same at every scale — and it is picked for
+you: a file whose own name says slider opens at ±10, one your last setup left at
+6.5 opens wide enough to show 6.5, everything else opens at ±2, where an
+ordinary LoRA's whole useful range finally gets the full track. The weight
+beside it is typed rather than read, which is the one control that reaches any
+value at all; typing past the track widens the span instead of clipping what you
+asked for.
 
-**A ControlNet bench, and two quick links on the wordmark's dashboard.**
+**A ControlNet bench: footage in, a guide out — Edges, Lines, Blocks, Luma,
+Blur, Depth, Pose or As shot.**
 
 The bench is a room of its own, reached from the dashboard the wordmark opens.
 Footage goes in — dropped on it, or picked out of the input folder — and a guide
@@ -984,20 +1021,22 @@ comes out: **Edges** (Canny), **Lines** (a difference-of-Gaussians drawing),
 **Blocks**, **Luma** and **Blur**, plus **As shot** for a clip that needs only
 cutting or its soundtrack stripped.
 
-**Depth** and **Pose** are there too, and they are model work rather than
+**Depth and Pose tracings, through the Depth Anything 3 and SDPose nodes ComfyUI
+already ships.** and **Pose** are there too, and they are model work rather than
 arithmetic: Depth Anything 3 and SDPose, both of which ComfyUI already ships in
 `comfy_extras`. The bench loads what core loads and draws the skeleton with
 core's own `KeypointDraw`, which is where the DWPose colour tables the pose
-ControlNets were trained on actually live — a skeleton in a palette of its own is
-one a ControlNet reads as a different pose. Neither downloads anything: the file is
-picked on the same weights pill the pre-stage and the shot wear — same popover,
-same chooser — and a tracing whose files are missing says which files and which
-folder rather than going quiet. The bench has no piece to save a pick into, so
-the pick is remembered per machine in the user settings beside `weights`: which
-file on this disk is the depth model is a fact about the disk, and being asked
-again every time the bench opens is being asked forever. Depth measures its near and far once and
-holds them for the rest of the cut, because normalising each frame against its
-own extremes is the usual reason a depth-guided render flickers.
+ControlNets were trained on actually live — a skeleton in a palette of its own
+is one a ControlNet reads as a different pose. Neither downloads anything: the
+file is picked on the same weights pill the pre-stage and the shot wear — same
+popover, same chooser — and a tracing whose files are missing says which files
+and which folder rather than going quiet. The bench has no piece to save a pick
+into, so the pick is remembered per machine in the user settings beside
+`weights`: which file on this disk is the depth model is a fact about the disk,
+and being asked again every time the bench opens is being asked forever. Depth
+measures its near and far once and holds them for the rest of the cut, because
+normalising each frame against its own extremes is the usual reason a
+depth-guided render flickers.
 
 Nothing about the other five queues. Those tracings are arithmetic over pixels,
 written against numpy and `scipy.ndimage` so the pack still declares no
@@ -1032,9 +1071,10 @@ Pressing Pre-stage when the piece has none spawns it on the way. It was three
 presses in two places before — the view switch in the bar, then the step switch
 on the card, which is not even drawn until the view is simple.
 
-**Both image models now sample the way their authors said to.** Four things were
-wrong in the pre-stage, and each of them was quiet — nothing errored, the
-pictures were just worse than the weights can do.
+**Fixed: four sampling settings in the pre-stage did not match what Krea 2's and
+Ideogram's authors specified.** Four things were wrong in the pre-stage, and
+each of them was quiet — nothing errored, the pictures were just worse than the
+weights can do.
 
 *Ideogram's low-guidance polish tail.* Every official preset ends on a fixed
 number of steps at guidance 3 instead of 7 — three of Quality's 48, two of
@@ -1075,14 +1115,14 @@ The switch is per architecture, so flipping the model pill no longer carries one
 family's file onto the other; blobs written before the split are read as Krea
 2's, which is the only side that had one.
 
-**A pre-stage render previews beside the node, not on it.** The two image
-architectures — Krea 2 and Ideogram 4.0 — sampled behind ComfyUI's own
-previewer, whose frames the frontend paints onto the canvas node itself: under
-the stage card that should be showing them, and invisible in the fullscreen
-editor. They now carry the same KJNodes preview override the video render and
-the H3 still already did, which broadcasts the frames the stage reads and
-suppresses core's overlay. As everywhere else it is optional: without the pack
-installed nothing is emitted and the render is identical.
+**A pre-stage render previews beside the node instead of being painted onto
+it.** The two image architectures — Krea 2 and Ideogram 4.0 — sampled behind
+ComfyUI's own previewer, whose frames the frontend paints onto the canvas node
+itself: under the stage card that should be showing them, and invisible in the
+fullscreen editor. They now carry the same KJNodes preview override the video
+render and the H3 still already did, which broadcasts the frames the stage reads
+and suppresses core's overlay. As everywhere else it is optional: without the
+pack installed nothing is emitted and the render is identical.
 
 **Fixed: the strip's reel went blank after turning the card.** In the fullscreen
 editor's simple view, switching between Pre-stage and Shot left every block on
@@ -1094,26 +1134,27 @@ block a few pixels wide and stripped the labels off all of them. A turn changes
 nothing the reel's resize observer reports, so nothing ever asked again. It
 measures the laid-out width now, which is the question it meant to ask.
 
-**The wordmark is the door.** In the fullscreen editor, pressing **Continuity**
-in the title bar turns the room over to the dashboard: the editor's tools, as
-cards, over the whole width under the title bar. One card today — the preset
-library, the same one the rail's Presets button opens — beside a marked-out
-place for the tools still to come, which is where they will appear. Pressing
-the mark again, pressing Escape, or opening a card puts the piece back exactly
-as you left it. No keystroke is claimed for it: every pack on the canvas wants
-⌘K, so the dashboard is the mark's alone. Nothing else about the window changes,
-and no new chrome stands open while you work.
+**The wordmark in the fullscreen editor opens a dashboard of tools.** In the
+fullscreen editor, pressing **Continuity** in the title bar turns the room over
+to the dashboard: the editor's tools, as cards, over the whole width under the
+title bar. One card today — the preset library, the same one the rail's Presets
+button opens — beside a marked-out place for the tools still to come, which is
+where they will appear. Pressing the mark again, pressing Escape, or opening a
+card puts the piece back exactly as you left it. No keystroke is claimed for it:
+every pack on the canvas wants ⌘K, so the dashboard is the mark's alone. Nothing
+else about the window changes, and no new chrome stands open while you work.
 
-**The pack is called Continuity.** "MiniMax Creator" named the only thing it
-could render when it was written; it now renders on four families — MiniMax H3,
-LTX 2.5, Krea 2 and Ideogram 4.0 — and a fifth is a directory with a declaration
-in it. Continuity is the script supervisor's job: the same person, the same prop
-and the same light in shot 1 and in shot 9, which is the cast, the piece
-references and the seams, and the one thing that stays true whichever family
-renders the frames.
+**The pack is renamed Continuity, with a new repo and Comfy Registry entry.**
+"MiniMax Creator" named the only thing it could render when it was written; it
+now renders on four families — MiniMax H3, LTX 2.5, Krea 2 and Ideogram 4.0 —
+and a fifth is a directory with a declaration in it. Continuity is the script
+supervisor's job: the same person, the same prop and the same light in shot 1
+and in shot 9, which is the cast, the piece references and the seams, and the
+one thing that stays true whichever family renders the frames.
 
-**Nothing you have made moves.** Saved workflows load untouched — the node class
-ids never changed, only what they are called on the canvas — and your presets,
+**The rename moves nothing you have made: saved workflows, presets and settings
+are all carried over.** Saved workflows load untouched — the node class ids
+never changed, only what they are called on the canvas — and your presets,
 picker favourites, LoRA memory, refiner settings and machine settings are all
 read under their old names on the first open and written back under the new one.
 An install that had typed its own output folder keeps writing there; only the
@@ -1126,13 +1167,14 @@ The pack also has a new home — `github.com/roadmaus/ComfyUI-Continuity` — an
 new Comfy Registry entry, `continuity`. An existing clone keeps pulling through
 GitHub's redirect.
 
-**Every family files its renders and stills under its own name.** A piece shot
-on LTX 2.5 was written to `output/minimax/renders/H3_00021_.mp4` — the wrong
-shelf and another architecture's name on the file — because where a render
-landed was one constant for the whole pack, decided when H3 was the only thing
-in it. It is decided by whatever rendered it now: renders go to
-`continuity/renders/<family>/`, stills to `continuity/stills/<family>/`, and a
-piece shot a pass at a time keeps its takes in that family's own `takes/` folder.
+**Each family files its renders and stills under its own name, with a folder
+setting per family.** A piece shot on LTX 2.5 was written to
+`output/minimax/renders/H3_00021_.mp4` — the wrong shelf and another
+architecture's name on the file — because where a render landed was one constant
+for the whole pack, decided when H3 was the only thing in it. It is decided by
+whatever rendered it now: renders go to `continuity/renders/<family>/`, stills
+to `continuity/stills/<family>/`, and a piece shot a pass at a time keeps its
+takes in that family's own `takes/` folder.
 
 Settings → Folders has a row per family to match, so a family can be sent
 anywhere without moving the others. A machine that had typed its own folder
@@ -1140,46 +1182,50 @@ keeps it: the old single setting is read as an answer for every family of its
 kind, which is what it was, and only the untouched default gives way to the new
 layout.
 
-**The first card of a piece can now be kept.** A render of one generation used
-to be told there was nothing to keep — its take *was* the render, so writing the
-same frames out a second time would have been one file to keep and one to
-delete. True about the file and wrong about the card: a piece shot a pass at a
-time starts as one card generated whole, and that card came back with no take on
-it, so locking it left nothing to play and the only way to add a second shot was
-to shoot the first one again. The save node now reports the render itself as
-that card's take. Nothing extra is written and nothing on disk moves.
+**The first card of a piece can be locked, because the render itself is now
+reported as its take.** A render of one generation used to be told there was
+nothing to keep — its take *was* the render, so writing the same frames out a
+second time would have been one file to keep and one to delete. True about the
+file and wrong about the card: a piece shot a pass at a time starts as one card
+generated whole, and that card came back with no take on it, so locking it left
+nothing to play and the only way to add a second shot was to shoot the first one
+again. The save node now reports the render itself as that card's take. Nothing
+extra is written and nothing on disk moves.
 
-**The turbo LoRA reads as the switch's on the strip's rail.** Thrown on, it is an
-ordinary entry in the piece's stack — which is the point, and it stays one — but
-the piece rail drew it like a file you had picked, forty characters of
-`..._turbo_v4_step600_ema_pruned` beside the pill that had just dropped the
-filename for exactly that reason. It wears the switch's bolt and the word
-"turbo" now, with the file in the tooltip. The shot face never showed it: its
-rail is the segment's stack, and turbo's LoRA belongs to the piece.
+**The turbo LoRA shows as the switch's own entry on the strip's rail instead of
+a long filename.** Thrown on, it is an ordinary entry in the piece's stack —
+which is the point, and it stays one — but the piece rail drew it like a file
+you had picked, forty characters of `..._turbo_v4_step600_ema_pruned` beside the
+pill that had just dropped the filename for exactly that reason. It wears the
+switch's bolt and the word "turbo" now, with the file in the tooltip. The shot
+face never showed it: its rail is the segment's stack, and turbo's LoRA belongs
+to the piece.
 
-**The LoRA manager remembers what you set it to.** A strength you arrived at by
-trying it, and the two words out of a sidecar's nine that actually did anything,
-used to live on the entry in creator_data — which is to say they lived until the
-✕, and the next piece started again from the file's own guess. They are kept per
-file now, and adding a LoRA anywhere picks up where you left it. A card whose
-settings came from you rather than from its sidecar says so, and a file nobody
-has used yet still starts from whatever its sidecar recorded.
+**The LoRA manager remembers a file's strength and trigger words across
+pieces.** A strength you arrived at by trying it, and the two words out of a
+sidecar's nine that actually did anything, used to live on the entry in
+creator_data — which is to say they lived until the ✕, and the next piece
+started again from the file's own guess. They are kept per file now, and adding
+a LoRA anywhere picks up where you left it. A card whose settings came from you
+rather than from its sidecar says so, and a file nobody has used yet still
+starts from whatever its sidecar recorded.
 
 Trigger words are kept the same way, including the ones that are switched off.
 A word you type is part of that LoRA's vocabulary from then on: switch it off and
 the chip stays, so turning it back on is a click rather than retyping it. The ✕
 on a chip of your own is what forgets one for good.
 
-**Opening the manager from a chip goes to that LoRA.** It lands on the card, in
-whatever folder the file is in, and marks it for a moment. Before this the window
-opened on the folder you happened to be in last, scrolled to the top, with no
-hint of which of several hundred cards you had just clicked.
+**Opening the LoRA manager from a chip lands on that LoRA's card.** It lands on
+the card, in whatever folder the file is in, and marks it for a moment. Before
+this the window opened on the folder you happened to be in last, scrolled to the
+top, with no hint of which of several hundred cards you had just clicked.
 
-**Star a LoRA, and save whole stacks.** The scope picker now offers two shelves
-above the folder list — Favorites and Recently used — and the shelves are read by
-name rather than by walking a folder, so a starred file stays reachable even in a
-folder past the listing cap. A file that has been renamed or deleted since you
-starred it is named as missing rather than quietly dropped.
+**Star a LoRA, and save whole stacks as presets.** The scope picker now offers
+two shelves above the folder list — Favorites and Recently used — and the
+shelves are read by name rather than by walking a folder, so a starred file
+stays reachable even in a folder past the listing cap. A file that has been
+renamed or deleted since you starred it is named as missing rather than quietly
+dropped.
 
 A stack you have built is kept under the manager's own Stacks tab, as a preset
 holding nothing but its LoRAs: it is the same body the preset library writes, so
@@ -1187,13 +1233,14 @@ it lists, exports and cross-applies there like anything else you have kept. Appl
 one over the current stack with Replace, or merge it into what is already on the
 node with Add.
 
-**LTX 2.5 reads references.** The second video family used to refuse every
-attachment, because a citation reached its text encoder as a bare `<Picture 1>`
-with no picture behind it. It has a reference grammar now, and it is Lightricks'
-own: pick up to nine stills and the picker lays them out as an Ingredients
-reference sheet — panels on a black background — which the render hands to the
-transformer as a guide through the `Ingredients` IC-LoRA, with the caption
-written in two parts, `Reference sheet: …` then `Generated video: …`.
+**LTX 2.5 reads references, through Lightricks' own Ingredients reference
+sheet.** The second video family used to refuse every attachment, because a
+citation reached its text encoder as a bare `<Picture 1>` with no picture behind
+it. It has a reference grammar now, and it is Lightricks' own: pick up to nine
+stills and the picker lays them out as an Ingredients reference sheet — panels
+on a black background — which the render hands to the transformer as a guide
+through the `Ingredients` IC-LoRA, with the caption written in two parts,
+`Reference sheet: …` then `Generated video: …`.
 
 The whole of the reference system is the one you already had. The same chips,
 the same handles, the same cast, the same pool, the same refiner panel. What
@@ -1212,16 +1259,16 @@ Pick the Ingredients IC-LoRA under the weights control. Every canvas axis has to
 divide by the adapter's own downscale factor times 32; a canvas that does not is
 refused before anything loads, naming the pill to move.
 
-**The sheet is made while you pick, and you see it before it lands.** On LTX
-2.5 the image selection *is* the sheet — that is the family's grammar, one
-composite per shot — so pressing Add opens the sheet editor: the composite
-exactly as the model will be handed it, on the black field the adapter was
-trained against, with the panels in a strip below. Drag a panel to rearrange
-(the numbering is the citation — `panel 3` in the caption is cell 3 of the
-grid), press the scissors to cut one out of its background or keep it whole,
-take one off with the ✕, and confirm. A card on this family carries one image
-reference and the render loads that file; a request carrying loose seconds is
-refused rather than composed behind your back.
+**The reference sheet is built while you pick, in an editor that shows what the
+model will be handed.** On LTX 2.5 the image selection *is* the sheet — that is
+the family's grammar, one composite per shot — so pressing Add opens the sheet
+editor: the composite exactly as the model will be handed it, on the black field
+the adapter was trained against, with the panels in a strip below. Drag a panel
+to rearrange (the numbering is the citation — `panel 3` in the caption is cell 3
+of the grid), press the scissors to cut one out of its background or keep it
+whole, take one off with the ✕, and confirm. A card on this family carries one
+image reference and the render loads that file; a request carrying loose seconds
+is refused rather than composed behind your back.
 
 On H3 nothing is welded together for you: multi-select attaches separate
 references, as it always did, and each is encoded on its own. The new Connect
@@ -1253,16 +1300,17 @@ press the scissors and held for the session. Nothing about a cutout or a layout
 happens at render time any more — the graph loads no matte and composes no
 sheet, and a selection you have built before comes back without a second pass.
 
-**The sheet editor is a stage now, and nothing is written until you accept.**
-The editor used to show a server-built composite and rebuild it — as a real
-file in `input/_plates/` — on every click, so an afternoon of picking left the
-folder full of discarded previews and the All shelf full of half-made sheets.
-Both halves are gone. The preview is composited in the browser, from per-panel
-cutouts the server serves straight out of memory, and the composite is written
-exactly once: when Accept (or Add, for a Connect group) commits it. Cancel
-leaves no file anywhere, `_plates/` no longer appears on the All shelf (its own
-shelf still holds it), and Organize grew a Mark all button — which is also how
-the sheets an earlier version littered are cleared in one press.
+**The sheet editor composites in the browser, so nothing is written to disk
+until you accept.** The editor used to show a server-built composite and rebuild
+it — as a real file in `input/_plates/` — on every click, so an afternoon of
+picking left the folder full of discarded previews and the All shelf full of
+half-made sheets. Both halves are gone. The preview is composited in the
+browser, from per-panel cutouts the server serves straight out of memory, and
+the composite is written exactly once: when Accept (or Add, for a Connect group)
+commits it. Cancel leaves no file anywhere, `_plates/` no longer appears on the
+All shelf (its own shelf still holds it), and Organize grew a Mark all button —
+which is also how the sheets an earlier version littered are cleared in one
+press.
 
 The stage is the shot's own canvas, and the panels on it are where they will
 actually sit. Drag one to place it, take its corner to resize it, reorder the
@@ -1273,18 +1321,19 @@ differently are a different file — and part of its caption: an unarranged
 landed, against thirds of the canvas, so "panel 1 is the person top right"
 stays a sentence the model can check against the picture in front of it.
 
-**Click the subject and SAM 3 cuts exactly that out.** BiRefNet's matte is
-salient-object — hand it a picture of two people and it lifts both. The editor
-now has "Click to choose the subject": click the thing you mean and the panel's
-matte comes from SAM 3's point path instead, shift-click marks what to leave
-out, every click is a dot you can press to take back, and the mask is feathered
-a couple of pixels so a hard edge does not read as a sticker. Clicks are part
-of the sheet's name too, and they ride with the panel, so reopening the editor
-starts from them. Pick a SAM 3 checkpoint under weights — on H3 it is the same
-file the face pass already uses; without one the scissors still work
-whole-subject, and the first click tells you what is missing.
+**Click the subject and SAM 3 cuts exactly that panel out, instead of BiRefNet
+lifting everything salient.** BiRefNet's matte is salient-object — hand it a
+picture of two people and it lifts both. The editor now has "Click to choose the
+subject": click the thing you mean and the panel's matte comes from SAM 3's
+point path instead, shift-click marks what to leave out, every click is a dot
+you can press to take back, and the mask is feathered a couple of pixels so a
+hard edge does not read as a sticker. Clicks are part of the sheet's name too,
+and they ride with the panel, so reopening the editor starts from them. Pick a
+SAM 3 checkpoint under weights — on H3 it is the same file the face pass already
+uses; without one the scissors still work whole-subject, and the first click
+tells you what is missing.
 
-**The refiner writes the prompt this piece's model was trained to read, not
+**The refiner writes the prompt the piece's own family was trained on, not
 always H3's.** The Refine button was written when H3 was the only family, and it
 stayed H3's after there were two: whatever the piece's model pill said, the
 route compiled the request as H3, derived an H3 mode name for it, and rewrote
@@ -1316,9 +1365,9 @@ The template pill offers each family's own list, and a pin is kept per family: a
 name its refiner has never heard of. An existing pin is kept for the family it
 was made against.
 
-**Clear empties the sound lane, and a track can be taken back off by hand.** A
-laid track is the piece's own sound — the shots under it are generated against
-it — so a Clear that left it behind handed the next scene the last one's
+**Clear now empties the sound lane, and every block carries a ✕ to remove it by
+hand.** A laid track is the piece's own sound — the shots under it are generated
+against it — so a Clear that left it behind handed the next scene the last one's
 soundtrack, and did it silently: nothing on the emptied piece said where that
 music was coming from. It also meant a piece with only a lane on it read as
 nothing to clear. The files themselves are untouched; what goes is where they
@@ -1330,33 +1379,34 @@ bottom-right corner, drawn at rest and faint like the trim grips beside it, for
 the same reason those are: a handle you only meet once you are on top of it says
 it too late.
 
-**A card opened from the strip is a card of *that piece*.** The segment editor
-was built without being told which piece it belonged to, so it fell back to the
-card itself — and a card carries no family. Every family-derived control in that
-window was therefore drawn as the default family: no auto-duration switch on a
-piece whose weights have a duration head, H3's mode names over an LTX card, a
-weights pill for routes LTX does not have, and attach tools for references the
-compiler would refuse at queue time. The strip underneath had all of it right,
-which is how the same segment came to read `FL2V` on the card and `FL2VA` in the
-window over it.
+**Fixed: a card opened from the strip drew the default family's controls instead
+of the piece's.** The segment editor was built without being told which piece it
+belonged to, so it fell back to the card itself — and a card carries no family.
+Every family-derived control in that window was therefore drawn as the default
+family: no auto-duration switch on a piece whose weights have a duration head,
+H3's mode names over an LTX card, a weights pill for routes LTX does not have,
+and attach tools for references the compiler would refuse at queue time. The
+strip underneath had all of it right, which is how the same segment came to read
+`FL2V` on the card and `FL2VA` in the window over it.
 
-**Where a family reads no attached references, the attach tools are gone rather
-than greyed.** A disabled button says "this is a thing you could do here"; on
-LTX 2.5 it is not one, and no amount of waiting will make it one — the refusal
-is about what the model reads. The piece's reference shelf goes with them, and
-stays only where files are already on it, so a piece carried over from H3 can
-still be emptied. Greying is kept for the case it was meant for: a full card on
-a family that does take them.
+**On a family that reads no attached references, the attach tools are hidden
+rather than greyed out.** A disabled button says "this is a thing you could do
+here"; on LTX 2.5 it is not one, and no amount of waiting will make it one — the
+refusal is about what the model reads. The piece's reference shelf goes with
+them, and stays only where files are already on it, so a piece carried over from
+H3 can still be emptied. Greying is kept for the case it was meant for: a full
+card on a family that does take them.
 
-**A shot that cites a reference no longer claims to open on it.** Since the
-compiler started asking a family how to read a request, the prompt was composed
-as though nothing had been cited — so a reference generation was written in a
-keyframe mode and picked up the guide's base-mode alignment line, "at 0.00
-seconds `<Picture 1>` is fully referenced". On that road `<Picture 1>` is the
-first *reference*, not a frame the shot opens on: the seam is never presented to
-the text encoder there, and an attached start frame is presented after the
-references and already named, at the ordinal it really took, by the line under
-it. So the prompt told the model to open the shot on the character sheet.
+**Fixed: a shot citing a reference was told to open on the character sheet.**
+Since the compiler started asking a family how to read a request, the prompt was
+composed as though nothing had been cited — so a reference generation was
+written in a keyframe mode and picked up the guide's base-mode alignment line,
+"at 0.00 seconds `<Picture 1>` is fully referenced". On that road `<Picture 1>`
+is the first *reference*, not a frame the shot opens on: the seam is never
+presented to the text encoder there, and an attached start frame is presented
+after the references and already named, at the ordinal it really took, by the
+line under it. So the prompt told the model to open the shot on the character
+sheet.
 
 It bit hardest in a timeline, where the transformer was simultaneously handed
 the previous shot's own last frames as pinned guides: the picture the text asked
@@ -1364,15 +1414,15 @@ for and the picture the guides asked for were different, and whatever came out
 of that argument was decoded, inherited by the next seam, and argued over again.
 A cast-driven chain drifted further from itself with every card.
 
-**The LTX 2.5 sampler row is five pills at rest instead of thirteen, and it is
-written in words rather than in the names of the nodes behind it.** Settings →
-Nodes → Advanced controls never reached this row: the flag was read past the
-point where a declared family peels off to its own renderer, so "Standard" and
-"Everything" drew the same thing. It is read per control now, off an `advanced`
-key each family sets in its own manifest — so which controls are the last few
-percent is that family's statement rather than a list in the frontend. The rule
-the H3 row already lived by holds: a control you have set keeps its pill
-whatever the setting says, because in force means visible.
+**The LTX 2.5 sampler row is five pills at rest instead of thirteen, written in
+words rather than node names.** Settings → Nodes → Advanced controls never
+reached this row: the flag was read past the point where a declared family peels
+off to its own renderer, so "Standard" and "Everything" drew the same thing. It
+is read per control now, off an `advanced` key each family sets in its own
+manifest — so which controls are the last few percent is that family's statement
+rather than a list in the frontend. The rule the H3 row already lived by holds:
+a control you have set keeps its pill whatever the setting says, because in
+force means visible.
 
 Separately, and worth more: on the trained curve the row was drawing five pills
 the render does not read, one of them lit. `requires` grew a value form, so
@@ -1399,23 +1449,23 @@ it is H3's crop-and-repair loop, and on LTX 2.5 it was a switch for something
 that could never run. A piece that somehow carries one switched on keeps the
 pill, so it can be switched off.
 
-**LTX 2.5 now samples on the curve its checkpoint was distilled against, and
-renders come out a different class of picture for it.** The family was building
-its schedule with `LTXVScheduler` and pairing it with the `ModelSamplingLTXV`
-patch — the recipe LTX 2.3 shipped, and the wrong one here. A step-distilled
-transformer is not merely a model that takes fewer steps: the distillation is
-done against one trajectory, and 2.5's is a constant Lightricks ships rather
-than a curve anybody computes. Both of their own 2.5 workflows and ComfyUI's own
-template feed nine fixed sigmas through `ManualSigmas` and emit neither of those
-two nodes. What this pack was computing instead descended evenly and then jumped
-0.572 straight to 0.1, skipping the stretch below 0.42 where the picture's
-detail resolves; the trained curve spends four of its eight steps almost in
-place at the top and does the whole denoise in four large drops. The second
-stage was wrong the same way, and is now the tail Lightricks ships for it —
-three steps from 0.85, where the upscaled latent re-enters the trajectory the
-first stage left. The sampler default moves to `euler_ancestral` with them,
-which is what both stages of both official graphs select: the noise an ancestral
-step adds back is part of what eight steps were distilled with.
+**LTX 2.5 samples on the fixed sigma curve its checkpoint was distilled against,
+with a recipe control to pick between that and the old one.** The family was
+building its schedule with `LTXVScheduler` and pairing it with the
+`ModelSamplingLTXV` patch — the recipe LTX 2.3 shipped, and the wrong one here.
+A step-distilled transformer is not merely a model that takes fewer steps: the
+distillation is done against one trajectory, and 2.5's is a constant Lightricks
+ships rather than a curve anybody computes. Both of their own 2.5 workflows and
+ComfyUI's own template feed nine fixed sigmas through `ManualSigmas` and emit
+neither of those two nodes. What this pack was computing instead descended
+evenly and then jumped 0.572 straight to 0.1, skipping the stretch below 0.42
+where the picture's detail resolves; the trained curve spends four of its eight
+steps almost in place at the top and does the whole denoise in four large drops.
+The second stage was wrong the same way, and is now the tail Lightricks ships
+for it — three steps from 0.85, where the upscaled latent re-enters the
+trajectory the first stage left. The sampler default moves to `euler_ancestral`
+with them, which is what both stages of both official graphs select: the noise
+an ancestral step adds back is part of what eight steps were distilled with.
 
 Which of the two curves a piece is on is a new **recipe** control at the head of
 the LTX sampler row, because it is genuinely a choice — the `dev` transformer in
@@ -1426,21 +1476,21 @@ and neither is the resolution popover's refine denoise, there being no fraction
 to take of a schedule whose every value the distillation fixed. Nothing about H3
 moved — its goldens are byte-identical.
 
-**A still handed to LTX 2.5 is compressed before it conditions anything.** Every
-official image-to-video graph for this model resizes the frame to a 1536 px
-longest edge and runs it through `LTXVPreprocess` on the way to the guide, and
-conditions it at 0.7 rather than pinning it at 1.0. This pack was passing the
-image through clean and pinned. The compression is the load-bearing half: it is
-what makes a still look like the guide frames the model was trained to continue
-from, every one of which came out of a compressed clip, and a clean one is
-off-distribution in a way that shows up as an opening second that sits still and
-a pass that drifts soft behind it. Seams are untouched at full strength — the
-frames a continuing shot inherits are the pass in front's own, already at this
-canvas and already out of this VAE, and putting encode artefacts into them would
-be inventing damage rather than matching training.
+**A still handed to LTX 2.5 is compressed and conditioned at 0.7, the way the
+official graphs do it.** Every official image-to-video graph for this model
+resizes the frame to a 1536 px longest edge and runs it through `LTXVPreprocess`
+on the way to the guide, and conditions it at 0.7 rather than pinning it at 1.0.
+This pack was passing the image through clean and pinned. The compression is the
+load-bearing half: it is what makes a still look like the guide frames the model
+was trained to continue from, every one of which came out of a compressed clip,
+and a clean one is off-distribution in a way that shows up as an opening second
+that sits still and a pass that drifts soft behind it. Seams are untouched at
+full strength — the frames a continuing shot inherits are the pass in front's
+own, already at this canvas and already out of this VAE, and putting encode
+artefacts into them would be inventing damage rather than matching training.
 
-**A take on the editor's shelf goes up on the picture, and the newest one is
-nearest it.** The shelf under the fullscreen editor grew left to right, so the
+**The editor's take shelf reads newest-first and plays a take over the picture
+at full size.** The shelf under the fullscreen editor grew left to right, so the
 render you had just made was at the far end of a row that only ever got longer —
 the one take anybody reaches for was the one that kept moving away. It reads
 outward from the plate now: leftmost is what was on the picture a moment ago,
@@ -1461,8 +1511,8 @@ travels between its cell and the plate rather than cross-fading, so which one is
 up is said by the movement instead of by a label; a system set to reduced motion
 gets the fade.
 
-**A render whose sound does not land on the audio encoder's frame boundary now
-writes.** AAC's frame is a fixed 1024 samples and libavcodec refuses any other
+**Fixed: a render whose audio did not land on an AAC frame boundary failed to
+write.** AAC's frame is a fixed 1024 samples and libavcodec refuses any other
 length anywhere but the end of the stream — as a bare `avcodec_send_frame()
 returned 22`, four frames deep in PyAV, naming nothing. Every part's sound is
 cut to the length of its own picture, so landing on a boundary was the
@@ -1474,8 +1524,8 @@ samples a part ends on are carried into the next part's first frame now, and the
 last of them go out with the flush, where a short frame is the one thing that is
 allowed.
 
-**A shot's length can be handed to the model from the strip, not only from the
-shot.** The duration head's "auto" was on the seconds pill in a shot's own
+**A shot's length can be set to auto from the strip, not only from inside the
+card.** The duration head's "auto" was on the seconds pill in a shot's own
 editor and nowhere else, so setting it on a strip of eight meant opening eight
 cards — in the one view where the lengths are actually laid out side by side,
 the seconds were a readout. They are the switch now, on any family that has a
@@ -1484,142 +1534,149 @@ on the strip's total and inside the editor. Not on a shot inside a merged pass:
 what is sampled there is the pass's total, so a per-shot switch would be
 offering the model a number nothing reads.
 
-**The model leads every node's pill row.** Which architecture renders a piece
-was in two different places and neither was findable: on the pre-stage it stood
-mid-row between the frame pills and the canvas, and on the video nodes it was
-inside the sampler row, behind the Sampling settings disclosure, between the
-face pass and the weights. It is a sampler setting nowhere — it decides what
-every other pill on the body *means*: which routes exist, what the seconds round
-to, which checkpoints the routing pill cycles. So it now opens the row that says
-what the render is, in the same slot on all four faces — a shot, a strip's
-summary, the strip window's bar, and both pre-stages, where the slot names an
-image architecture instead of a video family. The weights pill stays on the
-sampler row: those are file paths, set once when a checkpoint is installed.
+**The model pill leads every node's row, in the same slot on all four faces.**
+Which architecture renders a piece was in two different places and neither was
+findable: on the pre-stage it stood mid-row between the frame pills and the
+canvas, and on the video nodes it was inside the sampler row, behind the
+Sampling settings disclosure, between the face pass and the weights. It is a
+sampler setting nowhere — it decides what every other pill on the body *means*:
+which routes exist, what the seconds round to, which checkpoints the routing
+pill cycles. So it now opens the row that says what the render is, in the same
+slot on all four faces — a shot, a strip's summary, the strip window's bar, and
+both pre-stages, where the slot names an image architecture instead of a video
+family. The weights pill stays on the sampler row: those are file paths, set
+once when a checkpoint is installed.
 
-**A preset keeps the whole sampler row, whichever family's row it is.** The list
-of settings a preset carried was written down rather than read off the family,
-and it was H3's list from before three of H3's own controls existed: the
-attention pick, low VRAM and fast math were dropped by every preset that
-claimed to keep the row, and it carried the retired `sage` switch, which is the
-one thing the pack exists to *clear*. On LTX 2.5 it kept `steps` and the sampler
-name — the two settings both families spell the same — and dropped the cfg pair,
-the sigma curve, the stretch and the new guidance. On an Ideogram 4 pre-stage it
-carried a step count that architecture does not have and missed the quality that
-is most of what its row is. All four lists are one derivation now, off the same
-manifest the controls are drawn from.
+**A preset keeps the whole sampler row, derived from the family's own
+manifest.** The list of settings a preset carried was written down rather than
+read off the family, and it was H3's list from before three of H3's own controls
+existed: the attention pick, low VRAM and fast math were dropped by every preset
+that claimed to keep the row, and it carried the retired `sage` switch, which is
+the one thing the pack exists to *clear*. On LTX 2.5 it kept `steps` and the
+sampler name — the two settings both families spell the same — and dropped the
+cfg pair, the sigma curve, the stretch and the new guidance. On an Ideogram 4
+pre-stage it carried a step count that architecture does not have and missed the
+quality that is most of what its row is. All four lists are one derivation now,
+off the same manifest the controls are drawn from.
 
-**And a preset no longer quietly puts one family's settings on another's piece.**
-A row and a set of weights belong to the family they were captured on — both
-video families spell `steps` and `sampler_name` and mean different things by
-them, and no weight slot is shared at all — so those two sections are now
+**A preset no longer puts one family's row or weights onto another family's
+piece.** A row and a set of weights belong to the family they were captured on —
+both video families spell `steps` and `sampler_name` and mean different things
+by them, and no weight slot is shared at all — so those two sections are now
 refused across families, with a reason naming both. Everything else on the
 preset crosses as it always did. Applying a preset's weights also reads them
 under the target piece's own slot names, where before it read them under H3's:
 on an LTX 2.5 piece that meant every file the preset was keeping came back
 empty.
 
-**LTX 2.5 renders can be guided for detail and for lip-sync, and the pills say
-what that costs.** Two of Lightricks' own patches, off by default and drawn in
-their own group beside the sampler row rather than among the accelerators —
-because they are the opposite trade. Detail guidance re-runs each step with the
-chosen transformer blocks' self-attention degraded and steers away from it,
-which sharpens spatial detail and steadies motion; a/v sync re-runs each step
-with the audio-to-video attention severed and pushes toward the coupled
-prediction, which is what tightens lip-sync. Each is an extra forward pass per
-step, so on the distilled weights either roughly doubles the time of the stage
-it runs on and both roughly triple it — which is in the tooltip, since it is the
-only thing worth deciding on. A pill is lit exactly while it is costing that,
-and a piece that leaves them alone builds the same graph it always did.
+**Two of Lightricks' own guidance patches for LTX 2.5 — detail and lip-sync —
+with their cost stated on the pill.** Two of Lightricks' own patches, off by
+default and drawn in their own group beside the sampler row rather than among
+the accelerators — because they are the opposite trade. Detail guidance re-runs
+each step with the chosen transformer blocks' self-attention degraded and steers
+away from it, which sharpens spatial detail and steadies motion; a/v sync
+re-runs each step with the audio-to-video attention severed and pushes toward
+the coupled prediction, which is what tightens lip-sync. Each is an extra
+forward pass per step, so on the distilled weights either roughly doubles the
+time of the stage it runs on and both roughly triple it — which is in the
+tooltip, since it is the only thing worth deciding on. A pill is lit exactly
+while it is costing that, and a piece that leaves them alone builds the same
+graph it always did.
 
-**Every render has a live preview again, not just an H3 one pointed at taeh3.**
-The preview override was only ever emitted when a tiny decoder had been picked,
-which made a decoder look like the thing that turns previews on. It is not: it
-is a quality setting *inside* KJNodes' node, and the node itself is the only
-thing that previews these renders at all — ComfyUI ships with previews off, and
-where they are switched on the frontend paints them onto the canvas node rather
-than into the body. So an LTX 2.5 piece, and any H3 piece whose owner had not
-downloaded taeh3, sampled for ten minutes behind an empty box. The node is now
-emitted whenever KJNodes is installed, on both families and on both of LTX's
-sampling stages. Without a decoder it draws latent2rgb — colour without detail,
-animated across the clip — and on LTX through KJNodes' own LTX previewer, which
-knows to crop off the guide frames the sampler appended. Picking taeh3 still
-does what it always did, on the family that has one.
+**Live previews on every render, not only H3 renders with a taeh3 decoder
+picked.** The preview override was only ever emitted when a tiny decoder had
+been picked, which made a decoder look like the thing that turns previews on. It
+is not: it is a quality setting *inside* KJNodes' node, and the node itself is
+the only thing that previews these renders at all — ComfyUI ships with previews
+off, and where they are switched on the frontend paints them onto the canvas
+node rather than into the body. So an LTX 2.5 piece, and any H3 piece whose
+owner had not downloaded taeh3, sampled for ten minutes behind an empty box. The
+node is now emitted whenever KJNodes is installed, on both families and on both
+of LTX's sampling stages. Without a decoder it draws latent2rgb — colour without
+detail, animated across the clip — and on LTX through KJNodes' own LTX
+previewer, which knows to crop off the guide frames the sampler appended.
+Picking taeh3 still does what it always did, on the family that has one.
 
-**And the stage card holds the picture at the card's size, whatever size the
-picture is.** The card declared a column but never `display: flex`, so the media
-row had an automatic height, the picture's `height: 100%` had nothing to resolve
-against, and it fell back to the decoded file's own size — while the card's
-width sat on its 240px floor because shrink-to-fit reads an image's intrinsic
-width and ignores any cap on its height. Neither showed while the only preview
-in the pack decoded at roughly the render's own shape. A latent2rgb frame is the
-latent — 30×17 on an LTX canvas — and it landed in the corner of a full-height
-card as a postage stamp. The card is a flex column now and takes its shape from
-the media it was handed, which is the mechanism `Stage.setAspect` already fed the
-fullscreen dock. The dock had the other half of the same fault: it took the
-picture's shape *and its size* from what was inside it, so the full-size frame it
-holds while you wait handed over to a 30×17 card adrift in the column. It is the
-largest box of the picture's shape the column will hold now, at whatever the
-corner grip is set to.
+**Fixed: the stage card sized itself to the decoded picture, so a latent preview
+landed as a postage stamp.** The card declared a column but never `display:
+flex`, so the media row had an automatic height, the picture's `height: 100%`
+had nothing to resolve against, and it fell back to the decoded file's own size
+— while the card's width sat on its 240px floor because shrink-to-fit reads an
+image's intrinsic width and ignores any cap on its height. Neither showed while
+the only preview in the pack decoded at roughly the render's own shape. A
+latent2rgb frame is the latent — 30×17 on an LTX canvas — and it landed in the
+corner of a full-height card as a postage stamp. The card is a flex column now
+and takes its shape from the media it was handed, which is the mechanism
+`Stage.setAspect` already fed the fullscreen dock. The dock had the other half
+of the same fault: it took the picture's shape *and its size* from what was
+inside it, so the full-size frame it holds while you wait handed over to a 30×17
+card adrift in the column. It is the largest box of the picture's shape the
+column will hold now, at whatever the corner grip is set to.
 
-**The sampler row a pill writes is the one the render reads.** Two faults with
-one shape. The store's field list was H3's, written down, so an LTX 2.5 piece
-kept `steps` and lost the rest of its row on the way through — `video_cfg`, the
-sigma pair, the stretch — dropped on load and on save both, which meant a pill
-moved on that family changed the render until the workflow was saved and then
-quietly stopped. The list is each family's own declarations now, derived from
-the manifest, so a family added to the pack turns up in the store without
-anyone editing the browser half. And the row on the piece's face was drawn
-against a second `{value, set}` pair over the node's widgets, left behind when
-the row moved into the blob: the turbo switch wrote its six steps and euler
-where the render takes them from while the row went on showing twenty and
-res_multistep, so the switch looked inert and a step count dialled after it was
-overruled by a blob it never wrote. One pair now, the blob's.
+**Fixed: sampler pills on LTX 2.5 wrote settings the render never read.** Two
+faults with one shape. The store's field list was H3's, written down, so an LTX
+2.5 piece kept `steps` and lost the rest of its row on the way through —
+`video_cfg`, the sigma pair, the stretch — dropped on load and on save both,
+which meant a pill moved on that family changed the render until the workflow
+was saved and then quietly stopped. The list is each family's own declarations
+now, derived from the manifest, so a family added to the pack turns up in the
+store without anyone editing the browser half. And the row on the piece's face
+was drawn against a second `{value, set}` pair over the node's widgets, left
+behind when the row moved into the blob: the turbo switch wrote its six steps
+and euler where the render takes them from while the row went on showing twenty
+and res_multistep, so the switch looked inert and a step count dialled after it
+was overruled by a blob it never wrote. One pair now, the blob's.
 
-**Switching families keeps the weights, and only H3 routes.** Three faults, one
-root: the weights layer knew which family a piece renders with and the routing
-layer did not. A piece moved to LTX 2.5 reported two weights missing when every
-file it loads had been picked — it was being asked for `fl2va` and `ref2va`,
-which are H3's checkpoints and not slots LTX has — and a LoRA whose checkpoint
-claim LTX cannot read was taken to claim both of them, so the H3 distillation
-the turbo switch had thrown went on being patched onto a 22B LTX transformer
-with no switch left on the row that owned it. A family that ships one
-transformer now routes between nothing, on both sides of the pack: nothing is
-derived, nothing may be pinned, nothing is required, and a LoRA claims nothing —
-which means every enabled entry is patched onto the one set of weights there is.
-The turbo switch's own LoRA leaves with the switch when the family changes, and
-the switch is drawn only for a family that declares a distillation.
+**Fixed: switching families lost the weights and kept H3's routing, including
+its turbo LoRA.** Three faults, one root: the weights layer knew which family a
+piece renders with and the routing layer did not. A piece moved to LTX 2.5
+reported two weights missing when every file it loads had been picked — it was
+being asked for `fl2va` and `ref2va`, which are H3's checkpoints and not slots
+LTX has — and a LoRA whose checkpoint claim LTX cannot read was taken to claim
+both of them, so the H3 distillation the turbo switch had thrown went on being
+patched onto a 22B LTX transformer with no switch left on the row that owned it.
+A family that ships one transformer now routes between nothing, on both sides of
+the pack: nothing is derived, nothing may be pinned, nothing is required, and a
+LoRA claims nothing — which means every enabled entry is patched onto the one
+set of weights there is. The turbo switch's own LoRA leaves with the switch when
+the family changes, and the switch is drawn only for a family that declares a
+distillation.
 
-**LoRAs on LTX 2.5.** Which loader patches a family's LoRAs is now the family's
-own: H3 keeps the vendored stack it needs — the stock loader is wrong on the
-quantized checkpoints most people run it on — and every other family goes
+**LoRA support on LTX 2.5, through ComfyUI's own loader, with a refusal when a
+LoRA patches nothing.** Which loader patches a family's LoRAs is now the
+family's own: H3 keeps the vendored stack it needs — the stock loader is wrong
+on the quantized checkpoints most people run it on — and every other family goes
 through ComfyUI's own, which is what LTX's adapters want. LTX 2.5 takes LTX
 2.3's LoRAs, so those work here. Nothing checks a file to decide whether it
 belongs, because that is not knowable from the file; but a LoRA that patched
 nothing at all now says so and stops the render, instead of leaving you to
 wonder why it made no difference.
 
-**The sampler row is the family's too.** `steps` and `sampler` are spelled the
-same on both families and mean different things — 20 res_multistep steps is H3's
-row and 8 euler ones is the distilled LTX transformer's — so a row left in place
-across a switch was quietly sampling the new family at the old one's numbers. It
-is now set aside with the weights and handed back the same way, and the turbo
-switch is released into it on the way out: switching a family off is switching
-its turbo off, and that means putting the row it overwrote back.
+**The sampler row is set aside per family, so a switch no longer samples at the
+other family's numbers.** `steps` and `sampler` are spelled the same on both
+families and mean different things — 20 res_multistep steps is H3's row and 8
+euler ones is the distilled LTX transformer's — so a row left in place across a
+switch was quietly sampling the new family at the old one's numbers. It is now
+set aside with the weights and handed back the same way, and the turbo switch is
+released into it on the way out: switching a family off is switching its turbo
+off, and that means putting the row it overwrote back.
 
-**The weights are remembered, per family.** Picking six files was a chore paid
-twice — once per new node, and once more every time a piece was switched between
-architectures, which threw away the block for the family being left. A piece now
-sets that block aside under its family's id and takes it back on return, and
-this machine remembers the last block picked for each family beside its other
-preferences. A node fills an *empty* row from that memory and never a row the
-workflow answered, so a saved piece still says what it rendered on.
+**The weights are remembered per family, and per machine.** Picking six files
+was a chore paid twice — once per new node, and once more every time a piece was
+switched between architectures, which threw away the block for the family being
+left. A piece now sets that block aside under its family's id and takes it back
+on return, and this machine remembers the last block picked for each family
+beside its other preferences. A node fills an *empty* row from that memory and
+never a row the workflow answered, so a saved piece still says what it rendered
+on.
 
-**The upscale pill has a third answer, and it is not the family's own.**
-ReDetail finishes a piece by re-rendering every decoded pass through LTX 2.5's
-pixel spatial upscaler at twice the canvas — an H3 render included, which is the
-point: the backend is the piece's choice and the family is not. Pick it on the
-resolution popover and the render samples once at the native edge and comes out
-at double it, past anything either family samples at on its own.
+**ReDetail: a third upscale answer that re-renders every pass through LTX 2.5's
+spatial upscaler, on any family.** ReDetail finishes a piece by re-rendering
+every decoded pass through LTX 2.5's pixel spatial upscaler at twice the canvas
+— an H3 render included, which is the point: the backend is the piece's choice
+and the family is not. Pick it on the resolution popover and the render samples
+once at the native edge and comes out at double it, past anything either family
+samples at on its own.
 
 It is a repaint rather than a polish. The model invents the fine detail as it
 goes, so it is right for soft or generated footage and wrong wherever a face has
@@ -1637,7 +1694,8 @@ is loaded until a render actually reaches the pass. Built from ComfyUI's own LTX
 nodes, so no third-party pack is needed; the graph and its measurements come
 from [Bambushu's ReDetail](https://github.com/Bambushu/redetail).
 
-**LTX 2.5 renders.** The second video family samples now, rather than being
+**LTX 2.5 renders: Lightricks' 22B transformer, Gemma 4 and the two VAEs, with
+its own sampler row.** The second video family samples now, rather than being
 described and refused. Pick it on the model pill in front of the weights and the
 node loads Lightricks' 22B transformer, Gemma 4 with LTX's projections and the
 two VAEs; picture and soundtrack come out of one packed latent, guided apart by
@@ -1655,62 +1713,63 @@ The grammar that replaces H3's ordinal citations here is IC-LoRAs, and choosing
 it is the next phase's work; the render proceeds and says so in the log rather
 than refusing.
 
-**The upscale pill runs Lightricks' own second stage on an LTX piece.** Not the
-H3 refine, which re-encodes the request at a larger canvas: LTX ships a trained
-x2 latent upscaler, so the piece samples at the native edge, the upscaler takes
-the video latent up, and a tail of the schedule runs again. The factor is the
-model's, so the resolution slider chooses *whether* there is a second stage
-rather than how big it is, and the pill says which.
+**The upscale pill runs Lightricks' own trained x2 second stage on an LTX
+piece.** Not the H3 refine, which re-encodes the request at a larger canvas: LTX
+ships a trained x2 latent upscaler, so the piece samples at the native edge, the
+upscaler takes the video latent up, and a tail of the schedule runs again. The
+factor is the model's, so the resolution slider chooses *whether* there is a
+second stage rather than how big it is, and the pill says which.
 
-**The controls ask the piece which family it is.** The weights popover, the
-sampler row, the LoRA manager, the resolution and aspect pills and the mode
-badge all read the piece's family instead of the one family this pack used to
-have. A family that ships one transformer draws no route control, no per-LoRA
-checkpoint choice and no mode → checkpoint arrow, because there is nothing for
-any of them to say. Nothing about an H3 piece moves: the graphs it builds are
-byte-identical, and a workflow saved before any of this names no family and is
-H3 for good.
+**Every control asks the piece which family it is, so a single-transformer
+family draws no routing.** The weights popover, the sampler row, the LoRA
+manager, the resolution and aspect pills and the mode badge all read the piece's
+family instead of the one family this pack used to have. A family that ships one
+transformer draws no route control, no per-LoRA checkpoint choice and no mode →
+checkpoint arrow, because there is nothing for any of them to say. Nothing about
+an H3 piece moves: the graphs it builds are byte-identical, and a workflow saved
+before any of this names no family and is H3 for good.
 
-**A shot on LTX 2.5 can be as long as it wants to be.** The seconds pill grows
-an "auto" switch on a family that has weights to answer with — LTX's duration
-head, picked in the weights popover — and the model reads the shot's own prompt
-and chooses its length while it renders, inside the trained 1–20 s. It cannot be
-asked any earlier: the prediction runs the transformer's caption connectors over
-the encoded prompt, so it needs the whole model loaded. So the number on the
-pill becomes an estimate while auto is on, wears a `~`, and is what the strip's
-bar and the queue's length guard go on counting with. H3 has no such weights and
-so is not offered the switch.
+**A shot on LTX 2.5 can pick its own length, from the model's duration head.**
+The seconds pill grows an "auto" switch on a family that has weights to answer
+with — LTX's duration head, picked in the weights popover — and the model reads
+the shot's own prompt and chooses its length while it renders, inside the
+trained 1–20 s. It cannot be asked any earlier: the prediction runs the
+transformer's caption connectors over the encoded prompt, so it needs the whole
+model loaded. So the number on the pill becomes an estimate while auto is on,
+wears a `~`, and is what the strip's bar and the queue's length guard go on
+counting with. H3 has no such weights and so is not offered the switch.
 
-**A seam blends at the width its own model can encode.** The picker's short,
-medium and long are the runs a family's video VAE takes standalone, which on H3
-is 5, 22 and 39 frames and on LTX 2.5 is 9, 17 and 25. This matters more than it
-sounds: LTX crops a guide to its own grid silently, so an H3-shaped blend
-reached it as a single frame while the strip went on subtracting five — a seam
-that had quietly stopped being a seam. The strip's length readouts, the queue
-guard and the reference-length match now all ask the piece which family it is,
-for the same reason.
+**A seam blends at the run its own family's VAE can encode — 5/22/39 on H3,
+9/17/25 on LTX 2.5.** The picker's short, medium and long are the runs a
+family's video VAE takes standalone, which on H3 is 5, 22 and 39 frames and on
+LTX 2.5 is 9, 17 and 25. This matters more than it sounds: LTX crops a guide to
+its own grid silently, so an H3-shaped blend reached it as a single frame while
+the strip went on subtracting five — a seam that had quietly stopped being a
+seam. The strip's length readouts, the queue guard and the reference-length
+match now all ask the piece which family it is, for the same reason.
 
-**Merging cards on LTX 2.5 is native multishot, and now reads like it.** One
-generation holding several shots is what Lightricks means by multishot — this
-pack has always had the control, as `merge` and one-pass mode. What it did not
-have was the right *description*: every family's merged pass was assembled in
-H3's Context-IR form, so LTX received `[Shot 1] … [Shot 2] At 00:05.000, …`,
-which is markup its captions are defined by never containing. A merged LTX pass
-is one flowing paragraph now, its shots in play order, with nothing invented —
-you name the cut yourself ("a hard cut transitions to…"), which is what the
-model was taught to read. Nothing about an H3 pass changes. Past four cuts in
-one generation the pass wears the same off-distribution mark a too-long
-duration does, because four is what Lightricks' guidance prefers.
+**A merged pass on LTX 2.5 is written as native multishot prose instead of H3's
+markup.** One generation holding several shots is what Lightricks means by
+multishot — this pack has always had the control, as `merge` and one-pass mode.
+What it did not have was the right *description*: every family's merged pass was
+assembled in H3's Context-IR form, so LTX received `[Shot 1] … [Shot 2] At
+00:05.000, …`, which is markup its captions are defined by never containing. A
+merged LTX pass is one flowing paragraph now, its shots in play order, with
+nothing invented — you name the cut yourself ("a hard cut transitions to…"),
+which is what the model was taught to read. Nothing about an H3 pass changes.
+Past four cuts in one generation the pass wears the same off-distribution mark a
+too-long duration does, because four is what Lightricks' guidance prefers.
 
-**A blended seam no longer pins the frame it lands on.** Blending a seam hands
-the previous shot's last run of motion to the model as context; on top of that,
-the text encoder was also being shown that run's final frame and told to arrive
-at it exactly — a still pinned against the motion meant to carry through. Worse,
-it only happened on shots without references, so the same seam behaved
-differently depending on what else was attached to the card. A blend now speaks
-for itself. If you want the old behaviour — the blend *and* a hard statement
-about where it lands — the seam's blend picker has a switch for it, and an
-unblended seam is unchanged, since there the frame is the whole seam.
+**Fixed: a blended seam also pinned its final frame, but only on shots without
+references.** Blending a seam hands the previous shot's last run of motion to
+the model as context; on top of that, the text encoder was also being shown that
+run's final frame and told to arrive at it exactly — a still pinned against the
+motion meant to carry through. Worse, it only happened on shots without
+references, so the same seam behaved differently depending on what else was
+attached to the card. A blend now speaks for itself. If you want the old
+behaviour — the blend *and* a hard statement about where it lands — the seam's
+blend picker has a switch for it, and an unblended seam is unchanged, since
+there the frame is the whole seam.
 
 One knock-on worth knowing about: a blended seam with an end frame attached now
 correctly describes one picture to the model instead of claiming two.
@@ -1720,41 +1779,42 @@ says so by name instead of failing three hooks deep.
 
 ## 2.26
 
-**A long reference does not take the card down with it.** A reference video is
-`latent_t` copies of its own grid, not one, so ten seconds at `max` is around two
-hundred thousand conditioning tokens — longer than the clip being generated, and
-every row of it rides through every sampling step. At that length the widest
-tensor in the model is the first projection of each block's SwiGLU, gigabytes of
-it, and a branched LoRA held three of them at once: the layer's own output, a
-delta of the same shape, and the sum that allocated a third. That third
-allocation is what ended a render on a 32 GB card, on the second sampler pass
-where the branch bank is attached, having got through the first pass on the same
-shapes. The branch now adds into the tensor the layer already returned, so it
-costs the rank-width intermediate and nothing else. Unscheduled branches stay
-bit-identical; a scheduled one moves by the last bit, because the add happens
-inside the matmul now instead of after it.
+**Fixed: a long reference video could exhaust VRAM on the second sampler pass.**
+A reference video is `latent_t` copies of its own grid, not one, so ten seconds
+at `max` is around two hundred thousand conditioning tokens — longer than the
+clip being generated, and every row of it rides through every sampling step. At
+that length the widest tensor in the model is the first projection of each
+block's SwiGLU, gigabytes of it, and a branched LoRA held three of them at once:
+the layer's own output, a delta of the same shape, and the sum that allocated a
+third. That third allocation is what ended a render on a 32 GB card, on the
+second sampler pass where the branch bank is attached, having got through the
+first pass on the same shapes. The branch now adds into the tensor the layer
+already returned, so it costs the rank-width intermediate and nothing else.
+Unscheduled branches stay bit-identical; a scheduled one moves by the last bit,
+because the add happens inside the matmul now instead of after it.
 
 What that cannot do is make the sequence shorter, and a long reference at `max`
 still costs what it costs. Accelerators → chunked feed-forward splits the same
 arithmetic over the sequence and is free — it is arithmetic rearrangement, not a
 trade — and `match` on the reference itself is the other half of the answer.
 
-**Recommended: a ComfyUI carrying H3's seven special tokens.** The released
-tokenizer declares `<d>`, `</d>`, `<|cutoff|>`, `<|lyrics_start|>`,
-`<|lyrics_end|>`, `<|caption_start|>` and `<|caption_end|>` in its config and
-nowhere else, and ComfyUI did not add them, so the dialogue tags this pack writes
-were tokenized as two pieces of ordinary text apiece rather than as the token the
-model was trained on. [PR #15808](https://github.com/comfyanonymous/ComfyUI/pull/15808),
-merged 2026-08-22, adds them. Nothing here needs to change to get it — the prompt
-is handed to ComfyUI as text and tokenized there — but it is worth updating for,
+**Recommended: a ComfyUI carrying H3's seven special tokens (ComfyUI PR
+#15808).** The released tokenizer declares `<d>`, `</d>`, `<|cutoff|>`,
+`<|lyrics_start|>`, `<|lyrics_end|>`, `<|caption_start|>` and `<|caption_end|>`
+in its config and nowhere else, and ComfyUI did not add them, so the dialogue
+tags this pack writes were tokenized as two pieces of ordinary text apiece
+rather than as the token the model was trained on. [PR
+#15808](https://github.com/comfyanonymous/ComfyUI/pull/15808), merged
+2026-08-22, adds them. Nothing here needs to change to get it — the prompt is
+handed to ComfyUI as text and tokenized there — but it is worth updating for,
 and worth knowing that it changes results: a prompt carrying dialogue or lyrics
-renders differently afterwards on the same seed, in the direction of correctness.
-A prompt with no `<d>` in it is unaffected. There is no minimum version and this
-is not a floor; a ComfyUI without the PR runs everything here correctly, it just
-spells the dialogue tags worse.
+renders differently afterwards on the same seed, in the direction of
+correctness. A prompt with no `<d>` in it is unaffected. There is no minimum
+version and this is not a floor; a ComfyUI without the PR runs everything here
+correctly, it just spells the dialogue tags worse.
 
 
-**A duplicated segment does not copy the cast into the piece's references.** It
+**Cast entries on the reference shelf are marked and named, so a duplicated segment no longer looks like it copied them.** It
 never did — but that is what it looked like, and it was reported twice. A piece
 of one shot keeps its cast's photographs on that shot's own row; the moment a
 second card exists they move onto the piece, because card 2 cannot see card 1's
@@ -1770,27 +1830,28 @@ name rather than which prompt writes the handle. Removing one says whose face it
 takes with it. Marked rather than hidden, because a shelf that draws only some
 of what a piece carries is not an answer to what a piece carries.
 
-**A cast of five is five colours.** The identity hue — the colour a chip in the
-prompt shares with the file on the asset row and the card on the shelf — is
-worked out from the handle, and it was worked out by counting: `img-2` is the
-second hue, `ref-4` the fourth. A cast member's name counts nothing, so every
-member in every piece fell to the same first colour, and the shelf's five
-coloured edges were one colour five times. Names are now spread over the same
-eight by their letters. Files keep exactly the colours they had, because those
-are in every piece already; only the names move, and a member keeps theirs
-across a reload.
+**Cast members get their own identity colours instead of all sharing the first
+one.** The identity hue — the colour a chip in the prompt shares with the file
+on the asset row and the card on the shelf — is worked out from the handle, and
+it was worked out by counting: `img-2` is the second hue, `ref-4` the fourth. A
+cast member's name counts nothing, so every member in every piece fell to the
+same first colour, and the shelf's five coloured edges were one colour five
+times. Names are now spread over the same eight by their letters. Files keep
+exactly the colours they had, because those are in every piece already; only the
+names move, and a member keeps theirs across a reload.
 
 ## 2.25
 
-**A reference is encoded once, not once per prompt.** Attaching a video or a
-cast member means decoding it and pushing it through the VAE, and on a
-high-resolution source that is most of the wait before the first sampling step.
-None of it depends on the prompt — but a generation caches on its whole request,
-so editing one word paid for all of it again. References are now kept between
-renders, keyed on the file, the canvas they were encoded at and the VAE that
-encoded them; the prompt, the seed, the sampler, the LoRAs and the other
-references are all free to move. A cached reference is never opened, either:
-the decode is deferred, so a hit does not touch the disk the clip is on.
+**References are encoded once and cached between renders, keyed on the file,
+canvas and VAE.** Attaching a video or a cast member means decoding it and
+pushing it through the VAE, and on a high-resolution source that is most of the
+wait before the first sampling step. None of it depends on the prompt — but a
+generation caches on its whole request, so editing one word paid for all of it
+again. References are now kept between renders, keyed on the file, the canvas
+they were encoded at and the VAE that encoded them; the prompt, the seed, the
+sampler, the LoRAs and the other references are all free to move. A cached
+reference is never opened, either: the decode is deferred, so a hit does not
+touch the disk the clip is on.
 
 That makes `max` affordable. It was the better-looking setting you paid for on
 every render, and `match` was the answer; now it is paid for once per canvas and
@@ -1811,13 +1872,14 @@ travel a list of stops rather than a range, because nobody is choosing between
 holding, drawn against the thumb, so a ceiling is set against a real number
 instead of a guess. Past the thumb is over, and says what the next render drops.
 
-**The terminal says what the references are doing.** A reference being decoded
-and encoded is most of the wait before the first sampling step, and it used to
-happen in silence — which also meant there was no way to tell a working cache
-from a broken one. Each reference now says whether it was reused and from where,
-or that it is about to be encoded and then what that cost, and each generation
-ends with one line saying how many of each. A miss announces itself before it
-runs, not after, because the point is to explain a wait while it is happening:
+**The terminal reports what each reference cost and whether it came from the
+cache.** A reference being decoded and encoded is most of the wait before the
+first sampling step, and it used to happen in silence — which also meant there
+was no way to tell a working cache from a broken one. Each reference now says
+whether it was reused and from where, or that it is about to be encoded and then
+what that cost, and each generation ends with one line saying how many of each.
+A miss announces itself before it runs, not after, because the point is to
+explain a wait while it is happening:
 
     [MiniMax] @vid-1 video (max): encoding, nothing cached
     [MiniMax] @vid-1: decoding beach-plate.mp4
@@ -1826,7 +1888,7 @@ runs, not after, because the point is to explain a wait while it is happening:
     [MiniMax] @vid-1 soundtrack: reused from disk (420 KB)
     [MiniMax] references: 2 reused (18 MB), 1 encoded in 24.3 s
 
-**Cached references survive a restart, which is what they were for.** They did
+**Fixed: cached references could never be reused after a restart.** They did
 not. A reference's key includes the VAE that encoded it, and that was worked out
 by reading the loaded object — including `downscale_ratio`, which on the H3
 video VAE is a tuple holding a lambda. Its text is a memory address, so every
@@ -1836,21 +1898,21 @@ number 800, so reference *sound* hit every time, which is what made the failure
 visible at all. A checkpoint is now identified by its file, stamped like any
 other, and its name travels down the graph beside the socket it is on.
 
-**A fresh node opens on a seed of its own.** The default was 0, and this node
-pins the after-generate control to "fixed" — so 0 was not a starting point, it
-was the seed every first render anyone made ran on. Now a node dropped on a
-canvas draws its own. Not a "better" seed: golden seeds are found by ranking a
-thousand of them against one model's own output and the winners differ from
-model to model, so there is no number to borrow for H3. Every seed is one noise
-sample. What was wrong with 0 is that it was everybody's. A saved workflow is
-untouched — its seed lands after the node is built.
+**A fresh node opens on a seed of its own instead of 0.** The default was 0, and
+this node pins the after-generate control to "fixed" — so 0 was not a starting
+point, it was the seed every first render anyone made ran on. Now a node dropped
+on a canvas draws its own. Not a "better" seed: golden seeds are found by
+ranking a thousand of them against one model's own output and the winners differ
+from model to model, so there is no number to borrow for H3. Every seed is one
+noise sample. What was wrong with 0 is that it was everybody's. A saved workflow
+is untouched — its seed lands after the node is built.
 
-**Settings' third tab is called General.** It carries a Rendering group as well
+**Settings' third tab is renamed General.** It carries a Rendering group as well
 as a Nodes one, so "Nodes" was the name of half of it.
 
 ## 2.24
 
-**A shot can be made as long as the sound or the footage it is generated
+**A shot can be set to the length of the sound or footage it is generated
 against.** A card's length and a reference's never met: the pill set one, the
 segment editor set the other, and the difference was spent silently — every
 reference video is cut down to the card's own frame count on the way to the
@@ -1863,50 +1925,50 @@ they stand in for included; where a card carries several, the one offered is the
 one its length leads — a line of dialogue over a long plate the shot only takes
 a look from.
 
-**A matched card carries the length the model can actually make.** Frame counts
-come 17 apart, which is 0.708 s, and whole seconds do not cover that grid: the
-nearest card to a 6.6 s cue is 6.58 s, and rounding to 7 lands two thirds of a
-second late. Matching writes the real duration, the pill shows its two decimals,
-and a step from there returns to whole seconds.
+**A matched card carries a real frame-grid duration instead of a rounded
+second.** Frame counts come 17 apart, which is 0.708 s, and whole seconds do not
+cover that grid: the nearest card to a 6.6 s cue is 6.58 s, and rounding to 7
+lands two thirds of a second late. Matching writes the real duration, the pill
+shows its two decimals, and a step from there returns to whole seconds.
 
 ## 2.23
 
-**A reference the sentence stops naming is muted, not binned.** Deleting `@img-1`
-used to take the file, the handle, the narrowing and the trim with it. It stays
-on the row now, dimmed and out of the run — the same switch a LoRA carries, with
-a glyph beside the ✕ to work it by hand on any reference.
+**A reference the prompt stops naming is muted rather than deleted.** Deleting
+`@img-1` used to take the file, the handle, the narrowing and the trim with it.
+It stays on the row now, dimmed and out of the run — the same switch a LoRA
+carries, with a glyph beside the ✕ to work it by hand on any reference.
 
-**The reference row is the same row in both fullscreen views.** The simple view
-hid the cast's own pictures; a row that draws only some of what is attached is
-not an answer you can trust once a file can be sitting there muted.
+**The reference row shows the same files in both fullscreen views.** The simple
+view hid the cast's own pictures; a row that draws only some of what is attached
+is not an answer you can trust once a file can be sitting there muted.
 
-**Pressing a name in the prompt opens the cast drawer again after the card is
-rebuilt.** Which view a card is drawn in was remembered on the editor, which is
-rebuilt whenever the segment under it changes — so in the simple view the press
-put up a drawer that view hides, and only a round trip through the full view
-cured it. The body remembers it now.
+**Fixed: pressing a name in the prompt stopped opening the cast drawer after the
+card was rebuilt.** Which view a card is drawn in was remembered on the editor,
+which is rebuilt whenever the segment under it changes — so in the simple view
+the press put up a drawer that view hides, and only a round trip through the
+full view cured it. The body remembers it now.
 
-**The next shot is a pill in the pill row.** Growing a piece a second shot was a
-dashed rule across the whole body, which the simple view hid outright — leaving
-the face people write single shots on with no way to add one. It is `+ Add shot`
-in the tail of the row, on both faces.
+**"+ Add shot" is a pill in the row, on both card faces.** Growing a piece a
+second shot was a dashed rule across the whole body, which the simple view hid
+outright — leaving the face people write single shots on with no way to add one.
+It is `+ Add shot` in the tail of the row, on both faces.
 
 ## 2.22
 
-**Duplicating a card no longer leaves a second copy of a cast member's picture
-behind.** A cast member's files live on the card while a piece is one shot, and
-move into the project references the moment it grows a second one — they have to
-be somewhere every card can see them. Duplicating the only shot does both at
-once: the copy makes the piece a strip, and the move that follows only ever
-looked at card 1. So the original's picture was promoted to `@ref-3` and the
-clone kept a second copy of the same file under the handle the original had
-worn, claimed by no member, invisible in the cast shelf and paid for again at
-queue time. The copy now follows the file it is a copy of, and prose that named
-it follows the rename. Reported in #27.
+**Fixed: duplicating a card left an unclaimed second copy of a cast member's
+picture (#27).** A cast member's files live on the card while a piece is one
+shot, and move into the project references the moment it grows a second one —
+they have to be somewhere every card can see them. Duplicating the only shot
+does both at once: the copy makes the piece a strip, and the move that follows
+only ever looked at card 1. So the original's picture was promoted to `@ref-3`
+and the clone kept a second copy of the same file under the handle the original
+had worn, claimed by no member, invisible in the cast shelf and paid for again
+at queue time. The copy now follows the file it is a copy of, and prose that
+named it follows the rename. Reported in #27.
 
-**The fullscreen editor's Render button reaches its node on every ComfyUI
-frontend.** The button queues one node rather than the whole graph, and the
-argument that says which node means two different things depending on which
+**Fixed: the fullscreen editor's Render button was refused on some ComfyUI
+frontends (#27).** The button queues one node rather than the whole graph, and
+the argument that says which node means two different things depending on which
 frontend reads it: 1.47 and 1.49 and later take `{queueNodeIds: [...]}`, while
 1.44, 1.45 and 1.48 take the whole argument *as* the list and forward it to the
 server untouched. On those the server looked for the node id among the keys of
@@ -1914,23 +1976,24 @@ an object, counted no output nodes, and refused the prompt — "The prompt has n
 outputs", about a graph whose output node was on screen. It is sent as a bare
 array now, which is the one shape all of them read alike. Reported in #27.
 
-**And a refused prompt gives the button back.** ComfyUI catches a refusal
-itself — it puts the dialog up and answers as though nothing went wrong — so the
-row went on saying "Sampling" over a render that was never queued, and the only
-thing left to press was Cancel. The row now spends its optimism on the queue
-actually accepting something.
+**A refused prompt hands the Render button back instead of leaving the row
+saying "Sampling".** ComfyUI catches a refusal itself — it puts the dialog up
+and answers as though nothing went wrong — so the row went on saying "Sampling"
+over a render that was never queued, and the only thing left to press was
+Cancel. The row now spends its optimism on the queue actually accepting
+something.
 
-**The turbo lead-in says what it needs instead of failing deep in the sampler.**
-Its second sitting starts with the noise switched off, and ComfyUI before
-2026-08-11 built that noise from the picture alone — H3's soundtrack was not in
-it, and the first step died on a tensor size that named neither the lead-in nor
-the fix. The render now stops before anything loads, with the version to update
-to and the setting to turn off.
+**The turbo lead-in states what it needs up front instead of failing deep in the
+sampler.** Its second sitting starts with the noise switched off, and ComfyUI
+before 2026-08-11 built that noise from the picture alone — H3's soundtrack was
+not in it, and the first step died on a tensor size that named neither the
+lead-in nor the fix. The render now stops before anything loads, with the
+version to update to and the setting to turn off.
 
 ## 2.21
 
-**This pack takes its colours from ComfyUI's palette instead of drawing its own
-dark one over the top of it.** Every colour in the pack was a literal — around
+**The pack takes its colours from ComfyUI's palette, so it follows any theme
+rather than forcing dark.** Every colour in the pack was a literal — around
 three hundred of them across the stylesheet — written for a dark desk and drawn
 unchanged on a light one, so the Appearance settings had no say over any node
 this pack puts on the canvas. All of them now derive from two variables ComfyUI
@@ -1946,35 +2009,36 @@ something rather than describe the palette. The one concession is that the amber
 is drawn a shade deeper on a pale palette, because amber on white is not a
 colour a word can be written in.
 
-**The Appearance tab has a text size.** One multiplier over every size in the
-pack — the node faces, the fullscreen editor, the timeline, the picker, and the
-settings page itself, which is why the words move as you choose. A multiplier
-rather than a set of named sizes because the sizes were never a scale: fifteen
-distinct values, each chosen against the thing beside it. Text and the controls
-that carry it move with it; the room around them and the picture do not, which
-is the line between a text size and a magnifier. Nothing of ComfyUI's own moves
-with it.
+**A text size setting on the Appearance tab, over every size in the pack.** One
+multiplier over every size in the pack — the node faces, the fullscreen editor,
+the timeline, the picker, and the settings page itself, which is why the words
+move as you choose. A multiplier rather than a set of named sizes because the
+sizes were never a scale: fifteen distinct values, each chosen against the thing
+beside it. Text and the controls that carry it move with it; the room around
+them and the picture do not, which is the line between a text size and a
+magnifier. Nothing of ComfyUI's own moves with it.
 
-**It also has a surface separation.** The surface ladder is proportional to a
-palette's own contrast, and some palettes have very little to be proportional
-to: on Github, Nord and Solarized the four surfaces came out close enough
-together to read as two. One multiplier pushes all four rungs further off the
-ground or pulls them closer, and it works on any palette, including ones that do
-not exist yet.
+**A surface separation setting, for palettes whose own contrast is slight.** The
+surface ladder is proportional to a palette's own contrast, and some palettes
+have very little to be proportional to: on Github, Nord and Solarized the four
+surfaces came out close enough together to read as two. One multiplier pushes
+all four rungs further off the ground or pulls them closer, and it works on any
+palette, including ones that do not exist yet.
 
-**And a colour setting, for the one case following the desk gets wrong.** A
-frame judged against white is judged against the wrong thing, which is why the
-tools that cut and grade are dark. "Dark in fullscreen" keeps a dark ground for
-the fullscreen editor whatever the desk is set to. It stops there deliberately:
-a node body sits inside a node ComfyUI draws in its own palette, so pinning the
-body dark on a light desk does not give you a dark editor, it gives you a dark
-island in a white card. Node faces keep following the palette.
+**A "Dark in fullscreen" setting, so a frame is judged against a dark ground on
+a light desk.** A frame judged against white is judged against the wrong thing,
+which is why the tools that cut and grade are dark. "Dark in fullscreen" keeps a
+dark ground for the fullscreen editor whatever the desk is set to. It stops
+there deliberately: a node body sits inside a node ComfyUI draws in its own
+palette, so pinning the body dark on a light desk does not give you a dark
+editor, it gives you a dark island in a white card. Node faces keep following
+the palette.
 
 ## 2.20
 
-**Casting a look no longer files a copy of its frame in your input folder.** The
-style atlas ships its thousand frames inside the pack, but casting one used to
-fetch the picture back out of the browser and upload it into
+**Casting a look from the style atlas no longer copies its frame into your input
+folder.** The style atlas ships its thousand frames inside the pack, but casting
+one used to fetch the picture back out of the browser and upload it into
 `ComfyUI/input/style_refs/` — purely so it would have the kind of address the
 rest of the pack understands, which is a path under input/. The copies were
 permanent and one per look ever cast: a shelf of catalogue frames in the picker,
@@ -1987,50 +2051,50 @@ to delete once no saved workflow points into it.
 
 ## 2.19
 
-**The tool rail is a set of columns rather than a row of tiles with a gap
-between them.** A tool is a square with a label under it, and the label is the
-wider of the two — "Add image" is half again the width of the box above it — so
-a gap tuned to the squares left barely two pixels between one word and the next,
-and the rail read as one run of prose with pictures over it. Every tool now
-occupies a column of the same width, wide enough that the space between two
-labels is space. The squares keep their rhythm; the words get their own.
+**The tool rail lays tools out in columns, so the labels stop running
+together.** A tool is a square with a label under it, and the label is the wider
+of the two — "Add image" is half again the width of the box above it — so a gap
+tuned to the squares left barely two pixels between one word and the next, and
+the rail read as one run of prose with pictures over it. Every tool now occupies
+a column of the same width, wide enough that the space between two labels is
+space. The squares keep their rhythm; the words get their own.
 
-**In the window the rail is a grid, and it wraps by tool.** Two things were
+**In the window the tool rail is a grid that wraps by tool.** Two things were
 wrong with it as a wrapping row. Each row spaced its own contents, so a row of
-eight and a row of three shared no vertical line anywhere. And the two clusters —
-what writes this shot, and what outlives it — were unbreakable blocks, so the
+eight and a row of three shared no vertical line anywhere. And the two clusters
+— what writes this shot, and what outlives it — were unbreakable blocks, so the
 machine's three fell to a line of their own the moment the column narrowed,
 leaving a hole across the end of the row above them. Fixed tracks and clusters
 set to display:contents answer both. The one-line rail on the simple card keeps
 its hairline between the clusters; a rail that wraps by design cannot mark
 anything with one, so it does not try.
 
-**The refiner's chevron stays in its corner at every tile size.** It was placed
-by two offsets that suited the node face's 56px square, and the window draws a
-44px one — so in the shell it hung out past the tile's right edge, over the gap
-beside it. The tile is a token now (`--mmc-tool-tile`), the chevron is measured
-from it, and the three places that draw a smaller tile set the token rather than
-a width.
+**Fixed: the refiner's chevron hung outside the tile at the window's smaller
+size.** It was placed by two offsets that suited the node face's 56px square,
+and the window draws a 44px one — so in the shell it hung out past the tile's
+right edge, over the gap beside it. The tile is a token now (`--mmc-tool-tile`),
+the chevron is measured from it, and the three places that draw a smaller tile
+set the token rather than a width.
 
-**On the simple card the cast drawer is gone until you ask for it, and gone
-again when you ask twice.** Clicking a name in the sentence is the only thing
-that puts it there, and clicking the same name takes it away — that second press
-had stopped working. The body the card borrows is the node's own, `nodeId` and
-all, so the question "is the drawer a row of me?" was answered by asking whether
-there was a node behind it, which is yes for both views and true of only one.
-The card says which view it is now, and the answer decides both halves of the
-gesture. While the drawer was up-but-hidden it also kept the gap either side of
-it: a host with a hidden row in it is still a row of the column, so the card
-carried the drawer's space without the drawer. Empty hosts stopped costing a gap
-generally, which is where the rest of the slack over the prompt came from.
+**Fixed: on the simple card, clicking a name a second time did not close the
+cast drawer.** Clicking a name in the sentence is the only thing that puts it
+there, and clicking the same name takes it away — that second press had stopped
+working. The body the card borrows is the node's own, `nodeId` and all, so the
+question "is the drawer a row of me?" was answered by asking whether there was a
+node behind it, which is yes for both views and true of only one. The card says
+which view it is now, and the answer decides both halves of the gesture. While
+the drawer was up-but-hidden it also kept the gap either side of it: a host with
+a hidden row in it is still a row of the column, so the card carried the
+drawer's space without the drawer. Empty hosts stopped costing a gap generally,
+which is where the rest of the slack over the prompt came from.
 
-**The prompt box says what "/" does.** It answers a slash with the cast
-library, the input folder and the style atlas — somewhere to bring a thing in
-from, where "@" cites what is already attached — and nothing on screen said so.
-The placeholder named one opening and read as the complete list of what the box
-does; it names both now.
+**The prompt box's placeholder says what "/" does as well as "@".** It answers a
+slash with the cast library, the input folder and the style atlas — somewhere to
+bring a thing in from, where "@" cites what is already attached — and nothing on
+screen said so. The placeholder named one opening and read as the complete list
+of what the box does; it names both now.
 
-**And the pre-stage and the shot are the same height.** They were two cards
+**The pre-stage and the shot are drawn the same height.** They were two cards
 centred on the ground, each as tall as its own contents, so the step before the
 shot ended somewhere up the side of it and the pair read as debris rather than
 as a row. They are wrapped in a row of their own now, which is only as tall as
@@ -2039,11 +2103,11 @@ the button rather than below it, so Render still and Render sit on one line.
 
 ## 2.18
 
-**A subject is a list of features now, and each one can be changed on its own.**
-The reference guide writes a subject as a named list — "with thick white fur,
-pointed ears, a dark nose, and a curved tail" — and names those same features
-again in `retention_analysis`. A cast card holds that list, and every line in it
-is either kept or has an arrow in it:
+**A cast subject is a list of features, and each one can be kept or changed on
+its own.** The reference guide writes a subject as a named list — "with thick
+white fur, pointed ears, a dark nose, and a curved tail" — and names those same
+features again in `retention_analysis`. A cast card holds that list, and every
+line in it is either kept or has an arrow in it:
 
     long dark hair                 kept
     a blue cardigan             →  a red waxed jacket
@@ -2055,43 +2119,45 @@ is "the referenced content is still used, but some defined characteristics are
 changed" and a characteristic has to be defined before it can be changed, and the
 retention line says which are retained and what the changed one became.
 
-**The relationship marker is derived instead of picked.** All features kept is
-`fully_preserved`; any feature changed is `partially_preserved`; taking somebody's
-place is `attribute_transfer`. It was a menu of four words that changed nothing
-but the word — picking *partly kept* wrote `partially_preserved` above a sentence
-saying everything was retained, which is a marker you can set and a sentence that
+**The relationship marker is derived from the features you changed instead of
+picked from a menu.** All features kept is `fully_preserved`; any feature
+changed is `partially_preserved`; taking somebody's place is
+`attribute_transfer`. It was a menu of four words that changed nothing but the
+word — picking *partly kept* wrote `partially_preserved` above a sentence saying
+everything was retained, which is a marker you can set and a sentence that
 ignores you. The override survives as the only way to reach `weak_reference`,
 which nothing can infer from the cast.
 
 **Nothing negative is written into `retention_analysis` any more.** Those lines
 used to end "...and the source picture's background, palette, lighting, pose and
-action are not", which is a sentence borrowed from what the compiler writes for a
-*file*. Section 4.1 closes by saying not to treat what the target video adds as a
-loss of reference fidelity, and there is not one negative clause in any of the
-guide's four retention examples. `<Subject N>` means content abstracted from a
-reference asset — section 2.1 — so the abstraction is already in the label, and
-`<Picture N>` is the label that denotes a file and needs saying which parts of it
-count.
+action are not", which is a sentence borrowed from what the compiler writes for
+a *file*. Section 4.1 closes by saying not to treat what the target video adds
+as a loss of reference fidelity, and there is not one negative clause in any of
+the guide's four retention examples. `<Subject N>` means content abstracted from
+a reference asset — section 2.1 — so the abstraction is already in the label,
+and `<Picture N>` is the label that denotes a file and needs saying which parts
+of it count.
 
-**"Takes the place of" is a row on the card, not a menu item behind a thumbnail.**
-Writing *@vera should replace the bench in @vid-1* in the prompt does nothing
-structural: it lands in `detailed_description` and the two retention lines beside
-it go on saying the subject is preserved whole and the clip is preserved whole,
-with nothing connecting them. The row is offered on every open card whenever the
-piece holds a clip to edit or continue, and filling it in is what produces the
-`attribute_transfer` line — their features transferred onto the bench in
-`<Video 1>`, whose framing, camera work and action are kept.
+**"Takes the place of" is a row on the card rather than a menu item behind a
+thumbnail.** Writing *@vera should replace the bench in @vid-1* in the prompt
+does nothing structural: it lands in `detailed_description` and the two
+retention lines beside it go on saying the subject is preserved whole and the
+clip is preserved whole, with nothing connecting them. The row is offered on
+every open card whenever the piece holds a clip to edit or continue, and filling
+it in is what produces the `attribute_transfer` line — their features
+transferred onto the bench in `<Video 1>`, whose framing, camera work and action
+are kept.
 
-**A name in the sentence opens, and closes, whoever it names — and this time it
-is tested.** Clicking `@vera` or `@lego_brickfilm` in the prompt has been meant
-to open them on the cast shelf for several releases and has kept coming back
-dead. The handler was never the problem: `PromptBox.refresh` rewrote the box's
+**Fixed: clicking a name in the prompt no longer failed to open the cast
+shelf.** Clicking `@vera` or `@lego_brickfilm` in the prompt has been meant to
+open them on the cast shelf for several releases and has kept coming back dead.
+The handler was never the problem: `PromptBox.refresh` rewrote the box's
 children on every render, so the chip a press started on was detached before the
-browser could finish the click on it. A press is a pointerdown and a click on the
-same element, and any render at all — a pill moved, a probe answered, a commit
-landed — took that element away mid-press. No error, nothing in the console, a
-chip that simply does nothing. The box now leaves itself alone when the chips it
-would build are the ones already in it.
+browser could finish the click on it. A press is a pointerdown and a click on
+the same element, and any render at all — a pill moved, a probe answered, a
+commit landed — took that element away mid-press. No error, nothing in the
+console, a chip that simply does nothing. The box now leaves itself alone when
+the chips it would build are the ones already in it.
 
 Nothing caught it because the test drove `openCastMember` directly rather than
 performing the press, and because the DOM shim under those tests could not match
@@ -2117,15 +2183,16 @@ is a red waxed jacket — two sections of one prompt disagreeing about one perso
 
 ## 2.17
 
-**The prompt box shows what is actually sent.** The sentence you type has never
-been the prompt H3 reads — the compiler wraps it in the reference guide's
-sections — and until now the only way to find out what that came to was to read
-the console. There is a rail under the box now — *what the model reads* — and it
-opens onto the finished prompt for the pass this shot lands in, set out section
-by section under the field names the model is handed. It comes from the compiler
-itself rather than being rebuilt in the frontend, so there is no version of this
-where the two disagree. On a timeline it follows the merge — cards merged into
-one pass share one prompt — and it says which pass you are looking at.
+**The prompt box can show the finished prompt the model actually reads, section
+by section.** The sentence you type has never been the prompt H3 reads — the
+compiler wraps it in the reference guide's sections — and until now the only way
+to find out what that came to was to read the console. There is a rail under the
+box now — *what the model reads* — and it opens onto the finished prompt for the
+pass this shot lands in, set out section by section under the field names the
+model is handed. It comes from the compiler itself rather than being rebuilt in
+the frontend, so there is no version of this where the two disagree. On a
+timeline it follows the merge — cards merged into one pass share one prompt —
+and it says which pass you are looking at.
 
 It opens *under* your sentence, not in place of it. The first cut of this was a
 pair of tabs that swapped the two, which was wrong three ways: the tabs sat on
@@ -2146,38 +2213,39 @@ is the whole rebuttal, since a label the prompt never defines is a label
 pointing at nothing. There is no reading on which the old default was the better
 prompt, so there is no longer a switch for it.
 
-**A reference generation is written in the reference form, whether or not you
-refine.** The three sections that are not the description — `subject_definitions`,
-`summary`, `retention_analysis` — used to arrive only from a rewrite, so a piece
-queued without one went out as a bare sentence with `<Picture 1>` substituted
-into it: no wrapper, no definitions, nothing saying what kind of job it was. All
-three are derived from what you already declared. The task-type prefix comes off
-the clips' scope dials (`edit` is `video editing`, a camera reference is
-`reference generation`, and the guide says so itself); the definitions come off
-the chips; the retention markers come off what each label was declared to lend.
-Every label defined now gets a retention line, which section 4.1 asks for and
-nothing wrote.
+**A reference generation is written in the reference form whether or not you
+refine it.** The three sections that are not the description —
+`subject_definitions`, `summary`, `retention_analysis` — used to arrive only
+from a rewrite, so a piece queued without one went out as a bare sentence with
+`<Picture 1>` substituted into it: no wrapper, no definitions, nothing saying
+what kind of job it was. All three are derived from what you already declared.
+The task-type prefix comes off the clips' scope dials (`edit` is `video
+editing`, a camera reference is `reference generation`, and the guide says so
+itself); the definitions come off the chips; the retention markers come off what
+each label was declared to lend. Every label defined now gets a retention line,
+which section 4.1 asks for and nothing wrote.
 
 What this does not do is write the guide's 350–500 words of shot description. No
 rule turns one sentence into that. It builds the document; Refine still writes
 the prose, and a refined section replaces the derived one.
 
-**The form follows what the piece holds, not which checkpoint it routed to.** It
-used to be built only for REF2VA, so a cast in a text-only generation got two of
-the sections with the base form's body field — a hybrid neither guide describes.
-People run reference-form prompts against T2VA and get what they asked for; the
-weights do not police the field name. A piece with something to declare is now
-written in the form built for declaring things, whatever it is about to be
-encoded as. A bare sentence with nothing to declare still gets the base form.
+**The prompt form follows what the piece holds instead of which checkpoint it
+routed to.** It used to be built only for REF2VA, so a cast in a text-only
+generation got two of the sections with the base form's body field — a hybrid
+neither guide describes. People run reference-form prompts against T2VA and get
+what they asked for; the weights do not police the field name. A piece with
+something to declare is now written in the form built for declaring things,
+whatever it is about to be encoded as. A bare sentence with nothing to declare
+still gets the base form.
 
-**Two of the four retention markers were not in the guide.** The cast path wrote
-`transferred` and `reused`; the guide's fixed set is `fully_preserved`,
-`partially_preserved`, `attribute_transfer` and `weak_reference`. So the one
-field whose vocabulary the guide spells in English in every language was being
-handed a token the weights never saw — and on exactly the case that needs it
-most, since a subject who stands in for somebody derives that marker. The
-refiner's glossary and `prompts/modes/ref2va.txt` always had the right four;
-this is the third copy agreeing with them.
+**Fixed: two of the four retention markers were words the guide does not use.**
+The cast path wrote `transferred` and `reused`; the guide's fixed set is
+`fully_preserved`, `partially_preserved`, `attribute_transfer` and
+`weak_reference`. So the one field whose vocabulary the guide spells in English
+in every language was being handed a token the weights never saw — and on
+exactly the case that needs it most, since a subject who stands in for somebody
+derives that marker. The refiner's glossary and `prompts/modes/ref2va.txt`
+always had the right four; this is the third copy agreeing with them.
 
 **Somebody can stand in for a person in more than one clip.** *They take
 somebody's place in this* held a single file, so the same person in a medium
@@ -2196,11 +2264,12 @@ refused for a file the citation should have brought with it.
 
 ## 2.16
 
-**The picture stopped moving.** The fullscreen editor kept every finished render
-and the live stage in one scrolling column, so where the picture you were waiting
-for sat was a function of how many you had already made: centred while the column
-was empty, shoved to the floor by the first take, further down with every one
-after it. The thing you were watching was the thing that would not hold still.
+**The fullscreen editor holds the picture still, with history on a shelf under
+the window.** The fullscreen editor kept every finished render and the live
+stage in one scrolling column, so where the picture you were waiting for sat was
+a function of how many you had already made: centred while the column was empty,
+shoved to the floor by the first take, further down with every one after it. The
+thing you were watching was the thing that would not hold still.
 
 The two no longer share an axis. The picture region takes the whole height and
 centres what is in it, always, and history runs left to right along a shelf under
@@ -2210,50 +2279,55 @@ out of the picture and not out of the card, and they would have sat half a shelf
 apart for as long as there was any history at all. It is reserved from the first
 press rather than grown on the second take, for the same reason.
 
-**And the clock keeps its place when it stops.** The elapsed readout counted up
-through the render and then vanished at the moment it became the answer. It now
-holds the total, in the same corner, in the same type — and every past take on the
-shelf is captioned with what it cost, which is the one thing about a finished
-render you cannot see by looking at it. The filename moved to the tooltip: along
-a row of thumbnails it was the same truncated stem eight times over.
+**The elapsed clock keeps its total when the render stops, and every take is
+captioned with its cost.** The elapsed readout counted up through the render and
+then vanished at the moment it became the answer. It now holds the total, in the
+same corner, in the same type — and every past take on the shelf is captioned
+with what it cost, which is the one thing about a finished render you cannot see
+by looking at it. The filename moved to the tooltip: along a row of thumbnails
+it was the same truncated stem eight times over.
 
-**A corner you can pull.** The live picture has a grip at its top right — drag to
-size it between 40% and full, with a little gravity at 50, 75 and 100; double-click
-for full; arrow keys for five points at a time. It grows and shrinks about its own
-centre, so nothing else in the window moves, and the size is remembered the way the
-Simple/Full switch is. The bottom edge of a render is spoken for three times over —
-the progress rule, the readout, a finished clip's own transport — so the handle is
-at the top, where there was nothing.
+**A grip on the live picture's corner sizes it between 40% and full.** The live
+picture has a grip at its top right — drag to size it between 40% and full, with
+a little gravity at 50, 75 and 100; double-click for full; arrow keys for five
+points at a time. It grows and shrinks about its own centre, so nothing else in
+the window moves, and the size is remembered the way the Simple/Full switch is.
+The bottom edge of a render is spoken for three times over — the progress rule,
+the readout, a finished clip's own transport — so the handle is at the top,
+where there was nothing.
 
-**One row, one kind of object.** The readout over the picture used to hold two
-vocabularies: Gallery was a pill and everything beside it was bare text on a
-gradient scrim, so a finished render carried a dark band across its bottom third
-to make three words legible. Every chip now brings its own small ground and the
-scrim is gone — the picture ends where the picture ends. The card the picture sits
-in was carrying a shadow written for the canvas while the card beside it carried
-another, so the two objects in the window sat at two different heights; they
-match now, radius included, and the outline drawn before the first render is the
-same shape as the picture that replaces it.
+**The readout over the picture is one kind of chip, and the scrim behind it is
+gone.** The readout over the picture used to hold two vocabularies: Gallery was
+a pill and everything beside it was bare text on a gradient scrim, so a finished
+render carried a dark band across its bottom third to make three words legible.
+Every chip now brings its own small ground and the scrim is gone — the picture
+ends where the picture ends. The card the picture sits in was carrying a shadow
+written for the canvas while the card beside it carried another, so the two
+objects in the window sat at two different heights; they match now, radius
+included, and the outline drawn before the first render is the same shape as the
+picture that replaces it.
 
-**Portrait renders got their own shape back.** A card that hugs a contained image
-is not something CSS can work out on its own — a parent's shrink-to-fit width
-comes from the image's intrinsic width and ignores any cap on its height — so a
-portrait render sat in the middle of a box as wide as the file, letterboxed by
-its own frame. The stage now measures the media when it loads and hands the ratio
-over, which is the one fact the stylesheet could not derive.
+**Fixed: portrait renders sat letterboxed in a box as wide as the file.** A card
+that hugs a contained image is not something CSS can work out on its own — a
+parent's shrink-to-fit width comes from the image's intrinsic width and ignores
+any cap on its height — so a portrait render sat in the middle of a box as wide
+as the file, letterboxed by its own frame. The stage now measures the media when
+it loads and hands the ratio over, which is the one fact the stylesheet could
+not derive.
 
 ## 2.15
 
-**A look you cast is a look you can click.** Three things were wrong with it and
-all three were silent. The atlas was only read when its tab was *pressed*, so
-opening the library straight onto Style — which is what the new `/` door does
-every time — left the grid on its empty line, and that line said "The style atlas
-could not be read" about a read nobody had started. A look is cast under a handle
-that has to open on a letter, and a quarter of the atlas opens on a number, so
-"2D cutout-paper stop-motion" arrived as `@subject` while the button that cast it
-promised `@2d_cutout_paper` in its own tooltip. And nothing wrote the name into
-the sentence: the tooltip told you to go and type it yourself, so there was no
-chip to click even when the name was right.
+**Fixed: casting a look from the style atlas produced a broken handle and wrote
+no chip.** Three things were wrong with it and all three were silent. The atlas
+was only read when its tab was *pressed*, so opening the library straight onto
+Style — which is what the new `/` door does every time — left the grid on its
+empty line, and that line said "The style atlas could not be read" about a read
+nobody had started. A look is cast under a handle that has to open on a letter,
+and a quarter of the atlas opens on a number, so "2D cutout-paper stop-motion"
+arrived as `@subject` while the button that cast it promised `@2d_cutout_paper`
+in its own tooltip. And nothing wrote the name into the sentence: the tooltip
+told you to go and type it yourself, so there was no chip to click even when the
+name was right.
 
 Now the frame casts itself in: `@look_2d_cutout_paper` leads the prompt as a
 chip, on the prompt the node is actually showing. Click it to edit the look,
@@ -2262,7 +2336,7 @@ look replaces the first rather than stacking on it, which is the promise the old
 descriptor-swap made and this had quietly stopped keeping.
 
 
-**A name is a door, in every box that draws one.** Clicking somebody's name in
+**Clicking a name in the sentence opens their card in every prompt box, not just the Creator's.** Clicking somebody's name in
 the sentence opens their card — that was true on the Creator's face and nowhere
 else, so the Timeline window's standing prompt and a card of the strip both drew
 chips that changed the cursor and then did nothing. A card's editor was worse
@@ -2271,19 +2345,21 @@ deleting a chip there took nobody out of anything. Both are wired now, and a
 card knows whose cast it is holding. A style is a subject like any other — it
 opens the same shelf and leaves the same way, by deleting its name.
 
-**One reference, one door.** A reference chip used to carry four small buttons —
-what of the file is the reference, what part of the clip, its soundtrack, its
-encode size — and the simple fullscreen view hid any of them still holding a
-default. That is exactly the answer you are trying to leave, so a picture
-attached in that view could not be made a style reference at all. The chip now
-says only what somebody *set*, and its handle opens a card with all of it: the
-same card on a node face and in either fullscreen view.
+**A reference chip shows only what you set, and its handle opens one card with
+all of it.** A reference chip used to carry four small buttons — what of the
+file is the reference, what part of the clip, its soundtrack, its encode size —
+and the simple fullscreen view hid any of them still holding a default. That is
+exactly the answer you are trying to leave, so a picture attached in that view
+could not be made a style reference at all. The chip now says only what somebody
+*set*, and its handle opens a card with all of it: the same card on a node face
+and in either fullscreen view.
 
-**`/` — where a thing comes from.** `@` cites what this piece already has. `/`
-is the layer above it: the style atlas, the cast library, the input folder.
-Typing after it searches all three at once, so `/cla` finds Clara, Claymation
-*and* clay-turntable.png without choosing a branch first; the arrow keys go in
-and back out. Every row ends in a chip.
+**`/` in the prompt box searches the style atlas, the cast library and the input
+folder at once.** `@` cites what this piece already has. `/` is the layer above
+it: the style atlas, the cast library, the input folder. Typing after it
+searches all three at once, so `/cla` finds Clara, Claymation *and*
+clay-turntable.png without choosing a branch first; the arrow keys go in and
+back out. Every row ends in a chip.
 
 The Style branch searches all 941 looks by their whole descriptor — so
 "grindhouse", "needle-felted" and "anamorphic" find their entries from the
@@ -2293,20 +2369,21 @@ writes its name where you typed the slash. The atlas is read the first time a
 slash asks about looks and never again, and the way into the full catalogue is
 still the last row of the branch.
 
-**The Sampling settings toggle works on the Timeline and the pre-stage.** The
-simple view folds the sampler row away by a class on its host, and only the
-Creator body carried one: the Timeline mounted its bar straight onto the root and
-the pre-stage's host had no class at all. Pressing the button on either did
-nothing, which is what the screenshot showed.
+**Fixed: the Sampling settings toggle did nothing on the Timeline and the
+pre-stage.** The simple view folds the sampler row away by a class on its host,
+and only the Creator body carried one: the Timeline mounted its bar straight
+onto the root and the pre-stage's host had no class at all. Pressing the button
+on either did nothing, which is what the screenshot showed.
 
 ## 2.14
 
-**The node can have the whole window now.** Settings → MiniMax H3 → Editor →
-Fullscreen, or Ctrl+Shift+M, and the Creator's face stops being a rectangle on a
-canvas and becomes the screen: the body in a column at its own width, the picture
-beside it at its own size rather than scaled to the zoom, and the PreStage — when
-one is spawned — in a column of its own to the left, still the direction the
-hand-off runs. Escape and the button in the corner go back to the graph.
+**The node can take the whole window: Ctrl+Shift+M, or Settings → Editor →
+Fullscreen.** Settings → MiniMax H3 → Editor → Fullscreen, or Ctrl+Shift+M, and
+the Creator's face stops being a rectangle on a canvas and becomes the screen:
+the body in a column at its own width, the picture beside it at its own size
+rather than scaled to the zoom, and the PreStage — when one is spawned — in a
+column of its own to the left, still the direction the hand-off runs. Escape and
+the button in the corner go back to the graph.
 
 Nothing is duplicated to do it. The body is the same element the node mounts, the
 blob is the same hidden widget, and the node stays in the graph the whole time —
@@ -2316,46 +2393,50 @@ The node's own title is the piece's name, because LiteGraph already lets you
 rename it and already saves it, and inventing a second name would have meant two
 that could disagree.
 
-**The title bar wears the pack's own mark.** It was drawing `timeline`, a rail
-glyph that means "the strip" everywhere else it appears, next to the words
-MiniMax H3. It is the icon the Comfy registry lists the pack under now — the
-same artwork, inlined rather than fetched, so the shell does not go to GitHub to
-draw its own corner.
+**The fullscreen title bar wears the pack's own mark instead of the timeline
+glyph.** It was drawing `timeline`, a rail glyph that means "the strip"
+everywhere else it appears, next to the words MiniMax H3. It is the icon the
+Comfy registry lists the pack under now — the same artwork, inlined rather than
+fetched, so the shell does not go to GitHub to draw its own corner.
 
-**A Render button, and a Cancel.** ComfyUI's are behind the shell, so the piece
-grows its own at the foot of its column, and the button is the queue readout as
-well — it turns into the step count while it samples and puts a Cancel beside
-itself. Both call exactly what the toolbar calls, `queuePrompt` and `interrupt`;
-neither reimplements a queue. The Gallery and the Settings page are *not* in the
-title bar: they have been in the body's own rail all along, and a second copy
-would be two doors into one room.
+**A Render button and a Cancel in the fullscreen shell, which double as the
+queue readout.** ComfyUI's are behind the shell, so the piece grows its own at
+the foot of its column, and the button is the queue readout as well — it turns
+into the step count while it samples and puts a Cancel beside itself. Both call
+exactly what the toolbar calls, `queuePrompt` and `interrupt`; neither
+reimplements a queue. The Gallery and the Settings page are *not* in the title
+bar: they have been in the body's own rail all along, and a second copy would be
+two doors into one room.
 
-**Two views over the one shell.** The switch is in the title bar. *Full* is the
-desk described above — the pre-stage, the shot and the picture side by side,
-which is what a piece built out of parts actually looks like. *Simple* is the
-other half of the day: one card, for when the piece is one prompt and everything
-else is in the way. Nothing that the render reads is hidden in it — the rail,
-the references, the cast and the shot's own pills are all still there; the
-sampler row is folded, because it is the row you set once and then stop looking
-at, and *Sampling settings* beside Render brings it back. Which view you were
-last in survives a reload.
+**Two views over the fullscreen shell: Full, and Simple for a piece that is one
+prompt.** The switch is in the title bar. *Full* is the desk described above —
+the pre-stage, the shot and the picture side by side, which is what a piece
+built out of parts actually looks like. *Simple* is the other half of the day:
+one card, for when the piece is one prompt and everything else is in the way.
+Nothing that the render reads is hidden in it — the rail, the references, the
+cast and the shot's own pills are all still there; the sampler row is folded,
+because it is the row you set once and then stop looking at, and *Sampling
+settings* beside Render brings it back. Which view you were last in survives a
+reload.
 
-**And the simple view opens as you use it.** The card sits in the middle of an
-empty window while you write, and the moment you press Render the picture column
-opens beside it and the card slides left to make room. It is the same two regions
-the desk has, in the same places — writing on the left, picture on the right —
-with the difference that the right-hand one is not there until there is something
-in it. Nothing appears at a new address, either: the card is on rails between two
-positions in one centred row, so opening the column *is* the movement, and there
-is no second layout to keep in step with the first. Reduced motion gets the two
-positions and nothing between them.
+**In the simple view the picture column opens beside the card the moment you
+press Render.** The card sits in the middle of an empty window while you write,
+and the moment you press Render the picture column opens beside it and the card
+slides left to make room. It is the same two regions the desk has, in the same
+places — writing on the left, picture on the right — with the difference that
+the right-hand one is not there until there is something in it. Nothing appears
+at a new address, either: the card is on rails between two positions in one
+centred row, so opening the column *is* the movement, and there is no second
+layout to keep in step with the first. Reduced motion gets the two positions and
+nothing between them.
 
-**And it stays simple once you have used it.** Cast somebody, attach a clip,
-narrow a reference, and the card that was one prompt in the middle of a window
-became four rows of chips over a paragraph of explanation. Every one of those is
-right on a node face, where it is the only place the thing can be said, and
-wrong in a view whose whole point is that there is one thing on screen. Three
-things go, and none of them is a control you cannot reach:
+**The simple view stays simple once you have cast, attached and narrowed
+things.** Cast somebody, attach a clip, narrow a reference, and the card that
+was one prompt in the middle of a window became four rows of chips over a
+paragraph of explanation. Every one of those is right on a node face, where it
+is the only place the thing can be said, and wrong in a view whose whole point
+is that there is one thing on screen. Three things go, and none of them is a
+control you cannot reach:
 
 *The cast shelf, and the Cast tool with it.* Everything the drawer does is
 already somewhere else and better placed in this view. Casting somebody is the
@@ -2404,41 +2485,44 @@ gesture and the Timeline pill is still in the row. Everything dropped is one
 press away in the full view, and none of it is dropped from the render — these
 are display rules over the same bodies, drawing the same blob.
 
-**A pre-stage is a step there, not a second panel.** There is no room beside one
-column for another one, and there should not be — the pair is a sequence, make
-the still and then make the video out of it — so a switch at the top of the card
-says which half you are writing and the card shows it. Both nodes stay in the
-graph; the step changes what is in front of you *and* what Render makes. Grabbing a frame or sending a still to the shot moves the card
-to the shot on its own, because that hand-off is the whole reason the pair
-exists. The switch is also the only pre-stage control the simple view has now:
-pressing *Pre-stage* when there is none spawns one and takes you to it, and the
-✕ on the step you are standing on removes it. The amber pill in the shot's own
-row that used to do the spawning is gone from this view — two controls over one
-node was one place too many to look. The desk keeps it.
+**In the simple view the pre-stage is a step on the same card, not a second
+panel.** There is no room beside one column for another one, and there should
+not be — the pair is a sequence, make the still and then make the video out of
+it — so a switch at the top of the card says which half you are writing and the
+card shows it. Both nodes stay in the graph; the step changes what is in front
+of you *and* what Render makes. Grabbing a frame or sending a still to the shot
+moves the card to the shot on its own, because that hand-off is the whole reason
+the pair exists. The switch is also the only pre-stage control the simple view
+has now: pressing *Pre-stage* when there is none spawns one and takes you to it,
+and the ✕ on the step you are standing on removes it. The amber pill in the
+shot's own row that used to do the spawning is gone from this view — two
+controls over one node was one place too many to look. The desk keeps it.
 
-**Render makes one thing, not both.** A PreStage is an output node of the same
-graph the shot is in, so queueing the graph runs the pair — which is right for
-ComfyUI's own Run button, and wrong for a button at the foot of one column that
-reads as being about that column. Touching the still's prompt and pressing
-Render made a still nobody had asked for, and there was no way to remake the
-still without also remaking the clip built on it. Each press now names its node,
-through ComfyUI's own partial execution. In the simple view Render runs the step
-you are standing on; on the desk, where both are on screen, the pre-stage column
-grows its own *Render still* under the thing it makes. Queue both and they queue
-in the order you pressed them, which is the order the hand-off runs.
+**Render makes one thing: the step you are on, through ComfyUI's partial
+execution.** A PreStage is an output node of the same graph the shot is in, so
+queueing the graph runs the pair — which is right for ComfyUI's own Run button,
+and wrong for a button at the foot of one column that reads as being about that
+column. Touching the still's prompt and pressing Render made a still nobody had
+asked for, and there was no way to remake the still without also remaking the
+clip built on it. Each press now names its node, through ComfyUI's own partial
+execution. In the simple view Render runs the step you are standing on; on the
+desk, where both are on screen, the pre-stage column grows its own *Render
+still* under the thing it makes. Queue both and they queue in the order you
+pressed them, which is the order the hand-off runs.
 
-**And the desk itself is laid out again.** Three regions used to be three
-stripes, ruled edge to edge by hairlines and all weighted the same, which is a
-window with no place to start reading. They are cards on a ground now, and only
-one of them is raised: the shot you are writing. The pre-stage sits quieter
-beside it because it is the step before — a card on the ground where the shot is
-lifted onto a surface, rather than a rail, a prompt and a sampler row lying loose
-on the desk with nothing round them — and the picture's dock has room around it
-instead of a border ending in mid-air. Each column says what it is at the top,
-because both faces are built out of the same parts and, unlabelled, the first
-thing the eye met on the left was a second copy of the toolbar it was already
-reading on the right. Read across, the desk is pre-stage, then shot, then the
-picture they make.
+**The fullscreen desk is laid out as cards on a ground, with the shot you are
+writing raised.** Three regions used to be three stripes, ruled edge to edge by
+hairlines and all weighted the same, which is a window with no place to start
+reading. They are cards on a ground now, and only one of them is raised: the
+shot you are writing. The pre-stage sits quieter beside it because it is the
+step before — a card on the ground where the shot is lifted onto a surface,
+rather than a rail, a prompt and a sampler row lying loose on the desk with
+nothing round them — and the picture's dock has room around it instead of a
+border ending in mid-air. Each column says what it is at the top, because both
+faces are built out of the same parts and, unlabelled, the first thing the eye
+met on the left was a second copy of the toolbar it was already reading on the
+right. Read across, the desk is pre-stage, then shot, then the picture they
+make.
 
 The dock's empty frame is also drawn for a Creator and a Timeline now, and not
 only for a pre-stage. It never was: the body those two nodes wear could not
@@ -2455,47 +2539,49 @@ which is most of what made a dozen chips in one heap unreadable. On a node face,
 where two or three are on at once and the rail is most of the width, nothing
 changes.
 
-**Every render this session made, up the scroll.** The stage is one box and
-`execution_start` clears it, which is right on a canvas — a card beside a node
-still showing last week's render while this week's samples would be a card that
-lies — and exactly wrong in a window with room for both, because the reason you
-queue a second take is to look at it beside the first. The picture column is a
-reel now: oldest at the top, the live stage at the bottom nearest the writing,
-and it scrolls itself down whenever something arrives, so what just happened is
-where you were already looking and history is a scroll rather than a mode. Past
-takes do not play themselves — ten clips going at once is not history — and
-nothing is copied: an entry points at the same file the Gallery opens, so
-closing the editor loses the list and not one render.
+**The picture column keeps every render this session made, oldest at the top.**
+The stage is one box and `execution_start` clears it, which is right on a canvas
+— a card beside a node still showing last week's render while this week's
+samples would be a card that lies — and exactly wrong in a window with room for
+both, because the reason you queue a second take is to look at it beside the
+first. The picture column is a reel now: oldest at the top, the live stage at
+the bottom nearest the writing, and it scrolls itself down whenever something
+arrives, so what just happened is where you were already looking and history is
+a scroll rather than a mode. Past takes do not play themselves — ten clips going
+at once is not history — and nothing is copied: an entry points at the same file
+the Gallery opens, so closing the editor loses the list and not one render.
 
-**A finished video no longer lands on top of the tool rail.** The card is
+**Fixed: a finished video could be painted over the tool rail.** The card is
 `position: relative`, and the writing column below it was not, so anything that
 got out of the picture column was painted over the rail rather than under it.
 The reel's own scroll is the containment; the column is positioned as well, so a
 leak would at worst be visible instead of covering a control.
 
-**Add a card and you can get back.** Growing a strip moves the cast's pictures
-into the reference pool — they are on card 1 otherwise, where no other card can
-see them — and there was no way back down. So a Creator that had ever held two
-cards kept a pool forever, and a pool is one of the fields a shot's face has no
-row for: the node stayed folded into the strip summary with the toggle drawn
-dead over "the reference pool", naming a field nothing on that face could empty.
-Shrinking back to one shot now moves them home, handles and citations and all —
-the promotion run backwards, with the same filter, so a reference attached to the
-whole piece on purpose still belongs to the piece and still holds the strip.
+**Shrinking a strip back to one shot moves the cast's pictures back off the
+reference pool.** Growing a strip moves the cast's pictures into the reference
+pool — they are on card 1 otherwise, where no other card can see them — and
+there was no way back down. So a Creator that had ever held two cards kept a
+pool forever, and a pool is one of the fields a shot's face has no row for: the
+node stayed folded into the strip summary with the toggle drawn dead over "the
+reference pool", naming a field nothing on that face could empty. Shrinking back
+to one shot now moves them home, handles and citations and all — the promotion
+run backwards, with the same filter, so a reference attached to the whole piece
+on purpose still belongs to the piece and still holds the strip.
 
-**One height for everything pill-shaped.** The route badge was padding-sized, the
-strip's open button was 32px and the pills around both were 38px, which read as
-three unrelated things in a row rather than as a row. `--mmc-pill-h` is the one
-number now, and the next control cannot quietly be a fourth.
+**One height for everything pill-shaped, as a single token.** The route badge
+was padding-sized, the strip's open button was 32px and the pills around both
+were 38px, which read as three unrelated things in a row rather than as a row.
+`--mmc-pill-h` is the one number now, and the next control cannot quietly be a
+fourth.
 
-**A docked render is not cut off any more.** The card carries a flex direction
-but never `display: flex` — on a satellite it does not need one, because the
-card's height is the node's and the picture is sized off that height alone. In a
-column the card is sized by the column instead, and without the flex the row
-inside it had an auto height that no percentage could resolve against, so the
-picture went to its own pixel size and the card's `overflow: hidden` took off
-whatever stuck out. The row is a flex row in the dock now, and it is allowed to
-be narrower than what is in it.
+**Fixed: a docked render was cut off by the card it sat in.** The card carries a
+flex direction but never `display: flex` — on a satellite it does not need one,
+because the card's height is the node's and the picture is sized off that height
+alone. In a column the card is sized by the column instead, and without the flex
+the row inside it had an auto height that no percentage could resolve against,
+so the picture went to its own pixel size and the card's `overflow: hidden` took
+off whatever stuck out. The row is a flex row in the dock now, and it is allowed
+to be narrower than what is in it.
 
 The caps the face wears — two rows of chips, then scroll; ten lines of prompt,
 then scroll — lift inside it. They were there because a node face is a preview
@@ -2505,26 +2591,29 @@ rgba(255,255,255,.16) across a third of a large screen is a line you have to go
 looking for, and a dock that reads as empty is the thing that element exists to
 prevent.
 
-**Render queues; it no longer locks.** The button disabled itself the moment it
-was pressed, so lining up three takes and going to make coffee — the whole reason
-ComfyUI's own Queue button does not do that — was refused. It stays pressable
-while a render runs. What it says meanwhile is a status, not a lock: *Sampling*,
-the step count, and how many are behind it.
+**Render stays pressable while a render runs, so takes can be queued up.** The
+button disabled itself the moment it was pressed, so lining up three takes and
+going to make coffee — the whole reason ComfyUI's own Queue button does not do
+that — was refused. It stays pressable while a render runs. What it says
+meanwhile is a status, not a lock: *Sampling*, the step count, and how many are
+behind it.
 
-**And Cancel is heard.** Interrupting a render left the button reading *Sampling*
-forever, with no way back to a button short of closing the editor. The stage was
-listening for the two ways a run can end, `executed` and `execution_error`, and a
-cancelled one sends neither — it sends `execution_interrupted`, which nothing was
-listening for. It is now, and the stage clears rather than leaving the last
-sampled frame up: that frame is a step of a video that was never finished, and a
-stage still showing it reads as a render that landed.
+**Fixed: cancelling a render left the button reading "Sampling" forever.**
+Interrupting a render left the button reading *Sampling* forever, with no way
+back to a button short of closing the editor. The stage was listening for the
+two ways a run can end, `executed` and `execution_error`, and a cancelled one
+sends neither — it sends `execution_interrupted`, which nothing was listening
+for. It is now, and the stage clears rather than leaving the last sampled frame
+up: that frame is a step of a video that was never finished, and a stage still
+showing it reads as a render that landed.
 
-**Deleting a mention deletes what it named.** The @ menu is how a file is
-attached in this redesign and how somebody is cast — picking one writes the chip
-and creates the thing in one gesture — so the chip *is* the attachment, and
-deleting it has to be the way back out. It was not. The file stayed on the
-reference row and the member stayed on the cast shelf, both of them invisible to
-somebody who had just taken them out of the shot.
+**Deleting a mention now deletes what it named — the attachment or the cast
+member.** The @ menu is how a file is attached in this redesign and how somebody
+is cast — picking one writes the chip and creates the thing in one gesture — so
+the chip *is* the attachment, and deleting it has to be the way back out. It was
+not. The file stayed on the reference row and the member stayed on the cast
+shelf, both of them invisible to somebody who had just taken them out of the
+shot.
 
 Worse for a plain reference: an uncited cast member is cut at queue time and its
 pictures with it, but `@img-1` is in `assets`, and everything in `assets` is
@@ -2543,71 +2632,75 @@ thing in the box that can only be deleted whole.
 
 ## 2.13
 
-**A LoRA can be switched off now, instead of only thrown away.** The stack was a
-row of names with one control on it — the ✕ — so the ordinary question "is this
-LoRA the reason it looks like that" cost the strength you dialled in, the
-checkpoint you pinned it to and the trigger words you edited, every time you
-asked it. The name is the switch now: click it and the LoRA is out of the run,
-off the checkpoint, its trigger words off the front of the prompt, and everything
-you set up still sitting on it; click it again and it is back. The flag has been
-in the blob and in `compile.py` since the beginning — nothing in the interface
-ever wrote it. Muting the file the turbo switch owns counts as turbo off, which
-is what it is.
+**A LoRA can be muted instead of thrown away, keeping its strength, checkpoint
+and trigger words.** The stack was a row of names with one control on it — the ✕
+— so the ordinary question "is this LoRA the reason it looks like that" cost the
+strength you dialled in, the checkpoint you pinned it to and the trigger words
+you edited, every time you asked it. The name is the switch now: click it and
+the LoRA is out of the run, off the checkpoint, its trigger words off the front
+of the prompt, and everything you set up still sitting on it; click it again and
+it is back. The flag has been in the blob and in `compile.py` since the
+beginning — nothing in the interface ever wrote it. Muting the file the turbo
+switch owns counts as turbo off, which is what it is.
 
-**And swapped for another, in the same slot.** The shuffle button beside the ✕
-opens the LoRA grid as a one-shot picker: one click and the file you pick takes
-that entry's place, keeping its position in the patch order, its checkpoint and
-its muted state, and taking strength and trigger words from its own sidecar —
-0.6 on a character LoRA and 0.6 on a distill are not the same number. Which
-makes trying the other version of a style two clicks rather than a removal, a
-search and a re-dial.
+**A LoRA can be swapped for another in the same slot, keeping its place in the
+patch order.** The shuffle button beside the ✕ opens the LoRA grid as a one-shot
+picker: one click and the file you pick takes that entry's place, keeping its
+position in the patch order, its checkpoint and its muted state, and taking
+strength and trigger words from its own sidecar — 0.6 on a character LoRA and
+0.6 on a distill are not the same number. Which makes trying the other version
+of a style two clicks rather than a removal, a search and a re-dial.
 
-**The timeline had no LoRAs in it at all.** The strip window drew a pill counting
-the stack and nothing naming it, so on a piece with a global LoRA there was no
-mute, no strength and no filename anywhere on screen — the only way to find out
-what was patched onto every segment was to open the manager over it and read the
-lit cards. It draws the same chips the Creator face does, under the bar, and the
-node's own strip face carries the names beside the count. One implementation of
-that chip now, shared by all three faces, rather than two near-copies and a hole.
+**The timeline draws the piece's LoRAs, with their names, mutes and strengths.**
+The strip window drew a pill counting the stack and nothing naming it, so on a
+piece with a global LoRA there was no mute, no strength and no filename anywhere
+on screen — the only way to find out what was patched onto every segment was to
+open the manager over it and read the lit cards. It draws the same chips the
+Creator face does, under the bar, and the node's own strip face carries the
+names beside the count. One implementation of that chip now, shared by all three
+faces, rather than two near-copies and a hole.
 
 **Clear takes the cast with it.** It emptied the prompt, the references and the
 shots and left the people behind — a shelf of subjects no `@handle` in the piece
-named any more, each of them still pointing at reference files the same press had
-just deleted, and all of them still riding down onto the blank card the piece
-went back to. The cast is written alongside the prose that cites it and goes with
-it.
+named any more, each of them still pointing at reference files the same press
+had just deleted, and all of them still riding down onto the blank card the
+piece went back to. The cast is written alongside the prose that cites it and
+goes with it.
 
 ## 2.12.2
 
-**Deleting a cast member no longer saves them on the way out.** The sheet flushes
-on close, and the flush ran against the row that had just been deleted — writing
-their body file back and then reading an index row that was gone.
+**Fixed: deleting a cast member wrote them back to disk on the way out.** The
+sheet flushes on close, and the flush ran against the row that had just been
+deleted — writing their body file back and then reading an index row that was
+gone.
 
 ## 2.12.1
 
-**Pasting a prompt no longer pastes a node.** ComfyUI decides a paste belongs to
-the graph by asking whether it landed on an `<input>` or a `<textarea>`. The
-prompt box is neither — it is a contenteditable, because the `@` references are
-atomic chips a textarea cannot hold — so every Ctrl+V at a caret in there also
-dealt out whatever was last copied on the canvas. That clipboard lives in
-localStorage and outlasts restarts, workflows and subgraphs, so what landed was
-often a node copied weeks ago, once per paste, stacked on the Creator and only
-found on the way out of the editor. The box now keeps its own paste to itself,
-and its copy and cut with it. One consequence worth knowing: pasting an image
-while the caret is in a prompt box no longer builds a LoadImage node, because
-that went the same way. Thanks to @MrUSBEN for the report (#22).
+**Fixed: pasting into the prompt box also pasted a node onto the graph.**
+ComfyUI decides a paste belongs to the graph by asking whether it landed on an
+`<input>` or a `<textarea>`. The prompt box is neither — it is a
+contenteditable, because the `@` references are atomic chips a textarea cannot
+hold — so every Ctrl+V at a caret in there also dealt out whatever was last
+copied on the canvas. That clipboard lives in localStorage and outlasts
+restarts, workflows and subgraphs, so what landed was often a node copied weeks
+ago, once per paste, stacked on the Creator and only found on the way out of the
+editor. The box now keeps its own paste to itself, and its copy and cut with it.
+One consequence worth knowing: pasting an image while the caret is in a prompt
+box no longer builds a LoadImage node, because that went the same way. Thanks to
+@MrUSBEN for the report (#22).
 
 ## 2.12
 
-**Every LoRA now loads the way a quantized H3 needs loading.** The stock path is
-dequantize, add the delta, requantize with a recalculated codebook — a round trip
-that is not idempotent. It injects about 1.5% relative weight noise where a
-typical H3 LoRA delta is 0.01–0.08% of the weight, so on the int8 and w4a8 bakes
-most people run, the adapter was being replaced by rounding noise. It is also two
-orders of magnitude slower than not doing it. Two more things went wrong without
-saying so: H3 ships in a dense and a curve adaLN form, and a LoRA trained against
-one has the wrong `lora_A` width for the other, so ComfyUI dropped those pairs —
-on a distillation LoRA that is most of the adapter — and the five key conventions
+**LoRAs load through a branch built for quantized H3, instead of a
+dequantize-and-requantize round trip.** The stock path is dequantize, add the
+delta, requantize with a recalculated codebook — a round trip that is not
+idempotent. It injects about 1.5% relative weight noise where a typical H3 LoRA
+delta is 0.01–0.08% of the weight, so on the int8 and w4a8 bakes most people
+run, the adapter was being replaced by rounding noise. It is also two orders of
+magnitude slower than not doing it. Two more things went wrong without saying
+so: H3 ships in a dense and a curve adaLN form, and a LoRA trained against one
+has the wrong `lora_A` width for the other, so ComfyUI dropped those pairs — on
+a distillation LoRA that is most of the adapter — and the five key conventions
 H3 LoRAs are published under do not all survive being split on underscores.
 
 So this pack now ships cicalooo's
@@ -2634,106 +2727,112 @@ first one's fit, and a table-to-table fit that raised on a model whose table was
 on the GPU. `h3lora/__init__.py` says what changed and `tools/vendor_h3lora.py`
 re-syncs it, patch and all.
 
-**The attention pill is a list now.** Sage was a switch, and switches are the
-wrong shape for a slot that holds one thing: a model has one attention, and core
-now ships its own int8 kernel through `ModelAttentionBackend`. So the pill offers
-**default**, **sage** and **kitchen**, and picking one is what turns the other
-off. Kitchen needs nothing installed — no NVIDIA-only package, no build step —
-and appears only on a ComfyUI whose build can actually run it; asked for on one
-that cannot, it says so rather than quietly sampling on pytorch attention, which
-is the render you did not ask for, finished. A workflow saved with the old switch
-on still runs sage, once, and then the list is what decides.
+**The attention pill is a list — default, sage or kitchen — instead of a Sage
+switch.** Sage was a switch, and switches are the wrong shape for a slot that
+holds one thing: a model has one attention, and core now ships its own int8
+kernel through `ModelAttentionBackend`. So the pill offers **default**, **sage**
+and **kitchen**, and picking one is what turns the other off. Kitchen needs
+nothing installed — no NVIDIA-only package, no build step — and appears only on
+a ComfyUI whose build can actually run it; asked for on one that cannot, it says
+so rather than quietly sampling on pytorch attention, which is the render you
+did not ask for, finished. A workflow saved with the old switch on still runs
+sage, once, and then the list is what decides.
 
-**Two more pills, both about what a step costs rather than how many run.**
-**low vram** splits H3's feed-forward over the packed sequence (KJNodes' Chunk
-FFN), which lowers the peak a render has to fit in and is the only accelerator
-here that trades nothing at all — activations are quantized per token, so
-chunking is arithmetic rearrangement and the frames are the ones you would have
-had. **fast math** lets cuBLAS accumulate fp16 matmuls in fp16 while this model
-runs (KJNodes' fp16 accumulation) and puts the flag back afterwards — and it is
-worth saying where that reaches, because it is narrower than it sounds: fp16
-matmuls only. The released H3 checkpoints run bf16, and their quantized layers
-go through comfy-kitchen's own kernels rather than cuBLAS, so on the bakes
-nearly everybody runs there is nothing for it to change. It is on the row for
-the fp16 model that would use it, and its tooltip says all of this rather than
-leaving it to a stopwatch. Both compose with every cache, with Spectrum, and
-with either attention backend, and both survive the turbo lead-in — they skip
-nothing, so there is nothing for the lead-in to protect. They are named for what
-you get rather than for how they are built; the packs' own names are in the
-tooltips, where somebody looking for them will find them.
+**Two more accelerator pills: low vram (chunked feed-forward) and fast math
+(fp16 accumulation).** **low vram** splits H3's feed-forward over the packed
+sequence (KJNodes' Chunk FFN), which lowers the peak a render has to fit in and
+is the only accelerator here that trades nothing at all — activations are
+quantized per token, so chunking is arithmetic rearrangement and the frames are
+the ones you would have had. **fast math** lets cuBLAS accumulate fp16 matmuls
+in fp16 while this model runs (KJNodes' fp16 accumulation) and puts the flag
+back afterwards — and it is worth saying where that reaches, because it is
+narrower than it sounds: fp16 matmuls only. The released H3 checkpoints run
+bf16, and their quantized layers go through comfy-kitchen's own kernels rather
+than cuBLAS, so on the bakes nearly everybody runs there is nothing for it to
+change. It is on the row for the fp16 model that would use it, and its tooltip
+says all of this rather than leaving it to a stopwatch. Both compose with every
+cache, with Spectrum, and with either attention backend, and both survive the
+turbo lead-in — they skip nothing, so there is nothing for the lead-in to
+protect. They are named for what you get rather than for how they are built; the
+packs' own names are in the tooltips, where somebody looking for them will find
+them.
 
-**And the sampler row has a length now.** It has grown a cache, Spectrum, an
-attention backend, a turbo switch with a lead-in inside it and those two, which
-is a lot of row to read past on the way to the seed. **Settings → Nodes →
-Advanced controls** decides how much of it a node draws: **Standard** is the
-row most renders use, **Everything** adds the turbo lead-in, low vram and fast
-math, and the turbo lead-in section to that page. It hides, it never disables —
-a control already switched on keeps its pill either way, which is the rule the
-shift pills and the custom quality row already live by, so turning it off can
-never change what a render does.
+**Settings → Nodes → Advanced controls decides how much of the sampler row a
+node draws.** It has grown a cache, Spectrum, an attention backend, a turbo
+switch with a lead-in inside it and those two, which is a lot of row to read
+past on the way to the seed. **Settings → Nodes → Advanced controls** decides
+how much of it a node draws: **Standard** is the row most renders use,
+**Everything** adds the turbo lead-in, low vram and fast math, and the turbo
+lead-in section to that page. It hides, it never disables — a control already
+switched on keeps its pill either way, which is the rule the shift pills and the
+custom quality row already live by, so turning it off can never change what a
+render does.
 
-**A style is a look now, not somebody else's scene.** The Style tab's 941
-descriptors are the opening clause of a dataset caption, split at the first
-action beat — so a third of them carried the clip's cast and setting into your
-prompt along with the medium. Seventy-two shipped a literal `(S1)`, the dataset's
-own subject token; a hundred and sixty-one were cut off mid-word at 250
-characters, because that is where the atlas page truncates. Asking for LEGO also
-asked for a chef minifig and a stovetop fire. The clause chain is now walked and
-stopped at the first clause that is about *something* rather than about how it
-looks — 333 of the 941 are shorter, none came out empty, no `(S1)` survives and
-the truncations are down to eighteen. It is a cut, never a rewrite: nothing is
-invented and no clause is reordered, the verbatim descriptor is still what the
-search reads, and the inspector shows it under **What the clip's own caption
-said**. A prompt written before this still gets its long descriptor swapped out
-when you apply a style over it.
+**The style atlas's 941 descriptors are cut back to the look, without the source
+clip's cast and setting.** The Style tab's 941 descriptors are the opening
+clause of a dataset caption, split at the first action beat — so a third of them
+carried the clip's cast and setting into your prompt along with the medium.
+Seventy-two shipped a literal `(S1)`, the dataset's own subject token; a hundred
+and sixty-one were cut off mid-word at 250 characters, because that is where the
+atlas page truncates. Asking for LEGO also asked for a chef minifig and a
+stovetop fire. The clause chain is now walked and stopped at the first clause
+that is about *something* rather than about how it looks — 333 of the 941 are
+shorter, none came out empty, no `(S1)` survives and the truncations are down to
+eighteen. It is a cut, never a rewrite: nothing is invented and no clause is
+reordered, the verbatim descriptor is still what the search reads, and the
+inspector shows it under **What the clip's own caption said**. A prompt written
+before this still gets its long descriptor swapped out when you apply a style
+over it.
 
-**And a style has a picture you can actually use.** The card stills are 192px —
-enough to tell one look from another, not a reference. So one frame per clip is
-now vendored at the clip's own resolution, 512 to 1088 across, and **Cast this
-frame as a look** attaches it as a `takes: "style"` subject with the distilled
-descriptor as its description. This is the answer to "where do I find a still of
-a 1972 educational puppet show": you do not, the atlas has one. Both sizes are
-cut from the same frame of the same clip at vendor time, so the card and the
-reference are one moment rather than two. Nothing streams — the frames are on
-disk and the whole catalogue works with the machine offline, which is why they
-are vendored rather than fetched on demand.
+**Every style ships a full-resolution frame, and "Cast this frame as a look"
+attaches it as a reference.** The card stills are 192px — enough to tell one
+look from another, not a reference. So one frame per clip is now vendored at the
+clip's own resolution, 512 to 1088 across, and **Cast this frame as a look**
+attaches it as a `takes: "style"` subject with the distilled descriptor as its
+description. This is the answer to "where do I find a still of a 1972
+educational puppet show": you do not, the atlas has one. Both sizes are cut from
+the same frame of the same clip at vendor time, so the card and the reference
+are one moment rather than two. Nothing streams — the frames are on disk and the
+whole catalogue works with the machine offline, which is why they are vendored
+rather than fetched on demand.
 
-**A cast member is made where you look for them.** Keeping somebody used to mean
-four surfaces: attach a picture to a node, add a subject on that node's shelf,
-point the subject at the picture, press **★**. Three of those are about a node,
-and a member is deliberately not about a node — their files are stored by
-filename precisely so they outlive the graph they were built on. So the roster
-makes its own. **+ New cast member** opens an editor over the grid: their face
-and handle, what they are, their files as tiles you press to say what each one
-lends them, and their description as a box rather than the line the inspector had
-room for. Nothing there reads a node, and there is no Save — the row exists from
-the moment you press New, so every edit is a change to something already in the
-library. The **★** on a node still works; there are two ways in now rather than
-one. Their description reaches their card too, so a roster of twelve is scanned
-by who somebody *is* rather than by how many files are behind them.
+**A cast member can be made in the roster itself, with "+ New cast member".**
+Keeping somebody used to mean four surfaces: attach a picture to a node, add a
+subject on that node's shelf, point the subject at the picture, press **★**.
+Three of those are about a node, and a member is deliberately not about a node —
+their files are stored by filename precisely so they outlive the graph they were
+built on. So the roster makes its own. **+ New cast member** opens an editor
+over the grid: their face and handle, what they are, their files as tiles you
+press to say what each one lends them, and their description as a box rather
+than the line the inspector had room for. Nothing there reads a node, and there
+is no Save — the row exists from the moment you press New, so every edit is a
+change to something already in the library. The **★** on a node still works;
+there are two ways in now rather than one. Their description reaches their card
+too, so a roster of twelve is scanned by who somebody *is* rather than by how
+many files are behind them.
 
-**Removing somebody takes their pictures with them.** Casting attaches files —
-the `+` on their card does it, and so does taking them out of the library — so
-the **✕** undid half of what it was undoing, and the node quietly accumulated a
-picture every time you changed your mind, each one needing to be found on the
-asset row and removed by hand. Now it takes what that member alone was built out
-of. Not a picture a second member is also built out of, not a file a prompt
-writes by hand as `@img-2`, and never the piece's pool from inside one card of a
-strip.
+**Removing a cast member takes the pictures they were built out of with them.**
+Casting attaches files — the `+` on their card does it, and so does taking them
+out of the library — so the **✕** undid half of what it was undoing, and the
+node quietly accumulated a picture every time you changed your mind, each one
+needing to be found on the asset row and removed by hand. Now it takes what that
+member alone was built out of. Not a picture a second member is also built out
+of, not a file a prompt writes by hand as `@img-2`, and never the piece's pool
+from inside one card of a strip.
 
 ## 2.11
 
-**A cast you can keep.** A subject was built by hand on every node they appeared
-on, which is how the same person becomes three slightly different people across a
-project. The **★** on their card writes them into a cast library — their name, their
-words, their retention marker and their references *by filename* — and **From the
-library** on the shelf head brings them back into a piece that never had their
-pictures attached. Their files attach as they land, as *ordinary references*: an
-image of them is an image reference in the reference row under `img-2`, sizeable
-and removable like anything else you attached. On a piece of one shot they land
-on that shot; on a strip they go to the piece's pool, which is the one list
-several cards can cite. A file already attached is used rather than attached
-twice.
+**A cast library: keep somebody with ★ and bring them into any piece.** A
+subject was built by hand on every node they appeared on, which is how the same
+person becomes three slightly different people across a project. The **★** on
+their card writes them into a cast library — their name, their words, their
+retention marker and their references *by filename* — and **From the library**
+on the shelf head brings them back into a piece that never had their pictures
+attached. Their files attach as they land, as *ordinary references*: an image of
+them is an image reference in the reference row under `img-2`, sizeable and
+removable like anything else you attached. On a piece of one shot they land on
+that shot; on a strip they go to the piece's pool, which is the one list several
+cards can cite. A file already attached is used rather than attached twice.
 
 They have a tab of their own in the preset library, the fourth one: a roster, one
 card per person, their own picture as the hero and *person · 2 pictures · voice*
@@ -2748,46 +2847,50 @@ and there is one of them. Casting them into a piece that already has an `@anna`
 lands them as `@anna_2` instead, because two subjects of one name is a piece where
 the name means neither.
 
-**And the way in is the sentence.** Type `@ann` in any prompt and the roster is
-in the menu under **Cast library**, below whoever is already cast — their own face
-on the row, and *person · 2 pictures · voice* under their name. Picking them casts
-them and writes their name in one press: their files attach as references, and their
-name is written in at the `@` you typed. The name goes in by character offset
-rather than by caret — casting them rebuilds the box the caret was sitting in, and
-a caret does not survive that where an offset does. Somebody already cast here is
-left out of that half of the menu — they are in the list above under the name they
-actually have. A card's prose offers them too, and casts them into the piece the card
+**The cast library is reachable from the sentence — type `@` and pick them.**
+Type `@ann` in any prompt and the roster is in the menu under **Cast library**,
+below whoever is already cast — their own face on the row, and *person · 2
+pictures · voice* under their name. Picking them casts them and writes their
+name in one press: their files attach as references, and their name is written
+in at the `@` you typed. The name goes in by character offset rather than by
+caret — casting them rebuilds the box the caret was sitting in, and a caret does
+not survive that where an offset does. Somebody already cast here is left out of
+that half of the menu — they are in the list above under the name they actually
+have. A card's prose offers them too, and casts them into the piece the card
 belongs to; a PreStage has no piece behind its prompt, so it is offered nobody.
 
-**A file hung on somebody is narrowed to what they are.** A picture given to @anna
-as their looks was still scoped `full` — "what the target video takes from it is
-what the picture actually shows" — which is the opposite of what a person
-reference means, and it was a second setting nobody knew they had to change. It
-follows the slot now: their looks take what they are (person, object, scene or
-style), their movement clip takes `motion`, their voice takes `voice`, and the clip
-they take somebody's place in takes `edit`. A dial set by hand is left alone, and
-the only thing that moves one afterwards is changing what *they* are — their pictures
-follow them from `person` to `scene` and a hand-set dial still does not. A piece
-written before this is repaired as it loads.
+**A file hung on a cast member is scoped to what they are, instead of staying
+`full`.** A picture given to @anna as their looks was still scoped `full` —
+"what the target video takes from it is what the picture actually shows" — which
+is the opposite of what a person reference means, and it was a second setting
+nobody knew they had to change. It follows the slot now: their looks take what
+they are (person, object, scene or style), their movement clip takes `motion`,
+their voice takes `voice`, and the clip they take somebody's place in takes
+`edit`. A dial set by hand is left alone, and the only thing that moves one
+afterwards is changing what *they* are — their pictures follow them from
+`person` to `scene` and a hand-set dial still does not. A piece written before
+this is repaired as it loads.
 
-**The shelf is a call sheet now.** Every member drew a full card, so a cast of six
-was several screens of fields, of which five sets were being scrolled past rather
-than read — on a node face, a 300px scrollport holding one and a half people. A
-member is a *line* until you open them: their face, their name, what they are made of,
-and where they walk on, which is the whole of what a cast gets checked for. One is
-open at a time, and the open one is the card that was always there. What is wrong
-with somebody is on their shut line too, in red, so a card that cannot queue is
-visible without opening anybody.
+**The cast shelf is a call sheet: one line per member, one open at a time.**
+Every member drew a full card, so a cast of six was several screens of fields,
+of which five sets were being scrolled past rather than read — on a node face, a
+300px scrollport holding one and a half people. A member is a *line* until you
+open them: their face, their name, what they are made of, and where they walk
+on, which is the whole of what a cast gets checked for. One is open at a time,
+and the open one is the card that was always there. What is wrong with somebody
+is on their shut line too, in red, so a card that cannot queue is visible
+without opening anybody.
 
 ## 2.10
 
-**A turbo lead-in.** Every H3 distillation LoRA trades the same thing away: the
-frames stay good and the model stops listening, because a turbo LoRA buys its
-speed by collapsing the schedule and the opening steps are where a shot's
-composition and motion are actually decided. **Settings → Nodes → Turbo lead-in**
-hands those steps back — one or two of them sample on the checkpoint with the
-distillation held off it, then the leftover noise goes to the distilled model and
-the rest of the same schedule runs as it always did.
+**A turbo lead-in: sample the first steps on the checkpoint before the
+distillation takes over.** Every H3 distillation LoRA trades the same thing
+away: the frames stay good and the model stops listening, because a turbo LoRA
+buys its speed by collapsing the schedule and the opening steps are where a
+shot's composition and motion are actually decided. **Settings → Nodes → Turbo
+lead-in** hands those steps back — one or two of them sample on the checkpoint
+with the distillation held off it, then the leftover noise goes to the distilled
+model and the rest of the same schedule runs as it always did.
 
 One run, not two: one seed, one step count, one set of sigmas, and the lead-in's
 steps come out of the count on the node rather than being added to it. It engages
@@ -2799,12 +2902,13 @@ stop — while sage attention stays, since it skips no steps. The refine and fac
 passes are unchanged: they resume partway down the schedule and the split is not
 in them.
 
-**The turbo pill, rebuilt around it.** The switch used to spell the engaged
-file's whole name on the sampler row — forty characters of
+**The turbo pill reads "turbo" instead of the whole filename, with the lead-in
+settable beside it.** The switch used to spell the engaged file's whole name on
+the sampler row — forty characters of
 `minimax_h3_turbo_v4_step600_ema_pruned_comfyui`, the widest thing on the row by
 a factor of four, for a decision made once the day the file was downloaded. The
-pill reads `turbo` now and names the file in its tooltip, in the picker beside it
-and in the weights popover, which is where choosing one already happened.
+pill reads `turbo` now and names the file in its tooltip, in the picker beside
+it and in the weights popover, which is where choosing one already happened.
 
 The room that frees goes to the lead-in, which is settable there: a stepper
 reading `lead 2/8` — the steps given back over the steps the run has — sitting
@@ -2815,10 +2919,11 @@ shortcut into one answer rather than a second copy of it.
 
 ## 2.9
 
-**A cast.** You can say who is in the video now, and not only which files are
-attached. A subject is declared on the piece — a name, the references behind it,
-what of them is the reference — and cited in prose as `@anna`, the same chip
-everything else uses. It becomes `<Subject N>` at queue time.
+**A cast: declare who is in the video as `@anna`, and cite them in prose.** You
+can say who is in the video now, and not only which files are attached. A
+subject is declared on the piece — a name, the references behind it, what of
+them is the reference — and cited in prose as `@anna`, the same chip everything
+else uses. It becomes `<Subject N>` at queue time.
 
 That is the split H3's reference guide draws and this pack did not: `<Picture N>`
 is a file, `<Subject N>` is who the video contains, and an image that only says
@@ -2844,12 +2949,13 @@ nothing. And a name is a citation only because it was declared: `@anna` in a
 piece with no Anna in it is prose and stays prose, so nothing already written
 changes meaning.
 
-**The cast shelf, rebuilt, and on the node itself.** It only ever appeared in
-the Timeline window, and it refused to open at all until a reference had been
-attached — so the one prompt that most needs a cast, a text-only one where a
-name is all that keeps the same person in shot 1 and in shot 9, could not have
-one. Cast is on the rail now, beside Add image, on every node; the same shelf is
-still in the Timeline window, and it is literally the same shelf.
+**The cast shelf is on every node's rail, rebuilt around thumbnails of what each
+file lends.** It only ever appeared in the Timeline window, and it refused to
+open at all until a reference had been attached — so the one prompt that most
+needs a cast, a text-only one where a name is all that keeps the same person in
+shot 1 and in shot 9, could not have one. Cast is on the rail now, beside Add
+image, on every node; the same shelf is still in the Timeline window, and it is
+literally the same shelf.
 
 A subject can be a name and a description with nothing behind them, and the two
 sections they make derivable are emitted in the base modes too — a `<Subject 1>`
@@ -2877,193 +2983,198 @@ has the caret is not pulled out from under the pointer.
 
 ## 2.8
 
-**A start frame beside its references.** Frames and references used to lock
-each other out — attaching one greyed the other, and a strip could not merge a
-keyframe shot with a reference shot. The lock is gone at every level: a
-generation takes a start frame, an end frame *and* references (images, video,
-audio) in one request, a globally cited piece reference rides into a keyframe
-segment, a reference shot can end on a clip, and one pass holds all of it. The
-frames ride as guides pinned at the clip's own first and last frame — the same
-mechanism the continuation seam has always used, which Ref2VA reads alongside
-its references — presented after the references so every `<Picture N>` a
-cached prompt already has stays put, with an alignment line naming the
-ordinals the frames took. Forcing the FL2VA slot onto a reference generation
-is honoured now too, instead of refused: the slot names what you loaded into
-it, and merges of the two trainings exist.
+**A generation can take a start frame, an end frame and references at once.**
+Frames and references used to lock each other out — attaching one greyed the
+other, and a strip could not merge a keyframe shot with a reference shot. The
+lock is gone at every level: a generation takes a start frame, an end frame
+*and* references (images, video, audio) in one request, a globally cited piece
+reference rides into a keyframe segment, a reference shot can end on a clip, and
+one pass holds all of it. The frames ride as guides pinned at the clip's own
+first and last frame — the same mechanism the continuation seam has always used,
+which Ref2VA reads alongside its references — presented after the references so
+every `<Picture N>` a cached prompt already has stays put, with an alignment
+line naming the ordinals the frames took. Forcing the FL2VA slot onto a
+reference generation is honoured now too, instead of refused: the slot names
+what you loaded into it, and merges of the two trainings exist.
 
-**The aspect ratio, from any input.** The canvas used to take its shape from
-the start frame or the first clip whether you liked it or not — the ratio pill
-went dead the moment a keyframe existed. The pill is always live now, and its
-popover starts with the ratio's *source*: Auto (the rule that always held),
-then every attached picture the piece holds — frames, reference images and
-videos, clip cards' footage, pool references — each drawn at its own shape,
-with the presets beneath them to force over the lot. Choosing a preset while
-pictures are on offer writes the choice down, so footage can no longer quietly
-outrank a ratio you just picked.
+**The aspect ratio can be taken from any attached picture, or forced to a
+preset.** The canvas used to take its shape from the start frame or the first
+clip whether you liked it or not — the ratio pill went dead the moment a
+keyframe existed. The pill is always live now, and its popover starts with the
+ratio's *source*: Auto (the rule that always held), then every attached picture
+the piece holds — frames, reference images and videos, clip cards' footage, pool
+references — each drawn at its own shape, with the presets beneath them to force
+over the lot. Choosing a preset while pictures are on offer writes the choice
+down, so footage can no longer quietly outrank a ratio you just picked.
 
 ## 2.7.1
 
-**A stage that can hold still.** Every preview used to start playing the moment
-it existed, and on a canvas with a dozen finished renders that is a dozen
-looping clips decoding for nobody. Settings → Nodes now offers Preview
-playback: leave it on Plays itself and nothing changes; set it to Waits for
-play and the stage holds a clip's first frame, still, with the browser's
-controls to start it — sound on hover and looping unchanged once it is. Covers
-the finished render and the animated step previews alike, and it is
-per-machine like the rest of the settings file: the workflow says what the
-piece is, not how your canvas behaves.
+**A Preview playback setting, so a stage can hold a clip's first frame instead
+of looping.** Every preview used to start playing the moment it existed, and on
+a canvas with a dozen finished renders that is a dozen looping clips decoding
+for nobody. Settings → Nodes now offers Preview playback: leave it on Plays
+itself and nothing changes; set it to Waits for play and the stage holds a
+clip's first frame, still, with the browser's controls to start it — sound on
+hover and looping unchanged once it is. Covers the finished render and the
+animated step previews alike, and it is per-machine like the rest of the
+settings file: the workflow says what the piece is, not how your canvas behaves.
 
 ## 2.7
 
-**Any template pins onto any request.** The refiner used to refuse a pinned
-REF2VA template on a request without @ references, and a base template on one
-with them — a first frame plus an always-REF2VA pin got an error instead of a
-rewrite, even though the checkpoint handles that prompt fine. Both refusals are
-gone: every pin is honoured, and a pin across the reference boundary comes back
-with a hint in the result panel saying it may degrade quality, alongside the
-rewrite rather than instead of it.
+**Any refiner template can be pinned onto any request.** The refiner used to
+refuse a pinned REF2VA template on a request without @ references, and a base
+template on one with them — a first frame plus an always-REF2VA pin got an error
+instead of a rewrite, even though the checkpoint handles that prompt fine. Both
+refusals are gone: every pin is honoured, and a pin across the reference
+boundary comes back with a hint in the result panel saying it may degrade
+quality, alongside the rewrite rather than instead of it.
 
 ## 2.6
 
-**Shoot one card, then the next.** Building a piece one expensive generation at
-a time meant locking five cards to shoot the sixth, then unlocking one and
-locking another for every step after it. A card's number on the strip is now the
-way to say it: click the 4 and card 4 is the only thing generated, everything
-else locked and left exactly as it is. Because a card locked with a take is a
-card playing that take, clicking the next number keeps what you just shot and
-carries the strip forward — one click per card, for the whole piece. Clicking a
-number inside a merged run shoots the run, a pass being one generation. On a
-strip that is a single generation the numbers stay what they were, there being
-no "only" to ask for.
+**Clicking a card's number on the strip shoots that card alone.** Building a
+piece one expensive generation at a time meant locking five cards to shoot the
+sixth, then unlocking one and locking another for every step after it. A card's
+number on the strip is now the way to say it: click the 4 and card 4 is the only
+thing generated, everything else locked and left exactly as it is. Because a
+card locked with a take is a card playing that take, clicking the next number
+keeps what you just shot and carries the strip forward — one click per card, for
+the whole piece. Clicking a number inside a merged run shoots the run, a pass
+being one generation. On a strip that is a single generation the numbers stay
+what they were, there being no "only" to ask for.
 
-**Lock all, and unlock all.** The two ends of that, which going card by card
-never reaches: lock everything and the next render generates nothing and writes
-the piece out of the takes it already has, which is how a piece shot in parts is
-finished. Unlock everything to put the whole strip back in the pot. They sit on
-the bar beside Refine all, appear once the strip is shooting in parts, and Lock
-all goes dead while there is nothing shot to assemble from.
+**Lock all and Unlock all on the strip's bar.** The two ends of that, which
+going card by card never reaches: lock everything and the next render generates
+nothing and writes the piece out of the takes it already has, which is how a
+piece shot in parts is finished. Unlock everything to put the whole strip back
+in the pot. They sit on the bar beside Refine all, appear once the strip is
+shooting in parts, and Lock all goes dead while there is nothing shot to
+assemble from.
 
-**A take can be turned down.** Looking at a take and deciding against it is half
-of shooting in parts, and the only way to say so was to render over it. The chip
-that names a take — kept, take ready, kept · edited — now carries a ✕ that
-forgets it: the card goes back to not shot, and the file stays under output/,
-because this is a card saying the take is not the one rather than a file being
-deleted. It is out of sight until the card is under the pointer, so a strip of
-finished takes still reads as film.
+**A take can be turned down with a ✕, without deleting the file.** Looking at a
+take and deciding against it is half of shooting in parts, and the only way to
+say so was to render over it. The chip that names a take — kept, take ready,
+kept · edited — now carries a ✕ that forgets it: the card goes back to not shot,
+and the file stays under output/, because this is a card saying the take is not
+the one rather than a file being deleted. It is out of sight until the card is
+under the pointer, so a strip of finished takes still reads as film.
 
-**A card shot by itself is still a card of a piece.** Shooting one segment,
-keeping what came back and moving on to the next is the whole point of the lock
-— and it never worked. The take a render writes out was written only where the
-render had more than one pass in it, which a strip with five cards locked and
-one open does not: the take never landed, so the card could not be kept, so the
-next render was one pass again, and the strip never got off the ground. Every
-place that asked "is there one pass here" was really asking "is this render the
-whole piece", and those stopped being the same question the day a card could be
-held back. So a card shot alone now writes its take, says which card it is while
-it renders, and is named by its own number in anything it raises — while a strip
-genuinely generated in one go is still one generation with one take, which is
-the render.
+**Fixed: a card shot by itself never wrote its take, so shooting in parts could
+not get started.** Shooting one segment, keeping what came back and moving on to
+the next is the whole point of the lock — and it never worked. The take a render
+writes out was written only where the render had more than one pass in it, which
+a strip with five cards locked and one open does not: the take never landed, so
+the card could not be kept, so the next render was one pass again, and the strip
+never got off the ground. Every place that asked "is there one pass here" was
+really asking "is this render the whole piece", and those stopped being the same
+question the day a card could be held back. So a card shot alone now writes its
+take, says which card it is while it renders, and is named by its own number in
+anything it raises — while a strip genuinely generated in one go is still one
+generation with one take, which is the render.
 
-**A seam cannot inherit from a card that is not in the render.** A locked card
-with nothing to play is dropped from the render, which moved the card behind it
-up and left its seam pointing at whoever now sat in front of it. Shooting card 6
-with cards 4 and 5 still unshot opened it on card 3's last frame and said
-nothing about it — a shot that looks right until the piece is assembled. It is
-refused now, naming the card it wanted and the two ways on: shoot that card
-first, or turn off the seam and start fresh. Which is also the rule for shooting
-out of order, finally stated — a card behind a cut shoots whenever you like, and
-a card behind a seam waits for the one it continues from. The strip says it
-while the cards are still in front of you rather than at the queue.
+**A seam that would inherit from a card held out of the render is refused by
+name.** A locked card with nothing to play is dropped from the render, which
+moved the card behind it up and left its seam pointing at whoever now sat in
+front of it. Shooting card 6 with cards 4 and 5 still unshot opened it on card
+3's last frame and said nothing about it — a shot that looks right until the
+piece is assembled. It is refused now, naming the card it wanted and the two
+ways on: shoot that card first, or turn off the seam and start fresh. Which is
+also the rule for shooting out of order, finally stated — a card behind a cut
+shoots whenever you like, and a card behind a seam waits for the one it
+continues from. The strip says it while the cards are still in front of you
+rather than at the queue.
 
-**A named seam source follows the card it names.** Pointing a seam at a
-particular earlier card recorded that card's number on the strip, and the
-render read it as a position in the render — the same number until something
-earlier was held back, and a different card after that. It is rebased now, so a
-seam keeps meaning the card it was aimed at however much of the strip is
-locked.
+**A named seam source follows the card it names, however much of the strip is
+locked.** Pointing a seam at a particular earlier card recorded that card's
+number on the strip, and the render read it as a position in the render — the
+same number until something earlier was held back, and a different card after
+that. It is rebased now, so a seam keeps meaning the card it was aimed at
+however much of the strip is locked.
 
-**A card compiles to the same generation however it is shot.** Four things the
-strip records about a card — the seed it ran on, the take it has, whether it is
-locked, and its number — were being folded into the description handed to the
-model, which is what the segment's cache is keyed on. Nothing about the picture
-changed when they did, so re-rolling a seed re-encoded the references it was not
-changing, and shooting one card of six re-encoded all six. They are kept out of
-it now: the conditioning behind a card is reused whenever the card still says
-the same thing.
+**A card compiles to the same generation however it is shot, so its references
+are not re-encoded.** Four things the strip records about a card — the seed it
+ran on, the take it has, whether it is locked, and its number — were being
+folded into the description handed to the model, which is what the segment's
+cache is keyed on. Nothing about the picture changed when they did, so
+re-rolling a seed re-encoded the references it was not changing, and shooting
+one card of six re-encoded all six. They are kept out of it now: the
+conditioning behind a card is reused whenever the card still says the same
+thing.
 
 ## 2.5
 
-**A folder browses as a folder.** The row of places above the gallery used to
-list every subfolder the input or output folder held, flattened — a nested path
-was its own chip, and the row wrapped until an output folder filed by day and
-take was more chips than gallery, with the pictures pushed off the bottom of
-the modal. It is one line now, whatever is in there: a trail on the left saying
-where you are, and beside it the folders one step inside, scrolled sideways
-when there are more than fit. Clicking a folder goes in, and the grid shows
+**The picker's places row is a trail with the folders one step in, instead of
+every subfolder flattened.** The row of places above the gallery used to list
+every subfolder the input or output folder held, flattened — a nested path was
+its own chip, and the row wrapped until an output folder filed by day and take
+was more chips than gallery, with the pictures pushed off the bottom of the
+modal. It is one line now, whatever is in there: a trail on the left saying
+where you are, and beside it the folders one step inside, scrolled sideways when
+there are more than fit. Clicking a folder goes in, and the grid shows
 everything under it however deep, so the chips narrow rather than dead-end.
-Leaving is one click on any step of the trail, dragging a file onto a step
-moves it there, and the "+" makes its new shelf inside the folder you are
-looking at. The preset library's shelves scroll on one line too, and the
-Move to… menu reads as the tree it is.
+Leaving is one click on any step of the trail, dragging a file onto a step moves
+it there, and the "+" makes its new shelf inside the folder you are looking at.
+The preset library's shelves scroll on one line too, and the Move to… menu reads
+as the tree it is.
 
-**The picker opens where you left it.** Each root remembers its own folder — one
-for the input tabs, which share a folder and so share the place in it, and one
-for the gallery — and the next opening lands there with the trail already
-showing, instead of at the top of a folder you then have to find your way down
-again. It rides in the same prefs file the stars do, so it follows the ComfyUI
-user rather than one browser, and a remembered folder that has since been
-renamed or removed quietly falls back to the whole folder.
+**The picker opens on the folder you left it in.** Each root remembers its own
+folder — one for the input tabs, which share a folder and so share the place in
+it, and one for the gallery — and the next opening lands there with the trail
+already showing, instead of at the top of a folder you then have to find your
+way down again. It rides in the same prefs file the stars do, so it follows the
+ComfyUI user rather than one browser, and a remembered folder that has since
+been renamed or removed quietly falls back to the whole folder.
 
 ## 2.4
 
-**A reference's scope can now reach the model, not just the refiner.** The
-`full · person · object · scene · style` dial has always been prose or nothing —
-H3 has no reference-conditioning switch, and the DiT is handed the same tensor
-whatever the chip says — but until now the only thing that read it was Refine's
-glossary, so a piece queued without a rewrite had the setting quietly do
-nothing. Settings → Nodes → **Reference scopes in the prompt** turns on a second
-reader: the compiler writes one sentence per reference in front of the
-description, saying what that file lends and what it does not. The sentences are
-shown in the prompt box above your own text, so what gets sent is readable while
-you are still setting the chips. Off by default, and dropped entirely when a
-refined reference form is what is queued — that form defines its own labels in
-`subject_definitions` and scopes them in `retention_analysis`, and two
-descriptions of one reference is worse than none.
+**A reference's scope can be written into the prompt, not just read by the
+refiner.** The `full · person · object · scene · style` dial has always been
+prose or nothing — H3 has no reference-conditioning switch, and the DiT is
+handed the same tensor whatever the chip says — but until now the only thing
+that read it was Refine's glossary, so a piece queued without a rewrite had the
+setting quietly do nothing. Settings → Nodes → **Reference scopes in the
+prompt** turns on a second reader: the compiler writes one sentence per
+reference in front of the description, saying what that file lends and what it
+does not. The sentences are shown in the prompt box above your own text, so what
+gets sent is readable while you are still setting the chips. Off by default, and
+dropped entirely when a refined reference form is what is queued — that form
+defines its own labels in `subject_definitions` and scopes them in
+`retention_analysis`, and two descriptions of one reference is worse than none.
 
-**Audio references get the dial too.** `full · voice · music · ambience · copy`,
-which are the roles H3's reference guide gives an `<Audio N>`. `voice` carries a
-timbre and a delivery onto whoever speaks without carrying the words, `music`
-and `ambience` reference a style or a texture without reusing the recording, and
-`copy` says the signal itself is the video's own audio — the difference between
-an `audio reference` task-type prefix and an `audio reuse` one, and between
-`reference` and `fully_copy` in the retention lines. A clip taken for its
-soundtrack alone scopes here rather than with the pictures, which is a change:
-it used to be refused a scope outright on the grounds that it had no picture
-left to narrow, and it turns out the thing it does have is a sound.
+**Audio references get a scope dial: full, voice, music, ambience or copy.**
+`full · voice · music · ambience · copy`, which are the roles H3's reference
+guide gives an `<Audio N>`. `voice` carries a timbre and a delivery onto whoever
+speaks without carrying the words, `music` and `ambience` reference a style or a
+texture without reusing the recording, and `copy` says the signal itself is the
+video's own audio — the difference between an `audio reference` task-type prefix
+and an `audio reuse` one, and between `reference` and `fully_copy` in the
+retention lines. A clip taken for its soundtrack alone scopes here rather than
+with the pictures, which is a change: it used to be refused a scope outright on
+the grounds that it had no picture left to narrow, and it turns out the thing it
+does have is a sound.
 
-**A reference clip now says what it lends.** The scope dial that reference
-images have had — `full · person · object · scene · style` — is on video chips
-too, with four more values that only a moving picture has. `motion` lends the
-action alone and carries it onto whoever the prompt puts in the shot. `camera`
-lends the move, the cuts and the pacing, with nothing visible in the clip
-appearing. `edit` says the clip *is* the video being edited, which is how you
-replace one subject and keep everything else. `continue` picks the video up
-where the clip ends. Each one becomes a different label in the rewrite: the
-content takes and `motion` mine the clip for a `<Subject N>`, while `camera`,
-`edit` and `continue` ask for the `<Video N>` entry, retention marker and
-task-type prefix H3's reference form gives whole-video relationships. The dial
-opens as a menu now rather than cycling, on the card's chip and on the
-timeline pool's alike, and a clip taken for its sound alone has no dial — there
-is no picture left to scope.
+**A reference clip says what it lends, with motion, camera, edit and continue
+beside the image scopes.** The scope dial that reference images have had — `full
+· person · object · scene · style` — is on video chips too, with four more
+values that only a moving picture has. `motion` lends the action alone and
+carries it onto whoever the prompt puts in the shot. `camera` lends the move,
+the cuts and the pacing, with nothing visible in the clip appearing. `edit` says
+the clip *is* the video being edited, which is how you replace one subject and
+keep everything else. `continue` picks the video up where the clip ends. Each
+one becomes a different label in the rewrite: the content takes and `motion`
+mine the clip for a `<Subject N>`, while `camera`, `edit` and `continue` ask for
+the `<Video N>` entry, retention marker and task-type prefix H3's reference form
+gives whole-video relationships. The dial opens as a menu now rather than
+cycling, on the card's chip and on the timeline pool's alike, and a clip taken
+for its sound alone has no dial — there is no picture left to scope.
 
-**A piece can be shot a pass at a time.** Every card on the strip carries a
-padlock: unlocked is in the next render, locked is not. Write the whole piece,
-lock the cards you are not ready for, and render the first one alone; look at
-it, render it again if it is wrong, and when it is right lock *it* and unlock
-the next. The next render generates that card continuing from the file the first
-one already made — segment 1 is never sampled twice. A locked card keeps
-everything set on it and is simply not generated, so the strip stays the plan it
-always was.
+**A piece can be shot a pass at a time, with a padlock on every card.** Every
+card on the strip carries a padlock: unlocked is in the next render, locked is
+not. Write the whole piece, lock the cards you are not ready for, and render the
+first one alone; look at it, render it again if it is wrong, and when it is
+right lock *it* and unlock the next. The next render generates that card
+continuing from the file the first one already made — segment 1 is never sampled
+twice. A locked card keeps everything set on it and is simply not generated, so
+the strip stays the plan it always was.
 
 Every render of more than one pass now writes each pass as its own file under a
 `takes/` shelf beside the finished video, and hands it back to the card that
@@ -3083,16 +3194,17 @@ on the node body shows the same picture at a tenth the size. A lock belongs to a
 pass rather than a card, since a pass is one generation and there is no half of
 one to lock.
 
-**A card may carry its own seed.** New on the seed pill in a card's editor, and
-absent on every card until it is rolled there — a piece is one look and the seed
-is the handle on it. Retaking is what needs the exception: re-rolling the node's
-seed to shoot one card again moves the number that made the take already locked
-in on another, so a take's seed is a fact about the take. The pill says which of the
+**A card can carry its own seed, so a retake does not move the seed of a take
+already kept (#17).** New on the seed pill in a card's editor, and absent on
+every card until it is rolled there — a piece is one look and the seed is the
+handle on it. Retaking is what needs the exception: re-rolling the node's seed
+to shoot one card again moves the number that made the take already locked in on
+another, so a take's seed is a fact about the take. The pill says which of the
 two numbers is in force, and names the one the card's take was made on.
 
 Asked for in [#17](https://github.com/roadmaus/ComfyUI-MiniMax-Creator/issues/17).
 
-**Clear starts the next scene without taking the setup with it.** A new rail
+**A Clear tool that empties the scene and leaves the setup alone.** A new rail
 tool, last in the cluster the add tools are in. It empties what you wrote for
 this scene — the prompt, the soundscape and the score, any rewrite over them,
 the reference pool, and the strip, which goes back to one blank shot. It leaves
@@ -3103,20 +3215,21 @@ often, so it asks: the first press arms it, the second clears, and five seconds,
 Escape or a click anywhere else puts it back. On a piece with nothing in it the
 tool is simply unavailable.
 
-**941 looks on a style tab in the preset library.** A fourth scope beside piece,
-shot and pre-stage, holding every distinct visual style in the `ostris/minimax_h3_1k`
-dataset as indexed by hoodtronik's [Style Atlas](https://github.com/hoodtronik/minimax-h3-style-atlas)
-— grouped into eight media categories, each card a still off the clip the phrase
-was read from. These are the exact strings H3 was captioned with rather than
-adjectives we thought of, so applying one puts a phrase the model has seen a
-thousand frames of at the front of your prompt. It *swaps* rather than replaces:
-a style already leading the prompt comes out as the new one goes in, so six looks
-tried on one shot is six prompts and not six stacked paragraphs. Nothing else
-moves, and it lands on a piece, a card or a PreStage alike. Vendored — the index
-and one still per clip, about 5 MB, no video and nothing fetched at runtime — and
+**941 looks on a style tab in the preset library, from the MiniMax H3 style
+atlas.** A fourth scope beside piece, shot and pre-stage, holding every distinct
+visual style in the `ostris/minimax_h3_1k` dataset as indexed by hoodtronik's
+[Style Atlas](https://github.com/hoodtronik/minimax-h3-style-atlas) — grouped
+into eight media categories, each card a still off the clip the phrase was read
+from. These are the exact strings H3 was captioned with rather than adjectives
+we thought of, so applying one puts a phrase the model has seen a thousand
+frames of at the front of your prompt. It *swaps* rather than replaces: a style
+already leading the prompt comes out as the new one goes in, so six looks tried
+on one shot is six prompts and not six stacked paragraphs. Nothing else moves,
+and it lands on a piece, a card or a PreStage alike. Vendored — the index and
+one still per clip, about 5 MB, no video and nothing fetched at runtime — and
 `tools/vendor_style_atlas.py` re-reads a fresh clone when upstream grows.
 
-**A trimmed clip and an unnarrowed one no longer say the same word.** An
+**A trimmed clip and an unnarrowed one no longer both read "full".** An
 untrimmed video reference read `@vid-1 full sound on full max` — "full" for the
 whole duration, and "full" again two pills along for a reference nobody has
 scoped. The duration one is "whole" now, which is what the trim editor's own
@@ -3126,9 +3239,9 @@ tooltip has always called it.
 
 Asked for in [#16](https://github.com/roadmaus/ComfyUI-MiniMax-Creator/issues/16).
 
-**Sage attention is a pill on the sampler row.** H3's own attention, run
-quantized — int8 queries and keys, fp8 or fp16 values — through Kijai's
-`MiniMax H3 Mem Eff Sage Attention Patch` in
+**Sage attention is a pill on the sampler row (#16).** H3's own attention, run
+quantized — int8 queries and keys, fp8 or fp16 values — through Kijai's `MiniMax
+H3 Mem Eff Sage Attention Patch` in
 [ComfyUI-KJNodes](https://github.com/kijai/ComfyUI-KJNodes). It is the first
 accelerator here that is not a trade of fidelity for skipped steps: it changes
 what one attention call costs, so it wants *less* VRAM rather than more, and it
@@ -3142,54 +3255,56 @@ queued, the way the other accelerators do. NVIDIA only.
 
 All from [#12](https://github.com/roadmaus/ComfyUI-MiniMax-Creator/issues/12).
 
-**A piece reference in use is no longer reported as unused.** The reference
-shelf says where each one is cited, and it was redrawn only by a full render of
-the strip modal — so writing `@ref-1` into a card left the chip on "cited
-nowhere yet" for the whole of the edit that cited it, which is the one moment
-anybody is reading it. It keeps up with the card now. The other half is the case
-that was actually filed: attaching the same picture to a card in its own right
-works, and gives the file a handle of the card's own, so the copy on the shelf
-is left uncited and the shelf said so — a reference plainly on screen in that
-card, reported as used nowhere. The chip now names the card and the handle it
-wears there.
+**Fixed: a piece reference in use was reported as cited nowhere (#12).** The
+reference shelf says where each one is cited, and it was redrawn only by a full
+render of the strip modal — so writing `@ref-1` into a card left the chip on
+"cited nowhere yet" for the whole of the edit that cited it, which is the one
+moment anybody is reading it. It keeps up with the card now. The other half is
+the case that was actually filed: attaching the same picture to a card in its
+own right works, and gives the file a handle of the card's own, so the copy on
+the shelf is left uncited and the shelf said so — a reference plainly on screen
+in that card, reported as used nowhere. The chip now names the card and the
+handle it wears there.
 
-**A rewrite writes what it returned and nothing else.** Where the node face owns
-the two audio fields, they were taken from the reply unconditionally, so a reply
-with nothing to say about the soundscape blanked one you had typed — in a box
-you were looking at. The strip has always taken those two only when the reply
-carries them; the face agrees with it now.
+**Fixed: a rewrite blanked an audio field the reply said nothing about (#12).**
+Where the node face owns the two audio fields, they were taken from the reply
+unconditionally, so a reply with nothing to say about the soundscape blanked one
+you had typed — in a box you were looking at. The strip has always taken those
+two only when the reply carries them; the face agrees with it now.
 
-**The prompt box is read as it is.** Its DOM is meant to be flat, and everything
-the box does keeps it that way, but undo restores the engine's own snapshot and
-Ctrl+B is the browser's command on a contenteditable. Reading the top level only
-meant a wrapper the engine put there cost the line break it stands for, and a
-reference chip inside one came back as its own label — written into the state on
-the same keystroke. Text dragged into the box is now held to the plain-text rule
-that pasted text already was.
+**Fixed: undo and Ctrl+B in the prompt box could lose a line break or a
+reference chip (#12).** Its DOM is meant to be flat, and everything the box does
+keeps it that way, but undo restores the engine's own snapshot and Ctrl+B is the
+browser's command on a contenteditable. Reading the top level only meant a
+wrapper the engine put there cost the line break it stands for, and a reference
+chip inside one came back as its own label — written into the state on the same
+keystroke. Text dragged into the box is now held to the plain-text rule that
+pasted text already was.
 
 ## 2.2
 
-**[The face pass](README.md#faces).** H3 draws a face badly in proportion to how
-small the head is in frame, and no upscaler reaches that — an upscaler
-re-resolves what was drawn, and what was drawn was a smudge. The **faces** pill
-on the sampler row switches on a second, small generation per pass: the face is
-tracked frame by frame, cropped to fill its own canvas, re-drawn by H3 itself at
-a denoise scaled to how large it already is, and pasted back under a feathered
-mask. It needs a SAM3 checkpoint, which ships with ComfyUI core; nothing else to
-install. Asked for in
+**A face pass: track the face, re-draw it at its own canvas, and paste it back
+(#9).** H3 draws a face badly in proportion to how small the head is in frame,
+and no upscaler reaches that — an upscaler re-resolves what was drawn, and what
+was drawn was a smudge. The **faces** pill on the sampler row switches on a
+second, small generation per pass: the face is tracked frame by frame, cropped
+to fill its own canvas, re-drawn by H3 itself at a denoise scaled to how large
+it already is, and pasted back under a feathered mask. It needs a SAM3
+checkpoint, which ships with ComfyUI core; nothing else to install. Asked for in
 [#9](https://github.com/roadmaus/ComfyUI-MiniMax-Creator/issues/9).
 
-**The seed that made this.** `control_after_generate` rolls the seed the moment a
-queue goes out, so the number that made the shot on screen is gone from the UI by
-the time you decide you want it. The sampler row remembers what was actually
-sent and grows a button that puts it back.
+**A button that puts back the seed the render on screen was actually made
+with.** `control_after_generate` rolls the seed the moment a queue goes out, so
+the number that made the shot on screen is gone from the UI by the time you
+decide you want it. The sampler row remembers what was actually sent and grows a
+button that puts it back.
 
-**One seed for the piece.** A timeline used to run segment k on `seed + k`, so
-the number on the node named the first shot's noise and nothing else: no shot
-after it could be reproduced from what the UI showed, and re-ordering the strip
-re-rolled every shot below the card you moved. The seed you set now carries
-through every segment — chained or single, and through the refine and face
-passes inside them.
+**One seed for the whole piece, instead of `seed + k` per segment.** A timeline
+used to run segment k on `seed + k`, so the number on the node named the first
+shot's noise and nothing else: no shot after it could be reproduced from what
+the UI showed, and re-ordering the strip re-rolled every shot below the card you
+moved. The seed you set now carries through every segment — chained or single,
+and through the refine and face passes inside them.
 
 One fix rides along: the rewrite box no longer loses the caret after every
 character ([#11](https://github.com/roadmaus/ComfyUI-MiniMax-Creator/issues/11)).
@@ -3204,10 +3319,11 @@ what it rendered before.
 
 ## 2.1
 
-**[Presets](README.md#presets).** A setup you can put back — the whole node, or
-the sections of it you tick. Saved off a node you have dialled in, or read back
-out of a render you already made, since the file carries the workflow that made
-it. The library is on the rail beside Gallery and Settings.
+**Presets: save a node's setup, or read one back out of a render you already
+made.** A setup you can put back — the whole node, or the sections of it you
+tick. Saved off a node you have dialled in, or read back out of a render you
+already made, since the file carries the workflow that made it. The library is
+on the rail beside Gallery and Settings.
 
 Two fixes ride along. The settings page no longer resets the fields you did not
 touch ([#8](https://github.com/roadmaus/ComfyUI-MiniMax-Creator/issues/8)): a
