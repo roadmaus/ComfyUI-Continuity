@@ -96,11 +96,24 @@ This pack is glue. The work underneath it belongs to other people:
 - [taehv](https://github.com/madebyollin/taehv) by madebyollin - the tiny decoder behind the live preview
 - [BiRefNet](https://github.com/ZhengPeng7/BiRefNet) by ZhengPeng7 - the matte behind every one-click cutout
 - [ComfyUI-H3-PowerLoraStack](https://github.com/cicalooo/ComfyUI-H3-PowerLoraStack) by cicalooo - the H3-safe LoRA loader, vendored (Apache-2.0)
+- [MLX-DLSS](https://github.com/iamwavecut/MLX-DLSS) by iamwavecut - the DLSS 5 refiner's inference and weight extraction, vendored (Apache-2.0)
+- NVIDIA - the DLSS 5 neural renderer itself. Nothing of theirs ships here; the weights are extracted from your own driver DLL
+- [ReDetail](https://github.com/Bambushu/redetail) by Bambushu - the graph and the measurements behind the ReDetail upscale
+- [Raylight](https://github.com/Karmabu/raylight) by Karmabu - H3 across two GPUs
+- MiniMax - H3 itself, and the reference guide this pack's prompts are written to
+- Krea, Ideogram, Black Forest Labs and the Qwen team - the four still families beside H3 and LTX 2.5
+- Meta - SAM 3, behind click-to-select cutouts, the faces pass and the Matte tracing
+- ByteDance - SeedVR2, the Restore backend on the upscale bench
+- Depth Anything 3 and SDPose - the two model-backed tracings, both loaded through core
+- alibaba-pai - the MiniMax-H3-Acc-LoRAs whose 32 output heads the accelerator reads
+- ["Towards Error-Free Long Video Generation"](https://arxiv.org/abs/2606.22370) - the finding the drift guard is built on
 - larryvrh and lightx2v - the H3 distillation LoRAs behind turbo
 - CiviMeta - the sidecar format the LoRA cards read
 
-All of those packs are optional. If one is installed, the matching pills light
-up.
+Every node pack on that list is optional: if one is installed, the matching
+pills light up, and if it is not, they say what is missing. The models are
+optional in the same way — none of them is downloaded for you, and nothing on
+this list ships inside the pack except the two vendored libraries it names.
 
 ## License
 
