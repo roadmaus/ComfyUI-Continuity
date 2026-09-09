@@ -82,27 +82,6 @@ and the weights are extracted, on the settings page, from the user's own DLSS
 DLL after a hash check. Without them the pack loads and renders exactly as
 before, and the pills say what is missing.
 
-**A drift guard that stops chained shots getting brighter and harsher down a
-long strip (#41, #46).** Every continued shot came out a little brighter and
-harsher than the one before it, until the end of a long strip looked fried
-(issues #41, #46). A flow sampler's output is, exactly, the step-weighted
-average of every step's own guess at the clean picture, and "Towards Error-Free
-Long Video Generation" (arXiv 2606.22370) finds the drift in the late guesses on
-a chained Wan model and stops it, with no training, by handing on a window of
-the schedule instead. The settings page's new "Drift guard" rail does that for
-H3 passes and their turbo lead-in: off, or the average of the model's last two
-to eight guesses at each shot. Two departures from the paper. It is counted in
-guesses rather than sigma, so one setting means the same on a 20-step schedule
-and a turbo one — H3 samples at shift 12, where a turbo schedule's steps all
-start above sigma 0.6. And the guess is the model's own prediction at each step
-rather than the paper's noise-minus- velocity, which assumes one consistent
-model along the run and made a turbo render with a lead-in worse, not better. On
-an eight-shot 20-step strip the frying was gone; fewer guesses look most like a
-plain render, more are steadier and softer. A model patch records the
-predictions and swaps the sampler's output for their average once the schedule
-reaches zero; the sound row leaves as the sampler made it. Off by default and
-off emits nothing.
-
 **A seam can continue from the model's own latent instead of a VAE round trip
 (#41, #46).** The run a seam inherits used to be read off the source pass's
 decode and encoded again; measured on H3, that trip darkens the run by about

@@ -777,27 +777,6 @@ check("levelled: the next blended seam is anchored to the first pass's sampler",
 check("levelled: a classic seam gets neither",
       any(k in _lv_chain[3][1] for k in ("prev_latent", "anchor_latent")), False)
 
-# The drift guard. Off by default and off emits nothing; on, one patch per
-# generation sits between the accelerators and the sampler carrying the count,
-# and the sampler runs on it. Read off the file like the seam handoff, so it is in the cache key for the
-# same reason.
-check("off, no drift guard node is emitted", "MiniMaxH3TruncatedFlow" in by_type, False)
-_was_dg = _settings.drift_guard
-_settings.drift_guard = lambda: 3
-try:
-    _dg = build().expand
-    _fp_three = cn.MiniMaxH3Timeline.fingerprint_inputs(timeline_data=DATA)
-finally:
-    _settings.drift_guard = _was_dg
-_dg_nodes = {n_id: n["inputs"] for n_id, n in _dg.items()
-             if n["class_type"] == "MiniMaxH3TruncatedFlow"}
-check("three guesses emits one drift guard per generation", len(_dg_nodes), 3)
-check("...carrying the count", {i["guesses"] for i in _dg_nodes.values()}, {3})
-check("...and every sampler runs on it",
-      all(n["inputs"]["model"][0] in _dg_nodes
-          for n in _dg.values() if n["class_type"] == "KSampler"), True)
-check("the drift guard is part of the node's cache key",
-      _fp_three != cn.MiniMaxH3Timeline.fingerprint_inputs(timeline_data=DATA), True)
 
 # The encoder's guide arithmetic, against a stand-in VAE: one call over the
 # run, one block per latent step, pinned at the offsets core's temporal grid
