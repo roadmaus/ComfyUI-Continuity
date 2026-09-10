@@ -77,7 +77,7 @@ def default_prefixes():
 
 
 # The roads a blended seam can take, see `DEFAULTS["seam_handoff"]`.
-SEAM_HANDOFFS = ("frames", "latent", "levelled")
+SEAM_HANDOFFS = ("frames", "latent", "levelled", "masked")
 DEFAULTS = {
     "video_crf": DEFAULT_CRF,
     # `{family: prefix}` apiece — see `default_prefixes` above. Asked of the
@@ -127,9 +127,12 @@ DEFAULTS = {
     # source pass's sampler latent (`encode._context_slice`). "levelled": the
     # same slice, pulled back to the first pass's channel statistics before it
     # is pinned (`encode._level`), so the model's own brightening and
-    # sharpening stop stacking down a strip. "frames": the decoded tail encoded
-    # again — the road every render took before either existed, kept so the
-    # three can be compared on the same strip.
+    # sharpening stop stacking down a strip. "masked": the same slice written
+    # into the next pass's own latent and held there by a noise mask, so the
+    # model continues the tokens it made rather than generating new ones under
+    # guidance (`encode._masked_prefix`). "frames": the decoded tail encoded
+    # again — the road every render took before any of these existed, kept so
+    # the four can be compared on the same strip.
     "seam_handoff": "latent",
     # The weight files this machine last picked, by family: `{family: {slot:
     # filename, dtype, route, devices}}` — the same block a piece carries, in

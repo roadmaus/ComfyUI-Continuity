@@ -846,6 +846,11 @@ class SettingsPage {
             + "before the model reads it. Each shot still drifts a little within "
             + "itself, but the next one starts where the first did, so it stops "
             + "stacking down the strip. The finished frames are not touched." },
+      { value: "masked", label: "The latent, masked",
+        note: "The same slice, written into the next shot's own latent and held "
+            + "there while the rest is sampled: the model continues the frames it "
+            + "made rather than generating new ones under guidance. Picture only; "
+            + "the sound crosses the seam as before." },
     ];
     return this.section("Rendering", "Seam handoff",
       "What a blended seam hands the next shot. Every continued shot comes out a "
