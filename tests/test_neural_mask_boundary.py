@@ -17,8 +17,11 @@ soft = np.full_like(source, 0.25)
 
 
 class Network:
+    def __init__(self, head=0.4):
+        self.head = head
+
     def run_features(self, features):
-        out = np.full((*features.shape[:2], 4), 0.4, dtype=np.float32)
+        out = np.full((*features.shape[:2], 4), self.head, dtype=np.float32)
         out[..., 3] = 0
         return out
 
@@ -62,3 +65,25 @@ for detail, colour in [(1.25, 0), (1, 1), (0.5, 1.5)]:
 
 check("fully masked still remains the original recipe",
       np.allclose(still(np.ones_like(source), 1.25, 0), still(None, 1.25, 0), atol=1e-6), True)
+
+# Intensity belongs before detail/colour clipping, just as in unmasked runs.
+# Moving it into the final mask blend changes saturated highlights/shadows.
+for level, residual in [(0.95, 0.4), (0.05, -0.4)]:
+    source = np.full_like(source, level)
+    network = Network(residual)
+    pipeline.run_features = network.run_features
+    for intensity in (0, 0.25, 0.5, 1):
+        raw = still(None, 1.25, 1.5, intensity)
+        check(f"saturated still {level}/{intensity}: white mask preserves recipe",
+              np.allclose(still(np.ones_like(source), 1.25, 1.5, intensity), raw, atol=1e-6), True)
+        check(f"saturated still {level}/{intensity}: soft mask is applied once",
+              np.allclose(still(soft, 1.25, 1.5, intensity),
+                          source + 0.25 * (raw - source), atol=1e-6), True)
+        options = port.TemporalOptions(detail_strength=1.25, colour_strength=1.5,
+                                       intensity=intensity, scene_cut_threshold=0)
+        masked = port.TemporalSession(network, options=options, motion="zero")
+        unmasked = port.TemporalSession(network, options=options, motion="zero")
+        for frame_index in range(3):
+            check(f"saturated temporal {level}/{intensity}/{frame_index}: white mask preserves recipe",
+                  np.allclose(masked.process(source, control_mask=np.ones_like(source)),
+                              unmasked.process(source), atol=1e-6), True)

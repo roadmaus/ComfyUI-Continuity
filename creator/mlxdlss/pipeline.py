@@ -183,7 +183,7 @@ class NeuralRenderingPipeline:
         mask = prepared.control_mask
         composed = compose_head(
             prepared.geometry.crop(head), prepared.processing,
-            intensity=intensity if mask is None else 1.0
+            intensity=intensity
         )
         if composed.shape[:2] != prepared.source.shape[:2]:
             composed = resample(composed, prepared.source.shape[1], prepared.source.shape[0])
@@ -192,8 +192,9 @@ class NeuralRenderingPipeline:
         )
         if mask is not None:
             # Filtering an already masked residual spreads the change outside
-            # the mask. Filter first, then blend once (also for soft masks).
-            output = blend_mask(prepared.source, output, mask, intensity)
+            # the mask. Filter first, then mask once (also for soft masks).
+            # Intensity stays before detail/clipping, matching unmasked runs.
+            output = blend_mask(prepared.source, output, mask)
         timings = {
             "preprocess": prepared.preprocess_seconds,
             "network": network_seconds,

@@ -270,7 +270,7 @@ class TemporalSession:
         height, width = frame.shape[:2]
         geometry = NetworkGeometry.vendor_aligned(width, height)
         controls = self._controls()
-        intensity = self.options.intensity if control_mask is None else 1.0
+        intensity = self.options.intensity
         if self.history is None:
             network = make_features(frame, frame_index=self.frame_index, geometry=geometry, control_mask=control_mask, **controls)
             head = geometry.crop(self.pipeline.run_features(network))
@@ -286,13 +286,13 @@ class TemporalSession:
         # the displayed result applies that mask after filtering instead. This
         # preserves unedited pixels without multiplying soft-mask strength twice.
         self.history = (output if control_mask is None else
-                        blend_mask(frame, output, control_mask, self.options.intensity))
+                        blend_mask(frame, output, control_mask))
         self.previous = frame; self.frame_index += 1
         detailed = compose_detail(
             frame, output, detail_strength=self.options.detail_strength, colour_strength=self.options.colour_strength, radius=self.options.detail_radius
         )
         return (detailed if control_mask is None else
-                blend_mask(frame, detailed, control_mask, self.options.intensity))
+                blend_mask(frame, detailed, control_mask))
 
     def _is_scene_cut(self, frame: np.ndarray) -> bool:
         if self.options.scene_cut_threshold <= 0:
