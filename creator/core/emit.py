@@ -347,7 +347,9 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
                     graph, links, frames, payloads[source_index],
                     compiled[source_index], one.seam_restore, weights, sampling,
                     acceleration, seed_for(index))
-                handoff = handoff if one.feather > 1 else None
+                # ...but not on the frames road: that road is the decoded tail
+                # encoded again, and a restored seam is no exception to it.
+                handoff = handoff if one.feather > 1 and handing != "frames" else None
             seams["prev_image"] = frames
             if handoff is not None:
                 seams["prev_latent"] = handoff

@@ -2,8 +2,8 @@
 
 Upstream: <https://github.com/iamwavecut/MLX-DLSS>, Apache-2.0,
 revision `7debaaf` (2026-09-05). Its LICENSE and NOTICE sit beside this file.
-Every line in the other modules here is upstream's; `tools/vendor_mlxdlss.py`
-copies them and holds any local edit as a patch.
+`tools/vendor_mlxdlss.py` copies the upstream modules and reapplies the local
+mask-boundary correction recorded in `tools/mlxdlss.patch`.
 
 **Why this is copied and not installed.** The first version of the refiner
 asked the user to `pip install` the port from a git URL, and that was the

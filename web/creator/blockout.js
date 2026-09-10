@@ -955,6 +955,7 @@ class Bench {
     this.progress = null;      // a sentence for the run button while it works
     this.error = null;
     this.result = null;
+    this.revision = 0;        // edits made while a run is yielding to the page
     this.sentTo = new Set();
     this.sending = null;
 
@@ -1684,6 +1685,7 @@ class Bench {
    *  dial on the tracing bench — and note what is *not* here: flying the free
    *  camera changes nothing about the file, and so stales nothing. */
   markStale() {
+    this.revision++;
     if (!this.result) return;
     this.result = null;
     this.sentTo.clear();
@@ -2605,26 +2607,31 @@ class Bench {
     };
     try {
       const { w, h } = this.frameSize();
-      // The set, as it stands at the press. The run yields to the page between
-      // frames — that is what keeps the room responsive — so without this a
-      // piece dragged mid-render would change sets halfway through the clip.
+      // Freeze the whole job, not just its objects. Encoding/uploading yields
+      // between frames, while the camera marks, pass and prose remain editable.
+      // The sidecar must describe the same scene the pixels were drawn from.
+      const revision = this.revision;
+      const scene = this.scene();
+      const pass = this.passOf();
+      const words = this.said();
       const staged = this.objects.map((piece) => ({ ...piece }));
-      const still = this.marks.length < 2;
+      const still = scene.marks.length < 2;
+      let result;
       if (still) {
         step(t("Tracing the frame…"));
-        const blob = await this.drawFull(w, h, this.shot, staged);
+        const blob = await this.drawFull(w, h, scene.shot, staged, scene.pass);
         const asset = await upload(
-          new File([blob], `blockout-${this.pass}.png`, { type: "image/png" }), WRITES.slice(0, -1));
-        this.result = { path: asset.path, kind: "image" };
+          new File([blob], `blockout-${scene.pass}.png`, { type: "image/png" }), WRITES.slice(0, -1));
+        result = { path: asset.path, kind: "image" };
       } else {
         const token = crypto.getRandomValues(new Uint32Array(4))
           .reduce((hex, part) => hex + part.toString(16).padStart(8, "0"), "");
-        const count = Math.max(2, Math.round(this.duration * FPS));
+        const count = Math.max(2, Math.round(scene.duration * FPS));
         let batch = [];
         for (let index = 0; index < count; index++) {
           step(t("Drawing frame {n} of {count}…", { n: index + 1, count }));
-          const cam = pathCam(this.marks, index / (count - 1));
-          batch.push({ index, blob: await this.drawFull(w, h, cam, staged) });
+          const cam = pathCam(scene.marks, index / (count - 1));
+          batch.push({ index, blob: await this.drawFull(w, h, cam, staged, scene.pass) });
           if (batch.length >= BATCH || index === count - 1) {
             step(t("Sending frame {n} of {count}…", { n: index + 1, count }));
             await blockoutFrames(token, batch);
@@ -2632,16 +2639,18 @@ class Bench {
           }
         }
         step(t("Writing the clip…"));
-        this.result = await blockoutWrite({
-          token, fps: FPS, op: this.pass, scene: this.scene(),
+        result = await blockoutWrite({
+          token, fps: FPS, op: scene.pass, scene,
         });
       }
-      const pass = this.passOf();
-      this.result.op = pass.label;
-      this.result.opId = pass.opId;
+      result.op = pass.label;
+      result.opId = pass.opId;
       // The prose, stamped on the file's record: staging and move together, so
       // a door's take() — and anything later that wants the words — has them.
-      this.result.words = this.said();
+      result.words = words;
+      // A finished old snapshot remains in the picker, but it must not reopen
+      // the attachment doors after an edit has made the live scene different.
+      if (this.revision === revision) this.result = result;
     } catch (error) {
       this.error = String(error.message || error);
     }
@@ -2651,7 +2660,7 @@ class Bench {
   }
 
   /** One frame at the run's size, as a PNG blob. */
-  drawFull(width, height, cam, staged = this.objects) {
+  drawFull(width, height, cam, staged = this.objects, pass = this.pass) {
     if (!this.full || this.full.w !== width || this.full.h !== height) {
       this.full = new Raster(width, height);
       this.fullCanvas = el("canvas");
@@ -2660,7 +2669,7 @@ class Bench {
       this.fullContext = this.fullCanvas.getContext("2d");
     }
     this.full.raster(staged, cam);
-    this.full.shade(this.fullContext, this.pass);
+    this.full.shade(this.fullContext, pass);
     return new Promise((resolve, reject) => {
       this.fullCanvas.toBlob((blob) =>
         blob ? resolve(blob) : reject(new Error(t("a frame could not be encoded"))), "image/png");

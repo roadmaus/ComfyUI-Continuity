@@ -157,7 +157,7 @@ export const api = {
     }
     if (String(route).startsWith("/continuity/neural/twin")) {
       globalThis.__twinAsked = JSON.parse(options.body);
-      return { ok: true, status: 200, json: async () => ({ prompt_id: "twin-1" }) };
+      return { ok: true, status: 200, json: async () => ({ prompt_id: "twin-1", node: "7", index: 0 }) };
     }
     if (String(route).startsWith("/continuity/probe")) {
       return { ok: true, status: 200, json: async () => (globalThis.__probe
@@ -541,8 +541,10 @@ try {
   out.reap.castUntouched = cast();
   cut(anna);
   out.reap.afterTheName = cast();
-  // Her picture was attached by casting her, so it leaves with her — muting is
-  // for a file you might put back, and there is nobody left to put it back for.
+  // She stays on the shelf, and the picture casting her attached stays live
+  // with her: deleting a sentence is trying the shot without somebody, not
+  // striking them off the piece (#52). An uncited member is cut at queue time,
+  // pictures and all, so nothing reaches the model meanwhile.
   out.reap.andHerPictures = refs();
   // And all of it is in the blob, which is what queues.
   out.reap.blob = JSON.parse(node.widgets[0].value).segments[0].assets
@@ -1397,11 +1399,7 @@ try {
     return found;
   };
   const previewRails = rails.slice(0, 2);
-  const guardRail = rails[2];
-  const cacheRails = rails.slice(3);
-  out.settings.guardStops = Number(railOf(guardRail).getAttribute("max")) + 1;
-  out.settings.guardReads = guardRail.children?.[1]?.children?.[0]?.children?.[0]?.text
-    ?? guardRail.children?.[1]?.children?.[0]?.text ?? null;
+  const cacheRails = rails.slice(2);
   out.settings.previewStops = previewRails.map(
     (r) => Number(railOf(r).getAttribute("max")) + 1);
   out.settings.cacheStops = cacheRails.map((r) => Number(railOf(r).getAttribute("max")) + 1);
@@ -2585,8 +2583,8 @@ try {
     })(),
   };
 
-  // ...and deleting the style's chip takes the style off the node, picture and
-  // all — the same reaping a cast member gets, because it is the same thing.
+  // ...and deleting the style's chip leaves the style on the node, picture and
+  // all — the same keeping a cast member gets, because it is the same thing.
   box.root.children.find((n) => n.dataset?.handle === look)?.remove();
   box.onEdit();
   out.summon.styleGone = (node.mmcBody.timeline.subjects ?? [])
@@ -2967,7 +2965,7 @@ try {
   for (let n = 0; n < 6; n += 1) await new Promise((done) => setTimeout(done, 0));
   twin.asked = globalThis.__twinAsked;
   // The queue answering, on the wire, the way a render answers.
-  globalThis.__say("executed", { prompt_id: "twin-1",
+  globalThis.__say("executed", { prompt_id: "twin-1", node: "7.0.save", display_node: "7",
                                  output: { mmc_image: [{ filename: "shot-2.png",
                                                          subfolder: "continuity/stills",
                                                          type: "output" }] } });
@@ -3277,11 +3275,15 @@ check("a handle still written elsewhere survives losing its chip",
 check("a reference whose last mention goes is muted, not detached",
       reap.get("afterTheRef"), "img-1,img-2!,img-3")
 check("...and takes nobody out of the cast with it", reap.get("castUntouched"), "anna")
-check("deleting a name takes the member off the shelf", reap.get("afterTheName"), "")
-check("...and the pictures casting her attached go with her", reap.get("andHerPictures"),
-      "img-2!,img-3")
+# Deleting a name is not deleting a member. It used to be — the member and the
+# pictures casting them attached went with the sentence — and a piece built
+# with care lost its cast to a prompt rewrite (#52). The shelf's ✕ is the
+# gesture that means "out of the cast".
+check("deleting a name leaves the member on the shelf", reap.get("afterTheName"), "anna")
+check("...and the picture casting her attached stays with her", reap.get("andHerPictures"),
+      "img-1,img-2!,img-3")
 check("...and all of it is written through to the blob that queues",
-      reap.get("blob"), "img-2!,img-3")
+      reap.get("blob"), "img-1,img-2!,img-3")
 
 # The same switch by hand: the glyph beside the ✕, which is where the other
 # thing you can do to a whole file already lives.
@@ -3438,11 +3440,6 @@ check("both preview rails carry their stops", settings.get("previewStops"), [7, 
 check("...opening on the pack's own 640 px and quality 80",
       settings.get("previewReads"), ["640 px", "80"])
 check("both cache rails carry their stops", settings.get("cacheStops"), [6, 9])
-# The drift guard: one rail from off to the steadiest count, opening on off —
-# a count in force would be a strip rendering differently from every strip
-# before it with nothing on the page saying so.
-check("the drift guard rail carries its stops", settings.get("guardStops"), 6)
-check("...opening on off", settings.get("guardReads"), "Off")
 check("...opening on the stored month and 8 GB",
       settings.get("cacheReads"), ["1 month", "8 GB"])
 # The retention rail is live: the ceiling ships at 8 GB, so there is a store for
@@ -3911,9 +3908,9 @@ check("a style is a subject like any other, and opens the same shelf",
       summon.get("takes"), "style")
 check("a name nobody answers to leaves the shelf as it was",
       summon.get("strangerLeavesItAlone"), "claymation")
-check("deleting a style's chip takes the style off the node",
-      summon.get("styleGone"), "anna")
-check("...and its picture with it", summon.get("andItsPicture"), "anna/face.png")
+check("deleting a style's chip leaves the style on the node",
+      summon.get("styleGone"), "anna,claymation")
+check("...and its picture with it", summon.get("andItsPicture"), "anna/face.png,styles/clay.webp")
 
 # ---- the reference card -----------------------------------------------------
 #

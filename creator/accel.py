@@ -242,7 +242,19 @@ def _kitchen_kwargs(node):
     raises instead, on the same terms as a missing pack.
     """
     kwargs = node_defaults(node)
-    options = node.INPUT_TYPES()["required"]["attention"][0]
+    declared = node.INPUT_TYPES()["required"]["attention"]
+    options = ()
+    # Legacy nodes put the choices first. V3's INPUT_TYPES shim instead puts
+    # the type name "COMBO" first and the choices in metadata. Reading that
+    # string as choices rejects a supported kernel and reports C/O/M/B/O (#64).
+    if isinstance(declared, (tuple, list)) and declared:
+        if isinstance(declared[0], (tuple, list)):
+            options = declared[0]
+        elif (declared[0] == "COMBO" and len(declared) > 1
+              and isinstance(declared[1], dict)):
+            choices = declared[1].get("options")
+            if isinstance(choices, (tuple, list)):
+                options = choices
     if KITCHEN_OPTION not in options:
         raise ValueError(
             f"This ComfyUI cannot run '{KITCHEN_OPTION}' — '{KITCHEN_NODE}' "

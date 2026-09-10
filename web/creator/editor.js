@@ -108,7 +108,9 @@ export function pickTakes(anchor, asset, commit) {
     options: options.map((key) => t(S.takeWord(key))),
     value: t(S.takeWord(S.takes(asset))),
     onPick: (choice) => {
-      const key = options.find((k) => t(k) === choice) ?? "full";
+      // Through the same word the option was shown as: "motion" is shown as
+      // "action", and matching on the key alone sent it to "full" (#52).
+      const key = options.find((k) => t(S.takeWord(k)) === choice) ?? "full";
       if (key === "full") delete asset.takes;
       else asset.takes = key;
       commit();
@@ -1004,9 +1006,11 @@ export class CreatorEditor {
    *
    * Then it meant too much: the reference was detached outright, and a mention
    * deleted while trying a sentence without it cost the file, the handle, the
-   * narrowing and the trim. A member leaves — that is what deleting their name
-   * is for — but their picture is muted rather than binned, which is the state
-   * "out of this shot, still on the node" already had a word for.
+   * narrowing and the trim. So the picture is muted rather than binned, which
+   * is the state "out of this shot, still on the node" already had a word for.
+   * And a member stays on the shelf: their name is cut at queue time anyway,
+   * and taking them off the piece over a rewritten sentence cost a cast built
+   * with care (#52). The shelf's ✕ is what means "out of the cast".
    *
    * Only what is no longer written anywhere. A handle the same shot still cites
    * from its soundscape, or another card of the same piece still cites, stays —
@@ -1020,41 +1024,14 @@ export class CreatorEditor {
     if (!handles?.length) return;
     let dropped = false;
 
-    // The cast first, so the pictures a departing member alone was built out of
-    // are still findable when the files are swept below.
-    const orphans = [];
-    for (const handle of handles) {
-      const cast = this.castPiece.subjects ?? [];
-      const subject = cast.find((s) => s.handle === handle);
-      if (!subject) continue;
-      // Piece-wide: a member deleted from shot 3 is still in the piece while
-      // shot 5 writes them. `match` rather than `test`, because the pattern is
-      // global and a global regex tested twice in a row answers from wherever
-      // the first test left off.
-      const pattern = S.subjectCitationRe([subject]);
-      const stillCited = [...this.citingTexts(),
-                          ...(this.castPiece === this.state ? [] : S.allTexts(this.castPiece))]
-        .some((text) => String(text ?? "").match(pattern));
-      if (stillCited) continue;
-      orphans.push(...S.soleClaims(subject, cast));
-      // The shelf drops an open card whose member is no longer in the cast on
-      // its next render, so there is nothing to tell it.
-      this.castPiece.subjects = cast.filter((s) => s !== subject);
-      dropped = true;
-    }
-
+    // Not the cast. A member whose last mention was deleted stays on the
+    // shelf with their pictures: deleting a sentence is how you try a shot
+    // without somebody, and it used to take them — and the files casting them
+    // attached — off the piece for good (#52). The shelf's own ✕ is the one
+    // gesture that means "out of the cast"; see `CastShelf.remove`.
     const texts = [...this.citingTexts(),
                    ...(this.castPiece === this.state ? [] : S.allTexts(this.castPiece))];
     const gone = (handle) => !S.handleWritten(texts, handle);
-
-    // A departing member's leavings do go. Their pictures are on this shot
-    // because casting them put them there, so with nobody left to be a picture
-    // *of* there is nothing to mute — see `soleClaims`.
-    const orphaned = new Set(orphans);
-    const before = this.state.assets.length;
-    this.state.assets = this.state.assets.filter(
-      (asset) => asset.role !== "reference" || !orphaned.has(asset.handle) || !gone(asset.handle));
-    if (this.state.assets.length !== before) dropped = true;
 
     // The reference whose name was deleted is muted, not detached.
     //

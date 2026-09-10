@@ -59,7 +59,7 @@ from . import (accel, canvas, compile as compiler, guide as guides, job_node,
                redetailpass, refmod_node, sampling, settings, timeline)
 from .core import emit as loop
 from .families import registry
-from .families.h3 import declare as h3, facepass, hires, seamrestore, truncate
+from .families.h3 import declare as h3, facepass, hires, seamrestore
 
 DEFAULT_DATA = json.dumps({
     "version": 2,
@@ -185,13 +185,12 @@ def _fingerprint(blob):
     piece keeps its reference pool.
 
     The settings are the ones `_render` reads off the file when it builds
-    the graph — the seam handoff, the turbo lead-in and the drift guard. They are not node inputs,
+    the graph — the seam handoff and the turbo lead-in. They are not node inputs,
     so without this a changed setting left the node's inputs identical, the
     expansion was a cache hit, and the switch on the settings page did nothing
     until something else about the render moved.
     """
-    graph_settings = (settings.seam_handoff(), settings.turbo_lead_in(),
-                      settings.drift_guard())
+    graph_settings = (settings.seam_handoff(), settings.turbo_lead_in())
     try:
         return (blob, timeline.stamps(compiler.as_piece(json.loads(blob))), graph_settings)
     except Exception:
@@ -374,7 +373,7 @@ class MiniMaxCreatorExtension(ComfyExtension):
         return [MiniMaxH3Creator, MiniMaxH3Timeline, job_node.ContinuityJob,
                 *timeline.NODES, *registry.segment_nodes(),
                 *prestage.NODES, *hires.NODES, *facepass.NODES, *seamrestore.NODES,
-                *truncate.NODES, *refmod_node.NODES,
+                *refmod_node.NODES,
                 *redetailpass.NODES, *neuralpass.NODES]
 
 

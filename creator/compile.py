@@ -3173,7 +3173,9 @@ def _chained_request(data, segment, pool, global_prompt, cast=()):
     #   errors and announcements can name the card. It only exists on a render
     #   that holds something back, so leaving it in meant every card of a
     #   part-render missed the cache the whole render had just filled.
-    for key in ("seed", "take", "hold", "card_no"):
+    # - `card_id` is persistent UI ownership for queued takes, not a model
+    #   input. Assigning/recovering an identity must not re-encode a shot.
+    for key in ("seed", "take", "hold", "card_no", "card_id"):
         request.pop(key, None)
     request["prompt"] = _join_prompt(global_prompt, segment.get("prompt"))
     # A shot-scoped rewrite gets the same join: it stands in for the
@@ -3244,9 +3246,16 @@ def _asset_dict(asset):
     """
     out = {"handle": asset.handle, "kind": asset.kind, "role": asset.role,
            "filename": asset.filename}
-    if asset.track:
+    # A saved RefMod carries none of the file-shaped fields: `ref_size` is
+    # meaningless (its latent is already what it is) and it has no track. Kept
+    # out of the blob by both writers, so the merged request round-trips to the
+    # same asset whichever side wrote it.
+    if asset.track and not asset.mod:
         out["track"] = asset.track
-    if asset.ref_size != "match":
+    # Video parsing defaults to max, unlike images. Omitting an explicit match
+    # here changes both the reference canvas and the memory cost after a merge
+    # or pool injection. Keep existing max serialization/cache keys unchanged.
+    if not asset.mod and (asset.kind == "video" or asset.ref_size != "match"):
         out["ref_size"] = asset.ref_size
     if asset.trim:
         out["trim"] = {"start": asset.trim[0], "end": asset.trim[1]}
@@ -3357,6 +3366,17 @@ def _agree(values, what, blank=""):
     return distinct[0] if distinct else blank
 
 
+def _asset_identity(asset):
+    """What a reference means, without its card-local spelling.
+
+    A sheet's ordered panel metadata is part of its meaning, not just its
+    filename. Aliases can deduplicate; different cuts, layouts or roles cannot.
+    """
+    return (asset.kind, asset.role, asset.filename, asset.track, asset.ref_size,
+            asset.trim, asset.takes, asset.cut, asset.op, asset.rect,
+            tuple(_asset_identity(panel) for panel in asset.panels))
+
+
 def group_payload(data, start=0, end=None):
     """`timeline_data` + a run of segments -> one payload generating all of them.
 
@@ -3367,7 +3387,7 @@ def group_payload(data, start=0, end=None):
 
     - **One reference pool.** Handles are allocated per segment, so `img-1`
       means a different file in each of them. Every segment's attachments are
-      merged — same file, role and trim is the same reference, which is the point:
+      merged — same file, role, trim and panel interpretation is the same reference:
       a face cited in shot 1 and again in shot 4 is one `<Picture N>` — and each
       shot's prompt is rewritten onto the merged handles before the labels are
       assigned. There is no second labelling scheme; `compile_request` does it.
@@ -3395,7 +3415,7 @@ def group_payload(data, start=0, end=None):
     last_number = start + len(group)
     global_prompt = str(data.get("prompt") or "").strip()
     pool = timeline_pool(data)
-    pool_handles = {asset.handle for asset in pool}
+    pool_identities = {asset.handle: _asset_identity(asset) for asset in pool}
     cast = timeline_cast(data)
     # A card's own assets are renamed onto the merged list, so a subject built
     # out of one has to be renamed with them. Accumulated across the shots and
@@ -3413,7 +3433,54 @@ def group_payload(data, start=0, end=None):
     assets = []          # the merged reference list, in first-appearance order
     position_of = {}     # dedup key -> index into `assets`
     counters = {}        # kind -> how many merged handles of it exist
+    # Owners and panels share one namespace when the request is parsed again.
+    # Reserve the pool up front: a reference first cited in a later shot must
+    # not collide with a local owner or panel allocated by an earlier shot.
+    reserved = {handle for asset in pool
+                for handle in (asset.handle, *(p.handle for p in asset.panels))}
+    used = reserved | {subject.handle for subject in cast}
+    claimed = set()
+    cast_handles = {subject.handle for subject in cast}
+
+    def allocate(kind, preferred=None, pooled=False):
+        # A pool entry may claim its reservation, but a shot-local override of
+        # that entry is a second reference if its content/metadata differs.
+        if preferred and preferred not in (claimed if pooled else used):
+            used.add(preferred)
+            claimed.add(preferred)
+            return preferred
+        while True:
+            counters[kind] = counters.get(kind, 0) + 1
+            handle = f"{_HANDLE_PREFIX[kind]}-{counters[kind]}"
+            if handle not in used:
+                used.add(handle)
+                claimed.add(handle)
+                return handle
+
+    def merged_asset(asset):
+        identity = _asset_identity(asset)
+        # A local override has the pool's spelling, not its identity. Letting it
+        # claim the reserved name would silently redirect unchanged global prose.
+        pooled = pool_identities.get(asset.handle) == identity
+        conflict = cast_handles.intersection(
+            [asset.handle, *(panel.handle for panel in asset.panels)])
+        if conflict:
+            handle = sorted(conflict)[0]
+            raise CompileError(f"@{handle} is both a subject and an attached file — "
+                               "one @ must mean one thing; rename one of them")
+        key = (asset.handle if pooled else None, identity)
+        position = position_of.get(key)
+        if position is None:
+            position = position_of[key] = len(assets)
+            handle = allocate(asset.kind, asset.handle if pooled else None, pooled)
+            assets.append(replace(
+                asset, handle=handle,
+                panels=tuple(replace(panel, handle=allocate(panel.kind, panel.handle, pooled))
+                             for panel in asset.panels)))
+        return assets[position]
+
     shots = []           # (cut time in seconds, text) per shot
+    audio_fields = {key: [str(data.get(key) or "")] for key in ("soundscape", "music")}
     at = 0.0
     stack = data.get("loras")
     piece_aspect_source = data.get("aspect_source")
@@ -3441,6 +3508,18 @@ def group_payload(data, start=0, end=None):
         except CompileError as exc:
             raise CompileError(f"shot {number}: {exc}") from exc
 
+        if number == first_number:
+            # Normally _inject_pool already supplies these in pool order. Only
+            # seed an original that the first card shadows: the unrenamed global
+            # description must still mean that original, even if every card has
+            # its own override. Ordinary payload ordering/cache keys stay put.
+            for asset in cited_pool(pool, {}, extra_texts=global_texts, cast=cast):
+                if not any(a.handle == asset.handle and _asset_identity(a) == _asset_identity(asset)
+                           for a in parsed):
+                    merged_asset(asset)
+                    for handle in (asset.handle, *(panel.handle for panel in asset.panels)):
+                        cast_rename.setdefault(handle, handle)
+
         rename = {}
         for asset in parsed:
             if asset.role == "first_frame" and number != first_number:
@@ -3457,33 +3536,21 @@ def group_payload(data, start=0, end=None):
                     f"makes, so it can only be that shot's. Split the pass after shot "
                     f"{number} to give it one of its own."
                 )
-            # A pool asset keys — and keeps — its own handle: the global prompt
-            # is prepended to shot 1's text *without* the shot's rename pass,
-            # so a citation there only resolves if the merged list still calls
-            # the asset what the pool does. Its handle is globally unique
-            # already, which is the ref- prefix's whole job.
-            pooled = asset.handle in pool_handles
-            key = (asset.handle if pooled else None,
-                   asset.kind, asset.role, asset.filename, asset.track,
-                   asset.ref_size, asset.trim, asset.takes)
-            position = position_of.get(key)
-            if position is None:
-                position = position_of[key] = len(assets)
-                if pooled:
-                    assets.append(asset)
-                else:
-                    counters[asset.kind] = counters.get(asset.kind, 0) + 1
-                    assets.append(replace(
-                        asset, handle=f"{_HANDLE_PREFIX[asset.kind]}-{counters[asset.kind]}"))
-            rename[asset.handle] = assets[position].handle
-            cast_rename.setdefault(asset.handle, assets[position].handle)
+            target_asset = merged_asset(asset)
+            rename[asset.handle] = target_asset.handle
+            cast_rename.setdefault(asset.handle, target_asset.handle)
+            # Also map aliases on a deduplicated sheet: retaining only its first
+            # owner's name leaves later shots citing panels that were discarded.
+            for source, target in zip(asset.panels, target_asset.panels):
+                rename[source.handle] = target.handle
+                cast_rename.setdefault(source.handle, target.handle)
             # The piece's chosen aspect source, carried through the merge: the
             # request below is a single generation, so `{card, handle}` has to
             # become the handle the asset wears after renaming.
             if (isinstance(piece_aspect_source, dict)
                     and int(piece_aspect_source.get("card") or 0) == number
                     and piece_aspect_source.get("handle") == asset.handle):
-                merged_aspect_source = assets[position].handle
+                merged_aspect_source = target_asset.handle
 
         # A refined shot replaces the typed one here rather than downstream,
         # because the merged request is a single generation and `compile_request`
@@ -3496,6 +3563,12 @@ def group_payload(data, start=0, end=None):
             lambda m: "@" + rename.get(m.group(1), m.group(1)),
             written or str(segment.get("prompt") or ""),
         ).strip()
+        # Audio prose can cite these same references. Compare/join it only
+        # after the shot's aliases have been mapped to the merged namespace.
+        for key, values in audio_fields.items():
+            values.append(HANDLE_RE.sub(
+                lambda m: "@" + rename.get(m.group(1), m.group(1)),
+                str(segment.get(key) or "")))
         # The standing description of the piece opens the description, which is
         # where the guide puts the style and the initial composition — in front
         # of typed text, and in front of a shot-scoped rewrite, which stands in
@@ -3541,8 +3614,7 @@ def group_payload(data, start=0, end=None):
         "audio_tail_s": data.get("audio_tail_s", DEFAULT_AUDIO_TAIL_S),
     }
     for key in ("soundscape", "music"):
-        request[key] = _agree(
-            [str(data.get(key) or "")] + [str(s.get(key) or "") for s in group], key)
+        request[key] = _agree(audio_fields[key], key)
     # One pass is one face pass. The cards in a merged run are a single
     # generation, so a card that turned it off inside one is asking for
     # something a pass cannot do — refused by name here rather than resolved in

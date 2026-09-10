@@ -245,7 +245,7 @@ async def probe_asset(request):
         return web.json_response({"has_audio": None, "error": str(exc)})
 
 
-def _read_embedded(path):
+def _read_embedded(path, keys=("prompt", "workflow")):
     """The `prompt` and `workflow` a finished render carries in its own file.
 
     Both save nodes write them — `MiniMaxH3Save` into the MP4's container tags,
@@ -263,17 +263,20 @@ def _read_embedded(path):
     A value that is not JSON comes back as None rather than raising. These tags
     are written by whoever wrote the file, which is not always this pack — a
     render remuxed by ffmpeg keeps the tag and can lose the end of it.
+
+    Callers needing producer provenance opt into that key; preset/workflow
+    readers retain the original two-field response by default.
     """
     if os.path.splitext(path)[1].lower() in (".png", ".webp"):
         from PIL import Image
 
         with Image.open(path) as image:
-            raw = {key: image.info.get(key) for key in ("prompt", "workflow")}
+            raw = {key: image.info.get(key) for key in keys}
     else:
         import av  # ComfyUI's own decoder stack, as `_read_header` above.
 
         with av.open(path) as container:
-            raw = {key: container.metadata.get(key) for key in ("prompt", "workflow")}
+            raw = {key: container.metadata.get(key) for key in keys}
 
     out = {}
     for key, value in raw.items():

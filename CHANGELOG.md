@@ -6,6 +6,56 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**A LoRA's soundtrack slider is saved, "action" sticks, and deleting a name
+no longer deletes the cast.** Three losses from issue #52. The soundtrack
+dial on a LoRA was never written into the piece, so a clone or a reload put
+every one back to full — and the backend only ever saw full. Picking "action"
+for a reference set it to "full": the menu showed the word "action" for the
+stored value "motion", and the pick was matched back against the wrong word.
+And deleting a cast member's name out of a prompt took the member off the
+shelf and the pictures casting them attached off the piece, which a rewrite
+of scene 1 did to the whole cast at once. A member now stays until the
+shelf's ✕ says otherwise; an uncited member costs nothing at queue time.
+Removing the one card a cast's pictures sit on hands them to the pool first
+instead of taking them with the card.
+
+**Kitchen attention reads core's V3 option list again.** ComfyUI moved
+`ModelAttentionBackend` to the V3 API on 2026-09-08, and its `INPUT_TYPES`
+shim now leads with the type name rather than the choices. The pack read that
+string as the option list, refused a kitchen kernel the machine had, and said
+so as `['C', 'O', 'M', 'B', 'O']`. Both shapes are read now (issue #64).
+Reported and patched by @sarnara2.
+
+**Sixteen fixes off one audit (issue #54), the DLSS switch first.** In a
+Timeline body the DLSS pill's popover threw before it mounted — the body has no
+`geometry()`, the modal does — so a piece saved with the pass on could not turn
+it off, and rendering without the weights died after the sampler had finished.
+Fixed at the callback. With it: a reel of nothing but held takes passes through
+the neural node instead of being refused; a video reference set to `match` no
+longer serialises away and comes back as `max` after a merge or a pool
+injection; merged sheets allocate owner and panel handles in one namespace, so
+`plate-1`'s `img-1` panel stops colliding with the sheet renamed onto `img-1`;
+the H3 segment's fingerprint calls `timeline.stamps` again, which a bare except
+had been hiding since the family move. The tool benches keep the frame on
+screen at a VFR trim mark rather than the next one decoded, keep the trimmed
+tail's duration, and place a clip's sound by its own timestamps — internal
+gaps and an initial delay included — through a reader the reel's mux now
+shares. The standalone neural node keeps every pixel under a zero mask: the
+detail filter used to smear the masked residual past its edge. A Blockout run
+freezes camera marks, pass, duration and prose at the press, not only the
+objects. The loupe accepts only its producer's output as the twin — every save
+node now stamps `continuity_producer` into the file — queues just that
+producer's closure, and follows seeks, playback and dial changes without
+marking a stale tile current. Takes land on the card that queued them by a
+persistent `card_id` rather than by content, so deleting one of two identical
+cards no longer hands the survivor the other's take, and two overlapping
+submissions keep their own snapshots. Natural's detail dial resets to
+Natural's default; the settings page counts remembered folders and layouts
+among what it offers to clear. A restored seam on the frames road hands over
+restored frames only, no latent, as the setting says. The drift-guard findings in the same audit
+(items 6, 7, E4) landed after the guard was already removed. Reported, with
+patches, by @sarnara2.
+
 **Better DLSS 5 defaults: each style preset now opens at its own detail
 strength, with colour off.** The DLSS 5 pass shipped opening at the model's own
 answer, 1 on both strengths, which is right for detail and wrong for colour:
@@ -81,27 +131,6 @@ and extraction code is vendored (Apache-2.0, pinned, `tools/vendor_mlxdlss.py`),
 and the weights are extracted, on the settings page, from the user's own DLSS
 DLL after a hash check. Without them the pack loads and renders exactly as
 before, and the pills say what is missing.
-
-**A drift guard that stops chained shots getting brighter and harsher down a
-long strip (#41, #46).** Every continued shot came out a little brighter and
-harsher than the one before it, until the end of a long strip looked fried
-(issues #41, #46). A flow sampler's output is, exactly, the step-weighted
-average of every step's own guess at the clean picture, and "Towards Error-Free
-Long Video Generation" (arXiv 2606.22370) finds the drift in the late guesses on
-a chained Wan model and stops it, with no training, by handing on a window of
-the schedule instead. The settings page's new "Drift guard" rail does that for
-H3 passes and their turbo lead-in: off, or the average of the model's last two
-to eight guesses at each shot. Two departures from the paper. It is counted in
-guesses rather than sigma, so one setting means the same on a 20-step schedule
-and a turbo one — H3 samples at shift 12, where a turbo schedule's steps all
-start above sigma 0.6. And the guess is the model's own prediction at each step
-rather than the paper's noise-minus- velocity, which assumes one consistent
-model along the run and made a turbo render with a lead-in worse, not better. On
-an eight-shot 20-step strip the frying was gone; fewer guesses look most like a
-plain render, more are steadier and softer. A model patch records the
-predictions and swaps the sampler's output for their average once the schedule
-reaches zero; the sound row leaves as the sampler made it. Off by default and
-off emits nothing.
 
 **A seam can continue from the model's own latent instead of a VAE round trip
 (#41, #46).** The run a seam inherits used to be read off the source pass's
