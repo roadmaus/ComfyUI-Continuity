@@ -61,10 +61,11 @@ for (const ready of [false, true]) {
     // The body is not the modal Timeline class; do not add a fake method to
     // make its callback work. This exercises the callback actually shipped.
     assert.equal(typeof body.geometry, "undefined");
+    const beforeOpening = store.writes;
     click(pill);
     assert.ok(pop()?.isConnected);
     assert.equal(displayedOn(), String(on));
-    assert.equal(store.writes, 0, "opening settings does not save them");
+    assert.equal(store.writes, beforeOpening, "opening settings does not save them");
     if (!on) click(toggle());
     assert.equal(displayedOn(), "true");
     assert.equal(body.timeline.neural.on, true);
