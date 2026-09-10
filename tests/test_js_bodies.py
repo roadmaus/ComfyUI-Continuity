@@ -157,7 +157,7 @@ export const api = {
     }
     if (String(route).startsWith("/continuity/neural/twin")) {
       globalThis.__twinAsked = JSON.parse(options.body);
-      return { ok: true, status: 200, json: async () => ({ prompt_id: "twin-1" }) };
+      return { ok: true, status: 200, json: async () => ({ prompt_id: "twin-1", node: "7", index: 0 }) };
     }
     if (String(route).startsWith("/continuity/probe")) {
       return { ok: true, status: 200, json: async () => (globalThis.__probe
@@ -2954,7 +2954,7 @@ try {
   for (let n = 0; n < 6; n += 1) await new Promise((done) => setTimeout(done, 0));
   twin.asked = globalThis.__twinAsked;
   // The queue answering, on the wire, the way a render answers.
-  globalThis.__say("executed", { prompt_id: "twin-1",
+  globalThis.__say("executed", { prompt_id: "twin-1", node: "7.0.save", display_node: "7",
                                  output: { mmc_image: [{ filename: "shot-2.png",
                                                          subfolder: "continuity/stills",
                                                          type: "output" }] } });

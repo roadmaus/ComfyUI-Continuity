@@ -313,15 +313,22 @@ def video_frame(path, at):
         # Read before the seek: it decodes one frame and winds the container
         # back to the top, so it has to come before anything positions it.
         rotation = media.stream_rotation(container, stream)
+        mark = Fraction(str(at)) + (stream.start_time or 0) * (stream.time_base or 0)
         if at > 0 and stream.time_base:
             try:
-                container.seek(int(at / stream.time_base), stream=stream)
+                container.seek(int(mark / stream.time_base), stream=stream)
             except Exception:  # noqa: BLE001 — an unseekable container decodes from zero
                 container.seek(0)
         last = None
         for frame in container.decode(stream):
+            # A frame remains on screen until the next one's timestamp. At a
+            # mark inside that hold, the next frame is not the displayed one.
+            when = (frame.pts * frame.time_base
+                    if frame.pts is not None and frame.time_base else None)
+            if when is not None and when > mark and last is not None:
+                break
             last = frame
-            if frame.time is not None and frame.time >= at:
+            if when is not None and when >= mark:
                 break
         if last is None:
             raise BenchError(f"{os.path.basename(path)} has no decodable frame")
@@ -330,6 +337,50 @@ def video_frame(path, at):
         # the still it exports are the picture the player shows, not the
         # storage picture lying on its side (issue #47).
         return media.turned(last.to_ndarray(format="rgb24"), rotation)
+
+
+def _video_window(container, stream, start, end, rate):
+    """Yield (window-relative start, end, frame) for intersecting display intervals.
+
+    One-frame lookahead keeps VFR timing without expanding held frames into
+    CFR duplicates (and running an expensive image operator on each duplicate).
+    The first and last intervals are clipped, even if the entire cut is inside
+    one hold. Source timestamps are relative to the video's own start.
+    """
+    tick = stream.time_base or Fraction(1, 90000)
+    origin = (stream.start_time or 0) * tick
+    first = origin + Fraction(str(start))
+    stop = origin + Fraction(str(end)) if end is not None else None
+    if start > 0:
+        try:
+            container.seek(int(first / tick), stream=stream)
+        except Exception:  # noqa: BLE001 — unseekable footage is read from the top
+            container.seek(0)
+    previous = None
+    previous_at = None
+
+    def interval(frame, at, until):
+        left, right = max(first, at), min(stop, until) if stop is not None else until
+        if right > left:
+            yield left - first, right - first, frame
+
+    for frame in container.decode(stream):
+        if frame.pts is None:
+            continue
+        at = frame.pts * (frame.time_base or tick)
+        if previous is not None:
+            yield from interval(previous, previous_at, at)
+        if stop is not None and at >= stop:
+            return
+        previous, previous_at = frame, at
+    if previous is not None:
+        duration = getattr(previous, "duration", 0)
+        period = (duration * (previous.time_base or tick)
+                  if duration else Fraction(1, 1) / rate)
+        until = previous_at + period
+        if stream.duration is not None:
+            until = max(until, origin + stream.duration * tick)
+        yield from interval(previous, previous_at, until)
 
 
 def source_frame(path, at=0.0, long_edge=PREVIEW_LONG_EDGE):
@@ -497,7 +548,10 @@ def transcode(path, out_dir, name_stem, work, size=None, trim=None, chunk=1,
                 video = out.add_stream("libx264", rate=rate)
                 video.width, video.height = width, height
                 video.pix_fmt = "yuv420p"
-                video.options = {"crf": str(crf), "preset": "medium"}
+                # Reordered B-frame DTS can shorten an MP4's reported duration
+                # on sparse VFR despite correct display PTS. Keep encode order
+                # on the source clock so each packet's duration is its hold.
+                video.options = {"crf": str(crf), "preset": "medium", "bf": "0"}
                 # The source's own tick, not one over the frame rate, and the frames
                 # keep their own timestamps against it — because the result has to
                 # line up with the footage frame for frame. Counting frames out at a
@@ -508,22 +562,14 @@ def transcode(path, out_dir, name_stem, work, size=None, trim=None, chunk=1,
                 video.codec_context.time_base = tick
                 audio_out = None
                 fifo = None
-                resampler = None
                 if audio_in is not None:
                     audio_out = out.add_stream("aac", rate=audio_in.rate)
                     audio_out.layout = "stereo" if audio_in.channels >= 2 else "mono"
                     fifo = av.AudioFifo()
-                    resampler = av.audio.resampler.AudioResampler(
-                        format="fltp", layout=audio_out.layout, rate=audio_in.rate)
-
-                if start > 0 and stream.time_base:
-                    try:
-                        source.seek(int(start / stream.time_base), stream=stream)
-                    except Exception:  # noqa: BLE001
-                        source.seek(0)
 
                 written = 0
-                zero = None
+                seconds = Fraction(0)
+                durations = {}
                 # The frames waiting to go through `work` — each with the timestamp
                 # it came in on, because what is written has to line up with the
                 # footage frame for frame — and the tail of the last chunk's answer,
@@ -532,15 +578,27 @@ def transcode(path, out_dir, name_stem, work, size=None, trim=None, chunk=1,
                 held = []
                 fade = _fade(overlap) if overlap else []
 
-                def emit(pts, done):
-                    nonlocal written
+                def mux_video(packets):
+                    for packet in packets:
+                        # libx264 may buffer/reorder frames, so associate the
+                        # clipped display duration with its PTS, not with the
+                        # call to encode that happened to return the packet.
+                        duration = durations.pop(packet.pts, None)
+                        if duration is not None:
+                            packet.duration = round(duration * tick / packet.time_base)
+                        out.mux(packet)
+
+                def emit(pts, duration, done):
+                    nonlocal written, seconds
                     if done.shape[1] != width or done.shape[0] != height:
                         done = np.asarray(
                             Image.fromarray(done).resize((width, height), Image.LANCZOS))
                     picture = av.VideoFrame.from_ndarray(done, format="rgb24")
-                    picture.pts = pts - zero
+                    picture.pts = pts
                     picture.time_base = tick
-                    out.mux(video.encode(picture))
+                    durations[pts] = duration
+                    mux_video(video.encode(picture))
+                    seconds = max(seconds, (pts + duration) * tick)
                     written += 1
                     if on_progress and expected and written % every == 0:
                         on_progress(min(0.99, written / expected))
@@ -554,7 +612,7 @@ def transcode(path, out_dir, name_stem, work, size=None, trim=None, chunk=1,
                     nothing is written twice and nothing is written early.
                     """
                     nonlocal waiting, held
-                    answer = work([picture for _, picture in waiting])
+                    answer = work([picture for _, _, picture in waiting])
                     if len(answer) != len(waiting):
                         raise BenchError("the work gave back a different number of frames")
                     for index, weight in enumerate(fade[:len(held)]):
@@ -562,57 +620,52 @@ def transcode(path, out_dir, name_stem, work, size=None, trim=None, chunk=1,
                                          + answer[index].astype(np.float32) * (1 - weight)
                                          ).round().clip(0, 255).astype(np.uint8)
                     keep = 0 if last else min(overlap, len(answer) - 1)
-                    for (pts, _), done in zip(waiting[:len(answer) - keep], answer):
-                        emit(pts, done)
+                    for (pts, duration, _), done in zip(waiting[:len(answer) - keep], answer):
+                        emit(pts, duration, done)
                     held = answer[len(answer) - keep:] if keep else []
                     waiting = waiting[len(waiting) - keep:] if keep else []
 
-                streams = [stream] + ([audio_in] if audio_in is not None else [])
-                for frame in source.decode(*streams):
-                    when = frame.time
-                    if when is None:
+                for left, right, frame in _video_window(source, stream, start, end, rate):
+                    pts, stop = round(left / tick), round(right / tick)
+                    if stop <= pts:
                         continue
-                    if when < start:
-                        continue
-                    if end is not None and when >= end:
-                        # Video and audio do not run out together, so this only stops
-                        # the stream that has passed the mark.
-                        if isinstance(frame, av.VideoFrame):
-                            break
-                        continue
-                    if isinstance(frame, av.VideoFrame):
-                        if frame.pts is None:
-                            continue
-                        if zero is None:
-                            zero = frame.pts
-                        waiting.append((frame.pts,
-                                        media.turned(frame.to_ndarray(format="rgb24"), rotation)))
-                        if len(waiting) >= max(1, chunk):
-                            run_chunk(last=False)
-                    elif audio_out is not None:
-                        for block in resampler.resample(frame):
-                            block.pts = None
-                            fifo.write(block)
-                            # Not `chunk`: that is this function's frames-per-work
-                            # parameter, and a walrus here rebound it to an audio
-                            # frame and then to None, so the next video frame hit
-                            # `max(1, None)`. Every upscale of a clip with sound
-                            # died there — `keep_sound` defaults to true on that
-                            # bench — after the model had already run.
-                            while (piece := fifo.read(audio_out.frame_size)) is not None:
-                                out.mux(audio_out.encode(piece))
+                    waiting.append((pts, stop - pts,
+                                    media.turned(frame.to_ndarray(format="rgb24"), rotation)))
+                    if len(waiting) >= max(1, chunk):
+                        run_chunk(last=False)
 
                 # Whatever the last full chunk did not cover, including the frames
                 # held back for a crossfade that now has nothing to fade into.
                 if waiting:
                     run_chunk(last=True)
 
-                if audio_out is not None:
+                mux_video(video.encode(None))
+                if audio_out is not None and written:
+                    # A separate audio-only pass shares the reel's timestamp
+                    # placement and is bounded by the picture just written.
+                    # It cannot stop early because a video packet crossed the
+                    # trim, or concatenate a missing second onto the end.
+                    from .mux import sound_blocks
+
+                    audio_start = start + float((stream.start_time or 0) * tick)
+                    audio_samples = 0
+                    for data in sound_blocks(av, path, audio_start, float(seconds),
+                                             audio_in.rate, audio_out.layout.name):
+                        block = av.AudioFrame.from_ndarray(
+                            np.ascontiguousarray(data), format="fltp", layout=audio_out.layout.name)
+                        block.sample_rate = audio_in.rate
+                        # Explicit sample PTS lets the muxer remove AAC encoder
+                        # priming rather than adding an extra frame of silence.
+                        block.pts = audio_samples
+                        block.time_base = Fraction(1, audio_in.rate)
+                        audio_samples += block.samples
+                        fifo.write(block)
+                        while (piece := fifo.read(audio_out.frame_size)) is not None:
+                            out.mux(audio_out.encode(piece))
                     leftover = fifo.read()
                     if leftover is not None:
                         out.mux(audio_out.encode(leftover))
                     out.mux(audio_out.encode(None))
-                out.mux(video.encode(None))
     except BaseException:
         # A run that dies partway has already created the file, and
         # `free_name` counts up — so a bench pressed three times left three
@@ -623,6 +676,7 @@ def transcode(path, out_dir, name_stem, work, size=None, trim=None, chunk=1,
         raise
 
     if not written:
-        os.remove(target)
+        if os.path.exists(target):
+            os.remove(target)
         raise BenchError("that cut has no frames in it")
     return name

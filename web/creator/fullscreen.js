@@ -129,6 +129,16 @@ export function forgetLayout() {
   }
 }
 
+/** Inventory the same keys that forgetLayout removes. Count a stored default
+ *  too: it is still a remembered choice, not an absent preference. */
+export function layoutPrefsHeld() {
+  let count = 0;
+  for (const key of [VIEW_KEY, PLATE_KEY]) {
+    try { if (localStorage.getItem(key) !== null) count++; } catch { /* inaccessible */ }
+  }
+  return count;
+}
+
 function storedPlate() {
   try {
     const seen = Number(localStorage.getItem(PLATE_KEY));

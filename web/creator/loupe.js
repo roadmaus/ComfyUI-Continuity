@@ -134,10 +134,13 @@ class Loupe {
     // The queue item it is riding on, so the one `executed` in a hundred that
     // belongs to this room can be told from the rest.
     this.twinId = null;
+    this.twinNode = null;
+    this.twinIndex = 0;
     // The refined tile: the rectangle it covers in source pixels, and whether
     // it still answers to the rail as it stands.
     this.tile = null;
     this.stale = false;
+    this.frameTime = null;
     this.working = false;
     this.error = null;
     this.saving = false;
@@ -246,6 +249,7 @@ class Loupe {
     // words arrive a moment after it does is a button nobody trusts.
     this.render = await neuralOf(this.source.path);
     if (!this.overlay.isConnected) return;
+    if (this.render?.error) this.error = this.render.error;
     // A piece's own block is what the pill handed over; where this room brought
     // its own and the file says what it was rendered with, that is the better
     // starting point — it is what these dials were, on this picture.
@@ -338,6 +342,14 @@ class Loupe {
     // frame quietly resampled to 720 would be the one lie this whole room is
     // built to catch.
     drawFrame(this.picture, media, media.videoHeight || 720);
+    const at = Number.isFinite(media.currentTime) ? media.currentTime : 0;
+    if (this.frameTime !== at) {
+      this.frameTime = at;
+      // Seek and playback arrive here, not through the trim-range callback.
+      // Invalidate only once per changed frame; never launch a neural pass.
+      this.markStale();
+      this.syncTwin(at);
+    }
     if (!this.natural && media.videoWidth) {
       this.natural = { width: media.videoWidth, height: media.videoHeight };
       this.toFit();
@@ -577,10 +589,17 @@ class Loupe {
       // The dials only go with it where the twin is the one being refined.
       // Taking the pass *out* has no settings, and sending some would suggest
       // the picture on the left could have been made differently.
-      this.twinId = await neuralTwin(this.source.path, wanted,
-                                     wanted ? profileOf(this.neural) : null);
+      const queued = await neuralTwin(this.source.path, wanted,
+                                       wanted ? profileOf(this.neural) : null);
+      this.twinId = queued.prompt_id;
+      // The file's producer, where it named one. An older file did not, and
+      // its twin is whichever of ours reports first — the way it always was.
+      this.twinNode = queued.node ?? null;
+      this.twinIndex = queued.index ?? 0;
+      if (!this.twinId) throw new Error("the comparison was not queued");
     } catch (error) {
       this.twinId = null;
+      this.twinNode = null;
       this.twinBusy = false;
       this.error = String(error?.message ?? error);
       this.paintRail();
@@ -601,11 +620,16 @@ class Loupe {
       this.paintRail();
       return;
     }
-    const saved = detail.output?.mmc_video?.[0] ?? detail.output?.mmc_image?.[0];
+    // Expanded saves report their original canvas owner as display_node. A
+    // prompt id alone also matches the other outputs in it, where there are.
+    if (this.twinNode !== null
+        && String(detail.display_node ?? detail.node) !== String(this.twinNode)) return;
+    const saved = (detail.output?.mmc_video ?? detail.output?.mmc_image)?.[this.twinIndex];
     if (!saved?.filename) return;
     const folder = saved.subfolder ? `${saved.subfolder}/` : "";
     this.twinBusy = false;
     this.twinId = null;
+    this.twinNode = null;
     this.twin = {
       path: `${folder}${saved.filename} [${saved.type || "output"}]`,
       kind: detail.output?.mmc_video ? "video" : "image",
@@ -628,7 +652,12 @@ class Loupe {
     if (this.twin.kind === "video") {
       this.twinMedia = el("video", { src: viewUrl(this.twin.path), preload: "auto",
                                      playsinline: true, muted: true });
-      this.twinMedia.addEventListener("seeked", () => this.drawTwinFrame());
+      this.twinMedia.addEventListener("seeked", () => {
+        // Show the completed frame before catching up. During playback the
+        // source may already be ahead; waiting for an exact match stays blank.
+        this.drawTwinFrame();
+        this.syncTwin();
+      });
       this.twinMedia.addEventListener("loadeddata", () => this.syncTwin());
       this.twinCanvas = el("canvas", { class: "mmc-lp-tile" });
       this.overLayer.replaceWith(this.twinCanvas);
@@ -644,9 +673,12 @@ class Loupe {
   }
 
   /** Park the twin's decoder on the mark the transport is showing. */
-  syncTwin() {
+  syncTwin(at = this.cutter?.at() ?? 0) {
     if (!this.twinMedia) return;
-    const at = this.cutter?.at() ?? 0;
+    // Let an outstanding decoder seek finish, then catch up to the latest
+    // playhead. Resetting currentTime on every display tick can starve it.
+    if (this.twinMedia.seeking) return;
+    if (Number.isFinite(this.twinMedia.duration)) at = Math.min(at, this.twinMedia.duration);
     if (Math.abs(this.twinMedia.currentTime - at) < 0.001) this.drawTwinFrame();
     else this.twinMedia.currentTime = at;
   }
@@ -657,44 +689,53 @@ class Loupe {
     }
   }
 
-  /** Put the refiner on the square in front of you. */
-  async refine() {
-    const region = this.region();
-    if (!region || this.working) return;
-    this.working = true;
-    this.error = null;
-    this.paintRail();
+  /** The complete request identity: source, frame, square and every dial. The
+   *  same URL is used to submit and to check whether a late result is current. */
+  tilePreviewUrl(region = this.region()) {
+    if (!region) return null;
     const values = {
       profile: this.neural.profile, processing: this.neural.scale,
       detail: this.neural.detail, colour: this.neural.colour,
       intensity: this.neural.intensity, precision: this.neural.precision,
     };
-    const url = upscalePreviewUrl(this.source.path, "neural", values, {
+    return upscalePreviewUrl(this.source.path, "neural", values, {
       at: this.cutter?.at() ?? 0, centre: region.centre, side: region.side,
     });
+  }
+
+  /** Put the refiner on the square in front of you. */
+  async refine() {
+    const region = this.region();
+    if (!region || this.working) return;
+    const natural = { ...this.natural };
+    const url = this.tilePreviewUrl(region);
+    this.working = true;
+    this.error = null;
+    this.paintRail();
     try {
       // Loaded detached and swapped in once it has decoded, the way the bench
       // does it: setting `src` on the visible layer blanks it for the length of
       // a model pass, and the half being compared against is exactly what has
       // to stay up while the other one is made.
-      await new Promise((done, fail) => {
+      const next = await new Promise((done, fail) => {
         const next = new Image();
-        next.onload = () => {
-          this.overLayer.src = next.src;
-          this.overLayer.style.visibility = "";
-          done();
-        };
+        next.onload = () => done(next);
         next.onerror = () => fail(new Error("no tile"));
         next.src = url;
       });
-      this.tile = { ...region, rect: tileRect(this.natural, region.centre, region.side) };
-      this.stale = false;
+      if (!this.overlay.isConnected) return;
+      this.overLayer.src = next.src;
+      this.overLayer.style.visibility = "";
+      this.tile = { ...region, rect: tileRect(natural, region.centre, region.side) };
+      // A dial/seek/zoom can change before the first tile exists, when
+      // markStale has nothing to mark. Compare the submitted request instead.
+      this.stale = url !== this.tilePreviewUrl();
       this.paintTile();
     } catch {
-      this.error = t("That square could not be refined.");
+      if (this.overlay.isConnected) this.error = t("That square could not be refined.");
     } finally {
       this.working = false;
-      this.paintRail();
+      if (this.overlay.isConnected) this.paintRail();
     }
   }
 

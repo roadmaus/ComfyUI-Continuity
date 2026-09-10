@@ -27,7 +27,7 @@ import { loadSettings, saveSettings, resetSettings, noteSettings, loadLatentCach
 import * as P from "./presets.js";
 import { resetSettings as resetRefiner, settingsStored as refinerStored,
          remoteStatus, saveRemote } from "./refine.js";
-import { forgetLayout } from "./fullscreen.js";
+import { forgetLayout, layoutPrefsHeld } from "./fullscreen.js";
 import { t } from "./i18n.js";
 import { CLOCK_TOKENS, FRAME_TOKENS, cleanPrefix, folderOf, stemOf, examplePath,
          splitTokens, tokenLabel, tokenValues } from "./outputs.js";
@@ -495,7 +495,7 @@ class SettingsPage {
     ]);
     this.kept = {
       presets,
-      picker,
+      picker: picker + layoutPrefsHeld(),
       loras,
       refiner: refinerStored(),
       cacheBytes: Number(this.cache?.bytes ?? 0),

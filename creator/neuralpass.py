@@ -223,6 +223,11 @@ class ContinuityNeuralPass(io.ComfyNode):
         parts = list(reel or [])
         passes = [index for index, part in enumerate(parts) if "pass" in part]
         if not passes:
+            # Held takes are compiled to clips, which may already be refined.
+            # Assembling them must neither refine them twice nor require the
+            # optional weights on a machine that only wants to save the reel.
+            if parts and all("clip" in part for part in parts):
+                return io.NodeOutput(parts)
             raise RuntimeError("the neural pass was given a reel with nothing "
                                "generated on it — there is nothing to refine.")
         try:

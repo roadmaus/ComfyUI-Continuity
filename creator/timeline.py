@@ -699,7 +699,7 @@ class MiniMaxH3Save(io.ComfyNode):
                 io.String.Input("takes", default="", optional=True),
             ],
             outputs=[],
-            hidden=[io.Hidden.prompt, io.Hidden.extra_pnginfo],
+            hidden=[io.Hidden.prompt, io.Hidden.extra_pnginfo, io.Hidden.unique_id, io.Hidden.dynprompt],
         )
 
     @classmethod
@@ -719,9 +719,15 @@ class MiniMaxH3Save(io.ComfyNode):
         # under --disable-metadata for the same reason.
         metadata = None
         if not args.disable_metadata:
+            from . import neuraltwin
+
             collected = dict(cls.hidden.extra_pnginfo or {})
+            collected.pop(neuraltwin.PRODUCER_KEY, None)
             if cls.hidden.prompt is not None:
                 collected["prompt"] = cls.hidden.prompt
+            producer = neuraltwin.producer_metadata(cls.hidden)
+            if producer is not None:
+                collected[neuraltwin.PRODUCER_KEY] = producer
             metadata = collected or None
 
         filename = f"{name}_{counter:05}_.mp4"

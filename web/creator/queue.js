@@ -16,6 +16,63 @@ import { t } from "./i18n.js";
 
 const listeners = new Set();
 
+// promptQueued is a batch notification ({number, batchCount, requestId}) in
+// ComfyUI's frontend, not a server prompt id. Observe the actual submission
+// boundary once so each accepted prompt is paired with the graph it sent,
+// including batches and replies that arrive after an execution event.
+const submissions = new Set();
+let observingSubmissions = false;
+
+export function watchSubmittedPrompts(capture, accepted) {
+  if (!observingSubmissions && typeof api.queuePrompt === "function") {
+    const original = api.queuePrompt;
+    api.queuePrompt = async function (...args) {
+      const snapshots = [];
+      for (const listener of submissions) {
+        try {
+          const snapshot = listener.capture(args[1]?.output);
+          if (snapshot) snapshots.push([listener, snapshot]);
+        } catch (error) { console.warn("[Continuity] could not snapshot a submitted strip", error); }
+      }
+      // Preserve the API's arguments, receiver, result and rejection. A failed
+      // request must not create a queue entry or attach somebody else's take.
+      const answer = await original.apply(this, args);
+      if (answer?.prompt_id) {
+        for (const [listener, snapshot] of snapshots) {
+          if (!submissions.has(listener)) continue;
+          try { listener.accepted(String(answer.prompt_id), snapshot); }
+          catch (error) { console.warn("[Continuity] could not record a submitted strip", error); }
+        }
+      }
+      return answer;
+    };
+    observingSubmissions = true;
+  }
+  const listener = { capture, accepted };
+  submissions.add(listener);
+  return () => submissions.delete(listener);
+}
+
+/** Recover the submitted graph after a page reload, never the current graph.
+ * A running prompt lives in /queue; a completed/failed one lives in history. */
+export async function submittedPrompt(promptId) {
+  const id = String(promptId);
+  const history = await api.fetchApi(`/history/${encodeURIComponent(id)}`);
+  if (history.ok) {
+    const entry = (await history.json())?.[id];
+    if (entry?.prompt?.[2]) return entry.prompt[2];
+  }
+  const response = await api.fetchApi("/queue");
+  if (!response.ok) return null;
+  const queue = await response.json();
+  const entry = [...(queue.queue_running ?? []), ...(queue.queue_pending ?? [])]
+    .find((item) => String(item?.[1]) === id);
+  if (entry?.[2]) return entry[2];
+  // The render may have left the queue between those two reads.
+  const finished = await api.fetchApi(`/history/${encodeURIComponent(id)}`);
+  return finished.ok ? (await finished.json())?.[id]?.prompt?.[2] ?? null : null;
+}
+
 // `remaining` is ComfyUI's own `queue_remaining`: everything queued including
 // whatever is on the sampler right now. `running` is whether execution has
 // actually started on one, which is the difference between "yours is next" and
