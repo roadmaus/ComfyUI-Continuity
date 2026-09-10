@@ -3978,7 +3978,8 @@ export class TimelineBody {
           ? [facesPill({ target: this.timeline, commit: () => this.commit() })] : []),
         // The DLSS 5 refiner, family-neutral: it runs over decoded frames.
         neuralPill({ target: this.timeline, commit: () => this.commit(),
-                     geometry: () => this.geometry(),
+                     // TimelineBody has no geometry() method; the modal does.
+                     geometry: () => timelineGeometry(this.timeline),
                      picture: () => stageSource(this.stage?.result) }),
         weightsPill({
           piece: this.timeline,
