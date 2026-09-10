@@ -498,10 +498,20 @@ class H3(base.Family):
             # reuse — they would be caching the exact steps this feature exists
             # to run properly. Sage stays: it makes one attention call cheaper
             # and skips nothing.
+            opening_model = truncated(graph, patched(graph, segment.out(3), sampling,
+                                                     accel.uncached(acceleration), weights))
+            if settings.drift_guard() > 0:
+                # The lead-in's cached LATENT cannot replay the guard's transient
+                # predictions. One node owns both sittings, so a tail setting
+                # change reruns the lead-in too; unchanged full runs still cache.
+                return graph.node(
+                    truncate.GUARDED_TURBO_NODE,
+                    model=model, lead_model=opening_model,
+                    latent_image=segment.out(2), noise_seed=seed,
+                    lead_steps=run.steps, **common).out(0)
             opening = graph.node(
                 "KSamplerAdvanced",
-                model=truncated(graph, patched(graph, segment.out(3), sampling,
-                                                 accel.uncached(acceleration), weights)),
+                model=opening_model,
                 latent_image=segment.out(2),
                 add_noise="enable", noise_seed=seed,
                 start_at_step=0, end_at_step=run.steps,

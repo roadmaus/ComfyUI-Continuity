@@ -39,6 +39,7 @@ refine's or the restore's, is its own trajectory from wherever it starts.
 """
 
 from collections import deque
+from contextvars import ContextVar
 
 import torch
 
@@ -48,6 +49,7 @@ import comfy.utils
 from comfy_api.latest import io
 
 TRUNCATE_NODE = "MiniMaxH3TruncatedFlow"
+GUARDED_TURBO_NODE = "MiniMaxH3GuardedTurboSampler"
 
 
 class Trajectory:
@@ -117,38 +119,73 @@ def _step_width(sigma, sigmas):
     return float(sigmas[index] - sigmas[index + 1])
 
 
-# The trajectory in flight. Module state rather than the patch's own because
-# the lead-in's two sittings run on two different models — one with the
-# distillation held off — and both halves have to write the one sum. ComfyUI
-# samples one graph at a time.
+# Legacy separately wired sampler sittings retain their shared state. Newly
+# emitted guarded Turbo runs own it in a ContextVar, so the two models share
+# one history without sharing it with another concurrent/nested run.
 _open = None
+_run = ContextVar("continuity_guarded_turbo_run", default=None)
+
+
+class _Run:
+    def __init__(self):
+        self.trajectory = None
+
+
+def _current():
+    run = _run.get()
+    return run.trajectory if run is not None else _open
+
+
+def _set_current(trajectory):
+    global _open
+    run = _run.get()
+    if run is not None:
+        run.trajectory = trajectory
+    else:
+        _open = trajectory
+
+
+def _release(trajectory):
+    trajectory.terms.clear()
+    if _current() is trajectory:
+        _set_current(None)
 
 
 def _patch(model, guesses):
     """`model` cloned, with the recorder and the wrapper on it."""
 
     def record(args):
-        if _open is not None:
+        trajectory = _current()
+        if trajectory is not None:
             sigmas = args["model_options"]["transformer_options"]["sample_sigmas"]
             sigma = float(args["sigma"].flatten()[0])
-            _open.record(_step_width(sigma, sigmas), args["denoised"])
+            trajectory.record(_step_width(sigma, sigmas), args["denoised"])
         return args["denoised"]
 
     def sample(executor, guider, sigmas, *rest):
-        global _open
         first, end = float(sigmas[0]), float(sigmas[-1])
-        if _open is None or not _open.continues_at(first):
-            _open = Trajectory(guesses)
-        trajectory = _open
-        samples = executor(guider, sigmas, *rest)
-        trajectory.last = end
-        if end > 1e-6:
-            return samples          # a sitting with more schedule to come
-        _open = None
-        # Set on the model by core's `inner_sample` before the sampler runs,
-        # so it is there for every sitting this wrapper sees.
-        shapes = getattr(getattr(guider, "inner_model", None), "latent_shapes", None)
-        return trajectory.finish(samples, shapes)
+        trajectory = _current()
+        if trajectory is None or not trajectory.continues_at(first) or trajectory.guesses != guesses:
+            if trajectory is not None:
+                _release(trajectory)
+            trajectory = Trajectory(guesses)
+            _set_current(trajectory)
+        keep_open = False
+        try:
+            samples = executor(guider, sigmas, *rest)
+            trajectory.last = end
+            if end > 1e-6:
+                keep_open = True
+                return samples      # a successful sitting with more schedule to come
+            # Set on the model by core's `inner_sample` before the sampler runs.
+            shapes = getattr(getattr(guider, "inner_model", None), "latent_shapes", None)
+            return trajectory.finish(samples, shapes)
+        finally:
+            # ComfyUI cancellation derives from BaseException, not Exception.
+            # Release the predictions even if sampling or finish() is interrupted,
+            # while preserving a successful lead-in until its tail consumes it.
+            if not keep_open:
+                _release(trajectory)
 
     patched = model.clone()
     patched.set_model_sampler_post_cfg_function(record)
@@ -182,4 +219,70 @@ class MiniMaxH3TruncatedFlow(io.ComfyNode):
         return io.NodeOutput(_patch(model, guesses))
 
 
-NODES = [MiniMaxH3TruncatedFlow]
+class MiniMaxH3GuardedTurboSampler(io.ComfyNode):
+    """Two core sampler calls, but one cacheable result and one history owner.
+
+    A cached opening LATENT does not contain the post-CFG predictions the guard
+    needs. Caching the two sittings independently therefore changes the average
+    when only the tail is invalidated. Keep both in one node instead of caching
+    GPU prediction tensors or disabling caching for the whole render.
+    """
+
+    @classmethod
+    def define_schema(cls):
+        import comfy.samplers
+
+        return io.Schema(
+            node_id=GUARDED_TURBO_NODE,
+            display_name="H3 Guarded Turbo Sampler",
+            category="Continuity/internal",
+            is_dev_only=True,
+            description="Runs both Turbo sittings as one drift-guard trajectory and one cache unit.",
+            inputs=[
+                io.Model.Input("model"),
+                io.Model.Input("lead_model"),
+                io.Conditioning.Input("positive"),
+                io.Conditioning.Input("negative"),
+                io.Latent.Input("latent_image"),
+                io.Int.Input("noise_seed", default=0, min=0, max=0xffffffffffffffff),
+                io.Int.Input("steps", default=8, min=2, max=10000),
+                io.Int.Input("lead_steps", default=3, min=1, max=9999),
+                io.Float.Input("cfg", default=1.0, min=0.0, max=100.0),
+                io.Combo.Input("sampler_name", options=comfy.samplers.KSampler.SAMPLERS),
+                io.Combo.Input("scheduler", options=comfy.samplers.KSampler.SCHEDULERS),
+            ],
+            outputs=[io.Latent.Output()],
+        )
+
+    @classmethod
+    def execute(cls, model, lead_model, positive, negative, latent_image,
+                noise_seed, steps, lead_steps, cfg, sampler_name, scheduler) -> io.NodeOutput:
+        import nodes
+
+        if not 0 < lead_steps < steps:
+            raise ValueError("a guarded Turbo lead-in must be between zero and the total step count")
+        run = _Run()
+        token = _run.set(run)
+        try:
+            common = dict(noise_seed=noise_seed, steps=steps, cfg=cfg,
+                          sampler_name=sampler_name, scheduler=scheduler,
+                          positive=positive, negative=negative)
+            sampler = nodes.KSamplerAdvanced()
+            opening = sampler.sample(
+                model=lead_model, latent_image=latent_image,
+                add_noise="enable", start_at_step=0, end_at_step=lead_steps,
+                return_with_leftover_noise="enable", **common)[0]
+            finished = sampler.sample(
+                model=model, latent_image=opening,
+                add_noise="disable", start_at_step=lead_steps, end_at_step=steps,
+                return_with_leftover_noise="disable", **common)[0]
+            return io.NodeOutput(finished)
+        finally:
+            # Also covers cancellation after the lead-in but before the tail's
+            # wrapper runs. No prediction history is returned into Comfy's cache.
+            if run.trajectory is not None:
+                _release(run.trajectory)
+            _run.reset(token)
+
+
+NODES = [MiniMaxH3TruncatedFlow, MiniMaxH3GuardedTurboSampler]
