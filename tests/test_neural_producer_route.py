@@ -1,4 +1,4 @@
-"""The twin route queues only the identified producer and its dependencies.
+"""The twin route queues the identified producer's closure and names the output.
 
     python3 tests/test_neural_producer_route.py
 
@@ -77,22 +77,24 @@ class Request:
 async def run():
     response = await namespace["neural_of"](Request())
     info = json.loads(response.text)
-    check("metadata endpoint chooses B, not earlier ON A", (info["node"], info["on"]), ("B", False))
+    check("metadata endpoint reads B's closure, not the unrelated ON A", (info["node"], info["on"]), ("B", False))
     response = await namespace["neural_twin"](Request())
     answer = json.loads(response.text)
     check("queue request succeeds", response.status, 200)
     check("response identifies output and batch index", (answer["node"], answer["index"]), ("B", 1))
-    check("only target is submitted for output validation", validations[0][1], ["B"])
+    check("the whole closure validates as an ordinary prompt", validations[0][1], None)
     check("unrelated output and missing-node type removed", set(validations[0][0]), {"B", "loader"})
     check("queue preserves input link", queued[0][2]["B"]["inputs"]["image"], ["loader", 0])
     check("queue preserves seed", queued[0][2]["B"]["inputs"]["seed"], 42)
-    check("queue targets only B", queued[0][4], ["B"])
+    check("no partial-execution targets", queued[0][4], None)
     check("socket client id preserved", queued[0][3], {"client_id": "test"})
     check("metadata reader requests provenance", twin.PRODUCER_KEY in reads[0][1], True)
     embedded.pop(twin.PRODUCER_KEY)
     response = await namespace["neural_twin"](Request())
-    check("ambiguous legacy request is rejected", response.status, 400)
-    check("ambiguous request never reaches the queue", len(queued), 1)
+    answer = json.loads(response.text)
+    check("an older file without the stamp still queues", response.status, 200)
+    check("...the whole prompt, every node of ours flipped", set(queued[1][2]), set(prompt))
+    check("...and leaves the output to the viewer", answer["node"], None)
 
 
 asyncio.run(run())

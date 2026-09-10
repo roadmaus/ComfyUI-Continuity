@@ -83,22 +83,20 @@ def _blob_nodes(prompt):
     return found
 
 
-def _producer(prompt, producer=None):
-    """Select an explicit producer, or the only unambiguous legacy producer."""
-    nodes = _blob_nodes(prompt)
-    if not nodes:
-        raise TwinError("this file does not carry a prompt this pack can render")
+def _producer(prompt, producer):
+    """The file's producer entry and batch index off its metadata, or None.
+
+    Nothing is guessed: a file from before the stamp existed simply has no
+    producer, and the caller falls back to flipping the whole prompt.
+    """
     if producer is None:
-        if len(nodes) != 1:
-            raise TwinError("this older file has multiple Continuity outputs but no producer metadata; "
-                            "render it once with the updated node before comparing its twin")
-        return nodes[0], 0
+        return None, 0
     if not isinstance(producer, dict):
         raise TwinError("this file's Continuity producer metadata is invalid")
     index = producer.get("index", 0)
     if isinstance(index, bool) or not isinstance(index, int) or index < 0:
         raise TwinError("this file's Continuity image index is invalid")
-    for entry in nodes:
+    for entry in _blob_nodes(prompt):
         if entry[0] == producer.get("node"):
             return entry, index
     raise TwinError("this file's Continuity producer is absent from its prompt")
@@ -118,52 +116,83 @@ def producer_metadata(hidden, index=0):
 def read(prompt, producer=None):
     """What this render says about the refiner.
 
-    `{"ours": bool, "on": bool, "settings": {...}|None, "node": id|None}`.
+    `{"ours": bool, "on": bool, "settings": {...}|None, "node": id|None}`,
+    plus `index` when the file names its producer.
 
     `ours` is the question the surfaces actually ask first: a file with no
     prompt in it, or one made by somebody else's graph, has no other version to
     render and has to be offered the tile comparison instead.
     """
-    if not _blob_nodes(prompt):
+    nodes = _blob_nodes(prompt)
+    if not nodes:
         return {"ours": False, "on": False, "settings": None, "node": None}
     try:
-        (node_id, _, blob), index = _producer(prompt, producer)
+        entry, index = _producer(prompt, producer)
     except TwinError as error:
         return {"ours": False, "on": False, "settings": None, "node": None,
                 "error": str(error)}
+    # On if *any* of our nodes in what made this file asked for it, and the
+    # settings are that node's. A file that names its producer narrows "what
+    # made it" to that node's inputs; one that does not is the whole prompt —
+    # a pre-stage feeding a creator writes a still and a clip out of one queue.
+    if entry is not None:
+        closure = dependency_prompt(prompt, entry[0])
+        nodes = [node for node in nodes if node[0] in closure]
+    for node_id, _, blob in nodes:
+        block = blob.get(BLOCK)
+        if isinstance(block, dict) and block.get("on"):
+            return {"ours": True, "on": True, "settings": block, "node": node_id,
+                    **({"index": index} if entry is not None else {})}
+    node_id, _, blob = entry if entry is not None else nodes[0]
     block = blob.get(BLOCK)
-    return {"ours": True, "on": bool(isinstance(block, dict) and block.get("on")),
+    return {"ours": True, "on": False,
             "settings": block if isinstance(block, dict) else None, "node": node_id,
-            **({"index": index} if producer is not None else {})}
+            **({"index": index} if entry is not None else {})}
 
 
 def twin(prompt, on, block=None, producer=None):
     """The same prompt with the refiner switched `on` or off. -> a new prompt.
 
-    Only the file's producer is flipped. Changing an independent Creator (or
-    the PreStage that supplies an input) would compare two different sources,
-    not the same render with its final material pass switched off or on.
+    Every node of ours is flipped, not only the last: a still that a piece is
+    built on is refined by its own pre-stage, and a comparison that left one of
+    the two on would be comparing two things that differ in two ways.
+
+    A file that names its producer (`producer_metadata`) queues only that
+    node's dependency closure. An unrelated creator sharing the prompt is
+    another render — flipping it would burn a second sampler run for a file
+    nobody is comparing, and a model it needs that has since gone would stop
+    this one from queueing at all.
 
     `block` replaces the settings while switching *on* — which is what lets the
     dials on a viewer's rail mean something for a render that never had the
     pass. Switching off ignores it: there is nothing to set.
     """
-    (node_id, widget, blob), _ = _producer(prompt, producer)
-    twinned = copy.deepcopy(prompt)
-    current = blob.get(BLOCK) if isinstance(blob.get(BLOCK), dict) else {}
-    wanted = {**current, **(block or {}), "on": True} if on else {**current, "on": False}
-    blob = {**blob, BLOCK: wanted}
-    twinned[node_id] = {**twinned[node_id],
-                       "inputs": {**twinned[node_id]["inputs"], widget: json.dumps(blob)}}
+    nodes = _blob_nodes(prompt)
+    if not nodes:
+        raise TwinError("this file does not carry a prompt this pack can render")
+    entry, _ = _producer(prompt, producer)
+    twinned = dependency_prompt(prompt, entry[0]) if entry is not None \
+        else copy.deepcopy(prompt)
+    for node_id, widget, blob in nodes:
+        if node_id not in twinned:
+            continue
+        current = blob.get(BLOCK) if isinstance(blob.get(BLOCK), dict) else {}
+        if on:
+            wanted = {**current, **(block or {}), "on": True}
+        else:
+            # Written as off rather than deleted: a blob that never had the key
+            # is a blob from before the refiner existed, and adding an explicit
+            # off to it says the same thing in the shape this build reads.
+            wanted = {**current, "on": False}
+        blob = {**blob, BLOCK: wanted}
+        twinned[node_id] = {**twinned[node_id],
+                            "inputs": {**twinned[node_id]["inputs"],
+                                       widget: json.dumps(blob)}}
     return twinned
 
 
 def dependency_prompt(prompt, node_id):
-    """Keep the target's input closure under unchanged ids, excluding other outputs.
-
-    A whole saved prompt can include an unrelated output with missing models.
-    It must neither run nor prevent this comparison from validating.
-    """
+    """The prompt cut down to `node_id` and everything feeding it, ids kept."""
     held, pending = set(), [node_id]
     while pending:
         current = pending.pop()

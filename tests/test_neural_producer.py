@@ -1,8 +1,8 @@
-"""A comparison belongs to the file's producer, not another output in its prompt.
+"""A file that names its producer queues that producer's closure, flipped whole.
 
     python3 tests/test_neural_producer.py
 
-Pure producer selection, dependency closure and metadata tests; no model runs.
+Pure closure and metadata tests; no model runs.
 """
 
 import copy
@@ -29,30 +29,34 @@ prompt = {
 }
 original = copy.deepcopy(prompt)
 
-check("B is off even though A and PreStage are on",
-      twin.read(prompt, {"node": "B", "index": 0})["on"], False)
-check("ambiguous legacy file is not guessed", twin.read(prompt)["ours"], False)
-check("ambiguous legacy file explains why", bool(twin.read(prompt).get("error")), True)
-check("a single-producer legacy file remains supported",
-      twin.read({"B": prompt["B"]})["node"], "B")
-for bad in [None, {"node": "missing"}, {"node": "B", "index": -1},
+check("B's closure is on: its pre-stage asked for it",
+      twin.read(prompt, {"node": "B", "index": 0})["on"], True)
+check("...and the settings are the pre-stage's",
+      twin.read(prompt, {"node": "B", "index": 0})["node"], "pre")
+check("an older file with no producer still reads", twin.read(prompt)["ours"], True)
+check("...off whichever of ours asked first", twin.read(prompt)["node"], "A")
+for bad in [{"node": "missing"}, {"node": "B", "index": -1},
             {"node": "B", "index": True}, {"node": "B", "index": "one"}]:
     try:
         twin.twin(prompt, True, producer=bad)
     except twin.TwinError:
         pass
     else:
-        raise AssertionError(f"ambiguous/invalid producer was accepted: {bad!r}")
+        raise AssertionError(f"invalid producer was accepted: {bad!r}")
+check("invalid metadata reads as not ours, with a reason",
+      (twin.read(prompt, {"node": "missing"})["ours"],
+       bool(twin.read(prompt, {"node": "missing"}).get("error"))), (False, True))
 
 changed = twin.twin(prompt, True, {"detail": 3}, producer={"node": "B", "index": 0})
-check("only B changed", changed["A"], prompt["A"])
-check("upstream PreStage settings remain fixed", changed["pre"], prompt["pre"])
+check("only B's closure is queued", set(changed), {"B", "pre", "loader"})
+check("the pre-stage in it is flipped with it",
+      json.loads(changed["pre"]["inputs"]["prestage_data"])["neural"]["detail"], 3)
 check("target seed stays fixed", changed["B"]["inputs"]["seed"], 73)
 check("target adopts requested detail", json.loads(changed["B"]["inputs"]["creator_data"])["neural"]["detail"], 3)
 check("original prompt untouched", prompt, original)
-closure = twin.dependency_prompt(changed, "B")
-check("only target and its upstream dependency chain are queued", set(closure), {"B", "pre", "loader"})
-check("dependency values and node ids are preserved", closure["pre"], prompt["pre"])
+whole = twin.twin(prompt, False)
+check("no producer: the whole prompt, every node of ours off", set(whole), set(prompt))
+check("...A included", json.loads(whole["A"]["inputs"]["creator_data"])["neural"]["on"], False)
 check("batch index survives metadata read", twin.read(prompt, {"node": "B", "index": 2})["index"], 2)
 
 hidden = SimpleNamespace(prompt=prompt, unique_id="B.0.save",

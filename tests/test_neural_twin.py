@@ -97,17 +97,17 @@ on_blob = json.loads(on["7"]["inputs"]["creator_data"])
 check("a render that never had the pass can be given one", on_blob["neural"]["on"], True)
 check("...with the dials the caller asked for", on_blob["neural"]["profile"], "cinematic")
 
-# Two of ours in one prompt need explicit producer metadata. Only its final
-# pass changes; an upstream or independent pre-stage keeps its original pixels.
+# Two of ours in one prompt — a pre-stage feeding a creator. Both are flipped:
+# a still refined by its own pre-stage and a piece built on it differ in two
+# places, and a comparison that left one of them on is not one.
 pair = {**prompt(REFINED),
         "9": {"class_type": "MiniMaxH3PreStage", "inputs": {"prestage_data": REFINED}}}
-both = twin.twin(pair, False, producer={"node": "7", "index": 0})
-check("only the named producer is flipped",
+both = twin.twin(pair, False)
+check("every node of ours is flipped",
       [json.loads(both["7"]["inputs"]["creator_data"])["neural"]["on"],
        json.loads(both["9"]["inputs"]["prestage_data"])["neural"]["on"]],
-      [False, True])
-check("...and settings come from that same producer",
-      twin.read(pair, {"node": "7"})["node"], "7")
+      [False, False])
+check("...and the settings are read off whichever asked for it", twin.read(pair)["node"], "7")
 
 try:
     twin.twin({"1": {"class_type": "KSampler", "inputs": {}}}, False)

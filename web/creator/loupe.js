@@ -592,9 +592,11 @@ class Loupe {
       const queued = await neuralTwin(this.source.path, wanted,
                                        wanted ? profileOf(this.neural) : null);
       this.twinId = queued.prompt_id;
-      this.twinNode = queued.node ?? this.render.node;
-      this.twinIndex = queued.index ?? this.render.index ?? 0;
-      if (!this.twinId || !this.twinNode) throw new Error("the comparison has no output identity");
+      // The file's producer, where it named one. An older file did not, and
+      // its twin is whichever of ours reports first — the way it always was.
+      this.twinNode = queued.node ?? null;
+      this.twinIndex = queued.index ?? 0;
+      if (!this.twinId) throw new Error("the comparison was not queued");
     } catch (error) {
       this.twinId = null;
       this.twinNode = null;
@@ -618,9 +620,10 @@ class Loupe {
       this.paintRail();
       return;
     }
-    // Expanded saves report their original canvas owner as display_node.
-    // A prompt id alone also matches other outputs and intermediate stages.
-    if (String(detail.display_node ?? detail.node) !== String(this.twinNode)) return;
+    // Expanded saves report their original canvas owner as display_node. A
+    // prompt id alone also matches the other outputs in it, where there are.
+    if (this.twinNode !== null
+        && String(detail.display_node ?? detail.node) !== String(this.twinNode)) return;
     const saved = (detail.output?.mmc_video ?? detail.output?.mmc_image)?.[this.twinIndex];
     if (!saved?.filename) return;
     const folder = saved.subfolder ? `${saved.subfolder}/` : "";

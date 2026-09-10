@@ -174,14 +174,11 @@ async def neural_twin(request):
         prompt = neuraltwin.twin(embedded.get("prompt"), bool(body.get("on")),
                                  body.get("block") if isinstance(body.get("block"), dict) else None,
                                  producer=producer)
-        prompt = neuraltwin.dependency_prompt(prompt, info["node"])
     except neuraltwin.TwinError as exc:
         return web.json_response({"error": str(exc)}, status=400)
 
     prompt_id = str(uuid.uuid4())
-    # Only the requested output is a queue target. Its upstream dependencies
-    # remain available, but an independent Creator is neither changed nor run.
-    valid = await execution.validate_prompt(prompt_id, prompt, [info["node"]])
+    valid = await execution.validate_prompt(prompt_id, prompt, None)
     if not valid[0]:
         # The prompt in the file no longer validates on this install — a node it
         # names is gone, or a file it loads has been moved. That is a sentence
@@ -194,5 +191,8 @@ async def neural_twin(request):
     client_id = body.get("client_id")
     extra_data = {"client_id": client_id} if client_id else {}
     server.prompt_queue.put((number, prompt_id, prompt, extra_data, valid[2], {}))
-    return web.json_response({"prompt_id": prompt_id, "node": info["node"],
+    # Which output is the twin: the producer's, where the file names one. An
+    # older file leaves it to the viewer, which takes the first of ours.
+    return web.json_response({"prompt_id": prompt_id,
+                              "node": info["node"] if producer is not None else None,
                               "index": info.get("index", 0)})

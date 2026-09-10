@@ -56,6 +56,17 @@ try {
   lp.onWire({ type: "executed", detail: { prompt_id: "comparison", node: "A",
     output: { mmc_image: [file("late-A.png")] } } });
   assert.equal(lp.twin.path, "renders/B-second.png [output]");
+  // An older file names no producer: the first of ours to report is the twin.
+  api.fetchApi = async (route, options) => {
+    if (String(route).startsWith("/continuity/neural/twin")) return {
+      ok: true, json: async () => ({ prompt_id: "legacy", node: null, index: 0 }) };
+    return baseFetch(route, options);
+  };
+  lp.twin = null;
+  await lp.renderTwin();
+  lp.onWire({ type: "executed", detail: { prompt_id: "legacy", node: "A.0.save", display_node: "A",
+    output: { mmc_image: [file("A-legacy.png")] } } });
+  assert.equal(lp.twin.path, "renders/A-legacy.png [output]");
 } finally { lp.close(); }
 console.log(JSON.stringify({ checked: true }));
 '''
