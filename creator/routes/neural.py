@@ -125,11 +125,13 @@ async def neural_of(request):
         return web.json_response({"error": "not in the input or output folder"}, status=404)
     loop = asyncio.get_running_loop()
     try:
-        embedded = await loop.run_in_executor(None, _read_embedded, path)
+        embedded = await loop.run_in_executor(None, _read_embedded, path,
+                                              ("prompt", neuraltwin.PRODUCER_KEY))
     except Exception as exc:  # noqa: BLE001 — an unreadable file has no answer, not an error
         return web.json_response({"ours": False, "on": False, "settings": None,
                                   "node": None, "error": str(exc)})
-    return web.json_response(neuraltwin.read(embedded.get("prompt")))
+    return web.json_response(neuraltwin.read(embedded.get("prompt"),
+                                            embedded.get(neuraltwin.PRODUCER_KEY)))
 
 
 @PromptServer.instance.routes.post("/continuity/neural/twin")
@@ -164,15 +166,22 @@ async def neural_twin(request):
         return web.json_response({"error": str(exc)}, status=404)
 
     loop = asyncio.get_running_loop()
-    embedded = await loop.run_in_executor(None, _read_embedded, path)
+    embedded = await loop.run_in_executor(None, _read_embedded, path,
+                                          ("prompt", neuraltwin.PRODUCER_KEY))
     try:
+        producer = embedded.get(neuraltwin.PRODUCER_KEY)
+        info = neuraltwin.read(embedded.get("prompt"), producer)
         prompt = neuraltwin.twin(embedded.get("prompt"), bool(body.get("on")),
-                                 body.get("block") if isinstance(body.get("block"), dict) else None)
+                                 body.get("block") if isinstance(body.get("block"), dict) else None,
+                                 producer=producer)
+        prompt = neuraltwin.dependency_prompt(prompt, info["node"])
     except neuraltwin.TwinError as exc:
         return web.json_response({"error": str(exc)}, status=400)
 
     prompt_id = str(uuid.uuid4())
-    valid = await execution.validate_prompt(prompt_id, prompt, None)
+    # Only the requested output is a queue target. Its upstream dependencies
+    # remain available, but an independent Creator is neither changed nor run.
+    valid = await execution.validate_prompt(prompt_id, prompt, [info["node"]])
     if not valid[0]:
         # The prompt in the file no longer validates on this install — a node it
         # names is gone, or a file it loads has been moved. That is a sentence
@@ -185,4 +194,5 @@ async def neural_twin(request):
     client_id = body.get("client_id")
     extra_data = {"client_id": client_id} if client_id else {}
     server.prompt_queue.put((number, prompt_id, prompt, extra_data, valid[2], {}))
-    return web.json_response({"prompt_id": prompt_id})
+    return web.json_response({"prompt_id": prompt_id, "node": info["node"],
+                              "index": info.get("index", 0)})

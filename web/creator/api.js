@@ -1044,7 +1044,7 @@ export async function upscaleRun(body, options) {
 /**
  * What one finished file says about the refiner.
  *
- * `{ours, on, settings, node}`. `ours` is whether the file carries a prompt
+ * `{ours, on, settings, node, index?}`. `ours` is whether the file carries a prompt
  * this pack can put back on the queue — a photo or somebody else's render does
  * not, and the surface that asked has to offer it something else.
  */
@@ -1057,11 +1057,12 @@ export async function neuralOf(path) {
 }
 
 /**
- * Queue this render again with the refiner the other way round. -> `prompt_id`.
+ * Queue this render again with the refiner the other way round.
+ * -> `{prompt_id, node, index}` identifying the matching output file.
  *
  * Not a job in `queue.js`'s sense — what goes on the queue is the user's own
  * prompt, not a `ContinuityJob` — so there is no `executed` envelope to wait
- * for here. The caller watches the wire for the id this returns; see
+ * for here. The caller watches the wire for this prompt and output id; see
  * `loupe.js`, and `creator/neuraltwin.py` for why this costs the save rather
  * than the render.
  */
@@ -1078,7 +1079,7 @@ export async function neuralTwin(path, on, block = null) {
   }
   // The file it writes is a new take on the shelf the gallery already lists.
   invalidate("output");
-  return body.prompt_id;
+  return body;
 }
 
 /** Where the refiner stands on this machine: package, weights, the last DLL. */

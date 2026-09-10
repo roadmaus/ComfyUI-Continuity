@@ -216,7 +216,7 @@ class MiniMaxH3SaveImage(io.ComfyNode):
                     registry.STILL_ARCHES[registry.DEFAULT_STILL_ARCH])),
             ],
             outputs=[],
-            hidden=[io.Hidden.prompt, io.Hidden.extra_pnginfo],
+            hidden=[io.Hidden.prompt, io.Hidden.extra_pnginfo, io.Hidden.unique_id, io.Hidden.dynprompt],
         )
 
     @classmethod
@@ -236,16 +236,26 @@ class MiniMaxH3SaveImage(io.ComfyNode):
 
         # The workflow, so a still dropped back onto the canvas rebuilds the
         # node that made it — the same two hidden fields core's savers write.
-        metadata = None
+        collected = None
         if not args.disable_metadata:
-            metadata = PngInfo()
+            from . import neuraltwin
+
+            collected = dict(cls.hidden.extra_pnginfo or {})
+            collected.pop(neuraltwin.PRODUCER_KEY, None)
             if cls.hidden.prompt is not None:
-                metadata.add_text("prompt", json.dumps(cls.hidden.prompt))
-            for key, value in (cls.hidden.extra_pnginfo or {}).items():
-                metadata.add_text(key, json.dumps(value))
+                collected["prompt"] = cls.hidden.prompt
 
         results = []
-        for image in images:
+        for index, image in enumerate(images):
+            metadata = None
+            if collected is not None:
+                metadata = PngInfo()
+                # A batch shares one producer but not one comparison picture.
+                # Stamp each file separately so image 2 compares with image 2.
+                producer = neuraltwin.producer_metadata(cls.hidden, index)
+                tags = {**collected, **({neuraltwin.PRODUCER_KEY: producer} if producer else {})}
+                for key, value in tags.items():
+                    metadata.add_text(key, json.dumps(value))
             array = (image.cpu().numpy() * 255.0).clip(0, 255).astype(np.uint8)
             filename = f"{name}_{counter:05}_.png"
             Image.fromarray(array).save(os.path.join(directory, filename),
