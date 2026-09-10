@@ -6,6 +6,36 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**Sixteen fixes off one audit (issue #54), the DLSS switch first.** In a
+Timeline body the DLSS pill's popover threw before it mounted — the body has no
+`geometry()`, the modal does — so a piece saved with the pass on could not turn
+it off, and rendering without the weights died after the sampler had finished.
+Fixed at the callback. With it: a reel of nothing but held takes passes through
+the neural node instead of being refused; a video reference set to `match` no
+longer serialises away and comes back as `max` after a merge or a pool
+injection; merged sheets allocate owner and panel handles in one namespace, so
+`plate-1`'s `img-1` panel stops colliding with the sheet renamed onto `img-1`;
+the H3 segment's fingerprint calls `timeline.stamps` again, which a bare except
+had been hiding since the family move. The tool benches keep the frame on
+screen at a VFR trim mark rather than the next one decoded, keep the trimmed
+tail's duration, and place a clip's sound by its own timestamps — internal
+gaps and an initial delay included — through a reader the reel's mux now
+shares. The standalone neural node keeps every pixel under a zero mask: the
+detail filter used to smear the masked residual past its edge. A Blockout run
+freezes camera marks, pass, duration and prose at the press, not only the
+objects. The loupe accepts only its producer's output as the twin — every save
+node now stamps `continuity_producer` into the file — queues just that
+producer's closure, and follows seeks, playback and dial changes without
+marking a stale tile current. Takes land on the card that queued them by a
+persistent `card_id` rather than by content, so deleting one of two identical
+cards no longer hands the survivor the other's take, and two overlapping
+submissions keep their own snapshots. Natural's detail dial resets to
+Natural's default; the settings page counts remembered folders and layouts
+among what it offers to clear. A restored seam on the frames road hands over
+restored frames only, no latent, as the setting says. The drift-guard findings in the same audit
+(items 6, 7, E4) landed after the guard was already removed. Reported, with
+patches, by @sarnara2.
+
 **Better DLSS 5 defaults: each style preset now opens at its own detail
 strength, with colour off.** The DLSS 5 pass shipped opening at the model's own
 answer, 1 on both strengths, which is right for detail and wrong for colour:
