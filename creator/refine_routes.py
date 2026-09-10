@@ -74,6 +74,14 @@ def _picture(asset):
     """
     from PIL import Image, ImageOps
 
+    # A saved RefMod has no media file to open — its `filename` is a name under
+    # a refmods root, not a path under input — so the refiner is given its
+    # description instead of a picture. Falling through to `media.resolve` would
+    # either fail (a "could not be read" note about a file that is fine) or,
+    # worse, open an unrelated input file with the same name.
+    if getattr(asset, "mod", None):
+        return None
+
     try:
         path = media.resolve(asset.filename)
         if asset.kind == "image":
@@ -94,6 +102,12 @@ def _sighted(slot, asset, picture):
         # Which of the message's images this is comes later, in `_number`, once
         # every picture is in one list and the tail past `MAX_IMAGES` is known.
         slot["picture"] = True
+    elif getattr(asset, "mod", None):
+        # Deliberately not shown, and that is not a failure: the reference is a
+        # stored latent. The glossary already carries its description; this says
+        # so plainly rather than leaving the model to expect a picture.
+        slot["note"] = ("a saved RefMod — no picture is attached; work from its "
+                        "description and the request")
     elif asset.kind != "audio" and asset.track != "sound":
         # It should have had one and does not: the file would not open. Said
         # rather than left silent, because the glossary line stays either way

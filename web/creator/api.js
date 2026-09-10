@@ -733,9 +733,24 @@ export function thumbUrl(path, version) {
  * anything storing a reference to one should keep it in.
  */
 export function stillUrl(asset) {
-  if (!asset?.path) return null;
+  if (!asset) return null;
+  // Chips carry `filename`, picker rows carry `path` — one helper for both.
+  const name = asset.path ?? asset.filename;
+  if (!name) return null;
+  // A saved RefMod has no media file: its thumbnail comes from the route that
+  // serves the stored preview (or the sidecar a render wrote). The same answer
+  // everywhere a reference is drawn — the picker cell, an attached chip, a
+  // cast tile, the RefMod node's own well.
+  if (asset.mod) return refmodThumbUrl(name);
   if (asset.kind !== "video" && asset.kind !== "image") return null;
-  return viewUrl(asset.path, { preview: true, version: asset.mtime });
+  return viewUrl(name, { preview: true, version: asset.mtime });
+}
+
+/** A saved RefMod's thumbnail: the server decodes its latent, or serves the
+ *  preview stored when it was saved. A mod has no media file, so none of the
+ *  `/view` routes apply to it. */
+export function refmodThumbUrl(name) {
+  return api.apiURL(`/continuity/refmod_thumb?name=${encodeURIComponent(name)}`);
 }
 
 /**

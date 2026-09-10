@@ -56,7 +56,7 @@ from comfy_api.latest import ComfyExtension, io
 
 from . import (accel, canvas, compile as compiler, guide as guides, job_node,
                media, models, neural, neuralpass, outputs, prestage, redetail,
-               redetailpass, sampling, settings, timeline)
+               redetailpass, refmod_node, sampling, settings, timeline)
 from .core import emit as loop
 from .families import registry
 from .families.h3 import declare as h3, facepass, hires, seamrestore, truncate
@@ -374,7 +374,7 @@ class MiniMaxCreatorExtension(ComfyExtension):
         return [MiniMaxH3Creator, MiniMaxH3Timeline, job_node.ContinuityJob,
                 *timeline.NODES, *registry.segment_nodes(),
                 *prestage.NODES, *hires.NODES, *facepass.NODES, *seamrestore.NODES,
-                *truncate.NODES,
+                *truncate.NODES, *refmod_node.NODES,
                 *redetailpass.NODES, *neuralpass.NODES]
 
 

@@ -52,7 +52,7 @@
 // perform (`keep` and `library` below): a shelf does not know where a roster
 // lives, and there are two hosts.
 
-import { viewUrl } from "./api.js";
+import { stillUrl } from "./api.js";
 import { dismissable, el, icon, placeNear } from "./dom.js";
 import { t } from "./i18n.js";
 import * as S from "./state.js";
@@ -198,10 +198,15 @@ export function openMenu(anchor, { title, lead = null, sections, onClose = null 
  *  is the whole point of it being here. */
 function assetThumb(asset, className = "mmc-asset-thumb") {
   if (!asset) return el("span", { class: `${className} mmc-cast-missing`, text: "?" });
-  if (asset.kind === "image") {
+  if (asset.kind === "image" || asset.mod) {
+    const cls = `${className} mmc-tag-${S.tagIndex(asset.handle)}`;
     return el("img", {
-      class: `${className} mmc-tag-${S.tagIndex(asset.handle)}`,
-      src: viewUrl(asset.filename, { preview: true }), alt: "",
+      class: cls, src: stillUrl(asset), alt: "",
+      // No preview yet is an ordinary state for a RefMod; fall back to the
+      // glyph the row would have worn anyway rather than a broken image.
+      onerror: (event) => event.target.replaceWith(
+        el("span", { class: cls },
+           [icon(asset.kind === "video" ? "video" : "audio", 15)])),
     });
   }
   return el("span", { class: `${className} mmc-tag-${S.tagIndex(asset.handle)}` },
@@ -766,24 +771,26 @@ export class CastShelf {
   }
 
   /** Their face, where one of their pictures can supply it: the first still they are
-   *  built out of. A subject made of a clip alone, or of words alone, keeps the
-   *  glyph — there is no picture of them to show, and inventing one would be
-   *  showing a file that says nothing about their looks. */
+   *  built out of — or, failing a still, a saved RefMod, which carries a
+   *  thumbnail even when it is a clip (the preview stored with it, or the one a
+   *  render wrote). A subject made of a plain clip alone, or of words alone,
+   *  keeps the glyph — there is no picture of them to show, and inventing one
+   *  would be showing a file that says nothing about their looks. */
   face(subject) {
-    const assets = this.getAssets();
-    const still = (subject.from ?? [])
-      .map((handle) => assets.find((a) => a.handle === handle))
-      .find((a) => a?.kind === "image");
-    if (still) {
+    const blank = () => el("span", { class: "mmc-cast-face mmc-cast-face-blank" },
+                            [icon(BLANK_FACE[subject.takes ?? "person"] ?? "face", 22)]);
+    const chosen = S.castFaceSource(subject, this.getAssets());
+    if (chosen) {
       return el("img", {
-        class: "mmc-cast-face", alt: "",
-        src: viewUrl(still.filename, { preview: true }),
+        class: "mmc-cast-face", alt: "", src: stillUrl(chosen),
+        // A RefMod with no thumbnail yet is an ordinary state; fall back to the
+        // glyph the clip-only subject would have worn rather than a broken image.
+        onerror: (event) => event.target.replaceWith(blank()),
       });
     }
     // The glyph follows what they are: a person glyph over a described *place*
     // says the wrong thing, and the card's whole job is saying what they are.
-    return el("span", { class: "mmc-cast-face mmc-cast-face-blank" },
-              [icon(BLANK_FACE[subject.takes ?? "person"] ?? "face", 22)]);
+    return blank();
   }
 
   nameField(subject) {

@@ -750,6 +750,13 @@ def slot_row(asset, label=None, show_label=False):
                 if asset.kind == "video" else "a reference audio clip"),
         }[kind]
     row = {"handle": asset.handle, "what": f"{what} ({os.path.basename(asset.filename)})"}
+    if getattr(asset, "mod", None):
+        # A stored reference has no file the refiner can look at, so the line
+        # says what it is from the words it was saved with — the one thing the
+        # model can be told about a picture it is not shown.
+        detail = (asset.mod_description or "").strip()
+        row["what"] = (f"a saved RefMod — {detail}" if detail
+                       else f"a saved RefMod ({os.path.basename(asset.filename)})")
     if asset.role == "reference":
         if kind == "image":
             row["note"] = _TAKES_NOTE.get(asset.takes, _FULL_NOTE)

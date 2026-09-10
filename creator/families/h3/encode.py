@@ -20,7 +20,7 @@ import time
 import node_helpers
 import torch
 from comfy.ldm.minimax.model import FRAME_PER_TOKEN
-from ... import audiolatent, latents, media
+from ... import audiolatent, latents, media, refmod as refmods
 from .payload import AUDIO_END_KEY, CORE_ANCHORS_ANYWHERE, FRAME_INDEX_KEY
 from comfy_extras.nodes_minimax_h3 import (
     CANVAS_MULTIPLE,
@@ -298,6 +298,92 @@ def _cached_ref_audio(kind, audio_vae, print_of_vae, asset, entry, compiled, tal
         tally)
     latent = _restore(audio_vae, tensors["audio_latent"])
     return latent, latent.shape[-1]
+
+
+def _png_of(frame):
+    """One decoded frame -> small PNG bytes, for a picker thumbnail.
+
+    Called on the render thread from `_encode_refmod`, where the VAE is loaded
+    and a decode has just happened. Deliberately *not* reachable from a route:
+    driving model management off the render thread is what segfaulted the
+    process when `/continuity/refmod_thumb` tried to decode.
+    """
+    import io
+
+    from PIL import Image
+    array = frame.detach().float().clamp(0, 1).cpu().numpy()
+    image = Image.fromarray((array * 255).round().astype("uint8"))
+    image.thumbnail((192, 192))
+    buffer = io.BytesIO()
+    image.save(buffer, format="PNG")
+    return buffer.getvalue()
+
+
+def _encode_refmod(vae, asset, print_of_vae, compiled, tally=None):
+    """A saved RefMod as one reference. -> (tokenizer item, DiT block).
+
+    The latent is the whole point: it is already encoded, so it is read from
+    the file and handed to the model exactly as saved — re-encoding it would
+    both cost the wait this exists to avoid and change what the user made. The
+    tokenizer still needs a picture, so the stored latent is decoded through the
+    same VAE and sampled exactly the way a file reference is (2 fps for a video,
+    the first frame for an image), and that decode is what gets cached. The
+    latent is deliberately *not* cached: it is a few megabytes off the local
+    disk, and a second copy under `latents.py` would only be a copy of the file.
+
+    The cache key is the mod's own stamp plus the VAE, for the same reason
+    `_ref_key` exists — re-saving a mod under the same name must miss, and the
+    presentation is a function of the stored latent and the decoder.
+    """
+    mod = refmods.load_meta(asset.mod)
+    if mod is None:
+        raise ValueError(
+            f"@{asset.handle}: RefMod {asset.mod!r} is no longer readable")
+
+    def decode_presentation():
+        latent = _restore(vae, refmods.load_latent(asset.mod))
+        pixels = vae.decode(latent)
+        del latent
+        # Same shape contract the sibling pack's Text Encode enforces: a video
+        # VAE returns [B, T, H, W, 3] and the batch is always one reference.
+        if pixels.ndim == 5 and pixels.shape[0] == 1:
+            pixels = pixels[0]
+        if pixels.ndim != 4 or pixels.shape[-1] != 3 or pixels.shape[0] < 1:
+            raise ValueError(
+                f"@{asset.handle}: RefMod {asset.mod!r} decoded to "
+                f"{tuple(pixels.shape)}; expected [T, H, W, 3]")
+        if mod.kind == "image":
+            chosen, stamps = pixels[:1], None
+        else:
+            sampled = list(range(0, pixels.shape[0], FPS // 2))
+            chosen, stamps = pixels[sampled], [i / 2.0 for i in range(len(sampled))]
+        # A thumbnail for the picker, from the frame that was just decoded —
+        # written here because this is the render thread. Best effort: a mod that
+        # cannot write a sidecar still encodes exactly the same.
+        try:
+            if refmods.read_thumb(asset.mod) is None:
+                refmods.write_thumb(asset.mod, _png_of(chosen[0]))
+        except Exception:  # noqa: BLE001
+            pass
+        del pixels
+        return ({"presentation": _quantize(chosen)},
+                {"timestamps": stamps, "latent_t": mod.latent_t})
+
+    tensors, meta = _cached(
+        f"@{asset.handle} refmod ({asset.mod})",
+        {"refmod": refmods.stamp(asset.mod), "vae": print_of_vae},
+        decode_presentation, tally)
+
+    latent = _restore(vae, refmods.load_latent(asset.mod))
+    if mod.kind == "image":
+        return ({"type": "image", "data": _present(tensors["presentation"])},
+                {"kind": "image", "latent_h": mod.latent_h,
+                 "latent_w": mod.latent_w, "latent": latent})
+    return ({"type": "video", "data": _present(tensors["presentation"]),
+             "timestamps": meta["timestamps"]},
+            {"kind": "video", "latent_t": meta["latent_t"],
+             "latent_h": mod.latent_h, "latent_w": mod.latent_w,
+             "ref_audio_t": 0, "latent": latent, "audio_latent": None})
 
 
 def _pin(keyframe, index, stock=0):
@@ -719,7 +805,11 @@ def _encode_references(clip, vae, audio_vae, compiled, loaded, checkpoints=None)
         asset = step["asset"]
         entry = loaded[asset.handle]
 
-        if step["op"] == "image":
+        if getattr(asset, "mod", None):
+            item, block = _encode_refmod(vae, asset, print_of_vae, compiled, tally)
+            items.append(item)
+            blocks.append(block)
+        elif step["op"] == "image":
             def encode_image(entry=entry, asset=asset):
                 image = entry["image"]
                 height, width = image.shape[1], image.shape[2]

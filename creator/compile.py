@@ -19,6 +19,7 @@ from dataclasses import dataclass, field, replace
 
 from . import canvas
 from . import redetail
+from . import refmod as refmods
 from . import sound
 from .families import grammar, registry
 from .families.h3 import contextir, declare as h3, subjects
@@ -207,6 +208,18 @@ class Asset:
     kind: str            # image | video | audio
     role: str            # reference | first_frame | last_frame
     filename: str        # relative to ComfyUI/input
+    # A saved RefMod (sibling `ComfyUI-MiniMaxH3Mod`) this reference draws its
+    # latent from, instead of decoding `filename` and running the VAE. The name
+    # stays in `filename` too: it is the asset's identity for the pool dedup and
+    # the timeline stamp, and both want a value that is stable and unique rather
+    # than the empty string a "not a file" reading would leave. This field is
+    # the flag that says "do not treat that value as a path".
+    mod: str | None = None
+    # A RefMod's own words, carried so the prompt and the refiner can define a
+    # label whose file neither can open. Filled by `_resolve_refmods`; empty on
+    # every ordinary asset.
+    mod_description: str = ""
+    mod_concept: str = ""
     track: str | None = None   # video only: one of TRACKS; None for images and audio
     ref_size: str = "match"    # reference image/video: match | max; see DEFAULT_REF_SIZE
     trim: tuple[float, float] | None = None   # video/audio only: (start, end) seconds; None = whole file
@@ -549,6 +562,60 @@ def _parse_trim(handle, kind, raw):
     return (start, end)
 
 
+def _resolve_refmods(assets):
+    """`kind="refmod"` assets -> the ordinary image/video assets they stand for.
+
+    A RefMod's kind and its `takes` live in the file's own header, not in the
+    blob: the blob says *which* mod, the header says what it is. Reading it here
+    — once, before the images/videos split — is what lets `plan_references`, the
+    label ordinals, `contextir` and every limit keep reading an asset that looks
+    like any other file. The name stays in `filename`; `mod` is the flag the
+    loader and the encoder read to know it is not a path.
+
+    A missing or unreadable mod is a `CompileError` naming the handle and the
+    roots searched. A reference the prompt cites and the payload cannot produce
+    is precisely the silent-wrong-video failure the plan/label agreement exists
+    to prevent, so it must be loud here rather than a `None` later.
+    """
+    out = []
+    for asset in assets:
+        if not asset.mod:
+            out.append(asset)
+            continue
+        try:
+            mod = refmods.load_meta(asset.mod)
+        except refmods.RefModError as exc:
+            raise CompileError(f"@{asset.handle}: {exc}") from exc
+        if mod is None:
+            searched = (", ".join(refmods.roots())
+                        or "(no refmods folder is registered)")
+            raise CompileError(
+                f"@{asset.handle}: no RefMod named {asset.mod!r} — searched {searched}")
+        if mod.kind == "audio":
+            raise CompileError(
+                f"@{asset.handle}: audio RefMods are not supported yet; attach "
+                f"the sound file instead")
+        # `kind="refmod"` is the hand-authored convenience: the header decides.
+        # An image/video asset carrying `mod` already named its kind — the
+        # picker reads it from the same header — and a disagreement is a
+        # mistake worth hearing about rather than resolving silently.
+        kind = mod.kind if asset.kind == "refmod" else asset.kind
+        if kind != mod.kind:
+            raise CompileError(
+                f"@{asset.handle}: {asset.mod!r} is a {mod.kind} RefMod but is "
+                f"attached as a {kind}")
+        takes = asset.takes or mod.takes or "full"
+        allowed = VIDEO_TAKES if kind == "video" else IMAGE_TAKES
+        if takes not in allowed:
+            raise CompileError(
+                f"@{asset.handle}: takes must be one of {', '.join(allowed)} "
+                f"for a {kind} RefMod (got {takes!r})")
+        out.append(replace(asset, kind=kind, takes=takes,
+                           mod_description=mod.description,
+                           mod_concept=mod.concept_type))
+    return out
+
+
 def _parse_assets(raw):
     assets = []
     seen = set()
@@ -561,7 +628,7 @@ def _parse_assets(raw):
         seen.add(handle)
 
         kind = item.get("kind")
-        if kind not in ("image", "video", "audio"):
+        if kind not in ("image", "video", "audio", "refmod"):
             raise CompileError(f"@{handle}: unknown kind {kind!r}")
 
         role = item.get("role", "reference")
@@ -618,6 +685,33 @@ def _parse_assets(raw):
         filename = str(item.get("filename") or "").strip()
         if not filename:
             raise CompileError(f"@{handle}: no filename")
+
+        # A saved RefMod: `filename` names a `.safetensors` under a `refmods`
+        # root, not media in input. Its kind and `takes` are not in the blob —
+        # the header knows them — so it is carried as kind `refmod` until
+        # `_resolve_refmods` has read that header, after the cast has been cut
+        # down and before the split into images and videos. The file-oriented
+        # knobs are refused rather than ignored, because a stored latent has no
+        # size to match, seconds to trim, or track to pick, and silently
+        # dropping one would queue something other than what the card shows.
+        if kind == "refmod" or item.get("mod"):
+            if role != "reference":
+                raise CompileError(
+                    f"@{handle}: a RefMod is a reference — it cannot be the "
+                    f"shot's {role.replace('_', ' ')}")
+            if item.get("trim") or item.get("track") or item.get("with_audio"):
+                raise CompileError(
+                    f"@{handle}: a RefMod has no trim or track — the stored "
+                    f"latent already is what it is")
+            takes = str(item.get("takes") or "")
+            allowed = VIDEO_TAKES if kind == "refmod" else TAKES.get(kind, ())
+            if takes and takes not in allowed:
+                raise CompileError(
+                    f"@{handle}: takes must be one of {', '.join(allowed)} "
+                    f"(got {takes!r})")
+            assets.append(Asset(handle=handle, kind=kind, role=role,
+                                filename=filename, mod=filename, takes=takes))
+            continue
 
         # Defaulted per kind rather than globally — see DEFAULT_REF_SIZE. Audio
         # has no size to speak of and is left on the dataclass default, which
@@ -1396,6 +1490,10 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
         )
     guide = guides[0] if guides else None
 
+    # Read the header of every RefMod now, after the cast has been cut and
+    # before the split, so the mode, the plan, the label ordinals and every
+    # limit are derived from the resolved kind. See `_resolve_refmods`.
+    assets = _resolve_refmods(assets)
     refs = [a for a in assets if a.role == "reference"]
     ref_images = [a for a in refs if a.kind == "image"]
     # A video referenced for its soundtrack alone is an audio reference and
@@ -1806,7 +1904,8 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
 # seed is the timeline's either way: every pass runs on the one set on the node.)
 RENDER_MODES = ("chained", "single")
 
-_HANDLE_PREFIX = {"image": "img", "video": "vid", "audio": "aud"}
+_HANDLE_PREFIX = {"image": "img", "video": "vid", "audio": "aud",
+                  "refmod": "mod"}
 
 # What a card on the strip is. A shot is a generation — everything this module
 # was written for. A clip is footage the user already has, cut into the piece
@@ -3151,12 +3250,17 @@ def _asset_dict(asset):
         out["ref_size"] = asset.ref_size
     if asset.trim:
         out["trim"] = {"start": asset.trim[0], "end": asset.trim[1]}
-    if asset.takes != "full":
+    # `""` is the "unset" sentinel a RefMod carries until `_resolve_refmods`
+    # seeds it from `concept_type`, not a value to write back: an empty `takes`
+    # in the blob would be a narrowing the compiler could not read.
+    if asset.takes and asset.takes != "full":
         out["takes"] = asset.takes
     # The fields `_parse_assets` reads that used to be lost here: a plate's
     # panels — the handles the merged prompt cites — a guide's tracing op, which
     # is what routes a matte to the inpaint branch, and the cut-out flag. Each
     # was parsed on a card and silently absent from the merged pass (issue #47).
+    if asset.mod:
+        out["mod"] = True
     if asset.cut:
         out["cut"] = True
     if asset.op:

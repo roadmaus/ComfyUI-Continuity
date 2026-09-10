@@ -35,7 +35,7 @@ import folder_paths
 from server import PromptServer
 
 from . import (compile as compiler, jobs, latents, lorameta, media, models, plate,
-               preview, settings)
+               preview, refmod, settings)
 
 # The picker builds its grid lazily and paginates, so the cap only bounds the
 # listing's JSON payload (~2 MB at this size). Newest first, so when a folder
@@ -587,15 +587,97 @@ async def list_models(request):
     return web.json_response(await loop.run_in_executor(None, models.available))
 
 
+def _scan_refmods():
+    """Every saved RefMod -> picker rows, in the shape the media listing uses.
+
+    A RefMod is offered as the image or video it stands for, carrying `mod: true`
+    so the frontend can attach it as that kind and the backend can tell it from a
+    file of the same shape. Audio RefMods are left out for now: the encoder
+    refuses them, and offering one in the grid would be offering a pick that
+    cannot queue.
+    """
+    assets = []
+    folders = set()
+    for name in refmod.list_names():
+        try:
+            mod = refmod.load_meta(name)
+        except refmod.RefModError:
+            # A file this build cannot read is not a reason to empty the grid.
+            continue
+        if mod is None or mod.kind not in ("image", "video"):
+            continue
+        path = refmod.find(name)
+        try:
+            stat = os.stat(path + ".safetensors")
+        except OSError:
+            continue
+        subfolder = name.rsplit("/", 1)[0] if "/" in name else ""
+        if subfolder:
+            parts = subfolder.split("/")
+            folders.update("/".join(parts[:i]) for i in range(1, len(parts) + 1))
+        assets.append({
+            "path": name,
+            "name": name.rsplit("/", 1)[-1],
+            "subfolder": subfolder,
+            "kind": mod.kind,
+            "mod": True,
+            "size": stat.st_size,
+            "mtime": stat.st_mtime,
+            "tokens": mod.tokens,
+            "description": mod.description,
+            "concept_type": mod.concept_type,
+        })
+    assets.sort(key=lambda a: a["mtime"], reverse=True)
+    return {"assets": assets, "folders": sorted(folders), "truncated": False}
+
+
+def _refmod_thumb(name):
+    """A mod's stored thumbnail bytes, or None.
+
+    **Never decode here.** This runs on a thread-pool worker, and ComfyUI's
+    model management (dynamic VRAM, pinned host buffers, `cast_to_gathered`) is
+    not safe to drive off the render thread — doing it to draw one thumbnail
+    segfaulted the whole process. The bytes come from the mod's own header
+    (written by Save as RefMod) or from the sidecar a render writes the first
+    time it decodes that mod for the tokenizer; a mod with neither falls back
+    to the picker's kind icon, which is the honest answer for a file nothing has
+    looked at yet.
+    """
+    if not name:
+        return None
+    try:
+        return refmod.read_preview(name) or refmod.read_thumb(name)
+    except Exception:  # noqa: BLE001 — a thumbnail must never fail a request
+        return None
+
+
+@PromptServer.instance.routes.get("/continuity/refmod_thumb")
+async def refmod_thumb(request):
+    """A mod's thumbnail, if one has been stored. No model work on a route."""
+    name = request.query.get("name", "")
+    data = await asyncio.get_running_loop().run_in_executor(None, _refmod_thumb, name)
+    if data is None:
+        return web.Response(status=404)
+    return web.Response(body=data, content_type="image/png",
+                        headers={"Cache-Control": "no-cache"})
+
+
 @PromptServer.instance.routes.get("/continuity/assets")
 async def list_assets(request):
-    """The picker's grid: `?root=input` (the default) or `?root=output`.
+    """The picker's grid: `?root=input` (the default), `?root=output`, `?root=refmods`.
 
     The output listing is the gallery — finished renders, browsed with the same
     machinery as the input folder. Its paths come back annotated (` [output]`),
     which is what lets one of them be attached as a reference: see `_scan`.
+
+    The refmods listing is the saved RefMods, in the same row shape but read
+    from a header rather than from media files.
     """
-    if request.query.get("root") == "output":
+    root_name = request.query.get("root")
+    if root_name == "refmods":
+        loop = asyncio.get_running_loop()
+        return web.json_response(await loop.run_in_executor(None, _scan_refmods))
+    if root_name == "output":
         root, annotation = folder_paths.get_output_directory(), " [output]"
     else:
         root, annotation = folder_paths.get_input_directory(), ""

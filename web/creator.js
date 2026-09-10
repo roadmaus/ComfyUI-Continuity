@@ -6,6 +6,7 @@ import { app } from "../../scripts/app.js";
 import { installStyles } from "./creator/styles.js";
 import { TimelineBody } from "./creator/timeline.js";
 import { PreStageBody } from "./creator/prestage.js";
+import { RefModBody, parseRefMod, serializeRefMod } from "./creator/refmod.js";
 import { Satellite } from "./creator/satellite.js";
 import { adopted, SAMPLING_WIDGETS } from "./creator/sampling.js";
 import { rememberQueuedSeeds } from "./creator/seedmemory.js";
@@ -23,13 +24,18 @@ const CREATOR = "MiniMaxH3Creator";
 // same piece-shaped blob and behaves identically. See `creator_node.py`.
 const TIMELINE = "MiniMaxH3Timeline";
 const PRESTAGE = "MiniMaxH3PreStage";
+// The Save as RefMod node: no sockets, a hidden `refmod_data` blob and a body
+// that picks the media and the two questions a picture cannot answer for itself.
+const REFMOD = "ContinuitySaveRefMod";
 // Both ids drive one body, so the pair of them is worth naming once rather than
 // spelling out at every branch below.
 const PIECE = [CREATOR, TIMELINE];
 // Unchanged by the stage: the picture floats in a satellite card beside the
 // node, so a node with a render is the same size as one without.
-const MIN_SIZE = { [CREATOR]: [620, 520], [TIMELINE]: [620, 520], [PRESTAGE]: [460, 420] };
-const WIDGET = { [CREATOR]: "creator_data", [TIMELINE]: "timeline_data", [PRESTAGE]: "prestage_data" };
+const MIN_SIZE = { [CREATOR]: [620, 520], [TIMELINE]: [620, 520], [PRESTAGE]: [460, 420],
+                   [REFMOD]: [420, 300] };
+const WIDGET = { [CREATOR]: "creator_data", [TIMELINE]: "timeline_data",
+                 [PRESTAGE]: "prestage_data", [REFMOD]: "refmod_data" };
 // Which edge of the node the satellite result card hangs off. The PreStage sits
 // to the *left* of its Creator, so its result goes further left — the desk
 // reads *still ← pre-stage · creator → video* and nothing ever overlaps.
@@ -461,6 +467,30 @@ app.registerExtension({
         stashPreStage(nodeById(node.graph, node.mmcBody?.state?.peer), node);
         removed?.apply(this, arguments);
       };
+    } else if (node.comfyClass === REFMOD) {
+      node.mmcBody = attach(node, (widget) => {
+        // `body.state`, read at call time, not a `state` captured here: a loaded
+        // workflow replaces the body's state after `nodeCreated` (see
+        // `loadedGraphNode`), so a closure over the first object would write an
+        // empty blob forever while the face showed the pick.
+        let body;
+        body = new RefModBody({
+          state: parseRefMod(widget.value),
+          onCommit: () => {
+            widget.value = serializeRefMod(body.state);
+            node.graph?.setDirtyCanvas(true, true);
+          },
+          // Save writes the blob and queues just this node — the same call the
+          // fullscreen editor's Render makes. The node is an output node, so
+          // queueing it is the whole job.
+          onSave: () => {
+            widget.value = serializeRefMod(body.state);
+            node.graph?.setDirtyCanvas(true, true);
+            app.queuePrompt(0, 1, [String(node.id)]);
+          },
+        });
+        return body;
+      });
     }
   },
 
@@ -484,6 +514,9 @@ app.registerExtension({
         node.graph?.setDirtyCanvas(true, true);
       };
       body.setState(state);
+    } else if (node.comfyClass === REFMOD) {
+      const widget = node.widgets?.find((w) => w.name === WIDGET[REFMOD]);
+      if (widget) body.setState(parseRefMod(widget.value));
     } else {
       body.reload();
     }

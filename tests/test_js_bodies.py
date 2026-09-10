@@ -228,6 +228,10 @@ for (const [cls, widget, blob] of [
   ["MiniMaxH3Timeline", "timeline_data", A_STRIP],
   ["MiniMaxH3PreStage", "prestage_data", "{}"],
   ["MiniMaxH3PreStage", "prestage_data", JSON.stringify({ arch: "minimax" })],
+  ["ContinuitySaveRefMod", "refmod_data", "{}"],
+  ["ContinuitySaveRefMod", "refmod_data",
+   JSON.stringify({ filename: "a.png", kind: "image", name: "a", type: "identity",
+                    capture: "full" })],
 ]) {
   const node = fakeNode(cls, widget, blob);
   try {
@@ -244,6 +248,7 @@ for (const [cls, widget, blob] of [
                        body: node.mmcBody?.editor?.constructor.name
                           ?? node.mmcBody?.constructor.name };
     if (cls === "MiniMaxH3PreStage" && blob !== "{}") out.still = node.mmcBody.root.text;
+    if (cls === "ContinuitySaveRefMod" && blob !== "{}") out.refmod = node.mmcBody.root.text;
     if (cls === "MiniMaxH3Creator") out.creator = node.mmcBody.root.text;
     // Which architecture renders this is the choice every other pill is read
     // against, so it leads the piece's row on every face — the shot's, the
@@ -257,8 +262,12 @@ for (const [cls, widget, blob] of [
       (n.children ?? []).forEach(findRows);
     };
     findRows(node.mmcBody.root);
-    out.leads[key] = String(rows[0]?.children?.[0]?.className ?? "")
-      .split(" ").includes("mmc-pill-model");
+    // Not a piece: the Save as RefMod node has no family pill to lead with, so
+    // it is not one of the faces this reads.
+    if (cls !== "ContinuitySaveRefMod") {
+      out.leads[key] = String(rows[0]?.children?.[0]?.className ?? "")
+        .split(" ").includes("mmc-pill-model");
+    }
   } catch (error) {
     out.errors.push(`${cls}: ${error.message}`);
   }
@@ -3196,6 +3205,11 @@ check("the image pre-stage mounts", report["nodes"].get("MiniMaxH3PreStage"),
 check("the H3 pre-stage mounts the Creator's body",
       report["nodes"].get("MiniMaxH3PreStage (H3 still)"),
       {"mounted": True, "body": "CreatorEditor"})
+check("the Save as RefMod node mounts",
+      report["nodes"].get("ContinuitySaveRefMod"),
+      {"mounted": True, "body": "RefModBody"})
+check("...and draws the file its blob picked",
+      "a.png" in (report["refmod"] or ""), True)
 
 # The model leads the piece's row on every face. Four bodies, one slot: the
 # shot's editor and the strip's summary name a video family, both pre-stages

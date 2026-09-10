@@ -8,7 +8,7 @@
 // with the node's, because there is only one editor.
 
 import { api } from "../../../scripts/api.js";
-import { compiledPrompt, probe, viewUrl, primeSettings, buildPlate } from "./api.js";
+import { compiledPrompt, probe, viewUrl, stillUrl, primeSettings, buildPlate } from "./api.js";
 import { CastShelf } from "./cast.js";
 import { clearButton } from "./clear.js";
 import { el, icon, mountOverlay, swappable } from "./dom.js";
@@ -176,6 +176,10 @@ function probeAspectSizes(timeline, onReady, { all = false } = {}) {
   for (const asset of want) {
     if (ASPECT_SIZES.has(asset.filename)) continue;
     ASPECT_SIZES.set(asset.filename, null);
+    // A saved RefMod has no media file to measure. Requesting `/view` for a mod
+    // name is a guaranteed 404, so it stays unmeasured and the canvas falls
+    // back to the preset — the same as any file that cannot be read.
+    if (asset.mod) continue;
     if (asset.kind === "video") {
       probe(asset.filename).then(({ width, height }) => {
         if (!width || !height) return;
@@ -705,8 +709,11 @@ class Timeline {
                   : "not cited — attached to segments {list} instead",
                 { list: doubles.map((d) => `${d.segment} (@${d.handle})`).join(", ") })
             : t("cited nowhere yet");
-    const thumb = asset.kind === "image"
-      ? el("img", { class: "mmc-asset-thumb", src: viewUrl(asset.filename, { preview: true }), alt: "" })
+    const thumb = (asset.kind === "image" || asset.mod)
+      ? el("img", { class: "mmc-asset-thumb", src: stillUrl(asset), alt: "",
+                    onerror: (event) => event.target.replaceWith(
+                      el("span", { class: "mmc-asset-thumb",
+                                    text: asset.kind === "video" ? "▶" : "♪" })) })
       : el("span", { class: "mmc-asset-thumb", text: asset.kind === "video" ? "▶" : "♪" });
     // The pool is the one place a swap pays the most: @char rides into every
     // segment that cites it, so re-casting the character is one click here
@@ -767,7 +774,7 @@ class Timeline {
       ...(S.isPlate(asset) && asset.panels.length > 1
         ? [el("span", { class: "mmc-asset-panels",
                         text: t("{count} panels", { count: asset.panels.length }) })]
-        : asset.kind === "image" && S.plateSpec(this.timeline)
+        : asset.kind === "image" && !asset.mod && S.plateSpec(this.timeline)
             && S.canCut((asset.panels?.[0] ?? asset).takes)
           ? [el("button", {
               class: `mmc-pl-cut mmc-asset-scissors${asset.panels?.[0]?.cut ? " on" : ""}`,
@@ -1063,7 +1070,7 @@ class Timeline {
     const single = this.timeline.segments.length === 1;
     const host = single ? this.timeline.segments[0] : this.timeline;
     const chosen = await openPicker({
-      kinds: ["image", "video", "audio", "renders"],
+      kinds: ["image", "video", "audio", "renders", "refmods"],
       kind: "image",
       capacity: (kind) => (single
         ? S.capacity(host, kind, this.timeline)
@@ -1091,10 +1098,12 @@ class Timeline {
       kind: picked.kind,
       role: "reference",
       filename: picked.path ?? picked.filename,
-      ref_size: "max",
+      // A saved RefMod is named, not sized, and has no track — the same rule
+      // the editor's `attachAssets` follows.
+      ...(picked.mod ? { mod: true } : { ref_size: "max" }),
     };
     if (picked.trim) entry.trim = picked.trim;
-    if (entry.kind === "video") entry.track = picked.track ?? S.DEFAULT_TRACK;
+    if (entry.kind === "video" && !picked.mod) entry.track = picked.track ?? S.DEFAULT_TRACK;
     host.assets.push(entry);
     this.commit();
     return entry;
@@ -1132,10 +1141,10 @@ class Timeline {
   }
 
   /** The same picker the segments use, filling the pool instead of a card. */
-  async addPoolAssets() {
+  async addPoolAssets(kind = "image") {
     const chosen = await openPicker({
-      kinds: ["image", "video", "audio", "renders"],
-      kind: "image",
+      kinds: ["image", "video", "audio", "renders", "refmods"],
+      kind,
       // The per-segment reference caps are compile's, applied where a segment
       // actually cites — the pool itself has no ceiling worth enforcing here.
       capacity: () => ({ used: 0, max: S.refCaps(this.timeline).files, filesLeft: S.refCaps(this.timeline).files }),
@@ -1164,10 +1173,11 @@ class Timeline {
       kind: picked.kind,
       role: "reference",
       filename: picked.path,
-      // Fidelity is why a reference is attached — same default as the editor.
-      ref_size: "max",
+      // Fidelity is why a reference is attached — same default as the editor,
+      // except a RefMod, which is named rather than sized and carries no track.
+      ...(picked.mod ? { mod: true } : { ref_size: "max" }),
     };
-    if (picked.kind === "video") entry.track = picked.track ?? S.DEFAULT_TRACK;
+    if (picked.kind === "video" && !picked.mod) entry.track = picked.track ?? S.DEFAULT_TRACK;
     if (picked.trim) entry.trim = picked.trim;
     return entry;
   }
@@ -1302,6 +1312,12 @@ class Timeline {
     const picked = chosen?.[0];
     if (!picked || picked.path === asset.filename) return;
     asset.filename = picked.path;
+    // A swap is between files: a RefMod flag does not carry onto a media file
+    // (or the backend would try to open the new name as a mod). See the
+    // editor's `replaceAsset`, this function's twin.
+    delete asset.mod;
+    delete asset.mod_description;
+    delete asset.mod_concept;
     if (picked.trim) asset.trim = picked.trim;
     else delete asset.trim;
     if (asset.kind === "video") asset.track = picked.track ?? S.DEFAULT_TRACK;
@@ -3384,6 +3400,16 @@ export class TimelineBody {
                + "prompt — or in the global one, for every segment — to use it there.",
                  { kind: t(kind) }),
                () => this.addPoolAssets(kind))),
+        // Saved RefMods, on the timeline's own rail: the piece-wide pool is a
+        // different attach point from a card's, and the tool has to live where
+        // that attach point does. H3's format, so H3 only — see the editor's
+        // identical tool for the reason.
+        ...(takesRefs && S.pieceFamily(this.timeline) === "h3" ? [
+          tool("Add RefMod", "weights",
+               t("Attach a saved RefMod to the whole piece. Cite its @handle in a "
+                 + "segment's prompt to use it there."),
+               () => this.addPoolAssets("refmods")),
+        ] : []),
         tool("Add LoRA", "effect",
              t("Manage the LoRAs patched onto every segment of this timeline"),
              () => this.manageLoras()),

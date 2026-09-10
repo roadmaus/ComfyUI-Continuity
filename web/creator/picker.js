@@ -3,7 +3,7 @@
 
 import { el, ICONS, svg, icon, mountOverlay, dismissable } from "./dom.js";
 import { listAssets, listingTruncated, listedFolders, makeFolder, removeFolder,
-         viewUrl, stillUrl, upload, moveAsset,
+         viewUrl, stillUrl, refmodThumbUrl, upload, moveAsset,
          deleteAsset, loadPickerPrefs, savePickerPrefs, buildPlate,
          cutPanel } from "./api.js";
 import { openTrim, trimLabel } from "./trim.js";
@@ -22,7 +22,7 @@ import { t } from "./i18n.js";
 // the list the current tab is looking at, and every organize path goes through
 // it rather than reaching for `this.assets`.
 const KIND_LABEL = { image: "Image", video: "Video", audio: "Audio",
-                     renders: "Renders", guides: "Guide" };
+                     renders: "Renders", guides: "Guide", refmods: "RefMod" };
 const ACCEPT = { image: "image/*", video: "video/*", audio: "audio/*",
                  guides: "video/*" };
 
@@ -91,6 +91,7 @@ class Picker {
     this.selected = [];   // asset rows, in click order
     this.assets = [];
     this.renders = [];    // the output folder, only fetched when the tab exists
+    this.refmods = [];    // saved RefMods, only fetched when the tab exists
     this.loaded = false;
     // Which shelf the grid shows: "all", "fav", or an input subfolder. Shelves
     // are shared across tabs — a folder is a place, not a kind.
@@ -208,6 +209,12 @@ class Picker {
     this.uploadButton = this.modal.querySelector(".mmc-upload");
     this.organizeButton = this.modal.querySelector(".mmc-organize");
     if (this.kind === "renders") this.uploadButton.style.display = "none";
+    if (this.kind === "refmods") {
+      // Nothing uploads into the RefMod library, and there is nothing on disk to
+      // organize: a mod is one saved file, not a folder of media.
+      this.uploadButton.style.display = "none";
+      this.organizeButton.style.display = "none";
+    }
     this.modal.style.position = "relative";
 
     this.overlay = el("div", {
@@ -233,13 +240,15 @@ class Picker {
       // All three at once. The two folders have nothing to say to each other,
       // and waiting for input to come back before asking for output made a slow
       // disk twice as slow for no reason (#4).
-      const [assets, renders, prefs] = await Promise.all([
+      const [assets, renders, refmods, prefs] = await Promise.all([
         listAssets({ force }),
         this.options.kinds.includes("renders") ? listAssets({ force, root: "output" }) : [],
+        this.options.kinds.includes("refmods") ? listAssets({ force, root: "refmods" }) : [],
         loadPickerPrefs(),
       ]);
       this.assets = assets;
       this.renders = renders;
+      this.refmods = refmods;
       this.prefs = prefs;
       // A mark on a file the listing no longer has is a mark on nothing.
       this.marked = this.marked.filter((p) => this.activeAssets().some((a) => a.path === p));
@@ -265,6 +274,7 @@ class Picker {
     } catch (error) {
       this.assets = [];
       this.renders = [];
+      this.refmods = [];
       this.loaded = true;
       this.loadError = error.message;
     }
@@ -291,13 +301,16 @@ class Picker {
     for (const tab of this.tabs) tab.setAttribute("aria-selected", String(tab.textContent === t(KIND_LABEL[kind])));
     // Nothing uploads into the output folder: renders arrive by being rendered.
     // Organizing them is another matter — see the note at the top of the file.
-    this.uploadButton.style.display = kind === "renders" ? "none" : "";
-    if (kind !== "renders") this.uploadButton.textContent = t("+  Upload {kind}", { kind: t(KIND_LABEL[kind].toLowerCase()) });
+    const foreign = kind === "renders" || kind === "refmods";
+    const wasForeign = previous === "renders" || previous === "refmods";
+    this.uploadButton.style.display = foreign ? "none" : "";
+    if (!foreign) this.uploadButton.textContent = t("+  Upload {kind}", { kind: t(KIND_LABEL[kind].toLowerCase()) });
+    this.organizeButton.style.display = kind === "refmods" ? "none" : "";
     // Shelves are shared between the input tabs — a folder is a place, not a
-    // kind — but the output folder is a different place, so crossing that line
-    // opens where that root was last left rather than on a shelf that is not
-    // there.
-    if ((kind === "renders") !== (previous === "renders")) {
+    // kind — but the output folder and the RefMod library are different places,
+    // so crossing that line opens where that root was last left rather than on
+    // a shelf that is not there.
+    if (foreign !== wasForeign || (foreign && kind !== previous)) {
       this.shelf = this.rememberedShelf();
       this.marked = [];
     }
@@ -331,7 +344,9 @@ class Picker {
    *  renders tab reads a different folder; everything organize-related goes
    *  through it, which is why there is only one implementation of any of it. */
   activeAssets() {
-    return this.kind === "renders" ? this.renders : this.assets;
+    if (this.kind === "renders") return this.renders;
+    if (this.kind === "refmods") return this.refmods;
+    return this.assets;
   }
 
   /** The label the upload button wears when it is not uploading. */
@@ -350,14 +365,18 @@ class Picker {
 
   /** Which root the tab is browsing, as the server names it. */
   rootName() {
-    return this.kind === "renders" ? "output" : "input";
+    if (this.kind === "renders") return "output";
+    if (this.kind === "refmods") return "refmods";
+    return "input";
   }
 
   /** Which root the tab is browsing. The shelf is remembered per root, not per
    *  kind: the image and video tabs share a folder, so they share the place in
    *  it they were left. */
   rootKey() {
-    return this.kind === "renders" ? "renders" : "input";
+    if (this.kind === "renders") return "renders";
+    if (this.kind === "refmods") return "refmods";
+    return "input";
   }
 
   /** Open where the picker was last left. A remembered folder that has since
@@ -446,6 +465,8 @@ class Picker {
     // its grid is showing.
     const scoped = this.kind === "renders"
       ? (this.options.only ? this.renders.filter((a) => a.kind === this.options.only) : this.renders)
+      : this.kind === "refmods"
+      ? (this.options.only ? this.refmods.filter((a) => a.kind === this.options.only) : this.refmods)
       : this.kind === "guides" ? this.assets.filter(isGuide)
       : this.assets.filter((a) => a.kind === this.kind);
     const count = (test) => scoped.filter(test).length;
@@ -788,6 +809,10 @@ class Picker {
     const only = this.options.only;
     const onKind = only ? (asset) => asset.kind === only
       : this.kind === "renders" ? () => true
+      // The RefMod library is a place and not a kind, exactly as renders is:
+      // each row is the image or video the mod stands for, so a kind test would
+      // hide every one of them. `mod` is what marks the shelf.
+      : this.kind === "refmods" ? (asset) => asset.mod === true
       // The guide tab is a place, not a kind: every clip the bench has traced,
       // and nothing else in the input folder.
       : this.kind === "guides" ? isGuide
@@ -871,7 +896,9 @@ class Picker {
                 : t("Nothing on this shelf yet — drag files here, or upload while it is open.")
               : this.kind === "renders"
                 ? t("Nothing in the output folder yet — queue a render.")
-                : t("No {kind} files in the input folder yet — upload one.", { kind: t(this.kind) }),
+                : this.kind === "refmods"
+                  ? t("No saved RefMods yet — make one with the Save as RefMod node.")
+                  : t("No {kind} files in the input folder yet — upload one.", { kind: t(this.kind) }),
       }));
       return;
     }
@@ -1025,12 +1052,14 @@ class Picker {
     });
 
     // Which route shows this file is `api.stillUrl`'s to know — the same
-    // question the preset library's cards ask, answered in one place.
-    const still = stillUrl(asset);
+    // question the preset library's cards ask, answered in one place. A saved
+    // RefMod has no media file, so it asks the route that decodes its latent
+    // (or serves the preview stored when it was saved).
+    const still = asset.mod ? refmodThumbUrl(asset.path) : stillUrl(asset);
     // A cut cell shows the cutout itself, on the family's own backdrop — the
     // scissors' promise is a picture, and this is it. The original stands in
     // until the matte lands; `previewCut` swaps the cell when it does.
-    const held = this.chipPossible(asset) && this.cutOf(asset)
+    const held = !asset.mod && this.chipPossible(asset) && this.cutOf(asset)
       ? this.cutUrls.get(asset.path) : null;
     if (held?.url) {
       cell.classList.add("cutout");
@@ -1041,8 +1070,8 @@ class Picker {
       const thumb = el("img", { src: held?.url ?? still, loading: "lazy", alt: asset.name });
       // A clip the decoder cannot open answers 404, and the cell falls back to
       // the same icon tile audio uses rather than showing a broken image.
-      if (asset.kind === "video") {
-        thumb.addEventListener("error", () => thumb.replaceWith(this.fallback(asset, "video")));
+      if (asset.mod || asset.kind === "video") {
+        thumb.addEventListener("error", () => thumb.replaceWith(this.fallback(asset, asset.kind)));
       }
       cell.appendChild(thumb);
     } else {
@@ -1091,7 +1120,7 @@ class Picker {
     }
     // No segment badge while organizing: configuring a segment selects the
     // file for attachment, which is exactly not what a mark means.
-    if (asset.kind !== "image" && !this.organize) cell.appendChild(this.badge(asset));
+    if (asset.kind !== "image" && !this.organize && !asset.mod) cell.appendChild(this.badge(asset));
     if (asset.kind !== "audio") cell.appendChild(el("div", { class: "mmc-cell-name", text: asset.name }));
 
     // Stars and dragging on every tab, renders included: a finished clip is the
@@ -1207,11 +1236,16 @@ class Picker {
    *  cell could not give it. Opened by double-click on any tab. */
   view(asset) {
     let unmount;
-    const media = asset.kind === "audio"
-      ? el("audio", { class: "mmc-light-audio", src: viewUrl(asset.path), controls: true, autoplay: true })
-      : asset.kind === "video"
-        ? el("video", { class: "mmc-light-media", src: viewUrl(asset.path), controls: true, autoplay: true, loop: true })
-        : el("img", { class: "mmc-light-media", src: viewUrl(asset.path), alt: asset.name });
+    // A saved RefMod has no media file to play or open: its picture is its own
+    // route and it is always a still, so the lightbox shows that rather than
+    // asking `/view` for a mod name.
+    const media = asset.mod
+      ? el("img", { class: "mmc-light-media", src: stillUrl(asset), alt: asset.name })
+      : asset.kind === "audio"
+        ? el("audio", { class: "mmc-light-audio", src: viewUrl(asset.path), controls: true, autoplay: true })
+        : asset.kind === "video"
+          ? el("video", { class: "mmc-light-media", src: viewUrl(asset.path), controls: true, autoplay: true, loop: true })
+          : el("img", { class: "mmc-light-media", src: viewUrl(asset.path), alt: asset.name });
     const overlay = el("div", {
       class: "mmc-overlay",
       onpointerdown: (event) => { if (event.target === overlay) unmount(); },
@@ -1275,7 +1309,9 @@ class Picker {
    *  browsing. A keyframe caller (`single`) does not — a start frame is a
    *  frame of the video, and cutting it out would condition on a hole. */
   chipPossible(asset) {
-    return Boolean(this.plate) && asset.kind === "image"
+    // A saved RefMod cannot be cut: its latent is already encoded, and there is
+    // no source picture for a matte to lift a subject out of.
+    return Boolean(this.plate) && asset.kind === "image" && !asset.mod
       && !this.organize && !this.options.viewOnly && !this.options.single;
   }
 

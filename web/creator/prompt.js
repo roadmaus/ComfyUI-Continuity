@@ -14,9 +14,9 @@
 import { el, floatAbove, icon, keepScroll, mountOverlay } from "./dom.js";
 import { t } from "./i18n.js";
 import { castFactsLine, listPresets, loadBody } from "./presets.js";
-import { listAssets, viewUrl } from "./api.js";
+import { listAssets, stillUrl } from "./api.js";
 import { LANGUAGES, settings as refineSettings } from "./refine.js";
-import { tagIndex } from "./state.js";
+import { castFaceSource, tagIndex } from "./state.js";
 
 const TRIGGER = /@([\w-]*)$/;
 /* The other opening. `@` cites what is already in this piece; `/` is the layer
@@ -1506,7 +1506,7 @@ export class PromptBox {
     const attached = state.assets
       .filter((asset) => !this.query || asset.handle.toLowerCase().includes(this.query)
         || asset.filename.toLowerCase().includes(this.query))
-      .map((asset) => ({ kind: "attached", handle: asset.handle, path: asset.filename, mediaKind: asset.kind }));
+      .map((asset) => ({ kind: "attached", handle: asset.handle, path: asset.filename, mediaKind: asset.kind, mod: asset.mod }));
 
     // The pool is citable, never attached: choosing one only writes the chip,
     // and the citation is what carries the file into this generation at queue
@@ -1518,7 +1518,7 @@ export class PromptBox {
         .filter((asset) => !own.has(asset.handle))
         .filter((asset) => !this.query || asset.handle.toLowerCase().includes(this.query)
           || asset.filename.toLowerCase().includes(this.query))
-        .map((asset) => ({ kind: "pool", handle: asset.handle, path: asset.filename, mediaKind: asset.kind }));
+        .map((asset) => ({ kind: "pool", handle: asset.handle, path: asset.filename, mediaKind: asset.kind, mod: asset.mod }));
 
     const here = new Set((this.hooks.getCast?.() ?? []).map((subject) => subject.handle));
     // Out while references are blocked here — a start or end frame is set — for
@@ -1538,7 +1538,7 @@ export class PromptBox {
       .filter((row) => !used.has(row.path))
       .filter((row) => !this.query || row.path.toLowerCase().includes(this.query))
       .slice(0, MAX_SUGGESTIONS)
-      .map((row) => ({ kind: "library", path: row.path, mediaKind: row.kind, row }));
+      .map((row) => ({ kind: "library", path: row.path, mediaKind: row.kind, mod: row.mod, row }));
 
     return { cast, roster, attached, pool, library };
   }
@@ -1602,7 +1602,7 @@ export class PromptBox {
         .filter((row) => !used.has(row.path))
         .filter((row) => !asked || row.path.toLowerCase().includes(asked))
         .slice(0, MAX_SUGGESTIONS)
-        .map((row) => ({ kind: "library", path: row.path, mediaKind: row.kind, row }));
+        .map((row) => ({ kind: "library", path: row.path, mediaKind: row.kind, mod: row.mod, row }));
       const blocked = this.hooks.attachBlocked("reference");
       const doors = this.hooks.onBrowse
         ? [{ kind: "door", door: "browse", label: t("Browse files"),
@@ -1856,11 +1856,7 @@ export class PromptBox {
     const faceOf = (subject) => {
       const pool = [...(this.hooks.getPool?.() ?? []),
                     ...(this.hooks.getState().assets ?? [])];
-      for (const handle of subject.from ?? []) {
-        const asset = pool.find((a) => a.handle === handle);
-        if (asset?.kind === "image") return asset.filename;
-      }
-      return null;
+      return castFaceSource(subject, pool);
     };
 
     let index = 0;
@@ -1872,9 +1868,12 @@ export class PromptBox {
       if (SAY_ROWS.has(option.kind)) return this.sayRow(option, here);
       // A kept member's face is in their index row: it is one of their own
       // pictures, named at the moment they were kept, so the menu draws them
-      // without reading a body it does not otherwise need.
+      // without reading a body it does not otherwise need. `castFaceSource`
+      // picks a still, or a saved RefMod failing a still — both are pictures.
       const face = option.kind === "cast" ? faceOf(option.subject)
-        : option.kind === "roster" ? option.row.portrait : null;
+        : option.kind === "roster"
+          ? (option.row.portrait ? { path: option.row.portrait, kind: "image" } : null)
+          : null;
       // The two `/` rows draw a rail glyph rather than a picture: a source is
       // not a thing with a thumbnail, and a blank tile beside it would read as
       // a file whose preview failed.
@@ -1886,10 +1885,14 @@ export class PromptBox {
         // through, so the URL stylelib built is the src.
         : option.kind === "style"
         ? el("img", { class: "mmc-mention-thumb", src: option.row.thumbs?.[0] ?? "", alt: "" })
-        : option.mediaKind === "image" || face
+        : option.mediaKind === "image" || face || option.mod
         ? el("img", {
             class: "mmc-mention-thumb",
-            src: viewUrl(face ?? option.path, { preview: true }), alt: "",
+            // `stillUrl` is the one place that knows a saved RefMod's picture
+            // comes from its own route, not `/view` — so a mod row draws its
+            // thumbnail rather than 404ing.
+            src: stillUrl(face ?? { path: option.path, kind: option.mediaKind, mod: option.mod }),
+            alt: "",
           })
         : el("span", {
             class: "mmc-mention-thumb",
@@ -2009,7 +2012,7 @@ export class PromptBox {
       // is a list of words, and a column of placeholders beside them would be
       // saying that each one is a thing with a picture.
       face
-        ? el("img", { class: "mmc-mention-thumb", src: viewUrl(face, { preview: true }), alt: "" })
+        ? el("img", { class: "mmc-mention-thumb", src: stillUrl(face), alt: "" })
         : option.iconName
         ? el("span", { class: "mmc-mention-thumb mmc-mention-glyph" }, [icon(option.iconName, 15)])
         : option.subject || option.row
@@ -2034,11 +2037,7 @@ export class PromptBox {
   /** A cast member's own first picture, for the row that offers them. */
   subjectFace(subject) {
     const pool = [...(this.hooks.getPool?.() ?? []), ...(this.hooks.getState().assets ?? [])];
-    for (const handle of subject.from ?? []) {
-      const asset = pool.find((a) => a.handle === handle);
-      if (asset?.kind === "image") return asset.filename;
-    }
-    return null;
+    return castFaceSource(subject, pool);
   }
 
   /**

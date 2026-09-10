@@ -56,7 +56,7 @@ import logging
 from comfy_api.latest import io
 
 from . import (compile as compiler, guide, lora, media, mux,
-               outputs, settings, spill)
+               outputs, refmod, settings, spill)
 
 def announce(unique_id, progress):
     """Broadcast which segment is being built, keyed to the emitting node.
@@ -111,6 +111,22 @@ def stamps(data):
         except Exception:
             out.append(None)
 
+    def stamp_asset(item):
+        """A reference's own identity: a media file's mtime, or a RefMod's.
+
+        A RefMod names a file under a `refmods` root, not media under input, so
+        `media.resolve` would fail on it and the node would keep the cached
+        render after the mod was re-saved under the same name. `refmod.stamp`
+        gives the same identity `media.stamp` gives a file — path, mtime and
+        size — so a hit and a miss mean the same thing on both kinds.
+        """
+        if isinstance(item, dict) and item.get("kind") == "refmod":
+            found = refmod.stamp(item.get("filename", ""))
+            out.append((found["path"], found["mtime"], found["size"])
+                       if found else None)
+            return
+        stamp(media.resolve, item, "filename")
+
     # The timeline's own LoRAs are patched onto every segment, so a replaced file
     # has to invalidate the node just as a segment's own would. The reference
     # pool is the same story on the asset side: a cited pool file rides into
@@ -118,7 +134,7 @@ def stamps(data):
     for entry in data.get("loras", []) or []:
         stamp(lora.resolve, entry, "name")
     for asset in data.get("assets", []) or []:
-        stamp(media.resolve, asset, "filename")
+        stamp_asset(asset)
     # The lane's cues, whether the piece's whole lane or the stretch cut onto
     # one pass (`_stamp_sound`): both name files by `filename`, and a file
     # replaced under its name used to be a cache hit (issue #47).
@@ -138,7 +154,7 @@ def stamps(data):
             if isinstance(block, dict):
                 stamp(media.resolve, block, "filename")
         for asset in segment.get("assets", []) or []:
-            stamp(media.resolve, asset, "filename")
+            stamp_asset(asset)
         for entry in segment.get("loras", []) or []:
             stamp(lora.resolve, entry, "name")
     return tuple(out)

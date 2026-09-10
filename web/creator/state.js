@@ -1661,10 +1661,15 @@ function serializeAssets(assets) {
     const out = { handle: asset.handle, kind: asset.kind, role: asset.role, filename: asset.filename };
     // Absent means live, so nothing that was never muted grows a key.
     if (asset.enabled === false) out.enabled = false;
-    if (asset.kind === "video") out.track = asset.track || DEFAULT_TRACK;
+    // A saved RefMod is named, not a media file: the backend reads its kind and
+    // its dimensions from the header in a refmods root, so none of the
+    // file-shaped fields below apply to it. This flag is the whole difference
+    // between the encoder opening a latent and trying to open a clip.
+    if (asset.mod) out.mod = true;
+    if (asset.kind === "video" && !asset.mod) out.track = asset.track || DEFAULT_TRACK;
     // Only what departs from the backend's own default for the kind, so the
     // common setting adds nothing and an old blob round-trips unchanged.
-    if (sizeable(asset) && refSize(asset) !== DEFAULT_REF_SIZE[asset.kind]) {
+    if (!asset.mod && sizeable(asset) && refSize(asset) !== DEFAULT_REF_SIZE[asset.kind]) {
       out.ref_size = refSize(asset);
     }
     // Absent means the whole file, so a clip nobody trimmed adds nothing.
@@ -2389,6 +2394,25 @@ export function castAssets(timeline) {
   const segments = timeline.segments ?? [];
   const lone = segments.length === 1 ? (segments[0].assets ?? []) : [];
   return [...(timeline.assets ?? []), ...lone];
+}
+
+/**
+ * The file that supplies a subject's face: the first still they are made of, or
+ * — failing a still — a saved RefMod, which carries a thumbnail even when it is
+ * a clip (the preview stored with it, or the one a render wrote). Null when
+ * nothing among their files can show their looks, which a subject of words or
+ * of a plain clip alone is.
+ *
+ * Pulled out of `cast.js`'s `face` so the choice can be tested without building
+ * a shelf; the drawing stays there.
+ */
+export function castFaceSource(subject, assets) {
+  const files = (subject?.from ?? [])
+    .map((handle) => (assets ?? []).find((a) => a.handle === handle))
+    .filter(Boolean);
+  return files.find((a) => a.kind === "image")
+      ?? files.find((a) => a.mod)
+      ?? null;
 }
 
 /** `text` with `@old` rewritten to `@new` for each entry of `renamed`. The

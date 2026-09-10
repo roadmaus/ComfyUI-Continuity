@@ -30,7 +30,7 @@ import { Stage, stageSource } from "./stage.js";
 import { familyPill, weightsPill, loadCatalog, adoptWeights } from "./models.js";
 import * as Turbo from "./turbo.js";
 import * as Guide from "./guide.js";
-import { viewUrl, thumbUrl, probe, probeAudio, primeSettings, buildPlate } from "./api.js";
+import { viewUrl, stillUrl, thumbUrl, probe, probeAudio, primeSettings, buildPlate } from "./api.js";
 import { openSubjectView } from "./subject.js";
 import * as S from "./state.js";
 import { describeRatio, framesForSeconds, isTrainedLength,
@@ -582,15 +582,16 @@ export class CreatorEditor {
       handle, kind: row.kind, role: "reference", filename: row.path,
       // Max by default, for a picture and for a clip alike: fidelity is why a
       // reference is attached, and "match" trading it for speed is a downgrade
-      // to opt into, not out of. Ignored for audio, which has no size.
-      ref_size: "max",
+      // to opt into, not out of. Ignored for audio, which has no size. A saved
+      // RefMod is named rather than sized, and carries no track.
+      ...(row.mod ? { mod: true } : { ref_size: "max" }),
     };
-    if (row.kind === "video") entry.track = S.DEFAULT_TRACK;
+    if (row.kind === "video" && !row.mod) entry.track = S.DEFAULT_TRACK;
     this.state.assets.push(entry);
     this.commit();
     // The caller needs the handle now, to put a chip under a live caret; the
     // sound default settles a round trip later and commits again.
-    if (row.kind === "video") this.applySoundDefault(entry);
+    if (row.kind === "video" && !row.mod) this.applySoundDefault(entry);
     return handle;
   }
 
@@ -606,6 +607,26 @@ export class CreatorEditor {
         { kind: t(kind), used, max, filesLeft, maxFiles: S.refCaps(this.piece).files }));
     }
     await this.pickReferences(kind, sheet);
+  }
+
+  /**
+   * Attach one or more saved RefMods.
+   *
+   * Its own rail tool rather than a corner of the image tab: a RefMod is not a
+   * file in input/, and the picker has to open on the RefMod library to make
+   * that legible. There is no sheet and no capacity precheck for the kind —
+   * `refmods` is a place, not a slot — so the picker's own counters do the
+   * holding, against the image/video kind each mod actually is.
+   */
+  async addRefmods() {
+    const chosen = await openPicker({
+      kinds: ["refmods", "image", "video", "audio", "renders"],
+      kind: "refmods",
+      capacity: (k) => S.capacity(this.state, k, this.piece, null),
+      cardSeconds: this.cardSeconds(),
+    });
+    if (!chosen?.length) return;
+    await this.attachAssets(chosen);
   }
 
   /**
@@ -646,7 +667,7 @@ export class CreatorEditor {
   async pickReferences(kind, sheet, { edit = false } = {}) {
     const spec = this.plateSpec();
     const chosen = await openPicker({
-      kinds: edit ? ["image", "renders"] : ["image", "video", "audio", "renders"],
+      kinds: edit ? ["image", "renders"] : ["image", "video", "audio", "renders", "refmods"],
       kind,
       capacity: (k) => S.capacity(this.state, k, this.piece, sheet),
       cardSeconds: this.cardSeconds(),
@@ -848,12 +869,16 @@ export class CreatorEditor {
         kind: asset.kind,
         role: "reference",
         filename: asset.path,
-        ref_size: "max",
+        // A saved RefMod is named, not sized: its latent is already what it is.
+        // The flag is what tells the compiler to read it from a refmods root
+        // instead of decoding a media file, and what keeps the sound default
+        // from asking a latent about its audio track.
+        ...(asset.mod ? { mod: true } : { ref_size: "max" }),
       };
-      if (asset.kind === "video") entry.track = S.DEFAULT_TRACK;
+      if (asset.kind === "video" && !asset.mod) entry.track = S.DEFAULT_TRACK;
       if (asset.trim) entry.trim = asset.trim;
       this.state.assets.push(entry);
-      if (asset.kind !== "video") continue;
+      if (asset.kind !== "video" || asset.mod) continue;
       // A track means the user opened the segment editor and said so. Anything
       // else is the default, which needs a round trip to settle. Both are applied
       // after the push, so the file the video occupies counts against the total.
@@ -925,6 +950,11 @@ export class CreatorEditor {
     const picked = chosen?.[0];
     if (!picked || picked.path === asset.filename) return;
     asset.filename = picked.path;
+    // A swap is between files: whatever the old one was saved as — a RefMod
+    // included — does not carry onto the new one.
+    delete asset.mod;
+    delete asset.mod_description;
+    delete asset.mod_concept;
     // A trim is a range in the old file's timeline and means nothing in
     // another's — either the picker's segment editor set one for this pick, or
     // the new file starts whole.
@@ -1414,6 +1444,10 @@ export class CreatorEditor {
     for (const asset of S.aspectDonors(this.state)) {
       if (this.sizes.has(asset.filename)) continue;
       this.sizes.set(asset.filename, null);
+      // A saved RefMod has no media file behind it: no `<img>` to measure and
+      // nothing for the probe to read. Left unmeasured, so the readout keeps
+      // the preset — and no `/view` request is made for a mod name.
+      if (asset.mod) continue;
       if (asset.kind === "video") {
         probe(asset.filename).then(({ width, height }) => {
           if (!width || !height) return;
@@ -1443,6 +1477,8 @@ export class CreatorEditor {
     for (const asset of S.timedAssets(this.state)) {
       if (asset.trim || this.lengths.has(asset.filename)) continue;
       this.lengths.set(asset.filename, null);
+      // No media length to ask for on a saved RefMod; see `probeKeyframe`.
+      if (asset.mod) continue;
       probe(asset.filename).then(({ duration }) => {
         if (!duration) return;
         this.lengths.set(asset.filename, duration);
@@ -1992,6 +2028,17 @@ export class CreatorEditor {
           ["audio", "Add audio", "audio"],
         ].filter(([kind]) => S.takesKind(this.piece, kind))
          .map(([kind, label, iconName]) => tool(kind, label, iconName)) : []),
+        // Saved RefMods, which are H3's own format — a latent the sibling pack
+        // or the Save as RefMod node wrote. Offered only on H3 for that reason:
+        // another family would resolve it as an ordinary reference and then try
+        // to open a mod name as a media file.
+        ...(takes && S.pieceFamily(this.piece) === "h3" ? [el("button", {
+          class: "mmc-tool",
+          disabled: blocked ? true : undefined,
+          title: blocked ?? t("Attach a saved RefMod — a compressed reference from the RefMod library"),
+          onclick: () => this.addRefmods(),
+        }, [el("span", { class: "mmc-tool-icon" }, [icon("image")]),
+            el("span", { text: t("Add RefMod") })])] : []),
         // The drawing this shot is aimed at. Beside the three attach tools
         // because it is the same gesture — pick a file, it lands on the card —
         // and gated on the family declaring a ControlNet rather than on the
@@ -2136,8 +2183,13 @@ export class CreatorEditor {
       // to look at. A reference clip is cited by handle and read as motion, so
       // its chip has a name to be recognised by; a guide has no handle in the
       // prompt and only its picture.
-      const thumb = asset.kind === "image"
-        ? el("img", { class: "mmc-asset-thumb", src: viewUrl(asset.filename, { preview: true }), alt: asset.filename })
+      const thumb = (asset.kind === "image" || asset.mod)
+        ? el("img", { class: "mmc-asset-thumb", src: stillUrl(asset), alt: asset.filename,
+                      // A mod with no preview yet (never rendered, never saved
+                      // with one) 404s; the chip falls back to its kind glyph
+                      // rather than a broken image.
+                      onerror: (event) => event.target.replaceWith(
+                        el("span", { class: "mmc-asset-thumb" }, [svg(ICONS[asset.kind], 15)])) })
         : asset.role === "guide"
           ? el("img", { class: "mmc-asset-thumb", src: thumbUrl(asset.filename), alt: asset.filename })
           : el("span", { class: "mmc-asset-thumb" }, [svg(ICONS[asset.kind], 15)]);
@@ -2179,8 +2231,8 @@ export class CreatorEditor {
           class: "mmc-asset-panels",
           text: t("{count} panels", { count: asset.panels.length }),
         }));
-      } else if (asset.role === "reference" && asset.kind === "image" && this.plateSpec()
-                 && S.canCut((asset.panels?.[0] ?? asset).takes)) {
+      } else if (asset.role === "reference" && asset.kind === "image" && !asset.mod
+                 && this.plateSpec() && S.canCut((asset.panels?.[0] ?? asset).takes)) {
         const cut = Boolean(asset.panels?.[0]?.cut);
         parts.push(el("button", {
           class: `mmc-pl-cut mmc-asset-scissors${cut ? " on" : ""}`,

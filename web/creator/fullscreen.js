@@ -55,7 +55,7 @@
 import { app } from "../../../scripts/app.js";
 import { api } from "../../../scripts/api.js";
 import { watch as watchQueue } from "./queue.js";
-import { viewUrl } from "./api.js";
+import { viewUrl, stillUrl } from "./api.js";
 import { el, icon, mark, spinner } from "./dom.js";
 import { buildDashboard } from "./navigate.js";
 import { openBlockout } from "./blockout.js";
@@ -924,10 +924,13 @@ class Fullscreen {
     if (shown?.url) return shown.url;
     const pre = preStageOf(this.node)?.mmcBody?.state;
     const attached = pre?.init?.filename
-      ?? (pre?.refs ?? []).find((ref) => ref.filename)?.filename
-      ?? (this.node.mmcBody?.timeline?.assets ?? [])
-           .find((asset) => asset.filename && asset.kind !== "video")?.filename;
-    return attached ? viewUrl(attached, { preview: true }) : null;
+      ?? (pre?.refs ?? []).find((ref) => ref.filename)?.filename;
+    if (attached) return viewUrl(attached, { preview: true });
+    // A card's own first still. `stillUrl` resolves a saved RefMod through its
+    // own route, so a mod is a picture here rather than a 404.
+    const asset = (this.node.mmcBody?.timeline?.assets ?? [])
+      .find((a) => a.filename && a.kind !== "video");
+    return asset ? stillUrl(asset) : null;
   }
 
   /**
