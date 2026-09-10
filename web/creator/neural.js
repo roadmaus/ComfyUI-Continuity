@@ -173,10 +173,12 @@ const shown = (key, value) => (key === "scale" ? `×${value}` : Number(value).to
  * @param {number} spec.value
  * @param {{min:number, max:number, step:number, default:number}} spec.range
  * @param {(next:number) => void} spec.onChange  while it is being dragged
+ * @param {() => number} [spec.reset]  the owner's current default, read on reset
  * @param {string} [spec.note]     the tooltip, already in English
  * @param {string} [spec.key]      which dial, for how the number reads
  */
-export function neuralDial({ label, value, range, onChange, note = "", key = "" }) {
+export function neuralDial({ label, value, range, onChange, reset = () => range.default,
+                             note = "", key = "" }) {
   const readout = el("span", { class: "mmc-nr-value", text: shown(key, value) });
   const slider = el("input", {
     type: "range", class: "mmc-nr-range",
@@ -192,9 +194,10 @@ export function neuralDial({ label, value, range, onChange, note = "", key = "" 
     // or a memory of which number it started at.
     ondblclick: (event) => {
       event.preventDefault();
-      event.target.value = String(range.default);
-      readout.textContent = shown(key, range.default);
-      onChange(range.default);
+      const next = reset();
+      event.target.value = String(next);
+      readout.textContent = shown(key, next);
+      onChange(next);
     },
   });
   return el("div", { class: "mmc-nr-dial", title: note ? t(note) : null }, [
@@ -282,6 +285,9 @@ export function neuralRail({ block, onChange, redraw = null, still = false, rang
     rows.push(neuralDial({
       key, label: labels[key], value: Number(block[key]), range: ranges[key],
       note: DIAL_NOTES[key],
+      // Bounds are shared, but Natural's opening detail differs. Read the
+      // active profile at the gesture, even if this rail has not been rebuilt.
+      reset: () => neuralDefaultsFor(block.profile)[key],
       onChange: (next) => { block[key] = next; onChange(); },
     }));
   }
