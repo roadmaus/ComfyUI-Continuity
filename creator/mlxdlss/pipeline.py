@@ -16,7 +16,7 @@ import numpy as np
 import torch
 
 from . import model as reference
-from .composition import compose_detail, compose_head, resample
+from .composition import blend_mask, compose_detail, compose_head, resample
 from .features import PROFILES, AutomaticMask, NetworkGeometry, make_features
 
 PRECISIONS = ("reference", "fast")
@@ -180,14 +180,20 @@ class NeuralRenderingPipeline:
     ) -> EnhanceResult:
         """Compose the head over the frame, resample back and apply the detail/colour split."""
         started = time.perf_counter()
+        mask = prepared.control_mask
         composed = compose_head(
-            prepared.geometry.crop(head), prepared.processing, control_mask=prepared.control_mask, intensity=intensity
+            prepared.geometry.crop(head), prepared.processing,
+            intensity=intensity if mask is None else 1.0
         )
         if composed.shape[:2] != prepared.source.shape[:2]:
             composed = resample(composed, prepared.source.shape[1], prepared.source.shape[0])
         output = compose_detail(
             prepared.source, composed, detail_strength=detail_strength, colour_strength=colour_strength, radius=detail_radius
         )
+        if mask is not None:
+            # Filtering an already masked residual spreads the change outside
+            # the mask. Filter first, then blend once (also for soft masks).
+            output = blend_mask(prepared.source, output, mask, intensity)
         timings = {
             "preprocess": prepared.preprocess_seconds,
             "network": network_seconds,

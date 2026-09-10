@@ -1,0 +1,103 @@
+diff --git a/creator/mlxdlss/composition.py b/creator/mlxdlss/composition.py
+index 8a4bcf2..ab41e78 100644
+--- a/creator/mlxdlss/composition.py
++++ b/creator/mlxdlss/composition.py
+@@ -39,6 +39,16 @@ def gaussian_kernel(sigma: float) -> np.ndarray:
+     return kernel / kernel.sum()
+ 
+ 
++def blend_mask(source: np.ndarray, output: np.ndarray, control_mask: np.ndarray,
++               intensity: float = 1.0) -> np.ndarray:
++    """Apply the red-channel editing boundary once, after spatial filtering."""
++    mask = np.asarray(control_mask, dtype=np.float32)
++    if mask.shape != source.shape or output.shape != source.shape:
++        raise ValueError("control mask and output must match the source image shape")
++    blend = np.clip(mask[..., :1] * np.float32(intensity), 0, 1)
++    return np.clip(source + blend * (output - source), 0, 1).astype(np.float32)
++
++
+ def blur(plane: np.ndarray, kernel: np.ndarray) -> np.ndarray:
+     """Separable convolution with edge replication (vImage kvImageEdgeExtend)."""
+     extent = (len(kernel) - 1) // 2
+diff --git a/creator/mlxdlss/pipeline.py b/creator/mlxdlss/pipeline.py
+index 9ff3b25..d7904b5 100644
+--- a/creator/mlxdlss/pipeline.py
++++ b/creator/mlxdlss/pipeline.py
+@@ -16,7 +16,7 @@ import numpy as np
+ import torch
+ 
+ from . import model as reference
+-from .composition import compose_detail, compose_head, resample
++from .composition import blend_mask, compose_detail, compose_head, resample
+ from .features import PROFILES, AutomaticMask, NetworkGeometry, make_features
+ 
+ PRECISIONS = ("reference", "fast")
+@@ -180,14 +180,20 @@ class NeuralRenderingPipeline:
+     ) -> EnhanceResult:
+         """Compose the head over the frame, resample back and apply the detail/colour split."""
+         started = time.perf_counter()
++        mask = prepared.control_mask
+         composed = compose_head(
+-            prepared.geometry.crop(head), prepared.processing, control_mask=prepared.control_mask, intensity=intensity
++            prepared.geometry.crop(head), prepared.processing,
++            intensity=intensity if mask is None else 1.0
+         )
+         if composed.shape[:2] != prepared.source.shape[:2]:
+             composed = resample(composed, prepared.source.shape[1], prepared.source.shape[0])
+         output = compose_detail(
+             prepared.source, composed, detail_strength=detail_strength, colour_strength=colour_strength, radius=detail_radius
+         )
++        if mask is not None:
++            # Filtering an already masked residual spreads the change outside
++            # the mask. Filter first, then blend once (also for soft masks).
++            output = blend_mask(prepared.source, output, mask, intensity)
+         timings = {
+             "preprocess": prepared.preprocess_seconds,
+             "network": network_seconds,
+diff --git a/creator/mlxdlss/temporal.py b/creator/mlxdlss/temporal.py
+index bd64d05..63ffe11 100644
+--- a/creator/mlxdlss/temporal.py
++++ b/creator/mlxdlss/temporal.py
+@@ -14,7 +14,7 @@ from typing import Callable
+ 
+ import numpy as np
+ 
+-from .composition import compose_detail, compose_head
++from .composition import blend_mask, compose_detail, compose_head
+ from .features import PROFILES, AutomaticMask, NetworkGeometry, deterministic_noise, half, make_features, scaled_color
+ 
+ BLEND_SCALE = 0.73974609375  # half(blend_scale) of the recovered package
+@@ -270,21 +270,29 @@ class TemporalSession:
+         height, width = frame.shape[:2]
+         geometry = NetworkGeometry.vendor_aligned(width, height)
+         controls = self._controls()
++        intensity = self.options.intensity if control_mask is None else 1.0
+         if self.history is None:
+             network = make_features(frame, frame_index=self.frame_index, geometry=geometry, control_mask=control_mask, **controls)
+             head = geometry.crop(self.pipeline.run_features(network))
+-            output = compose_head(head, frame, control_mask=control_mask, intensity=self.options.intensity)
++            output = compose_head(head, frame, intensity=intensity)
+         else:
+             if motion is None:
+                 motion = self.motion(frame, self.previous)
+             features = make_temporal_features(frame, self.history, motion, frame_index=self.frame_index, control_mask=control_mask, **controls)
+             network = extend_features(features, geometry, self.frame_index)
+             head = geometry.crop(self.pipeline.run_features(network))
+-            output = compose_temporal(head, frame, features, blend_scale=self.options.blend_scale, control_mask=control_mask, intensity=self.options.intensity)
+-        self.history = output; self.previous = frame; self.frame_index += 1
+-        return compose_detail(
++            output = compose_temporal(head, frame, features, blend_scale=self.options.blend_scale, intensity=intensity)
++        # History keeps the original masked head recipe, before detail/colour;
++        # the displayed result applies that mask after filtering instead. This
++        # preserves unedited pixels without multiplying soft-mask strength twice.
++        self.history = (output if control_mask is None else
++                        blend_mask(frame, output, control_mask, self.options.intensity))
++        self.previous = frame; self.frame_index += 1
++        detailed = compose_detail(
+             frame, output, detail_strength=self.options.detail_strength, colour_strength=self.options.colour_strength, radius=self.options.detail_radius
+         )
++        return (detailed if control_mask is None else
++                blend_mask(frame, detailed, control_mask, self.options.intensity))
+ 
+     def _is_scene_cut(self, frame: np.ndarray) -> bool:
+         if self.options.scene_cut_threshold <= 0:

@@ -39,6 +39,16 @@ def gaussian_kernel(sigma: float) -> np.ndarray:
     return kernel / kernel.sum()
 
 
+def blend_mask(source: np.ndarray, output: np.ndarray, control_mask: np.ndarray,
+               intensity: float = 1.0) -> np.ndarray:
+    """Apply the red-channel editing boundary once, after spatial filtering."""
+    mask = np.asarray(control_mask, dtype=np.float32)
+    if mask.shape != source.shape or output.shape != source.shape:
+        raise ValueError("control mask and output must match the source image shape")
+    blend = np.clip(mask[..., :1] * np.float32(intensity), 0, 1)
+    return np.clip(source + blend * (output - source), 0, 1).astype(np.float32)
+
+
 def blur(plane: np.ndarray, kernel: np.ndarray) -> np.ndarray:
     """Separable convolution with edge replication (vImage kvImageEdgeExtend)."""
     extent = (len(kernel) - 1) // 2
