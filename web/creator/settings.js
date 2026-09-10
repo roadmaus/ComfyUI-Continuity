@@ -189,14 +189,6 @@ const PREVIEW_PX_STOPS = [
   { value: 512 }, { value: 640, label: "640" }, { value: 768 },
   { value: 1024, label: "1024" },
 ];
-// The drift guard's stops: off, then how many of the model's last guesses at
-// a pass are averaged. One guess is the plain render, so the rail starts at
-// two; past eight the early, generic guesses are most of the average.
-const DRIFT_STOPS = [
-  { value: 0, label: "Off" }, { value: 2, label: "Lightest" }, { value: 3 }, { value: 4 },
-  { value: 6 }, { value: 8, label: "Steadiest" },
-];
-
 const PREVIEW_Q_STOPS = [
   { value: 40, label: "40" }, { value: 50 }, { value: 60, label: "60" },
   { value: 70 }, { value: 80, label: "80" }, { value: 90 }, { value: 100, label: "100" },
@@ -657,48 +649,6 @@ class SettingsPage {
    * same rule the Custom quality row lives by.
    */
   /**
-   * The drift guard (issues #41, #46). At every step the model makes a full
-   * guess at the clean picture, and the render is its last one; the guard
-   * averages the last few instead, which is where a continued shot's
-   * brightening and sharpening are added. One rail, counted in guesses rather
-   * than sigma so it means the same on a 20-step schedule and a turbo one. Per machine like the seam
-   * handoff: it is a statement about how a pass is read, not about the piece.
-   * H3 only.
-   */
-  renderDriftGuard() {
-    const current = Number(this.settings.drift_guard) || 0;
-    const rail = this.stopSlider({
-      stops: DRIFT_STOPS,
-      value: current,
-      name: "Drift guard",
-      read: (value) => ({
-        value: value === 0 ? t("Off") : t("Last {n} guesses", { n: value }),
-      }),
-      note: (value) => value === 0
-        ? t("The clip is the model's final guess, as before. Continued shots drift.")
-        : value <= 3
-          ? t("Closest to a plain render, with the drift taken out. Start here.")
-          : t("Steadier and softer. Faces and objects may loosen a little."),
-      apply: (value) => this.set({ drift_guard: value }),
-    });
-    return this.section("Rendering", "Drift guard",
-      "Every continued shot comes out a little brighter and harsher than the "
-      + "one before it, until the end of a long strip looks fried. The guard "
-      + "averages the model's last few guesses at each shot instead of keeping "
-      + "only its final one, and the drift stops. Fewer guesses look most like "
-      + "a plain render; more are steadier and softer.",
-      [
-        el("div", { class: "mmc-set-field" }, [rail]),
-        el("div", { class: "mmc-set-foot" }, [
-          el("span", {
-            text: t("MiniMax H3 shots, turbo included. Refine, face and restore "
-                + "passes are unaffected. Read when a render is queued."),
-          }),
-        ]),
-      ]);
-  }
-
-  /**
    * The DLSS 5 neural refiner: where it stands on this machine, and the two
    * presses that set it up.
    *
@@ -1102,7 +1052,7 @@ class SettingsPage {
     const leadIn = this.settings.advanced === true || Number(this.settings.turbo_lead_in) > 0
       ? this.renderLeadIn() : [];
     return [this.renderAdvanced(), this.renderPreviews(), this.renderPreviewSize(),
-      ...leadIn, this.renderLatentSeams(), this.renderDriftGuard(), this.renderNeural(),
+      ...leadIn, this.renderLatentSeams(), this.renderNeural(),
       this.renderRefCache(),
       this.section("Nodes", "Flow shift pills",
       "Whether the sampler row offers H3's two flow shifts — the video and audio "

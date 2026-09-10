@@ -106,7 +106,6 @@ This pack is glue. The work underneath it belongs to other people:
 - ByteDance - SeedVR2, the Restore backend on the upscale bench
 - Depth Anything 3 and SDPose - the two model-backed tracings, both loaded through core
 - alibaba-pai - the MiniMax-H3-Acc-LoRAs whose 32 output heads the accelerator reads
-- ["Towards Error-Free Long Video Generation"](https://arxiv.org/abs/2606.22370) - the finding the drift guard is built on
 - larryvrh and lightx2v - the H3 distillation LoRAs behind turbo
 - CiviMeta - the sidecar format the LoRA cards read
 

@@ -1388,11 +1388,7 @@ try {
     return found;
   };
   const previewRails = rails.slice(0, 2);
-  const guardRail = rails[2];
-  const cacheRails = rails.slice(3);
-  out.settings.guardStops = Number(railOf(guardRail).getAttribute("max")) + 1;
-  out.settings.guardReads = guardRail.children?.[1]?.children?.[0]?.children?.[0]?.text
-    ?? guardRail.children?.[1]?.children?.[0]?.text ?? null;
+  const cacheRails = rails.slice(2);
   out.settings.previewStops = previewRails.map(
     (r) => Number(railOf(r).getAttribute("max")) + 1);
   out.settings.cacheStops = cacheRails.map((r) => Number(railOf(r).getAttribute("max")) + 1);
@@ -3424,11 +3420,6 @@ check("both preview rails carry their stops", settings.get("previewStops"), [7, 
 check("...opening on the pack's own 640 px and quality 80",
       settings.get("previewReads"), ["640 px", "80"])
 check("both cache rails carry their stops", settings.get("cacheStops"), [6, 9])
-# The drift guard: one rail from off to the steadiest count, opening on off —
-# a count in force would be a strip rendering differently from every strip
-# before it with nothing on the page saying so.
-check("the drift guard rail carries its stops", settings.get("guardStops"), 6)
-check("...opening on off", settings.get("guardReads"), "Off")
 check("...opening on the stored month and 8 GB",
       settings.get("cacheReads"), ["1 month", "8 GB"])
 # The retention rail is live: the ceiling ships at 8 GB, so there is a store for

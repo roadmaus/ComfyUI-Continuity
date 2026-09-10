@@ -78,10 +78,6 @@ def default_prefixes():
 
 # The roads a blended seam can take, see `DEFAULTS["seam_handoff"]`.
 SEAM_HANDOFFS = ("frames", "latent", "levelled")
-# The drift guard's ceiling, see `DEFAULTS["drift_guard"]`. Past the schedule
-# the node averages all of it; the page offers up to 8.
-MAX_DRIFT_GUARD = 99
-
 DEFAULTS = {
     "video_crf": DEFAULT_CRF,
     # `{family: prefix}` apiece — see `default_prefixes` above. Asked of the
@@ -135,14 +131,6 @@ DEFAULTS = {
     # again — the road every render took before either existed, kept so the
     # three can be compared on the same strip.
     "seam_handoff": "latent",
-    # The drift guard: how many of the model's last guesses at a pass its
-    # latent is the average of. 0 is off — the sampler's last step, as every
-    # render before this, and on a Euler run the same as 1. Each guess beyond
-    # is steadier and a little softer; many loosen faces and objects. Counted
-    # in steps rather than the paper's sigma so one setting means the same on
-    # a 20-step schedule and a turbo one. See `families/h3/truncate.py`; H3
-    # only.
-    "drift_guard": 0,
     # The weight files this machine last picked, by family: `{family: {slot:
     # filename, dtype, route, devices}}` — the same block a piece carries, in
     # the same shape.
@@ -425,14 +413,6 @@ def clean(raw):
         if raw["seam_handoff"] not in SEAM_HANDOFFS:
             raise ValueError(f"seam_handoff must be one of {', '.join(SEAM_HANDOFFS)}")
         clean_settings["seam_handoff"] = raw["seam_handoff"]
-    if "drift_guard" in raw and raw["drift_guard"] is not None:
-        value = raw["drift_guard"]
-        if isinstance(value, bool) or not isinstance(value, (int, float)) \
-                or value != int(value):
-            raise ValueError("drift_guard must be a whole number")
-        if not 0 <= value <= MAX_DRIFT_GUARD:
-            raise ValueError(f"drift_guard must be between 0 and {MAX_DRIFT_GUARD}")
-        clean_settings["drift_guard"] = int(value)
     for flag in ("show_shift_pills", "autoplay_previews", "advanced", "latent_cache"):
         if flag in raw and raw[flag] is not None:
             if not isinstance(raw[flag], bool):
@@ -702,11 +682,6 @@ def turbo_lead_in():
 def seam_handoff():
     """What a blended seam hands the next shot: one of `SEAM_HANDOFFS`."""
     return load()["seam_handoff"]
-
-
-def drift_guard():
-    """How many of a pass's last steps make its latent; 0 is off."""
-    return load()["drift_guard"]
 
 
 def neural_dll():
