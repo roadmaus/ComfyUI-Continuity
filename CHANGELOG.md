@@ -6,6 +6,13 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**Kitchen attention reads core's V3 option list again.** ComfyUI moved
+`ModelAttentionBackend` to the V3 API on 2026-09-08, and its `INPUT_TYPES`
+shim now leads with the type name rather than the choices. The pack read that
+string as the option list, refused a kitchen kernel the machine had, and said
+so as `['C', 'O', 'M', 'B', 'O']`. Both shapes are read now (issue #64).
+Reported and patched by @sarnara2.
+
 **Sixteen fixes off one audit (issue #54), the DLSS switch first.** In a
 Timeline body the DLSS pill's popover threw before it mounted — the body has no
 `geometry()`, the modal does — so a piece saved with the pass on could not turn
