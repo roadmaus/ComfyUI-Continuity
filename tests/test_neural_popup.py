@@ -87,41 +87,8 @@ for (const ready of [false, true]) {
   }
 }
 
-let fallbackCases = 0;
-const warnings = [];
-const warn = console.warn;
-console.warn = (...args) => warnings.push(args);
-try {
-  for (const ready of [false, true]) {
-    for (const initialOn of [false, true]) {
-      const { body, store, pill } = build(initialOn, ready);
-      openNeuralPopover(pill, {
-        target: body.timeline, commit: () => body.commit(),
-        geometry: () => { throw new Error("estimate unavailable"); },
-      });
-      assert.ok(pop()?.isConnected, "optional geometry cannot prevent opening");
-      if (!initialOn) click(toggle());
-      assert.equal(displayedOn(), "true");
-      assert.equal(body.timeline.neural.on, true);
-      assert.ok(pop().text.includes("About a gigabyte of VRAM per megapixel."));
-      if (!initialOn) assert.equal(JSON.parse(store.value).neural.on, true);
-      click(toggle());
-      assert.equal(displayedOn(), "false");
-      assert.equal(body.timeline.neural.on, false);
-      assert.equal(Object.hasOwn(JSON.parse(store.value), "neural"), false);
-      assert.equal(S.parseTimeline(store.value).neural.on, false);
-      body.destroy();
-      fallbackCases++;
-    }
-  }
-} finally {
-  console.warn = warn;
-}
-assert.equal(warnings.length, 4, "only the four failed estimates are reported");
-assert.ok(warnings.every((entry) => entry[1]?.message === "estimate unavailable"));
-
-// The fallback is confined to the optional estimate, not a catch around all
-// settings rendering or saving that would conceal an unrelated regression.
+// No catch around the popover: a failing callback is a bug to see, not a
+// condition to render around.
 {
   const { body, pill } = build(true, true);
   assert.throws(() => openNeuralPopover(pill, {
@@ -131,11 +98,10 @@ assert.ok(warnings.every((entry) => entry[1]?.message === "estimate unavailable"
   }), /unrelated picture failure/);
   body.destroy();
 }
-console.log(JSON.stringify({ bodyCases, fallbackCases }));
+console.log(JSON.stringify({ bodyCases }));
 '''
 
 with layout.pack(skip=["atlas"]) as target:
     result = layout.in_pack(DOM + SCRIPT, target)
 
 check("real timeline ON/OFF and readiness combinations", result["bodyCases"], 4)
-check("failing optional geometry ON/OFF and readiness combinations", result["fallbackCases"], 4)
