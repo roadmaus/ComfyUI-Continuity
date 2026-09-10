@@ -1099,10 +1099,19 @@ export function openNeuralPopover(anchor, { target, commit, still = false, geome
         redraw: () => render(),
       }));
       rows.push(profileRow(block, render, commit));
-      const size = geometry?.();
-      const gigabytes = size
-        ? neuralEstimateGb(size.width, size.height, still ? block.scale : 1, block.precision)
-        : null;
+      let size, gigabytes = null;
+      try {
+        size = geometry?.();
+        if (size) {
+          gigabytes = neuralEstimateGb(size.width, size.height,
+                                       still ? block.scale : 1, block.precision);
+        }
+      } catch (error) {
+        // An optional estimate must never strand a saved ON block: users need
+        // this switch even on a machine where the refiner cannot run. Keep the
+        // failure visible in the console, but let the controls render and save.
+        console.warn("[Continuity] DLSS memory estimate unavailable", error);
+      }
       rows.push(el("div", { class: "mmc-pop-note", text: [
         gigabytes != null
           ? t("About {gb} GB of VRAM per frame at {width} × {height}.",
