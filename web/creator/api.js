@@ -201,7 +201,10 @@ export async function clearPickerPrefs() {
  *  say what it is about to remove. */
 export async function pickerPrefsHeld() {
   const prefs = await loadPickerPrefs();
-  return prefs.favorites.length;
+  // Remembered folders are records too: an empty star list must not disable
+  // the only control that clears where the picker was left.
+  return prefs.favorites.length
+    + Object.values(prefs.lastShelf).filter((shelf) => shelf !== "all").length;
 }
 
 // ---- settings ---------------------------------------------------------------
