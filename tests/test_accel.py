@@ -197,6 +197,32 @@ class KernelLessKitchen(FakeKitchen):
     BACKENDS = ["pytorch attention"]
 
 
+class FakeKitchenV3(FakeKitchen):
+    """Core's V3 INPUT_TYPES shim after ComfyUI's September 8 migration.
+
+    The first item is now the type name, not the list of available kernels.
+    Keep the legacy fixture too: installations can have either core version.
+    """
+
+    FUNCTION = "EXECUTE_NORMALIZED"
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {"required": {
+            "model": ("MODEL", {}),
+            "attention": ("COMBO", {
+                "default": "pytorch attention", "options": cls.BACKENDS,
+            }),
+        }}
+
+    def EXECUTE_NORMALIZED(self, model, **kwargs):
+        return self.patch(model, **kwargs)
+
+
+class KernelLessKitchenV3(FakeKitchenV3):
+    BACKENDS = ["pytorch attention"]
+
+
 class FakeChunkFFN:
     """`MiniMaxChunkFeedForward.define_schema`, as the registry holds it."""
 
@@ -548,5 +574,55 @@ check("direct_apply is a no-op when off", accel.direct_apply("MODEL", accel.Sett
 # comes back through `[0]`.
 check("direct_apply runs a V3 node through its shim",
       accel.direct_apply("MODEL", accel.Settings(attention="sage"))[:2], ("sage", "MODEL"))
+
+# Kitchen's V3 migration must not turn the type string "COMBO" into a list of
+# letters or mistake its default (pytorch) for the user's requested kernel.
+for kitchen_class in (FakeKitchen, FakeKitchenV3):
+    install()
+    NODES.NODE_CLASS_MAPPINGS[accel.KITCHEN_NODE] = kitchen_class
+    label = kitchen_class.__name__
+    settings = accel.Settings(attention="kitchen")
+    expected = {"attention": accel.KITCHEN_OPTION}
+    check(f"{label} plans the requested kernel", accel.plan(settings),
+          [(accel.KITCHEN_NODE, expected)])
+    graph = FakeGraph()
+    check(f"{label} graph returns the patched model",
+          accel.graph_apply(graph, "MODEL_LINK", settings), f"{accel.KITCHEN_NODE}:0")
+    check(f"{label} graph receives the selected kernel", graph.built,
+          [(accel.KITCHEN_NODE, {"model": "MODEL_LINK", **expected})])
+    check(f"{label} direct path receives the selected kernel",
+          accel.direct_apply("MODEL", settings),
+          ("kitchen", "MODEL", tuple(sorted(expected.items()))))
+
+for kitchen_class in (KernelLessKitchen, KernelLessKitchenV3):
+    install()
+    NODES.NODE_CLASS_MAPPINGS[accel.KITCHEN_NODE] = kitchen_class
+    label = kitchen_class.__name__
+    expect_error(f"{label} still rejects an unavailable kernel",
+                 lambda: accel.plan(accel.Settings(attention="kitchen")),
+                 "offers ['pytorch attention']")
+    check(f"{label} does not prevent default attention", accel.plan(accel.Settings()), [])
+    check(f"{label} does not change sage planning",
+          accel.plan(accel.Settings(attention="sage")), [(accel.SAGE_NODE, {})])
+
+# Missing/malformed options must fail closed, not pass a substring check on a
+# string and let core silently fall back to a different backend.
+class MalformedKitchen(FakeKitchenV3):
+    declared = None
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {"required": {"model": ("MODEL",), "attention": cls.declared}}
+
+
+for declared in (("COMBO", {}), ("COMBO", {"options": accel.KITCHEN_OPTION}),
+                 ("COMBO", {"options": None}), (accel.KITCHEN_OPTION,),
+                 ("COMBO", {"options": {accel.KITCHEN_OPTION: True}}),
+                 ("STRING", {"options": [accel.KITCHEN_OPTION]}), (), None):
+    install()
+    MalformedKitchen.declared = declared
+    NODES.NODE_CLASS_MAPPINGS[accel.KITCHEN_NODE] = MalformedKitchen
+    expect_error(f"malformed kitchen declaration {declared!r}",
+                 lambda: accel.plan(accel.Settings(attention="kitchen")), "offers []")
 
 passed("all accelerator tests passed")
