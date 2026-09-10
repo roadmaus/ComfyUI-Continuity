@@ -7,10 +7,10 @@ queued*. The strip is editable while a render runs, so by the time the take
 arrives that number may point at another card: a move swaps two, a removal
 slides every later card up one. `attachTakes` used to read the number against
 the current strip and pin the take on whoever sat there, stamped so that the
-"edited since" mark stayed quiet. It now reads it against the snapshot the
-timeline body takes on `promptQueued` — the card objects in queue order — and a
-card that was removed keeps its take in the history rather than handing it to a
-neighbour.
+"edited since" mark stayed quiet. It now reads it against the submitted graph
+paired with its accepted prompt id, using persistent card identities in queue
+order. A removed card keeps its take in history rather than handing it to a
+neighbour, even one with an identical prompt.
 
 The same number game, on the piece's aspect source: it names a card, and it
 follows that card through a move, a copy and a removal the way a seam's source
@@ -62,8 +62,8 @@ const out = {};
   out.removed = { takes: takes(t), prompts: t.segments.map((seg) => seg.prompt), landed };
 }
 
-// The body rebuilt from the widget between queue and report: no object survives,
-// so the stamp decides — an unchanged strip lands by number, an edited card does not.
+// The body rebuilt from the widget: persistent identity survives, including an
+// edited card. Its queued stamp still marks that take as needing another look.
 {
   const t = strip();
   const queued = s.queuedCards(t);
@@ -74,6 +74,7 @@ const out = {};
   edited.segments[1].prompt = "shot b, rewritten";
   s.attachTakes(edited, [report(1), report(2), report(3)], queued);
   out.edited = takes(edited);
+  out.editedMarks = [...s.editedSince(edited)];
 }
 
 // No snapshot at all — a page that loaded mid-render — is the old behaviour.
@@ -116,8 +117,9 @@ check("a moved card keeps its own take",
 check("a removed card's take goes to nobody",
       got["removed"], {"takes": ["s2", "s3"], "prompts": ["shot b", "shot c"],
                        "landed": True})
-check("a rebuilt but unchanged strip lands by number", got["rebuilt"], ["s1", "s2", "s3"])
-check("...and a card edited in the rebuilt strip is skipped", got["edited"], ["s1", None, "s3"])
+check("a rebuilt strip keeps its identities", got["rebuilt"], ["s1", "s2", "s3"])
+check("...and an edited card keeps its own take", got["edited"], ["s1", "s2", "s3"])
+check("...but that take is marked stale", got["editedMarks"], [1])
 check("no snapshot is the old behaviour", got["bare"], [None, "s2", None])
 check("a card edited while its own render ran is marked", got["markedDuring"], [0])
 check("the aspect source follows a moved card", got["aspectMoved"], 3)

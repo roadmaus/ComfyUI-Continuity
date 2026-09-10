@@ -380,7 +380,7 @@ export class Stage {
         // render coming back even though the node that made it is not on the
         // canvas.
         if (String(detail.display_node) !== String(this.nodeId())) break;
-        this.finish(detail.output);
+        this.finish(detail.output, { promptId: detail.prompt_id ?? this.promptId });
         break;
 
       case "mmc_segment":
@@ -479,13 +479,13 @@ export class Stage {
    * `MiniMaxH3SaveImage` reports `mmc_image` instead; which one arrives is also
    * what says whether the result is a clip or a still.
    */
-  finish(output) {
+  finish(output, { promptId = this.promptId, prompt = null } = {}) {
     // The passes, each as its own file, so a card whose pass came out right
     // never has to be sampled again. Before the `saved` gate: most takes now
     // arrive one at a time from `ContinuityTake` while the render is still
     // running — an executed message with a take and no piece in it — and the
     // rest still ride the save node's report the way they always did.
-    if (output?.mmc_takes?.length) this.onTakes?.(output.mmc_takes);
+    if (output?.mmc_takes?.length) this.onTakes?.(output.mmc_takes, { promptId, prompt });
     const saved = output?.mmc_video?.[0] ?? output?.mmc_image?.[0];
     if (!saved) return;
     this.state = "done";
@@ -551,14 +551,15 @@ export class Stage {
     if (Date.now() - this.probedAt < PROBE_EVERY_MS) return;
     this.probing = true;
     this.probedAt = Date.now();
+    const promptId = this.promptId;
     try {
-      const response = await api.fetchApi(`/history/${encodeURIComponent(this.promptId)}`);
+      const response = await api.fetchApi(`/history/${encodeURIComponent(promptId)}`);
       if (!response.ok) return;
-      const entry = (await response.json())?.[this.promptId];
+      const entry = (await response.json())?.[promptId];
       // The stage may have caught up on its own while this was in flight — the
       // wire coming back mid-probe is the likeliest moment of all — and a probe
       // must never overwrite a result that arrived the ordinary way.
-      if (this.state !== "sampling") return;
+      if (this.state !== "sampling" || this.promptId !== promptId) return;
       if (!entry) return;
       // The takes first, wherever the entry holds them: `ContinuityTake`
       // reports them one node at a time, so they are scattered across the
@@ -566,10 +567,10 @@ export class Stage {
       // is the case this exists for — the passes that landed before the
       // failure are exactly the ones worth keeping.
       const takes = this.takesOf(entry.outputs, entry.meta);
-      if (takes.length) this.onTakes?.(takes);
+      if (takes.length) this.onTakes?.(takes, { promptId, prompt: entry.prompt });
       const output = this.savedOutput(entry.outputs, entry.meta);
       if (output) {
-        this.finish(output);
+        this.finish(output, { promptId, prompt: entry.prompt });
         return;
       }
       // In history, with nothing of ours in it: the render failed or was

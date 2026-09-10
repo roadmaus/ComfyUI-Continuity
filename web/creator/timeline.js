@@ -28,6 +28,7 @@ import { openAspectPopover, openResolutionPopover, openChoicePopover, facesPill,
 import { refine, refineButton, chosenModel as refineModel } from "./refine.js";
 import { adopted, blobIO, samplingBar } from "./sampling.js";
 import { Stage, stageSource } from "./stage.js";
+import { watchSubmittedPrompts, submittedPrompt } from "./queue.js";
 import { familyPill, weightsPill, loadCatalog, adoptWeights } from "./models.js";
 import * as S from "./state.js";
 import * as Turbo from "./turbo.js";
@@ -2939,6 +2940,28 @@ export class TimelineBody {
     // only decides what a *new* node opens as. So the face grows one.
     this.fullscreen = fullscreen;
     this.timeline = S.parseTimeline(read());
+    // Persist identities before graphToPrompt reads the widget, including
+    // migration of an old strip. They identify UI cards, not render content.
+    if (S.ensureCardIds(this.timeline)) {
+      // Add only ids here. Serializing all defaults before reload() adopts a
+      // legacy node's sampling widgets would overwrite its actual settings.
+      let raw;
+      try { raw = JSON.parse(read()); } catch { raw = null; }
+      if (raw && typeof raw === "object" && !Array.isArray(raw)) {
+        let migrated = false;
+        if (Array.isArray(raw.segments)
+            && raw.segments.length === this.timeline.segments.length) {
+          raw.segments = raw.segments.map((card, index) => ({
+            ...card, card_id: this.timeline.segments[index].card_id,
+          }));
+          migrated = true;
+        } else if (!Array.isArray(raw.segments) && this.timeline.segments.length === 1) {
+          raw.card_id = this.timeline.segments[0].card_id;
+          migrated = true;
+        }
+        if (migrated) this.write(JSON.stringify(raw, null, 2));
+      }
+    }
     // The face's editor, when the piece is one shot and the face is wearing
     // one. Null the rest of the time — see `loneShot`.
     this.faceEditor = null;
@@ -2947,13 +2970,13 @@ export class TimelineBody {
     // clip, and what it is making is one picture whatever the strip looks like.
     // attach() floats it beside the node in a Satellite; it never mounts here.
     this.root = el("div", { class: "mmc-root" });
-    // The strip as it went out, for the takes that come back — see
-    // `queuedCards`. `promptQueued` is the frontend's one word on a prompt
-    // leaving, and it is said for every prompt: a snapshot taken on somebody
-    // else's queue is the same strip a moment later, and costs a hash.
-    this.queued = null;
-    this.onQueued = () => { this.queued = S.queuedCards(this.timeline); };
-    api.addEventListener("promptQueued", this.onQueued);
+    this.queued = new Map();
+    this.queueLookups = new Map();
+    this.takeArrivals = new Map();
+    this.takeSequence = 0;
+    this.offSubmitted = watchSubmittedPrompts(
+      (output) => this.submittedCards(output),
+      (promptId, snapshot) => this.rememberQueued(promptId, snapshot));
     this.stage = new Stage({
       nodeId,
       // Which generation the queue is on, said over the preview: the strip runs
@@ -2966,9 +2989,7 @@ export class TimelineBody {
       // Every pass this render wrote, back onto the card that made it. The card
       // is not held by it: what came back is a take, and whether to keep it is
       // the point of looking at it. See `takeTakes`.
-      onTakes: (reported) => {
-        if (S.attachTakes(this.timeline, reported, this.queued)) this.commit();
-      },
+      onTakes: (reported, context) => this.takeTakes(reported, context),
       // View-only: a timeline's references live on its segments, so a pick from
       // here would have no card to land on. The Creator attaches; this browses.
       onGallery: () => openPicker({
@@ -2986,10 +3007,68 @@ export class TimelineBody {
   }
 
   destroy() {
-    api.removeEventListener("promptQueued", this.onQueued);
+    this.destroyed = true;
+    this.offSubmitted?.();
     this.stage?.destroy();
     this.laneFit?.disconnect();
     this.dropFaceEditor();
+  }
+
+  /** Only this node's submitted blob, not the strip currently on screen. */
+  submittedCards(output) {
+    const inputs = output?.[String(this.nodeId())]?.inputs;
+    // The unified Creator and the legacy Timeline mount this same body.
+    const raw = inputs?.creator_data ?? inputs?.timeline_data;
+    if (typeof raw !== "string") return null;
+    try {
+      const parsed = JSON.parse(raw);
+      const cards = S.asPiece(parsed)?.segments;
+      // A mixed old/new blob must not turn off known ownership merely because
+      // a *different* card has no id. Legacy recovery is per submitted slot.
+      const legacy = Array.isArray(cards)
+        ? cards.map((card) => typeof card?.card_id !== "string" || !card.card_id) : false;
+      return S.queuedCards(S.parseTimeline(raw), { legacy });
+    } catch { return null; }
+  }
+
+  rememberQueued(promptId, snapshot) {
+    this.queued.set(String(promptId), snapshot);
+    // Snapshots contain only ids/stamps. Old entries can be recovered from
+    // history if a very large pending batch outlives this bounded notebook.
+    while (this.queued.size > 128) this.queued.delete(this.queued.keys().next().value);
+  }
+
+  async takeTakes(reported, { promptId, prompt = null } = {}) {
+    if (!promptId || this.destroyed) return;
+    const id = String(promptId);
+    const arrival = ++this.takeSequence;
+    let snapshot = this.queued.get(id);
+    if (!snapshot) {
+      if (!this.queueLookups.has(id)) {
+        this.queueLookups.set(id, (async () => {
+          const output = prompt?.[2] ?? await submittedPrompt(id);
+          return this.submittedCards(output);
+        })().catch(() => null));
+      }
+      snapshot = await this.queueLookups.get(id);
+      this.queueLookups.delete(id);
+      snapshot = this.queued.get(id) ?? snapshot;
+      if (!snapshot || this.destroyed) return; // Keep unowned results in history.
+      this.rememberQueued(id, snapshot);
+    }
+    const applicable = reported.filter((report) => {
+      const card = snapshot.ids[Number(report.segment) - 1];
+      if (!card || (this.takeArrivals.get(card) ?? 0) > arrival) return false;
+      // An older history lookup finishing after a newer report must not
+      // overwrite that card's newer take. Other cards may still land normally.
+      this.takeArrivals.set(card, arrival);
+      return true;
+    });
+    if (S.attachTakes(this.timeline, applicable, snapshot)) this.commit();
+    const live = new Set(this.timeline.segments.map((card) => card.card_id));
+    for (const card of this.takeArrivals.keys()) {
+      if (!live.has(card)) this.takeArrivals.delete(card);
+    }
   }
 
   /** See `CreatorEditor.adoptWeights` — same rescue, same reason. */
@@ -3008,6 +3087,7 @@ export class TimelineBody {
     const adopted_ = adopted(this.read(), this.widgets, S.parseTimeline, S.serializeTimeline);
     if (adopted_) this.write(adopted_);
     this.timeline = S.parseTimeline(this.read());
+    if (S.ensureCardIds(this.timeline)) this.write(S.serializeTimeline(this.timeline));
     // The face editor closes over the segment object it was handed, and this is
     // a different one. Dropped rather than re-pointed: `render` builds another
     // against whatever the strip now holds.
@@ -3201,6 +3281,7 @@ export class TimelineBody {
 
   commit() {
     S.syncTimeline(this.timeline);
+    S.ensureCardIds(this.timeline);
     // Removing or disabling the turbo LoRA anywhere — the global stack's
     // manager included — is switching turbo off, and the sampler row has to
     // come back before the blob is written with `on` still in it.
