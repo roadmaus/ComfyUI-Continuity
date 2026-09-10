@@ -3074,7 +3074,9 @@ def _chained_request(data, segment, pool, global_prompt, cast=()):
     #   errors and announcements can name the card. It only exists on a render
     #   that holds something back, so leaving it in meant every card of a
     #   part-render missed the cache the whole render had just filled.
-    for key in ("seed", "take", "hold", "card_no"):
+    # - `card_id` is persistent UI ownership for queued takes, not a model
+    #   input. Assigning/recovering an identity must not re-encode a shot.
+    for key in ("seed", "take", "hold", "card_no", "card_id"):
         request.pop(key, None)
     request["prompt"] = _join_prompt(global_prompt, segment.get("prompt"))
     # A shot-scoped rewrite gets the same join: it stands in for the

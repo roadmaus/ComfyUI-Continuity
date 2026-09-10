@@ -1924,22 +1924,17 @@ export function segmentSeed(segment) {
 /**
  * The takes a finished render reported, onto the cards that made them.
  *
- * -> whether any landed. By card number rather than by position, because a
- * render is not always the whole strip: the save node is told which card each
- * pass is, and that number is the number on the card. One that has moved or
- * been deleted since the queue went out is left alone rather than guessed at.
+ * -> whether any landed. Report numbers address the submitted snapshot, not
+ * the live strip. Its persistent card ids survive reloads/reorders; a removed
+ * card's result remains in history rather than landing on an identical copy.
  *
  * Nothing is held here. A take that came back is a take to look at, and holding
  * the card is the gesture that says it is good — doing it here would decide for
  * the user, and would quietly stop the next queue from re-rendering the card
  * they were about to re-render.
  *
- * `stamp` is what the card looked like when its take was attached, so an edit
- * afterwards can be marked rather than silently shipped — see `editedSince`. It
- * is taken now rather than at queue time, which leaves a window: a card edited
- * while its own render was still running is stamped as if the edit had been in
- * it. The cost of closing that is a queue-time hook, for a mark that only ever
- * says "look at this again".
+ * `stamp` comes from that same submitted snapshot, so edits made while the
+ * render ran are marked by `editedSince` rather than silently approved.
  */
 export function attachTakes(timeline, reports, queued = null) {
   // One serialization for the whole report rather than one per take: the strip
@@ -1961,35 +1956,55 @@ export function attachTakes(timeline, reports, queued = null) {
 }
 
 /**
- * The strip as it went out: the card objects in queue order and each one's
- * stamp. Taken on `promptQueued` by the timeline body, and what `attachTakes`
- * reads a report's card number against — the number is the card's position
- * *then*, and a card moved or removed while the render ran is not the card
- * now at that position (issue #47).
+ * The strip as submitted: card identities in queue order and render stamps.
+ * `legacy` is only for explicit recovery of an old saved prompt without ids;
+ * a live snapshot never falls back to identical content after deletion.
  */
-export function queuedCards(timeline) {
-  return { cards: [...timeline.segments], stamps: stampsOf(timeline) };
+export function queuedCards(timeline, { legacy = false } = {}) {
+  ensureCardIds(timeline);
+  return { ids: timeline.segments.map((card) => card.card_id),
+           stamps: stampsOf(timeline), legacy };
 }
 
 /**
  * Where the card that was number `number` at queue time sits now, or -1.
  *
- * By identity first: the strip is edited in place, so a moved card is the
- * same object at another index. Failing that — the body was rebuilt from the
- * widget, say on a reload — by the stamp: the card now at that number is
- * accepted only when it is byte-for-byte the card that was queued there. A
- * card that was removed matches neither and its take is left in the history
- * rather than pinned on whoever slid into its place.
+ * Never infer live identity from equal prompts. Explicit legacy history
+ * recovery permits a positional match only if its stamp is unique in both
+ * strips; ambiguous identical cards remain unattached in history.
  */
 function queuedIndex(timeline, queued, number, stamps) {
-  const card = queued.cards[number - 1];
-  if (card) {
-    const index = timeline.segments.indexOf(card);
+  const id = queued.ids?.[number - 1];
+  if (id) {
+    const index = timeline.segments.findIndex((card) => card.card_id === id);
     if (index >= 0) return index;
   }
   const stamp = queued.stamps[number - 1];
-  if (stamp !== undefined && stamps[number - 1] === stamp) return number - 1;
+  const legacy = Array.isArray(queued.legacy) ? queued.legacy[number - 1] : queued.legacy === true;
+  if (legacy && stamp !== undefined && stamps[number - 1] === stamp
+      && queued.stamps.filter((value) => value === stamp).length === 1
+      && stamps.filter((value) => value === stamp).length === 1) return number - 1;
   return -1;
+}
+
+/** Frontend ownership only: not part of the description the model renders. */
+let nextCardId = 0;
+function newCardId() {
+  return globalThis.crypto?.randomUUID?.()
+    ?? `card-${Date.now().toString(36)}-${++nextCardId}-${Math.random().toString(36).slice(2)}`;
+}
+
+export function ensureCardIds(timeline) {
+  const seen = new Set();
+  let changed = false;
+  for (const card of timeline.segments ?? []) {
+    if (typeof card.card_id !== "string" || !card.card_id || seen.has(card.card_id)) {
+      card.card_id = newCardId();
+      changed = true;
+    }
+    seen.add(card.card_id);
+  }
+  return changed;
 }
 
 function takeFrom(report, stamp) {
@@ -2036,7 +2051,7 @@ function stampsOf(timeline) {
   const { segments, ...piece } = blob;
   const head = JSON.stringify(piece);
   return (segments ?? []).map((card) => {
-    const { hold, take, ...rest } = card;
+    const { hold, take, card_id, ...rest } = card;
     return hash(head + JSON.stringify(rest));
   });
 }
@@ -3037,6 +3052,7 @@ export function parseTimeline(raw) {
           const width = Number(raw.feather);
           if (featherGridOf(timeline).includes(width) && width > 1) segment.feather = width;
           if (raw.feather_pin === true) segment.feather_pin = true;
+          if (typeof raw.card_id === "string") segment.card_id = raw.card_id;
           return segment;
         }
         const segment = parseState(JSON.stringify(raw ?? {}));
@@ -3184,6 +3200,7 @@ export function serializeTimeline(timeline) {
       if (isClip(segment)) {
         return {
           kind: "clip",
+          ...(segment.card_id ? { card_id: segment.card_id } : {}),
           filename: segment.filename,
           duration_s: round2(segment.duration_s),
           ...(segment.width && segment.height
@@ -3205,6 +3222,7 @@ export function serializeTimeline(timeline) {
         };
       }
       const out = serializeCommon(segment, pieceFamily(timeline));
+      if (segment.card_id) out.card_id = segment.card_id;
       // Which pass this segment belongs to, said as "the same one as the
       // segment before me" — so a pass survives inserting, moving and deleting
       // with no numbers to keep in step. Never on the first segment, which is
@@ -3251,7 +3269,10 @@ export function serializeTimeline(timeline) {
 
 /** A copy that shares nothing with the original — for "duplicate segment". */
 export function cloneSegment(segment) {
-  return JSON.parse(JSON.stringify(segment));
+  const copy = JSON.parse(JSON.stringify(segment));
+  // A clone may look identical, but it never owns the original's in-flight take.
+  copy.card_id = newCardId();
+  return copy;
 }
 
 /**
