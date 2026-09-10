@@ -158,10 +158,16 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
 
     @classmethod
     def fingerprint_inputs(cls, segment_data, **kwargs):
+        # Shared file stamps live on timeline, not on this moved family node.
+        # Import lazily, as LTX does, so loading either module cannot make a
+        # circular import look like an unchanged/empty reference fingerprint.
+        from ... import timeline
+
         try:
             payload = json.loads(segment_data)
-            return (segment_data, stamps({"segments": [payload.get("request", {})],
-                                          "sound": payload.get("sound")}))
+            return (segment_data,
+                    timeline.stamps({"segments": [payload.get("request", {})],
+                                     "sound": payload.get("sound")}))
         except Exception:
             return (segment_data, ())
 
