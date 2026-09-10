@@ -101,4 +101,34 @@ check("an image block has no latent_t", "latent_t" in block, False)
 check("an image mod presents as a picture", item["type"], "image")
 check("...from the first decoded frame", item["data"].shape[0], 1)
 
+# ---- the save node's file list and stack ------------------------------------
+#
+# `_blob_files` reads the new list and the old single-filename shape;
+# `_stack` concatenates several sources onto the first one's canvas, so a set
+# of stills of different sizes still encodes as one reference.
+
+save = layout.load("refmod", "media", "refmod_node").refmod_node
+
+check("a files list reads in order",
+      save._blob_files({"files": [{"path": "a.png", "kind": "image"},
+                                   {"path": "b.mp4", "kind": "video"}]}),
+      [{"path": "a.png", "kind": "image"}, {"path": "b.mp4", "kind": "video"}])
+check("the old single filename still reads",
+      save._blob_files({"filename": "c.jpg", "kind": "image"}),
+      [{"path": "c.jpg", "kind": "image"}])
+check("an empty blob names no files", save._blob_files({}), [])
+check("a files list wins over a stray filename",
+      save._blob_files({"files": [{"path": "a.png", "kind": "image"}],
+                        "filename": "z.jpg"}),
+      [{"path": "a.png", "kind": "image"}])
+
+_wide = torch.zeros(1, 2048, 2048, 3)
+_tall = torch.zeros(2, 1536, 1024, 3)
+stacked, th, tw = save._stack([_wide, _tall])
+check("stacking concatenates every frame", int(stacked.shape[0]), 3)
+check("...onto the first source's canvas",
+      (int(stacked.shape[1]), int(stacked.shape[2])), (1024, 1024))
+_single, _, _ = save._stack([_tall])
+check("one source is just resized", int(_single.shape[0]), 2)
+
 passed("the RefMod encode branch reads the file and presents the decode")

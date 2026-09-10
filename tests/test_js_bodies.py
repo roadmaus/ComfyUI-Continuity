@@ -230,8 +230,8 @@ for (const [cls, widget, blob] of [
   ["MiniMaxH3PreStage", "prestage_data", JSON.stringify({ arch: "minimax" })],
   ["ContinuitySaveRefMod", "refmod_data", "{}"],
   ["ContinuitySaveRefMod", "refmod_data",
-   JSON.stringify({ filename: "a.png", kind: "image", name: "a", type: "identity",
-                    capture: "full" })],
+   JSON.stringify({ files: [{ path: "a.png", kind: "image" }], name: "a",
+                    type: "identity", capture: "full", vae: "v.safetensors" })],
 ]) {
   const node = fakeNode(cls, widget, blob);
   try {

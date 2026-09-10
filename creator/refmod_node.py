@@ -1,15 +1,21 @@
-"""Save a chosen picture or clip as a RefMod.
+"""Save chosen pictures and clips as one RefMod.
 
 The Creator's own way to make one of the compressed references its picker and
 encoder already read. The node wears a Continuity body (`web/creator/refmod.js`)
-that picks the media through the same picker every other attachment uses and
-asks the two questions a picture cannot answer for itself — what the reference
-is *of* (`type`) and whether to keep the whole picture or only the movement
-(`capture`). This half owns everything the user should never have to: where the
-file came from, the causal trim, the resolution, the token cost, the format.
+that picks the media through the same picker every other attachment uses —
+images, clips and finished Renders — and asks the two questions a picture cannot
+answer for itself: what the reference is *of* (`type`) and whether to keep the
+whole picture or only the movement (`capture`). This half owns everything the
+user should never have to: where the files came from, the common canvas they are
+stacked on, the causal trim, the resolution, the token cost, the format.
 
-The picked media and the two answers ride in the hidden `refmod_data` blob.
-The H3 video VAE is chosen there too, from the same model list the Creator's
+Several files become **one** mod, the way the sibling extractor stacks a set of
+stills: a handful of photographs of one person, or a face from a still and a
+walk from a clip, are one reference the tokenizer is shown as one picture. The
+first file sets the canvas and every other is cover-cropped onto it.
+
+The picked files and the two answers ride in the hidden `refmod_data` blob. The
+H3 video VAE is chosen there too, from the same model list the Creator's
 settings popover reads, and loaded by the node itself — so there are no sockets
 at all.
 """
@@ -32,6 +38,7 @@ _GRID = 32          # canvas multiple, as everywhere else in this pack
 _MIN_EDGE = 320     # the VAE's tiled encoder floor; below it the tiler can make a zero tile
 _DEFAULT_EDGE = 1024
 _MAX_SECONDS = 30   # how much of a clip is decoded; the sibling caps its refs too
+_MAX_FILES = 64     # one mod's ceiling; a hundred frames of one is a clip, not a moodboard
 
 
 def _resize(pixels, short_edge):
@@ -44,6 +51,14 @@ def _resize(pixels, short_edge):
     samples = pixels[..., :3].movedim(-1, 1)
     samples = comfy.utils.common_upscale(samples, target_w, target_h, "lanczos", "disabled")
     return samples.movedim(1, -1), target_h, target_w
+
+
+def _to_canvas(pixels, target_h, target_w):
+    """Cover-crop/resize frames onto an established canvas, keeping aspect."""
+    import comfy.utils  # noqa: PLC0415
+    samples = pixels[..., :3].movedim(-1, 1)
+    samples = comfy.utils.common_upscale(samples, target_w, target_h, "lanczos", "center")
+    return samples.movedim(1, -1)
 
 
 def _ensure_min_edge(pixels, floor=_MIN_EDGE):
@@ -79,8 +94,60 @@ def _preview_png(pixels):
     return buffer.getvalue()
 
 
+def _blob_files(blob):
+    """The picked files a blob names, oldest shape included. -> [{path, kind}]."""
+    files = []
+    raw = blob.get("files")
+    if isinstance(raw, list):
+        for entry in raw:
+            if not isinstance(entry, dict):
+                continue
+            path = str(entry.get("path") or "").strip()
+            if path:
+                files.append({"path": path,
+                              "kind": "video" if entry.get("kind") == "video" else "image"})
+    if not files:
+        path = str(blob.get("filename") or "").strip()
+        if path:
+            files.append({"path": path,
+                          "kind": "video" if blob.get("kind") == "video" else "image"})
+    return files[:_MAX_FILES]
+
+
+def _load(file):
+    """One picked file -> [T, H, W, C] frames."""
+    path, kind = file["path"], file["kind"]
+    if kind == "video":
+        frames, _audio = media.load_video(path, max_seconds=_MAX_SECONDS)
+    else:
+        frames = media.load_image(path)
+    if frames.ndim != 4 or frames.shape[-1] < 3:
+        raise ValueError(
+            f"Save as RefMod: {path!r} read as {tuple(frames.shape)}, "
+            f"expected [T, H, W, C] images")
+    return frames
+
+
+def _stack(batches):
+    """Several sources' frames -> one sequence on the first source's canvas.
+
+    The first file sets the canvas (resized to the short-edge dial) and every
+    other is cover-cropped onto it, exactly as the sibling extractor anchors a
+    stack — so a set of photographs of different sizes still encodes as one
+    reference. -> (pixels, target_h, target_w).
+    """
+    import torch  # noqa: PLC0415
+    first, target_h, target_w = _resize(batches[0].float(), _DEFAULT_EDGE)
+    if len(batches) == 1:
+        return first, target_h, target_w
+    parts = [first]
+    for frames in batches[1:]:
+        parts.append(_to_canvas(frames.float(), target_h, target_w))
+    return torch.cat(parts, dim=0), target_h, target_w
+
+
 class ContinuitySaveRefMod(io.ComfyNode):
-    """One picked file -> one saved RefMod in the library."""
+    """One or more picked files -> one saved RefMod in the library."""
 
     @classmethod
     def define_schema(cls):
@@ -89,9 +156,11 @@ class ContinuitySaveRefMod(io.ComfyNode):
             display_name="Save as RefMod",
             category="Continuity",
             description=(
-                "Save a picture or clip as a RefMod for the continuity picker. "
-                "Pick the media on the node, choose what the reference is of and "
-                "whether to keep the whole picture or only what moves, and Save."
+                "Save pictures and clips as one RefMod for the continuity picker. "
+                "Pick them on the node — a handful of stills, a clip, a finished "
+                "render — choose what the reference is of and whether to keep the "
+                "whole picture or only what moves, and Save. Several files stack "
+                "onto the first one's canvas."
             ),
             is_output_node=True,
             inputs=[
@@ -108,10 +177,9 @@ class ContinuitySaveRefMod(io.ComfyNode):
             raise ValueError(f"Save as RefMod: the node's data is not valid JSON: {exc}") from exc
         if not isinstance(blob, dict):
             blob = {}
-        filename = str(blob.get("filename") or "").strip()
-        if not filename:
-            raise ValueError("Save as RefMod: choose a picture or clip in the node first.")
-        kind = blob.get("kind") if blob.get("kind") in ("image", "video") else "image"
+        files = _blob_files(blob)
+        if not files:
+            raise ValueError("Save as RefMod: choose pictures or clips in the node first.")
         name = str(blob.get("name") or "").strip() or "my_reference"
         reference_type = blob.get("type") if blob.get("type") in CONCEPT_TYPES else "generic"
         capture = blob.get("capture") if blob.get("capture") in CAPTURES else "full"
@@ -126,18 +194,14 @@ class ContinuitySaveRefMod(io.ComfyNode):
         import nodes  # noqa: PLC0415 - ComfyUI is this node's environment.
         vae = nodes.VAELoader().load_vae(vae_name)[0]
 
-        if kind == "video":
-            pixels, _audio = media.load_video(filename, max_seconds=_MAX_SECONDS)
-        else:
-            pixels = media.load_image(filename)
-        if pixels.ndim != 4 or pixels.shape[-1] < 3:
-            raise ValueError(
-                f"Save as RefMod: {filename!r} read as {tuple(pixels.shape)}, "
-                f"expected [T, H, W, C] images")
-
-        # Before `capture` turns the frames into differences: the preview is of
-        # the picture the user chose, not of the motion trace.
-        preview = _preview_png(pixels)
+        batches = [_load(file) for file in files]
+        # Before `capture` turns the frames into differences or the stack moves
+        # them onto a canvas: the preview is of the first picture the user chose.
+        preview = _preview_png(batches[0])
+        pixels, target_h, target_w = _stack(batches)
+        if len(files) > 1:
+            print(f"[Save as RefMod] stacking {len(files)} files onto the first's "
+                  f"canvas ({target_w}x{target_h})")
 
         if capture == "motion":
             if int(pixels.shape[0]) < 2:
@@ -153,7 +217,7 @@ class ContinuitySaveRefMod(io.ComfyNode):
             pixels = differences
 
         count = int(pixels.shape[0])
-        # A clip is cut to the VAE's causal 4k+1 grid before it is encoded —
+        # A sequence is cut to the VAE's causal 4k+1 grid before it is encoded —
         # anything else makes the temporal chunker produce an empty chunk.
         if count > 1:
             valid = ((count - 1) // 4) * 4 + 1
@@ -161,7 +225,6 @@ class ContinuitySaveRefMod(io.ComfyNode):
                 print(f"[Save as RefMod] trimming {count} -> {valid} frames to the "
                       f"VAE's causal 4k+1 grid")
             pixels = pixels[:valid]
-        pixels, target_h, target_w = _resize(pixels.float(), _DEFAULT_EDGE)
         pixels = _ensure_min_edge(pixels)
 
         latent = vae.encode(pixels)
@@ -182,9 +245,9 @@ class ContinuitySaveRefMod(io.ComfyNode):
             pool=f"full-res {target_w}x{target_h}px",
             tags=[stored_kind, capture] if capture != "full" else [stored_kind],
             preview=preview)
-        print(f"[Save as RefMod] {stored_kind} RefMod ({capture}): "
-              f"{latent_t}x{latent_h}x{latent_w} latent, {tokens} tokens -> "
-              f"{path}.safetensors")
+        print(f"[Save as RefMod] {stored_kind} RefMod ({capture}) from "
+              f"{len(files)} file(s): {latent_t}x{latent_h}x{latent_w} latent, "
+              f"{tokens} tokens -> {path}.safetensors")
         return io.NodeOutput()
 
 

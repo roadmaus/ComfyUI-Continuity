@@ -1,17 +1,22 @@
-// The Save as RefMod body: pick a picture or clip, say what it is of, save.
+// The Save as RefMod body: pick pictures and clips, say what it is of, save.
 //
 // The node has no sockets. What it saves is chosen here, from the same picker
-// every other attachment uses, and the two questions a picture cannot answer
-// for itself — what it is *of*, and whether to keep the whole picture or only
-// the movement — are pills on the face. Everything else (resolution, the causal
-// trim, the file format) is the node's business, not the user's.
+// every other attachment uses — images, clips and finished Renders — and the
+// two questions a picture cannot answer for itself — what it is *of*, and
+// whether to keep the whole picture or only the movement — are pills on the
+// face. Everything else (resolution, the causal trim, the file format) is the
+// node's business, not the user's.
+//
+// Several files stack into one mod, the way the sibling extractor stacks a set
+// of stills: a handful of photographs of one person, or a face from a still and
+// a walk from a clip, become one reference the tokenizer is shown as one
+// picture.
 //
 // Follows `PreStageEditor`'s shape: a `state` object, a `root` element the node
 // hosts, a `commit()` that writes the blob back through `onCommit`, and a
 // `render()` that redraws from state. The blob lives in the hidden `refmod_data`
 // widget.
 
-import { app } from "../../../scripts/app.js";
 import { api } from "../../../scripts/api.js";
 
 import { el, icon } from "./dom.js";
@@ -27,6 +32,10 @@ export const REFMOD_TYPES = ["generic", "identity", "pose_motion", "clothing",
                              "background", "style"];
 export const REFMOD_CAPTURES = ["full", "motion"];
 
+// How many files one mod may stack. A ceiling rather than a policy — a mod is a
+// reference, and a hundred frames of one is a clip, not a moodboard.
+export const REFMOD_MAX_FILES = 64;
+
 const TYPE_LABEL = {
   generic: "generic",
   identity: "a person",
@@ -35,6 +44,13 @@ const TYPE_LABEL = {
   background: "a place",
   style: "a look",
 };
+
+/** One picked row -> the `{path, kind}` the blob stores. Renders are their own
+ *  kind in the picker but a file is an image or a clip wherever it lives. */
+const asFile = (picked) => ({
+  path: picked.path,
+  kind: picked.kind === "video" ? "video" : "image",
+});
 
 /** A blob -> the body's state, with every field clamped to a legal value. */
 export function parseRefMod(raw) {
@@ -45,9 +61,17 @@ export function parseRefMod(raw) {
     blob = {};
   }
   if (typeof blob !== "object") blob = {};
+  let files = [];
+  if (Array.isArray(blob.files)) {
+    files = blob.files
+      .filter((file) => file && typeof file.path === "string" && file.path)
+      .map((file) => ({ path: file.path, kind: file.kind === "video" ? "video" : "image" }));
+  } else if (typeof blob.filename === "string" && blob.filename) {
+    // A save from before this node stacked files: one `filename`/`kind` pair.
+    files = [{ path: blob.filename, kind: blob.kind === "video" ? "video" : "image" }];
+  }
   return {
-    filename: typeof blob.filename === "string" ? blob.filename : "",
-    kind: blob.kind === "video" ? "video" : "image",
+    files,
     name: typeof blob.name === "string" ? blob.name : "",
     type: REFMOD_TYPES.includes(blob.type) ? blob.type : "generic",
     capture: blob.capture === "motion" ? "motion" : "full",
@@ -58,8 +82,7 @@ export function parseRefMod(raw) {
 /** The body's state -> the blob the node reads. */
 export function serializeRefMod(state) {
   return JSON.stringify({
-    filename: state.filename || "",
-    kind: state.kind === "video" ? "video" : "image",
+    files: (state.files ?? []).filter((file) => file?.path).map(asFile),
     name: state.name || "",
     type: REFMOD_TYPES.includes(state.type) ? state.type : "generic",
     capture: state.capture === "motion" ? "motion" : "full",
@@ -122,22 +145,22 @@ export class RefModBody {
     this.render();
   }
 
-  /** The media well: the picker, on the kind the chosen file already is. */
+  /** The media well: the picker, on images, clips and finished Renders. */
   async choose() {
+    const first = this.state.files[0];
     const chosen = await openPicker({
-      kinds: ["image", "video"],
-      kind: this.state.kind === "video" ? "video" : "image",
-      single: true,
-      capacity: () => ({ used: 0, max: 1, filesLeft: 1 }),
+      kinds: ["image", "video", "renders"],
+      kind: first?.kind === "video" ? "video" : "image",
+      // No reference cap here: this builds a file rather than taking a slot.
+      capacity: () => ({ used: 0, max: REFMOD_MAX_FILES, filesLeft: REFMOD_MAX_FILES }),
     });
-    const pick = chosen?.[0];
-    if (!pick || pick.path === this.state.filename) return;
-    this.state.filename = pick.path;
-    this.state.kind = pick.kind === "video" ? "video" : "image";
-    // A name only if the user has not written one: the filename stem is a
-    // better default than "my_reference", and rewriting a chosen name is worse
-    // than leaving the default alone.
+    if (!chosen?.length) return;
+    this.state.files = chosen.slice(0, REFMOD_MAX_FILES).map(asFile);
+    // A name only if the user has not written one: the first filename's stem is
+    // a better default than "my_reference", and rewriting a chosen name is
+    // worse than leaving the default alone.
     if (!this.state.name) {
+      const pick = chosen[0];
       this.state.name = String(pick.name || pick.path).replace(/\.[^./\\]+$/, "");
     }
     this.commit();
@@ -158,27 +181,31 @@ export class RefModBody {
 
   render() {
     const state = this.state;
-    const ready = Boolean(state.filename && state.name.trim());
+    const first = state.files[0] ?? null;
+    const ready = Boolean(state.files.length && state.name.trim());
     // A real still, not an icon: the well's whole job is to show what was
     // picked, and `stillUrl` is the one place that knows which route draws it
-    // (a picture is `/view`, a clip is the server-decoded still). `image`/
-    // `video` icons are only the empty state — a framed picture with a mountain
-    // on it reads as a broken-image placeholder wherever it is used for real.
-    const still = state.filename
-      ? stillUrl({ path: state.filename, kind: state.kind })
-      : null;
+    // (a picture or a render is `/view`, a clip is the server-decoded still, a
+    // RefMod is its own route).
+    const still = first ? stillUrl({ path: first.path, kind: first.kind }) : null;
+    const label = !first
+      ? t("Choose pictures or clips")
+      : state.files.length === 1
+        ? first.path
+        : t("{count} files", { count: state.files.length });
     const well = el("button", {
       class: "mmc-well",
       type: "button",
-      title: t("Choose a picture or a clip to save as a reference"),
+      title: t("Choose pictures and clips to save as one reference"),
       onclick: () => this.choose(),
     }, [
       still
-        ? el("img", { class: "mmc-asset-thumb", src: still, alt: state.filename,
+        ? el("img", { class: "mmc-asset-thumb", src: still, alt: first.path,
                       loading: "lazy", style: { width: "100%", height: "auto",
-                                                display: "block", borderRadius: "6px" } })
+                                                display: "block", borderRadius: "6px" },
+                      onerror: (event) => event.target.replaceWith(icon("gallery", 18)) })
         : icon("gallery", 18),
-      el("span", { class: "mmc-model-name", text: state.filename || t("Choose a picture or clip") }),
+      el("span", { class: "mmc-model-name", text: label }),
     ]);
 
     const name = el("input", {
