@@ -50,6 +50,7 @@ BLOB_WIDGETS = {
 # carried across untouched: the question this answers is "with or without",
 # and a twin that also changed the settings would answer a different one.
 BLOCK = "neural"
+PRODUCER_KEY = "continuity_producer"
 
 
 class TwinError(Exception):
@@ -82,7 +83,39 @@ def _blob_nodes(prompt):
     return found
 
 
-def read(prompt):
+def _producer(prompt, producer=None):
+    """Select an explicit producer, or the only unambiguous legacy producer."""
+    nodes = _blob_nodes(prompt)
+    if not nodes:
+        raise TwinError("this file does not carry a prompt this pack can render")
+    if producer is None:
+        if len(nodes) != 1:
+            raise TwinError("this older file has multiple Continuity outputs but no producer metadata; "
+                            "render it once with the updated node before comparing its twin")
+        return nodes[0], 0
+    if not isinstance(producer, dict):
+        raise TwinError("this file's Continuity producer metadata is invalid")
+    index = producer.get("index", 0)
+    if isinstance(index, bool) or not isinstance(index, int) or index < 0:
+        raise TwinError("this file's Continuity image index is invalid")
+    for entry in nodes:
+        if entry[0] == producer.get("node"):
+            return entry, index
+    raise TwinError("this file's Continuity producer is absent from its prompt")
+
+
+def producer_metadata(hidden, index=0):
+    """Name the original producer, not the ephemeral save node's expansion id."""
+    node_id = getattr(hidden, "unique_id", None)
+    dynamic = getattr(hidden, "dynprompt", None)
+    if node_id is not None and dynamic is not None:
+        node_id = dynamic.get_real_node_id(node_id)
+    if any(entry[0] == node_id for entry in _blob_nodes(getattr(hidden, "prompt", None))):
+        return {"node": node_id, "index": index}
+    return None
+
+
+def read(prompt, producer=None):
     """What this render says about the refiner.
 
     `{"ours": bool, "on": bool, "settings": {...}|None, "node": id|None}`.
@@ -91,50 +124,55 @@ def read(prompt):
     prompt in it, or one made by somebody else's graph, has no other version to
     render and has to be offered the tile comparison instead.
     """
-    nodes = _blob_nodes(prompt)
-    if not nodes:
+    if not _blob_nodes(prompt):
         return {"ours": False, "on": False, "settings": None, "node": None}
-    # On if *any* of our nodes asked for it, and the settings are that node's.
-    # Which node wrote the file is not knowable from the prompt — a pre-stage
-    # feeding a creator writes a still and a clip out of one queue — and it
-    # does not need to be: `twin` flips every one of them, so what this has to
-    # answer is whether the refiner is anywhere in what made this file.
-    for node_id, _, blob in nodes:
-        block = blob.get(BLOCK)
-        if isinstance(block, dict) and block.get("on"):
-            return {"ours": True, "on": True, "settings": block, "node": node_id}
-    node_id, _, blob = nodes[0]
+    try:
+        (node_id, _, blob), index = _producer(prompt, producer)
+    except TwinError as error:
+        return {"ours": False, "on": False, "settings": None, "node": None,
+                "error": str(error)}
     block = blob.get(BLOCK)
-    return {"ours": True, "on": False,
-            "settings": block if isinstance(block, dict) else None, "node": node_id}
+    return {"ours": True, "on": bool(isinstance(block, dict) and block.get("on")),
+            "settings": block if isinstance(block, dict) else None, "node": node_id,
+            **({"index": index} if producer is not None else {})}
 
 
-def twin(prompt, on, block=None):
+def twin(prompt, on, block=None, producer=None):
     """The same prompt with the refiner switched `on` or off. -> a new prompt.
 
-    Every node of ours is flipped, not only the last: a still that a piece is
-    built on is refined by its own pre-stage, and a comparison that left one of
-    the two on would be comparing two things that differ in two ways.
+    Only the file's producer is flipped. Changing an independent Creator (or
+    the PreStage that supplies an input) would compare two different sources,
+    not the same render with its final material pass switched off or on.
 
     `block` replaces the settings while switching *on* — which is what lets the
     dials on a viewer's rail mean something for a render that never had the
     pass. Switching off ignores it: there is nothing to set.
     """
-    nodes = _blob_nodes(prompt)
-    if not nodes:
-        raise TwinError("this file does not carry a prompt this pack can render")
+    (node_id, widget, blob), _ = _producer(prompt, producer)
     twinned = copy.deepcopy(prompt)
-    for node_id, widget, blob in nodes:
-        current = blob.get(BLOCK) if isinstance(blob.get(BLOCK), dict) else {}
-        if on:
-            wanted = {**current, **(block or {}), "on": True}
-        else:
-            # Written as off rather than deleted: a blob that never had the key
-            # is a blob from before the refiner existed, and adding an explicit
-            # off to it says the same thing in the shape this build reads.
-            wanted = {**current, "on": False}
-        blob = {**blob, BLOCK: wanted}
-        twinned[node_id] = {**twinned[node_id],
-                            "inputs": {**twinned[node_id]["inputs"],
-                                       widget: json.dumps(blob)}}
+    current = blob.get(BLOCK) if isinstance(blob.get(BLOCK), dict) else {}
+    wanted = {**current, **(block or {}), "on": True} if on else {**current, "on": False}
+    blob = {**blob, BLOCK: wanted}
+    twinned[node_id] = {**twinned[node_id],
+                       "inputs": {**twinned[node_id]["inputs"], widget: json.dumps(blob)}}
     return twinned
+
+
+def dependency_prompt(prompt, node_id):
+    """Keep the target's input closure under unchanged ids, excluding other outputs.
+
+    A whole saved prompt can include an unrelated output with missing models.
+    It must neither run nor prevent this comparison from validating.
+    """
+    held, pending = set(), [node_id]
+    while pending:
+        current = pending.pop()
+        if current in held or current not in prompt:
+            continue
+        held.add(current)
+        for value in (prompt[current].get("inputs") or {}).values():
+            if (isinstance(value, list) and len(value) == 2
+                    and isinstance(value[0], str) and isinstance(value[1], int)
+                    and value[0] in prompt):
+                pending.append(value[0])
+    return {key: copy.deepcopy(value) for key, value in prompt.items() if key in held}
