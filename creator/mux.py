@@ -55,6 +55,7 @@ frame count and a sample count.
 """
 
 import json
+import math
 from dataclasses import dataclass, field
 from fractions import Fraction
 
@@ -586,59 +587,87 @@ def _mixed(av, waveform, blocks, target):
     return out.clamp_(-1.0, 1.0)
 
 
-def _clip_sound(av, path, spec, start, duration, target):
-    """A supplied clip's soundtrack, at the reel's rate and layout.
+def sound_blocks(av, path, start, duration, rate, layout):
+    """Planar float32 blocks on the requested window's sample clock.
 
-    Resampled by ffmpeg rather than by hand: the rate conversion, the format
-    and — where a source is mono or 5.1 — the channel mix are all things it has
-    correct matrices for and we would be inventing. A clip whose container
-    carries no sound at all comes back empty and is padded to its own length by
-    `_fit`, which is what a silent shot is.
+    Both the reel and the bench use this reading. Concatenating decoded blocks
+    preserves neither an initial delay nor a gap *between* packets: position
+    every resampled block by its own PTS, pad holes, and trim overlaps (the
+    already-written samples win). Silence is streamed in bounded chunks.
     """
     with av.open(path) as container:
         stream = next(iter(container.streams.audio), None)
         if stream is None:
-            return torch.zeros(target.channels, 0)
+            return
         resampler = av.audio.resampler.AudioResampler(
-            format="fltp", layout=target.layout, rate=target.rate)
+            format="fltp", layout=layout, rate=rate)
+        channels = len(av.AudioLayout(layout).channels)
+        origin = Fraction(str(start))
         end = start + duration if duration else None
+        wanted = int(round(duration * rate)) if duration else None
+        timestamp_tick = rate * (stream.time_base or Fraction(1, rate))
+        jitter = math.ceil(timestamp_tick) if timestamp_tick > 1 else 0
         if start:
             container.seek(int(start / stream.time_base), stream=stream)
-        blocks = []
-        # A seek lands on a packet boundary, which is at or *before* the window
-        # — so the first frame kept usually begins early. How early is what
-        # gets dropped off the front, and dropping it is what keeps the sound
-        # in step with a picture that was cut at the frame.
-        began = None
+        cursor = 0
+        placed = False
+
+        def silence(until):
+            nonlocal cursor
+            if wanted is not None:
+                until = min(until, wanted)
+            while cursor < until:
+                count = min(until - cursor, rate)
+                cursor += count
+                yield np.zeros((channels, count), dtype=np.float32)
+
+        def place(block):
+            nonlocal cursor, placed
+            at = (round((block.pts * block.time_base - origin) * rate)
+                  if block.pts is not None and block.time_base else cursor)
+            # Matroska commonly rounds packet PTS to milliseconds while PCM
+            # blocks contain an exact sample count. Within one source tick,
+            # keep the sample clock instead of inserting tiny clicks every
+            # packet. A real gap/delay larger than that still keeps its PTS.
+            if placed and abs(at - cursor) <= jitter:
+                at = cursor
+            data = block.to_ndarray()
+            # Includes samples preceding a fractional trim and duplicated or
+            # overlapping packets; neither is allowed to shift later sound.
+            skip = max(0, cursor - at)
+            if skip >= data.shape[-1]:
+                return
+            at += skip
+            yield from silence(at)
+            count = data.shape[-1] - skip
+            if wanted is not None:
+                count = min(count, wanted - cursor)
+            if count > 0:
+                cursor += count
+                placed = True
+                yield data[..., skip:skip + count]
+
         for frame in container.decode(stream):
             if frame.time is not None:
                 if frame.time + frame.samples / float(frame.sample_rate or 1) <= start:
                     continue
                 if end is not None and frame.time >= end:
                     break
-                if began is None:
-                    began = frame.time
             for out in resampler.resample(frame):
-                blocks.append(torch.from_numpy(out.to_ndarray()))
+                yield from place(out)
         for out in resampler.resample(None):
-            blocks.append(torch.from_numpy(out.to_ndarray()))
+            yield from place(out)
+        if wanted is not None:
+            yield from silence(wanted)
+
+
+def _clip_sound(av, path, spec, start, duration, target):
+    """A supplied clip's timestamped soundtrack, at the reel's rate/layout."""
+    blocks = [torch.from_numpy(block) for block in sound_blocks(
+        av, path, start, duration, target.rate, target.layout)]
     if not blocks:
         return torch.zeros(target.channels, 0)
-    waveform = torch.cat(blocks, dim=-1)
-    # ...and the other way round: sound that begins *after* the window opens
-    # — a track whose first packet sits a second in — used to be laid at the
-    # window's start, a second early, with the missing second padded onto the
-    # end by `_fit`. Its place is where it was in the file (issue #47).
-    offset = (began if began is not None else start) - start
-    if offset < 0:
-        early = int(round(-offset * target.rate))
-        return waveform[..., early:] if early else waveform
-    late = int(round(offset * target.rate))
-    if late:
-        waveform = torch.cat(
-            [torch.zeros(waveform.shape[:-1] + (late,), dtype=waveform.dtype), waveform],
-            dim=-1)
-    return waveform
+    return torch.cat(blocks, dim=-1)
 
 
 def write(path, parts, fps, crf, metadata=None):
