@@ -419,7 +419,8 @@ class Timeline {
       openLibrary: (scope) => openPresetLibrary({ target: this.pieceTarget(), scope })
         .then(() => { this.renderStrip(); this.renderPool(); this.renderCast(); }),
       onBrowse: () => this.addPoolAssets(),
-      onUncited: (handles) => this.dropCitedCast(handles),
+      // No `onUncited`: a name deleted from the standing prompt leaves the
+      // member on the shelf. The shelf's ✕ is what takes them out (#52).
     });
     box.frame.classList.add("mmc-tl-prompt-frame");
     box.frame.addEventListener("pointerdown", (event) => event.stopPropagation());
@@ -873,41 +874,6 @@ class Timeline {
    * drew every one of them as a member built out of a file "not attached here",
    * on a piece where the face beside this window shows their photographs.
    */
-  /**
-   * Names just deleted out of the piece's own prompt: take them off the shelf.
-   *
-   * The shelf's ✕ is one way out of a cast and deleting the name is the other,
-   * and it has to be — the @ menu's roster is how somebody is cast, so the
-   * gesture that put them here is writing their name and the one that takes
-   * them back out is deleting it. They were being left on the shelf, in a piece
-   * that no longer mentions them anywhere.
-   *
-   * Piece-wide, because the cast is: a member the global prompt stops naming is
-   * still in the piece while any card names them. Their sole-claimed pictures go
-   * with them on the shelf's own terms — see `dropAssets` below, which this
-   * borrows by going through the shelf's `remove`.
-   *
-   * The pool is left alone. A pool reference the prompt stops citing is already
-   * not injected into any generation (`compile.cited_pool`), and it stays on the
-   * shelf saying so, which is the readout that band exists for.
-   */
-  dropCitedCast(handles) {
-    const cast = this.timeline.subjects ?? [];
-    const leaving = handles
-      .map((handle) => cast.find((s) => s.handle === handle))
-      .filter(Boolean)
-      .filter((subject) => {
-        // `match` rather than `test`: the pattern is global, and a global regex
-        // tested twice answers from wherever the last test left off.
-        const pattern = S.subjectCitationRe([subject]);
-        return !S.allTexts(this.timeline).some((text) => String(text ?? "").match(pattern));
-      });
-    if (!leaving.length) return;
-    this.renderCast();                       // the shelf owns the removal
-    for (const subject of leaving) this.castShelf.remove(subject);
-    this.render();
-  }
-
   /**
    * A name clicked in the standing prompt: open that member's card on the shelf
    * below, and put it where the eye already is.
@@ -2621,6 +2587,9 @@ class Timeline {
 
   remove(index) {
     this.armed = null;
+    // The cast's pictures first, off the card and into the pool: they are the
+    // members', and the members are staying.
+    S.rescueCastFiles(this.timeline, this.timeline.segments[index]);
     this.timeline.segments.splice(index, 1);
     // A seam that named the removed segment falls back to the previous one;
     // one naming a later segment follows it up a card.

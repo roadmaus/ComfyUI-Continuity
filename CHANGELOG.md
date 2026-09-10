@@ -6,6 +6,19 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**A LoRA's soundtrack slider is saved, "action" sticks, and deleting a name
+no longer deletes the cast.** Three losses from issue #52. The soundtrack
+dial on a LoRA was never written into the piece, so a clone or a reload put
+every one back to full — and the backend only ever saw full. Picking "action"
+for a reference set it to "full": the menu showed the word "action" for the
+stored value "motion", and the pick was matched back against the wrong word.
+And deleting a cast member's name out of a prompt took the member off the
+shelf and the pictures casting them attached off the piece, which a rewrite
+of scene 1 did to the whole cast at once. A member now stays until the
+shelf's ✕ says otherwise; an uncited member costs nothing at queue time.
+Removing the one card a cast's pictures sit on hands them to the pool first
+instead of taking them with the card.
+
 **Kitchen attention reads core's V3 option list again.** ComfyUI moved
 `ModelAttentionBackend` to the V3 API on 2026-09-08, and its `INPUT_TYPES`
 shim now leads with the type name rather than the choices. The pack read that

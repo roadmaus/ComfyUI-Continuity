@@ -1599,6 +1599,10 @@ export function serializeLoras(entries, family = DEFAULT_VIDEO_FAMILY) {
   return entries.map((entry) => {
     const out = { name: entry.name, strength: round2(entry.strength) };
     if (entry.enabled === false) out.enabled = false;
+    // The soundtrack damping, only where it was turned down: full is what an
+    // absent key means to `lora.modality`, and it was never written at all
+    // before this — a clone or a reload put every slider back to 1 (#52).
+    if (Number.isFinite(entry.audio) && entry.audio !== 1) out.audio = round2(entry.audio);
     // The literal words, not a pointer at the sidecar: creator_data has to
     // still say what it means on a machine where that LoRA is missing.
     if (entry.triggers?.length) out.triggers = [...entry.triggers];
@@ -2488,9 +2492,28 @@ function followPromoted(timeline, moved, renamed) {
  * after it.
  */
 function promoteCastFiles(timeline) {
-  const cast = timeline.subjects ?? [];
   const segment = timeline.segments?.[0];
-  if (!cast.length || (timeline.segments?.length ?? 0) < 2 || isClip(segment)) return;
+  if ((timeline.segments?.length ?? 0) < 2 || isClip(segment)) return;
+  moveCastFilesToPool(timeline, segment);
+}
+
+/**
+ * A card about to be removed hands the cast's pictures to the pool first.
+ *
+ * On a one-card piece `collapsePool` keeps the cast's files on the card, so
+ * removing that card used to remove the members' every picture with it while
+ * the members stayed, standing for nothing (#52). The files are the cast's,
+ * not the card's; they go to the pool the same way growing the strip sends
+ * them, and `collapsePool` brings them back onto whatever card is left.
+ */
+export function rescueCastFiles(timeline, segment) {
+  if (!segment || isClip(segment)) return;
+  moveCastFilesToPool(timeline, segment);
+}
+
+function moveCastFilesToPool(timeline, segment) {
+  const cast = timeline.subjects ?? [];
+  if (!cast.length) return;
   const claimed = new Set();
   for (const subject of cast) {
     for (const handle of subjectFiles(subject)) claimed.add(handle);
