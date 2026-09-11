@@ -116,7 +116,10 @@ export const css = `
 .mmc-pill[aria-pressed="true"] { border-color: color-mix(in srgb, var(--mmc-role-motion) 45%, transparent); color: var(--mmc-role-motion); }
 /* The turbo switch: the seed pill's shape — one pill, a big half that throws
    it and a small half that picks what it throws. Both inherit the group's
-   colour so the accelerator blue lights the whole pill, chevron included. */
+   colour so the accelerator blue lights the whole pill, chevron included.
+   The VDN-H3 switch (sampling.js) wears the same two classes: it is the same
+   shape making the same kind of decision, and a second name would be a second
+   place for the shape to drift. */
 .mmc-turbo-main {
   display: flex; align-items: center; gap: 7px; height: 100%; padding: 0 2px 0 8px;
   background: none; border: 0; color: inherit; font-size: calc(13px * var(--mmc-type));

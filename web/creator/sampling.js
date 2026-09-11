@@ -25,6 +25,11 @@ import { lastSeed } from "./seedmemory.js";
 
 export const SEED_CONTROL = ["fixed", "increment", "decrement", "randomize"];
 
+// The VDN stage the switch was last thrown off, so throwing it back on is one
+// press. Per page rather than per piece: the blob holds only the live value,
+// and a stage is this machine's file, not the piece's.
+let lastVdnStage = "";
+
 // Every widget this row draws. The entry point hides exactly these, so a name
 // added here without being added there would render twice — once as a pill and
 // once as the stock widget underneath.
@@ -723,36 +728,56 @@ export function samplingBar({ widgets, value, set, perSegment = false,
   // switch leads them: it is the one that changes the most about the run.
   pills.push(...turbo);
 
-  // VDN-H3, right behind turbo and for the same reason it leads: it changes
-  // what the render *is* — a linear-attention branch and two adapters over
-  // the same H3 weights — where everything after it changes how the render is
-  // arrived at. Gated on the family's declaration rather than on a node
-  // widget: the field lives in the blob alone, and the stage list is asked of
-  // the server when the pill opens, because it is a folder of directories and
-  // a folder fills up. Lit like an accelerator when on: a stage on the row is
-  // not a native render, and that is worth seeing at a glance.
+  // VDN-H3, right behind turbo and in its shape: a big half that throws the
+  // switch and a small half that picks what it throws. It sits here because
+  // it changes what the render *is* — a linear-attention branch and two
+  // adapters over the same H3 weights — where everything after it changes how
+  // the render is arrived at. The stage's name never rides on the pill: like
+  // the turbo file it is a decision made once, the day it was downloaded, and
+  // forty characters of it crowded out the numbers actually being dialled. It
+  // is in the tooltip and in the picker. Gated on the family's declaration
+  // rather than on a node widget: the field lives in the blob alone, and the
+  // stage list is asked of the server when the pill opens, because it is a
+  // folder of directories and a folder fills up.
   const vdnControl = S_widgetsOf(family).find((w) => w.id === "vdn");
   if (vdnControl) {
     const stage = String(value("vdn", vdnControl.default));
     const on = stage !== vdnControl.off;
-    pills.push(el("button", {
-      class: `mmc-pill${on ? " accel-on" : ""}`,
-      title: on
-        ? t("VDN-H3 on — {stage}. Nearby frames keep exact attention and the rest of the shot goes through the linear branch, so the cost grows with length instead of squaring. With turbo on, the stage's own 8-step adapter is used and the turbo file is left off the run.", { stage })
-        : t("VDN-H3 off. On, the shot samples through Video Delta Net — a linear-attention branch over the same H3 weights, from a stage directory under models/vdn. For long shots: under about fifteen latent frames it falls back to plain attention and only costs. Its 8-step adapter follows the turbo switch and replaces the turbo file."),
-      onclick: async (event) => {
-        const anchor = event.currentTarget;
-        const stages = await listVdnStages();
-        openChoicePopover(anchor, {
-          title: t("VDN-H3 stage"),
-          options: [vdnControl.off, ...stages],
-          value: stage,
-          find: true,
-          label: (option) => (option === vdnControl.off ? t("off") : option),
-          onPick: (picked) => set("vdn", picked),
-        });
-      },
-    }, [el("span", { text: on ? t("VDN {stage}", { stage }) : t("VDN off") })]));
+    // What the small half offers to change: the stage on the row, or the one
+    // the switch was last thrown off — so off-and-on is two presses, not a
+    // trip through the picker each time.
+    const known = on ? stage : lastVdnStage;
+    const pick = (anchor) => listVdnStages().then((stages) => openChoicePopover(anchor, {
+      title: t("VDN-H3 stage"),
+      options: stages,
+      value: on ? stage : "",
+      find: true,
+      extra: stages.length ? null : () => el("div", { class: "mmc-pop-note",
+        text: t("No stage under models/vdn yet. A stage is a directory — model_spec.json, linear_branch/ and adapters/ — see the models page in the docs.") }),
+      onPick: (picked) => { lastVdnStage = picked; set("vdn", picked); },
+    }));
+    pills.push(el("div", { class: `mmc-pill mmc-pill-group${on ? " accel-on" : ""}` }, [
+      el("button", {
+        class: "mmc-turbo-main",
+        title: on
+          ? t("VDN-H3 — running on {stage}. Nearby frames keep exact attention and the rest of the shot goes through the linear branch, so the cost grows with length instead of squaring. With turbo on, the stage's own 8-step adapter is used and the turbo file is left off the run. Switching off puts the plain attention back.", { stage })
+          : t("VDN-H3 off. On, the shot samples through Video Delta Net — a linear-attention branch over the same H3 weights, from a stage directory under models/vdn. For long shots: under about fifteen latent frames it falls back to plain attention and only costs. Its 8-step adapter follows the turbo switch and replaces the turbo file."),
+        onclick: async (event) => {
+          if (on) { lastVdnStage = stage; set("vdn", vdnControl.off); return; }
+          if (lastVdnStage) { set("vdn", lastVdnStage); return; }
+          // No stage known yet: the first press is the picking, like turbo's.
+          // One stage on disk is the common case and needs no list.
+          const stages = await listVdnStages();
+          if (stages.length === 1) { lastVdnStage = stages[0]; set("vdn", stages[0]); return; }
+          pick(event.currentTarget);
+        },
+      }, [icon("timeline", 16), el("span", { text: on ? t("vdn") : t("vdn off") })]),
+      ...(known ? [el("button", {
+        class: "mmc-step mmc-turbo-pick",
+        title: t("Pick a different VDN-H3 stage — now {stage}.", { stage: known }),
+        onclick: (event) => pick(event.currentTarget),
+      }, [icon("chevron", 14)])] : []),
+    ]));
   }
 
   if (widgets.block_cache) {
