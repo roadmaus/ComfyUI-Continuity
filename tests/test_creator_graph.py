@@ -66,6 +66,7 @@ accel_mod = importlib.import_module(f"{PACKAGE}.creator.accel")
 tl = importlib.import_module(f"{PACKAGE}.creator.timeline")
 outputs_mod = importlib.import_module(f"{PACKAGE}.creator.outputs")
 settings_mod = importlib.import_module(f"{PACKAGE}.creator.settings")
+vdn_mod = importlib.import_module(f"{PACKAGE}.creator.vdn")
 # The lead-in's core probe lives with H3's hooks now, and patching a re-export
 # would flip a name the emitting code no longer reads.
 h3_render_mod = importlib.import_module(f"{PACKAGE}.creator.families.h3.render")
@@ -986,6 +987,75 @@ try:
               [1, 0])
     finally:
         h3_render_mod.CORE_EMPTY_NOISE_IS_NESTED = core
+finally:
+    settings_mod.turbo_lead_in = was
+
+
+# --- VDN-H3 -------------------------------------------------------------------
+#
+# The one model patch that ships with the pack. Off — every graph above — it
+# emits nothing. On, it is the innermost patch on every generation's model,
+# its turbo adapter follows the row's switch, and under that switch the
+# community distill is out of the piece rather than stacked on the adapter.
+# Nothing here opens a stage: the graph is built, not run, and the node the
+# graph names is registered by hand the way the accelerator fakes are.
+
+comfy_nodes.NODE_CLASS_MAPPINGS[accel_mod.VDN_NODE] = vdn_mod.ContinuityVDN
+
+
+def model_chain(graph, link):
+    """The class types from `link` down to the node that made the model."""
+    chain = []
+    while link is not None:
+        node = graph[link[0]]
+        chain.append(node["class_type"])
+        link = node["inputs"].get("model")
+    return chain
+
+
+VDN_DATA = json.dumps({**json.loads(DATA), "sampling": {"vdn": "stage-x"}})
+staged = build(data=VDN_DATA).expand
+kinds = by_class(staged)
+check("a stage emits one VDN node per generation, on the segment's model",
+      [(i["checkpoint"], i["turbo"], i["model"]) for _, i in kinds[accel_mod.VDN_NODE]],
+      [("stage-x", False, [kinds["MiniMaxH3TimelineSegment"][0][0], 0])])
+check("...and the sampler runs on it",
+      model_chain(staged, kinds["KSampler"][0][1]["model"]),
+      [accel_mod.VDN_NODE, "MiniMaxH3TimelineSegment"])
+check("off is the ordinary graph", accel_mod.VDN_NODE in by_class(build(data=DATA).expand), False)
+
+expect_error("sage and vdn are refused together, by name",
+             lambda: build(data=VDN_DATA, attention="sage").expand, "sage")
+
+# Turbo on: the adapter goes on, the file the switch engaged comes out of every
+# stack, and the lead-in holds the adapter off for its opening sitting with
+# nothing for the segment node to hold.
+VDN_TURBO_DATA = json.dumps({**json.loads(TURBO_DATA), "sampling": {"vdn": "stage-x"}})
+settings_mod.turbo_lead_in = lambda: 2
+try:
+    split = by_class(build(data=VDN_TURBO_DATA, steps=6).expand)
+    segment_id, segment_inputs = split["MiniMaxH3TimelineSegment"][0]
+    check("the turbo file is out of the piece, the rest of the stack stays",
+          [e["name"] for e in json.loads(segment_inputs["segment_data"])["request"]["loras"]],
+          ["look/grain.safetensors"])
+    check("...so the segment node is asked to hold nothing",
+          "hold_lora" in segment_inputs, False)
+    opening, rest = sorted((i for _, i in split["KSamplerAdvanced"]),
+                           key=lambda i: i["start_at_step"])
+    by_id = {nid: i for nid, i in split[accel_mod.VDN_NODE]}
+    check("the opening sitting samples the stage with the adapter held off",
+          (by_id[opening["model"][0]]["turbo"], by_id[opening["model"][0]]["model"]),
+          (False, [segment_id, 3]))
+    check("the rest of the schedule samples it with the adapter on",
+          (by_id[rest["model"][0]]["turbo"], by_id[rest["model"][0]]["model"]),
+          (True, [segment_id, 0]))
+
+    settings_mod.turbo_lead_in = lambda: 0
+    whole = by_class(build(data=VDN_TURBO_DATA, steps=6).expand)
+    check("with the lead-in off, one sampler on the adapter, file still out",
+          ([i["turbo"] for _, i in whole[accel_mod.VDN_NODE]],
+           [e["name"] for e in json.loads(whole["MiniMaxH3TimelineSegment"][0][1]["segment_data"])["request"]["loras"]]),
+          ([True], ["look/grain.safetensors"]))
 finally:
     settings_mod.turbo_lead_in = was
 

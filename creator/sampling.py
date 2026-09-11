@@ -91,6 +91,11 @@ DEFAULTS = {
     "attention": "default",
     "chunk_ffn": False,
     "fp16_accumulation": False,
+    # A VDN-H3 stage under `models/vdn`, or off. A name rather than a choice:
+    # the list is whatever directories are there, and `vdn.checkpoints` is
+    # asked live. A name that is not there is refused where the stage is
+    # opened, by the port, with the folder in the sentence.
+    "vdn": accel.VDN_OFF,
 }
 
 # What each field has to be. Anything else in the blob is refused by name rather
@@ -158,6 +163,11 @@ def resolve(data, widgets):
                                  named="attention" in stored),
             chunk_ffn=pick("chunk_ffn"),
             fp16_accumulation=pick("fp16_accumulation"),
+            vdn=pick("vdn"),
+            # The row's turbo switch, as the stage reads it. Off the blob's
+            # turbo block rather than off the row, because that block is the
+            # switch — see `accel.Settings.vdn_turbo`.
+            vdn_turbo=bool(((data or {}).get("turbo") or {}).get("on")),
         ),
     )
 

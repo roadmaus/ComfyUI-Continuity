@@ -44,6 +44,12 @@ def _widgets():
                  default=d["chunk_ffn"]),
         m.widget("fp16_accumulation", "toggle", label="fp16 accumulation",
                  group="accel", default=d["fp16_accumulation"]),
+        # No options: the list is the stage directories under models/vdn, asked
+        # of `/continuity/vdn` when the pill opens, the way the weights popover
+        # asks for files. `off` is declared so the pill knows when it is lit.
+        m.widget("vdn", "combo", label="VDN-H3", group="accel",
+                 default=d["vdn"], off=accel.VDN_OFF,
+                 help="Video Delta Net over the H3 base: a stage under models/vdn. For long shots — under about fifteen latent frames the port falls back to dense attention."),
     ]
 
 

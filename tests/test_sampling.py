@@ -68,6 +68,24 @@ check("no block: the accelerators come off the widgets", accel_settings.any, Fal
 
 sampler, accel_settings = resolve(None, block_cache="fast", chunk_ffn=True)
 check("no block: the cache comes off the widget", accel_settings.block_cache, "fast")
+check("no block: vdn is off — it has no widget to fall back to",
+      (accel_settings.vdn, accel_settings.vdn_turbo), (sampling.DEFAULTS["vdn"], False))
+
+# ---- VDN-H3 lives in the blob alone -----------------------------------------
+#
+# A stage name, and the row's turbo switch read off the turbo block rather than
+# off a second switch: the stage's adapter *is* the distillation.
+_, staged = sampling.resolve({"sampling": {"vdn": "stage-x"},
+                              "turbo": {"on": True, "lora": "t.safetensors"}}, WIDGETS)
+check("a stage comes off the blob with the switch",
+      (staged.vdn, staged.vdn_turbo), ("stage-x", True))
+_, unswitched = sampling.resolve({"sampling": {"vdn": "stage-x"},
+                                  "turbo": {"on": False, "lora": "t.safetensors"}}, WIDGETS)
+check("the switch off is the 50-step stage", unswitched.vdn_turbo, False)
+_, absent = sampling.resolve({"sampling": {"vdn": "stage-x"}}, WIDGETS)
+check("no turbo block at all is the switch off", absent.vdn_turbo, False)
+expect_error("a stage that is not a name", lambda: resolve({"vdn": 3}), "must be a name")
+expect_error("an empty stage name", lambda: resolve({"vdn": ""}), "must be a name")
 check("no block: chunked ffn comes off the widget", accel_settings.chunk_ffn, True)
 
 # The seed is not in the block and never will be — `control_after_generate` is a

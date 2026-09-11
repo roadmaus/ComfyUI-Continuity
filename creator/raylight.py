@@ -72,6 +72,8 @@ or the lead-in would be a backend nobody could trust a piece to.
 
 from dataclasses import dataclass
 
+from . import accel
+
 # The blob's `backend` values. "default" is this pack sampling on the card
 # ComfyUI picked, which is what every render before this did and what every
 # saved workflow means by having no `backend` at all.
@@ -242,6 +244,12 @@ def refuse_accel(acceleration):
             f"Raylight's own 'MiniMax H3 Block Cache' node in a hand-built "
             f"graph. (It is not wired up here because its thresholds are its "
             f"own and this pack's three presets are not those numbers.)"
+        )
+    if acceleration.vdn != accel.VDN_OFF:
+        raise ValueError(
+            "VDN-H3 patches the model on this side of the wire, and a Ray "
+            "render's model is in the workers. Switch the VDN pill off, or set "
+            "the backend back to single-GPU."
         )
     if acceleration.spectrum:
         raise ValueError(

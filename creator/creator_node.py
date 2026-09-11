@@ -56,7 +56,7 @@ from comfy_api.latest import ComfyExtension, io
 
 from . import (accel, canvas, compile as compiler, guide as guides, job_node,
                media, models, neural, neuralpass, outputs, prestage, redetail,
-               redetailpass, sampling, settings, timeline)
+               redetailpass, sampling, settings, timeline, vdn)
 from .core import emit as loop
 from .families import registry
 from .families.h3 import declare as h3, facepass, hires, seamrestore
@@ -235,6 +235,11 @@ def _render(blob, seed, steps, cfg, sampler_name, scheduler,
     # compiles to exactly what it always did.
     piece = compiler.rendered_piece(data)
     piece = compiler.varied_piece(piece, seed)
+    # The run's context is read off `data` below, for the reason given there;
+    # it is read once more here because the piece it describes may have to
+    # change for it — H3 under VDN-H3 leaves the turbo file out of every stack.
+    run = family.run_context(data)
+    piece = family.piece_for_run(piece, run)
 
     # One payload per pass, and a pass is a run of merged segments — usually one
     # segment long, and on a piece of one shot there is exactly one of each. How
@@ -281,7 +286,7 @@ def _render(blob, seed, steps, cfg, sampler_name, scheduler,
         # change which LoRA is the distillation. Reading the setting here rather
         # than inside `emit` is the same rule the output prefix follows — the
         # file on disk is consulted once per queue, above the graph.
-        run=family.run_context(data),
+        run=run,
         # The upscale backend's own files, read off the blob like the family's
         # and for the same reason: this node is where a blob becomes objects.
         # They belong to no family — ReDetail re-renders an H3 pass through LTX
@@ -374,7 +379,7 @@ class MiniMaxCreatorExtension(ComfyExtension):
         return [MiniMaxH3Creator, MiniMaxH3Timeline, job_node.ContinuityJob,
                 *timeline.NODES, *registry.segment_nodes(),
                 *prestage.NODES, *hires.NODES, *facepass.NODES, *seamrestore.NODES,
-                *redetailpass.NODES, *neuralpass.NODES]
+                *redetailpass.NODES, *neuralpass.NODES, *vdn.NODES]
 
 
 async def comfy_entrypoint() -> MiniMaxCreatorExtension:

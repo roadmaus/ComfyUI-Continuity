@@ -96,6 +96,7 @@ const ROW = {
   shift_video: 6, shift_audio: 4, block_cache: "fast",
   spectrum: true, spectrum_blend: 0.75,
   attention: "sage", chunk_ffn: true, fp16_accumulation: true,
+  vdn: "stage-x",
   // Not a preset's business, and the check below proves it is not carried.
   seed: 4471,
 };

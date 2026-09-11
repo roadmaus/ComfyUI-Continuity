@@ -79,18 +79,36 @@ class LeadIn:
     `lora` is the file the switch engaged. Without one there is nothing to hold
     off — a checkpoint with the distillation merged into the weights has no
     lead-in to give, which is a real answer and not a failure.
+
+    **Under VDN-H3 the distillation is the stage's turbo adapter**, not a file
+    in the stack, and `vdn` says so. Then `lora` is still the file the switch
+    engaged, but its job changes: it is what `without_distill` leaves *out of
+    the piece* for the whole run, because the adapter replaces the community
+    distills rather than stacking on them. The lead-in holds the adapter off
+    instead (`accel.opening`), and the segment node is asked to hold nothing.
     """
 
     steps: int = 0
     lora: str = ""
+    vdn: bool = False
 
     @classmethod
     def of(cls, data):
         """The lead-in this machine asks for, for the piece `data` describes."""
         turbo = data.get("turbo") or {}
-        if not turbo.get("on") or not turbo.get("lora"):
+        if not turbo.get("on"):
+            return cls()
+        if sampling_mod.block(data).get("vdn", accel.VDN_OFF) != accel.VDN_OFF:
+            return cls(steps=settings.turbo_lead_in(),
+                       lora=str(turbo.get("lora") or ""), vdn=True)
+        if not turbo.get("lora"):
             return cls()
         return cls(steps=settings.turbo_lead_in(), lora=str(turbo["lora"]))
+
+    @property
+    def dropped(self):
+        """The distill file a VDN run leaves out of the piece, or ""."""
+        return self.lora if self.vdn else ""
 
     def within(self, sampling, compiled, payload):
         """Whether this payload actually splits — the whole test, in one place.
@@ -102,11 +120,45 @@ class LeadIn:
         not claim). `active_loras` is the same filter the segment node patches
         by, so the two cannot disagree about what is on the model.
         """
-        if self.steps <= 0 or not self.lora or self.steps >= sampling.steps:
+        if self.steps <= 0 or self.steps >= sampling.steps:
+            return False
+        # The adapter goes on with the stage, so under VDN it is on every
+        # generation the stage is — there is no stack to consult.
+        if self.vdn:
+            return True
+        if not self.lora:
             return False
         return any(entry["name"] == self.lora for entry in
                    compiler.active_loras(payload["request"].get("loras"),
                                          compiled.checkpoint))
+
+
+def without_distill(piece, name):
+    """`piece` with the LoRA `name` out of every stack, for a VDN turbo run.
+
+    Not disabled, and not held off by the segment node: gone from the request.
+    The segment node's `hold_lora` would leave the file off one output and
+    patch it onto the other, and on the vendored stack a patch is measured as
+    it goes on — a whole application for a model nothing samples. Dropping it
+    here changes the segment's cache key, which is right: it is a different
+    model. A blank `name` is a run with nothing to drop, and the piece comes
+    back as it was.
+    """
+    if not name:
+        return piece
+
+    def kept(entries):
+        return [entry for entry in (entries or [])
+                if not (isinstance(entry, dict) and entry.get("name") == name)]
+
+    out = dict(piece)
+    if piece.get("loras"):
+        out["loras"] = kept(piece["loras"])
+    if piece.get("segments"):
+        out["segments"] = [dict(segment, loras=kept(segment["loras"]))
+                           if isinstance(segment, dict) and segment.get("loras")
+                           else segment for segment in piece["segments"]]
+    return out
 
 
 def routed(compiled, labels):
@@ -223,6 +275,9 @@ class H3(base.Family):
     def run_context(self, data):
         return LeadIn.of(data)
 
+    def piece_for_run(self, piece, run):
+        return without_distill(piece, run.dropped)
+
     def preflight(self, sampling, acceleration, weights):
         if raylight.enabled(weights):
             # A different set of packs entirely: the accelerator nodes are not
@@ -280,10 +335,13 @@ class H3(base.Family):
             # time — this string is the segment node's cache key.
             "segment_data": json.dumps(payload, sort_keys=True),
         }
-        if splits:
+        if splits and not run.vdn:
             # Only when it is in play: an input the graph does not write is an
             # input the segment node's cache key does not carry, so a render
-            # without a lead-in keeps the key it had before this existed.
+            # without a lead-in keeps the key it had before this existed. Under
+            # VDN there is no file to hold — the adapter is held off by
+            # `accel.opening` — and the distill file is already out of the
+            # piece, so the lead model is the first output, unpatched twice.
             inputs["hold_lora"] = run.lora
         # The VAEs are wired into the encoder only when this segment actually
         # encodes with them — a keyframe or a sound seam. A text-only segment
@@ -480,11 +538,12 @@ class H3(base.Family):
             # they have already paid for, and there are two forwards here to
             # reuse — they would be caching the exact steps this feature exists
             # to run properly. Sage stays: it makes one attention call cheaper
-            # and skips nothing.
+            # and skips nothing. Under VDN the stage's turbo adapter is what
+            # is held off, and `opening` is where that is said.
             opening = graph.node(
                 "KSamplerAdvanced",
                 model=patched(graph, segment.out(3), sampling,
-                              accel.uncached(acceleration), weights),
+                              accel.opening(acceleration), weights),
                 latent_image=segment.out(2),
                 add_noise="enable", noise_seed=seed,
                 start_at_step=0, end_at_step=run.steps,

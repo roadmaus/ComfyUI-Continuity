@@ -20,7 +20,7 @@ import { el, icon } from "./dom.js";
 import { t } from "./i18n.js";
 import { openChoicePopover, stepperPill, pillSet, pillClass, accelClass } from "./pills.js";
 import { DEFAULT_VIDEO_FAMILY, widgetsOf as S_widgetsOf } from "./state.js";
-import { uiSetting } from "./api.js";
+import { listVdnStages, uiSetting } from "./api.js";
 import { lastSeed } from "./seedmemory.js";
 
 export const SEED_CONTROL = ["fixed", "increment", "decrement", "randomize"];
@@ -722,6 +722,38 @@ export function samplingBar({ widgets, value, set, perSegment = false,
   // native render, which is worth being able to see at a glance. The turbo
   // switch leads them: it is the one that changes the most about the run.
   pills.push(...turbo);
+
+  // VDN-H3, right behind turbo and for the same reason it leads: it changes
+  // what the render *is* — a linear-attention branch and two adapters over
+  // the same H3 weights — where everything after it changes how the render is
+  // arrived at. Gated on the family's declaration rather than on a node
+  // widget: the field lives in the blob alone, and the stage list is asked of
+  // the server when the pill opens, because it is a folder of directories and
+  // a folder fills up. Lit like an accelerator when on: a stage on the row is
+  // not a native render, and that is worth seeing at a glance.
+  const vdnControl = S_widgetsOf(family).find((w) => w.id === "vdn");
+  if (vdnControl) {
+    const stage = String(value("vdn", vdnControl.default));
+    const on = stage !== vdnControl.off;
+    pills.push(el("button", {
+      class: `mmc-pill${on ? " accel-on" : ""}`,
+      title: on
+        ? t("VDN-H3 on — {stage}. Nearby frames keep exact attention and the rest of the shot goes through the linear branch, so the cost grows with length instead of squaring. With turbo on, the stage's own 8-step adapter is used and the turbo file is left off the run.", { stage })
+        : t("VDN-H3 off. On, the shot samples through Video Delta Net — a linear-attention branch over the same H3 weights, from a stage directory under models/vdn. For long shots: under about fifteen latent frames it falls back to plain attention and only costs. Its 8-step adapter follows the turbo switch and replaces the turbo file."),
+      onclick: async (event) => {
+        const anchor = event.currentTarget;
+        const stages = await listVdnStages();
+        openChoicePopover(anchor, {
+          title: t("VDN-H3 stage"),
+          options: [vdnControl.off, ...stages],
+          value: stage,
+          find: true,
+          label: (option) => (option === vdnControl.off ? t("off") : option),
+          onPick: (picked) => set("vdn", picked),
+        });
+      },
+    }, [el("span", { text: on ? t("VDN {stage}", { stage }) : t("VDN off") })]));
+  }
 
   if (widgets.block_cache) {
     const options = widgets.block_cache.options?.values || [];

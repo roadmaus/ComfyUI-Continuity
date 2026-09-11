@@ -79,6 +79,7 @@ MODULES = {
     # A package rather than a module: the vendored MLX-DLSS copy, imported as
     # one so its own relative imports resolve.
     "mlxdlss": "mlxdlss",
+    "vdnh3": "vdnh3",
 }
 
 

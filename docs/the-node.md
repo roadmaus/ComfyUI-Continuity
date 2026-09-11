@@ -209,6 +209,18 @@ re-render.
 - **Faces** runs a second small generation per pass: each face is tracked,
   cropped, re-drawn at 512 px and pasted back under a feathered mask. Needs
   the SAM 3 checkpoint.
+- **VDN-H3** samples the shot through Video Delta Net: nearby frames keep
+  exact attention and the rest of the shot goes through a linear-attention
+  branch, so the cost grows with the length of a shot instead of squaring.
+  Pick a stage from `models/vdn` (see [models](models.md)); the port that runs
+  it ships with the pack. It is for long shots — under about fifteen latent
+  frames it falls back to plain attention and only costs — and it is slower per
+  step than the int8 attention routes, so a strip of two-second cards gains
+  nothing from it and a strip of fifteen-second ones does. With turbo on, the
+  stage's own 8-step adapter is used and the turbo file is left off the run;
+  the turbo lead-in then holds that adapter off for its opening steps. Does not
+  combine with sage attention (both replace the same forward); kitchen
+  attention, the caches, Spectrum and low vram compose.
 - Accelerator pills (caches, sage attention, low vram, and so on) appear when
   the matching optional pack is installed. All caches trade fidelity for
   speed, so A/B against a native render before trusting one on a final piece.

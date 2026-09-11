@@ -92,6 +92,12 @@ class Family:
         through unread. H3's is the turbo lead-in; most families have none."""
         return None
 
+    def piece_for_run(self, piece, run):
+        """The piece as this run's weights want it — H3 under VDN-H3 drops the
+        community distill the stage's own adapter replaces. Everyone else
+        renders the piece as it stands."""
+        return piece
+
     def preflight(self, sampling, acceleration, weights):
         """Raise for a run that cannot happen — before anything compiles.
 

@@ -656,6 +656,10 @@ for switch, value, fragment in (
                  lambda switch=switch, value=value: build(**{switch: value}),
                  fragment)
 
+# VDN-H3 lives in the blob rather than on a widget, and is refused the same way.
+expect_error("the VDN stage is refused rather than dropped",
+             lambda: build(data=blob(sampling={"vdn": "stage-x"})), "VDN-H3")
+
 # Sage is the one that survives, because Raylight picks its own kernel and the
 # fork's list says which name to ask for.
 saged = by_class(build(attention="sage").expand)

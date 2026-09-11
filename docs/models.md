@@ -40,6 +40,24 @@ switch on the sampler row finds them there.
 Optional: [`taeh3.safetensors`](https://github.com/madebyollin/taehv/blob/main/safetensors/taeh3.safetensors)
 in `vae_approx` gives H3 a properly decoded live preview.
 
+Optional: a **VDN-H3 stage** for the sampler row's VDN pill. A stage is a
+directory, not a file, and it goes under `models/vdn/` with its layout intact
+(`model_spec.json`, `linear_branch/`, `adapters/`). The bf16 release is
+[OpenVDN/vdn-minimax-h3](https://huggingface.co/OpenVDN/vdn-minimax-h3)
+(`stage-dmd-step-250/` is the 8-step model, `stage-b-step-2000/` the 50-step
+one); the INT8 ConvRot repack of the 8-step stage at
+[drbaph/vdn-minimax-h3-int8-convrot-comfyui](https://huggingface.co/drbaph/vdn-minimax-h3-int8-convrot-comfyui)
+is half the size with identical output and is the one to take on 24 GB and
+below:
+
+```bash
+hf download drbaph/vdn-minimax-h3-int8-convrot-comfyui --local-dir ComfyUI/models/vdn/vdn-minimax-h3-int8-convrot-comfyui
+```
+
+The directory name is what the pill lists. A stage is branch weights and two
+adapters over the H3 checkpoints you already have, not a base of its own, and
+the weights are under the MiniMax H3 Community License — read it first.
+
 ## LTX 2.5 (video with sound)
 
 From [Lightricks/LTX-2.5](https://huggingface.co/Lightricks/LTX-2.5):

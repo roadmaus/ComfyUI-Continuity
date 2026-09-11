@@ -354,6 +354,30 @@ export async function listModels({ force = false } = {}) {
   return modelsInFlight;
 }
 
+let vdnAt = 0;
+let vdnCache = null;
+let vdnInFlight = null;
+
+/** The VDN-H3 stages under models/vdn — directory names, so the model listing
+ *  cannot answer this. Cached like it and for the same reason: a stage is
+ *  downloaded once, and the answer sits behind a pill you have to open. */
+export async function listVdnStages({ force = false } = {}) {
+  if (!force && vdnCache && Date.now() - vdnAt < 60000) return vdnCache;
+  if (!force && vdnInFlight) return vdnInFlight;
+  vdnInFlight = (async () => {
+    try {
+      const response = await api.fetchApi("/continuity/vdn");
+      if (!response.ok) throw new Error(t("VDN stage listing failed ({status})", { status: response.status }));
+      vdnCache = (await response.json()).checkpoints || [];
+      vdnAt = Date.now();
+      return vdnCache;
+    } finally {
+      vdnInFlight = null;
+    }
+  })();
+  return vdnInFlight;
+}
+
 /** Core's /view, pointed at output rather than input — how a finished render is
  *  played back in the node body. Takes a `SavedResult` verbatim, which is what
  *  the `executed` message carries. */

@@ -71,7 +71,16 @@ at the settings its author recommends. So `node_defaults` reads them back off th
 installed class's own `INPUT_TYPES`, and this module only names the handful it
 actually overrides. A pack that gains a knob gets its own default for it.
 
-**Order is `attention -> chunked ffn -> torch settings -> block cache ->
+**VDN-H3 is the exception to "wired in", and goes on first.** It is not an
+accelerator but a model — OpenVDN's linear-attention branch and adapters over
+the same H3 base, which is why its port travels with the pack (`vdnh3/`) rather
+than being looked up in the registry. It owns each block's `attn.forward` by
+object patch, so it is innermost: everything below wraps a model whose
+attention is already the hybrid. Sage patches the same key — whichever went on
+last would silently win — so the pair is refused by name; kitchen goes through
+`optimized_attention_override` and composes. See `vdn.py`.
+
+**Order is `vdn -> attention -> chunked ffn -> torch settings -> block cache ->
 spectrum -> sampler`**,
 which is the packs' own advice: FirstBlockCache refuses to sit downstream of
 another DiT block replacement, and Spectrum documents itself as the last patch
@@ -94,6 +103,12 @@ SAGE_NODE = "MiniMaxH3MemoryEfficientSageAttentionPatch"
 KITCHEN_NODE = "ModelAttentionBackend"
 CHUNK_FFN_NODE = "MiniMaxChunkFeedForward"
 TORCH_SETTINGS_NODE = "ModelPatchTorchSettings"
+VDN_NODE = "ContinuityVDN"
+
+# What the `vdn` field holds when no stage is picked. Every other value is a
+# stage directory's name under `models/vdn`, and the list of those is asked
+# live (`vdn.checkpoints`) rather than written into a widget.
+VDN_OFF = "off"
 
 # What core's node calls the kernel. Matched against the options the installed
 # class actually offers rather than passed blind: `ModelAttentionBackend` leaves
@@ -114,6 +129,9 @@ SOURCES = {
     KITCHEN_NODE: "ComfyUI core (comfy_extras/nodes_model_advanced.py) — update ComfyUI",
     CHUNK_FFN_NODE: "https://github.com/kijai/ComfyUI-KJNodes",
     TORCH_SETTINGS_NODE: "https://github.com/kijai/ComfyUI-KJNodes",
+    # Ours. Missing means the pack itself failed to register, which a restart
+    # and the console's IMPORT FAILED line will say more about than this can.
+    VDN_NODE: "this pack itself (creator/vdn.py) — check ComfyUI's log for an import failure",
 }
 
 # What the `attention` widget offers. One backend at a time, because a model has
@@ -149,12 +167,19 @@ class Settings:
     attention: str = "default"
     chunk_ffn: bool = False
     fp16_accumulation: bool = False
+    # A VDN stage's directory name, or `VDN_OFF`. `vdn_turbo` is the row's
+    # turbo switch as the stage sees it: on, the stage's 8-step adapter goes on
+    # beside the stage-B one. Read off the turbo block rather than off a
+    # second switch, because the stage's adapter *is* the distillation and two
+    # switches for one decision would let them disagree.
+    vdn: str = VDN_OFF
+    vdn_turbo: bool = False
 
     @property
     def any(self):
         return (self.block_cache != "off" or self.spectrum
                 or self.attention != "default" or self.chunk_ffn
-                or self.fp16_accumulation)
+                or self.fp16_accumulation or self.vdn != VDN_OFF)
 
 
 def uncached(settings):
@@ -167,6 +192,18 @@ def uncached(settings):
     every step still runs.
     """
     return replace(settings, block_cache="off", spectrum=False)
+
+
+def opening(settings):
+    """`settings` for a turbo lead-in's opening sitting.
+
+    The caches off, as `uncached` says — and VDN's turbo adapter held off the
+    stage, because under VDN the adapter is the distillation. Holding a LoRA
+    file off is the segment node's job (`hold_lora`); holding the adapter off
+    is this one's, since the adapter goes on with the stage rather than with
+    the LoRA stack.
+    """
+    return replace(uncached(settings), vdn_turbo=False)
 
 
 def _node_class(node_id):
@@ -301,9 +338,22 @@ def plan(settings, sampler_steps=None):
         raise ValueError(
             f"unknown attention backend {settings.attention!r} — "
             f"this build offers {ATTENTION_MODES}")
+    if settings.vdn != VDN_OFF and settings.attention == "sage":
+        raise ValueError(
+            "VDN-H3 and sage attention both replace each block's attention "
+            "forward, so one of them would silently be dropped. Set attention "
+            "to 'default' or 'kitchen' — the port keeps its windows on exact "
+            "attention either way — or switch VDN off.")
     steps = []
-    # First, so everything downstream wraps a model whose attention is already
-    # quantized. Kijai's node has no inputs but `model` — there is no tuning
+    # Before everything: the hybrid attention is the model the rest of the row
+    # is applied to. Ours, so the two inputs are ours to name and there is no
+    # tuning to read back.
+    if settings.vdn != VDN_OFF:
+        _require(VDN_NODE)
+        steps.append((VDN_NODE, {"checkpoint": settings.vdn,
+                                 "turbo": bool(settings.vdn_turbo)}))
+    # Then the attention, so everything downstream wraps a model whose attention
+    # is already quantized. Kijai's node has no inputs but `model` — there is no tuning
     # there to go stale, and `node_defaults` correctly returns nothing for it.
     if settings.attention == "sage":
         steps.append((SAGE_NODE, node_defaults(_require(SAGE_NODE))))

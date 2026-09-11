@@ -35,7 +35,7 @@ import folder_paths
 from server import PromptServer
 
 from . import (compile as compiler, jobs, latents, lorameta, media, models, plate,
-               preview, settings)
+               preview, settings, vdn)
 
 # The picker builds its grid lazily and paginates, so the cap only bounds the
 # listing's JSON payload (~2 MB at this size). Newest first, so when a folder
@@ -588,6 +588,21 @@ async def list_models(request):
     # the websocket held up behind it.
     loop = asyncio.get_running_loop()
     return web.json_response(await loop.run_in_executor(None, models.available))
+
+
+@PromptServer.instance.routes.get("/continuity/vdn")
+async def list_vdn(request):
+    """The VDN-H3 stages under `models/vdn`, for the sampler row's pill.
+
+    Directories rather than files, which is why the weights listing cannot
+    answer this — and asked when the pill opens rather than written into the
+    manifest, so a stage downloaded after boot is offered without a restart.
+    Off the event loop for the same reason `/continuity/models` is: it walks
+    a model directory.
+    """
+    loop = asyncio.get_running_loop()
+    names = await loop.run_in_executor(None, vdn.checkpoints)
+    return web.json_response({"checkpoints": names})
 
 
 @PromptServer.instance.routes.get("/continuity/assets")

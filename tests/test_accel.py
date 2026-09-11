@@ -258,9 +258,25 @@ class FakeTorchSettings:
         return (("torch_settings", model, tuple(sorted(kwargs.items()))),)
 
 
+class FakeVDN:
+    """`ContinuityVDN`, ours — a V3 node with two inputs of our own naming."""
+
+    FUNCTION = "EXECUTE_NORMALIZED"
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {"required": {"model": ["MODEL", {}], "checkpoint": ["STRING", {}],
+                             "turbo": ["BOOLEAN", {"default": False}]}}
+
+    def EXECUTE_NORMALIZED(self, model, **kwargs):
+        return (("vdn", model, tuple(sorted(kwargs.items()))),)
+
+
 def install(*, block_cache=True, spectrum=True, easycache=True, teacache=True, sage=True,
-            kitchen=True, chunk_ffn=True, torch_settings=True):
+            kitchen=True, chunk_ffn=True, torch_settings=True, vdn=True):
     NODES.NODE_CLASS_MAPPINGS = {}
+    if vdn:
+        NODES.NODE_CLASS_MAPPINGS[accel.VDN_NODE] = FakeVDN
     if block_cache:
         NODES.NODE_CLASS_MAPPINGS[accel.BLOCK_CACHE_NODE] = FakeBlockCache
     if spectrum:
@@ -494,6 +510,40 @@ check("the lead-in drops the caches",
       (kept.block_cache, kept.spectrum), ("off", False))
 check("the lead-in keeps everything that skips nothing",
       (kept.attention, kept.chunk_ffn, kept.fp16_accumulation), ("sage", True, True))
+
+# ---- VDN-H3 -----------------------------------------------------------------
+#
+# Not an accelerator but a model, and the one patch that ships with the pack.
+# It goes on first, its turbo adapter follows the row's switch, and the lead-in
+# holds the adapter off the way it holds a LoRA file off.
+
+install()
+check("vdn is off by default", accel.Settings().vdn, accel.VDN_OFF)
+check("a stage alone counts as a non-native render", accel.Settings(vdn="stage-x").any, True)
+check("off plans nothing", accel.plan(accel.Settings(vdn=accel.VDN_OFF)), [])
+staged = accel.plan(accel.Settings(vdn="stage-x", vdn_turbo=True))
+check("a stage plans our node with the stage and the switch",
+      staged, [(accel.VDN_NODE, {"checkpoint": "stage-x", "turbo": True})])
+check("the adapter follows the switch",
+      accel.plan(accel.Settings(vdn="stage-x"))[0][1]["turbo"], False)
+check("vdn goes on before everything that reads the attention",
+      [n for n, _ in accel.plan(accel.Settings(vdn="stage-x", attention="kitchen",
+                                               chunk_ffn=True, block_cache="fast",
+                                               spectrum=True))],
+      [accel.VDN_NODE, accel.KITCHEN_NODE, accel.CHUNK_FFN_NODE,
+       accel.BLOCK_CACHE_NODE, accel.SPECTRUM_NODE])
+expect_error("sage and vdn own the same forward and are refused together",
+             lambda: accel.plan(accel.Settings(vdn="stage-x", attention="sage")), "sage")
+held = accel.opening(accel.Settings(vdn="stage-x", vdn_turbo=True, block_cache="fast",
+                                    attention="kitchen"))
+check("the opening sitting holds the adapter off and the caches off, keeps the stage",
+      (held.vdn, held.vdn_turbo, held.block_cache, held.attention),
+      ("stage-x", False, "off", "kitchen"))
+check("uncached alone leaves the adapter where the switch put it",
+      accel.uncached(accel.Settings(vdn="stage-x", vdn_turbo=True)).vdn_turbo, True)
+install(vdn=False)
+expect_error("our own node missing names the pack",
+             lambda: accel.plan(accel.Settings(vdn="stage-x")), "creator/vdn.py")
 
 # ---- ordering ---------------------------------------------------------------
 

@@ -6,6 +6,35 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**VDN-H3 on the sampler row.** A pill picks a Video Delta Net stage from
+`models/vdn` and the shot samples through OpenVDN's hybrid attention: nearby
+frames keep exact softmax attention inside a window, everything further away
+goes through a linear-attention branch whose cost is constant in clip length,
+and two adapters ride on the same H3 checkpoints you already have. The port
+that runs it — Saganaki22's ComfyUI-VDN-H3, Apache-2.0 — travels with the pack
+the way the LoRA stack and the DLSS port do (`creator/vdnh3/`, re-synced by
+`tools/vendor_vdnh3.py`), so there is nothing to install beyond the stage; the
+stage list is asked of the server when the pill opens, so a download after
+boot is offered without a restart. One knob, the stage: the adapters merge,
+the branch weights are placed by free VRAM and the softmax runs grouped, which
+is what upstream validated the release on.
+It is for long shots. Under about fifteen latent frames the window covers the
+whole clip and the port falls back to dense attention, so a strip of
+two-second cards pays for the adapters and gains nothing, and every step is
+dearer than the int8 attention routes; a strip of fifteen-second shots is
+where it pays. The stage's `turbo` adapter is the 8-step distillation and it
+replaces the community turbo LoRAs rather than stacking on them, so it follows
+the row's turbo switch: on, the distill file the switch engaged is left out of
+every stack for the run, and the turbo lead-in holds the adapter off for its
+opening steps the way it held the file off. The VDN patch goes on first,
+innermost, since it owns each block's attention forward; sage attention
+patches the same key and the pair is refused by name, while kitchen attention,
+the caches, Spectrum and the chunked feed-forward compose. Refused on a
+Raylight render like every other patch on this side of the wire. Nothing has
+been rendered with it from this pack yet: the graph is tested, the vendored
+math is tested against upstream's fold, and the first fifteen-second segment
+at both resolutions is the next thing to measure.
+
 **`{day|night}` in a prompt is a choice the seed makes.** Braces holding
 alternatives separated by bars turn one prompt into many videos: every render
 picks one alternative from each group, the same seed picks the same ones, and
