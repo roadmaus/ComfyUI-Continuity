@@ -316,7 +316,8 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
         cond, latent = encoder.encode(
             clip, vae, audio_vae, compiled, loaded,
             {"vae": vae_name, "audio_vae": audio_vae_name},
-            sound=payload.get("sound"))
+            sound=payload.get("sound"),
+            masked_seam=payload.get("seam_road") == "masked")
         return io.NodeOutput(model, cond, latent, model if lead is None else lead)
 
 

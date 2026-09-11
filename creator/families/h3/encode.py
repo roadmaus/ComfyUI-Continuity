@@ -57,6 +57,10 @@ PREV_LATENT = "__prev_latent__"
 # Where the first pass's latent arrives on a levelled seam — the statistics the
 # inherited run is pulled back to before it is pinned. See `_level`.
 ANCHOR_LATENT = "__anchor_latent__"
+# The inherited run on the masked road, already sliced and fitted: it is
+# written into the target latent by `_masked_prefix` and the head seam pins no
+# guides for it. Set by `encode`, read by `_inherited_run`.
+MASKED_RUN = "__masked_run__"
 
 # Where time is on an H3 audio latent, and the rate its VAE is assumed to run at
 # when it does not name one. `_empty_av_latent` builds `[B, 32, 2, audio_t]`, so
@@ -368,6 +372,16 @@ def _context_keyframes(vae, tail, feather, at=0):
 
 
 def _context_slice(latent, feather, width, height, anchor=None):
+    """The inherited run off the source pass's latent as pinned guides, or None.
+
+    `_context_run` does the slicing; this pins it. See there for when it is
+    None.
+    """
+    run = _context_run(latent, feather, width, height, anchor)
+    return None if run is None else _pinned_run(run, feather, 0)
+
+
+def _context_run(latent, feather, width, height, anchor=None):
     """The inherited run sliced off the source pass's own latent, or None.
 
     The same pinned guides `_context_keyframes` builds, taken from the tail of
@@ -408,7 +422,53 @@ def _context_slice(latent, feather, width, height, anchor=None):
             run = _level(run.float(), reference[:, :, -steps:].float().to(run.device))
         else:
             logging.info("[MiniMax] seam: the anchor pass is shorter than the run; not levelled")
-    return _pinned_run(run, feather, 0)
+    return run
+
+
+def _masked_prefix(latent, run):
+    """`run` written over the head of the target latent, held by a noise mask.
+
+    The third road. The other two hand the run to the model as guides: pinned
+    conditioning the sampler is asked to agree with while it generates fresh
+    tokens from noise over the same frames. This one makes the run the target's
+    own first steps — the numbers the last pass ended on *are* the numbers this
+    pass starts on — and marks them 0 in core's `noise_mask`, which the sampler
+    reads as "keep these, denoise the rest" (`samplers.KSamplerX0Inpaint`,
+    `MiniMaxH3.scale_latent_inpaint`). Attention over the protected steps is
+    attention over the real tokens at their real positions, and the join
+    inside the feather is the same latent on both sides of it.
+
+    The reel node trims `feather` frames off the head of every blended pass, so
+    what this writes is never delivered twice; it is the overlap, as it always
+    was, now made of the source's own tokens.
+
+    Video only. The seam's sound still rides as a reference block
+    (`_seam_audio`): a 22-frame feather is 36⅔ audio ticks, off the 40 Hz
+    grid, and a protected audio prefix that ends between two ticks would be a
+    click at every seam. The audio half of the mask stays ones, and
+    `audiolatent.apply_av` keeps this video half when a sound lane adds its own.
+    """
+    import comfy.nested_tensor
+
+    video, audio = latent["samples"].unbind()
+    steps = int(run.shape[2])
+    if steps >= int(video.shape[2]):
+        raise ValueError(
+            f"the inherited run is {steps} latent steps and the target only "
+            f"{int(video.shape[2])} — a seam cannot be the whole shot")
+    video = video.clone()
+    video[:, :, :steps] = run.to(device=video.device, dtype=video.dtype)
+    video_mask = torch.ones_like(video)
+    video_mask[:, :, :steps] = 0.0
+    existing = latent.get("noise_mask")
+    audio_mask = existing.unbind()[1] if existing is not None and existing.is_nested \
+        else torch.ones_like(audio)
+    logging.info("[MiniMax] seam: the inherited run is the target's first %d steps, masked", steps)
+    return {
+        **latent,
+        "samples": comfy.nested_tensor.NestedTensor((video, audio)),
+        "noise_mask": comfy.nested_tensor.NestedTensor((video_mask, audio_mask)),
+    }
 
 
 def _video(latent):
@@ -456,6 +516,10 @@ def _inherited_run(vae, compiled, loaded, tail):
     """The head seam's run as pinned guides: off the latent when one reached
     this segment and fits its canvas, off the pixels otherwise. Levelled to the
     anchor first when one rode along (`_level`)."""
+    if MASKED_RUN in loaded:
+        # The run is in the latent already (`_masked_prefix`); pinning it as
+        # well would be two statements of the same frames, one of them noise.
+        return []
     latent = loaded.get(PREV_LATENT, {}).get("latent")
     if latent is not None:
         guides = _context_slice(latent, compiled.feather, compiled.width, compiled.height,
@@ -507,8 +571,15 @@ def _seam_blocks(audio_vae, compiled, loaded, frame_count):
     return blocks
 
 
-def encode(clip, vae, audio_vae, compiled, loaded, checkpoints=None, sound=None):
+def encode(clip, vae, audio_vae, compiled, loaded, checkpoints=None, sound=None,
+           masked_seam=False):
     """-> (conditioning, latent). `loaded` maps asset handle -> decoded media.
+
+    `masked_seam` is the third seam road (`settings.seam_handoff = "masked"`):
+    the inherited run becomes the target latent's own head under a noise mask
+    rather than pinned guides — `_masked_prefix`. Only where the run fits this
+    canvas; otherwise the seam falls back to the guides, as the latent road
+    does, and says so in the log.
 
     `checkpoints` names the VAE files on `vae` and `audio_vae`, for the
     reference cache to key on — `{"vae": ..., "audio_vae": ...}`. Names rather
@@ -528,11 +599,21 @@ def encode(clip, vae, audio_vae, compiled, loaded, checkpoints=None, sound=None)
     out of the denoise. A piece may carry both: "this is the music, and the
     voice should sound like that" is a coherent thing to ask for.
     """
+    inherited = loaded.get(PREV_LATENT, {}).get("latent")
+    if masked_seam and compiled.continues and compiled.feather > 1 and inherited is not None:
+        run = _context_run(inherited, compiled.feather, compiled.width, compiled.height)
+        if run is not None:
+            loaded = {**loaded, MASKED_RUN: {"latent": run}}
+        else:
+            logging.info("[MiniMax] seam: the inherited latent does not fit this "
+                         "canvas; the masked road falls back to pinned guides")
     if compiled.mode == "REF2VA":
         cond, latent = _encode_references(clip, vae, audio_vae, compiled, loaded,
                                           checkpoints or {})
     else:
         cond, latent = _encode_frames(clip, vae, audio_vae, compiled, loaded)
+    if MASKED_RUN in loaded:
+        latent = _masked_prefix(latent, loaded[MASKED_RUN]["latent"])
     return cond, audiolatent.apply_av(latent, audio_vae, sound or [],
                                       compiled.frames, AUDIO_LAYOUT)
 

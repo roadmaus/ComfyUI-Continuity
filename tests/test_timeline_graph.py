@@ -770,6 +770,38 @@ check("the seam handoff is part of the node's cache key",
 check("the latent road wires no anchor",
       any("anchor_latent" in n["inputs"] for n in feathered.values()), False)
 
+# Masked: the run rides on `prev_latent` as on the latent road, and the
+# segment's payload says which road, so the node caches on it. Only that
+# payload changes; the graph is otherwise the latent road's, and the latent
+# road's payloads never carry the key.
+_settings.seam_handoff = lambda: "masked"
+try:
+    _masked = build(blob(audio_tail_s=2.0, segments=[
+        {"prompt": "one", "duration_s": 5},
+        {"prompt": "two", "duration_s": 5, "continue": True, "continue_audio": True,
+         "feather": 22},
+        {"prompt": "three", "duration_s": 5, "continue": True},
+    ])).expand
+finally:
+    _settings.seam_handoff = _was
+_masked_segments = in_order([(n_id, n["inputs"]) for n_id, n in _masked.items()
+                             if n["class_type"] == "MiniMaxH3TimelineSegment"],
+                            ["one", "two", "three"])
+check("the masked road hands the blended seam its latent",
+      _masked[_masked_segments[1][1]["prev_latent"][0]]["class_type"],
+      feathered[fchain[1][1]["prev_latent"][0]]["class_type"])
+check("...and names the road in that segment's payload",
+      json.loads(_masked_segments[1][1]["segment_data"]).get("seam_road"), "masked")
+check("...not in the first's, which has no seam",
+      "seam_road" in json.loads(_masked_segments[0][1]["segment_data"]), False)
+check("...nor the classic seam's, which pins a frame",
+      "seam_road" in json.loads(_masked_segments[2][1]["segment_data"]), False)
+check("the latent road's payloads never carry it",
+      any("seam_road" in json.loads(n["inputs"]["segment_data"]) for n in feathered.values()
+          if n["class_type"] == "MiniMaxH3TimelineSegment"), False)
+check("the masked road wires no anchor",
+      any("anchor_latent" in n["inputs"] for n in _masked.values()), False)
+
 # Levelled: every blended seam past the first also gets the first pass's latent
 # to level against. Not the seam off the first pass itself — its source *is* the
 # anchor, and levelling a run to its own statistics is the identity.

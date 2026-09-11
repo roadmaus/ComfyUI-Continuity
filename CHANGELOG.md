@@ -6,6 +6,23 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**A fourth seam road: the latent, masked.** The three roads so far all hand
+the inherited run to the model as pinned guides over a fresh latent, and the
+measured cost of that is a step at every hop. `seam_handoff: "masked"` writes
+the run sliced off the source pass's latent into the next pass's own first
+steps and holds them there with core's noise mask, so the model continues the
+tokens it made rather than generating new ones under guidance — the mechanism
+ComfyUI added for H3 in August, and the one the pack linked from issue #50
+chains with. Picture only: the seam's sound still crosses as a reference
+block, since a 22-frame feather does not land on the 40 Hz audio grid.
+Measured on an 8-hop turbo strip: the brightness step at each cut goes from
++2.86 on the latent road to -0.11, end to end from +24 to under +2, and each
+pass samples in about half the time because no guide tokens ride in the
+sequence. Off by default for now, because with a turbo lead-in the two-sitting
+sampler loses the prefix and the step comes back worse (+6.5); that handover
+is the open item. Where the run does not fit the canvas, the seam falls back
+to the guides as the latent road does.
+
 **A LoRA's soundtrack slider is saved, "action" sticks, and deleting a name
 no longer deletes the cast.** Three losses from issue #52. The soundtrack
 dial on a LoRA was never written into the piece, so a clone or a reload put

@@ -353,6 +353,13 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
             seams["prev_image"] = frames
             if handoff is not None:
                 seams["prev_latent"] = handoff
+                # Masked: the segment writes the run into its own latent
+                # instead of pinning it as guides. Said in the payload rather
+                # than read off the settings file by the node, so the road is
+                # part of what the node caches on; only on this road, so the
+                # others' payloads stay byte-identical to what they were.
+                if handing == "masked":
+                    payloads[index]["seam_road"] = "masked"
                 # Levelled: the first pass's latent rides along as the anchor,
                 # and the segment pulls the slice back to its statistics before
                 # pinning (`encode._level`). Not on the seam off the first pass
