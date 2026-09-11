@@ -1213,8 +1213,11 @@ export class CastShelf {
    *  have one voice, and one way of moving. */
   setRole(subject, handle, current, next) {
     if (current === next) return;
-    this.clearRole(subject, handle, current);
+    // Into the new slot before out of the old: `clearRole` drops the words on a
+    // file the moment it is on none of their slots, and a file changing slots
+    // is never off them (issue #70 — the note vanished with every switch).
     this.addRole(subject, handle, next);
+    this.clearRole(subject, handle, current);
     // The file is a different kind of reference now — a clip that was their looks
     // and is now their movement is a motion reference — so the narrowing follows
     // it across, unless somebody set that themselves. See `state.inheritTake`.

@@ -6,6 +6,14 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**The words on a cast member's file survive changing what it lends them.**
+The tile's menu takes a sentence about the file and is also where the file
+is switched from their looks to their action, and the switch threw the
+sentence away: it cleared the old slot before filling the new one, and the
+clear drops a file's words the moment it is on none of their slots. The move
+now fills first and clears second, so a file changing slots is never off
+them (issue #70, reported by @pvhrip).
+
 **A strip that opens on footage or a held take no longer renders its later
 parts one size too small under "direct".** The timeline pins every part to
 one canvas, and when part 1 was a clip or a held take, or the ratio pill was
