@@ -30,6 +30,39 @@ across the cut. How wide a blend can be depends on the family. Picture and
 sound cross a cut independently: a hard cut whose score keeps playing, and a
 match cut that resets the room tone, are both one switch away.
 
+## Seams and drift
+
+Every continued shot comes out a little brighter and a little harder than
+the one it continues, and the next seam starts from that, so the change
+walks down a strip. Measured on an 8-hop turbo strip, about three quarters
+of it arrives as a step at each cut rather than inside the shots. Three
+per-machine settings on the gear's Rendering tab act on it:
+
+- **Turbo lead-in** (on by default, four steps). A turbo LoRA collapses the
+  schedule, and the opening steps are where a shot is decided. This runs
+  those steps on the base weights with the LoRA held off, then hands the
+  rest of the same schedule to the distilled model. Measured: the step at
+  each cut falls from +2.86 with it off to about +1.0 at four steps, and
+  the texture ratchet falls with it. The cost is those four steps at the
+  base weights' speed. Off is the old behaviour.
+- **Seam handoff**. What a blended seam hands the next shot. *The latent*
+  (default) slices the run off what the sampler made, so nothing is decoded
+  and encoded again on the way. *Levelled* pulls that slice back to the
+  first shot's tone before the model reads it. *Masked* writes the slice
+  into the next shot's own latent and holds it there while the rest is
+  sampled, so the model continues the frames it made rather than
+  generating new ones under guidance; measured to remove the step at the
+  cut on a single sampler, and about twice as fast, but not yet measured
+  together with the lead-in. *The frames* is the road every render took
+  before any of these, kept for comparison.
+- **Seam restore** (per seam, on the blend pill). Re-draws the frames a
+  seam hands over against the source shot's own references before the next
+  shot continues from them. Helps on raw H3 with a good reference, hurts on
+  turbo and low step counts. Off by default.
+
+None of this is zero yet. If you find a setting or a method that measures
+better on your strips, open an issue with the per-cut numbers.
+
 ## Piece-level fields
 
 The timeline itself carries:

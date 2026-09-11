@@ -13,6 +13,9 @@ The gear on the node's rail opens the pack's settings.
 - **Language** follows ComfyUI's own locale: English, Japanese, Korean,
   Simplified Chinese. Corrections are one-line edits in
   `web/creator/locales/`.
+- **Rendering** holds the drift levers for long strips: the turbo lead-in,
+  the seam handoff and the DLSS 5 pass. See [Seams and
+  drift](timeline.md#seams-and-drift) for what each was measured to do.
 - **Appearance** has a text size, and the pack takes its colours from
   ComfyUI's palette.
 - **Stored data** lists everything the pack has written down, with a count

@@ -115,6 +115,12 @@ DEFAULTS = {
     # on for the rest. 0 is off, which is what every render did before this
     # existed. See `render.LeadIn` for what it builds and why.
     #
+    # Four by default since 2026-09-11. Measured on an 8-hop turbo strip, the
+    # brightness step at each cut goes +2.86 (off) -> +1.74 (three) -> +0.98
+    # (four), and the texture ratchet falls with it — it is the one lever
+    # found that reduces the drift rather than trading it. The cost is those
+    # four steps at the base weights' speed.
+    #
     # This reaches the render, which is the line the rest of this file draws
     # and the reason it is worth naming out loud: two people opening the same
     # `.json` get the same shot only if they agree about it. It sits here
@@ -122,7 +128,7 @@ DEFAULTS = {
     # than about this piece. The LoRA, the steps and the schedule are all still
     # the workflow's; this only says where in that schedule the distillation
     # takes over.
-    "turbo_lead_in": 0,
+    "turbo_lead_in": 4,
     # What a blended seam hands the next shot. "latent": the run sliced off the
     # source pass's sampler latent (`encode._context_slice`). "levelled": the
     # same slice, pulled back to the first pass's channel statistics before it

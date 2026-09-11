@@ -868,12 +868,18 @@ TURBO_DATA = json.dumps({
     "turbo": {"lora": "turbo/lightx2v.safetensors", "on": True, "quality": "medium"},
 })
 
-check("a turbo render with the lead-in off is one ordinary sampler",
-      [len(by_class(build(data=TURBO_DATA).expand).get(k, []))
-       for k in ("KSampler", "KSamplerAdvanced")],
-      [1, 0])
-
 was = settings_mod.turbo_lead_in
+# The lead-in is on by default now (four steps), so "off" is a choice the
+# setting has to make, the same way every other row here is patched in.
+settings_mod.turbo_lead_in = lambda: 0
+try:
+    check("a turbo render with the lead-in off is one ordinary sampler",
+          [len(by_class(build(data=TURBO_DATA).expand).get(k, []))
+           for k in ("KSampler", "KSamplerAdvanced")],
+          [1, 0])
+finally:
+    settings_mod.turbo_lead_in = was
+
 settings_mod.turbo_lead_in = lambda: 2
 try:
     lead_kinds = by_class(build(data=TURBO_DATA, steps=6).expand)

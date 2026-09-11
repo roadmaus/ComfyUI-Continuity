@@ -103,9 +103,9 @@ refuses("an autoplay setting that is not a boolean", {"autoplay_previews": "yes"
 # the distillation. A whole number of steps rather than a boolean, because "off"
 # and "how far" are one answer — and held to a ceiling, past which the idea
 # stops being a lead-in.
-check("no lead-in by default", settings.clean({})["turbo_lead_in"], 0)
+check("a four-step lead-in by default", settings.clean({})["turbo_lead_in"], 4)
 check("a lead-in is kept", settings.clean({"turbo_lead_in": 2})["turbo_lead_in"], 2)
-check("a null lead-in is the default", settings.clean({"turbo_lead_in": None})["turbo_lead_in"], 0)
+check("a null lead-in is the default", settings.clean({"turbo_lead_in": None})["turbo_lead_in"], 4)
 check("both ends of the range are legal",
       (settings.clean({"turbo_lead_in": 0})["turbo_lead_in"],
        settings.clean({"turbo_lead_in": settings.MAX_LEAD_IN})["turbo_lead_in"]),
@@ -245,7 +245,7 @@ with tempfile.TemporaryDirectory() as directory:
     check("the lead-in reaches the render the same way",
           (settings.save({"turbo_lead_in": 2})["turbo_lead_in"], settings.turbo_lead_in()),
           (2, 2))
-    settings.save({"turbo_lead_in": 0})
+    settings.save({"turbo_lead_in": settings.DEFAULTS["turbo_lead_in"]})
 
     # A save is a patch over the file, not a replacement of it. The page sends
     # the one field just edited, so a second save must not hand back the first

@@ -57,18 +57,21 @@ const QUALITY = [
 
 // The turbo lead-in, in steps: how much of a distilled render's opening is
 // sampled on the base weights. `settings.py` decides what is allowed (up to
-// four, so a hand-edited file can go further than this offers); these are the
-// three answers worth clicking.
+// four); these are the three answers worth clicking. Four is the default and
+// the measured best: on an 8-hop strip the step at each cut fell from +2.86
+// with it off to +0.98, and the texture ratchet fell with it.
 const LEAD_IN = [
   { steps: 0, label: "Off",
     note: "The whole schedule runs on the distillation, which is what a turbo "
-        + "render has always been." },
-  { steps: 1, label: "One step",
-    note: "The cheapest version of the idea. Enough on a 4-step render, where one "
-        + "step is a quarter of the schedule." },
+        + "render was before the lead-in existed. Fastest, and drifts the most "
+        + "down a strip." },
   { steps: 2, label: "Two steps",
-    note: "The one to start with at 6 and 8 steps. Costs about a quarter of what "
+    note: "A quarter of the way there at 8 steps, for about a quarter of what "
         + "the distillation saved." },
+  { steps: 4, label: "Four steps",
+    note: "The default. Half of an 8-step schedule on the base weights, which is "
+        + "where the seam step was measured smallest and the texture cleanest. "
+        + "Costs those four steps at full speed." },
 ];
 
 // How large the pack draws its own text, as the multiplier `--mmc-type` carries

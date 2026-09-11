@@ -6,6 +6,16 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**The turbo lead-in is on by default, at four steps.** It shipped off,
+because nobody had measured it. It has been now: on an 8-hop turbo strip the
+brightness step at every cut goes from +2.86 with it off to +1.74 at three
+steps and +0.98 at four, the texture ratchet falls with it, and it is the
+one lever found that reduces the drift rather than trading it for something
+else (issue #41). The cost is four of the schedule's steps at the base
+weights' speed. The settings rows now offer off, two and four, and the
+timeline doc has a section on seams and drift that says what each lever was
+measured to do.
+
 **A fourth seam road: the latent, masked.** The three roads so far all hand
 the inherited run to the model as pinned guides over a fresh latent, and the
 measured cost of that is a step at every hop. `seam_handoff: "masked"` writes
