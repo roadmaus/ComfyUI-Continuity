@@ -24,6 +24,7 @@ from comfy_extras.nodes_audio import load as _load_audio_file
 from comfy_extras.nodes_minimax_h3 import align_frame_count
 
 from . import mux
+from . import refmod
 
 TARGET_FPS = 24
 
@@ -67,6 +68,14 @@ def resolve(filename):
         if not os.path.isfile(path):
             raise MediaError(f"{name!r} is not a style frame this pack ships")
         return path
+    # A saved reference lives in the model folders, not in input/. The second
+    # scheme this function answers, for the reason the first is here: one door
+    # in, so a mod costs the pipeline a prefix check rather than a third path.
+    if refmod.is_mod(name):
+        try:
+            return refmod.resolve(name)
+        except refmod.RefModError as exc:
+            raise MediaError(str(exc)) from exc
     if not folder_paths.exists_annotated_filepath(filename):
         raise MediaError(f"{filename!r} is not in the input folder any more")
     return folder_paths.get_annotated_filepath(filename)
@@ -165,6 +174,14 @@ def image_size(filename):
     still format and says so when handed anything else.
     """
     path = resolve(filename)
+    if refmod.is_mod(filename):
+        # A mod's picture is its latent grid at the VAE's 16px stride: what the
+        # DiT is handed, and so the shape a canvas adapting to it should take.
+        try:
+            meta = refmod.header(path)
+        except refmod.RefModError as exc:
+            raise MediaError(str(exc)) from exc
+        return meta["latent_w"] * 16, meta["latent_h"] * 16
     try:
         with Image.open(path) as img:
             img = ImageOps.exif_transpose(img)
@@ -391,9 +408,17 @@ def load_all(compiled):
         if asset is not None:
             loaded[asset.handle] = {"image": load_image(asset.filename)}
     for asset in compiled.ref_images:
+        if asset.mod:
+            # A mod is its latent, read by `encode` off the file itself; there
+            # is no picture to decode and nothing for a cache miss to open.
+            loaded[asset.handle] = {"mod": resolve(asset.filename)}
+            continue
         loaded[asset.handle] = Deferred(
             lambda asset=asset: {"image": load_image(asset.filename)})
     for asset in compiled.ref_videos:
+        if asset.mod:
+            loaded[asset.handle] = {"mod": resolve(asset.filename)}
+            continue
         def decode(asset=asset):
             # The one decode long enough to be worth announcing. It only runs on
             # a cache miss (`Deferred`), and on a high-resolution source it is a

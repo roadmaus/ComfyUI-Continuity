@@ -326,13 +326,25 @@ export const DEFAULT_TRACK = REFERENCE.default_track;
  *  in the table. */
 export const DEFAULT_REF_SIZE = REFERENCE.sizes;
 
+/** The track a picked clip lands with: what it asked for, else the default —
+ *  and `picture` for a saved clip, which carries no soundtrack to bring. Takes
+ *  a picker row (`path`) or an asset (`filename`). */
+export const trackFor = (picked) =>
+  isRefMod({ filename: picked.filename ?? picked.path }) ? "picture"
+    : (picked.track ?? DEFAULT_TRACK);
+
 /** The setting in force for an asset — the stored one, or its kind's default.
  *  Read this rather than `asset.ref_size`, which an older blob simply omits. */
 export const refSize = (asset) => asset.ref_size || DEFAULT_REF_SIZE[asset.kind] || "match";
 
+/** A saved reference: its latent was encoded when it was made and is read off
+ *  the file, so it has no size, no cut, no trim and no soundtrack to choose.
+ *  Mirrors `compile.Asset.mod`. */
+export const isRefMod = (asset) => String(asset?.filename ?? "").startsWith("refmod:");
+
 /** Whether an asset has a size to choose at all. */
 export const sizeable = (asset) =>
-  asset.role === "reference" && DEFAULT_REF_SIZE[asset.kind] !== undefined;
+  asset.role === "reference" && DEFAULT_REF_SIZE[asset.kind] !== undefined && !isRefMod(asset);
 
 /** What of a reference is actually the reference. "full" — the default — is
  *  the whole file; the others narrow it so "them from @img-1" stops dragging the

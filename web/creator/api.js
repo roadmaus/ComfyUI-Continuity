@@ -707,6 +707,10 @@ export function viewUrl(path, { preview = false, version = null } = {}) {
   // the other side — one door in, so a second species of path costs two
   // branches instead of thirty. See `presets/atlasref.js`.
   if (isAtlasRef(path)) return atlasUrl(path);
+  // A saved reference (`refmod:<name>`) lives in the model folders and has no
+  // pixels to view — only the picture kept beside it, which the thumb route
+  // serves. The same one door, for the same reason. See `creator/refmod.py`.
+  if (isRefMod(path)) return thumbUrl(path, version);
   // A gallery path carries ComfyUI's folder annotation ("clip.mp4 [output]").
   // The servers that take a filename parse it themselves; core's /view takes
   // the folder as a parameter instead, so it is split off here.
@@ -725,6 +729,26 @@ export function viewUrl(path, { preview = false, version = null } = {}) {
   // showing thirty 4000px PNGs at 140px has no use for the originals.
   if (preview) return thumbUrl(path, version);
   return api.apiURL(`/view?${params}`);
+}
+
+/** Whether a path names a saved reference rather than a file in input/. The
+ *  prefix is `creator/refmod.py`'s `SCHEME`, spelled here because a mod is
+ *  told from a picture on every surface that draws one. */
+export function isRefMod(path) {
+  return String(path ?? "").startsWith("refmod:");
+}
+
+/**
+ * Keep pictures as saved references. -> `{mods: [row, ...]}`, one picker row
+ * per source, in source order. A job on ComfyUI's queue like a tracing: the
+ * encode is the H3 VAE over each picture, so it waits its turn behind a render
+ * and rides the real progress bar.
+ */
+export async function makeRefMod(body, options) {
+  const answer = await runJob("/continuity/refmod/make", body, options);
+  // The mods are new and the listing is a few seconds stale.
+  invalidate("refmods");
+  return answer;
 }
 
 /**

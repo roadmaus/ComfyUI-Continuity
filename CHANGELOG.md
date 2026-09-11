@@ -6,6 +6,19 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**Cast members can be kept as RefMods.** The cube on a member's open card
+encodes the pictures their looks come from into saved latents — the
+`.safetensors` format ComfyUI-MiniMaxH3Mod reads and writes, in
+`models/refmods/cast/` — and points their looks at the mods; the pictures leave
+the piece unless somebody else still needs them. *Compressed* pools a picture to
+a 16-cell grid and refines it against the full encode (64 tokens a picture where
+a `match` encode is several hundred), *full* keeps the encode whole. A mod is an
+ordinary reference from there: it takes a `<Picture N>`, the render reads the
+latent off the file and shows the model a picture decoded from it, the picker
+has a RefMod tab over `models/refmods` for mods made anywhere, and the cast
+library keeps a member built out of them. Nothing about a mod is a concept
+extractor and the docs say so; audio mods are refused (#53).
+
 **The VDN-H3 pill throws turbo with it, at the stage's own numbers.** Before,
 the pill only picked the stage: the sampler row stayed at twenty res_multistep
 steps, and the turbo switch — if thrown — landed on its own quality's count,

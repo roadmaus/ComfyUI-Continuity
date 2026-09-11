@@ -104,6 +104,33 @@ own word for it, `motion`.) The definition then reads "whose appearance comes
 from Picture 1 and whose motion comes from Video 1 (the golf swing)", and the
 retention line says the movement is followed.
 
+### Saved references (RefMods)
+
+A picture's reference tokens ride through every sampling step, and a member
+built out of three stills is a few hundred tokens each. The cube on their open
+card keeps those pictures as **RefMods** — the saved-latent format
+[ComfyUI-MiniMaxH3Mod](https://github.com/Luisacaotica/ComfyUI-MiniMaxH3Mod)
+reads and writes, so a character made or downloaded there works here and one
+kept here loads in their nodes. *Compressed* pools each picture's latent to a
+16-cell grid and refines it against the full encode: 64 tokens a picture, so a
+shot that carried two references can carry six. *Full* keeps the encode as it
+is. Either way the picture is encoded once, the render reads the latent off
+the file, and the model is shown a picture decoded from that latent as the
+`<Picture N>` it cites.
+
+The mods land where the pictures were, the member's looks point at them, and
+the pictures leave the piece unless another member or a hand-written `@handle`
+still needs them. They are files like any other: the picker has a **RefMod**
+tab over `models/refmods`, a mod hangs on a member from there, and the cast
+library keeps a member built out of mods exactly as one built out of pictures.
+A mod tile wears `mod` where a picture's would wear `max`.
+
+What a mod is not: a concept extractor. Pooling keeps colour, build and large
+structure and loses fine detail, and nothing about it stops identity, clothing
+and background mixing any more than a picture does — that is still what the
+member's words and `takes` are for. Audio mods are not taken; a voice is bound
+as a file. The encode needs the H3 video VAE picked in the weights control.
+
 A cast member can be swapped for another from the card's swap button: the
 replacement takes over their clips, their slot in the cast order, and every
 sentence that named the old name is rewritten to the new one. Removing a

@@ -13,6 +13,7 @@
 
 import { el, icon, ICONS, dismissable, keepScroll, placeNear, svg, swappable } from "./dom.js";
 import { CastShelf } from "./cast.js";
+import { keepAsMod } from "./refmod.js";
 import { t } from "./i18n.js";
 import { openPicker } from "./picker.js";
 import { openLoras, loraBlock } from "./loras.js";
@@ -592,7 +593,7 @@ export class CreatorEditor {
       // to opt into, not out of. Ignored for audio, which has no size.
       ref_size: "max",
     };
-    if (row.kind === "video") entry.track = S.DEFAULT_TRACK;
+    if (row.kind === "video") entry.track = S.trackFor(row);
     this.state.assets.push(entry);
     this.commit();
     // The caller needs the handle now, to put a chip under a live caret; the
@@ -653,7 +654,7 @@ export class CreatorEditor {
   async pickReferences(kind, sheet, { edit = false } = {}) {
     const spec = this.plateSpec();
     const chosen = await openPicker({
-      kinds: edit ? ["image", "renders"] : ["image", "video", "audio", "renders"],
+      kinds: edit ? ["image", "renders"] : ["image", "video", "audio", "renders", "refmods"],
       kind,
       capacity: (k) => S.capacity(this.state, k, this.piece, sheet),
       cardSeconds: this.cardSeconds(),
@@ -818,7 +819,7 @@ export class CreatorEditor {
     const spec = this.plateSpec();
     const sheet = this.seedSheet("image");
     const chosen = await openPicker({
-      kinds: ["renders", "image", "video", "audio"],
+      kinds: ["renders", "image", "video", "audio", "refmods"],
       kind: "renders",
       capacity: (k) => S.capacity(this.state, k, this.piece, sheet),
       cardSeconds: this.cardSeconds(),
@@ -857,10 +858,11 @@ export class CreatorEditor {
         filename: asset.path,
         ref_size: "max",
       };
-      if (asset.kind === "video") entry.track = S.DEFAULT_TRACK;
+      if (asset.kind === "video") entry.track = S.trackFor(asset);
       if (asset.trim) entry.trim = asset.trim;
       this.state.assets.push(entry);
-      if (asset.kind !== "video") continue;
+      // A saved clip has no soundtrack to ask about.
+      if (asset.kind !== "video" || S.isRefMod(entry)) continue;
       // A track means the user opened the segment editor and said so. Anything
       // else is the default, which needs a round trip to settle. Both are applied
       // after the push, so the file the video occupies counts against the total.
@@ -939,7 +941,7 @@ export class CreatorEditor {
     else delete asset.trim;
     // Same for sound: whether this clip has any is a fact about this clip, and
     // the old one's answer must not carry over onto a silent replacement.
-    if (asset.kind === "video") asset.track = picked.track ?? S.DEFAULT_TRACK;
+    if (asset.kind === "video") asset.track = S.trackFor(picked);
     this.commit();
     this.probeKeyframe();
     if (asset.role === "reference" && asset.kind === "video" && !picked.track) {
@@ -1179,7 +1181,7 @@ export class CreatorEditor {
       // A guide has no sound row: the branch reads a drawing, so its soundtrack
       // is not a setting with two useful answers — it is a slot that would be
       // spent on nothing. See `S.rerole`, which silences one on promotion.
-      if (asset.kind === "video" && asset.role !== "guide") {
+      if (asset.kind === "video" && asset.role !== "guide" && !S.isRefMod(asset)) {
         rows.push(choose(t("sound"),
           t("On by default: this clip's soundtrack is bound as a reference audio, taking an "
           + "<Audio> slot before the video's own label, and needing the audio VAE connected. "
@@ -1210,7 +1212,7 @@ export class CreatorEditor {
       ]));
 
       const foot = [];
-      if (asset.kind !== "image") {
+      if (asset.kind !== "image" && !S.isRefMod(asset)) {
         foot.push(opens(trimLabel(asset), t("Use the whole clip, or only a segment of it"),
                         () => this.editSegment(asset)));
       }
@@ -1793,6 +1795,19 @@ export class CreatorEditor {
         ? () => openPresetLibrary({ target: this.presetTarget(), scope: "cast" })
             .then(() => this.render())
         : null,
+      // Their pictures as saved latents, landing on this shot's own row where
+      // the pictures were. The pool is read (`getAssets` merges it) but never
+      // written: a pool picture kept as a mod stays in the pool, unclaimed.
+      mod: (subject, assets, mode) => keepAsMod(subject, assets, mode, {
+        vae: (this.piece ?? this.state).models?.vae ?? "",
+        list: () => (this.state.assets ??= []),
+        nextHandle: (kind) => S.nextHandle(this.state, kind),
+        texts: () => S.allTexts(this.castPiece),
+        cast: () => this.castPiece.subjects ?? [],
+        drop: (handles) => {
+          this.state.assets = this.state.assets.filter((a) => !handles.includes(a.handle));
+        },
+      }).then((rows) => { this.commit(); this.render(); return rows; }),
       // Recasting rewrites every sentence that wrote the departed name. This
       // card's own three and its rewrite, plus the piece's where the cast being
       // edited is not this shot's — somebody cast into the standing prompt
@@ -1921,7 +1936,7 @@ export class CreatorEditor {
     if (blocked) { this.flash(blocked); return null; }
     const spec = this.plateSpec();
     const chosen = await openPicker({
-      kinds: ["image", "video", "audio", "renders"],
+      kinds: ["image", "video", "audio", "renders", "refmods"],
       kind: "image",
       capacity: (k) => S.capacity(this.state, k, this.piece),
       // The scissors ride along: a picture attached while casting somebody is

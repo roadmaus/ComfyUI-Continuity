@@ -55,6 +55,7 @@
 import { viewUrl } from "./api.js";
 import { dismissable, el, icon, placeNear } from "./dom.js";
 import { t } from "./i18n.js";
+import { MODES as MOD_MODES, keepable } from "./refmod.js";
 import * as S from "./state.js";
 
 /** The four things a file can lend a subject, and what tells them apart on
@@ -214,6 +215,9 @@ function assetThumb(asset, className = "mmc-asset-thumb") {
  *  set in the same monospace the marker wears: this is what the model is handed.
  *  Exported for the library sheet, whose tiles say the same thing. */
 export function sizeMark(asset) {
+  // A saved reference wears what it is rather than a size: it was encoded
+  // when it was made, and the mark says the tile is a latent, not a picture.
+  if (asset && S.isRefMod(asset)) return [el("span", { class: "mmc-cast-size", text: "mod" })];
   if (!asset || !S.sizeable(asset) || S.refSize(asset) !== "max") return [];
   return [el("span", { class: "mmc-cast-size", text: "max" })];
 }
@@ -289,6 +293,9 @@ export function noteField({ value, write, done }) {
  *                       the files they are built out of here. Absent where there
  *                       is nowhere to keep them, and the star is absent with it.
  * `library`              open the roster so somebody can be taken out of it.
+ * `mod`                  keep one subject's pictures as saved references
+ *                       (`refmod.keepAsMod`), given them, the assets and a
+ *                       mode; null where the host has no VAE to encode with.
  *                       The host owns this because casting them lands files on a
  *                       node, which is the host's node and not the shelf's.
  * `rename`               rewrite `@from` as `@to` in every text the host holds.
@@ -299,7 +306,7 @@ export function noteField({ value, write, done }) {
  */
 export class CastShelf {
   constructor({ getCast, setCast, getAssets, addAsset, whereCited, cite, touch, commit,
-                keep = null, library = null, rename = null, dropAssets = null,
+                keep = null, library = null, mod = null, rename = null, dropAssets = null,
                 onShut = null }) {
     this.getCast = getCast;
     this.dropAssets = dropAssets;
@@ -312,6 +319,10 @@ export class CastShelf {
     this.commit = commit;
     this.keep = keep;
     this.library = library;
+    this.mod = mod;
+    // The member whose pictures are on the queue being encoded. The button is
+    // held while it is, so a second press cannot queue the same pictures twice.
+    this.encoding = null;
     this.rename = rename;
     // Set while the library is open for a swap, so the card can say which of
     // its two buttons is waiting and a second press cannot start a second one.
@@ -611,6 +622,18 @@ export class CastShelf {
             disabled: this.swapping ? true : undefined,
             onclick: () => this.recast(subject),
           }, [icon("swap", 13)])] : []),
+          // Keeping their pictures as mods: the same star's neighbour, because
+          // it is the other way somebody is kept — as tokens rather than as a
+          // roster entry. Only where they have a picture to keep.
+          ...(this.mod && keepable(subject, this.getAssets()).length ? [el("button", {
+            class: `mmc-cast-modme${this.encoding === subject ? " on" : ""}`,
+            title: t("Keep @{handle}'s pictures as RefMods — each becomes a saved "
+                   + "latent the render reads instead of encoding the picture, "
+                   + "compressed to a fraction of the tokens or kept whole.",
+                     { handle: subject.handle }),
+            disabled: this.encoding ? true : undefined,
+            onclick: (event) => this.pickMod(event.currentTarget, subject),
+          }, [icon("cube", 13)])] : []),
           ...(this.keep ? [el("button", {
             class: `mmc-cast-keepme${this.kept === subject ? " on" : ""}`,
             title: this.kept === subject
@@ -766,6 +789,41 @@ export class CastShelf {
       this.note = { subject, text: t("Could not keep them — {error}",
                                      { error: error.message ?? error }) };
     }
+    this.render();
+  }
+
+  /** The two ways to keep somebody's pictures, as a menu on the cube. */
+  pickMod(anchor, subject) {
+    const count = keepable(subject, this.getAssets()).length;
+    openMenu(anchor, {
+      title: t(count === 1 ? "Keep {count} picture as a RefMod" : "Keep {count} pictures as RefMods",
+               { count }),
+      sections: [{ rows: MOD_MODES.map((mode) => ({
+        label: t(mode.label), note: t(mode.note),
+        onPick: () => this.keepAsMod(subject, mode.key),
+      })) }],
+    });
+  }
+
+  /** Encode them. The host does the work and the attaching; the card says how
+   *  it went, in the note the star's own answers use. */
+  async keepAsMod(subject, mode) {
+    if (!this.mod || this.encoding) return;
+    this.encoding = subject;
+    this.note = { subject, text: t("Encoding their pictures…") };
+    this.render();
+    try {
+      const rows = await this.mod(subject, this.getAssets(), mode);
+      this.note = { subject, text: t(rows.length === 1
+        ? "Kept as a {mode} RefMod — {tokens} tokens."
+        : "Kept as {count} {mode} RefMods — {tokens} tokens together.",
+        { count: rows.length, mode: t(mode === "compressed" ? "compressed" : "full-detail"),
+          tokens: rows.reduce((sum, row) => sum + (row.tokens ?? 0), 0) }) };
+    } catch (error) {
+      this.note = { subject, text: t("Could not keep them — {error}",
+                                     { error: error.message ?? error }) };
+    }
+    this.encoding = null;
     this.render();
   }
 

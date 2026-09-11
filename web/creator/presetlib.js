@@ -35,7 +35,7 @@
 
 import { el, icon, mountOverlay } from "./dom.js";
 import { t } from "./i18n.js";
-import { renderMeta, stillUrl, viewUrl } from "./api.js";
+import { isRefMod, renderMeta, stillUrl, viewUrl } from "./api.js";
 import { atlasRef } from "./presets/atlasref.js";
 import { openPicker } from "./picker.js";
 import { openMenu, noteField, sizeRows, MARKER_LABEL, MARKER_NOTE, ROLES, TAKES_NOTE } from "./cast.js";
@@ -1046,8 +1046,10 @@ class PresetLibrary {
                                           [icon(role.glyph, 10)])]),
       // The shelf's own two marks: full detail, and words attached. A kept
       // file lands at max unless it says otherwise, so absent reads as max.
-      ...(kind !== "audio" && (file.ref_size ?? "max") === "max"
-        ? [el("span", { class: "mmc-cast-size", text: "max" })] : []),
+      ...(isRefMod(file.filename)
+        ? [el("span", { class: "mmc-cast-size", text: "mod" })]
+        : kind !== "audio" && (file.ref_size ?? "max") === "max"
+          ? [el("span", { class: "mmc-cast-size", text: "max" })] : []),
       ...(file.note ? [el("span", { class: "mmc-cast-noted" })] : []),
     ]);
     // The role colour rides on the wrapper as one variable that the badge and

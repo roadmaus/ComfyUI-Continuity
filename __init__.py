@@ -20,6 +20,7 @@ from .creator.routes import blockout  # noqa: F401  (registers /continuity/block
 from .creator.routes import control  # noqa: F401  (registers /continuity/control)
 from .creator.routes import families  # noqa: F401  (registers /continuity/families)
 from .creator.routes import neural  # noqa: F401  (registers /continuity/neural)
+from .creator.routes import refmod  # noqa: F401  (registers /continuity/refmod)
 from .creator.routes import upscale  # noqa: F401  (registers /continuity/upscale)
 
 WEB_DIRECTORY = "./web"
