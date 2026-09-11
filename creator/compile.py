@@ -2918,11 +2918,30 @@ def _timeline_canvas(data, segments, payloads, image_size_lookup):
     }
 
 
+def _sampling_edge(data):
+    """The short edge the first pass actually samples at, for this piece.
+
+    The same answer `compile_request` reaches: the first-pass edge only when
+    a second pass is going to refine up from it ("two_pass" under the slider)
+    or the re-detail pass doubles it; the slider's own edge otherwise. A
+    pinned canvas resolved at the first-pass edge regardless was right only
+    under two passes — under "direct" there is no refine to carry a 768
+    first part up to an 864 slider, and a strip whose first part was footage
+    or a held take came out with its later parts one size smaller (#15).
+    """
+    rules = rules_of(data)
+    short_edge = data.get("short_edge", rules.native_short_edge)
+    mode_raw = str(data.get("upscale") or UPSCALE_MODES[0])
+    first_edge = first_pass_edge(data.get("sample_edge"), short_edge, rules)
+    two_pass = first_edge < short_edge and mode_raw == "two_pass"
+    return first_edge if two_pass or mode_raw == "redetail" else short_edge
+
+
 def _clip_canvas(data, size):
     """The canvas a supplied clip's own dimensions give.
 
     The spec every payload is pinned to is the canvas the *first* pass samples
-    at, so this resolves against `first_pass_edge` exactly as `compile_request`
+    at, so this resolves against `_sampling_edge` exactly as `compile_request`
     does — otherwise a two-pass timeline would pin its refine target as its
     sampling size. `output_canvas` is what the finished frames come out at.
 
@@ -2934,10 +2953,8 @@ def _clip_canvas(data, size):
     if not width or not height:
         return _pill_canvas(data)
     rules = rules_of(data)
-    edge = first_pass_edge(data.get("sample_edge"),
-                           data.get("short_edge", rules.native_short_edge), rules)
     resolved_w, resolved_h, ratio, clamped = canvas.canvas_from_image(
-        width, height, edge, rules)
+        width, height, _sampling_edge(data), rules)
     return {"width": resolved_w, "height": resolved_h, "ratio": ratio,
             "label": canvas.describe_ratio(ratio, rules), "from_image": False,
             "clamped": clamped}
@@ -2948,13 +2965,11 @@ def _pill_canvas(data):
     with nothing better to consult is held to, and what `aspect_source: "pill"`
     holds it to on purpose."""
     rules = rules_of(data)
-    edge = first_pass_edge(data.get("sample_edge"),
-                           data.get("short_edge", rules.native_short_edge), rules)
     label = data.get("aspect", "16:9")
     if label not in rules.aspects:
         raise CompileError(f"unknown aspect ratio {label!r}")
     ratio = rules.aspects[label]
-    resolved_w, resolved_h = canvas.resolve_canvas(ratio, edge, rules)
+    resolved_w, resolved_h = canvas.resolve_canvas(ratio, _sampling_edge(data), rules)
     return {"width": resolved_w, "height": resolved_h, "ratio": ratio,
             "label": label, "from_image": False, "clamped": False}
 

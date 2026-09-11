@@ -1423,3 +1423,47 @@ with tempfile.TemporaryDirectory() as _out:
     check("...as long as the pass it is", alone[0]["duration_s"], 2.0)
     check("...and nothing is encoded a second time",
           __import__("glob").glob(os.path.join(_out, "**", "*.mp4"), recursive=True), [])
+
+# ---- parts that would not match are refused before a node is built (#15) ------
+#
+# The save node's `reel_geometry` catches this on the finished reel, which on a
+# two-GPU box was ten minutes of sampling and a discarded part. Everything it
+# compares is known at compile time, so the loop refuses first.
+from types import SimpleNamespace as _NS
+_emit = importlib.import_module(f"{PACKAGE}.creator.core.emit")
+
+def _pass(width, height, refine=None, redetail=None):
+    return _NS(width=width, height=height,
+               refine=_NS(width=refine[0], height=refine[1]) if refine else None,
+               redetail=_NS(width=redetail[0], height=redetail[1]) if redetail else None)
+
+def _refused(payloads, compiled):
+    try:
+        _emit._refuse_mismatched_parts(payloads, compiled)
+    except ValueError as exc:
+        return str(exc)
+    return None
+
+check("matching parts pass", _refused([{}, {}], [_pass(864, 864), _pass(864, 864)]), None)
+check("a two-pass part is judged by its refine target",
+      _refused([{}, {}], [_pass(864, 864), _pass(768, 768, refine=(864, 864))]), None)
+check("a re-detail part by its doubled size",
+      _refused([{}, {}], [_pass(1536, 1536, redetail=None), _pass(768, 768, redetail=(1536, 1536))]), None)
+check("footage by the size stamped on its payload",
+      _refused([{"clip": {"width": 864, "height": 864}}, {}], [None, _pass(864, 864)]), None)
+check("a lone part is never compared", _refused([{}], [_pass(864, 864)]), None)
+said = _refused([{"clip": {"width": 864, "height": 864}}, {}], [None, _pass(768, 768)])
+check("the held-take-plus-direct case is refused, naming both parts",
+      ("part 2 would come out 768x768" in (said or ""), "part 1 864x864" in (said or "")),
+      (True, True))
+check("...before any node exists: a strip built that way never reaches the graph",
+      "part 2 would come out" in (said or ""), True)
+
+# And the strip that reported it builds whole now: a forced pill, direct 864,
+# a continuing card — every segment sampled at the slider.
+_direct = build(blob(aspect="1:1", short_edge=864, upscale="direct", aspect_source="pill",
+                     segments=[{"prompt": "one", "duration_s": 5},
+                               {"prompt": "two", "duration_s": 5, "continue": True}])).expand
+_direct_canvases = sorted({tuple(json.loads(n["inputs"]["segment_data"])["canvas"][k] for k in ("width", "height"))
+                           for n in _direct.values() if n["class_type"] == "MiniMaxH3TimelineSegment"})
+check("a direct strip off the pill pins every segment at the slider", _direct_canvases, [(864, 864)])

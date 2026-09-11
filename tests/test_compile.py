@@ -2225,3 +2225,41 @@ _named = compiler.rendered_piece(
 _at = compiler.timeline_payloads(_named)[-1]["continue_from"]
 check("a named seam source follows the card it names into a shortened render",
       _named["segments"][_at]["card_no"], 2)
+
+
+# ---- the pinned canvas follows the mode, not the first-pass edge (#15) --------
+#
+# A strip pins every part to one canvas. When part 1 is footage or the ratio
+# pill is forced, that pin used to resolve at the first-pass edge — right under
+# two passes, where a refine carries a 768 first pass up to the slider, and one
+# size too small under "direct", where nothing does. Part 1 came out 864, part 2
+# 768, and the save node refused the reel ten minutes in.
+
+def _pinned(piece):
+    payloads = compiler.timeline_payloads(piece)
+    canvas = payloads[-1]["canvas"]
+    compiled = compiler.compile_segment(payloads[-1])
+    return (canvas["width"], canvas["height"]), (compiled.width, compiled.height), \
+        (compiled.refine.width, compiled.refine.height) if compiled.refine else None
+
+square_direct = {"aspect": "1:1", "short_edge": 864, "upscale": "direct",
+                 "aspect_source": "pill",
+                 "segments": [segment("one"), segment("two", **{"continue": True})]}
+check("the pill pin under direct samples at the slider",
+      _pinned(square_direct), ((864, 864), (864, 864), None))
+check("...and under two passes at the first-pass edge, refined up to the slider",
+      _pinned({**square_direct, "upscale": "two_pass"}), ((768, 768), (768, 768), (864, 864)))
+check("...and at the slider where two passes collapse into one",
+      _pinned({**square_direct, "upscale": "two_pass", "short_edge": 768}),
+      ((768, 768), (768, 768), None))
+
+footage_first = {"aspect": "16:9", "short_edge": 864, "upscale": "direct",
+                 "segments": [clip(duration_s=3, width=1920, height=1080),
+                              segment("two", **{"continue": True})]}
+check("a clip's pin under direct samples at the slider",
+      _pinned(footage_first)[0][1], 864)
+check("...and under two passes at the first-pass edge",
+      _pinned({**footage_first, "upscale": "two_pass"})[0][1], 768)
+check("a lowered first-pass edge is still honoured under two passes",
+      _pinned({**square_direct, "upscale": "two_pass", "sample_edge": 640}),
+      ((640, 640), (640, 640), (864, 864)))
