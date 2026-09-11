@@ -17,6 +17,23 @@ import { castFactsLine, listPresets, loadBody } from "./presets.js";
 import { listAssets, viewUrl } from "./api.js";
 import { LANGUAGES, settings as refineSettings } from "./refine.js";
 import { tagIndex } from "./state.js";
+import { layout as layoutVariations } from "./variations.js";
+
+/* Where a `{day|night}` is painted: the braces and bars of every live group in
+   one colour, the alternatives the seed does not take in another — see
+   `paintVariations`. Highlights rather than spans, because the box's DOM is
+   flat on purpose (text and chips, nothing else) and a group is text the caret
+   has to be able to walk through and edit. Two registries for the whole
+   document, shared by every box: the API keys highlights by name, and a box
+   keeps the ranges it added so it can take exactly those away again. Absent
+   where the browser has no Highlight API, and then nothing is painted — the
+   readout under the box still shows the choice, which is the fact that counts. */
+const HIGHLIGHTS = typeof Highlight === "function" && globalThis.CSS?.highlights
+  ? { marks: new Highlight(), off: new Highlight() } : null;
+if (HIGHLIGHTS) {
+  CSS.highlights.set("mmc-alt-mark", HIGHLIGHTS.marks);
+  CSS.highlights.set("mmc-alt-off", HIGHLIGHTS.off);
+}
 
 const TRIGGER = /@([\w-]*)$/;
 /* The other opening. `@` cites what is already in this piece; `/` is the layer
@@ -444,6 +461,9 @@ export class PromptBox {
     // the editable and nothing about the wrapper.
     this.superseded = false;
     this.excerpt = el("span", { class: "mmc-prompt-excerpt" });
+    // The highlight ranges this box has painted, so a repaint removes its own
+    // and nobody else's.
+    this.painted = [];
 
     // ---- what the model reads -----------------------------------------------
     //
@@ -725,6 +745,7 @@ export class PromptBox {
     this.censusChips();
     this.syncExcerpt();
     this.reportOverflow();
+    this.paintVariations();
   }
 
   /** Whether the text has outgrown the box it is in. Measured rather than
@@ -928,6 +949,82 @@ export class PromptBox {
     // after the rebuild is what keeps `onEdit` from reporting it as one.
     this.censusChips();
     this.syncExcerpt();
+    // Whatever moved the host — a seed re-rolled, a card retaken — may have
+    // moved the choice, and painting never touches the caret.
+    this.paintVariations();
+  }
+
+  /**
+   * Light the alternative the seed will take, and dim the ones it will not.
+   *
+   * A `{day|night}` is one sentence that is several videos, and the number on
+   * the node decides which. Showing that decision *in the sentence* is what
+   * makes the syntax usable without a second panel: the braces and bars are
+   * marked so the group reads as a group, the alternatives the seed passes
+   * over fade, and what is left at full strength is the shot this render makes.
+   * Roll the seed and a different one lights up.
+   *
+   * Made by the same hash the compiler uses (`variations.js` mirrors
+   * `variations.py`), on the seed and card the host names through `pick` — a
+   * host with no answer, like a box in a window with no node under it, gets no
+   * paint and nothing else changes. The piece's standing prompt chooses once,
+   * as the piece; a card chooses on its own seed or the piece's, by its number.
+   *
+   * Offsets are those of the bare text — what `getValue` returns and what the
+   * compiler chooses on — walked back into the flat DOM the way `placeCaret`
+   * walks them. A block the engine has put in the box would throw that walk
+   * off, so a box holding one is left unpainted rather than painted wrong.
+   */
+  paintVariations() {
+    if (!HIGHLIGHTS) return;
+    for (const [which, range] of this.painted) HIGHLIGHTS[which].delete(range);
+    this.painted = [];
+    const pick = this.hooks.pick?.();
+    if (!pick) return;
+    const text = this.getValue();
+    if (!text.includes("{")) return;
+    const flat = [...this.root.childNodes].every((node) =>
+      node.nodeType === Node.TEXT_NODE || node.dataset?.handle
+      || node.dataset?.say !== undefined || node.tagName === "BR");
+    if (!flat) return;
+    const { marks, off } = layoutVariations(text, pick.seed, pick.card);
+    for (const [which, spans] of [["marks", marks], ["off", off]]) {
+      for (const [start, end] of spans) {
+        const range = this.rangeOf(start, end);
+        if (!range) continue;
+        HIGHLIGHTS[which].add(range);
+        this.painted.push([which, range]);
+      }
+    }
+  }
+
+  /** A DOM range over bare offsets `[start, end)`, or null for an empty one.
+   *  A chip is atomic: a boundary inside one lands on its outer edge. */
+  rangeOf(start, end) {
+    if (end <= start) return null;
+    const range = document.createRange();
+    let at = 0;
+    let opened = false;
+    for (const node of this.root.childNodes) {
+      const text = node.nodeType === Node.TEXT_NODE;
+      const length = text ? bare(node.nodeValue).length
+        : node.dataset?.say !== undefined ? node.dataset.say.length
+        : node.dataset?.handle ? node.dataset.handle.length + 1 : 1;
+      if (!opened && start < at + length) {
+        if (text) range.setStart(node, rawOffset(node.nodeValue, start - at));
+        else range.setStartBefore(node);
+        opened = true;
+      }
+      if (opened && end <= at + length) {
+        if (text) range.setEnd(node, rawOffset(node.nodeValue, end - at));
+        else range.setEndAfter(node);
+        return range;
+      }
+      at += length;
+    }
+    if (!opened) return null;
+    range.setEndAfter(this.root.lastChild);
+    return range;
   }
 
   /** Whether the box already holds exactly what `built` would put in it: the
@@ -977,6 +1074,7 @@ export class PromptBox {
     const before = this.chipped;
     this.censusChips();
     this.hooks.onInput(this.getValue());
+    this.paintVariations();
     // After `onInput`, so the host is asked "is this handle still written
     // anywhere" about the text as it now stands rather than as it was.
     const gone = [...before].filter((handle) => !this.chipped.has(handle));

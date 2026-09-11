@@ -20,6 +20,7 @@ from dataclasses import dataclass, field, replace
 from . import canvas
 from . import redetail
 from . import sound
+from . import variations
 from .families import grammar, registry
 from .families.h3 import contextir, declare as h3, subjects
 
@@ -2086,6 +2087,42 @@ def rendered_piece(data):
     # pass. The runs above were read off the strip as the user set it, so the
     # merging that survived the rewrite is already written on the cards.
     return {**data, "segments": rendered, "render": "chained"}
+
+
+def varied_piece(data, seed):
+    """The piece with every `{a|b|c}` chosen, for the render `seed` runs on.
+
+    Chosen here, on the piece, rather than in `compile_request`: a request is
+    the segment node's cache key and the seed is deliberately kept out of it
+    (see `_chained_request`), so the choice has to be written into the text
+    before a request exists — and a text with nothing to choose is left as the
+    bytes it was, so a card without a group keeps the cache entry it had.
+
+    A card chooses on its own seed where it has one and the piece's otherwise,
+    the same rule the sampler follows, keyed by its number on the strip so the
+    choice holds still while other cards are held back. The piece's own fields
+    — the standing prompt, the soundscape, the score — choose once, as the
+    piece: a standing description that changed at every cut would not be
+    standing. Runs after `rendered_piece`, which is where `card_no` comes from.
+
+    Returns `data` itself when nothing in it varies. The refiner never sees
+    this: it is handed the groups as typed and asked to keep them.
+    """
+    data = as_piece(data)
+    piece = variations.vary_mapping(data, seed, "piece")
+    segments = timeline_segments(data)
+    chosen = []
+    changed = False
+    for index, segment in enumerate(segments):
+        own = segment_seed(segment, index)
+        card = int(segment.get("card_no") or index + 1)
+        varied = variations.vary_mapping(
+            segment, seed if own is None else own, card)
+        changed = changed or varied is not segment
+        chosen.append(varied)
+    if not changed:
+        return piece
+    return {**piece, "segments": chosen}
 
 
 def _rebase_seam(card, segments, start, first, place):

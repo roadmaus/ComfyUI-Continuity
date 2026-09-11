@@ -490,6 +490,19 @@ export const css = `
   background: var(--mmc-wash); color: var(--mmc-dim); text-decoration: line-through;
 }
 
+/* --- a choice left to the seed ----------------------------------------------
+ *
+ * {day|night} is one sentence that is several videos, and the number on the
+ * node decides which. The box says so in the sentence itself (see
+ * PromptBox.paintVariations): the braces and bars take the accent, so a group
+ * reads as a group, and the alternatives this seed passes over fade to the
+ * faint text colour, so what stands at full strength is the shot this render
+ * makes. Highlights rather than spans, because a group is text the caret walks
+ * through and edits — a highlight paints over text and owns none of it. Only
+ * colour is set: the API allows little else, and little else is wanted. */
+::highlight(mmc-alt-mark) { color: var(--mmc-accent); }
+::highlight(mmc-alt-off) { color: var(--mmc-faint); }
+
 /* --- a spoken line --------------------------------------------------------
  *
  * Deliberately not a .mmc-ref pill. A reference chip is a label: it stands in

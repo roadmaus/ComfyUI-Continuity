@@ -234,6 +234,7 @@ def _render(blob, seed, steps, cfg, sampler_name, scheduler,
     # itself when neither is in play, so a strip that never touched any of this
     # compiles to exactly what it always did.
     piece = compiler.rendered_piece(data)
+    piece = compiler.varied_piece(piece, seed)
 
     # One payload per pass, and a pass is a run of merged segments — usually one
     # segment long, and on a piece of one shot there is exactly one of each. How

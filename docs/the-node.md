@@ -125,6 +125,37 @@ A spoken line is drawn with a rule down its left edge in the speaker's colour
 (dashed for a voiceover). Press it to edit the words, the speaker, the
 language or the delivery, or to turn it back into on-screen text.
 
+## Variations
+
+Braces holding alternatives separated by bars are one prompt that can become
+many videos:
+
+```
+@anna walks {along the beach|through a mansion} {at dawn|at dusk|at night},
+{medium shot|close-up}, and {laughs|frowns}
+```
+
+The seed decides. Every render picks one alternative from each group, the
+same seed always picks the same ones, and rolling the seed (the seed pill's
+`randomize` does it on every render) is what asks for a new combination.
+Groups nest - `{on the beach {in the shade|in hard sun}|in a mansion {at
+night|by day}}` - an alternative may be empty (`{|, smiling}` sometimes adds
+the smile), and a cast member or a file is an alternative like any other word:
+`{@anna|@ben} turns to the camera` casts whoever is picked, and only their
+files ride into the shot. A brace pair with no bar in it is ordinary text.
+
+The box shows the choice as you type: the braces and bars take the accent
+colour, and the alternatives this seed passes over fade, so what stands at
+full strength is the shot the next Render makes. **What the model reads**
+shows the finished prompt with the choice made.
+
+On a timeline every card chooses on its own, so one sentence on three cards
+gives three scenarios; a card retaken on its own seed chooses on that seed.
+A group in the global prompt is chosen once for the whole piece, because the
+standing description is one description. Refine keeps every group and may
+expand the alternatives inside it; a rewrite that quietly settled a choice is
+reported under the panel, like a dropped quote.
+
 ## Refine
 
 The **Refine** button rewrites your sentence into the long, structured

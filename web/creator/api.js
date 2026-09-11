@@ -891,13 +891,16 @@ export async function buildPlate(body) {
  * @param {object} creatorData  the node's blob, exactly as it is saved
  * @returns {Promise<{passes: object[], cards?: object, problem?: string}>}
  */
-export async function compiledPrompt(creatorData) {
+export async function compiledPrompt(creatorData, seed = null) {
   let body;
   try {
     const response = await api.fetchApi("/continuity/compiled_prompt", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ creator_data: creatorData }),
+      // The seed the node will queue, so a `{day|night}` in the piece is shown
+      // chosen the way the render will choose it. See `compile.varied_piece`.
+      body: JSON.stringify({ creator_data: creatorData,
+                             ...(seed === null ? {} : { seed }) }),
     });
     body = await response.json().catch(() => ({}));
     if (!response.ok) {

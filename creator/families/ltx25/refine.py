@@ -149,6 +149,16 @@ few clear subjects and one clear action read better than a crowded scene.
 Where the request and these instructions pull apart, the request decides what \
 the video contains and the instructions decide how it is written down. Keep the \
 request's subject matter intact and unedited, and write it in this form.
+
+VARIATIONS
+Braces holding alternatives separated by bars — `{at dawn|at dusk|at night}`, \
+`{@anna|@ben}` — are a choice the video generator makes by its seed, not one \
+for you. Keep every such group in your prose, with the same number of \
+alternatives in the same order between the same bars, placed where its content \
+belongs, and write the sentence around it so it reads whichever alternative is \
+taken. You may expand an alternative into fuller detail inside its own slot. \
+Never pick one, never merge them into a single description, and never write \
+the group twice. Groups may nest; keep the nesting as it is.
 """
 
 _LANGUAGE_RULE = """\

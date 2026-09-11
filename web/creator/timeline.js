@@ -278,9 +278,10 @@ const holdSkin = (head) => (S.isHeld(head)
  *
  * @param {object} timeline  the piece, as the node holds it
  * @param {number} card      which card's pass to answer for
+ * @param {number} seed      the piece's seed, the number the node will queue
  */
-async function compiledFor(timeline, card) {
-  const answer = await compiledPrompt(JSON.parse(S.serializeTimeline(timeline)));
+async function compiledFor(timeline, card, seed) {
+  const answer = await compiledPrompt(JSON.parse(S.serializeTimeline(timeline)), seed);
   if (answer.problem) return { problem: answer.problem };
 
   const index = answer.cards?.[card] ?? 0;
@@ -369,6 +370,13 @@ class Timeline {
     return box;
   }
 
+  /** The number the node will queue — what every `{day|night}` in the piece
+   *  is chosen on. Zero where nothing lent a seed, which is also what the
+   *  node's widget starts at. */
+  pieceSeed() {
+    return Number(this.io().value("seed", 0)) || 0;
+  }
+
   /**
    * The global prompt: the same box a segment's prompt is, chips and all.
    *
@@ -401,6 +409,10 @@ class Timeline {
       },
       attachBlocked: () => null,
       attachedLabel: () => t("Piece references"),
+      // A `{day|night}` in the standing prompt is chosen once for the whole
+      // piece, on the node's seed — a standing description that changed at
+      // every cut would not be standing. See `compile.varied_piece`.
+      pick: () => ({ seed: this.pieceSeed(), card: "piece" }),
       getCast: () => this.timeline.subjects ?? [],
       onAttach: (row) => this.attachToPool(row),
       castFromLibrary: (member) => this.castFromLibrary(member),
@@ -2792,7 +2804,12 @@ class Timeline {
       // looked the piece's subjects up on the segment, found none, and a name
       // clicked in a card opened nothing while deleting one took nobody out.
       castPiece: this.timeline,
-      compiledPrompt: () => compiledFor(this.timeline, index),
+      compiledPrompt: () => compiledFor(this.timeline, index, this.pieceSeed()),
+      // What a `{day|night}` in this card is chosen on: the card's own seed
+      // where it was retaken on one, the piece's otherwise — the sampler's
+      // rule — and the card's number, so two cards holding the same sentence
+      // choose apart. See `compile.varied_piece`.
+      varies: () => ({ seed: S.segmentSeed(segment) ?? this.pieceSeed(), card: index + 1 }),
       // Both belong to the timeline rather than to one shot: the canvas because
       // the segments are joined, the continuation because it describes the seam
       // in front of this segment and so does not exist for the first one.
@@ -2812,7 +2829,7 @@ class Timeline {
       // whole point of retaking one pass. See `segmentSeedPill`.
       seedTarget: () => ({
         own: S.segmentSeed(segment),
-        piece: Number(this.io().value("seed", 0)) || 0,
+        piece: this.pieceSeed(),
         taken: S.takeOn(segment)?.seed ?? null,
       }),
       // One card, refined against the whole timeline: the server compiles the
@@ -3177,7 +3194,9 @@ export class TimelineBody {
       },
       onCommit: () => this.commit(),
       // The face wears the piece's first card, so that is the pass it shows.
-      compiledPrompt: () => compiledFor(this.timeline, 0),
+      compiledPrompt: () => compiledFor(this.timeline, 0, this.pieceSeed()),
+      // The face wears card 1, and a `{day|night}` on it chooses as card 1.
+      varies: () => ({ seed: S.segmentSeed(segment) ?? this.pieceSeed(), card: 1 }),
       samplingWidgets: this.widgets,
       onWidgetChange: this.onWidgetChange,
       nodeId: this.nodeId,
@@ -3312,6 +3331,13 @@ export class TimelineBody {
 
   value(name, fallback) {
     return this.widgetIO().value(name, fallback);
+  }
+
+  /** The number the node will queue — the modal's `pieceSeed`, on the body:
+   *  the seed is the one sampler setting that is still a widget, and this is
+   *  the class that holds the widgets. */
+  pieceSeed() {
+    return Number(this.value("seed", 0)) || 0;
   }
 
   /** The sampler row's `{value, set}` pair.

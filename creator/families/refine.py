@@ -37,6 +37,8 @@ are unit-tested that way. `refine_local.py` is what loads the model and
 import importlib
 import re
 
+from .. import variations
+
 
 class RefineError(RuntimeError):
     """The refiner could not produce a usable rewrite."""
@@ -388,6 +390,28 @@ def dropped_quotes(requests, written):
             needle = _plain(span).strip(" .!?,;:")
             if needle and needle not in haystack and span not in missing:
                 missing.append(span)
+    return missing
+
+
+def dropped_variations(requests, written):
+    """Request groups — `{day|night}` — the rewrite no longer offers. Empty is good.
+
+    A group is the user leaving a choice to the seed, and a rewrite that made
+    the choice for them, or merged the alternatives into one sentence, has
+    quietly turned many videos back into one. The rules ask the model to keep
+    every group; this is the check on it. Matched by the number of alternatives
+    rather than by the words, because the words are exactly what a rewrite is
+    allowed to grow — `{day|night}` legitimately comes back as
+    `{under a flat noon sun|under sodium streetlights}` and is the same choice.
+    """
+    offered = [count for _, count in variations.shapes(written)]
+    missing = []
+    for request in requests:
+        for source, count in variations.shapes(request):
+            if count in offered:
+                offered.remove(count)
+            elif source not in missing:
+                missing.append(source)
     return missing
 
 

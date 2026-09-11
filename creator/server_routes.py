@@ -1032,6 +1032,13 @@ async def compiled_prompt(request):
         # `timeline_payloads` and nothing else: it is what `creator_node.py`
         # builds the graph from, so it is what the render will actually be, one
         # entry per pass, merged runs already merged.
+        # The choices a `{a|b|c}` makes are the render's, on the number the
+        # node will queue — sent by the box so the panel shows the take this
+        # seed would shoot rather than the braces as typed. An older frontend
+        # sends none, and the braces are shown as they stand.
+        seed = data.get("seed")
+        if isinstance(seed, (int, float)) and not isinstance(seed, bool):
+            blob = compiler.varied_piece(blob, int(seed))
         payloads = compiler.timeline_payloads(blob, media.image_size)
         # Which pass each card ended up in. A run of merged cards is one
         # generation with one prompt, so the box has to be able to ask "the pass

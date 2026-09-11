@@ -218,7 +218,11 @@ export class CreatorEditor {
                 piece = null, castPiece = null, growShot = null, presetTarget = null,
                 samplingStore = null,
                 clearTool = null, seedTarget = null, compiledPrompt = null,
-                castFromLibrary = null, fullscreen = null }) {
+                castFromLibrary = null, fullscreen = null, varies = null }) {
+    // The seed and card a `{day|night}` in this prompt is chosen on, for the
+    // box to light the alternative the render will take. Null where there is
+    // no node under the box to answer for it — see `PromptBox.paintVariations`.
+    this.varies = varies;
     // The one sampler setting a card may answer for itself — see
     // `segmentSeedPill`. Null on a node body, which owns the whole row.
     this.seedTarget = seedTarget;
@@ -305,6 +309,7 @@ export class CreatorEditor {
         this.prompt.refreshCompiled();
       },
       compiled: this.compiledPrompt ? () => this.compiledPrompt() : null,
+      pick: () => this.varies?.() ?? null,
       onAttach: (row) => this.attachFromMention(row),
       attachBlocked: (action) => S.blockedReason(this.state, action),
       // The piece's reference pool, where this state is a timeline segment —

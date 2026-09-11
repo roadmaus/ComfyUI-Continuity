@@ -820,6 +820,17 @@ def _run(body):
             f'or edit them in.'
         )
 
+    # A `{day|night}` in the request is a choice left to the seed, and the same
+    # promise: the rewrite may grow each alternative, but every group has to
+    # come back offering as many, or the render has nothing left to choose.
+    for source in refine.dropped_variations(
+            [s.get("text") or "" for s in shots] + [piece_text or ""], everything):
+        problems.append(
+            f"the request leaves {source} to the seed and the rewrite no longer "
+            f"offers that choice — every render would make the same video. Refine "
+            f"again, or write the braces back in."
+        )
+
     return {
         "mode": mode,
         # Which template actually wrote this, and whether that was the request's

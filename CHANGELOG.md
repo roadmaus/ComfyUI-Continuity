@@ -6,6 +6,20 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**`{day|night}` in a prompt is a choice the seed makes.** Braces holding
+alternatives separated by bars turn one prompt into many videos: every render
+picks one alternative from each group, the same seed picks the same ones, and
+rolling the seed asks for a new combination. Groups nest, an alternative may
+be empty, and `{@anna|@ben}` casts whoever is picked with only their files.
+The choice is made on the piece before a request exists, so a card with no
+group keeps the cache entry it had, and each card on a strip chooses on its
+own seed and number while the global prompt chooses once for the piece. The
+prompt box lights the alternative the current seed will take and fades the
+rest, in the sentence itself, and "What the model reads" shows the finished
+prompt with the choice made. Refine is told to keep every group and may grow
+the alternatives; a rewrite that settled a choice on its own is reported under
+the panel the way a dropped quote is (issue #69, asked for by @G0Thommy).
+
 **The words on a cast member's file survive changing what it lends them.**
 The tile's menu takes a sentence about the file and is also where the file
 is switched from their looks to their action, and the switch threw the
