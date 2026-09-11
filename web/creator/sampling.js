@@ -771,7 +771,10 @@ export function samplingBar({ widgets, value, set, perSegment = false,
           if (stages.length === 1) { lastVdnStage = stages[0]; set("vdn", stages[0]); return; }
           pick(event.currentTarget);
         },
-      }, [icon("timeline", 16), el("span", { text: on ? t("VDN") : t("VDN off") })]),
+      // The link: the branch carries state from frame to frame across the
+      // whole shot, which is the one thing about VDN a glyph can say. Not the
+      // strip — that already means the Timeline, two rows up.
+      }, [icon("link", 16), el("span", { text: on ? t("VDN") : t("VDN off") })]),
       ...(known ? [el("button", {
         class: "mmc-step mmc-turbo-pick",
         title: t("Pick a different VDN-H3 stage — now {stage}.", { stage: known }),
