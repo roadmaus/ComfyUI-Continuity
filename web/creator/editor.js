@@ -1514,6 +1514,9 @@ export class CreatorEditor {
       // The turbo switch, for a node body only: a timeline segment has no
       // sampler of its own to throw it on — and only for a family that declares
       // a distillation, since every number the switch throws is that family's.
+      // The VDN-H3 pill throws the switch too, so it needs what the switch
+      // works on. A node body only, like the switch.
+      container: this.nodeId ? this.piece : null,
       turbo: this.nodeId && S.turboOf(S.pieceFamily(this.piece)) ? Turbo.turboPills({
         container: this.piece,
         ...this.widgetIO(),

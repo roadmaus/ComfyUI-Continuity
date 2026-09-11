@@ -132,6 +132,12 @@ out.turboPresets = Object.fromEntries(
    "turbo/minimax_h3_turbo_v4.safetensors"].map(
     (name) => [name, { steps: S.turboSteps(name, "h3"), row: S.turboRow(name, "h3"),
                        strength: S.turboStrength(name, "h3") }]));
+// Under VDN-H3 every file resolves to the stage's block: the file is off the
+// run and the stage's adapter is the distillation.
+out.turboUnderVdn = ["turbo/lightx2v_4step.safetensors", ""].map((name) => {
+  const p = S.turboPreset(name, "h3", true);
+  return { steps: p.steps, row: p.row, shifts: [p.shift_video, p.shift_audio], fixed: p.fixed === true };
+});
 
 console.log(JSON.stringify(out));
 """
@@ -166,6 +172,15 @@ check("and the ordinary files still engage at the strengths they always did",
       [reflected["turboPresets"][n]["strength"] for n in
        ("turbo/lightx2v_4step.safetensors", "turbo/minimax_h3_turbo_v4.safetensors")],
       [0.6, turbo_block["default_strength"]])
+
+
+vdn = turbo_block["vdn"]
+for got in reflected["turboUnderVdn"]:
+    check("under VDN-H3 the stage's block owns the row, file or no file",
+          (got["row"], got["shifts"], got["fixed"], sorted(set(got["steps"].values()))),
+          (vdn["row"], [vdn["shift_video"], vdn["shift_audio"]], True, [vdn["steps"]]))
+check("and every quality is the stage's one count",
+      sorted(reflected["turboUnderVdn"][0]["steps"]), sorted(turbo_block["steps"]))
 
 
 # ---- the field list ----------------------------------------------------------

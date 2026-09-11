@@ -216,9 +216,14 @@ re-render.
   it ships with the pack. It is for long shots — under about fifteen latent
   frames it falls back to plain attention and only costs — and it is slower per
   step than the int8 attention routes, so a strip of two-second cards gains
-  nothing from it and a strip of fifteen-second ones does. With turbo on, the
-  stage's own 8-step adapter is used and the turbo file is left off the run;
-  the turbo lead-in then holds that adapter off for its opening steps. Does not
+  nothing from it and a strip of fifteen-second ones does. Throwing the pill
+  throws turbo with it: the stage's own 8-step adapter is the distillation, so
+  the row is set to 8 steps, er_sde + beta on the checkpoints' own shifts
+  (the port's example row), the turbo file is left off the run and the quality
+  stops are not drawn. Turbo off under VDN is the 50-step stage. Switching VDN
+  off gives the row back to the turbo file, or releases the switch if the pill
+  was what threw it. The turbo lead-in holds the adapter off for its opening
+  steps the way it holds the file off. Does not
   combine with sage attention (both replace the same forward); kitchen
   attention, the caches, Spectrum and low vram compose.
 - Accelerator pills (caches, sage attention, low vram, and so on) appear when

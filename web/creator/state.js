@@ -819,8 +819,18 @@ export const TURBO_RESET = TURBO.reset;
  *  against fixed places on the flow grid and only lands on them at certain step
  *  counts under one scheduler — so where a file says which, the switch sets
  *  what it says instead of the family's own. */
-export function turboPreset(name, family = DEFAULT_VIDEO_FAMILY) {
+export function turboPreset(name, family = DEFAULT_VIDEO_FAMILY, vdn = false) {
   const TURBO = turboOf(family) ?? turboOf(DEFAULT_VIDEO_FAMILY);
+  // Under VDN-H3 the file is left off the run and the stage's own adapter is
+  // the distillation, so the family's `vdn` block owns the row outright —
+  // one count, spelled into every quality so the switch's table keeps its
+  // shape, and `fixed` so the pill knows not to draw the stops.
+  if (vdn && TURBO.vdn) {
+    const v = TURBO.vdn;
+    return { strength: TURBO.default_strength, shift_video: v.shift_video, shift_audio: v.shift_audio,
+             row: v.row, steps: Object.fromEntries(Object.keys(TURBO.steps).map((q) => [q, v.steps])),
+             note: v.note ?? "", fixed: true };
+  }
   const hit = TURBO.presets.find((p) => new RegExp(p.match, "i").test(name || ""));
   if (hit) {
     return { strength: hit.strength, shift_video: hit.shift_video, shift_audio: hit.shift_audio,
@@ -836,11 +846,19 @@ export const turboStrength = (name, family = DEFAULT_VIDEO_FAMILY) =>
 
 /** The step table the switch's qualities write for one file, and the sampler
  *  row it sets. Both are the family's unless the file's preset owns them. */
-export const turboSteps = (name, family = DEFAULT_VIDEO_FAMILY) =>
-  turboPreset(name, family).steps;
+export const turboSteps = (name, family = DEFAULT_VIDEO_FAMILY, vdn = false) =>
+  turboPreset(name, family, vdn).steps;
 
-export const turboRow = (name, family = DEFAULT_VIDEO_FAMILY) =>
-  turboPreset(name, family).row;
+export const turboRow = (name, family = DEFAULT_VIDEO_FAMILY, vdn = false) =>
+  turboPreset(name, family, vdn).row;
+
+/** Whether the row's VDN-H3 pill is thrown, read through the family's own
+ *  declaration of the field — a family with no `vdn` widget is never under it,
+ *  whatever a blob carries. `value` is the body's widget reader. */
+export function vdnOn(family, value) {
+  const control = widgetsOf(family).find((w) => w.id === "vdn");
+  return !!control && String(value("vdn", control.default)) !== control.off;
+}
 
 /** The switch's block, off. `family` decides only the quality it starts on —
  *  a family with no turbo switch never draws the pill, and the block rides its
@@ -863,6 +881,9 @@ export function emptyTurbo(family = DEFAULT_VIDEO_FAMILY) {
     // two other places — the chip and the manager — which is why this is
     // reconciled against the stack on every commit rather than trusted.
     on: false,
+    // Thrown by the VDN-H3 pill with no file and no merged claim — on for the
+    // stage's adapter alone, so the pill going off releases it too.
+    byVdn: false,
     // The sampler row as it stood when the switch was thrown: {steps,
     // sampler_name, scheduler}. Null when off.
     saved: null,
@@ -876,6 +897,7 @@ export function parseTurbo(raw) {
   out.merged = raw.merged === true;
   if (TURBO_QUALITIES.includes(raw.quality)) out.quality = raw.quality;
   out.on = raw.on === true;
+  out.byVdn = out.on && raw.byVdn === true;
   if (raw.saved && typeof raw.saved === "object") {
     out.saved = {
       steps: Number(raw.saved.steps) || TURBO_RESET.steps,
@@ -901,6 +923,7 @@ export function serializeTurbo(turbo) {
   if (picked.merged) out.merged = true;
   if (picked.quality !== "medium") out.quality = picked.quality;
   if (picked.on) out.on = true;
+  if (picked.byVdn) out.byVdn = true;
   if (picked.saved) out.saved = { ...picked.saved };
   return { turbo: out };
 }

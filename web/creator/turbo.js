@@ -133,6 +133,11 @@ function throwOn(container, { value, set }) {
   // family that has a turbo switch at all.
   const family = S.pieceFamily(container);
   const turbo = container.turbo;
+  // Under VDN-H3 the stage's own adapter is the distillation and the file is
+  // left off the run, so the row is the stage's — see `state.turboPreset`. The
+  // file still goes into the stack when there is one: VDN off again is an
+  // ordinary turbo run on it, with nothing to re-pick.
+  const vdn = S.vdnOn(family, value);
   // No file is the merged-checkpoint mode: the distillation is already in the
   // weights, so the switch touches nothing but the sampler row.
   if (turbo.lora) {
@@ -162,17 +167,18 @@ function throwOn(container, { value, set }) {
   // The row and the step table are the family's unless the picked file's preset
   // owns them — see `state.turboPreset`. With no file at all they are the
   // family's by definition: a merged checkpoint has no card to read.
-  const steps = S.turboSteps(turbo.lora, family);
-  const row = S.turboRow(turbo.lora, family);
+  const steps = S.turboSteps(turbo.lora, family, vdn);
+  const row = S.turboRow(turbo.lora, family, vdn);
   set("steps", steps[turbo.quality] ?? steps.medium ?? S.TURBO_STEPS.medium);
   set("sampler_name", row.sampler_name);
   set("scheduler", row.scheduler);
   // The flow shifts the picked family's card was distilled against — part of
   // the same contract as the step count, so they are thrown and released with
   // the row. Merged-checkpoint mode keeps the row's own values: the schedule
-  // is the checkpoint's business and the user picked it.
-  if (turbo.lora) {
-    const preset = S.turboPreset(turbo.lora, family);
+  // is the checkpoint's business and the user picked it. Under VDN they are
+  // the stage's, file or no file — the adapter, not the file, is what runs.
+  if (turbo.lora || vdn) {
+    const preset = S.turboPreset(turbo.lora, family, vdn);
     set("shift_video", preset.shift_video);
     set("shift_audio", preset.shift_audio);
   }
@@ -189,6 +195,32 @@ function throwOff(container, { set }, { removeEntry = true } = {}) {
   set("shift_audio", saved.shift_audio ?? S.TURBO_RESET.shift_audio);
   turbo.on = false;
   turbo.saved = null;
+  turbo.byVdn = false;
+}
+
+/**
+ * The VDN-H3 pill was thrown, `on` or off — keep the switch in step.
+ *
+ * On throws turbo with it: the stage's 8-step adapter follows the switch, and
+ * a stage sampled at the row's twenty res_multistep steps is the 50-step model
+ * run short. No file is needed to throw — the adapter is the distillation — so
+ * a switch that was never given one engages in merged mode for the stage's
+ * sake, and off again releases it, since with no file there is nothing left
+ * for it to be on. A switch with a file, or already on, is re-thrown so the
+ * row moves between the stage's numbers and the file's; the saved row is the
+ * pre-turbo one either way.
+ */
+export function syncVdn(container, widgetIO, on) {
+  const turbo = container.turbo;
+  if (!turbo) return;
+  if (on) {
+    if (!turbo.on) turbo.byVdn = !turbo.lora && !turbo.merged;
+    throwOn(container, widgetIO);
+    return;
+  }
+  if (!turbo.on) return;
+  if (turbo.byVdn) { throwOff(container, widgetIO); return; }
+  throwOn(container, widgetIO);
 }
 
 /**
@@ -260,20 +292,30 @@ export function turboPills({ container, value, set, onCommit }) {
   // The row the switch is setting, named rather than assumed: it is the
   // family's for every ordinary distill and the file's own for one that was
   // trained against a particular schedule.
-  const rowOf = S.turboRow(turbo.lora, S.pieceFamily(container));
+  const vdn = S.vdnOn(S.pieceFamily(container), value);
+  const rowOf = S.turboRow(turbo.lora, S.pieceFamily(container), vdn);
   const rowName = `${rowOf.sampler_name} + ${rowOf.scheduler}`;
+  const rowSteps = S.turboSteps(turbo.lora, S.pieceFamily(container), vdn)[turbo.quality]
+    ?? S.TURBO_STEPS.medium;
 
   pills.push(el("div", { class: `mmc-pill mmc-pill-group${on ? " accel-on" : ""}` }, [
     el("button", {
       class: "mmc-turbo-main",
       title: on
-        ? turbo.lora
+        ? vdn
+          ? t("Turbo — VDN-H3's own 8-step adapter at {steps} steps, {row}; the turbo file stays off the run. "
+            + "Switching off runs the 50-step stage and puts the sampler row back.",
+            { steps: value("steps", "?"), row: rowName })
+        : turbo.lora
           ? t("Turbo — running on {lora} at {steps} steps, {row}. "
             + "Switching off removes the LoRA and puts the sampler row back.",
             { lora: turbo.lora, steps: value("steps", "?"), row: rowName })
           : t("Turbo — {steps} steps, {row}, no LoRA: the checkpoint is "
             + "taken to be a merged distill. Switching off puts the sampler row back.",
             { steps: value("steps", "?"), row: rowName })
+        : vdn
+          ? t("Turbo off — the VDN-H3 stage runs as its 50-step model. On, its 8-step adapter goes on "
+            + "and the row is set to {steps} steps, {row}.", { steps: rowSteps, row: rowName })
         : turbo.lora
           ? t("Turbo off. On, it adds {lora}, drops the steps to the picked quality and "
             + "switches the sampler to {row} — H3's soundtrack warbles on "
@@ -284,7 +326,9 @@ export function turboPills({ container, value, set, onCommit }) {
         if (turbo.on) {
           throwOff(container, { value, set });
           onCommit();
-        } else if (turbo.lora || turbo.merged) {
+        } else if (turbo.lora || turbo.merged || vdn) {
+          // Under VDN no file is needed: the stage's adapter is the distillation.
+          if (vdn && !turbo.lora && !turbo.merged) turbo.byVdn = true;
           throwOn(container, { value, set });
           onCommit();
         } else {
@@ -343,7 +387,9 @@ export function turboPills({ container, value, set, onCommit }) {
 
   // Only while it is doing something, like the spectrum blend: off, the
   // qualities are a setting for a feature not in use.
-  if (on) {
+  // Not under VDN either: a DMD stage has one count, and three stops writing
+  // the same eight would be a control with nothing to choose.
+  if (on && !vdn) {
     const steps = Number(value("steps", 0));
     // The picked file's table, which is the family's for everything that does
     // not name its own. A file with its own counts describes them itself rather

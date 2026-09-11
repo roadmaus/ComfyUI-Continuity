@@ -4027,6 +4027,8 @@ export class TimelineBody {
       // throws (the step counts, euler + beta, the flow shifts a distill was
       // trained against) is that family's, and a pill offering H3's on another
       // family's row is a shortcut into weights nobody has.
+      // The VDN-H3 pill throws the switch too — the same container.
+      container: this.timeline,
       turbo: S.turboOf(S.pieceFamily(this.timeline)) ? Turbo.turboPills({
         container: this.timeline,
         ...this.widgetIO(),

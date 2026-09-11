@@ -21,6 +21,7 @@ import { t } from "./i18n.js";
 import { openChoicePopover, stepperPill, pillSet, pillClass, accelClass } from "./pills.js";
 import { DEFAULT_VIDEO_FAMILY, widgetsOf as S_widgetsOf } from "./state.js";
 import { listVdnStages, uiSetting } from "./api.js";
+import { syncVdn } from "./turbo.js";
 import { lastSeed } from "./seedmemory.js";
 
 export const SEED_CONTROL = ["fixed", "increment", "decrement", "randomize"];
@@ -600,7 +601,7 @@ function declaredPill(w, widgets, value, set, seg = false, lit = false) {
 
 export function samplingBar({ widgets, value, set, perSegment = false,
                               guide = [], turbo = [], trailing = [],
-                              family = DEFAULT_VIDEO_FAMILY }) {
+                              family = DEFAULT_VIDEO_FAMILY, container = null }) {
   const pills = [];
 
   // A family the frontend has never seen draws its row from its own manifest —
@@ -747,6 +748,15 @@ export function samplingBar({ widgets, value, set, perSegment = false,
     // the switch was last thrown off — so off-and-on is two presses, not a
     // trip through the picker each time.
     const known = on ? stage : lastVdnStage;
+    // The stage goes on with the turbo switch in step: its 8-step adapter is
+    // the distillation, so throwing the pill throws turbo and sets the row to
+    // the stage's numbers, and off gives the file's row (or the saved one)
+    // back. `container` is the body's, the same one its turbo pills work on;
+    // a row drawn without one — none today — would only write the stage.
+    const throwStage = (next) => {
+      set("vdn", next);
+      if (container?.turbo) syncVdn(container, { value, set }, next !== vdnControl.off);
+    };
     const pick = (anchor) => listVdnStages().then((stages) => openChoicePopover(anchor, {
       title: t("VDN-H3 stage"),
       options: stages,
@@ -754,21 +764,21 @@ export function samplingBar({ widgets, value, set, perSegment = false,
       find: true,
       extra: stages.length ? null : () => el("div", { class: "mmc-pop-note",
         text: t("No stage under models/vdn yet. A stage is a directory — model_spec.json, linear_branch/ and adapters/ — see the models page in the docs.") }),
-      onPick: (picked) => { lastVdnStage = picked; set("vdn", picked); },
+      onPick: (picked) => { lastVdnStage = picked; throwStage(picked); },
     }));
     pills.push(el("div", { class: `mmc-pill mmc-pill-group${on ? " accel-on" : ""}` }, [
       el("button", {
         class: "mmc-turbo-main",
         title: on
-          ? t("VDN-H3 — running on {stage}. Nearby frames keep exact attention and the rest of the shot goes through the linear branch, so the cost grows with length instead of squaring. With turbo on, the stage's own 8-step adapter is used and the turbo file is left off the run. Switching off puts the plain attention back.", { stage })
-          : t("VDN-H3 off. On, the shot samples through Video Delta Net — a linear-attention branch over the same H3 weights, from a stage directory under models/vdn. For long shots: under about fifteen latent frames it falls back to plain attention and only costs. Its 8-step adapter follows the turbo switch and replaces the turbo file."),
+          ? t("VDN-H3 — running on {stage}. Nearby frames keep exact attention and the rest of the shot goes through the linear branch, so the cost grows with length instead of squaring. With turbo on, the stage's own 8-step adapter runs at 8 steps, er_sde + beta, and the turbo file is left off the run. Switching off puts the plain attention back and gives the row back to turbo.", { stage })
+          : t("VDN-H3 off. On, the shot samples through Video Delta Net — a linear-attention branch over the same H3 weights, from a stage directory under models/vdn — and throws turbo with it: the stage's own 8-step adapter, at 8 steps, er_sde + beta. For long shots: under about fifteen latent frames it falls back to plain attention and only costs."),
         onclick: async (event) => {
-          if (on) { lastVdnStage = stage; set("vdn", vdnControl.off); return; }
-          if (lastVdnStage) { set("vdn", lastVdnStage); return; }
+          if (on) { lastVdnStage = stage; throwStage(vdnControl.off); return; }
+          if (lastVdnStage) { throwStage(lastVdnStage); return; }
           // No stage known yet: the first press is the picking, like turbo's.
           // One stage on disk is the common case and needs no list.
           const stages = await listVdnStages();
-          if (stages.length === 1) { lastVdnStage = stages[0]; set("vdn", stages[0]); return; }
+          if (stages.length === 1) { lastVdnStage = stages[0]; throwStage(stages[0]); return; }
           pick(event.currentTarget);
         },
       // The link: the branch carries state from frame to frame across the

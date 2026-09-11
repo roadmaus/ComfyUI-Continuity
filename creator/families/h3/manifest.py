@@ -214,6 +214,19 @@ TURBO = {
                          "and only steps on them at 4 or 8 steps with the "
                          "simple scheduler."}],
     "default_strength": 1.0,
+    # Under VDN-H3 the distillation is the stage's own adapter — an 8-step DMD
+    # over the base schedule — and the picked file is left off the run
+    # (`render.LeadIn.dropped`), so its preset has nothing to say. The switch
+    # sets what the adapter was trained for instead: one count, the port's
+    # example row (er_sde + beta) and the checkpoints' own shifts. No quality
+    # stops — a DMD stage has one count, and the stop names would be three
+    # buttons writing the same number.
+    "vdn": {"steps": 8,
+            "row": {"sampler_name": "er_sde", "scheduler": "beta"},
+            "shift_video": sampling.DEFAULTS["shift_video"],
+            "shift_audio": sampling.DEFAULTS["shift_audio"],
+            "note": "VDN-H3: the stage's 8-step adapter is the distillation, "
+                    "trained at this count on the checkpoints' own schedule."},
 }
 
 

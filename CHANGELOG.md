@@ -6,6 +6,18 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**The VDN-H3 pill throws turbo with it, at the stage's own numbers.** Before,
+the pill only picked the stage: the sampler row stayed at twenty res_multistep
+steps, and the turbo switch — if thrown — landed on its own quality's count,
+six by default, under a distill adapter trained for eight. Now the `vdn` block
+of the family's turbo declaration owns the row whenever the stage is on: 8
+steps, er_sde + beta (the port's example workflow) on the checkpoints' own
+shifts, whatever file the switch holds, since the file is off the run anyway.
+The pill going on throws the switch — with no file and no merged claim it
+engages for the stage's sake and is released when the pill goes off; with a
+file it is re-thrown to the file's row instead. The quality stops are not drawn
+under VDN, a DMD stage having one count.
+
 **VDN-H3 on the sampler row.** A pill picks a Video Delta Net stage from
 `models/vdn` and the shot samples through OpenVDN's hybrid attention: nearby
 frames keep exact softmax attention inside a window, everything further away
