@@ -849,8 +849,10 @@ class SettingsPage {
       { value: "masked", label: "The latent, masked",
         note: "The same slice, written into the next shot's own latent and held "
             + "there while the rest is sampled: the model continues the frames it "
-            + "made rather than generating new ones under guidance. Picture only; "
-            + "the sound crosses the seam as before." },
+            + "made rather than generating new ones under guidance. Measured to take "
+            + "the step out of the seam, and cheaper to sample. Not yet with a turbo "
+            + "lead-in, where it comes out worse than the guides. Picture only; the "
+            + "sound crosses the seam as before." },
     ];
     return this.section("Rendering", "Seam handoff",
       "What a blended seam hands the next shot. Every continued shot comes out a "
