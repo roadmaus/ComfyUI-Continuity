@@ -6,6 +6,20 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**A strip that opens on footage or a held take no longer renders its later
+parts one size too small under "direct".** The timeline pins every part to
+one canvas, and when part 1 was a clip or a held take, or the ratio pill was
+forced, that pin was resolved at the first-pass edge on the assumption that
+a refine pass would carry it up to the slider. Under "direct" nothing does,
+so an 864 slider gave an 864 first part and 768 for the rest, and the save
+node refused the reel after all of it had sampled (issue #15, found on the
+two-GPU path, where two-pass is refused and direct is the only way past
+native). The pin now resolves at the edge the first pass actually samples
+at. And the size check runs before a node is built: a strip whose parts
+would not match is refused in the same breath as every other pre-queue
+refusal, naming both parts, instead of ten minutes and a discarded render
+later. Reported with a precise repro by @ofung30-sketch.
+
 **The turbo lead-in is on by default, at four steps.** It shipped off,
 because nobody had measured it. It has been now: on an 8-hop turbo strip the
 brightness step at every cut goes from +2.86 with it off to +1.74 at three

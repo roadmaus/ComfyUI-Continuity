@@ -119,6 +119,43 @@ def compile_all(family, payloads, labels):
     return out
 
 
+def _refuse_mismatched_parts(payloads, compiled):
+    """Refuse a strip whose parts would not come out the same size.
+
+    The save node checks this on the finished reel (`mux.reel_geometry`), which
+    is ten minutes of sampling late. Everything it compares is known here: a
+    generated pass delivers its refine target where it has one, its re-detail
+    size where that is on, and what it sampled otherwise; footage and a held
+    take are conformed to the size stamped on the payload. Said now, before a
+    node is built, like every other refusal in this loop (#15).
+    """
+    if len(payloads) < 2:
+        return
+    sizes = []
+    for index, (payload, one) in enumerate(zip(payloads, compiled), start=1):
+        if one is None:
+            clip = payload.get("clip") or {}
+            if not clip.get("width") or not clip.get("height"):
+                continue
+            sizes.append((index, (int(clip["width"]), int(clip["height"]))))
+        elif one.redetail is not None:
+            sizes.append((index, (one.redetail.width, one.redetail.height)))
+        elif one.refine is not None:
+            sizes.append((index, (one.refine.width, one.refine.height)))
+        else:
+            sizes.append((index, (one.width, one.height)))
+    if not sizes:
+        return
+    first_index, first = sizes[0]
+    for index, size in sizes[1:]:
+        if size != first:
+            raise ValueError(
+                f"part {index} would come out {size[0]}x{size[1]} and part "
+                f"{first_index} {first[0]}x{first[1]} — the parts of one render "
+                f"have to match. Set every card to the same resolution and "
+                f"upscale mode, or take the odd one off the strip.")
+
+
 def is_clip_source(source):
     """Whether a seam is inheriting from supplied footage rather than a pass.
 
@@ -246,6 +283,7 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
         payloads = [{**payload, "progress": {"index": int(number)}}
                     for payload, number in zip(payloads, numbers)]
     compiled = compile_all(family, payloads, labels)
+    _refuse_mismatched_parts(payloads, compiled)
     where = family.routes(compiled, labels)
 
     # Whether each pass writes its own take the moment it exists, off the reel
