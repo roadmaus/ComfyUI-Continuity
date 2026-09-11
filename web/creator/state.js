@@ -4,6 +4,7 @@
 
 import { VIDEO_RULES, featherGrid, framesForSeconds, secondsForFrames,
          matchSeconds, resolveCanvas, rulesFor } from "./canvas.js";
+import { resolve as resolveVariations } from "./variations.js";
 import { DEFAULT_STILL_ARCH, DEFAULT_VIDEO_FAMILY, STILL_ARCHES,
          UPSCALERS, VIDEO_FAMILIES, stillFamily, upscaler, videoFamily } from "./manifest.js";
 import { t } from "./i18n.js";
@@ -5032,6 +5033,58 @@ export function renameSubjectCitations(hosts, from, to) {
     for (const key of Object.keys(refined.sections ?? {})) write(refined.sections, key);
   }
   return moved;
+}
+
+/**
+ * The files a `{day|night}` in this card's prose leaves out under `pick`.
+ *
+ * A handle written inside an alternative the seed passes over is a file the
+ * sentence named and the render will not mention — `compile.varied_piece`
+ * mutes it for that render, and a cast member passed over is cut with their
+ * files. The row and the shelf show the same thing, off the same choice the
+ * box lights: what is dimmed in the sentence is dimmed on the chip, and
+ * nothing that is greyed is being sent.
+ *
+ * `pick` is `{seed, card}` as the editor's `varies` names it; null means no
+ * node answers for the seed, and then nothing is passed over. The card's own
+ * prose chooses on the card, the piece's standing texts as the piece.
+ */
+export function passedOver(state, pick) {
+  const found = new Set();
+  if (!pick) return found;
+  const own = (text) => resolveVariations(text ?? "", pick.seed, pick.card);
+  const piece = (text) => resolveVariations(text ?? "", pick.seed, "piece");
+  const global_ = state.globalTexts ?? {};
+  const before = poolTexts(state);
+  if (!before.some((text) => String(text ?? "").includes("{"))) return found;
+  const after = [own(state.prompt), piece(global_.prompt),
+                 state.soundscape ? own(state.soundscape) : piece(global_.soundscape),
+                 state.music ? own(state.music) : piece(global_.music)];
+  if (state.refined && state.refined.enabled !== false) {
+    after.push(own(state.refined.body));
+    for (const text of Object.values(state.refined.sections ?? {})) after.push(own(text));
+  }
+  const lost = citedHandles(before);
+  for (const handle of citedHandles(after)) lost.delete(handle);
+  const cast = state.cast ?? [];
+  const named = citedSubjects(before, cast);
+  const kept = citedSubjects(after, cast);
+  for (const subject of cast) {
+    if (!named.has(subject.handle) || kept.has(subject.handle)) continue;
+    lost.add(subject.handle);
+    for (const handle of subjectFiles(subject)) lost.add(handle);
+    for (const handle of replacesOf(subject)) lost.add(handle);
+  }
+  // A file the chosen text still names — on its own, or through somebody
+  // else who is cast — stays in the shot.
+  const still = citedHandles(after);
+  for (const subject of cast) {
+    if (!kept.has(subject.handle)) continue;
+    for (const handle of subjectFiles(subject)) still.add(handle);
+    for (const handle of replacesOf(subject)) still.add(handle);
+  }
+  for (const handle of still) lost.delete(handle);
+  return lost;
 }
 
 /** The subjects the given texts cite, as a Set of names. */

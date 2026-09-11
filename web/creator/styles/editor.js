@@ -197,6 +197,13 @@ export const css = `
 .mmc-asset-mute.on { color: var(--mmc-accent); }
 .mmc-asset.off .mmc-asset-handle { color: var(--mmc-dim); }
 .mmc-asset.off .mmc-asset-thumb { filter: grayscale(1); }
+/* Passed over: named only inside an alternative the seed on the node does not
+   take (see state.passedOver). Dimmed the way a muted chip is, because for
+   this render that is what it is, and with no glyph lit, because nobody
+   pressed anything — roll the seed and it comes back. */
+.mmc-asset.passed { opacity: .6; }
+.mmc-asset.passed .mmc-asset-handle { color: var(--mmc-dim); }
+.mmc-asset.passed .mmc-asset-thumb { filter: grayscale(1); }
 
 /* The swap button sits in the ✕'s row and wears its colours; the glyph needs
    the extra line-height reset a text button does not. */

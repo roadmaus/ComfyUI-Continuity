@@ -119,6 +119,8 @@ export const ja = {
  "{count} feature": "特徴 {count} 件",
  "{count} features": "特徴 {count} 件",
  "yours": "あなたの文",
+ "Not in this take: the sentence names it only in an alternative this seed passes over.": "このテイクには入りません。文中では、このシードが選ばない選択肢の中でしか名前が出ていません。",
+ "passed over by this seed": "このシードでは選ばれていません",
  "What the model reads": "モデルが読む文",
  "compiling…": "コンパイル中…",
  "could not compile": "コンパイルできませんでした",

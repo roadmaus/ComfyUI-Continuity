@@ -140,6 +140,31 @@ check("the compiled prompt carries the choice and no braces",
       ["{" in compiled[0].prompt, ("day walk" in compiled[0].prompt) or ("night walk" in compiled[0].prompt)],
       [False, True])
 
+# A file named only inside an alternative the seed passes over is muted for
+# the render: everything live in `assets` is encoded whether the prompt names
+# it or not, so the words alone choosing would send both pictures.
+def picture(handle):
+    return {"handle": handle, "kind": "image", "role": "reference", "filename": handle + ".png"}
+
+
+either = strip(shot("{@img-1|@img-2} walks in", assets=[picture("img-1"), picture("img-2")]))
+for seed in range(8):
+    card = compiler.varied_piece(either, seed)["segments"][0]
+    named = card["prompt"].split(" ")[0][1:]
+    check(f"seed {seed}: the picture the sentence lost is muted, the one it kept is not",
+          {a["handle"]: a.get("enabled", True) for a in card["assets"]},
+          {"img-1": named == "img-1", "img-2": named == "img-2"})
+    compiled_card = compiler.compile_timeline(compiler.varied_piece(either, seed))[0]
+    check(f"seed {seed}: one picture reaches the encoder",
+          len(compiled_card.ref_images), 1)
+
+unnamed = strip(shot("{a|b} walks in", assets=[picture("img-1")]))
+check("a file the sentence never named is left attached, as it always was",
+      compiler.varied_piece(unnamed, 3)["segments"][0]["assets"][0].get("enabled"), None)
+twice = strip(shot("{@img-1|@img-1 slowly} walks in", assets=[picture("img-1")]))
+check("a file every alternative names is never muted",
+      compiler.varied_piece(twice, 3)["segments"][0]["assets"][0].get("enabled"), None)
+
 # ---- the refiner ---------------------------------------------------------------
 
 check("a rewrite that keeps every group passes",

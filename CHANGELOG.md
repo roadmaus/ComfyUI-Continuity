@@ -10,7 +10,11 @@ exactly as it was written, wall of text and all.
 alternatives separated by bars turn one prompt into many videos: every render
 picks one alternative from each group, the same seed picks the same ones, and
 rolling the seed asks for a new combination. Groups nest, an alternative may
-be empty, and `{@anna|@ben}` casts whoever is picked with only their files.
+be empty, and `{@anna|@ben}` casts whoever is picked with only their files —
+a reference named only inside the alternative the seed passed over is muted
+for that render, and its chip on the row greys with the name in the sentence,
+because everything live on the row is encoded whether the prompt names it or
+not.
 The choice is made on the piece before a request exists, so a card with no
 group keeps the cache entry it had, and each card on a strip chooses on its
 own seed and number while the global prompt chooses once for the piece. The

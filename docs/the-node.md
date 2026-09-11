@@ -142,7 +142,9 @@ Groups nest - `{on the beach {in the shade|in hard sun}|in a mansion {at
 night|by day}}` - an alternative may be empty (`{|, smiling}` sometimes adds
 the smile), and a cast member or a file is an alternative like any other word:
 `{@anna|@ben} turns to the camera` casts whoever is picked, and only their
-files ride into the shot. A brace pair with no bar in it is ordinary text.
+files ride into the shot. A file named only inside an alternative the seed
+passes over is muted for that render, and its chip on the reference row is
+greyed to say so. A brace pair with no bar in it is ordinary text.
 
 The box shows the choice as you type: the braces and bars take the accent
 colour, and the alternatives this seed passes over fade, so what stands at

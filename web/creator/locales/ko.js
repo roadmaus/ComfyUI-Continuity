@@ -119,6 +119,8 @@ export const ko = {
  "{count} feature": "특징 {count}개",
  "{count} features": "특징 {count}개",
  "yours": "직접 쓴 것",
+ "Not in this take: the sentence names it only in an alternative this seed passes over.": "이 테이크에는 들어가지 않습니다. 문장에서 이 시드가 고르지 않는 선택지 안에서만 언급됩니다.",
+ "passed over by this seed": "이 시드에서는 선택되지 않음",
  "What the model reads": "모델이 읽는 문장",
  "compiling…": "컴파일 중…",
  "could not compile": "컴파일하지 못했습니다",

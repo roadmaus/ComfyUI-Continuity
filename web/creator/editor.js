@@ -1771,6 +1771,11 @@ export class CreatorEditor {
       addAsset: () => this.attachOneAsset(),
       whereCited: (subject) => {
         const cited = S.citedCast({ ...this.state, cast: [subject] }).length > 0;
+        // Named only inside an alternative this seed passes over: cut at queue
+        // time like somebody never named, and the shelf says so.
+        if (cited && S.passedOver(this.state, this.varies?.() ?? null).has(subject.handle)) {
+          return { cited: false, text: t("passed over by this seed") };
+        }
         return { cited, text: cited ? t("in the prompt") : "" };
       },
       cite: (subject) => this.citeName(subject.handle),
@@ -2110,6 +2115,10 @@ export class CreatorEditor {
       for (const handle of S.subjectFiles(subject)) cast.add(handle);
       for (const handle of S.replacesOf(subject)) cast.add(handle);
     }
+    // Files a `{day|night}` leaves out under the seed on the node. Greyed like
+    // a muted one, because for this render that is what they are — see
+    // `compile.varied_piece` — and the box has already dimmed the name.
+    const passed = S.passedOver(this.state, this.varies?.() ?? null);
     const chip = (asset) => {
       // A guide shows its own frame, where every other clip shows a glyph. That
       // is not a flourish: the only question anybody has about a guide is
@@ -2248,8 +2257,11 @@ export class CreatorEditor {
       }));
       return el("div", {
         class: `mmc-asset mmc-tag-${S.tagIndex(asset.handle)}${
-          cast.has(asset.handle) ? " mmc-asset-cast" : ""}${S.muted(asset) ? " off" : ""}`,
-        title: asset.filename,
+          cast.has(asset.handle) ? " mmc-asset-cast" : ""}${S.muted(asset) ? " off" : ""}${
+          passed.has(asset.handle) ? " passed" : ""}`,
+        title: passed.has(asset.handle)
+          ? t("Not in this take: the sentence names it only in an alternative this seed passes over.")
+          : asset.filename,
       }, parts);
     };
 

@@ -120,6 +120,8 @@ export const zh = {
  "{count} feature": "{count} 个特征",
  "{count} features": "{count} 个特征",
  "yours": "你写的",
+ "Not in this take: the sentence names it only in an alternative this seed passes over.": "不在这次生成中：句子只在这个种子未选中的备选项里提到了它。",
+ "passed over by this seed": "此种子未选中",
  "What the model reads": "模型读到的内容",
  "compiling…": "正在编译…",
  "could not compile": "无法编译",

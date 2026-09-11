@@ -528,7 +528,11 @@ export class CastShelf {
           // Titled as well as printed: a refusal is a sentence and the line has
           // room for about half of one.
           title: problem ? t(problem) : "",
-          text: problem ? t(problem) : where.cited ? where.text : t("not in the prompt yet"),
+          // A host may answer "not cited" with a reason of its own — named
+          // only inside an alternative the seed passes over — and then the
+          // reason is the line, not the standing invitation to write them in.
+          text: problem ? t(problem) : where.cited || where.text ? where.text
+              : t("not in the prompt yet"),
         }),
         el("span", { class: "mmc-cast-chev" }, [icon("chevron", 14)]),
       ]),
@@ -1091,7 +1095,7 @@ export class CastShelf {
    *  cast somebody and never write their name, so the thing that says so is also
    *  the thing that fixes it. */
   whereButton(subject, where) {
-    if (where.cited || !this.cite) {
+    if (where.cited || where.text || !this.cite) {
       return el("span", { class: "mmc-cast-where", text: where.text });
     }
     return el("button", {

@@ -2105,6 +2105,14 @@ def varied_piece(data, seed):
     piece: a standing description that changed at every cut would not be
     standing. Runs after `rendered_piece`, which is where `card_no` comes from.
 
+    A reference the sentence wrote inside an alternative the seed passed over
+    is muted for this render. Everything live in a card's `assets` is encoded
+    whether the prompt names it or not, so `{@img-1|@img-2}` would otherwise
+    choose the words and send both pictures — and a file the user put in the
+    sentence is only in the shot while the sentence keeps it. A cast member
+    passed over needs nothing here: `compile_request` cuts an uncited subject
+    and their files with them, off the chosen text.
+
     Returns `data` itself when nothing in it varies. The refiner never sees
     this: it is handed the groups as typed and asked to keep them.
     """
@@ -2118,6 +2126,16 @@ def varied_piece(data, seed):
         card = int(segment.get("card_no") or index + 1)
         varied = variations.vary_mapping(
             segment, seed if own is None else own, card)
+        if varied is not segment:
+            passed = variations.passed_over(segment, varied, HANDLE_RE)
+            if passed:
+                varied["assets"] = [
+                    {**asset, "enabled": False}
+                    if isinstance(asset, dict)
+                    and asset.get("role", "reference") == "reference"
+                    and asset.get("handle") in passed
+                    else asset
+                    for asset in (varied.get("assets") or [])]
         changed = changed or varied is not segment
         chosen.append(varied)
     if not changed:

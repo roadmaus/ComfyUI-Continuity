@@ -25,8 +25,8 @@ Free of torch and of ComfyUI, like `compile.py`, so the suite runs it bare.
 
 from dataclasses import dataclass, field
 
-__all__ = ["Group", "choose", "has_groups", "parse", "resolve", "shapes",
-           "vary_mapping"]
+__all__ = ["Group", "choose", "has_groups", "parse", "passed_over", "resolve",
+           "shapes", "vary_mapping"]
 
 
 @dataclass
@@ -215,3 +215,35 @@ def vary_mapping(mapping, seed, card, keys=("prompt", "soundscape", "music")):
             out = out if out is not None else dict(mapping)
             out["refined"] = chosen
     return out if out is not None else mapping
+
+
+def _texts(mapping, keys):
+    out = [str(mapping.get(key) or "") for key in keys]
+    refined = mapping.get("refined")
+    if isinstance(refined, dict):
+        out.append(str(refined.get("body") or ""))
+        sections = refined.get("sections")
+        if isinstance(sections, dict):
+            out.extend(str(text or "") for text in sections.values())
+    return out
+
+
+def passed_over(raw, varied, pattern, keys=("prompt", "soundscape", "music")):
+    """Handles the request wrote that the choice left out, as a set.
+
+    `@img-1` inside an alternative the seed passed over is a file the user put
+    in the sentence and the render is not going to mention — and a file that is
+    attached and unmentioned is still encoded and shown to the model, which
+    conditions the shot exactly as hard as one the prompt names. So the caller
+    mutes these for this render. Only what was written and lost: a file the
+    sentence never named is the user's to keep attached, as it always was.
+    `pattern` is the handle grammar (`compile.HANDLE_RE`), with the handle in
+    group 1.
+    """
+    before = set()
+    for text in _texts(raw, keys):
+        before.update(pattern.findall(text))
+    after = set()
+    for text in _texts(varied, keys):
+        after.update(pattern.findall(text))
+    return before - after
