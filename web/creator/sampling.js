@@ -771,7 +771,7 @@ export function samplingBar({ widgets, value, set, perSegment = false,
           if (stages.length === 1) { lastVdnStage = stages[0]; set("vdn", stages[0]); return; }
           pick(event.currentTarget);
         },
-      }, [icon("timeline", 16), el("span", { text: on ? t("vdn") : t("vdn off") })]),
+      }, [icon("timeline", 16), el("span", { text: on ? t("VDN") : t("VDN off") })]),
       ...(known ? [el("button", {
         class: "mmc-step mmc-turbo-pick",
         title: t("Pick a different VDN-H3 stage — now {stage}.", { stage: known }),

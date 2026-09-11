@@ -758,7 +758,7 @@ export const zh = {
  "Block cache": "块缓存",
  "cache off": "缓存关",
  "VDN-H3 — running on {stage}. Nearby frames keep exact attention and the rest of the shot goes through the linear branch, so the cost grows with length instead of squaring. With turbo on, the stage's own 8-step adapter is used and the turbo file is left off the run. Switching off puts the plain attention back.": "VDN-H3——正在 {stage} 上运行。相邻帧保持精确注意力，镜头其余部分走线性分支，因此开销随长度线性增长而非平方。Turbo 开启时使用该 stage 自带的 8 步适配器，turbo 文件不参与本次渲染。关闭后恢复普通注意力。",
- "vdn": "vdn",
+ "VDN": "VDN",
  "vdn off": "vdn 关",
  "Pick a different VDN-H3 stage — now {stage}.": "选择另一个 VDN-H3 stage——当前为 {stage}。",
  "No stage under models/vdn yet. A stage is a directory — model_spec.json, linear_branch/ and adapters/ — see the models page in the docs.": "models/vdn 下还没有 stage。stage 是一个目录——model_spec.json、linear_branch/ 和 adapters/——见文档的模型页。",
