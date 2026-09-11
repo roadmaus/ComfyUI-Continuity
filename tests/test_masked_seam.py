@@ -75,3 +75,24 @@ try:
 except ValueError:
     refused = True
 check("a run as long as the target is refused", refused, True)
+
+# ---- between a lead-in's two sittings ----------------------------------------
+#
+# The first sitting hands its latent on scaled by 1/(1 - sigma); the hold puts
+# the segment's own run back wherever the mask keeps it, and leaves the rest
+# of the trajectory alone.
+timeline = layout.load("timeline", package="masked_seam_contract").timeline
+scaled_video = torch.randn(1, 24, 12, 30, 42)
+scaled_audio = torch.randn(1, 32, 2, 65)
+between = {"samples": comfy.nested_tensor.NestedTensor((scaled_video, scaled_audio)),
+           "noise_mask": out["noise_mask"]}
+held = timeline.ContinuitySeamHold.execute(between, out).result[0]
+hv, ha = held["samples"].unbind()
+check("the run is back under the mask", torch.equal(hv[:, :, :7], run), True)
+check("...and the trajectory outside it is the first sitting's",
+      torch.equal(hv[:, :, 7:], scaled_video[:, :, 7:]), True)
+check("the audio is the first sitting's throughout", torch.equal(ha, scaled_audio), True)
+check("the mask rides along", held["noise_mask"] is out["noise_mask"], True)
+check("a source with no mask is passed through",
+      timeline.ContinuitySeamHold.execute(between, {"samples": out["samples"]}).result[0] is between,
+      True)

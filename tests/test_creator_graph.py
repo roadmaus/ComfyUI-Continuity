@@ -910,6 +910,39 @@ try:
           lead_graph[lead_kinds["MiniMaxH3Reel"][0][1]["samples"][0]]["class_type"],
           "KSamplerAdvanced")
 
+    # The masked seam road under a lead-in: the run is put back between the
+    # two sittings (`ContinuitySeamHold`), on the blended seam only, and never
+    # on the latent road.
+    masked_data = json.dumps({
+        **json.loads(TURBO_DATA), "version": 2,
+        "segments": [{"prompt": "one", "duration_s": 5},
+                     {"prompt": "two", "duration_s": 5, "continue": True, "feather": 22}],
+    })
+    seam_was = settings_mod.seam_handoff
+    for road, holds in (("masked", 1), ("latent", 0)):
+        settings_mod.seam_handoff = lambda road=road: road
+        try:
+            masked_kinds = by_class(build(data=masked_data, steps=6).expand)
+        finally:
+            settings_mod.seam_handoff = seam_was
+        check(f"the {road} road holds the seam between the sittings {holds} time(s)",
+              len(masked_kinds.get("ContinuitySeamHold", [])), holds)
+        if holds:
+            hold_id, hold = masked_kinds["ContinuitySeamHold"][0]
+            seconds = [i for _, i in masked_kinds["KSamplerAdvanced"]
+                       if i["latent_image"][0] == hold_id]
+            check("...the second sitting reads the held latent",
+                  [(i["start_at_step"], i["add_noise"]) for i in seconds], [(2, "disable")])
+            check("...which is the opening's output, restored from the segment's latent",
+                  (masked_kinds["KSamplerAdvanced"] and
+                   any(nid == hold["latent"][0] and i["start_at_step"] == 0
+                       for nid, i in masked_kinds["KSamplerAdvanced"]),
+                   hold["source"][1]),
+                  (True, 2))
+            check("...on the segment that continues",
+                  json.loads(dict(masked_kinds["MiniMaxH3TimelineSegment"])[hold["source"][0]]["segment_data"]).get("seam_road"),
+                  "masked")
+
     # A lead-in with nothing to lead: no distillation on the model, or a
     # schedule too short to give steps away from. Both are the ordinary graph,
     # and neither is an error — the switch is simply not in play.

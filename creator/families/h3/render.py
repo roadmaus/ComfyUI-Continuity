@@ -489,9 +489,17 @@ class H3(base.Family):
                 add_noise="enable", noise_seed=seed,
                 start_at_step=0, end_at_step=run.steps,
                 return_with_leftover_noise="enable", **common)
+            handed = opening.out(0)
+            if payload.get("seam_road") == "masked":
+                # The masked seam's run, put back under its mask before the
+                # second sitting reads it: the first hands its latent on
+                # scaled for the leftover noise, and the inpaint path would
+                # inject the run at that scale. See `ContinuitySeamHold`.
+                handed = graph.node("ContinuitySeamHold", latent=handed,
+                                    source=segment.out(2)).out(0)
             sampled = graph.node(
                 "KSamplerAdvanced",
-                model=model, latent_image=opening.out(0),
+                model=model, latent_image=handed,
                 # The noise is already in the latent. A second `enable` here
                 # would add a whole schedule's worth of it on top and throw the
                 # opening steps away.

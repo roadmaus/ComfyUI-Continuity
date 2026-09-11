@@ -364,6 +364,61 @@ class MiniMaxH3PassAudio(io.ComfyNode):
         return io.NodeOutput(spill.sound(source, float(seconds), "tail"))
 
 
+class ContinuitySeamHold(io.ComfyNode):
+    """The masked seam's prefix put back between the two sittings of a lead-in.
+
+    H3 samples as a flow model, and core's first sitting hands its leftover
+    noise on divided by `1 - sigma` at the step it stopped
+    (`CONST.inverse_noise_scaling`). The second sitting undoes that for the
+    trajectory, but the inpaint path reads the same scaled tensor as its
+    `latent_image` — the picture it injects under the mask and blends back
+    over every prediction — so the protected run reaches the model at about
+    twice its magnitude, and the shot continues from a blown-out context.
+    Measured on the strip: a seam that steps -0.11 in one sitting steps +6.5
+    in two. The guides road never touches `latent_image`, which is why only
+    the masked one breaks.
+
+    So the original is put back where the mask says it is kept: the trajectory
+    outside the mask is the first sitting's, the prefix inside it is the run
+    as the segment wrote it, and the mask rides along. Nothing about the
+    feather or the step is needed — the mask already says where.
+    """
+
+    @classmethod
+    def define_schema(cls):
+        return io.Schema(
+            node_id="ContinuitySeamHold",
+            display_name="Continuity Seam Hold",
+            category="Continuity/internal",
+            description="The masked seam's run, restored between a lead-in's two sittings.",
+            is_dev_only=True,
+            inputs=[
+                io.Latent.Input("latent"),
+                io.Latent.Input("source"),
+            ],
+            outputs=[io.Latent.Output()],
+        )
+
+    @classmethod
+    def execute(cls, latent, source) -> io.NodeOutput:
+        import comfy.nested_tensor
+
+        mask = source.get("noise_mask")
+        if mask is None:
+            return io.NodeOutput(latent)
+        streams = latent["samples"].unbind() if latent["samples"].is_nested \
+            else (latent["samples"],)
+        originals = source["samples"].unbind() if source["samples"].is_nested \
+            else (source["samples"],)
+        masks = mask.unbind() if mask.is_nested else (mask,)
+        held = []
+        for stream, original, keep in zip(streams, originals, masks):
+            keep = keep.to(device=stream.device, dtype=stream.dtype)
+            held.append(stream * keep + original.to(device=stream.device, dtype=stream.dtype) * (1 - keep))
+        samples = comfy.nested_tensor.NestedTensor(tuple(held)) if len(held) > 1 else held[0]
+        return io.NodeOutput({**latent, "samples": samples, "noise_mask": mask})
+
+
 class MiniMaxH3ClipReel(io.ComfyNode):
     """Supplied footage, added to the reel as a file rather than as frames.
 
@@ -835,5 +890,6 @@ class MiniMaxH3Save(io.ComfyNode):
 NODES = [MiniMaxH3Reel,
          MiniMaxH3PassFrames, MiniMaxH3PassAudio,
          MiniMaxH3ClipReel, MiniMaxH3ClipFrames, MiniMaxH3ClipAudio,
+         ContinuitySeamHold,
          ContinuityGuideFrames,
          ContinuityTake, MiniMaxH3Save]

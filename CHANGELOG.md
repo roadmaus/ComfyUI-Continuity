@@ -18,10 +18,12 @@ block, since a 22-frame feather does not land on the 40 Hz audio grid.
 Measured on an 8-hop turbo strip: the brightness step at each cut goes from
 +2.86 on the latent road to -0.11, end to end from +24 to under +2, and each
 pass samples in about half the time because no guide tokens ride in the
-sequence. Off by default for now, because with a turbo lead-in the two-sitting
-sampler loses the prefix and the step comes back worse (+6.5); that handover
-is the open item. Where the run does not fit the canvas, the seam falls back
-to the guides as the latent road does.
+sequence. Under a turbo lead-in it first measured worse (+6.5): core hands
+the first sitting's latent on scaled for its leftover noise, and the inpaint
+path injected the protected run at that scale. A hold between the two
+sittings now puts the run back under its mask; that path is built from the
+diagnosis and not yet measured. Off by default. Where the run does not fit
+the canvas, the seam falls back to the guides as the latent road does.
 
 **A LoRA's soundtrack slider is saved, "action" sticks, and deleting a name
 no longer deletes the cast.** Three losses from issue #52. The soundtrack
