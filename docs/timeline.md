@@ -79,10 +79,10 @@ are put back verbatim, so the fix cannot become a seam step of its own; the
 soundtrack rides through untouched. matlowai's Motion Lab worked the method
 out; this is a reimplementation of its core.
 
-Plain on the left, fixed on the right, a 2 s turbo card at the same seed
-([the clip](vid/motion-fix-burst.mp4)):
+The same frame of a 2 s turbo card at the same seed, plain on the left and
+fixed on the right ([the clip](vid/motion-fix-burst.mp4)):
 
-![A spinning kick, plain and fixed](img/motion-fix-burst.jpg)
+![Frame 12 of a spinning kick, plain and fixed](img/motion-fix-burst.jpg)
 
 The kick keeps its choreography and gets its shin, foot and face back. On
 this card the plan held 30 of 56 frames, slowed the clip to 124, and the
@@ -97,10 +97,11 @@ kick, 1.8 on the fern, gate at 2.5. The number is `motion_fix_abstain` on
 the settings page; 0 fixes every card that asks, and the node writes what it
 saw into the render history either way.
 
-Plain on the left, the same pass forced over a calm shot on the right
-([the clip](vid/motion-fix-calm.mp4)):
+The same frame of a calm shot, plain on the left and forced through the
+pass on the right — a still cannot show the motion going wrong, so
+[the clip](vid/motion-fix-calm.mp4) is the one to watch:
 
-![A fern in a draught, plain and forced through the fix](img/motion-fix-calm.jpg)
+![Frame 30 of a fern in a draught, plain and forced through the fix](img/motion-fix-calm.jpg)
 
 Measured on two clips as of this page. A pan will clear the gate on motion
 alone, and the fix has not been tried on one.
