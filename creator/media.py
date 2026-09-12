@@ -350,6 +350,24 @@ def clip_frames(spec, count, at="tail"):
     does.
     """
     start, end = _clip_window(spec)
+    if at == "spread":
+        # A storyboard's cells: one frame at the centre of each of `count`
+        # equal stretches of the window. One short decode per cell rather
+        # than the window whole — nine cells of a five-minute clip should cost
+        # nine seeks, not five minutes of frames.
+        from . import spill
+
+        length = max(0.0, end - start)
+        cells = []
+        for index in spill.spread(max(1, round(length * TARGET_FPS)), count):
+            at_s = start + index / TARGET_FPS
+            one, _ = load_video(spec["filename"], trim=(at_s, at_s + 3.0 / TARGET_FPS))
+            if one.shape[0] == 0:
+                raise MediaError(
+                    f"{spec['filename']!r}: no frame could be read at {at_s:.2f} s "
+                    f"for the storyboard")
+            cells.append(one[:1])
+        return torch.cat(cells)
     span = count / TARGET_FPS + _SEAM_SLACK_S
     window = (start, min(end, start + span)) if at == "head" \
         else (max(start, end - span), end)
@@ -412,6 +430,11 @@ def load_all(compiled):
             # A mod is its latent, read by `encode` off the file itself; there
             # is no picture to decode and nothing for a cache miss to open.
             loaded[asset.handle] = {"mod": resolve(asset.filename)}
+            continue
+        if not asset.filename:
+            # The timeline's storyboard: laid out in the graph and handed to
+            # the segment node on a socket, which adds it here the way the
+            # seam frame is added. See `compile.STORYBOARD_HANDLE`.
             continue
         loaded[asset.handle] = Deferred(
             lambda asset=asset: {"image": load_image(asset.filename)})

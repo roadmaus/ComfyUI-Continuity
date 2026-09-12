@@ -256,17 +256,37 @@ def open_frames(spec):
         ) from exc
 
 
-def frames(spec, count, at="tail"):
-    """`count` frames off one end of a pass, as an IMAGE batch.
+def spread(have, count):
+    """Which `count` of `have` frames stand for the whole run: the centres of
+    `count` equal bins, in order.
 
-    What a seam inherits. Read back through the same memmap the muxer uses, so
-    a one-frame seam off a ten-second pass costs one frame — the pass itself is
-    never materialised to take a slice of it.
+    Centres rather than ends, so a nine-cell sheet of one shot is nine moments
+    *inside* it and not its first and last frames again — the last frame is
+    what the seam already hands over, and the first is the frame the shot
+    before it ended on. `count` bins over fewer frames repeat what there is.
+    """
+    have, count = max(1, int(have)), max(1, int(count))
+    return [min(have - 1, int((index + 0.5) * have / count)) for index in range(count)]
+
+
+def frames(spec, count, at="tail"):
+    """`count` frames off one end of a pass — or, `spread`, from across the
+    whole of it — as an IMAGE batch.
+
+    What a seam inherits, and what a storyboard's cells are. Read back through
+    the same memmap the muxer uses, so a one-frame seam off a ten-second pass
+    costs one frame — the pass itself is never materialised to take a slice of
+    it — and nine cells cost nine.
     """
     import torch
 
     count = max(1, int(count))
     have = int(spec["frames"])
+    if at == "spread":
+        data = open_frames(spec)
+        return torch.from_numpy(np.stack([np.array(data[index])
+                                          for index in spread(have, count)])
+                                ).float().div_(255.0)
     if have < count:
         # Padding or repeating would pin motion that never happened; the seam's
         # width has to come down instead.

@@ -114,6 +114,12 @@ REF_BACKDROP = {module.ID: getattr(module, "REF_BACKDROP", 0.5)
 CUTOUT_DEFAULT = {module.ID: bool(getattr(module, "CUTOUT_DEFAULT", False))
                   for module in DECLARED}
 
+# Whether a shot may be shown a storyboard of the shots before it. A default
+# for the same reason the two above have one: it is a thing a *video* strip
+# does, and the still families have no strip. See `h3/declare.py`.
+STORYBOARD = {module.ID: bool(getattr(module, "STORYBOARD", False))
+              for module in DECLARED}
+
 # What each family's files are called. The folder they land in is the family id
 # and the tree is `outputs.py`'s; this is the stem every file in it is numbered
 # off. See `h3/declare.py` for why it is declared rather than lowercased off ID.

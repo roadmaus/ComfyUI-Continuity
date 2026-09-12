@@ -2881,6 +2881,23 @@ function syncCanvas(timeline) {
     }
     // A clip with no soundtrack has none to carry backwards across the seam.
     if (isClip(segment) && segment.has_audio === false) segment.continue_audio = false;
+    // A storyboard naming a card at or past this one is a leftover from
+    // reordering, dropped the way a stale source is. `false` and an absent
+    // key both survive: they are the two deliberate answers.
+    if (Array.isArray(segment.storyboard)) {
+      segment.storyboard = segment.storyboard.filter(
+        (card) => Number.isInteger(card) && card >= 1 && card <= index);
+    }
+  });
+  // The sheet each card is shown, mirrored onto it the way the pool is and for
+  // the same reason: a card shown one is a reference generation, and `mode()`,
+  // `checkpoint()` and the picker's slot count have to be able to tell from
+  // the card alone. Never serialized — it is derived from the strip.
+  timeline.segments.forEach((segment, index) => {
+    if (isClip(segment)) return;
+    const sheet = storyboardSheet(timeline, index);
+    if (sheet.length) segment.storyboardSheet = sheet;
+    else delete segment.storyboardSheet;
   });
   syncSound(timeline);
   return timeline;
@@ -3064,6 +3081,9 @@ export function parseTimeline(raw) {
         delete timeline.aspect_source;
       }
       timeline.audio_tail_s = clampTail(timeline.audio_tail_s);
+      // What each shot is shown of the shots before it. Absent means nothing,
+      // which is what every piece written before the sheet existed says.
+      if (!STORYBOARD_MODES.includes(timeline.storyboard)) delete timeline.storyboard;
       timeline.sound = parseSound(timeline.sound);
       for (const key of ["soundscape", "music"]) {
         if (typeof timeline[key] !== "string") timeline[key] = "";
@@ -3136,6 +3156,14 @@ export function parseTimeline(raw) {
         delete segment.continue_from;
         const from = Number(raw?.continue_from);
         if (Number.isInteger(from)) segment.continue_from = from;
+        // The card's own answer about the storyboard: `false` for none, a list
+        // of the cards it names, absent to take the piece's setting. Pruned in
+        // `syncCanvas` like the source above. Mirrors `compile._storyboard_cards`.
+        delete segment.storyboard;
+        if (raw?.storyboard === false) segment.storyboard = false;
+        else if (Array.isArray(raw?.storyboard)) {
+          segment.storyboard = raw.storyboard.map(Number).filter(Number.isInteger);
+        }
         // The seam's width. Off the grid means the classic single frame,
         // which is also what absence means.
         delete segment.feather;
@@ -3238,6 +3266,9 @@ export function serializeTimeline(timeline) {
     // without one round-trips to the bytes it always did.
     ...(timeline.subjects?.length ? { subjects: timeline.subjects } : {}),
     audio_tail_s: clampTail(timeline.audio_tail_s),
+    // The storyboard. Absent when off, so a piece that never asked for one
+    // round-trips to the bytes it always did.
+    ...(STORYBOARD_MODES.includes(timeline.storyboard) ? { storyboard: timeline.storyboard } : {}),
     // The sound lane. Absent when nothing is on it, so a piece that never laid
     // a track down round-trips to the bytes it always did — and present the
     // moment one is, which is the whole of what a lane is for: it is the piece
@@ -3316,6 +3347,13 @@ export function serializeTimeline(timeline) {
       // first member by `emit`. Absent is off, which is the default and what
       // every blob written before the pass existed says.
       if (seamRestore(segment, timeline)) out.seam_restore = seamRestore(segment, timeline);
+      // The card's own answer about the storyboard, only where it gave one:
+      // absent is "as the piece is set". Never on the first card, which has
+      // nothing before it to be shown.
+      if (index > 0 && storyboardCards(segment, index) !== null) {
+        out.storyboard = storyboardCards(segment, index).map((card) => card + 1);
+        if (!out.storyboard.length) out.storyboard = false;
+      }
       // Out of the next render, and the render it already has. Only the
       // deliberate states are written: a card nobody has held and nothing has
       // rendered writes exactly what it always did.
@@ -5567,8 +5605,10 @@ export function lengthMatch(state, lengthOf, piece) {
 export function hasReferences(state) {
   // A cited pool reference is a reference of this generation in every way that
   // matters — the mode, the checkpoint, the pin — even though the asset lives
-  // on the timeline. Mirrors what compile's injection makes true.
-  return references(state).length > 0 || citedPool(state).length > 0;
+  // on the timeline. Mirrors what compile's injection makes true. So is the
+  // storyboard a card is shown, mirrored onto it by `syncCanvas`.
+  return references(state).length > 0 || citedPool(state).length > 0
+    || Boolean(state.storyboardSheet?.length);
 }
 
 /** A timeline segment that starts from the previous segment's last frame. */
@@ -5657,6 +5697,12 @@ export function continueSource(segment, index) {
  *  prunes whatever no longer points at an earlier segment. */
 export function remapContinueFrom(timeline, map) {
   for (const segment of timeline.segments) {
+    // A card's storyboard names cards by the same number, and follows them
+    // the same way: a named card that is gone drops off the list.
+    if (Array.isArray(segment.storyboard)) {
+      segment.storyboard = segment.storyboard.map(map)
+        .filter((next) => Number.isInteger(next) && next >= 1);
+    }
     if (!Number.isInteger(segment.continue_from)) continue;
     const next = map(segment.continue_from);
     if (Number.isInteger(next) && next >= 1) segment.continue_from = next;
@@ -5675,6 +5721,103 @@ export function remapContinueFrom(timeline, map) {
 
 /** ...and one whose sound carries on from it. Not implied by the above. */
 export const continuesAudio = (state) => state.continue_audio === true;
+
+// ---- the storyboard ----------------------------------------------------------
+//
+// A 3 x 3 sheet of frames from the shots before a card, made in the graph and
+// cited as the card's last picture reference (issue #43). Mirrors the
+// `storyboard` half of compile.py: `STORYBOARD_MODES`, `_storyboard_cards`,
+// `_storyboard_indices` and `storyboard_cells`, in that order.
+
+/** What the piece shows each shot of the shots before it: the shot in front
+ *  of it, or every shot before it. Absent is nothing. Mirrors
+ *  `compile.STORYBOARD_MODES`. */
+export const STORYBOARD_MODES = ["previous", "all"];
+/** The sheet's cells — 3 x 3. Mirrors `compile.STORYBOARD_CELLS`. */
+export const STORYBOARD_CELLS = 9;
+
+/** The piece's setting, or null — and null on a family without the sheet,
+ *  whatever the blob says: the compiler reads it as off there too. */
+export function storyboardPolicy(piece) {
+  if (!canDo(piece, "storyboard")) return null;
+  return STORYBOARD_MODES.includes(piece.storyboard) ? piece.storyboard : null;
+}
+
+/** A card's own answer: null to take the piece's setting, `[]` for none, or
+ *  the 0-based indices of the cards it names, sorted. Only cards before it
+ *  count — a number pointing at itself or past it is a leftover. Mirrors
+ *  `compile._storyboard_cards`. */
+export function storyboardCards(segment, index) {
+  const raw = segment.storyboard;
+  if (raw === false) return [];
+  if (!Array.isArray(raw)) return null;
+  const cards = [];
+  for (const item of raw) {
+    const number = Number(item);
+    if (Number.isInteger(number) && number >= 1 && number <= index && !cards.includes(number - 1)) {
+      cards.push(number - 1);
+    }
+  }
+  return cards.sort((a, b) => a - b);
+}
+
+/** Which cards the card at `index` is shown, as 0-based indices in strip
+ *  order — its own list, or what the piece's setting resolves to. Nothing on
+ *  the first card, on a clip, or on a shot inside a pass (the pass's head is
+ *  the one that is shown it). Mirrors `compile._storyboard_indices`. */
+export function storyboardIndices(piece, index) {
+  const segment = piece.segments[index];
+  if (!index || !segment || isClip(segment) || !canDo(piece, "storyboard")) return [];
+  if (passOf(piece, index)?.start !== index) return [];
+  const own = storyboardCards(segment, index);
+  if (own !== null) return own;
+  const policy = storyboardPolicy(piece);
+  if (policy === "previous") return [index - 1];
+  if (policy === "all") return Array.from({ length: index }, (_, i) => i);
+  return [];
+}
+
+/** How many of the sheet's cells each source gets, in order: proportional to
+ *  how long each plays, by largest remainder, never zero; more sources than
+ *  cells keeps the most recent. Mirrors `compile.storyboard_cells`, and
+ *  `tests/test_storyboard_mirror.py` holds the two to each other. */
+export function storyboardCells(secondsList, cells = STORYBOARD_CELLS) {
+  const seconds = secondsList.map((value) => Math.max(0, Number(value) || 0)).slice(-cells);
+  if (!seconds.length) return [];
+  const count = seconds.length;
+  const spare = cells - count;
+  const total = seconds.reduce((sum, value) => sum + value, 0);
+  if (spare <= 0 || total <= 0) return seconds.map(() => 1);
+  const shares = seconds.map((value) => value / total * spare);
+  const counts = shares.map((share) => 1 + Math.floor(share));
+  const owed = cells - counts.reduce((sum, value) => sum + value, 0);
+  const order = shares.map((share, i) => i)
+    .sort((a, b) => (shares[b] - Math.floor(shares[b])) - (shares[a] - Math.floor(shares[a])) || a - b);
+  for (const i of order.slice(0, owed)) counts[i] += 1;
+  return counts;
+}
+
+/** How long a pass plays, as its cards add up. */
+const passSeconds = (pass) => pass.segments.reduce(
+  (sum, segment) => sum + (isClip(segment) ? clipSeconds(segment) : Number(segment.duration_s) || 0), 0);
+
+/** The sheet the card at `index` is shown: `[{ pass, count }]` — the earlier
+ *  passes it draws on, in play order, and how many cells each fills. Empty
+ *  when it is shown nothing. What the seam chip, the popover's diagram and
+ *  the card's badge all draw from, and what `syncCanvas` mirrors onto the
+ *  card as `storyboardSheet`. */
+export function storyboardSheet(piece, index) {
+  const runs = passes(piece);
+  const mine = runs.findIndex((pass) => index >= pass.start && index < pass.end);
+  const sources = [];
+  for (const card of storyboardIndices(piece, index)) {
+    const where = runs.findIndex((pass) => card >= pass.start && card < pass.end);
+    if (where >= 0 && where < mine && !sources.includes(where)) sources.push(where);
+  }
+  if (!sources.length) return [];
+  const counts = storyboardCells(sources.map((where) => passSeconds(runs[where])));
+  return sources.slice(-counts.length).map((where, i) => ({ pass: runs[where], count: counts[i] }));
+}
 
 /** What this generation is, in the piece's family's own names.
  *
@@ -5716,7 +5859,10 @@ function counts(state, piece = null, except = null) {
   // `Grammar.refuse`, which counts attachments).
   const panels = sheetRefs(piece ?? state);
   const images = refImages(state).filter((a) => a !== except)
-    .reduce((n, a) => n + (panels ? Math.max(1, a.panels?.length ?? 0) : 1), 0);
+    .reduce((n, a) => n + (panels ? Math.max(1, a.panels?.length ?? 0) : 1), 0)
+    // The storyboard this card is shown is one of its pictures — the compiler
+    // refuses a card with no slot left for it, so the count says so first.
+    + (state.storyboardSheet?.length ? 1 : 0);
   const videos = refVideos(state).length;
   const audios = refAudios(state).length
     + refVideos(state).filter((v) => v.track === "picture+sound").length;

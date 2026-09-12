@@ -324,6 +324,10 @@ def manifest():
             # (`seamrestore.py`); a family declaring nothing here draws no
             # switch and the compiler's value is ignored by its loop.
             "seam_restore": True,
+            # Whether a shot can be shown a storyboard of the shots before it
+            # — the pill on the bar and the chip on every seam. Read off the
+            # declaration so the compiler and the frontend answer alike.
+            "storyboard": declare.STORYBOARD,
             "turbo": TURBO,
             # Whether this family can sample through Raylight's Ray workers —
             # the multi-GPU backend in the weights popover. H3's alone so far,

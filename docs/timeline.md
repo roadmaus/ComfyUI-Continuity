@@ -63,6 +63,46 @@ per-machine settings on the gear's Rendering tab act on it:
 None of this is zero yet. If you find a setting or a method that measures
 better on your strips, open an issue with the per-cut numbers.
 
+## Storyboards
+
+A shot can be shown the shots before it. The **Storyboard** pill on the bar
+has three answers: nothing, *each shot sees the shot before it*, or *each shot
+sees the piece so far*. With one of the two on, every shot after the first is
+handed a 3 × 3 sheet of frames from those shots — nine cells shared out by how
+long each shot plays, in time order, reading left to right and top to bottom
+— as its last picture reference, with a line in the prompt saying what the
+sheet is, how it reads, and that the grid itself is never to be drawn. It is
+the sheet people were attaching by hand (issue #43), made for you at render
+time from the passes as they actually came out: a kept take is read from its
+file, a cut-in clip from its window.
+
+What it buys is the room. A cut to another angle of the same street has
+nothing crossing it — no frame, no sound — and the model re-imagines the
+street. With the sheet in front of it the walls, the light and where things
+stand carry across. It is not a face reference: at the generation's own
+canvas each cell is a ninth of the picture, enough for a place and not for a
+likeness, which is what the cast is for.
+
+The chip on every seam says what its own card sees — *sees #1–3*, *no
+storyboard* — and opens to the same three answers plus a row of toggles, so
+one card can see shots 1 and 4 while the piece is set to the shot before.
+Under the toggles is a picture of the sheet with the number of the shot each
+cell will come from, which is the one honest preview there is before the
+shots exist.
+
+Two costs. A shot shown a sheet is a reference generation, so it runs on the
+reference checkpoint whatever else it carries, and the sheet takes one of the
+nine picture slots — a card already citing nine is refused by name. And a
+shot now depends on the shots it sees: edit shot 1 and every shot shown it
+re-renders, where a hard cut used to keep its cache.
+
+Which of the two settings is the better default on a long strip is an open
+measurement. The reporter's finding was about environments and placements;
+on the tone drift described above, a sheet of the previous shot shows each
+shot the drift of the one before it as the room, while the piece so far keeps
+shot 1's cells in view as the tone the piece opened on. If you measure either
+on your strips, open an issue with the per-cut numbers.
+
 ## Piece-level fields
 
 The timeline itself carries:

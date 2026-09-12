@@ -6,6 +6,26 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**A shot can be shown a storyboard of the shots before it (#43).** A
+*Storyboard* pill on the timeline's bar: *each shot sees the shot before it*,
+or *the piece so far*. Every shot after the first is then handed a 3 × 3 sheet
+of frames from those shots — nine cells shared out by how long each plays, in
+time order, left to right, top to bottom — as its last picture reference,
+with a line in the prompt saying what it is and how it reads. Made at render
+time off the passes as delivered, so it is the shots as they actually came
+out, a kept take included; a cut-in clip fills its cells from its file. The
+chip on every seam says what its own card sees — *sees #1–3*, *no
+storyboard* — and opens to the three answers plus a row of toggles for any
+set of earlier shots, over a picture of the sheet with the number of the
+shot each cell will come from. A shot shown one runs on the reference
+checkpoint whatever else it carries, and re-renders when the shots it sees
+change; the sheet is one of H3's nine pictures, and a full card is refused
+by name. H3 only for now: LTX 2.5 lays every reference onto one sheet
+already, and what a sheet of frames means inside that one is undecided. The
+reporter measured a hand-made sheet against environment and placement drift
+across cuts; which of the two settings is the better default on a long
+strip is being measured on the lab rig.
+
 **A cast member's plate can wake on a word (#72).** Each file on a member has
 a second line under "what it shows of them": the words it wakes on. Blank,
 the file comes with them into every shot that names them, as before. `hat,

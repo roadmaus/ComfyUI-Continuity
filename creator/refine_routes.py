@@ -74,6 +74,10 @@ def _picture(asset):
     """
     from PIL import Image, ImageOps
 
+    # Nothing on disk to show: the timeline's storyboard is laid out at render
+    # time, and its glossary note says so.
+    if not asset.filename:
+        return None
     try:
         path = media.resolve(asset.filename)
         if asset.kind == "image":
@@ -94,11 +98,12 @@ def _sighted(slot, asset, picture):
         # Which of the message's images this is comes later, in `_number`, once
         # every picture is in one list and the tail past `MAX_IMAGES` is known.
         slot["picture"] = True
-    elif asset.kind != "audio" and asset.track != "sound":
+    elif asset.kind != "audio" and asset.track != "sound" and asset.filename:
         # It should have had one and does not: the file would not open. Said
         # rather than left silent, because the glossary line stays either way
         # and a handle the model believes it can see is worse than one it
-        # knows it cannot.
+        # knows it cannot. (A fileless asset — the storyboard — carries its own
+        # note saying why there is nothing to see.)
         slot["note"] = "the file could not be read, so no picture of it is attached"
     return slot
 

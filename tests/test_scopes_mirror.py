@@ -99,11 +99,23 @@ for kind, values in compiler.TAKES.items():
         if (kind, takes) not in contextir._BECOMES:
             FAILURES.append(f"compile offers {key} but contextir says nothing about what becomes of it")
 
-# ...and the reverse, which is a sentence nothing can ever ask for.
+# ...and the reverse, which is a sentence nothing can ever ask for. The one
+# scope the compiler writes itself — the timeline's storyboard of earlier shots,
+# which no picker offers and `_parse_assets` refuses on a file — is held to the
+# same three dictionaries from the other side.
+COMPILER_OWN = {("image", compiler.STORYBOARD_TAKE)}
 for key in python_define:
     kind, takes = key.split(":", 1)
-    if takes not in compiler.TAKES.get(kind, ()):
+    if takes not in compiler.TAKES.get(kind, ()) and (kind, takes) not in COMPILER_OWN:
         FAILURES.append(f"contextir defines {key}, which is not a scope compile allows")
+for kind, takes in COMPILER_OWN:
+    for table, what in ((contextir._MARKER, "retention marker"),
+                        (contextir._BECOMES, "line about what becomes of it"),
+                        (contextir._SCOPE_NOTE, "scope note")):
+        if (kind, takes) not in table:
+            FAILURES.append(f"the compiler's own {kind}:{takes} has no {what}")
+    if takes in compiler.TAKES.get(kind, ()):
+        FAILURES.append(f"{kind}:{takes} is the compiler's and must not be a chip")
 
 # Every definition has exactly one place for the label to go. The two whole-video
 # relationships used to borrow the summary's opening sentence here, which read as
