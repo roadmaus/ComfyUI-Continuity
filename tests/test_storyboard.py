@@ -1,5 +1,5 @@
-"""The storyboard (issue #43): a 3 x 3 sheet of the shots before a card, cited
-as its last picture reference.
+"""The storyboard (issue #43): nine frames of the shots before a card, saved as
+a video RefMod and cited as its last video reference with the scene take.
 
 Runs standalone, like `test_compile.py`: everything here is the compiler's
 bookkeeping — which passes a card is shown, how the sheet's cells are allotted,
@@ -145,33 +145,37 @@ compiled = compiler.compile_timeline({**three, "storyboard": "all"}, _look)
 check("a shown card is a reference generation", compiled[1].mode, "REF2VA")
 check("...on the ref2va checkpoint", compiled[1].checkpoint, "ref2va")
 check("the first card is untouched", (compiled[0].mode, compiled[0].storyboard), ("T2VA", False))
-check("the sheet is the last picture", compiled[1].ref_images[-1].handle, compiler.STORYBOARD_HANDLE)
-check("...and takes <Picture 1> on a card with no other pictures",
-      compiled[1].labels[compiler.STORYBOARD_HANDLE], "<Picture 1>")
+check("the storyboard is the last video", compiled[1].ref_videos[-1].handle, compiler.STORYBOARD_HANDLE)
+check("...a saved reference, named as pending until the graph writes it",
+      (compiled[1].ref_videos[-1].mod, compiled[1].ref_videos[-1].filename),
+      (True, "refmod:storyboards/pending"))
+check("...with the scene take", compiled[1].ref_videos[-1].takes, "scene")
+check("...taking <Video 1> on a card with no other clips",
+      compiled[1].labels[compiler.STORYBOARD_HANDLE], "<Video 1>")
 check("the flag survives compilation", compiled[1].storyboard, True)
-check("the definition says what it is",
-      "<Picture 1> is a storyboard of the video so far" in compiled[1].prompt, True)
-check("...how it reads",
-      "left to right and top to bottom" in compiled[1].prompt, True)
-check("...that the framing is the description's",
-      "Its framing is not: the target video's own shot size" in compiled[1].prompt, True)
-check("...and that the sheet is not shown",
-      "its grid and its frames are never shown" in compiled[1].prompt, True)
-check("the retention line scopes it",
-      "<Picture 1> (the shots before this one): fully_preserved" in compiled[1].prompt, True)
-check("the summary names it",
-      "next shot of the piece storyboarded in <Picture 1>" in compiled[1].prompt, True)
+check("it is defined in the guide's own scene words",
+      "<Video 1> is a scene reference: its environment, surfaces and light are "
+      "retained, and anyone in it, its framing and its camera work are not." in compiled[1].prompt,
+      True)
+check("...and scoped as one", "<Video 1>: fully_preserved" in compiled[1].prompt
+      or "<Video 1> (" in compiled[1].prompt, True)
+check("it is not shown to the tokenizer as a picture", "<Picture 1>" in compiled[1].prompt, False)
 
-# A user's pictures keep their ordinals: the sheet rides last.
+# A user's clips keep their ordinals: the storyboard rides last.
 with_ref = strip(
     shot("one", 5),
-    shot("two @img-1", 4, assets=[{"handle": "img-1", "kind": "image",
-                                    "role": "reference", "filename": "anna.png"}]),
+    shot("two @vid-1", 4, assets=[{"handle": "vid-1", "kind": "video", "track": "picture",
+                                    "role": "reference", "filename": "walk.mp4"}]),
     storyboard="previous")
 compiled = compiler.compile_timeline(with_ref, _look)
-check("an attached picture stays <Picture 1>", compiled[1].labels["img-1"], "<Picture 1>")
-check("...and the sheet is <Picture 2>", compiled[1].labels[compiler.STORYBOARD_HANDLE], "<Picture 2>")
-check("the body cites the picture, not the sheet", compiled[1].body, "two <Picture 1>")
+check("an attached clip stays <Video 1>", compiled[1].labels["vid-1"], "<Video 1>")
+check("...and the storyboard is <Video 2>", compiled[1].labels[compiler.STORYBOARD_HANDLE], "<Video 2>")
+check("the body cites the clip, not the storyboard", compiled[1].body, "two <Video 1>")
+check("a picture reference is untouched",
+      compiler.compile_timeline(strip(
+          shot("one"), shot("two @img-1", assets=[{"handle": "img-1", "kind": "image",
+                                                    "role": "reference", "filename": "a.png"}]),
+          storyboard="previous"), _look)[1].labels, {"img-1": "<Picture 1>", "storyboard": "<Video 1>"})
 
 # A continuing card is shown the sheet alongside its inherited frame.
 cont = strip(shot("one"), shot("two", **{"continue": True}), storyboard="previous")
@@ -181,25 +185,20 @@ check("a continuing card rides the reference road with its seam",
       ("REF2VA", True, True))
 check("...and encodes video", compiled[1].encodes_video(), True)
 
-# The caps: the sheet is one of H3's nine pictures.
-nine = [{"handle": f"img-{n}", "kind": "image", "role": "reference",
-         "filename": f"p{n}.png"} for n in range(1, 10)]
+# The caps: the storyboard is one of H3's three videos.
+three_clips = [{"handle": f"vid-{n}", "kind": "video", "track": "picture", "role": "reference",
+                "filename": f"c{n}.mp4"} for n in range(1, 4)]
 expect_error("a full card has no room for it",
              lambda: compiler.compile_timeline(
-                 strip(shot("one"), shot("two " + " ".join(f"@img-{n}" for n in range(1, 10)),
-                                          assets=nine), storyboard="previous"), _look),
-             "needs one of the 9")
+                 strip(shot("one"), shot("two " + " ".join(f"@vid-{n}" for n in range(1, 4)),
+                                          assets=three_clips), storyboard="previous"), _look),
+             "needs one of the 3")
 expect_error("the handle is the sheet's",
              lambda: compiler.compile_timeline(
                  strip(shot("one"), shot("two", assets=[{"handle": "storyboard", "kind": "image",
                                                          "role": "reference", "filename": "x.png"}]),
                        storyboard="previous"), _look),
              "rename")
-expect_error("a file cannot claim the sheet's take",
-             lambda: compiler.compile_request({"prompt": "x @img-1", "assets": [
-                 {"handle": "img-1", "kind": "image", "role": "reference",
-                  "filename": "x.png", "takes": "storyboard"}]}),
-             "takes must be one of")
 
 # A family without the sheet renders as though the switch were off.
 check("LTX 2.5 draws no sheet",
@@ -213,7 +212,7 @@ step2 = strip(shot("one", hold=True, take=take()), shot("two"), shot("three", ho
 rendered = compiler.rendered_piece(step2)
 check("the piece's setting is written onto the card, in the render's numbers",
       rendered["segments"][1].get("storyboard"), [1])
-check("...and the sheet is the take, a clip", boards(rendered), ["clip", [[0, 9]]])
+check("...and the storyboard is the take, a clip", boards(rendered), ["clip", [[0, 9]]])
 
 # 'all' means what exists; a named card that does not is refused.
 gap = strip(shot("one", hold=True, take=take()), shot("two", hold=True), shot("three"),

@@ -1993,15 +1993,15 @@ class Timeline {
         return el("button", {
           class: `mmc-tl-join mmc-tl-join-board${shown ? " on" : ""}`,
           title: shown
-            ? t("Segment {n} is shown a storyboard of {which}: nine of their frames on one "
-              + "sheet, in order, cited as a picture reference so the room, the light and "
-              + "where things stand carry across this cut. It runs on the reference "
-              + "checkpoint for it, and re-renders when those shots change. Click to "
-              + "change which shots, or show it nothing.",
+            ? t("Segment {n} is shown a storyboard of {which}: nine of their frames in order, "
+             + "saved as one video reference of the place, so the room, the light and where "
+             + "things stand carry across this cut. It runs on the reference checkpoint for "
+             + "it, and re-renders when those shots change. Click to change which shots, or "
+             + "show it nothing.",
                 { n: index + 1, which: passNumbers(sheet) })
             : t("Segment {n} is shown nothing of the shots before it. Click to show it a "
-              + "storyboard of them — nine of their frames on one sheet, cited as a "
-              + "picture reference.", { n: index + 1 }),
+             + "storyboard of them — nine of their frames, saved as one video reference of the "
+             + "place.", { n: index + 1 }),
           onclick: (event) => this.pickStoryboard(event.currentTarget, segment, index),
         }, [icon("storyboard", 13),
             el("span", { text: shown ? t("sees {which}", { which: passNumbers(sheet) })
@@ -2108,12 +2108,12 @@ class Timeline {
     const sub = { previous: t("previous shot"), all: t("piece so far") }[policy];
     return el("button", {
       class: `mmc-pill${policy ? " on" : ""}`,
-      title: t("Whether each shot is shown a storyboard of the shots before it: nine of "
-             + "their frames on one sheet, cited as a picture reference, so the room, the "
-             + "light and where things stand carry across a cut. Made when the earlier "
-             + "shots have rendered. A shot shown one runs on the reference checkpoint, "
-             + "and re-renders when the shots it sees change. Each seam's chip can say "
-             + "otherwise for its own shot."),
+      title: t("Whether each shot is shown a storyboard of the shots before it: nine of their "
+             + "frames, saved as one video reference of the place, so the room, the light and "
+             + "where things stand carry across a cut. Made when the earlier shots have "
+             + "rendered, and kept in the Saved references library. A shot shown one runs on "
+             + "the reference checkpoint, and re-renders when the shots it sees change. Each "
+             + "seam's chip can say otherwise for its own shot."),
       onclick: (event) => this.pickStoryboardPolicy(event.currentTarget),
     }, [
       icon("storyboard", 16),

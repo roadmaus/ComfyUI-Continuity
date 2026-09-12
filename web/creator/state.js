@@ -5724,8 +5724,8 @@ export const continuesAudio = (state) => state.continue_audio === true;
 
 // ---- the storyboard ----------------------------------------------------------
 //
-// A 3 x 3 sheet of frames from the shots before a card, made in the graph and
-// cited as the card's last picture reference (issue #43). Mirrors the
+// Nine frames from the shots before a card, made in the graph, saved as a video
+// RefMod and cited as the card's last video reference (issue #43). Mirrors the
 // `storyboard` half of compile.py: `STORYBOARD_MODES`, `_storyboard_cards`,
 // `_storyboard_indices` and `storyboard_cells`, in that order.
 
@@ -5859,11 +5859,11 @@ function counts(state, piece = null, except = null) {
   // `Grammar.refuse`, which counts attachments).
   const panels = sheetRefs(piece ?? state);
   const images = refImages(state).filter((a) => a !== except)
-    .reduce((n, a) => n + (panels ? Math.max(1, a.panels?.length ?? 0) : 1), 0)
-    // The storyboard this card is shown is one of its pictures — the compiler
-    // refuses a card with no slot left for it, so the count says so first.
-    + (state.storyboardSheet?.length ? 1 : 0);
-  const videos = refVideos(state).length;
+    .reduce((n, a) => n + (panels ? Math.max(1, a.panels?.length ?? 0) : 1), 0);
+  // The storyboard this card is shown is one of its videos — a saved video
+  // reference of the earlier shots — and the compiler refuses a card with no
+  // slot left for it, so the count says so first.
+  const videos = refVideos(state).length + (state.storyboardSheet?.length ? 1 : 0);
   const audios = refAudios(state).length
     + refVideos(state).filter((v) => v.track === "picture+sound").length;
   return { image: images, video: videos, audio: audios, files: images + videos + audios };

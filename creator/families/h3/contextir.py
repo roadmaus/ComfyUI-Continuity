@@ -116,21 +116,6 @@ _DEFINE = {
                          "are carried onto the target video's own subject, and "
                          "nobody and nothing visible in the picture appears in "
                          "the target video.",
-    # The timeline's own sheet of the shots before this one (issue #43). It is
-    # said to be a sheet, and read in order, because a model handed a grid with
-    # nothing said about it has been handed a picture of nine small rooms: the
-    # line is what turns nine cells into one place seen over time. And it says
-    # what is *not* carried — the grid — for the same reason the motion line
-    # says whoever is in the picture stays out: it is the failure it exists to
-    # prevent.
-    ("image", "storyboard"): "%s is a storyboard of the video so far: nine frames "
-                             "from the shots before this one, in time order, laid "
-                             "out left to right and top to bottom. Its environment, "
-                             "surfaces and light, and where the people and objects "
-                             "in it stand, are retained. Its framing is not: the "
-                             "target video's own shot size, angle and camera come "
-                             "from this description, and the sheet itself, its grid "
-                             "and its frames are never shown.",
 
     ("video", "full"): "%s is a reference video.",
     ("video", "person"): "%s is a person reference: the face, hair, build and "
@@ -274,7 +259,6 @@ _MARKER = {
     ("image", "scene"): "fully_preserved",
     ("image", "style"): "fully_preserved",
     ("image", "motion"): "attribute_transfer",
-    ("image", "storyboard"): "fully_preserved",
 
     ("video", "full"): "fully_preserved",
     ("video", "person"): "fully_preserved",
@@ -301,7 +285,6 @@ _MARKER = {
 # structure)" — the parenthetical says what the label is *for*, and only a
 # subject's says where it appears. Absent means no parenthetical at all.
 _SCOPE_NOTE = {
-    ("image", "storyboard"): "the shots before this one",
     ("video", "camera"): "camera and pacing structure",
     ("video", "edit"): "source video",
     ("video", "continue"): "continuation point",
@@ -318,11 +301,6 @@ _BECOMES = {
                          "setting it was photographed in is not",
     ("image", "scene"): "the place, its surfaces and its light are carried into "
                         "the target video and whoever stood in it is not",
-    ("image", "storyboard"): "the place, its light and where things stand are "
-                             "carried into the target video, which picks up "
-                             "where those shots left off and frames them as this "
-                             "description says rather than as the sheet does, and "
-                             "the sheet is not shown",
     ("image", "style"): "the medium, palette, light and rendering are carried "
                         "into the target video and the source's own subject is not",
     ("image", "motion"): "the action and pose are carried onto the target "
@@ -527,8 +505,6 @@ def summary(plan, cast, subject_labels, asset_labels, shots=1, has_frames=False)
                                             or step["asset"].handle in replaced_in)]
     continued = [step["label"] for step in plan
                  if step["op"] == "video" and step["asset"].takes == "continue"]
-    boards = [step["label"] for step in plan
-              if step["op"] == "image" and step["asset"].takes == "storyboard"]
 
     sentences = []
     # The guide dictates this opening for an editing task, word for word.
@@ -536,9 +512,6 @@ def summary(plan, cast, subject_labels, asset_labels, shots=1, has_frames=False)
         sentences.append(f"The target video is an edited version of {_english(edited)}.")
     if continued:
         sentences.append(f"The target video continues from the end of {_english(continued)}.")
-    if boards:
-        sentences.append(f"The target video is the next shot of the piece "
-                         f"storyboarded in {_english(boards)}.")
 
     opener = "It runs" if sentences else "The target video runs"
     body = f"{opener} {_count(max(1, int(shots)), 'shot')}"

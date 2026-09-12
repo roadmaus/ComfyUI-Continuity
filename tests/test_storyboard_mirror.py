@@ -67,7 +67,7 @@ for (const [policy, cards] of JSON.parse(process.argv[2])) {
     sheets: timeline.segments.map((segment, index) =>
       s.storyboardSheet(timeline, index).map(({ pass, count }) => [pass.start, count])),
     modes: timeline.segments.map((segment) => s.mode(segment, timeline)),
-    slots: timeline.segments.map((segment) => s.capacity(segment, "image", timeline).used),
+    slots: timeline.segments.map((segment) => s.capacity(segment, "video", timeline).used),
     blob: s.serializeTimeline(timeline),
   });
 }
@@ -105,8 +105,8 @@ for (policy, cards), seen in zip(CASES, reflected):
     compiled = compiler.compile_timeline(data)
     for index, (start, end) in enumerate(runs):
         check(f"{name}: card {start + 1} mode", seen["modes"][start], compiled[index].mode)
-        check(f"{name}: card {start + 1} pictures", seen["slots"][start],
-              len(compiled[index].ref_images))
+        check(f"{name}: card {start + 1} videos", seen["slots"][start],
+              len(compiled[index].ref_videos))
 
 # The cells themselves, on the numbers alone.
 CELLS = [[5], [5, 5], [6, 3], [7, 2], [10, 0.5, 10], [1] * 9, list(range(1, 11)),

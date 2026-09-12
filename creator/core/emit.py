@@ -203,14 +203,19 @@ def spread_frames(graph, source, count):
                       at="spread").out(0)
 
 
-def storyboard(graph, decoded, cells, width, height):
-    """The sheet a segment is shown of the passes before it -> an IMAGE link.
+def storyboard(graph, links, decoded, cells, width, height):
+    """The saved reference a segment is shown of the passes before it -> a
+    STRING link naming it.
 
     `cells` is the payload's `storyboard.cells`: `(payload index, count)`
     pairs in play order, allotted by `compile.storyboard_cells`. One reader per
-    source and one layout node, at the segment's own canvas.
+    source and one node that encodes, pools and writes, at the segment's own
+    canvas and the machine's grid (`settings.storyboard_grid`) — written onto
+    the node so the grid is part of what it caches on.
     """
-    inputs = {"width": int(width), "height": int(height)}
+    inputs = {"vae": links.vae, "width": int(width), "height": int(height),
+              "grid": int(settings.storyboard_grid()),
+              "steps": int(settings.storyboard_steps())}
     for slot, (where, count) in enumerate(cells, start=1):
         inputs[f"frames_{slot}"] = spread_frames(graph, decoded[where], int(count))
     return graph.node(STORYBOARD_NODE, **inputs).out(0)
@@ -440,15 +445,15 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
             # where that decision reaches the graph.
             seams["prev_audio"] = inherited_audio(graph, source, one.audio_tail_s)
         if one.storyboard:
-            # The sheet of earlier passes this segment is shown, read off the
-            # same `decoded` the seams read — so it, too, is of the passes as
-            # delivered, face pass included. Wired beside the seams because it
-            # is the same kind of fact: what crosses into this segment from the
-            # strip before it. It rides on the refine's segment node as well,
-            # through `seams`, because the second pass re-encodes the same
-            # references at the target canvas.
-            seams["storyboard_image"] = storyboard(
-                graph, decoded, payloads[index]["storyboard"]["cells"],
+            # The saved reference of earlier passes this segment is shown,
+            # read off the same `decoded` the seams read — so it, too, is of
+            # the passes as delivered, face pass included. Wired beside the
+            # seams because it is the same kind of fact: what crosses into
+            # this segment from the strip before it. It rides on the refine's
+            # segment node as well, through `seams`, because the second pass
+            # re-encodes the same references at the target canvas.
+            seams["storyboard_mod"] = storyboard(
+                graph, links, decoded, payloads[index]["storyboard"]["cells"],
                 one.width, one.height)
         if one.ends_on or one.ends_on_audio:
             # The seam running the other way: the pass after this one is
