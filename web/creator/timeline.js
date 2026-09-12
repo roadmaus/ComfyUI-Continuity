@@ -2572,6 +2572,24 @@ class Timeline {
         this.commit();
       },
     }) : null;
+    // The card's motion fix: its own switch, not the piece's, because which
+    // shots have a burst in them is a fact about the shots. Only a generated
+    // shot on a family with the pass draws it.
+    const fixable = !S.isClip(segment) && S.canDo(this.timeline, "motion_fix");
+    const fixed = S.motionFix(this.timeline, segment);
+    const motionChip = fixable ? el("button", {
+      class: `mmc-tl-card-motion${fixed ? " on" : ""}`,
+      text: fixed ? t("motion fix") : t("no motion fix"),
+      title: fixed
+        ? t("Where this shot moves too fast for the model, it is slowed down, re-drawn and put back on the clock after it renders — a second pass, about three times the shot's cost. Click to leave it as it renders.")
+        : t("This shot is left as it renders. Click to have its fast motion slowed down, re-drawn and put back on the clock — a second pass, about three times the shot's cost."),
+      onclick: (event) => {
+        event.stopPropagation();
+        if (fixed) delete segment.motion_fix;
+        else segment.motion_fix = true;
+        this.commit();
+      },
+    }) : null;
 
     // Which of the three things this card is: in the next render, playing the
     // take it already has, or not shot yet. The skin says which — solid because
@@ -2652,10 +2670,11 @@ class Timeline {
         text: prompt || t("No prompt yet"),
         title: using && typed ? t("Not queued — this card's rewrite is. Open it to read or revert.") : "",
       }),
-      ...(meta.length || faceChip || chip
+      ...(meta.length || faceChip || motionChip || chip
         ? [el("div", { class: "mmc-tl-card-meta" }, [
             ...(meta.length ? [el("span", { text: meta.join(" · ") })] : []),
             ...(chip ? [chip] : []),
+            ...(motionChip ? [motionChip] : []),
             ...(faceChip ? [faceChip] : []),
           ])]
         : []),

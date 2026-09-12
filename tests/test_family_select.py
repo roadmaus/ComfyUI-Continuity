@@ -672,4 +672,46 @@ check("the two rows are different controls, not one with pieces missing",
       ["audio_cfg", "base_shift", "max_shift", "schedule", "stretch",
        "terminal", "video_cfg"])
 
+# ---- the card's motion fix -----------------------------------------------------
+#
+# The same shape as the restore — a capability-gated fact, this time about a
+# card rather than a seam — and checked for the same reason: the chip has to
+# move the blob, not just the live segment.
+
+MOTION_JS = """
+const S = await import(process.argv[1]);
+const strip = (family, extra, first) => {
+  const t = S.emptyTimeline();
+  t.family = family;
+  t.segments = [first ?? S.emptySegment(), S.emptySegment()];
+  Object.assign(t.segments[0], extra);
+  S.syncTimeline(t);
+  return t;
+};
+const clip = () => ({ kind: "clip", filename: "footage/plate.mp4", duration_s: 6 });
+const written = (family, extra, first) =>
+  JSON.parse(S.serializeTimeline(strip(family, extra, first))).segments[0];
+console.log(JSON.stringify({
+  canDo: [S.canDo(strip("h3", {}), "motion_fix"), S.canDo(strip("ltx25", {}), "motion_fix")],
+  written: [written("h3", { motion_fix: true }).motion_fix ?? false,
+            written("ltx25", { motion_fix: true }).motion_fix ?? false],
+  reopened: S.parseTimeline(S.serializeTimeline(strip("h3", { motion_fix: true })))
+              .segments[0].motion_fix ?? false,
+  onClip: (() => {
+    const t = strip("h3", {}, { ...clip(), motion_fix: true });
+    return t.segments[0].motion_fix ?? false;
+  })(),
+  byDefault: written("h3", {}).motion_fix ?? false,
+  offIsAbsent: "motion_fix" in written("h3", { motion_fix: false }),
+}));
+"""
+
+motion = layout.run(MOTION_JS, STATE)
+check("only a family with the pass offers the motion fix", motion["canDo"], [True, False])
+check("a fix set on a card is written to the blob", motion["written"], [True, False])
+check("...and comes back as itself", motion["reopened"], True)
+check("footage is never fixed", motion["onClip"], False)
+check("absent is off", motion["byDefault"], False)
+check("...and off is written as absent", motion["offIsAbsent"], False)
+
 passed("the piece names its family, and both halves read it off the piece")

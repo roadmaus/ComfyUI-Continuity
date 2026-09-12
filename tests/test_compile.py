@@ -963,6 +963,16 @@ check("zero is off, not the floor",
 expect_error("a restore that is not a number is refused",
              lambda: timeline([segment(), segment(**{"continue": True, "seam_restore": "hard"})]),
              "seam_restore must be a number")
+# The motion fix (issue #76): the card's own switch, carried as a flag.
+check("a card's motion fix is carried",
+      timeline([segment(**{"motion_fix": True}), segment()])[0].motion_fix, True)
+check("off by default", timeline([segment(), segment()])[0].motion_fix, False)
+check("a card saying false is off", timeline([segment(**{"motion_fix": False})])[0].motion_fix, False)
+check("...and it stays off the segment's request",
+      "motion_fix" in compiler.timeline_payloads(
+          {"version": 2, "prompt": "", "models": {},
+           "segments": [{"prompt": "x", "duration_s": 5, "motion_fix": True}]})[0]["request"],
+      False)
 
 # A blended sound seam pins its tail on this segment's own timeline instead of
 # sending it as a reference, so it takes no <Audio N> and the prompt carries no

@@ -324,6 +324,11 @@ def manifest():
             # (`seamrestore.py`); a family declaring nothing here draws no
             # switch and the compiler's value is ignored by its loop.
             "seam_restore": True,
+            # Whether a card can have its fast motion slowed, re-drawn and put
+            # back on the clock after it renders — `Compiled.motion_fix`. H3's
+            # own pass (`motionfix.py`, planned by `derope.py`); a family
+            # declaring nothing here draws no chip and its loop ignores the flag.
+            "motion_fix": True,
             # Whether a shot can be shown a storyboard of the shots before it
             # — the pill on the bar and the chip on every seam. Read off the
             # declaration so the compiler and the frontend answer alike.

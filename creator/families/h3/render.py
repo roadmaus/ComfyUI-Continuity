@@ -24,7 +24,7 @@ import comfy.sample
 from ... import (accel, canvas, compile as compiler, guide as guides, media,
                  models as core, raylight, sampling as sampling_mod, settings)
 from .. import base
-from . import declare, models as slots
+from . import declare, derope, models as slots
 
 # Whether this core can start a sampler with the noise switched off on an H3
 # audio+video latent. The lead-in's second sitting does exactly that — the noise
@@ -45,6 +45,7 @@ SEGMENT_NODE = declare.SEGMENT_NODE
 REFINE_NODE = "MiniMaxH3RefinePass"
 FACE_NODE = "MiniMaxH3FacePass"
 SEAM_RESTORE_NODE = "MiniMaxH3SeamRestore"
+MOTION_FIX_NODE = "MiniMaxH3MotionFix"
 
 
 @dataclass(frozen=True)
@@ -254,6 +255,23 @@ def restore_payload(payload, compiled):
                        "ratio": compiled.ratio, "label": compiled.ratio_label,
                        "from_image": compiled.ratio_from_image,
                        "clamped": compiled.ratio_clamped}}
+
+
+def motion_payload(payload, compiled):
+    """The payload the motion fix's *conditioning* is built from.
+
+    The seam restore's, at the canvas the pass was *delivered* at: past a
+    two-pass render that is the refine's, and the frames being re-drawn are the
+    ones on disk. The same two things are taken out for the same reasons — its
+    own second passes, and its keyframes, which are pinned to frame indices of
+    a clip of this pass's length and the slowed clip is another. The protected
+    ends do that job instead (`derope.PROTECT`). References survive.
+    """
+    out = restore_payload(payload, compiled)
+    if compiled.refine:
+        out["canvas"] = {**out["canvas"], "width": compiled.refine.width,
+                         "height": compiled.refine.height}
+    return out
 
 
 class H3(base.Family):
@@ -764,6 +782,41 @@ class H3(base.Family):
 
     restores_seams = True
     hands_latents = True
+    fixes_motion = True
+
+    def emit_motion_fix(self, graph, links, payload, compiled, written, latent,
+                        head, weights, sampling, acceleration, seed):
+        # A segment node of its own, compiled from the shot at its delivered
+        # canvas, so the references are encoded at the size the frames are
+        # re-drawn at. No seam links: the pass is re-drawn in place, and its
+        # protected ends are what hold it to its neighbours.
+        source = motion_payload(payload, compiled)
+        fixed = compiler.compile_segment(source, image_size_lookup=media.image_size)
+        inputs = {"clip": links.clip,
+                  "segment_data": json.dumps(source, sort_keys=True)}
+        if fixed.encodes_video():
+            inputs["vae"] = links.vae
+            inputs["vae_name"] = weights.vae or ""
+        if fixed.encodes_audio():
+            inputs["audio_vae"] = links.audio_vae
+            inputs["audio_vae_name"] = weights.audio_vae or ""
+        for name in slots.ROUTED_SLOTS:
+            if links.get(name) is not None:
+                inputs[f"model_{name}"] = links.get(name)
+        segment = graph.node(SEGMENT_NODE, **inputs)
+
+        # Patched as the passes are — same LoRAs off the segment node, cfg 1.0
+        # behind a zeroed negative, the same accelerators. No lead-in: like the
+        # refine, this resumes partway down the schedule.
+        model = patched(graph, segment.out(0), sampling, acceleration, weights)
+        return graph.node(
+            MOTION_FIX_NODE, model=model, positive=segment.out(1),
+            negative=graph.node("ConditioningZeroOut",
+                                conditioning=segment.out(1)).out(0),
+            vae=links.vae, source=written.out(1), latent=latent, head=int(head),
+            seed=seed, steps=sampling.steps, cfg=sampling.cfg,
+            sampler_name=sampling.sampler_name, scheduler=sampling.scheduler,
+            denoise=float(derope.INJECT), reel=written.out(0))
 
     def emit_seam_restore(self, graph, links, frames, payload, compiled, denoise,
                           weights, sampling, acceleration, seed):

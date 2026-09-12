@@ -2912,6 +2912,11 @@ function syncCanvas(timeline) {
             || isClip(segment) || !donor || isClip(donor))) {
       delete segment.seam_restore;
     }
+    // The motion fix is a fact about a generated pass: not on footage, and
+    // not where the family has no such pass.
+    if (segment.motion_fix !== undefined && !motionFix(segment, timeline)) {
+      delete segment.motion_fix;
+    }
     // Nothing runs into a clip that has no generation in front of it — two
     // clips end to end have no sampler between them to condition.
     if (isClip(segment) && (!index || isClip(timeline.segments[index - 1]))) {
@@ -3387,6 +3392,9 @@ export function serializeTimeline(timeline) {
       // first member by `emit`. Absent is off, which is the default and what
       // every blob written before the pass existed says.
       if (seamRestore(segment, timeline)) out.seam_restore = seamRestore(segment, timeline);
+      // The card's motion fix, only when it is on: absent is off, which is the
+      // default and what every blob written before the pass existed says.
+      if (motionFix(segment, timeline)) out.motion_fix = true;
       // The card's own answer about the storyboard, only where it gave one:
       // absent is "as the piece is set". Never on the first card, which has
       // nothing before it to be shown.
@@ -5775,6 +5783,13 @@ export function seamRestore(segment, piece) {
   const value = Number(segment.seam_restore);
   if (!(value > 0) || !segment.continue || !canDo(piece, "seam_restore")) return 0;
   return value;
+}
+
+/** Whether this card's fast motion is slowed, re-drawn and put back on the
+ *  clock after it renders. Only on a generated shot, and only where the family
+ *  has the pass (`motion_fix`). Mirrors `compile.Compiled.motion_fix`. */
+export function motionFix(segment, piece) {
+  return segment.motion_fix === true && !isClip(segment) && canDo(piece, "motion_fix");
 }
 
 /** The seam's width in frames — a valid grid value, or the classic 1. */

@@ -457,6 +457,14 @@ class Compiled:
     # after this pass is decoded and written, which is why it carries only its
     # own canvas and denoise.
     face: Face | None = None
+    # The motion fix, when this card asks for it: after the pass is decoded and
+    # written, the frames where it moved too fast for the model are slowed
+    # down, drawn again and put back on the clock (`families/h3/derope.py`).
+    # Like the face pass it changes nothing the sampler is handed, which is why
+    # it is a flag and not a pass spec: the dials are the method's measured
+    # defaults. A family with no such pass ignores it; see
+    # `base.Family.fixes_motion`.
+    motion_fix: bool = False
     # The re-detail pass, when the upscale pill named a backend that is not this
     # family's own. `width`/`height` above are what was sampled; this is what the
     # finished file is, and it is the one upscale mode where those differ.
@@ -1384,7 +1392,7 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
                     continues_audio=False, shots=1, feather=1, feather_pin=False,
                     seam_restore=0.0, carries_sound=False,
                     ends_on=False, ends_on_audio=False, ends_feather=1,
-                    ends_feather_pin=False, storyboard=False,
+                    ends_feather_pin=False, storyboard=False, motion_fix=False,
                     family=registry.DEFAULT_VIDEO):
     """`creator_data` dict -> `Compiled`.
 
@@ -1927,6 +1935,7 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
         ends_tail_s=ends_tail_s,
         refine=refine,
         face=face,
+        motion_fix=bool(motion_fix),
         redetail=redetail_pass,
     )
 
@@ -3110,6 +3119,12 @@ def timeline_payloads(data, image_size_lookup=None):
             restore = seam_restore_denoise(head.get("seam_restore"))
             if restore:
                 payload["seam_restore"] = restore
+        # The motion fix is the card's own switch rather than the seam's, read
+        # off the run's first segment like the rest; carried only when it is
+        # on, so a strip without it keeps every cache key it had. Never on
+        # footage: nothing sampled a clip.
+        if not is_clip(head) and head.get("motion_fix"):
+            payload["motion_fix"] = True
 
         # The storyboard: which earlier passes this one is shown, and how many
         # of the sheet's cells each fills. Resolved through `payload_of` the
@@ -3460,6 +3475,7 @@ def _chained_request(data, segment, pool, global_prompt, cast=()):
     request.pop("feather", None)
     request.pop("feather_pin", None)
     request.pop("seam_restore", None)
+    request.pop("motion_fix", None)
     request.pop("merge", None)
     request.pop("storyboard", None)
     # ...and the bookkeeping the strip keeps about a card, which describes what
@@ -3995,6 +4011,7 @@ def compile_segment(payload, image_size_lookup=None, family=registry.DEFAULT_VID
         feather=int(payload.get("feather", 1)),
         feather_pin=bool(payload.get("feather_pin")),
         seam_restore=payload.get("seam_restore", 0.0),
+        motion_fix=bool(payload.get("motion_fix")),
         # The seam on this pass's *far* side, stamped on by `timeline_payloads`
         # when the pass after it is supplied footage.
         ends_on=bool(payload.get("ends_on")),

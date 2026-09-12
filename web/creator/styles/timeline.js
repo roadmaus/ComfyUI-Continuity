@@ -230,9 +230,10 @@ export const css = `
   color: var(--mmc-dim); font-size: calc(11px * var(--mmc-type));
   display: flex; align-items: center; gap: 6px;
 }
-/* This shot's half of the face pass. Unlit while the shot is opted out, so a
-   strip tells you at a glance which cards are being repaired. */
-.mmc-tl-card-face {
+/* This shot's half of the face pass, and its motion fix. Unlit while the shot
+   is opted out, so a strip tells you at a glance which cards are being
+   repaired. */
+.mmc-tl-card-face, .mmc-tl-card-motion {
   border: 0; padding: 1px 6px; border-radius: 6px; cursor: pointer;
   background: var(--mmc-surface-3); color: var(--mmc-dim);
   font-size: calc(10px * var(--mmc-type)); font-family: inherit; margin-left: auto;
@@ -240,8 +241,8 @@ export const css = `
      part that must stay readable, so it neither shrinks nor breaks. */
   flex: none; white-space: nowrap;
 }
-.mmc-tl-card-face.on { background: color-mix(in srgb, var(--mmc-blue) 18%, transparent); color: var(--mmc-blue); }
-.mmc-tl-card-face:hover { filter: brightness(1.25); }
+.mmc-tl-card-face.on, .mmc-tl-card-motion.on { background: color-mix(in srgb, var(--mmc-blue) 18%, transparent); color: var(--mmc-blue); }
+.mmc-tl-card-face:hover, .mmc-tl-card-motion:hover { filter: brightness(1.25); }
 .mmc-tl-card-foot { display: flex; align-items: center; gap: 4px; }
 /* The ✕ after one press: the question, in the warning colour, where the ✕
    was. Kept to the ✕'s own height so the foot does not jump. */
