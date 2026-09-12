@@ -431,6 +431,11 @@ def load_all(compiled):
             # is no picture to decode and nothing for a cache miss to open.
             loaded[asset.handle] = {"mod": resolve(asset.filename)}
             continue
+        if not asset.filename:
+            # The timeline's storyboard: laid out in the graph and handed to
+            # the segment node on a socket, which adds it here the way the
+            # seam frame is added. See `compile.STORYBOARD_HANDLE`.
+            continue
         loaded[asset.handle] = Deferred(
             lambda asset=asset: {"image": load_image(asset.filename)})
     for asset in compiled.ref_videos:

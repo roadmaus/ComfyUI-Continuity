@@ -78,11 +78,6 @@ def default_prefixes():
 
 # The roads a blended seam can take, see `DEFAULTS["seam_handoff"]`.
 SEAM_HANDOFFS = ("frames", "latent", "levelled", "masked")
-# The storyboard's pooled grid, see `DEFAULTS["storyboard_grid"]`. The floor is
-# the smallest grid the sibling pack pools to; the ceiling is a 512-edge
-# canvas's own latent, past which pooling would be upsampling.
-MIN_STORYBOARD_GRID, MAX_STORYBOARD_GRID = 8, 64
-MAX_STORYBOARD_STEPS = 1000
 DEFAULTS = {
     "video_crf": DEFAULT_CRF,
     # `{family: prefix}` apiece — see `default_prefixes` above. Asked of the
@@ -145,16 +140,6 @@ DEFAULTS = {
     # again — the road every render took before any of these existed, kept so
     # the four can be compared on the same strip.
     "seam_handoff": "latent",
-    # How heavy the storyboard of earlier shots rides (issue #43): the long
-    # edge, in latent cells, that each of its nine frames is pooled to before
-    # they are laid along T as a saved video reference, and how many
-    # refinement steps the pooled frame is fitted to its full encode for
-    # (`refmod.compress`). Tokens go as the square of the grid: at 16:9, 16
-    # is about 360 tokens for the nine frames, 24 about 760, 32 about 1300 —
-    # against 1800 for the same nine cells encoded whole. Per machine while
-    # it is being measured; a piece-level control can follow the number.
-    "storyboard_grid": 24,
-    "storyboard_steps": 150,
     # The weight files this machine last picked, by family: `{family: {slot:
     # filename, dtype, route, devices}}` — the same block a piece carries, in
     # the same shape.
@@ -437,15 +422,6 @@ def clean(raw):
         if raw["seam_handoff"] not in SEAM_HANDOFFS:
             raise ValueError(f"seam_handoff must be one of {', '.join(SEAM_HANDOFFS)}")
         clean_settings["seam_handoff"] = raw["seam_handoff"]
-    for key, low, high in (("storyboard_grid", MIN_STORYBOARD_GRID, MAX_STORYBOARD_GRID),
-                           ("storyboard_steps", 0, MAX_STORYBOARD_STEPS)):
-        if key in raw and raw[key] is not None:
-            value = raw[key]
-            if isinstance(value, bool) or not isinstance(value, (int, float)) or value != int(value):
-                raise ValueError(f"{key} must be a whole number")
-            if not low <= int(value) <= high:
-                raise ValueError(f"{key} must be between {low} and {high}")
-            clean_settings[key] = int(value)
     for flag in ("show_shift_pills", "autoplay_previews", "advanced", "latent_cache"):
         if flag in raw and raw[flag] is not None:
             if not isinstance(raw[flag], bool):
@@ -715,16 +691,6 @@ def turbo_lead_in():
 def seam_handoff():
     """What a blended seam hands the next shot: one of `SEAM_HANDOFFS`."""
     return load()["seam_handoff"]
-
-
-def storyboard_grid():
-    """The long edge each storyboard frame is pooled to, in latent cells."""
-    return load()["storyboard_grid"]
-
-
-def storyboard_steps():
-    """How many steps a pooled storyboard frame is refined against its encode."""
-    return load()["storyboard_steps"]
 
 
 def neural_dll():

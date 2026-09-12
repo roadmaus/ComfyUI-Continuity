@@ -565,38 +565,27 @@ class MiniMaxH3ClipAudio(io.ComfyNode):
         return io.NodeOutput(media.clip_audio(_parse(clip_data), float(seconds), at))
 
 
-# How many sources one storyboard can draw on — `compile.STORYBOARD_CELLS`,
-# since a source fills at least one cell. The node takes that many optional
-# inputs because a graph's node has a fixed set of sockets and the strip does
-# not.
+# How many sources one sheet can draw on — `compile.STORYBOARD_CELLS`, since a
+# source fills at least one cell. The node takes that many optional inputs
+# because a graph's node has a fixed set of sockets and the strip does not.
 STORYBOARD_SOURCES = compiler.STORYBOARD_CELLS
 
 
 class ContinuityStoryboard(io.ComfyNode):
-    """The storyboard a shot is shown of the shots before it (issue #43), as a
-    saved video reference.
+    """The storyboard a shot is shown of the shots before it (issue #43).
 
-    Nine frames from earlier passes, in play order — the frames arrive per
-    source, already chosen (`spill.spread`); which passes and how many cells
-    each was the compiler's decision (`compile.storyboard_cells`) and is on the
-    payload. Each is encoded on its own with the video VAE, pooled to a small
-    grid and fitted back to its full encode (`refmod.compress`), and the nine
-    are laid along T as one video latent: `refmod.stack`'s shape, the sibling
-    pack's own way of keeping a character as one file. Written as a RefMod
-    under `refmods/storyboards/`, and what comes out of this node is its name
-    — the segment node cites it as `<Video N>` with the scene take, the way it
-    would cite any saved reference.
+    A 3 x 3 sheet of frames from earlier passes, in play order, laid out left
+    to right and top to bottom on black — the contact sheet the reporter was
+    attaching by hand — handed to the segment node as one more picture
+    reference. The frames arrive per source, already chosen (`spill.spread`),
+    so this only lays out; which passes and how many cells each was the
+    compiler's decision (`compile.storyboard_cells`) and is on the payload.
 
-    **Content-addressed, like a plate.** The name is a hash of the frames and
-    the grid, so an unchanged strip finds the file already there and writes
-    nothing, and the segment node — whose input this name is — re-encodes
-    only when the frames actually changed. Files nobody asks for again stay
-    in the folder, in the library, until they are thrown away: that is the
-    user-controllable cache, and it is deliberately not pruned by a render.
-
-    The preview beside the file is the 3 x 3 sheet of the same nine frames,
-    which is what the library shows for it and what the reporter was
-    attaching by hand.
+    Built at the generation's own canvas, for `plate.compose`'s reason: the
+    reference encoder scales a `match` reference down to that area anyway,
+    and a sheet made there is downsampled once rather than twice. Each frame
+    is fitted whole into its cell; a pass at the canvas fills it exactly, and
+    a cut-in clip of another shape is letterboxed rather than cropped.
 
     Its id is its own, like the guide reader's: a node that has never shipped
     has no saved workflow to break.
@@ -608,67 +597,31 @@ class ContinuityStoryboard(io.ComfyNode):
             node_id="ContinuityStoryboard",
             display_name="Continuity Storyboard",
             category="Continuity/internal",
-            description="Nine frames of the passes before a shot, pooled and saved as "
-                        "a video RefMod for the shot to cite.",
+            description="A 3 x 3 sheet of frames from the passes before a shot, "
+                        "for the shot to be shown as a reference.",
             is_dev_only=True,
             inputs=[
-                io.Vae.Input("vae"),
                 io.Int.Input("width", default=1344, min=64, max=16384),
                 io.Int.Input("height", default=768, min=64, max=16384),
-                io.Int.Input("grid", default=24, min=2, max=256),
-                io.Int.Input("steps", default=150, min=0, max=10000),
                 *(io.Image.Input(f"frames_{n}", optional=True)
                   for n in range(1, STORYBOARD_SOURCES + 1)),
             ],
-            outputs=[io.String.Output(display_name="refmod")],
+            outputs=[io.Image.Output()],
         )
 
     @classmethod
-    def execute(cls, vae, width, height, grid, steps, **frames) -> io.NodeOutput:
-        import hashlib
-
+    def execute(cls, width, height, **frames) -> io.NodeOutput:
         import torch
-        from comfy_extras.nodes_minimax_h3 import _resize
 
-        from . import plate, refmod
+        from . import plate
 
-        batches = [frames[f"frames_{n}"] for n in range(1, STORYBOARD_SOURCES + 1)
-                   if frames.get(f"frames_{n}") is not None]
-        if not batches:
+        cells = [frames[f"frames_{n}"] for n in range(1, STORYBOARD_SOURCES + 1)
+                 if frames.get(f"frames_{n}") is not None]
+        if not cells:
             raise ValueError("a storyboard needs at least one pass to draw on")
-        # Every cell at the canvas, whatever it came off: a pass is there
-        # already, a cut-in clip may not be, and frames laid along one latent
-        # have to share a shape.
-        cells = [_resize(frame[None], int(width), int(height), "disabled")
-                 for batch in batches for frame in batch][:compiler.STORYBOARD_CELLS]
-
-        digest = hashlib.sha1()
-        digest.update(f"{width}x{height}:{grid}:{steps}".encode())
-        for cell in cells:
-            digest.update((cell.clamp(0, 1) * 255).round().to(torch.uint8).numpy().tobytes())
-        name = f"{compiler.STORYBOARD_FOLDER}/sb-{digest.hexdigest()[:16]}"
-        filename = refmod.SCHEME + name
-        try:
-            refmod.resolve(filename)
-            return io.NodeOutput(filename)
-        except refmod.RefModError:
-            pass
-
-        latents = []
-        for cell in cells:
-            latent = vae.encode(cell).detach().float().cpu()
-            latents.append(refmod.compress(latent, int(grid), int(steps)))
-        stacked = torch.cat(latents, dim=2)
-        refmod.save(name, stacked, {
-            "kind": "video", "mode": "training", "source": "storyboard",
-            "source_shape": "x".join(str(v) for v in latents[0].shape[2:]),
-            "pool": "x".join(str(v) for v in stacked.shape[2:]),
-            "optimize_steps": int(steps),
-            "tags": ["storyboard", f"{len(batches)} shots"],
-            "description": "The shots before a shot of a piece, nine frames in time order.",
-            "concept_type": "scene",
-        }, preview=plate.compose(cells, int(width), int(height), backdrop=0.0)[0])
-        return io.NodeOutput(filename)
+        ordered = [frame[None] for batch in cells for frame in batch][:compiler.STORYBOARD_CELLS]
+        sheet = plate.compose(ordered, int(width), int(height), backdrop=0.0)
+        return io.NodeOutput(sheet)
 
 
 class ContinuityGuideFrames(io.ComfyNode):

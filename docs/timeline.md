@@ -68,38 +68,20 @@ better on your strips, open an issue with the per-cut numbers.
 A shot can be shown the shots before it. The **Storyboard** pill on the bar
 has three answers: nothing, *each shot sees the shot before it*, or *each shot
 sees the piece so far*. With one of the two on, every shot after the first is
-handed nine frames of those shots — shared out by how long each shot plays,
-in time order — as a **saved video reference** of the place: each frame is
-encoded, pooled to a small grid and laid along time as one RefMod, written to
-`refmods/storyboards/` with a 3 × 3 sheet of the same frames as its picture,
-and cited as `<Video N>` with the scene take. It is the sheet people were
-attaching by hand (issue #43), made for you at render time from the passes as
-they actually came out: a kept take is read from its file, a cut-in clip from
-its window.
+handed a 3 × 3 sheet of frames from those shots — nine cells shared out by how
+long each shot plays, in time order, reading left to right and top to bottom
+— as its last picture reference, with a line in the prompt saying what the
+sheet is, how it reads, and that the grid itself is never to be drawn. It is
+the sheet people were attaching by hand (issue #43), made for you at render
+time from the passes as they actually came out: a kept take is read from its
+file, a cut-in clip from its window.
 
 What it buys is the room. A cut to another angle of the same street has
 nothing crossing it — no frame, no sound — and the model re-imagines the
-street. With the earlier shots in front of it the walls, the light and where
-things stand carry across. It is not a face reference: pooling keeps colours
-and large structure and loses detail, enough for a place and not for a
+street. With the sheet in front of it the walls, the light and where things
+stand carry across. It is not a face reference: at the generation's own
+canvas each cell is a ninth of the picture, enough for a place and not for a
 likeness, which is what the cast is for.
-
-Why a video and not a picture of the sheet: that was measured. A 3 × 3 sheet
-encoded whole kept the room perfectly — and kept the previous shot's framing
-with it, a medium shot at the door coming back as the opening wide, and no
-sentence in the prompt about the sheet moved that. A video reference with the
-scene take gets the model's own trained line — environment, surfaces and
-light retained; framing and camera not — and its weight is its grid, which
-is a knob the library already has. How heavy it rides is `storyboard_grid`
-in the machine settings (the long edge each frame is pooled to, 24 by
-default, roughly 760 tokens for the nine frames against 1800 for the sheet
-whole) while the right number is measured.
-
-The files it writes are yours. Each is named by what is in it, so an unchanged
-strip finds its storyboard already there and writes nothing; one whose shots
-changed writes a new one and the old stays. They list in the Saved references
-panel like any RefMod — hang one on a cast member as *the shop*, cite it in
-another piece, throw it away — and a render never prunes them.
 
 The chip on every seam says what its own card sees — *sees #1–3*, *no
 storyboard* — and opens to the same three answers plus a row of toggles, so
@@ -108,15 +90,15 @@ Under the toggles is a picture of the sheet with the number of the shot each
 cell will come from, which is the one honest preview there is before the
 shots exist.
 
-Two costs. A shot shown a storyboard is a reference generation, so it runs on
-the reference checkpoint whatever else it carries, and the storyboard takes
-one of the three video slots — a card already citing three clips is refused
-by name. And a shot now depends on the shots it sees: edit shot 1 and every
-shot shown it re-renders, where a hard cut used to keep its cache.
+Two costs. A shot shown a sheet is a reference generation, so it runs on the
+reference checkpoint whatever else it carries, and the sheet takes one of the
+nine picture slots — a card already citing nine is refused by name. And a
+shot now depends on the shots it sees: edit shot 1 and every shot shown it
+re-renders, where a hard cut used to keep its cache.
 
 Which of the two settings is the better default on a long strip is an open
 measurement. The reporter's finding was about environments and placements;
-on the tone drift described above, a storyboard of the previous shot shows each
+on the tone drift described above, a sheet of the previous shot shows each
 shot the drift of the one before it as the room, while the piece so far keeps
 shot 1's cells in view as the tone the piece opened on. If you measure either
 on your strips, open an issue with the per-cut numbers.

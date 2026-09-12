@@ -116,15 +116,13 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
                 io.Audio.Input("prev_audio", optional=True,
                     tooltip="The tail of an earlier segment's soundtrack, when this segment's sound continues from it."),
                 # The storyboard of earlier passes this segment is shown
-                # (`compile.STORYBOARD_HANDLE`): the name of the saved video
-                # reference the render loop wrote of them, cited as the last
-                # `<Video N>`. Wired only where the payload says there is one,
-                # so every other segment keeps the inputs it had — and a link,
-                # so this node runs after the file exists and re-runs when its
-                # content-addressed name changes.
-                io.String.Input("storyboard_mod", optional=True,
-                                tooltip="The saved reference of earlier shots this one is "
-                                        "shown, when the timeline makes one."),
+                # (`compile.STORYBOARD_HANDLE`), laid out by the render loop
+                # and cited as the last picture reference. Wired only where the
+                # payload says there is one, so every other segment keeps the
+                # inputs it had.
+                io.Image.Input("storyboard_image", optional=True,
+                               tooltip="The sheet of earlier shots this one is shown, "
+                                       "when the timeline makes one."),
                 io.Image.Input("next_image", optional=True,
                     tooltip="The opening frames of the supplied clip this segment runs into."),
                 io.Audio.Input("next_audio", optional=True,
@@ -188,7 +186,7 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
                 prev_image=None, prev_audio=None,
                 next_image=None, next_audio=None, hold_lora="",
                 prev_latent=None, anchor_latent=None,
-                sampler_backend="", storyboard_mod=None) -> io.NodeOutput:
+                sampler_backend="", storyboard_image=None) -> io.NodeOutput:
         payload = _parse(segment_data)
 
         # Which segment the queue has reached, told to the stage the moment
@@ -260,22 +258,17 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
                               without=hold_lora) if hold_lora else None
             model = lora.apply(model, entries, compiled.checkpoint)
 
+        loaded = media.load_all(compiled)
         if compiled.storyboard:
-            if not storyboard_mod:
+            if storyboard_image is None:
                 raise ValueError(
                     "This segment is shown a storyboard of earlier shots but no "
-                    "saved reference reached it — the Timeline node should have "
-                    "wired one."
+                    "sheet reached it — the Timeline node should have wired one."
                 )
-            # The compiler named a placeholder, since the file did not exist
-            # when it compiled; the real name arrives here. Written onto the
-            # asset itself — the plan step holds the same object — so the
-            # loader, the reference cache key and the encoder all read a mod
-            # like any other from here on.
-            for asset in compiled.ref_videos:
-                if compiler.is_storyboard(asset):
-                    asset.filename = str(storyboard_mod)
-        loaded = media.load_all(compiled)
+            # One picture, like any reference that came off a file — the
+            # encoder reads it through the same `image` step, uncached
+            # (`encode._ref_key`), and the prompt already says what it is.
+            loaded[compiler.STORYBOARD_HANDLE] = {"image": storyboard_image[:1]}
         if compiled.continues:
             if prev_image is None:
                 raise ValueError(

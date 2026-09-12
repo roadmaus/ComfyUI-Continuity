@@ -87,15 +87,13 @@ def segments(graph, prompts):
 
 
 def sheet_of(graph, inputs):
-    """A segment's storyboard node -> ((w, h, grid, steps), [(reader, count, at, whose)])."""
-    link = inputs.get("storyboard_mod")
+    """A segment's storyboard node -> [(reader class, count, whose pass)]."""
+    link = inputs.get("storyboard_image")
     if link is None:
         return None
     node = graph[link[0]]
     if node["class_type"] != "ContinuityStoryboard":
         return f"<ContinuityStoryboard expected, found {node['class_type']}>"
-    if "vae" not in node["inputs"]:
-        return "<no vae on the storyboard node>"
     cells = []
     for slot in range(1, 10):
         frames = node["inputs"].get(f"frames_{slot}")
@@ -103,9 +101,13 @@ def sheet_of(graph, inputs):
             continue
         reader = graph[frames[0]]
         if reader["class_type"] == "MiniMaxH3PassFrames":
-            # pass frames -> reel -> sampler -> ... -> segment: whose pass this is
+            # pass frames -> reel -> sampler -> segment: whose pass this is
             reel = graph[reader["inputs"]["source"][0]]
-            seen = graph[reel["inputs"]["samples"][0]]["inputs"]["model"]
+            sampler = graph[reel["inputs"]["samples"][0]]
+            model = sampler["inputs"]["model"]
+            # The model may go through a patcher or two on its way; walk to
+            # the segment node.
+            seen = model
             while graph[seen[0]]["class_type"] != "MiniMaxH3TimelineSegment":
                 seen = graph[seen[0]]["inputs"]["model"]
             whose = json.loads(graph[seen[0]]["inputs"]["segment_data"])["request"]["prompt"]
@@ -113,23 +115,20 @@ def sheet_of(graph, inputs):
             whose = json.loads(reader["inputs"]["clip_data"])["filename"]
         cells.append((reader["class_type"], reader["inputs"]["count"],
                       reader["inputs"]["at"], whose))
-    return ((node["inputs"]["width"], node["inputs"]["height"],
-             node["inputs"]["grid"], node["inputs"]["steps"]), cells)
+    return (node["inputs"]["width"], node["inputs"]["height"]), cells
 
 
 three = [{"prompt": "one", "duration_s": 5},
          {"prompt": "two", "duration_s": 4},
          {"prompt": "three", "duration_s": 7}]
-settings = importlib.import_module(f"{PACKAGE}.creator.settings")
-KNOBS = (1344, 768, settings.storyboard_grid(), settings.storyboard_steps())
 
 # Off: the graph it always built.
 plain = build(segments=three)
-check("no storyboard, no storyboard node", "ContinuityStoryboard" in by_class(plain), False)
+check("no storyboard, no sheet node", "ContinuityStoryboard" in by_class(plain), False)
 check("...and no reader spread over anything",
       [i.get("at") for _, i in by_class(plain).get("MiniMaxH3PassFrames", [])], [])
 check("...and no socket on any segment",
-      [("storyboard_mod" in i) for _, i in segments(plain, ["one", "two", "three"])],
+      [("storyboard_image" in i) for _, i in segments(plain, ["one", "two", "three"])],
       [False, False, False])
 
 # 'all': each card is shown the passes before it, at their allotted cells.
@@ -137,12 +136,13 @@ shown = build(segments=three, storyboard="all")
 one, two, three_ = segments(shown, ["one", "two", "three"])
 check("the first card is shown nothing", sheet_of(shown, one[1]), None)
 check("the second is shown the first, nine cells, off its spill",
-      sheet_of(shown, two[1]), (KNOBS, [("MiniMaxH3PassFrames", 9, "spread", "one")]))
+      sheet_of(shown, two[1]),
+      ((1344, 768), [("MiniMaxH3PassFrames", 9, "spread", "one")]))
 check("the third is shown both, by duration, in play order",
       sheet_of(shown, three_[1]),
-      (KNOBS, [("MiniMaxH3PassFrames", 5, "spread", "one"),
-               ("MiniMaxH3PassFrames", 4, "spread", "two")]))
-check("the cells are on the payload, so they are in the cache key",
+      ((1344, 768), [("MiniMaxH3PassFrames", 5, "spread", "one"),
+                     ("MiniMaxH3PassFrames", 4, "spread", "two")]))
+check("the sheet is on the payload, so it is in the cache key",
       json.loads(three_[1]["segment_data"]).get("storyboard"), {"cells": [[0, 5], [1, 4]]})
 check("a shown card runs on ref2va", "model_ref2va" in two[1], True)
 check("...with the video VAE wired for the encode", "vae" in two[1], True)
@@ -150,10 +150,11 @@ check("...with the video VAE wired for the encode", "vae" in two[1], True)
 # A seam's own reader is untouched: it still reads the tail, no `at` written.
 seamed = build(segments=[three[0], {**three[1], "continue": True}], storyboard="previous")
 readers = by_class(seamed)["MiniMaxH3PassFrames"]
-check("the seam reads the tail as it always did, the storyboard reads across",
+check("the seam reads the tail as it always did, the sheet reads across",
       sorted((i.get("at", "<absent>"), i.get("count", 1)) for _, i in readers),
       [("<absent>", 1), ("spread", 9)])
-check("both hang off the same pass", len({i["source"][0] for _, i in readers}), 1)
+check("both hang off the same pass",
+      len({i["source"][0] for _, i in readers}), 1)
 
 # Supplied footage is a source too, off the clip's own window.
 with_clip = build(segments=[
@@ -164,17 +165,17 @@ with_clip = build(segments=[
 last = segments(with_clip, ["three"])[0]
 check("a cut-in clip fills its cells from its file",
       sheet_of(with_clip, last[1]),
-      (KNOBS, [("MiniMaxH3PassFrames", 5, "spread", "one"),
-               ("MiniMaxH3ClipFrames", 4, "spread", "insert.mp4")]))
+      ((1344, 768), [("MiniMaxH3PassFrames", 5, "spread", "one"),
+                     ("MiniMaxH3ClipFrames", 4, "spread", "insert.mp4")]))
 
-# The storyboard rides the refine's segment node too: the second pass
-# re-encodes the same references at the target canvas.
+# The sheet rides the refine's segment node too: the second pass re-encodes
+# the same references at the target canvas.
 refined = build(segments=three[:2], storyboard="previous", short_edge=1024)
 nodes = [i for _, i in by_class(refined)["MiniMaxH3TimelineSegment"]
          if json.loads(i["segment_data"])["request"]["prompt"] == "two"]
-check("a two-pass card's both segment nodes are shown the storyboard",
-      [("storyboard_mod" in i) for i in nodes], [True, True])
-check("...the same one", len({i["storyboard_mod"][0] for i in nodes}), 1)
+check("a two-pass card's both segment nodes are shown the sheet",
+      [("storyboard_image" in i) for i in nodes], [True, True])
+check("...the same sheet", len({i["storyboard_image"][0] for i in nodes}), 1)
 
 # `spill.spread` — the cells' positions.
 check("nine cells of a 120-frame pass are its bin centres",
@@ -183,58 +184,19 @@ check("one cell is the middle", spill.spread(120, 1), [60])
 check("fewer frames than cells repeats what there is", spill.spread(2, 4), [0, 0, 1, 1])
 check("the last cell never runs off the end", max(spill.spread(7, 9)), 6)
 
-# The node itself, on a fake VAE and a temporary library: nine frames in, one
-# video mod out, content-addressed, with the sheet beside it.
-import tempfile
-
+# The layout node itself, on fake frames.
 import torch
 
-refmod = importlib.import_module(f"{PACKAGE}.creator.refmod")
-
-
-class _Vae:
-    def encode(self, image):
-        # A latent that carries the frame's mean colour, at the /16 grid, so a
-        # test can tell cells apart after pooling.
-        h, w = image.shape[1] // 16, image.shape[2] // 16
-        return torch.full((1, 24, 1, h, w), float(image.mean()))
-
-
-frames = torch.zeros(9, 144, 256, 3)
+frames = torch.zeros(9, 90, 160, 3)
 for index in range(9):
-    frames[index] = (index + 1) / 9
-library = tempfile.mkdtemp(prefix="mmc-refmods-")
-previous_home = refmod.home
-refmod.home = lambda: library
-previous_roots = refmod.roots
-refmod.roots = lambda: [library]
-try:
-    made = tl.ContinuityStoryboard.execute(vae=_Vae(), width=256, height=144, grid=8, steps=0,
-                                           frames_1=frames[:5], frames_2=frames[5:]).args[0]
-    check("the node names a mod under storyboards/",
-          made.startswith("refmod:storyboards/sb-"), True)
-    path = refmod.resolve(made)
-    meta = refmod.header(path)
-    check("...a video of nine latent frames", (meta["kind"], meta["latent_t"]), ("video", 9))
-    check("...pooled to the grid at the canvas's aspect",
-          (meta["latent_h"], meta["latent_w"]), (4, 8))
-    latent = refmod.load_latent(path, meta)
-    check("...in the order the frames came",
-          [round(float(latent[0, 0, t].mean()) * 9) for t in range(9)], list(range(1, 10)))
-    check("...with the sheet beside it as its picture", refmod.preview_path(path) is not None, True)
-    stamp = os.stat(path).st_mtime_ns
-    again = tl.ContinuityStoryboard.execute(vae=_Vae(), width=256, height=144, grid=8, steps=0,
-                                            frames_1=frames[:5], frames_2=frames[5:]).args[0]
-    check("the same frames name the same file, and write nothing",
-          (again, os.stat(path).st_mtime_ns), (made, stamp))
-    other = tl.ContinuityStoryboard.execute(vae=_Vae(), width=256, height=144, grid=8, steps=0,
-                                            frames_1=frames[1:6], frames_2=frames[5:]).args[0]
-    check("different frames name a different file", other != made, True)
-    grid16 = tl.ContinuityStoryboard.execute(vae=_Vae(), width=256, height=144, grid=16, steps=0,
-                                             frames_1=frames[:5], frames_2=frames[5:]).args[0]
-    check("...and so does a different grid", grid16 != made, True)
-finally:
-    refmod.home = previous_home
-    refmod.roots = previous_roots
+    frames[index, :, :, 0] = (index + 1) / 9
+sheet = tl.ContinuityStoryboard.execute(width=480, height=270, frames_1=frames[:5],
+                                        frames_2=frames[5:]).args[0]
+check("the sheet is one picture at the canvas", tuple(sheet.shape), (1, 270, 480, 3))
+# Cell (row, col) holds frame row*3+col: sample each cell's centre.
+got = [round(float(sheet[0, row * 90 + 45, col * 160 + 80, 0]) * 9)
+       for row in range(3) for col in range(3)]
+check("cells run left to right, top to bottom, in the order the frames came",
+      got, list(range(1, 10)))
 
-passed("the storyboard is read off the passes before a shot and saved as one reference")
+passed("the storyboard is read off the passes before a shot and laid out in order")

@@ -198,35 +198,20 @@ VIDEO_TAKES = IMAGE_TAKES + ("camera", "edit", "continue")
 AUDIO_TAKES = ("full", "voice", "music", "ambience", "copy")
 TAKES = {"image": IMAGE_TAKES, "video": VIDEO_TAKES, "audio": AUDIO_TAKES}
 
-# The storyboard: the shots before a card, handed to it as a reference (issue
-# #43). Nine frames of them, in time order, made in the graph off the passes as
-# they were rendered — so it has no place in a blob's asset list, and the
-# compiler adds it to the plan itself when the payload says there is one, under
-# a handle no `@` citation can spell (`HANDLE_RE` wants a dash and a number).
-#
-# It is a *video* reference, and a saved one: the frames are encoded one by
-# one, pooled to a small grid and laid along T as a RefMod (`refmod.stack`'s
-# shape), written content-addressed under `refmods/storyboards/` and cited as
-# `<Video N>` with the `scene` take. Three things decided that. A picture of
-# nine cells has to be *described* as a storyboard, and measured on the lab
-# the description had no leverage: the model kept the room and the previous
-# shot's framing with it. A video with the scene take gets the guide's own
-# trained sentence — environment, surfaces and light retained; framing and
-# camera not. Its weight is its grid, which is a knob the library already
-# has, where a sheet at `match` rode as heavy as a full reference. And a mod
-# is a file: it is in the Saved references panel with a preview, can hang on
-# a cast member, be cited elsewhere, and be thrown away.
-#
-# The compiler names a placeholder file: the mod does not exist until the
-# earlier passes have rendered, and the graph hands the segment node the real
-# name (`ContinuityStoryboard` -> `storyboard_mod`). It rides *last* among the
-# videos so every clip the user attached keeps the `<Video N>` it had.
+# The storyboard: a contact sheet of the shots before a card, handed to it as
+# one more picture reference (issue #43). It is made in the graph, off the
+# passes as they were rendered, so it has no file and no place in a blob's
+# asset list — the compiler adds it to the plan itself when the payload says
+# there is one, under a handle no `@` citation can spell (`HANDLE_RE` wants a
+# dash and a number) and a take no picker offers. It rides *last* among the
+# pictures so every reference the user attached keeps the `<Picture N>` it had
+# without it, and the cache entry that goes with it.
 STORYBOARD_HANDLE = "storyboard"
-STORYBOARD_TAKE = "scene"
-STORYBOARD_PENDING = refmod.SCHEME + "storyboards/pending"
-STORYBOARD_FOLDER = "storyboards"
-# 3 x 3 — the sheet the reporter measured with, kept as the cell budget: nine
-# frames over the shots a card is shown, and the preview the library draws.
+STORYBOARD_TAKE = "storyboard"
+# 3 x 3 — the sheet the reporter measured with, and the largest grid on which a
+# cell still reads as a room at the generation's own canvas (`ref_size` match):
+# each is a ninth of the area, which is enough for where things stand and not
+# for whose face it is.
 STORYBOARD_CELLS = 9
 # What every shot on the strip is shown, unless its card says otherwise:
 # nothing, the shot in front of it, or every shot before it. `all` is the one
@@ -391,9 +376,9 @@ class Compiled:
     # is a tensor produced mid-graph and so has no Asset and no filename.
     continues: bool = False
     # Timeline only: whether a storyboard of earlier shots rides in as the last
-    # video reference. The asset is in `ref_videos` under `STORYBOARD_HANDLE`
+    # picture reference. The asset is in `ref_images` under `STORYBOARD_HANDLE`
     # like any other; this says so without a scan, for the node that has to
-    # name its file from its socket.
+    # fill it from its socket.
     storyboard: bool = False
     # How many of the source segment's last frames the seam inherits. 1 is the
     # classic seam — the last frame becomes this segment's first. More pins the
@@ -1397,10 +1382,10 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     clip: a generated pass after this one has nothing to hand backwards, since
     it does not exist until this one has been sampled.
 
-    `storyboard` is the timeline's third addition: the earlier shots arrive as
-    a saved video reference the graph writes, cited last among the videos.
-    Unlike the seam frame it is a *reference* — so it puts the generation on
-    the reference road, whatever else the card carries.
+    `storyboard` is the timeline's third addition: a contact sheet of earlier
+    shots arrives as a tensor and is cited as the last picture reference. Like
+    the seam frame it has no file, and unlike it, it is a *reference* — so it
+    puts the generation on the reference road, whatever else the card carries.
 
     Every reference is defined and scoped in the prompt unconditionally. That
     used to be a machine setting (`define_refs`, off by default), which meant
@@ -1521,16 +1506,15 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
                 "this family takes no references, so there is nothing for a "
                 "storyboard of earlier shots to ride in as — turn it off")
         # Said here rather than left to `grammar.refuse`, whose count would be
-        # right and whose message would name a clip the user never attached.
-        if len(ref_videos) >= family_grammar.max_videos:
+        # right and whose message would name a picture the user never attached.
+        if len(ref_images) >= family_grammar.max_images:
             raise CompileError(
-                f"this shot already cites {len(ref_videos)} videos, and the "
+                f"this shot already cites {len(ref_images)} pictures, and the "
                 f"storyboard of earlier shots needs one of the "
-                f"{family_grammar.max_videos} — take a clip off it, or turn "
+                f"{family_grammar.max_images} — take a picture off it, or turn "
                 f"the storyboard off for this shot")
-        ref_videos = ref_videos + [Asset(handle=STORYBOARD_HANDLE, kind="video",
-                                         role="reference", track="picture",
-                                         filename=STORYBOARD_PENDING,
+        ref_images = ref_images + [Asset(handle=STORYBOARD_HANDLE, kind="image",
+                                         role="reference", filename="",
                                          takes=STORYBOARD_TAKE)]
 
     mode = _derive_mode(family_grammar, first_frame, last_frame,
@@ -2832,12 +2816,6 @@ def _continue_source(raw, index):
     except (TypeError, ValueError):
         return None
     return number - 1 if 1 <= number < index else None
-
-
-def is_storyboard(asset):
-    """Whether an asset is the timeline's storyboard of earlier shots — the one
-    reference with no file behind it until the graph has written one."""
-    return getattr(asset, "handle", None) == STORYBOARD_HANDLE
 
 
 def storyboard_policy(data):
