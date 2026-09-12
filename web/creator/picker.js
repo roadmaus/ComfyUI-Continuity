@@ -7,7 +7,8 @@ import { listAssets, listingTruncated, listedFolders, makeFolder, removeFolder,
          deleteAsset, loadPickerPrefs, savePickerPrefs, buildPlate,
          cutPanel, uploadRefMod } from "./api.js";
 import { openTrim, trimLabel } from "./trim.js";
-import { openSubjectView, greyField } from "./subject.js";
+import { openPicture, cropLabel } from "./picture.js";
+import { greyField } from "./subject.js";
 import { t } from "./i18n.js";
 import { memberFromMod } from "./presets.js";
 
@@ -127,7 +128,14 @@ class Picker {
     // family whose image references *are* one composite sheet (LTX 2.5), and
     // the panels of a sheet already attached, which is what makes pairing
     // survive reopening the picker.
-    this.plate = options.plate || null;
+    // Every picker can cut. A caller with a piece hands in its family's spec
+    // (`S.plateSpec`); one without — a swap, a keyframe, a bench — gets the
+    // plain one, the matte weights left for the server to resolve
+    // (`plate.default_models`). The scissors are one thing on every surface,
+    // and a picker that only cut where its caller remembered to say so was
+    // how a swap came to open a poorer editor than an attachment.
+    this.plate = options.plate || { backdrop: 0.5, cut: false, model: "", segment: "",
+                                    width: 1280, height: 704, sheet: false };
     // path -> whether that picture is cut out of its background. Absent means
     // the family's default, so a picture the user has not touched follows the
     // family and one they have touched stays where they put it.
@@ -143,6 +151,11 @@ class Picker {
     this.points = new Map((options.plate?.panels ?? [])
       .filter((panel) => panel.points?.length)
       .map((panel) => [panel.path, panel.points.map((point) => ({ ...point }))]));
+    // The framing each seeded panel already wears rides in through the same
+    // per-file settings a segment does, so the picture editor opens on it.
+    for (const panel of options.plate?.panels ?? []) {
+      if (panel.crop) this.settings.set(panel.path, { crop: { ...panel.crop } });
+    }
     // The connected group: paths, in layout order. On a sheet family every
     // selected image is a panel and this stays empty; elsewhere it is what
     // Connect built, and it holds until the sheet is taken off the piece.
@@ -1079,7 +1092,10 @@ class Picker {
 
     // Which route shows this file is `api.stillUrl`'s to know — the same
     // question the preset library's cards ask, answered in one place.
-    const still = stillUrl(asset);
+    const framing = this.settings.get(asset.path)?.crop ?? null;
+    const still = framing && !asset.mod
+      ? viewUrl(asset.path, { preview: true, version: asset.mtime, crop: framing })
+      : stillUrl(asset);
     // A cut cell shows the cutout itself, on the family's own backdrop — the
     // scissors' promise is a picture, and this is it. The original stands in
     // until the matte lands; `previewCut` swaps the cell when it does.
@@ -1116,36 +1132,9 @@ class Picker {
         cell.appendChild(el("div", { class: "mmc-cell-sheet", text: `⧉ ${number + 1}` }));
       }
     }
-    // The scissors, on the picture itself. One press cuts the whole subject
-    // out and the cell shows the cutout; a second, smaller button — there only
-    // once something is cut — opens the subject view for the picture the
-    // whole-subject matte is wrong about. This is the door the sheet editor
-    // used to be the only way through.
-    if (this.chipPossible(asset)) {
-      const on = this.cutOf(asset);
-      cell.appendChild(el("button", {
-        class: `mmc-cell-cut${on ? " on" : ""}${
-          on && this.points.get(asset.path)?.length ? " pts" : ""}`,
-        "aria-pressed": String(on),
-        title: on
-          ? t("{name} is cut out: the subject is lifted off its background onto the flat "
-            + "field the panels sit on, so the room it was photographed in stops "
-            + "conditioning the render alongside it. Click to keep the background.",
-              { name: asset.name })
-          : t("{name} is used whole, background and all. Click to lift the subject off it "
-            + "— which is what you want when you are citing a person or an object and not "
-            + "the place they were photographed in.", { name: asset.name }),
-        onclick: (event) => { event.stopPropagation(); this.setCut(asset, !on); },
-      }, [icon("scissors", 12)]));
-      if (on) {
-        cell.appendChild(el("button", {
-          class: "mmc-cell-subject",
-          title: t("Choose the subject — where the whole-subject cut grabs the wrong "
-                 + "thing, click the one you mean"),
-          onclick: (event) => { event.stopPropagation(); this.chooseSubject(asset); },
-        }, [icon("subject", 12)]));
-      }
-      if (held?.pending) cell.appendChild(el("div", { class: "mmc-plate-scan" }));
+    // The sweep while a cutout is on its way: the cell is about to change.
+    if (this.chipPossible(asset) && held?.pending) {
+      cell.appendChild(el("div", { class: "mmc-plate-scan" }));
     }
     // No segment badge while organizing: configuring a segment selects the
     // file for attachment, which is exactly not what a mark means.
@@ -1159,7 +1148,10 @@ class Picker {
         text: `${t(asset.source === "stack" ? "stack" : asset.mode === "training" ? "compressed" : "full")} · ${
           t("{count} tokens", { count: asset.tokens ?? 0 })}`,
       }));
-    } else if (asset.kind !== "image" && !this.organize) cell.appendChild(this.badge(asset));
+    } else if (!this.organize) {
+      if (asset.kind !== "image") cell.appendChild(this.badge(asset));
+      if (asset.kind !== "audio") cell.appendChild(this.cropBadge(asset));
+    }
     if (asset.kind !== "audio") cell.appendChild(el("div", { class: "mmc-cell-name", text: asset.name }));
 
     // Stars and dragging on every tab, renders included: a finished clip is the
@@ -1227,6 +1219,54 @@ class Picker {
     }, [icon("scissors", 12), el("span", { text: parts.join(" · ") || t("Segment") })]);
   }
 
+  /** The picture editor's door on a cell — the segment badge's twin, quiet
+   *  on the same terms, and the one door: the window, the turn, the mirror,
+   *  and where the family can cut, the scissors and the clicks that say which
+   *  subject they mean. The label reads what is set, so a cut cell says so
+   *  where the scissors chip used to sit. */
+  cropBadge(asset) {
+    const framing = this.settings.get(asset.path)?.crop ?? null;
+    const label = [this.chipPossible(asset) && this.cutOf(asset) ? t("cut out") : "",
+                   cropLabel(framing)].filter(Boolean).join(" · ");
+    return el("button", {
+      class: `mmc-cell-trim mmc-cell-crop${label ? " set" : ""}`,
+      title: this.chipPossible(asset)
+        ? t("Crop this picture to the part that is the reference, turn or mirror it, "
+          + "and choose the subject the scissors cut out")
+        : t("Crop this picture to the part that is the reference, or turn and mirror it"),
+      onclick: (event) => { event.stopPropagation(); this.editPicture(asset); },
+    }, [icon("edit", 12), el("span", { text: label || t("Edit") })]);
+  }
+
+  async editPicture(asset) {
+    const setting = this.settings.get(asset.path) || {};
+    const canCut = this.chipPossible(asset);
+    const result = await openPicture({
+      path: asset.path,
+      kind: asset.kind,
+      crop: setting.crop ?? null,
+      trim: setting.trim ?? null,
+      aspect: this.options.aspect ?? null,
+      cutout: canCut ? { plate: this.plate, cut: this.cutOf(asset),
+                         points: this.points.get(asset.path) ?? [] } : null,
+    });
+    if (!result) return;
+    const next = { ...setting };
+    if (result.crop) next.crop = result.crop;
+    else delete next.crop;
+    this.settings.set(asset.path, next);
+    if (canCut) {
+      if (result.points.length) this.points.set(asset.path, result.points);
+      else this.points.delete(asset.path);
+      this.cuts.set(asset.path, result.cut);
+    }
+    // Editing a file is how you say you want it, the way cutting a segment is.
+    if (!this.selected.some((a) => a.path === asset.path)) this.toggle(asset);
+    if (canCut) this.previewCut(asset);
+    else this.refreshCell(asset);
+    this.renderFoot();
+  }
+
   async editSegment(asset) {
     const setting = this.settings.get(asset.path) || {};
     const result = await openTrim({
@@ -1244,14 +1284,16 @@ class Picker {
     });
     if (!result) return;
     // Stored even when it matches the default, because "the user looked at this
-    // and left the sound off" has to outrank the on-by-default rule.
-    this.settings.set(asset.path, result);
+    // and left the sound off" has to outrank the on-by-default rule. The
+    // framing, set in the other editor, rides along untouched.
+    this.settings.set(asset.path, { ...(setting.crop ? { crop: setting.crop } : {}), ...result });
     const selected = this.selected.some((a) => a.path === asset.path);
     // Switching to sound-only moves the file between buckets, and the one it
     // lands in may be full. Say so and put the choice back rather than letting a
     // selection through that compile.py would refuse.
     if (selected && !this.fits(this.targetKind(asset))) {
-      this.settings.set(asset.path, { ...result, track: setting.track });
+      this.settings.set(asset.path, { ...(setting.crop ? { crop: setting.crop } : {}),
+                                      ...result, track: setting.track });
       this.refreshCell(asset);   // the segment still changed, even if the track did not
       this.warn(t("No {kind} slot left for {name}.", { kind: t(this.targetKind(asset)), name: asset.name }));
       return;
@@ -1314,7 +1356,7 @@ class Picker {
    *  not for a single-pick caller (a keyframe is one frame of the video, not a
    *  sheet of references), and only on the tabs pictures live on. */
   sheetsPossible() {
-    if (!this.plate || this.organize || this.options.single || this.options.viewOnly) return false;
+    if (!this.plate || this.organize || this.options.viewOnly) return false;
     return this.kind === "image" || this.kind === "renders";
   }
 
@@ -1341,41 +1383,13 @@ class Picker {
     return this.cuts.has(asset.path) ? this.cuts.get(asset.path) : Boolean(this.plate?.cut);
   }
 
-  /** Whether a cell wears the scissors chip: a picture, on a caller that can
-   *  build a plate, in a session that is picking rather than organizing or
-   *  browsing. A keyframe caller (`single`) does not — a start frame is a
-   *  frame of the video, and cutting it out would condition on a hole. */
+  /** Whether a cell's picture can be cut: a still, not a saved reference, in
+   *  a session that is picking rather than organizing or browsing. Nothing
+   *  about the caller — a swap, a keyframe and a fresh attachment all open
+   *  the same editor with the same scissors in it. */
   chipPossible(asset) {
     return Boolean(this.plate) && asset.kind === "image" && !asset.mod
-      && !this.organize && !this.options.viewOnly && !this.options.single;
-  }
-
-  /** The chip's press: cut this picture, or stop. Cutting a picture is wanting
-   *  it — an unselected cell selects on the way, and a press that finds no
-   *  slot left goes nowhere, with the counter already saying why. */
-  setCut(asset, on) {
-    if (!this.selected.some((a) => a.path === asset.path)) {
-      this.toggle(asset);
-      if (!this.selected.some((a) => a.path === asset.path)) return;
-    }
-    this.cuts.set(asset.path, on);
-    this.previewCut(asset);
-    this.renderFoot();
-  }
-
-  /** The subject view, from a cell: the clicks that say which subject this
-   *  picture's scissors mean. Accepting cuts the picture with them; cancel
-   *  changes nothing, clicks included. */
-  async chooseSubject(asset) {
-    const got = await openSubjectView({
-      plate: this.plate, path: asset.path, name: asset.name,
-      points: this.points.get(asset.path) ?? [],
-    });
-    if (!got) return;
-    if (got.points.length) this.points.set(asset.path, got.points);
-    else this.points.delete(asset.path);
-    this.cuts.set(asset.path, true);
-    this.previewCut(asset);
+      && !this.organize && !this.options.viewOnly;
   }
 
   /** Fetch the cutout a cut cell shows, from the same in-memory route the
@@ -1383,7 +1397,8 @@ class Picker {
    *  that need one happen in the subject view, which has its own. */
   previewCut(asset) {
     if (!this.cutOf(asset)) { this.refreshCell(asset); return; }
-    const key = JSON.stringify([asset.path, this.points.get(asset.path) ?? []]);
+    const key = JSON.stringify([asset.path, this.points.get(asset.path) ?? [],
+                                this.settings.get(asset.path)?.crop ?? null]);
     const have = this.cutUrls.get(asset.path) ?? {};
     if (have.key === key || have.pending === key) { this.refreshCell(asset); return; }
     this.cutUrls.set(asset.path, { ...have, pending: key });
@@ -1425,11 +1440,13 @@ class Picker {
   panelPayload(asset) {
     const points = this.points.get(asset.path) ?? [];
     const rect = this.rects.get(asset.path);
+    const crop = this.settings.get(asset.path)?.crop;
     return {
       path: asset.path,
       cut: this.cutOf(asset),
       ...(rect ? { rect: rect.map((v) => Math.round(v * 1e4) / 1e4) } : {}),
       ...(this.cutOf(asset) && points.length ? { points } : {}),
+      ...(crop ? { crop } : {}),
     };
   }
 
@@ -1526,6 +1543,9 @@ class Picker {
         ? { rect: rects.get(asset.path).map(round4) } : {}),
       ...(cut(asset) && points.get(asset.path)?.length
         ? { points: points.get(asset.path) } : {}),
+      // The cell's framing, baked into the sheet with the rest of the panel.
+      ...(this.settings.get(asset.path)?.crop
+        ? { crop: this.settings.get(asset.path).crop } : {}),
     });
 
     // ---- the cutouts, fetched as they are asked for ------------------------
@@ -1676,20 +1696,26 @@ class Picker {
     });
     const subjectButton = el("button", {
       class: "mmc-ghost mmc-tool",
-      title: t("Choose the subject — where the whole-subject cut grabs the wrong "
-             + "thing, click the one you mean"),
-      text: t("Choose the subject…"),
+      title: t("Crop this panel to the part that is the reference, turn or mirror it, "
+             + "and choose the subject the scissors cut out"),
+      text: t("Edit…"),
       onclick: async () => {
         const asset = pickedAsset();
         if (!asset) return;
-        const got = await openSubjectView({
-          plate: this.plate, path: asset.path, name: asset.name,
-          points: points.get(asset.path) ?? [],
+        const setting = this.settings.get(asset.path) || {};
+        const got = await openPicture({
+          path: asset.path, kind: "image", crop: setting.crop ?? null,
+          aspect: this.options.aspect ?? null,
+          cutout: { plate: this.plate, cut: cut(asset), points: points.get(asset.path) ?? [] },
         });
         if (!got) return;
+        const next = { ...setting };
+        if (got.crop) next.crop = got.crop;
+        else delete next.crop;
+        this.settings.set(asset.path, next);
+        cuts.set(asset.path, got.cut);
         if (got.points.length) points.set(asset.path, got.points);
         else points.delete(asset.path);
-        cuts.set(asset.path, true);
         schedule();
       },
     });

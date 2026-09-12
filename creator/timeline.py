@@ -664,6 +664,11 @@ class ContinuityGuideFrames(io.ComfyNode):
                 io.Int.Input("width", default=0, min=0, max=16384),
                 io.Int.Input("height", default=0, min=0, max=16384),
                 io.Float.Input("fps", default=float(media.TARGET_FPS), min=1.0, max=240.0, step=0.001),
+                # The guide's framing, as `crop.to_dict` writes it, or empty
+                # for the drawing whole. JSON on one socket rather than six
+                # numbers: it is one decision, and the blob is the one shape
+                # every other reader of a framing takes.
+                io.String.Input("crop", default="", optional=True),
             ],
             outputs=[io.Image.Output()],
         )
@@ -677,10 +682,11 @@ class ContinuityGuideFrames(io.ComfyNode):
 
     @classmethod
     def execute(cls, filename, start=0.0, end=0.0, frames=5, width=0, height=0,
-                fps=float(media.TARGET_FPS)) -> io.NodeOutput:
+                fps=float(media.TARGET_FPS), crop="") -> io.NodeOutput:
         trim = (float(start), float(end)) if float(end) > float(start) else None
         return io.NodeOutput(guide.read(
-            filename, trim, int(frames), int(width), int(height), float(fps)))
+            filename, trim, int(frames), int(width), int(height), float(fps),
+            crop=guide.parse_crop(crop)))
 
 
 def reported_take(part, card, filename, subfolder, fps, seed):

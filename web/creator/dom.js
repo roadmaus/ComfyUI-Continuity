@@ -106,9 +106,18 @@ export const ICONS = {
   play: `<path d="M8 5.5l11 6.5-11 6.5z"/>`,
   pause: `<path d="M8 5v14M16 5v14"/>`,
   scissors: `<circle cx="6" cy="6" r="2.4"/><circle cx="6" cy="18" r="2.4"/><path d="M8 7.4L20 18M8 16.6L20 6"/>`,
-  // The subject chooser beside the scissors: a point named on the picture —
-  // the click that tells SAM 3 which subject the scissors mean.
-  subject: `<circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/>`,
+  // The framing editor's door: two crop marks, the corner brackets the editor
+  // itself draws — so the button and the thing it opens share a shape.
+  crop: `<path d="M6 2v14a2 2 0 0 0 2 2h14"/><path d="M2 6h14a2 2 0 0 1 2 2v14"/>`,
+  // Lucide's `square-pen`, verbatim: the picture editor's door on a chip —
+  // crop, turn, mirror, cut out, all behind one press.
+  edit: `<path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/>`,
+  // Its four tools. A quarter turn each way — an arc with its head at the end
+  // it turns towards — and a mirror on either axis: two halves about a line.
+  turnLeft: `<path d="M4.5 12a7.5 7.5 0 1 1 2.2 5.3"/><path d="M4 7v5h5"/>`,
+  turnRight: `<path d="M19.5 12a7.5 7.5 0 1 0-2.2 5.3"/><path d="M20 7v5h-5"/>`,
+  mirrorH: `<path d="M12 3v18"/><path d="M8 7L3 12l5 5z"/><path d="M16 7l5 5-5 5z"/>`,
+  mirrorV: `<path d="M3 12h18"/><path d="M7 8l5-5 5 5z"/><path d="M7 16l5 5 5-5z"/>`,
   dice: `<rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.2"/><circle cx="15.5" cy="15.5" r="1.2"/><circle cx="12" cy="12" r="1.2"/>`,
   // Back round to where it was: the seed the last queue ran on, put back. An
   // arrow returning to its own start, which is what the button does — beside

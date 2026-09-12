@@ -255,6 +255,87 @@ export const css = `
    modal is only 640 px. */
 .mmc-trim-foot { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 14px; }
 .mmc-trim-spacer { flex: 1; }
+/* --- framing editor ------------------------------------------------------- */
+/* The picture editor (picture.js): the segment editor's modal, wider, the
+   picture as the hero and the tools in rows under it. */
+.mmc-crop { width: min(880px, 100%); }
+.mmc-crop-frame { display: flex; justify-content: center; align-items: center; min-height: 160px; }
+/* Shrink-wraps the canvas, so the window's percentages are the picture's. */
+.mmc-crop-stage {
+  position: relative; display: inline-block; line-height: 0; max-width: 100%;
+  overflow: hidden; border-radius: 12px; background: var(--mmc-media-bg);
+  cursor: crosshair; touch-action: none; user-select: none;
+}
+.mmc-crop-canvas {
+  display: block; max-width: 100%; max-height: 58vh; width: auto; height: auto;
+}
+/* The window. What it keeps is shown as it is; everything it leaves out is
+   put under a scrim, drawn as one shadow so the four margins are one shape. */
+.mmc-crop-window {
+  position: absolute; box-sizing: border-box; cursor: move; touch-action: none;
+  outline: 1px solid color-mix(in srgb, var(--mmc-blue) 85%, white);
+  box-shadow: 0 0 0 4000px var(--mmc-scrim-2);
+}
+.mmc-crop-window:focus-visible { outline: 2px solid var(--mmc-strong); }
+/* Thirds while a handle is being dragged, and only then: a viewfinder's
+   grid is for composing the move, not for reading the result. */
+.mmc-crop-thirds {
+  position: absolute; inset: 0; pointer-events: none; opacity: 0;
+  background:
+    linear-gradient(to right, transparent calc(33.33% - .5px), color-mix(in srgb, white 45%, transparent) calc(33.33% - .5px), color-mix(in srgb, white 45%, transparent) calc(33.33% + .5px), transparent calc(33.33% + .5px)),
+    linear-gradient(to right, transparent calc(66.66% - .5px), color-mix(in srgb, white 45%, transparent) calc(66.66% - .5px), color-mix(in srgb, white 45%, transparent) calc(66.66% + .5px), transparent calc(66.66% + .5px)),
+    linear-gradient(to bottom, transparent calc(33.33% - .5px), color-mix(in srgb, white 45%, transparent) calc(33.33% - .5px), color-mix(in srgb, white 45%, transparent) calc(33.33% + .5px), transparent calc(33.33% + .5px)),
+    linear-gradient(to bottom, transparent calc(66.66% - .5px), color-mix(in srgb, white 45%, transparent) calc(66.66% - .5px), color-mix(in srgb, white 45%, transparent) calc(66.66% + .5px), transparent calc(66.66% + .5px));
+}
+.mmc-crop-window.dragging .mmc-crop-thirds { opacity: 1; }
+/* Handles. The corners are brackets — the crop marks of a viewfinder, and
+   the glyph on the button that opened this — and the edges are bare grab
+   zones, so the window reads as a frame rather than as a box with eight
+   dots on it. */
+.mmc-crop-handle { position: absolute; touch-action: none; }
+.mmc-crop-corner {
+  width: 18px; height: 18px; border: 0 solid color-mix(in srgb, var(--mmc-blue) 85%, white);
+}
+.mmc-crop-nw { top: -2px; left: -2px; border-top-width: 3px; border-left-width: 3px; cursor: nwse-resize; }
+.mmc-crop-ne { top: -2px; right: -2px; border-top-width: 3px; border-right-width: 3px; cursor: nesw-resize; }
+.mmc-crop-sw { bottom: -2px; left: -2px; border-bottom-width: 3px; border-left-width: 3px; cursor: nesw-resize; }
+.mmc-crop-se { bottom: -2px; right: -2px; border-bottom-width: 3px; border-right-width: 3px; cursor: nwse-resize; }
+.mmc-crop-n, .mmc-crop-s { left: 18px; right: 18px; height: 10px; cursor: ns-resize; }
+.mmc-crop-w, .mmc-crop-e { top: 18px; bottom: 18px; width: 10px; cursor: ew-resize; }
+.mmc-crop-n { top: -5px; }
+.mmc-crop-s { bottom: -5px; }
+.mmc-crop-w { left: -5px; }
+.mmc-crop-e { right: -5px; }
+.mmc-crop-handle:focus-visible { outline: 2px solid var(--mmc-strong); outline-offset: 1px; }
+/* The transport for a clip: the trim editor's track with nothing to select on
+   it — only a head to drag across the segment. */
+.mmc-crop-scrub {
+  position: relative; flex: 1; height: 18px; border-radius: 8px;
+  background: var(--mmc-surface-2); cursor: pointer; touch-action: none;
+}
+/* The clicks that say which subject the scissors mean, over the stage. The
+   layer takes no pointer; the dots do. */
+.mmc-crop-dots { position: absolute; inset: 0; pointer-events: none; }
+.mmc-crop-dots .mmc-st-dot { pointer-events: auto; }
+/* With the scissors on, a tap on the window is a click on the subject. */
+.mmc-crop-stage.cutting .mmc-crop-window { cursor: crosshair; }
+/* The scissors row: on or off, what the next click means, and the way back
+   to the whole-subject cut — a second decision about the same window, on a
+   row of its own between the readout and the framing tools. */
+.mmc-crop-cutrow { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 14px; }
+.mmc-crop-cutrow .mmc-plate-say { flex: 1; min-width: 200px; text-align: left; padding: 0; text-shadow: none; color: var(--mmc-dim); }
+.mmc-crop-cut {
+  display: inline-flex; align-items: center; gap: 6px; padding: 3px 12px;
+  border: 1px solid var(--mmc-line-3); border-radius: 7px; font-size: calc(12.5px * var(--mmc-type));
+}
+.mmc-crop-cut.on { background: color-mix(in srgb, var(--mmc-blue) 22%, transparent); border-color: var(--mmc-blue); color: var(--mmc-strong); }
+.mmc-crop-cutrow .mmc-ghost:disabled { color: var(--mmc-off); cursor: not-allowed; }
+.mmc-crop-cut svg { width: 13px; height: 13px; stroke: currentColor; fill: none;
+  stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.mmc-crop-tool { padding: 0 10px; display: flex; align-items: center; }
+.mmc-crop-tool svg { width: 15px; height: 15px; stroke: currentColor; fill: none;
+  stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
 /* The track switch: three mutually exclusive choices, so one bordered group
    rather than three loose pills that would read as independent toggles. */
 .mmc-seg {

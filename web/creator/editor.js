@@ -21,6 +21,7 @@ import { openSettings } from "./settings.js";
 import { openPresetLibrary, styleCastMember } from "./presetlib.js";
 import { castIntoPiece, keepSubject } from "./presets.js";
 import { openTrim, trimLabel } from "./trim.js";
+import { editPicture, asPick, applyPick, cropLabel } from "./picture.js";
 import { PromptBox, focusEnd, openEditorSheet } from "./prompt.js";
 import { RefinePanel, refineButton, refine } from "./refine.js";
 import { openAspectPopover, openResolutionPopover, openChoicePopover, facesPill, neuralPill, aspectGlyph,
@@ -32,7 +33,6 @@ import { familyPill, weightsPill, loadCatalog, adoptWeights } from "./models.js"
 import * as Turbo from "./turbo.js";
 import * as Guide from "./guide.js";
 import { viewUrl, thumbUrl, probe, probeAudio, primeSettings, buildPlate } from "./api.js";
-import { openSubjectView } from "./subject.js";
 import * as S from "./state.js";
 import { describeRatio, framesForSeconds, isTrainedLength,
          rulesFor, secondsForFrames } from "./canvas.js";
@@ -91,6 +91,7 @@ export function referenceSummary(asset) {
   const said = [];
   if (S.takeable(asset) && S.takes(asset) !== "full") said.push(t(S.takeWord(S.takes(asset))));
   if (asset.kind !== "image" && asset.trim) said.push(trimLabel(asset));
+  if (S.croppable(asset)) said.push(cropLabel(S.cropOf(asset)));
   if (asset.kind === "video" && (asset.track ?? S.DEFAULT_TRACK) !== S.DEFAULT_TRACK) {
     said.push(t(TRACK_CHIP[asset.track]?.text ?? ""));
   }
@@ -665,6 +666,7 @@ export class CreatorEditor {
     const spec = this.plateSpec();
     const chosen = await openPicker({
       kinds: edit ? ["image", "renders"] : ["image", "video", "audio", "renders", "refmods"],
+      aspect: this.pickerAspect(),
       kind,
       capacity: (k) => S.capacity(this.state, k, this.piece, sheet),
       cardSeconds: this.cardSeconds(),
@@ -678,7 +680,8 @@ export class CreatorEditor {
           ? (sheet.panels?.length
               ? sheet.panels.map((panel) => ({ path: panel.filename, cut: Boolean(panel.cut),
                   ...(panel.rect ? { rect: [...panel.rect] } : {}),
-                  ...(panel.points?.length ? { points: panel.points.map((p) => ({ ...p })) } : {}) }))
+                  ...(panel.points?.length ? { points: panel.points.map((p) => ({ ...p })) } : {}),
+                  ...(panel.crop ? { crop: { ...panel.crop } } : {}) }))
               : [{ path: sheet.filename, cut: false }])
           : [] } : null,
     });
@@ -694,48 +697,51 @@ export class CreatorEditor {
     await this.pickReferences("image", asset, { edit: true });
   }
 
-  /**
-   * Cut one attached picture out of its background, or put it back — without
-   * the picker. The entry is rebuilt through the same seam a picker answer
-   * takes (`mergeSheet`), so the handle, the chip and the prompt citing it
-   * all survive; what changes is the file the card points at — the plate the
-   * server wrote, or the source photograph again.
-   */
-  async cutReference(asset, on, points = null) {
-    const spec = this.plateSpec();
-    if (!spec) return;
+  /** The pen a chip wears: the picture editor's door, lit when the picture
+   *  is cut out or framed. The one control on the face, so every surface
+   *  that draws a chip draws the same one. */
+  editMark(asset, open) {
     const panel = asset.panels?.[0];
-    const source = panel?.filename ?? asset.filename;
-    const clicks = points ?? (panel?.points?.length ? panel.points.map((p) => ({ ...p })) : []);
-    try {
-      if (!on) {
-        await this.mergeSheet(asset, [{ kind: "image", path: source,
-                                        name: source.split("/").pop() }]);
-        return;
-      }
-      const made = { path: source, cut: true, ...(clicks.length ? { points: clicks } : {}) };
-      const built = await buildPlate({ ...spec, panels: [made] });
-      await this.mergeSheet(asset, [{ plate: true, kind: "image", path: built.path,
-                                      name: built.path.split("/").pop(), panels: [made] }]);
-    } catch (error) {
-      this.flash(error.message);
-    }
+    const said = [panel?.cut ? t("cut out") : "", cropLabel(S.cropOf(asset))].filter(Boolean);
+    return el("button", {
+      class: `mmc-pl-cut mmc-asset-scissors mmc-asset-edit${said.length ? " on" : ""}`,
+      "aria-pressed": String(said.length > 0),
+      title: said.length
+        ? t("{framing} — press to change the framing", { framing: said.join(" · ") })
+        : t("Used whole — press to crop, turn or mirror it, or cut the subject out"),
+      onclick: (event) => { event.stopPropagation(); open(); },
+    }, [icon("edit", 12)]);
   }
 
-  /** The subject view on an attached picture: the clicks that say which
-   *  subject its scissors mean. Accepting rebuilds the cutout with them;
-   *  cancel leaves the reference exactly as it stands. */
-  async chooseSubject(asset) {
-    const spec = this.plateSpec();
-    if (!spec) return;
-    const panel = asset.panels?.[0];
-    const source = panel?.filename ?? asset.filename;
-    const got = await openSubjectView({
-      plate: spec, path: source, name: source.split("/").pop(),
-      points: panel?.points ?? [],
-    });
-    if (!got) return;
-    await this.cutReference(asset, true, got.points);
+  /** The picture editor on an attached picture or clip — `picture.editPicture`,
+   *  folded back the way a fresh pick is, so the handle and every citation
+   *  survive whichever way the answer went. */
+  async editPicture(asset) {
+    // The shot's shape, offered as a lock — unless this picture *is* where
+    // the shape comes from, in which case there is nothing to lock to yet.
+    const donor = S.aspectSourceAsset(this.state);
+    const { width, height } = this.frame();
+    let answer;
+    try {
+      answer = await editPicture(asset, {
+        plate: this.plateSpec(),
+        aspect: donor?.handle === asset.handle ? null : { ratio: width / height, label: t("shot") },
+      });
+    } catch (error) {
+      return this.flash(error.message);
+    }
+    if (!answer) return;
+    // A reference folds through the sheet, so a plate's panel handles and the
+    // cast built on them survive; everything else — a keyframe, a guide, a
+    // clip — takes the answer in place.
+    if (asset.kind === "image" && asset.role === "reference") {
+      await this.mergeSheet(asset, [asPick(answer)]);
+    } else {
+      applyPick(asset, asPick(answer));
+      this.commit();
+    }
+    // A framed picture is a different shape, and the canvas may follow it.
+    this.probeKeyframe();
   }
 
   /**
@@ -769,6 +775,11 @@ export class CreatorEditor {
           handle: seed.handle, kind: "image", role: "reference",
           filename: heir.path, ref_size: "max",
           ...(before?.takes && before.takes !== "full" ? { takes: before.takes } : {}),
+          // The framing was drawn on this file and stays with it, whether it
+          // came off a panel or the picker's cell. A pick that says `crop`
+          // at all — the picture editor's, null included — is the answer.
+          ...(("crop" in heir ? heir.crop : before?.crop)
+            ? { crop: "crop" in heir ? heir.crop : before.crop } : {}),
         });
       }
     }
@@ -795,13 +806,15 @@ export class CreatorEditor {
     const existing = S.guideAsset(this.state);
     const chosen = await openPicker({
       kinds: ["guides"],
+      aspect: this.pickerAspect(),
       kind: "guides",
       capacity: () => ({ used: existing ? 1 : 0, max: 1, filesLeft: 1 }),
       single: true,
       cardSeconds: this.cardSeconds(),
     });
     if (!chosen?.length) return;
-    this.takeGuide({ path: chosen[0].path, kind: chosen[0].kind, trim: chosen[0].trim });
+    this.takeGuide({ path: chosen[0].path, kind: chosen[0].kind, trim: chosen[0].trim,
+                     crop: chosen[0].crop });
   }
 
   /**
@@ -812,8 +825,8 @@ export class CreatorEditor {
    * place among the chips and its handle: swapping the guide is a change to
    * this shot, not a detach and a re-attach.
    */
-  takeGuide({ path, kind = "video", op = "", trim = null }) {
-    if (!S.attachGuide(this.state, this.piece, { path, kind, op, trim })) return;
+  takeGuide({ path, kind = "video", op = "", trim = null, crop = null }) {
+    if (!S.attachGuide(this.state, this.piece, { path, kind, op, trim, crop })) return;
     this.commit();
   }
 
@@ -830,6 +843,7 @@ export class CreatorEditor {
     const sheet = this.seedSheet("image");
     const chosen = await openPicker({
       kinds: ["renders", "image", "video", "audio", "refmods"],
+      aspect: this.pickerAspect(),
       kind: "renders",
       capacity: (k) => S.capacity(this.state, k, this.piece, sheet),
       cardSeconds: this.cardSeconds(),
@@ -838,7 +852,8 @@ export class CreatorEditor {
           ? (sheet.panels?.length
               ? sheet.panels.map((panel) => ({ path: panel.filename, cut: Boolean(panel.cut),
                   ...(panel.rect ? { rect: [...panel.rect] } : {}),
-                  ...(panel.points?.length ? { points: panel.points.map((p) => ({ ...p })) } : {}) }))
+                  ...(panel.points?.length ? { points: panel.points.map((p) => ({ ...p })) } : {}),
+                  ...(panel.crop ? { crop: { ...panel.crop } } : {}) }))
               : [{ path: sheet.filename, cut: false }])
           : [] } : null,
     });
@@ -870,6 +885,7 @@ export class CreatorEditor {
       };
       if (asset.kind === "video") entry.track = S.trackFor(asset);
       if (asset.trim) entry.trim = asset.trim;
+      if (asset.crop) entry.crop = asset.crop;
       this.state.assets.push(entry);
       // A saved clip has no soundtrack to ask about.
       if (asset.kind !== "video" || S.isRefMod(entry)) continue;
@@ -934,21 +950,34 @@ export class CreatorEditor {
   async replaceAsset(asset) {
     const chosen = await openPicker({
       kinds: [asset.kind, "renders"],
+      aspect: this.pickerAspect(),
       kind: asset.kind,
       only: asset.kind,
       single: true,
       // The slot it occupies is the slot it will occupy: a swap adds nothing to
       // count, so the reference caps have nothing to say about it.
       capacity: () => ({ used: 0, max: 1, filesLeft: 1 }),
+      // A reference picture may come back cut, as a plate of one — the same
+      // door a fresh attachment has, so a swap is not a poorer way in.
     });
     const picked = chosen?.[0];
     if (!picked || picked.path === asset.filename) return;
+    if (picked.plate) {
+      if (asset.role === "reference") await this.mergeSheet(asset, chosen);
+      else { applyPick(asset, picked); this.commit(); }
+      this.probeKeyframe();
+      return;
+    }
     asset.filename = picked.path;
     // A trim is a range in the old file's timeline and means nothing in
     // another's — either the picker's segment editor set one for this pick, or
     // the new file starts whole.
     if (picked.trim) asset.trim = picked.trim;
     else delete asset.trim;
+    // And the framing: a window on the old picture is a window on nothing in
+    // particular on the new one.
+    if (picked.crop) asset.crop = picked.crop;
+    else delete asset.crop;
     // Same for sound: whether this clip has any is a fact about this clip, and
     // the old one's answer must not carry over onto a silent replacement.
     if (asset.kind === "video") asset.track = S.trackFor(picked);
@@ -1250,12 +1279,24 @@ export class CreatorEditor {
         foot.push(opens(trimLabel(asset), t("Use the whole clip, or only a segment of it"),
                         () => this.editSegment(asset)));
       }
-      // The scissors and the sheet, separated: cutting is a property of this
-      // one picture and lives here as its own rows; combining is a relation
-      // between pictures and opens the sheet editor. A plain attachment is a
-      // sheet of one nobody has added to yet, so Combine… seeds with it — and
-      // either way the handle survives, which is what stops any of this being
-      // a detach and a re-attach.
+      // The one door onto the picture itself: which part of it, which way
+      // up, and — where the family can cut — whether the subject is lifted off
+      // its background and which subject the scissors mean. The button reads
+      // what is set, the way the trim's does. The sheet is the other door:
+      // combining is a relation between pictures, not a property of this one.
+      // A plain attachment is a sheet of one nobody has added to yet, so
+      // Combine… seeds with it — and either way the handle survives, which is
+      // what stops any of this being a detach and a re-attach.
+      if (S.croppable(asset)) {
+        const panel = asset.panels?.[0];
+        const said = [cropLabel(S.cropOf(asset)), panel?.cut ? t("cut out") : ""].filter(Boolean);
+        foot.push(opens(said.join(" · ") || t("Edit…"),
+                        t("Crop this picture to the part that is the reference, turn or mirror "
+                        + "it, and lift the subject off its background. The file stays whole; "
+                        + "what is set here is kept on @{handle} and applied when the render "
+                        + "reads it.", { handle: asset.handle }),
+                        () => this.editPicture(asset)));
+      }
       if (asset.role === "reference" && asset.kind === "image" && this.plateSpec()) {
         if (S.isPlate(asset) && asset.panels.length > 1) {
           foot.push(opens(t("Edit sheet…"),
@@ -1264,23 +1305,6 @@ export class CreatorEditor {
                           + "The sheet is laid out again as you go."),
                           () => this.editSheet(asset)));
         } else {
-          const cut = Boolean(asset.panels?.[0]?.cut);
-          if (S.canCut((asset.panels?.[0] ?? asset).takes)) {
-            foot.push(opens(cut ? t("Keep the background") : t("Cut out"),
-                            cut
-                              ? t("Put the background back — the reference goes back to being "
-                                + "the whole photograph.")
-                              : t("Lift the subject off its background, onto the flat field the "
-                                + "model reads references against. The room it was photographed "
-                                + "in stops conditioning the render alongside it."),
-                            () => this.cutReference(asset, !cut)));
-            if (cut) {
-              foot.push(opens(t("Choose the subject…"),
-                              t("Where the whole-subject cut grabs the wrong thing, click the "
-                              + "one you mean — and click again on what should go."),
-                              () => this.chooseSubject(asset)));
-            }
-          }
           foot.push(opens(t("Combine…"),
                           t("Lay this picture out with others as one sheet, attached as a "
                           + "single reference."),
@@ -1342,16 +1366,16 @@ export class CreatorEditor {
     const blocked = S.blockedReason(this.state, role);
     if (blocked) return this.flash(blocked);
     const existing = S.frameAsset(this.state, role);
-    const chosen = await openPicker({ kinds: ["image"], kind: "image", single: true, capacity: () => ({ used: 0, max: 1, filesLeft: 1 }) });
+    const chosen = await openPicker({ kinds: ["image"], kind: "image", single: true, capacity: () => ({ used: 0, max: 1, filesLeft: 1 }),
+                                      aspect: this.pickerAspect() });
     if (!chosen) return;
     const asset = chosen[0];
     if (existing) this.remove(existing.handle, { silent: true });
-    this.state.assets.push({
+    this.state.assets.push(applyPick({
       handle: S.nextHandle(this.state, "image"),
       kind: "image",
       role,
-      filename: asset.path,
-    });
+    }, asset));
     this.commit();
     this.probeKeyframe();
   }
@@ -1430,6 +1454,18 @@ export class CreatorEditor {
     }
   }
 
+  /** The shot's shape, for the picker's framing editor to offer as a lock. */
+  pickerAspect() {
+    const { width, height } = this.frame();
+    return width && height ? { ratio: width / height, label: t("shot") } : null;
+  }
+
+  /** A picture's size as the canvas will read it: the probed size, framed.
+   *  The cache is by file; the framing is the chip's. */
+  sizeOf(asset) {
+    return S.framedSize(this.sizes.get(asset.filename), S.thumbCrop(asset));
+  }
+
   /** The seconds cache as `S.refSeconds` wants it. */
   lengthOf(filename) {
     return this.lengths.get(filename) ?? null;
@@ -1443,7 +1479,7 @@ export class CreatorEditor {
   frame() {
     const source = S.aspectSourceAsset(this.state);
     const { width, height, seconds } =
-      S.resolved(this.state, source ? this.sizes.get(source.filename) : null, this.piece);
+      S.resolved(this.state, source ? this.sizeOf(source) : null, this.piece);
     return { width, height, seconds };
   }
 
@@ -1462,7 +1498,7 @@ export class CreatorEditor {
     this.probeKeyframe();
     this.probeLengths();
     const source = S.aspectSourceAsset(state);
-    const geometry = S.resolved(state, source ? this.sizes.get(source.filename) : null, this.piece);
+    const geometry = S.resolved(state, source ? this.sizeOf(source) : null, this.piece);
 
     this.railHost.replaceChildren(this.renderRail());
     this.assetsHost.replaceChildren(
@@ -1553,7 +1589,7 @@ export class CreatorEditor {
         neuralPill({ target: this.piece, commit: () => this.commit(),
                      geometry: () => {
                        const asset = S.aspectSourceAsset(this.state);
-                       return S.resolved(this.state, asset ? this.sizes.get(asset.filename) : null, this.piece);
+                       return S.resolved(this.state, asset ? this.sizeOf(asset) : null, this.piece);
                      },
                      // What the popover's door opens on: the last thing this
                      // node rendered. Read late — the pill is built long before
@@ -1888,6 +1924,7 @@ export class CreatorEditor {
     const spec = this.plateSpec();
     const chosen = await openPicker({
       kinds: ["image", "video", "audio", "renders", "refmods"],
+      aspect: this.pickerAspect(),
       kind: "image",
       capacity: (k) => S.capacity(this.state, k, this.piece),
       // The scissors ride along: a picture attached while casting somebody is
@@ -2132,11 +2169,12 @@ export class CreatorEditor {
       // to look at. A reference clip is cited by handle and read as motion, so
       // its chip has a name to be recognised by; a guide has no handle in the
       // prompt and only its picture.
-      const thumb = asset.kind === "image"
-        ? el("img", { class: "mmc-asset-thumb", src: viewUrl(asset.filename, { preview: true }), alt: asset.filename })
-        : asset.role === "guide"
-          ? el("img", { class: "mmc-asset-thumb", src: thumbUrl(asset.filename), alt: asset.filename })
-          : el("span", { class: "mmc-asset-thumb" }, [svg(ICONS[asset.kind], 15)]);
+      // Framed, where it is: the thumbnail is the window the render reads,
+      // so a subject picked off a sheet shows as the subject.
+      const thumb = asset.kind === "image" || asset.role === "guide"
+        ? el("img", { class: "mmc-asset-thumb", alt: asset.filename,
+                      src: viewUrl(asset.filename, { preview: true, crop: S.thumbCrop(asset) }) })
+        : el("span", { class: "mmc-asset-thumb" }, [svg(ICONS[asset.kind], 15)]);
       swappable(thumb, {
         title: t("Swap the file behind @{handle} — the handle stays, so the prompt still fits.",
                  { handle: asset.handle }),
@@ -2169,35 +2207,17 @@ export class CreatorEditor {
       // somebody set about it.
       //
       // A plate of one panel says nothing with a count: there is no layout to
-      // report, only a picture the picker cut out, and "1 panels" is a badge
-      // that exists to be wrong. The scissors say the one true thing instead —
-      // and on any picture that *could* be cut they are the control itself,
-      // right on the chip, so "cut this out" is one press on the face rather
-      // than a footer link found through the card. A scene or style reference
-      // shows no scissors at all: there the background is the reference.
+      // report, only a picture somebody edited. The pen is the door instead —
+      // on every picture and clip, right on the chip: crop, turn, mirror and
+      // the scissors are one press on the face rather than a footer link
+      // found through the card. Lit when anything is set.
       if (S.isPlate(asset) && asset.panels.length > 1) {
         parts.push(el("span", {
           class: "mmc-asset-panels",
           text: t("{count} panels", { count: asset.panels.length }),
         }));
-      } else if (asset.role === "reference" && asset.kind === "image" && this.plateSpec()
-                 && S.canCut((asset.panels?.[0] ?? asset).takes)) {
-        const cut = Boolean(asset.panels?.[0]?.cut);
-        parts.push(el("button", {
-          class: `mmc-pl-cut mmc-asset-scissors${cut ? " on" : ""}`,
-          "aria-pressed": String(cut),
-          title: cut
-            ? t("Cut out of its background — press to keep the background")
-            : t("Used whole — press to lift the subject off its background"),
-          onclick: (event) => {
-            event.stopPropagation();
-            this.cutReference(asset, !cut);
-          },
-        }, [icon("scissors", 12)]));
-      } else if (asset.panels?.[0]?.cut) {
-        parts.push(el("span", {
-          class: "mmc-pl-cut on", title: t("Cut out of its background"),
-        }, [icon("scissors", 12)]));
+      } else if (S.croppable(asset)) {
+        parts.push(this.editMark(asset, () => this.editPicture(asset)));
       }
       // Which end of the shot this is — and the press that makes it the other
       // one, or a reference instead. The word was a caption for as long as the
@@ -2344,7 +2364,7 @@ export class CreatorEditor {
       el("span", { class: "mmc-pl-no", text: String(index + 1) }),
       el("img", {
         class: "mmc-pl-thumb",
-        src: viewUrl(panel.filename, { preview: true }),
+        src: viewUrl(panel.filename, { preview: true, crop: panel.crop ?? null }),
         alt: panel.filename, title: panel.filename,
       }),
       el("span", { class: `mmc-pl-handle mmc-tag-${S.tagIndex(panel.handle)}`,
@@ -2888,7 +2908,7 @@ export class CreatorEditor {
     // shot is card 1 and the piece form of every source says so. The mirrored
     // per-segment form (`syncCanvas`) is what `aspectSourceAsset` reads back.
     const ratioOf = (asset) => {
-      const size = this.sizes.get(asset.filename);
+      const size = this.sizeOf(asset);
       return size?.width ? size.width / size.height : null;
     };
     const roleOf = (asset) =>
@@ -2915,7 +2935,7 @@ export class CreatorEditor {
   openResolution(anchor) {
     openResolutionPopover(anchor, this.piece, () => {
       const asset = S.aspectSourceAsset(this.state);
-      return S.resolved(this.state, asset ? this.sizes.get(asset.filename) : null, this.piece);
+      return S.resolved(this.state, asset ? this.sizeOf(asset) : null, this.piece);
     }, () => this.commit());
   }
 }

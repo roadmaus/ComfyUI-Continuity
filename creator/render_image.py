@@ -230,6 +230,24 @@ def emit(payload, weights, sampling, unique_id, family, filename_prefix=None):
     return graph
 
 
+def load_picture(graph, payload, slot, filename):
+    """`LoadImage` for one of the payload's pictures, framed if it was. -> socket.
+
+    `slot` is `"ref:<i>"` or `"init"` — the key `compile_image` filed the
+    picture's framing under. Every still family loads through here so a crop
+    set on a chip reaches the graph on all of them the same way: core's own
+    rotate, flip and crop nodes after the load, and nothing at all when the
+    picture is used whole.
+    """
+    from . import crop as framing
+
+    image = graph.node("LoadImage", image=filename).out(0)
+    entry = (payload.framing or {}).get(slot)
+    if not entry:
+        return image
+    return framing.nodes(graph, image, framing.parse(entry["crop"], slot), entry["size"])
+
+
 def emit_latent(graph, payload, vae, empty_node):
     """The starting latent: empty for t2i, the encoded init image for img2img.
 
@@ -241,7 +259,7 @@ def emit_latent(graph, payload, vae, empty_node):
         empty = graph.node(empty_node, width=payload.width, height=payload.height,
                            batch_size=1)
         return empty.out(0), 1.0
-    image = graph.node("LoadImage", image=payload.init["filename"]).out(0)
+    image = load_picture(graph, payload, "init", payload.init["filename"])
     scaled = graph.node("ImageScale", image=image, upscale_method="lanczos",
                         width=payload.width, height=payload.height,
                         crop="center").out(0)

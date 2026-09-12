@@ -45,6 +45,7 @@ import { loadLoraNames, loraNames } from "./turbo.js";
 import { Stage, stageSource } from "./stage.js";
 import { loadCatalog, refreshCatalog, catalogByFolder } from "./models.js";
 import { viewUrl } from "./api.js";
+import { editPicture, asPick, applyPick, cropLabel } from "./picture.js";
 import { t } from "./i18n.js";
 import * as S from "./state.js";
 
@@ -270,25 +271,30 @@ export class PreStageEditor {
   /** Pick the init image — the still this render restyles rather than starts
    *  from nothing. From the picker, or grabbed off a video's playhead. */
   async setInit(fromVideo = false) {
-    let path = null;
+    let pick = null;
     if (fromVideo) {
       const clip = await openPicker({
         kinds: ["video", "renders"], kind: "video", single: true,
+        aspect: this.pickerAspect(),
+        plate: this.plateSpec(),
         capacity: () => ({ used: 0, max: 1, filesLeft: 1 }),
       });
       if (!clip) return;
       const grabbed = await openFrameGrab({ path: clip[0].path });
       if (!grabbed) return;
-      path = grabbed.path;
+      pick = { path: grabbed.path };
     } else {
       const chosen = await openPicker({
         kinds: ["image", "renders"], kind: "image", single: true,
+        aspect: this.pickerAspect(),
+        plate: this.plateSpec(),
         capacity: () => ({ used: 0, max: 1, filesLeft: 1 }),
       });
       if (!chosen) return;
-      path = chosen[0].path;
+      pick = chosen[0];
     }
-    this.state.init = { filename: path, denoise: this.state.init?.denoise ?? S.PRESTAGE_DEFAULT_DENOISE };
+    this.state.init = applyPick(
+      { denoise: this.state.init?.denoise ?? S.PRESTAGE_DEFAULT_DENOISE }, pick);
     this.commit();
     this.probeInit();
   }
@@ -306,6 +312,8 @@ export class PreStageEditor {
   async contactSheet() {
     const chosen = await openPicker({
       kinds: ["video", "image", "renders"], kind: "video", single: true,
+      aspect: this.pickerAspect(),
+      plate: this.plateSpec(),
       capacity: () => ({ used: 0, max: 1, filesLeft: 1 }),
     });
     if (!chosen) return;
@@ -337,6 +345,8 @@ export class PreStageEditor {
     if (fromVideo) {
       const clip = await openPicker({
         kinds: ["video", "renders"], kind: "video", single: true,
+        aspect: this.pickerAspect(),
+        plate: this.plateSpec(),
         capacity: () => ({ used: 0, max: 1, filesLeft: 1 }),
       });
       if (!clip) return;
@@ -347,11 +357,13 @@ export class PreStageEditor {
     }
     const chosen = await openPicker({
       kinds: ["image", "renders"], kind: "image",
+      aspect: this.pickerAspect(),
+      plate: this.plateSpec(),
       capacity: () => ({ used: this.state.refs.length, max: S.PRESTAGE_MAX_REFS, filesLeft: room }),
     });
     if (!chosen) return;
     for (const asset of chosen.slice(0, room)) {
-      this.state.refs.push({ handle: S.nextPreStageHandle(this.state), filename: asset.path });
+      this.state.refs.push(applyPick({ handle: S.nextPreStageHandle(this.state) }, asset));
     }
     this.commit();
   }
@@ -419,12 +431,63 @@ export class PreStageEditor {
   async replaceRef(ref) {
     const chosen = await openPicker({
       kinds: ["image", "renders"], kind: "image", only: "image", single: true,
+      aspect: this.pickerAspect(),
+      plate: this.plateSpec(),
       capacity: () => ({ used: 0, max: 1, filesLeft: 1 }),
     });
     const picked = chosen?.[0];
     if (!picked || picked.path === ref.filename) return;
-    ref.filename = picked.path;
+    applyPick(ref, picked);
     this.commit();
+  }
+
+  /** The canvas's shape, for the picker's framing editor to offer as a lock. */
+  pickerAspect() {
+    const { width, height } = S.resolvedPreStage(this.state, this.sourceSize());
+    return width && height ? { ratio: width / height, label: t("canvas") } : null;
+  }
+
+  /** The picture editor on a chip — the init's or a reference's: the same
+   *  `picture.editPicture` the Creator's chips open, folded the same way. The
+   *  canvas is offered as the lock, unless this picture is what sets it. */
+  async cropChip(chip) {
+    const canvas = S.resolvedPreStage(this.state, this.sourceSize());
+    const donor = S.preStageSource(this.state);
+    let answer;
+    try {
+      answer = await editPicture({ ...chip, kind: "image" }, {
+        plate: this.plateSpec(),
+        aspect: donor === chip.filename ? null
+          : { ratio: canvas.width / canvas.height, label: t("canvas") },
+      });
+    } catch (error) {
+      return this.flash(error.message);
+    }
+    if (!answer) return;
+    applyPick(chip, asPick(answer));
+    this.commit();
+  }
+
+  /** The plate spec the pre-stage's pictures are cut against: the family's
+   *  own where it declares one, the plain one otherwise — see `S.plateSpec`. */
+  plateSpec() {
+    const { width, height } = S.resolvedPreStage(this.state, this.sourceSize());
+    return S.plateSpec(this.state, { width, height });
+  }
+
+  /** The crop mark a chip wears: faint until a framing is set, blue after —
+   *  the scissors' idiom on the Creator's chips. */
+  cropMark(chip) {
+    const label = [chip.panels?.[0]?.cut ? t("cut out") : "", cropLabel(S.cropOf(chip))]
+      .filter(Boolean).join(" · ");
+    return el("button", {
+      class: `mmc-pl-cut mmc-asset-scissors mmc-asset-edit${label ? " on" : ""}`,
+      "aria-pressed": String(Boolean(label)),
+      title: label
+        ? t("{framing} — press to change the framing", { framing: label })
+        : t("Used whole — press to crop, turn or mirror it, or cut the subject out"),
+      onclick: (event) => { event.stopPropagation(); this.cropChip(chip); },
+    }, [icon("edit", 12)]);
   }
 
   async manageLoras(entry = null) {
@@ -476,7 +539,13 @@ export class PreStageEditor {
   /** The measured size of that picture, or null while it is still loading. */
   sourceSize() {
     const source = S.preStageSource(this.state);
-    return source ? this.sizes.get(source) : null;
+    if (!source) return null;
+    // The size the canvas follows is the framed one: a source cropped to
+    // portrait is a portrait render. `preStageSource` names the file; the
+    // framing is on whichever chip carries it.
+    const chip = this.state.init?.filename === source ? this.state.init
+      : (this.state.refs ?? []).find((ref) => ref.filename === source);
+    return S.framedSize(this.sizes.get(source), chip?.crop);
   }
 
   flash(message) {
@@ -681,10 +750,12 @@ export class PreStageEditor {
       // the denoise you dialled in — the whole point of swapping the still is
       // to see the settings you have against a different picture.
       swappable(
-        el("img", { class: "mmc-asset-thumb", src: viewUrl(init.filename, { preview: true }), alt: init.filename }),
+        el("img", { class: "mmc-asset-thumb", alt: init.filename,
+                    src: viewUrl(init.filename, { preview: true, crop: init.crop ?? null }) }),
         { title: t("Pick a different init image — the denoise stays"), onclick: () => this.setInit(false) },
       ),
       el("span", { class: "mmc-asset-handle", text: t("init") }),
+      this.cropMark(init),
       el("button", {
         class: "mmc-ghost",
         style: { fontSize: "11px" },
@@ -746,7 +817,7 @@ export class PreStageEditor {
     // an impossible one — see `S.preStageRefOffShape`.
     const canvas = S.resolvedPreStage(this.state, this.sourceSize());
     const offShape = !refused && !untrained && S.preStageRefOffShape(
-      this.state, this.sizes.get(ref.filename), canvas.width / canvas.height);
+      this.state, S.framedSize(this.sizes.get(ref.filename), ref.crop), canvas.width / canvas.height);
     return el("div", {
       class: `mmc-asset mmc-tag-${S.tagIndex(ref.handle)}`
              + (refused ? " mmc-asset-refused"
@@ -762,11 +833,13 @@ export class PreStageEditor {
         : offShape
           ? t("This picture's shape does not match the canvas. The reference adapters "
             + "were trained on pairs that agreed, so what they hold on to falls off "
-            + "when it does not — crop it, or set the aspect to match.")
+            + "when it does not — press the crop mark and lock the window to the "
+            + "canvas, or set the aspect to match.")
           : ref.filename,
     }, [
       swappable(
-        el("img", { class: "mmc-asset-thumb", src: viewUrl(ref.filename, { preview: true }), alt: ref.filename }),
+        el("img", { class: "mmc-asset-thumb", alt: ref.filename,
+                    src: viewUrl(ref.filename, { preview: true, crop: ref.crop ?? null }) }),
         {
           title: t("Swap the file behind @{handle} — the handle stays, so the prompt still fits.",
                    { handle: ref.handle }),
@@ -774,6 +847,7 @@ export class PreStageEditor {
         },
       ),
       el("span", { class: "mmc-asset-handle", text: `@${ref.handle}` }),
+      this.cropMark(ref),
       // What this picture is *for*, which is not the same on every arch: a
       // style reference on Krea 2, and on an edit family the first slot is the
       // picture being changed while the rest are cited beside it.
@@ -1645,6 +1719,8 @@ export class PreStageBody {
     if (blocked) return;
     const clip = await openPicker({
       kinds: ["video", "renders"], kind: "video", single: true,
+      aspect: this.pickerAspect(),
+      plate: this.plateSpec(),
       capacity: () => ({ used: 0, max: 1, filesLeft: 1 }),
     });
     if (!clip) return;

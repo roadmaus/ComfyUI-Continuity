@@ -6,6 +6,29 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**One picture editor — crop, turn, mirror, cut out — behind a pen on every
+picture and clip (#75).** A window dragged over the part of the picture that
+is the reference, with corner and edge handles, a lock to the shot's shape
+(or square, 16:9, 9:16), a quarter turn each way, a mirror on either axis,
+and on a still the scissors: cut out on or off, the SAM clicks (keep,
+shift-click to drop) made on the same window, and the cutout previewed
+inside it. A clip gets a transport to check the window across its segment.
+The pen opens it from a chip's face, a picker cell, a clip card and the
+pre-stage's chips alike — the chip scissors, the subject view and the
+crop/cut/subject links on the card are gone, as is every reason a swap or a
+keyframe pick used to open a poorer editor: the picker always carries a plate
+spec, and where a family names no matte weights the server uses the BiRefNet
+and SAM 3 the install has. Nothing is written to disk for a framing: it is a
+`crop` blob on the asset — fractions of the picture as shown, after the turn
+and the mirror — parsed and applied by one module (`creator/crop.py`)
+wherever the file is read: `media.load_image` and `load_video`, the ffmpeg
+graph a clip card is spliced through, the guide reader, plate panels, the
+RefMod encoder, and core's own rotate, flip and crop nodes on the still
+families' graphs. Thumbnails come framed off the thumb route, the adaptive
+canvas follows the window rather than the file, the reference cache keys on
+it, and a saved reference refuses one, since it was encoded before any window
+could be drawn.
+
 **Fixed: `{day|night}` groups in the Timeline window's standing prompt came
 up as plain text (#74).** The window fills that box and then mounts, and a
 highlight range added while the text is detached is one Chromium never

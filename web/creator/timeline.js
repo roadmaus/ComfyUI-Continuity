@@ -22,8 +22,8 @@ import * as P from "./presets.js";
 import { PromptBox, openEditorSheet } from "./prompt.js";
 import { openSettings } from "./settings.js";
 import { SoundLane } from "./soundlane.js";
-import { openSubjectView } from "./subject.js";
 import { openTrim } from "./trim.js";
+import { openPicture, editPicture, asPick, cropLabel } from "./picture.js";
 import { openAspectPopover, openResolutionPopover, openChoicePopover, facesPill, neuralPill, stepperPill,
          aspectGlyph, resolutionPillText, PILL_GLYPH } from "./pills.js";
 import { refine, refineButton, chosenModel as refineModel } from "./refine.js";
@@ -184,7 +184,9 @@ function seamPinRow(piece, segment, width, commit) {
  *  modal bar and the node face — two views of the same strip — measure a file
  *  once between them. Clip cards never land here: they store their own size. */
 const ASPECT_SIZES = new Map();
-const aspectSizeOf = (filename) => ASPECT_SIZES.get(filename) || null;
+// The source's own size; the framing is applied by whoever reads it — the
+// cache is by file, and two chips can frame one file two ways.
+const aspectSizeOf = (asset) => ASPECT_SIZES.get(asset.filename) || null;
 
 /** Measure the pictures the timeline's canvas can follow: the resolved source
  *  (or segment 1's anchor under the auto rule), and with `all` every donor the
@@ -203,9 +205,9 @@ function probeAspectSizes(timeline, onReady, { all = false } = {}) {
   } else {
     // Just what the bar needs: ask timelineAspectSize what it would read, by
     // reading through a recording lookup.
-    S.timelineAspectSize(timeline, (filename) => {
-      want.push(...allDonors(timeline).filter((a) => a.filename === filename));
-      return aspectSizeOf(filename);
+    S.timelineAspectSize(timeline, (asset) => {
+      want.push(asset);
+      return aspectSizeOf(asset);
     });
   }
   for (const asset of want) {
@@ -754,7 +756,8 @@ class Timeline {
                 { list: doubles.map((d) => `${d.segment} (@${d.handle})`).join(", ") })
             : t("cited nowhere yet");
     const thumb = asset.kind === "image"
-      ? el("img", { class: "mmc-asset-thumb", src: viewUrl(asset.filename, { preview: true }), alt: "" })
+      ? el("img", { class: "mmc-asset-thumb", alt: "",
+                    src: viewUrl(asset.filename, { preview: true, crop: S.thumbCrop(asset) }) })
       : el("span", { class: "mmc-asset-thumb", text: asset.kind === "video" ? "▶" : "♪" });
     // The pool is the one place a swap pays the most: @char rides into every
     // segment that cites it, so re-casting the character is one click here
@@ -807,41 +810,26 @@ class Timeline {
         text: `@${subject.handle}`,
       })),
       el("span", { class: "mmc-tl-pool-where", text: where }),
-      // What a plate is, in the one number that says it — and the scissors
-      // where the picture could be cut at all: the control itself, right on
-      // the chip, same as the card's. Same eligibility too — a scene or style
-      // reference shows no scissors, because there the background *is* the
-      // reference.
+      // What a plate is, in the one number that says it — and the pen where
+      // the picture can be edited at all: the door itself, right on the chip,
+      // same as the card's.
       ...(S.isPlate(asset) && asset.panels.length > 1
         ? [el("span", { class: "mmc-asset-panels",
                         text: t("{count} panels", { count: asset.panels.length }) })]
-        : asset.kind === "image" && S.plateSpec(this.timeline)
-            && S.canCut((asset.panels?.[0] ?? asset).takes)
-          ? [el("button", {
-              class: `mmc-pl-cut mmc-asset-scissors${asset.panels?.[0]?.cut ? " on" : ""}`,
-              "aria-pressed": String(Boolean(asset.panels?.[0]?.cut)),
-              title: asset.panels?.[0]?.cut
-                ? t("Cut out of its background — press to keep the background")
-                : t("Used whole — press to lift the subject off its background"),
-              onclick: () => this.cutPoolReference(asset, !asset.panels?.[0]?.cut),
-            }, [icon("scissors", 12)])]
-          : asset.panels?.[0]?.cut
-            ? [el("span", { class: "mmc-pl-cut on",
-                            title: t("Cut out of its background") }, [icon("scissors", 12)])]
-            : []),
-      // Where a cut picture's scissors grabbed the wrong subject: the clicks
-      // that name the right one, without rebuilding the whole sheet session.
-      ...(asset.kind === "image" && S.plateSpec(this.timeline)
-          && !(S.isPlate(asset) && asset.panels.length > 1) && asset.panels?.[0]?.cut
-        ? [el("button", {
-            class: "mmc-ghost",
-            style: { fontSize: "11px" },
-            title: t("Where the whole-subject cut grabs the wrong thing, click the "
-                   + "one you mean — and click again on what should go."),
-            text: t("Choose the subject…"),
-            onclick: () => this.choosePoolSubject(asset),
-          })]
-        : []),
+        : S.croppable(asset)
+          ? [(() => {
+              const said = [asset.panels?.[0]?.cut ? t("cut out") : "", cropLabel(S.cropOf(asset))]
+                .filter(Boolean);
+              return el("button", {
+                class: `mmc-pl-cut mmc-asset-scissors mmc-asset-edit${said.length ? " on" : ""}`,
+                "aria-pressed": String(said.length > 0),
+                title: said.length
+                  ? t("{framing} — press to change the framing", { framing: said.join(" · ") })
+                  : t("Used whole — press to crop, turn or mirror it, or cut the subject out"),
+                onclick: () => this.editPoolPicture(asset),
+              }, [icon("edit", 12)]);
+            })()]
+          : []),
       // Building the sheet again, from here. The pool is where a shared
       // reference is set at all — a citation of it in a segment has nothing to
       // open — so without this a sheet attached to the piece could never be
@@ -1136,6 +1124,7 @@ class Timeline {
       ref_size: "max",
     };
     if (picked.trim) entry.trim = picked.trim;
+    if (picked.crop) entry.crop = picked.crop;
     if (entry.kind === "video") entry.track = S.trackFor(picked);
     host.assets.push(entry);
     this.commit();
@@ -1211,6 +1200,7 @@ class Timeline {
     };
     if (picked.kind === "video") entry.track = S.trackFor(picked);
     if (picked.trim) entry.trim = picked.trim;
+    if (picked.crop) entry.crop = picked.crop;
     return entry;
   }
 
@@ -1244,7 +1234,10 @@ class Timeline {
       capacity: () => ({ used: 0, max: S.refCaps(this.timeline).files,
                          filesLeft: S.refCaps(this.timeline).files }),
       plate: { ...spec, panels: (asset.panels?.length
-        ? asset.panels.map((panel) => ({ path: panel.filename, cut: Boolean(panel.cut) }))
+        ? asset.panels.map((panel) => ({ path: panel.filename, cut: Boolean(panel.cut),
+            ...(panel.rect ? { rect: [...panel.rect] } : {}),
+            ...(panel.points?.length ? { points: panel.points.map((p) => ({ ...p })) } : {}),
+            ...(panel.crop ? { crop: { ...panel.crop } } : {}) }))
         : [{ path: asset.filename, cut: false }]) },
     });
     if (!chosen) return;
@@ -1272,9 +1265,12 @@ class Timeline {
       const heirAt = loose.findIndex((picked) => kept.has(picked.path));
       if (heirAt >= 0) {
         const [heir] = loose.splice(heirAt, 1);
+        const before = kept.get(heir.path);
         this.timeline.assets.splice(at, 0, {
           handle: asset.handle, kind: "image", role: "reference",
           filename: heir.path, ref_size: "max",
+          ...(("crop" in heir ? heir.crop : before?.crop)
+            ? { crop: "crop" in heir ? heir.crop : before.crop } : {}),
         });
       }
     }
@@ -1282,53 +1278,38 @@ class Timeline {
       this.timeline.assets.push({
         handle: S.nextPoolHandle(this.timeline), kind: picked.kind,
         role: "reference", filename: picked.path, ref_size: "max",
+        ...(picked.crop ? { crop: picked.crop } : {}),
       });
     }
     this.commit();
     this.renderPool();
   }
 
-  /** Cut one pool picture out of its background, or put it back — the chip's
-   *  press, without a picker session. The entry is rebuilt through
-   *  `foldPoolSheet`, so the handle and every citation of it survive; what
-   *  changes is the file the pool points at — the plate the server wrote, or
-   *  the source photograph again. */
-  async cutPoolReference(asset, on, points = null) {
-    const spec = this.poolPlate();
-    if (!spec) return;
-    const panel = asset.panels?.[0];
-    const source = panel?.filename ?? asset.filename;
-    const clicks = points ?? (panel?.points?.length ? panel.points.map((p) => ({ ...p })) : []);
+  /** The picture editor on a pool picture — the editor's `editPicture`, folded
+   *  through the pool's own sheet fold. */
+  async editPoolPicture(asset) {
+    const { width, height } = this.geometry();
+    let answer;
     try {
-      if (!on) {
-        this.poolError = null;
-        this.foldPoolSheet(asset, [{ kind: "image", path: source }]);
-        return;
-      }
-      const made = { path: source, cut: true, ...(clicks.length ? { points: clicks } : {}) };
-      const built = await buildPlate({ ...spec, panels: [made] });
-      this.poolError = null;
-      this.foldPoolSheet(asset, [{ plate: true, kind: "image", path: built.path,
-                                   panels: [made] }]);
+      answer = await editPicture(asset, {
+        plate: this.poolPlate(),
+        aspect: width && height ? { ratio: width / height, label: t("canvas") } : null,
+      });
     } catch (error) {
       this.poolError = String(error.message || error);
       this.renderPool();
+      return;
     }
-  }
-
-  /** The subject view on a pool picture — see the editor's `chooseSubject`,
-   *  which this is the pool-side twin of. */
-  async choosePoolSubject(asset) {
-    const spec = this.poolPlate();
-    if (!spec) return;
-    const panel = asset.panels?.[0];
-    const source = panel?.filename ?? asset.filename;
-    const got = await openSubjectView({
-      plate: spec, path: source, name: source.split("/").pop(),
-      points: panel?.points ?? [],
-    });
-    if (!got) return;
-    await this.cutPoolReference(asset, true, got.points);
+    if (!answer) return;
+    if (asset.kind === "image") {
+      this.poolError = null;
+      this.foldPoolSheet(asset, [asPick(answer)]);
+      return;
+    }
+    if (answer.crop) asset.crop = answer.crop;
+    else delete asset.crop;
+    this.commit();
+    this.renderPool();
   }
 
   /** Point a pool reference at a different file, keeping its handle — see the
@@ -1343,9 +1324,15 @@ class Timeline {
     });
     const picked = chosen?.[0];
     if (!picked || picked.path === asset.filename) return;
+    if (picked.plate) {
+      this.foldPoolSheet(asset, chosen);
+      return;
+    }
     asset.filename = picked.path;
     if (picked.trim) asset.trim = picked.trim;
     else delete asset.trim;
+    if (picked.crop) asset.crop = picked.crop;
+    else delete asset.crop;
     if (asset.kind === "video") asset.track = S.trackFor(picked);
     this.commit();
   }
@@ -1371,11 +1358,11 @@ class Timeline {
       if (S.isClip(asset)) {
         return {
           value, label: t("clip"), tag: null,
-          ratio: asset.width && asset.height ? asset.width / asset.height : null,
+          ratio: S.clipSize(asset) ? S.clipSize(asset).width / S.clipSize(asset).height : null,
           sub: t("card {n}", { n: card }),
         };
       }
-      const size = aspectSizeOf(asset.filename);
+      const size = S.framedSize(aspectSizeOf(asset), asset.crop);
       const role = asset.role === "first_frame" ? t("start frame")
         : asset.role === "last_frame" ? t("end frame")
         : asset.kind === "video" ? t("reference video") : t("reference image");
@@ -2301,12 +2288,18 @@ class Timeline {
                + "spliced in without being generated. It has not been through the model, "
                + "so its colour and grain will not match the shots around it."),
         text: [
-          segment.width && segment.height ? `${segment.width}×${segment.height} → ${scaled.width}×${scaled.height}` : null,
+          S.clipSize(segment) ? `${S.clipSize(segment).width}×${S.clipSize(segment).height} → ${scaled.width}×${scaled.height}` : null,
           S.clipSound(segment) ? t("sound") : t("silent"),
         ].filter(Boolean).join(" · "),
       }),
       el("div", { class: "mmc-tl-card-foot" }, [
         el("button", { class: "mmc-tl-edit", text: t("Trim"), onclick: () => this.editClip(index) }),
+        el("button", {
+          class: `mmc-tl-edit${segment.crop ? " on" : ""}`, text: t("Crop"),
+          title: cropLabel(segment.crop)
+            || t("Crop the footage to part of the frame, or turn and mirror it, before it is scaled to the canvas"),
+          onclick: () => this.editClipCrop(index),
+        }),
         el("button", {
           class: `mmc-ghost${S.clipSound(segment) ? " on" : ""}`,
           title: segment.has_audio === false
@@ -2762,6 +2755,24 @@ class Timeline {
     if (!picked) return;
     if (picked.trim) segment.trim = picked.trim;
     else delete segment.trim;
+    this.commit();
+  }
+
+  /** The clip's framing, through the same editor a reference picture uses.
+   *  The canvas is offered as the lock; the card's own trim bounds the scrub. */
+  async editClipCrop(index) {
+    const segment = this.timeline.segments[index];
+    const { width, height } = this.geometry();
+    const picked = await openPicture({
+      path: segment.filename,
+      kind: "video",
+      crop: segment.crop ?? null,
+      trim: segment.trim ?? null,
+      aspect: width && height ? { ratio: width / height, label: t("canvas") } : null,
+    });
+    if (!picked) return;
+    if (picked.crop) segment.crop = picked.crop;
+    else delete segment.crop;
     this.commit();
   }
 
@@ -3749,6 +3760,8 @@ export class TimelineBody {
       };
       if (picked.kind === "video") entry.track = S.trackFor(picked);
       if (picked.trim) entry.trim = picked.trim;
+      if (picked.crop) entry.crop = picked.crop;
+    if (picked.crop) entry.crop = picked.crop;
       this.timeline.assets.push(entry);
     }
     this.commit();
@@ -4217,6 +4230,7 @@ export class TimelineBody {
     };
     if (picked.kind === "video") entry.track = S.trackFor(picked);
     if (picked.trim) entry.trim = picked.trim;
+    if (picked.crop) entry.crop = picked.crop;
     segment.assets.push(entry);
     this.commit();
   }

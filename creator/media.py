@@ -23,6 +23,7 @@ from comfy_extras.nodes_audio import load as _load_audio_file
 # reference clip can possibly survive it.
 from comfy_extras.nodes_minimax_h3 import align_frame_count
 
+from . import crop as framing
 from . import mux
 from . import refmod
 
@@ -164,7 +165,7 @@ def turned(array, rotation):
     return np.rot90(array, k=turns).copy() if turns else array
 
 
-def image_size(filename):
+def image_size(filename, crop=None):
     """(width, height) without decoding pixels — used for the adaptive canvas.
 
     A video container answers the same question since the aspect source became
@@ -172,7 +173,14 @@ def image_size(filename):
     picture is read off its header (rotation honoured) exactly as the probe
     route reads it. Dispatch is by what the file actually is — PIL knows every
     still format and says so when handed anything else.
+
+    `crop` is the asset's framing (`crop.Crop`), and the answer is the window's
+    size after the turn — what the render will actually be handed.
     """
+    return framing.size(_source_size(filename), crop)
+
+
+def _source_size(filename):
     path = resolve(filename)
     if refmod.is_mod(filename):
         # A mod's picture is its latent grid at the VAE's 16px stride: what the
@@ -198,10 +206,14 @@ def image_size(filename):
         return width, height
 
 
-def load_image(filename):
-    """-> float tensor [1, H, W, 3] in 0..1, the ComfyUI IMAGE layout."""
+def load_image(filename, crop=None):
+    """-> float tensor [1, H, W, 3] in 0..1, the ComfyUI IMAGE layout.
+
+    `crop` is the asset's framing, applied to the picture as its player shows
+    it — after the orientation tag, which is the picture the box was drawn on.
+    """
     with Image.open(resolve(filename)) as img:
-        img = ImageOps.exif_transpose(img).convert("RGB")
+        img = framing.pil(ImageOps.exif_transpose(img), crop).convert("RGB")
         array = np.array(img, dtype=np.float32) / 255.0
     return torch.from_numpy(array).unsqueeze(0)
 
@@ -259,7 +271,7 @@ def _decode_window(trim, max_seconds):
     return start, duration
 
 
-def _frames_at(filename, start, duration, fps):
+def _frames_at(filename, start, duration, fps, crop=None):
     """The window's picture at `fps` -> [N, H, W, 3] float32, or empty.
 
     Through `mux.conform` — the same timestamp-driven resample the finished
@@ -274,14 +286,14 @@ def _frames_at(filename, start, duration, fps):
     """
     frames = [
         torch.from_numpy(frame.to_ndarray(format="rgb24"))
-        for frame in mux.conform(av, resolve(filename), start, duration, fps)
+        for frame in mux.conform(av, resolve(filename), start, duration, fps, crop=crop)
     ]
     if not frames:
         return torch.zeros(0, 1, 1, 3)
     return torch.stack(frames).float() / 255.0
 
 
-def load_video(filename, want_audio=False, trim=None, max_seconds=None):
+def load_video(filename, want_audio=False, trim=None, max_seconds=None, crop=None):
     """-> (frames [N, H, W, 3] resampled to 24 fps, audio dict or None).
 
     H3 reads reference video at 24 fps, so a clip shot at any other rate is
@@ -298,10 +310,14 @@ def load_video(filename, want_audio=False, trim=None, max_seconds=None):
     The window anchors the resample at the requested second: the first frame
     out is the source frame nearest the window's start, and the rest fall on a
     24 fps grid from there.
+
+    `crop` is the asset's framing, done in the same ffmpeg graph the reel
+    splices a clip card through (`mux.conform`), so a seam reading the tail of
+    a cropped clip reads the frames the reel shows.
     """
     start, duration = _decode_window(trim, max_seconds)
     try:
-        frames = _frames_at(filename, start, duration, TARGET_FPS)
+        frames = _frames_at(filename, start, duration, TARGET_FPS, crop=crop)
     except ValueError as exc:
         raise MediaError(f"{filename!r} has no video frames") from exc
     if frames.shape[0] == 0:
@@ -330,6 +346,14 @@ def load_video(filename, want_audio=False, trim=None, max_seconds=None):
 # from the end of what arrives — cheap, since it is still a seek window and not
 # the clip.
 _SEAM_SLACK_S = 0.5
+
+
+def _spec_crop(spec):
+    """A clip card's framing, as `compile.clip_spec` wrote it, or None."""
+    try:
+        return framing.parse(spec.get("crop"), spec.get("filename", "clip"))
+    except framing.CropError as exc:
+        raise MediaError(str(exc)) from exc
 
 
 def _clip_window(spec):
@@ -361,7 +385,8 @@ def clip_frames(spec, count, at="tail"):
         cells = []
         for index in spill.spread(max(1, round(length * TARGET_FPS)), count):
             at_s = start + index / TARGET_FPS
-            one, _ = load_video(spec["filename"], trim=(at_s, at_s + 3.0 / TARGET_FPS))
+            one, _ = load_video(spec["filename"], trim=(at_s, at_s + 3.0 / TARGET_FPS),
+                                crop=_spec_crop(spec))
             if one.shape[0] == 0:
                 raise MediaError(
                     f"{spec['filename']!r}: no frame could be read at {at_s:.2f} s "
@@ -371,7 +396,7 @@ def clip_frames(spec, count, at="tail"):
     span = count / TARGET_FPS + _SEAM_SLACK_S
     window = (start, min(end, start + span)) if at == "head" \
         else (max(start, end - span), end)
-    frames, _ = load_video(spec["filename"], trim=window)
+    frames, _ = load_video(spec["filename"], trim=window, crop=_spec_crop(spec))
     if frames.shape[0] < count:
         raise MediaError(
             f"{spec['filename']!r}: this seam needs {count} frames and the "
@@ -424,7 +449,7 @@ def load_all(compiled):
     loaded = {}
     for asset in (compiled.first_frame, compiled.last_frame):
         if asset is not None:
-            loaded[asset.handle] = {"image": load_image(asset.filename)}
+            loaded[asset.handle] = {"image": load_image(asset.filename, crop=asset.crop)}
     for asset in compiled.ref_images:
         if asset.mod:
             # A mod is its latent, read by `encode` off the file itself; there
@@ -437,7 +462,7 @@ def load_all(compiled):
             # seam frame is added. See `compile.STORYBOARD_HANDLE`.
             continue
         loaded[asset.handle] = Deferred(
-            lambda asset=asset: {"image": load_image(asset.filename)})
+            lambda asset=asset: {"image": load_image(asset.filename, crop=asset.crop)})
     for asset in compiled.ref_videos:
         if asset.mod:
             loaded[asset.handle] = {"mod": resolve(asset.filename)}
@@ -451,7 +476,7 @@ def load_all(compiled):
             logging.info("[MiniMax] @%s: decoding %s", asset.handle, asset.filename)
             frames, audio = load_video(
                 asset.filename, want_audio=asset.track == "picture+sound",
-                trim=asset.trim, max_seconds=limit)
+                trim=asset.trim, max_seconds=limit, crop=asset.crop)
             return {"frames": frames, "audio": audio}
         loaded[asset.handle] = Deferred(decode)
     # Both real audio files and videos referenced for their sound alone: the

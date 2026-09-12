@@ -36,8 +36,8 @@ from aiohttp import web
 import folder_paths
 from server import PromptServer
 
-from . import (compile as compiler, jobs, latents, lorameta, media, models, plate, refmod,
-               preview, settings, vdn)
+from . import (compile as compiler, crop as framing, jobs, latents, lorameta, media,
+               models, plate, refmod, preview, settings, vdn)
 
 # The picker builds its grid lazily and paginates, so the cap only bounds the
 # listing's JSON payload (~2 MB at this size). Newest first, so when a folder
@@ -324,6 +324,25 @@ async def render_meta(request):
         return web.json_response({"prompt": None, "workflow": None, "error": str(exc)})
 
 
+def _query_crop(text):
+    """The thumb route's `crop` parameter -> `crop.Crop` or None.
+
+    Positional in the URL rather than JSON, so the string is short enough to
+    read in a network tab and stable enough to be a cache key.
+    """
+    if not text:
+        return None
+    parts = text.split(",")
+    if len(parts) < 4:
+        raise framing.CropError("crop needs x,y,w,h")
+    raw = {"x": parts[0], "y": parts[1], "w": parts[2], "h": parts[3]}
+    if len(parts) > 4:
+        raw["turn"] = parts[4]
+    if len(parts) > 5:
+        raw["mirror"] = parts[5]
+    return framing.parse(raw, "thumb")
+
+
 @PromptServer.instance.routes.get("/continuity/thumb")
 async def asset_thumb(request):
     """A small webp of one clip or picture, the way its player shows it.
@@ -349,7 +368,15 @@ async def asset_thumb(request):
         path = _input_path(request)
     if path is None:
         return web.Response(status=404)
-    thumb = await preview.thumbnail(path)
+    # `crop=x,y,w,h[,turn[,mirror]]` draws the framed picture — the same
+    # window `media.load_image` hands the render, so a chip's thumbnail shows
+    # what the model gets. `full=1` keeps the source's size: the subject view
+    # clicks on the framed picture and needs every pixel of it.
+    try:
+        crop = _query_crop(request.query.get("crop"))
+    except framing.CropError as exc:
+        return web.json_response({"error": str(exc)}, status=400)
+    thumb = await preview.thumbnail(path, crop=crop, full=request.query.get("full") == "1")
     if thumb is None:
         return web.Response(status=404)
     # A caller that stamped the source's mtime into the URL has made it name one
@@ -904,13 +931,20 @@ def _plate_panels(body):
                   for p in (panel.get("points") or []) if isinstance(p, dict)]
         if points:
             made["points"] = points
+        crop = panel.get("crop")
+        if isinstance(crop, dict) and crop:
+            made["crop"] = crop
         panels.append(made)
     return panels
 
 
 def _plate_models(body):
-    return {"cutout": str(body.get("model") or ""),
-            "segment": str(body.get("segment") or "")}
+    """The matte weights a plate request names — or, unnamed, the install's
+    own (`plate.default_models`), resolved here so the plate's name on disk
+    says which file cut it."""
+    defaults = plate.default_models()
+    return {"cutout": str(body.get("model") or "") or defaults["cutout"],
+            "segment": str(body.get("segment") or "") or defaults["segment"]}
 
 
 def _plate_job(body):
@@ -1003,7 +1037,8 @@ async def cut_plate_panel(request):
     try:
         stamp = media.stamp(panel["path"])
         key = json.dumps([stamp, models, panel.get("points") or [],
-                          bool(panel.get("cut"))], sort_keys=True, default=str)
+                          bool(panel.get("cut")), panel.get("crop") or {}],
+                         sort_keys=True, default=str)
         png = _PANEL_CACHE.get(key)
         if png is None:
             loop = asyncio.get_running_loop()

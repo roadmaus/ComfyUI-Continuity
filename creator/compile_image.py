@@ -113,6 +113,12 @@ class ImagePayload:
     loras: list = field(default_factory=list)        # [{"name", "strength"}]
     refs: list = field(default_factory=list)         # filenames, on the families that read them
     init: dict = None                                # {"filename", "denoise"} or None
+    # The framing on each picture that has one, keyed "ref:<slot>" / "init":
+    # `{"crop": crop.to_dict(...), "size": [w, h]}`, the source size resolved
+    # here so the graph can be emitted without a disk. Empty on a render with
+    # nothing framed, which keeps every such payload the bytes it was. Read
+    # through `render_image.load_picture`.
+    framing: dict = field(default_factory=dict)
     # How this family's schedule is shaped for this render — the family's own
     # keys, opaque here. Ideogram's mu/std/polish; Krea's shift ramp. Empty on a
     # family whose schedule the sampler row already states in full.
@@ -234,7 +240,30 @@ def _parse_init(raw):
     # ignored the image; below the floor it is the image with noise on it.
     # Clamped rather than refused: both ends are slider overshoot, not intent.
     denoise = max(MIN_DENOISE, min(1.0, denoise))
-    return {"filename": raw["filename"], "denoise": denoise}
+    init = {"filename": raw["filename"], "denoise": denoise}
+    if raw.get("crop"):
+        init["crop"] = raw["crop"]
+    return init
+
+
+def _framed(what, filename, raw, image_size_lookup):
+    """A picture's framing blob -> the payload's `framing` entry, or None.
+
+    The still families crop in the graph with core's `ImageCrop`, which takes
+    pixels, so the source's size is read here — the one place this module
+    reaches for the lookup for anything but the canvas.
+    """
+    from . import crop as framing
+
+    try:
+        crop = framing.parse(raw, what)
+    except framing.CropError as exc:
+        raise CompileError(str(exc)) from exc
+    if crop is None:
+        return None
+    if image_size_lookup is None:
+        raise CompileError(f"{what}: a cropped picture needs its size, and none was looked up")
+    return {"crop": framing.to_dict(crop), "size": list(image_size_lookup(filename))}
 
 
 def ref_limit(family, data):
@@ -272,7 +301,8 @@ def _parse_refs(raw, limit=MAX_STYLE_REFS, reason=REFS_LIMIT_REASON,
         if not filename or not isinstance(filename, str):
             raise CompileError(f"every {noun[0]} must carry a filename")
         handle = item.get("handle") if isinstance(item, dict) else None
-        refs.append((handle if isinstance(handle, str) else None, filename))
+        refs.append((handle if isinstance(handle, str) else None, filename,
+                     item.get("crop") if isinstance(item, dict) else None))
     if len(refs) > limit:
         raise CompileError(f"at most {limit} {noun[0] if limit == 1 else noun[1]} "
                            f"— {reason}")
@@ -293,7 +323,7 @@ def _cite_refs(prompt, refs, noun=REFS_NOUN):
     only handles that name an attached reference are touched.
     """
     labels = {handle: f"Picture {slot}"
-              for slot, (handle, _) in enumerate(refs, start=1) if handle}
+              for slot, (handle, *_) in enumerate(refs, start=1) if handle}
     dangling = sorted({h for h in HANDLE_RE.findall(prompt) if h not in labels})
     if dangling:
         raise CompileError(
@@ -375,11 +405,27 @@ def compile_prestage(data, family, image_size_lookup=None):
         # to make it, because attaching the first picture is what silently turns
         # the render into an edit of it.
         init = {"filename": refs[0][1], "denoise": 1.0}
+        if refs[0][2]:
+            init["crop"] = refs[0][2]
 
     short_edge = data.get("short_edge", DEFAULT_SHORT_EDGE)
     ratio_clamped = False
+    framed = {}
+    for slot, (_, filename, crop) in enumerate(refs):
+        entry = _framed(f"picture {slot + 1}", filename, crop, image_size_lookup)
+        if entry:
+            framed[f"ref:{slot}"] = entry
+    if init is not None:
+        entry = _framed("the init image", init["filename"], init.get("crop"), image_size_lookup)
+        if entry:
+            framed["init"] = entry
+
     if init is not None and image_size_lookup is not None:
-        source_w, source_h = image_size_lookup(init["filename"])
+        from . import crop as framing
+
+        source_w, source_h = framing.size(
+            image_size_lookup(init["filename"]),
+            framing.parse(init.get("crop"), "the init image"))
         ratio, ratio_clamped = clamp_ratio(source_w / source_h)
     else:
         aspect = data.get("aspect", DEFAULT_ASPECT)
@@ -396,7 +442,8 @@ def compile_prestage(data, family, image_size_lookup=None):
         checkpoint_field=checkpoint_field, loras=loras,
         # Filenames alone from here on: the handles did their work above and the
         # graph loads these by name, in this order, into the encoder's slots.
-        refs=[filename for _, filename in refs], init=init,
+        refs=[filename for _, filename, _ in refs], init=init,
+        framing=framed,
         schedule=schedule or {}, ratio_clamped=ratio_clamped,
         neural=neural_block(data),
     )

@@ -254,6 +254,12 @@ export const css = `
   margin-right: auto;
 }
 .mmc-tl-edit:hover { background: var(--mmc-surface-3); }
+/* A clip card has two of them, Trim and Crop, side by side on the left; the
+   gap that pushes the rest right belongs after the last one. Lit when set,
+   the way the sound button is. */
+.mmc-tl-edit + .mmc-tl-edit { margin-left: 6px; }
+.mmc-tl-edit:has(+ .mmc-tl-edit) { margin-right: 0; }
+.mmc-tl-edit.on { box-shadow: inset 0 0 0 1px var(--mmc-blue); }
 .mmc-tl-card-foot .mmc-ghost { padding: 0 4px; font-size: calc(12px * var(--mmc-type)); }
 .mmc-tl-card-foot button:disabled { opacity: .3; cursor: not-allowed; }
 

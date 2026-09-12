@@ -89,10 +89,32 @@ def _encode(vae, image, edge):
     return vae.encode(resized), resized
 
 
-def _frames(source, count):
+def _crops(body, sources):
+    """`body["crops"]` — one framing blob per source, by position — as `Crop`s.
+
+    Absent or short is fine: the framing is the chip's, and a source without
+    one is kept whole. A latent is what a mod *is*, so the window has to be
+    applied before the encode, here, rather than remembered on the mod.
+    """
+    from .. import crop as framing
+
+    raw = body.get("crops") or []
+    if not isinstance(raw, list):
+        raise jobs.JobError("crops must be a list, one per source")
+    crops = []
+    for index, source in enumerate(sources):
+        blob = raw[index] if index < len(raw) else None
+        try:
+            crops.append(framing.parse(blob or None, source))
+        except framing.CropError as exc:
+            raise jobs.JobError(str(exc)) from exc
+    return crops
+
+
+def _frames(source, count, crop=None):
     """`count` frames of a clip, spread evenly over its first seconds, trimmed
     to a run core's reference path encodes whole (n % 17 == 5)."""
-    frames, _ = media.load_video(source, max_seconds=STACK_SECONDS)
+    frames, _ = media.load_video(source, max_seconds=STACK_SECONDS, crop=crop)
     if frames.shape[0] > count:
         import torch
         picks = torch.linspace(0, frames.shape[0] - 1, count).round().long()
@@ -118,6 +140,7 @@ def _run_stack(body, sources):
     tell = jobs.progress()
 
     vae = _vae(str(body.get("vae") or ""))
+    crops = _crops(body, sources)
     latents, shapes, first = [], [], None
     stills = clips = 0
     for index, source in enumerate(sources):
@@ -125,10 +148,10 @@ def _run_stack(body, sources):
         # listing classifies files with.
         import folder_paths
         if folder_paths.filter_files_content_types([source.rsplit("/", 1)[-1]], ["video"]):
-            image = _frames(source, frames)
+            image = _frames(source, frames, crop=crops[index])
             clips += 1
         else:
-            image = media.load_image(source)
+            image = media.load_image(source, crop=crops[index])
             stills += 1
         latent, resized = _encode(vae, image, min(edge, 768) if image.shape[0] > 1 else edge)
         latent = latent.detach().float().cpu()
@@ -197,9 +220,10 @@ def _run_job(body):
     tell = jobs.progress()
 
     vae = _vae(str(body.get("vae") or ""))
+    crops = _crops(body, sources)
     rows = []
     for index, source in enumerate(sources):
-        image = media.load_image(source)
+        image = media.load_image(source, crop=crops[index])
         latent, resized = _encode(vae, image, edge)
         base = index / len(sources)
         latent, meta = _still(latent.detach().float().cpu(), mode, grid, steps,
@@ -344,7 +368,7 @@ async def make_refmod(request):
     try:
         prompt_id = await jobs.submit("refmod", {
             key: body.get(key) for key in
-            ("name", "subfolder", "sources", "mode", "edge", "grid", "steps",
+            ("name", "subfolder", "sources", "crops", "mode", "edge", "grid", "steps",
              "description", "concept", "vae", "max_tokens", "frames")
         }, body.get("client_id"))
     except jobs.JobError as exc:

@@ -712,13 +712,42 @@ export async function renderMeta(path) {
   return { prompt: body.prompt ?? null, workflow: body.workflow ?? null };
 }
 
+// A framing blob's slack: `picture.js` WHOLE_SLACK — a window this close to the
+// whole picture is the whole picture, and the URL carries nothing.
+const WHOLE_SLACK = 0.004;
+
+/** Whether a framing blob (`{x, y, w, h, turn, mirror}`) says anything. */
+export function isFramed(crop) {
+  if (!crop) return false;
+  return isWindowed(crop) || Boolean(crop.turn) || Boolean(crop.mirror);
+}
+
+/** Whether the blob's window leaves any of the picture out. */
+export function isWindowed(crop) {
+  if (!crop) return false;
+  return (crop.w ?? 1) < 1 - WHOLE_SLACK || (crop.h ?? 1) < 1 - WHOLE_SLACK
+    || (crop.x ?? 0) > WHOLE_SLACK || (crop.y ?? 0) > WHOLE_SLACK;
+}
+
+/** The thumb route's `crop` parameter for a framing, or null — see
+ *  `server_routes._query_crop`. Positional and short on purpose: it is a URL. */
+export function cropQuery(crop) {
+  if (!isFramed(crop)) return null;
+  const four = (v) => Math.round(v * 10000) / 10000;
+  const parts = [crop.x ?? 0, crop.y ?? 0, crop.w ?? 1, crop.h ?? 1].map(four);
+  if (crop.turn || crop.mirror) parts.push(crop.turn ?? 0);
+  if (crop.mirror) parts.push(crop.mirror);
+  return parts.join(",");
+}
+
 /**
  * Core's /view, the same URL LoadImage previews use.
  *
  * Takes the input-relative path ("3d/foo.png"), not an asset row: only the path
  * survives into creator_data, so a reloaded workflow has nothing else to go on.
+ * `crop` is the asset's framing blob, and a framed picture is served framed.
  */
-export function viewUrl(path, { preview = false, version = null } = {}) {
+export function viewUrl(path, { preview = false, version = null, crop = null } = {}) {
   // A cast look's frame is not in the input folder and never was: it is a file
   // this pack ships, served out of WEB_DIRECTORY. Answered here rather than at
   // each of the dozen call sites, for the reason `media.resolve` answers it on
@@ -729,6 +758,10 @@ export function viewUrl(path, { preview = false, version = null } = {}) {
   // pixels to view — only the picture kept beside it, which the thumb route
   // serves. The same one door, for the same reason. See `creator/refmod.py`.
   if (isRefMod(path)) return thumbUrl(path, version);
+  // A framed picture is a preview whatever was asked for: core's /view serves
+  // the file as it is on disk, and the framing is not on the disk. The thumb
+  // route draws the window the render will read (`preview._render_thumb`).
+  if (isFramed(crop)) return thumbUrl(path, version, cropQuery(crop), { full: !preview });
   // A gallery path carries ComfyUI's folder annotation ("clip.mp4 [output]").
   // The servers that take a filename parse it themselves; core's /view takes
   // the folder as a parameter instead, so it is split off here.
@@ -831,9 +864,13 @@ export const describeRefMod = (filename, description) =>
  * `version` is the asset's mtime, which is what makes the URL safe to cache
  * forever: re-uploading the file changes the URL rather than staling the image.
  */
-export function thumbUrl(path, version) {
+export function thumbUrl(path, version, crop = null, { full = false } = {}) {
   const params = new URLSearchParams({ filename: path });
   if (version) params.set("v", String(version));
+  // The framing, positional — see `crop.cropQuery` and the route's `_query_crop`.
+  // `full` keeps the source's size: the subject view clicks on every pixel.
+  if (crop) params.set("crop", crop);
+  if (full) params.set("full", "1");
   return api.apiURL(`/continuity/thumb?${params}`);
 }
 

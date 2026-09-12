@@ -162,7 +162,21 @@ def untrained(asset, tracings):
 _SLACK_FRAMES = 2
 
 
-def read(filename, trim, frames, width, height, fps):
+def parse_crop(text):
+    """The framing off the node's `crop` socket -> `crop.Crop` or None."""
+    import json
+
+    from . import crop as framing
+
+    if not text:
+        return None
+    try:
+        return framing.parse(json.loads(text), "guide")
+    except (ValueError, framing.CropError) as exc:
+        raise GuideError(f"the guide's crop is not a framing: {exc}") from exc
+
+
+def read(filename, trim, frames, width, height, fps, crop=None):
     """One shot's worth of the guide — `[frames, height, width, 3]`.
 
     Read at the render's rate rather than through `media.load_video`, and that
@@ -185,6 +199,10 @@ def read(filename, trim, frames, width, height, fps):
     node does with a short hint anyway; said here as well so the tensor handed
     over is the length it claims to be, and so a guide that runs out is a shot
     that stops moving with the drawing rather than one that fails.
+
+    `crop` is the guide's framing (`crop.Crop`), the same field a reference
+    carries, applied before the fit — a drawing cropped to the subject is
+    aimed at the canvas by the window, not by the sheet it was traced on.
     """
     import comfy.utils
     import torch
@@ -200,7 +218,7 @@ def read(filename, trim, frames, width, height, fps):
     # which is unusual and legitimate and is what the hold below would do to a
     # clip that ran out on frame one anyway.
     if _is_still(filename):
-        one = media.load_image(filename)[..., :3]
+        one = media.load_image(filename, crop=crop)[..., :3]
         return _fit(comfy.utils, one.expand(want, -1, -1, -1), width, height)
 
     start = max(0.0, float(trim[0])) if trim else 0.0
@@ -217,7 +235,7 @@ def read(filename, trim, frames, width, height, fps):
     # average-rate index it replaced put variable-rate footage on the wrong
     # frames.
     try:
-        got = media._frames_at(filename, start, span, rate)
+        got = media._frames_at(filename, start, span, rate, crop=crop)
     except ValueError as exc:
         raise GuideError(f"the guide {filename!r} has no picture in it") from exc
     if got.shape[0] == 0:
@@ -356,14 +374,24 @@ def guide_frames(graph, asset, compiled, fps):
     An `end` of 0 means "to the end of the file", which is `media._decode_window`'s
     own convention for a duration of 0 and is what an untrimmed guide carries.
     """
+    import json
+
+    from . import crop as framing
+
     trim = getattr(asset, "trim", None)
+    crop = getattr(asset, "crop", None)
+    inputs = {}
+    if crop is not None:
+        # Only when set: a graph for an unframed guide stays the bytes it was,
+        # so its cache entry and its golden are untouched.
+        inputs["crop"] = json.dumps(framing.to_dict(crop), separators=(",", ":"), sort_keys=True)
     return graph.node(
         FRAMES_NODE, filename=asset.filename,
         start=round(float(trim[0]), 3) if trim else 0.0,
         end=round(float(trim[1]), 3) if trim else 0.0,
         frames=int(compiled.frames),
         width=int(compiled.width), height=int(compiled.height),
-        fps=float(fps)).out(0)
+        fps=float(fps), **inputs).out(0)
 
 
 def node_available(node_id):

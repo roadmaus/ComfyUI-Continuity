@@ -63,14 +63,30 @@ video contributes: picture and sound, picture only, or sound only. A clip
 attached for its sound alone scopes with the audio dial, since there is no
 picture left to narrow.
 
-### Cutouts
+### Editing a picture: crop, turn, mirror, cut out
 
-Press the scissors on a reference picture and the subject is lifted off its
-background, so citing a portrait for a face stops also citing the room. This
-runs in the picker, not in a render. With only BiRefNet installed it grabs the
-most prominent subject automatically; with SAM 3 you can click the subject you
-mean, and click again on what you don't. Files for both are in
-[models.md](models.md#cutouts-and-the-faces-pass).
+Every picture and clip wears a pen. Press it - on a chip, on a picker cell,
+on a clip card, on a pre-stage chip - and one editor opens on the source
+file: drag a window over the part that is the reference (one subject off a
+sheet of four), resize it by its corners, lock it to the shot's shape, turn or
+mirror the picture under it, and on a still, switch the scissors on to lift
+the subject off its background - click the subject you mean, shift-click what
+should go, and the window shows the cutout as it will be used. A clip gets a
+scrub bar so the window can be checked across the segment.
+
+The file on disk is never touched. The framing is kept on the chip, survives
+reloading the workflow, and is applied wherever the file is read - as a
+reference, a start or end frame, a guide, a clip card on the strip, a picture
+in the pre-stage, or a RefMod being kept. A cutout is built once as a plate,
+with the source and the clicks remembered so the editor opens on the
+photograph again. Thumbnails show the picture as edited, and a canvas that
+follows a picture follows its window.
+
+Cutting out runs in the picker, not in a render. With only BiRefNet installed
+it grabs the most prominent subject automatically; SAM 3 is what the clicks
+ask. Files for both are in [models.md](models.md#cutouts-and-the-faces-pass);
+with nothing picked under the weights control, the first of each the install
+has is used.
 
 ## The cast
 

@@ -220,7 +220,7 @@ function assetThumb(asset, className = "mmc-asset-thumb") {
   if (asset.kind === "image" || S.isRefMod(asset)) {
     return el("img", {
       class: `${className} mmc-tag-${S.tagIndex(asset.handle)}`,
-      src: viewUrl(asset.filename, { preview: true }), alt: "",
+      src: viewUrl(asset.filename, { preview: true, crop: S.thumbCrop(asset) }), alt: "",
     });
   }
   return el("span", { class: `${className} mmc-tag-${S.tagIndex(asset.handle)}` },
@@ -970,7 +970,7 @@ export class CastShelf {
     if (still) {
       return el("img", {
         class: "mmc-cast-face", alt: "",
-        src: viewUrl(still.filename, { preview: true }),
+        src: viewUrl(still.filename, { preview: true, crop: S.thumbCrop(still) }),
       });
     }
     // The glyph follows what they are: a person glyph over a described *place*

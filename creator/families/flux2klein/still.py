@@ -138,8 +138,8 @@ def emit_graph(graph, payload, sampling, weights, clip, vae, model, unique_id,
     # Each picture: scaled to the model's ~1MP working size, VAE-encoded once,
     # and chained into both conditionings as a reference latent. No encoder
     # slots and no method to pick — the base weights read the chain natively.
-    for name in payload.refs:
-        image = graph.node("LoadImage", image=name).out(0)
+    for slot, name in enumerate(payload.refs):
+        image = render_image.load_picture(graph, payload, f"ref:{slot}", name)
         # resolution_steps is required on current cores and gets no default
         # injected for a prompt that omits it, so it is always sent; 16 is the
         # family's own snap, the same one the canvas takes.

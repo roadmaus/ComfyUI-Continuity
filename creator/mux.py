@@ -62,6 +62,7 @@ from fractions import Fraction
 import numpy as np
 import torch
 
+from . import crop as framing
 from . import spill
 
 # The layouts PyAV names, by channel count. Anything else is refused rather
@@ -302,7 +303,7 @@ def _write_pass(av, target, spec, at_frame, at_sample):
     return count, wanted
 
 
-def _clip_graph(av, stream, frame, frame_rate, width=None, height=None):
+def _clip_graph(av, stream, frame, frame_rate, width=None, height=None, crop=None):
     """The filter chain a supplied clip is conformed through.
 
     Four things, and ffmpeg does all four properly so this does not:
@@ -332,6 +333,9 @@ def _clip_graph(av, stream, frame, frame_rate, width=None, height=None):
 
     `fps` comes first so the scaler only ever touches frames that survive,
     and the turn comes next so the scaler is fitting the picture as seen.
+    The card's own framing (`crop`, a `crop.Crop`) goes between the two: it
+    was drawn on the picture as seen, and the canvas is filled with what it
+    keeps.
 
     Returns the graph along with its two ends, and the caller has to hold it:
     the filter contexts do not own it, so a graph nothing references is
@@ -342,7 +346,7 @@ def _clip_graph(av, stream, frame, frame_rate, width=None, height=None):
     source = graph.add_buffer(width=frame.width, height=frame.height,
                               format=frame.format.name,
                               time_base=stream.time_base)
-    steps = [("fps", f"fps={frame_rate}"), *_upright(frame.rotation)]
+    steps = [("fps", f"fps={frame_rate}"), *_upright(frame.rotation), *framing.filters(crop)]
     if width and height:
         steps += [("scale", f"{width}:{height}:force_original_aspect_ratio=increase"),
                   ("crop", f"{width}:{height}")]
@@ -384,7 +388,7 @@ def _file_end(av, container, stream):
     return None
 
 
-def conform(av, path, start, duration, frame_rate, width=None, height=None):
+def conform(av, path, start, duration, frame_rate, width=None, height=None, crop=None):
     """The frames of `path`'s `start`..`start + duration` window, at `frame_rate`.
 
     A generator of decoded `av.VideoFrame`s, conformed through `_clip_graph`,
@@ -445,7 +449,7 @@ def conform(av, path, start, duration, frame_rate, width=None, height=None):
         def graph_for(frame):
             # `chain` is held for as long as its two ends are used — see
             # `_clip_graph`.
-            return _clip_graph(av, stream, frame, frame_rate, width, height)
+            return _clip_graph(av, stream, frame, frame_rate, width, height, crop)
 
         # The frame still showing when the window opens. A seek lands on the
         # keyframe at or before the start, and every frame from there up to the
@@ -531,10 +535,14 @@ def _write_clip(av, target, spec, at_frame, at_sample):
     width, height = int(spec["width"]), int(spec["height"])
     start, duration = float(spec.get("start") or 0.0), float(spec.get("duration") or 0.0)
     path = spec["path"]
+    try:
+        crop = framing.parse(spec.get("crop"), spec.get("name") or path)
+    except framing.CropError as exc:
+        raise MuxError(str(exc)) from exc
 
     count = 0
     try:
-        for out in conform(av, path, start, duration, target.frame_rate, width, height):
+        for out in conform(av, path, start, duration, target.frame_rate, width, height, crop):
             out = out.reformat(format=target.pix_fmt)
             out.pts = at_frame + count
             out.time_base = target.video_time_base

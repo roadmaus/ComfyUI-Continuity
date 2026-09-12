@@ -229,7 +229,7 @@ def emit_graph(graph, payload, sampling, weights, clip, vae, model, unique_id,
     model = graph.node("CFGNorm", model=model, strength=CFGNORM_STRENGTH).out(0)
 
     if payload.refs:
-        images = {f"image{i + 1}": graph.node("LoadImage", image=name).out(0)
+        images = {f"image{i + 1}": render_image.load_picture(graph, payload, f"ref:{i}", name)
                   for i, name in enumerate(payload.refs)}
         positive = graph.node("TextEncodeQwenImageEditPlus", clip=clip,
                               prompt=payload.prompt, vae=vae, **images).out(0)

@@ -51,6 +51,7 @@ import os
 
 import folder_paths
 
+from . import crop as framing
 from . import cutout, media
 
 # Where plates are written, as a subfolder of the input directory. Its own shelf
@@ -77,18 +78,46 @@ def _keep(kind, name, load):
     return held["model"]
 
 
+def _first(folder, hints):
+    """The first file under `folder` whose name says one of `hints`, or "".
+
+    The scissors are one thing on every surface, and only the video families
+    have a weights control to name the matte in. Everywhere else — the
+    pre-stage, a swap — the name is empty and the answer is the file that is
+    there: one BiRefNet under models/background_removal, one SAM 3 under
+    models/checkpoints. Picked by name, so a folder with both a SAM 3 and a
+    diffusion checkpoint hands back the right one.
+    """
+    try:
+        names = folder_paths.get_filename_list(folder)
+    except Exception:  # noqa: BLE001 — a folder ComfyUI does not know is an empty one
+        return ""
+    for name in names:
+        if any(hint in name.lower() for hint in hints):
+            return name
+    return ""
+
+
+def default_models():
+    """The matte and the segmenter an install would use with nothing picked."""
+    return {"cutout": _first("background_removal", ("birefnet",)),
+            "segment": _first("checkpoints", ("sam3",))}
+
+
 def _model(name):
-    """The loaded background-removal model named by the weights control.
+    """The loaded background-removal model named by the weights control — or,
+    with none named, the one the install has (`default_models`).
 
     Through core's registry node for the reason `cutout.matte` goes through it:
     an install without background removal has to fail here, naming the pass,
     rather than fail on an attribute somewhere inside a matte.
     """
+    name = name or default_models()["cutout"]
     if not name:
         raise ValueError(
             "Cutting a picture out of its background needs a background-removal "
-            "model. Pick one under the node's weights control "
-            "(models/background_removal)."
+            "model: put a BiRefNet under models/background_removal, or pick one "
+            "under the node's weights control."
         )
     import nodes
 
@@ -112,10 +141,12 @@ def _segment_model(name):
     so one download answers both "where is the face" and "what did you click".
     The text encoder is left unloaded: the point path needs none.
     """
+    name = name or default_models()["segment"]
     if not name:
         raise ValueError(
-            "Picking a subject by clicking on it needs a SAM 3 checkpoint. "
-            "Pick one under the node's weights control (models/checkpoints)."
+            "Picking a subject by clicking on it needs a SAM 3 checkpoint: put "
+            "one under models/checkpoints, or pick it under the node's weights "
+            "control."
         )
 
     def load():
@@ -131,14 +162,17 @@ def _segment_model(name):
 def cut_panel(panel, models):
     """One panel, loaded and matted the way it asked. -> (image, alpha or None).
 
-    `panel` is one `{"path", "cut", "points"?}` dict; `models` is
+    `panel` is one `{"path", "cut", "points"?, "crop"?}` dict; `models` is
     `{"cutout": name, "segment": name}` off the piece's weights. Clicks pick the
     model: a panel with points is a SAM3 question ("this thing, not that one"),
     a panel without is BiRefNet's ("the subject"). Alpha is None on a panel
     used whole, which is what lets the preview route hand the browser the
     original file untouched.
+
+    The framing comes first: the matte is asked of the window, and the clicks
+    are fractions of it — the picture the subject view showed.
     """
-    image = media.load_image(panel["path"])
+    image = media.load_image(panel["path"], crop=panel_crop(panel))
     if not panel.get("cut"):
         return image, None
     points = panel.get("points") or []
@@ -146,6 +180,14 @@ def cut_panel(panel, models):
         return image, cutout.matte_points(
             _segment_model(models.get("segment")), image, points)
     return image, cutout.matte(_model(models.get("cutout")), image)
+
+
+def panel_crop(panel):
+    """A panel's framing (`crop.Crop`) off its dict, or None."""
+    try:
+        return framing.parse(panel.get("crop"), str(panel.get("path")))
+    except framing.CropError as exc:
+        raise ValueError(str(exc)) from exc
 
 
 def grid(count):
@@ -258,6 +300,9 @@ def key(panels, backdrop, width, height, models=None):
         # existed keeps the name it was written under.
         if panel.get("rect"):
             entry.append([round(float(v), 4) for v in panel["rect"]])
+        crop = panel_crop(panel)
+        if crop is not None:
+            entry.append(list(crop.key()))
         if panel.get("points"):
             entry.append([[round(float(p["x"]), 4), round(float(p["y"]), 4),
                            bool(p.get("include", True))] for p in panel["points"]])

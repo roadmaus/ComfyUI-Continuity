@@ -240,6 +240,7 @@ export function plateEntry(picked, taken, {
     // re-opening the editor has to start from.
     if (source.rect) made.rect = source.rect;
     if (source.points?.length) made.points = source.points;
+    if (source.crop) made.crop = source.crop;
     if (before?.takes) made.takes = before.takes;
     taken.add(made.handle);
     entry.panels.push(made);
@@ -248,8 +249,13 @@ export function plateEntry(picked, taken, {
 }
 
 export function plateSpec(piece, { width, height } = {}) {
-  const capability = capabilityOf(piece, "cutout");
-  if (!capability) return null;
+  // Every piece has one. A family that declares the capability says what a
+  // cutout means to it — the field's grey, whether it is on by default, and
+  // which weights slots name the matte; one that does not (the still
+  // families) gets the plain spec, with the matte weights left unnamed and
+  // resolved by the server to the files the install has
+  // (`plate.default_models`). The scissors are one thing on every surface.
+  const capability = (piece && capabilityOf(piece, "cutout")) || {};
   return {
     backdrop: capability.backdrop ?? 0.5,
     cut: Boolean(capability.default),
@@ -262,7 +268,7 @@ export function plateSpec(piece, { width, height } = {}) {
     // Whether the family's image references *are* one sheet (LTX 2.5). The
     // picker treats the whole image selection as the sheet where this is set;
     // elsewhere a sheet is something Connect builds out of part of it.
-    sheet: sheetRefs(piece),
+    sheet: piece ? sheetRefs(piece) : false,
   };
 }
 
@@ -341,6 +347,39 @@ export const refSize = (asset) => asset.ref_size || DEFAULT_REF_SIZE[asset.kind]
  *  the file, so it has no size, no cut, no trim and no soundtrack to choose.
  *  Mirrors `compile.Asset.mod`. */
 export const isRefMod = (asset) => String(asset?.filename ?? "").startsWith("refmod:");
+
+/** Whether a file has a picture to frame — crop, turn, mirror (`picture.js`).
+ *  A still or a clip; not a saved reference, which was encoded before any
+ *  window could be drawn on it; not a clip taken for its sound alone; and
+ *  not a sheet of several pictures, whose panels are framed on the sheet. */
+export const croppable = (asset) =>
+  (asset?.kind === "image" || asset?.kind === "video") && !isRefMod(asset)
+  && asset.track !== "sound" && !(isPlate(asset) && asset.panels.length > 1);
+
+/** Where a picture's framing lives: on the one panel of a cut-out plate —
+ *  the plate file is what that panel *becomes*, so the window is drawn on
+ *  the source and baked in when the plate is built — and on the asset itself
+ *  everywhere else. */
+export const cropOf = (asset) =>
+  (isPlate(asset) ? asset.panels[0]?.crop : asset?.crop) ?? null;
+
+/** The framing a thumbnail of this asset is drawn with: none for a plate,
+ *  whose file already looks the way its panel was framed. */
+export const thumbCrop = (asset) => (isPlate(asset) ? null : asset?.crop ?? null);
+
+/** `{width, height}` of a picture after its framing — the mirror of
+ *  `crop.size`: a quarter turn swaps the edges, and the window is a fraction
+ *  of what is left. Undefined and null pass through, so a probe still out is
+ *  still "not measured yet". */
+export function framedSize(size, crop) {
+  if (!size?.width || !crop) return size;
+  let { width, height } = size;
+  if ((Number(crop.turn) || 0) % 180) [width, height] = [height, width];
+  return {
+    width: Math.max(1, Math.round(width * (crop.w ?? 1))),
+    height: Math.max(1, Math.round(height * (crop.h ?? 1))),
+  };
+}
 
 /** Whether an asset has a size to choose at all. */
 export const sizeable = (asset) =>
@@ -1055,7 +1094,7 @@ export const guideAsset = (state) =>
  * @param {object} segment  the shot the drawing goes on
  * @param {?object} piece   the container holding the switch, where there is one
  */
-export function attachGuide(segment, piece, { path, kind = "video", op = "", trim = null }) {
+export function attachGuide(segment, piece, { path, kind = "video", op = "", trim = null, crop = null }) {
   if (!segment || !path) return null;
   const existing = guideAsset(segment);
   const at = existing ? segment.assets.indexOf(existing) : segment.assets.length;
@@ -1066,6 +1105,7 @@ export function attachGuide(segment, piece, { path, kind = "video", op = "", tri
     filename: path,
     ...(op ? { op } : {}),
     ...(trim ? { trim } : {}),
+    ...(crop ? { crop } : {}),
     // Silent, always, and only a clip has a soundtrack to silence. A guide is a
     // drawing; whatever the footage it was traced from happened to carry is not
     // something the branch reads, and attaching it with sound would spend an
@@ -6276,9 +6316,10 @@ export function timelineAspectSources(timeline) {
 /**
  * The size whose ratio the timeline's canvas follows, or null when the pill
  * rules. Mirrors `compile._timeline_canvas`: the chosen source when one is
- * named, else segment 1's own anchor, else the first clip. `sizeOf(filename)`
- * is the caller's probe cache and may return undefined while a probe is still
- * out — the pill then shows the preset until the answer lands.
+ * named, else segment 1's own anchor, else the first clip. `sizeOf(asset)` is
+ * the caller's probe cache — the source's own size, framed here — and may
+ * return undefined while a probe is still out; the pill then shows the
+ * preset until the answer lands.
  */
 export function timelineAspectSize(timeline, sizeOf, { ignoreChoice = false } = {}) {
   const source = ignoreChoice ? undefined : timeline.aspect_source;
@@ -6286,22 +6327,28 @@ export function timelineAspectSize(timeline, sizeOf, { ignoreChoice = false } = 
   if (source && typeof source === "object") {
     const card = Number(source.card) || 0;
     if (card && isClip(timeline.segments[card - 1])) {
-      const clip = timeline.segments[card - 1];
-      return clip.width && clip.height ? { width: clip.width, height: clip.height } : null;
+      return clipSize(timeline.segments[card - 1]);
     }
     const donor = card
       ? aspectDonors(timeline.segments[card - 1] ?? { assets: [] })
           .find((a) => a.handle === source.handle)
       : (timeline.assets ?? []).find((a) => a.handle === source.handle);
-    return (donor && sizeOf(donor.filename)) || null;
+    return (donor && framedSize(sizeOf(donor), donor.crop)) || null;
   }
   const head = timeline.segments[0];
   if (head && !isClip(head)) {
     const anchor = frameAsset(head, "first_frame") || frameAsset(head, "last_frame");
-    if (anchor) return sizeOf(anchor.filename) || null;
+    if (anchor) return framedSize(sizeOf(anchor), anchor.crop) || null;
   }
   const clip = timeline.segments.find((s) => isClip(s) && s.width && s.height);
-  return clip ? { width: clip.width, height: clip.height } : null;
+  return clip ? clipSize(clip) : null;
+}
+
+/** A clip card's picture size as the strip will read it: the probed size,
+ *  framed — the mirror of `compile.clip_spec`'s `source_width`/`height`. */
+export function clipSize(clip) {
+  if (!clip?.width || !clip?.height) return null;
+  return framedSize({ width: clip.width, height: clip.height }, clip.crop);
 }
 
 /** The widest blend the segment behind a clip can afford. The overlap is

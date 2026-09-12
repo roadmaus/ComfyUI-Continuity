@@ -445,6 +445,9 @@ export async function keepAsMod(subject, assets, mode, host) {
     name: subject.handle,
     subfolder: SUBFOLDER,
     sources: sources.map((a) => a.filename),
+    // The framing on each chip, by position: a mod is the latent of what the
+    // model would have read, and that is the window, not the file.
+    crops: sources.map((a) => a.crop ?? null),
     mode: stack ? "stack" : mode === "full" ? "full" : "compressed",
     description: [subject.description ?? "", ...(stack ? noted : [])].filter(Boolean).join("; "),
     concept: CONCEPT[subject.takes ?? "person"] ?? "generic",

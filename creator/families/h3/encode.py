@@ -280,6 +280,10 @@ def _ref_key(kind, asset, print_of_vae, compiled):
     except (media.MediaError, OSError):
         return None
     parts = {"kind": kind, "file": stamp, "vae": print_of_vae, "trim": asset.trim}
+    if kind in ("image", "video") and getattr(asset, "crop", None) is not None:
+        # Only when framed, so every entry made before framing existed is
+        # still found by the key that made it.
+        parts["crop"] = asset.crop.key()
     if kind in ("image", "video"):
         parts["ref_size"] = asset.ref_size
         if asset.ref_size == "match":

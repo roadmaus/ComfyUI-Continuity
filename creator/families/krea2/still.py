@@ -245,7 +245,7 @@ def emit_graph(graph, payload, sampling, weights, clip, vae, model, unique_id,
         # conditioning's reference latents, which is the pair Krea 2 was
         # post-trained against. The method node picks the variant the adapter in
         # the stack was trained with.
-        images = {f"image{i + 1}": graph.node("LoadImage", image=name).out(0)
+        images = {f"image{i + 1}": render_image.load_picture(graph, payload, f"ref:{i}", name)
                   for i, name in enumerate(payload.refs)}
         method = payload.schedule["ref_method"]
         positive = _refs_encode(graph, clip, vae, payload.prompt, images, method)

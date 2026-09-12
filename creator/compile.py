@@ -18,6 +18,7 @@ import re
 from dataclasses import dataclass, field, replace
 
 from . import canvas
+from . import crop as framing
 from . import redetail
 from . import refmod
 from . import sound
@@ -256,6 +257,12 @@ class Asset:
     # composite already looks like this — and read by exactly one thing, the
     # caption's "panel 3 is top right" (`families/ltx25/sheet._placed`).
     rect: tuple | None = None
+    # The framing set on a picture or a clip — a turn, a mirror, a window — or
+    # None for the file as it is. Applied wherever the file is read
+    # (`media.load_image`, `media.load_video`, the clip graph, the still
+    # families' graph) and reflected wherever its size is asked for. See
+    # `creator/crop.py`.
+    crop: framing.Crop | None = None
 
     @property
     def mod(self):
@@ -586,6 +593,18 @@ def _parse_trim(handle, kind, raw):
     return (start, end)
 
 
+def _parse_crop(handle, kind, raw):
+    """The framing blob -> `Crop`, or None. Only a picture can be framed."""
+    if raw is None:
+        return None
+    if kind == "audio":
+        raise CompileError(f"@{handle}: a sound has no picture to crop")
+    try:
+        return framing.parse(raw, f"@{handle}")
+    except framing.CropError as exc:
+        raise CompileError(str(exc)) from exc
+
+
 def _parse_assets(raw):
     assets = []
     seen = set()
@@ -677,6 +696,10 @@ def _parse_assets(raw):
                     f"@{handle}: an audio RefMod — voices are bound as files, not mods")
             if item.get("trim"):
                 raise CompileError(f"@{handle}: a saved reference cannot be trimmed")
+            if item.get("crop"):
+                raise CompileError(
+                    f"@{handle}: a saved reference is already encoded — crop the "
+                    f"picture before keeping it as a mod")
             if item.get("panels") or item.get("cut"):
                 raise CompileError(
                     f"@{handle}: a saved reference is already encoded — cut the "
@@ -724,6 +747,9 @@ def _parse_assets(raw):
             track=track,
             ref_size=ref_size,
             trim=_parse_trim(handle, kind, item.get("trim")),
+            # A sound taken off a clip has no picture, so the framing goes
+            # with the track: refused where it would frame nothing.
+            crop=_parse_crop(handle, "audio" if track == "sound" else kind, item.get("crop")),
             takes=takes,
             cut=bool(item.get("cut")),
             panels=_parse_panels(handle, role, kind, item.get("panels"), seen),
@@ -780,7 +806,11 @@ def _parse_panels(owner, role, kind, raw, seen):
             rect = tuple(float(v) for v in rect)
         panels.append(Asset(handle=handle, kind="image", role="reference",
                             filename=filename, takes=takes,
-                            cut=bool(item.get("cut")), rect=rect))
+                            cut=bool(item.get("cut")), rect=rect,
+                            # Recorded, like `cut` and `rect`: the plate file
+                            # already looks this way. Validated so a blob
+                            # cannot carry a framing nothing could apply.
+                            crop=_parse_crop(handle, "image", item.get("crop"))))
     return tuple(panels)
 
 
@@ -1809,12 +1839,12 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
         if chosen.kind == "audio" or (chosen.kind == "video" and chosen.track == "sound"):
             raise CompileError(
                 f"@{aspect_source} has no picture to take an aspect ratio from")
-        source_w, source_h = image_size_lookup(chosen.filename)
+        source_w, source_h = framing.size(image_size_lookup(chosen.filename), chosen.crop)
         width, height, ratio, clamped = canvas.canvas_from_image(
             source_w, source_h, sample_edge, rules)
         ratio_from_image = chosen is anchor
     elif aspect_source == "auto" and anchor is not None and image_size_lookup is not None:
-        source_w, source_h = image_size_lookup(anchor.filename)
+        source_w, source_h = framing.size(image_size_lookup(anchor.filename), anchor.crop)
         width, height, ratio, clamped = canvas.canvas_from_image(
             source_w, source_h, sample_edge, rules)
         ratio_from_image = True
@@ -1982,6 +2012,14 @@ def clip_spec(segment, index):
             continue
         if value > 0:
             spec[f"source_{key}"] = value
+    # The card's framing rides along for the muxer, and the source size is
+    # the window's: the canvas that follows a cropped clip follows the crop.
+    crop = _parse_crop(f"clip on segment {index + 1}", "video", segment.get("crop"))
+    if crop is not None:
+        spec["crop"] = framing.to_dict(crop)
+        if "source_width" in spec and "source_height" in spec:
+            spec["source_width"], spec["source_height"] = framing.size(
+                (spec["source_width"], spec["source_height"]), crop)
     return spec
 
 
@@ -3341,7 +3379,8 @@ def _source_canvas(data, segments, source, image_size_lookup):
             raise CompileError(f"aspect source @{handle} is not in the reference pool")
         if pooled.kind == "audio" or (pooled.kind == "video" and pooled.track == "sound"):
             raise CompileError(f"@{handle} has no picture to take an aspect ratio from")
-        return _sized_canvas(data, image_size_lookup, pooled.filename)
+        return _sized_canvas(data, image_size_lookup, pooled.filename,
+                             framing.to_dict(pooled.crop) if pooled.crop else None)
 
     # By the number on the strip rather than by position: a render that holds
     # cards back (`rendered_piece`) is a shorter list whose cards carry their
@@ -3368,7 +3407,7 @@ def _source_canvas(data, segments, source, image_size_lookup):
     if item.get("kind") == "audio" or (item.get("kind") == "video"
                                        and item.get("track") == "sound"):
         raise CompileError(f"@{handle} has no picture to take an aspect ratio from")
-    resolved = _sized_canvas(data, image_size_lookup, item.get("filename"))
+    resolved = _sized_canvas(data, image_size_lookup, item.get("filename"), item.get("crop"))
     if card == 1 and item.get("role") in ("first_frame", "last_frame"):
         anchor = next((a.get("handle") for role in ("first_frame", "last_frame")
                        for a in (segment.get("assets") or [])
@@ -3377,12 +3416,17 @@ def _source_canvas(data, segments, source, image_size_lookup):
     return resolved
 
 
-def _sized_canvas(data, image_size_lookup, filename):
+def _sized_canvas(data, image_size_lookup, filename, crop=None):
     """`_clip_canvas`'s arithmetic for a file whose size the backend reads
-    itself rather than trusts from the blob."""
+    itself rather than trusts from the blob. `crop` is the asset's framing
+    blob: the canvas follows the window, not the file."""
     if image_size_lookup is None:
         return _pill_canvas(data)
-    return _clip_canvas(data, image_size_lookup(filename))
+    try:
+        framed = framing.parse(crop, filename)
+    except framing.CropError as exc:
+        raise CompileError(str(exc)) from exc
+    return _clip_canvas(data, framing.size(image_size_lookup(filename), framed))
 
 
 def output_canvas(data, spec):
@@ -3517,6 +3561,8 @@ def _asset_dict(asset):
         out["ref_size"] = asset.ref_size
     if asset.trim:
         out["trim"] = {"start": asset.trim[0], "end": asset.trim[1]}
+    if asset.crop:
+        out["crop"] = framing.to_dict(asset.crop)
     if asset.takes != "full":
         out["takes"] = asset.takes
     # The fields `_parse_assets` reads that used to be lost here: a plate's
@@ -3541,6 +3587,8 @@ def _panel_dict(panel):
         out["cut"] = True
     if panel.rect:
         out["rect"] = list(panel.rect)
+    if panel.crop:
+        out["crop"] = framing.to_dict(panel.crop)
     return out
 
 
@@ -3630,7 +3678,7 @@ def _asset_identity(asset):
     filename. Aliases can deduplicate; different cuts, layouts or roles cannot.
     """
     return (asset.kind, asset.role, asset.filename, asset.track, asset.ref_size,
-            asset.trim, asset.takes, asset.cut, asset.op, asset.rect,
+            asset.trim, asset.crop, asset.takes, asset.cut, asset.op, asset.rect,
             tuple(_asset_identity(panel) for panel in asset.panels))
 
 

@@ -145,7 +145,7 @@ def _seek_past_the_leader(container, stream):
         pass
 
 
-def _render_thumb(path, out):
+def _render_thumb(path, out, crop=None, full=False):
     """A thumbnail of a picture or a clip, as its player shows it.
 
     A still goes through PIL with its orientation tag applied — a phone stores
@@ -156,14 +156,22 @@ def _render_thumb(path, out):
     picture back and puts the turn on the frame as `rotation`.
 
     webp rather than JPEG so a still with transparency keeps it.
+
+    `crop` is a framing (`crop.Crop`) applied to the upright picture — the
+    same call `media.load_image` makes, so what the chip shows is what the
+    render reads. `full` skips the downscale.
     """
+    from . import crop as framing
+
     try:
         with Image.open(path) as picture:
             image = ImageOps.exif_transpose(picture)
             image.load()
     except UnidentifiedImageError:
         image = _clip_still(path)
-    image.thumbnail((THUMB_LONG_EDGE, THUMB_LONG_EDGE), Image.LANCZOS)
+    image = framing.pil(image, crop)
+    if not full:
+        image.thumbnail((THUMB_LONG_EDGE, THUMB_LONG_EDGE), Image.LANCZOS)
     if image.mode not in ("RGB", "RGBA"):
         image = image.convert("RGBA" if "A" in image.getbands() else "RGB")
     image.save(out, "WEBP", quality=THUMB_QUALITY, method=4)
@@ -189,9 +197,19 @@ def _clip_still(path):
         return image.rotate(90 * turn, expand=True) if turn else image
 
 
-async def thumbnail(path):
-    """-> path to a webp still of this file, or None if it has no readable picture."""
-    return await _produce(path, "thumb", "webp", _render_thumb)
+async def thumbnail(path, crop=None, full=False):
+    """-> path to a webp still of this file, or None if it has no readable picture.
+
+    A framed one is cached under its framing — a chip whose crop is redrawn
+    gets a fresh file, and the unframed thumbnail keeps the name it had.
+    """
+    kind = "thumb"
+    if crop is not None:
+        kind += "|" + ",".join(str(v) for v in crop.key())
+    if full:
+        kind += "|full"
+    return await _produce(path, kind, "webp",
+                          lambda source, out: _render_thumb(source, out, crop, full))
 
 
 # ---- waveform ---------------------------------------------------------------
