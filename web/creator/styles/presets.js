@@ -554,8 +554,11 @@ export const css = `
   font-size: calc(12px * var(--mmc-type)); line-height: 1.55; color: var(--mmc-dim);
 }
 .mmc-mod-panel-bad { color: var(--mmc-bad); border-style: solid; }
+/* flex: none: the inspector is a flex column that scrolls, and a child with
+   overflow: hidden has a zero minimum height — it would be squashed to fit
+   and clip its rows instead of pushing the column into a scroll. */
 .mmc-mod-list {
-  display: flex; flex-direction: column; min-width: 0;
+  display: flex; flex-direction: column; flex: none; min-width: 0;
   background: var(--mmc-surface); border: 1px solid var(--mmc-line); border-radius: 10px; overflow: hidden;
 }
 .mmc-mod-folder {
