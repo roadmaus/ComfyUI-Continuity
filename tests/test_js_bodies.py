@@ -96,7 +96,11 @@ export const app = {
     // A refused prompt is caught by ComfyUI itself: it puts the dialog up and
     // resolves, exactly as this does. Only an accepted one is announced.
     if (!globalThis.__refuse) globalThis.__say?.("promptQueued", { batchCount: 1 });
-    return this.graphToPrompt();
+    const prompt = await this.graphToPrompt();
+    // Where the real frontend runs each widget's `afterQueued` — inside the
+    // call, after serialization, which is what moves a seed on "increment".
+    globalThis.__afterQueued?.();
+    return prompt;
   },
   async graphToPrompt() { return globalThis.__prompt ?? { output: {} }; },
 };
@@ -2239,6 +2243,19 @@ try {
   // ...and once the seed *is* that one, it goes inert again rather than
   // offering a click that would change nothing.
   out.seed.thenOff = "disabled" in (backButton()?.attrs ?? {});
+
+  // #73: with the control mode on "after", the frontend rolls the widget inside
+  // the queue call, once the prompt is serialized. The widget is hidden and the
+  // pill is a snapshot taken at render — so unless the queue itself redraws the
+  // row, the pill keeps showing the seed that was *sent*, one behind the node,
+  // until something unrelated happens to redraw it.
+  const pill = () => first(node.mmcBody.root, "mmc-seed-input");
+  globalThis.__afterQueued = () => { seed.value = seed.value + 1; };
+  globalThis.__prompt = { output: { "3": { inputs: { seed: seed.value } } } };
+  await app.queuePrompt();
+  globalThis.__afterQueued = null;
+  out.seed.rolled = seed.value;
+  out.seed.shown = pill()?.attrs?.value ?? pill()?.value;
 } catch (error) {
   out.errors.push(`seed: ${error.message}`);
 }
@@ -3856,6 +3873,10 @@ check("...inert until something has been queued", seed.get("beforeQueueOff"), Tr
 check("after a queue it offers the seed that ran", seed.get("afterQueue"), True)
 check("...and clicking it puts that seed back", seed.get("restored"), 4242)
 check("...after which it is inert again", seed.get("thenOff"), True)
+# #73: the seed moved inside the queue call; the pill has to say so without
+# waiting for some other redraw.
+check("the pill shows the seed the node holds after the queue rolled it",
+      str(seed.get("shown")), str(seed.get("rolled")))
 
 
 # ---- the cast, on the node face ---------------------------------------------

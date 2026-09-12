@@ -54,6 +54,17 @@ export function rememberQueuedSeeds() {
       return await queue.apply(this, args);
     } finally {
       queuing = false;
+      // With the control mode on "after" the frontend rolls the seed widget
+      // inside the queue call, after serialization — so `record` above drew the
+      // pill with the seed that was sent, and the widget has since moved on.
+      // The widget is hidden; the pill is the only thing showing the seed, and
+      // a row left here shows the last queue's number until something else
+      // happens to redraw it. Catch the row up now.
+      for (const node of app.graph?._nodes || []) {
+        const widget = node.widgets?.find((w) => w.name === "seed");
+        if (!node.mmcBody || !widget || LAST.get(widget) === widget.value) continue;
+        node.mmcBody.render?.();
+      }
     }
   };
 

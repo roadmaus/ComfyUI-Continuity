@@ -6,6 +6,12 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**The seed pill catches up with the queue (#73).** On *increment*,
+*decrement* and *randomize* the frontend moves the seed after the prompt is
+serialized, inside the queue call; the pill redrew on serialization and so
+showed the seed the last queue *sent*, one behind the number the node held,
+until something unrelated redrew the row. The queue redraws it now.
+
 **A shot can be shown a storyboard of the shots before it (#43).** A
 *Storyboard* pill on the timeline's bar: *each shot sees the shot before it*,
 or *the piece so far*. Every shot after the first is then handed a 3 × 3 sheet
