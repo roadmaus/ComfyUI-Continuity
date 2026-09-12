@@ -6,6 +6,15 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**Fixed: `{day|night}` groups in the Timeline window's standing prompt came
+up as plain text (#74).** The window fills that box and then mounts, and a
+highlight range added while the text is detached is one Chromium never
+paints — it builds the markers when the range is added and nothing asks it
+to look again when the node lands in the document — so the braces and the
+fade sat unpainted until a keystroke re-added them. A box that is not in the
+document now waits for its first layout and paints then. Firefox painted it
+either way.
+
 **SLA sparse attention is the fourth position on the attention pill (#23).**
 PlagueKind's `H3 SLA Attention` scores each query block against every key
 block once and attends only the best fraction — fewer keys rather than a

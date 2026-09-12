@@ -986,11 +986,30 @@ export class PromptBox {
    * compiler chooses on — walked back into the flat DOM the way `placeCaret`
    * walks them. A block the engine has put in the box would throw that walk
    * off, so a box holding one is left unpainted rather than painted wrong.
+   *
+   * Not before the box is in the document. The Timeline window fills its
+   * standing prompt and then mounts, and a range added to a highlight while
+   * its text is detached is one Chromium never paints: it builds the markers
+   * when the range is added, and the node landing in the document later is
+   * not a change to the range, so nothing asks it to look again — the group
+   * sat as plain text until the next keystroke re-added the ranges (#74).
+   * Firefox paints it either way. So a detached box waits for its first
+   * layout, which is the moment it is on screen, and paints then.
    */
   paintVariations() {
     if (!HIGHLIGHTS) return;
     for (const [which, range] of this.painted) HIGHLIGHTS[which].delete(range);
     this.painted = [];
+    if (!this.root.isConnected) {
+      this.paintWhenShown ??= new ResizeObserver(() => {
+        if (!this.root.isConnected) return;
+        this.paintWhenShown.disconnect();
+        this.paintWhenShown = null;
+        this.paintVariations();
+      });
+      this.paintWhenShown.observe(this.root);
+      return;
+    }
     const pick = this.hooks.pick?.();
     if (!pick) return;
     const text = this.getValue();
