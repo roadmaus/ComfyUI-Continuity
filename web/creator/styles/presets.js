@@ -482,6 +482,17 @@ export const css = `
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .mmc-cast-sheet-filenote.off { color: var(--mmc-off); }
+/* The words the file wakes on, under the note, behind the same hollow ring the
+   shelf's tile and the card's chip use for it. */
+.mmc-cast-sheet-wake {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: calc(11.5px * var(--mmc-type)); color: var(--mmc-dim); white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+}
+.mmc-cast-sheet-wake::before {
+  content: ""; width: 7px; height: 7px; border-radius: 999px; flex: none;
+  box-shadow: inset 0 0 0 1.5px var(--mmc-accent);
+}
 /* How the file is encoded, right-aligned in the marker's monospace numbers:
    this is what the model is handed. Amber for a saved file. */
 .mmc-cast-sheet-enc {

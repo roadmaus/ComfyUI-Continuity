@@ -557,7 +557,7 @@ def describe_cast(cast, images=None):
         if subject.sources:
             made_of.append("pictured in " + ", ".join(said(h) for h in subject.sources))
         if subject.motion:
-            made_of.append(f"moving as in {said(subject.motion)}")
+            made_of.append("moving as in " + ", ".join(said(h) for h in subject.motion))
         if subject.voice:
             made_of.append(f"speaking with the voice in @{subject.voice}")
         if subject.replaces:

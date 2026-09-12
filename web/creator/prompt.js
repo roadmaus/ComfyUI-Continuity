@@ -16,7 +16,7 @@ import { t } from "./i18n.js";
 import { castFactsLine, listPresets, loadBody } from "./presets.js";
 import { listAssets, viewUrl } from "./api.js";
 import { LANGUAGES, settings as refineSettings } from "./refine.js";
-import { tagIndex } from "./state.js";
+import { subjectFiles, tagIndex } from "./state.js";
 import { layout as layoutVariations } from "./variations.js";
 
 /* Where a `{day|night}` is painted: the braces and bars of every live group in
@@ -2002,8 +2002,7 @@ export class PromptBox {
       // about them that their name does not say.
       const made = option.kind === "cast"
         ? (option.subject.description
-           || [...(option.subject.from ?? []), option.subject.motion, option.subject.voice]
-                .filter(Boolean).map((h) => "@" + h).join(", "))
+           || subjectFiles(option.subject).map((h) => "@" + h).join(", "))
         : null;
       const title = option.kind === "branch" || option.kind === "door"
         ? t(option.label)

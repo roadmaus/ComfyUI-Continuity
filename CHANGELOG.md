@@ -6,6 +6,30 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**A cast member's plate can wake on a word (#72).** Each file on a member has
+a second line under "what it shows of them": the words it wakes on. Blank,
+the file comes with them into every shot that names them, as before. `hat,
+cap` on the plate of the red hat, and it is in a shot only while the sentence
+says one of those words — matched anywhere in a word, so `smok` on a smoking
+sheet answers "smoking" and "smokes". A character with thirty plates is then
+written as a sentence: "@vera, in her hat, lights a cigarette" brings the
+face, the hat and the smoking sheet and leaves the rest out, under the cap.
+Decided after `{a|b}` has chosen, so a word inside an alternative the seed
+passes over wakes nothing; a file the sentence names outright is awake
+whatever its words; a muted file stays muted. The card's chip says *wakes on
+hat, cap* behind a ring — filled while the file is in, hollow while it waits
+— and carries the owner's words for the file too, which is how img-4 and
+img-5 tell apart. A member every one of whose plates is asleep, with no words
+of their own, is refused by name with the words that would wake one. The
+words are kept in the cast library and follow a picture onto its RefMod.
+
+**Their actions are a list.** A member's "their action comes from this" held
+one file, so hanging the smoking sheet evicted the golf swing. It is a list
+now, like their looks and the place they take — the definition reads "whose
+motion comes from Video 1 (the swing) and Picture 3 (the left hand)" — and
+each action can wake on its own words. Old blobs with one handle read as the
+one-element list they meant (#72).
+
 **Deleting somebody's name mutes their pictures.** Casting a member attaches
 their files to the shot, and compile already left an uncited member's files
 out of the render — but the reference row went on showing them live, so a

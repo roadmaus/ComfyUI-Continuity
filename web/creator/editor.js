@@ -2165,6 +2165,11 @@ export class CreatorEditor {
     // a muted one, because for this render that is what they are — see
     // `compile.varied_piece` — and the box has already dimmed the name.
     const passed = S.passedOver(this.state, this.varies?.() ?? null);
+    // Files a member holds back until the sentence says their word. Greyed the
+    // same way, because for this render that is what they are — see
+    // `compile_request`'s cut and `state.asleepHere`. The un-chosen words are
+    // read for the counters; the chosen ones here, since the box lights those.
+    const asleep = S.asleepHere(this.state, this.varies?.() ?? null);
     const chip = (asset) => {
       // A guide shows its own frame, where every other clip shows a glyph. That
       // is not a flourish: the only question anybody has about a guide is
@@ -2288,16 +2293,33 @@ export class CreatorEditor {
       // what it is: the one fact about a file the thumbnail cannot show.
       const owner = owners.find((subject) => S.subjectFiles(subject).includes(asset.handle));
       const mod = S.isRefMod(asset);
+      // What the owner said the file shows of them, and the words it waits
+      // for. Both are theirs, so both sit on their tag: the row was "img-4,
+      // img-5, img-6" with the one fact that tells them apart a click away.
+      const note = owner ? S.subjectNotes(owner)[asset.handle] ?? "" : "";
+      const wake = owner ? S.subjectTriggers(owner)[asset.handle] ?? "" : "";
       if (owner) {
         parts.push(el("button", {
           class: `mmc-asset-owner mmc-tag-${S.tagIndex(owner.handle)}`,
           text: mod ? t("{who}'s RefMod", { who: owner.handle }) : t("{who}'s", { who: owner.handle }),
-          title: mod
-            ? t("@{who} is built out of this saved reference — encoded once, read off the "
-              + "file on every render. Click to open them.", { who: owner.handle })
-            : t("@{who} is built out of this picture. Click to open them.", { who: owner.handle }),
+          title: (note ? `${note}\n` : "")
+            + (mod
+              ? t("@{who} is built out of this saved reference — encoded once, read off the "
+                + "file on every render. Click to open them.", { who: owner.handle })
+              : t("@{who} is built out of this picture. Click to open them.", { who: owner.handle })),
           onclick: () => this.openCastMember(owner.handle),
         }));
+        if (note) parts.push(el("span", { class: "mmc-asset-note", text: note }));
+        if (wake) {
+          parts.push(el("span", {
+            class: `mmc-asset-wake${asleep.has(asset.handle) ? "" : " on"}`,
+            text: t("wakes on {words}", { words: wake }),
+            title: asleep.has(asset.handle)
+              ? t("Not in this shot: the sentence says none of these words. Write one, "
+                + "or name @{handle} outright.", { handle: asset.handle })
+              : t("In this shot: the sentence says one of these words."),
+          }));
+        }
       } else if (mod) {
         parts.push(el("span", {
           class: "mmc-asset-owner",
@@ -2333,13 +2355,16 @@ export class CreatorEditor {
       return el("div", {
         class: `mmc-asset mmc-tag-${S.tagIndex(asset.handle)}${
           cast.has(asset.handle) ? " mmc-asset-cast" : ""}${S.muted(asset) ? " off" : ""}${
-          passed.has(asset.handle) ? " passed" : ""}`,
+          passed.has(asset.handle) ? " passed" : ""}${asleep.has(asset.handle) ? " asleep" : ""}`,
         // The rule down the edge in the owner's hue, so it joins the chip to
         // their name in the sentence rather than to its own handle.
         ...(owner ? { style: { "--owner": `var(--mmc-tag-${S.tagIndex(owner.handle)})` } } : {}),
         title: passed.has(asset.handle)
           ? t("Not in this take: the sentence names it only in an alternative this seed passes over.")
-          : asset.filename,
+          : asleep.has(asset.handle)
+            ? t("Not in this shot: it wakes on {words}, and the sentence says none of them.",
+                { words: wake })
+            : asset.filename,
       }, parts);
     };
 

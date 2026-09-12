@@ -154,17 +154,23 @@ class Subject:
 
     __slots__ = ("handle", "sources", "takes", "description", "features",
                  "motion", "voice", "replaces", "replaces_what", "marker",
-                 "seeded", "notes")
+                 "seeded", "notes", "triggers")
 
     def __init__(self, handle, sources, takes="person", description="",
-                 features=(), motion=None, voice=None, replaces=(),
-                 replaces_what="", marker=None, seeded=False, notes=None):
+                 features=(), motion=(), voice=None, replaces=(),
+                 replaces_what="", marker=None, seeded=False, notes=None,
+                 triggers=None):
         self.handle = handle
         self.sources = tuple(sources)      # asset handles defining its appearance
         self.takes = takes                 # one of TAKES
         self.description = description     # the user's own words, folded into the definition
         self.features = tuple(features)    # what the reference shows, one phrase each
-        self.motion = motion               # a reference clip or still its movement comes from
+        # The reference clips and stills its movement comes from. A tuple like
+        # `replaces`, and for the same reason: one person has several actions
+        # — a clip of the swing, a sheet of the smoking gesture — and while this
+        # held one handle, hanging the second on them evicted the first (#72).
+        # A string is still read (`parse`), as the one-element list it meant.
+        self.motion = tuple(motion or ())
         self.voice = voice                 # an audio reference that is its voice
         # The reference videos it stands in for someone in. A tuple, because one
         # person can occupy the same role in several clips — a medium shot and a
@@ -197,6 +203,18 @@ class Subject:
         # pictures and a clip says which is which. Only files the subject claims
         # are kept — a note on a file that left with its owner is dropped.
         self.notes = {h: t for h, t in (notes or {}).items() if h and t}
+        # The words a file waits for, by handle: the smoking sheet wakes on
+        # "smok", the red hat on "hat, cap". A file with none is in every shot
+        # its owner is in; one with some is in the shot only while the prose
+        # says one of them — see `asleep`. Lowercase, and matched as a
+        # substring, so "smok" answers "smoking", "smokes" and "smoke" without
+        # a stemmer. How a character with thirty plates stays under the nine-
+        # picture cap: you write the hat and the hat's plate comes (#72).
+        # Only on files they claim: a word left on a picture that went with
+        # its slot would hold back nothing, and the UI drops it the same way.
+        claimed = set(self.files)
+        self.triggers = {h: tuple(w) for h, w in (triggers or {}).items()
+                         if h in claimed and w}
 
     @property
     def changed(self):
@@ -240,7 +258,7 @@ class Subject:
     def files(self):
         """Every asset handle this subject claims, in citation order."""
         out = list(self.sources)
-        for extra in (self.motion, self.voice):
+        for extra in (*self.motion, self.voice):
             if extra and extra not in out:
                 out.append(extra)
         return out
@@ -277,21 +295,17 @@ def parse(raw):
                 f"@{handle}: takes must be one of {', '.join(TAKES)} (got {takes!r})")
 
         sources = [str(h).strip() for h in (item.get("from") or []) if str(h).strip()]
-        motion = str(item.get("motion") or "").strip() or None
+        motion = _handles(item.get("motion"))
         voice = str(item.get("voice") or "").strip() or None
         # A string or a list of them. The scalar form is every blob written
         # before a person could stand in for somebody twice, and it is read as
         # the one-element list it always meant — the alternative is a migration
         # that has to run on every load of every saved workflow, for good.
-        raw_replaces = item.get("replaces")
-        if isinstance(raw_replaces, str):
-            raw_replaces = [raw_replaces]
-        replaces = tuple(h for h in
-                         (str(x).strip() for x in (raw_replaces or []))
-                         if h)
+        replaces = _handles(item.get("replaces"))
         description = str(item.get("description") or "").strip()
         features = _parse_features(handle, item.get("features"))
         notes = _parse_notes(handle, item.get("notes"))
+        triggers = _parse_triggers(handle, item.get("triggers"))
         # A subject with nothing behind it defines nothing: the label would be
         # written into the prompt and the model would be told a name and no
         # appearance. Three things count as something behind it, and a cast entry
@@ -331,8 +345,16 @@ def parse(raw):
             replaces_what=str(item.get("replaces_what") or "").strip(),
             marker=marker,
             notes=notes,
+            triggers=triggers,
         ))
     return cast
+
+
+def _handles(raw):
+    """A string or a list of them -> a tuple of handles, blanks dropped."""
+    if isinstance(raw, str):
+        raw = [raw]
+    return tuple(h for h in (str(x).strip() for x in (raw or [])) if h)
 
 
 def _parse_notes(handle, raw):
@@ -343,6 +365,55 @@ def _parse_notes(handle, raw):
         raise SubjectError(f"@{handle}: notes must be an object of handle -> words")
     return {str(k).strip(): str(v or "").strip() for k, v in raw.items()
             if str(k).strip() and str(v or "").strip()}
+
+
+def split_triggers(text):
+    """One typed line -> the words a file wakes on. `"Day, sun,   STUPID "
+    "SPACES  "` is `("day", "sun", "stupid spaces")`: split on commas, trimmed,
+    lowercased, blanks dropped. Mirrors `state.splitTriggers`."""
+    return tuple(w for w in (part.strip().lower() for part in str(text or "").split(","))
+                 if w)
+
+
+def _parse_triggers(handle, raw):
+    """The blob's `triggers` map -> handle -> words. Stored as the line the
+    user typed and read as the words in it; an entry with no word is dropped."""
+    if raw is None:
+        return {}
+    if not isinstance(raw, dict):
+        raise SubjectError(f"@{handle}: triggers must be an object of handle -> words")
+    out = {}
+    for key, value in raw.items():
+        words = split_triggers(value)
+        if str(key).strip() and words:
+            out[str(key).strip()] = words
+    return out
+
+
+def asleep(subject, texts):
+    """The files of `subject` that wait for a word `texts` do not say.
+
+    Not a fact about the cast but about one shot: the same member cited in
+    two shots is built out of a different set of plates in each, decided by
+    the prose. `texts` is what `cited` reads — the prompt (chosen, where it
+    held a `{a|b}`), the audio fields, the refiner's sections — so a plate
+    named inside an alternative the seed passed over does not wake.
+    """
+    if not subject.triggers:
+        return set()
+    prose = "\n".join(str(t or "") for t in texts).lower()
+    # A file the prose names outright is awake whatever its words: `@img-3`
+    # written into the sentence is the plainest way of asking for it.
+    return {h for h, words in subject.triggers.items()
+            if not re.search(rf"@{re.escape(h.lower())}\b", prose)
+            and not any(w in prose for w in words)}
+
+
+def awake(cast, texts):
+    """Every handle a cited member carries into the shot the prose describes:
+    what `claimed` says, minus what `asleep` holds back."""
+    return {h for subject in cast for h in subject.files
+            if h not in asleep(subject, texts)}
 
 
 def _parse_features(handle, raw):
@@ -432,7 +503,7 @@ def here(cast, assets):
     out = []
     for subject in cast:
         keep = [h for h in subject.sources if h in present]
-        motion = subject.motion if subject.motion in present else None
+        motion = tuple(h for h in subject.motion if h in present)
         voice = subject.voice if subject.voice in present else None
         replaces = tuple(h for h in subject.replaces if h in present)
         if (len(keep) == len(subject.sources) and motion == subject.motion
@@ -453,7 +524,7 @@ def here(cast, assets):
             motion=motion, voice=voice, replaces=replaces,
             replaces_what=subject.replaces_what if replaces else "",
             marker=subject.marker, seeded=subject.seeded,
-            notes=subject.notes))
+            notes=subject.notes, triggers=subject.triggers))
     return out
 
 
@@ -513,7 +584,7 @@ def check(cast, assets):
         # Motion may come off a still as well as a clip — the guide counts
         # actions and poses among what a subject denotes, and a photograph of
         # the swing is one pose of it. A soundtrack is neither.
-        pairs = [(subject.motion, "motion", ("image", "video"))] if subject.motion else []
+        pairs = [(handle, "motion", ("image", "video")) for handle in subject.motion]
         pairs += [(handle, "place", ("video",)) for handle in subject.replaces]
         for handle, what, kinds in pairs:
             asset = by_handle.get(handle)
@@ -780,7 +851,7 @@ def definitions(cast, asset_labels, extra_lines=(), ids=None):
                            f"in {_cite(subject.sources, asset_labels, notes)}")
         if subject.motion:
             clauses.append("whose motion comes from "
-                           f"{_cite([subject.motion], asset_labels, notes)}")
+                           f"{_cite(subject.motion, asset_labels, notes)}")
         if subject.replaces:
             # The clips are where the vacancy is. Several of them read as one
             # list — the same person in a medium shot and a close-up is one
@@ -966,7 +1037,7 @@ def retention(cast, asset_labels, body):
         # named as losses, because section 4.1 says not to count them.
         if subject.motion:
             clauses.append(
-                f"the movement in {_cite([subject.motion], asset_labels, subject.notes)}, "
+                f"the movement in {_cite(subject.motion, asset_labels, subject.notes)}, "
                 f"its path, its timing and its weight, is followed by {label}")
 
         # A subject with nothing to say still has to say something: the marker

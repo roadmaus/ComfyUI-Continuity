@@ -97,12 +97,31 @@ member taken out of the cast library comes back with each picture at the size
 it was kept at. A tile wears a small `max` when it is encoded at full detail
 and a dot when words are attached to it.
 
+Under that line is a second one: the words the file **wakes on**. Leave it
+blank and the file comes with the member into every shot that names them.
+Write `hat, cap` on the plate of the red hat and it is in a shot only while
+the sentence says one of those words - anywhere in a word, so `smok` on a
+smoking sheet wakes on "smoking", "smokes" and "smoke". This is how a
+character with thirty plates - costumes, props, action sheets, a reel per
+gesture - is written as a sentence: "@vera, in her hat, lights a cigarette"
+brings the face, the hat and the smoking sheet, and leaves the other
+twenty-seven out, under the nine-picture cap. A file the sentence names
+outright (`@img-3`) is awake whatever its words, a muted file stays muted
+whatever the sentence says, and a `{hat|cap}` wakes the plate the seed picks.
+On the card the chip says *wakes on hat, cap* behind a ring - filled while
+the file is in, hollow while it waits - and a member every one of whose plates
+is asleep is refused by name with the words that would wake one. The tile
+wears the ring hollow. The words are kept with the member in the cast
+library and follow a picture onto its RefMod.
+
 To have somebody perform an action the way another person does it, hang the
 clip or still of that person on them as "their action comes from this", and
 say what the action is on the tile. (The blob and the prompt keep the guide's
 own word for it, `motion`.) The definition then reads "whose appearance comes
 from Picture 1 and whose motion comes from Video 1 (the golf swing)", and the
-retention line says the movement is followed.
+retention line says the movement is followed. Several files are several
+actions - the swing on a clip, the smoking gesture on a sheet - and each can
+wake on its own words.
 
 ### Saved references (RefMods)
 

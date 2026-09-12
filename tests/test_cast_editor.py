@@ -142,12 +142,20 @@ try {
   // The slot is guessed from what the file *is* — the shelf's own guess.
   out.guessedSlots = lib.body.cast.files.map((f) => f.slot);
 
-  // The three single-file slots hold one each, so moving a second file into an
-  // occupied one must send the sitting tenant back to `from` rather than
-  // silently dropping it.
+  // Their actions are a list (#72): a still moved in beside the clip joins it.
+  // Their voice holds one file, so a second moved into it sends the sitting
+  // tenant back to `from` rather than silently dropping it.
   lib.setSlot(lib.body.cast, 1, "motion");
+  lib.setSlot(lib.body.cast, 0, "motion");
   await wait(); await wait();
   out.afterMove = lib.body.cast.files.map((f) => `${f.filename.split("/")[1]}:${f.slot}`);
+  lib.setSlot(lib.body.cast, 0, "from");
+  lib.setSlot(lib.body.cast, 1, "voice");
+  await wait(); await wait();
+  out.afterEvict = lib.body.cast.files.map((f) => `${f.filename.split("/")[1]}:${f.slot}`);
+  lib.setSlot(lib.body.cast, 1, "motion");
+  lib.setSlot(lib.body.cast, 2, "voice");
+  await wait(); await wait();
 
   // ---- what a file shows of them, and how big it is encoded ----------------
   // Both live on the tile's own menu: the words at its head, the size under
@@ -157,12 +165,15 @@ try {
   const menu = one(globalThis.document.body, "mmc-cast-menu");
   out.menuHasField = Boolean(menu && one(menu, "mmc-cast-menu-field"));
   type(one(menu, "mmc-cast-menu-field"), "her face, front-lit");
+  // The second field: the words the file wakes on, kept as typed.
+  type(one(one(menu, "mmc-cast-menu-wake"), "mmc-cast-menu-field"), "Hat, cap");
   const matchRow = all(menu, "mmc-opt").find((b) => /^match\b/.test(b.text.replace(/\s+/g, " ").trim()));
   out.menuOffersSize = Boolean(matchRow);
   press(matchRow);
   await lib.flushSave();
   await wait(); await wait();
   out.noted = lib.body.cast.files.map((f) => f.note ?? "");
+  out.wakes = lib.body.cast.files.map((f) => f.trigger ?? "");
   out.sized = lib.body.cast.files.map((f) => f.ref_size ?? "");
   // The row says both: the words attached, and no "max" once it is match.
   const fileRows = all(one(sheet, "mmc-cast-sheet-files"), "mmc-cast-sheet-file");
@@ -172,6 +183,7 @@ try {
     const enc = one(row, "mmc-cast-sheet-enc");
     return `${noted ? "noted" : "-"}:${/\bmax\b/.test(enc?.text ?? "") ? "max" : "-"}`;
   });
+  out.rowWakes = fileRows.map((row) => one(row, "mmc-cast-sheet-wake")?.text ?? "");
 
   // ---- their description ---------------------------------------------------
   const desc = one(sheet, "mmc-cast-sheet-desc");
@@ -193,6 +205,10 @@ try {
     description: body.cast.description,
     files: body.cast.files.map((f) => ({ slot: f.slot, filename: f.filename })),
   };
+  // ...and back onto a piece: the words ride with the file, by the handle it
+  // lands under, and the action is a list.
+  const landed = P.addSubjectToPiece(body.cast, { assets: [], subjects: [], segments: [] });
+  out.landed = { motion: landed.motion, triggers: landed.triggers ?? null, notes: landed.notes ?? null };
   // The card's own reading, off the index alone — no body fetched.
   out.card = { blurb: row.blurb ?? null, facts: row.facts, portrait: row.portrait };
   out.factsLine = P.castFactsLine(row.facts);
@@ -276,18 +292,21 @@ check("a handle keeps only what a sentence can hold", report.get("handleCleaned"
 # a clip dropped on a card land in the same slot.
 check("a file's slot is guessed from what it is",
       report.get("guessedSlots"), ["from", "from", "voice"])
-# Moving the picture onto `motion` evicts the clip that was there, back to the
-# slot everything can hold, rather than dropping it.
 check("a file's menu opens on the words it lends them", report.get("menuHasField"), True)
 check("...and offers the size it is encoded at", report.get("menuOffersSize"), True)
 check("the words are kept on the file", report.get("noted"), ["her face, front-lit", "", ""])
+check("...and so are the words it wakes on, as typed", report.get("wakes"), ["Hat, cap", "", ""])
+check("...which the row says", report.get("rowWakes"), ["wakes on Hat, cap", "", ""])
 check("...and so is the size", report.get("sized"), ["match", "", ""])
 # A kept file lands at max unless it says otherwise, so a silent one wears the
 # mark and the one set to match does not; the voice has no size at all.
 check("the tiles say which is which", report.get("tileMarks"), ["noted:-", "-:max", "-:-"])
-check("...and a slot that holds one file evicts rather than drops",
+check("...and their actions are a list a second file joins",
       report.get("afterMove"),
-      ["ana.png:from", "walk.mp4:motion", "voice.wav:voice"])
+      ["ana.png:motion", "walk.mp4:motion", "voice.wav:voice"])
+check("...where the slot that holds one file evicts rather than drops",
+      report.get("afterEvict"),
+      ["ana.png:from", "walk.mp4:voice", "voice.wav:from"])
 
 # ---- their description ------------------------------------------------------
 
@@ -308,6 +327,11 @@ check("their files are stored by name, in their slots", stored.get("files"), [
     {"slot": "motion", "filename": "people/walk.mp4"},
     {"slot": "voice", "filename": "people/voice.wav"},
 ])
+
+landed = report.get("landed") or {}
+check("back on a piece, the action is a list and the words ride by handle",
+      landed, {"motion": ["vid-1"], "triggers": {"img-1": "Hat, cap"},
+               "notes": {"img-1": "her face, front-lit"}})
 
 # ---- what the card reads off the index alone --------------------------------
 
