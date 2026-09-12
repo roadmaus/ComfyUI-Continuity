@@ -816,7 +816,8 @@ class H3(base.Family):
             vae=links.vae, source=written.out(1), latent=latent, head=int(head),
             seed=seed, steps=sampling.steps, cfg=sampling.cfg,
             sampler_name=sampling.sampler_name, scheduler=sampling.scheduler,
-            denoise=float(derope.INJECT), reel=written.out(0))
+            denoise=float(derope.INJECT),
+            abstain=float(settings.motion_fix_abstain()), reel=written.out(0))
 
     def emit_seam_restore(self, graph, links, frames, payload, compiled, denoise,
                           weights, sampling, acceleration, seed):

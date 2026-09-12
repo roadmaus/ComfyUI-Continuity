@@ -36,6 +36,7 @@ import json
 import os
 
 from . import outputs
+from .families.h3 import derope
 from .families import registry
 
 FILE = "continuity.settings.json"
@@ -140,6 +141,12 @@ DEFAULTS = {
     # again — the road every render took before any of these existed, kept so
     # the four can be compared on the same strip.
     "seam_handoff": "latent",
+    # The motion fix's gate: a pass whose jerk profile peaks under this many
+    # times its mean is left alone (`families/h3/derope.ABSTAIN`). 0 fixes
+    # every card that asks. A per-machine dial while the number is being
+    # measured; it reaches the graph as a node input, so a change re-runs the
+    # pass.
+    "motion_fix_abstain": derope.ABSTAIN,
     # The weight files this machine last picked, by family: `{family: {slot:
     # filename, dtype, route, devices}}` — the same block a piece carries, in
     # the same shape.
@@ -341,6 +348,13 @@ def clean(raw):
         if not 0 <= lead <= MAX_LEAD_IN:
             raise ValueError(f"turbo_lead_in must be between 0 and {MAX_LEAD_IN}")
         clean_settings["turbo_lead_in"] = lead
+    if "motion_fix_abstain" in raw and raw["motion_fix_abstain"] is not None:
+        gate = raw["motion_fix_abstain"]
+        if isinstance(gate, bool) or not isinstance(gate, (int, float)):
+            raise ValueError("motion_fix_abstain must be a number")
+        if not 0 <= gate <= 10:
+            raise ValueError("motion_fix_abstain must be between 0 and 10")
+        clean_settings["motion_fix_abstain"] = float(gate)
     if "neural_dll" in raw and raw["neural_dll"] is not None:
         dll = raw["neural_dll"]
         if not isinstance(dll, str):
@@ -691,6 +705,11 @@ def turbo_lead_in():
 def seam_handoff():
     """What a blended seam hands the next shot: one of `SEAM_HANDOFFS`."""
     return load()["seam_handoff"]
+
+
+def motion_fix_abstain():
+    """The profile contrast under which the motion fix leaves a pass alone."""
+    return float(load()["motion_fix_abstain"])
 
 
 def neural_dll():
