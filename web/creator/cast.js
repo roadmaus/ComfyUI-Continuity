@@ -376,7 +376,7 @@ export function wordsLead({ subject, handle, touch, done }) {
 export class CastShelf {
   constructor({ getCast, setCast, getAssets, addAsset, whereCited, cite, touch, commit,
                 keep = null, library = null, mod = null, vae = null, rename = null,
-                dropAssets = null, canvas = null, onShut = null }) {
+                dropAssets = null, canvas = null }) {
     this.getCast = getCast;
     this.dropAssets = dropAssets;
     this.setCast = setCast;
@@ -401,11 +401,6 @@ export class CastShelf {
     // Set while the library is open for a swap, so the card can say which of
     // its two buttons is waiting and a second press cannot start a second one.
     this.swapping = null;
-    // Fired when the open card is closed from its own chevron. A host that put
-    // the shelf on screen *for* one member — the simple view summons it from
-    // their name in the prompt — takes it away again on the same press. Hosts
-    // that keep a standing shelf pass nothing and nothing changes for them.
-    this.onShut = onShut;
     // Which member is open, by reference rather than by name: a name is the one
     // field being typed into while the card is open, and a shelf that tracked it
     // by name would close them on the first keystroke.
@@ -417,12 +412,6 @@ export class CastShelf {
     this.root = el("div", { class: "mmc-cast" });
   }
 
-  /**
-   * Open one member by name, for a host that was asked about them rather than
-   * about the cast — clicking their chip in the prompt. Answers whether
-   * there was anybody by that name, so a host that put the shelf up to show
-   * them can take it back down when there was not.
-   */
   /**
    * Open somebody's card, or shut it where it is the card already open.
    *
@@ -690,7 +679,6 @@ export class CastShelf {
               // A row waiting for an "instead" nobody typed is not a change.
               this.changing = null;
               this.renderSoon();
-              this.onShut?.();
             },
           }, [icon("chevron", 14)]),
           el("button", {
@@ -992,6 +980,11 @@ export class CastShelf {
   }
 
   nameField(subject) {
+    // What they were called when the field was opened. A name selected and
+    // typed over passes through "" on the way, and a member left with no name
+    // is one the @ menu cannot list and the queue refuses — invisible on every
+    // surface but this one. Leaving the field empty puts the old name back.
+    const was = subject.handle;
     const field = el("input", {
       class: "mmc-cast-name",
       value: subject.handle ?? "",
@@ -1005,7 +998,10 @@ export class CastShelf {
       },
       // Redrawn on blur rather than on every keystroke: the field holds the
       // caret, and rebuilding the card mid-word would take it away.
-      onblur: () => this.renderSoon(),
+      onblur: () => {
+        if (!subject.handle && was) { subject.handle = was; this.touch?.(); }
+        this.renderSoon();
+      },
     });
     field.addEventListener("pointerdown", (event) => event.stopPropagation());
     return field;
@@ -1450,24 +1446,11 @@ export class CastShelf {
     subject[role] = held;
   }
 
+  /** Off one slot — a file that is also on them elsewhere keeps its words.
+   *  `state.releaseClaim` is the rule; the face's asset ✕ and the pool's use
+   *  the same one, which is what keeps a removed file from dangling. */
   clearRole(subject, handle, role) {
-    if (!LIST_ROLES.has(role)) { delete subject[role]; }
-    else {
-      const left = inRole(subject, role).filter((h) => h !== handle);
-      if (left.length) subject[role] = left;
-      else delete subject[role];
-    }
-    // The words naming who they stand in for belong to the whole slot, so they
-    // only go when the last clip does. The words on the file itself go with the
-    // file, unless it is still on them in another slot.
-    if (role === "replaces" && !S.replacesOf(subject).length) delete subject.replaces_what;
-    if (!S.subjectFiles(subject).includes(handle)) {
-      for (const key of ["notes", "triggers"]) {
-        if (!subject[key]) continue;
-        delete subject[key][handle];
-        if (!Object.keys(subject[key]).length) delete subject[key];
-      }
-    }
+    S.releaseClaim(subject, handle, role);
   }
 
   /** The "+" tile: everything attached that is not already on them, then the way

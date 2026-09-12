@@ -5090,6 +5090,72 @@ export function soleClaims(subject, cast) {
 }
 
 /**
+ * Take one handle off a subject wherever it is held — their looks, their
+ * actions, their voice, the place they take — and the words attached to it.
+ *
+ * One rule, because three copies of it had drifted: the shelf's own menu
+ * cleared a list-form `motion` and the face's "file removed" sweep did not (it
+ * predates #72, when an action became a list), so a removed clip stayed
+ * claimed and the member refused to queue over a file that was gone. And the
+ * pool's ✕ cleared nothing at all.
+ *
+ * `role` narrows it to one slot — a file moving between slots is taken off the
+ * slot it leaves, not off the member — and the words stay while any slot still
+ * holds the handle. The words naming who they stand in for belong to the
+ * whole `replaces` slot and go with its last clip. Mirrors nothing on the
+ * Python side: a subject that reaches the compiler is already whole.
+ */
+export function releaseClaim(subject, handle, role = null) {
+  const drop = (key) => {
+    if (role && role !== key) return;
+    if (Array.isArray(subject[key])) {
+      const left = subject[key].filter((h) => h !== handle);
+      if (left.length) subject[key] = left;
+      else delete subject[key];
+    } else if (subject[key] === handle) {
+      delete subject[key];
+    }
+  };
+  for (const key of ["from", "motion", "voice", "replaces"]) drop(key);
+  if (!replacesOf(subject).length) delete subject.replaces_what;
+  if (subjectFiles(subject).includes(handle)) return;
+  for (const key of ["notes", "triggers"]) {
+    if (!subject[key]) continue;
+    delete subject[key][handle];
+    if (!Object.keys(subject[key]).length) delete subject[key];
+  }
+}
+
+/**
+ * A file left the piece: the cast built out of it is built without it.
+ *
+ * Only once nothing in the piece holds the handle any more — no pool entry and
+ * no shot's row — so a picture taken off one card of a strip stays claimed for
+ * the card ahead that still carries it. A member whose whole account was that
+ * file keeps the dead claim instead: dropping it would leave a name standing
+ * for nothing, which is the one thing `subjects.parse` refuses, and the
+ * refusal `subjects.here` writes says what to do about it. Answers whether
+ * anybody was changed.
+ */
+export function releaseFromPiece(piece, handle) {
+  const rows = [
+    ...(piece.assets ?? []),
+    ...(piece.segments ?? []).flatMap((segment) => segment.assets ?? []),
+  ];
+  if (rows.some((asset) => asset.handle === handle)) return false;
+  let changed = false;
+  for (const subject of piece.subjects ?? []) {
+    const claims = [...subjectFiles(subject), ...replacesOf(subject)];
+    if (!claims.includes(handle)) continue;
+    const left = claims.filter((h) => h !== handle);
+    if (!left.length && !subject.description && !subjectFeatures(subject).length) continue;
+    releaseClaim(subject, handle);
+    changed = true;
+  }
+  return changed;
+}
+
+/**
  * Whether any of `texts` writes `@handle`.
  *
  * Texts only — no subject expansion. A host asking "may I drop this file now?"
@@ -5270,7 +5336,9 @@ export function asleepHere(state, pick = null) {
 }
 
 /** The subjects the given texts cite, as a Set of names. */
-function citedSubjects(texts, cast) {
+/** The names `texts` cite out of `cast`, as a Set of handles. Exported for the
+ *  `@` menu, which has one sentence and asks whether it writes somebody yet. */
+export function citedSubjects(texts, cast) {
   const pattern = subjectCitationRe(cast);
   const found = new Set();
   if (!pattern) return found;

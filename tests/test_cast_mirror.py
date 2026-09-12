@@ -165,6 +165,48 @@ console.log(JSON.stringify({
       onLoad: loaded.segments[0].assets[0].takes,
     };
   })(),
+  // ---- a file leaving somebody, from every slot that can hold one ----------
+  //
+  // One rule for the shelf's menu, the face's asset ✕ and the pool's: the
+  // face's own sweep predated #72 and never cleared a list-form `motion`, so
+  // a removed action clip stayed claimed and the member refused to queue.
+  release: (() => {
+    const her = () => ({ handle: "anna", takes: "person", from: ["img-1", "img-2"],
+                         motion: ["vid-1", "vid-3"], voice: "aud-1", replaces: ["vid-2"],
+                         replaces_what: "the clerk",
+                         notes: { "vid-1": "the swing", "img-1": "her face" },
+                         triggers: { "vid-1": "swing" } });
+    const actionGone = her();
+    s.releaseClaim(actionGone, "vid-1");
+    const placeGone = her();
+    s.releaseClaim(placeGone, "vid-2");
+    // Off one slot only: a file on them twice keeps its words.
+    const twice = { ...her(), motion: ["img-1"] };
+    s.releaseClaim(twice, "img-1", "motion");
+    // The pool's ✕: nothing in the piece holds the handle any more, so every
+    // member built out of it is built without it — except one whose whole
+    // account it was, who keeps the dead claim so the refusal can say what to do.
+    const piece = {
+      assets: [{ handle: "ref-2", kind: "image", role: "reference", filename: "b.png" }],
+      segments: [{ assets: [] }, { assets: [] }],
+      subjects: [{ handle: "anna", takes: "person", from: ["ref-1", "ref-2"] },
+                 { handle: "ben", takes: "person", from: ["ref-1"] },
+                 { handle: "cy", takes: "person", from: ["ref-1"], description: "tall" }],
+    };
+    const swept = s.releaseFromPiece(piece, "ref-1");
+    const held = { assets: [], segments: [{ assets: [{ handle: "ref-1" }] }],
+                   subjects: [{ handle: "anna", takes: "person", from: ["ref-1"] }] };
+    const kept = s.releaseFromPiece(held, "ref-1");
+    return {
+      action: { motion: actionGone.motion, notes: Object.keys(actionGone.notes),
+                triggers: actionGone.triggers ?? null },
+      place: { replaces: placeGone.replaces ?? null, what: placeGone.replaces_what ?? null },
+      twice: { from: twice.from, motion: twice.motion ?? null, notes: Object.keys(twice.notes) },
+      swept,
+      after: piece.subjects.map((x) => (x.from ?? []).join(",")),
+      kept, stillHeld: held.subjects[0].from.join(","),
+    };
+  })(),
 }));
 """
 
@@ -234,6 +276,19 @@ check("...while the one this rule put there follows her when she changes",
 check("a piece written before any of this is repaired on the way in",
       narrowing["onLoad"], "person")
 
+release = reflected["release"]
+check("a removed action clip leaves their actions, their words and their trigger",
+      release["action"], {"motion": ["vid-3"], "notes": ["img-1"], "triggers": None})
+check("the last clip they stood in takes the words about who they replace with it",
+      release["place"], {"replaces": None, "what": None})
+check("a file on them twice, taken off one slot, keeps its words",
+      release["twice"], {"from": ["img-1", "img-2"], "motion": None, "notes": ["vid-1", "img-1"]})
+check("a pool file nobody holds any more is swept off everybody built out of it",
+      release["swept"], True)
+check("...except the member whose whole account it was, who keeps the dead claim",
+      release["after"], ["ref-2", "ref-1", ""])
+check("a file a shot's row still holds is not swept",
+      [release["kept"], release["stillHeld"]], [False, "ref-1"])
 check("an empty cast has no pattern at all",
       reflected["cites"][3], subjects.citation_re([]) is None)
 

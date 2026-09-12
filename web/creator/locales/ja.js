@@ -1307,6 +1307,8 @@ export const ja = {
  "Who is in it. Name them once here, write @anna in the prompt, and whatever is behind them rides in with them.": "誰が出ているか。ここで一度名前を付け、プロンプトに @anna と書けば、その人の背後にあるものが一緒に渡されます。",
  "Cast somebody — a person, an object, a place or a look. Give them pictures to be built out of, or just describe them: a name with a description behind it is what keeps them the same person in shot 1 and in shot 9.": "誰かをキャストします——人物、物体、場所、ルック。素材となる画像を与えても、言葉で描写するだけでも構いません。説明の付いた名前こそが、ショット 1 とショット 9 で同一人物を保つものです。",
  "Who is in the video: a person, an object, a place or a look that comes back shot after shot. Name them once, write @anna in the prompt, and whatever is behind them rides in with them.": "映像に出てくるもの：ショットをまたいで繰り返し現れる人物、物体、場所、ルック。一度名前を付け、プロンプトに @anna と書けば、その人の背後にあるものが一緒に渡されます。",
+ "Fold the cast shelf away. Who is in the piece stays as it is.": "キャスト欄をたたむ。作品の登場人物は変わらない。",
+ "cast, not in this prompt yet": "キャスト済み、このプロンプトにはまだ未記入",
  "Nobody cast yet": "まだ誰もキャストされていません",
  "A person, an object, a place or a look that comes back shot after shot. Cast them once and write @anna.": "ショットをまたいで繰り返し現れる人物、物体、場所、ルック。一度キャストして @anna と書くだけです。",
  "name": "名前",

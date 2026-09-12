@@ -1308,6 +1308,8 @@ export const ko = {
  "Who is in it. Name them once here, write @anna in the prompt, and whatever is behind them rides in with them.": "누가 나오는지. 여기서 한 번 이름을 붙이고 프롬프트에 @anna 라고 쓰면 그 뒤에 있는 것이 함께 실려 갑니다.",
  "Cast somebody — a person, an object, a place or a look. Give them pictures to be built out of, or just describe them: a name with a description behind it is what keeps them the same person in shot 1 and in shot 9.": "누군가를 캐스팅합니다 — 인물, 사물, 장소 또는 룩. 만들어질 사진을 주어도 되고 말로 묘사만 해도 됩니다. 설명이 붙은 이름이야말로 샷 1과 샷 9에서 같은 사람을 유지하게 합니다.",
  "Who is in the video: a person, an object, a place or a look that comes back shot after shot. Name them once, write @anna in the prompt, and whatever is behind them rides in with them.": "영상에 누가 나오는가: 샷마다 다시 등장하는 인물, 사물, 장소 또는 룩. 한 번 이름을 붙이고 프롬프트에 @anna 라고 쓰면 그 뒤에 있는 것이 함께 실려 갑니다.",
+ "Fold the cast shelf away. Who is in the piece stays as it is.": "캐스트 선반을 접습니다. 작품의 등장인물은 그대로입니다.",
+ "cast, not in this prompt yet": "캐스트됨, 이 프롬프트에는 아직 없음",
  "Nobody cast yet": "아직 캐스팅된 인물이 없습니다",
  "A person, an object, a place or a look that comes back shot after shot. Cast them once and write @anna.": "샷마다 다시 등장하는 인물, 사물, 장소 또는 룩. 한 번 캐스팅하고 @anna 라고 쓰면 됩니다.",
  "name": "이름",

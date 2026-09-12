@@ -901,6 +901,9 @@ class Timeline {
             : t("Remove @{handle}", { handle: asset.handle }),
         onclick: () => {
           this.timeline.assets = (this.timeline.assets ?? []).filter((a) => a !== asset);
+          // The tooltip promised the member loses it, so they do — a claim
+          // left standing was a `?` tile and a refusal to queue.
+          S.releaseFromPiece(this.timeline, asset.handle);
           this.commit();
         },
       }),
@@ -3012,6 +3015,9 @@ class Timeline {
       // looked the piece's subjects up on the segment, found none, and a name
       // clicked in a card opened nothing while deleting one took nobody out.
       castPiece: this.timeline,
+      // The shelf is this window's, a few rows down — a card draws none of its
+      // own, and a name pressed in it opens the member there.
+      openCast: (handle) => this.openCastMember(handle),
       compiledPrompt: () => compiledFor(this.timeline, index, this.pieceSeed()),
       // What a `{day|night}` in this card is chosen on: the card's own seed
       // where it was retaken on one, the piece's otherwise — the sampler's
@@ -3446,10 +3452,11 @@ export class TimelineBody {
         add: () => this.growIntoStrip(),
       },
     });
-    // Which view this body is drawn in, carried onto the editor that was just
-    // built for it — see `Fullscreen.setCastResident`. Undefined on the canvas,
-    // which is the answer the face wants anyway.
-    this.faceEditor.castResident = this.castResident;
+    // Whether the view this body is drawn in starts with the cast shelf
+    // folded, carried onto the editor that was just built for it — see
+    // `Fullscreen.setCastDefault`. Undefined on the canvas, which is the
+    // answer the face wants anyway.
+    this.faceEditor.castDefaultOpen = this.castDefaultOpen;
     return this.faceEditor;
   }
 

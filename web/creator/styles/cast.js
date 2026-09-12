@@ -476,12 +476,21 @@ export const css = `
    the pills off the bottom of it. */
 .mmc-root .mmc-cast-list { max-height: 300px; overflow-y: auto; }
 
-/* The rail's own entry. Lit when the piece has a cast, the way a lit accelerator
-   pill is: a generation with somebody in it is not the default, and the rail is
-   the only place that says so while the shelf is scrolled out of sight. */
+/* The rail's own entry: a switch. Lit while the shelf is up, and wearing the
+   head count whether or not it is — a folded shelf with two people on it must
+   read as two people, because the rail is the only thing that says so while
+   the shelf is folded or scrolled out of sight. */
 .mmc-tool.on { color: var(--mmc-text); }
 .mmc-tool.on .mmc-tool-icon {
   border-color: color-mix(in srgb, var(--mmc-accent) 45%, transparent); color: var(--mmc-accent);
+}
+.mmc-tool-cast { position: relative; }
+.mmc-tool-count {
+  position: absolute; top: -4px; right: calc(50% - var(--mmc-tool-tile) / 2 - 6px);
+  min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px;
+  background: var(--mmc-accent); color: var(--mmc-strong);
+  font-size: 10px; font-weight: 600; line-height: 16px; text-align: center;
+  font-variant-numeric: tabular-nums;
 }
 
 /* --- the menus ------------------------------------------------------------- */

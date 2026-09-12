@@ -6,6 +6,24 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**The cast shelf is one shelf, on every face.** The simple fullscreen view
+hid it and the Cast tool outright, on the argument that casting is the `@`
+menu and removing somebody is deleting their chip — but a deleted chip keeps
+the member (#52), so somebody could sit in the piece with nothing on screen
+to say so, and the `@` menu then stopped offering the library's copy of them
+without saying why. Now the shelf is drawn on the node face, the desk, the
+simple view, the pre-stage's H3 branch and the editor sheet alike; the
+simple view starts it folded, and the rail's Cast tool is the switch — it no
+longer casts a blank `@subject` on every press — and wears the head count
+while the shelf is folded. A card in the Timeline window draws none of its
+own: a name pressed there opens the member on the window's shelf. The `@`
+menu's cast group is *In this piece*, and a member the sentence does not
+write yet says so on their row. A file taken off the pool or a shot's row is
+taken off every member built out of it, actions included — the face's sweep
+predated actions becoming a list and left a removed clip claimed, and the
+pool's ✕ released nothing — and a name typed over and left empty goes back
+to what it was rather than leaving a member the menu cannot list.
+
 **The seed pill catches up with the queue (#73).** On *increment*,
 *decrement* and *randomize* the frontend moves the seed after the prompt is
 serialized, inside the queue call; the pill redrew on serialization and so
