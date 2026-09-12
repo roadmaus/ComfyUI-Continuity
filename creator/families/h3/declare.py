@@ -64,6 +64,14 @@ REF_BACKDROP = 0.5
 # starts where H3 already was.
 CUTOUT_DEFAULT = False
 
+# Whether a shot on the strip can be shown a storyboard of the shots before it
+# — a 3 x 3 sheet of their frames, made in the graph and cited as one more
+# picture reference (issue #43). H3's, because H3 encodes its references one
+# picture at a time and a sheet is one picture. LTX 2.5 lays every reference
+# onto one Ingredients sheet already, and what a sheet of frames means inside
+# that sheet is undecided — so it declares nothing and draws no switch.
+STORYBOARD = True
+
 # The graph node that is this family's boundary: one self-contained payload in,
 # `(model, positive, latent, lead model)` out. A ComfyUI registry key named in
 # saved workflows, and frozen for it — the module it is defined in has moved and

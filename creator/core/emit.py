@@ -71,6 +71,7 @@ CLIP_FRAMES_NODE = "MiniMaxH3ClipFrames"
 CLIP_AUDIO_NODE = "MiniMaxH3ClipAudio"
 SAVE_NODE = "MiniMaxH3Save"
 TAKE_NODE = "ContinuityTake"
+STORYBOARD_NODE = "ContinuityStoryboard"
 
 
 def default_prefix(family):
@@ -185,6 +186,34 @@ def inherited_frames(graph, source, feather):
                           count=feather, at="tail").out(0)
     return graph.node(PASS_FRAMES_NODE, source=source[1],
                       **({"count": feather} if feather > 1 else {})).out(0)
+
+
+def spread_frames(graph, source, count):
+    """`count` frames from across a pass — a storyboard's cells for it.
+
+    The same two roads `inherited_frames` reads, at `spread` rather than off
+    an end: a generated pass's cells come back off its spill, a supplied clip's
+    (a cut-in, or a kept take) out of the clip's own window.
+    """
+    if is_clip_source(source):
+        return graph.node(CLIP_FRAMES_NODE,
+                          clip_data=json.dumps(source[1], sort_keys=True),
+                          count=count, at="spread").out(0)
+    return graph.node(PASS_FRAMES_NODE, source=source[1], count=count,
+                      at="spread").out(0)
+
+
+def storyboard(graph, decoded, cells, width, height):
+    """The sheet a segment is shown of the passes before it -> an IMAGE link.
+
+    `cells` is the payload's `storyboard.cells`: `(payload index, count)`
+    pairs in play order, allotted by `compile.storyboard_cells`. One reader per
+    source and one layout node, at the segment's own canvas.
+    """
+    inputs = {"width": int(width), "height": int(height)}
+    for slot, (where, count) in enumerate(cells, start=1):
+        inputs[f"frames_{slot}"] = spread_frames(graph, decoded[where], int(count))
+    return graph.node(STORYBOARD_NODE, **inputs).out(0)
 
 
 def inherited_audio(graph, source, seconds):
@@ -410,6 +439,17 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
             # compile clamps it to a feathered seam's overlap, and this is
             # where that decision reaches the graph.
             seams["prev_audio"] = inherited_audio(graph, source, one.audio_tail_s)
+        if one.storyboard:
+            # The sheet of earlier passes this segment is shown, read off the
+            # same `decoded` the seams read — so it, too, is of the passes as
+            # delivered, face pass included. Wired beside the seams because it
+            # is the same kind of fact: what crosses into this segment from the
+            # strip before it. It rides on the refine's segment node as well,
+            # through `seams`, because the second pass re-encodes the same
+            # references at the target canvas.
+            seams["storyboard_image"] = storyboard(
+                graph, decoded, payloads[index]["storyboard"]["cells"],
+                one.width, one.height)
         if one.ends_on or one.ends_on_audio:
             # The seam running the other way: the pass after this one is
             # supplied footage, and this generation ends on its opening rather

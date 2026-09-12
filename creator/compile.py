@@ -198,6 +198,28 @@ VIDEO_TAKES = IMAGE_TAKES + ("camera", "edit", "continue")
 AUDIO_TAKES = ("full", "voice", "music", "ambience", "copy")
 TAKES = {"image": IMAGE_TAKES, "video": VIDEO_TAKES, "audio": AUDIO_TAKES}
 
+# The storyboard: a contact sheet of the shots before a card, handed to it as
+# one more picture reference (issue #43). It is made in the graph, off the
+# passes as they were rendered, so it has no file and no place in a blob's
+# asset list — the compiler adds it to the plan itself when the payload says
+# there is one, under a handle no `@` citation can spell (`HANDLE_RE` wants a
+# dash and a number) and a take no picker offers. It rides *last* among the
+# pictures so every reference the user attached keeps the `<Picture N>` it had
+# without it, and the cache entry that goes with it.
+STORYBOARD_HANDLE = "storyboard"
+STORYBOARD_TAKE = "storyboard"
+# 3 x 3 — the sheet the reporter measured with, and the largest grid on which a
+# cell still reads as a room at the generation's own canvas (`ref_size` match):
+# each is a ninth of the area, which is enough for where things stand and not
+# for whose face it is.
+STORYBOARD_CELLS = 9
+# What every shot on the strip is shown, unless its card says otherwise:
+# nothing, the shot in front of it, or every shot before it. `all` is the one
+# worth defaulting to when the switch is on — the first shot's cells stay in
+# view as the tone the piece opened on, where a sheet of the previous shot
+# alone shows each shot the drift of the one before it as the room.
+STORYBOARD_MODES = ("previous", "all")
+
 
 class CompileError(ValueError):
     """A `creator_data` blob that cannot become a valid H3 request."""
@@ -353,6 +375,11 @@ class Compiled:
     # Timeline only: the first frame is the previous segment's last frame, which
     # is a tensor produced mid-graph and so has no Asset and no filename.
     continues: bool = False
+    # Timeline only: whether a storyboard of earlier shots rides in as the last
+    # picture reference. The asset is in `ref_images` under `STORYBOARD_HANDLE`
+    # like any other; this says so without a scan, for the node that has to
+    # fill it from its socket.
+    storyboard: bool = False
     # How many of the source segment's last frames the seam inherits. 1 is the
     # classic seam — the last frame becomes this segment's first. More pins the
     # whole run as never-denoised context at the head of this segment's
@@ -1327,7 +1354,8 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
                     continues_audio=False, shots=1, feather=1, feather_pin=False,
                     seam_restore=0.0, carries_sound=False,
                     ends_on=False, ends_on_audio=False, ends_feather=1,
-                    ends_feather_pin=False, family=registry.DEFAULT_VIDEO):
+                    ends_feather_pin=False, storyboard=False,
+                    family=registry.DEFAULT_VIDEO):
     """`creator_data` dict -> `Compiled`.
 
     `family` is which architecture this generation is for, and it decides two
@@ -1353,6 +1381,11 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     arrives as a tensor too. Only a timeline can say it, and only in front of a
     clip: a generated pass after this one has nothing to hand backwards, since
     it does not exist until this one has been sampled.
+
+    `storyboard` is the timeline's third addition: a contact sheet of earlier
+    shots arrives as a tensor and is cited as the last picture reference. Like
+    the seam frame it has no file, and unlike it, it is a *reference* — so it
+    puts the generation on the reference road, whatever else the card carries.
 
     Every reference is defined and scoped in the prompt unconditionally. That
     used to be a machine setting (`define_refs`, off by default), which meant
@@ -1462,6 +1495,27 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     # limits, the plan and the loader all count it the same way.
     ref_videos = [a for a in refs if a.kind == "video" and a.track != "sound"]
     ref_audios = [a for a in refs if a.kind == "audio" or (a.kind == "video" and a.track == "sound")]
+
+    if storyboard:
+        if any(a.handle == STORYBOARD_HANDLE for a in assets):
+            raise CompileError(
+                f"@{STORYBOARD_HANDLE} is the name of the sheet the timeline "
+                f"makes of earlier shots — rename the attached file")
+        if "reference" not in family_grammar.modes:
+            raise CompileError(
+                "this family takes no references, so there is nothing for a "
+                "storyboard of earlier shots to ride in as — turn it off")
+        # Said here rather than left to `grammar.refuse`, whose count would be
+        # right and whose message would name a picture the user never attached.
+        if len(ref_images) >= family_grammar.max_images:
+            raise CompileError(
+                f"this shot already cites {len(ref_images)} pictures, and the "
+                f"storyboard of earlier shots needs one of the "
+                f"{family_grammar.max_images} — take a picture off it, or turn "
+                f"the storyboard off for this shot")
+        ref_images = ref_images + [Asset(handle=STORYBOARD_HANDLE, kind="image",
+                                         role="reference", filename="",
+                                         takes=STORYBOARD_TAKE)]
 
     mode = _derive_mode(family_grammar, first_frame, last_frame,
                         ref_images, ref_videos, ref_audios, continues, ends_on)
@@ -1831,6 +1885,7 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
         ends_feather_pin=ends_feather_pin,
         auto_duration=auto_duration,
         continues=continues,
+        storyboard=bool(storyboard),
         continues_audio=continues_audio,
         carries_sound=bool(carries_sound),
         audio_tail_s=audio_tail_s,
@@ -2128,6 +2183,7 @@ def rendered_piece(data):
                 place[index] = len(rendered)
                 rendered.append({**segments[index], "card_no": index + 1})
             _rebase_seam(rendered[first], segments, start, first, place)
+            _rebase_storyboard(rendered[first], data, segments, start, place)
             continue
         if is_kept(head):
             for index in range(start, end):
@@ -2246,6 +2302,54 @@ def _rebase_seam(card, segments, start, first, place):
         card.pop("continue_from", None)
     else:
         card["continue_from"] = place[source] + 1
+
+
+def _rebase_storyboard(card, data, segments, start, place):
+    """Write the storyboard a live card gets, as card numbers in a shortened
+    render.
+
+    The piece's setting and the card's own list are both statements about the
+    strip, and `timeline_payloads` reads them against the render — so with
+    cards held back, "the shot in front of it" would be whatever landed there
+    and a named card would be a different one. Resolved here onto the render's
+    own numbering, the way `_rebase_seam` resolves a seam's source.
+
+    A named card that is not in the render is refused, for the seam's reason:
+    the frames do not exist yet, and the two ways out are the two things the
+    user means. "Every shot so far" is not refused — it means the shots that
+    exist, and a held card with nothing to play is not one of them.
+    """
+    if not start or is_clip(segments[start]) \
+            or not registry.STORYBOARD.get(piece_family(data)):
+        return
+    own = _storyboard_cards(segments[start], start)
+    if own is not None:
+        indices = own
+        missing = [index for index in indices if index not in place]
+        if missing:
+            raise CompileError(
+                f"segment {start + 1}'s storyboard shows segment "
+                f"{missing[0] + 1}, which is not in this render — it is held "
+                f"with nothing to play. Shoot segment {missing[0] + 1} first, "
+                f"or take it off segment {start + 1}'s storyboard."
+            )
+    else:
+        policy = storyboard_policy(data)
+        if policy is None:
+            return
+        if policy == "previous":
+            if start - 1 not in place:
+                raise CompileError(
+                    f"segment {start + 1} is shown a storyboard of the shot in "
+                    f"front of it, segment {start}, which is not in this render "
+                    f"— it is held with nothing to play. Shoot segment {start} "
+                    f"first, or turn the storyboard off for segment {start + 1}."
+                )
+            indices = [start - 1]
+        else:
+            indices = [index for index in range(start) if index in place]
+    numbers = sorted({place[index] + 1 for index in indices})
+    card["storyboard"] = numbers or False
 
 
 def render_mode(data):
@@ -2714,6 +2818,112 @@ def _continue_source(raw, index):
     return number - 1 if 1 <= number < index else None
 
 
+def storyboard_policy(data):
+    """What the piece shows each shot of the shots before it — one of
+    `STORYBOARD_MODES`, or None for nothing. Absent means nothing, so a blob
+    written before the sheet existed renders as it did."""
+    mode = as_piece(data).get("storyboard")
+    if mode in (None, "", False):
+        return None
+    if mode not in STORYBOARD_MODES:
+        raise CompileError(
+            f"unknown storyboard setting {mode!r} — one of "
+            f"{', '.join(STORYBOARD_MODES)}, or nothing")
+    return mode
+
+
+def _storyboard_cards(segment, index):
+    """A card's own answer about the storyboard, off its `storyboard` key.
+
+    -> None to inherit the piece's setting, `[]` for none, or the 0-based
+    indices of the cards it names, in strip order. Only cards *before* it are
+    worth keeping: a number pointing at itself or past it is a leftover from
+    reordering, read the way a stale `continue_from` is.
+    """
+    raw = segment.get("storyboard")
+    if raw is None:
+        return None
+    if raw is False:
+        return []
+    if not isinstance(raw, list):
+        raise CompileError(
+            f"segment {index + 1}: storyboard must be false or a list of "
+            f"segment numbers")
+    cards = []
+    for item in raw:
+        try:
+            number = int(item)
+        except (TypeError, ValueError) as exc:
+            raise CompileError(
+                f"segment {index + 1}: storyboard names must be segment "
+                f"numbers") from exc
+        if 1 <= number <= index and number - 1 not in cards:
+            cards.append(number - 1)
+    return sorted(cards)
+
+
+def _storyboard_indices(data, segments, start):
+    """Which cards the run opening at `start` is shown, as 0-based strip
+    indices in order, resolved from the card's own key or the piece's setting.
+    Nothing on the first card, and nothing on a clip — footage is played, not
+    generated, so there is nothing for a sheet to condition."""
+    head = segments[start]
+    if not start or is_clip(head):
+        return []
+    # A family without the sheet renders as though the switch were off — a
+    # piece moved across families keeps its blob, and the setting is a leftover
+    # there rather than a mistake. The frontend draws no switch on it.
+    if not registry.STORYBOARD.get(piece_family(data)):
+        return []
+    own = _storyboard_cards(head, start)
+    if own is not None:
+        return own
+    policy = storyboard_policy(data)
+    if policy == "previous":
+        return [start - 1]
+    if policy == "all":
+        return list(range(start))
+    return []
+
+
+def storyboard_cells(seconds, cells=STORYBOARD_CELLS):
+    """How many of a sheet's cells each source gets, in order -> a list as
+    long as `seconds`, or as long as `cells` when there are more sources
+    than that.
+
+    Proportional to how long each source plays, by largest remainder, and
+    never zero: a two-second insert between two long shots is still a shot the
+    sheet should show. With more sources than cells the most recent ones are
+    kept — continuity is about what the eye just saw, and a sheet of the first
+    nine shots of a twelve-shot piece would say nothing about the three the
+    new shot follows.
+
+    Mirrored in `state.js` (`storyboardCells`) so the popover's diagram draws
+    the sheet the render will make; `tests/test_storyboard_mirror.py` holds
+    the two to each other.
+    """
+    seconds = [max(0.0, float(value)) for value in seconds][-cells:]
+    if not seconds:
+        return []
+    count = len(seconds)
+    spare = cells - count
+    total = sum(seconds)
+    if spare <= 0 or total <= 0:
+        return [1] * count
+    shares = [value / total * spare for value in seconds]
+    counts = [1 + int(share) for share in shares]
+    for index in sorted(range(count), key=lambda i: shares[i] - int(shares[i]),
+                        reverse=True)[:cells - sum(counts)]:
+        counts[index] += 1
+    return counts
+
+
+def _run_seconds(segments, run):
+    """How long a pass plays, as its cards add up."""
+    start, end = run
+    return sum(_duration_seconds(segments[index]) for index in range(start, end))
+
+
 def timeline_payloads(data, image_size_lookup=None):
     """`timeline_data` dict -> one self-contained payload per segment, in play order.
 
@@ -2862,6 +3072,25 @@ def timeline_payloads(data, image_size_lookup=None):
             restore = seam_restore_denoise(head.get("seam_restore"))
             if restore:
                 payload["seam_restore"] = restore
+
+        # The storyboard: which earlier passes this one is shown, and how many
+        # of the sheet's cells each fills. Resolved through `payload_of` the
+        # way a seam's source is — a card merged into a pass has no frames of
+        # its own, the pass does — and written as payload positions, which is
+        # what the emitter reads frames by. Only where there is one, so a
+        # strip without it keeps every cache key it had.
+        if "request" in payload:
+            sources = []
+            for index in _storyboard_indices(data, segments, start):
+                where = payload_of[index]
+                if where < position and where not in sources:
+                    sources.append(where)
+            if sources:
+                counts = storyboard_cells(
+                    [_run_seconds(segments, runs[where]) for where in sources])
+                payload["storyboard"] = {
+                    "cells": [[where, count] for where, count
+                              in zip(sources[-len(counts):], counts)]}
 
     _stamp_sound(data, segments, runs, payloads, rules, frames)
 
@@ -3188,6 +3417,7 @@ def _chained_request(data, segment, pool, global_prompt, cast=()):
     request.pop("feather_pin", None)
     request.pop("seam_restore", None)
     request.pop("merge", None)
+    request.pop("storyboard", None)
     # ...and the bookkeeping the strip keeps about a card, which describes what
     # has been *done* with the generation rather than what it is. This request
     # is the segment node's cache key, so anything left in it here is a
@@ -3723,6 +3953,9 @@ def compile_segment(payload, image_size_lookup=None, family=registry.DEFAULT_VID
         ends_on_audio=bool(payload.get("ends_on_audio")),
         ends_feather=int(payload.get("ends_feather", 1)),
         ends_feather_pin=bool(payload.get("ends_feather_pin")),
+        # Stamped on by `timeline_payloads` with the cells it is made of; the
+        # compiler needs only that there is one.
+        storyboard=bool((payload.get("storyboard") or {}).get("cells")),
         canvas_spec=CanvasSpec(**spec) if spec else None)
 
 

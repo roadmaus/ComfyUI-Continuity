@@ -608,6 +608,12 @@ _TAKES_WHAT = {
     "scene": "a scene reference",
     "style": "a style reference",
     "motion": "a reference image, for the action in it",
+    # The timeline's own sheet of earlier shots — `compile.STORYBOARD_TAKE`.
+    # Not a file: it is laid out at render time from passes that may not have
+    # been sampled yet, so the refiner is told what it is and never shown it.
+    "storyboard": "a storyboard the timeline makes of the shots before this "
+                  "one: nine of their frames in time order, left to right, top "
+                  "to bottom",
 }
 _TAKES_NOTE = {
     "person": "only the person is the reference — face, hair, skin, build and "
@@ -633,6 +639,13 @@ _TAKES_NOTE = {
               "taking its action from this picture, mark that line "
               "attribute_transfer in retention_analysis, and give the picture "
               "no <Picture N> entry of its own",
+    "storyboard": "you cannot see it — it is made when the earlier shots have "
+                  "rendered. It is the piece so far, seen as one sheet: keep "
+                  "its definition line saying what it is and how it reads, "
+                  "retain its place, light and where people and things stand, "
+                  "mark that line fully_preserved in retention_analysis, and "
+                  "never describe the sheet, its grid or its frames as "
+                  "something the target video shows",
 }
 
 # The un-narrowed case. `takes` defaults to "full", so this is what most
@@ -759,7 +772,10 @@ def slot_row(asset, label=None, show_label=False):
                 "a reference video used for its soundtrack alone"
                 if asset.kind == "video" else "a reference audio clip"),
         }[kind]
-    row = {"handle": asset.handle, "what": f"{what} ({os.path.basename(asset.filename)})"}
+    # A file's row names the file; the storyboard has none and is named by what
+    # it is.
+    row = {"handle": asset.handle,
+           "what": f"{what} ({os.path.basename(asset.filename)})" if asset.filename else what}
     if asset.role == "reference":
         if kind == "image":
             row["note"] = _TAKES_NOTE.get(asset.takes, _FULL_NOTE)

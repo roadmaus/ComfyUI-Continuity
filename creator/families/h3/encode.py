@@ -270,6 +270,11 @@ def _ref_key(kind, asset, print_of_vae, compiled):
     decode is asked for. A hand-built graph that supplies the media directly is
     the other caller this reaches, and it has no file to be missing.
     """
+    # No file, no key: the timeline's storyboard arrives on a socket, and an
+    # empty name resolves to the input *folder*, whose stamp would key every
+    # sheet ever made at this canvas to the first one encoded.
+    if not asset.filename:
+        return None
     try:
         stamp = media.stamp(asset.filename)
     except (media.MediaError, OSError):

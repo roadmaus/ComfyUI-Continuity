@@ -115,6 +115,14 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
                     tooltip="The first pass's sampler latent, whose tone a levelled seam is pulled back to."),
                 io.Audio.Input("prev_audio", optional=True,
                     tooltip="The tail of an earlier segment's soundtrack, when this segment's sound continues from it."),
+                # The storyboard of earlier passes this segment is shown
+                # (`compile.STORYBOARD_HANDLE`), laid out by the render loop
+                # and cited as the last picture reference. Wired only where the
+                # payload says there is one, so every other segment keeps the
+                # inputs it had.
+                io.Image.Input("storyboard_image", optional=True,
+                               tooltip="The sheet of earlier shots this one is shown, "
+                                       "when the timeline makes one."),
                 io.Image.Input("next_image", optional=True,
                     tooltip="The opening frames of the supplied clip this segment runs into."),
                 io.Audio.Input("next_audio", optional=True,
@@ -178,7 +186,7 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
                 prev_image=None, prev_audio=None,
                 next_image=None, next_audio=None, hold_lora="",
                 prev_latent=None, anchor_latent=None,
-                sampler_backend="") -> io.NodeOutput:
+                sampler_backend="", storyboard_image=None) -> io.NodeOutput:
         payload = _parse(segment_data)
 
         # Which segment the queue has reached, told to the stage the moment
@@ -251,6 +259,16 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
             model = lora.apply(model, entries, compiled.checkpoint)
 
         loaded = media.load_all(compiled)
+        if compiled.storyboard:
+            if storyboard_image is None:
+                raise ValueError(
+                    "This segment is shown a storyboard of earlier shots but no "
+                    "sheet reached it — the Timeline node should have wired one."
+                )
+            # One picture, like any reference that came off a file — the
+            # encoder reads it through the same `image` step, uncached
+            # (`encode._ref_key`), and the prompt already says what it is.
+            loaded[compiler.STORYBOARD_HANDLE] = {"image": storyboard_image[:1]}
         if compiled.continues:
             if prev_image is None:
                 raise ValueError(

@@ -151,6 +151,8 @@ export const ICONS = {
   folder: `<path d="M3 7.5A2.5 2.5 0 015.5 5h3.8l2 2.2h7.2A2.5 2.5 0 0121 9.7v6.8a2.5 2.5 0 01-2.5 2.5h-13A2.5 2.5 0 013 16.5z"/>`,
   // A grid of frames: the gallery is the one place in the node that shows many
   // renders at once, and the rail already spends `image` on "Add image".
+  // A contact sheet: the storyboard a shot is shown of the shots before it.
+  storyboard: `<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16M15 4v16M3 9.33h18M3 14.67h18"/>`,
   gallery: `<rect x="3" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.8"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.8"/>`,
   // Lucide's `settings`, verbatim — drawn for a 2.0 stroke and rendered here at
   // the package's 1.6, the same deal `brain` above gets. `sliders` is spoken

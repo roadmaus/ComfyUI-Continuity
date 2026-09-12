@@ -63,6 +63,65 @@ per-machine settings on the gear's Rendering tab act on it:
 None of this is zero yet. If you find a setting or a method that measures
 better on your strips, open an issue with the per-cut numbers.
 
+## Storyboards
+
+A shot can be shown the shots before it. The **Storyboard** pill on the bar
+has three answers: nothing, *each shot sees the shot before it*, or *each shot
+sees the piece so far*. With one of the two on, every shot after the first is
+handed a 3 × 3 sheet of frames from those shots — nine cells shared out by how
+long each shot plays, in time order, reading left to right and top to bottom
+— as its last picture reference, with a line in the prompt saying what the
+sheet is, how it reads, and that the grid itself is never to be drawn. It is
+the sheet people were attaching by hand (issue #43), made for you at render
+time from the passes as they actually came out: a kept take is read from its
+file, a cut-in clip from its window.
+
+What it buys is the room. A cut to another angle of the same street has
+nothing crossing it — no frame, no sound — and the model re-imagines the
+street. With the sheet in front of it the walls, the light and where things
+stand carry across. It is not a face reference: at the generation's own
+canvas each cell is a ninth of the picture, enough for a place and not for a
+likeness, which is what the cast is for.
+
+The chip on every seam says what its own card sees — *sees #1–3*, *no
+storyboard* — and opens to the same three answers plus a row of toggles, so
+one card can see shots 1 and 4 while the piece is set to the shot before.
+Under the toggles is a picture of the sheet with the number of the shot each
+cell will come from, which is the one honest preview there is before the
+shots exist.
+
+Two costs. A shot shown a sheet is a reference generation, so it runs on the
+reference checkpoint whatever else it carries, and the sheet takes one of the
+nine picture slots — a card already citing nine is refused by name. And a
+shot now depends on the shots it sees: edit shot 1 and every shot shown it
+re-renders, where a hard cut used to keep its cache.
+
+What was measured, on two scenes at three and eight shots, on turbo and on
+the base weights: with the storyboard on, the place and its objects hold
+across every hard cut — the same boat, crane and toolbox in all eight shots
+where, without it, the same description gave a different boat in nearly
+every one. The two settings hold the place equally well; *the piece so far*
+is the one to reach for, because a shot's mistake then rides forward as one
+cell among nine rather than as the whole sheet. On the tone drift described
+above it changes nothing either way — the step at a continuation seam is the
+same with it and without — and over eight hops it kept the picture's detail
+where the strip without it softened.
+
+The cost is composition. The sheet holds the camera as firmly as the room:
+a shot written as a reverse angle or a close-up of the shots it sees comes
+back framed like them. Some of that is the prompt's — a long standing
+description ahead of a one-line shot gets framed as the description, sheet or
+no sheet — but the sheet takes the rest of the variety with it. So for a shot
+that needs an angle the earlier shots do not have, turn the storyboard off on
+its seam chip, or show it only a shot that has that angle; the shots after it
+can pick the strip back up.
+
+Also measured and rejected: saying in the prompt that the sheet's framing is
+not to be kept (no effect — the pull is in the picture), and handing the
+frames over as a pooled video RefMod with the scene take instead of a sheet
+(no effect on framing, and the pooled latent's colour stains compounded down
+the chain). The sheet is a real picture, and that is why it stays one.
+
 ## Piece-level fields
 
 The timeline itself carries:

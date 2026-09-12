@@ -114,6 +114,39 @@ function seamRestoreRow(piece, segment, index, commit) {
   };
 }
 
+/** How the strip names a run of passes a card is shown: their last cards'
+ *  numbers, contiguous runs as a range — "#1–3", "#1, #4". The last card,
+ *  because that is the number a seam already speaks in (`from #2`) and the
+ *  frame a merged run leaves behind. */
+function passNumbers(sheet) {
+  const numbers = sheet.map(({ pass }) => pass.end);
+  const parts = [];
+  for (let i = 0; i < numbers.length; i += 1) {
+    let j = i;
+    while (j + 1 < numbers.length && numbers[j + 1] === numbers[j] + 1) j += 1;
+    parts.push(j > i + 1 ? `#${numbers[i]}–${numbers[j]}` : numbers.slice(i, j + 1).map((n) => `#${n}`).join(", "));
+    i = j;
+  }
+  return parts.join(", ");
+}
+
+/** The sheet as a picture: nine cells, each carrying the number of the card
+ *  it will be filled from, in the order the frames will land. What the render
+ *  makes is not on disk until it has rendered, so this is the one honest
+ *  preview there is — and "five cells of #1, four of #2" is a thing to look at
+ *  rather than read. Hue per source card, so a sheet of three shots reads as
+ *  three bands. */
+function sheetDiagram(sheet) {
+  const cells = [];
+  sheet.forEach(({ pass, count }, source) => {
+    for (let n = 0; n < count; n += 1) {
+      cells.push(el("span", { class: `mmc-board-cell${source % 2 ? " alt" : ""}`,
+                              text: String(pass.end) }));
+    }
+  });
+  return el("div", { class: "mmc-board", "aria-hidden": "true" }, cells);
+}
+
 /** The rows a seam popover draws under its list, in order, or null. */
 function seamRows(...rows) {
   const drawn = rows.filter(Boolean);
@@ -1476,6 +1509,13 @@ class Timeline {
           : t("LoRAs") }),
         ...(idle ? [el("span", { class: "mmc-pill-sub", text: t("{idle} idle", { idle }) })] : []),
       ]),
+      // The storyboard: what each shot is shown of the shots before it. On the
+      // bar because it is the attach-once gesture, like the global prompt —
+      // every seam's chip then says what its own card gets, and can differ.
+      // Only where the family has the sheet, and only once there is a shot
+      // before another: one pass over the whole strip has no "before".
+      ...(S.canDo(this.timeline, "storyboard") && !single && passes.length > 1
+        ? [this.storyboardPill()] : []),
       // Only once a seam actually carries sound *and* is the kind this governs:
       // a blended seam takes its tail from its blend, so a strip where every
       // sound seam is blended has nothing left for this to set. Until then it
@@ -1943,6 +1983,30 @@ class Timeline {
           ? t("blend {s} s", { s: blendSeconds(width, rules) }) : t("no blend"),
       })]);
       })()] : []),
+      // What this card is shown of the strip before it. Beside the seam's
+      // chips because it is the same kind of fact — what reaches this shot
+      // from the shots before it — and unlike them it is there on a hard cut
+      // too, which is where a sheet earns most: nothing else crosses one.
+      ...(S.canDo(this.timeline, "storyboard") ? [(() => {
+        const sheet = S.storyboardSheet(this.timeline, index);
+        const shown = sheet.length > 0;
+        return el("button", {
+          class: `mmc-tl-join mmc-tl-join-board${shown ? " on" : ""}`,
+          title: shown
+            ? t("Segment {n} is shown a storyboard of {which}: nine of their frames on one "
+              + "sheet, in order, cited as a picture reference so the room, the light and "
+              + "where things stand carry across this cut. It runs on the reference "
+              + "checkpoint for it, and re-renders when those shots change. Click to "
+              + "change which shots, or show it nothing.",
+                { n: index + 1, which: passNumbers(sheet) })
+            : t("Segment {n} is shown nothing of the shots before it. Click to show it a "
+              + "storyboard of them — nine of their frames on one sheet, cited as a "
+              + "picture reference.", { n: index + 1 }),
+          onclick: (event) => this.pickStoryboard(event.currentTarget, segment, index),
+        }, [icon("storyboard", 13),
+            el("span", { text: shown ? t("sees {which}", { which: passNumbers(sheet) })
+                                     : t("no storyboard") })]);
+      })()] : []),
       // The third answer to what happens here, and the only structural one: no
       // seam at all, because the two sides are one generation. Kept apart from
       // the two switches above rather than folded in as a third state of the
@@ -2036,6 +2100,120 @@ class Timeline {
    *  whose frames exist by the time this seam is crossed. */
   earlierPasses(index) {
     return S.passes(this.timeline).filter((pass) => pass.end <= index);
+  }
+
+  /** The piece's storyboard setting, as a pill. */
+  storyboardPill() {
+    const policy = S.storyboardPolicy(this.timeline);
+    const sub = { previous: t("previous shot"), all: t("piece so far") }[policy];
+    return el("button", {
+      class: `mmc-pill${policy ? " on" : ""}`,
+      title: t("Whether each shot is shown a storyboard of the shots before it: nine of "
+             + "their frames on one sheet, cited as a picture reference, so the room, the "
+             + "light and where things stand carry across a cut. Made when the earlier "
+             + "shots have rendered. A shot shown one runs on the reference checkpoint, "
+             + "and re-renders when the shots it sees change. Each seam's chip can say "
+             + "otherwise for its own shot."),
+      onclick: (event) => this.pickStoryboardPolicy(event.currentTarget),
+    }, [
+      icon("storyboard", 16),
+      el("span", { text: t("Storyboard") }),
+      ...(sub ? [el("span", { class: "mmc-pill-sub", text: sub })] : []),
+    ]);
+  }
+
+  pickStoryboardPolicy(anchor) {
+    const options = [null, "previous", "all"];
+    const label = (policy) => ({
+      previous: t("Each shot sees the shot before it"),
+      all: t("Each shot sees the piece so far"),
+    }[policy] ?? t("No storyboard"));
+    const sub = (policy) => ({
+      previous: t("Nine frames of the previous shot. What the eye just saw."),
+      all: t("Nine frames spread over every earlier shot, by length. Shot 1 stays in "
+           + "view as the tone the piece opened on."),
+    }[policy] ?? t("Each shot is described by its prompt, its seam and its own references."));
+    openChoicePopover(anchor, {
+      title: t("What each shot is shown of the shots before it"),
+      options, label, sub,
+      value: S.storyboardPolicy(this.timeline),
+      onPick: (policy) => {
+        if (policy) this.timeline.storyboard = policy; else delete this.timeline.storyboard;
+        this.commit();
+      },
+    });
+  }
+
+  /**
+   * The storyboard a card is shown, chosen on its seam.
+   *
+   * Three answers and a fourth: nothing, the shot in front, everything so far
+   * — and any set of earlier passes, on the row of toggles. Choosing what the
+   * piece is already set to is choosing to store nothing, which is what a
+   * seam's source does too: a card with no answer of its own follows the
+   * piece, and stays following it if the piece changes its mind.
+   */
+  pickStoryboard(anchor, segment, index) {
+    const earlier = this.earlierPasses(index);
+    const policy = S.storyboardPolicy(this.timeline);
+    const previous = earlier[earlier.length - 1];
+    const all = earlier.map((pass) => pass.end);
+    const options = ["none", "previous", ...(earlier.length > 1 ? ["all"] : [])];
+    const label = (choice) => ({
+      none: t("Nothing"),
+      previous: t("The shot before it (#{n})", { n: previous.end }),
+      all: t("Every shot so far (#1–{n})", { n: previous.end }),
+    }[choice]);
+    const sub = (choice) => (
+      choice === (policy ?? "none") || (choice === "previous" && policy === "all" && earlier.length === 1)
+        ? t("As the piece is set") : null);
+    const current = () => {
+      const shown = S.storyboardSheet(this.timeline, index).map(({ pass }) => pass.end);
+      if (!shown.length) return "none";
+      if (shown.length === earlier.length && earlier.length > 1) return "all";
+      if (shown.length === 1 && shown[0] === previous.end) return "previous";
+      return null;
+    };
+    const write = (cards) => {
+      // The piece's own answer is stored as no answer.
+      const resolved = policy === "all" ? all : policy === "previous" ? [previous.end] : [];
+      const same = cards.length === resolved.length && cards.every((n, i) => n === resolved[i]);
+      if (same) delete segment.storyboard;
+      else segment.storyboard = cards.length ? cards : false;
+      this.commit();
+    };
+    // The toggles: one per earlier pass, lit where the sheet draws on it.
+    const toggles = (close) => {
+      const shown = new Set(S.storyboardSheet(this.timeline, index).map(({ pass }) => pass.end));
+      return el("div", { class: "mmc-twopass" }, [
+        el("div", { class: "mmc-opt-label mmc-opt-col" }, [
+          el("span", { text: t("Or choose the shots") }),
+          el("span", { class: "mmc-opt-sub",
+                       text: t("Nine cells, shared out by how long each shot plays.") }),
+        ]),
+        el("div", { class: "mmc-board-picks" }, earlier.map((pass) => el("button", {
+          class: "mmc-board-pick",
+          "aria-checked": shown.has(pass.end),
+          title: pass.segments.length > 1
+            ? t("segments {first}-{last}, one pass", { first: pass.start + 1, last: pass.end })
+            : t("segment {n}", { n: pass.end }),
+          onclick: () => {
+            const next = new Set(shown);
+            if (next.has(pass.end)) next.delete(pass.end); else next.add(pass.end);
+            write(all.filter((n) => next.has(n)));
+            close();
+          },
+        }, [el("span", { text: `#${pass.end}` })]))),
+        ...(shown.size ? [sheetDiagram(S.storyboardSheet(this.timeline, index))] : []),
+      ]);
+    };
+    openChoicePopover(anchor, {
+      title: t("What segment {n} is shown of the piece so far", { n: index + 1 }),
+      options, label, sub,
+      value: current(),
+      extra: toggles,
+      onPick: (choice) => write(choice === "all" ? all : choice === "previous" ? [previous.end] : []),
+    });
   }
 
   /**
@@ -2374,6 +2552,9 @@ class Timeline {
 
     const meta = [];
     if (refs) meta.push(t(refs === 1 ? "{count} ref" : "{count} refs", { count: refs }));
+    // The sheet this card is shown counts as one of its pictures, and the
+    // strip should say at a glance which cards see the piece.
+    if (!shared && S.storyboardSheet(this.timeline, index).length) meta.push(t("storyboard"));
     if (loras) meta.push(t(loras === 1 ? "{count} LoRA" : "{count} LoRAs", { count: loras }));
     if (rewrite) meta.push(using ? t("refined") : t("refined (off)"));
 

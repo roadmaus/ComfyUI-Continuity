@@ -326,13 +326,18 @@ class MiniMaxH3PassFrames(io.ComfyNode):
                 io.Custom(PASS_TYPE).Input("source"),
                 # A feathered seam inherits a run instead of a single frame.
                 io.Int.Input("count", default=1, min=1, max=64, optional=True),
+                # `spread` is a storyboard's cells: `count` frames from across
+                # the whole pass rather than off its end. Optional, so a seam's
+                # node keeps the inputs — and the cache key — it always had.
+                io.Combo.Input("at", options=["tail", "spread"], default="tail",
+                               optional=True),
             ],
             outputs=[io.Image.Output()],
         )
 
     @classmethod
-    def execute(cls, source, count=1) -> io.NodeOutput:
-        return io.NodeOutput(spill.frames(source, int(count), "tail"))
+    def execute(cls, source, count=1, at="tail") -> io.NodeOutput:
+        return io.NodeOutput(spill.frames(source, int(count), at))
 
 
 class MiniMaxH3PassAudio(io.ComfyNode):
@@ -509,7 +514,8 @@ class MiniMaxH3ClipFrames(io.ComfyNode):
             inputs=[
                 io.String.Input("clip_data", multiline=True),
                 io.Int.Input("count", default=1, min=1, max=64),
-                io.Combo.Input("at", options=["head", "tail"], default="tail"),
+                # `spread` is a storyboard's cells — see `MiniMaxH3PassFrames`.
+                io.Combo.Input("at", options=["head", "tail", "spread"], default="tail"),
             ],
             outputs=[io.Image.Output()],
         )
@@ -557,6 +563,65 @@ class MiniMaxH3ClipAudio(io.ComfyNode):
     def execute(cls, clip_data, seconds=compiler.DEFAULT_AUDIO_TAIL_S,
                 at="tail") -> io.NodeOutput:
         return io.NodeOutput(media.clip_audio(_parse(clip_data), float(seconds), at))
+
+
+# How many sources one sheet can draw on — `compile.STORYBOARD_CELLS`, since a
+# source fills at least one cell. The node takes that many optional inputs
+# because a graph's node has a fixed set of sockets and the strip does not.
+STORYBOARD_SOURCES = compiler.STORYBOARD_CELLS
+
+
+class ContinuityStoryboard(io.ComfyNode):
+    """The storyboard a shot is shown of the shots before it (issue #43).
+
+    A 3 x 3 sheet of frames from earlier passes, in play order, laid out left
+    to right and top to bottom on black — the contact sheet the reporter was
+    attaching by hand — handed to the segment node as one more picture
+    reference. The frames arrive per source, already chosen (`spill.spread`),
+    so this only lays out; which passes and how many cells each was the
+    compiler's decision (`compile.storyboard_cells`) and is on the payload.
+
+    Built at the generation's own canvas, for `plate.compose`'s reason: the
+    reference encoder scales a `match` reference down to that area anyway,
+    and a sheet made there is downsampled once rather than twice. Each frame
+    is fitted whole into its cell; a pass at the canvas fills it exactly, and
+    a cut-in clip of another shape is letterboxed rather than cropped.
+
+    Its id is its own, like the guide reader's: a node that has never shipped
+    has no saved workflow to break.
+    """
+
+    @classmethod
+    def define_schema(cls):
+        return io.Schema(
+            node_id="ContinuityStoryboard",
+            display_name="Continuity Storyboard",
+            category="Continuity/internal",
+            description="A 3 x 3 sheet of frames from the passes before a shot, "
+                        "for the shot to be shown as a reference.",
+            is_dev_only=True,
+            inputs=[
+                io.Int.Input("width", default=1344, min=64, max=16384),
+                io.Int.Input("height", default=768, min=64, max=16384),
+                *(io.Image.Input(f"frames_{n}", optional=True)
+                  for n in range(1, STORYBOARD_SOURCES + 1)),
+            ],
+            outputs=[io.Image.Output()],
+        )
+
+    @classmethod
+    def execute(cls, width, height, **frames) -> io.NodeOutput:
+        import torch
+
+        from . import plate
+
+        cells = [frames[f"frames_{n}"] for n in range(1, STORYBOARD_SOURCES + 1)
+                 if frames.get(f"frames_{n}") is not None]
+        if not cells:
+            raise ValueError("a storyboard needs at least one pass to draw on")
+        ordered = [frame[None] for batch in cells for frame in batch][:compiler.STORYBOARD_CELLS]
+        sheet = plate.compose(ordered, int(width), int(height), backdrop=0.0)
+        return io.NodeOutput(sheet)
 
 
 class ContinuityGuideFrames(io.ComfyNode):
@@ -887,7 +952,7 @@ class MiniMaxH3Save(io.ComfyNode):
 
 # Registered by `creator_node.MiniMaxCreatorExtension` — one extension for the
 # package, so there is one place that says what this node pack contains.
-NODES = [MiniMaxH3Reel,
+NODES = [ContinuityStoryboard, MiniMaxH3Reel,
          MiniMaxH3PassFrames, MiniMaxH3PassAudio,
          MiniMaxH3ClipReel, MiniMaxH3ClipFrames, MiniMaxH3ClipAudio,
          ContinuitySeamHold,

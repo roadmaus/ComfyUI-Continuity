@@ -538,6 +538,42 @@ export const css = `
 .mmc-tl-join-from { padding-top: 0; }
 .mmc-tl-join-from span:first-child { font-size: calc(10px * var(--mmc-type)); }
 
+/* The storyboard chip: what this card is shown of the strip before it. Drawn
+   like the sound switch — a small glyph over a word — and on every seam,
+   because unlike the seam's own chips it means something on a hard cut. */
+.mmc-tl-join-board { padding-top: 0; }
+.mmc-tl-join-board svg { width: 13px; height: 13px; stroke: currentColor; fill: none;
+  stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+/* The sheet, in the chip's popover: nine cells carrying the number of the card
+   each is filled from, in the order the frames land. A picture of the layout
+   rather than the layout — the frames do not exist until the shots have
+   rendered — so it is small and reads as a diagram: the canvas's own shape,
+   sources told apart by two tones of the accent, the number in each cell. */
+.mmc-board {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+  width: 132px; aspect-ratio: 16 / 9; margin: 8px 10px 4px; padding: 2px;
+  border-radius: 6px; background: var(--mmc-ground);
+}
+.mmc-board-cell {
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 2px; font-size: calc(9px * var(--mmc-type)); line-height: 1;
+  color: var(--mmc-strong); background: color-mix(in srgb, var(--mmc-accent) 34%, var(--mmc-surface-2));
+}
+.mmc-board-cell.alt { background: color-mix(in srgb, var(--mmc-accent) 14%, var(--mmc-surface-2)); }
+/* The row of earlier shots to draw the sheet on, as toggles. Lit ones are in. */
+.mmc-board-picks { display: flex; flex-wrap: wrap; gap: 4px; padding: 4px 10px 2px; }
+.mmc-board-pick {
+  border: 1px solid var(--mmc-line); border-radius: 6px; padding: 3px 8px;
+  background: var(--mmc-surface-2); color: var(--mmc-dim); cursor: pointer;
+  font-family: inherit; font-size: calc(11px * var(--mmc-type));
+}
+.mmc-board-pick:hover { color: var(--mmc-text); border-color: var(--mmc-line-2); }
+.mmc-board-pick[aria-checked="true"] {
+  color: var(--mmc-accent); border-color: color-mix(in srgb, var(--mmc-accent) 50%, transparent);
+  background: color-mix(in srgb, var(--mmc-accent) 14%, transparent);
+}
+
 .mmc-tl-add {
   width: 108px; box-sizing: border-box; margin: 6px 0 6px 12px;
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
