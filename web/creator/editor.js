@@ -24,7 +24,7 @@ import { openTrim, trimLabel } from "./trim.js";
 import { editPicture, asPick, applyPick, cropLabel } from "./picture.js";
 import { PromptBox, focusEnd, openEditorSheet } from "./prompt.js";
 import { RefinePanel, refineButton, refine } from "./refine.js";
-import { openAspectPopover, openResolutionPopover, openChoicePopover, facesPill, neuralPill, aspectGlyph,
+import { openAspectPopover, openResolutionPopover, openChoicePopover, facesPill, motionPill, neuralPill, aspectGlyph,
          resolutionPillText,
          PILL_GLYPH, pillSet, pillClass } from "./pills.js";
 import { blobIO, samplingBar, segmentSeedPill } from "./sampling.js";
@@ -1585,6 +1585,13 @@ export class CreatorEditor {
         // render that says what is wrong and one that stops.
         ...(S.canDo(this.piece, "face") || this.piece.face?.on
           ? [facesPill({ target: this.piece, commit: () => this.commit() })] : []),
+        // The motion fix, which on a strip is a chip on each card: a lone
+        // shot has no card, so its switch sits here. Only where the family
+        // has the pass, and this editor is the node's face rather than a
+        // card's — a card's switch is the chip on the strip behind it.
+        ...(S.canDo(this.piece, "motion_fix") && !S.isClip(this.state)
+          ? [motionPill({ segment: this.state, on: S.motionFix(this.state, this.piece),
+                          commit: () => this.commit() })] : []),
         // The DLSS 5 refiner, family-neutral: it runs over decoded frames.
         neuralPill({ target: this.piece, commit: () => this.commit(),
                      geometry: () => {

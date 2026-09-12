@@ -885,6 +885,57 @@ try {
   out.errors.push(`clip card: ${error.message}`);
 }
 
+// The motion fix chip on a card is a switch, and the switch has to be seen to
+// move: it once read the flag off the piece instead of the card, so a click
+// wrote `motion_fix` into the blob while the chip kept saying "no motion fix".
+try {
+  const blob = JSON.stringify({
+    version: 2, prompt: "", aspect: "16:9", short_edge: 768,
+    segments: [{ prompt: "a kick", duration_s: 2, assets: [], loras: [] },
+               { prompt: "a bow", duration_s: 2, assets: [], loras: [], continue: true }],
+  });
+  const node = fakeNode("MiniMaxH3Timeline", "timeline_data", blob);
+  await ext.nodeCreated(node);
+  const body = node.mmcBody;
+  const { openTimeline } = await import("./web/creator/timeline.js");
+  openTimeline({ timeline: body.timeline, onCommit: () => body.commit() });
+  await new Promise((done) => setTimeout(done, 0));
+  const chips = (root, found = []) => {
+    if ((root.className ?? "").split(" ").includes("mmc-tl-card-motion")) found.push(root);
+    (root.children ?? []).forEach((child) => chips(child, found));
+    return found;
+  };
+  // This modal and not the body: earlier blocks leave their modals open on
+  // the document, each with a strip of its own chips.
+  const modal = document.body.children.at(-1);
+  const before = chips(modal).map((chip) => chip.text);
+  chips(modal)[0].listeners.click[0]({ stopPropagation() {} });
+  await new Promise((done) => setTimeout(done, 0));
+  out.motionChip = {
+    before, after: chips(modal).map((chip) => chip.text),
+    written: JSON.parse(S.serializeTimeline(body.timeline)).segments.map((seg) => seg.motion_fix ?? false),
+    // The lone shot's own switch, on the editor's row rather than a card.
+    lone: await (async () => {
+      const one = fakeNode("MiniMaxH3Timeline", "timeline_data", JSON.stringify({
+        version: 2, prompt: "", aspect: "16:9", short_edge: 768,
+        segments: [{ prompt: "a kick", duration_s: 2, assets: [], loras: [] }] }));
+      await ext.nodeCreated(one);
+      const pills = (root, found = []) => {
+        if ((root.className ?? "").split(" ").includes("mmc-pill-motion")) found.push(root);
+        (root.children ?? []).forEach((child) => pills(child, found));
+        return found;
+      };
+      const first = pills(one.mmcBody.root).map((pill) => pill.text);
+      pills(one.mmcBody.root)[0]?.listeners.click[0]({ stopPropagation() {} });
+      await new Promise((done) => setTimeout(done, 0));
+      return { first, then: pills(one.mmcBody.root).map((pill) => pill.text),
+               written: JSON.parse(S.serializeTimeline(one.mmcBody.timeline)).segments[0].motion_fix ?? false };
+    })(),
+  };
+} catch (error) {
+  out.errors.push(`motion chip: ${error.message}`);
+}
+
 // A piece cannot be empty.
 //
 // The strip could hold no cards at all while it was a node of its own, and the
@@ -3670,6 +3721,17 @@ check("the face and a strip card open one window", window.get("same"), True)
 check("...with the shot's body in it", window.get("body"), True)
 
 # Supplied footage: both renders survive it, and both say it is there.
+motion = report.get("motionChip", {})
+check("every card offers the motion fix, off", motion.get("before"), ["no motion fix", "no motion fix"])
+check("clicking the chip turns it on, and only on that card",
+      (motion.get("after"), motion.get("written")),
+      (["motion fix", "no motion fix"], [True, False]))
+check("a lone shot has the switch as a pill on its row, off",
+      (motion.get("lone") or {}).get("first"), ["motion fix off"])
+check("...and the pill switches it on in the blob",
+      ((motion.get("lone") or {}).get("then"), (motion.get("lone") or {}).get("written")),
+      (["motion fix"], True))
+
 clip = report.get("clip", {})
 check("a timeline with a clip in it mounts", clip.get("mounted"), True)
 check("the strip still redraws after a clip is committed", clip.get("recommitted"), True)

@@ -68,8 +68,9 @@ better on your strips, open an issue with the per-cut numbers.
 H3 smears fast motion — a spinning kick, a sword arc, a whip-fast turn — into
 a blur, and no seed or step count fixes it: one latent time token spans four
 frames and cannot hold four different poses, so the poses were never drawn.
-The **motion fix** chip on a card (H3 only, never on footage) runs a second
-pass after the shot renders: the shot's own latent says where it moved too
+The **motion fix** chip on a card — on a lone shot, the pill of the same
+name on its row — (H3 only, never on footage) runs a second pass after the
+shot renders: the shot's own latent says where it moved too
 fast, those frames are held on a longer clock at up to four copies each, the
 slowed clip is sampled again from half the schedule against the shot's own
 prompt and references, and the original clock is recovered by keeping the

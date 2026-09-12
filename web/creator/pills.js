@@ -909,6 +909,27 @@ export function facesPill({ target, commit }) {
 }
 
 
+/** The motion fix on a lone shot — the same switch the card chip is on a strip,
+ *  on the editor's row because a lone shot has no card to wear it. `on` is the
+ *  caller's answer (`S.motionFix`, which this module does not import) and
+ *  `segment` the shot the click writes to; a plain toggle, since there is
+ *  nothing behind it to dial: the gate is on the settings page. */
+export function motionPill({ segment, on, commit }) {
+  return el("button", {
+    class: `mmc-pill mmc-pill-motion${on ? " accel-on" : ""}`,
+    title: on
+      ? t("Where this shot moves too fast for the model, it is slowed down, re-drawn and put back on the clock after it renders — a second pass, about three times the shot's cost. Click to leave it as it renders.")
+      : t("This shot is left as it renders. Click to have its fast motion slowed down, re-drawn and put back on the clock — a second pass, about three times the shot's cost."),
+    onclick: (event) => {
+      event.stopPropagation();
+      if (on) delete segment.motion_fix;
+      else segment.motion_fix = true;
+      commit();
+    },
+  }, [el("span", { text: on ? t("motion fix") : t("motion fix off") })]);
+}
+
+
 /** On or off, and — on — the two knobs. The card switches are on the cards. */
 export function openFacesPopover(anchor, { target, commit }) {
   const pop = el("div", { class: "mmc-pop mmc-faces-pop" });

@@ -1255,6 +1255,7 @@ export const ko = {
  "face": "얼굴",
  "no face": "얼굴 제외",
  "motion fix": "모션 수정",
+ "motion fix off": "모션 수정 꺼짐",
  "no motion fix": "모션 수정 없음",
  "Where this shot moves too fast for the model, it is slowed down, re-drawn and put back on the clock after it renders — a second pass, about three times the shot's cost. Click to leave it as it renders.": "이 샷에서 모델에 너무 빠른 움직임은 렌더링 후 느리게 만들어 다시 그린 뒤 원래 클록으로 되돌립니다 — 두 번째 패스로, 샷 비용의 약 3배입니다. 클릭하면 렌더링 그대로 둡니다.",
  "This shot is left as it renders. Click to have its fast motion slowed down, re-drawn and put back on the clock — a second pass, about three times the shot's cost.": "이 샷은 렌더링 그대로 둡니다. 클릭하면 빠른 움직임을 느리게 만들어 다시 그린 뒤 원래 클록으로 되돌립니다 — 두 번째 패스로, 샷 비용의 약 3배입니다.",

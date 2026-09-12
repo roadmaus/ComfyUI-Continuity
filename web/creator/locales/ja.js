@@ -1254,6 +1254,7 @@ export const ja = {
  "face": "顔",
  "no face": "顔なし",
  "motion fix": "モーション修正",
+ "motion fix off": "モーション修正 オフ",
  "no motion fix": "モーション修正なし",
  "Where this shot moves too fast for the model, it is slowed down, re-drawn and put back on the clock after it renders — a second pass, about three times the shot's cost. Click to leave it as it renders.": "このショットの動きがモデルには速すぎる箇所は、レンダリング後にスローダウンして描き直し、元のクロックに戻します — 2 パス目で、ショットの約 3 倍のコストです。クリックするとそのままにします。",
  "This shot is left as it renders. Click to have its fast motion slowed down, re-drawn and put back on the clock — a second pass, about three times the shot's cost.": "このショットはレンダリングのままです。クリックすると速い動きをスローダウンして描き直し、元のクロックに戻します — 2 パス目で、ショットの約 3 倍のコストです。",

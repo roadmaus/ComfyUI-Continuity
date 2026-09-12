@@ -2576,7 +2576,7 @@ class Timeline {
     // shots have a burst in them is a fact about the shots. Only a generated
     // shot on a family with the pass draws it.
     const fixable = !S.isClip(segment) && S.canDo(this.timeline, "motion_fix");
-    const fixed = S.motionFix(this.timeline, segment);
+    const fixed = S.motionFix(segment, this.timeline);
     const motionChip = fixable ? el("button", {
       class: `mmc-tl-card-motion${fixed ? " on" : ""}`,
       text: fixed ? t("motion fix") : t("no motion fix"),

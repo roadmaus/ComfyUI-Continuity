@@ -24,7 +24,8 @@ fix cannot become a seam step of its own; a calm pass (peak motion under the
 gate) is left alone and says so in the history; the soundtrack rides through
 untouched. A blended seam off a fixed pass takes the frames road, and the
 face pass, where on, runs over the fixed frames. The chip sits on the card
-beside the face chip, only on H3 and never on footage; the dials are the
+beside the face chip, and on a lone shot the same switch is a pill on its
+row beside faces, only on H3 and never on footage; the dials are the
 method's defaults in `families/h3/derope.py`, which is pure numpy and tested
 without a model. Measured on a 2 s turbo card: a spinning kick gets its
 shin, foot and face back with the choreography kept, at about twice the

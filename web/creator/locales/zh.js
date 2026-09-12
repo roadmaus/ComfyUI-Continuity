@@ -1256,6 +1256,7 @@ export const zh = {
  "face": "面部",
  "no face": "不处理",
  "motion fix": "运动修复",
+ "motion fix off": "运动修复 关",
  "no motion fix": "不修复运动",
  "Where this shot moves too fast for the model, it is slowed down, re-drawn and put back on the clock after it renders — a second pass, about three times the shot's cost. Click to leave it as it renders.": "此镜头中对模型来说过快的动作，会在渲染后被放慢、重绘并放回原时钟 — 第二遍，约为镜头三倍的开销。点击则保持渲染原样。",
  "This shot is left as it renders. Click to have its fast motion slowed down, re-drawn and put back on the clock — a second pass, about three times the shot's cost.": "此镜头保持渲染原样。点击则将其过快的动作放慢、重绘并放回原时钟 — 第二遍，约为镜头三倍的开销。",
