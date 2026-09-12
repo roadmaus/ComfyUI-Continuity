@@ -153,6 +153,8 @@ check("the definition says what it is",
       "<Picture 1> is a storyboard of the video so far" in compiled[1].prompt, True)
 check("...how it reads",
       "left to right and top to bottom" in compiled[1].prompt, True)
+check("...that the framing is the description's",
+      "Its framing is not: the target video's own shot size" in compiled[1].prompt, True)
 check("...and that the sheet is not shown",
       "its grid and its frames are never shown" in compiled[1].prompt, True)
 check("the retention line scopes it",

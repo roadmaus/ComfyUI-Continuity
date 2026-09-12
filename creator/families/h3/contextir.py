@@ -127,7 +127,9 @@ _DEFINE = {
                              "from the shots before this one, in time order, laid "
                              "out left to right and top to bottom. Its environment, "
                              "surfaces and light, and where the people and objects "
-                             "in it stand, are retained; the sheet itself, its grid "
+                             "in it stand, are retained. Its framing is not: the "
+                             "target video's own shot size, angle and camera come "
+                             "from this description, and the sheet itself, its grid "
                              "and its frames are never shown.",
 
     ("video", "full"): "%s is a reference video.",
@@ -318,8 +320,9 @@ _BECOMES = {
                         "the target video and whoever stood in it is not",
     ("image", "storyboard"): "the place, its light and where things stand are "
                              "carried into the target video, which picks up "
-                             "where those shots left off, and the sheet is not "
-                             "shown",
+                             "where those shots left off and frames them as this "
+                             "description says rather than as the sheet does, and "
+                             "the sheet is not shown",
     ("image", "style"): "the medium, palette, light and rendering are carried "
                         "into the target video and the source's own subject is not",
     ("image", "motion"): "the action and pose are carried onto the target "
