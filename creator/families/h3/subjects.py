@@ -406,7 +406,17 @@ def asleep(subject, texts):
     # written into the sentence is the plainest way of asking for it.
     return {h for h, words in subject.triggers.items()
             if not re.search(rf"@{re.escape(h.lower())}\b", prose)
-            and not any(w in prose for w in words)}
+            and not any(says(prose, w) for w in words)}
+
+
+def says(prose, word):
+    """Whether `prose` says `word`: at the start of a word, running on as it
+    likes. "smok" is said by "smoking", "smokes" and "smokarilly"; "hat" is
+    said by "hats" and not by "what". A prefix and not a substring, because
+    the one thing a plate must not do is wake on a word nobody wrote — and
+    not a whole word, because the sheet that wakes on "smok" is the whole
+    point. Mirrors `state.says`."""
+    return re.search(r"(?<!\w)" + re.escape(word), prose) is not None
 
 
 def awake(cast, texts):

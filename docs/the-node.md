@@ -100,8 +100,9 @@ and a dot when words are attached to it.
 Under that line is a second one: the words the file **wakes on**. Leave it
 blank and the file comes with the member into every shot that names them.
 Write `hat, cap` on the plate of the red hat and it is in a shot only while
-the sentence says one of those words - anywhere in a word, so `smok` on a
-smoking sheet wakes on "smoking", "smokes" and "smoke". This is how a
+the sentence says one of those words - at the start of a word, so `smok` on
+a smoking sheet wakes on "smoking", "smokes" and "smoke", and `hat` wakes on
+"hats" but not on "what". This is how a
 character with thirty plates - costumes, props, action sheets, a reel per
 gesture - is written as a sentence: "@vera, in her hat, lights a cigarette"
 brings the face, the hat and the smoking sheet, and leaves the other

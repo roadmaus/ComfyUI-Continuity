@@ -290,8 +290,9 @@ export function triggerField({ value, write, done }) {
     className: "mmc-cast-menu-wake",
     placeholder: t("wakes on — hat, cap  (blank: in every shot they are in)"),
     title: t("Words, separated by commas. The file is in a shot only while the sentence "
-           + "says one of them — anywhere in a word, so “smok” wakes on smoking and "
-           + "smokes. Leave it blank and the file comes with them everywhere."),
+           + "says one of them — at the start of a word, so “smok” wakes on smoking and "
+           + "smokes, and “hat” on hats but not on what. Leave it blank and the file "
+           + "comes with them everywhere."),
   });
 }
 

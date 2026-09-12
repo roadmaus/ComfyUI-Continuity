@@ -45,6 +45,8 @@ SENTENCES = [
     "@vera waits. @img-3 shows how.",
     "@vera waits. @img-30 by the door.",
     "what she does",
+    "two hats, (hat), her-hat, chapeau",
+    "@vera swings; a smokarilly smokilly evening.",
     "a room, empty.",
 ]
 # A `{a|b}` under twelve seeds: the sentence the seed makes is what wakes

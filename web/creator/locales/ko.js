@@ -1991,7 +1991,7 @@ export const ko = {
  "Could not re-encode @{handle} — {error}": "@{handle} 를 다시 인코딩할 수 없습니다 — {error}",
  "Encoded as": "인코딩 방식",
  "wakes on — hat, cap  (blank: in every shot they are in)": "깨우는 말 — 모자, 캡  (비우면: 등장하는 모든 샷에서)",
- "Words, separated by commas. The file is in a shot only while the sentence says one of them — anywhere in a word, so “smok” wakes on smoking and smokes. Leave it blank and the file comes with them everywhere.": "쉼표로 구분한 단어들. 문장에 그중 하나가 있을 때만 이 파일이 샷에 들어갑니다 — 단어 일부라도 맞으면 되므로 “smok”은 smoking과 smokes에 모두 반응합니다. 비워 두면 어디든 함께 따라갑니다.",
+ "Words, separated by commas. The file is in a shot only while the sentence says one of them — at the start of a word, so “smok” wakes on smoking and smokes, and “hat” on hats but not on what. Leave it blank and the file comes with them everywhere.": "쉼표로 구분한 단어들. 문장에 그중 하나가 있을 때만 이 파일이 샷에 들어갑니다 — 단어의 시작에서 맞추므로 “smok”은 smoking과 smokes에, “hat”은 hats에는 반응하지만 what에는 반응하지 않습니다. 비워 두면 어디든 함께 따라갑니다.",
  "Wakes on {words}\n": "{words}에 깨어남\n",
  "wakes on {words}": "{words}에 깨어남",
  "Not in this shot: the sentence says none of these words. Write one, or name @{handle} outright.": "이 샷에 없음: 문장에 이 단어들이 하나도 없습니다. 하나를 쓰거나 @{handle}을 직접 적으세요.",

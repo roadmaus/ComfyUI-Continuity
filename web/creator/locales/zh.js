@@ -1992,7 +1992,7 @@ export const zh = {
  "Could not re-encode @{handle} — {error}": "无法重新编码 @{handle} — {error}",
  "Encoded as": "编码方式",
  "wakes on — hat, cap  (blank: in every shot they are in)": "唤醒词 — 帽子, 鸭舌帽  (留空: TA出现的每个镜头都带上)",
- "Words, separated by commas. The file is in a shot only while the sentence says one of them — anywhere in a word, so “smok” wakes on smoking and smokes. Leave it blank and the file comes with them everywhere.": "用逗号分隔的词。只有句子里出现其中一个词时，这个文件才进入镜头 —— 匹配词的任意部分，所以“smok”对 smoking 和 smokes 都生效。留空则它随TA出现在每个镜头。",
+ "Words, separated by commas. The file is in a shot only while the sentence says one of them — at the start of a word, so “smok” wakes on smoking and smokes, and “hat” on hats but not on what. Leave it blank and the file comes with them everywhere.": "用逗号分隔的词。只有句子里出现其中一个词时，这个文件才进入镜头 —— 按词首匹配，所以“smok”对 smoking 和 smokes 生效，“hat”对 hats 生效但对 what 不生效。留空则它随TA出现在每个镜头。",
  "Wakes on {words}\n": "由 {words} 唤醒\n",
  "wakes on {words}": "由 {words} 唤醒",
  "Not in this shot: the sentence says none of these words. Write one, or name @{handle} outright.": "不在此镜头：句子里没有这些词。写上一个，或直接点名 @{handle}。",

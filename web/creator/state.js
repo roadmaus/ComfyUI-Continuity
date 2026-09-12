@@ -5008,9 +5008,17 @@ export function subjectAsleep(subject, texts) {
   const prose = texts.map((t) => String(t ?? "")).join("\n").toLowerCase();
   for (const handle of handles) {
     if (new RegExp(`@${handle.toLowerCase().replace(/[.*+?^${}()|[\]\\-]/g, "\\$&")}\\b`).test(prose)) continue;
-    if (!splitTriggers(triggers[handle]).some((w) => prose.includes(w))) out.add(handle);
+    if (!splitTriggers(triggers[handle]).some((w) => says(prose, w))) out.add(handle);
   }
   return out;
+}
+
+/** Whether `prose` says `word`: at the start of a word, running on as it
+ *  likes — "smok" is said by "smoking", "hat" by "hats" and not by "what".
+ *  Mirrors `subjects.says`. */
+export function says(prose, word) {
+  const escaped = word.replace(/[.*+?^${}()|[\]\\-]/g, "\\$&");
+  return new RegExp(`(?<![\\p{L}\\p{N}_])${escaped}`, "u").test(prose);
 }
 
 /**

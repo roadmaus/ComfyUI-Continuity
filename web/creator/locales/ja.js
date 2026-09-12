@@ -1990,7 +1990,7 @@ export const ja = {
  "Could not re-encode @{handle} — {error}": "@{handle} を再エンコードできませんでした — {error}",
  "Encoded as": "エンコード形式",
  "wakes on — hat, cap  (blank: in every shot they are in)": "起きる言葉 — 帽子, キャップ  (空欄: 出演する全ショットで有効)",
- "Words, separated by commas. The file is in a shot only while the sentence says one of them — anywhere in a word, so “smok” wakes on smoking and smokes. Leave it blank and the file comes with them everywhere.": "コンマ区切りの言葉。文がそのいずれかを含むショットでだけこのファイルが使われます — 単語の一部でも一致するので、「smok」は smoking にも smokes にも反応します。空欄ならどのショットにも一緒に付いてきます。",
+ "Words, separated by commas. The file is in a shot only while the sentence says one of them — at the start of a word, so “smok” wakes on smoking and smokes, and “hat” on hats but not on what. Leave it blank and the file comes with them everywhere.": "コンマ区切りの言葉。文がそのいずれかを含むショットでだけこのファイルが使われます — 単語の先頭で一致するので、「smok」は smoking にも smokes にも、「hat」は hats には反応しますが what には反応しません。空欄ならどのショットにも一緒に付いてきます。",
  "Wakes on {words}\n": "{words} で起きる\n",
  "wakes on {words}": "{words} で起きる",
  "Not in this shot: the sentence says none of these words. Write one, or name @{handle} outright.": "このショットには入りません: 文にこれらの言葉がありません。どれかを書くか、@{handle} を直接書いてください。",

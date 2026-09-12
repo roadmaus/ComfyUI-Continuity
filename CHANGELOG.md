@@ -10,8 +10,9 @@ exactly as it was written, wall of text and all.
 a second line under "what it shows of them": the words it wakes on. Blank,
 the file comes with them into every shot that names them, as before. `hat,
 cap` on the plate of the red hat, and it is in a shot only while the sentence
-says one of those words — matched anywhere in a word, so `smok` on a smoking
-sheet answers "smoking" and "smokes". A character with thirty plates is then
+says one of those words — matched at the start of a word, so `smok` on a
+smoking sheet answers "smoking" and "smokes" while "what" leaves the hat
+alone. A character with thirty plates is then
 written as a sentence: "@vera, in her hat, lights a cigarette" brings the
 face, the hat and the smoking sheet and leaves the rest out, under the cap.
 Decided after `{a|b}` has chosen, so a word inside an alternative the seed

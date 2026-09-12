@@ -6,8 +6,9 @@ ComfyUI. What is pinned here is the contract the UI mirrors (`state.asleepHere`,
 held to this file by `tests/test_triggers_mirror.py`):
 
   - the words are read off the line as typed — commas, spaces, case forgiven;
-  - matched as a substring of the lowercased prose, so "smok" wakes on
-    "smoking", and a file named outright by handle wakes whatever its words;
+  - matched at the start of a word in the lowercased prose, so "smok" wakes
+    on "smoking" and "what" does not wake "hat", and a file named outright
+    by handle wakes whatever its words;
   - the cut happens wherever a cited member's files are gathered — the piece's
     pool on the way into a segment, and the card's own row — and before the
     mode, the labels and the limits are read;
@@ -81,11 +82,13 @@ check("any of the words will do, in any case",
       subjects.asleep(_vera, ["a CAP pulled low"]), {"img-3"})
 check("naming the file outright wakes it whatever its words",
       subjects.asleep(_vera, ["@img-3 shows her by the door"]), {"img-2"})
-# The reporter asked for substrings, not words, and this is the price: "what"
-# says "hat". Pinned so nobody "fixes" it into a word match without a test
-# saying so — the sheet that wakes on "smok" is why it is a substring.
-check("a substring is a substring — what wakes the hat",
-      subjects.asleep(_vera, ["what she does"]), {"img-3"})
+# A prefix, not a substring and not a whole word: "smok" has to wake on
+# "smoking", and "what" must not wake the hat.
+check("what does not wake the hat",
+      subjects.asleep(_vera, ["what she does"]), {"img-2", "img-3"})
+check("...but hats do, and so does a hat after a bracket",
+      [subjects.asleep(_vera, [t]) for t in ["two hats", "(hat)", "her-hat", "chapeau"]],
+      [{"img-3"}, {"img-3"}, {"img-3"}, {"img-2", "img-3"}])
 check("...but @img-30 is not @img-3",
       subjects.asleep(_vera, ["@img-30 by the door"]), {"img-2", "img-3"})
 check("the words are read across every text handed in",

@@ -1021,6 +1021,9 @@ export class PromptBox {
     for (const { words, hue } of wakes) {
       for (const word of words) {
         for (let at = lower.indexOf(word); at >= 0; at = lower.indexOf(word, at + 1)) {
+          // Only where it starts a word — the rule `state.says` wakes on, so
+          // "what" is never underlined for a plate set to "hat".
+          if (at && /[\p{L}\p{N}_]/u.test(lower[at - 1])) continue;
           if (!dimmed(at, at + word.length)) paint(`wake${hue}`, at, at + word.length);
         }
       }
