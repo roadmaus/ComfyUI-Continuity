@@ -485,6 +485,19 @@ export async function keepAsMod(subject, assets, mode, host) {
   }
   if (Object.keys(moved).length) subject.notes = moved;
   else delete subject.notes;
+  // The words a picture wakes on follow it onto its mod the same way. A stack
+  // is one latent and cannot wake per picture, so its sources' words are
+  // dropped with the pictures — a stack of plates that conflict is exactly
+  // what waking them one at a time replaces.
+  const triggers = S.subjectTriggers(subject);
+  const woken = { ...triggers };
+  for (const [old, fresh] of swapped) {
+    if (!triggers[old]) continue;
+    if (!stack) woken[fresh] = triggers[old];
+    delete woken[old];
+  }
+  if (Object.keys(woken).length) subject.triggers = woken;
+  else delete subject.triggers;
 
   // The pictures, unless somebody still needs them. Another member's claim or
   // a handle written by hand keeps a file; a mod standing in for it does not.

@@ -155,7 +155,7 @@ FAILURES.extend(report["errors"])
 toAction = report.get("toAction") or {}
 check("looks -> action keeps the note",
       toAction.get("note"), "how they move when smoking a cigar, motion sheet")
-check("...and the file moved", (toAction.get("from"), toAction.get("motion")), (None, "img-1"))
+check("...and the file moved", (toAction.get("from"), toAction.get("motion")), (None, ["img-1"]))
 
 toLooks = report.get("toLooks") or {}
 check("action -> looks keeps the note", toLooks.get("note"), "the cigar")

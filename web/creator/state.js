@@ -1565,12 +1565,13 @@ function parseSubjects(raw) {
       // Two states, one empty list: see `seedSubject`. Written only where it is
       // true, so a piece nobody has opened since is byte-identical.
       ...(s.seeded ? { seeded: true } : {}),
-      ...(s.motion ? { motion: String(s.motion) } : {}),
+      ...(motionOf(s).length ? { motion: motionOf(s) } : {}),
       ...(s.voice ? { voice: String(s.voice) } : {}),
       ...(replacesOf(s).length ? { replaces: replacesOf(s) } : {}),
       ...(s.replaces_what ? { replaces_what: String(s.replaces_what) } : {}),
       ...(SUBJECT_MARKERS.includes(s.relationship) ? { relationship: s.relationship } : {}),
       ...(Object.keys(subjectNotes(s)).length ? { notes: subjectNotes(s) } : {}),
+      ...(Object.keys(subjectTriggers(s)).length ? { triggers: subjectTriggers(s) } : {}),
     }));
 }
 
@@ -4880,6 +4881,17 @@ export function replacesOf(subject) {
   return (Array.isArray(raw) ? raw : [raw]).map(String).filter(Boolean);
 }
 
+/** The clips and stills a subject's movement comes from, always as a list.
+ *  Went from one to many the way `replaces` did, and for the same reason: one
+ *  person has several actions — the swing on a clip, the smoking gesture on a
+ *  sheet — and a single slot meant hanging the second evicted the first (#72).
+ *  A bare string is a blob written before, read as the list it meant. */
+export function motionOf(subject) {
+  const raw = subject?.motion;
+  if (!raw) return [];
+  return (Array.isArray(raw) ? raw : [raw]).map(String).filter(Boolean);
+}
+
 /**
  * What the reference shows about a subject, one phrase per feature.
  *
@@ -4953,8 +4965,50 @@ export function subjectNotes(subject) {
 
 export function subjectFiles(subject) {
   const out = [...(subject.from ?? [])];
-  for (const extra of [subject.motion, subject.voice]) {
+  for (const extra of [...motionOf(subject), subject.voice]) {
     if (extra && !out.includes(extra)) out.push(extra);
+  }
+  return out;
+}
+
+/** One typed line -> the words a file wakes on: split on commas, trimmed,
+ *  lowercased, blanks dropped. Mirrors `subjects.split_triggers`. */
+export function splitTriggers(text) {
+  return String(text ?? "").split(",").map((w) => w.trim().toLowerCase()).filter(Boolean);
+}
+
+/**
+ * The words each file of a subject waits for, by handle — the line as typed,
+ * "smok, cigarette", kept whole so the field shows what was written. A file
+ * with an entry is in a shot only while the prose says one of its words; one
+ * without is in every shot its owner is in. Blank entries and entries on files
+ * the subject no longer claims are dropped. Mirrors `subjects._parse_triggers`.
+ */
+export function subjectTriggers(subject) {
+  const raw = subject?.triggers;
+  if (!raw || typeof raw !== "object") return {};
+  const claimed = new Set(subjectFiles(subject));
+  return Object.fromEntries(Object.entries(raw)
+    .map(([handle, text]) => [String(handle).trim(), String(text ?? "").trim()])
+    .filter(([handle, text]) => handle && splitTriggers(text).length && claimed.has(handle)));
+}
+
+/**
+ * The files of `subject` that wait for a word `texts` do not say. A fact about
+ * one shot, not the cast: the same member is built out of a different set of
+ * plates in every shot, decided by the prose. Matched as a lowercase substring
+ * — "smok" wakes on "smoking" — and a file the prose names outright by handle
+ * is awake whatever its words. Mirrors `subjects.asleep`.
+ */
+export function subjectAsleep(subject, texts) {
+  const triggers = subjectTriggers(subject);
+  const out = new Set();
+  const handles = Object.keys(triggers);
+  if (!handles.length) return out;
+  const prose = texts.map((t) => String(t ?? "")).join("\n").toLowerCase();
+  for (const handle of handles) {
+    if (new RegExp(`@${handle.toLowerCase().replace(/[.*+?^${}()|[\]\\-]/g, "\\$&")}\\b`).test(prose)) continue;
+    if (!splitTriggers(triggers[handle]).some((w) => prose.includes(w))) out.add(handle);
   }
   return out;
 }
@@ -5122,6 +5176,53 @@ export function passedOver(state, pick) {
   return lost;
 }
 
+/**
+ * The files on this card's row that a cast member holds back from this shot:
+ * claimed by somebody the prose cites, and waiting for a word it does not say.
+ * What `compile_request` cuts beside the uncited members' files, read off the
+ * same prose — chosen under `pick` where it holds a `{a|b}`, so a plate named
+ * only in the alternative the seed takes wakes and the other stays asleep.
+ * Without a `pick` the text is read as typed, both alternatives at once, which
+ * is the superset: what the slot counters want, since a plate that *may* wake
+ * has to fit.
+ *
+ * The cast is the piece's — `state.cast` on a segment, `state.subjects` on a
+ * lone node — and an uncited member's files are not here at all: those are
+ * muted on the row already (`dropCited`), and a member nobody names has no
+ * word to say.
+ */
+export function asleepHere(state, pick = null) {
+  const cast = state.cast ?? state.subjects ?? [];
+  const found = new Set();
+  if (!cast.some((subject) => Object.keys(subjectTriggers(subject)).length)) return found;
+  let texts = poolTexts(state);
+  if (pick) {
+    const own = (text) => resolveVariations(text ?? "", pick.seed, pick.card);
+    const piece = (text) => resolveVariations(text ?? "", pick.seed, "piece");
+    const global_ = state.globalTexts ?? {};
+    texts = [own(state.prompt), piece(global_.prompt),
+             state.soundscape ? own(state.soundscape) : piece(global_.soundscape),
+             state.music ? own(state.music) : piece(global_.music)];
+    if (state.refined && state.refined.enabled !== false) {
+      texts.push(own(state.refined.body));
+      for (const text of Object.values(state.refined.sections ?? {})) texts.push(own(text));
+    }
+  }
+  const named = citedSubjects(texts, cast);
+  // Sole claims only, as the compiler cuts: a file awake on one member who is
+  // cited stays for both.
+  const awake = new Set();
+  for (const subject of cast) {
+    if (!named.has(subject.handle)) continue;
+    const sleeping = subjectAsleep(subject, texts);
+    for (const handle of subjectFiles(subject)) {
+      if (sleeping.has(handle)) found.add(handle); else awake.add(handle);
+    }
+  }
+  for (const handle of awake) found.delete(handle);
+  return found;
+}
+
 /** The subjects the given texts cite, as a Set of names. */
 function citedSubjects(texts, cast) {
   const pattern = subjectCitationRe(cast);
@@ -5218,8 +5319,11 @@ export function citedPool(state) {
   // the place of — writing `@anna` is the whole gesture, and it would be a
   // strange one that made you name their photographs beside them. Mirrors the
   // same expansion in `compile.cited_pool`.
+  const texts = poolTexts(state);
   for (const subject of citedCast(state)) {
-    for (const handle of subjectFiles(subject)) found.add(handle);
+    // Minus the plates whose word the prose does not say — see `subjectAsleep`.
+    const sleeping = subjectAsleep(subject, texts);
+    for (const handle of subjectFiles(subject)) if (!sleeping.has(handle)) found.add(handle);
     for (const handle of replacesOf(subject)) found.add(handle);
   }
   const own = new Set(state.assets.map((a) => a.handle));
@@ -5304,9 +5408,13 @@ export const muted = (asset) => asset.enabled === false;
 /** The references this generation actually sends. Muted ones are attached and
  *  drawn — they are the row you put one back from — but they are not references
  *  of this render in any way that counts, so the mode, the limits, the
- *  checkpoint pin and the slot counters all read through here. */
-export const references = (state) =>
-  state.assets.filter((a) => a.role === "reference" && !muted(a));
+ *  checkpoint pin and the slot counters all read through here. A plate asleep
+ *  on its word is out the same way (`asleepHere`) — that is what lets thirty
+ *  of them hang on one member under a nine-picture cap. */
+export const references = (state) => {
+  const sleeping = asleepHere(state);
+  return state.assets.filter((a) => a.role === "reference" && !muted(a) && !sleeping.has(a.handle));
+};
 export const refImages = (state) => references(state).filter((a) => a.kind === "image");
 // The same bucketing compile.py does: a video kept for its soundtrack alone is
 // an audio reference, and never a video one.

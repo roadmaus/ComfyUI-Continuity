@@ -80,7 +80,8 @@ export const ROLES = [
     lead: "Their action comes from this",
     note: "Their movement is taken from it and their appearance stays their "
         + "pictures'. A clip lends the whole action; a still lends its pose. This is "
-        + "how a face from one picture swings a club like somebody in another.",
+        + "how a face from one picture swings a club like somebody in another. "
+        + "Several files are several actions; give each its words to wake on.",
     // A still as well as a clip: the guide counts actions and poses among what
     // a subject may denote, and a photograph of the swing is one pose of it.
     fits: (asset) => asset.kind !== "audio" && asset.track !== "sound",
@@ -103,20 +104,23 @@ export const ROLES = [
 
 const ROLE = Object.fromEntries(ROLES.map((role) => [role.key, role]));
 
-/** The two roles that hold several files rather than one.
+/** The three roles that hold several files rather than one.
  *
- *  Their looks, obviously — several pictures of one person are one person. And
- *  the place they take: the same role in a medium shot and a close-up is one
+ *  Their looks, obviously — several pictures of one person are one person. The
+ *  place they take: the same role in a medium shot and a close-up is one
  *  vacancy filmed twice, and while this slot held a single handle the second
- *  clip could only be attached and left saying nothing. The other two are
- *  genuinely singular — they have one voice, and one way of moving. */
-const LIST_ROLES = new Set(["from", "replaces"]);
+ *  clip could only be attached and left saying nothing. And their actions,
+ *  since #72: the swing on one clip and the smoking gesture on a sheet are two
+ *  things one person does, and while this held one handle hanging the second
+ *  evicted the first. Their voice is genuinely singular. */
+const LIST_ROLES = new Set(["from", "motion", "replaces"]);
 
 /** What `subject` has in `role`, always as a list. */
 const inRole = (subject, role) =>
   role === "from" ? [...(subject.from ?? [])]
-    : role === "replaces" ? S.replacesOf(subject)
-      : subject[role] ? [subject[role]] : [];
+    : role === "motion" ? S.motionOf(subject)
+      : role === "replaces" ? S.replacesOf(subject)
+        : subject[role] ? [subject[role]] : [];
 
 /** What stands in for a face where no picture can supply one. Follows `takes`,
  *  because a person glyph over a described loft says the wrong thing. */
@@ -256,7 +260,8 @@ export function sizeRows(file, pick) {
 /** The words attached to one file, as the field at the head of its menu.
  *  `write` is called on every keystroke and `done` on Enter, so the words are
  *  on the blob before the menu goes and the tile can wear its dot. */
-export function noteField({ value, write, done, placeholder = null, title = null }) {
+export function noteField({ value, write, done, placeholder = null, title = null,
+                            className = "" }) {
   const field = el("input", {
     class: "mmc-cast-menu-field",
     value,
@@ -273,7 +278,47 @@ export function noteField({ value, write, done, placeholder = null, title = null
     },
   });
   field.addEventListener("pointerdown", (event) => event.stopPropagation());
-  return el("div", { class: "mmc-cast-menu-lead" }, [field]);
+  return el("div", { class: `mmc-cast-menu-lead${className ? ` ${className}` : ""}` }, [field]);
+}
+
+/** The words a file wakes on, under the words that say what it shows. The
+ *  same input with its own placeholder and its own sentence, and a mark that
+ *  says it is a rule rather than a caption — see the stylesheet. */
+export function triggerField({ value, write, done }) {
+  return noteField({
+    value, write, done,
+    className: "mmc-cast-menu-wake",
+    placeholder: t("wakes on — hat, cap  (blank: in every shot they are in)"),
+    title: t("Words, separated by commas. The file is in a shot only while the sentence "
+           + "says one of them — anywhere in a word, so “smok” wakes on smoking and "
+           + "smokes. Leave it blank and the file comes with them everywhere."),
+  });
+}
+
+/** The two fields together, for the menus that hold both. */
+export function wordsLead({ subject, handle, touch, done }) {
+  return (close) => el("div", { class: "mmc-cast-menu-words" }, [
+    noteField({
+      value: S.subjectNotes(subject)[handle] ?? "",
+      write: (text) => {
+        subject.notes = { ...S.subjectNotes(subject), [handle]: text };
+        if (!text) delete subject.notes[handle];
+        if (!Object.keys(subject.notes).length) delete subject.notes;
+        touch();
+      },
+      done: () => { close(); done(); },
+    }),
+    triggerField({
+      value: S.subjectTriggers(subject)[handle] ?? "",
+      write: (text) => {
+        subject.triggers = { ...S.subjectTriggers(subject), [handle]: text };
+        if (!S.splitTriggers(text).length) delete subject.triggers[handle];
+        if (!Object.keys(subject.triggers).length) delete subject.triggers;
+        touch();
+      },
+      done: () => { close(); done(); },
+    }),
+  ]);
 }
 
 /**
@@ -1296,10 +1341,12 @@ export class CastShelf {
   refTile(subject, handle, role, assets) {
     const asset = assets.find((a) => a.handle === handle);
     const note = S.subjectNotes(subject)[handle] ?? "";
+    const wake = S.subjectTriggers(subject)[handle] ?? "";
     return el("button", {
-      class: `mmc-cast-ref${asset ? "" : " missing"}`,
+      class: `mmc-cast-ref${asset ? "" : " missing"}${wake ? " wakes" : ""}`,
       title: asset
         ? (note ? `@${handle} — ${note}\n` : "")
+          + (wake ? t("Wakes on {words}\n", { words: wake }) : "")
           + t("@{handle} — {what}. Click to say what it shows of them, change what it "
               + "lends them, or take it off.",
               { handle, what: t(ROLE[role].lead).toLowerCase() })
@@ -1310,8 +1357,9 @@ export class CastShelf {
       assetThumb(asset, "mmc-cast-ref-thumb"),
       ...sizeMark(asset),
       // Words attached to this file: a dot, because the words themselves are a
-      // sentence and the tile is 38 pixels. The tooltip carries them.
-      ...(note ? [el("span", { class: "mmc-cast-noted" })] : []),
+      // sentence and the tile is 38 pixels. The tooltip carries them. A file
+      // with words to wake on wears the dot hollow — a rule, not a caption.
+      ...(note || wake ? [el("span", { class: `mmc-cast-noted${wake ? " wake" : ""}` })] : []),
       // No badge on a picture that only says what they look like. That is what
       // four out of five tiles are, and a badge on every one of them is a badge
       // that means nothing — where a badge on the fifth means "this one is not
@@ -1364,16 +1412,8 @@ export class CastShelf {
       : [];
     openMenu(anchor, {
       title: `@${handle}`,
-      lead: (close) => noteField({
-        value: S.subjectNotes(subject)[handle] ?? "",
-        write: (text) => {
-          subject.notes = { ...S.subjectNotes(subject), [handle]: text };
-          if (!text) delete subject.notes[handle];
-          if (!Object.keys(subject.notes).length) delete subject.notes;
-          this.touch?.();
-        },
-        done: () => { close(); this.save(); },
-      }),
+      lead: wordsLead({ subject, handle, touch: () => this.touch?.(),
+                        done: () => this.save() }),
       sections: [{ rows }, ...(sizes.length ? [{ head: t("Encoded at"), rows: sizes }] : []),
                  ...(modes.length ? [{ head: t("Encoded as"), rows: modes }] : []),
                  ...(file.length ? [{ head: t("The file"), rows: file }] : [])],
@@ -1383,10 +1423,10 @@ export class CastShelf {
     });
   }
 
-  /** Move a handle between slots. Their looks and the place they take are lists
-   *  and a file joins them; the other two hold one each, so taking over one of
-   *  them displaces whatever was in it — which is the truthful outcome: they
-   *  have one voice, and one way of moving. */
+  /** Move a handle between slots. Their looks, their actions and the place
+   *  they take are lists and a file joins them; their voice holds one, so
+   *  taking it over displaces whatever was in it — which is the truthful
+   *  outcome: they have one voice. */
   setRole(subject, handle, current, next) {
     if (current === next) return;
     // Into the new slot before out of the old: `clearRole` drops the words on a
@@ -1420,9 +1460,12 @@ export class CastShelf {
     // only go when the last clip does. The words on the file itself go with the
     // file, unless it is still on them in another slot.
     if (role === "replaces" && !S.replacesOf(subject).length) delete subject.replaces_what;
-    if (subject.notes && !S.subjectFiles(subject).includes(handle)) {
-      delete subject.notes[handle];
-      if (!Object.keys(subject.notes).length) delete subject.notes;
+    if (!S.subjectFiles(subject).includes(handle)) {
+      for (const key of ["notes", "triggers"]) {
+        if (!subject[key]) continue;
+        delete subject[key][handle];
+        if (!Object.keys(subject[key]).length) delete subject[key];
+      }
     }
   }
 

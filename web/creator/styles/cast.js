@@ -313,8 +313,26 @@ export const css = `
   position: absolute; right: -2px; top: -2px; width: 7px; height: 7px; border-radius: 999px;
   background: var(--mmc-accent); box-shadow: 0 0 0 2px var(--mmc-surface);
 }
+/* ...and hollow where the file has words to wake on: a rule rather than a
+   caption. The same ring the card's chip draws in front of the words. */
+.mmc-cast-noted.wake {
+  background: var(--mmc-surface);
+  box-shadow: 0 0 0 2px var(--mmc-surface), inset 0 0 0 1.5px var(--mmc-accent);
+}
 /* The words themselves, at the head of the tile's menu. */
 .mmc-cast-menu-lead { padding: 2px 8px 6px; }
+/* Two of them, stacked: what the file shows, then what it wakes on. The second
+   wears the hollow ring inside its left edge — filled in, the two fields are
+   two lines of words, and the ring is what says which line is the rule. */
+.mmc-cast-menu-words { display: flex; flex-direction: column; }
+.mmc-cast-menu-words .mmc-cast-menu-lead + .mmc-cast-menu-lead { padding-top: 0; }
+.mmc-cast-menu-wake { position: relative; }
+.mmc-cast-menu-wake::before {
+  content: ""; position: absolute; left: 17px; top: 50%; margin-top: -6.5px;
+  width: 7px; height: 7px; border-radius: 999px; pointer-events: none;
+  box-shadow: inset 0 0 0 1.5px var(--mmc-accent);
+}
+.mmc-cast-menu-wake .mmc-cast-menu-field { padding-left: 22px; }
 .mmc-cast-menu-field {
   width: 100%; box-sizing: border-box; min-width: 260px;
   padding: 5px 8px; border-radius: 6px; border: 1px solid var(--mmc-line);

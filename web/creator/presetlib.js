@@ -40,9 +40,9 @@ import { deleteRefMod, describeRefMod, isRefMod, makeRefMod, moveRefMod, renderM
 import { SUBFOLDER as MOD_FOLDER, ledger, modRow, modRows, modeRows, modeWord, remakeMods, remakeRows } from "./refmod.js";
 import { atlasRef } from "./presets/atlasref.js";
 import { openPicker } from "./picker.js";
-import { downloadMod, openMenu, noteField, sizeRows, MARKER_LABEL, MARKER_NOTE, ROLES,
-         TAKES_NOTE } from "./cast.js";
-import { SUBJECT_TAKES, seedFeatures, showSeconds, tagIndex } from "./state.js";
+import { downloadMod, openMenu, noteField, sizeRows, triggerField, MARKER_LABEL, MARKER_NOTE,
+         ROLES, TAKES_NOTE } from "./cast.js";
+import { SUBJECT_TAKES, seedFeatures, showSeconds, splitTriggers, tagIndex } from "./state.js";
 import { BUILTIN } from "./presets/builtin.js";
 import * as P from "./presets.js";
 
@@ -1455,6 +1455,8 @@ class PresetLibrary {
         el("span", { class: "mmc-cast-sheet-filename", text: name }),
         el("span", { class: `mmc-cast-sheet-filenote${file.note ? "" : " off"}`,
                      text: file.note || t("no words attached") }),
+        ...(file.trigger ? [el("span", { class: "mmc-cast-sheet-wake",
+                                         text: t("wakes on {words}", { words: file.trigger }) })] : []),
       ]),
       el("span", { class: `mmc-cast-sheet-enc${mod ? " mod" : ""}` }, enc),
       el("span", { class: "mmc-cast-sheet-more", text: "⋯" }),
@@ -1757,20 +1759,29 @@ class PresetLibrary {
         (at === index ? { ...entry, ref_size: key } : entry));
       this.flushSave().then(() => this.renderSheet());
     });
+    // One field per word-shaped fact on the file, written back the same way.
+    const wordsOn = (key, text) => {
+      member.files = member.files.map((entry, at) => {
+        if (at !== index) return entry;
+        const { [key]: _, ...rest } = entry;
+        return text ? { ...rest, [key]: text } : rest;
+      });
+      this.queueSave();
+    };
     openMenu(anchor, {
       title: t("What this file lends them"),
-      lead: (close) => noteField({
-        value: file.note ?? "",
-        write: (text) => {
-          member.files = member.files.map((entry, at) => {
-            if (at !== index) return entry;
-            const { note, ...rest } = entry;
-            return text ? { ...rest, note: text } : rest;
-          });
-          this.queueSave();
-        },
-        done: () => { close(); this.flushSave().then(() => this.renderSheet()); },
-      }),
+      lead: (close) => el("div", { class: "mmc-cast-menu-words" }, [
+        noteField({
+          value: file.note ?? "",
+          write: (text) => wordsOn("note", text),
+          done: () => { close(); this.flushSave().then(() => this.renderSheet()); },
+        }),
+        triggerField({
+          value: file.trigger ?? "",
+          write: (text) => wordsOn("trigger", splitTriggers(text).length ? text : ""),
+          done: () => { close(); this.flushSave().then(() => this.renderSheet()); },
+        }),
+      ]),
       sections: [{
         rows: [
           ...ROLES.filter((role) => role.fits({ kind })).map((role) => ({
@@ -1806,11 +1817,11 @@ class PresetLibrary {
     });
   }
 
-  /** Move a file into a slot. The three single-file slots hold one each, so a
-   *  file moving into an occupied one sends the sitting tenant back to `from` —
-   *  the shelf's own rule, and the alternative is a silently dropped picture. */
+  /** Move a file into a slot. Their voice holds one file, so one moving into
+   *  it sends the sitting tenant back to `from` — the shelf's own rule, and the
+   *  alternative is a silently dropped picture. The other three are lists. */
   setSlot(member, index, slot) {
-    if (slot !== "from") {
+    if (slot === "voice") {
       member.files = member.files.map((file, at) =>
         (at !== index && file.slot === slot ? { ...file, slot: "from" } : file));
     }

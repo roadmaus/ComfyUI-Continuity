@@ -218,6 +218,33 @@ button.mmc-asset-owner:hover, button.mmc-asset-owner:focus-visible {
 .mmc-asset.passed { opacity: .6; }
 .mmc-asset.passed .mmc-asset-handle { color: var(--mmc-dim); }
 .mmc-asset.passed .mmc-asset-thumb { filter: grayscale(1); }
+/* Asleep: the owner gave this file words to wake on and the sentence says none
+   of them (see state.asleepHere). Dimmed like passed-over, for the same reason
+   — nothing was pressed, and writing the word brings it back. */
+.mmc-asset.asleep { opacity: .6; }
+.mmc-asset.asleep .mmc-asset-handle { color: var(--mmc-dim); }
+.mmc-asset.asleep .mmc-asset-thumb { filter: grayscale(1); }
+
+/* The owner's words on the file — "the red hat" — as a footnote in the said
+   style. Ellipsed, because a sentence on a chip is a chip nobody can scan. */
+.mmc-asset-note {
+  color: var(--mmc-dim); font-size: calc(11px * var(--mmc-type));
+  max-width: 18ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+/* The words the file wakes on. A ring in front of them is the one device for
+   "this file has a rule" — the tile's hollow dot in the cast shelf is the same
+   ring — and it fills in the owner's hue while the rule holds, so the row
+   reads at a glance: filled rings are in, hollow ones are waiting. */
+.mmc-asset-wake {
+  display: inline-flex; align-items: center; gap: 5px;
+  color: var(--mmc-dim); font-size: calc(11px * var(--mmc-type)); white-space: nowrap;
+}
+.mmc-asset-wake::before {
+  content: ""; width: 7px; height: 7px; border-radius: 999px; flex: none;
+  box-shadow: inset 0 0 0 1.5px var(--owner, var(--mmc-dim));
+}
+.mmc-asset-wake.on { color: var(--mmc-text); }
+.mmc-asset-wake.on::before { background: var(--owner, var(--mmc-accent)); box-shadow: none; }
 
 /* The swap button sits in the ✕'s row and wears its colours; the glyph needs
    the extra line-height reset a text button does not. */
@@ -523,6 +550,18 @@ button.mmc-asset-owner:hover, button.mmc-asset-owner:focus-visible {
  * colour is set: the API allows little else, and little else is wanted. */
 ::highlight(mmc-alt-mark) { color: var(--mmc-accent); }
 ::highlight(mmc-alt-off) { color: var(--mmc-faint); }
+/* The word that woke a cast member's plate, in their hue — the ring on the
+   chip fills in the same hue, and this is where the sentence says why. An
+   underline and not a colour: the word is prose, and prose stays the text
+   colour; only the rule under it is theirs. */
+::highlight(mmc-wake-0) { text-decoration: underline; text-decoration-color: var(--mmc-tag-0); text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+::highlight(mmc-wake-1) { text-decoration: underline; text-decoration-color: var(--mmc-tag-1); text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+::highlight(mmc-wake-2) { text-decoration: underline; text-decoration-color: var(--mmc-tag-2); text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+::highlight(mmc-wake-3) { text-decoration: underline; text-decoration-color: var(--mmc-tag-3); text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+::highlight(mmc-wake-4) { text-decoration: underline; text-decoration-color: var(--mmc-tag-4); text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+::highlight(mmc-wake-5) { text-decoration: underline; text-decoration-color: var(--mmc-tag-5); text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+::highlight(mmc-wake-6) { text-decoration: underline; text-decoration-color: var(--mmc-tag-6); text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+::highlight(mmc-wake-7) { text-decoration: underline; text-decoration-color: var(--mmc-tag-7); text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
 
 /* --- a spoken line --------------------------------------------------------
  *

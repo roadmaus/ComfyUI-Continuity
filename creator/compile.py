@@ -1389,10 +1389,10 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     raw_body = refined_body(data) or str(data.get("prompt") or "")
     raw_sections = refined_sections(data, family_grammar)
     everybody = cast
-    cast = subjects.cited(cast, [raw_body,
-                                 str(data.get("soundscape") or ""),
-                                 str(data.get("music") or "")]
-                          + list((raw_sections or {}).values()))
+    prose = [raw_body,
+             str(data.get("soundscape") or ""),
+             str(data.get("music") or "")] + list((raw_sections or {}).values())
+    cast = subjects.cited(cast, prose)
 
     # ...and their pictures cut with them.
     #
@@ -1408,7 +1408,26 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     # — it is in `assets` because they put it there, not because casting did.
     # Before the split below, so the mode, the plan and every limit are derived
     # from what is actually going to be sent.
-    absent = subjects.claimed(everybody) - subjects.claimed(cast)
+    #
+    # A cited member's plate that waits for a word the prose does not say is
+    # cut the same way (`subjects.asleep`): for this shot it is a picture of a
+    # costume nobody is wearing. Read off `prose` after `varied_piece` made its
+    # choices, so a `{hat|cap}` wakes the plate the seed picked.
+    absent = subjects.claimed(everybody) - subjects.awake(cast, prose)
+    for subject in cast:
+        # Every file of theirs cut for want of a word, and no words of their
+        # own to stand on: `subjects.here` would refuse this as pictures not
+        # attached, which is not what happened. Say what did.
+        sleeping = subjects.asleep(subject, prose)
+        if sleeping and subject.files and absent >= set(subject.files) \
+                and not subject.description and not subject.features \
+                and not subject.replaces:
+            words = sorted({w for h in sleeping for w in subject.triggers[h]})
+            raise CompileError(
+                f"@{subject.handle} walks on here, and every picture they are "
+                f"built out of waits for a word this shot does not say "
+                f"({', '.join(words)}) — write one of them, or take the words "
+                f"off one of their pictures, or describe them")
     if absent:
         assets = [a for a in assets
                   if a.role != "reference" or a.handle not in absent]
@@ -2528,7 +2547,11 @@ def cited_pool(pool, request, extra_texts=(), cast=()):
             named.update(pattern.findall(text))
         for subject in cast:
             if subject.handle in named:
-                found.update(subject.files)
+                # Minus the plates whose word the prose does not say: a member
+                # with a sheet per costume brings the one the sentence dressed
+                # them in. See `subjects.asleep`.
+                found.update(h for h in subject.files
+                             if h not in subjects.asleep(subject, texts))
                 # `update`, not `add`: this is a list of clips now, and adding
                 # the tuple itself put an object in a set of handles that
                 # matched nothing — so a subject standing in for somebody across
@@ -3301,9 +3324,10 @@ def _renamed(subject, rename):
         sources=[pick(h) for h in subject.sources],
         takes=subject.takes,
         description=subject.description,
-        motion=pick(subject.motion),
+        motion=[pick(h) for h in subject.motion],
         voice=pick(subject.voice),
         notes={pick(h): text for h, text in subject.notes.items()},
+        triggers={pick(h): words for h, words in subject.triggers.items()},
         features=subject.features,
         seeded=subject.seeded,
         replaces=[pick(h) for h in subject.replaces],
@@ -3338,10 +3362,13 @@ def _subject_dict(subject):
     # carries, but nothing writes one any more.
     if subject.replaces:
         out["replaces"] = list(subject.replaces)
+    if subject.motion:
+        out["motion"] = list(subject.motion)
     if subject.notes:
         out["notes"] = dict(subject.notes)
+    if subject.triggers:
+        out["triggers"] = {h: ", ".join(words) for h, words in subject.triggers.items()}
     for key, value in (("description", subject.description),
-                       ("motion", subject.motion),
                        ("voice", subject.voice),
                        ("replaces_what", subject.replaces_what),
                        ("relationship", subject.marker)):

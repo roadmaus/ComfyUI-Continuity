@@ -16,7 +16,7 @@ import { t } from "./i18n.js";
 import { castFactsLine, listPresets, loadBody } from "./presets.js";
 import { listAssets, viewUrl } from "./api.js";
 import { LANGUAGES, settings as refineSettings } from "./refine.js";
-import { tagIndex } from "./state.js";
+import { subjectFiles, tagIndex } from "./state.js";
 import { layout as layoutVariations } from "./variations.js";
 
 /* Where a `{day|night}` is painted: the braces and bars of every live group in
@@ -33,6 +33,14 @@ const HIGHLIGHTS = typeof Highlight === "function" && globalThis.CSS?.highlights
 if (HIGHLIGHTS) {
   CSS.highlights.set("mmc-alt-mark", HIGHLIGHTS.marks);
   CSS.highlights.set("mmc-alt-off", HIGHLIGHTS.off);
+  // The word that woke a cast member's plate, underlined in the owner's hue —
+  // one registry per hue, because a highlight is one style for every range
+  // in it and the hue is the whole of what joins the word to the chip. Eight,
+  // the same eight `state.tagIndex` deals out. See `paintVariations`.
+  for (let hue = 0; hue < 8; hue += 1) {
+    HIGHLIGHTS[`wake${hue}`] = new Highlight();
+    CSS.highlights.set(`mmc-wake-${hue}`, HIGHLIGHTS[`wake${hue}`]);
+  }
 }
 
 const TRIGGER = /@([\w-]*)$/;
@@ -340,6 +348,10 @@ export class PromptBox {
    *   rows are left out of the menu with it.
    * @param {()=>void} [hooks.onBrowse]  open the file picker — the `/` menu's
    *   door onto the input folder, for a file whose name you do not know.
+   * @param {()=>Array<{words:string[], hue:number}>} [hooks.wakes]  for each
+   *   cast file that is awake in this shot on its words, the words and the
+   *   owner's hue — underlined where the sentence says them. See
+   *   `paintVariations`; nothing without `pick`.
    * @param {(handles:string[])=>void} [hooks.onUncited]  chips that were in the
    *   box a keystroke ago and are not in it now. Deleting a chip is how this
    *   redesign takes a reference or a cast member out of a shot, so the host has
@@ -982,18 +994,35 @@ export class PromptBox {
     const pick = this.hooks.pick?.();
     if (!pick) return;
     const text = this.getValue();
-    if (!text.includes("{")) return;
+    const wakes = this.hooks.wakes?.() ?? [];
+    if (!text.includes("{") && !wakes.length) return;
     const flat = [...this.root.childNodes].every((node) =>
       node.nodeType === Node.TEXT_NODE || node.dataset?.handle
       || node.dataset?.say !== undefined || node.tagName === "BR");
     if (!flat) return;
-    const { marks, off } = layoutVariations(text, pick.seed, pick.card);
+    const { marks, off } = text.includes("{")
+      ? layoutVariations(text, pick.seed, pick.card) : { marks: [], off: [] };
+    const paint = (which, start, end) => {
+      const range = this.rangeOf(start, end);
+      if (!range) return;
+      HIGHLIGHTS[which].add(range);
+      this.painted.push([which, range]);
+    };
     for (const [which, spans] of [["marks", marks], ["off", off]]) {
-      for (const [start, end] of spans) {
-        const range = this.rangeOf(start, end);
-        if (!range) continue;
-        HIGHLIGHTS[which].add(range);
-        this.painted.push([which, range]);
+      for (const [start, end] of spans) paint(which, start, end);
+    }
+    // The words that woke a plate, underlined where they stand — every
+    // occurrence, since each is a reason the file is in — except inside an
+    // alternative the seed passes over, which is text the render never reads
+    // and a word there woke nothing. The same substring rule as the cut:
+    // `state.subjectAsleep` lowercases and matches anywhere in a word.
+    const lower = text.toLowerCase();
+    const dimmed = (start, end) => off.some(([a, b]) => start < b && end > a);
+    for (const { words, hue } of wakes) {
+      for (const word of words) {
+        for (let at = lower.indexOf(word); at >= 0; at = lower.indexOf(word, at + 1)) {
+          if (!dimmed(at, at + word.length)) paint(`wake${hue}`, at, at + word.length);
+        }
       }
     }
   }
@@ -2002,8 +2031,7 @@ export class PromptBox {
       // about them that their name does not say.
       const made = option.kind === "cast"
         ? (option.subject.description
-           || [...(option.subject.from ?? []), option.subject.motion, option.subject.voice]
-                .filter(Boolean).map((h) => "@" + h).join(", "))
+           || subjectFiles(option.subject).map((h) => "@" + h).join(", "))
         : null;
       const title = option.kind === "branch" || option.kind === "door"
         ? t(option.label)

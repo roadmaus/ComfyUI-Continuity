@@ -583,7 +583,7 @@ export const SUBJECT_SLOTS = ["from", "motion", "voice", "replaces"];
 /** What of an asset row travels with a cast member. The handle is deliberately
  *  not in it — see above — and neither is `role`, which is `reference` for
  *  everything a subject can be built out of. */
-function storedFile(asset, slot, note = "") {
+function storedFile(asset, slot, note = "", trigger = "") {
   return {
     slot,
     filename: asset.filename,
@@ -593,6 +593,10 @@ function storedFile(asset, slot, note = "") {
     // What it lends them, in the user's words — the half of a picture's
     // meaning that neither its filename nor its slot can say.
     ...(note ? { note } : {}),
+    // The words it wakes on. Kept with them because it is the whole point of
+    // keeping a member with thirty plates: the plates come back knowing which
+    // sentence each is for.
+    ...(trigger ? { trigger } : {}),
     ...(asset.trim ? { trim: asset.trim } : {}),
     // A plate's panels, in the shape a picker answer carries them (`path`,
     // not `filename`) and without their handles — handles are the piece's,
@@ -621,14 +625,20 @@ function storedFile(asset, slot, note = "") {
 export function captureSubject(subject, assets) {
   const byHandle = new Map((assets ?? []).map((asset) => [asset.handle, asset]));
   const notes = S.subjectNotes(subject);
+  const triggers = S.subjectTriggers(subject);
   const files = [];
   for (const handle of subject.from ?? []) {
     const asset = byHandle.get(handle);
-    if (asset?.filename) files.push(storedFile(asset, "from", notes[handle]));
+    if (asset?.filename) files.push(storedFile(asset, "from", notes[handle], triggers[handle]));
   }
-  for (const slot of ["motion", "voice"]) {
-    const asset = byHandle.get(subject[slot]);
-    if (asset?.filename) files.push(storedFile(asset, slot, notes[subject[slot]]));
+  // Several actions, where they have them — see `state.motionOf`.
+  for (const handle of S.motionOf(subject)) {
+    const asset = byHandle.get(handle);
+    if (asset?.filename) files.push(storedFile(asset, "motion", notes[handle], triggers[handle]));
+  }
+  {
+    const asset = byHandle.get(subject.voice);
+    if (asset?.filename) files.push(storedFile(asset, "voice", notes[subject.voice], triggers[subject.voice]));
   }
   // Several, where somebody stands in for the same person in more than one clip.
   for (const handle of S.replacesOf(subject)) {
@@ -1325,8 +1335,9 @@ export function addSubjectToPiece(stored, timeline) {
   const single = (timeline.segments ?? []).length <= 1;
   const host = single ? (timeline.segments?.[0] ?? timeline) : timeline;
   if (!Array.isArray(host.assets)) host.assets = [];
-  const slots = { from: [], replaces: [] };
+  const slots = { from: [], motion: [], replaces: [] };
   const notes = {};
+  const triggers = {};
   for (const file of stored.files ?? []) {
     if (!file?.filename) continue;
     const kind = file.kind ?? "image";
@@ -1366,9 +1377,10 @@ export function addSubjectToPiece(stored, timeline) {
       asset.ref_size = file.ref_size;
     }
     if (file.note) notes[asset.handle] = String(file.note);
-    // Their looks and the place they take hold several files each; the other
-    // two hold one. See `cast.LIST_ROLES`.
-    if (file.slot === "from" || file.slot === "replaces") slots[file.slot].push(asset.handle);
+    if (file.trigger) triggers[asset.handle] = String(file.trigger);
+    // Their looks, their actions and the place they take hold several files
+    // each; their voice holds one. See `cast.LIST_ROLES`.
+    if (Array.isArray(slots[file.slot])) slots[file.slot].push(asset.handle);
     else if (SUBJECT_SLOTS.includes(file.slot)) slots[file.slot] = asset.handle;
     // Narrowed to what the slot says, exactly as hanging it on them by hand
     // would — a picture that arrives as their looks is a person reference and has
@@ -1386,7 +1398,7 @@ export function addSubjectToPiece(stored, timeline) {
     handle: freeSubjectHandle(stored.handle || "subject", timeline),
     takes: S.SUBJECT_TAKES.includes(stored.takes) ? stored.takes : "person",
     from: slots.from,
-    ...(slots.motion ? { motion: slots.motion } : {}),
+    ...(slots.motion.length ? { motion: slots.motion } : {}),
     ...(slots.voice ? { voice: slots.voice } : {}),
     ...(slots.replaces.length ? { replaces: slots.replaces } : {}),
     ...(stored.description ? { description: String(stored.description) } : {}),
@@ -1396,6 +1408,7 @@ export function addSubjectToPiece(stored, timeline) {
       ? { relationship: stored.relationship } : {}),
     ...(stored.seeded ? { seeded: true } : {}),
     ...(Object.keys(notes).length ? { notes } : {}),
+    ...(Object.keys(triggers).length ? { triggers } : {}),
   };
   // A member kept before the rows existed gets them here, on the way into a
   // piece — the same repair `parseSubjects` does for a piece written then.
