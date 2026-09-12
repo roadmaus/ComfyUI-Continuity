@@ -144,6 +144,41 @@ export async function loadBody(row) {
   return stored?.data ?? null;
 }
 
+/**
+ * A cast member out of a RefMod, filed in the roster: named after the file,
+ * in its header's words, with the file as their looks. -> `{row, body}`.
+ *
+ * A RefMod *is* a character — that is what the file is for — so importing
+ * one makes the member wherever the file arrives: the library's Import, the
+ * picker's RefMod tab. A mod that is already somebody's looks makes nobody
+ * twice; their row comes back instead. `rows` is the roster where the caller
+ * has it in hand, else it is listed.
+ */
+export async function memberFromMod(mod, rows = null) {
+  const roster = (rows ?? await listPresets()).filter((row) => row.scope === "cast");
+  const already = roster.find((row) => (row.facts?.mods ?? []).includes(mod.path));
+  if (already) return { row: already, body: await loadBody(already) };
+  const taken = new Set(roster.map((row) => row.name));
+  const base = modHandle(mod.name);
+  let handle = base;
+  for (let n = 2; taken.has(handle); n += 1) handle = `${base}_${n}`;
+  const body = { cast: {
+    handle, takes: "person", description: mod.description ?? "",
+    files: [{ slot: "from", filename: mod.path, kind: mod.kind === "video" ? "video" : "image" }],
+    features: S.seedFeatures("person"), seeded: true,
+  } };
+  const row = await savePreset({ name: handle, scope: "cast", data: body });
+  return { row, body };
+}
+
+/** A mod's name as a handle somebody can write after an `@`: lower case,
+ *  underscores, and `subject` where nothing usable is left. */
+export function modHandle(name) {
+  const handle = String(name ?? "").toLowerCase().replace(/[^a-z0-9_]+/g, "_")
+    .replace(/^_+|_+$/g, "").slice(0, 32);
+  return S.SUBJECT_HANDLE_RE.test(handle) ? handle : "subject";
+}
+
 /** Store a captured preset and hand back its index row.
  *
  *  The card fields are derived here rather than passed in, so every call site
@@ -633,16 +668,22 @@ export function captureSubject(subject, assets) {
  * and the `@` menu's own row, which offers them mid-sentence — and a second
  * implementation of "person · 2 pictures · voice" would drift from this one.
  */
-export function castFactsLine(facts = {}) {
+export function castFactsLine(facts = {}, { tokens = null } = {}) {
+  const mods = (facts.mods ?? []).length;
   const pictures = facts.pictures ?? 0;
   const clips = facts.clips ?? 0;
   const features = facts.features ?? 0;
-  const nothing = !pictures && !clips && !facts.motion && !facts.voice && !facts.replaces;
+  const nothing = !pictures && !mods && !clips && !facts.motion && !facts.voice && !facts.replaces;
   return [
     t(facts.takes ?? "person"),
+    // Saved looks before pictures: they are the cheaper and the portable kind,
+    // and a roster is scanned for who is which. `tokens` is what the mods add
+    // up to, where the caller has the listing to sum them from.
+    mods ? t(mods === 1 ? "{count} RefMod" : "{count} RefMods", { count: mods }) : null,
     pictures
       ? t(pictures === 1 ? "{count} picture" : "{count} pictures", { count: pictures })
       : null,
+    tokens ? t("{tokens} tok", { tokens: tokens.toLocaleString() }) : null,
     clips ? t(clips === 1 ? "{count} clip" : "{count} clips", { count: clips }) : null,
     facts.motion ? t("action") : null,
     facts.voice ? t("voice") : null,
@@ -885,8 +926,12 @@ export function factsOf(body, scope) {
       // "2 pictures" under a card whose second file was an mp4 — and the card's
       // own face, which only ever draws an image, then had one to draw for one
       // of those two and not the other.
-      pictures: built.filter((file) => (file.kind ?? "image") === "image").length,
-      clips: built.filter((file) => (file.kind ?? "image") !== "image").length,
+      // Saved files first, whatever kind they are — a stack is a video-kind
+      // mod and is a mod, not a clip. By path, so the roster's panel can read
+      // who uses a file off the index, and the card counts them apart.
+      mods: built.filter((file) => S.isRefMod(file)).map((file) => file.filename),
+      pictures: built.filter((file) => (file.kind ?? "image") === "image" && !S.isRefMod(file)).length,
+      clips: built.filter((file) => (file.kind ?? "image") !== "image" && !S.isRefMod(file)).length,
       motion: files.some((file) => file.slot === "motion"),
       voice: files.some((file) => file.slot === "voice"),
       replaces: files.some((file) => file.slot === "replaces"),
@@ -963,8 +1008,10 @@ export function describe(data, scope, { cover = null } = {}) {
   // no render behind a cast member and no output folder to look in. Where they are
   // words alone there is nothing to show, and the card draws their glyph instead.
   if (scope === "cast") {
+    // A still, or a mod of either kind — a stack's picture is its first frame,
+    // served by the same thumb route once the file has one beside it.
     const still = (data.cast?.files ?? []).find(
-      (file) => file.slot === "from" && (file.kind ?? "image") === "image");
+      (file) => file.slot === "from" && ((file.kind ?? "image") === "image" || S.isRefMod(file)));
     // Their own prose, on the index so the card can set it without fetching a
     // body. Capped rather than clamped in CSS alone: the index is read whole on
     // every library open, and a member described in nine hundred words would be

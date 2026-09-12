@@ -6,6 +6,31 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**Cast members can be saved as RefMods, and RefMods have a home.** A ledger
+under a member's tiles says what their looks cost a render — *2 pictures + 1
+clip at max · ≈8,200+ tokens* — and offers *Save as RefMod*: one stacked file
+(every still and clip pooled to a 16×16 grid, end to end as one video mod —
+the shape of ComfyUI-MiniMaxH3Mod's own `vanellope_example`, motion included,
+cited as one `<Video n>`), or per picture, compressed (pooled to a 48-grid,
+a few hundred tokens — measured against the picture itself: the sibling
+pack's 16-grid stains a face, 48 renders like the full encode) or full (the
+encode at a 1024 short edge). The mods are that pack's `.safetensors`
+format, in `models/refmods/cast/`; they land where the sources were, the
+member's looks point at them, and the sources leave the piece unless somebody
+else still needs them. Saved, the ledger is the receipt —
+mode, tokens, path — with *Download* beside it. Importing a `.safetensors` — on the Cast
+tab or the picker's RefMod tab — makes the member: one named after the file
+appears at once and their page opens, Cast button at its foot. The Cast
+tab grows a *Saved references* column: every mod on the machine, what it
+costs, who is built out of it; a stray one becomes a member from there, hangs
+on an existing one, is renamed (members follow), described in its header, or
+deleted. A member's page lists their
+files as rows with how each is encoded, and the shut line on the shelf shows
+the cost. The star and the swap on a card's header are now *Keep in library*
+and *Recast from library* in a footer. Five routes carry the files:
+`/continuity/refmod/{file,upload,move,delete,describe}`. Nothing about a mod is
+a concept extractor and the docs say so; audio mods are refused (#53).
+
 **The VDN-H3 pill throws turbo with it, at the stage's own numbers.** Before,
 the pill only picked the stage: the sampler row stayed at twenty res_multistep
 steps, and the turbo switch — if thrown — landed on its own quality's count,

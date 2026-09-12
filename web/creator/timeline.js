@@ -10,6 +10,7 @@
 import { api } from "../../../scripts/api.js";
 import { compiledPrompt, probe, viewUrl, primeSettings, buildPlate } from "./api.js";
 import { CastShelf } from "./cast.js";
+import { keepAsMod } from "./refmod.js";
 import { clearButton } from "./clear.js";
 import { el, icon, mountOverlay, swappable } from "./dom.js";
 import { CreatorEditor, pickTakes, takesHelp } from "./editor.js";
@@ -451,7 +452,7 @@ class Timeline {
       filename: row.path,
       ref_size: "max",
     };
-    if (row.kind === "video") entry.track = S.DEFAULT_TRACK;
+    if (row.kind === "video") entry.track = S.trackFor(row);
     this.timeline.assets.push(entry);
     // Not `commit`: the caret is in the box and the chip is about to be written
     // into it, so only the shelf that gained a row is redrawn.
@@ -932,8 +933,29 @@ class Timeline {
       // somebody out of the library attaches their files to the pool, which is
       // the shelf this window is already drawing.
       keep: (subject, assets) => P.keepSubject(subject, assets),
-      library: () => openPresetLibrary({ target: this.pieceTarget(), scope: "cast" })
+      library: (options = {}) => openPresetLibrary({ target: this.pieceTarget(), scope: "cast", ...options })
         .then(() => { this.renderStrip(); this.renderPool(); this.renderCast(); }),
+      // Their pictures as saved latents, landing where the shelf's own "+"
+      // lands a picture: the lone shot's row, or the pool.
+      mod: (subject, assets, mode, onProgress) => {
+        const single = this.timeline.segments.length === 1;
+        const host = single ? this.timeline.segments[0] : this.timeline;
+        return keepAsMod(subject, assets, mode, {
+          vae: this.timeline.models?.vae ?? "",
+          onProgress,
+          list: () => (host.assets ??= []),
+          nextHandle: (kind) => (single ? S.nextHandle(host, kind) : S.nextPoolHandle(this.timeline)),
+          texts: () => S.allTexts(this.timeline),
+          cast: () => this.timeline.subjects ?? [],
+          drop: (handles) => {
+            for (const owner of [this.timeline, ...(this.timeline.segments ?? [])]) {
+              if (owner.assets) owner.assets = owner.assets.filter((a) => !handles.includes(a.handle));
+            }
+          },
+        }).then((rows) => { this.commit(); this.renderStrip(); this.renderPool(); return rows; });
+      },
+      // The ledger's estimate of a `match` picture is the piece's canvas.
+      canvas: () => timelineGeometry(this.timeline),
       // Recasting somebody rewrites every sentence that wrote their name — the
       // piece's own three and each card's, because a member cast into the
       // standing prompt walks on in shots that never mention them by hand.
@@ -1013,6 +1035,10 @@ class Timeline {
       // Which family a preset's row and weights would be landing on. Read by
       // `crossable`, which refuses those two sections across families.
       family: () => S.pieceFamily(this.timeline),
+      // The VAE a kept member's pictures are encoded through when the library
+      // keeps them as RefMods — the piece's own, so a mod made from the roster
+      // is the mod a render here would read.
+      vae: () => this.timeline.models?.vae ?? "",
       // What the picker needs to cut a picture out — the scissors ride into
       // the library's own attach flow through this. The pool's spec, because a
       // member's pictures are individual files, not one sheet.
@@ -1042,7 +1068,7 @@ class Timeline {
     const single = this.timeline.segments.length === 1;
     const host = single ? this.timeline.segments[0] : this.timeline;
     const chosen = await openPicker({
-      kinds: ["image", "video", "audio", "renders"],
+      kinds: ["image", "video", "audio", "renders", "refmods"],
       kind: "image",
       capacity: (kind) => (single
         ? S.capacity(host, kind, this.timeline)
@@ -1073,7 +1099,7 @@ class Timeline {
       ref_size: "max",
     };
     if (picked.trim) entry.trim = picked.trim;
-    if (entry.kind === "video") entry.track = picked.track ?? S.DEFAULT_TRACK;
+    if (entry.kind === "video") entry.track = S.trackFor(picked);
     host.assets.push(entry);
     this.commit();
     return entry;
@@ -1113,7 +1139,7 @@ class Timeline {
   /** The same picker the segments use, filling the pool instead of a card. */
   async addPoolAssets() {
     const chosen = await openPicker({
-      kinds: ["image", "video", "audio", "renders"],
+      kinds: ["image", "video", "audio", "renders", "refmods"],
       kind: "image",
       // The per-segment reference caps are compile's, applied where a segment
       // actually cites — the pool itself has no ceiling worth enforcing here.
@@ -1146,7 +1172,7 @@ class Timeline {
       // Fidelity is why a reference is attached — same default as the editor.
       ref_size: "max",
     };
-    if (picked.kind === "video") entry.track = picked.track ?? S.DEFAULT_TRACK;
+    if (picked.kind === "video") entry.track = S.trackFor(picked);
     if (picked.trim) entry.trim = picked.trim;
     return entry;
   }
@@ -1283,7 +1309,7 @@ class Timeline {
     asset.filename = picked.path;
     if (picked.trim) asset.trim = picked.trim;
     else delete asset.trim;
-    if (asset.kind === "video") asset.track = picked.track ?? S.DEFAULT_TRACK;
+    if (asset.kind === "video") asset.track = S.trackFor(picked);
     this.commit();
   }
 
@@ -3296,6 +3322,7 @@ export class TimelineBody {
       scope: "piece",
       label: t("this piece"),
       family: () => S.pieceFamily(this.timeline),
+      vae: () => this.timeline.models?.vae ?? "",
       // See `Timeline.pieceTarget`: the scissors in the library's attach flow.
       // Built here rather than borrowed — `poolPlate` is the window's, and
       // this target is the node body's.
@@ -3507,7 +3534,7 @@ export class TimelineBody {
    *  the node-side twin of. */
   async addPoolAssets(kind) {
     const chosen = await openPicker({
-      kinds: [kind, "renders"],
+      kinds: [kind, "renders", "refmods"],
       kind,
       capacity: () => ({ used: 0, max: S.refCaps(this.timeline).files, filesLeft: S.refCaps(this.timeline).files }),
       // `sheet` off, as on the modal's pool picker: the pool serves many
@@ -3531,7 +3558,7 @@ export class TimelineBody {
         filename: picked.path,
         ref_size: "max",
       };
-      if (picked.kind === "video") entry.track = picked.track ?? S.DEFAULT_TRACK;
+      if (picked.kind === "video") entry.track = S.trackFor(picked);
       if (picked.trim) entry.trim = picked.trim;
       this.timeline.assets.push(entry);
     }
@@ -3999,7 +4026,7 @@ export class TimelineBody {
       filename: picked.path,
       ref_size: "max",
     };
-    if (picked.kind === "video") entry.track = S.DEFAULT_TRACK;
+    if (picked.kind === "video") entry.track = S.trackFor(picked);
     if (picked.trim) entry.trim = picked.trim;
     segment.assets.push(entry);
     this.commit();

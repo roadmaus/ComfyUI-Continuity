@@ -52,9 +52,10 @@
 // perform (`keep` and `library` below): a shelf does not know where a roster
 // lives, and there are two hosts.
 
-import { viewUrl } from "./api.js";
+import { refmodFileUrl, viewUrl } from "./api.js";
 import { dismissable, el, icon, placeNear } from "./dom.js";
 import { t } from "./i18n.js";
+import { SUBFOLDER as MOD_FOLDER, costMark, keepable, ledger, looks, modeRows } from "./refmod.js";
 import * as S from "./state.js";
 
 /** The four things a file can lend a subject, and what tells them apart on
@@ -193,12 +194,23 @@ export function openMenu(anchor, { title, lead = null, sections, onClose = null 
   pop.querySelector('[aria-checked="true"]')?.scrollIntoView({ block: "center" });
 }
 
+/** Hand a mod's file to the browser under its own name. An anchor rather than
+ *  a fetch, so the page never holds the bytes; exported for the library's
+ *  panel, which offers the same file. */
+export function downloadMod(path) {
+  const anchor = el("a", { href: refmodFileUrl(path), download: "" });
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+}
+
 /** A file's thumbnail at whatever size the caller draws it, wearing the file's
  *  own identity hue. The same ring the asset row and the prompt chip wear, which
  *  is the whole point of it being here. */
 function assetThumb(asset, className = "mmc-asset-thumb") {
   if (!asset) return el("span", { class: `${className} mmc-cast-missing`, text: "?" });
-  if (asset.kind === "image") {
+  // A mod of either kind has a picture beside it — a stack's is its first frame.
+  if (asset.kind === "image" || S.isRefMod(asset)) {
     return el("img", {
       class: `${className} mmc-tag-${S.tagIndex(asset.handle)}`,
       src: viewUrl(asset.filename, { preview: true }), alt: "",
@@ -214,6 +226,9 @@ function assetThumb(asset, className = "mmc-asset-thumb") {
  *  set in the same monospace the marker wears: this is what the model is handed.
  *  Exported for the library sheet, whose tiles say the same thing. */
 export function sizeMark(asset) {
+  // A saved reference wears what it is rather than a size: it was encoded
+  // when it was made, and the mark says the tile is a latent, not a picture.
+  if (asset && S.isRefMod(asset)) return [el("span", { class: "mmc-cast-size", text: "mod" })];
   if (!asset || !S.sizeable(asset) || S.refSize(asset) !== "max") return [];
   return [el("span", { class: "mmc-cast-size", text: "max" })];
 }
@@ -238,15 +253,15 @@ export function sizeRows(file, pick) {
 /** The words attached to one file, as the field at the head of its menu.
  *  `write` is called on every keystroke and `done` on Enter, so the words are
  *  on the blob before the menu goes and the tile can wear its dot. */
-export function noteField({ value, write, done }) {
+export function noteField({ value, write, done, placeholder = null, title = null }) {
   const field = el("input", {
     class: "mmc-cast-menu-field",
     value,
     spellcheck: "false",
-    placeholder: t("what it shows of them — her face, front-lit; the golf swing"),
-    title: t("Written after this file's label in their definition, so the model "
-           + "knows which picture is the face and which is the coat, and what the "
-           + "clip is of."),
+    placeholder: placeholder ?? t("what it shows of them — her face, front-lit; the golf swing"),
+    title: title ?? t("Written after this file's label in their definition, so the model "
+                    + "knows which picture is the face and which is the coat, and what the "
+                    + "clip is of."),
     oninput: (event) => write(event.target.value.trim()),
     onkeydown: (event) => {
       // The canvas's own shortcuts must not fire off a sentence about a coat.
@@ -289,8 +304,16 @@ export function noteField({ value, write, done }) {
  *                       the files they are built out of here. Absent where there
  *                       is nowhere to keep them, and the star is absent with it.
  * `library`              open the roster so somebody can be taken out of it.
- *                       The host owns this because casting them lands files on a
- *                       node, which is the host's node and not the shelf's.
+ *                       Takes `{reveal}` — a mod's path — to open on that file
+ *                       in the roster's Saved references panel instead.
+ * `mod`                  save one subject's pictures as RefMods
+ *                       (`refmod.keepAsMod`), given them, the assets, a mode
+ *                       and a progress callback; null where the host has no VAE
+ *                       to encode with. The host owns this because casting them
+ *                       lands files on a node, which is the host's node and not
+ *                       the shelf's.
+ * `canvas`               the generation's `{width, height}`, for the ledger's
+ *                       estimate of what a `match` picture costs. Optional.
  * `rename`               rewrite `@from` as `@to` in every text the host holds.
  *                       Recasting is the only thing that asks for it — see
  *                       `recast` — and only the host knows which prose there is.
@@ -299,8 +322,8 @@ export function noteField({ value, write, done }) {
  */
 export class CastShelf {
   constructor({ getCast, setCast, getAssets, addAsset, whereCited, cite, touch, commit,
-                keep = null, library = null, rename = null, dropAssets = null,
-                onShut = null }) {
+                keep = null, library = null, mod = null, rename = null, dropAssets = null,
+                canvas = null, onShut = null }) {
     this.getCast = getCast;
     this.dropAssets = dropAssets;
     this.setCast = setCast;
@@ -312,6 +335,14 @@ export class CastShelf {
     this.commit = commit;
     this.keep = keep;
     this.library = library;
+    this.mod = mod;
+    this.canvas = canvas;
+    // Whose pictures are on the queue being encoded — `{subject, mode, count,
+    // progress}` — so their ledger can say so and a second press cannot queue
+    // the same pictures twice. And what went wrong the last time, on the
+    // ledger of the member it happened to.
+    this.encoding = null;
+    this.modNote = null;
     this.rename = rename;
     // Set while the library is open for a swap, so the card can say which of
     // its two buttons is waiting and a second press cannot start a second one.
@@ -520,6 +551,7 @@ export class CastShelf {
           el("span", { class: "mmc-cast-line-takes", text: t(subject.takes ?? "person") }),
         ]),
         this.miniRefs(subject),
+        ...this.costMark(subject),
         // What is wrong with them outranks where they walk on: a card that
         // cannot queue is the thing to deal with first, and it is the reason
         // this line is not the same colour as the others.
@@ -595,31 +627,6 @@ export class CastShelf {
         ]),
         el("div", { class: "mmc-cast-side" }, [
           this.whereButton(subject, where),
-          // Keeping them is the second thing you do after building somebody worth
-          // keeping, so it is on their card rather than in a menu — and it is a
-          // star, which is the mark this pack already uses for "this goes in the
-          // library".
-          // Swapping who is behind the name, beside keeping them — the two
-          // things a finished member is for. It leads, because the clip they
-          // stand in is the thing being recast and this is the only way to
-          // change who is in it without taking the footage apart.
-          ...(this.library ? [el("button", {
-            class: `mmc-cast-swapme${this.swapping === subject ? " on" : ""}`,
-            title: t("Recast @{handle} — somebody else out of the library takes their "
-                   + "place. The clips they stand in stay, and the prompt is "
-                   + "rewritten to the new name.", { handle: subject.handle }),
-            disabled: this.swapping ? true : undefined,
-            onclick: () => this.recast(subject),
-          }, [icon("swap", 13)])] : []),
-          ...(this.keep ? [el("button", {
-            class: `mmc-cast-keepme${this.kept === subject ? " on" : ""}`,
-            title: this.kept === subject
-              ? t("@{handle} is in the cast library.", { handle: subject.handle })
-              : t("Keep @{handle} in the cast library — they come back with their "
-                + "pictures, into any piece.", { handle: subject.handle }),
-            disabled: subject.handle ? undefined : true,
-            onclick: () => this.keepSubject(subject),
-          }, [icon("star", 13)])] : []),
           el("button", {
             class: "mmc-cast-shut",
             title: t("Close @{handle}", { handle: subject.handle }),
@@ -643,12 +650,77 @@ export class CastShelf {
         ]),
       ]),
       this.refStrip(subject),
+      // What their looks cost a render, and the way to change it. Under the
+      // tiles it is about, where the cube that used to do this sat in the
+      // header with nothing to say for itself.
+      ...this.ledgerRow(subject),
       this.featureBlock(subject),
       ...this.placeRow(subject),
       ...(problem ? [el("div", { class: "mmc-cast-bad", text: t(problem) })] : []),
       ...(this.note?.subject === subject
         ? [el("div", { class: "mmc-cast-bad", text: this.note.text })] : []),
+      ...this.footRow(subject),
     ];
+  }
+
+  /** Their looks as the ledger reads them: every still in `from`, mod or not. */
+  looks(subject) { return looks(subject, this.getAssets()); }
+
+  /** What they cost, on their shut line. Amber once every look is a mod. */
+  costMark(subject) {
+    const mark = costMark(this.looks(subject), this.canvas?.(), () => this.renderSoon());
+    if (!mark) return [];
+    return [el("span", {
+      class: `mmc-cast-line-cost${mark.saved ? " saved" : ""}`,
+      title: t("Reference tokens their looks add to every sampling step, ≈ where "
+             + "it is a picture and exact where it is a RefMod."),
+      text: mark.text,
+    })];
+  }
+
+  ledgerRow(subject) {
+    const busy = this.encoding?.subject === subject ? this.encoding : null;
+    const row = ledger({
+      entries: this.looks(subject),
+      canvas: this.canvas?.(),
+      busy,
+      note: this.modNote?.subject === subject ? this.modNote.text : null,
+      onSave: this.mod && !this.encoding && keepable(subject, this.getAssets(), "stack").length
+        ? (anchor) => this.pickMod(anchor, subject) : null,
+      onLibrary: this.library ? (path) => this.library({ reveal: path }) : null,
+      onKnown: () => this.renderSoon(),
+    });
+    return row ? [row] : [];
+  }
+
+  /** The two things a finished member is for, said in words: keeping them in
+   *  the library, and putting somebody else in their place. These were a star
+   *  and a pair of arrows at 13px in the header, which nobody read. */
+  footRow(subject) {
+    const acts = [];
+    if (this.keep) {
+      const kept = this.kept === subject;
+      acts.push(el("button", {
+        class: `mmc-cast-foot-act${kept ? " on" : ""}`,
+        title: kept
+          ? t("@{handle} is in the cast library.", { handle: subject.handle })
+          : t("Keep @{handle} in the cast library — they come back with their "
+            + "pictures, into any piece.", { handle: subject.handle }),
+        disabled: subject.handle ? undefined : true,
+        onclick: () => this.keepSubject(subject),
+      }, [icon("star", 12), el("span", { text: kept ? t("In the library") : t("Keep in library") })]));
+    }
+    if (this.library) {
+      acts.push(el("button", {
+        class: `mmc-cast-foot-act${this.swapping === subject ? " on" : ""}`,
+        title: t("Recast @{handle} — somebody else out of the library takes their "
+               + "place. The clips they stand in stay, and the prompt is "
+               + "rewritten to the new name.", { handle: subject.handle }),
+        disabled: this.swapping ? true : undefined,
+        onclick: () => this.recast(subject),
+      }, [icon("swap", 12), el("span", { text: t("Recast from library") })]));
+    }
+    return acts.length ? [el("div", { class: "mmc-cast-foot" }, acts)] : [];
   }
 
   /**
@@ -769,6 +841,44 @@ export class CastShelf {
     this.render();
   }
 
+  /** The two ways to save somebody's pictures, as a menu on the ledger's
+   *  button, each row naming what it would cost. */
+  pickMod(anchor, subject) {
+    // Everything that could go: stills and clips. The per-picture rows take
+    // the stills alone and say so.
+    const sources = keepable(subject, this.getAssets(), "stack");
+    openMenu(anchor, {
+      title: t(sources.length === 1
+        ? "Save {count} file as a RefMod → refmods/{folder}/{handle}"
+        : "Save {count} files as RefMods → refmods/{folder}/{handle}",
+        { count: sources.length, folder: MOD_FOLDER, handle: subject.handle }),
+      sections: [{ rows: modeRows(sources, (mode) => this.keepAsMod(subject, mode),
+                                  () => this.renderSoon()) }],
+    });
+  }
+
+  /** Encode them. The host does the work and the attaching; the ledger says
+   *  how it is going, and afterwards it says what it became. */
+  async keepAsMod(subject, mode) {
+    if (!this.mod || this.encoding) return;
+    const count = keepable(subject, this.getAssets(), mode).length;
+    this.encoding = { subject, mode, count, progress: 0 };
+    this.modNote = null;
+    this.render();
+    try {
+      await this.mod(subject, this.getAssets(), mode, (fraction) => {
+        if (this.encoding?.subject !== subject) return;
+        this.encoding.progress = fraction;
+        this.renderSoon();
+      });
+    } catch (error) {
+      this.modNote = { subject, text: t("Could not save @{handle} — {error}",
+                                        { handle: subject.handle, error: error.message ?? error }) };
+    }
+    this.encoding = null;
+    this.render();
+  }
+
   /** Their face, where one of their pictures can supply it: the first still they are
    *  built out of. A subject made of a clip alone, or of words alone, keeps the
    *  glyph — there is no picture of them to show, and inventing one would be
@@ -777,7 +887,7 @@ export class CastShelf {
     const assets = this.getAssets();
     const still = (subject.from ?? [])
       .map((handle) => assets.find((a) => a.handle === handle))
-      .find((a) => a?.kind === "image");
+      .find((a) => a?.kind === "image" || (a && S.isRefMod(a)));
     if (still) {
       return el("img", {
         class: "mmc-cast-face", alt: "",
@@ -1192,6 +1302,16 @@ export class CastShelf {
       asset.ref_size = key;
       this.save();
     }) : [];
+    // A mod is a file somebody may want to carry off, so its tile says where
+    // the file is and hands it out; a picture's file is the input folder's.
+    const file = asset && S.isRefMod(asset) ? [
+      { label: t("Download .safetensors"),
+        note: asset.filename.replace(/^refmod:/, "models/refmods/") + ".safetensors",
+        onPick: () => downloadMod(asset.filename) },
+      ...(this.library ? [{ label: t("Show in library"),
+                            note: t("The Cast tab's Saved references panel, on this file."),
+                            onPick: () => this.library({ reveal: asset.filename }) }] : []),
+    ] : [];
     openMenu(anchor, {
       title: `@${handle}`,
       lead: (close) => noteField({
@@ -1204,7 +1324,8 @@ export class CastShelf {
         },
         done: () => { close(); this.save(); },
       }),
-      sections: [{ rows }, ...(sizes.length ? [{ head: t("Encoded at"), rows: sizes }] : [])],
+      sections: [{ rows }, ...(sizes.length ? [{ head: t("Encoded at"), rows: sizes }] : []),
+                 ...(file.length ? [{ head: t("The file"), rows: file }] : [])],
       // Words typed and then clicked away from are on the blob already; the
       // tile has to catch up and wear its dot.
       onClose: () => this.renderSoon(),

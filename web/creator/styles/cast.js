@@ -101,6 +101,14 @@ export const css = `
 .mmc-cast-mini-replaces::after { background: var(--mmc-role-replaces); }
 .mmc-cast-mini.missing .mmc-cast-mini-thumb { box-shadow: 0 0 0 1.5px color-mix(in srgb, var(--mmc-bad) 50%, transparent); }
 .mmc-cast-line-words { font-size: calc(11px * var(--mmc-type)); color: var(--mmc-off); flex: none; }
+/* What their looks cost a render, in the marker's monospace — it is a number
+   the model is handed. Amber once every look is a saved file, which is the
+   one reading a cast of six is scanned for. */
+.mmc-cast-line-cost {
+  flex: none; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: calc(10.5px * var(--mmc-type)); color: var(--mmc-dim); font-variant-numeric: tabular-nums;
+}
+.mmc-cast-line-cost.saved { color: var(--mmc-accent); }
 
 /* Where they walk on, or what is wrong with them — the two things a shut line is
    read for, in the place the eye already goes for a status. */
@@ -114,23 +122,77 @@ export const css = `
 
 /* --- open: the way back out ----------------------------------------------- */
 
-.mmc-cast-shut, .mmc-cast-keepme, .mmc-cast-swapme {
+.mmc-cast-shut {
   display: flex; align-items: center; justify-content: center;
   width: 22px; height: 22px; padding: 0; border: 0; border-radius: 6px;
   background: none; color: var(--mmc-off); cursor: pointer; flex: none;
+  transform: rotate(180deg);
 }
-.mmc-cast-shut { transform: rotate(180deg); }
-.mmc-cast-shut:hover, .mmc-cast-keepme:hover:not(:disabled),
-.mmc-cast-swapme:hover:not(:disabled) {
-  background: var(--mmc-surface-3); color: var(--mmc-text);
+.mmc-cast-shut:hover { background: var(--mmc-surface-3); color: var(--mmc-text); }
+
+/* --- the ledger ------------------------------------------------------------ */
+/* One line under their tiles: what their looks cost a render, and the one
+   thing that changes it. The number is the argument for a RefMod, so it is
+   drawn where the pictures are rather than hinted at by a cube in the header.
+   Shared with the library sheet, which draws the same line under its rows. */
+.mmc-cast-ledger {
+  display: flex; align-items: center; gap: 8px 10px; flex-wrap: wrap; min-width: 0;
+  margin-left: 58px; padding: 6px 10px; border-radius: 9px;
+  background: var(--mmc-surface); border: 1px solid var(--mmc-line);
+  font-size: calc(11.5px * var(--mmc-type)); color: var(--mmc-dim);
 }
-.mmc-cast-keepme:disabled, .mmc-cast-swapme:disabled { opacity: .4; cursor: default; }
-/* Kept: the star fills, the way a starred preset's does in the library. */
-.mmc-cast-keepme.on { color: var(--mmc-accent); }
-/* Waiting on the library window: the arrows light and stay lit, so the card says
-   which press the window belongs to when it comes back. */
-.mmc-cast-swapme.on { color: var(--mmc-accent); opacity: 1; }
-.mmc-cast-keepme.on svg { fill: currentColor; }
+.mmc-cast-ledger-what { flex: 1; min-width: 16ch; }
+.mmc-cast-ledger-what b { font-weight: 500; color: var(--mmc-text); }
+.mmc-cast-ledger-dot { color: var(--mmc-off); }
+.mmc-cast-ledger-n {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-variant-numeric: tabular-nums; color: var(--mmc-text);
+}
+.mmc-cast-ledger-path {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: var(--mmc-off);
+  overflow-wrap: anywhere;
+}
+/* Saved: the line is the receipt, and the only amber on the card. */
+.mmc-cast-ledger.saved { border-color: color-mix(in srgb, var(--mmc-accent) 35%, transparent); }
+.mmc-cast-ledger.saved .mmc-cast-ledger-what b { color: var(--mmc-accent); }
+.mmc-cast-ledger-act {
+  display: inline-flex; align-items: center; gap: 5px; flex: none;
+  padding: 3px 9px; border-radius: 999px; border: 1px solid var(--mmc-line-2);
+  background: none; color: var(--mmc-text); font: inherit; font-size: calc(11.5px * var(--mmc-type));
+  cursor: pointer; text-decoration: none; white-space: nowrap;
+}
+.mmc-cast-ledger-act:hover { border-color: var(--mmc-line-3); background: var(--mmc-surface-2); }
+.mmc-cast-ledger-act.on { border-color: color-mix(in srgb, var(--mmc-accent) 60%, transparent); color: var(--mmc-accent); }
+.mmc-cast-ledger-act.on:hover { background: color-mix(in srgb, var(--mmc-accent) 10%, transparent); }
+.mmc-cast-ledger-queued { font-size: calc(11px * var(--mmc-type)); color: var(--mmc-off); flex: none; }
+/* Encoding: the same line grows a bar across its foot and nothing else moves. */
+.mmc-cast-ledger-bar {
+  flex-basis: 100%; height: 3px; border-radius: 2px; background: var(--mmc-surface-3); overflow: hidden;
+}
+.mmc-cast-ledger-bar i { display: block; height: 100%; background: var(--mmc-accent); transition: width .3s ease; }
+.mmc-cast-ledger-note { flex-basis: 100%; color: var(--mmc-bad); line-height: 1.45; }
+
+/* --- the footer -------------------------------------------------------------- */
+/* The two verbs a finished member is for, with their words on: keeping them in
+   the library, and recasting. A star and two arrows at 13px in the header were
+   the same two verbs and nobody found either. */
+.mmc-cast-foot {
+  display: flex; gap: 4px; align-items: center; flex-wrap: wrap;
+  margin-left: 58px; padding-top: 8px; border-top: 1px solid var(--mmc-line);
+}
+.mmc-cast-foot-act {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 9px; border-radius: 999px; border: 1px solid transparent;
+  background: none; color: var(--mmc-dim); font: inherit; font-size: calc(11.5px * var(--mmc-type));
+  cursor: pointer; white-space: nowrap;
+}
+.mmc-cast-foot-act:hover:not(:disabled) { border-color: var(--mmc-line-2); color: var(--mmc-text); }
+.mmc-cast-foot-act:disabled { opacity: .4; cursor: default; }
+/* Kept: the star fills, the way a starred preset's does in the library. Waiting
+   on the library window for a swap: lit, so the card says which press the
+   window belongs to when it comes back. */
+.mmc-cast-foot-act.on { color: var(--mmc-accent); opacity: 1; }
+.mmc-cast-foot-act.on svg { fill: currentColor; }
 
 .mmc-cast-top { display: flex; gap: 12px; align-items: flex-start; min-width: 0; }
 

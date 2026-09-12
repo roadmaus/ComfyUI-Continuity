@@ -278,6 +278,14 @@ export const css = `
   background: linear-gradient(transparent, var(--mmc-scrim-3));
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
+/* A saved reference's caption: what it was pooled to and what it costs, in the
+   monospace the cast's own size mark wears — this is what the model is handed. */
+.mmc-cell-mod {
+  position: absolute; left: 6px; top: 6px; padding: 1px 5px; border-radius: 4px;
+  font-size: calc(9px * var(--mmc-type)); letter-spacing: .03em;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  background: var(--mmc-scrim-3); color: var(--mmc-text);
+}
 .mmc-empty { grid-column: 1/-1; color: var(--mmc-dim); font-size: calc(14px * var(--mmc-type)); padding: 40px 0; text-align: center; }
 .mmc-modal-foot {
   position: absolute; bottom: 34px; right: 44px;

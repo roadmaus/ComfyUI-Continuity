@@ -20,7 +20,7 @@ import time
 import node_helpers
 import torch
 from comfy.ldm.minimax.model import FRAME_PER_TOKEN
-from ... import audiolatent, latents, media
+from ... import audiolatent, latents, media, refmod
 from .payload import AUDIO_END_KEY, CORE_ANCHORS_ANYWHERE, FRAME_INDEX_KEY
 from comfy_extras.nodes_minimax_h3 import (
     CANVAS_MULTIPLE,
@@ -751,6 +751,50 @@ def _encode_frames(clip, vae, audio_vae, compiled, loaded):
     return cond, latent
 
 
+def _mod_key(asset, print_of_vae):
+    """What a saved reference's render-time work depends on: the file, and the
+    VAE that decodes its picture. Not the canvas and not `ref_size` — the latent
+    was sized when the mod was made, and the same tensor goes to the DiT
+    whatever the generation is. None where the file cannot be stamped, which
+    `_cached` treats as "encode, do not cache" and `media` then names."""
+    try:
+        stamp = media.stamp(asset.filename)
+    except (media.MediaError, OSError):
+        return None
+    return {"kind": "refmod", "file": stamp, "vae": print_of_vae}
+
+
+def _mod_tensors(vae, asset, path):
+    """A saved reference's two halves, read and decoded. -> (tensors, meta).
+
+    The latent is the file's, untouched: that is the whole point of a mod. The
+    tokenizer's picture is decoded from it, because a mod carries no pixels —
+    and for a compressed mod that picture is the blur the DiT also sees, which
+    is honest. Presented the way `encode_image` / `encode_video` present a
+    file: one still for an image, a 2 fps sampling with timestamps for a clip.
+
+    A mod made elsewhere has no picture beside it for the picker to draw; the
+    first render that decodes one writes it, here, on the thread that already
+    holds the VAE. Never on a route — a decode off the render thread drives
+    model management from a pool worker, and that has crashed the process.
+    """
+    meta = refmod.header(path)
+    latent = refmod.load_latent(path, meta)
+    frames = vae.decode(latent)
+    frames = frames.reshape(-1, *frames.shape[-3:]).to("cpu", torch.float32)
+    if refmod.preview_path(path) is None:
+        refmod.write_preview(path, frames[:1])
+    out = {"latent_h": meta["latent_h"], "latent_w": meta["latent_w"]}
+    if meta["kind"] == "video":
+        sampled = list(range(0, frames.shape[0], FPS // 2)) or [0]
+        out["latent_t"] = meta["latent_t"]
+        out["timestamps"] = [i / 2.0 for i in range(len(sampled))]
+        presentation = frames[sampled]
+    else:
+        presentation = frames[:1]
+    return {"latent": latent, "presentation": _quantize(presentation)}, out
+
+
 def _snap(value):
     return max(CANVAS_MULTIPLE, round(value / CANVAS_MULTIPLE) * CANVAS_MULTIPLE)
 
@@ -800,7 +844,38 @@ def _encode_references(clip, vae, audio_vae, compiled, loaded, checkpoints=None)
         asset = step["asset"]
         entry = loaded[asset.handle]
 
-        if step["op"] == "image":
+        if step["op"] == "image" and asset.mod:
+            tensors, meta = _cached(
+                f"@{asset.handle} mod", _mod_key(asset, print_of_vae),
+                lambda entry=entry, asset=asset: _mod_tensors(vae, asset, entry["mod"]), tally)
+            items.append({"type": "image", "data": _present(tensors["presentation"])})
+            blocks.append({
+                "kind": "image",
+                "latent_h": meta["latent_h"],
+                "latent_w": meta["latent_w"],
+                "latent": _restore(vae, tensors["latent"]),
+            })
+
+        elif step["op"] == "video" and asset.mod:
+            tensors, meta = _cached(
+                f"@{asset.handle} mod", _mod_key(asset, print_of_vae),
+                lambda entry=entry, asset=asset: _mod_tensors(vae, asset, entry["mod"]), tally)
+            items.append({
+                "type": "video",
+                "data": _present(tensors["presentation"]),
+                "timestamps": meta["timestamps"],
+            })
+            blocks.append({
+                "kind": "video",
+                "latent_t": meta["latent_t"],
+                "latent_h": meta["latent_h"],
+                "latent_w": meta["latent_w"],
+                "ref_audio_t": 0,
+                "latent": _restore(vae, tensors["latent"]),
+                "audio_latent": None,
+            })
+
+        elif step["op"] == "image":
             def encode_image(entry=entry, asset=asset):
                 image = entry["image"]
                 height, width = image.shape[1], image.shape[2]

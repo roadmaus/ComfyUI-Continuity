@@ -19,6 +19,7 @@ from dataclasses import dataclass, field, replace
 
 from . import canvas
 from . import redetail
+from . import refmod
 from . import sound
 from . import variations
 from .families import grammar, registry
@@ -233,6 +234,14 @@ class Asset:
     # composite already looks like this — and read by exactly one thing, the
     # caption's "panel 3 is top right" (`families/ltx25/sheet._placed`).
     rect: tuple | None = None
+
+    @property
+    def mod(self):
+        """A saved reference (`refmod:<name>`): its latent is read off the file
+        and never encoded, and its picture is decoded from that latent. Read off
+        the filename rather than stored beside it, so a blob cannot say one thing
+        in two places. See `creator/refmod.py`."""
+        return refmod.is_mod(self.filename)
 
 
 @dataclass
@@ -619,6 +628,35 @@ def _parse_assets(raw):
         filename = str(item.get("filename") or "").strip()
         if not filename:
             raise CompileError(f"@{handle}: no filename")
+
+        # A saved reference is a latent with a picture decoded from it, so it
+        # is a reference and only that: there is no file to open at a frame, no
+        # background to cut, no soundtrack, no stretch of it to trim, and no
+        # size to encode it at — it was encoded when it was made. Each of those
+        # is refused by name rather than ignored, because a blob asking for one
+        # is asking for something the render cannot do.
+        if refmod.is_mod(filename):
+            try:
+                refmod.name_of(filename)
+            except refmod.RefModError as exc:
+                raise CompileError(f"@{handle}: {exc}") from exc
+            if role != "reference":
+                raise CompileError(
+                    f"@{handle}: a saved reference is a reference — it has no "
+                    f"frame to open or close a shot on, and nothing to aim a "
+                    f"render at")
+            if kind == "audio":
+                raise CompileError(
+                    f"@{handle}: an audio RefMod — voices are bound as files, not mods")
+            if item.get("trim"):
+                raise CompileError(f"@{handle}: a saved reference cannot be trimmed")
+            if item.get("panels") or item.get("cut"):
+                raise CompileError(
+                    f"@{handle}: a saved reference is already encoded — cut the "
+                    f"picture out before keeping it as a mod")
+            if kind == "video" and item.get("track") not in (None, "", "picture"):
+                raise CompileError(
+                    f"@{handle}: a saved clip carries no soundtrack")
 
         # Defaulted per kind rather than globally — see DEFAULT_REF_SIZE. Audio
         # has no size to speak of and is left on the dataclass default, which

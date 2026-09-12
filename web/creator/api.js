@@ -707,6 +707,10 @@ export function viewUrl(path, { preview = false, version = null } = {}) {
   // the other side — one door in, so a second species of path costs two
   // branches instead of thirty. See `presets/atlasref.js`.
   if (isAtlasRef(path)) return atlasUrl(path);
+  // A saved reference (`refmod:<name>`) lives in the model folders and has no
+  // pixels to view — only the picture kept beside it, which the thumb route
+  // serves. The same one door, for the same reason. See `creator/refmod.py`.
+  if (isRefMod(path)) return thumbUrl(path, version);
   // A gallery path carries ComfyUI's folder annotation ("clip.mp4 [output]").
   // The servers that take a filename parse it themselves; core's /view takes
   // the folder as a parameter instead, so it is split off here.
@@ -726,6 +730,65 @@ export function viewUrl(path, { preview = false, version = null } = {}) {
   if (preview) return thumbUrl(path, version);
   return api.apiURL(`/view?${params}`);
 }
+
+/** Whether a path names a saved reference rather than a file in input/. The
+ *  prefix is `creator/refmod.py`'s `SCHEME`, spelled here because a mod is
+ *  told from a picture on every surface that draws one. */
+export function isRefMod(path) {
+  return String(path ?? "").startsWith("refmod:");
+}
+
+/**
+ * Keep pictures as saved references. -> `{mods: [row, ...]}`, one picker row
+ * per source, in source order. A job on ComfyUI's queue like a tracing: the
+ * encode is the H3 VAE over each picture, so it waits its turn behind a render
+ * and rides the real progress bar.
+ */
+export async function makeRefMod(body, options) {
+  const answer = await runJob("/continuity/refmod/make", body, options);
+  // The mods are new and the listing is a few seconds stale.
+  invalidate("refmods");
+  return answer;
+}
+
+/** Where a mod's own file is handed out. A plain URL rather than a fetch: it
+ *  goes on an anchor with `download`, so the browser saves it under the mod's
+ *  name and the page never holds the bytes. */
+export function refmodFileUrl(path) {
+  return api.apiURL(`/continuity/refmod/file?filename=${encodeURIComponent(path)}`);
+}
+
+/** One `.safetensors` in, into `models/refmods/<subfolder>`. -> the picker row.
+ *  Refused by sentence when the file is not a mod. */
+export async function uploadRefMod(file, subfolder = "") {
+  const form = new FormData();
+  form.append("file", file);
+  if (subfolder) form.append("subfolder", subfolder);
+  const response = await api.fetchApi("/continuity/refmod/upload", { method: "POST", body: form });
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(body.error || t("upload failed ({status})", { status: response.status }));
+  invalidate("refmods");
+  return body;
+}
+
+/** The three edits a mod's file takes — a new name or folder, gone, and the
+ *  description in its header. Each answers the fresh row, or throws the
+ *  server's sentence. */
+async function refmodPost(route, payload, fallback) {
+  const response = await api.fetchApi(`/continuity/refmod/${route}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(body.error || t(fallback, { status: response.status }));
+  invalidate("refmods");
+  return body;
+}
+export const moveRefMod = (filename, name) => refmodPost("move", { filename, name }, "move failed ({status})");
+export const deleteRefMod = (filename) => refmodPost("delete", { filename }, "delete failed ({status})");
+export const describeRefMod = (filename, description) =>
+  refmodPost("describe", { filename, description }, "could not write the description ({status})");
 
 /**
  * A server-decoded still of one clip.

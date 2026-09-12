@@ -34,7 +34,7 @@ from aiohttp import web
 import folder_paths
 from server import PromptServer
 
-from . import (compile as compiler, jobs, latents, lorameta, media, models, plate,
+from . import (compile as compiler, jobs, latents, lorameta, media, models, plate, refmod,
                preview, settings, vdn)
 
 # The picker builds its grid lazily and paginates, so the cap only bounds the
@@ -232,6 +232,17 @@ async def probe_asset(request):
     `has_audio: null` means the question could not be answered; the caller keeps
     its own default rather than guessing silence.
     """
+    filename = request.query.get("filename", "")
+    if refmod.is_mod(filename):
+        # A mod's picture is its latent grid at the VAE's stride, and it has no
+        # soundtrack and no length: the header says all of it, no container.
+        try:
+            meta = refmod.header(refmod.resolve(filename))
+        except refmod.RefModError as exc:
+            return web.json_response({"has_audio": None, "error": str(exc)}, status=404)
+        return web.json_response({"has_audio": False, "width": meta["latent_w"] * 16,
+                                  "height": meta["latent_h"] * 16, "mod": True,
+                                  "tokens": meta["tokens"], "mode": meta["mode"]})
     path = _input_path(request)
     if path is None:
         return web.json_response({"has_audio": None, "error": "not in the input folder"}, status=404)
@@ -323,7 +334,17 @@ async def asset_thumb(request):
     404 rather than a placeholder: the cell falls back to an icon, and inventing
     an image here would make an undecodable file look like a fine one.
     """
-    path = _input_path(request)
+    filename = request.query.get("filename", "")
+    if refmod.is_mod(filename):
+        # A mod's picture is the sidecar beside it — written when it was made,
+        # or by the first render that decoded it. Nothing is decoded here: a
+        # route runs on a pool worker, and the VAE stays on the render thread.
+        try:
+            path = refmod.preview_path(refmod.resolve(filename))
+        except refmod.RefModError:
+            path = None
+    else:
+        path = _input_path(request)
     if path is None:
         return web.Response(status=404)
     thumb = await preview.thumbnail(path)
@@ -613,6 +634,13 @@ async def list_assets(request):
     machinery as the input folder. Its paths come back annotated (` [output]`),
     which is what lets one of them be attached as a reference: see `_scan`.
     """
+    if request.query.get("root") == "refmods":
+        # Saved references, out of the model folders: a different place with
+        # its own rows, browsed by the same grid. See `refmod.listing`.
+        loop = asyncio.get_running_loop()
+        rows, folders = await loop.run_in_executor(None, refmod.listing)
+        rows.sort(key=lambda a: a["mtime"], reverse=True)
+        return web.json_response({"assets": rows, "folders": folders, "truncated": False})
     if request.query.get("root") == "output":
         root, annotation = folder_paths.get_output_directory(), " [output]"
     else:

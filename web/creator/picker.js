@@ -5,10 +5,11 @@ import { el, ICONS, svg, icon, mountOverlay, dismissable } from "./dom.js";
 import { listAssets, listingTruncated, listedFolders, makeFolder, removeFolder,
          viewUrl, stillUrl, upload, moveAsset,
          deleteAsset, loadPickerPrefs, savePickerPrefs, buildPlate,
-         cutPanel } from "./api.js";
+         cutPanel, uploadRefMod } from "./api.js";
 import { openTrim, trimLabel } from "./trim.js";
 import { openSubjectView, greyField } from "./subject.js";
 import { t } from "./i18n.js";
+import { memberFromMod } from "./presets.js";
 
 // "renders" is a tab, not a kind: it browses the output folder instead of a
 // slice of the input one, and the files under it keep their own kinds — a
@@ -22,9 +23,9 @@ import { t } from "./i18n.js";
 // the list the current tab is looking at, and every organize path goes through
 // it rather than reaching for `this.assets`.
 const KIND_LABEL = { image: "Image", video: "Video", audio: "Audio",
-                     renders: "Renders", guides: "Guide" };
+                     renders: "Renders", guides: "Guide", refmods: "RefMod" };
 const ACCEPT = { image: "image/*", video: "video/*", audio: "audio/*",
-                 guides: "video/*" };
+                 guides: "video/*", refmods: ".safetensors" };
 
 // Where the ControlNet bench writes, and so the whole of what the guide tab
 // shows. Mirrors `control.SUBFOLDER`.
@@ -91,6 +92,10 @@ class Picker {
     this.selected = [];   // asset rows, in click order
     this.assets = [];
     this.renders = [];    // the output folder, only fetched when the tab exists
+    // Saved references, out of the model folders: a third place, like renders,
+    // whose rows keep their own kinds (a mod is a picture or a clip). See
+    // `creator/refmod.py`.
+    this.mods = [];
     this.loaded = false;
     // Which shelf the grid shows: "all", "fav", or an input subfolder. Shelves
     // are shared across tabs — a folder is a place, not a kind.
@@ -208,6 +213,7 @@ class Picker {
     this.uploadButton = this.modal.querySelector(".mmc-upload");
     this.organizeButton = this.modal.querySelector(".mmc-organize");
     if (this.kind === "renders") this.uploadButton.style.display = "none";
+    if (this.kind === "refmods") { this.organizeButton.style.display = "none"; this.uploadButton.textContent = this.uploadLabel(); }
     this.modal.style.position = "relative";
 
     this.overlay = el("div", {
@@ -233,13 +239,15 @@ class Picker {
       // All three at once. The two folders have nothing to say to each other,
       // and waiting for input to come back before asking for output made a slow
       // disk twice as slow for no reason (#4).
-      const [assets, renders, prefs] = await Promise.all([
+      const [assets, renders, mods, prefs] = await Promise.all([
         listAssets({ force }),
         this.options.kinds.includes("renders") ? listAssets({ force, root: "output" }) : [],
+        this.options.kinds.includes("refmods") ? listAssets({ force, root: "refmods" }) : [],
         loadPickerPrefs(),
       ]);
       this.assets = assets;
       this.renders = renders;
+      this.mods = mods;
       this.prefs = prefs;
       // A mark on a file the listing no longer has is a mark on nothing.
       this.marked = this.marked.filter((p) => this.activeAssets().some((a) => a.path === p));
@@ -265,6 +273,7 @@ class Picker {
     } catch (error) {
       this.assets = [];
       this.renders = [];
+      this.mods = [];
       this.loaded = true;
       this.loadError = error.message;
     }
@@ -291,13 +300,18 @@ class Picker {
     for (const tab of this.tabs) tab.setAttribute("aria-selected", String(tab.textContent === t(KIND_LABEL[kind])));
     // Nothing uploads into the output folder: renders arrive by being rendered.
     // Organizing them is another matter — see the note at the top of the file.
+    // Nothing uploads into the mod folders either, and nothing is organized
+    // there: a mod is made by keeping a cast member, and the move and delete
+    // routes act on the two media roots alone.
     this.uploadButton.style.display = kind === "renders" ? "none" : "";
-    if (kind !== "renders") this.uploadButton.textContent = t("+  Upload {kind}", { kind: t(KIND_LABEL[kind].toLowerCase()) });
+    this.organizeButton.style.display = kind === "refmods" ? "none" : "";
+    if (kind === "refmods" && this.organize) this.setOrganize(false);
+    if (kind !== "renders") this.uploadButton.textContent = this.uploadLabel();
     // Shelves are shared between the input tabs — a folder is a place, not a
     // kind — but the output folder is a different place, so crossing that line
     // opens where that root was last left rather than on a shelf that is not
     // there.
-    if ((kind === "renders") !== (previous === "renders")) {
+    if (this.rootKey() !== this.rootKeyOf(previous)) {
       this.shelf = this.rememberedShelf();
       this.marked = [];
     }
@@ -331,11 +345,15 @@ class Picker {
    *  renders tab reads a different folder; everything organize-related goes
    *  through it, which is why there is only one implementation of any of it. */
   activeAssets() {
-    return this.kind === "renders" ? this.renders : this.assets;
+    return this.kind === "renders" ? this.renders
+      : this.kind === "refmods" ? this.mods : this.assets;
   }
 
   /** The label the upload button wears when it is not uploading. */
   uploadLabel() {
+    // A mod is imported rather than uploaded: it is a file made elsewhere,
+    // and it lands in the model folder, not the input folder.
+    if (this.kind === "refmods") return t("+  Import RefMod");
     return t("+  Upload {kind}", { kind: t(KIND_LABEL[this.kind].toLowerCase()) });
   }
 
@@ -350,14 +368,18 @@ class Picker {
 
   /** Which root the tab is browsing, as the server names it. */
   rootName() {
-    return this.kind === "renders" ? "output" : "input";
+    return this.kind === "renders" ? "output" : this.kind === "refmods" ? "refmods" : "input";
   }
 
   /** Which root the tab is browsing. The shelf is remembered per root, not per
    *  kind: the image and video tabs share a folder, so they share the place in
    *  it they were left. */
   rootKey() {
-    return this.kind === "renders" ? "renders" : "input";
+    return this.rootKeyOf(this.kind);
+  }
+
+  rootKeyOf(kind) {
+    return kind === "renders" ? "renders" : kind === "refmods" ? "refmods" : "input";
   }
 
   /** Open where the picker was last left. A remembered folder that has since
@@ -788,6 +810,8 @@ class Picker {
     const only = this.options.only;
     const onKind = only ? (asset) => asset.kind === only
       : this.kind === "renders" ? () => true
+      // Mods are a place too, and every one is a reference of its own kind.
+      : this.kind === "refmods" ? () => true
       // The guide tab is a place, not a kind: every clip the bench has traced,
       // and nothing else in the input folder.
       : this.kind === "guides" ? isGuide
@@ -863,6 +887,9 @@ class Picker {
           ? (this.kind === "renders"
               ? t("No renders matching “{query}”.", { query: this.query })
               : t("No {kind} files matching “{query}”.", { kind: t(this.kind), query: this.query }))
+          : this.kind === "refmods"
+            ? t("No RefMods yet — import a .safetensors and they join the cast, or save "
+              + "a cast member's pictures from their card.")
           : this.shelf === "fav"
             ? t("No favorites yet — hover a file and hit the star.")
             : this.shelf !== "all"
@@ -1044,6 +1071,11 @@ class Picker {
       if (asset.kind === "video") {
         thumb.addEventListener("error", () => thumb.replaceWith(this.fallback(asset, "video")));
       }
+      // A mod made elsewhere has no picture beside it until a render decodes
+      // one; the cell says what it is rather than showing a broken image.
+      if (asset.mod) {
+        thumb.addEventListener("error", () => thumb.replaceWith(this.fallback(asset, "cube")));
+      }
       cell.appendChild(thumb);
     } else {
       cell.appendChild(this.fallback(asset, "audio"));
@@ -1091,7 +1123,17 @@ class Picker {
     }
     // No segment badge while organizing: configuring a segment selects the
     // file for attachment, which is exactly not what a mark means.
-    if (asset.kind !== "image" && !this.organize) cell.appendChild(this.badge(asset));
+    // A mod has no segment to cut and no soundtrack to bring; what it wears
+    // instead is what it costs — the grid it was pooled to and the tokens it
+    // spends — which is the one fact a row of mods is read for.
+    if (asset.mod) {
+      cell.appendChild(el("div", {
+        class: "mmc-cell-mod",
+        title: asset.description || "",
+        text: `${t(asset.source === "stack" ? "stack" : asset.mode === "training" ? "compressed" : "full")} · ${
+          t("{count} tokens", { count: asset.tokens ?? 0 })}`,
+      }));
+    } else if (asset.kind !== "image" && !this.organize) cell.appendChild(this.badge(asset));
     if (asset.kind !== "audio") cell.appendChild(el("div", { class: "mmc-cell-name", text: asset.name }));
 
     // Stars and dragging on every tab, renders included: a finished clip is the
@@ -1119,7 +1161,8 @@ class Picker {
 
     // Organizing is dragging: the cell rides to a shelf chip. The chips take
     // it from `this.dragging` — dataTransfer only carries strings.
-    cell.draggable = true;
+    // A mod's home is the model folders; the shelves are input's.
+    cell.draggable = !asset.mod;
     cell.addEventListener("dragstart", (event) => {
       this.dragging = asset;
       event.dataTransfer.effectAllowed = "move";
@@ -1209,7 +1252,7 @@ class Picker {
     let unmount;
     const media = asset.kind === "audio"
       ? el("audio", { class: "mmc-light-audio", src: viewUrl(asset.path), controls: true, autoplay: true })
-      : asset.kind === "video"
+      : asset.kind === "video" && !asset.mod
         ? el("video", { class: "mmc-light-media", src: viewUrl(asset.path), controls: true, autoplay: true, loop: true })
         : el("img", { class: "mmc-light-media", src: viewUrl(asset.path), alt: asset.name });
     const overlay = el("div", {
@@ -1275,7 +1318,7 @@ class Picker {
    *  browsing. A keyframe caller (`single`) does not — a start frame is a
    *  frame of the video, and cutting it out would condition on a hole. */
   chipPossible(asset) {
-    return Boolean(this.plate) && asset.kind === "image"
+    return Boolean(this.plate) && asset.kind === "image" && !asset.mod
       && !this.organize && !this.options.viewOnly && !this.options.single;
   }
 
@@ -1930,7 +1973,8 @@ class Picker {
     } else {
       // The renders tab has no bucket of its own — a picked render is a video
       // and counts where a video counts.
-      const bucket = this.kind === "renders" ? "video" : this.kind;
+      const bucket = this.kind === "renders" ? "video"
+        : this.kind === "refmods" ? "image" : this.kind;
       const { used, max } = this.options.capacity(bucket);
       const filled = used + this.claimed(bucket);
       // A clip taken for its sound alone is not in this tab's bucket, so it is
@@ -1962,6 +2006,21 @@ class Picker {
       const into = this.shelf === "all" || this.shelf === "fav" ? "" : this.shelf;
       try {
         const added = [];
+        // A .safetensors on the RefMod tab goes to models/refmods, read as a
+        // mod on the way in; the row comes back and the tab is re-read.
+        if (this.kind === "refmods") {
+          // A RefMod is a character: the file lands, and a cast member named
+          // after it is filed in the library at the same time, so it is in
+          // the roster the next "From the library" opens on.
+          for (const file of files) {
+            const mod = await uploadRefMod(file, into);
+            added.push(mod);
+            await memberFromMod(mod).catch(() => {});
+          }
+          this.uploadButton.textContent = this.uploadLabel();
+          await this.load({ force: true });
+          return;
+        }
         for (const file of files) added.push(await upload(file, into));
         // "Uploading…" stops when the uploading does. It used to stay up for the
         // re-listing that followed, so a finished upload read as a stuck one and
