@@ -550,6 +550,18 @@ button.mmc-asset-owner:hover, button.mmc-asset-owner:focus-visible {
  * colour is set: the API allows little else, and little else is wanted. */
 ::highlight(mmc-alt-mark) { color: var(--mmc-accent); }
 ::highlight(mmc-alt-off) { color: var(--mmc-faint); }
+/* The word that woke a cast member's plate, in their hue — the ring on the
+   chip fills in the same hue, and this is where the sentence says why. An
+   underline and not a colour: the word is prose, and prose stays the text
+   colour; only the rule under it is theirs. */
+::highlight(mmc-wake-0) { text-decoration: underline; text-decoration-color: var(--mmc-tag-0); text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+::highlight(mmc-wake-1) { text-decoration: underline; text-decoration-color: var(--mmc-tag-1); text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+::highlight(mmc-wake-2) { text-decoration: underline; text-decoration-color: var(--mmc-tag-2); text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+::highlight(mmc-wake-3) { text-decoration: underline; text-decoration-color: var(--mmc-tag-3); text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+::highlight(mmc-wake-4) { text-decoration: underline; text-decoration-color: var(--mmc-tag-4); text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+::highlight(mmc-wake-5) { text-decoration: underline; text-decoration-color: var(--mmc-tag-5); text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+::highlight(mmc-wake-6) { text-decoration: underline; text-decoration-color: var(--mmc-tag-6); text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+::highlight(mmc-wake-7) { text-decoration: underline; text-decoration-color: var(--mmc-tag-7); text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
 
 /* --- a spoken line --------------------------------------------------------
  *

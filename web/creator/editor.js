@@ -311,6 +311,10 @@ export class CreatorEditor {
       },
       compiled: this.compiledPrompt ? () => this.compiledPrompt() : null,
       pick: () => this.varies?.() ?? null,
+      // The plates the sentence woke, so the box can underline the word that
+      // did it in the owner's hue — the chip's ring fills in that hue, and the
+      // underline is the same fact at the other end.
+      wakes: () => this.wakesHere(),
       onAttach: (row) => this.attachFromMention(row),
       attachBlocked: (action) => S.blockedReason(this.state, action),
       // The piece's reference pool, where this state is a timeline segment —
@@ -2146,6 +2150,28 @@ export class CreatorEditor {
       onSwap: (entry) => this.swapLora(entry),
       onRemove: (entry) => { S.removeLora(this.state, entry.name); this.commit(); },
     });
+  }
+
+  /** For each cast file awake in this shot on its words: the words, and the
+   *  owner's hue. Off the same reading the chips use (`state.asleepHere`), so
+   *  the underline and the ring never disagree. */
+  wakesHere() {
+    const cast = this.castPiece.subjects ?? [];
+    if (!cast.length) return [];
+    const scoped = { ...this.state, cast };
+    const cited = new Set(S.citedCast(scoped).map((subject) => subject.handle));
+    if (!cited.size) return [];
+    const asleep = S.asleepHere(scoped, this.varies?.() ?? null);
+    const out = [];
+    for (const subject of cast) {
+      if (!cited.has(subject.handle)) continue;
+      const hue = S.tagIndex(subject.handle);
+      for (const [handle, line] of Object.entries(S.subjectTriggers(subject))) {
+        if (asleep.has(handle)) continue;
+        out.push({ words: S.splitTriggers(line), hue });
+      }
+    }
+    return out;
   }
 
   renderAssets() {

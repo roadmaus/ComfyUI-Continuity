@@ -19,7 +19,9 @@ passes over wakes nothing; a file the sentence names outright is awake
 whatever its words; a muted file stays muted. The card's chip says *wakes on
 hat, cap* behind a ring — filled while the file is in, hollow while it waits
 — and carries the owner's words for the file too, which is how img-4 and
-img-5 tell apart. A member every one of whose plates is asleep, with no words
+img-5 tell apart. The sentence says why: the word that woke a plate is
+underlined in the member's hue, every time it occurs, except inside an
+alternative the seed passes over. A member every one of whose plates is asleep, with no words
 of their own, is refused by name with the words that would wake one. The
 words are kept in the cast library and follow a picture onto its RefMod.
 
