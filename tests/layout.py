@@ -55,6 +55,7 @@ MODULES = {
     "facepass": "families.h3.facepass",
     "h3_pdd": "h3lora.pdd",
     "hires": "families.h3.hires",
+    "derope": "families.h3.derope",
     "h3_segment": "families.h3.segment",
     "truncate": "families.h3.truncate",
     "refine": "families.h3.refine",

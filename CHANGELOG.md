@@ -6,6 +6,37 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**Motion fix: a switch on the card that slows a shot down where it moves too
+fast for the model, draws it again and puts it back on the clock (#76).** H3
+smears bursty motion — a flip, a sword arc, a whip-fast turn — because one
+latent time token spans four frames and cannot hold four different poses;
+re-denoising does not help, the poses were never drawn. matlowai's Motion Lab
+worked out the test-time answer and this is a clean reimplementation of its
+core: after the pass is written, the jerk profile (the third difference of the
+latent over time, per token) says where it ran too hot, those frames are held
+on a longer 17k+5 clock at up to four copies each with the bridge and ramp
+rules the method measured, the slowed clip is encoded and sampled again from
+half the schedule against the shot's own prompt and references, and the
+original clock is recovered by keeping the first frame of every hold group —
+generated pixels, never interpolated. Five frames at either end are never
+held, are frozen through the second pass and are put back verbatim, so the
+fix cannot become a seam step of its own; a calm pass (peak motion under the
+gate) is left alone and says so in the history; the soundtrack rides through
+untouched. A blended seam off a fixed pass takes the frames road, and the
+face pass, where on, runs over the fixed frames. The chip sits on the card
+beside the face chip, only on H3 and never on footage; the dials are the
+method's defaults in `families/h3/derope.py`, which is pure numpy and tested
+without a model. Measured on a 2 s turbo card: a spinning kick gets its
+shin, foot and face back with the choreography kept, at about twice the
+card's own sampling time. The gate turned out to matter more than the dials:
+the method's profile contrast read a static fern *higher* than the kick, and
+forced through the pass the fern came back sharper and moving unnaturally,
+so the gate reads peak frame-to-frame motion off the delivered frames
+instead (4.4 on the kick, 1.9 on the fern, gate at 2.5). The line is on the
+settings page under Rendering as four rows named by what they let through,
+with the two measured clips as the anchors, and in the file as
+`motion_fix_abstain`. Both comparisons are in `docs/timeline.md`.
+
 **One picture editor — crop, turn, mirror, cut out — behind a pen on every
 picture and clip (#75).** A window dragged over the part of the picture that
 is the reference, with corner and edge handles, a lock to the shot's shape

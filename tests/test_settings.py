@@ -106,6 +106,9 @@ refuses("an autoplay setting that is not a boolean", {"autoplay_previews": "yes"
 check("a four-step lead-in by default", settings.clean({})["turbo_lead_in"], 4)
 check("a lead-in is kept", settings.clean({"turbo_lead_in": 2})["turbo_lead_in"], 2)
 check("a null lead-in is the default", settings.clean({"turbo_lead_in": None})["turbo_lead_in"], 4)
+check("the motion fix gate is the method's by default",
+      settings.clean({})["motion_fix_abstain"], settings.derope.GATE)
+check("a gate is kept as a float", settings.clean({"motion_fix_abstain": 0})["motion_fix_abstain"], 0.0)
 check("both ends of the range are legal",
       (settings.clean({"turbo_lead_in": 0})["turbo_lead_in"],
        settings.clean({"turbo_lead_in": settings.MAX_LEAD_IN})["turbo_lead_in"]),

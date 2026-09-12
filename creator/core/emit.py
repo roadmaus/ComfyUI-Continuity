@@ -520,6 +520,18 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
             **({"reel": reel} if reel is not None else {}))
         source = written
 
+        if one.motion_fix and family.fixes_motion:
+            # The motion fix, on the pass as delivered, and before the face
+            # pass: it re-draws whole frames, and a face repaired first would
+            # be re-drawn again over. Here rather than at the end of the render
+            # for the reason the face pass is: what the next seam inherits is
+            # `decoded[]`. `head` is the trim the reel took, so the node can
+            # line the latent's clock up with the frames on disk.
+            source = family.emit_motion_fix(
+                graph, links, payloads[index], one, written, latent,
+                one.feather if one.feather > 1 else 0, weights, sampling,
+                acceleration, seed_for(index))
+
         if one.face:
             # The face pass, on the pass as delivered: it reads the frames back
             # off the spill, re-draws the face at a canvas where it is large,
@@ -529,18 +541,21 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
             # instead, every seam would have continued from a face this pass
             # then went on to repair.
             source = family.emit_face(graph, links, face_payloads[index],
-                                      face_compiled[index], one.face, written,
+                                      face_compiled[index], one.face, source,
                                       weights, sampling, acceleration,
                                       seed_for(index))
 
         reel = source.out(0)
         # What a later blended seam may slice its run off. Only while the
-        # sampler's latent still *is* the delivered pass: a face pass rewrote
-        # the frames, and a tail blend trimmed the frames the latent ends on.
-        # A family whose segment node has no socket for it, or a machine that
-        # picked the frames road to compare (`settings.seam_handoff`), hands none.
+        # sampler's latent still *is* the delivered pass: a face pass or a
+        # motion fix rewrote the frames, and a tail blend trimmed the frames
+        # the latent ends on. A family whose segment node has no socket for
+        # it, or a machine that picked the frames road to compare
+        # (`settings.seam_handoff`), hands none.
         handoff = latent if (family.hands_latents and handing != "frames"
-                             and not one.face and one.ends_feather <= 1) else None
+                             and not one.face
+                             and not (one.motion_fix and family.fixes_motion)
+                             and one.ends_feather <= 1) else None
         decoded.append(("pass", source.out(1), handoff))
         if anchor is None and handoff is not None:
             anchor = handoff

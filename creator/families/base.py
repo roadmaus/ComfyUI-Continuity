@@ -218,6 +218,21 @@ class Family:
         the same shape the reel node hands out."""
         raise NotImplementedError(f"{self.id}.emit_face")
 
+    # Whether `emit_motion_fix` is written for this family. The loop emits the
+    # pass only where this is True, so a family without it keeps the graph —
+    # and the cache keys — it had, whatever a card asks.
+    fixes_motion = False
+
+    def emit_motion_fix(self, graph, links, payload, compiled, written, latent,
+                        head, weights, sampling, acceleration, seed):
+        """The motion fix over a written pass. `written` is the reel node (or
+        whatever last rewrote the pass — out(0) the reel, out(1) the pass link),
+        `latent` the sampler's latent link the pass was decoded from, `head`
+        the frames trimmed off its front on the way to disk. -> the node whose
+        out(0) is the reel and out(1) the pass link, the same shape the reel
+        node hands out. Called only where `fixes_motion` is True."""
+        raise NotImplementedError(f"{self.id}.emit_motion_fix")
+
     # Whether `emit_seam_restore` is written for this family. The loop reads
     # this before it widens the run it reads back for the seam, so a family
     # without the pass keeps the seam wiring — and the cache keys — it had.

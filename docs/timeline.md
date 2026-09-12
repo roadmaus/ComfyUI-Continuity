@@ -63,6 +63,49 @@ per-machine settings on the gear's Rendering tab act on it:
 None of this is zero yet. If you find a setting or a method that measures
 better on your strips, open an issue with the per-cut numbers.
 
+## Motion fix
+
+H3 smears fast motion — a spinning kick, a sword arc, a whip-fast turn — into
+a blur, and no seed or step count fixes it: one latent time token spans four
+frames and cannot hold four different poses, so the poses were never drawn.
+The **motion fix** chip on a card (H3 only, never on footage) runs a second
+pass after the shot renders: the shot's own latent says where it moved too
+fast, those frames are held on a longer clock at up to four copies each, the
+slowed clip is sampled again from half the schedule against the shot's own
+prompt and references, and the original clock is recovered by keeping the
+first frame of every hold group — generated frames, never interpolated. Five
+frames at either end are never held, are frozen through the second pass and
+are put back verbatim, so the fix cannot become a seam step of its own; the
+soundtrack rides through untouched. matlowai's Motion Lab worked the method
+out; this is a reimplementation of its core.
+
+The same frame of a 2 s turbo card at the same seed, plain on the left and
+fixed on the right ([the clip](vid/motion-fix-burst.mp4)):
+
+![Frame 12 of a spinning kick, plain and fixed](img/motion-fix-burst.jpg)
+
+The kick keeps its choreography and gets its shin, foot and face back. On
+this card the plan held 30 of 56 frames, slowed the clip to 124, and the
+second pass cost about twice the card's own sampling time.
+
+**The gate is the whole difference between a feature and a tax.** The same
+pass over a calm shot comes back sharper and moving *wrongly* — the fern
+below was re-drawn at 23 dB against the plain take and its stir no longer
+reads as a draught. So a card is left alone unless its peak frame-to-frame
+change, measured at thumbnail scale on 0–255, clears the gate: 4.4 on the
+kick, 1.9 on the fern, gate at 2.5. The number is `motion_fix_abstain` on
+the settings page; 0 fixes every card that asks, and the node writes what it
+saw into the render history either way.
+
+The same frame of a calm shot, plain on the left and forced through the
+pass on the right — a still cannot show the motion going wrong, so
+[the clip](vid/motion-fix-calm.mp4) is the one to watch:
+
+![Frame 30 of a fern in a draught, plain and forced through the fix](img/motion-fix-calm.jpg)
+
+Measured on two clips as of this page. A pan will clear the gate on motion
+alone, and the fix has not been tried on one.
+
 ## Storyboards
 
 A shot can be shown the shots before it. The **Storyboard** pill on the bar
