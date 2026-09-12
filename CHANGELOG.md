@@ -32,8 +32,10 @@ card's own sampling time. The gate turned out to matter more than the dials:
 the method's profile contrast read a static fern *higher* than the kick, and
 forced through the pass the fern came back sharper and moving unnaturally,
 so the gate reads peak frame-to-frame motion off the delivered frames
-instead (4.4 on the kick, 1.9 on the fern, gate at 2.5, `motion_fix_abstain`
-on the settings page). Both comparisons are in `docs/timeline.md`.
+instead (4.4 on the kick, 1.9 on the fern, gate at 2.5). The line is on the
+settings page under Rendering as four rows named by what they let through,
+with the two measured clips as the anchors, and in the file as
+`motion_fix_abstain`. Both comparisons are in `docs/timeline.md`.
 
 **One picture editor — crop, turn, mirror, cut out — behind a pen on every
 picture and clip (#75).** A window dragged over the part of the picture that

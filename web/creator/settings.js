@@ -60,6 +60,26 @@ const QUALITY = [
 // four); these are the three answers worth clicking. Four is the default and
 // the measured best: on an 8-hop strip the step at each cut fell from +2.86
 // with it off to +0.98, and the texture ratchet fell with it.
+// The motion fix's gate, as the line a shot has to clear rather than as a
+// number: the two rows either side of the default sit against the two clips
+// it was measured on (`derope.GATE` says which). Peak frame-to-frame change at
+// thumbnail scale, 0-255.
+const MOTION_GATE = [
+  { value: 0, label: "Every shot that asks",
+    note: "No line. A calm shot is re-drawn too, and comes back sharper but "
+        + "moving wrongly — measured on a fern stirring in a draught. For "
+        + "trying the pass out, not for a strip." },
+  { value: 1.5, label: "Gentle motion too",
+    note: "Under the fern. A walk, a turn of the head and a slow pan all go "
+        + "through the pass; none of them has been measured there." },
+  { value: 2.5, label: "Fast motion",
+    note: "The default, between the two measured clips: a spinning kick reads "
+        + "4.4, the fern 1.9." },
+  { value: 4, label: "Only the fastest",
+    note: "Just under the kick. A brisk gesture is left alone, and a burst "
+        + "slower than that kick may be too." },
+];
+
 const LEAD_IN = [
   { steps: 0, label: "Off",
     note: "The whole schedule runs on the distillation, which is what a turbo "
@@ -931,6 +951,53 @@ class SettingsPage {
   }
 
   /**
+   * How fast a shot has to move before its motion fix chip does anything.
+   *
+   * The chip is on every H3 card, and what it does is decided by this line: a
+   * shot under it is left as it renders, one over it is slowed, re-drawn and
+   * put back on the clock. Per machine because it is a calibration — the two
+   * clips it was measured on are named in the rows — and never hidden behind
+   * the advanced switch, since a card can be asking for the pass while the
+   * number that decides whether it runs has nowhere to be changed.
+   */
+  renderMotionGate() {
+    const current = Number(this.settings.motion_fix_abstain ?? 2.5);
+    // A file edited by hand can name a line the rows do not offer. Shown as
+    // its own row rather than silently rounded, the way the lead-in does it.
+    const rows = MOTION_GATE.some((row) => row.value === current)
+      ? MOTION_GATE
+      : [{ value: current, label: "Custom",
+           note: "Set by hand in the settings file. Pick one of the rows below to leave it." },
+         ...MOTION_GATE];
+
+    return this.section("Rendering", "Motion fix",
+      "A card's motion fix chip runs a second pass only when the shot moves "
+      + "fast enough to smear — a spinning kick, a whip-fast turn. This is the "
+      + "line: how much a frame has to change from the one before it, measured "
+      + "on the finished shot, before the pass runs at all.",
+      [
+        el("div", { class: "mmc-set-choices" }, rows.map((row) => el("button", {
+          class: "mmc-opt mmc-set-opt",
+          "aria-checked": row.value === current,
+          onclick: () => row.value !== current && this.set({ motion_fix_abstain: row.value }),
+        }, [
+          el("span", { class: "mmc-radio" }),
+          el("span", { class: "mmc-set-opt-text" }, [
+            el("span", { class: "mmc-set-opt-label", text: t(row.label) }),
+            el("span", { class: "mmc-set-opt-note", text: t(row.note) }),
+          ]),
+        ]))),
+        el("div", { class: "mmc-set-foot" }, [
+          el("span", {
+            text: t("Either way the pass writes what it saw into the render "
+                + "history — how much the shot moved, and whether it was touched — "
+                + "so a card whose fix did nothing says why."),
+          }),
+        ]),
+      ]);
+  }
+
+  /**
    * How many of a turbo render's opening steps run without the distillation.
    *
    * The other setting on this page that reaches the render, and the one people
@@ -1062,7 +1129,7 @@ class SettingsPage {
     const leadIn = this.settings.advanced === true || Number(this.settings.turbo_lead_in) > 0
       ? this.renderLeadIn() : [];
     return [this.renderAdvanced(), this.renderPreviews(), this.renderPreviewSize(),
-      ...leadIn, this.renderLatentSeams(), this.renderNeural(),
+      ...leadIn, this.renderLatentSeams(), this.renderMotionGate(), this.renderNeural(),
       this.renderRefCache(),
       this.section("Nodes", "Flow shift pills",
       "Whether the sampler row offers H3's two flow shifts — the video and audio "

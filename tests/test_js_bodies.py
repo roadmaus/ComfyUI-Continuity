@@ -3497,9 +3497,12 @@ check("the settings page has all five tabs", settings.get("tabs"),
 # reference's scope into the prompt. It is not a choice any more — a label the
 # prompt never defines is a label pointing at nothing — so the setting is gone
 # and the prompt box shows what is actually sent instead.
+# The motion fix gate's four rows sit after the latent seams' pair: off,
+# gentle, fast (the default, checked), only the fastest.
 check("the node settings show their defaults checked",
       settings.get("shiftRows"),
-      ["true", "false", "true", "false", "false", "true", "false", "false", "true", "false", "true", "false"])
+      ["true", "false", "true", "false", "false", "true", "false", "false",
+       "false", "false", "true", "false", "true", "false", "true", "false"])
 # The step preview's two rails, and the reference cache's two. All four travel a
 # list of stops rather than a range, because nobody is choosing between 30 days
 # and 31 — and the defaults have to land on a named stop, or the page opens
@@ -3525,8 +3528,10 @@ check("...both live while there is a store to bound", settings.get("cacheDisable
 # four pairs and the seam handoff's four rows, plus its own three rows. That is
 # the whole of what the switch does to this tab — it adds a section, it never
 # disables one.
+# 19: the fifteen rows the tab always draws plus the lead-in's four (the
+# motion fix gate's four are among the fifteen — it is never hidden).
 check("advanced controls bring the turbo lead-in back to the page",
-      (settings.get("advancedRows"), settings.get("advancedLeadIn")), (15, True))
+      (settings.get("advancedRows"), settings.get("advancedLeadIn")), (19, True))
 check("the quality tab shows the encoder value", settings.get("quality"), True)
 # The text scale: four points with the drawn sizes checked on a fresh file, each
 # row saying what it is as a percentage the way the quality rows say their crf.
