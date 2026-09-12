@@ -65,8 +65,8 @@ INJECT = 0.5
 # on a spinning kick — normalising per phase throws away the magnitude, and
 # on a 2 s card the ranking is all that is left. It is the magnitude itself,
 # read off the delivered frames: the peak frame-to-frame change of the clip
-# at thumbnail scale, on the 0-255 scale (`pixel_motion`). Measured 4.1 on
-# the kick and 1.8 on the fern; a pass under this is left alone.
+# at thumbnail scale, on the 0-255 scale (`pixel_motion`). Measured 4.4 on
+# the kick and 1.9 on the fern; a pass under this is left alone.
 GATE = 2.5
 # Thumbnail width the motion is measured at. Small enough that a burst is a
 # few pixels of change and sensor-level noise is averaged away.

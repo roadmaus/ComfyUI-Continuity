@@ -92,8 +92,8 @@ second pass cost about twice the card's own sampling time.
 pass over a calm shot comes back sharper and moving *wrongly* — the fern
 below was re-drawn at 23 dB against the plain take and its stir no longer
 reads as a draught. So a card is left alone unless its peak frame-to-frame
-change, measured at thumbnail scale on 0–255, clears the gate: 4.1 on the
-kick, 1.8 on the fern, gate at 2.5. The number is `motion_fix_abstain` on
+change, measured at thumbnail scale on 0–255, clears the gate: 4.4 on the
+kick, 1.9 on the fern, gate at 2.5. The number is `motion_fix_abstain` on
 the settings page; 0 fixes every card that asks, and the node writes what it
 saw into the render history either way.
 
