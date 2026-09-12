@@ -96,12 +96,31 @@ nine picture slots — a card already citing nine is refused by name. And a
 shot now depends on the shots it sees: edit shot 1 and every shot shown it
 re-renders, where a hard cut used to keep its cache.
 
-Which of the two settings is the better default on a long strip is an open
-measurement. The reporter's finding was about environments and placements;
-on the tone drift described above, a sheet of the previous shot shows each
-shot the drift of the one before it as the room, while the piece so far keeps
-shot 1's cells in view as the tone the piece opened on. If you measure either
-on your strips, open an issue with the per-cut numbers.
+What was measured, on two scenes at three and eight shots, on turbo and on
+the base weights: with the storyboard on, the place and its objects hold
+across every hard cut — the same boat, crane and toolbox in all eight shots
+where, without it, the same description gave a different boat in nearly
+every one. The two settings hold the place equally well; *the piece so far*
+is the one to reach for, because a shot's mistake then rides forward as one
+cell among nine rather than as the whole sheet. On the tone drift described
+above it changes nothing either way — the step at a continuation seam is the
+same with it and without — and over eight hops it kept the picture's detail
+where the strip without it softened.
+
+The cost is composition. The sheet holds the camera as firmly as the room:
+a shot written as a reverse angle or a close-up of the shots it sees comes
+back framed like them. Some of that is the prompt's — a long standing
+description ahead of a one-line shot gets framed as the description, sheet or
+no sheet — but the sheet takes the rest of the variety with it. So for a shot
+that needs an angle the earlier shots do not have, turn the storyboard off on
+its seam chip, or show it only a shot that has that angle; the shots after it
+can pick the strip back up.
+
+Also measured and rejected: saying in the prompt that the sheet's framing is
+not to be kept (no effect — the pull is in the picture), and handing the
+frames over as a pooled video RefMod with the scene take instead of a sheet
+(no effect on framing, and the pooled latent's colour stains compounded down
+the chain). The sheet is a real picture, and that is why it stays one.
 
 ## Piece-level fields
 

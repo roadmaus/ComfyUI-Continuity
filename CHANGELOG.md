@@ -21,10 +21,14 @@ shot each cell will come from. A shot shown one runs on the reference
 checkpoint whatever else it carries, and re-renders when the shots it sees
 change; the sheet is one of H3's nine pictures, and a full card is refused
 by name. H3 only for now: LTX 2.5 lays every reference onto one sheet
-already, and what a sheet of frames means inside that one is undecided. The
-reporter measured a hand-made sheet against environment and placement drift
-across cuts; which of the two settings is the better default on a long
-strip is being measured on the lab rig.
+already, and what a sheet of frames means inside that one is undecided.
+Measured on two scenes at three and eight shots, turbo and base weights: the
+place and its objects hold across every hard cut — the same boat in all
+eight shots where the same description alone gave a different one in nearly
+every shot — and the seam step is unchanged. The cost is that the sheet
+holds the camera as firmly as the room, so a shot that needs a new angle
+should be shown nothing on its seam chip. A pooled RefMod form was built,
+measured worse (colour stains compounding down the chain) and reverted.
 
 **A cast member's plate can wake on a word (#72).** Each file on a member has
 a second line under "what it shows of them": the words it wakes on. Blank,
