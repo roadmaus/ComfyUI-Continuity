@@ -37,7 +37,7 @@ import { el, icon, mountOverlay } from "./dom.js";
 import { t } from "./i18n.js";
 import { deleteRefMod, describeRefMod, isRefMod, makeRefMod, moveRefMod, renderMeta, stillUrl,
          uploadRefMod, viewUrl } from "./api.js";
-import { SUBFOLDER as MOD_FOLDER, ledger, modRows, modeRows, modeWord } from "./refmod.js";
+import { SUBFOLDER as MOD_FOLDER, ledger, modRow, modRows, modeRows, modeWord, remakeMods, remakeRows } from "./refmod.js";
 import { atlasRef } from "./presets/atlasref.js";
 import { openPicker } from "./picker.js";
 import { downloadMod, openMenu, noteField, sizeRows, MARKER_LABEL, MARKER_NOTE, ROLES,
@@ -1387,6 +1387,7 @@ class PresetLibrary {
       // Only with a piece behind the library — the VAE is the piece's.
       onSave: this.target?.vae && !this.encoding && this.modSources(member, "stack").length
         ? (anchor) => this.pickMod(anchor, member) : null,
+      onRemake: this.target?.vae && !this.encoding ? (anchor) => this.pickRemake(anchor, member) : null,
       onLibrary: (path) => { this.reveal = path; this.closeSheet(); this.renderInspector(); },
       onKnown: () => { if (!this.sheetTyping()) this.renderSheet(); },
     });
@@ -1612,6 +1613,48 @@ class PresetLibrary {
     });
   }
 
+  /** The mods among their looks, as listing rows — what a re-encode is of. */
+  modLooks(member) {
+    return this.lookEntries(member).filter((entry) => isRefMod(entry.filename))
+      .map((entry) => modRow(entry.filename)).filter(Boolean);
+  }
+
+  /** The other mode for their saved looks, as a menu on the ledger's button. */
+  pickRemake(anchor, member) {
+    openMenu(anchor, {
+      title: t("Re-encode @{handle}'s saved looks", { handle: member.handle || "subject" }),
+      sections: [{ rows: remakeRows(this.modLooks(member), (mode, mods) => this.remake(member, mode, mods)) }],
+    });
+  }
+
+  /** Write their mods again, in place. The roster does not change — the files
+   *  keep their names — so this only has to say how it is going and then draw
+   *  the new cost off a fresh listing. */
+  async remake(member, mode, mods) {
+    if (!this.target?.vae || this.encoding) return;
+    this.encoding = { count: mods.length, mode, progress: 0, remake: true };
+    this.modNote = null;
+    this.say(null);
+    this.renderSheet();
+    try {
+      await remakeMods(mods, mode, {
+        vae: this.target?.vae?.() ?? "",
+        onProgress: (fraction) => {
+          if (!this.encoding) return;
+          this.encoding.progress = fraction;
+          const bar = this.sheet.querySelector(".mmc-cast-ledger-bar i");
+          if (bar) bar.style.width = `${Math.round(fraction * 100)}%`;
+        },
+      });
+      await this.loadMods();
+    } catch (error) {
+      this.modNote = t("Could not re-encode @{handle} — {error}",
+                       { handle: member.handle || "", error: error.message ?? error });
+    }
+    this.encoding = null;
+    this.renderSheet();
+  }
+
   /**
    * Encode the member's pictures and file the mods in their place.
    *
@@ -1745,6 +1788,12 @@ class PresetLibrary {
           },
         ],
       }, ...(sizes.length ? [{ head: t("Encoded at"), rows: sizes }] : []),
+      // The other mode, on the row itself: this file, from its picture.
+      ...(isRefMod(file.filename) && this.target?.vae && !this.encoding ? [{
+        head: t("Encoded as"),
+        rows: remakeRows([modRow(file.filename)].filter(Boolean),
+                         (mode, mods) => this.remake(member, mode, mods)),
+      }] : []),
       ...(isRefMod(file.filename) ? [{ head: t("The file"), rows: [
         { label: t("Download .safetensors"),
           note: `models/refmods/${file.filename.replace(/^refmod:/, "")}.safetensors`,

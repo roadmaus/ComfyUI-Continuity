@@ -954,6 +954,7 @@ class Timeline {
           },
         }).then((rows) => { this.commit(); this.renderStrip(); this.renderPool(); return rows; });
       },
+      vae: () => this.timeline.models?.vae ?? "",
       // The ledger's estimate of a `match` picture is the piece's canvas.
       canvas: () => timelineGeometry(this.timeline),
       // Recasting somebody rewrites every sentence that wrote their name — the

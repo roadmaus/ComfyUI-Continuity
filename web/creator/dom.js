@@ -14,7 +14,14 @@ export function el(tag, props = {}, children = []) {
     if (value === null || value === undefined || value === false) continue;
     if (key === "class") node.className = value;
     else if (key === "text") node.textContent = value;
-    else if (key === "style") Object.assign(node.style, value);
+    else if (key === "style") {
+      // A custom property (`--owner`) is not a CSSStyleDeclaration field and
+      // silently goes nowhere through `assign`; it has to be set by name.
+      for (const [name, css] of Object.entries(value)) {
+        if (name.startsWith("--")) node.style.setProperty(name, css);
+        else node.style[name] = css;
+      }
+    }
     else if (key.startsWith("on")) node.addEventListener(key.slice(2).toLowerCase(), value);
     else node.setAttribute(key, value === true ? "" : value);
   }

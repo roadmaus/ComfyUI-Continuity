@@ -55,7 +55,7 @@
 import { refmodFileUrl, viewUrl } from "./api.js";
 import { dismissable, el, icon, placeNear } from "./dom.js";
 import { t } from "./i18n.js";
-import { SUBFOLDER as MOD_FOLDER, costMark, keepable, ledger, looks, modeRows } from "./refmod.js";
+import { SUBFOLDER as MOD_FOLDER, costMark, keepable, ledger, looks, modRow, modeRows, remakeMods, remakeRows } from "./refmod.js";
 import * as S from "./state.js";
 
 /** The four things a file can lend a subject, and what tells them apart on
@@ -172,10 +172,13 @@ export function openMenu(anchor, { title, lead = null, sections, onClose = null 
     if (!section.rows.length) continue;
     if (section.head) pop.appendChild(el("div", { class: "mmc-cast-menu-head", text: section.head }));
     for (const row of section.rows) {
+      // A row that cannot be taken stays in the menu with the reason in its
+      // note — a mode that vanished would leave "why can't I" unanswered.
       pop.appendChild(el("button", {
         class: "mmc-opt",
         "aria-checked": Boolean(row.checked),
-        onclick: () => { close(); row.onPick(); },
+        ...(row.disabled ? { disabled: "" } : {}),
+        onclick: () => { if (row.disabled) return; close(); row.onPick(); },
       }, [
         el("span", { class: "mmc-opt-label" }, [
           ...(row.lead ? [row.lead] : []),
@@ -312,6 +315,10 @@ export function noteField({ value, write, done, placeholder = null, title = null
  *                       to encode with. The host owns this because casting them
  *                       lands files on a node, which is the host's node and not
  *                       the shelf's.
+ * `vae`                  the H3 video VAE the piece is set to, by filename, as a
+ *                       getter. What a re-encode of their saved looks needs
+ *                       (`refmod.remakeMods`); null where the host has none,
+ *                       and the ledger offers no re-encode.
  * `canvas`               the generation's `{width, height}`, for the ledger's
  *                       estimate of what a `match` picture costs. Optional.
  * `rename`               rewrite `@from` as `@to` in every text the host holds.
@@ -322,8 +329,8 @@ export function noteField({ value, write, done, placeholder = null, title = null
  */
 export class CastShelf {
   constructor({ getCast, setCast, getAssets, addAsset, whereCited, cite, touch, commit,
-                keep = null, library = null, mod = null, rename = null, dropAssets = null,
-                canvas = null, onShut = null }) {
+                keep = null, library = null, mod = null, vae = null, rename = null,
+                dropAssets = null, canvas = null, onShut = null }) {
     this.getCast = getCast;
     this.dropAssets = dropAssets;
     this.setCast = setCast;
@@ -336,6 +343,7 @@ export class CastShelf {
     this.keep = keep;
     this.library = library;
     this.mod = mod;
+    this.vae = vae;
     this.canvas = canvas;
     // Whose pictures are on the queue being encoded — `{subject, mode, count,
     // progress}` — so their ledger can say so and a second press cannot queue
@@ -687,6 +695,7 @@ export class CastShelf {
       note: this.modNote?.subject === subject ? this.modNote.text : null,
       onSave: this.mod && !this.encoding && keepable(subject, this.getAssets(), "stack").length
         ? (anchor) => this.pickMod(anchor, subject) : null,
+      onRemake: this.vae && !this.encoding ? (anchor) => this.pickRemake(anchor, subject) : null,
       onLibrary: this.library ? (path) => this.library({ reveal: path }) : null,
       onKnown: () => this.renderSoon(),
     });
@@ -855,6 +864,42 @@ export class CastShelf {
       sections: [{ rows: modeRows(sources, (mode) => this.keepAsMod(subject, mode),
                                   () => this.renderSoon()) }],
     });
+  }
+
+  /** The other mode for their saved looks, as a menu on the ledger's button:
+   *  the mods they are built out of, written again from their pictures. */
+  pickRemake(anchor, subject) {
+    const rows = this.looks(subject).filter((a) => S.isRefMod(a))
+      .map((a) => modRow(a.filename)).filter(Boolean);
+    openMenu(anchor, {
+      title: t("Re-encode @{handle}'s saved looks", { handle: subject.handle }),
+      sections: [{ rows: remakeRows(rows, (mode, mods) => this.remake(subject, mode, mods)) }],
+    });
+  }
+
+  /** Write their mods again. In place — nothing to attach, nothing to move —
+   *  so the shelf only has to say how it is going and then draw the new cost. */
+  async remake(subject, mode, mods) {
+    if (!this.vae || this.encoding) return;
+    this.encoding = { subject, mode, count: mods.length, progress: 0, remake: true };
+    this.modNote = null;
+    this.render();
+    try {
+      await remakeMods(mods, mode, {
+        vae: this.vae(),
+        onProgress: (fraction) => {
+          if (this.encoding?.subject !== subject) return;
+          this.encoding.progress = fraction;
+          this.renderSoon();
+        },
+      });
+      this.touch?.();
+    } catch (error) {
+      this.modNote = { subject, text: t("Could not re-encode @{handle} — {error}",
+                                        { handle: subject.handle, error: error.message ?? error }) };
+    }
+    this.encoding = null;
+    this.render();
   }
 
   /** Encode them. The host does the work and the attaching; the ledger says
@@ -1312,6 +1357,11 @@ export class CastShelf {
                             note: t("The Cast tab's Saved references panel, on this file."),
                             onPick: () => this.library({ reveal: asset.filename }) }] : []),
     ] : [];
+    // The other mode, on the tile itself: this file, from its picture.
+    const modes = asset && S.isRefMod(asset) && this.vae && !this.encoding
+      ? remakeRows([modRow(asset.filename)].filter(Boolean),
+                   (mode, mods) => this.remake(subject, mode, mods))
+      : [];
     openMenu(anchor, {
       title: `@${handle}`,
       lead: (close) => noteField({
@@ -1325,6 +1375,7 @@ export class CastShelf {
         done: () => { close(); this.save(); },
       }),
       sections: [{ rows }, ...(sizes.length ? [{ head: t("Encoded at"), rows: sizes }] : []),
+                 ...(modes.length ? [{ head: t("Encoded as"), rows: modes }] : []),
                  ...(file.length ? [{ head: t("The file"), rows: file }] : [])],
       // Words typed and then clicked away from are on the blob already; the
       // tile has to catch up and wear its dot.

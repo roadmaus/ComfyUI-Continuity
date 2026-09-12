@@ -508,8 +508,10 @@ try {
   // Backspace against a chip, which is the only way one can be deleted: it is
   // contenteditable="false", so the caret cannot get inside it.
   const cut = (handle) => {
-    box.root.children.find((n) => n.dataset?.handle === handle)?.remove();
+    const chip = box.root.children.find((n) => n.dataset?.handle === handle);
+    chip?.remove();
     box.onEdit();
+    return chip;
   };
   // A muted reference is still attached — that is the whole point of it — so
   // the readout has to tell the two apart: `img-2!` is on the node and out of
@@ -520,26 +522,37 @@ try {
 
   box.setValue(`@${anna} at @${door}, lit by @${lamp}`);
   editor.state.prompt = box.getValue();
+  editor.render();
+  // The row says whose a cast file is, in words, and says nothing of the sort
+  // about a file you attached yourself.
+  const owners = [...editor.assetsHost.querySelectorAll(".mmc-asset")]
+    .map((chip) => chip.querySelector(".mmc-asset-owner")?.text ?? "");
   // The lamp is written in the soundscape too, so cutting it out of the prompt
   // is the deletion of one occurrence and not of the reference.
   editor.state.soundscape = `a hum off @${lamp}`;
-  out.reap = { chips: box.chipped.size, refs: refs(), cast: cast() };
+  out.reap = { chips: box.chipped.size, refs: refs(), cast: cast(), owners };
 
   cut(lamp);
   out.reap.citedElsewhere = refs();
   cut(door);
   out.reap.afterTheRef = refs();
   out.reap.castUntouched = cast();
-  cut(anna);
+  const her = cut(anna);
   out.reap.afterTheName = cast();
-  // She stays on the shelf, and the picture casting her attached stays live
-  // with her: deleting a sentence is trying the shot without somebody, not
-  // striking them off the piece (#52). An uncited member is cut at queue time,
-  // pictures and all, so nothing reaches the model meanwhile.
+  // She stays on the shelf: deleting a sentence is trying the shot without
+  // somebody, not striking them off the piece (#52). But the picture casting
+  // her attached goes quiet with her — compile cuts an uncited member's files
+  // at queue time, and the row has to say so rather than show a live chip the
+  // render never sees.
   out.reap.andHerPictures = refs();
   // And all of it is in the blob, which is what queues.
   out.reap.blob = JSON.parse(node.widgets[0].value).segments[0].assets
     .map((a) => `${a.handle}${a.enabled === false ? "!" : ""}`).join(",");
+  // Written back — undone, retyped, pasted: the chip is in the box again on a
+  // keystroke — she brings her picture with her.
+  box.root.appendChild(her);
+  box.onEdit();
+  out.reap.writtenBack = refs();
 } catch (error) {
   out.errors.push(`reap: ${error.stack}`);
 }
@@ -3254,6 +3267,8 @@ reap = report.get("reap", {})
 check("the box knows which chips it is showing", reap.get("chips"), 3)
 check("...over the shot's own references", reap.get("refs"), "img-1,img-2,img-3")
 check("...and the piece's cast", reap.get("cast"), "anna")
+check("a cast file's chip says whose it is, and a picked one says nothing",
+      reap.get("owners"), ["anna's", "", ""])
 # One occurrence deleted is not the reference deleted: the soundscape still
 # writes the lamp, so the lamp stays.
 check("a handle still written elsewhere survives losing its chip",
@@ -3266,10 +3281,11 @@ check("...and takes nobody out of the cast with it", reap.get("castUntouched"), 
 # with care lost its cast to a prompt rewrite (#52). The shelf's ✕ is the
 # gesture that means "out of the cast".
 check("deleting a name leaves the member on the shelf", reap.get("afterTheName"), "anna")
-check("...and the picture casting her attached stays with her", reap.get("andHerPictures"),
-      "img-1,img-2!,img-3")
+check("...and the picture casting her attached goes quiet with her", reap.get("andHerPictures"),
+      "img-1!,img-2!,img-3")
 check("...and all of it is written through to the blob that queues",
-      reap.get("blob"), "img-1,img-2!,img-3")
+      reap.get("blob"), "img-1!,img-2!,img-3")
+check("writing her name back wakes her picture", reap.get("writtenBack"), "img-1,img-2!,img-3")
 
 # The same switch by hand: the glyph beside the ✕, which is where the other
 # thing you can do to a whole file already lives.

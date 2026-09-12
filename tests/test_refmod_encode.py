@@ -182,4 +182,97 @@ second, _ = encoder._cached("@img-1 mod", encoder._mod_key(asset, "vae-print"),
 check("a second render reads the cache, not the VAE", vae.decoded, decodes)
 check("...and gets the same latent", torch.equal(first["latent"], second["latent"]), True)
 
+# ---- written again, in the other mode --------------------------------------------
+# The route module registers itself on the server at import; a stand-in server
+# takes the registrations and does nothing with them, which is all this needs.
+
+import importlib.util  # noqa: E402
+import types  # noqa: E402
+
+
+class _Routes:
+    def get(self, *_a, **_k): return lambda fn: fn
+    def post(self, *_a, **_k): return lambda fn: fn
+
+
+server_stub = types.ModuleType("server")
+server_stub.PromptServer = types.SimpleNamespace(instance=types.SimpleNamespace(routes=_Routes()))
+sys.modules.setdefault("server", server_stub)
+try:
+    _pkg = layout.load("jobs", package="mmc")
+    routes_pkg = types.ModuleType("mmc.routes")
+    routes_pkg.__path__ = [os.path.join(layout.PY_ROOT, "routes")]
+    sys.modules["mmc.routes"] = routes_pkg
+    spec = importlib.util.spec_from_file_location(
+        "mmc.routes.refmod", os.path.join(layout.PY_ROOT, "routes", "refmod.py"))
+    remake_routes = importlib.util.module_from_spec(spec)
+    sys.modules["mmc.routes.refmod"] = remake_routes
+    spec.loader.exec_module(remake_routes)
+except Exception as exc:  # noqa: BLE001
+    print(f"remake: skipped ({type(exc).__name__}: {exc})")
+    remake_routes = None
+
+if remake_routes is not None:
+    jobs = _pkg.jobs
+    jobs.progress = lambda: (lambda fraction: None)
+    remake_routes._vae = lambda name: vae
+    # One picture in the "input folder", by name; everything else is gone.
+    picture = torch.rand(1, 640, 1024, 3)
+    media.resolve = lambda filename: (refmod.resolve(filename) if refmod.is_mod(filename)
+                                      else filename if filename == "anna/face.png"
+                                      else (_ for _ in ()).throw(media.MediaError(f"{filename!r} gone")))
+    media.load_image = lambda filename: picture
+
+    # Made full from the picture, the way `_run_job` writes it: the header
+    # keeps the picker's path, which is what a remake reads it back from.
+    made = remake_routes._run_job({"name": "anna-full", "subfolder": "cast", "sources": ["anna/face.png"],
+                                   "mode": "full", "vae": "x"})
+    row = made["mods"][0]
+    check("a mod names the picture it was made of, path and all",
+          (row["source_file"], row["source_present"] in (True, False)), ("anna/face.png", True))
+    fullpath = refmod.resolve(row["path"])
+    check("...as a full encode of it", refmod.header(fullpath)["mode"], "encode")
+    stamp = os.stat(fullpath).st_mtime_ns
+    encodes = vae.encoded
+
+    # Full -> compressed, from the picture: same file, new grid, words kept.
+    out = remake_routes._run_remake({"mods": ["refmod:cast/anna-full"], "mode": "compressed",
+                                     "grid": 16, "steps": 2, "vae": "x"})
+    again = refmod.header(fullpath)
+    check("re-encoded in place: the file keeps its name",
+          out["mods"][0]["path"], "refmod:cast/anna-full")
+    check("...and is now compressed, on the grid asked for",
+          (again["mode"], again["latent_h"], again["latent_w"]), ("training", 10, 16))
+    check("...read from the picture again", vae.encoded, encodes + 1)
+    check("...still naming it", again["source_file"], "anna/face.png")
+    check("...and rewritten on disk, so a render's cache key moves",
+          os.stat(fullpath).st_mtime_ns != stamp, True)
+
+    # Compressed -> full, from the picture, back to the encode.
+    remake_routes._run_remake({"mods": ["refmod:cast/anna-full"], "mode": "full", "vae": "x"})
+    check("...and back to full", (refmod.header(fullpath)["mode"], refmod.header(fullpath)["latent_h"]),
+          ("encode", 40))
+
+    # The picture gone: a full mod is still the encode, so it compresses from
+    # itself; it cannot be made full again, and the refusal names the picture.
+    orphan = refmod.save("cast/orphan", full, {"kind": "image", "mode": "encode",
+                                                "source_file": "lost/face.png"})
+    encodes = vae.encoded
+    remake_routes._run_remake({"mods": ["refmod:cast/orphan"], "mode": "compressed",
+                               "grid": 16, "steps": 0, "vae": "x"})
+    check("a full mod whose picture is gone compresses from its own latent",
+          (refmod.header(orphan)["mode"], vae.encoded), ("training", encodes))
+    try:
+        remake_routes._run_remake({"mods": ["refmod:cast/orphan"], "mode": "full", "vae": "x"})
+        refused = ""
+    except jobs.JobError as exc:
+        refused = str(exc)
+    check("...and cannot be made full again without it", "lost/face.png" in refused, True)
+    try:
+        remake_routes._run_remake({"mods": ["refmod:cast/pair"], "mode": "full", "vae": "x"})
+        refused = ""
+    except jobs.JobError as exc:
+        refused = str(exc)
+    check("a stack is refused by name", "stack" in refused, True)
+
 passed("all RefMod encode tests passed")

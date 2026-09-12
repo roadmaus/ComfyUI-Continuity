@@ -122,6 +122,10 @@ export const css = `
   text-align: left;
 }
 .mmc-opt:hover { background: var(--mmc-surface-2); }
+/* A row that cannot be taken, kept in the menu with its reason in the note:
+   dimmed, no hand, no hover. */
+.mmc-opt:disabled { opacity: .5; cursor: default; }
+.mmc-opt:disabled:hover { background: none; }
 .mmc-opt-label { display: flex; align-items: center; gap: 10px; }
 .mmc-aspect-glyph {
   width: 18px; height: 18px; flex: none;

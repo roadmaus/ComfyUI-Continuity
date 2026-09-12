@@ -751,6 +751,17 @@ export async function makeRefMod(body, options) {
   return answer;
 }
 
+/**
+ * Write saved references again in another mode, from the pictures they were
+ * made of. -> `{mods: [row, ...]}`. The same queue `makeRefMod` rides; the
+ * files keep their names, so nothing that points at them has to move.
+ */
+export async function remakeRefMod(body, options) {
+  const answer = await runJob("/continuity/refmod/remake", body, options);
+  invalidate("refmods");
+  return answer;
+}
+
 /** Where a mod's own file is handed out. A plain URL rather than a fetch: it
  *  goes on an anchor with `download`, so the browser saves it under the mod's
  *  name and the page never holds the bytes. */

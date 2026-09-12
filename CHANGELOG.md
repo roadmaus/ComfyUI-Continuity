@@ -6,6 +6,35 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**Deleting somebody's name mutes their pictures.** Casting a member attaches
+their files to the shot, and compile already left an uncited member's files
+out of the render — but the reference row went on showing them live, so a
+picture the model was never going to see sat there looking sent. Now the
+sole claims of a member whose last mention goes are muted (dimmed, kept, one
+press or one written-back name from live), which is what the row said about
+a reference deleted by handle all along. The member stays on the shelf, as
+before (#52).
+
+**A cast file's chip says whose it is.** Casting somebody attaches their
+files, and the reference row marked those with a rule down the edge — which,
+beside their name in the sentence, read as a second picture of them attached
+twice. A RefMod most of all: its thumbnail is decoded from its latent and
+looks exactly like the photo it was made of. Now the chip says *Veranul's
+RefMod* (or *Veranul's*, for a picture) in Veranul's own hue, the rule wears
+that hue too, and the words open them. A mod nobody is built out of says
+*RefMod*. Nothing is sent twice — the chip is the file the render reads.
+
+**Saved looks can be re-encoded in the other mode.** A compressed mod that
+stained, or a full one costing more than a shot can carry, used to mean taking
+the member off the cast, attaching the picture again and saving again. The
+ledger on their page — the shelf's and the library's — offers *Re-encode ▾*,
+and so does each mod's own row menu under *Encoded as*: compressed or full,
+from the picture the file was made of, which the header names from now on
+(the full picker path, not the basename). The file keeps its name, so the member's looks
+and every citation stay put. A full mod whose picture has left the input
+folder is still compressed from its own latent; it cannot be made full again,
+and the row says so. Stacks are not remade — save the member again.
+
 **Cast members can be saved as RefMods, and RefMods have a home.** A ledger
 under a member's tiles says what their looks cost a render — *2 pictures + 1
 clip at max · ≈8,200+ tokens* — and offers *Save as RefMod*: one stacked file

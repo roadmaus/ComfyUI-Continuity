@@ -22,7 +22,7 @@
 // are the host's: a shelf does not know whether a member's pictures live on a
 // card's row or in the piece's pool, and there are two hosts.
 
-import { isRefMod, listAssets, makeRefMod, refmodFileUrl, viewUrl } from "./api.js";
+import { isRefMod, listAssets, makeRefMod, refmodFileUrl, remakeRefMod, viewUrl } from "./api.js";
 import { el, icon } from "./dom.js";
 import { t } from "./i18n.js";
 import * as S from "./state.js";
@@ -213,6 +213,64 @@ export function modeRows(entries, onPick, onKnown) {
   });
 }
 
+/** A listing row's aspect, long over short, off its own grid — exact, where a
+ *  picture's has to be measured. */
+function rowAspect(row) {
+  const [, h, w] = row.grid ?? [1, 1, 1];
+  return Math.max(h, w) / Math.max(1, Math.min(h, w));
+}
+
+/**
+ * The re-encode menu's rows: every per-picture mode the member's mods are not
+ * already all in, each naming what their mods would cost in it, and where the
+ * picture to read comes from. A stack has no rows — it was several files, and
+ * saving the member again is how one is remade.
+ *
+ * A mod whose picture has gone can still be *compressed*: the full file is the
+ * encode, and the grid is pooled and refined against it. It cannot be made
+ * full again, and the row says so rather than queueing a refusal.
+ */
+export function remakeRows(rows, onPick) {
+  const stills = rows.filter((row) => row.source !== "stack");
+  if (!stills.length) return [];
+  return MODES.filter((mode) => mode.key !== "stack").flatMap((mode) => {
+    const current = mode.key === "compressed" ? "training" : "encode";
+    const targets = stills.filter((row) => row.mode !== current);
+    if (!targets.length) return [];
+    const stuck = targets.filter((row) => !row.source_present && mode.key === "full");
+    const tokens = targets.reduce((sum, row) => sum + (mode.key === "compressed"
+      ? Math.round(COMPRESSED_TOKENS / rowAspect(row))
+      : Math.round(FULL_TOKENS * rowAspect(row))), 0);
+    const from = targets.every((row) => row.source_present)
+      ? t("From {file}", { file: targets.map((row) => row.source_file).join(", ") })
+      : stuck.length
+        ? t("The picture it was made of is not in the input folder any more — attach it "
+          + "again and save the member instead.")
+        : t("Pooled from the full encode already in the file — the picture it was "
+          + "made of is not in the input folder any more.");
+    return [{
+      label: t("{mode} — {tokens} tokens", { mode: t(mode.label), tokens: `≈${long(tokens)}` }),
+      note: `${t(mode.note)} ${from}`,
+      disabled: stuck.length > 0,
+      onPick: () => onPick(mode.key, targets.map((row) => row.path)),
+    }];
+  });
+}
+
+/**
+ * Write `mods` again as `mode`, in place. -> the listing rows of what was
+ * written. Nothing to attach and nothing to move: the file keeps its name and
+ * the member's looks keep pointing at it — the listing is what changed, and it
+ * is fetched again so the ledger's next redraw says the new cost.
+ */
+export async function remakeMods(mods, mode, { vae = "", onProgress = null } = {}) {
+  const answer = await remakeRefMod({ mods, mode, vae }, { onProgress });
+  const rows = answer?.mods ?? [];
+  if (!rows.length) throw new Error(t("the server wrote nothing"));
+  await modRows();
+  return rows;
+}
+
 /**
  * The ledger: one line under a member's looks that says what they cost and
  * what to do about it. Drawn by both hosts of the shelf and by the library
@@ -223,13 +281,15 @@ export function modeRows(entries, onPick, onKnown) {
  *   busy      `{count, mode, progress}` while their pictures are on the queue
  *   note      what went wrong the last time, or null
  *   onSave    called with the button as anchor; the host opens the mode menu
+ *   onRemake  called with the button as anchor once their looks are saved; the
+ *             host opens the re-encode menu (`remakeRows`), or null
  *   onLibrary open the library on the saved file, or null
  *   onKnown   redraw — a measure or the listing landed
  *
  * -> an element, or null where they have no looks to account for.
  */
 export function ledger({ entries, canvas = null, busy = null, note = null,
-                         onSave = null, onLibrary = null, onKnown = null }) {
+                         onSave = null, onRemake = null, onLibrary = null, onKnown = null }) {
   const c = cost(entries, canvas, onKnown);
   if (!c.pictures && !c.mods && !busy) return null;
   const root = el("div", { class: "mmc-cast-ledger" });
@@ -257,13 +317,28 @@ export function ledger({ entries, canvas = null, busy = null, note = null,
   const freshWords = () => t("{what} at {size}", { what: freshParts(), size: sizes() });
   const freshTokens = () => `≈${long(c.picTokens)}${c.clips ? "+" : ""} ${t("tokens")}`;
 
+  // The other mode, from the same picture: a compressed mod that stained, or
+  // a full one costing more than the shot can carry, used to be "take them
+  // off the cast, attach the picture again, save again". Wherever a mod is
+  // among their looks — alone, or beside a picture not yet saved.
+  const remakeButton = () => {
+    if (!onRemake || !remakeRows(c.rows, () => {}).length) return;
+    root.appendChild(el("button", {
+      class: "mmc-cast-ledger-act",
+      title: t("Encode their looks again in the other mode, from the pictures the "
+             + "files were made of. Same files, same names."),
+      onclick: (event) => onRemake(event.currentTarget),
+    }, [icon("cube", 12), el("span", { text: t("Re-encode ▾") })]));
+  };
+
   if (busy) {
     root.classList.add("busy");
     const stills = entries.filter((e) => !isRefMod(e.filename) && e.kind !== "video");
     const after = busy.mode === "stack"
       ? (stills.length + c.clips * STACK_CLIP_FRAMES) * STACK_FRAME_TOKENS
       : stills.reduce((sum, e) => sum + modTokens(e, busy.mode, onKnown), 0);
-    say(t(busy.mode === "stack" ? "Stacking {count} files into one…"
+    say(t(busy.remake ? (busy.count === 1 ? "Re-encoding {count} RefMod…" : "Re-encoding {count} RefMods…")
+          : busy.mode === "stack" ? "Stacking {count} files into one…"
           : busy.count === 1 ? "Encoding {count} picture…" : "Encoding {count} pictures…", { count: busy.count }),
         t(busy.mode === "compressed" ? "compressed" : busy.mode === "stack" ? "stack" : "full"),
         n(`${freshTokens().replace(` ${t("tokens")}`, "")} → ≈${long(after)} ${t("tokens")}`));
@@ -289,6 +364,7 @@ export function ledger({ entries, canvas = null, busy = null, note = null,
         onclick: (event) => onSave(event.currentTarget),
       }, [icon("cube", 12), el("span", { text: t(fresh === 1 ? "Save the picture too ▾" : "Save the pictures too ▾") })]));
     }
+    remakeButton();
   } else {
     root.classList.add("saved");
     const modes = [...new Set(c.rows.map(modeWord))].join("/");
@@ -299,6 +375,7 @@ export function ledger({ entries, canvas = null, busy = null, note = null,
         modes || null,
         c.exact ? n(`${long(c.modTokens)} ${t("tokens")}`) : null,
         folder);
+    remakeButton();
     if (c.rows.length === 1) {
       root.appendChild(el("a", {
         class: "mmc-cast-ledger-act", href: refmodFileUrl(c.rows[0].path), download: "",

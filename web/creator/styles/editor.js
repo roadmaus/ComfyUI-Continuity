@@ -175,8 +175,22 @@ export const css = `
    like everywhere else in the pack, and it is the difference between a shelf
    that reads as duplicated faces and one that reads as the cast's files. */
 .mmc-asset-cast {
-  border-left: 3px solid var(--tag, var(--mmc-accent)); padding-left: 9px;
+  border-left: 3px solid var(--owner, var(--tag, var(--mmc-accent))); padding-left: 9px;
 }
+/* Whose file it is, said: "Veranul's RefMod", in Veranul's hue, so the chip
+   joins to their name in the sentence and not to a second picture of them.
+   A button where there is somebody to open, plain text where a mod is simply
+   what the file is. Set like the footnote beside it — this is a fact about the
+   file, the handle is still what identifies the chip. */
+.mmc-asset-owner {
+  background: none; border: 0; padding: 0; font: inherit; line-height: inherit;
+  font-size: calc(11px * var(--mmc-type)); color: var(--mmc-dim);
+}
+button.mmc-asset-owner { cursor: pointer; color: var(--tag); }
+button.mmc-asset-owner:hover, button.mmc-asset-owner:focus-visible {
+  text-decoration: underline; text-underline-offset: 3px; outline: none;
+}
+.mmc-asset.off .mmc-asset-owner { color: var(--mmc-dim); }
 
 /* A LoRA set to the checkpoint this graph does not route to. Still listed —
    removing it on a mode change would throw the setting away — but visibly

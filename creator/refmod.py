@@ -308,7 +308,25 @@ def row_for(path, name, meta=None, stat=None):
         # Whose it is, as far as the header says: ours, or the sibling pack's.
         "foreign": meta.get("made_by") != "continuity",
         "preview": preview_path(path) is not None,
+        # The picture it was made of, and whether it is still there to be read
+        # again — what a re-encode in the other mode needs (`routes/refmod`).
+        # Ours only; the sibling pack's files name nothing here.
+        "source_file": str(meta.get("source_file", "") or ""),
+        "source_present": _source_present(meta.get("source_file")),
     }
+
+
+def _source_present(source):
+    """Whether the input-folder path a header names still resolves. A stack's
+    field is several names joined, and a stack is not remade from them."""
+    name = str(source or "")
+    if not name or "," in name:
+        return False
+    try:
+        import folder_paths
+        return bool(folder_paths.exists_annotated_filepath(name))
+    except Exception:  # noqa: BLE001 — no core, or a malformed annotation: not there
+        return False
 
 
 # ---- the file itself ------------------------------------------------------------

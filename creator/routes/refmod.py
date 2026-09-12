@@ -158,6 +158,29 @@ def _run_stack(body, sources):
     return {"mods": [row]}
 
 
+def _settings(body):
+    """The per-picture knobs, clamped: (mode, edge, grid, steps)."""
+    mode = "training" if body.get("mode") == "compressed" else "encode"
+    edge = max(256, min(4096, int(body.get("edge") or DEFAULT_EDGE)))
+    grid = max(4, min(64, int(body.get("grid") or DEFAULT_GRID)))
+    steps = max(0, min(MAX_STEPS, _steps(body)))
+    return mode, edge, grid, steps
+
+
+def _still(latent, mode, grid, steps, tell):
+    """A full latent -> what is written, and the header fields that say how."""
+    full_shape = "x".join(str(v) for v in latent.shape[2:])
+    pool = f"1x{latent.shape[3]}x{latent.shape[4]}"
+    if mode == "training":
+        latent = refmod.compress(latent, grid, steps, tell=tell)
+        pool = f"1x{latent.shape[3]}x{latent.shape[4]}"
+    return latent, {
+        "kind": "image", "mode": mode, "source": "image",
+        "source_shape": full_shape, "pool": pool,
+        "optimize_steps": steps if mode == "training" else 0,
+    }
+
+
 def _run_job(body):
     """Every source in `body["sources"]` becomes one mod — or, `stack`, all of
     them become one. See the module note."""
@@ -168,10 +191,7 @@ def _run_job(body):
         return _run_stack(body, sources)
     name = refmod.name_of(refmod.SCHEME + str(body.get("name") or ""))
     subfolder = str(body.get("subfolder") or "").strip().strip("/")
-    mode = "training" if body.get("mode") == "compressed" else "encode"
-    edge = max(256, min(4096, int(body.get("edge") or DEFAULT_EDGE)))
-    grid = max(4, min(64, int(body.get("grid") or DEFAULT_GRID)))
-    steps = max(0, min(MAX_STEPS, _steps(body)))
+    mode, edge, grid, steps = _settings(body)
     description = str(body.get("description") or "")
     concept = str(body.get("concept") or "generic")
     tell = jobs.progress()
@@ -181,24 +201,17 @@ def _run_job(body):
     for index, source in enumerate(sources):
         image = media.load_image(source)
         latent, resized = _encode(vae, image, edge)
-        latent = latent.detach().float().cpu()
-        full_shape = "x".join(str(v) for v in latent.shape[2:])
-        pool = f"1x{latent.shape[3]}x{latent.shape[4]}"
-        if mode == "training":
-            base = index / len(sources)
-            latent = refmod.compress(
-                latent, grid, steps,
-                tell=lambda f, base=base: tell(base + f / len(sources)))
-            pool = f"1x{latent.shape[3]}x{latent.shape[4]}"
+        base = index / len(sources)
+        latent, meta = _still(latent.detach().float().cpu(), mode, grid, steps,
+                              tell=lambda f, base=base: tell(base + f / len(sources)))
         tell((index + 1) / len(sources))
         stem = name if index == 0 else f"{name}-{index + 1}"
         target = f"{subfolder}/{stem}" if subfolder else stem
         path = refmod.save(target, latent, {
-            "kind": "image", "mode": mode, "source": "image",
-            "source_shape": full_shape, "pool": pool,
-            "optimize_steps": steps if mode == "training" else 0,
-            "description": description, "concept_type": concept,
-            "source_file": source.rsplit("/", 1)[-1],
+            **meta, "description": description, "concept_type": concept,
+            # The path as the picker gave it, not its basename: it is what a
+            # re-encode reads the picture back from (`_run_remake`).
+            "source_file": source,
         }, preview=resized[0])
         row = refmod.row_for(path, target)
         row["source"] = source
@@ -208,6 +221,99 @@ def _run_job(body):
 
 
 jobs.register("refmod", _run_job)
+
+
+def _run_remake(body):
+    """Every mod in `body["mods"]` written again in another mode, from the
+    picture it was made of. Same name, same header words: the member's looks
+    go on pointing at the file, and a citation of it means the same thing.
+
+    Compressed → full needs the picture, which the header names; full →
+    compressed does not — the file *is* the full encode, so it is pooled and
+    refined against itself when the picture has gone. A stack is refused: it
+    was several files, and saving the member again is how one is remade.
+    """
+    mods = [str(m) for m in (body.get("mods") or []) if m]
+    if not mods:
+        raise jobs.JobError("nothing to re-encode")
+    mode, edge, grid, steps = _settings(body)
+    tell = jobs.progress()
+    vae = None
+    rows = []
+    for index, filename in enumerate(mods):
+        try:
+            path = refmod.resolve(filename)
+            old = refmod.header(path)
+        except refmod.RefModError as exc:
+            raise jobs.JobError(str(exc)) from exc
+        if old.get("source") == "stack":
+            raise jobs.JobError(f"{filename} is a stack of several files — save the "
+                                f"member again to remake it")
+        source = str(old.get("source_file") or "")
+        base = index / len(mods)
+        progress = lambda f, base=base: tell(base + f / len(mods))  # noqa: E731
+        preview = None
+        try:
+            picture = media.resolve(source) if source else None
+        except media.MediaError:
+            picture = None
+        if picture is not None:
+            if vae is None:
+                vae = _vae(str(body.get("vae") or ""))
+            latent, resized = _encode(vae, media.load_image(source), edge)
+            latent = latent.detach().float().cpu()
+            preview = resized[0]
+        elif mode == "training" and old.get("mode") == "encode":
+            latent = refmod.load_latent(path, old).float().cpu()
+        else:
+            raise jobs.JobError(
+                f"{filename} was made from {source or 'a picture the header does not name'}, "
+                f"which is not in the input folder any more — attach the picture again "
+                f"and save the member instead")
+        latent, meta = _still(latent, mode, grid, steps, tell=progress)
+        tell((index + 1) / len(mods))
+        name = refmod.name_of(filename)
+        path = refmod.save(name, latent, {
+            **meta,
+            "description": old.get("description", ""),
+            "concept_type": old.get("concept_type", "generic"),
+            "tags": old.get("tags", []),
+            "source_file": source,
+        }, preview=preview)
+        row = refmod.row_for(path, name)
+        row["source"] = source
+        rows.append(row)
+        log.info("[Continuity] re-encoded %s as a %s RefMod (%d tokens)", filename, mode, row["tokens"])
+    return {"mods": rows}
+
+
+jobs.register("refmod-remake", _run_remake)
+
+
+@PromptServer.instance.routes.post("/continuity/refmod/remake")
+async def remake_refmod(request):
+    """Queue a re-encode of saved references in another mode: `{mods, mode, vae}`."""
+    try:
+        body = await request.json()
+    except (json.JSONDecodeError, ValueError):
+        return web.json_response({"error": "expected a JSON body"}, status=400)
+    mods = body.get("mods")
+    if not isinstance(mods, list) or not mods:
+        return web.json_response({"error": "name the RefMods to re-encode"}, status=400)
+    for filename in mods:
+        try:
+            refmod.resolve(str(filename))
+        except refmod.RefModError as exc:
+            return web.json_response({"error": str(exc)}, status=404)
+    if body.get("mode") not in ("full", "compressed"):
+        return web.json_response({"error": "mode is full or compressed"}, status=400)
+    try:
+        prompt_id = await jobs.submit("refmod-remake", {
+            key: body.get(key) for key in ("mods", "mode", "edge", "grid", "steps", "vae")
+        }, body.get("client_id"))
+    except jobs.JobError as exc:
+        return web.json_response({"error": str(exc)}, status=500)
+    return web.json_response({"prompt_id": prompt_id})
 
 
 @PromptServer.instance.routes.post("/continuity/refmod/make")

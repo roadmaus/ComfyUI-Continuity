@@ -1010,6 +1010,22 @@ export class CreatorEditor {
                    ...(this.castPiece === this.state ? [] : S.allTexts(this.castPiece))];
     const gone = (handle) => !S.handleWritten(texts, handle);
 
+    // But their pictures go quiet with them. Casting somebody attached those,
+    // and `compile_request` cuts an uncited member's sole claims at queue time
+    // — so a row still showing them live was showing a picture the render was
+    // never going to see. Muted here, the row says what compile does, and the
+    // member is one written-back name from whole again (`liveCited`). Sole
+    // claims only, and only files no text writes by handle: a file the user
+    // cites in its own right is theirs, not the departed member's.
+    const cast = this.castPiece.subjects ?? [];
+    const quiet = new Set();
+    for (const subject of cast) {
+      if (!handles.includes(subject.handle) || !gone(subject.handle)) continue;
+      for (const handle of S.soleClaims(subject, cast)) {
+        if (gone(handle)) quiet.add(handle);
+      }
+    }
+
     // The reference whose name was deleted is muted, not detached.
     //
     // Deleting the mention is how you take a picture out of a shot, and taking
@@ -1027,7 +1043,8 @@ export class CreatorEditor {
     // card is not the place a file is taken off every other card.
     for (const asset of this.state.assets) {
       if (asset.role !== "reference" || S.muted(asset)) continue;
-      if (!handles.includes(asset.handle) || !gone(asset.handle)) continue;
+      const named = handles.includes(asset.handle) && gone(asset.handle);
+      if (!named && !quiet.has(asset.handle)) continue;
       asset.enabled = false;
       dropped = true;
     }
@@ -1056,9 +1073,16 @@ export class CreatorEditor {
   liveCited(handles) {
     if (!handles?.length) return;
     let woken = false;
+    // A member written back brings their pictures with them — the inverse of
+    // what deleting their name did to them in `dropCited`.
+    const wanted = new Set(handles);
+    for (const subject of this.castPiece.subjects ?? []) {
+      if (!handles.includes(subject.handle)) continue;
+      for (const handle of S.subjectFiles(subject)) wanted.add(handle);
+    }
     for (const asset of this.state.assets) {
       if (asset.role !== "reference" || !S.muted(asset)) continue;
-      if (!handles.includes(asset.handle)) continue;
+      if (!wanted.has(asset.handle)) continue;
       delete asset.enabled;
       // A reference coming back can overrun a limit that was legal while it was
       // muted — the same check the mute button answers to, and the same
@@ -1809,6 +1833,7 @@ export class CreatorEditor {
           this.state.assets = this.state.assets.filter((a) => !handles.includes(a.handle));
         },
       }).then((rows) => { this.commit(); this.render(); return rows; }),
+      vae: () => (this.piece ?? this.state).models?.vae ?? "",
       // The ledger's estimate of a `match` picture is this shot's own canvas.
       canvas: () => this.frame(),
       // Recasting rewrites every sentence that wrote the departed name. This
@@ -2174,6 +2199,11 @@ export class CreatorEditor {
       });
 
       const parts = [thumb, handle];
+      // Who is built out of this file: the ✕ says what the press costs them,
+      // and the chip says whose it is.
+      const owners = (this.castPiece.subjects ?? []).filter(
+        (subject) => S.subjectFiles(subject).includes(asset.handle)
+                     || S.replacesOf(subject).includes(asset.handle));
 
       // What a plate is, in the one number that says it. Before the narrowing
       // summary, because it is what the picture *is* rather than something
@@ -2248,6 +2278,33 @@ export class CreatorEditor {
       // ordinary says nothing at all, and the row stays as short as the files
       // in it are plain; a clip trimmed to eight seconds still says so, on the
       // face and in both fullscreen views alike.
+      // Whose it is, in words, before what was set on it. The rule down the
+      // left edge said "the cast put this here" in the abstract, and next to a
+      // name in the sentence that was read as a second picture of the same
+      // person attached twice — a saved reference most of all, whose thumbnail
+      // is decoded from its latent and looks exactly like the photo it was made
+      // of. So the chip says "Veranul's RefMod", in Veranul's own hue, and the
+      // words are the door onto them. A mod nobody is built out of still says
+      // what it is: the one fact about a file the thumbnail cannot show.
+      const owner = owners.find((subject) => S.subjectFiles(subject).includes(asset.handle));
+      const mod = S.isRefMod(asset);
+      if (owner) {
+        parts.push(el("button", {
+          class: `mmc-asset-owner mmc-tag-${S.tagIndex(owner.handle)}`,
+          text: mod ? t("{who}'s RefMod", { who: owner.handle }) : t("{who}'s", { who: owner.handle }),
+          title: mod
+            ? t("@{who} is built out of this saved reference — encoded once, read off the "
+              + "file on every render. Click to open them.", { who: owner.handle })
+            : t("@{who} is built out of this picture. Click to open them.", { who: owner.handle }),
+          onclick: () => this.openCastMember(owner.handle),
+        }));
+      } else if (mod) {
+        parts.push(el("span", {
+          class: "mmc-asset-owner",
+          text: t("RefMod"),
+          title: t("A saved reference — encoded once, read off the file on every render."),
+        }));
+      }
       const said = referenceSummary(asset);
       if (said) parts.push(el("span", { class: "mmc-asset-said", text: said }));
 
@@ -2264,9 +2321,6 @@ export class CreatorEditor {
       // What the press means where a name is built out of the file: this shot
       // loses it and nobody else does — see `releaseHere`. Said on the button
       // because the row marks a cast file and does not say what happens to it.
-      const owners = (this.castPiece.subjects ?? []).filter(
-        (subject) => S.subjectFiles(subject).includes(asset.handle)
-                     || S.replacesOf(subject).includes(asset.handle));
       parts.push(el("button", {
         class: "mmc-asset-x", text: "✕",
         title: owners.length
@@ -2280,6 +2334,9 @@ export class CreatorEditor {
         class: `mmc-asset mmc-tag-${S.tagIndex(asset.handle)}${
           cast.has(asset.handle) ? " mmc-asset-cast" : ""}${S.muted(asset) ? " off" : ""}${
           passed.has(asset.handle) ? " passed" : ""}`,
+        // The rule down the edge in the owner's hue, so it joins the chip to
+        // their name in the sentence rather than to its own handle.
+        ...(owner ? { style: { "--owner": `var(--mmc-tag-${S.tagIndex(owner.handle)})` } } : {}),
         title: passed.has(asset.handle)
           ? t("Not in this take: the sentence names it only in an alternative this seed passes over.")
           : asset.filename,
