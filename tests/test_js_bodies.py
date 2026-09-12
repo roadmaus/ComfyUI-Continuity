@@ -925,10 +925,10 @@ try {
         (root.children ?? []).forEach((child) => pills(child, found));
         return found;
       };
-      const first = pills(one.mmcBody.root).map((pill) => pill.text);
+      const first = pills(one.mmcBody.root).map((pill) => pill.text.trim());
       pills(one.mmcBody.root)[0]?.listeners.click[0]({ stopPropagation() {} });
       await new Promise((done) => setTimeout(done, 0));
-      return { first, then: pills(one.mmcBody.root).map((pill) => pill.text),
+      return { first, then: pills(one.mmcBody.root).map((pill) => pill.text.trim()),
                written: JSON.parse(S.serializeTimeline(one.mmcBody.timeline)).segments[0].motion_fix ?? false };
     })(),
   };
