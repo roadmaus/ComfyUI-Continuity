@@ -30,7 +30,10 @@ block's `attn.forward` by object patch and everything that reads the model's
 attention has to see this one. KJNodes' sage patches the same key, so the two
 are refused together by `accel.plan`; core's kitchen kernel goes through
 `optimized_attention_override` and composes — the port keeps its windows on
-exact SDPA and lets the base's own attention take the override. The caches
+exact SDPA and lets the base's own attention take the override. SLA rides the
+same override and is refused for the opposite reason: with the windows on exact
+SDPA the override reaches only the text refiner, so there would be nothing for
+it to sparsify. The caches
 and Spectrum wrap whatever forward is there, and the chunked feed-forward
 patches the MLP.
 

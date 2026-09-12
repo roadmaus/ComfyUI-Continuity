@@ -74,8 +74,9 @@ function newId() {
   return `p${Date.now().toString(36)}${Math.floor(Math.random() * 0x10000).toString(16).padStart(4, "0")}`;
 }
 
-async function readUserData(file, key, legacyFile, legacyKey) {
-  for (const name of [file, legacyFile]) {
+async function readUserData(file, key, legacyFile = null, legacyKey = null) {
+  // A file that never had an old name passes none, and none is skipped.
+  for (const name of [file, legacyFile].filter(Boolean)) {
     try {
       const response = await api.getUserData(name);
       if (response.status === 200) return await response.json();
@@ -87,7 +88,7 @@ async function readUserData(file, key, legacyFile, legacyKey) {
       break;
     }
   }
-  for (const stored of [key, legacyKey]) {
+  for (const stored of [key, legacyKey].filter(Boolean)) {
     try {
       const found = JSON.parse(localStorage.getItem(stored) ?? "null");
       if (found) return found;
@@ -234,20 +235,64 @@ export async function deletePreset(id) {
 export async function deletePresets(scope = null) {
   const rows = await listPresets({ force: true });
   const going = rows.filter((row) => !row.builtin && (!scope || row.scope === scope));
-  if (!going.length) return 0;
+  // The stars on the catalogue go with the styles: they are what the Style
+  // tab holds, and `presetCounts` reported them under it.
+  const stars = !scope || scope === "style" ? await clearStyleStars() : 0;
+  if (!going.length) return stars;
   for (const row of going) await deleteUserData(BODY_FILE(row.id), BODY_KEY(row.id));
   await writeIndex(rows.filter((row) => !going.includes(row)));
-  return going.length;
+  return going.length + stars;
 }
 
 /** How many stored rows each scope holds, keyed by scope. Builtins are left
- *  out: they are not somebody's work and nothing can remove them. */
+ *  out: they are not somebody's work and nothing can remove them. The stars on
+ *  the catalogue are counted with the styles — they are the one record the
+ *  Style tab keeps, and `deletePresets("style")` is what clears them. */
 export async function presetCounts() {
   const counts = Object.fromEntries(SCOPES.map((scope) => [scope, 0]));
   for (const row of await listPresets({ force: true })) {
     if (!row.builtin && counts[row.scope] !== undefined) counts[row.scope] += 1;
   }
+  counts.style += (await starredStyles()).size;
   return counts;
+}
+
+// ---- stars on the catalogue -------------------------------------------------
+//
+// A shipped style is the same row for everybody and has nowhere on it to keep a
+// star, which is why the Style tab had none (#23). The star lives beside the
+// catalogue instead: one small file of ids, per ComfyUI user like the index,
+// read once and merged onto the rows as they are drawn. Its own file rather
+// than a field in the index, because the index is rows and a starred catalogue
+// entry is not a row — there is no body behind it and nothing to rename.
+
+const STARS_FILE = "continuity.stars.json";
+const STARS_KEY = "continuity-stars";
+let starsCache = null;
+
+/** The ids of the catalogue styles that are starred. Cached like the index. */
+export async function starredStyles() {
+  if (starsCache) return starsCache;
+  const raw = await readUserData(STARS_FILE, STARS_KEY);
+  starsCache = new Set(Array.isArray(raw?.styles)
+    ? raw.styles.filter((id) => typeof id === "string") : []);
+  return starsCache;
+}
+
+/** Star or unstar one catalogue style. Returns the set as it now stands. */
+export async function setStyleStar(id, on) {
+  const stars = new Set(await starredStyles());
+  if (on) stars.add(id); else stars.delete(id);
+  await writeUserData(STARS_FILE, STARS_KEY, { version: PRESET_VERSION, styles: [...stars] });
+  starsCache = stars;
+  return stars;
+}
+
+async function clearStyleStars() {
+  const had = (await starredStyles()).size;
+  starsCache = new Set();
+  await deleteUserData(STARS_FILE, STARS_KEY);
+  return had;
 }
 
 /** Re-store a body under an existing row — "Save over this preset". */

@@ -230,17 +230,19 @@ export const css = `
 /* --- organize mode --------------------------------------------------------- */
 /* The bar toggle. Outlined next to the solid Upload button — a mode you enter,
    not an action you fire — and lit like a selected shelf while it is on. */
-.mmc-organize {
+.mmc-organize, .mmc-reveal {
   display: flex; align-items: center; gap: 7px; height: calc(40px * var(--mmc-type)); padding: 0 16px;
   border-radius: 20px; background: none; border: 1px solid var(--mmc-line);
   color: var(--mmc-dim); font-size: calc(14px * var(--mmc-type)); font-family: inherit; cursor: pointer;
   white-space: nowrap;
 }
-.mmc-organize:hover { color: var(--mmc-text); background: var(--mmc-surface-2); }
+.mmc-organize:hover, .mmc-reveal:hover { color: var(--mmc-text); background: var(--mmc-surface-2); }
 .mmc-organize[aria-pressed="true"] {
   color: var(--mmc-bg); background: var(--mmc-accent); border-color: var(--mmc-accent);
 }
-.mmc-organize svg { width: 14px; height: 14px; flex: none; }
+.mmc-organize svg, .mmc-reveal svg { width: 14px; height: 14px; flex: none; }
+/* Open folder wears the same outline: it is the other door out of this window
+   onto the same directory, an action rather than a mode, so it never lights. */
 /* Delete reads as danger from the start, and arming it turns it solid: the
    second press is the one that removes files. */
 .mmc-del {

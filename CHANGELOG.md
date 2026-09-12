@@ -6,6 +6,38 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**SLA sparse attention is the fourth position on the attention pill (#23).**
+PlagueKind's `H3 SLA Attention` scores each query block against every key
+block once and attends only the best fraction — fewer keys rather than a
+cheaper kernel, and the inference path the lightx2v SLA turbo LoRA was
+distilled against, so it is at its best with that LoRA on the stack. It rides
+`optimized_attention_override` the way core's kitchen kernel does, which is why
+it is a position on the one switch and not a switch of its own; the node is
+built at the pack's own tuning (its two required numbers read off the class,
+the dozen optional ones left to the pack's defaults), and it needs Triton, so
+the pack registers it only where it can run. Refused under VDN-H3 — the
+port's windows run exact attention and hand the override only to the text
+refiner, so there would be nothing to sparsify — and on Raylight, where no
+model patch reaches the workers. Wired, not measured: the pack's own numbers
+(1.4–1.75× at 768p/15 s on a 5090, with the LoRA) are the only ones so far.
+
+**The Gallery has an Open folder button (#23).** Beside Organize, it shows
+the folder being browsed — the output root, the input root, or the shelf you
+are on — in the file manager of the machine ComfyUI runs on, which is asked
+of `folder_paths` rather than assumed, so an install started with
+`--output-directory` opens the folder it writes to. That machine is not
+always the one the browser is on: on a remote install nothing comes up, the
+foot says so, and the path is the caption either way. A route,
+`/continuity/reveal`, refuses anything but those two roots.
+
+**Style cards take a star (#23).** The Style tab had none because the
+catalogue is shipped and a shipped row has nowhere to keep one. The star
+lives beside the catalogue instead — one small file of ids, per ComfyUI user
+like the preset index — merged onto the rows as they are drawn, so the star
+sits where it sits on every other card, and the tab has the *★ Starred*
+shelf the other tabs have. Counted under *Styles* on the stored-data page and
+cleared with them.
+
 **The cast shelf is one shelf, on every face.** The simple fullscreen view
 hid it and the Cast tool outright, on the argument that casting is the `@`
 menu and removing somebody is deleting their chip — but a deleted chip keeps

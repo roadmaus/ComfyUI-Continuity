@@ -277,6 +277,13 @@ def refuse_accel(acceleration):
             "Raylight picks its kernel on the initializer — or to 'sage', which "
             "it can run itself."
         )
+    if acceleration.attention == "sla":
+        raise ValueError(
+            "SLA sparse attention is a model patch on this side of the wire and "
+            "does not reach Raylight's workers. Set the attention to 'default' "
+            "— Raylight picks its kernel on the initializer — or to 'sage', "
+            "which it can run itself."
+        )
 
 
 def refuse_run(compiled, splits, label=None):

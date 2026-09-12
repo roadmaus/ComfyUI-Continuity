@@ -49,6 +49,7 @@ const ATTENTION_TITLE = {
   default: "The checkpoint's own attention.",
   sage: "Sage attention — H3's attention runs quantized. Faster, and lower peak VRAM. Needs ComfyUI-KJNodes and sageattention on an NVIDIA card.",
   kitchen: "Comfy Kitchen attention — core's own int8 kernel, nothing to install. Needs a ComfyUI whose build ships it.",
+  sla: "SLA sparse attention — H3 attends a fraction of the key blocks instead of all of them. Pays off on long, high-resolution shots and is made for the lightx2v SLA turbo LoRA. Needs ComfyUI-PlagueKind-Nodes and Triton.",
 };
 
 // Noun first, the way the cache pill reads ("cache off", "cache fast"): the
@@ -60,6 +61,7 @@ const ATTENTION_LABEL = {
   default: "attention default",
   sage: "attention sage",
   kitchen: "attention kitchen",
+  sla: "attention sla",
 };
 
 const BLOCK_CACHE_TITLE = {

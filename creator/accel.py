@@ -16,6 +16,15 @@ Five accelerators make H3 substantially faster and none of them is ours:
   with nothing to install: core's own int8 attention kernel, set as the model's
   optimized attention. It is the other end of one switch with sage, not a
   second one — see `attention` below.
+- **SLA sparse attention** (`ComfyUI-PlagueKind-Nodes`) is the third position
+  of that switch, and a different trade: not a cheaper kernel but fewer keys.
+  Each query block is scored against every key block once, pooled, and only
+  the best fraction is attended at all — the inference path the lightx2v SLA
+  turbo LoRA was distilled against, so it is at its best with that LoRA on
+  the stack, and it pays off in proportion to how long the sequence is. It
+  reaches the model through `optimized_attention_override`, the way kitchen
+  does, which is why it is one switch with the other two and not a fourth
+  axis (#23).
 - **Chunked feed-forward** (`ComfyUI-KJNodes`) splits H3's SwiGLU over the
   packed sequence. Alone among these it does not trade anything: activations
   are quantized per token, so the output matches the unchunked model and only
@@ -39,11 +48,11 @@ patch rather than by replacing DiT blocks, which is also why FirstBlockCache
 does not read it as a conflict: that check looks at `patches_replace["dit"]` and
 sage is not there.
 
-**Sage and Kitchen are one switch and not two.** Both of them answer "what does
-one attention call cost", and a model has one attention: switching both on would
-mean whichever ran last silently won. So `attention` names the backend — the
-checkpoint's own, sage, or core's kitchen kernel — and picking one is what turns
-the other off. Kitchen needs no install and no NVIDIA-only package, which is why
+**Sage, Kitchen and SLA are one switch and not three.** All of them answer "what
+does one attention call cost", and a model has one attention: switching two on
+would mean whichever ran last silently won. So `attention` names the backend —
+the checkpoint's own, sage, core's kitchen kernel, or the sparse one — and
+picking one is what turns the others off. Kitchen needs no install and no NVIDIA-only package, which is why
 it is worth offering next to sage rather than instead of it: core hides the
 option itself on a build that cannot run it, and this reads that list rather
 than guessing at it.
@@ -78,7 +87,11 @@ than being looked up in the registry. It owns each block's `attn.forward` by
 object patch, so it is innermost: everything below wraps a model whose
 attention is already the hybrid. Sage patches the same key — whichever went on
 last would silently win — so the pair is refused by name; kitchen goes through
-`optimized_attention_override` and composes. See `vdn.py`.
+`optimized_attention_override` and composes. SLA goes through the same override
+and is refused all the same: the port runs its windows on exact attention and
+hands the override only to the text refiner and the short-shot fallback, so
+under VDN the sparse kernel would have nothing to sparsify and the switch would
+be a lie. See `vdn.py`.
 
 **Order is `vdn -> attention -> chunked ffn -> torch settings -> block cache ->
 spectrum -> sampler`**,
@@ -101,6 +114,7 @@ TEACACHE_NODE = "MiniMaxH3TeaCache"
 SPECTRUM_NODE = "SpectrumApplyMiniMaxH3"
 SAGE_NODE = "MiniMaxH3MemoryEfficientSageAttentionPatch"
 KITCHEN_NODE = "ModelAttentionBackend"
+SLA_NODE = "H3SLAAttention"
 CHUNK_FFN_NODE = "MiniMaxChunkFeedForward"
 TORCH_SETTINGS_NODE = "ModelPatchTorchSettings"
 VDN_NODE = "ContinuityVDN"
@@ -127,6 +141,8 @@ SOURCES = {
     SPECTRUM_NODE: "https://github.com/xmarre/ComfyUI-Spectrum-MiniMax-H3",
     SAGE_NODE: "https://github.com/kijai/ComfyUI-KJNodes (and the sageattention package)",
     KITCHEN_NODE: "ComfyUI core (comfy_extras/nodes_model_advanced.py) — update ComfyUI",
+    SLA_NODE: "https://github.com/PlagueKind/ComfyUI-PlagueKind-Nodes (needs Triton; the pack "
+              "registers the node only where it can run)",
     CHUNK_FFN_NODE: "https://github.com/kijai/ComfyUI-KJNodes",
     TORCH_SETTINGS_NODE: "https://github.com/kijai/ComfyUI-KJNodes",
     # Ours. Missing means the pack itself failed to register, which a restart
@@ -137,7 +153,7 @@ SOURCES = {
 # What the `attention` widget offers. One backend at a time, because a model has
 # one attention and two patches would mean the last one applied quietly won.
 # "default" is the checkpoint's own and emits no node at all.
-ATTENTION_MODES = ["default", "sage", "kitchen"]
+ATTENTION_MODES = ["default", "sage", "kitchen", "sla"]
 
 # KJNodes' own defaults are 2 chunks over 4096 tokens; 4 is what the H3 workflows
 # that use it settle on and what issue #18 asked for. Named here rather than read
@@ -344,6 +360,12 @@ def plan(settings, sampler_steps=None):
             "forward, so one of them would silently be dropped. Set attention "
             "to 'default' or 'kitchen' — the port keeps its windows on exact "
             "attention either way — or switch VDN off.")
+    if settings.vdn != VDN_OFF and settings.attention == "sla":
+        raise ValueError(
+            "VDN-H3 runs its windows on exact attention and hands the attention "
+            "override only to the text refiner, so SLA would have nothing to "
+            "sparsify. Set attention to 'default' or 'kitchen', or switch VDN "
+            "off.")
     steps = []
     # Before everything: the hybrid attention is the model the rest of the row
     # is applied to. Ours, so the two inputs are ours to name and there is no
@@ -359,6 +381,13 @@ def plan(settings, sampler_steps=None):
         steps.append((SAGE_NODE, node_defaults(_require(SAGE_NODE))))
     elif settings.attention == "kitchen":
         steps.append((KITCHEN_NODE, _kitchen_kwargs(_require(KITCHEN_NODE))))
+    # At the pack's own tuning, the whole of it: the sparsity and the block size
+    # are its two required inputs and come off the class, and the dozen optional
+    # ones — which steps stay dense, which prefix is protected, which kernel runs
+    # the dense fall-through — are left to `execute`'s own defaults, which is
+    # where its author keeps them.
+    elif settings.attention == "sla":
+        steps.append((SLA_NODE, node_defaults(_require(SLA_NODE))))
     # Then the MLP, which is the other object patch and the other thing every
     # step pays for. Its order against the attention does not matter — they
     # patch different keys on different modules and neither wraps the other —

@@ -692,8 +692,12 @@ class PresetLibrary {
     this.stylesLoading = true;
     this.renderGrid();
     try {
-      const module = await import("./presets/stylelib.js");
-      this.styles = module.styleRows();
+      const [module, stars] = await Promise.all([
+        import("./presets/stylelib.js"), P.starredStyles(),
+      ]);
+      // Copies, not the module's rows: the catalogue is shared and read-only,
+      // and the star is this user's, kept beside it (see `P.starredStyles`).
+      this.styles = module.styleRows().map((row) => ({ ...row, starred: stars.has(row.id) }));
       this.atlas = module.ATLAS;
     } catch (error) {
       // Remembered, not only announced: the grid's empty line used to read
@@ -724,11 +728,9 @@ class PresetLibrary {
   renderShelves() {
     const shelves = [
       [SHELF_ALL, t("All")],
-      // Nothing in the catalogue can be starred — a shipped row is the same for
-      // everybody and has nowhere to keep one — so the shelf that would always
-      // be empty is not offered. The atlas's eight media groups take its place,
-      // and they arrive as folders, which is what a shelf already is.
-      ...(this.scope === "style" ? [] : [[SHELF_FAV, t("★ Starred")]]),
+      [SHELF_FAV, t("★ Starred")],
+      // On the Style tab the atlas's eight media groups follow: they arrive as
+      // folders, which is what a shelf already is.
       ...this.folders().map((folder) => [folder, folder]),
     ];
     if (!shelves.some(([key]) => key === this.shelf)) this.shelf = SHELF_ALL;
@@ -862,9 +864,12 @@ class PresetLibrary {
       ])]),
     ]);
     holder.append(card);
-    // Not on a builtin: a shipped starter is the same for everybody and has
-    // nowhere to keep a star.
-    if (!row.builtin) {
+    // Not on a builtin starter: it is the same for everybody and has nowhere
+    // to keep a star. A catalogue style is shipped too, and keeps its star
+    // beside the catalogue instead (#23) — the card looks the same either way,
+    // which is the point: one star, in one place, on every card that can take
+    // one.
+    if (!row.builtin || style) {
       holder.append(el("button", {
         class: "mmc-preset-star",
         "aria-pressed": row.starred === true,
@@ -2275,8 +2280,17 @@ class PresetLibrary {
 
   async toggleStar(row) {
     try {
-      const updated = await P.updatePreset(row.id, { starred: !row.starred, updated: row.updated });
-      this.rows = this.rows.map((entry) => (entry.id === row.id ? updated : entry));
+      let updated;
+      if (row.scope === "style") {
+        // A catalogue row is not in the index; its star is a set of ids beside
+        // it, and the row on screen is this tab's copy.
+        await P.setStyleStar(row.id, !row.starred);
+        updated = { ...row, starred: !row.starred };
+        this.styles = this.styles.map((entry) => (entry.id === row.id ? updated : entry));
+      } else {
+        updated = await P.updatePreset(row.id, { starred: !row.starred, updated: row.updated });
+        this.rows = this.rows.map((entry) => (entry.id === row.id ? updated : entry));
+      }
       if (this.selected?.id === row.id) this.selected = updated;
       this.renderShelves();
       this.renderGrid();

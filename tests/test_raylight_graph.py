@@ -651,7 +651,8 @@ for switch, value, fragment in (
         ("spectrum", True, "Spectrum"),
         ("chunk_ffn", True, "chunked feed-forward"),
         ("fp16_accumulation", True, "fp16 accumulation"),
-        ("attention", "kitchen", "kitchen attention")):
+        ("attention", "kitchen", "kitchen attention"),
+        ("attention", "sla", "SLA sparse attention")):
     expect_error(f"the {switch} accelerator is refused rather than dropped",
                  lambda switch=switch, value=value: build(**{switch: value}),
                  fragment)

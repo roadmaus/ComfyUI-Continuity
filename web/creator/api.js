@@ -49,6 +49,24 @@ export async function makeFolder(root, subfolder) {
 }
 
 /** Remove an empty folder under a picker root. The server refuses a full one. */
+/** Open a folder in the file manager of the machine ComfyUI runs on. Resolves
+ *  to the folder's path either way; rejects with a message that carries the
+ *  path when there is no file manager to open it in (a remote box). */
+export async function revealFolder(root, subfolder) {
+  const response = await api.fetchApi("/continuity/reveal", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ root, subfolder }),
+  });
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    const error = new Error(body.error || t("could not open the folder ({status})", { status: response.status }));
+    error.path = body.path ?? "";
+    throw error;
+  }
+  return body.path;
+}
+
 export async function removeFolder(root, subfolder) {
   const response = await api.fetchApi("/continuity/folder/delete", {
     method: "POST",

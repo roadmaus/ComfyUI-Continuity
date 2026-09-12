@@ -223,6 +223,38 @@ class KernelLessKitchenV3(FakeKitchenV3):
     BACKENDS = ["pytorch attention"]
 
 
+class FakeSLA:
+    """`H3SLAAttention.define_schema` through the V3 shim, as the registry holds it.
+
+    Two required inputs beside the model, a dozen optional ones. The optional
+    ones are deliberately left out of the fixture's `required` — they are the
+    pack's own to default in `execute`, and the whole point of reading the
+    class is that `accel.py` never carries a copy of them.
+    """
+
+    FUNCTION = "EXECUTE_NORMALIZED"
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "model": ("MODEL", {"tooltip": "MODEL,"}),
+                "sparsity_ratio": ("FLOAT", {"default": 0.80, "min": 0.0, "max": 0.95,
+                                             "step": 0.05, "round": False}),
+                "block_size": ("COMBO", {"options": ["32", "64", "128"], "default": "32"}),
+            },
+            "optional": {
+                "min_seq_len": ("INT", {"default": 12228, "min": 0, "max": 1000000}),
+                "dense_last_steps": ("INT", {"default": 0, "min": 0, "max": 8}),
+                "protect_audio": ("BOOLEAN", {"default": False}),
+                "enabled": ("BOOLEAN", {"default": True}),
+            },
+        }
+
+    def EXECUTE_NORMALIZED(self, model, **kwargs):
+        return (("sla", model, tuple(sorted(kwargs.items()))),)
+
+
 class FakeChunkFFN:
     """`MiniMaxChunkFeedForward.define_schema`, as the registry holds it."""
 
@@ -273,8 +305,10 @@ class FakeVDN:
 
 
 def install(*, block_cache=True, spectrum=True, easycache=True, teacache=True, sage=True,
-            kitchen=True, chunk_ffn=True, torch_settings=True, vdn=True):
+            kitchen=True, sla=True, chunk_ffn=True, torch_settings=True, vdn=True):
     NODES.NODE_CLASS_MAPPINGS = {}
+    if sla:
+        NODES.NODE_CLASS_MAPPINGS[accel.SLA_NODE] = FakeSLA
     if vdn:
         NODES.NODE_CLASS_MAPPINGS[accel.VDN_NODE] = FakeVDN
     if block_cache:
@@ -325,8 +359,8 @@ check("no nodes built when off", graph.built, [])
 
 # An accelerator that is off must not be built even when its pack is missing —
 # nothing should depend on a pack it was not asked to use.
-install(block_cache=False, spectrum=False, sage=False, kitchen=False, chunk_ffn=False,
-        torch_settings=False)
+install(block_cache=False, spectrum=False, sage=False, kitchen=False, sla=False,
+        chunk_ffn=False, torch_settings=False)
 check("off needs no pack installed", accel.plan(accel.Settings()), [])
 
 # ---- presets resolve against the pack's own labels --------------------------
@@ -414,15 +448,27 @@ check("kitchen plans core's node", [node_id for node_id, _ in kitchen], [accel.K
 check("kitchen asks for the kernel by core's own name",
       kitchen[0][1], {"attention": accel.KITCHEN_OPTION})
 
+# The sparse backend is built at the pack's own tuning: its two required
+# numbers off the class, through the V3 shim, and none of the optional ones —
+# those are `execute`'s to default (#23).
+check("sla alone counts as an accelerator", accel.Settings(attention="sla").any, True)
+sla = accel.plan(accel.Settings(attention="sla"))
+check("sla plans the pack's node", [node_id for node_id, _ in sla], [accel.SLA_NODE])
+check("sla is built at the pack's required defaults",
+      sla[0][1], {"sparsity_ratio": 0.80, "block_size": "32"})
+check("sla's direct path runs through the V3 shim",
+      accel.direct_apply("MODEL", accel.Settings(attention="sla"))[:2], ("sla", "MODEL"))
+
 # One backend at a time: a model has one attention, so a plan never holds two.
-for backend in ("sage", "kitchen"):
+for backend in ("sage", "kitchen", "sla"):
     planned = [n for n, _ in accel.plan(accel.Settings(attention=backend))]
     check(f"'{backend}' plans exactly one attention node", len(planned), 1)
 
-# Neither backend is a step-caching accelerator, so unlike the three that are
+# No backend is a step-caching accelerator, so unlike the three that are
 # they rule nothing out — every cache and Spectrum both have to survive beside
 # them. The one pair that is refused stays refused for its own reason.
-for backend, node_id in (("sage", accel.SAGE_NODE), ("kitchen", accel.KITCHEN_NODE)):
+for backend, node_id in (("sage", accel.SAGE_NODE), ("kitchen", accel.KITCHEN_NODE),
+                         ("sla", accel.SLA_NODE)):
     for mode in ("safe", "fast", "aggressive", "easy", "tea"):
         planned = [n for n, _ in accel.plan(accel.Settings(block_cache=mode, attention=backend))]
         check(f"{backend} composes with '{mode}'", (planned[0], len(planned)), (node_id, 2))
@@ -450,6 +496,11 @@ expect_error("missing sage pack names KJNodes and the library",
 install(kitchen=False)
 expect_error("a core without the attention node says to update",
              lambda: accel.plan(accel.Settings(attention="kitchen")), "update ComfyUI")
+install(sla=False)
+expect_error("missing sla pack names the node",
+             lambda: accel.plan(accel.Settings(attention="sla")), accel.SLA_NODE)
+expect_error("missing sla pack names PlagueKind and Triton",
+             lambda: accel.plan(accel.Settings(attention="sla")), "PlagueKind-Nodes (needs Triton")
 
 # ---- the chunked feed-forward -----------------------------------------------
 
@@ -534,6 +585,9 @@ check("vdn goes on before everything that reads the attention",
        accel.BLOCK_CACHE_NODE, accel.SPECTRUM_NODE])
 expect_error("sage and vdn own the same forward and are refused together",
              lambda: accel.plan(accel.Settings(vdn="stage-x", attention="sage")), "sage")
+expect_error("sla under vdn would reach nothing and is refused",
+             lambda: accel.plan(accel.Settings(vdn="stage-x", attention="sla")),
+             "nothing to sparsify")
 held = accel.opening(accel.Settings(vdn="stage-x", vdn_turbo=True, block_cache="fast",
                                     attention="kitchen"))
 check("the opening sitting holds the adapter off and the caches off, keeps the stage",

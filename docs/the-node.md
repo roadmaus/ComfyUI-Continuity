@@ -305,8 +305,19 @@ re-render.
   off gives the row back to the turbo file, or releases the switch if the pill
   was what threw it. The turbo lead-in holds the adapter off for its opening
   steps the way it holds the file off. Does not
-  combine with sage attention (both replace the same forward); kitchen
-  attention, the caches, Spectrum and low vram compose.
+  combine with sage attention (both replace the same forward) or with SLA
+  (its windows run exact attention, so there would be nothing to sparsify);
+  kitchen attention, the caches, Spectrum and low vram compose.
+- **Attention** is one pill with four positions, because a model has one
+  attention: the checkpoint's own, *sage* (KJNodes, quantized), *kitchen*
+  (core's int8 kernel, nothing to install) and *sla* — block-sparse attention
+  from [ComfyUI-PlagueKind-Nodes](https://github.com/PlagueKind/ComfyUI-PlagueKind-Nodes),
+  which attends a fraction of the key blocks rather than a cheaper kernel over
+  all of them. SLA is at the pack's own tuning, pays off in proportion to how
+  long and large the shot is (short ones fall back to dense on their own), and
+  is the inference path the lightx2v SLA turbo LoRA was distilled against, so
+  it is at its best with that LoRA on the stack. It needs Triton; the pack
+  registers the node only where it can run.
 - Accelerator pills (caches, sage attention, low vram, and so on) appear when
   the matching optional pack is installed. All caches trade fidelity for
   speed, so A/B against a native render before trusting one on a final piece.

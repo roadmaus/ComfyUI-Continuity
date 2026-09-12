@@ -98,6 +98,7 @@ This pack is glue. The work underneath it belongs to other people:
 - [ComfyUI-H3-PowerLoraStack](https://github.com/cicalooo/ComfyUI-H3-PowerLoraStack) by cicalooo - the H3-safe LoRA loader, vendored (Apache-2.0)
 - [MLX-DLSS](https://github.com/iamwavecut/MLX-DLSS) by iamwavecut - the DLSS 5 refiner's inference and weight extraction, vendored (Apache-2.0)
 - [ComfyUI-VDN-H3](https://github.com/Saganaki22/ComfyUI-VDN-H3) by Saganaki22 - the port behind the VDN-H3 pill, vendored (Apache-2.0)
+- [ComfyUI-PlagueKind-Nodes](https://github.com/PlagueKind/ComfyUI-PlagueKind-Nodes) by PlagueKind - SLA sparse attention on the attention pill
 - [OpenVDN](https://github.com/OpenVDN/vdn-minimax-h3) - Video Delta Net itself: the hybrid attention, the training and the stages the pill loads
 - NVIDIA - the DLSS 5 neural renderer itself. Nothing of theirs ships here; the weights are extracted from your own driver DLL
 - [ReDetail](https://github.com/Bambushu/redetail) by Bambushu - the graph and the measurements behind the ReDetail upscale

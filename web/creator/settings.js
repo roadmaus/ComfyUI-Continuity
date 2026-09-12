@@ -249,7 +249,8 @@ const PRESET_ROW = {
           note: "People you kept, with the files they are built out of and every "
               + "feature written down about them." },
   style: { name: "Styles",
-           note: "A look on its own, without the piece it came off." },
+           note: "A look on its own, without the piece it came off — and the stars "
+               + "on the shipped atlas." },
 };
 
 /** What each group is and who else it belongs to. The heading has to answer

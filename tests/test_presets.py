@@ -812,6 +812,15 @@ try {
   };
   await P.deletePreset(row.id);
   out.storage.deleted = (await P.listPresets({ force: true })).length === 0;
+  // A catalogue style has no row to star, so its star is a set of ids beside
+  // the catalogue (#23): counted with the styles, cleared with them.
+  await P.setStyleStar("style.000001", true);
+  await P.setStyleStar("style.000002", true);
+  await P.setStyleStar("style.000001", false);
+  out.storage.styleStars = [...await P.starredStyles()].join(",");
+  out.storage.styleStarsCounted = (await P.presetCounts()).style;
+  out.storage.styleStarsCleared = await P.deletePresets("style");
+  out.storage.styleStarsGone = (await P.starredStyles()).size;
 } catch (error) {
   out.errors.push(`storage: ${error.stack}`);
 }
@@ -1111,6 +1120,11 @@ check("the index carries the whole card, so the grid draws without a body",
 check("the body round-trips through storage", storage.get("bodyRoundTrips"), True)
 check("starring writes through", storage.get("starred"), True)
 check("deleting removes it", storage.get("deleted"), True)
+check("a catalogue style's star is kept by id, beside the catalogue",
+      storage.get("styleStars"), "style.000002")
+check("...counted under Styles on the stored-data page", storage.get("styleStarsCounted"), 1)
+check("...and cleared with the styles", (storage.get("styleStarsCleared"), storage.get("styleStarsGone")),
+      (1, 0))
 
 cast = report.get("cast", {})
 check("a kept cast member names her files rather than handling them",

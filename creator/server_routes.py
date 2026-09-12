@@ -28,6 +28,8 @@ import asyncio
 import json
 import logging
 import os
+import subprocess
+import sys
 
 from aiohttp import web
 
@@ -839,6 +841,51 @@ async def remove_folder(request):
     except OSError:
         return web.json_response({"error": "that folder is not empty"}, status=409)
     return web.json_response({"ok": True})
+
+
+def _reveal_command(path):
+    """The OS's own "show me this folder", as an argv."""
+    if sys.platform == "darwin":
+        return ["open", path]
+    if sys.platform.startswith("win"):
+        return ["explorer", path]
+    return ["xdg-open", path]
+
+
+@PromptServer.instance.routes.post("/continuity/reveal")
+async def reveal_folder(request):
+    """Open a folder the picker browses in the operating system's file manager.
+
+    On the machine ComfyUI runs on — which is the only machine this process
+    can open anything on, and is not always the one the browser is on. So the
+    answer carries the path either way: on a local install the window comes up
+    and the path is a caption; on a remote one nothing comes up, the reply
+    says so, and the path is the thing you actually wanted (#23).
+
+    The output directory is asked of `folder_paths` rather than assumed, so an
+    install started with `--output-directory` opens the folder it writes to.
+    """
+    body = await request.json()
+    root = _picker_root(body.get("root"))
+    if root is None:
+        return web.json_response({"error": "not a folder the picker browses"}, status=400)
+    subfolder = _clean_subfolder(body.get("subfolder", ""))
+    if subfolder is None:
+        return web.json_response({"error": "bad folder name"}, status=400)
+    target = os.path.realpath(os.path.join(root, subfolder)) if subfolder else root
+    if not folder_paths.is_within_directory(root, target) or not os.path.isdir(target):
+        return web.json_response({"error": "no such folder"}, status=404)
+    try:
+        # Detached, and not waited for: `open` and `explorer` return at once,
+        # `xdg-open` returns when the file manager has taken the folder.
+        subprocess.Popen(_reveal_command(target), stdin=subprocess.DEVNULL,
+                         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    except OSError as exc:
+        # No file manager to hand it to — a headless box, a container. The
+        # path is still the answer.
+        return web.json_response({"error": f"this machine has no file manager to open it in ({exc})",
+                                  "path": target}, status=501)
+    return web.json_response({"path": target})
 
 
 def _plate_panels(body):

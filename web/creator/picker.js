@@ -3,7 +3,7 @@
 
 import { el, ICONS, svg, icon, mountOverlay, dismissable } from "./dom.js";
 import { listAssets, listingTruncated, listedFolders, makeFolder, removeFolder,
-         viewUrl, stillUrl, upload, moveAsset,
+         revealFolder, viewUrl, stillUrl, upload, moveAsset,
          deleteAsset, loadPickerPrefs, savePickerPrefs, buildPlate,
          cutPanel, uploadRefMod } from "./api.js";
 import { openTrim, trimLabel } from "./trim.js";
@@ -203,6 +203,17 @@ class Picker {
           title: t("Select files to move between folders or delete"),
           onclick: () => this.setOrganize(!this.organize),
         }, [icon("folder", 14), el("span", { text: t("Organize") })]),
+        // The folder being browsed, in the OS's own file manager — Finder,
+        // Explorer, whatever xdg-open answers to. Beside Organize because it is
+        // the other way of organizing: everything this window cannot do to a
+        // folder (delete a full one, rename, drag a file in from elsewhere) is
+        // a thing to do there. It opens on the machine ComfyUI runs on, so on a
+        // remote install the press reports the path instead (#23).
+        el("button", {
+          class: "mmc-reveal",
+          title: t("Open this folder in the file manager of the machine ComfyUI runs on"),
+          onclick: () => this.reveal(),
+        }, [icon("folderOpen", 14), el("span", { text: t("Open folder") })]),
         el("button", { class: "mmc-upload", text: t("+  Upload {kind}", { kind: t(KIND_LABEL[this.kind].toLowerCase()) }), onclick: () => this.pickFile() }),
       ]),
       this.shelfRow,
@@ -212,8 +223,10 @@ class Picker {
     ]);
     this.uploadButton = this.modal.querySelector(".mmc-upload");
     this.organizeButton = this.modal.querySelector(".mmc-organize");
+    this.revealButton = this.modal.querySelector(".mmc-reveal");
     if (this.kind === "renders") this.uploadButton.style.display = "none";
-    if (this.kind === "refmods") { this.organizeButton.style.display = "none"; this.uploadButton.textContent = this.uploadLabel(); }
+    // RefMods are not a folder the picker browses, so there is none to open.
+    if (this.kind === "refmods") { this.organizeButton.style.display = "none"; this.revealButton.style.display = "none"; this.uploadButton.textContent = this.uploadLabel(); }
     this.modal.style.position = "relative";
 
     this.overlay = el("div", {
@@ -305,6 +318,7 @@ class Picker {
     // routes act on the two media roots alone.
     this.uploadButton.style.display = kind === "renders" ? "none" : "";
     this.organizeButton.style.display = kind === "refmods" ? "none" : "";
+    this.revealButton.style.display = kind === "refmods" ? "none" : "";
     if (kind === "refmods" && this.organize) this.setOrganize(false);
     if (kind !== "renders") this.uploadButton.textContent = this.uploadLabel();
     // Shelves are shared between the input tabs — a folder is a place, not a
@@ -636,6 +650,18 @@ class Picker {
     }
     await this.load({ force: true });
     this.setShelf(name);
+  }
+
+  /** Show the folder being browsed in the server machine's file manager. The
+   *  path is the caption either way: with a window it says where that window
+   *  is, and without one — a remote box with nothing to open it in — it is the
+   *  whole of the answer, so it stays up long enough to be read. */
+  async reveal() {
+    try {
+      this.warn(await revealFolder(this.rootName(), this.here()), { quiet: true });
+    } catch (error) {
+      this.warn(error.path ? `${error.message} — ${error.path}` : error.message, { ms: 12000 });
+    }
   }
 
   /** Throw away the shelf being browsed, which the server allows only while it
@@ -1238,11 +1264,13 @@ class Picker {
 
   /** A transient line in the footer, where the slot counter already is — the
    *  picker has no other place to answer back. */
-  warn(message) {
+  /** A line in the foot for a few seconds. `quiet` says it in the plain
+   *  colour — a caption, not a warning. */
+  warn(message, { ms = 4000, quiet = false } = {}) {
     this.slots.textContent = message;
-    this.slots.classList.add("full");
+    this.slots.classList.toggle("full", !quiet);
     clearTimeout(this.warnTimer);
-    this.warnTimer = setTimeout(() => this.renderFoot(), 4000);
+    this.warnTimer = setTimeout(() => this.renderFoot(), ms);
   }
 
   /** Full size, in an overlay above the modal: a video plays with the
