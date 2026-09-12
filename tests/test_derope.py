@@ -111,11 +111,30 @@ check("...the peak is the hold, not the grid pad", plan.peak, derope.D_MAX)
 check("...priced against the tokens the pass was sampled at", plan.sampled_tokens, 37)
 check("the report prices the pass", "frames held" in plan.report and "time per step" in plan.report, True)
 
-check("a calm pass is left alone", derope.plan(prof_calm, count=124, abstain=derope.contrast(prof_calm) + 0.1), None)
-check("with the gate off, even a calm pass is planned",
-      derope.plan(prof_calm, count=124, abstain=0) is not None, True)
+check("the plan does not gate: a calm profile still plans its fastest quarter",
+      derope.plan(prof_calm, count=124) is not None, True)
 check("a pass too short to hold anything outside its ends is left alone",
-      derope.plan(prof_burst, count=8, protect=4, abstain=0), None)
+      derope.plan(prof_burst, count=8, protect=4), None)
+
+
+# ---- the gate, off the frames ------------------------------------------------
+#
+# Measured 2026-09-12: a static fern and a spinning kick had profile contrasts
+# of 1.36 and 1.15 — the wrong way round — so the gate reads motion magnitude
+# off the delivered frames instead.
+
+still = np.full((12, 96, 128, 3), 120, dtype=np.uint8)
+still[:, 20:60, 30:70] = 200
+moving = still.copy()
+for t in range(12):
+    moving[t] = 120
+    moving[t, 20:60, 30 + 6 * t:70 + 6 * t] = 200
+check("a static clip barely moves", derope.pixel_motion(still), (0.0, 0.0))
+mean_m, peak_m = derope.pixel_motion(moving)
+check("a moving block moves", (mean_m > derope.GATE, peak_m >= mean_m), (True, True))
+check("floats on 0..1 read the same as bytes",
+      derope.pixel_motion(moving.astype(np.float64) / 255.0), (mean_m, peak_m))
+check("a one-frame clip is still", derope.pixel_motion(moving[:1]), (0.0, 0.0))
 check("an empty pass is left alone", derope.plan(prof_burst, count=0), None)
 
 passed("the de-rope planner holds where the latent jerks and round-trips exactly")

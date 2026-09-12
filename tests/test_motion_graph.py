@@ -127,7 +127,7 @@ check("...and the latent the reel decoded", fix_inputs["latent"], reel_inputs["s
 check("no head trim on a first shot", fix_inputs["head"], 0)
 check("at the method's inject", fix_inputs["denoise"], derope.INJECT)
 check("...and this machine's gate, the method's by default",
-      fix_inputs["abstain"], derope.ABSTAIN)
+      fix_inputs["abstain"], derope.GATE)
 check("on the render's own sampler",
       (fix_inputs["steps"], fix_inputs["cfg"], fix_inputs["sampler_name"],
        fix_inputs["scheduler"]),

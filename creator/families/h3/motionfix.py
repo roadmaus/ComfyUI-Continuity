@@ -96,9 +96,10 @@ class MiniMaxH3MotionFix(io.ComfyNode):
                     tooltip="How much of the schedule runs over the slowed init. "
                             "0.5–0.8 keeps the choreography and re-rolls the "
                             "rendering; lower keeps the smear, higher invents."),
-                io.Float.Input("abstain", default=derope.ABSTAIN, min=0.0, max=10.0, step=0.1,
-                    tooltip="A pass whose jerk profile peaks under this many times "
-                            "its mean is left alone. 0 fixes every pass."),
+                io.Float.Input("abstain", default=derope.GATE, min=0.0, max=50.0, step=0.1,
+                    tooltip="A pass whose peak frame-to-frame change, at thumbnail "
+                            "scale on 0-255, is under this is left alone. 0 fixes "
+                            "every pass."),
                 io.Custom(REEL_TYPE).Input("reel"),
             ],
             outputs=[io.Custom(REEL_TYPE).Output(display_name="reel"),
@@ -120,17 +121,24 @@ class MiniMaxH3MotionFix(io.ComfyNode):
         frames = spill.open_frames(source)
         count = int(source["frames"])
         width, height = int(source["width"]), int(source["height"])
-        plan = derope.plan(profile, count, int(head), abstain=float(abstain))
-        # The decision goes into the history as well as the log, so a run can
-        # be read back over the API: what the profile looked like, and whether
-        # the pass was touched.
+
+        # The gate first, off the frames: a calm pass is left alone, and the
+        # decision goes into the history as well as the log so a run can be
+        # read back over the API — how much the pass moved, what the profile
+        # looked like, and whether it was touched.
+        mean_motion, peak_motion = derope.pixel_motion(np.array(frames))
         seen = derope.contrast(profile)
-        if plan is None:
-            report = f"calm (contrast {seen:.2f} under {float(abstain):g}) — left as it is"
+        told = {"motion_mean": mean_motion, "motion_peak": peak_motion, "contrast": seen}
+        plan = derope.plan(profile, count, int(head))
+        if peak_motion < float(abstain) or plan is None:
+            report = (f"left as it is: peak motion {peak_motion:.2f} (mean {mean_motion:.2f}) "
+                      f"under the gate {float(abstain):g}" if peak_motion < float(abstain)
+                      else "left as it is: nothing to hold outside the protected ends")
             logging.info("[MiniMax] motion fix: %s", report)
             return io.NodeOutput(reel, source, ui={"mmc_motion": [
-                {"fixed": False, "contrast": seen, "report": report}]})
-        logging.info("[MiniMax] motion fix: %s", plan.report)
+                {"fixed": False, "report": report, **told}]})
+        logging.info("[MiniMax] motion fix: %s (peak motion %.2f, mean %.2f)",
+                     plan.report, peak_motion, mean_motion)
 
         # The slowed clip, on the CPU: it is up to four times the pass and the
         # encoder moves it over a batch at a time.
@@ -182,7 +190,7 @@ class MiniMaxH3MotionFix(io.ComfyNode):
         # been fixed — this node runs after the one that put it there — so the
         # replacement goes in its place rather than after it.
         return io.NodeOutput([*reel[:-1], {"pass": written}], written, ui={"mmc_motion": [
-            {"fixed": True, "contrast": seen, "report": plan.report,
+            {"fixed": True, "report": plan.report, **told,
              "holds": list(plan.holds), "frozen": list(plan.frozen)}]})
 
     @classmethod

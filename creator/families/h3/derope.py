@@ -58,10 +58,19 @@ D_MAX = 4
 BRIDGE = 8
 INJECT = 0.5
 # The quantile can rank but cannot abstain: on a calm pass it would still hold
-# the fastest quarter and pay the second pass for nothing. A profile whose
-# peak is under this many times its mean is left alone. Measured contrast ran
-# about twice as high on a jerky clip as on a smooth one.
-ABSTAIN = 1.5
+# the fastest quarter and pay the second pass for nothing — worse than nothing,
+# measured: a static fern re-drawn through the pass came back sharper and
+# moving unnaturally. The gate is not the profile's contrast (peak over mean
+# of the phase-normalised profile), which measured 1.36 on that fern and 1.15
+# on a spinning kick — normalising per phase throws away the magnitude, and
+# on a 2 s card the ranking is all that is left. It is the magnitude itself,
+# read off the delivered frames: the peak frame-to-frame change of the clip
+# at thumbnail scale, on the 0-255 scale (`pixel_motion`). Measured 4.1 on
+# the kick and 1.8 on the fern; a pass under this is left alone.
+GATE = 2.5
+# Thumbnail width the motion is measured at. Small enough that a burst is a
+# few pixels of change and sensor-level noise is averaged away.
+GATE_WIDTH = 32
 # Frames at either end of the pass that are never held, whose tokens are
 # frozen through the second pass, and whose pixels are put back verbatim: the
 # join with the pass before this one and the run the pass after it continues
@@ -117,6 +126,30 @@ def jerk_profile(video):
         if mean > 0:
             prof[phase::5] /= mean
     return prof
+
+
+def pixel_motion(frames, width=GATE_WIDTH):
+    """How much a clip moves, off its own frames `[T, H, W, C]` (uint8 or
+    0..1 float) -> `(mean, peak)` of the mean absolute frame-to-frame change,
+    on the 0-255 scale, at a `width`-pixel greyscale thumbnail.
+
+    Block-averaged rather than resampled, so a fast limb a few pixels wide
+    still moves the thumbnail and film grain does not.
+    """
+    v = np.asarray(frames)
+    if v.ndim != 4:
+        raise ValueError(f"expected [T, H, W, C] frames, got {v.shape}")
+    v = v.astype(np.float64)
+    if v.max() <= 1.0:
+        v = v * 255.0
+    v = v[..., :3].mean(axis=-1)                       # grey
+    factor = max(1, v.shape[2] // width)
+    h, w = (v.shape[1] // factor) * factor, (v.shape[2] // factor) * factor
+    v = v[:, :h, :w].reshape(v.shape[0], h // factor, factor, w // factor, factor).mean(axis=(2, 4))
+    if v.shape[0] < 2:
+        return 0.0, 0.0
+    d1 = np.abs(np.diff(v, axis=0)).mean(axis=(1, 2))
+    return float(d1.mean()), float(d1.max())
 
 
 def contrast(profile):
@@ -238,15 +271,14 @@ class Plan:
 
 
 def plan(profile, count, head=0, *, q=Q, d_max=D_MAX, bridge=BRIDGE, ramp=True,
-         protect=PROTECT, abstain=ABSTAIN):
+         protect=PROTECT):
     """The plan for a `count`-frame delivered pass off its latent's profile, or
-    None where there is nothing worth doing — a calm pass (contrast under
-    `abstain`) or a pass too short to hold anything outside its protected ends."""
+    None where there is nothing to hold outside its protected ends. Whether
+    the pass is calm enough to skip is the caller's question (`pixel_motion`
+    against the gate), asked before this is."""
     if count <= 0:
         return None
     seen = contrast(profile)
-    if abstain > 0 and seen < abstain:
-        return None
     holds = protect_ends(frame_holds(token_holds(profile, q, d_max, bridge, ramp),
                                      count, head), protect)
     if not any(h > 1 for h in holds):

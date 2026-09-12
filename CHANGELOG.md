@@ -20,14 +20,20 @@ half the schedule against the shot's own prompt and references, and the
 original clock is recovered by keeping the first frame of every hold group —
 generated pixels, never interpolated. Five frames at either end are never
 held, are frozen through the second pass and are put back verbatim, so the
-fix cannot become a seam step of its own; a calm pass (profile contrast under
-1.5) is left alone and says so in the log; the soundtrack rides through
+fix cannot become a seam step of its own; a calm pass (peak motion under the
+gate) is left alone and says so in the history; the soundtrack rides through
 untouched. A blended seam off a fixed pass takes the frames road, and the
 face pass, where on, runs over the fixed frames. The chip sits on the card
 beside the face chip, only on H3 and never on footage; the dials are the
 method's defaults in `families/h3/derope.py`, which is pure numpy and tested
-without a model. Costs a second pass of roughly three times the shot's
-sampling time. Unmeasured on this pack's short cards as of this entry.
+without a model. Measured on a 2 s turbo card: a spinning kick gets its
+shin, foot and face back with the choreography kept, at about twice the
+card's own sampling time. The gate turned out to matter more than the dials:
+the method's profile contrast read a static fern *higher* than the kick, and
+forced through the pass the fern came back sharper and moving unnaturally,
+so the gate reads peak frame-to-frame motion off the delivered frames
+instead (4.1 on the kick, 1.8 on the fern, gate at 2.5, `motion_fix_abstain`
+on the settings page). Both comparisons are in `docs/timeline.md`.
 
 **One picture editor — crop, turn, mirror, cut out — behind a pen on every
 picture and clip (#75).** A window dragged over the part of the picture that

@@ -141,12 +141,13 @@ DEFAULTS = {
     # again — the road every render took before any of these existed, kept so
     # the four can be compared on the same strip.
     "seam_handoff": "latent",
-    # The motion fix's gate: a pass whose jerk profile peaks under this many
-    # times its mean is left alone (`families/h3/derope.ABSTAIN`). 0 fixes
-    # every card that asks. A per-machine dial while the number is being
-    # measured; it reaches the graph as a node input, so a change re-runs the
-    # pass.
-    "motion_fix_abstain": derope.ABSTAIN,
+    # The motion fix's gate: a pass whose peak frame-to-frame change, at
+    # thumbnail scale on 0-255, is under this is left alone
+    # (`families/h3/derope.GATE`, and why it is the frames and not the
+    # profile). 0 fixes every card that asks. A per-machine dial while the
+    # number is being measured; it reaches the graph as a node input, so a
+    # change re-runs the pass.
+    "motion_fix_abstain": derope.GATE,
     # The weight files this machine last picked, by family: `{family: {slot:
     # filename, dtype, route, devices}}` — the same block a piece carries, in
     # the same shape.
@@ -352,8 +353,8 @@ def clean(raw):
         gate = raw["motion_fix_abstain"]
         if isinstance(gate, bool) or not isinstance(gate, (int, float)):
             raise ValueError("motion_fix_abstain must be a number")
-        if not 0 <= gate <= 10:
-            raise ValueError("motion_fix_abstain must be between 0 and 10")
+        if not 0 <= gate <= 50:
+            raise ValueError("motion_fix_abstain must be between 0 and 50")
         clean_settings["motion_fix_abstain"] = float(gate)
     if "neural_dll" in raw and raw["neural_dll"] is not None:
         dll = raw["neural_dll"]
@@ -708,7 +709,7 @@ def seam_handoff():
 
 
 def motion_fix_abstain():
-    """The profile contrast under which the motion fix leaves a pass alone."""
+    """The peak motion under which the motion fix leaves a pass alone."""
     return float(load()["motion_fix_abstain"])
 
 
