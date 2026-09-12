@@ -1892,4 +1892,5 @@ export const ko = {
  "The encode as it is, at a 1024 short edge — the reference's whole detail, cached on disk and kept as one file.": "짧은 변 1024로 인코딩한 그대로 — 레퍼런스의 모든 세부를 디스크에 캐시해 파일 하나로 보관합니다.",
  "Nothing to keep — hang a picture on them first.": "보관할 것이 없습니다 — 먼저 사진을 걸어 주세요.",
  "the server kept nothing": "서버가 아무것도 보관하지 않았습니다",
+ "keep pictures as RefMods": "사진을 RefMod로 보관",
 };

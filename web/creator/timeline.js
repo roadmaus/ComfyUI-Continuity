@@ -1032,6 +1032,10 @@ class Timeline {
       // Which family a preset's row and weights would be landing on. Read by
       // `crossable`, which refuses those two sections across families.
       family: () => S.pieceFamily(this.timeline),
+      // The VAE a kept member's pictures are encoded through when the library
+      // keeps them as RefMods — the piece's own, so a mod made from the roster
+      // is the mod a render here would read.
+      vae: () => this.timeline.models?.vae ?? "",
       // What the picker needs to cut a picture out — the scissors ride into
       // the library's own attach flow through this. The pool's spec, because a
       // member's pictures are individual files, not one sheet.
@@ -3315,6 +3319,7 @@ export class TimelineBody {
       scope: "piece",
       label: t("this piece"),
       family: () => S.pieceFamily(this.timeline),
+      vae: () => this.timeline.models?.vae ?? "",
       // See `Timeline.pieceTarget`: the scissors in the library's attach flow.
       // Built here rather than borrowed — `poolPlate` is the window's, and
       // this target is the node body's.

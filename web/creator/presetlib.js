@@ -35,7 +35,8 @@
 
 import { el, icon, mountOverlay } from "./dom.js";
 import { t } from "./i18n.js";
-import { isRefMod, renderMeta, stillUrl, viewUrl } from "./api.js";
+import { isRefMod, makeRefMod, renderMeta, stillUrl, viewUrl } from "./api.js";
+import { MODES as MOD_MODES } from "./refmod.js";
 import { atlasRef } from "./presets/atlasref.js";
 import { openPicker } from "./picker.js";
 import { openMenu, noteField, sizeRows, MARKER_LABEL, MARKER_NOTE, ROLES, TAKES_NOTE } from "./cast.js";
@@ -170,6 +171,8 @@ class PresetLibrary {
     this.keys = new Set();     // which of them are ticked
     this.problem = null;
     this.busy = false;
+    // A member's pictures on the queue, being kept as mods. See `keepAsMod`.
+    this.encoding = false;
     // The shipped catalogue, read on first sight of its tab. Kept apart from
     // `rows` rather than folded into it: nothing that writes a user's library
     // should ever have nine hundred read-only rows in its hands.
@@ -1014,6 +1017,20 @@ class PresetLibrary {
           text: `${t("what is kept: {value}", { value: t(MARKER_LABEL[member.relationship ?? "derive"]) })}  ▾`,
           onclick: (event) => this.pickMarker(event.currentTarget, member),
         }),
+        // Their pictures as saved latents, from the roster itself: the member
+        // is what is kept here, and a mod is the other way a picture is kept.
+        // Only with a piece behind the library — the VAE is the piece's.
+        ...(this.target?.vae && this.modSources(member).length ? [el("button", {
+          class: `mmc-cast-sheet-keep mmc-cast-sheet-mod${this.encoding ? " on" : ""}`,
+          disabled: this.encoding ? true : undefined,
+          title: t("Keep @{handle}'s pictures as RefMods — each becomes a saved "
+                 + "latent the render reads instead of encoding the picture, "
+                 + "compressed to a fraction of the tokens or kept whole.",
+                   { handle: member.handle || "" }),
+          onclick: (event) => this.pickMod(event.currentTarget, member),
+        }, [icon("cube", 12), el("span", { text: this.encoding
+          ? t("Encoding their pictures…")
+          : `${t("keep pictures as RefMods")}  ▾` })])] : []),
       ])] : []),
       ...(files.some((file) => file.slot === "replaces")
         ? [this.sheetReplaces(member)] : []),
@@ -1183,10 +1200,79 @@ class PresetLibrary {
    *  and this used to be the one picker without the chip. A cut picture comes
    *  back as a plate — the file stored is the cutout the server wrote, and the
    *  panels ride with it so casting them into a piece keeps the clicks. */
+  /** The pictures a member can be kept out of: stills in their looks, not
+   *  already mods, not sheets. Mirrors `refmod.keepable` for a stored member. */
+  modSources(member) {
+    return (member.files ?? []).filter((file) =>
+      file.slot === "from" && (file.kind ?? "image") === "image"
+      && !isRefMod(file.filename) && !file.panels?.length);
+  }
+
+  /** Compressed or full, as a menu on the button. */
+  pickMod(anchor, member) {
+    const count = this.modSources(member).length;
+    openMenu(anchor, {
+      title: t(count === 1 ? "Keep {count} picture as a RefMod" : "Keep {count} pictures as RefMods",
+               { count }),
+      sections: [{ rows: MOD_MODES.map((mode) => ({
+        label: t(mode.label), note: t(mode.note),
+        onPick: () => this.keepAsMod(member, mode.key),
+      })) }],
+    });
+  }
+
+  /**
+   * Encode the member's pictures and file the mods in their place.
+   *
+   * The same job the shelf's cube runs (`refmod.keepAsMod`), on stored files
+   * rather than attached assets: each `from` picture becomes a `from` mod with
+   * the same words and narrowing, and the roster is saved. Nothing on any
+   * piece changes — a member cast out of the library afterwards arrives with
+   * the mods, and one cast before keeps the pictures they arrived with.
+   */
+  async keepAsMod(member, mode) {
+    if (this.encoding) return;
+    const sources = this.modSources(member);
+    if (!sources.length) return;
+    this.encoding = true;
+    this.say(null);
+    this.renderSheet();
+    try {
+      const answer = await makeRefMod({
+        name: member.handle || "subject",
+        subfolder: "cast",
+        sources: sources.map((file) => file.filename),
+        mode: mode === "full" ? "full" : "compressed",
+        description: member.description ?? "",
+        concept: { person: "identity", object: "generic", scene: "background", style: "style" }[member.takes ?? "person"] ?? "generic",
+        vae: this.target?.vae?.() ?? "",
+      });
+      const rows = answer?.mods ?? [];
+      if (!rows.length) throw new Error(t("the server kept nothing"));
+      const swapped = new Map(sources.map((file, index) => [file, rows[index]]).filter(([, row]) => row));
+      member.files = member.files.map((file) => {
+        const row = swapped.get(file);
+        if (!row) return file;
+        const { ref_size, trim, ...rest } = file;
+        return { ...rest, filename: row.path, kind: "image" };
+      });
+      await this.flushSave();
+      this.say(t(rows.length === 1
+        ? "Kept as a {mode} RefMod — {tokens} tokens."
+        : "Kept as {count} {mode} RefMods — {tokens} tokens together.",
+        { count: rows.length, mode: t(mode === "compressed" ? "compressed" : "full-detail"),
+          tokens: rows.reduce((sum, row) => sum + (row.tokens ?? 0), 0) }));
+    } catch (error) {
+      this.say(t("Could not keep them — {error}", { error: error.message ?? error }));
+    }
+    this.encoding = false;
+    this.renderSheet();
+  }
+
   async addFile(member) {
     const spec = this.target?.plate?.() ?? null;
     const chosen = await openPicker({
-      kinds: ["image", "video", "audio", "renders"],
+      kinds: ["image", "video", "audio", "renders", "refmods"],
       kind: "image",
       capacity: () => ({ used: 0, max: 8, filesLeft: 8 }),
       plate: spec ? { ...spec, panels: [] } : null,
@@ -1211,7 +1297,8 @@ class PresetLibrary {
     const kind = file.kind ?? "image";
     // A kept file lands at max unless it says otherwise — `addSubjectToPiece`'s
     // default — so the menu shows that as the standing answer.
-    const sizes = kind === "audio" ? [] : sizeRows({ ...file, ref_size: file.ref_size ?? "max" }, (key) => {
+    const sizes = kind === "audio" || isRefMod(file.filename) ? []
+      : sizeRows({ ...file, ref_size: file.ref_size ?? "max" }, (key) => {
       member.files = member.files.map((entry, at) =>
         (at === index ? { ...entry, ref_size: key } : entry));
       this.flushSave().then(() => this.renderSheet());

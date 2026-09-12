@@ -472,7 +472,10 @@ export const css = `
 /* A footnote to the row above it. Under the tiles rather than at the far end of
    their row: on a sheet this wide, anchoring it right put it three hundred
    pixels from the files it is about. */
-.mmc-cast-sheet-keeprow { display: flex; margin-top: 14px; margin-left: -8px; }
+.mmc-cast-sheet-keeprow { display: flex; gap: 10px; margin-top: 14px; margin-left: -8px; }
+/* The cube beside the marker: an icon and a verb, lit while the queue has them. */
+.mmc-cast-sheet-mod { display: inline-flex; align-items: center; gap: 6px; }
+.mmc-cast-sheet-mod.on, .mmc-cast-sheet-mod:disabled { color: var(--mmc-accent); cursor: default; }
 .mmc-cast-sheet-keep {
   background: none; border: 0; padding: 3px 8px; border-radius: 6px;
   color: var(--mmc-dim); font-family: inherit; font-size: calc(11.5px * var(--mmc-type));

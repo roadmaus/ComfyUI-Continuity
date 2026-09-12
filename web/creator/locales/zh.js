@@ -1893,4 +1893,5 @@ export const zh = {
  "The encode as it is, at a 1024 short edge — the reference's whole detail, cached on disk and kept as one file.": "按短边 1024 原样编码 — 参考的全部细节，缓存到磁盘并保存为一个文件。",
  "Nothing to keep — hang a picture on them first.": "没有可保存的内容 — 请先给他们挂上一张图片。",
  "the server kept nothing": "服务器没有保存任何内容",
+ "keep pictures as RefMods": "将图片保存为 RefMod",
 };

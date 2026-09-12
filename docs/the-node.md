@@ -123,7 +123,10 @@ the pictures leave the piece unless another member or a hand-written `@handle`
 still needs them. They are files like any other: the picker has a **RefMod**
 tab over `models/refmods`, a mod hangs on a member from there, and the cast
 library keeps a member built out of mods exactly as one built out of pictures.
-A mod tile wears `mod` where a picture's would wear `max`.
+A mod tile wears `mod` where a picture's would wear `max`. The library's own
+cast sheet has the same control under a member's pictures, *keep pictures as
+RefMods*, when the library was opened from a node: the roster entry is
+rewritten to the mods and nothing on any piece changes.
 
 What a mod is not: a concept extractor. Pooling keeps colour, build and large
 structure and loses fine detail, and nothing about it stops identity, clothing

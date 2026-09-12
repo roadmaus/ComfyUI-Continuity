@@ -1891,4 +1891,5 @@ export const ja = {
  "The encode as it is, at a 1024 short edge — the reference's whole detail, cached on disk and kept as one file.": "短辺 1024 でのエンコードそのまま — リファレンスの全ディテールをディスクにキャッシュし、1 ファイルとして保存します。",
  "Nothing to keep — hang a picture on them first.": "保存するものがありません — まず写真を掛けてください。",
  "the server kept nothing": "サーバーは何も保存しませんでした",
+ "keep pictures as RefMods": "写真を RefMod として保存",
 };
