@@ -16,7 +16,7 @@ import { t } from "./i18n.js";
 import { castFactsLine, listPresets, loadBody } from "./presets.js";
 import { listAssets, viewUrl } from "./api.js";
 import { LANGUAGES, settings as refineSettings } from "./refine.js";
-import { subjectFiles, tagIndex } from "./state.js";
+import { citedSubjects, subjectFiles, tagIndex } from "./state.js";
 import { layout as layoutVariations } from "./variations.js";
 
 /* Where a `{day|night}` is painted: the braces and bars of every live group in
@@ -1940,7 +1940,11 @@ export class PromptBox {
     const { cast, roster, attached, pool, library } = this.options();
     return [
       { head: this.hooks.attachedLabel?.() ?? t("Attached"), options: attached },
-      { head: t("Cast"), options: cast },
+      // Named for where they are, against the library under it: somebody
+      // taken out of the roster is in the piece from then on, the roster stops
+      // offering them (`options`), and with the shelf folded this row is the
+      // one place that says why.
+      { head: t("In this piece"), options: cast },
       { head: t("Cast library — cast them with their files"), options: roster },
       { head: t("Piece references"), options: pool },
       { head: this.hooks.attachBlocked("reference")
@@ -2036,6 +2040,11 @@ export class PromptBox {
         ? (option.subject.description
            || subjectFiles(option.subject).map((h) => "@" + h).join(", "))
         : null;
+      // Whether this sentence writes them yet. A member whose chip was deleted
+      // stays in the piece (#52) and comes back here rather than in the roster
+      // — so the row has to say it is the same person, not somebody new.
+      const written = option.kind === "cast"
+        && citedSubjects([this.getValue()], [option.subject]).has(option.handle);
       const title = option.kind === "branch" || option.kind === "door"
         ? t(option.label)
         // The lead names the medium — "Claymation", "2D cutout-paper stop-motion
@@ -2045,7 +2054,8 @@ export class PromptBox {
         : option.handle ? `@${option.handle}` : option.path.split("/").pop();
       const subtitle = option.kind === "branch" || option.kind === "door" ? t(option.sub)
         : option.kind === "style" ? (option.row.rest || option.row.folder)
-        : option.kind === "cast" ? made
+        : option.kind === "cast"
+        ? (written ? made : [t("cast, not in this prompt yet"), made].filter(Boolean).join(" · "))
         : option.kind === "roster" ? castFactsLine(option.row.facts)
         : option.handle ? option.path : (option.row?.subfolder || "");
 

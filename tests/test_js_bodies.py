@@ -1791,14 +1791,14 @@ try {
   out.errors.push(`fullscreen door: ${error.message}`);
 }
 
-// ---- the cast shelf, summoned from a name in the sentence -------------------
+// ---- the cast shelf, folded and unfolded ------------------------------------
 //
-// The simple fullscreen view draws neither the Cast tool nor the shelf: casting
-// is the @ menu's roster, building is the library's Cast tab, and removing
-// somebody is deleting their chip. The one thing left over is editing the copy
-// of somebody that lives in *this* piece, and clicking their name is what asks
-// for it. Driven through the editor here: this block is the hand-off, and the
-// block below it performs the press.
+// One shelf, every view. It used to be hidden outright in the simple
+// fullscreen view and summoned by a press on a name, with a chevron to send it
+// away again — and a member whose chip was deleted (#52 keeps them) sat in
+// the piece with nothing on screen to say so. Now the view starts it folded,
+// a press on a name brings it up on them, and nothing takes it away but the
+// rail's own tool.
 try {
   const node = fakeNode("MiniMaxH3Creator", "creator_data", JSON.stringify({
     version: 2, models: {},
@@ -1807,10 +1807,7 @@ try {
   }));
   await ext.nodeCreated(node);
   const editor = node.mmcBody.editor;
-  // The card, said out loud. The body is the node's own either way — the shell
-  // borrows it — so this is the only thing that tells the two views apart, and
-  // driving the summons without it was driving it on a face.
-  editor.castResident = false;
+  const rows = () => (editor.castHost.children ?? []).length;
   const shut = () => {
     let hit = null;
     const walk = (n) => {
@@ -1820,94 +1817,95 @@ try {
     walk(editor.castHost);
     return hit;
   };
+  // On the canvas the shelf is up whenever there is a cast.
+  const faceRows = rows();
+  // The simple view starts it folded — the shell stamps the body, and the body
+  // stamps the editor. Driven the way the shell does it.
+  editor.castDefaultOpen = false;
+  editor.castOpen = null;
+  editor.render();
+  const foldedRows = rows();
   editor.openCastMember("vera");
-  const opened = {
-    open: editor.castOpen === true,
-    summoned: editor.castSummoned === true,
-    onThem: editor.castShelf?.opened?.handle === "vera",
-    marked: String(editor.castShelf?.root?.className ?? "").split(" ").includes("summoned"),
-    hasShut: !!shut(),
-  };
+  const opened = { rows: rows(), onThem: editor.castShelf?.opened?.handle === "vera",
+                   hasShut: !!shut() };
+  // Their chevron shuts the card and leaves the shelf: it is a shelf, not a
+  // summons.
   shut()?.listeners?.click?.[0]?.();
   await new Promise((done) => setTimeout(done, 0));
+  const afterShut = { rows: rows(), open: editor.castShelf?.opened ?? null };
   // A name nobody answers to leaves the shelf exactly as it was.
+  editor.castOpen = null;
+  editor.render();
   editor.openCastMember("nobody");
-  out.castSummon = {
-    ...opened,
-    shutClosed: editor.castOpen === false && editor.castSummoned === false,
-    strangerIgnored: editor.castOpen === false,
-  };
+  const strangerIgnored = rows() === 0 && editor.castOpen === null;
+  // The tool is the way back up and back down.
+  editor.toggleCast();
+  const toggledUp = rows();
+  editor.toggleCast();
+  const toggledDown = rows();
+  out.castFold = { faceRows, foldedRows, opened, afterShut, strangerIgnored,
+                   toggledUp, toggledDown };
 } catch (error) {
-  out.errors.push(`cast summon: ${error.message}`);
+  out.errors.push(`cast fold: ${error.stack}`);
 }
 
-// ---- the card that draws no shelf: a press puts it up, a press takes it away -
+// ---- a card in the Timeline window hands the press to the window's shelf ---
 //
-// The simple fullscreen card has no cast drawer and no Cast tool, so the only
-// shelf it can show is one a press summoned — and the only way to be rid of it
-// is the same press again. That failed for a year of the wrong question: the
-// body the card borrows is the *node's* body, `nodeId` and all, so asking
-// "have I got a node?" answered "the shelf is a row of me" for a card that
-// draws no shelf, and the second press left it standing. The card says which
-// it is now (fullscreen.js sets `castResident`), and this drives both answers.
+// The window has the piece's shelf a few rows down. A card's editor used to
+// summon a second one inside the card — two places to edit one person — so a
+// card is told the window has one (`openCast`), draws none and no Cast tool,
+// and a name pressed in it opens the member on the window's.
 try {
-  const first = (root, sel) => root.querySelectorAll(sel)[0] ?? null;
-  const node = fakeNode("MiniMaxH3Creator", "creator_data", JSON.stringify({
-    version: 2, models: {},
+  const findAll = (root, cls) => {
+    const hits = [];
+    const walk = (n) => {
+      if (String(n.className ?? "").split(" ").includes(cls)) hits.push(n);
+      (n.children ?? []).forEach(walk);
+    };
+    walk(root);
+    return hits;
+  };
+  const node = fakeNode("MiniMaxH3Timeline", "timeline_data", JSON.stringify({
+    version: 2, render: "chained", prompt: "", aspect: "16:9", short_edge: 768,
+    assets: [],
     subjects: [{ handle: "vera", takes: "person", from: [] }],
-    segments: [{ prompt: "@vera waits", assets: [], loras: [], duration_s: 6 }],
+    segments: [{ prompt: "@vera waits", duration_s: 5, assets: [], loras: [] },
+               { prompt: "shot 2", duration_s: 5, assets: [], loras: [] }],
   }));
   await ext.nodeCreated(node);
-  const editor = node.mmcBody.editor;
-  const box = editor.prompt.root;
-  const press = () => box.listeners?.click?.forEach((fn) => fn({
-    target: first(box, '.mmc-ref-cast[data-handle="vera"]'),
+  const timeline = node.mmcBody.timeline;
+  const { openTimeline: openTimelineModal } = await import("./web/creator/timeline.js");
+  openTimelineModal({ timeline, onCommit: () => node.mmcBody.commit() });
+  await new Promise((done) => setTimeout(done, 0));
+  const win = document.body.children.at(-1);
+  const openOnWindow = () => findAll(win, "mmc-cast-card")
+    .filter((c) => String(c.className).split(" ").includes("open"))
+    .map((c) => findAll(c, "mmc-cast-name")[0]?.attrs?.value ?? null);
+  const beforePress = openOnWindow();
+  findAll(win, "mmc-tl-edit")[0].listeners.click[0]();
+  const sheet = document.body.children.at(-1);
+  const box = findAll(sheet, "mmc-prompt")[0];
+  box.listeners?.click?.forEach((fn) => fn({
+    target: box.querySelectorAll('.mmc-ref-cast[data-handle="vera"]')[0],
     preventDefault() {}, stopPropagation() {},
   }));
-  const rows = () => (editor.castHost.children ?? []).length;
-
-  editor.castResident = false;
-  editor.render();
-  const cardEmpty = rows() === 0;
-  press();
-  const cardOpen = { rows: rows(), on: editor.castShelf?.opened?.handle ?? null,
-                     marked: String(editor.castShelf?.root?.className ?? "")
-                       .split(" ").includes("summoned") };
-  press();
-  const cardShut = rows();
-
-  // And the face, where the drawer *is* a row: the same second press closes the
-  // member without taking the drawer with them.
-  editor.castResident = true;
-  editor.castSummoned = false;
-  editor.castOpen = false;
-  editor.render();
-  const faceRows = rows();
-  press();
-  const faceOn = editor.castShelf?.opened?.handle ?? null;
-  press();
   out.castCard = {
-    cardEmpty, ...cardOpen, cardShut, faceRows, faceOn,
-    faceKept: rows(), faceClosed: editor.castShelf?.opened ?? null,
+    // The card draws no shelf and no Cast tool of its own...
+    noShelf: findAll(sheet, "mmc-cast").length === 0,
+    noTool: findAll(sheet, "mmc-tool-cast").length === 0,
+    // ...and the press opened them on the window's.
+    beforePress, onWindow: openOnWindow(),
   };
 } catch (error) {
   out.errors.push(`cast card: ${error.stack}`);
 }
 
-// ---- ...and it survives the editor being rebuilt under the open shell -------
+// ---- ...and the fold survives the editor being rebuilt under the shell ------
 //
-// `castResident` is what the card says about itself, and it lived on the editor
-// — which is not what outlives the view. The face's editor is rebuilt whenever
-// the segment object under it changes: a preset carrying a strip parses new
-// segments, Clear makes one, a re-read of the blob makes all of them. The
-// replacement knew nothing about the shell it was born into, answered "the
-// shelf is a row of me" from its node id alone, and so a press on a name built
-// a resident drawer that the simple view's stylesheet hides. The press looked
-// dead, and the only way out was a round trip through the full view — which
-// calls `setCastResident` again and repairs it by accident.
-//
-// The body remembers now and stamps whoever it builds next. Driven through the
-// real shell, because the hand-off is the thing under test.
+// The view's default lives on the body, not the editor: the face's editor is
+// rebuilt whenever the segment object under it changes — a preset carrying a
+// strip, Clear, a re-read of the blob — and a replacement that answered from
+// the canvas's default would put the shelf up in a view that starts it folded.
 try {
   const fs = await import("./web/creator/fullscreen.js");
   globalThis.localStorage = { getItem: (k) => (k === "mmc.fullscreen.view" ? "simple" : null),
@@ -1922,25 +1920,32 @@ try {
   app.graph = node.graph;
   fs.openFullscreen(node);
   const simple = String(document.body.children.at(-1)?.className ?? "").includes("simple");
-  const told = node.mmcBody.editor?.castResident === false;
+  const told = node.mmcBody.editor?.castDefaultOpen === false;
+  const foldedRows = (node.mmcBody.editor?.castHost.children ?? []).length;
+  // The tool is still on the rail in this view, wearing the count.
+  const rail = node.mmcBody.editor?.root;
+  let tool = null;
+  const walk = (n) => {
+    if (!tool && String(n.className ?? "").split(" ").includes("mmc-tool-cast")) tool = n;
+    (n.children ?? []).forEach(walk);
+  };
+  walk(rail);
 
   // What a preset apply carrying a strip does to the face.
   node.mmcBody.dropFaceEditor();
   node.mmcBody.render();
   const editor = node.mmcBody.editor;
+  const rebuiltFolded = (editor.castHost.children ?? []).length;
   const box = editor.prompt.root;
   box.listeners?.click?.forEach((fn) => fn({
     target: box.querySelectorAll('.mmc-ref-cast[data-handle="vera"]')[0],
     preventDefault() {}, stopPropagation() {},
   }));
   out.castRebuilt = {
-    simple, told,
-    fresh: editor !== undefined && editor.castResident === false,
-    notResident: editor.castResidentHere() === false,
-    // The whole point: the drawer that arrives is the summoned one, which is
-    // the only kind this view draws.
-    summoned: editor.castSummoned === true,
-    marked: String(editor.castShelf?.root?.className ?? "").split(" ").includes("summoned"),
+    simple, told, foldedRows, rebuiltFolded,
+    toolOnRail: !!tool, toolCount: tool?.text?.includes("1") ?? false,
+    fresh: editor.castDefaultOpen === false,
+    pressedUp: (editor.castHost.children ?? []).length,
     onThem: editor.castShelf?.opened?.handle ?? null,
   };
   fs.close();
@@ -2445,10 +2450,20 @@ try {
   await ext.nodeCreated(node);
   const body = node.mmcBody;
 
-  const railCast = all(body.root, "mmc-tool").find((b) => b.text.includes("Cast"));
+  const railCast = () => all(body.root, "mmc-tool").find((b) => b.text.includes("Cast"));
   const beforePress = all(body.root, "mmc-cast-card").length;
-  click(railCast);
+  const shelfUp = () => all(body.root, "mmc-cast").length;
+  const shelfBefore = shelfUp();
+  click(railCast());
   const cards = () => all(body.root, "mmc-cast-card");
+  // The rail is a switch and nothing else: the shelf comes up empty, and a
+  // second press folds it again with nobody cast. Casting the first person is
+  // the shelf's own empty-state button.
+  const railOpened = { shelf: shelfUp(), cards: cards().length };
+  click(railCast());
+  const railFolded = { shelf: shelfUp(), cards: cards().length };
+  click(railCast());
+  click(all(body.root, "mmc-cast-empty")[0]);
 
   const name = all(body.root, "mmc-cast-name")[0];
   type(name, "anna");
@@ -2481,11 +2496,13 @@ try {
 
   const blob = JSON.parse(node.widgets.find((w) => w.name === "creator_data").value);
   out.cast = {
-    onRail: !!railCast,
+    onRail: !!railCast(),
     // Ungated: nothing is attached to this node at all.
-    railEnabled: !railCast?.attrs?.disabled,
-    beforePress,
+    railEnabled: !railCast()?.attrs?.disabled,
+    beforePress, shelfBefore, railOpened, railFolded,
     afterPress: cards().length,
+    // The tool wears the head count once there is one.
+    count: all(railCast(), "mmc-tool-count")[0]?.text ?? null,
     idleBefore: idle.length,
     idleAfter: all(body.root, "mmc-cast-where-idle").length,
     survived, rebuilt,
@@ -2516,6 +2533,45 @@ try {
   out.errors.push(`cast: ${error.stack}`);
 }
 
+
+// ---- the @ menu says who is already in the piece ----------------------------
+//
+// Somebody taken out of the roster is in the piece from then on: the roster
+// stops offering them (`options` filters names the cast already holds), and
+// they come back under the cast group instead. With the shelf folded, the
+// menu row is the one place that says they are the same person and not in
+// this sentence — deleting their chip keeps them (#52) — so the group is
+// named for where they are and the row says whether the prompt writes them.
+try {
+  const findAll = (root, cls) => {
+    const hits = [];
+    const walk = (n) => {
+      if (String(n.className ?? "").split(" ").includes(cls)) hits.push(n);
+      (n.children ?? []).forEach(walk);
+    };
+    walk(root);
+    return hits;
+  };
+  const node = fakeNode("MiniMaxH3Creator", "creator_data", JSON.stringify({
+    version: 2, models: {},
+    subjects: [{ handle: "vera", takes: "person", from: [], description: "cropped hair" },
+               { handle: "ben", takes: "person", from: [], description: "a tall man" }],
+    segments: [{ prompt: "@vera waits", assets: [], loras: [], duration_s: 6 }],
+  }));
+  await ext.nodeCreated(node);
+  const box = node.mmcBody.editor.prompt;
+  await box.openMenu("", "@");
+  await new Promise((done) => setTimeout(done, 0));
+  const heads = findAll(box.menu, "mmc-mention-head").map((h) => h.text);
+  const subs = Object.fromEntries(findAll(box.menu, "mmc-mention-row").map((row) => [
+    findAll(row, "mmc-mention-handle")[0]?.text,
+    findAll(row, "mmc-mention-sub")[0]?.text ?? "",
+  ]));
+  box.closeMenu();
+  out.castMenu = { heads, subs };
+} catch (error) {
+  out.errors.push(`cast menu: ${error.stack}`);
+}
 
 // ---- a name is a door, in every box that draws one --------------------------
 //
@@ -3733,6 +3789,14 @@ check("clicking it again comes back to the shot",
 check("...leaving the property as it found it",
       (view.get("backAgain") or {}).get("pinGone"), True)
 
+menu = report.get("castMenu", {})
+check("the @ menu groups the cast as who is in the piece",
+      "In this piece" in (menu.get("heads") or []), True)
+check("...a member the sentence writes shows what they are made of",
+      (menu.get("subs") or {}).get("@vera"), "cropped hair")
+check("...and one it does not says so",
+      (menu.get("subs") or {}).get("@ben"), "cast, not in this prompt yet · a tall man")
+
 door = report.get("fsDoor", {})
 check("the shot face carries a way into the shell", door.get("onShot"), True)
 check("...and so does the strip face", door.get("onStrip"), True)
@@ -3740,40 +3804,39 @@ check("...but a card's editor does not — there is no node to draw over",
       door.get("notInACard"), True)
 check("the node's own menu carries it too", door.get("inTheMenu"), True)
 
-summon = report.get("castSummon", {})
-check("clicking a name puts the shelf up", summon.get("open"), True)
-check("...on that member, and nobody else", summon.get("onThem"), True)
-check("...marked as summoned, so a view that hides the shelf shows this one",
-      summon.get("marked"), True)
-check("...with the chevron that takes it away", summon.get("hasShut"), True)
-check("closing the card closes the shelf it was summoned into",
-      summon.get("shutClosed"), True)
+fold = report.get("castFold", {})
+check("a face draws the shelf whenever there is a cast", fold.get("faceRows"), 1)
+check("...the simple view starts it folded", fold.get("foldedRows"), 0)
+check("a press on a name brings it up", (fold.get("opened") or {}).get("rows"), 1)
+check("...on that member, and nobody else", (fold.get("opened") or {}).get("onThem"), True)
+check("...with the chevron that shuts them", (fold.get("opened") or {}).get("hasShut"), True)
+check("their chevron shuts the card and leaves the shelf",
+      (fold.get("afterShut") or {}).get("rows"), 1)
+check("...with nobody open on it", (fold.get("afterShut") or {}).get("open"), None)
 check("a name nobody answers to leaves the shelf where it was",
-      summon.get("strangerIgnored"), True)
+      fold.get("strangerIgnored"), True)
+check("the rail's tool brings it up", fold.get("toggledUp"), 1)
+check("...and folds it again", fold.get("toggledDown"), 0)
 
 card = report.get("castCard", {})
-check("the card that draws no shelf opens with none", card.get("cardEmpty"), True)
-check("...a press on a name puts one up", card.get("rows"), 1)
-check("...on that member", card.get("on"), "vera")
-check("...marked summoned, which is what the card's stylesheet shows",
-      card.get("marked"), True)
-check("...and the same press again takes it away entirely", card.get("cardShut"), 0)
-check("a face draws the drawer whether or not anybody pressed", card.get("faceRows"), 1)
-check("...a press opens somebody on it", card.get("faceOn"), "vera")
-check("...and the press that closes them leaves the drawer", card.get("faceKept"), 1)
-check("...with nobody open on it", card.get("faceClosed"), None)
+check("a card in the Timeline window draws no shelf of its own", card.get("noShelf"), True)
+check("...and no Cast tool", card.get("noTool"), True)
+check("...nobody was open on the window's shelf before", card.get("beforePress"), [])
+check("...and a name pressed in it opens them on the window's shelf",
+      card.get("onWindow"), ["vera"])
 
-# The same press, after the face's editor was rebuilt under the open shell —
-# which is what applying a preset that carries a strip does. `castResident` used
-# to live on the editor, so the replacement answered from its node id alone and
-# put up a resident drawer the simple view hides. The body remembers it now.
+# The same fold, after the face's editor was rebuilt under the open shell —
+# which is what applying a preset that carries a strip does. The default lives
+# on the body, so the replacement starts where the view says.
 rebuilt = report.get("castRebuilt", {})
 check("the shell opens on the simple view", rebuilt.get("simple"), True)
-check("...and tells the body's editor it draws no drawer", rebuilt.get("told"), True)
-check("...an editor rebuilt under it is told the same", rebuilt.get("fresh"), True)
-check("...and answers the same", rebuilt.get("notResident"), True)
-check("...so a press on a name summons the drawer", rebuilt.get("summoned"), True)
-check("...marked, which is what the card's stylesheet shows", rebuilt.get("marked"), True)
+check("...and tells the body's editor to start folded", rebuilt.get("told"), True)
+check("...so the shelf is folded", rebuilt.get("foldedRows"), 0)
+check("...with the Cast tool still on the rail", rebuilt.get("toolOnRail"), True)
+check("...wearing the head count", rebuilt.get("toolCount"), True)
+check("an editor rebuilt under it is told the same", rebuilt.get("fresh"), True)
+check("...and starts folded too", rebuilt.get("rebuiltFolded"), 0)
+check("...and a press on a name brings the shelf up", rebuilt.get("pressedUp"), 1)
 check("...on the member whose name was pressed", rebuilt.get("onThem"), "vera")
 
 grew = report.get("grew", {})
@@ -3883,8 +3946,14 @@ check("the pill shows the seed the node holds after the queue rolled it",
 cast = report.get("cast") or {}
 check("the cast is on the rail", cast.get("onRail"), True)
 check("and is not gated on having attached anything", cast.get("railEnabled"), True)
-check("the shelf is hidden until it is asked for", cast.get("beforePress"), 0)
-check("one press of the rail casts the first person", cast.get("afterPress"), 1)
+check("the shelf is folded until it is asked for", cast.get("shelfBefore"), 0)
+check("...with nobody on it", cast.get("beforePress"), 0)
+check("a press of the rail puts the shelf up", (cast.get("railOpened") or {}).get("shelf"), 1)
+check("...and casts nobody", (cast.get("railOpened") or {}).get("cards"), 0)
+check("a second press folds it", (cast.get("railFolded") or {}).get("shelf"), 0)
+check("...still with nobody cast", (cast.get("railFolded") or {}).get("cards"), 0)
+check("the shelf's own button casts the first person", cast.get("afterPress"), 1)
+check("...and the rail counts them", cast.get("count"), "1")
 check("a subject nobody cites says so", cast.get("idleBefore"), 1)
 check("and clicking that is what cites her", cast.get("idleAfter"), 0)
 pop = report.get("resolutionPopover") or {}

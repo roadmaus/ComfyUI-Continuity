@@ -1217,49 +1217,13 @@ export const css = `
  * dropped from the render: these are display rules over the same bodies, and
  * the blob they are drawing has not moved.
  */
-/* The cast, both the tool and the drawer it opens. Not a shortening of it — the
-   whole shelf, because in this view everything it does is already somewhere
-   else and better placed:
- *
- * * **Casting somebody** is what the @ menu's roster does. It reads the cast
- *   library, and picking a name there attaches their pictures and writes the
- *   name into the sentence in one gesture — which is a shorter path than a
- *   drawer that made you find them, cast them, and then go and cite them.
- * * **Building or editing somebody** is the library's Cast tab: New cast
- *   member, the sheet with their description, their files and what each one is
- *   for, Export and Delete. Presets is in the rail two tiles along.
- * * **Taking somebody out** is deleting their chip from the prompt. It is not a
- *   shortcut — compile cuts the cast down to the subjects the text actually
- *   cites (subjects.cited, in compile.py), so a member nobody writes is not in the render.
- *
- * What is left over is a drawer that lists people, and a list of who is in a
- * shot is a thing you can read off the sentence you wrote. The full view keeps
- * it: editing the copy in *this* piece, rather than the library's, is the one
- * thing that still lives there.
- */
-.mmc-fs.simple .mmc-cast, .mmc-fs.simple .mmc-tool-cast { display: none; }
-/* The drawer's host with it. A hidden shelf inside a host that is still a row
-   of the column left the card carrying the gap either side of a drawer nobody
-   can see — which is most of the way to still having the drawer. */
-.mmc-fs.simple .mmc-cast-host:not(:has(> .mmc-cast.summoned)) { display: none; }
-/*
- * ...except summoned, which is the one thing neither the roster nor the library
- * covers: editing the copy of somebody that lives in *this* piece. The library
- * sheet edits the library's copy, and casting them again makes a second person
- * rather than updating the first, so without this there would be no way to
- * change a description or move a file between their slots once they were in.
- *
- * Double-click their name in the sentence and the shelf arrives on them alone;
- * their own chevron takes it away again. Raised, unlike the resident shelf,
- * because it is a thing that just appeared over the card rather than a row of
- * it — and without its head, because you asked about somebody by name and
- * "Cast / From the library / Add someone" is an answer to a different question.
- */
-.mmc-fs.simple .mmc-cast.summoned {
-  display: flex; padding: 8px; border-radius: 14px;
-  background: var(--mmc-surface-2); border: 1px solid var(--mmc-line);
-}
-.mmc-fs.simple .mmc-cast.summoned .mmc-cast-head { display: none; }
+/* The cast is the same shelf in both views, and the Cast tool is on both
+   rails. The simple view starts with it folded (fullscreen.js sets the body's
+   castDefaultOpen) rather than hidden: a member is in the piece whether or
+   not the sentence still writes them (#52 keeps them), and a view with no
+   shelf had no way to say so — the @ menu stopped offering the library's copy
+   because the piece already held one, and nothing on screen explained why.
+   Folded, the tool wears the head count; one press and it is the shelf. */
 /* The reference row is the same row in both views. It used to hide the cast's
    own pictures here, on the grounds that a chip for @vera's photo says what the
    @vera in the sentence already says — which was true until a file could be

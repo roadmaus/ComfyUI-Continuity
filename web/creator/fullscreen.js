@@ -558,13 +558,10 @@ class Fullscreen {
     // something that is still there afterwards. See `turnTo`.
     this.col.replaceChildren(this.colHead, this.stepBar, this.face, this.runRow);
     this.face.replaceChildren(body.root);
-    // The card the simple view draws has no cast drawer and no Cast tool — see
-    // styles/fullscreen.js for why — so the body it borrows has to be told, or
-    // it goes on answering "the shelf is a row of me" because it still knows
-    // its node id. Everything press-a-name does keys off that answer: whether
-    // the press is what put the shelf up, and so whether the next press takes
-    // it away again. The desk draws the drawer, so there it stays resident.
-    this.setCastResident(body, this.view !== "simple");
+    // The simple view starts with the cast shelf folded — one column, and the
+    // sentence is what it is for — where the desk starts with it up whenever
+    // there is a cast. Told to the body, which outlives the editor.
+    this.setCastDefault(body, this.view !== "simple");
     // The stage is the satellite's until it is told otherwise.
     body.satellite?.dock(this.dock);
     // `onVisibility` stays the satellite's — it owns "is there a picture". This
@@ -606,6 +603,9 @@ class Fullscreen {
       this.pre.replaceChildren(this.preHead, this.preStill, beside.mmcBody.root,
                                this.preRunRow);
       beside.mmcBody.satellite?.dock(this.preStill);
+      // The desk's other column starts its shelf up like the front one: it may
+      // have been the simple view's pre step a moment ago, stamped folded.
+      this.setCastDefault(beside.mmcBody, true);
       // Its own button has to say what its own node is doing. No `keepTake`:
       // the reel belongs to the step the card is on, and on the desk that is
       // always the shot — the still keeps its picture in the column above.
@@ -1483,36 +1483,31 @@ class Fullscreen {
 
   /** Give one node's body back to the wrapper the DOM widget positions, and its
    *  picture back to the card that follows the node. */
-  /** Whether the view this body is drawn in draws its cast drawer as a row.
-   *  Both bodies an editor can be — the Creator's, and a PreStage's H3 branch —
-   *  answer through the same editor, so this asks the body for it rather than
-   *  reaching for a field that may not be there. */
-  setCastResident(body, resident) {
+  /** Whether the cast shelf starts up or folded in the view this body is
+   *  drawn in. Both bodies an editor can be — the Creator's, and a PreStage's
+   *  H3 branch — answer through the same editor, so this asks the body. */
+  setCastDefault(body, open) {
     if (!body) return;
     // On the body first, because the body is what outlives the editor. A card's
     // editor is rebuilt whenever the segment object under it changes — a preset
     // carrying a strip, the piece cleared, a workflow re-read — and the new one
-    // knew nothing about the view it had been borrowed into. It answered "the
-    // shelf is a row of me", so pressing a name built a resident drawer that
-    // this view's stylesheet hides, and the press looked like it had done
-    // nothing. The body remembers; whoever builds the next editor stamps it.
-    body.castResident = resident;
+    // would otherwise start on the canvas's default. The body remembers;
+    // whoever builds the next editor stamps it.
+    body.castDefaultOpen = open;
     const editor = body.editor;
     if (!editor) return;
-    editor.castResident = resident;
-    // A drawer put up by a press in the window has no business surviving the
-    // view it was pressed in.
-    if (!resident || !editor.castSummoned) return;
-    editor.castSummoned = false;
-    editor.castOpen = false;
+    editor.castDefaultOpen = open;
+    // Each view opens on its own default; what the tool set in the other view
+    // does not carry across.
+    editor.castOpen = null;
     editor.render?.();
   }
 
   release(node) {
     const body = node?.mmcBody;
     if (!body) return;
-    // Home to the canvas, where the face draws the drawer itself.
-    this.setCastResident(body, true);
+    // Home to the canvas, where the shelf is up whenever there is a cast.
+    this.setCastDefault(body, true);
     if (body.stage) body.stage.onState = null;
     // Before the body goes home: the grip is the editor's, and a node dropped
     // back on the canvas with a resize handle on its satellite would be sizing

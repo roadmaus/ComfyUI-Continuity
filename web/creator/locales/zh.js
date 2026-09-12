@@ -1309,6 +1309,8 @@ export const zh = {
  "Who is in it. Name them once here, write @anna in the prompt, and whatever is behind them rides in with them.": "片中有谁。在这里命名一次，在提示词里写 @anna，TA背后的素材就会一起带进去。",
  "Cast somebody — a person, an object, a place or a look. Give them pictures to be built out of, or just describe them: a name with a description behind it is what keeps them the same person in shot 1 and in shot 9.": "指定一个角色——人物、物体、场景或风格。可以给TA构成用的图片，也可以只用文字描述：带着描述的名字，正是让TA在第 1 镜和第 9 镜保持同一个人的东西。",
  "Who is in the video: a person, an object, a place or a look that comes back shot after shot. Name them once, write @anna in the prompt, and whatever is behind them rides in with them.": "视频里有谁：一镜接一镜反复出现的人物、物体、场景或风格。命名一次，在提示词里写 @anna，TA背后的素材就会一起带进去。",
+ "Fold the cast shelf away. Who is in the piece stays as it is.": "收起角色栏。片中有谁不会改变。",
+ "cast, not in this prompt yet": "已在角色表，尚未写入本提示词",
  "Nobody cast yet": "还没有指定任何角色",
  "A person, an object, a place or a look that comes back shot after shot. Cast them once and write @anna.": "一镜接一镜反复出现的人物、物体、场景或风格。指定一次，然后写 @anna。",
  "name": "名字",
