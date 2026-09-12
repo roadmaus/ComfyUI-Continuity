@@ -152,7 +152,7 @@ try {
   // ---- what a file shows of them, and how big it is encoded ----------------
   // Both live on the tile's own menu: the words at its head, the size under
   // the roles. Typed words land without Enter — clicking away is enough.
-  press(all(sheet, "mmc-cast-sheet-tile")[0]);
+  press(all(sheet, "mmc-cast-sheet-file")[0]);
   await wait();
   const menu = one(globalThis.document.body, "mmc-cast-menu");
   out.menuHasField = Boolean(menu && one(menu, "mmc-cast-menu-field"));
@@ -164,10 +164,14 @@ try {
   await wait(); await wait();
   out.noted = lib.body.cast.files.map((f) => f.note ?? "");
   out.sized = lib.body.cast.files.map((f) => f.ref_size ?? "");
-  // The tile says both: words attached, and no "max" mark once it is match.
-  const tiles = all(one(sheet, "mmc-cast-sheet-refs"), "mmc-cast-sheet-tile");
-  out.tileMarks = tiles.map((tile) =>
-    `${one(tile, "mmc-cast-noted") ? "noted" : "-"}:${one(tile, "mmc-cast-size") ? "max" : "-"}`);
+  // The row says both: the words attached, and no "max" once it is match.
+  const fileRows = all(one(sheet, "mmc-cast-sheet-files"), "mmc-cast-sheet-file");
+  out.tileMarks = fileRows.map((row) => {
+    const note = one(row, "mmc-cast-sheet-filenote");
+    const noted = note && !String(note.className).includes("off");
+    const enc = one(row, "mmc-cast-sheet-enc");
+    return `${noted ? "noted" : "-"}:${/\bmax\b/.test(enc?.text ?? "") ? "max" : "-"}`;
+  });
 
   // ---- their description ---------------------------------------------------
   const desc = one(sheet, "mmc-cast-sheet-desc");

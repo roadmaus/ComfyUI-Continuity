@@ -183,4 +183,52 @@ expect_error("a bad name is refused",
              lambda: build("@img-1", [{"handle": "img-1", "kind": "image", "role": "reference",
                                        "filename": "refmod:../x"}]), "not a RefMod name")
 
+# ---- the file itself ---------------------------------------------------------------
+#
+# Rename, delete, describe and adopt work through `folder_paths` for the roots,
+# so a stub answering with ROOT stands in for ComfyUI here.
+
+import sys
+import types
+
+_fp = types.ModuleType("folder_paths")
+_fp.models_dir = ROOT
+_fp.add_model_folder_path = lambda *_a, **_k: None
+_fp.get_folder_paths = lambda _name: [ROOT]
+_fp.is_within_directory = lambda root, path: os.path.realpath(path).startswith(os.path.realpath(root))
+sys.modules["folder_paths"] = _fp
+
+_moved_src = write_mod("cast/mover", {"kind": "image", "mode": "training", "description": "before"})
+with open(os.path.splitext(_moved_src)[0] + ".png", "wb") as _h:
+    _h.write(b"png")
+_new = refmod.move("refmod:cast/mover", "people/moved")
+check("a mod moves with its picture",
+      (os.path.isfile(_new), os.path.isfile(os.path.splitext(_new)[0] + ".png"),
+       os.path.isfile(_moved_src)), (True, True, False))
+check("...and the row says where it is", refmod.row_for(_new, "people/moved")["subfolder"], "people")
+write_mod("people/taken", {"kind": "image"})
+refused("a move never overwrites", lambda: refmod.move("refmod:people/moved", "people/taken"), "already there")
+
+refmod.rewrite_meta(_new, description="after")
+_meta = refmod.header(_new)
+check("the description is rewritten in place", _meta["description"], "after")
+check("...and the tensor still reads", (_meta["tokens"], _meta["kind"]), (64, "image"))
+with open(_new, "rb") as _h:
+    (_len,) = struct.unpack("<Q", _h.read(8))
+check("...with the header padded to eight", _len % 8, 0)
+
+_tmp = write_mod("_incoming", {"kind": "image", "mode": "encode"})
+_adopted, _ = refmod.adopt(_tmp, "cast/adopted")
+check("an upload is adopted under its name", os.path.isfile(_adopted) and not os.path.exists(_tmp), True)
+_junk = os.path.join(ROOT, "junk.tmp")
+with open(_junk, "wb") as _h:
+    _h.write(b"not a safetensors file at all")
+refused("...and a file that is not a mod is refused", lambda: refmod.adopt(_junk, "cast/junk"), "safetensors")
+check("...and deleted", os.path.exists(_junk), False)
+
+refmod.remove("refmod:people/moved")
+check("a deleted mod is gone with its picture",
+      (os.path.exists(_new), os.path.exists(os.path.splitext(_new)[0] + ".png")), (False, False))
+check("a foreign mod is marked", refmod.row_for(_adopted, "cast/adopted")["foreign"], True)
+
 passed("all RefMod contract tests passed")

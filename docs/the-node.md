@@ -107,34 +107,64 @@ retention line says the movement is followed.
 ### Saved references (RefMods)
 
 A picture's reference tokens ride through every sampling step, and a member
-built out of three stills is a few hundred tokens each. The cube on their open
-card keeps those pictures as **RefMods** — the saved-latent format
+built out of three stills at `max` is several thousand tokens. The **ledger**
+under a member's tiles says what their looks cost a render — *Encoded on every
+render · 2 pictures + 1 clip at max · ≈8,200+ tokens* — and offers *Save as
+RefMod*. A RefMod is a reference encoded once and kept as a file: the
+saved-latent format
 [ComfyUI-MiniMaxH3Mod](https://github.com/Luisacaotica/ComfyUI-MiniMaxH3Mod)
 reads and writes, so a character made or downloaded there works here and one
-kept here loads in their nodes. *Compressed* pools each picture's latent to a
-16-cell grid and refines it against the full encode: 64 tokens a picture, so a
-shot that carried two references can carry six. *Full* keeps the encode as it
-is. Either way the picture is encoded once, the render reads the latent off
-the file, and the model is shown a picture decoded from that latent as the
-`<Picture N>` it cites.
+saved here loads in their nodes. The menu offers three shapes and names what
+each costs:
+
+* **One file — everything stacked.** Every still and clip in their looks,
+  each pooled to a 16×16 grid, laid end to end as one *video* RefMod — which
+  is what that pack's own `vanellope_example` is (four photos and three clips,
+  44 frames). One portable file that includes their motion, cited as one
+  `<Video n>`. Not a budget move: a still is 64 tokens, a clip is six frames
+  of them, and the whole is fitted under 5,120 by thinning the clips.
+* **Compressed**, per picture: the encode pooled to a 48-grid and refined
+  against it, a few hundred tokens — 432 for a 3:4 portrait. Renders like
+  Full at under half the cost. Pooled any further a face comes back with
+  colour stains (the sibling pack's 16-grid is 48 tokens for that portrait,
+  and unusable for a person), which is why the grid is where it is. Stills
+  only.
+* **Full**, per picture: the encode at a 1024 short edge, about a thousand
+  tokens. Stills only.
+
+Either way the render reads the latent off the file and shows the model a
+picture decoded from it as the label it cites.
 
 The mods land where the pictures were, the member's looks point at them, and
 the pictures leave the piece unless another member or a hand-written `@handle`
-still needs them. They are files like any other: the picker has a **RefMod**
-tab over `models/refmods`, a mod hangs on a member from there, and the cast
-library keeps a member built out of mods exactly as one built out of pictures.
-A mod tile wears `mod` where a picture's would wear `max`. The library's own
-cast sheet has the same control under a member's pictures, *keep pictures as
-RefMods*, when the library was opened from a node: the roster entry is
-rewritten to the mods and nothing on any piece changes.
+still needs them; the ledger then reads *Saved as a RefMod · compressed · 432
+tokens · refmods/cast/anna* with *Download* and *Show in library* beside it. A
+mod tile wears `mod` where a picture's would wear `max`, and its menu hands out
+the `.safetensors`. A shut line shows the cost too, amber once every look is a
+mod.
+
+**Importing a RefMod is casting them.** A RefMod is a character, so a
+`.safetensors` dropped on the **Cast** tab's Import — or the picker's RefMod
+tab — lands in `models/refmods` and a member is made out of it on the spot,
+named after the file and described from its header, and their page opens —
+*Cast @name into this piece* is at its foot. Importing the same file twice is
+still one member. The Cast tab's right-hand column is
+*Saved references*: every RefMod on the machine, what each costs, which members
+are built out of it. A stray one's menu casts it (or opens their page), hangs
+it on an existing member, downloads it, renames or moves it (members follow),
+rewrites the description in its header, or deletes it. A member's own page lists their
+files as rows — role, filename, words, and how each is encoded — with the same
+ledger under them, and *Pick a saved reference* attaches a mod already on the
+machine. The picker's **RefMod** tab has the same import.
 
 What a mod is not: a concept extractor. Pooling keeps colour, build and large
 structure and loses fine detail, and nothing about it stops identity, clothing
 and background mixing any more than a picture does — that is still what the
 member's words and `takes` are for. Audio mods are not taken; a voice is bound
-as a file. The encode needs the H3 video VAE picked in the weights control.
+as a file. Saving needs the H3 video VAE picked in the weights control; a mod
+made elsewhere needs nothing.
 
-A cast member can be swapped for another from the card's swap button: the
+A cast member can be swapped for another with *Recast from library* at the foot of their card: the
 replacement takes over their clips, their slot in the cast order, and every
 sentence that named the old name is rewritten to the new one. Removing a
 member removes only what they were built out of (their pictures, voice,

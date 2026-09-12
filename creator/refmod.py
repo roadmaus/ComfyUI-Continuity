@@ -280,21 +280,130 @@ def listing():
                 except (RefModError, OSError):
                     continue
                 seen.add(name)
-                rows.append({
-                    "path": filename_of(name),
-                    "name": stem,
-                    "subfolder": subfolder,
-                    "kind": meta["kind"],
-                    "size": stat.st_size,
-                    "mtime": stat.st_mtime,
-                    "mod": True,
-                    "mode": meta["mode"],
-                    "tokens": meta["tokens"],
-                    "grid": [meta["latent_t"], meta["latent_h"], meta["latent_w"]],
-                    "description": meta["description"],
-                    "preview": preview_path(path) is not None,
-                })
+                rows.append(row_for(path, name, meta=meta, stat=stat))
     return rows, sorted(folders)
+
+
+def row_for(path, name, meta=None, stat=None):
+    """One mod as the picker row every route answers with — the listing, the
+    make job and the file routes below all say the same thing about a file."""
+    meta = meta or header(path)
+    stat = stat or os.stat(path)
+    subfolder, _, stem = name.rpartition("/")
+    return {
+        "path": filename_of(name),
+        "name": stem,
+        "subfolder": subfolder,
+        "kind": meta["kind"],
+        "size": stat.st_size,
+        "mtime": stat.st_mtime,
+        "mod": True,
+        "mode": meta["mode"],
+        # `stack` for a character-as-one-file — several sources end to end —
+        # against `image` / `video` for one encoded source. Their word.
+        "source": str(meta.get("source", "") or ""),
+        "tokens": meta["tokens"],
+        "grid": [meta["latent_t"], meta["latent_h"], meta["latent_w"]],
+        "description": meta["description"],
+        # Whose it is, as far as the header says: ours, or the sibling pack's.
+        "foreign": meta.get("made_by") != "continuity",
+        "preview": preview_path(path) is not None,
+    }
+
+
+# ---- the file itself ------------------------------------------------------------
+#
+# Rename, move, delete, and one field of the header — the whole of what "edit a
+# RefMod" can mean, since the latent is not editable. All of it is stdlib: the
+# safetensors layout is an 8-byte length, a JSON header padded to that length,
+# and the tensor bytes, whose offsets in the header are relative to their own
+# start. So a header can be rewritten without touching a tensor, and a file can
+# be moved with its picture as two renames.
+
+
+def sidecars(path):
+    """The files that travel with a mod: its picture, under any name it is kept."""
+    return [p for p in (os.path.splitext(path)[0] + ext
+                        for ext in (PREVIEW_EXT, ".webp", ".jpg", ".jpeg")) if os.path.isfile(p)]
+
+
+def move(filename, new_name):
+    """`refmod:<name>` -> `refmod:<new_name>`, inside the root it is already in.
+    -> the new path. Refuses to overwrite: a mod is somebody's character."""
+    import folder_paths
+
+    source = resolve(filename)
+    clean = name_of(new_name)
+    root = next(r for r in roots() if folder_paths.is_within_directory(r, source))
+    target = os.path.join(root, *clean.split("/")) + EXT
+    if not folder_paths.is_within_directory(root, os.path.realpath(os.path.dirname(target) or root)):
+        raise RefModError(f"{new_name!r} is not a RefMod name")
+    if os.path.realpath(target) == os.path.realpath(source):
+        return source
+    if os.path.exists(target):
+        raise RefModError(f"a RefMod named {clean!r} is already there")
+    os.makedirs(os.path.dirname(target), exist_ok=True)
+    for extra in sidecars(source):
+        os.replace(extra, os.path.splitext(target)[0] + os.path.splitext(extra)[1])
+    os.replace(source, target)
+    return target
+
+
+def remove(filename):
+    """Delete a mod and its picture."""
+    path = resolve(filename)
+    for extra in sidecars(path):
+        os.unlink(extra)
+    os.unlink(path)
+
+
+def rewrite_meta(path, **fields):
+    """Change fields of `refmod_meta` in place — the description, mostly.
+
+    The header is re-serialised and padded to a multiple of eight, as the
+    format asks; the tensor bytes are copied after it unchanged. Written to a
+    temporary file beside the original and swapped in, like `save`.
+    """
+    with open(path, "rb") as handle:
+        (length,) = struct.unpack("<Q", handle.read(8))
+        table = json.loads(handle.read(length).decode("utf-8"))
+        metadata = table.get("__metadata__") or {}
+        meta = json.loads(metadata.get(META_KEY) or "{}")
+        meta.update(fields)
+        metadata[META_KEY] = json.dumps(meta)
+        table["__metadata__"] = metadata
+        encoded = json.dumps(table, separators=(",", ":")).encode("utf-8")
+        encoded += b" " * (-len(encoded) % 8)
+        fd, temporary = tempfile.mkstemp(prefix=".refmod-", suffix=".tmp",
+                                         dir=os.path.dirname(path))
+        with os.fdopen(fd, "wb") as out:
+            out.write(struct.pack("<Q", len(encoded)))
+            out.write(encoded)
+            while True:
+                chunk = handle.read(1 << 20)
+                if not chunk:
+                    break
+                out.write(chunk)
+    os.replace(temporary, path)
+    return path
+
+
+def adopt(temporary, name):
+    """Take a file somebody uploaded into the mod folder as `<name>`, once the
+    header reads as a mod. -> `(path, meta)`. The temporary file is consumed
+    either way; a refusal deletes it."""
+    try:
+        meta = header(temporary)
+        clean = name_of(name)
+        target = os.path.join(home(), *clean.split("/")) + EXT
+        if os.path.exists(target):
+            raise RefModError(f"a RefMod named {clean!r} is already there")
+        os.makedirs(os.path.dirname(target), exist_ok=True)
+        os.replace(temporary, target)
+    finally:
+        if os.path.exists(temporary):
+            os.unlink(temporary)
+    return target, meta
 
 
 # ---- the tensor ---------------------------------------------------------------
@@ -416,13 +525,19 @@ def grid_for(latent_h, latent_w, long_edge):
     return min(h, latent_h - latent_h % 2), min(w, latent_w - latent_w % 2)
 
 
-def compress(latent, long_edge, steps=150, lr=0.02, tell=None):
-    """`[1, 24, T, H, W]` -> the same at a `long_edge` grid, refined `steps` times."""
+def compress(latent, long_edge, steps=150, lr=0.02, tell=None, grid=None):
+    """`[1, 24, T, H, W]` -> the same at a `long_edge` grid, refined `steps` times.
+
+    `grid` names the pooled `(H, W)` outright — a stack pools every source to
+    one square grid whatever its aspect, since frames of different shapes
+    cannot share a latent — and `long_edge` picks it at the source's aspect
+    otherwise.
+    """
     import torch
     import torch.nn.functional as F
 
     _, _, t, h, w = latent.shape
-    gh, gw = grid_for(h, w, long_edge)
+    gh, gw = grid if grid else grid_for(h, w, long_edge)
     if (gh, gw) == (h, w):
         return latent
     full = latent.detach().float()
@@ -442,3 +557,48 @@ def compress(latent, long_edge, steps=150, lr=0.02, tell=None):
             if tell and (i + 1) % 10 == 0:
                 tell((i + 1) / steps)
         return param.detach()
+
+
+# ---- a stack: one character, one file ------------------------------------------
+#
+# The sibling pack's own example, `vanellope_example`, is not a picture: it is
+# four photos and three clips, each encoded, each pooled to the same 16x16 grid,
+# and laid end to end along the time axis as one 44-frame video latent. That is
+# what "a character as a RefMod" means over there — one file per person, motion
+# included, cited as one `<Video n>`. `stack` builds the same shape: the
+# per-source latents are pooled and refined one at a time (each against its own
+# full encode, never averaged together — their README says merging misaligned
+# faces blurs them) and concatenated on T. Under a token cap the clips lose
+# frames evenly and the stills keep their one.
+
+
+def stack(latents, grid, steps=150, lr=0.02, max_tokens=0, tell=None):
+    """`[[1, 24, T_i, H_i, W_i], ...]` -> one `[1, 24, sum T_i, grid, grid]`.
+
+    -> `(latent, kept)`, `kept` the frame count each source contributed after
+    the cap. `max_tokens` of 0 is no cap.
+    """
+    import torch
+
+    grid = max(2, int(grid) // 2 * 2)
+    per_frame = (grid // 2) * (grid // 2)
+    counts = [int(latent.shape[2]) for latent in latents]
+    kept = list(counts)
+    if max_tokens and sum(counts) * per_frame > max_tokens:
+        room = max(len(counts), max_tokens // per_frame)
+        # Stills are one frame and stay; the clips share what is left of the
+        # room in proportion, never below a frame each.
+        clips = [i for i, n in enumerate(counts) if n > 1]
+        spare = room - (len(counts) - len(clips))
+        total = sum(counts[i] for i in clips) or 1
+        for i in clips:
+            kept[i] = max(1, int(spare * counts[i] / total))
+    parts = []
+    for index, (latent, keep) in enumerate(zip(latents, kept)):
+        if keep < latent.shape[2]:
+            picks = torch.linspace(0, latent.shape[2] - 1, keep).round().long()
+            latent = latent[:, :, picks]
+        base = index / len(latents)
+        parts.append(compress(latent, grid, steps, lr, grid=(grid, grid),
+                              tell=(lambda f, base=base: tell(base + f / len(latents))) if tell else None))
+    return torch.cat(parts, dim=2), kept

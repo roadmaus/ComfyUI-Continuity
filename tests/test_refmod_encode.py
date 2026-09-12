@@ -108,6 +108,26 @@ check("...and pooling alone is the mean", torch.allclose(
     torch.nn.functional.adaptive_avg_pool3d(full, (1, 10, 16))), True)
 check("a grid the source already is passes through", refmod.compress(full, 64, steps=5) is full, True)
 
+# ---- a stack ------------------------------------------------------------------------
+# One character as one file: sources of different shapes, each pooled to one
+# square grid, end to end on T. A cap takes frames off the clips, never the stills.
+
+tall = torch.randn(1, 24, 1, 64, 40)
+clip = torch.randn(1, 24, 9, 32, 48)
+stacked, kept = refmod.stack([full, tall, clip], 16, steps=2)
+check("a stack is one square-grid latent, sources end to end",
+      (list(stacked.shape), kept), ([1, 24, 11, 16, 16], [1, 1, 9]))
+check("...and the still's frame is its own pooled grid", torch.allclose(
+    stacked[:, :, 1:2], refmod.compress(tall, 16, steps=2, grid=(16, 16))), True)
+capped, kept = refmod.stack([full, clip, tall], 16, steps=0, max_tokens=64 * 5)
+check("under a cap the clip loses frames and the stills keep theirs",
+      (list(capped.shape), kept), ([1, 24, 5, 16, 16], [1, 3, 1]))
+stackfile = refmod.save("cast/pair", stacked, {"kind": "video", "mode": "training", "source": "stack",
+                                                 "tags": ["2 img, 1 vid"]})
+smeta = refmod.header(stackfile)
+check("a stack reads back as a video mod with its frames' tokens",
+      (smeta["kind"], smeta["latent_t"], smeta["tokens"], smeta["source"]), ("video", 11, 11 * 64, "stack"))
+
 # ---- the encode branch -----------------------------------------------------------
 
 compressed = refmod.save("cast/anna-small", small, {"kind": "image", "mode": "training"})

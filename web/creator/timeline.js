@@ -933,15 +933,16 @@ class Timeline {
       // somebody out of the library attaches their files to the pool, which is
       // the shelf this window is already drawing.
       keep: (subject, assets) => P.keepSubject(subject, assets),
-      library: () => openPresetLibrary({ target: this.pieceTarget(), scope: "cast" })
+      library: (options = {}) => openPresetLibrary({ target: this.pieceTarget(), scope: "cast", ...options })
         .then(() => { this.renderStrip(); this.renderPool(); this.renderCast(); }),
       // Their pictures as saved latents, landing where the shelf's own "+"
       // lands a picture: the lone shot's row, or the pool.
-      mod: (subject, assets, mode) => {
+      mod: (subject, assets, mode, onProgress) => {
         const single = this.timeline.segments.length === 1;
         const host = single ? this.timeline.segments[0] : this.timeline;
         return keepAsMod(subject, assets, mode, {
           vae: this.timeline.models?.vae ?? "",
+          onProgress,
           list: () => (host.assets ??= []),
           nextHandle: (kind) => (single ? S.nextHandle(host, kind) : S.nextPoolHandle(this.timeline)),
           texts: () => S.allTexts(this.timeline),
@@ -953,6 +954,8 @@ class Timeline {
           },
         }).then((rows) => { this.commit(); this.renderStrip(); this.renderPool(); return rows; });
       },
+      // The ledger's estimate of a `match` picture is the piece's canvas.
+      canvas: () => timelineGeometry(this.timeline),
       // Recasting somebody rewrites every sentence that wrote their name — the
       // piece's own three and each card's, because a member cast into the
       // standing prompt walks on in shots that never mention them by hand.

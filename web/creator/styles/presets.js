@@ -324,6 +324,18 @@ export const css = `
    is a face, and a face wants the head-room a 96px letterbox crops off. */
 .mmc-preset-card[data-cast] .mmc-preset-hero { height: 124px; }
 .mmc-cast-hero { background: var(--mmc-surface-3); }
+/* Somebody whose looks are saved files wears the word on their picture — it is
+   what a roster is scanned for once mods exist at all. */
+.mmc-cast-hero-mod {
+  position: absolute; left: 8px; bottom: 8px; z-index: 1;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: calc(9.5px * var(--mmc-type)); font-weight: 600; letter-spacing: .03em;
+  padding: 3px 6px; border-radius: 5px; background: var(--mmc-accent); color: var(--mmc-on-accent);
+}
+.mmc-preset-import-kinds {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: calc(10px * var(--mmc-type)); color: var(--mmc-off); margin-left: 2px;
+}
 .mmc-cast-hero-blank {
   position: absolute; inset: 0; display: flex; align-items: center;
   justify-content: center; color: var(--mmc-off);
@@ -349,7 +361,7 @@ export const css = `
    files sit in one row at the size you recognise a face at, and the description
    is a box instead of a line. The roster is not on screen while you are in here,
    which is what the one way out at the top is for. */
-.mmc-cast-sheet { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+.mmc-cast-sheet { flex: 1; display: flex; flex-direction: column; min-height: 0; container-type: inline-size; }
 .mmc-cast-sheet-bar {
   display: flex; align-items: center; gap: 8px; padding: 14px 24px;
   border-bottom: 1px solid var(--mmc-line);
@@ -370,49 +382,53 @@ export const css = `
   margin-left: auto; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: calc(10.5px * var(--mmc-type)); color: var(--mmc-off);
 }
+/* Two columns: who they are, and what they are made of. Side by side because
+   the page is read as one person — face and words on the left, files and their
+   cost on the right — and stacked the files pushed the description off the
+   bottom of a window that has plenty of width. */
 .mmc-cast-sheet-body {
   flex: 1; overflow-y: auto; padding: 26px 40px;
-  display: flex; flex-direction: column; gap: 26px; min-height: 0;
+  display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 26px 40px;
+  align-content: start; min-height: 0;
 }
-/* The words band takes what the two above it leave. The description is the field
-   this sheet exists to make writable; a fixed 78px box under three hundred
-   pixels of nothing says the opposite. */
-.mmc-cast-sheet-body > .mmc-cast-sheet-band:last-child {
-  flex: 1; display: flex; flex-direction: column; min-height: 120px;
-}
-.mmc-cast-sheet-body > .mmc-cast-sheet-band:last-child .mmc-cast-sheet-desc { flex: 1; }
-/* The sheet has room the inspector never had, so the three things a member is
-   made of get named instead of inferred. */
+@container (max-width: 820px) { .mmc-cast-sheet-body { grid-template-columns: 1fr; } }
+.mmc-cast-sheet-col { display: flex; flex-direction: column; gap: 26px; min-width: 0; }
+/* The sheet has room the inspector never had, so what a member is made of gets
+   named instead of inferred. In sentence case, at the size of a line of the
+   page: a legend is a heading here, not a label. */
 .mmc-cast-sheet-legend {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: calc(10px * var(--mmc-type)); letter-spacing: .06em; text-transform: uppercase;
-  color: var(--mmc-off); margin-bottom: 10px;
+  font-size: calc(12.5px * var(--mmc-type)); color: var(--mmc-faint); margin-bottom: 10px;
 }
 .mmc-cast-sheet-band { min-width: 0; }
-.mmc-cast-sheet-who { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.mmc-cast-sheet-who { display: flex; align-items: flex-start; gap: 18px; min-width: 0; }
+/* At a size you recognise somebody at. The card's 46px is for a row; this is
+   their page. */
 .mmc-cast-sheet-face {
-  width: 46px; height: 46px; border-radius: 10px; object-fit: cover; flex: none;
+  width: 112px; height: 112px; border-radius: 16px; object-fit: cover; flex: none;
   background: var(--mmc-surface-3); box-shadow: 0 0 0 2px var(--tag, transparent);
 }
 .mmc-cast-sheet-face-blank {
   display: flex; align-items: center; justify-content: center; color: var(--mmc-off);
   box-shadow: inset 0 0 0 1px var(--mmc-line);
 }
+.mmc-cast-sheet-face-blank svg { width: 30px; height: 30px; }
+.mmc-cast-sheet-fields { display: flex; flex-direction: column; gap: 10px; min-width: 0; flex: 1; }
+.mmc-cast-sheet-field { display: flex; align-items: center; gap: 8px; min-width: 0; }
 /* The @ belongs to the name, not to the row: it is one token with a gap in it
    otherwise. */
 .mmc-cast-sheet-at {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: calc(20px * var(--mmc-type)); color: var(--mmc-off); margin-right: -13px;
+  font-size: calc(20px * var(--mmc-type)); color: var(--mmc-off); margin-right: -5px;
 }
 .mmc-cast-sheet-name {
   background: none; border: 0; border-bottom: 1px solid var(--mmc-line);
   padding: 2px 2px 4px; color: var(--tag, var(--mmc-text)); font: inherit;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: calc(20px * var(--mmc-type)); font-weight: 500; width: 11ch; min-width: 0; outline: none;
+  font-size: calc(20px * var(--mmc-type)); font-weight: 500; width: 100%; max-width: 24ch; min-width: 0; outline: none;
 }
 .mmc-cast-sheet-name:focus { border-bottom-color: var(--tag, var(--mmc-accent)); }
 .mmc-cast-sheet-name::placeholder { color: var(--mmc-off); font-weight: 400; }
-.mmc-cast-sheet-is { font-size: calc(13px * var(--mmc-type)); color: var(--mmc-dim); }
+.mmc-cast-sheet-is { font-size: calc(12.5px * var(--mmc-type)); color: var(--mmc-dim); white-space: nowrap; }
 /* A word inside the sentence "@ana is a person", not a control of the same
    weight as the name beside it. */
 .mmc-cast-sheet-takes {
@@ -421,73 +437,85 @@ export const css = `
 }
 .mmc-cast-sheet-takes:hover { background: var(--mmc-surface-3); color: var(--mmc-text); }
 
-.mmc-cast-sheet-refs { display: flex; gap: 12px; align-items: flex-start; flex-wrap: wrap; }
-.mmc-cast-sheet-ref {
-  width: 46px; display: flex; flex-direction: column; align-items: center; flex: none;
+/* What they are made of, one row a file. A row can say the filename, what the
+   file lends them, the words on it and how it is encoded; a 46px tile said one
+   of those and hid the rest in a tooltip. */
+.mmc-cast-sheet-files {
+  display: flex; flex-direction: column; min-width: 0;
+  background: var(--mmc-surface); border: 1px solid var(--mmc-line); border-radius: 12px; overflow: hidden;
 }
-.mmc-cast-sheet-tile {
-  position: relative; padding: 0; border: 0; background: none; cursor: pointer;
-  border-radius: 10px; line-height: 0;
+.mmc-cast-sheet-file {
+  display: grid; grid-template-columns: 40px 5em minmax(0, 1fr) auto auto; gap: 12px; align-items: center;
+  padding: 9px 12px; min-width: 0; border: 0; background: none; color: inherit; font: inherit;
+  text-align: left; cursor: pointer; --role: var(--mmc-dim);
 }
-.mmc-cast-sheet-tile:hover .mmc-cast-sheet-thumb { filter: brightness(1.25); }
-.mmc-cast-sheet-tile:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 3px; }
-.mmc-cast-sheet-thumb {
-  width: 46px; height: 46px; border-radius: 10px; object-fit: cover; display: flex;
-  align-items: center; justify-content: center; color: var(--mmc-dim);
-  background: var(--mmc-surface-3);
-}
-/* One colour per tile, set on the wrapper and read by both the badge and the
-   caption. Their looks are the default and wear no badge at all; the three
-   departures from it each say which, in the shelf's own colours. */
-.mmc-cast-sheet-ref { --role: var(--mmc-dim); }
+.mmc-cast-sheet-file + .mmc-cast-sheet-file { border-top: 1px solid var(--mmc-line); }
+.mmc-cast-sheet-file:hover { background: var(--mmc-surface-2); }
+.mmc-cast-sheet-file:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: -2px; }
+/* One colour per row, read by the role: their looks are the default and wear
+   the dim word; the three departures from it each say which, in the shelf's
+   own colours. */
 .mmc-role-motion { --role: var(--mmc-role-motion); }
 .mmc-role-voice { --role: var(--mmc-role-voice); }
 .mmc-role-replaces { --role: var(--mmc-role-replaces); }
-.mmc-cast-sheet-badge {
-  position: absolute; right: -4px; bottom: -4px; width: 18px; height: 18px;
-  border-radius: 999px; display: flex; align-items: center; justify-content: center;
-  background: var(--mmc-surface-3); box-shadow: 0 0 0 2px var(--mmc-float);
-  color: var(--role);
+.mmc-cast-sheet-thumb {
+  width: 40px; height: 40px; border-radius: 9px; object-fit: cover; display: flex;
+  align-items: center; justify-content: center; color: var(--mmc-dim);
+  background: var(--mmc-surface-3);
 }
-/* The shelf's two corner marks on a sheet tile: the sheet floats, so the ring
-   that lifts them off the picture is the float's colour rather than the node's. */
-.mmc-cast-sheet-tile .mmc-cast-size, .mmc-cast-sheet-tile .mmc-cast-noted {
-  box-shadow: 0 0 0 2px var(--mmc-float);
+/* A saved file's picture wears a thin amber ring: the tile is a latent, not a
+   picture, and the ring is the same amber the ledger turns when all of them are. */
+.mmc-cast-sheet-file.mod .mmc-cast-sheet-thumb {
+  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--mmc-accent) 65%, transparent);
 }
-.mmc-cast-sheet-cap {
-  margin-top: 7px; font-size: calc(10.5px * var(--mmc-type)); color: var(--role); text-align: center;
-  white-space: nowrap;
+.mmc-cast-sheet-role {
+  display: flex; align-items: center; gap: 5px; color: var(--role);
+  font-size: calc(12px * var(--mmc-type)); white-space: nowrap;
 }
-.mmc-cast-sheet-add {
-  width: calc(46px * var(--mmc-type)); height: calc(46px * var(--mmc-type)); box-sizing: border-box; border-radius: 10px;
-  border: 1px dashed var(--mmc-line); background: none; cursor: pointer;
-  color: var(--mmc-off); font-size: calc(20px * var(--mmc-type)); font-family: inherit; line-height: 1;
-  display: flex; align-items: center; justify-content: center;
+.mmc-cast-sheet-fileid { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.mmc-cast-sheet-filename {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: calc(12px * var(--mmc-type));
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
-.mmc-cast-sheet-add:hover { border-color: var(--mmc-accent); color: var(--mmc-accent); }
+.mmc-cast-sheet-filenote {
+  font-size: calc(11.5px * var(--mmc-type)); color: var(--mmc-dim);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.mmc-cast-sheet-filenote.off { color: var(--mmc-off); }
+/* How the file is encoded, right-aligned in the marker's monospace numbers:
+   this is what the model is handed. Amber for a saved file. */
+.mmc-cast-sheet-enc {
+  font-size: calc(11.5px * var(--mmc-type)); color: var(--mmc-dim); text-align: right;
+  white-space: nowrap; font-variant-numeric: tabular-nums; line-height: 1.4;
+}
+.mmc-cast-sheet-enc b { font-weight: 500; color: var(--mmc-text); }
+.mmc-cast-sheet-enc.mod b { color: var(--mmc-accent); }
+.mmc-cast-sheet-more { color: var(--mmc-off); font-size: calc(16px * var(--mmc-type)); letter-spacing: 1px; }
+.mmc-cast-sheet-file-add {
+  display: flex; gap: 8px; flex-wrap: wrap; padding: 8px 12px; background: var(--mmc-surface-2);
+  border-top: 1px solid var(--mmc-line);
+}
+.mmc-cast-sheet-files > .mmc-cast-sheet-file-add:first-child { border-top: 0; }
+.mmc-cast-sheet-addfile {
+  display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px;
+  border: 1px solid transparent; background: none; color: var(--mmc-dim); font: inherit;
+  font-size: calc(11.5px * var(--mmc-type)); cursor: pointer; white-space: nowrap;
+}
+.mmc-cast-sheet-addfile:hover { border-color: var(--mmc-line-2); color: var(--mmc-text); }
 .mmc-cast-sheet-nothing {
-  margin: 0; padding-top: 4px; font-size: calc(12.5px * var(--mmc-type)); line-height: 1.55;
-  color: var(--mmc-dim); max-width: 44ch;
+  margin: 10px 0 0; font-size: calc(12px * var(--mmc-type)); line-height: 1.55;
+  color: var(--mmc-off); max-width: 60ch;
 }
-/* A footnote to the row above it. Under the tiles rather than at the far end of
-   their row: on a sheet this wide, anchoring it right put it three hundred
-   pixels from the files it is about. */
-.mmc-cast-sheet-keeprow { display: flex; gap: 10px; margin-top: 14px; margin-left: -8px; }
-/* The cube beside the marker: an icon and a verb, lit while the queue has them. */
-.mmc-cast-sheet-mod { display: inline-flex; align-items: center; gap: 6px; }
-.mmc-cast-sheet-mod.on, .mmc-cast-sheet-mod:disabled { color: var(--mmc-accent); cursor: default; }
-.mmc-cast-sheet-keep {
-  background: none; border: 0; padding: 3px 8px; border-radius: 6px;
-  color: var(--mmc-dim); font-family: inherit; font-size: calc(11.5px * var(--mmc-type));
-  cursor: pointer; white-space: nowrap;
-}
-.mmc-cast-sheet-keep:hover { background: var(--mmc-surface-2); color: var(--mmc-dim); }
+/* The ledger, on the sheet: the shelf's own line, flush with the rows. */
+.mmc-cast-sheet .mmc-cast-ledger { margin: 12px 0 0; }
 
+/* A paragraph's worth, which grows if the paragraph does — not the rest of the
+   window, which read as a form waiting for an essay. */
 .mmc-cast-sheet-desc {
   width: 100%; box-sizing: border-box; background: var(--mmc-surface-2);
   border: 1px solid transparent; border-radius: 10px; padding: 11px 13px;
   color: var(--mmc-text); font: inherit; font-size: calc(13.5px * var(--mmc-type)); line-height: 1.55;
-  outline: none; resize: vertical; min-height: calc(78px * var(--mmc-type));
+  outline: none; resize: vertical; min-height: calc(112px * var(--mmc-type)); field-sizing: content;
 }
 .mmc-cast-sheet-desc:focus { border-color: var(--mmc-line); }
 .mmc-cast-sheet-desc::placeholder { color: var(--mmc-off); }
@@ -502,28 +530,68 @@ export const css = `
   border-top: 1px solid var(--mmc-line);
 }
 .mmc-cast-sheet-foot .mmc-preset-danger { padding: 0 16px; }
+/* Delete alone on the left; what makes or moves them on the right. */
+.mmc-cast-sheet-foot-gap { flex: 1; }
 /* Not the inspector's full-width pill: here it is one of three things on a row,
    and the only one that does anything to a node. */
-.mmc-cast-sheet-apply { margin: 0 0 0 auto; padding: 0 22px; }
+.mmc-cast-sheet-apply { margin: 0; padding: 0 22px; }
 
-/* Their references, in the inspector: what they are made of, captioned with what
-   each one lends them. The captions are the panel's argument — four pictures of
-   the same person say nothing about why there are four. */
-.mmc-cast-insp { display: flex; flex-direction: column; gap: 9px; }
-.mmc-cast-insp-files { display: flex; flex-wrap: wrap; gap: 7px; }
-.mmc-cast-insp-files figure { margin: 0; width: 66px; }
-.mmc-cast-insp-files img, .mmc-cast-insp-glyph {
-  width: 66px; height: 66px; object-fit: cover; display: flex;
-  align-items: center; justify-content: center; color: var(--mmc-dim);
-  border-radius: 8px; background: var(--mmc-surface-3);
+/* ---- saved references ------------------------------------------------------ */
+/* The Cast tab's right-hand column. Elsewhere it is the inspector; on the
+   roster a card opens its own page, so the column stood empty saying "pick a
+   preset". What belongs there is the files: every RefMod in models/refmods,
+   what each costs, who is built out of it, and the way to bring one in. */
+.mmc-mod-panel { gap: 10px; }
+.mmc-mod-panel-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.mmc-mod-panel-import {
+  display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 999px;
+  border: 1px solid var(--mmc-line-2); background: none; color: var(--mmc-dim); font: inherit;
+  font-size: calc(11.5px * var(--mmc-type)); cursor: pointer; white-space: nowrap;
 }
-.mmc-cast-insp-files figcaption {
-  font-size: calc(9.5px * var(--mmc-type)); line-height: 1.35; color: var(--mmc-off);
-  text-align: center; margin-top: 3px;
+.mmc-mod-panel-import:hover { border-color: var(--mmc-line-3); color: var(--mmc-text); }
+.mmc-mod-panel-empty, .mmc-mod-panel-bad {
+  margin: 4px 0 0; padding: 12px 14px; border: 1px dashed var(--mmc-line); border-radius: 10px;
+  font-size: calc(12px * var(--mmc-type)); line-height: 1.55; color: var(--mmc-dim);
 }
-.mmc-cast-insp-desc {
-  margin: 0; font-size: calc(12px * var(--mmc-type)); line-height: 1.55; color: var(--mmc-dim);
+.mmc-mod-panel-bad { color: var(--mmc-bad); border-style: solid; }
+.mmc-mod-list {
+  display: flex; flex-direction: column; min-width: 0;
+  background: var(--mmc-surface); border: 1px solid var(--mmc-line); border-radius: 10px; overflow: hidden;
 }
+.mmc-mod-folder {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: calc(10.5px * var(--mmc-type)); color: var(--mmc-off); padding: 6px 10px;
+  background: var(--mmc-surface-2);
+}
+.mmc-mod-folder:not(:first-child) { border-top: 1px solid var(--mmc-line); }
+.mmc-mod-row {
+  display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: 10px; align-items: center;
+  padding: 8px 10px; min-width: 0; border: 0; background: none; color: inherit; font: inherit;
+  text-align: left; cursor: pointer; border-top: 1px solid var(--mmc-line);
+}
+.mmc-mod-row:hover { background: var(--mmc-surface-2); }
+.mmc-mod-row:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: -2px; }
+/* The one a card's "Show in library" asked for. */
+.mmc-mod-row.lit { box-shadow: inset 3px 0 0 var(--mmc-accent); }
+.mmc-mod-thumb {
+  width: 40px; height: 40px; border-radius: 9px; object-fit: cover; display: flex;
+  align-items: center; justify-content: center; color: var(--mmc-dim); background: var(--mmc-surface-3);
+  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--mmc-accent) 65%, transparent);
+}
+.mmc-mod-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.mmc-mod-name {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: calc(12.5px * var(--mmc-type));
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.mmc-mod-facts {
+  font-size: calc(11px * var(--mmc-type)); color: var(--mmc-dim); font-variant-numeric: tabular-nums;
+}
+.mmc-mod-who { font-size: calc(11px * var(--mmc-type)); color: var(--mmc-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mmc-mod-who.off { color: var(--mmc-off); }
+.mmc-mod-who-name {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--tag, var(--mmc-text));
+}
+.mmc-mod-more { color: var(--mmc-off); font-size: calc(16px * var(--mmc-type)); letter-spacing: 1px; }
 
 /* ---- the save sheet ------------------------------------------------------ */
 

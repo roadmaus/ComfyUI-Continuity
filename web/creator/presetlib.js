@@ -35,11 +35,13 @@
 
 import { el, icon, mountOverlay } from "./dom.js";
 import { t } from "./i18n.js";
-import { isRefMod, makeRefMod, renderMeta, stillUrl, viewUrl } from "./api.js";
-import { MODES as MOD_MODES } from "./refmod.js";
+import { deleteRefMod, describeRefMod, isRefMod, makeRefMod, moveRefMod, renderMeta, stillUrl,
+         uploadRefMod, viewUrl } from "./api.js";
+import { SUBFOLDER as MOD_FOLDER, ledger, modRows, modeRows, modeWord } from "./refmod.js";
 import { atlasRef } from "./presets/atlasref.js";
 import { openPicker } from "./picker.js";
-import { openMenu, noteField, sizeRows, MARKER_LABEL, MARKER_NOTE, ROLES, TAKES_NOTE } from "./cast.js";
+import { downloadMod, openMenu, noteField, sizeRows, MARKER_LABEL, MARKER_NOTE, ROLES,
+         TAKES_NOTE } from "./cast.js";
 import { SUBJECT_TAKES, seedFeatures, showSeconds, tagIndex } from "./state.js";
 import { BUILTIN } from "./presets/builtin.js";
 import * as P from "./presets.js";
@@ -63,6 +65,8 @@ const PAGE_SIZE = 60;
  * @param {string} [options.scope]  which tab to open on, where the caller knows
  *   better than the target does — the cast shelf's own way in wants the roster,
  *   not the piece the roster would be applied to.
+ * @param {string} [options.reveal]  a mod's path (`refmod:cast/anna`) to open
+ *   the Cast tab's Saved references panel on — a card's "Show in library".
  * @returns {Promise<void>}
  */
 export function openPresetLibrary(options) {
@@ -74,13 +78,10 @@ export function openPresetLibrary(options) {
  *  wrong thing. */
 const CAST_GLYPH = { person: "face", object: "weights", scene: "image", style: "effect" };
 
-/** What each file lends them, as the caption under it — a caption is read beside
- *  the picture it belongs to, so it can say "voice" where a menu row has to say
- *  the whole sentence. Off `ROLES` rather than written out again: the shelf, the
- *  editor and the inspector answer the same question and must answer it in the
- *  same words. */
+/** What each file lends them, by slot. Off `ROLES` rather than written out
+ *  again: the shelf and the sheet answer the same question and must answer it
+ *  in the same words. */
 const ROLE = Object.fromEntries(ROLES.map((role) => [role.key, role]));
-const CAST_SLOT_LABEL = Object.fromEntries(ROLES.map((role) => [role.key, role.label]));
 
 /**
  * A style's opening clauses as something you would type after an `@`.
@@ -151,9 +152,20 @@ export function styleCastMember(row, index = 0) {
 }
 
 class PresetLibrary {
-  constructor({ target = null, scope = null }, resolve) {
+  constructor({ target = null, scope = null, reveal = null }, resolve) {
     this.target = target;
     this.resolve = resolve;
+    // The Cast tab's other half: every RefMod on the machine, in the column the
+    // inspector uses elsewhere. `reveal` is the one to scroll to and light on
+    // arrival; `modArmed` is the one whose Delete has been pressed once.
+    this.mods = [];
+    this.modsFailed = null;
+    this.modsRead = false;
+    this.reveal = reveal;
+    this.modArmed = null;
+    // Members' bodies, read once for the panel's "in @anna" line: the index row
+    // says how many files a member has, not which.
+    this.bodies = new Map();
     // Opens on the scope the node can actually take, because that is what you
     // came for — unless the caller asked for a tab by name, which is what a
     // "From the library" button on a shelf is doing. The tabs are still there to
@@ -171,8 +183,10 @@ class PresetLibrary {
     this.keys = new Set();     // which of them are ticked
     this.problem = null;
     this.busy = false;
-    // A member's pictures on the queue, being kept as mods. See `keepAsMod`.
-    this.encoding = false;
+    // A member's pictures on the queue, being saved as mods — `{count, mode,
+    // progress}` for the sheet's ledger — and what went wrong last time.
+    this.encoding = null;
+    this.modNote = null;
     // The shipped catalogue, read on first sight of its tab. Kept apart from
     // `rows` rather than folded into it: nothing that writes a user's library
     // should ever have nine hundred read-only rows in its hands.
@@ -257,6 +271,7 @@ class PresetLibrary {
     // without pressing it left the grid on its own empty-state line: "The style
     // atlas could not be read", about a read nobody had started.
     if (this.scope === "style") this.readAtlas();
+    if (this.scope === "cast") this.loadMods();
   }
 
   /**
@@ -281,9 +296,13 @@ class PresetLibrary {
     this.bar.replaceChildren(this.search, ...(catalogue ? [] : [
       el("button", {
         class: "mmc-organize",
-        title: t("Read a .json of presets exported from another machine"),
+        title: roster
+          ? t("A .safetensors RefMod made anywhere — they join the cast, named after the "
+            + "file. Or a .json of cast members exported from another machine.")
+          : t("Read a .json of presets exported from another machine"),
         onclick: () => this.importFile(),
-      }, [icon("folder", 14), el("span", { text: t("Import") })]),
+      }, [icon("folder", 14), el("span", { text: t("Import") }),
+          ...(roster ? [el("span", { class: "mmc-preset-import-kinds", text: ".json · .safetensors" })] : [])]),
       // Not conditional on a target, unlike the button beside it: this reads a
       // file rather than a node, so it works in the read-only library the
       // context menu opens — and on a machine whose renders came from somewhere
@@ -354,6 +373,309 @@ class PresetLibrary {
     this.renderGrid();
     this.renderInspector();
     if (scope === "style") this.readAtlas();
+    if (scope === "cast") this.loadMods();
+  }
+
+  // ---- saved references ------------------------------------------------------
+  //
+  // The Cast tab's right-hand column. Elsewhere it is the inspector; on the
+  // roster a card opens its own page, so the column stood empty saying "pick a
+  // preset". What belongs there is the files: every RefMod in models/refmods,
+  // what each costs, who is built out of it, and the way to bring one in — the
+  // home a foreign mod never had, and the one place import and export live.
+
+  /** Read the listing, and the members' bodies the "in @anna" line needs. */
+  async loadMods() {
+    try {
+      this.mods = [...(await modRows()).values()];
+      this.modsFailed = null;
+    } catch (error) {
+      this.mods = [];
+      this.modsFailed = error.message ?? String(error);
+    }
+    this.modsRead = true;
+    if (this.scope === "cast") this.renderInspector();
+    const unread = this.rows.filter((row) => row.scope === "cast" && !row.builtin
+                                             && !this.bodies.has(row.id));
+    if (!unread.length) return;
+    await Promise.all(unread.map(async (row) => {
+      this.bodies.set(row.id, await P.loadBody(row).catch(() => null));
+    }));
+    if (this.scope === "cast") this.renderInspector();
+  }
+
+  /** The members built out of one mod, as index rows. */
+  usedBy(path) {
+    return this.rows.filter((row) => {
+      if (row.scope !== "cast") return false;
+      const files = this.bodies.get(row.id)?.cast?.files;
+      if (files) return files.some((file) => file.filename === path);
+      return (row.facts?.mods ?? []).includes(path);
+    });
+  }
+
+  /** What the mods somebody is built out of add up to, or null while the
+   *  listing is on its way. For the card's facts line. */
+  modTokens(row) {
+    const paths = row.facts?.mods ?? [];
+    if (!paths.length || !this.mods.length) return null;
+    const byPath = new Map(this.mods.map((mod) => [mod.path, mod]));
+    return paths.reduce((sum, path) => sum + (byPath.get(path)?.tokens ?? 0), 0) || null;
+  }
+
+  renderModPanel() {
+    const panel = this.inspector;
+    panel.replaceChildren(
+      el("div", { class: "mmc-mod-panel-head" }, [
+        el("span", { class: "mmc-preset-insp-title", text: t("Saved references") }),
+        el("button", {
+          class: "mmc-mod-panel-import",
+          title: t("A .safetensors RefMod made anywhere — the sibling pack, a download. It "
+                 + "lands in models/refmods and they join the cast, named after the file."),
+          onclick: () => this.importFile(".safetensors"),
+        }, [icon("folder", 13), el("span", { text: t("Import") })]),
+      ]),
+      el("p", { class: "mmc-preset-insp-hint", text:
+        t("RefMods in models/refmods — a character as one file. Import one and they "
+        + "join the cast; save a member's pictures and theirs appears here.") }),
+    );
+    if (this.modsFailed) {
+      panel.appendChild(el("p", { class: "mmc-mod-panel-bad",
+                             text: t("Could not read models/refmods — {error}", { error: this.modsFailed }) }));
+      return;
+    }
+    if (!this.modsRead) {
+      panel.appendChild(el("p", { class: "mmc-preset-insp-hint", text: t("Reading…") }));
+      return;
+    }
+    if (!this.mods.length) {
+      panel.appendChild(el("p", { class: "mmc-mod-panel-empty", text:
+        t("No RefMods yet — import a .safetensors and they join the cast, or save a "
+        + "member's pictures from their page.") }));
+      return;
+    }
+    // Grouped by folder, the folder named once. Ours land in `cast/`; the
+    // sibling pack's and downloads land wherever they were put.
+    const folders = new Map();
+    for (const mod of this.mods) {
+      const key = mod.subfolder ?? "";
+      if (!folders.has(key)) folders.set(key, []);
+      folders.get(key).push(mod);
+    }
+    const list = el("div", { class: "mmc-mod-list" });
+    for (const [folder, mods] of [...folders.entries()].sort(([a], [b]) => a.localeCompare(b))) {
+      list.appendChild(el("div", { class: "mmc-mod-folder", text: folder ? `${folder}/` : t("(top level)") }));
+      for (const mod of mods) list.appendChild(this.renderModRow(mod));
+    }
+    panel.appendChild(list);
+    if (this.reveal) {
+      const lit = list.querySelector(`[data-path="${CSS.escape(this.reveal)}"]`);
+      lit?.scrollIntoView?.({ block: "center" });
+      lit?.classList.add("lit");
+      this.reveal = null;
+    }
+  }
+
+  /** One mod: its picture, its name, what it costs, who uses it, and its menu. */
+  renderModRow(mod) {
+    const users = this.usedBy(mod.path);
+    const facts = [
+      mod.kind === "video" && mod.source !== "stack" ? t("video") : modeWord(mod),
+      t("{tokens} tokens", { tokens: (mod.tokens ?? 0).toLocaleString() }),
+      mod.grid ? (mod.kind === "video"
+        ? t("{frames} frames of {grid}", { frames: mod.grid[0], grid: `${mod.grid[2]}×${mod.grid[1]}` })
+        : `${mod.grid[2]}×${mod.grid[1]}`) : null,
+      mod.foreign ? t("made elsewhere") : null,
+    ].filter(Boolean).join(" · ");
+    const who = users.length
+      ? el("span", { class: "mmc-mod-who" }, [
+          el("span", { text: t("in ") }),
+          ...users.flatMap((row, index) => [
+            ...(index ? [el("span", { text: ", " })] : []),
+            el("span", { class: `mmc-mod-who-name mmc-tag-${tagIndex(row.name || "x")}`, text: `@${row.name}` }),
+          ]),
+        ])
+      : el("span", { class: "mmc-mod-who off", text: t("not in any member") });
+    return el("button", {
+      class: "mmc-mod-row",
+      "data-path": mod.path,
+      title: mod.description ? mod.description : t("Press for what this file can do."),
+      onclick: (event) => this.pickModRow(event.currentTarget, mod),
+    }, [
+      mod.preview
+        ? el("img", { class: "mmc-mod-thumb", src: viewUrl(mod.path, { preview: true, version: mod.mtime }),
+                      alt: "", loading: "lazy",
+                      onerror: (event) => event.target.replaceWith(
+                        el("span", { class: "mmc-mod-thumb" }, [icon(mod.kind === "video" ? "video" : "cube", 16)])) })
+        : el("span", { class: "mmc-mod-thumb" }, [icon(mod.kind === "video" ? "video" : "cube", 16)]),
+      el("span", { class: "mmc-mod-text" }, [
+        el("span", { class: "mmc-mod-name", text: mod.name }),
+        el("span", { class: "mmc-mod-facts", text: facts }),
+        who,
+      ]),
+      el("span", { class: "mmc-mod-more", text: "⋯" }),
+    ]);
+  }
+
+  /** The file's menu: into the roster, and the file itself. */
+  pickModRow(anchor, mod) {
+    const members = this.rows.filter((row) => row.scope === "cast" && !row.builtin);
+    const armed = this.modArmed === mod.path;
+    openMenu(anchor, {
+      title: `${mod.name} · ${mod.kind === "video" && mod.source !== "stack" ? t("video") : modeWord(mod)} · ${t("{tokens} tokens", { tokens: (mod.tokens ?? 0).toLocaleString() })}`,
+      // The description in the file's header, written back on Enter — the one
+      // field of a mod worth editing, and the one every loader shows.
+      lead: (close) => {
+        let text = mod.description ?? "";
+        return noteField({
+          value: text,
+          placeholder: t("what this is — written into the file's header"),
+          title: t("The description in the RefMod's header, which every loader shows. "
+                 + "Enter writes it back to the file."),
+          write: (value) => { text = value; },
+          done: () => {
+            close();
+            if (text === (mod.description ?? "")) return;
+            describeRefMod(mod.path, text)
+              .then(() => this.loadMods())
+              .catch((error) => this.say(t("Could not write the description — {error}", { error: error.message })));
+          },
+        });
+      },
+      sections: [
+        { rows: [
+          ...(mod.kind === "image" || mod.source === "stack" ? [{
+            label: this.usedBy(mod.path).length ? t("Open their page") : t("Cast as a new member"),
+            note: this.usedBy(mod.path).length
+              ? t("They are already in the cast — this file is their looks.")
+              : t("Named after the file, described from its header, this file as their looks."),
+            onPick: () => this.castMod(mod),
+          }] : []),
+        ] },
+        { head: members.length && (mod.kind === "image" || mod.source === "stack") ? t("Hang on") : "",
+          rows: mod.kind === "image" || mod.source === "stack" ? members.slice(0, 12).map((row) => ({
+            label: `@${row.name}`,
+            note: this.usedBy(mod.path).includes(row) ? t("already theirs") : t("as their looks"),
+            checked: this.usedBy(mod.path).includes(row),
+            onPick: () => this.hangOn(row, mod),
+          })) : [] },
+        { head: t("The file"), rows: [
+          { label: t("Download .safetensors"),
+            note: `models/refmods/${mod.path.replace(/^refmod:/, "")}.safetensors`,
+            onPick: () => downloadMod(mod.path) },
+          { label: t("Rename or move…"),
+            note: t("A new name, or folder/name to move it. Members keep working — they are rewritten to the new name."),
+            onPick: () => this.renameMod(anchor, mod) },
+          { label: armed ? t("Really delete?") : t("Delete from disk"),
+            note: armed
+              ? t("Members built out of it will show a missing tile until it is replaced.")
+              : t("Two presses. There is no undo."),
+            onPick: () => {
+              if (!armed) { this.modArmed = mod.path; this.pickModRow(anchor, mod); return; }
+              this.modArmed = null;
+              deleteRefMod(mod.path).then(() => this.loadMods())
+                .catch((error) => this.say(t("Could not delete it — {error}", { error: error.message })));
+            } },
+        ] },
+      ],
+      onClose: () => { if (this.modArmed && this.modArmed !== mod.path) this.modArmed = null; },
+    });
+  }
+
+  /** A field for the new name, in the place the menu was. */
+  renameMod(anchor, mod) {
+    const current = mod.path.replace(/^refmod:/, "");
+    let name = current;
+    const commit = () => {
+      if (!name || name === current) return;
+      moveRefMod(mod.path, name)
+        .then((row) => this.rewritePaths(mod.path, row.path))
+        .then(() => this.loadMods())
+        .catch((error) => this.say(t("Could not rename it — {error}", { error: error.message })));
+    };
+    openMenu(anchor, {
+      title: t("Rename {name}", { name: mod.name }),
+      lead: (close) => noteField({
+        value: current,
+        placeholder: t("folder/name"),
+        title: t("Enter renames the file. A folder in front moves it there."),
+        write: (value) => { name = value; },
+        done: () => { close(); commit(); },
+      }),
+      sections: [{ rows: [{
+        label: t("Rename"),
+        note: t("folder/name moves it between folders. Members built out of it follow."),
+        onPick: commit,
+      }] }],
+    });
+  }
+
+  /** Every member built out of `from` now points at `to`. The roster is the
+   *  only place the pack keeps a mod's path outside a piece; pieces on the
+   *  canvas are not reachable from here and keep the old name. */
+  async rewritePaths(from, to) {
+    for (const row of this.usedBy(from)) {
+      const body = this.bodies.get(row.id) ?? await P.loadBody(row);
+      if (!body?.cast) continue;
+      body.cast.files = (body.cast.files ?? []).map((file) =>
+        (file.filename === from ? { ...file, filename: to } : file));
+      const updated = await P.replaceBody(row.id, { data: body, scope: "cast" });
+      this.bodies.set(row.id, body);
+      this.rows = this.rows.map((entry) => (entry.id === row.id ? { ...entry, ...updated } : entry));
+    }
+    this.renderGrid();
+  }
+
+  /**
+   * A new member out of a mod: named after the file, in its header's words,
+   * with the file as their looks. -> `{row, body}`.
+   *
+   * A RefMod *is* a character — that is what the file is for — so nothing
+   * asks: importing one makes the member, and a stray one on disk is one press
+   * from being one. A mod already somebody's looks makes nobody twice.
+   */
+  async memberFromMod(mod) {
+    const already = this.usedBy(mod.path)[0];
+    if (already) {
+      const body = this.bodies.get(already.id) ?? await P.loadBody(already);
+      return { row: already, body };
+    }
+    const { row, body } = await P.memberFromMod(mod, this.rows);
+    this.rows = [row, ...this.rows];
+    this.bodies.set(row.id, body);
+    return { row, body };
+  }
+
+  /** The panel's press: the member, and their page. */
+  async castMod(mod) {
+    if (this.busy) return;
+    this.busy = true;
+    try {
+      const { row } = await this.memberFromMod(mod);
+      this.busy = false;
+      await this.edit(row);
+    } catch (error) {
+      this.busy = false;
+      this.say(t("Could not make a cast member — {error}", { error: error.message }));
+    }
+  }
+
+  /** Put a mod in somebody's looks, from the panel. */
+  async hangOn(row, mod) {
+    try {
+      const body = this.bodies.get(row.id) ?? await P.loadBody(row);
+      const cast = { handle: row.name, takes: "person", files: [], ...(body?.cast ?? {}) };
+      if (cast.files.some((file) => file.filename === mod.path)) return;
+      cast.files = [...cast.files, { slot: "from", filename: mod.path, kind: mod.kind === "video" ? "video" : "image" }];
+      const data = { ...(body ?? {}), cast };
+      const updated = await P.replaceBody(row.id, { data, scope: "cast" });
+      this.bodies.set(row.id, data);
+      this.rows = this.rows.map((entry) => (entry.id === row.id ? { ...entry, ...updated } : entry));
+      this.renderGrid();
+      this.renderInspector();
+    } catch (error) {
+      this.say(t("Could not hang it on @{handle} — {error}", { handle: row.name, error: error.message }));
+    }
   }
 
   /**
@@ -583,6 +905,11 @@ class PresetLibrary {
     // picked it because it is the better likeness.
     if (row.scope === "cast" && !row.cover) {
       const hero = el("div", { class: "mmc-preset-hero mmc-cast-hero" });
+      // Somebody whose looks are saved files wears the word on their picture:
+      // it is what a roster is scanned for once mods exist at all.
+      if ((row.facts?.mods ?? []).length) {
+        hero.append(el("span", { class: "mmc-cast-hero-mod", text: "RefMod" }));
+      }
       if (row.portrait) {
         hero.append(el("img", {
           class: "mmc-preset-cover",
@@ -698,7 +1025,7 @@ class PresetLibrary {
     const facts = row.facts ?? {};
     // What they are, then what they were built out of. Shared with the `@` menu,
     // which offers the same people mid-sentence — see `presets.castFactsLine`.
-    if (row.scope === "cast") return P.castFactsLine(facts);
+    if (row.scope === "cast") return P.castFactsLine(facts, { tokens: this.modTokens(row) });
     if (row.scope === "style") {
       const clips = facts.clips ?? 0;
       return [facts.category,
@@ -908,11 +1235,19 @@ class PresetLibrary {
         ]),
         el("span", { class: "mmc-cast-sheet-saved", text: t("Saved as you type") }),
       ]),
+      // Two columns: who they are, and what they are made of. The files are
+      // rows rather than tiles because a row can say the filename, the role
+      // and how the file is encoded — which is what a RefMod question needs and
+      // a 46px square cannot hold.
       ...(member
         ? [el("div", { class: "mmc-cast-sheet-body" }, [
-            this.sheetWho(member),
-            this.sheetRefs(member),
-            this.sheetWords(member),
+            el("div", { class: "mmc-cast-sheet-col" }, [
+              this.sheetWho(member),
+              this.sheetWords(member),
+            ]),
+            el("div", { class: "mmc-cast-sheet-col" }, [
+              this.sheetRefs(member),
+            ]),
           ]),
           this.sheetFoot(row, member)]
         : [el("div", { class: "mmc-preset-insp-hint", style: { padding: "26px 40px" },
@@ -922,8 +1257,9 @@ class PresetLibrary {
 
   /** Who they are: their face, their handle, and what they are. */
   sheetWho(member) {
+    // A still, or a mod of either kind — a stack's picture is its first frame.
     const portrait = (member.files ?? []).find(
-      (file) => file.slot === "from" && (file.kind ?? "image") === "image");
+      (file) => file.slot === "from" && ((file.kind ?? "image") === "image" || isRefMod(file.filename)));
     const name = el("input", {
       class: "mmc-cast-sheet-name",
       value: member.handle ?? "",
@@ -952,8 +1288,9 @@ class PresetLibrary {
 
     // Their identity hue, off the shelf's own call on the same handle — @ana is
     // one colour wherever they are drawn, which is the whole point of the hues.
+    const files = member.files ?? [];
     return el("div", { class: `mmc-cast-sheet-band mmc-tag-${tagIndex(member.handle || "x")}` }, [
-      el("div", { class: "mmc-cast-sheet-legend", text: t("Who") }),
+      el("div", { class: "mmc-cast-sheet-legend", text: t("Who they are") }),
       el("div", { class: "mmc-cast-sheet-who" }, [
         portrait
           ? el("img", {
@@ -962,16 +1299,36 @@ class PresetLibrary {
               src: viewUrl(portrait.filename, { preview: true }), alt: "", loading: "lazy",
             })
           : this.sheetBlankFace(member),
-        el("span", { class: "mmc-cast-sheet-at", text: "@" }),
-        name,
-        el("span", { class: "mmc-cast-sheet-is", text: t("is a") }),
-        el("button", {
-          class: "mmc-cast-sheet-takes",
-          title: t("What of the pictures behind them is kept, and what it means where "
-                 + "there are none. Same four an attached file takes."),
-          text: `${t(member.takes ?? "person")}  ▾`,
-          onclick: (event) => this.pickTakes(event.currentTarget, member),
-        }),
+        el("div", { class: "mmc-cast-sheet-fields" }, [
+          el("div", { class: "mmc-cast-sheet-field" }, [
+            el("span", { class: "mmc-cast-sheet-at", text: "@" }),
+            name,
+          ]),
+          el("div", { class: "mmc-cast-sheet-field" }, [
+            el("span", { class: "mmc-cast-sheet-is", text: t("is a") }),
+            el("button", {
+              class: "mmc-cast-sheet-takes",
+              title: t("What of the pictures behind them is kept, and what it means where "
+                     + "there are none. Same four an attached file takes."),
+              text: `${t(member.takes ?? "person")}  ▾`,
+              onclick: (event) => this.pickTakes(event.currentTarget, member),
+            }),
+          ]),
+          // The retention marker: a statement about all of their files together,
+          // beside the other statement about all of them. Only where there is
+          // something to retain.
+          ...(files.length ? [el("div", { class: "mmc-cast-sheet-field" }, [
+            el("span", { class: "mmc-cast-sheet-is", text: t("what is kept") }),
+            el("button", {
+              class: "mmc-cast-sheet-takes",
+              title: t("The reference guide's own relationship marker, written into the "
+                     + "retention line. Left to decide, it is kept whole — or moved onto "
+                     + "them, where they take somebody's place."),
+              text: `${t(MARKER_LABEL[member.relationship ?? "derive"])}  ▾`,
+              onclick: (event) => this.pickMarker(event.currentTarget, member),
+            }),
+          ])] : []),
+        ]),
       ]),
     ]);
   }
@@ -981,101 +1338,125 @@ class PresetLibrary {
               [icon(CAST_GLYPH[member.takes ?? "person"] ?? "face", 22)]);
   }
 
-  /** The four things they can be built out of, as the tiles they are. */
+  /** What they are made of, one row a file, and under the rows the ledger:
+   *  what their looks cost a render and the way to change it. */
   sheetRefs(member) {
     const files = member.files ?? [];
     return el("div", { class: "mmc-cast-sheet-band" }, [
       el("div", { class: "mmc-cast-sheet-legend", text: t("Made out of") }),
-      el("div", { class: "mmc-cast-sheet-refs" }, [
-        ...files.map((file, index) => this.sheetTile(member, file, index)),
-        el("div", { class: "mmc-cast-sheet-ref" }, [
+      el("div", { class: "mmc-cast-sheet-files" }, [
+        ...files.map((file, index) => this.sheetFileRow(member, file, index)),
+        el("div", { class: "mmc-cast-sheet-file-add" }, [
           el("button", {
-            class: "mmc-cast-sheet-add",
-            text: "+",
+            class: "mmc-cast-sheet-addfile",
             title: t("Attach a picture, a clip or a recording"),
             onclick: () => this.addFile(member),
-          }),
-          el("span", { class: "mmc-cast-sheet-cap", text: t("add") }),
+          }, [el("span", { text: "+" }), el("span", { text: t("Attach a file") })]),
+          el("button", {
+            class: "mmc-cast-sheet-addfile",
+            title: t("A RefMod already on this machine — one of theirs from another "
+                   + "piece, or one that came from elsewhere."),
+            onclick: () => this.addFile(member, { mods: true }),
+          }, [icon("cube", 12), el("span", { text: t("Pick a saved reference") })]),
         ]),
-        ...(files.length ? [] : [el("p", { class: "mmc-cast-sheet-nothing", text:
-          t("Pictures of them, a clip they move like, a recording of their voice. "
-          + "Or nothing at all — a name and a description is a cast member too.") })]),
       ]),
-      // The retention marker, under the row rather than at the far end of it: it
-      // is a statement about all of them together, and on a sheet this wide
-      // "margin-left: auto" put it three hundred pixels from the thing it is
-      // about. Only where there is something to retain.
-      ...(files.length ? [el("div", { class: "mmc-cast-sheet-keeprow" }, [
-        el("button", {
-          class: "mmc-cast-sheet-keep",
-          title: t("The reference guide's own relationship marker, written into the "
-                 + "retention line. Left to decide, it is kept whole — or moved onto "
-                 + "them, where they take somebody's place."),
-          // The shelf's own wording, verbatim: "kept whole" alone under a row of
-          // pictures reads as a stray label rather than as a setting with a
-          // value, and it had already been solved once.
-          text: `${t("what is kept: {value}", { value: t(MARKER_LABEL[member.relationship ?? "derive"]) })}  ▾`,
-          onclick: (event) => this.pickMarker(event.currentTarget, member),
-        }),
-        // Their pictures as saved latents, from the roster itself: the member
-        // is what is kept here, and a mod is the other way a picture is kept.
-        // Only with a piece behind the library — the VAE is the piece's.
-        ...(this.target?.vae && this.modSources(member).length ? [el("button", {
-          class: `mmc-cast-sheet-keep mmc-cast-sheet-mod${this.encoding ? " on" : ""}`,
-          disabled: this.encoding ? true : undefined,
-          title: t("Keep @{handle}'s pictures as RefMods — each becomes a saved "
-                 + "latent the render reads instead of encoding the picture, "
-                 + "compressed to a fraction of the tokens or kept whole.",
-                   { handle: member.handle || "" }),
-          onclick: (event) => this.pickMod(event.currentTarget, member),
-        }, [icon("cube", 12), el("span", { text: this.encoding
-          ? t("Encoding their pictures…")
-          : `${t("keep pictures as RefMods")}  ▾` })])] : []),
-      ])] : []),
+      ...(files.length ? [] : [el("p", { class: "mmc-cast-sheet-nothing", text:
+        t("Pictures of them, a clip they move like, a recording of their voice. "
+        + "Or nothing at all — a name and a description is a cast member too.") })]),
+      ...this.sheetLedger(member),
       ...(files.some((file) => file.slot === "replaces")
         ? [this.sheetReplaces(member)] : []),
     ]);
   }
 
-  /** One file, wearing what it lends them. */
-  sheetTile(member, file, index) {
+  /** Their looks as the ledger reads them: `from` stills, mod or picture. A
+   *  stored file lands at max unless it says otherwise — `addSubjectToPiece`'s
+   *  default — so the estimate says max. */
+  lookEntries(member) {
+    return (member.files ?? [])
+      .filter((file) => file.slot === "from" && ["image", "video"].includes(file.kind ?? "image"))
+      .map((file) => ({ filename: file.filename, kind: file.kind ?? "image", ref_size: file.ref_size ?? "max" }));
+  }
+
+  sheetLedger(member) {
+    const row = ledger({
+      entries: this.lookEntries(member),
+      canvas: null,
+      busy: this.encoding,
+      note: this.modNote,
+      // Only with a piece behind the library — the VAE is the piece's.
+      onSave: this.target?.vae && !this.encoding && this.modSources(member, "stack").length
+        ? (anchor) => this.pickMod(anchor, member) : null,
+      onLibrary: (path) => { this.reveal = path; this.closeSheet(); this.renderInspector(); },
+      onKnown: () => { if (!this.sheetTyping()) this.renderSheet(); },
+    });
+    if (!row) return [];
+    // The trade-off, under a line that still offers it; a saved member has made
+    // the choice and the line is their receipt.
+    const fresh = this.modSources(member, "stack").length;
+    return [row, ...(fresh ? [el("p", { class: "mmc-cast-sheet-nothing", text:
+      t("Compressed renders like Full at about half the tokens — a few hundred a "
+      + "picture against about a thousand. Neither is undone — the picture stays "
+      + "in your input folder.") })] : [])];
+  }
+
+  /** Whether a field on the sheet holds the caret — a redraw then would take it. */
+  sheetTyping() {
+    const active = this.sheet.ownerDocument?.activeElement;
+    return Boolean(active && this.sheet.contains(active)
+                   && (active.tagName === "INPUT" || active.tagName === "TEXTAREA"));
+  }
+
+  /** One file: its picture, what it lends them, its name and words, and how it
+   *  is encoded — a picture at match or max with what that costs, or a RefMod
+   *  with what it cost. Pressing the row opens its menu. */
+  sheetFileRow(member, file, index) {
     const kind = file.kind ?? "image";
     const role = ROLE[file.slot] ?? ROLE.from;
-    const tile = el("button", {
-      class: "mmc-cast-sheet-tile",
-      title: (file.note ? `${file.note}\n` : "")
-        + t("{lead} — press to say what it shows of them, change what it lends "
-            + "them, or take it off.", { lead: t(role.lead) }),
+    const mod = isRefMod(file.filename);
+    const name = mod ? file.filename.replace(/^refmod:/, "refmods/") : file.filename.replace(/ \[\w+\]$/, "");
+    let enc;
+    if (mod) {
+      const row = this.mods.find((entry) => entry.path === file.filename);
+      enc = [el("b", { text: "RefMod" }),
+             row ? el("span", { text: ` · ${modeWord(row)}` }) : null,
+             el("br"),
+             el("span", { text: row ? t("{tokens} tokens", { tokens: (row.tokens ?? 0).toLocaleString() })
+                                    : t("not on this machine") })].filter(Boolean);
+    } else if (kind === "image") {
+      enc = [el("b", { text: t("picture") }), el("span", { text: ` · ${t(file.ref_size ?? "max")}` }),
+             el("br"), el("span", { text: t("encoded every render") })];
+    } else if (kind === "video") {
+      enc = [el("b", { text: t("clip") }), el("span", { text: ` · ${t(file.ref_size ?? "max")}` })];
+    } else {
+      enc = [el("span", { text: t("voice") })];
+    }
+    return el("button", {
+      class: `mmc-cast-sheet-file mmc-role-${file.slot}${mod ? " mod" : ""}`,
+      title: t("{lead} — press to say what it shows of them, change what it lends "
+             + "them, or take it off.", { lead: t(role.lead) }),
       onclick: (event) => this.pickSlot(event.currentTarget, member, index),
     }, [
-      kind === "image"
+      kind === "image" || mod
         ? el("img", {
             class: "mmc-cast-sheet-thumb",
             onerror: (event) => event.target.replaceWith(
-              el("span", { class: "mmc-cast-sheet-thumb" }, [icon("image", 18)])),
+              el("span", { class: "mmc-cast-sheet-thumb" }, [icon(mod ? "cube" : "image", 18)])),
             src: viewUrl(file.filename, { preview: true }), alt: "", loading: "lazy",
           })
         : el("span", { class: "mmc-cast-sheet-thumb" },
              [icon(kind === "audio" ? "audio" : "video", 18)]),
-      // Their looks are the default and wear no badge — the three departures from
-      // it each say which, the way the shelf's own tiles do.
-      ...(file.slot === "from" ? [] : [el("span", { class: "mmc-cast-sheet-badge" },
-                                          [icon(role.glyph, 10)])]),
-      // The shelf's own two marks: full detail, and words attached. A kept
-      // file lands at max unless it says otherwise, so absent reads as max.
-      ...(isRefMod(file.filename)
-        ? [el("span", { class: "mmc-cast-size", text: "mod" })]
-        : kind !== "audio" && (file.ref_size ?? "max") === "max"
-          ? [el("span", { class: "mmc-cast-size", text: "max" })] : []),
-      ...(file.note ? [el("span", { class: "mmc-cast-noted" })] : []),
-    ]);
-    // The role colour rides on the wrapper as one variable that the badge and
-    // the caption both read, rather than a colour class on each: they are one
-    // statement about one file, and two rules meant two chances for a later
-    // stylesheet to win half of it.
-    return el("div", { class: `mmc-cast-sheet-ref mmc-role-${file.slot}` }, [
-      tile,
-      el("span", { class: "mmc-cast-sheet-cap", text: t(role.label) }),
+      el("span", { class: "mmc-cast-sheet-role" }, [
+        ...(file.slot === "from" ? [] : [icon(role.glyph, 11)]),
+        el("span", { text: t(role.label) }),
+      ]),
+      el("span", { class: "mmc-cast-sheet-fileid" }, [
+        el("span", { class: "mmc-cast-sheet-filename", text: name }),
+        el("span", { class: `mmc-cast-sheet-filenote${file.note ? "" : " off"}`,
+                     text: file.note || t("no words attached") }),
+      ]),
+      el("span", { class: `mmc-cast-sheet-enc${mod ? " mod" : ""}` }, enc),
+      el("span", { class: "mmc-cast-sheet-more", text: "⋯" }),
     ]);
   }
 
@@ -1133,14 +1514,11 @@ class PresetLibrary {
     ]);
   }
 
-  /** Cast them, export them, delete them. */
+  /** Delete them, export them, cast them. Export is the roster's .json — the
+   *  member and the names of their files; a RefMod's own file is handed out
+   *  from its row, and from the Saved references panel. */
   sheetFoot(row, member) {
     return el("div", { class: "mmc-cast-sheet-foot" }, [
-      el("button", {
-        class: "mmc-preset-danger",
-        text: t("Export"),
-        onclick: () => P.exportPresets([row], [this.body]),
-      }),
       el("button", {
         class: `mmc-preset-danger${this.armed === row.id ? " armed" : ""}`,
         text: this.armed === row.id ? t("Really delete?") : t("Delete"),
@@ -1149,6 +1527,14 @@ class PresetLibrary {
           this.armed = row.id;
           this.renderSheet();
         },
+      }),
+      el("span", { class: "mmc-cast-sheet-foot-gap" }),
+      el("button", {
+        class: "mmc-preset-danger",
+        title: t("The member as a .json: their name, words and the names of their files. "
+               + "A RefMod's file itself is downloaded from its row."),
+        text: t("Export .json"),
+        onclick: () => P.exportPresets([row], [this.body]),
       }),
       ...(this.target ? [el("button", {
         class: "mmc-preset-apply mmc-cast-sheet-apply",
@@ -1200,24 +1586,29 @@ class PresetLibrary {
    *  and this used to be the one picker without the chip. A cut picture comes
    *  back as a plate — the file stored is the cutout the server wrote, and the
    *  panels ride with it so casting them into a piece keeps the clicks. */
-  /** The pictures a member can be kept out of: stills in their looks, not
-   *  already mods, not sheets. Mirrors `refmod.keepable` for a stored member. */
-  modSources(member) {
+  /** What a member can be saved out of, per mode: their looks, not already
+   *  mods, not sheets; clips only for a stack. Mirrors `refmod.keepable` for a
+   *  stored member. */
+  modSources(member, mode = "stack") {
     return (member.files ?? []).filter((file) =>
-      file.slot === "from" && (file.kind ?? "image") === "image"
-      && !isRefMod(file.filename) && !file.panels?.length);
+      file.slot === "from" && ["image", "video"].includes(file.kind ?? "image")
+      && !isRefMod(file.filename) && !file.panels?.length
+      && (mode === "stack" || (file.kind ?? "image") === "image"));
   }
 
-  /** Compressed or full, as a menu on the button. */
+  /** Compressed or full, as a menu on the ledger's button, each row naming
+   *  what it would cost. */
   pickMod(anchor, member) {
-    const count = this.modSources(member).length;
+    const sources = this.modSources(member);
     openMenu(anchor, {
-      title: t(count === 1 ? "Keep {count} picture as a RefMod" : "Keep {count} pictures as RefMods",
-               { count }),
-      sections: [{ rows: MOD_MODES.map((mode) => ({
-        label: t(mode.label), note: t(mode.note),
-        onPick: () => this.keepAsMod(member, mode.key),
-      })) }],
+      title: t(sources.length === 1
+        ? "Save {count} file as a RefMod → refmods/{folder}/{handle}"
+        : "Save {count} files as RefMods → refmods/{folder}/{handle}",
+        { count: sources.length, folder: MOD_FOLDER, handle: member.handle || "subject" }),
+      sections: [{ rows: modeRows(
+        sources.map((file) => ({ filename: file.filename, kind: file.kind ?? "image", ref_size: file.ref_size ?? "max" })),
+        (mode) => this.keepAsMod(member, mode),
+        () => { if (!this.sheetTyping()) this.renderSheet(); }) }],
     });
   }
 
@@ -1232,48 +1623,68 @@ class PresetLibrary {
    */
   async keepAsMod(member, mode) {
     if (this.encoding) return;
-    const sources = this.modSources(member);
+    const stack = mode === "stack";
+    const sources = this.modSources(member, mode);
     if (!sources.length) return;
-    this.encoding = true;
+    this.encoding = { count: sources.length, mode, progress: 0 };
+    this.modNote = null;
     this.say(null);
     this.renderSheet();
     try {
+      // A stack's header carries the words that were on its files — see
+      // `refmod.keepAsMod`, which does the same on a card.
+      const noted = stack ? sources.map((file) => file.note).filter(Boolean) : [];
       const answer = await makeRefMod({
         name: member.handle || "subject",
-        subfolder: "cast",
+        subfolder: MOD_FOLDER,
         sources: sources.map((file) => file.filename),
-        mode: mode === "full" ? "full" : "compressed",
-        description: member.description ?? "",
+        mode: stack ? "stack" : mode === "full" ? "full" : "compressed",
+        description: [member.description ?? "", ...noted].filter(Boolean).join("; "),
         concept: { person: "identity", object: "generic", scene: "background", style: "style" }[member.takes ?? "person"] ?? "generic",
         vae: this.target?.vae?.() ?? "",
-      });
+      }, { onProgress: (fraction) => {
+        if (!this.encoding) return;
+        this.encoding.progress = fraction;
+        const bar = this.sheet.querySelector(".mmc-cast-ledger-bar i");
+        if (bar) bar.style.width = `${Math.round(fraction * 100)}%`;
+      } });
       const rows = answer?.mods ?? [];
-      if (!rows.length) throw new Error(t("the server kept nothing"));
-      const swapped = new Map(sources.map((file, index) => [file, rows[index]]).filter(([, row]) => row));
-      member.files = member.files.map((file) => {
-        const row = swapped.get(file);
-        if (!row) return file;
-        const { ref_size, trim, ...rest } = file;
-        return { ...rest, filename: row.path, kind: "image" };
-      });
+      if (!rows.length) throw new Error(t("the server saved nothing"));
+      if (stack) {
+        // One file in the place of all of them, at the first one's position.
+        const [first] = sources;
+        const rest = new Set(sources.slice(1));
+        member.files = member.files
+          .filter((file) => !rest.has(file))
+          .map((file) => (file === first
+            ? { slot: "from", filename: rows[0].path, kind: rows[0].kind === "video" ? "video" : "image",
+                ...(file.takes ? { takes: file.takes } : {}) }
+            : file));
+      } else {
+        const swapped = new Map(sources.map((file, index) => [file, rows[index]]).filter(([, row]) => row));
+        member.files = member.files.map((file) => {
+          const row = swapped.get(file);
+          if (!row) return file;
+          const { ref_size, trim, ...rest } = file;
+          return { ...rest, filename: row.path, kind: "image" };
+        });
+      }
       await this.flushSave();
-      this.say(t(rows.length === 1
-        ? "Kept as a {mode} RefMod — {tokens} tokens."
-        : "Kept as {count} {mode} RefMods — {tokens} tokens together.",
-        { count: rows.length, mode: t(mode === "compressed" ? "compressed" : "full-detail"),
-          tokens: rows.reduce((sum, row) => sum + (row.tokens ?? 0), 0) }));
+      await this.loadMods();
     } catch (error) {
-      this.say(t("Could not keep them — {error}", { error: error.message ?? error }));
+      this.modNote = t("Could not save @{handle} — {error}",
+                       { handle: member.handle || "", error: error.message ?? error });
     }
-    this.encoding = false;
+    this.encoding = null;
     this.renderSheet();
   }
 
-  async addFile(member) {
+  /** Attach a file, or — `mods` — a RefMod already on the machine. */
+  async addFile(member, { mods = false } = {}) {
     const spec = this.target?.plate?.() ?? null;
     const chosen = await openPicker({
-      kinds: ["image", "video", "audio", "renders", "refmods"],
-      kind: "image",
+      kinds: mods ? ["refmods"] : ["image", "video", "audio", "renders", "refmods"],
+      kind: mods ? "refmods" : "image",
       capacity: () => ({ used: 0, max: 8, filesLeft: 8 }),
       plate: spec ? { ...spec, panels: [] } : null,
     });
@@ -1333,7 +1744,15 @@ class PresetLibrary {
             },
           },
         ],
-      }, ...(sizes.length ? [{ head: t("Encoded at"), rows: sizes }] : [])],
+      }, ...(sizes.length ? [{ head: t("Encoded at"), rows: sizes }] : []),
+      ...(isRefMod(file.filename) ? [{ head: t("The file"), rows: [
+        { label: t("Download .safetensors"),
+          note: `models/refmods/${file.filename.replace(/^refmod:/, "")}.safetensors`,
+          onPick: () => downloadMod(file.filename) },
+        { label: t("Show in library"),
+          note: t("The Saved references panel, on this file."),
+          onPick: () => { this.reveal = file.filename; this.closeSheet(); this.renderInspector(); } },
+      ] }] : [])],
       onClose: () => this.flushSave().then(() => this.renderSheet()),
     });
   }
@@ -1390,6 +1809,8 @@ class PresetLibrary {
 
   renderInspector() {
     const row = this.selected;
+    this.inspector.classList.toggle("mmc-mod-panel", this.scope === "cast");
+    if (this.scope === "cast") { this.renderModPanel(); return; }
     if (!row) {
       this.inspector.replaceChildren(el("div", { class: "mmc-preset-insp-hint", text:
         this.target
@@ -1422,7 +1843,6 @@ class PresetLibrary {
             onchange: (event) => this.rename(row, event.target.value),
           }),
       this.renderMeta(row),
-      ...(row.scope === "cast" ? [this.renderCastBody(row)] : []),
       el("div", { class: "mmc-preset-rows" }, this.renderSectionRows(row)),
       ...(this.target ? [el("button", {
         class: "mmc-preset-apply",
@@ -1576,41 +1996,6 @@ class PresetLibrary {
       this.say(t("Could not cast that frame — {error}", { error: error.message }));
       this.renderInspector();
     }
-  }
-
-  /**
-   * Who they are, in the inspector: their references at a size you can recognise
-   * somebody at, each captioned with what it lends them, and their description
-   * under them.
-   *
-   * The captions are the panel's argument. Four thumbnails of the same person say
-   * nothing about why there are four; "their looks / their looks / they move like
-   * this / this is their voice" is the definition itself, written out — and it is
-   * the thing to check before casting them into a piece that already has a
-   * different clip doing their movement.
-   */
-  renderCastBody(row) {
-    const member = this.body?.cast ?? {};
-    const files = member.files ?? [];
-    const description = String(member.description ?? "").trim();
-    return el("div", { class: "mmc-cast-insp" }, [
-      ...(files.length ? [el("div", { class: "mmc-cast-insp-files" }, files.map((file) =>
-        el("figure", {}, [
-          (file.kind ?? "image") === "image"
-            ? el("img", {
-                onerror: (event) => event.target.replaceWith(icon("image", 18)),
-                src: viewUrl(file.filename, { preview: true }), alt: "", loading: "lazy",
-              })
-            : el("span", { class: "mmc-cast-insp-glyph" },
-                 [icon(file.kind === "audio" ? "audio" : "video", 18)]),
-          el("figcaption", { text: t(CAST_SLOT_LABEL[file.slot] ?? file.slot) }),
-        ])))] : []),
-      ...(description ? [el("p", { class: "mmc-cast-insp-desc", text: description })] : []),
-      ...(files.length || description ? [] : [el("p", {
-        class: "mmc-preset-insp-hint",
-        text: t("Nothing behind them — they are a name and nothing else."),
-      })]),
-    ]);
   }
 
   renderMeta(row) {
@@ -1900,23 +2285,56 @@ class PresetLibrary {
     }
   }
 
-  importFile() {
-    const input = el("input", { type: "file", accept: ".json,application/json",
-                                style: { display: "none" } });
-    input.addEventListener("change", async () => {
-      const file = input.files?.[0];
+  /** Read files in. A `.json` is presets; on the roster a `.safetensors` is a
+   *  RefMod for models/refmods, and the one button takes either — a character
+   *  is carried between machines as whichever of the two somebody has. */
+  importFile(accept = null) {
+    const roster = this.scope === "cast";
+    const input = el("input", {
+      type: "file", multiple: roster,
+      accept: accept ?? (roster ? ".json,application/json,.safetensors" : ".json,application/json"),
+      style: { display: "none" },
+    });
+    input.addEventListener("change", () => {
+      const files = Array.from(input.files ?? []);
       input.remove();
-      if (!file) return;
-      try {
-        const saved = await P.importPresets(file);
-        this.say(null);
-        await this.load();
-        if (saved.length) this.select(saved[0]);
-      } catch (error) {
-        this.say(t("Could not import — {error}", { error: error.message }));
-      }
+      if (files.length) this.takeIn(files);
     });
     document.body.appendChild(input);
     input.click();
+  }
+
+  /**
+   * Read the files in.
+   *
+   * A RefMod is a character, so importing one makes the member: the file lands
+   * in models/refmods, a member named after it is made on the spot, and their
+   * page opens — name, words and files there to be looked over, and the Cast
+   * button at its foot for when they are. Never straight onto the piece: a file
+   * just imported is a stranger, and the page is where you meet them. A
+   * `.json` is presets, as before.
+   */
+  async takeIn(files) {
+    const roster = this.scope === "cast";
+    try {
+      const arrived = [];
+      for (const file of files) {
+        if (file.name.toLowerCase().endsWith(".safetensors")) {
+          const mod = await uploadRefMod(file, roster ? "" : MOD_FOLDER);
+          arrived.push(await this.memberFromMod(mod));
+          continue;
+        }
+        const saved = await P.importPresets(file);
+        await this.load();
+        if (saved.length) this.select(saved[0]);
+      }
+      this.say(null);
+      if (!arrived.length) return;
+      await this.loadMods();
+      this.renderGrid();
+      await this.edit(arrived[arrived.length - 1].row);
+    } catch (error) {
+      this.say(t("Could not import — {error}", { error: error.message }));
+    }
   }
 }

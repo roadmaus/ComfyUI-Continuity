@@ -5,10 +5,11 @@ import { el, ICONS, svg, icon, mountOverlay, dismissable } from "./dom.js";
 import { listAssets, listingTruncated, listedFolders, makeFolder, removeFolder,
          viewUrl, stillUrl, upload, moveAsset,
          deleteAsset, loadPickerPrefs, savePickerPrefs, buildPlate,
-         cutPanel } from "./api.js";
+         cutPanel, uploadRefMod } from "./api.js";
 import { openTrim, trimLabel } from "./trim.js";
 import { openSubjectView, greyField } from "./subject.js";
 import { t } from "./i18n.js";
+import { memberFromMod } from "./presets.js";
 
 // "renders" is a tab, not a kind: it browses the output folder instead of a
 // slice of the input one, and the files under it keep their own kinds — a
@@ -24,7 +25,7 @@ import { t } from "./i18n.js";
 const KIND_LABEL = { image: "Image", video: "Video", audio: "Audio",
                      renders: "Renders", guides: "Guide", refmods: "RefMod" };
 const ACCEPT = { image: "image/*", video: "video/*", audio: "audio/*",
-                 guides: "video/*" };
+                 guides: "video/*", refmods: ".safetensors" };
 
 // Where the ControlNet bench writes, and so the whole of what the guide tab
 // shows. Mirrors `control.SUBFOLDER`.
@@ -211,8 +212,8 @@ class Picker {
     ]);
     this.uploadButton = this.modal.querySelector(".mmc-upload");
     this.organizeButton = this.modal.querySelector(".mmc-organize");
-    if (this.kind === "renders" || this.kind === "refmods") this.uploadButton.style.display = "none";
-    if (this.kind === "refmods") this.organizeButton.style.display = "none";
+    if (this.kind === "renders") this.uploadButton.style.display = "none";
+    if (this.kind === "refmods") { this.organizeButton.style.display = "none"; this.uploadButton.textContent = this.uploadLabel(); }
     this.modal.style.position = "relative";
 
     this.overlay = el("div", {
@@ -302,10 +303,10 @@ class Picker {
     // Nothing uploads into the mod folders either, and nothing is organized
     // there: a mod is made by keeping a cast member, and the move and delete
     // routes act on the two media roots alone.
-    this.uploadButton.style.display = kind === "renders" || kind === "refmods" ? "none" : "";
+    this.uploadButton.style.display = kind === "renders" ? "none" : "";
     this.organizeButton.style.display = kind === "refmods" ? "none" : "";
     if (kind === "refmods" && this.organize) this.setOrganize(false);
-    if (kind !== "renders" && kind !== "refmods") this.uploadButton.textContent = t("+  Upload {kind}", { kind: t(KIND_LABEL[kind].toLowerCase()) });
+    if (kind !== "renders") this.uploadButton.textContent = this.uploadLabel();
     // Shelves are shared between the input tabs — a folder is a place, not a
     // kind — but the output folder is a different place, so crossing that line
     // opens where that root was last left rather than on a shelf that is not
@@ -350,6 +351,9 @@ class Picker {
 
   /** The label the upload button wears when it is not uploading. */
   uploadLabel() {
+    // A mod is imported rather than uploaded: it is a file made elsewhere,
+    // and it lands in the model folder, not the input folder.
+    if (this.kind === "refmods") return t("+  Import RefMod");
     return t("+  Upload {kind}", { kind: t(KIND_LABEL[this.kind].toLowerCase()) });
   }
 
@@ -884,8 +888,8 @@ class Picker {
               ? t("No renders matching “{query}”.", { query: this.query })
               : t("No {kind} files matching “{query}”.", { kind: t(this.kind), query: this.query }))
           : this.kind === "refmods"
-            ? t("No saved references yet — keep a cast member as a RefMod from their card, "
-              + "or put .safetensors mods in models/refmods.")
+            ? t("No RefMods yet — import a .safetensors and they join the cast, or save "
+              + "a cast member's pictures from their card.")
           : this.shelf === "fav"
             ? t("No favorites yet — hover a file and hit the star.")
             : this.shelf !== "all"
@@ -1126,7 +1130,7 @@ class Picker {
       cell.appendChild(el("div", {
         class: "mmc-cell-mod",
         title: asset.description || "",
-        text: `${t(asset.mode === "training" ? "compressed" : "full-detail")} · ${
+        text: `${t(asset.source === "stack" ? "stack" : asset.mode === "training" ? "compressed" : "full")} · ${
           t("{count} tokens", { count: asset.tokens ?? 0 })}`,
       }));
     } else if (asset.kind !== "image" && !this.organize) cell.appendChild(this.badge(asset));
@@ -2002,6 +2006,21 @@ class Picker {
       const into = this.shelf === "all" || this.shelf === "fav" ? "" : this.shelf;
       try {
         const added = [];
+        // A .safetensors on the RefMod tab goes to models/refmods, read as a
+        // mod on the way in; the row comes back and the tab is re-read.
+        if (this.kind === "refmods") {
+          // A RefMod is a character: the file lands, and a cast member named
+          // after it is filed in the library at the same time, so it is in
+          // the roster the next "From the library" opens on.
+          for (const file of files) {
+            const mod = await uploadRefMod(file, into);
+            added.push(mod);
+            await memberFromMod(mod).catch(() => {});
+          }
+          this.uploadButton.textContent = this.uploadLabel();
+          await this.load({ force: true });
+          return;
+        }
         for (const file of files) added.push(await upload(file, into));
         // "Uploading…" stops when the uploading does. It used to stay up for the
         // re-listing that followed, so a finished upload read as a stuck one and

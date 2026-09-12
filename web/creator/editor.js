@@ -1792,14 +1792,15 @@ export class CreatorEditor {
       // piece, and this body is also what a PreStage's H3 branch draws, where
       // the roster would open on a tab whose every Apply is refused.
       library: this.presetTarget?.()?.scope === "piece"
-        ? () => openPresetLibrary({ target: this.presetTarget(), scope: "cast" })
+        ? (options = {}) => openPresetLibrary({ target: this.presetTarget(), scope: "cast", ...options })
             .then(() => this.render())
         : null,
       // Their pictures as saved latents, landing on this shot's own row where
       // the pictures were. The pool is read (`getAssets` merges it) but never
       // written: a pool picture kept as a mod stays in the pool, unclaimed.
-      mod: (subject, assets, mode) => keepAsMod(subject, assets, mode, {
+      mod: (subject, assets, mode, onProgress) => keepAsMod(subject, assets, mode, {
         vae: (this.piece ?? this.state).models?.vae ?? "",
+        onProgress,
         list: () => (this.state.assets ??= []),
         nextHandle: (kind) => S.nextHandle(this.state, kind),
         texts: () => S.allTexts(this.castPiece),
@@ -1808,6 +1809,8 @@ export class CreatorEditor {
           this.state.assets = this.state.assets.filter((a) => !handles.includes(a.handle));
         },
       }).then((rows) => { this.commit(); this.render(); return rows; }),
+      // The ledger's estimate of a `match` picture is this shot's own canvas.
+      canvas: () => this.frame(),
       // Recasting rewrites every sentence that wrote the departed name. This
       // card's own three and its rewrite, plus the piece's where the cast being
       // edited is not this shot's — somebody cast into the standing prompt
