@@ -286,6 +286,11 @@ export const css = `
 .mmc-cast-ref.missing .mmc-cast-ref-thumb {
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--mmc-bad) 50%, transparent); color: var(--mmc-bad);
 }
+/* A file can still belong to them while being muted in the reference row.
+   Keep it visible and editable, but do not present it as a live model input. */
+.mmc-cast-ref.off .mmc-cast-ref-thumb { filter: grayscale(1) brightness(.55); }
+.mmc-cast-ref.off:hover .mmc-cast-ref-thumb,
+.mmc-cast-ref.off:focus-visible .mmc-cast-ref-thumb { filter: grayscale(1) brightness(.7); }
 .mmc-cast-missing { font-size: calc(15px * var(--mmc-type)); }
 
 /* What the file lends them, in the corner of the file. Small on purpose: the
@@ -297,6 +302,8 @@ export const css = `
   background: var(--mmc-surface-3); box-shadow: 0 0 0 2px var(--mmc-surface);
   color: var(--mmc-text);
 }
+/* Bottom-left leaves the role badge and both note/size corners readable. */
+.mmc-cast-muted { left: -3px; right: auto; color: var(--mmc-off); }
 /* The other two corners. Top-left: the file is encoded at full detail, in the
    marker's monospace — it is what the model is handed, and it is the setting
    that costs. Top-right: words are attached to this file; the tooltip and the

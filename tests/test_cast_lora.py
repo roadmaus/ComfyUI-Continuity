@@ -69,6 +69,28 @@ check("a LoRA with a trigger word is enough to stand behind a name", len(_worded
 check("...and the definition binds the label to the word",
       subjects.definitions(_worded, {}), "<Subject 1> is the person, ohwx anna.")
 
+# Trimming unavailable files must leave a worded LoRA intact. It is still the
+# member's appearance, even when the last reference picture is muted.
+_trimmed = compiler.compile_request({
+    "prompt": "@anna walks in.",
+    "assets": [dict(image("ref-1"), enabled=False)],
+    "subjects": [{"handle": "anna", "from": ["ref-1"], "loras": [ANNA_LORA]}]})
+check("losing the last picture preserves a worded LoRA's definition",
+      "<Subject 1> is the person, ohwx anna." in _trimmed.prompt, True)
+_survivor = subjects.here(
+    subjects.parse([{"handle": "anna", "from": ["ref-1"], "loras": [ANNA_LORA]}]), [])
+check("trimming files preserves the LoRA stack itself", _survivor[0].loras, (ANNA_LORA,))
+
+for _raw in ({"handle": "anna"}, {"handle": "anna", "from": ["ref-1"]}):
+    try:
+        compiler.compile_request({
+            "prompt": "@anna walks in.", "assets": [],
+            "subjects": [{**_raw, "features": [{"attr": "face"}],
+                          "loras": [dict(ANNA_LORA, enabled=False)]}]})
+        FAILURES.append("a muted LoRA and seeded attributes define a subject without files")
+    except (subjects.SubjectError, compiler.CompileError):
+        pass
+
 # ---- through a timeline -----------------------------------------------------
 
 _piece = piece(shot("@anna walks in."), shot("an empty room."), shot("@anna sits down."),

@@ -350,9 +350,11 @@ def parse(raw):
         # made of nothing but that still defines something, and the word is
         # what the definition line says (`definitions`). A LoRA with no word
         # is weights the prompt cannot reach for, and defines nobody.
-        worded = any(str(w).strip() for entry in loras for w in (entry.get("triggers") or ()))
+        worded = any(str(w).strip() for entry in loras
+                     if entry.get("enabled") is not False
+                     for w in (entry.get("triggers") or ()))
         if not sources and not motion and not replaces and not description \
-                and not features and not worded:
+                and not _described(features) and not worded:
             raise SubjectError(
                 f"@{handle}: a subject needs something behind it — a picture or "
                 f"a clip to be built out of, a description of what they look "
@@ -590,11 +592,14 @@ def here(cast, assets):
                 and voice == subject.voice and replaces == subject.replaces):
             out.append(subject)
             continue
+        # Seeded rows such as "face" and "hair" describe what to retain from a
+        # file, not what somebody looks like without it. Counting those rows
+        # allowed a muted or removed last file to leave an undefined label.
         if not keep and not motion and not replaces and not subject.description \
-                and not subject.features:
+                and not _described(subject.features) and not subject.lora_words:
             raise SubjectError(
-                f"@{subject.handle} walks on here, and the pictures they are "
-                f"built out of are not attached to this shot — attach one of "
+                f"@{subject.handle} walks on here, and their reference files "
+                f"are not attached to this shot — enable or attach one of "
                 f"them again, or describe what they look like, or take the name "
                 f"out of this shot's prompt"
             )
@@ -604,7 +609,7 @@ def here(cast, assets):
             motion=motion, voice=voice, replaces=replaces,
             replaces_what=subject.replaces_what if replaces else "",
             marker=subject.marker, seeded=subject.seeded,
-            notes=subject.notes, triggers=subject.triggers))
+            notes=subject.notes, triggers=subject.triggers, loras=subject.loras))
     return out
 
 

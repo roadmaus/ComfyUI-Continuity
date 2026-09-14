@@ -6,6 +6,17 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**Re-inserting a reference name restores its file, and muted cast files look
+muted.** Deleting the last mention could mute a reference, but putting it back
+through the prompt menu or the cast shelf's citation button did not call the
+reactivation hook. The sentence then named a file the render would not receive.
+These paths now use the same capacity-checked reactivation as paste and undo,
+for images, clips, audio and cast-owned files. Muted cast tiles are dimmed and
+badged. A cited member whose last source is missing or muted can no longer
+pass compilation on untouched face/hair retention rows alone; actual words,
+surviving files and worded LoRAs remain valid. Loading a workflow preserves
+saved mute choices, and a shot does not change shared pool mute choices.
+
 **A cast member can wear a LoRA.** A character LoRA is somebody's appearance
 as weights rather than as a file, and it had to be hung on the piece or on a
 shot by hand, in every piece they were in, and its trigger word typed into

@@ -1576,12 +1576,14 @@ export class CastShelf {
 
   refTile(subject, handle, role, assets) {
     const asset = assets.find((a) => a.handle === handle);
+    const off = asset && S.muted(asset);
     const note = S.subjectNotes(subject)[handle] ?? "";
     const wake = S.subjectTriggers(subject)[handle] ?? "";
     return el("button", {
-      class: `mmc-cast-ref${asset ? "" : " missing"}${wake ? " wakes" : ""}`,
+      class: `mmc-cast-ref${asset ? "" : " missing"}${off ? " off" : ""}${wake ? " wakes" : ""}`,
       title: asset
-        ? (note ? `@${handle} — ${note}\n` : "")
+        ? (off ? t("{name} — muted, and kept as it was set up.\n", { name: `@${handle}` }) : "")
+          + (note ? `@${handle} — ${note}\n` : "")
           + (wake ? t("Wakes on {words}\n", { words: wake }) : "")
           + t("@{handle} — {what}. Click to say what it shows of them, change what it "
               + "lends them, or take it off.",
@@ -1592,6 +1594,12 @@ export class CastShelf {
     }, [
       assetThumb(asset, "mmc-cast-ref-thumb"),
       ...sizeMark(asset),
+      // The shelf shares these files with the reference row, including mute.
+      // Keep the role/wake marks and the menu usable; waking a file still goes
+      // through the host's reference-cap checks in the reference row.
+      ...(off ? [el("span", {
+        class: "mmc-cast-badge mmc-cast-muted", title: t("muted"),
+      }, [icon("mute", 11)])] : []),
       // Words attached to this file: a dot, because the words themselves are a
       // sentence and the tile is 38 pixels. The tooltip carries them. A file
       // with words to wake on wears the dot hollow — a rule, not a caption.

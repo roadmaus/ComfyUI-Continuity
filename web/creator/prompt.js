@@ -356,8 +356,8 @@ export class PromptBox {
    *   box a keystroke ago and are not in it now. Deleting a chip is how this
    *   redesign takes a reference or a cast member out of a shot, so the host has
    *   to hear about it — see `CreatorEditor.dropCited`.
-   * @param {(handles:string[])=>void} [hooks.onCited]  chips that are in the box
-   *   now and were not a keystroke ago. The other half of `onUncited`: deleting
+   * @param {(handles:string[])=>void} [hooks.onCited]  chips written by an edit
+   *   or explicitly inserted from a menu. The other half of `onUncited`: deleting
    *   a mention mutes the reference, so writing one back has to bring it live
    *   again — see `CreatorEditor.liveCited`.
    */
@@ -1422,6 +1422,10 @@ export class PromptBox {
       : `${before}${before && !/\s$/.test(before) ? " " : ""}@${handle} `;
     this.setValue(text);
     this.hooks.onInput(text);
+    // setValue records the chips for a restored document; it does not report
+    // an edit. Picking a name is an explicit citation, even if that name was
+    // already visible beside a muted reference in a saved workflow.
+    this.hooks.onCited?.([handle]);
     this.placeCaret((spot ? spot.at : text.length - handle.length - 2) + handle.length + 2);
   }
 
@@ -1479,6 +1483,7 @@ export class PromptBox {
       this.root.appendChild(document.createTextNode(" "));
       this.censusChips();
       this.hooks.onInput(this.getValue());
+      this.hooks.onCited?.([handle]);
       return;
     }
     const chip = this.chip(handle);
@@ -1492,6 +1497,7 @@ export class PromptBox {
     selection.addRange(after);
     this.censusChips();
     this.hooks.onInput(this.getValue());
+    this.hooks.onCited?.([handle]);
   }
 
   // ---- suggestion menu -----------------------------------------------------

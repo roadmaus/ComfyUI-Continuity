@@ -86,6 +86,10 @@ expect_error("a subject with nothing behind it at all is refused",
 expect_error("a description of only whitespace is nothing behind it",
              lambda: subjects.parse([{"handle": "anna", "description": "   "}]),
              "needs something behind it")
+expect_error("untouched seeded attributes do not define a subject without files",
+             lambda: subjects.parse([{"handle": "anna", "seeded": True,
+                                     "features": [{"attr": "face"}, {"attr": "hair"}]}]),
+             "needs something behind it")
 
 # A cast in a generation with no references in it. There is no picture to point
 # at in T2VA, so the description is the whole of what the label can mean — and
@@ -373,6 +377,35 @@ expect_error("a cited subject whose files are all missing is refused",
                  "@anna walks in.", [image("img-1")],
                  [{"handle": "anna", "from": ["img-9"]}])),
              "not attached to this shot")
+
+# The shelf seeds retention rows for every kind of cast member. Those rows do
+# not replace a missing picture: without typed words they never enter the
+# definition, which previously let a muted file yield "<Subject 1> is .".
+for _takes, _attr in (("person", "face"), ("object", "form"),
+                      ("scene", "environment"), ("style", "palette")):
+    for _sources in ([], [image("img-9", enabled=False)]):
+        expect_error(f"{_takes} seeded rows cannot hide a missing or muted last source",
+                     lambda: compiler.compile_request(request(
+                         "@reference is shown.", [image("img-1"), *_sources],
+                         [{"handle": "reference", "takes": _takes,
+                           "from": ["img-9"], "seeded": True,
+                           "features": [{"attr": _attr}]}])),
+                     "enable or attach")
+
+_surviving = compiler.compile_request(request(
+    "@anna walks in.", [image("img-1"), image("img-2", enabled=False)],
+    [{"handle": "anna", "from": ["img-1", "img-2"], "seeded": True,
+      "features": [{"attr": "face"}, {"attr": "hair"}]}]))
+check("a surviving picture still defines a seeded cast member",
+      "<Subject 1> is the person in <Picture 1>." in _surviving.prompt, True)
+
+_described_row = compiler.compile_request(request(
+    "@anna walks in.", [image("img-1", enabled=False)],
+    [{"handle": "anna", "from": ["img-1"], "seeded": True,
+      "features": [{"attr": "face"}, {"attr": "hair", "is": "long dark hair"}]}]))
+check("a genuinely described row survives the loss of its source",
+      "<Subject 1> is the person, long dark hair." in _described_row.prompt, True)
+
 expect_error("a subject cannot be built out of a keyframe",
              lambda: compiler.compile_request(request(
                  "@anna walks in.",
@@ -708,7 +741,7 @@ check("a scene's rows compose the scene's own sentence",
 # A seeded row survives with nothing typed into it — the attribute's own name is
 # what it says. Only a row with neither half is the empty one the editor writes.
 check("a row with an attribute and no words is not an empty row",
-      [(f.attr, f.text) for f in subjects.parse([{"handle": "v", "features":
+      [(f.attr, f.text) for f in subjects.parse([{"handle": "v", "from": ["img-1"], "features":
           [{"attr": "hair"}, {"is": ""}, {"attr": "", "is": "  "}]}])[0].features],
       [("hair", "")])
 
