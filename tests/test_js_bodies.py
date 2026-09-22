@@ -3044,7 +3044,8 @@ try {
   const beforeClaim = stage.state;
   // The executor stepping into one of our expanded nodes claims the run —
   // without opening the box, which waits for something worth showing.
-  globalThis.__say("executing", { node: "7.0.0.5", display_node: "7", prompt_id: "p-3" });
+  // The frontend dispatches `executing` as the bare display node id.
+  globalThis.__say("executing", "7");
   const onClaim = stage.state;
   globalThis.__say("kj_preview_override", foreign);
   out.foreignFrame = {

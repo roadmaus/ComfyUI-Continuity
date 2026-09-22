@@ -296,7 +296,12 @@ export class Stage {
         // before the sampler does, and a box that opened on them is the empty
         // box `OPENS_ON_STEPS` exists to avoid — but from here on the run is
         // known to be ours, whatever the previewer calls itself.
-        if (String(detail.display_node ?? detail.node) !== String(this.nodeId())) break;
+        //
+        // Unlike `executed`, the frontend does not pass the message through:
+        // it dispatches `display_node || node` alone, a bare id string. Read
+        // as an object it named nobody, the claim never happened, and a
+        // pre-stage after a chat render sat blank until the cache let go.
+        if (String(detail) !== String(this.nodeId())) break;
         this.claimed = true;
         this.news();
         break;
