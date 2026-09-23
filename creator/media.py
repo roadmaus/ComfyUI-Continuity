@@ -418,7 +418,23 @@ def clip_audio(spec, seconds, at="tail"):
     start, end = _clip_window(spec)
     window = (start, min(end, start + seconds)) if at == "head" \
         else (max(start, end - seconds), end)
-    return load_audio(spec["filename"], trim=window)
+    filename = spec["filename"]
+    if window[1] <= window[0]:
+        raise MediaError(f"{filename!r}: the clip's audio window is empty")
+    path = resolve(filename)
+    with av.open(path) as container:
+        stream = next(iter(container.streams.audio), None)
+        if stream is None:
+            raise MediaError(f"{filename!r}: No audio stream found in the file.")
+        rate = int(stream.codec_context.sample_rate)
+        layout = stream.layout.name
+    # A seam names seconds on the source clock, not indices into concatenated
+    # packets. Share the reel's PTS placement, decoding only this seam's window.
+    blocks = [torch.from_numpy(block) for block in mux.sound_blocks(
+        av, path, window[0], window[1] - window[0], rate, layout)]
+    if not blocks:
+        raise MediaError(f"{filename!r}: No audio frames decoded.")
+    return {"waveform": torch.cat(blocks, dim=-1).unsqueeze(0), "sample_rate": rate}
 
 
 def load_all(compiled):

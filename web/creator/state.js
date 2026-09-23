@@ -3415,6 +3415,9 @@ export function parseTimeline(raw) {
           if (Number.isFinite(start) && Number.isFinite(end) && end > start) {
             segment.trim = { start, end };
           }
+          // Clip cards bypass parseState; their framing still belongs to the
+          // file, and must reach the same backend crop validator as an asset's.
+          if (raw.crop) segment.crop = { ...raw.crop };
           segment.continue = raw.continue === true;
           segment.continue_audio = raw.continue_audio === true;
           const width = Number(raw.feather);
@@ -3587,6 +3590,7 @@ export function serializeTimeline(timeline) {
             ? { width: segment.width, height: segment.height } : {}),
           ...(segment.trim ? { trim: { start: round2(segment.trim.start),
                                        end: round2(segment.trim.end) } } : {}),
+          ...(segment.crop ? { crop: { ...segment.crop } } : {}),
           // Only the deliberate choice is written: sound on is what a clip
           // comes with, so an absent key reads as it always would.
           ...(clipSound(segment) ? {} : { sound: false }),
