@@ -31,6 +31,9 @@ export const css = `
 }
 .mmc-lf-empty b { font-size: calc(15px * var(--mmc-type)); font-weight: 600; color: var(--mmc-strong); }
 .mmc-lf-empty span { font-size: calc(12.5px * var(--mmc-type)); line-height: 1.5; color: var(--mmc-dim); }
+/* The display above outranks the browser's own rule for the attribute, so
+   hiding it has to be said here or it stays over the mesh. */
+.mmc-lf-empty[hidden] { display: none; }
 
 /* The pictures, top left. They are the input, so they stay in view over the
    scene they were lifted into. */
