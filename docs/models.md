@@ -214,6 +214,25 @@ Matte uses the SAM 3 checkpoint from the cutouts table above.
 | Restore | `seedvr2_3b_int8_convrot.safetensors` and `seedvr2_ema_vae_fp16.safetensors` (from Comfy-Org/SeedVR2) | `diffusion_models`, `vae` |
 | Refine (DLSS 5) | `dlssnr-weights-logical.safetensors`, extracted on the settings page from your own `nvngx_dlssnr.dll` — see below | `dlss` |
 
+## Image to 3D
+
+The tool says which of these are missing and links each one. The folder is
+under `models/`.
+
+| File | Folder | Needed for |
+|---|---|---|
+| `pixal3d_int8_convrot.safetensors` | `diffusion_models` | Pixal3D from one picture |
+| `pixal3d_multiview_int8_convrot.safetensors` | `diffusion_models` | Pixal3D from several views (also used for one picture when it is the only Pixal3D file) |
+| `trellis_2_int8_convrot.safetensors` | `diffusion_models` | TRELLIS.2 |
+| `trellis_2_shape_vae_bf16.safetensors` | `vae` | every build |
+| `trellis_2_texture_vae_bf16.safetensors` | `vae` | a surface other than Shape only |
+| `dino_v3_L_naf_fp32.safetensors` | `clip_vision` | every build |
+| `moge_2_vitl_normal_fp16.safetensors` | `geometry_estimation` | Pixal3D from one picture (the camera estimate) |
+| `birefnet.safetensors` | `background_removal` | Background: Remove it |
+
+All of them are on Comfy-Org's Hugging Face pages (Pixal3D, TRELLIS.2, MoGe
+and BiRefNet). See [tools.md](tools.md#image-to-3d).
+
 ## The neural refiner (DLSS 5)
 
 No download. The weights are NVIDIA's, inside `nvngx_dlssnr.dll` file

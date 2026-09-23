@@ -161,6 +161,56 @@ so the material is drawn onto the enlarged picture.
 
 Files for both backends: [models.md](models.md#the-upscale-bench).
 
+## Image to 3D
+
+Lifts a picture into a textured mesh you can turn in your hands, stage and
+shoot around. It runs core's own Pixal3D / TRELLIS.2 pipeline, the one the
+template shows, with the few choices worth making in a drawer and everything
+else fixed where the template's authors put it. It opens on the piece's still
+when there is one; drop another picture anywhere to replace it. One object on
+a plain ground lifts best.
+
+The choices:
+
+- **Model.** **Pixal3D** keeps the mesh where the picture put it: it estimates
+  the picture's camera, and the mesh is built along the rays through it.
+  **TRELLIS.2** builds a centred object that is not aligned to any camera.
+- **Views.** With Pixal3D, add **Left**, **Back** and **Right** pictures of the
+  same object beside the **Front**, and the hidden sides are built from them
+  instead of guessed. More than one view runs the multi-view model; one picture
+  runs the single-view model, or the multi-view one if that is the only Pixal3D
+  checkpoint you have.
+- **Detail.** Standard builds the shape at 1024; **High** at 1536, slower and
+  heavier on memory.
+- **Background.** **Remove it** cuts the object out (BiRefNet); **Already cut
+  out** reads the picture's own transparency instead.
+- **Surface.** **Full PBR** unwraps the mesh and bakes colour, roughness,
+  metal, normal and occlusion maps at the **Texture size**. **Colour** paints
+  onto the vertices with no unwrap. **Shape only** never loads the texture
+  model.
+- **Faces.** What the mesh is decimated to after the remesh. Fewer is lighter
+  to stage and shoot around.
+
+**Build mesh** queues the build like any other render, so Cancel and the
+progress bar work. The track under the stage shows each of the six stages as it
+lands (the cut-out, the camera, the sparse structure, the shape, the texture
+and the bake) and how long it took. Press a finished stage to see what it made.
+Building again with only the surface changed starts at the texture: the
+structure and the shape come from ComfyUI's cache. Building again with nothing
+changed draws a different take.
+
+On the stage the picture stands in front of its own camera, with the mesh at
+the end of its rays. **Picture's camera** looks through that camera, so the
+mesh sits under the picture it was lifted from; drag to leave it. **Textured**,
+**Clay**, **Wire** and **Normals** change how the surface is drawn. After a
+Full PBR build the drawer lists the baked maps, each opening at full size.
+
+The finished GLB lands in `output/continuity/meshes/`, beside your renders.
+**Turntable clip** renders one orbit of the mesh into the input folder, to cite
+with `@` in a shot.
+
+Files: [models.md](models.md#image-to-3d).
+
 ## Neural refiner (DLSS 5)
 
 NVIDIA's DLSS 5 neural renderer, run outside a game through the open-source
