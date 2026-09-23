@@ -31,6 +31,10 @@ const INDEX_FILE = "continuity.chats.json";
 const BODY_FILE = (id) => `continuity.chat.${id}.json`;
 const INDEX_KEY = "continuity-chats";
 const BODY_KEY = (id) => `continuity-chat-${id}`;
+// A render may finish after its conversation was deleted. Keep that old home
+// from writing again, and let any save already in flight finish before removal.
+const deleted = new Set();
+const writing = new Map();
 
 /** How long a title may run. About what a sidebar row shows before the
  *  ellipsis, so the automatic title is never cut mid-word by the row. */
@@ -122,6 +126,7 @@ function packCard(card) {
     action: card.action ?? null,
     state: card.state === "done" || card.state === "failed" ? card.state : "left",
     promptId: card.promptId ?? null,
+    turn: card.turn ?? card.entry?.turn ?? null,
     saved: card.saved ?? null,
     isClip: Boolean(card.isClip),
     entry: card.entry ?? null,
@@ -164,7 +169,9 @@ export function pack(state) {
     ledger: state.ledger ?? [],
     strip: state.strip ?? [],
     counts: { pic: 0, clip: 0, snd: 0, ...(state.counts ?? {}) },
-    turn: state.turn ?? 0,
+    turn: Math.max(state.turn ?? 0, ...(state.messages ?? []).map((message) =>
+      message.turn ?? message.card?.turn ?? message.card?.entry?.turn ?? 0),
+      ...(state.ledger ?? []).map((entry) => entry.turn ?? 0)),
     // The chat's own piece: who is cast and the files they are built from.
     // Nothing else of a piece is the conversation's — the family, the row and
     // the stack are assembled at render time from the rail and the pins.
@@ -183,13 +190,19 @@ export function packPiece(piece) {
 /** A file back into the room's shape. Cards come back without their
  *  listeners; `chat.js` settles any that were left mid-render. */
 export function unpack(body) {
-  const messages = Array.isArray(body?.messages) ? body.messages : [];
+  const messages = (Array.isArray(body?.messages) ? body.messages : [])
+    .map((message) => ({ ...message, card: message.card ? { ...message.card } : undefined }));
+  const ledger = Array.isArray(body?.ledger) ? body.ledger : [];
   return {
-    messages: messages.map((message) => ({ ...message, card: message.card ? { ...message.card } : undefined })),
-    ledger: Array.isArray(body?.ledger) ? body.ledger : [],
+    messages,
+    ledger,
     strip: Array.isArray(body?.strip) ? body.strip : [],
     counts: { pic: 0, clip: 0, snd: 0, ...(body?.counts ?? {}) },
-    turn: Number.isFinite(body?.turn) ? body.turn : 0,
+    // Older saves omitted the home's turn. User messages and ledger entries
+    // already carry it, including retakes, so no transcript inference is needed.
+    turn: Math.max(Number.isFinite(body?.turn) ? body.turn : 0,
+      ...messages.map((message) => Number.isFinite(message.turn) ? message.turn : 0),
+      ...ledger.map((entry) => Number.isFinite(entry.turn) ? entry.turn : 0)),
     piece: packPiece(body?.piece),
   };
 }
@@ -220,9 +233,24 @@ export async function loadChat(id) {
  *
  * `meta` is `{id, title, created}`; the index line is rebuilt from the state
  * every time rather than patched, so the cover and the count can never drift
- * from the file. -> the index line written.
+ * from the file. -> the index line written, or null if this home was deleted.
  */
 export async function saveChat(meta, state, now = Date.now()) {
+  if (deleted.has(meta.id)) return null;
+  const pending = (writing.get(meta.id) ?? Promise.resolve()).catch(() => {}).then(async () => {
+    if (deleted.has(meta.id)) return null;
+    return writeChat(meta, state, now);
+  });
+  writing.set(meta.id, pending);
+  try {
+    const line = await pending;
+    return deleted.has(meta.id) ? null : line;
+  } finally {
+    if (writing.get(meta.id) === pending) writing.delete(meta.id);
+  }
+}
+
+async function writeChat(meta, state, now) {
   const line = {
     id: meta.id,
     title: meta.title || titleFor(state.messages?.find((m) => m.role === "user")?.text) || t("New chat"),
@@ -253,6 +281,8 @@ export async function renameChat(id, title) {
 /** Gone from the shelf and the index. The renders stay: they are files in the
  *  output folder, and deleting a conversation about them is not deleting them. */
 export async function deleteChat(id) {
+  deleted.add(id);
+  await writing.get(id)?.catch(() => {});
   await removeUserData(BODY_FILE(id), BODY_KEY(id));
   const entries = (await listChats()).filter((entry) => entry.id !== id);
   await writeIndex(entries);
