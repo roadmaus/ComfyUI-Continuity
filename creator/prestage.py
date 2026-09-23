@@ -34,11 +34,11 @@ import json
 
 from comfy_api.latest import io
 
-from . import canvas, compile_image, media, neural, render_image, sampling, variations
+from . import canvas, compile_image, media, neural, refmod, render_image, sampling, variations
 from .core import emit as loop
 from .compile import CompileError
 from .families import registry
-from .families.h3 import still
+from .families.h3 import still, subjects
 from .families.h3 import declare as h3_rules
 from .families.ideogram4 import still as ideogram4
 from .families.krea2 import still as krea2
@@ -77,6 +77,54 @@ DEFAULT_DATA = json.dumps({
     # renumber on paste, so the pill re-derives the relationship by scan.
     "peer": None,
 }, indent=2)
+
+
+def _cast_refmod_spaces(data, family):
+    """Stamp a still Cast's standalone latents from their actual file headers.
+
+    Presets persist filenames, not authoritative latent-space metadata. The
+    pure Cast compiler needs the space to choose a look; without this step a
+    valid Klein mod becomes only its description. Keep file access here at
+    the node boundary, as the chat route does, and never load tensor payloads.
+    """
+    space = (getattr(family, "REFMOD", None) or {}).get("space")
+    if not space or not getattr(family, "TAKES_REFS", False):
+        return data
+    raw = [s for s in data.get("subjects") or [] if isinstance(s, dict) and s.get("handle")]
+    if not raw:
+        return data
+    family_id = registry.STILL_ARCHES.get(getattr(family, "ARCH", None))
+    try:
+        cast = subjects.parse(raw, family_id)
+    except subjects.SubjectError as exc:
+        raise CompileError(str(exc)) from exc
+    refs = [dict(r) if isinstance(r, dict) else r for r in data.get("refs") or []]
+    by_handle = {str(r["handle"]): r for r in refs if isinstance(r, dict) and r.get("handle")}
+    spaces = {}
+    for member in subjects.cited(cast, [str(data.get("prompt") or "")]):
+        if member.send == "words":
+            continue
+        # Match cast_into_still's first usable look. An uncited member, a
+        # words-only choice, or a later unused look must not acquire disk I/O
+        # (or a new missing-file error) just because it is saved in the Cast.
+        for handle in member.sources:
+            ref = by_handle.get(handle)
+            if ref is None:
+                continue
+            filename = ref.get("filename")
+            if not refmod.is_mod(filename):
+                break
+            try:
+                if filename not in spaces:
+                    spaces[filename] = refmod.header(refmod.resolve(filename))["space"]
+            except refmod.RefModError as exc:
+                raise CompileError(f"@{member.handle} (@{handle}): {exc}") from exc
+            # Replace, rather than trust, a stale/browser-supplied space. A
+            # valid other-family mod keeps the existing description fallback.
+            ref["space"] = spaces[filename]
+            if ref["space"] == space:
+                break
+    return {**data, "refs": refs}
 
 
 class MiniMaxH3PreStage(io.ComfyNode):
@@ -191,6 +239,7 @@ class MiniMaxH3PreStage(io.ComfyNode):
         if family is None:
             raise ValueError(f"unknown model architecture {arch!r}")
         try:
+            data = _cast_refmod_spaces(data, family)
             plan = family.compile_still(data, media.image_size)
         except CompileError as exc:
             raise ValueError(str(exc)) from exc
