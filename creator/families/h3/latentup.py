@@ -196,6 +196,20 @@ def _build(sd):
     return LatentResizer3D(conv_in.shape[1], in_blocks, out_blocks, conv_in.shape[0], kernels[0])
 
 
+def _checkpoint_dtype(sd):
+    # Only a uniformly half-precision file opts into half computation. Mixed
+    # files retain the old FP32 road, so a full-precision layer is never silently
+    # downcast just because conv_in happened to be half. Integer buffers do not
+    # select a floating-point computation dtype.
+    dtypes = {value.dtype for value in sd.values()
+              if isinstance(value, torch.Tensor) and value.is_floating_point()}
+    if dtypes == {torch.float16}:
+        return torch.float16
+    if dtypes == {torch.bfloat16}:
+        return torch.bfloat16
+    return torch.float32
+
+
 def load(name):
     """The upscaler `name` (a file under models/latent_upscale_models), as a patcher."""
     if name in _LOADED:
@@ -205,11 +219,13 @@ def load(name):
     if "model" in sd and isinstance(sd["model"], dict):
         sd = sd["model"]
     sd = {k[len("upscaler."):] if k.startswith("upscaler.") else k: v for k, v in sd.items()}
-    model = _build(sd)
+    # load_state_dict copies into the destination's dtype; a freshly built
+    # nn.Module is FP32 even when the file is FP16/BF16. Select the checkpoint's
+    # precision before copying so the published half files stay half in memory
+    # and during the forward. An explicit FP32 checkpoint remains FP32.
+    model = _build(sd).to(dtype=_checkpoint_dtype(sd))
     model.load_state_dict(sd, strict=True)
     model.eval().requires_grad_(False)
-    # The file's own precision, which is fp16 or bf16 for the published ones;
-    # an fp32 file stays fp32.
     patcher = comfy.model_patcher.ModelPatcher(
         model, load_device=comfy.model_management.get_torch_device(),
         offload_device=comfy.model_management.unet_offload_device())
