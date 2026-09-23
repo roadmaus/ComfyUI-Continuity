@@ -17,19 +17,19 @@
   },
   "MiniMaxH3PreStage": {
     "display_name": "Continuity 预备台",
-    "description": "用 Krea 2、Ideogram 4.0 或 MiniMax H3 为视频管线生成静帧 — 起始/结束帧、参考图、风格表。由 Continuity 节点上的预备台胶囊按钮打开。"
+    "description": "用 Krea 2、Ideogram 4.0 或 MiniMax H3 为视频流程生成静帧 — 起始/结束帧、参考图、风格参考图。由 Continuity 节点上的预备台按钮打开。"
   },
   "MiniMaxH3SaveImage": {
     "display_name": "Continuity 保存图像",
-    "description": "将预备台的渲染写入 output/ 之下，并报告给舞台卡片。"
+    "description": "将预备台的渲染结果写入 output/ 下，并报告给预备台的预览卡片。"
   },
   "MiniMaxH3StillLatent": {
     "display_name": "H3 静帧 Latent",
     "description": "取采样后 H3 latent 的一个时间帧，作为 H3 VAE 能解码的最短片段输出。"
   },
   "MiniMaxH3RefinePass": {
-    "display_name": "H3 精修通道",
-    "description": "两遍渲染的第二遍：放大 H3 AV latent 的视频部分并从调度中途重新采样，音轨不加噪。由 render.emit 写入图中。"
+    "display_name": "H3 精修处理",
+    "description": "两遍渲染的第二遍：放大 H3 AV latent 的视频部分并从调度中途重新采样，音轨不参与去噪。由 render.emit 写入节点图中。"
   },
   "MiniMaxH3FacePass": {
     "display_name": "H3 面部处理",

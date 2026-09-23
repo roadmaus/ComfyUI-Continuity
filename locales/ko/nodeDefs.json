@@ -13,11 +13,11 @@
   },
   "MiniMaxH3Save": {
     "display_name": "Continuity 저장",
-    "description": "렌더링된 프레임과 사운드를 하나의 파일로 먹싱해 output/ 아래에 저장합니다."
+    "description": "렌더링된 프레임과 사운드를 하나의 영상 파일로 합쳐 output/ 아래에 저장합니다."
   },
   "MiniMaxH3PreStage": {
     "display_name": "Continuity 프리스테이지",
-    "description": "Krea 2, Ideogram 4.0 또는 MiniMax H3로 영상 파이프라인용 스틸 — 시작/끝 프레임, 레퍼런스, 스타일 시트 — 을 생성합니다. Continuity 노드의 프리스테이지 필에서 열립니다."
+    "description": "Krea 2, Ideogram 4.0 또는 MiniMax H3로 영상 파이프라인용 스틸 — 시작/끝 프레임, 레퍼런스, 스타일 시트 — 을 생성합니다. Continuity 노드의 프리스테이지 버튼으로 엽니다."
   },
   "MiniMaxH3SaveImage": {
     "display_name": "Continuity 이미지 저장",
