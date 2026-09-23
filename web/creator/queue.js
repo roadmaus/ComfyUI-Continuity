@@ -424,6 +424,7 @@ export function follow(handlers = {}) {
   const held = [];
   const stop = () => { for (const remove of off.splice(0)) remove(); };
   const table = {
+    execution_start: () => handlers.started?.(),
     progress_state: ({ detail }) => handlers.progress?.(detail.nodes ?? {}),
     executed: ({ detail }) => handlers.executed?.(String(detail.node ?? detail.display_node ?? ""),
                                                  detail.output ?? {}),

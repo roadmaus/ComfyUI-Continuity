@@ -61,6 +61,17 @@ const seconds = (ms) => {
   return s < 60 ? `${Math.round(s)} s` : `${Math.floor(s / 60)} min ${String(Math.round(s % 60)).padStart(2, "0")} s`;
 };
 
+/** When a stage's clock starts: where the last stage before it stopped, or
+ *  where the prompt began executing. A stage's own "running" report is no
+ *  use for this — the cut-out and the camera finish between two progress
+ *  events, so timing them from it read 0 s, and the loaders a stage waits on
+ *  are part of what it costs. */
+export function stageStart(times, stage, began, now) {
+  const ends = STAGES.slice(0, STAGES.indexOf(stage))
+    .map((earlier) => times[earlier]?.end).filter((end) => end !== undefined);
+  return ends.length ? Math.max(...ends) : began ?? now;
+}
+
 /**
  * Which diffusion model a build runs. The frontend's half of `lift.model_role`:
  * one picture falls back to the multi-view model when that is the only
@@ -118,6 +129,7 @@ class Lift {
     this.state = {};                 // stage -> wait | run | done | skip | fail
     this.progress = {};              // stage -> 0..1
     this.times = {};                 // stage -> {start, end}
+    this.began = null;               // when the prompt left the queue
     this.results = {};               // stage -> the stage node's record
     this.viewing = null;
     this.built = null;               // the settings the mesh on the stage was built with
@@ -492,10 +504,12 @@ class Lift {
     this.state = {};
     this.progress = {};
     this.times = {};
+    this.began = null;
     this.results = {};
     this.atCamera = false;
     const signature = this.signature();
     const following = follow({
+      started: () => { this.began = performance.now(); },
       progress: (nodes) => this.heard(nodes),
       executed: (_node, output) => {
         const record = output?.continuity_lift?.[0];
@@ -548,7 +562,7 @@ class Lift {
     for (const [stage, fraction] of running) {
       if (this.state[stage] === "wait") {
         this.state[stage] = "run";
-        this.times[stage] = { start: performance.now() };
+        this.times[stage] = { start: stageStart(this.times, stage, this.began, performance.now()) };
       }
       if (this.state[stage] === "run") this.progress[stage] = fraction;
     }
@@ -562,7 +576,7 @@ class Lift {
     this.results[stage] = record;
     this.state[stage] = "done";
     this.progress[stage] = 1;
-    const time = this.times[stage] ??= { start: performance.now() };
+    const time = this.times[stage] ??= { start: stageStart(this.times, stage, this.began, performance.now()) };
     time.end = performance.now();
     // An earlier stage whose nodes were all cached never reported running;
     // having heard from a later one, it is done too.
