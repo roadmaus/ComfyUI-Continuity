@@ -1526,11 +1526,6 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     # part of it that walks on.
     try:
         cast = subjects.parse(data.get("subjects"), family)
-        # What this family is handed for each member's looks, where the
-        # member said: their words alone, or the picture over its rendition.
-        # Before the citations are read, so a member sent as words has no
-        # files here to be claimed, counted or cut.
-        cast, assets = subjects.sent(cast, assets, _refmod_space(family))
     except subjects.SubjectError as exc:
         raise CompileError(str(exc)) from exc
     raw_body = refined_body(data) or str(data.get("prompt") or "")
@@ -1540,6 +1535,13 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
              str(data.get("soundscape") or ""),
              str(data.get("music") or "")] + list((raw_sections or {}).values())
     cast = subjects.cited(cast, prose)
+    # Only members in this shot can refuse words-only input or override a
+    # shared picture's saved rendition. Keep `everybody` above intact for
+    # ownership pruning: an absent member's files must still leave with them.
+    try:
+        cast, assets = subjects.sent(cast, assets, _refmod_space(family))
+    except subjects.SubjectError as exc:
+        raise CompileError(str(exc)) from exc
 
     # ...and their pictures cut with them.
     #
@@ -3716,6 +3718,10 @@ def _asset_dict(asset):
         out["op"] = asset.op
     if asset.panels:
         out["panels"] = [_panel_dict(panel) for panel in asset.panels]
+    # Pool injection and one-pass merging parse this again. Dropping the map
+    # silently re-encodes the picture instead of using its saved conditioning.
+    if asset.mods:
+        out["mods"] = dict(asset.mods)
     return out
 
 
@@ -3825,12 +3831,14 @@ def _agree(values, what, blank=""):
 def _asset_identity(asset):
     """What a reference means, without its card-local spelling.
 
-    A sheet's ordered panel metadata is part of its meaning, not just its
-    filename. Aliases can deduplicate; different cuts, layouts or roles cannot.
+    A sheet's ordered panel metadata and a picture's saved renditions are part
+    of its meaning, not just its filename. Aliases can deduplicate; different
+    cuts, layouts, roles or conditioning inputs cannot.
     """
     return (asset.kind, asset.role, asset.filename, asset.track, asset.ref_size,
             asset.trim, asset.crop, asset.takes, asset.cut, asset.op, asset.rect,
-            tuple(_asset_identity(panel) for panel in asset.panels))
+            tuple(_asset_identity(panel) for panel in asset.panels),
+            tuple(sorted(asset.mods.items())))
 
 
 def group_payload(data, start=0, end=None):
