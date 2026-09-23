@@ -1017,6 +1017,9 @@ export class CreatorEditor {
       return;
     }
     asset.filename = picked.path;
+    // Saved renditions belong to the old picture, not to the handle. Keeping
+    // one here would show the new file but still condition H3 on the old one.
+    S.dropMods(asset);
     // A trim is a range in the old file's timeline and means nothing in
     // another's — either the picker's segment editor set one for this pick, or
     // the new file starts whole.
