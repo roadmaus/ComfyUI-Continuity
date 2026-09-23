@@ -4,7 +4,7 @@ Back by request. Every entry opens with a line saying what changed; the
 paragraph under it says how and why, and from 3.0 down that paragraph is kept
 exactly as it was written, wall of text and all.
 
-## Unreleased
+## 3.2
 
 **Image to 3D: a picture lifted into a textured mesh, from the tools
 dashboard.** A new tool beside the benches that queues core's own Pixal3D /
