@@ -4815,7 +4815,11 @@ export function nextPreStageHandle(state) {
  *  warning — clip, vae and whichever DiT the turbo pill selects. */
 export function missingPreStageModels(state) {
   const side = state.models[state.arch] ?? {};
-  const dit = IMAGE_FAMILY[state.arch]?.capabilities.turbo && state.turbo.on ? "turbo_model" : "model";
+  // Per arch, and only the checkpoint route loads the Turbo file: with a LoRA
+  // picked the DiT stays RAW (`krea2/still.py`).
+  const turbo = state.turbo[state.arch];
+  const dit = IMAGE_FAMILY[state.arch]?.capabilities.turbo && turbo?.on && !turbo.lora
+    ? "turbo_model" : "model";
   return [dit, "clip", "vae"].filter((field) => !side[field]);
 }
 

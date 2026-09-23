@@ -1365,7 +1365,8 @@ export class PreStageRow {
 
   /** Move the blob onto another arch: release the leaving arch's turbo, set
    *  its row aside under its name, and write the arriving arch's — the row it
-   *  dialled last time it was here, or its own defaults where it never was.
+   *  dialled last time it was here, or its own defaults where it never was —
+   *  then throw the arriving arch's turbo again if it was on when it was left.
    *  The numbers these models run at have nothing to do with each other, so
    *  carrying the row across would be wrong on arrival; forgetting it would be
    *  re-dialling Krea each time Ideogram was looked at. The same bargain
@@ -1378,13 +1379,15 @@ export class PreStageRow {
     // the row on the way out is this node's one row, and it belongs to whoever
     // is arriving. Released first: switching off *is* putting the row back, and
     // a stash taken without it would be the distillation's step count rather
-    // than the one the user dialled.
+    // than the one the user dialled. Released, not switched off: `on` stays as
+    // the arch's answer for when it is back, and is inert meanwhile because
+    // every compile reads only its own arch's block (`turbo_block`).
     const leaving = state.turbo[state.arch];
     if (leaving?.on && leaving.lora) S.removeLora(state, leaving.lora);
     if (leaving?.on && leaving.saved) {
       for (const [key, value] of Object.entries(leaving.saved)) io.set(key, value);
     }
-    if (leaving) { leaving.on = false; leaving.saved = null; }
+    if (leaving) leaving.saved = null;
 
     const spare = S.parsePreStageSamplingSpare(state.sampling_spare);
     const dialled = S.parseSampling(state.sampling);
@@ -1413,6 +1416,14 @@ export class PreStageRow {
     const kept = new Set([...Object.keys(native), ...Object.keys(returning ?? {})]);
     state.sampling = Object.fromEntries(
       Object.entries(S.parseSampling(state.sampling)).filter(([key]) => kept.has(key)));
+
+    // Thrown again over the row just handed back, through the pill's own door,
+    // so the dialled row is what it saves and the LoRA goes back on the stack.
+    const arriving = state.turbo[arch];
+    if (arriving?.on) {
+      arriving.on = false;
+      this.throwTurbo(true);
+    }
   }
 
   // ---- turbo -----------------------------------------------------------------
