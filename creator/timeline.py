@@ -111,6 +111,18 @@ def stamps(data):
         except Exception:
             out.append(None)
 
+    def stamp_asset(asset):
+        stamp(media.resolve, asset, "filename")
+        # A photo can be read through a saved rendition instead of its pixels.
+        # Remaking that mod overwrites its file without changing the blob or
+        # the photo. The encoder's own cache cannot notice it if the executor
+        # never runs the node, so both outer and per-segment keys need it here.
+        mods = asset.get("mods")
+        if isinstance(mods, dict):
+            for space in sorted(mods):
+                if mods[space]:
+                    stamp(media.resolve, mods, space)
+
     # The timeline's own LoRAs are patched onto every segment, so a replaced file
     # has to invalidate the node just as a segment's own would. The reference
     # pool is the same story on the asset side: a cited pool file rides into
@@ -125,7 +137,7 @@ def stamps(data):
                 if isinstance(entry, dict):
                     stamp(lora.resolve, entry, "name")
     for asset in data.get("assets", []) or []:
-        stamp(media.resolve, asset, "filename")
+        stamp_asset(asset)
     # The lane's cues, whether the piece's whole lane or the stretch cut onto
     # one pass (`_stamp_sound`): both name files by `filename`, and a file
     # replaced under its name used to be a cache hit (issue #47).
@@ -145,7 +157,7 @@ def stamps(data):
             if isinstance(block, dict):
                 stamp(media.resolve, block, "filename")
         for asset in segment.get("assets", []) or []:
-            stamp(media.resolve, asset, "filename")
+            stamp_asset(asset)
         for entry in segment.get("loras", []) or []:
             stamp(lora.resolve, entry, "name")
     return tuple(out)

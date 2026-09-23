@@ -6075,6 +6075,8 @@ export function nextPoolHandle(timeline) {
 export function stillForClip(timeline, asset, path, crop = null) {
   asset.kind = "image";
   asset.filename = path;
+  // A saved video rendition cannot stand in for the newly selected still.
+  dropMods(asset);
   delete asset.trim;
   delete asset.track;
   if (crop) asset.crop = crop;
