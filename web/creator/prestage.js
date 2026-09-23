@@ -1024,8 +1024,7 @@ export class PreStageEditor {
     // alone, where what an attached image contributes really is its look.
     // The first slot on an edit family is the one picture whose role is a
     // decision rather than a fact: it can be the thing being changed in place.
-    // So there it is a button, and everywhere else
-    // it is the label it has always been.
+    // So there it is a button; everywhere else it keeps its usual label.
     // A guide is never the picture being edited: it is the drawing the render
     // is aimed at, so the slot it happens to sit in does not make it a subject.
     const guide = ref.role === "guide";
@@ -2151,10 +2150,12 @@ export class PreStageBody {
    * own output among everything else in the folder.
    *
    * Where it lands is the arch's own answer to "the picture this render is
-   * about": the first reference slot on a family that edits, the init image on
-   * one that draws, the request's start frame on the H3 branch. On an edit
-   * family the slot is *replaced* and its handle kept, so a prompt that cites
-   * `@ref-1` is still citing the picture in front of it.
+   * about": the init image on a family that draws, or the request's start frame
+   * on H3. On an edit family, an explicit init is replaced in place and keeps
+   * its denoise setting. Otherwise the first editable plain reference is
+   * replaced (or created if capacity allows), keeps its handle, moves before
+   * guides, and enables `edit_first`. Cast and guide pictures are preserved;
+   * a full pool with no editable reference is left unchanged with a notice.
    */
   takeBack(filename) {
     if (this.state.arch === S.PRESTAGE_STILL_ARCH) {
