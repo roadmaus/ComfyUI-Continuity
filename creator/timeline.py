@@ -774,7 +774,9 @@ class ContinuityTake(io.ComfyNode):
                 io.Int.Input("card", default=1, min=1, max=9999),
                 io.Int.Input("seed", default=0, min=0, max=0xffffffffffffffff),
             ],
-            outputs=[],
+            # Never wired to anything: `core.emit.expanded` exports it so the
+            # node that expanded this graph waits for the file (#97).
+            outputs=[io.Boolean.Output("done")],
         )
 
     @classmethod
@@ -793,8 +795,8 @@ class ContinuityTake(io.ComfyNode):
         except Exception as exc:      # noqa: BLE001 - see the docstring
             logging.warning("MiniMax: could not write the take for segment "
                             "%s: %s", card, exc)
-            return io.NodeOutput(ui={})
-        return io.NodeOutput(ui={"mmc_takes": [reported_take(
+            return io.NodeOutput(True, ui={})
+        return io.NodeOutput(True, ui={"mmc_takes": [reported_take(
             {"pass": source}, int(card), filename, subfolder, fps, int(seed))]})
 
 
@@ -843,7 +845,9 @@ class MiniMaxH3Save(io.ComfyNode):
                 # or empty on a render with nothing to keep. See `_takes`.
                 io.String.Input("takes", default="", optional=True),
             ],
-            outputs=[],
+            # Never wired to anything: `core.emit.expanded` exports it so the
+            # node that expanded this graph waits for the file (#97).
+            outputs=[io.Boolean.Output("done")],
             hidden=[io.Hidden.prompt, io.Hidden.extra_pnginfo, io.Hidden.unique_id, io.Hidden.dynprompt],
         )
 
@@ -891,7 +895,7 @@ class MiniMaxH3Save(io.ComfyNode):
                           piece=(filename, subfolder))
         if kept:
             report["mmc_takes"] = kept
-        return io.NodeOutput(ui=report)
+        return io.NodeOutput(True, ui=report)
 
     @classmethod
     def _takes(cls, reel, takes, filename_prefix, fps, crf, piece=None):

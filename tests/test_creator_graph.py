@@ -157,11 +157,14 @@ out = build()
 graph = out.expand
 kinds = by_class(graph)
 
-# The node has no output sockets, so the expansion exports no links — but that
-# has to be an empty tuple and not `None`, which is what `NodeOutput` gives for
-# no values. `execution.py` takes `len()` of this to find the exported links,
-# and a bare `NodeOutput(expand=...)` fails the whole prompt there.
-check("expansion exports no links", out.result, ())
+# Every node that writes a file is exported, so the executor holds this node
+# uncached until each has succeeded: a save that failed, or a Cancel, must
+# leave the next Run something to do. See `core.emit.expanded` (#97).
+written = sorted((node_id, 0) for node_id, node in graph.items()
+                 if node["class_type"] in ("MiniMaxH3Save", "ContinuityTake"))
+check("expansion exports every node that writes a file",
+      sorted(tuple(link) for link in out.result), written)
+check("...and there is one", len(written) > 0, True)
 
 # One generation is one of everything, and none of the chaining machinery: a
 # Creator render has no seam, so a last-frame or audio-tail node in here would
@@ -221,7 +224,7 @@ check("...and the audio one",
 # stamp is what puts the result back on the node the user is looking at, and
 # without it the `executed` message lands on an expanded node on nobody's canvas.
 
-check("nothing comes out of the node", out.args, ())
+check("the node has no output sockets", cn.MiniMaxH3Creator.define_schema().outputs, [])
 check("one save node", len(kinds["MiniMaxH3Save"]), 1)
 save_id, save_inputs = kinds["MiniMaxH3Save"][0]
 check("it is reported against the node that built it",

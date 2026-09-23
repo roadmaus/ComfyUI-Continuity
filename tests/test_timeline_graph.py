@@ -161,9 +161,14 @@ def blob(**fields):
 
 out = build()
 graph = out.expand
-# No output sockets, so no exported links — as an empty tuple, not the `None`
-# that `NodeOutput` gives for no values and that `execution.py` calls `len()` on.
-check("expansion exports no links", out.result, ())
+# Every node that writes a file is exported, so the executor holds this node
+# uncached until each has succeeded: a save that failed, or a Cancel, must
+# leave the next Run something to do. See `core.emit.expanded` (#97).
+written = sorted((node_id, 0) for node_id, node in graph.items()
+                 if node["class_type"] in ("MiniMaxH3Save", "ContinuityTake"))
+check("expansion exports every node that writes a file",
+      sorted(tuple(link) for link in out.result), written)
+check("...and there is one", len(written) > 0, True)
 by_type = {}
 for node_id, node in graph.items():
     by_type.setdefault(node["class_type"], []).append((node_id, node["inputs"]))
@@ -295,7 +300,7 @@ check("one loader per VAE", len(by_type["VAELoader"]), 2)
 # Nothing comes out of the node: it saves the whole reel itself, and the
 # display-id stamp is what puts the result back on the node the user is looking
 # at rather than on an expanded node nobody can see.
-check("nothing comes out of the node", out.args, ())
+check("the node has no output sockets", cn.MiniMaxH3Timeline.define_schema().outputs, [])
 save_id, save_inputs = by_type["MiniMaxH3Save"][0]
 check("one save node", len(by_type["MiniMaxH3Save"]), 1)
 check("it is reported against the node that built it",

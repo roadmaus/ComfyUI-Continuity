@@ -72,6 +72,12 @@ CLIP_AUDIO_NODE = "MiniMaxH3ClipAudio"
 SAVE_NODE = "MiniMaxH3Save"
 TAKE_NODE = "ContinuityTake"
 STORYBOARD_NODE = "ContinuityStoryboard"
+IMAGE_SAVE_NODE = "MiniMaxH3SaveImage"
+
+# The nodes that write a render's files, each with a `done` output that
+# `expanded` exports so the parent is cached only once they have all succeeded.
+# A new node that writes a file joins this set and gets a `done` output too.
+ENDS = frozenset({SAVE_NODE, TAKE_NODE, IMAGE_SAVE_NODE})
 
 
 def default_prefix(family):
@@ -668,23 +674,26 @@ def emit_tail(graph, reel, unique_id, filename_prefix, takes, fps):
     return save
 
 
-class _NoExportedLinks(io.NodeOutput):
-    """A `NodeOutput` that expands to a graph and exports nothing from it.
-
-    Neither node has an output socket, so an expansion from either one hands
-    nothing back to the graph around it. `NodeOutput.result` collapses "no
-    values" to `None`, but the empty tuple is what `execution.py` wants: it
-    takes `len()` of the result to find which of the subgraph's outputs are
-    links the parent exports, and `None` is a `TypeError` rather than "none of
-    them". The rest of the expansion — including the save node that makes the
-    file — is already in the graph and runs regardless.
-    """
-
-    @property
-    def result(self):
-        return ()
-
-
 def expanded(graph):
-    """-> the node return for a finished graph. See `_NoExportedLinks`."""
-    return _NoExportedLinks(expand=graph.finalize())
+    """-> the node return for a finished graph, exporting every file it writes.
+
+    Neither the Creator nor the PreStage has an output socket, and they used to
+    export nothing from their expansion. That let a failed render cache as a
+    finished one (#97). `execution.py` makes the parent wait only on the links
+    the expansion exports, so a parent with none resolves straight after it
+    expands, before anything inside has run, and its outputs are cached right
+    there. A save that then ran out of disk, or a Cancel, failed only the inner
+    node; the next Run found the parent cached with unchanged inputs, never
+    expanded again, and reported success with nothing written.
+
+    So each node that writes a file hands back a `done` output, and each one is
+    exported here. Core adds the exported links as strong links on the parent,
+    which now resolves, and caches, only once every one of those nodes has
+    succeeded. The values themselves go nowhere: the parent has no socket to put
+    them on, and `merge_result_data` sizes off the result, not the schema.
+    Exporting them is what matters, not what they are. A Run after a failure
+    re-expands, finds the sampler and the decode still cached, and does only
+    the part that failed.
+    """
+    ends = [node.out(0) for node in graph.nodes.values() if node.class_type in ENDS]
+    return io.NodeOutput(*ends, expand=graph.finalize())

@@ -158,7 +158,14 @@ out = build()
 graph = out.expand
 kinds = by_class(graph)
 
-check("expansion exports no links", out.result, ())
+# Every node that writes a file is exported, so the executor holds this node
+# uncached until each has succeeded: a save that failed, or a Cancel, must
+# leave the next Run something to do. See `core.emit.expanded` (#97).
+written = sorted((node_id, 0) for node_id, node in graph.items()
+                 if node["class_type"] in ("MiniMaxH3SaveImage"))
+check("expansion exports every node that writes a file",
+      sorted(tuple(link) for link in out.result), written)
+check("...and there is one", len(written) > 0, True)
 check("one sampler", len(kinds["KSampler"]), 1)
 check("one text encode", len(kinds["CLIPTextEncode"]), 1)
 check("the negative is the prompt zeroed out", len(kinds["ConditioningZeroOut"]), 1)

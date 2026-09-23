@@ -228,7 +228,9 @@ class MiniMaxH3SaveImage(io.ComfyNode):
                 io.String.Input("filename_prefix", default=render_image.default_prefix(
                     registry.STILL_ARCHES[registry.DEFAULT_STILL_ARCH])),
             ],
-            outputs=[],
+            # Never wired to anything: `core.emit.expanded` exports it so the
+            # node that expanded this graph waits for the file (#97).
+            outputs=[io.Boolean.Output("done")],
             hidden=[io.Hidden.prompt, io.Hidden.extra_pnginfo, io.Hidden.unique_id, io.Hidden.dynprompt],
         )
 
@@ -276,7 +278,7 @@ class MiniMaxH3SaveImage(io.ComfyNode):
             results.append({"filename": filename, "subfolder": subfolder, "type": "output"})
             counter += 1
 
-        return io.NodeOutput(ui={"mmc_image": results})
+        return io.NodeOutput(True, ui={"mmc_image": results})
 
 
 class MiniMaxH3StillLatent(io.ComfyNode):
