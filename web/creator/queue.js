@@ -138,6 +138,40 @@ export function dropQueued(promptId) {
   }).catch(() => {});
 }
 
+/** The server's current state for this prompt, including one restored after
+ *  reload before its next progress event. */
+export async function promptQueueState(promptId) {
+  const response = await api.fetchApi("/queue");
+  if (!response.ok) throw new Error(t("Could not read the queue."));
+  const queue = await response.json();
+  const contains = (rows) => (rows ?? []).some((row) => String(row?.[1]) === String(promptId));
+  return contains(queue.queue_running) ? "running" : contains(queue.queue_pending) ? "queued" : null;
+}
+
+/** Cancel by prompt identity, never by the card's possibly stale UI state.
+ *  A targeted interrupt cannot stop the next job if this one just finished. */
+export async function cancelPrompt(promptId) {
+  let status = await promptQueueState(promptId);
+  if (status === "queued") {
+    const response = await api.fetchApi("/queue", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ delete: [String(promptId)] }),
+    });
+    if (!response.ok) throw new Error(t("Could not cancel the render."));
+    status = await promptQueueState(promptId);
+    if (status === null) return "removed";
+    if (status === "queued") throw new Error(t("The render is still on the queue."));
+  }
+  if (status === "running") {
+    const response = await api.fetchApi("/interrupt", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt_id: String(promptId) }),
+    });
+    if (!response.ok) throw new Error(t("Could not cancel the render."));
+  }
+  return status;
+}
+
 export function watchSubmittedPrompts(capture, accepted) {
   const listener = { capture, accepted };
   submissions.add(listener);

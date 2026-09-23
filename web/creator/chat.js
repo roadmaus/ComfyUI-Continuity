@@ -51,7 +51,7 @@ import { openWeightsPopover, adoptWeights, rememberedWeights } from "./models.js
 import { PreStageRow } from "./prestage.js";
 import { FAMILIES, STILL_ARCHES, VIDEO_FAMILIES, DEFAULT_VIDEO_FAMILY, DEFAULT_STILL_ARCH, DEFAULT_EDIT_FAMILY,
          videoFamily, stillFamily } from "./manifest.js";
-import { run, watch as watchQueue, dropQueued } from "./queue.js";
+import { run, watch as watchQueue, promptQueueState, cancelPrompt } from "./queue.js";
 import { openLoupe } from "./loupe.js";
 import { FirstRun, freshSetup, scanMachine } from "./chatsetup.js";
 import { Sync, PICTURE_ARCHES, EDIT_ARCHES } from "./chatnode.js";
@@ -161,8 +161,15 @@ const state = {
  *  that asked for it. The arrays are the live ones, not copies: `newChat` and
  *  `openSaved` replace them on `state` rather than emptying them, so a home
  *  taken here stays whole. */
-const home = () => ({ messages: state.messages, ledger: state.ledger, strip: state.strip,
-                      counts: state.counts, chat: state.chat, piece: state.piece });
+const home = () => {
+  // The first render can start before autosave. Its home must share the id
+  // later deleted from the shelf, rather than inventing a new chat on landing.
+  if (!state.chat && state.messages.some((message) => !message.local && message.role === "user")) {
+    state.chat = { id: newId(), title: "", created: Date.now() };
+  }
+  return { messages: state.messages, ledger: state.ledger, strip: state.strip,
+           counts: state.counts, chat: state.chat, piece: state.piece, turn: state.turn };
+};
 
 /** Whether the sidebar starts open: what was chosen last, else the width. */
 function sideOpen() {
@@ -219,6 +226,7 @@ async function saveNow(where = home()) {
     if (where.messages === state.messages) state.chat = where.chat;
   }
   const line = await saveChat(where.chat, where);
+  if (!line) return; // Its render finished after the conversation was deleted.
   where.chat.title = line.title;
   if (current) lastWritten = body;
   state.index = [line, ...state.index.filter((entry) => entry.id !== line.id)];
@@ -315,22 +323,32 @@ async function openSaved(id) {
 }
 
 /** A card that was left mid-render, against what the queue remembers. */
-async function settle(card, where) {
+async function settle(card, where, removed = false) {
+  if (["done", "failed"].includes(card.state)) return;
   card.home = where;
   card.state = "queued";
   card.progress = 0;
   if (!card.promptId) return fail(card, t("The render was lost when the room was closed."));
+  card.stop?.();
+  watchRender(card);
   let record = null;
   try {
     const response = await api.fetchApi(`/history/${card.promptId}`);
     record = response.ok ? (await response.json())?.[card.promptId] ?? null : null;
   } catch { record = null; }
+  if (["done", "failed"].includes(card.state)) return;
   if (!record) {
-    // Not in the history: still on the queue, or a server that has been
-    // restarted since. The queue says which — if it is there it will report,
-    // and if nothing ever arrives the card stays queued, which is honest.
-    return watchRender(card);
+    if (removed) {
+      card.stop?.();
+      return fail(card, t("cancelled"));
+    }
+    try {
+      const status = await promptQueueState(card.promptId);
+      if (!["done", "failed"].includes(card.state) && status) card.state = status;
+    } catch { /* Keep watching when the queue cannot be read. */ }
+    return notify();
   }
+  card.stop?.();
   const status = record.status?.status_str;
   const output = Object.values(record.outputs ?? {}).find((node) => node.mmc_video || node.mmc_image);
   if (output) {
@@ -2335,15 +2353,24 @@ class Room {
   /** A render that has not landed, stopped. Queued, the job comes off the
    *  queue and the card says so; running, the sampler is interrupted and the
    *  queue's own event fails the card — see `watchRender`. */
-  cancel(card) {
-    if (card.state === "queued" && card.promptId) {
-      dropQueued(card.promptId);
-      card.state = "failed";
-      card.error = t("cancelled");
-      card.stop?.();
-      return notify();
+  async cancel(card) {
+    if (!card.promptId || !["queued", "running"].includes(card.state) || card.cancelling) return;
+    card.cancelling = true;
+    try {
+      const status = await cancelPrompt(card.promptId);
+      if (["done", "failed"].includes(card.state)) return;
+      if (status === "running") {
+        card.state = "running";
+        // The interrupt request is not its confirmation. Keep the result and
+        // interruption listeners until the server settles this exact prompt.
+        return notify();
+      }
+      await settle(card, card.home ?? home(), status === "removed");
+    } catch (error) {
+      report(error);
+    } finally {
+      card.cancelling = false;
     }
-    if (card.state === "running") api.interrupt();
   }
 
   // ---- attachments -------------------------------------------------------------
