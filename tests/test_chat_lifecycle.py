@@ -1,19 +1,23 @@
 """The saved room keeps its turn, cancels its own prompt, and stays deleted.
 
-Runs complete production modules with external API/DOM/storage mocks. No GPU,
-ComfyUI server, real browser, network or user data is needed.
+The real room is opened and driven through its DOM, alongside the real store,
+queue and imports. Only ComfyUI's API and the browser are stubbed; no server,
+network, GPU or user data is needed.
 """
-import os
-import subprocess
+from pathlib import Path
 
 import layout
-from harness import died, passed
+from domshim import DOM
+from harness import check, passed
 
 layout.skip_without_node()
-script = os.path.join(os.path.dirname(__file__), "chat_lifecycle.mjs")
-result = subprocess.run(["node", "--experimental-vm-modules", script],
-                        capture_output=True, text=True)
-if result.returncode:
-    died(result.stdout + result.stderr)
-print(result.stdout.strip())
-passed("chat lifecycle regressions passed")
+here = Path(__file__).parent
+api = layout.STUBS["api.js"] + (here / "chat_lifecycle_api.mjs").read_text(encoding="utf-8")
+script = DOM + (here / "chat_lifecycle.mjs").read_text(encoding="utf-8")
+with layout.pack(skip=["atlas"], extra_stubs={"api.js": api}) as target:
+    results = layout.in_pack(script, target)
+
+check("every chat lifecycle scenario ran", len(results), 9)
+for name, error in results.items():
+    check(name, error, None)
+passed("all 9 chat lifecycle scenarios passed")

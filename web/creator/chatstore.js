@@ -192,30 +192,16 @@ export function packPiece(piece) {
 export function unpack(body) {
   const messages = (Array.isArray(body?.messages) ? body.messages : [])
     .map((message) => ({ ...message, card: message.card ? { ...message.card } : undefined }));
-  // Older saves omitted the home's turn and each card's turn. The transcript
-  // and finished ledger entries still say which exchange produced the render.
-  let turn = 0;
-  let rendered = false;
-  for (const message of messages) {
-    if (message.role === "user") {
-      message.turn = Number.isFinite(message.turn) && message.turn > 0 ? message.turn : turn + 1;
-      turn = Math.max(turn, message.turn);
-      rendered = false;
-    }
-    if (message.card) {
-      const saved = message.card.turn ?? message.card.entry?.turn;
-      message.card.turn = Number.isFinite(saved) && saved > 0 ? saved : Math.max(1, turn + Number(rendered));
-      turn = Math.max(turn, message.card.turn);
-      rendered = true;
-    }
-  }
   const ledger = Array.isArray(body?.ledger) ? body.ledger : [];
   return {
     messages,
     ledger,
     strip: Array.isArray(body?.strip) ? body.strip : [],
     counts: { pic: 0, clip: 0, snd: 0, ...(body?.counts ?? {}) },
-    turn: Math.max(Number.isFinite(body?.turn) ? body.turn : 0, turn,
+    // Older saves omitted the home's turn. User messages and ledger entries
+    // already carry it, including retakes, so no transcript inference is needed.
+    turn: Math.max(Number.isFinite(body?.turn) ? body.turn : 0,
+      ...messages.map((message) => Number.isFinite(message.turn) ? message.turn : 0),
       ...ledger.map((entry) => Number.isFinite(entry.turn) ? entry.turn : 0)),
     piece: packPiece(body?.piece),
   };
