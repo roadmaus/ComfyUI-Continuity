@@ -11,7 +11,7 @@ English keys the i18n dictionaries already carry.
 
 from ... import accel, canvas, compile, guide, models as core, sampling, settings
 from .. import manifest as m
-from . import declare, grammar, guidelora, models as slots, refine, still
+from . import contextir, declare, grammar, guidelora, models as slots, refine, still
 
 
 def _widgets():
@@ -381,8 +381,16 @@ def manifest():
                                         "default": guidelora.DEFAULT_STRENGTH}},
             # Whether a shot can be shown a storyboard of the shots before it
             # — the pill on the bar and the chip on every seam. Read off the
-            # declaration so the compiler and the frontend answer alike.
-            "storyboard": declare.STORYBOARD,
+            # declaration so the compiler and the frontend answer alike. What
+            # it carries is for the pill's popover (issue #96): the holds in
+            # the order it offers them, and the line the prompt says for each,
+            # which is what the popover's box starts from. They are the
+            # prompt's words, so they come from the prompt's module rather
+            # than living twice.
+            "storyboard": {"holds": list(compile.STORYBOARD_HOLDS),
+                           "carries": dict(contextir.STORYBOARD_BECOMES),
+                           "max": compile.STORYBOARD_CARRIES_MAX}
+                          if declare.STORYBOARD else False,
             "turbo": TURBO,
             # Whether this family can sample through Raylight's Ray workers —
             # the multi-GPU backend in the weights popover. H3's alone so far,

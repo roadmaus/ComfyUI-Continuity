@@ -639,14 +639,22 @@ _TAKES_NOTE = {
               "taking its action from this picture, mark that line "
               "attribute_transfer in retention_analysis, and give the picture "
               "no <Picture N> entry of its own",
-    "storyboard": "you cannot see it — it is made when the earlier shots have "
-                  "rendered. It is the piece so far, seen as one sheet: keep "
-                  "its definition line saying what it is and how it reads, "
-                  "retain its place, light and where people and things stand, "
-                  "mark that line fully_preserved in retention_analysis, and "
-                  "never describe the sheet, its grid or its frames as "
-                  "something the target video shows",
+    # "storyboard" follows the piece's hold and its line: `_storyboard_note`.
 }
+
+
+def _storyboard_note(asset):
+    """The storyboard's note, saying the marker and the line the piece chose
+    (issue #96). Left to a fixed note, a refined prompt would write the
+    retention line back to `fully_preserved`, and the refined prompt is the
+    one that renders: `contextir.compose` adds only what a prompt lacks."""
+    return ("you cannot see it — it is made when the earlier shots have "
+            "rendered. It is the piece so far, seen as one sheet: keep its "
+            "definition line saying what it is and how it reads, and write its "
+            "retention line as this, marked "
+            f"{contextir.storyboard_hold(asset)} in retention_analysis: "
+            f"{contextir.storyboard_becomes(asset)}. Never describe the sheet, "
+            "its grid or its frames as something the target video shows")
 
 # The un-narrowed case. `takes` defaults to "full", so this is what most
 # reference images ride in with, and it is where the hallucination actually
@@ -778,7 +786,8 @@ def slot_row(asset, label=None, show_label=False):
            "what": f"{what} ({os.path.basename(asset.filename)})" if asset.filename else what}
     if asset.role == "reference":
         if kind == "image":
-            row["note"] = _TAKES_NOTE.get(asset.takes, _FULL_NOTE)
+            row["note"] = (_storyboard_note(asset) if asset.takes == "storyboard"
+                           else _TAKES_NOTE.get(asset.takes, _FULL_NOTE))
         elif kind == "video" and asset.takes in _VIDEO_TAKES_NOTE:
             row["note"] = _VIDEO_TAKES_NOTE[asset.takes]
     # Only where the ordinal is unambiguous. Handles are allocated per segment,

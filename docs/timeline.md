@@ -166,6 +166,64 @@ frames over as a pooled video RefMod with the scene take instead of a sheet
 (no effect on framing, and the pooled latent's colour stains compounded down
 the chain). The sheet is a real picture, and that is why it stays one.
 
+### How firmly the sheet holds
+
+The prompt tells the model to keep where things stand in the sheet, and that
+is also what undoes a change the shots themselves made: a table knocked over
+in one shot stands back up in the next, because the sheet shows it standing.
+Saying in the next shot's prompt that it lies broken only names the table
+again. So the storyboard pill's popover has a second part, under the three
+answers:
+
+- **How firmly the sheet holds.** *Firm* is the default and what every piece
+  before this setting had: the room, its light and where everything stands.
+  *Partial* keeps the room and its light, and lets people and things move and
+  change as the prompt says. *Loose* keeps only the broad look of the place and
+  its light, and leaves the rest to the prompt, the camera included. In the
+  prompt these are the guide's own retention markers, `fully_preserved`,
+  `partially_preserved` and `weak_reference`. The sentence that defines the
+  sheet changes with them, so it never claims more than the marker keeps.
+- **What carries over.** The box shows the storyboard's line as the model reads
+  it: the marker, then the sentence about what carries into the shot. It starts
+  from the default wording for the hold, and you can rewrite it, for example to
+  keep the room and its light but not where things stand. *Use the default*
+  puts the wording back. Your line stays when you change the hold.
+
+Both are settings of the piece, for every shot that is shown a sheet. They
+change only the words, not the sheet itself, so they loosen what the model is
+told to keep, not how strongly the picture pulls. Refine follows them too, so a
+rewritten prompt keeps the hold you chose. A shot that is shown a sheet
+re-renders when either changes.
+
+### How firmly the sheet holds
+
+The prompt tells the model to keep where things stand in the sheet, and that
+is also what undoes a change the shots themselves made: a table knocked over
+in one shot stands back up in the next, because the sheet shows it standing.
+Saying in the next shot's prompt that it lies broken only names the table
+again. So the storyboard pill's popover has a second part, under the three
+answers:
+
+- **How firmly the sheet holds.** *Firm* is the default and what every piece
+  before this setting had: the room, its light and where everything stands.
+  *Partial* keeps the room and its light, and lets people and things move and
+  change as the prompt says. *Loose* keeps only the broad look of the place and
+  its light, and leaves the rest to the prompt, the camera included. In the
+  prompt these are the guide's own retention markers, `fully_preserved`,
+  `partially_preserved` and `weak_reference`. The sentence that defines the
+  sheet changes with them, so it never claims more than the marker keeps.
+- **What carries over.** The box shows the storyboard's line as the model reads
+  it: the marker, then the sentence about what carries into the shot. It starts
+  from the default wording for the hold, and you can rewrite it, for example to
+  keep the room and its light but not where things stand. *Use the default*
+  puts the wording back. Your line stays when you change the hold.
+
+Both are settings of the piece, for every shot that is shown a sheet. They
+change only the words, not the sheet itself, so they loosen what the model is
+told to keep, not how strongly the picture pulls. Refine follows them too, so a
+rewritten prompt keeps the hold you chose. A shot that is shown a sheet
+re-renders when either changes.
+
 ## Piece-level fields
 
 The timeline itself carries:

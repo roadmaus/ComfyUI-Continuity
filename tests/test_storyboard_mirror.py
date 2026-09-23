@@ -118,4 +118,22 @@ console.log(JSON.stringify(JSON.parse(process.argv[2]).map((seconds) => s.storyb
 for seconds, got in zip(CELLS, counted):
     check(f"cells {seconds}", got, compiler.storyboard_cells(seconds))
 
+# How firmly the sheet holds (issue #96): the same markers in the same order,
+# and a piece that changed them round-trips to the keys the compiler reads.
+held = layout.run("""
+const s = await import(process.argv[1]);
+const piece = { segments: [], storyboard: "all", storyboard_hold: "weak_reference",
+                storyboard_carries: "only the room" };
+const plain = { segments: [], storyboard: "all", storyboard_hold: "fully_preserved",
+                storyboard_carries: "  " };
+const keys = (blob) => Object.fromEntries(Object.entries(
+  JSON.parse(s.serializeTimeline(s.parseTimeline(JSON.stringify({ version: 2, ...blob })))))
+  .filter(([key]) => key.startsWith("storyboard_")));
+console.log(JSON.stringify({ holds: s.STORYBOARD_HOLDS, set: keys(piece), plain: keys(plain) }));
+""", MIRROR, None)
+check("the holds", held["holds"], list(compiler.STORYBOARD_HOLDS))
+check("a changed hold and line survive a round trip", held["set"],
+      {"storyboard_hold": "weak_reference", "storyboard_carries": "only the room"})
+check("the defaults are stored as nothing", held["plain"], {})
+
 passed("state.js and compile.py agree about what each shot is shown")

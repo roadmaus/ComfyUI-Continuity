@@ -109,13 +109,22 @@ for key in python_define:
     if takes not in compiler.TAKES.get(kind, ()) and (kind, takes) not in COMPILER_OWN:
         FAILURES.append(f"contextir defines {key}, which is not a scope compile allows")
 for kind, takes in COMPILER_OWN:
-    for table, what in ((contextir._MARKER, "retention marker"),
-                        (contextir._BECOMES, "line about what becomes of it"),
-                        (contextir._SCOPE_NOTE, "scope note")):
-        if (kind, takes) not in table:
-            FAILURES.append(f"the compiler's own {kind}:{takes} has no {what}")
+    if (kind, takes) not in contextir._SCOPE_NOTE:
+        FAILURES.append(f"the compiler's own {kind}:{takes} has no scope note")
     if takes in compiler.TAKES.get(kind, ()):
         FAILURES.append(f"{kind}:{takes} is the compiler's and must not be a chip")
+
+# The storyboard's marker and its line are the piece's to choose (issue #96),
+# so they are not in the fixed tables: every hold the compiler accepts has a
+# sentence for what is retained and a line for what becomes of it, and the
+# default is the first.
+for table, what in ((contextir.STORYBOARD_RETAINS, "sentence about what is retained"),
+                    (contextir.STORYBOARD_BECOMES, "line about what becomes of it")):
+    if list(table) != list(compiler.STORYBOARD_HOLDS):
+        FAILURES.append(f"the storyboard's {what} covers {list(table)}, "
+                        f"want {list(compiler.STORYBOARD_HOLDS)}")
+if contextir.STORYBOARD_DEFAULT_HOLD != compiler.STORYBOARD_HOLDS[0]:
+    FAILURES.append("the storyboard's default hold is not the first the compiler offers")
 
 # Every definition has exactly one place for the label to go. The two whole-video
 # relationships used to borrow the summary's opening sentence here, which read as
@@ -133,6 +142,9 @@ for (kind, takes), marker in contextir._MARKER.items():
     allowed = AUDIO if kind == "audio" else VISIBLE
     if marker not in allowed:
         FAILURES.append(f"{kind}:{takes} is marked {marker}, which is not one of {sorted(allowed)}")
+for marker in compiler.STORYBOARD_HOLDS:
+    if marker not in VISIBLE:
+        FAILURES.append(f"the storyboard may be held {marker}, which is not one of {sorted(VISIBLE)}")
 
 # And the cast's own markers are the visible four, since a subject is visible
 # content by definition.

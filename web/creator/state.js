@@ -3369,6 +3369,13 @@ export function parseTimeline(raw) {
       // What each shot is shown of the shots before it. Absent means nothing,
       // which is what every piece written before the sheet existed says.
       if (!STORYBOARD_MODES.includes(timeline.storyboard)) delete timeline.storyboard;
+      // How firmly it holds and what it says carries over (issue #96): absent
+      // for the defaults, which is what every piece before the choice says.
+      if (!STORYBOARD_HOLDS.includes(timeline.storyboard_hold)
+          || timeline.storyboard_hold === STORYBOARD_HOLDS[0]) delete timeline.storyboard_hold;
+      if (typeof timeline.storyboard_carries !== "string" || !timeline.storyboard_carries.trim()) {
+        delete timeline.storyboard_carries;
+      }
       timeline.sound = parseSound(timeline.sound);
       for (const key of ["soundscape", "music"]) {
         if (typeof timeline[key] !== "string") timeline[key] = "";
@@ -3561,6 +3568,13 @@ export function serializeTimeline(timeline) {
     // The storyboard. Absent when off, so a piece that never asked for one
     // round-trips to the bytes it always did.
     ...(STORYBOARD_MODES.includes(timeline.storyboard) ? { storyboard: timeline.storyboard } : {}),
+    // Its hold and its line, each only where the piece changed it. Kept while
+    // the sheet is off: they are settings of the sheet, and turning it off and
+    // on again should not lose them.
+    ...(storyboardHold(timeline) !== STORYBOARD_HOLDS[0]
+      ? { storyboard_hold: storyboardHold(timeline) } : {}),
+    ...(typeof timeline.storyboard_carries === "string" && timeline.storyboard_carries.trim()
+      ? { storyboard_carries: timeline.storyboard_carries } : {}),
     // The sound lane. Absent when nothing is on it, so a piece that never laid
     // a track down round-trips to the bytes it always did — and present the
     // moment one is, which is the whole of what a lane is for: it is the piece
@@ -6386,6 +6400,15 @@ export const continuesAudio = (state) => state.continue_audio === true;
 export const STORYBOARD_MODES = ["previous", "all"];
 /** The sheet's cells — 3 x 3. Mirrors `compile.STORYBOARD_CELLS`. */
 export const STORYBOARD_CELLS = 9;
+/** How firmly the sheet holds: the retention marker its line in the prompt
+ *  carries, strongest first, the first being the default (issue #96). Mirrors
+ *  `compile.STORYBOARD_HOLDS`. */
+export const STORYBOARD_HOLDS = ["fully_preserved", "partially_preserved", "weak_reference"];
+
+/** The piece's hold, the default where it chose none. */
+export function storyboardHold(piece) {
+  return STORYBOARD_HOLDS.includes(piece.storyboard_hold) ? piece.storyboard_hold : STORYBOARD_HOLDS[0];
+}
 
 /** The piece's setting, or null — and null on a family without the sheet,
  *  whatever the blob says: the compiler reads it as off there too. */

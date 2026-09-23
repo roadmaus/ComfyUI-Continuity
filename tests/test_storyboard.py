@@ -205,6 +205,70 @@ expect_error("a file cannot claim the sheet's take",
 check("LTX 2.5 draws no sheet",
       boards({**three, "family": "ltx25", "storyboard": "all"}), [None, None, None])
 
+# --- how firmly it holds (issue #96) -----------------------------------------------
+#
+# The piece can loosen the sheet's retention marker and write its own line about
+# what carries over. Both are stored only when changed, both reach the prompt, and
+# a piece on the defaults keeps the payload, and so the cache key, it had.
+
+on_defaults = compiler.timeline_payloads({**three, "storyboard": "all"}, _look)
+check("a sheet on the defaults stamps only its cells",
+      sorted(on_defaults[1]["storyboard"]), ["cells"])
+check("...and so does one set to the default hold by name",
+      sorted(compiler.timeline_payloads({**three, "storyboard": "all",
+                                         "storyboard_hold": "fully_preserved"},
+                                        _look)[1]["storyboard"]), ["cells"])
+
+loose = {**three, "storyboard": "all", "storyboard_hold": "weak_reference"}
+check("a loosened hold rides on the sheet's payload",
+      compiler.timeline_payloads(loose, _look)[1]["storyboard"]["hold"], "weak_reference")
+check("...and nowhere a sheet is not",
+      "storyboard" in compiler.timeline_payloads(loose, _look)[0], False)
+compiled = compiler.compile_timeline(loose, _look)
+check("the retention line carries the chosen marker",
+      "<Picture 1> (the shots before this one): weak_reference - only the broad look"
+      in compiled[1].prompt, True)
+check("...and the definition retains only what that marker keeps",
+      "Only its broad look is retained" in compiled[1].prompt, True)
+check("...without the default's claim that where things stand is kept",
+      "where the people and objects in it stand, are retained" in compiled[1].prompt, False)
+check("the framing sentence is there whatever the hold",
+      "Its framing is not: the target video's own shot size" in compiled[1].prompt, True)
+
+partial = compiler.compile_timeline(
+    {**three, "storyboard": "all", "storyboard_hold": "partially_preserved"}, _look)
+check("the middle hold is the guide's partial marker",
+      "(the shots before this one): partially_preserved - " in partial[1].prompt, True)
+
+own = compiler.compile_timeline(
+    {**three, "storyboard": "all", "storyboard_hold": "weak_reference",
+     "storyboard_carries": "  keep the room and its light,\n but not where things stand. "},
+    _look)
+check("the piece's own line replaces the default, on one line, with one full stop",
+      "(the shots before this one): weak_reference - keep the room and its light, "
+      "but not where things stand." in own[1].prompt, True)
+check("a line that is only whitespace is no line",
+      sorted(compiler.timeline_payloads({**three, "storyboard": "all",
+                                         "storyboard_carries": "  \n "}, _look)[1]["storyboard"]),
+      ["cells"])
+check("the wording is kept while the sheet is off, and costs nothing there",
+      [p.get("storyboard") for p in compiler.timeline_payloads(
+          {**three, "storyboard_hold": "weak_reference"}, _look)], [None, None, None])
+
+expect_error("a hold that is not a marker is refused",
+             lambda: compiler.timeline_payloads(
+                 {**three, "storyboard": "all", "storyboard_hold": "loose"}, _look),
+             "unknown storyboard hold")
+expect_error("a line that is not text is refused",
+             lambda: compiler.timeline_payloads(
+                 {**three, "storyboard": "all", "storyboard_carries": 3}, _look),
+             "must be text")
+expect_error("a paragraph is refused by its length",
+             lambda: compiler.timeline_payloads(
+                 {**three, "storyboard": "all",
+                  "storyboard_carries": "x" * (compiler.STORYBOARD_CARRIES_MAX + 1)}, _look),
+             "keep it to")
+
 # --- a shortened render ----------------------------------------------------------
 
 # Card 1 kept, card 2 being shot: the sheet is the take.

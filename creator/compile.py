@@ -231,6 +231,16 @@ STORYBOARD_CELLS = 9
 # view as the tone the piece opened on, where a sheet of the previous shot
 # alone shows each shot the drift of the one before it as the room.
 STORYBOARD_MODES = ("previous", "all")
+# How firmly the sheet holds (issue #96): the retention marker its line in the
+# prompt carries, strongest first. The piece stores the marker itself, and only
+# when it is not the first, so every piece written before the choice existed
+# keeps its prompt and its cache. What each one says is the H3 prompt's
+# (`families/h3/contextir.STORYBOARD_RETAINS`).
+STORYBOARD_HOLDS = ("fully_preserved", "partially_preserved", "weak_reference")
+# The longest line the piece may write about what carries over. It stands in
+# one line of `retention_analysis`, where a paragraph would crowd out the
+# lines about every other reference.
+STORYBOARD_CARRIES_MAX = 400
 
 
 class CompileError(ValueError):
@@ -282,6 +292,12 @@ class Asset:
     # has. Empty on a picture nobody saved, and on a mod asset, which *is* one
     # rendition. See `creator/refmod.py` and `families/h3/encode`.
     mods: dict = field(default_factory=dict)
+    # The storyboard's alone (issue #96): the marker its retention line
+    # carries, and the line the piece wrote about what carries over, or empty
+    # for the defaults. On the sheet's asset because the prompt is written from
+    # the plan, and the asset is what the plan holds. See `storyboard_hold`.
+    hold: str = ""
+    carries: str = ""
 
     @property
     def mod(self):
@@ -1495,6 +1511,8 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
     shots arrives as a tensor and is cited as the last picture reference. Like
     the seam frame it has no file, and unlike it, it is a *reference* — so it
     puts the generation on the reference road, whatever else the card carries.
+    It is the payload's `storyboard` block, falsy for none; its `hold` and
+    `carries`, where the piece set them, go on the sheet's asset.
 
     Every reference is defined and scoped in the prompt unconditionally. That
     used to be a machine setting (`define_refs`, off by default), which meant
@@ -1635,9 +1653,12 @@ def compile_request(data, image_size_lookup=None, continues=False, canvas_spec=N
                 f"storyboard of earlier shots needs one of the "
                 f"{family_grammar.max_images} — take a picture off it, or turn "
                 f"the storyboard off for this shot")
+        spec = storyboard if isinstance(storyboard, dict) else {}
         ref_images = ref_images + [Asset(handle=STORYBOARD_HANDLE, kind="image",
                                          role="reference", filename="",
-                                         takes=STORYBOARD_TAKE)]
+                                         takes=STORYBOARD_TAKE,
+                                         hold=spec.get("hold", ""),
+                                         carries=spec.get("carries", ""))]
 
     mode = _derive_mode(family_grammar, first_frame, last_frame,
                         ref_images, ref_videos, ref_audios, continues, ends_on)
@@ -2999,6 +3020,40 @@ def storyboard_policy(data):
     return mode
 
 
+def storyboard_wording(data):
+    """How firmly the piece's storyboard holds, and what it says carries over.
+
+    -> `{"hold": ..., "carries": ...}`, each only where the piece set it. The
+    hold is one of `STORYBOARD_HOLDS`, absent for the first; the line is the
+    piece's own, on one line and with no closing full stop (the prompt adds
+    one), absent when blank. Read off the piece whether or not the storyboard
+    is on: it is a setting of the sheet, and turning the sheet off and on again
+    should not lose it."""
+    piece = as_piece(data)
+    out = {}
+    hold = piece.get("storyboard_hold")
+    if hold not in (None, "", STORYBOARD_HOLDS[0]):
+        if hold not in STORYBOARD_HOLDS:
+            raise CompileError(
+                f"unknown storyboard hold {hold!r} — one of "
+                f"{', '.join(STORYBOARD_HOLDS)}")
+        out["hold"] = hold
+    carries = piece.get("storyboard_carries")
+    if carries not in (None, ""):
+        if not isinstance(carries, str):
+            raise CompileError("the storyboard's line about what carries over "
+                               "must be text")
+        carries = " ".join(carries.split()).rstrip(" .")
+        if len(carries) > STORYBOARD_CARRIES_MAX:
+            raise CompileError(
+                f"the storyboard's line about what carries over is "
+                f"{len(carries)} characters — keep it to "
+                f"{STORYBOARD_CARRIES_MAX}")
+        if carries:
+            out["carries"] = carries
+    return out
+
+
 def _storyboard_cards(segment, index):
     """A card's own answer about the storyboard, off its `storyboard` key.
 
@@ -3263,7 +3318,10 @@ def timeline_payloads(data, image_size_lookup=None):
                     [_run_seconds(segments, runs[where]) for where in sources])
                 payload["storyboard"] = {
                     "cells": [[where, count] for where, count
-                              in zip(sources[-len(counts):], counts)]}
+                              in zip(sources[-len(counts):], counts)],
+                    # Only where the piece loosened it or wrote its own line,
+                    # so a sheet on the defaults keeps the cache key it had.
+                    **storyboard_wording(data)}
 
     _stamp_sound(data, segments, runs, payloads, rules, frames)
 
@@ -4166,9 +4224,9 @@ def compile_segment(payload, image_size_lookup=None, family=registry.DEFAULT_VID
         ends_on_audio=bool(payload.get("ends_on_audio")),
         ends_feather=int(payload.get("ends_feather", 1)),
         ends_feather_pin=bool(payload.get("ends_feather_pin")),
-        # Stamped on by `timeline_payloads` with the cells it is made of; the
-        # compiler needs only that there is one.
-        storyboard=bool((payload.get("storyboard") or {}).get("cells")),
+        # Stamped on by `timeline_payloads` with the cells it is made of, and
+        # with how firmly it holds where the piece said.
+        storyboard=payload.get("storyboard") if (payload.get("storyboard") or {}).get("cells") else None,
         canvas_spec=CanvasSpec(**spec) if spec else None)
 
 

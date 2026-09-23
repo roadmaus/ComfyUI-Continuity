@@ -2193,11 +2193,125 @@ class Timeline {
       title: t("What each shot is shown of the shots before it"),
       options, label, sub,
       value: S.storyboardPolicy(this.timeline),
+      extra: () => this.storyboardHold(),
       onPick: (policy) => {
         if (policy) this.timeline.storyboard = policy; else delete this.timeline.storyboard;
         this.commit();
       },
     });
+  }
+
+  /**
+   * How firmly the sheet holds, and what the prompt says carries over (issue
+   * #96), under the storyboard pill's three answers.
+   *
+   * The default holds the room, its light and where things stand, which is
+   * what makes objects and tone survive a cut, and also what stands a
+   * knocked-over table back up. So the piece can loosen the retention marker,
+   * and rewrite the line that goes with it.
+   *
+   * The box is drawn as the line the model reads, marker first: the marker and
+   * the sentence are one statement in `retention_analysis`, and a box holding
+   * only the sentence would hide which word it follows. The defaults are the
+   * prompt's own words, served in the manifest, so the box starts from what
+   * the render would say. Wording equal to the default is stored as nothing,
+   * and a line survives changing the hold: it is the user's.
+   *
+   * Neither control closes the popover. A hold is often picked to be followed
+   * by a rewrite, and the rows above close on pick because they are the whole
+   * answer.
+   */
+  storyboardHold() {
+    const cap = S.capabilityOf(this.timeline, "storyboard") || {};
+    const holds = cap.holds || S.STORYBOARD_HOLDS;
+    const defaults = cap.carries || {};
+    const words = {
+      fully_preserved: [t("Firm"), t("The room, its light and where everything stands. "
+        + "Steady across cuts, but things go back to where the sheet shows them.")],
+      partially_preserved: [t("Partial"), t("The room and its light. People and things "
+        + "move and change as the prompt says.")],
+      weak_reference: [t("Loose"), t("Only the broad look of the place and its light. "
+        + "The prompt decides the rest, the camera included.")],
+    };
+    const hold = () => S.storyboardHold(this.timeline);
+    const own = () => typeof this.timeline.storyboard_carries === "string"
+      && this.timeline.storyboard_carries.trim() !== "";
+
+    // Typing writes the piece at once and commits once it pauses: a commit
+    // re-renders the node, which is not a thing to do per keystroke.
+    let pending = null;
+    const commitSoon = () => {
+      clearTimeout(pending);
+      pending = setTimeout(() => this.commit(), 400);
+    };
+
+    const box = el("textarea", {
+      class: "mmc-board-line-text", rows: 4, spellcheck: "false",
+      maxlength: cap.max || 400,
+      "aria-label": t("What carries over from the storyboard"),
+    });
+    const marker = el("span", { class: "mmc-board-line-marker" });
+    const note = el("span", { class: "mmc-opt-sub mmc-board-hold-note" });
+    const reset = el("button", {
+      class: "mmc-board-line-reset", text: t("Use the default"),
+      onclick: () => {
+        delete this.timeline.storyboard_carries;
+        draw();
+        clearTimeout(pending);
+        this.commit();
+      },
+    });
+    const whose = el("span", { class: "mmc-opt-sub" });
+    const picks = el("div", { class: "mmc-board-picks mmc-board-holds", role: "radiogroup",
+                              "aria-label": t("How firmly the sheet holds") });
+
+    const draw = () => {
+      const now = hold();
+      picks.replaceChildren(...holds.map((name, index) => el("button", {
+        class: "mmc-board-pick mmc-board-hold",
+        role: "radio", "aria-checked": name === now,
+        title: name,
+        onclick: () => {
+          if (index === 0) delete this.timeline.storyboard_hold;
+          else this.timeline.storyboard_hold = name;
+          draw();
+          clearTimeout(pending);
+          this.commit();
+        },
+      }, [
+        // Strength as bars, strongest first: three, two, one.
+        el("span", { class: "mmc-board-hold-bars", "aria-hidden": "true" },
+          [0, 1, 2].map((bar) => el("i", { class: bar < holds.length - index ? "on" : "" }))),
+        el("span", { text: words[name]?.[0] ?? name }),
+      ])));
+      note.textContent = words[now]?.[1] ?? "";
+      marker.textContent = `${now} -`;
+      if (!own()) box.value = defaults[now] ?? "";
+      else if (document.activeElement !== box) box.value = this.timeline.storyboard_carries;
+      reset.hidden = !own();
+      whose.textContent = own() ? t("Your wording") : "";
+    };
+
+    box.oninput = () => {
+      const text = box.value;
+      const same = text.split(/\s+/).join(" ").trim() === (defaults[hold()] ?? "");
+      if (!text.trim() || same) delete this.timeline.storyboard_carries;
+      else this.timeline.storyboard_carries = text;
+      reset.hidden = !own();
+      whose.textContent = own() ? t("Your wording") : "";
+      commitSoon();
+    };
+
+    draw();
+    return el("div", { class: "mmc-twopass mmc-board-hold-sect" }, [
+      el("div", { class: "mmc-opt-label mmc-opt-col mmc-board-hold-head" }, [
+        el("span", { text: t("How firmly the sheet holds") }),
+        note,
+      ]),
+      picks,
+      el("label", { class: "mmc-board-line" }, [marker, box]),
+      el("div", { class: "mmc-board-line-foot" }, [whose, reset]),
+    ]);
   }
 
   /**

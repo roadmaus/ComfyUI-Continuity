@@ -123,14 +123,16 @@ _DEFINE = {
     # what is *not* carried — the grid — for the same reason the motion line
     # says whoever is in the picture stays out: it is the failure it exists to
     # prevent.
+    #
+    # The middle sentence, what of it is retained, is the one the piece can
+    # loosen (issue #96), so it comes from `STORYBOARD_RETAINS` by the hold the
+    # piece chose; see `_define`.
     ("image", "storyboard"): "%s is a storyboard of the video so far: nine frames "
                              "from the shots before this one, in time order, laid "
-                             "out left to right and top to bottom. Its environment, "
-                             "surfaces and light, and where the people and objects "
-                             "in it stand, are retained. Its framing is not: the "
-                             "target video's own shot size, angle and camera come "
-                             "from this description, and the sheet itself, its grid "
-                             "and its frames are never shown.",
+                             "out left to right and top to bottom. {retains} Its "
+                             "framing is not: the target video's own shot size, "
+                             "angle and camera come from this description, and the "
+                             "sheet itself, its grid and its frames are never shown.",
 
     ("video", "full"): "%s is a reference video.",
     ("video", "person"): "%s is a person reference: the face, hair, build and "
@@ -201,7 +203,70 @@ def _define(asset, label):
         return None
     kind = "audio" if (asset.kind == "audio" or asset.track == "sound") else asset.kind
     form = _DEFINE.get((kind, asset.takes)) or _DEFINE.get((kind, "full"))
+    if form and asset.takes == "storyboard":
+        form = form.replace("{retains}", STORYBOARD_RETAINS[storyboard_hold(asset)])
     return form % label if form else None
+
+
+# ---- how firmly the storyboard holds ----------------------------------------
+#
+# The sheet is the one reference whose retention the piece chooses (issue #96).
+# `fully_preserved`, with "where the people and objects in it stand, are
+# retained", is right for most cuts. It is what makes the room and its objects
+# hold, and what keeps the tone from flickering. But it is also an instruction
+# to put things back. A table knocked over in shot 2 stands up again in shot 3,
+# because the sheet shows it standing and the line says where things stand is
+# kept, and saying in the shot's own prose that it lies broken only names the
+# table once more. So the piece can loosen the hold to either of the guide's two
+# weaker markers, and can rewrite the line saying what carries over.
+#
+# Keyed by the marker itself, which is what the piece stores: the words are the
+# model's own vocabulary, and a reader who has seen the marker in the prompt
+# knows what the setting does. `compile.STORYBOARD_HOLDS` is the order the
+# popover offers them in, and `tests/test_storyboard.py` holds the three tables
+# to it.
+STORYBOARD_DEFAULT_HOLD = "fully_preserved"
+
+# The definition line's middle sentence: what of the sheet is retained.
+STORYBOARD_RETAINS = {
+    "fully_preserved": "Its environment, surfaces and light, and where the "
+                       "people and objects in it stand, are retained.",
+    "partially_preserved": "Its environment, surfaces and light are retained. "
+                           "Where the people and objects in it stand, and what "
+                           "state they are in, is where this description picks "
+                           "them up, not where it must leave them.",
+    "weak_reference": "Only its broad look is retained: the kind of place, its "
+                      "palette and its light. What is in it, where it stands and "
+                      "what state it is in come from this description.",
+}
+
+# The retention line's second half: what becomes of the sheet. The piece may
+# write its own (`Asset.carries`), which stands in for this.
+STORYBOARD_BECOMES = {
+    "fully_preserved": "the place, its light and where things stand are carried "
+                       "into the target video, which picks up where those shots "
+                       "left off and frames them as this description says rather "
+                       "than as the sheet does, and the sheet is not shown",
+    "partially_preserved": "the place and its light are carried into the target "
+                           "video, which picks up where those shots left off; "
+                           "people and things move and change as this description "
+                           "says, it is framed as this description says rather "
+                           "than as the sheet does, and the sheet is not shown",
+    "weak_reference": "only the broad look of the place and its light carry into "
+                      "the target video; what is in it, where it stands and how "
+                      "it is framed come from this description, and the sheet is "
+                      "not shown",
+}
+
+
+def storyboard_hold(asset):
+    """The marker the storyboard is held to: the piece's choice, or the default."""
+    return asset.hold or STORYBOARD_DEFAULT_HOLD
+
+
+def storyboard_becomes(asset):
+    """What the storyboard's retention line says becomes of it."""
+    return asset.carries or STORYBOARD_BECOMES[storyboard_hold(asset)]
 
 
 def reference_lines(plan, skip=(), replaced=None):
@@ -274,7 +339,7 @@ _MARKER = {
     ("image", "scene"): "fully_preserved",
     ("image", "style"): "fully_preserved",
     ("image", "motion"): "attribute_transfer",
-    ("image", "storyboard"): "fully_preserved",
+    # ("image", "storyboard") is the piece's to choose: `storyboard_hold`.
 
     ("video", "full"): "fully_preserved",
     ("video", "person"): "fully_preserved",
@@ -318,11 +383,7 @@ _BECOMES = {
                          "setting it was photographed in is not",
     ("image", "scene"): "the place, its surfaces and its light are carried into "
                         "the target video and whoever stood in it is not",
-    ("image", "storyboard"): "the place, its light and where things stand are "
-                             "carried into the target video, which picks up "
-                             "where those shots left off and frames them as this "
-                             "description says rather than as the sheet does, and "
-                             "the sheet is not shown",
+    # ("image", "storyboard") is `STORYBOARD_BECOMES`, or the piece's own line.
     ("image", "style"): "the medium, palette, light and rendering are carried "
                         "into the target video and the source's own subject is not",
     ("image", "motion"): "the action and pose are carried onto the target "
@@ -430,8 +491,11 @@ def retention_lines(plan, skip=(), body="", replaced=None):
                        f"video, while {becomes}")
             lines.append(f"{label} (source video): {marker} - {becomes}.")
             continue
-        marker = _MARKER.get((kind, asset.takes)) or _MARKER.get((kind, "full"))
-        becomes = _BECOMES.get((kind, asset.takes)) or _BECOMES.get((kind, "full"))
+        if asset.takes == "storyboard":
+            marker, becomes = storyboard_hold(asset), storyboard_becomes(asset)
+        else:
+            marker = _MARKER.get((kind, asset.takes)) or _MARKER.get((kind, "full"))
+            becomes = _BECOMES.get((kind, asset.takes)) or _BECOMES.get((kind, "full"))
         if not marker or not becomes:
             continue
         note = _SCOPE_NOTE.get((kind, asset.takes))

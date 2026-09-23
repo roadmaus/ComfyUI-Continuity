@@ -595,6 +595,60 @@ export const css = `
   color: var(--mmc-accent); border-color: color-mix(in srgb, var(--mmc-accent) 50%, transparent);
   background: color-mix(in srgb, var(--mmc-accent) 14%, transparent);
 }
+.mmc-board-pick:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 1px; }
+
+/* How firmly the sheet holds, under the storyboard pill's answers (issue #96).
+   As wide as the popover the answers above already make it, and never so
+   narrow that the line below reads as a column of words. The popover it sits
+   in is a choice list, capped short for long lists of samplers; this one is
+   three rows and a section, and is let run to the screen's own limit on
+   .mmc-pop instead of hiding its sentence under a scroll. */
+.mmc-board-hold-sect { min-width: 300px; box-sizing: border-box; }
+.mmc-pop-scroll:has(.mmc-board-hold-sect) { max-height: calc(100vh - 16px); }
+.mmc-board-hold-head { padding: 4px 10px 0; }
+.mmc-board-hold-note { line-height: 1.4; }
+/* The three holds are the shot toggles above in the same row shape, split
+   evenly, each led by a strength gauge: three bars, two, one. */
+.mmc-board-holds { flex-wrap: nowrap; }
+.mmc-board-hold { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.mmc-board-hold-bars { display: inline-flex; align-items: flex-end; gap: 1.5px; height: 9px; }
+.mmc-board-hold-bars i { width: 2.5px; border-radius: 1px; background: currentColor; opacity: .22; }
+.mmc-board-hold-bars i:nth-child(1) { height: 4px; }
+.mmc-board-hold-bars i:nth-child(2) { height: 6.5px; }
+.mmc-board-hold-bars i:nth-child(3) { height: 9px; }
+.mmc-board-hold-bars i.on { opacity: 1; }
+
+/* The line, drawn as the model reads it in retention_analysis: the marker in
+   the accent, then the sentence, which is the part that edits. One frame
+   around both, so they read as one statement and the caret lands in the
+   sentence wherever the frame is clicked. */
+.mmc-board-line {
+  display: block; margin: 8px 10px 0; padding: 8px 10px 6px; cursor: text;
+  border: 1px solid var(--mmc-line); border-radius: 10px; background: var(--mmc-ground);
+}
+.mmc-board-line:focus-within { border-color: color-mix(in srgb, var(--mmc-accent) 60%, transparent); }
+.mmc-board-line-marker {
+  display: block; color: var(--mmc-accent); font-weight: 600;
+  font-size: calc(11.5px * var(--mmc-type)); margin-bottom: 3px;
+}
+.mmc-board-line-text {
+  display: block; width: 100%; box-sizing: border-box; margin: 0; padding: 0;
+  background: none; border: 0; outline: 0; resize: vertical;
+  color: var(--mmc-text); font: inherit; font-size: calc(12.5px * var(--mmc-type)); line-height: 1.45;
+}
+.mmc-board-line-foot {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 8px;
+  padding: 5px 10px 2px;
+}
+.mmc-board-line-reset {
+  background: none; border: 0; padding: 0; cursor: pointer; font: inherit;
+  font-size: calc(11px * var(--mmc-type)); color: var(--mmc-accent);
+}
+.mmc-board-line-reset:hover { text-decoration: underline; }
+.mmc-board-line-reset[hidden] { display: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .mmc-board-line { transition: border-color .12s ease; }
+}
 
 .mmc-tl-add {
   width: 108px; box-sizing: border-box; margin: 6px 0 6px 12px;

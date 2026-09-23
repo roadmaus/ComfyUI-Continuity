@@ -291,9 +291,11 @@ check("...and the next picture keeps counting from the pictures, not the lines",
 class Slot:
     """As much of `compile.Asset` as a glossary row reads."""
 
-    def __init__(self, handle, kind, takes="full", role="reference", track=None):
+    def __init__(self, handle, kind, takes="full", role="reference", track=None,
+                 hold="", carries=""):
         self.handle, self.kind, self.role = handle, kind, role
         self.takes, self.track = takes, track
+        self.hold, self.carries = hold, carries
         self.filename = f"clips/{handle}.mp4" if kind != "image" else f"stills/{handle}.png"
 
 
@@ -303,6 +305,17 @@ check("an un-narrowed picture is still scoped to what it shows",
 check("a person reference says the background is not part of it",
       "background, palette, lighting" in refine.slot_row(Slot("img-1", "image", "person"))["note"],
       True)
+# The storyboard's note names the marker and the line the piece chose (issue
+# #96): a refined prompt is the one that renders, so a note that always said
+# fully_preserved would undo a loosened hold at the first Refine.
+board = lambda **kw: refine.slot_row(Slot("storyboard", "image", "storyboard", **kw))["note"]
+check("the storyboard's note asks for fully_preserved by default",
+      "marked fully_preserved in retention_analysis: the place, its light and "
+      "where things stand" in board(), True)
+check("...and for the piece's hold and line where it chose them",
+      "marked weak_reference in retention_analysis: only the room" in board(
+          hold="weak_reference", carries="only the room"), True)
+check("...and still says it cannot be seen", board().startswith("you cannot see it"), True)
 check("a keyframe is described by its role, not its narrowing",
       refine.slot_row(Slot("img-1", "image", role="first_frame"))["what"],
       "the target video's first frame (img-1.png)")
