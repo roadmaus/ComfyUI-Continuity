@@ -17,7 +17,7 @@
   },
   "MiniMaxH3PreStage": {
     "display_name": "Continuity プリステージ",
-    "description": "Krea 2、Ideogram 4.0、MiniMax H3 のいずれかで、動画パイプライン用のスチル — 開始/終了フレーム、リファレンス、スタイルシート — を生成します。Continuity ノードのプリステージピルから起動します。"
+    "description": "Krea 2、Ideogram 4.0、MiniMax H3 のいずれかで、動画パイプライン用のスチル — 開始/終了フレーム、リファレンス、スタイルシート — を生成します。Continuity ノードのプリステージボタンから追加します。"
   },
   "MiniMaxH3SaveImage": {
     "display_name": "Continuity 画像保存",
