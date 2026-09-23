@@ -34,5 +34,9 @@
   "MiniMaxH3FacePass": {
     "display_name": "H3 フェイスパス",
     "description": "デコード済みパスの顔をフレームごとに切り出し、顔が大きく写るキャンバスで描き直して元の画に合成し直します。render.emit がグラフに書き込みます。"
+  },
+  "ContinuityLiftStage": {
+    "display_name": "Continuity 3D 化ステージ",
+    "description": "内部用: 画像から 3D へ変換するツールの生成ステージを 1 つ報告します。lift.build がグラフに書き込みます。"
   }
 }

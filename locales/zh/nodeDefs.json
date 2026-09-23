@@ -34,5 +34,9 @@
   "MiniMaxH3FacePass": {
     "display_name": "H3 面部处理",
     "description": "把已解码采样中的面部逐帧裁剪出来，在脸能占满画面的画布上重画，再合成回原画。由 render.emit 写入图中。"
+  },
+  "ContinuityLiftStage": {
+    "display_name": "Continuity 3D 转换阶段",
+    "description": "内部使用：报告图像转 3D 工具的一个生成阶段。由 lift.build 写入图中。"
   }
 }

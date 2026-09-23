@@ -34,5 +34,9 @@
   "MiniMaxH3FacePass": {
     "display_name": "H3 얼굴 패스",
     "description": "디코드된 패스의 얼굴을 프레임마다 잘라내어 얼굴이 크게 잡히는 캔버스에서 다시 그린 뒤 원본에 합성합니다. render.emit이 그래프에 기록합니다."
+  },
+  "ContinuityLiftStage": {
+    "display_name": "Continuity 3D 변환 단계",
+    "description": "내부용: 이미지를 3D로 만드는 도구의 생성 단계 하나를 보고합니다. lift.build가 그래프에 기록합니다."
   }
 }
