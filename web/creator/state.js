@@ -4448,13 +4448,13 @@ export function parsePreStage(raw) {
         // any other — so this is carried for the chip and for the one refusal
         // that depends on it.
         .map((ref) => (ref.role === "guide"
-          ? { handle: ref.handle, filename: ref.filename, role: "guide",
+          ? { handle: ref.handle, filename: ref.filename, ...preStageFraming(ref), role: "guide",
               guide: typeof ref.guide === "string" ? ref.guide : null }
           // Every other slot is a reference picture — said so on the entry,
           // because the cast shelf reads a file's kind and role to know what
           // it may lend somebody, and the saved renditions it carries by
           // latent space (`mods`) are what the family reads it from.
-          : { handle: ref.handle, filename: ref.filename, kind: "image", role: "reference",
+          : { handle: ref.handle, filename: ref.filename, ...preStageFraming(ref), kind: "image", role: "reference",
               ...(ref.mods && typeof ref.mods === "object" && Object.keys(ref.mods).length
                 ? { mods: { ...ref.mods } } : {}) }));
       if (!Array.isArray(state.loras)) state.loras = [];
@@ -4521,6 +4521,22 @@ export function parsePreStage(raw) {
   return emptyPreStage();
 }
 
+/** The picture editor must reopen on its source, and the compiler must see
+ *  the same window the chip shows. Applies to init, references and guides. */
+function preStageFraming(asset) {
+  return {
+    ...(asset.crop ? { crop: { ...asset.crop } } : {}),
+    ...(Array.isArray(asset.panels) && asset.panels.length ? {
+      panels: asset.panels.map((panel) => ({
+        filename: panel.filename,
+        ...(panel.cut ? { cut: true } : {}),
+        ...(panel.points?.length ? { points: panel.points.map((p) => ({ ...p })) } : {}),
+        ...(panel.crop ? { crop: { ...panel.crop } } : {}),
+      })),
+    } : {}),
+  };
+}
+
 export function serializePreStage(state) {
   const models = {};
   for (const arch of PRESTAGE_IMAGE_ARCHES) {
@@ -4537,9 +4553,11 @@ export function serializePreStage(state) {
     prompt: state.prompt ?? "",
     aspect: state.aspect,
     short_edge: state.short_edge,
-    ...(state.init ? { init: { filename: state.init.filename, denoise: round2(state.init.denoise) } } : {}),
+    ...(state.init ? { init: { filename: state.init.filename, denoise: round2(state.init.denoise),
+      ...preStageFraming(state.init) } } : {}),
     ...(state.refs.length ? { refs: state.refs.map((r) => ({
       handle: r.handle, filename: r.filename,
+      ...preStageFraming(r),
       ...(r.role === "guide" ? { role: r.role } : {}),
       ...(r.guide ? { guide: r.guide } : {}),
       ...(r.mods && Object.keys(r.mods).length ? { mods: { ...r.mods } } : {}),
@@ -4548,7 +4566,9 @@ export function serializePreStage(state) {
     loras: serializeLoras(state.loras),
     ...serializePreStageTurbo(state.turbo),
     ...serializeNeural(state.neural),
-    ...(state.quality !== "default" ? { quality: state.quality } : {}),
+    // "default" names a 20-step preset, not the family's current default.
+    // Store the selection explicitly so a changed default cannot change it.
+    quality: state.quality,
     ...(state.ref_method !== PRESTAGE_DEFAULT_REF_METHOD ? { ref_method: state.ref_method } : {}),
     ...(state.ref_lora ? { ref_lora: state.ref_lora } : {}),
     ...(state.edit_first ? { edit_first: true } : {}),
@@ -4656,6 +4676,12 @@ export function preStageSource(state) {
 export function preStagePlainRefs(state) {
   const claimed = new Set((state.subjects ?? []).flatMap((subject) => subjectFiles(subject)));
   return (state.refs ?? []).filter((ref) => !claimed.has(ref.handle));
+}
+
+/** A picture the edit loop may replace, never a cast source, guide or an
+ *  already encoded latent. A reference's raw slot is not its ownership. */
+export function preStageEditableRef(state) {
+  return preStagePlainRefs(state).find((ref) => ref.role !== "guide" && !isRefMod(ref)) ?? null;
 }
 
 /** Does this render read a ControlNet guide as one of its pictures?

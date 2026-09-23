@@ -282,7 +282,8 @@ export class PreStageEditor {
    *  before it offers the input folder, and `attachFromMention` asks again
    *  before it takes one. */
   refBlocked() {
-    if (!S.PRESTAGE_REFS[this.state.arch]?.reads) {
+    const refs = S.PRESTAGE_REFS[this.state.arch];
+    if (!refs?.reads) {
       return t("{arch} has no local reference conditioning — switch the model pill to "
              + "one that reads pictures.", { arch: S.PRESTAGE_ARCH_LABEL[this.state.arch] });
     }
@@ -584,7 +585,8 @@ export class PreStageEditor {
   takeGuideAsPicture(path, opId = null) {
     const standing = this.state.refs.find((ref) => ref.role === "guide");
     if (standing) {
-      standing.filename = path;
+      applyPick(standing, { path });
+      S.dropMods(standing);
       standing.guide = opId;
     } else {
       const blocked = this.refBlocked();
@@ -610,6 +612,7 @@ export class PreStageEditor {
     const picked = chosen?.[0];
     if (!picked || picked.path === ref.filename) return;
     applyPick(ref, picked);
+    S.dropMods(ref);
     this.commit();
   }
 
@@ -637,6 +640,7 @@ export class PreStageEditor {
     }
     if (!answer) return;
     applyPick(chip, asPick(answer));
+    S.dropMods(chip);
     this.commit();
   }
 
@@ -1019,8 +1023,8 @@ export class PreStageEditor {
     // string the prompt cites them by. "style" is Krea 2's answer and Krea 2's
     // alone, where what an attached image contributes really is its look.
     // The first slot on an edit family is the one picture whose role is a
-    // decision rather than a fact: it is the thing being changed by default,
-    // and it does not have to be. So there it is a button, and everywhere else
+    // decision rather than a fact: it can be the thing being changed in place.
+    // So there it is a button, and everywhere else
     // it is the label it has always been.
     // A guide is never the picture being edited: it is the drawing the render
     // is aimed at, so the slot it happens to sit in does not make it a subject.
@@ -1038,7 +1042,7 @@ export class PreStageEditor {
     const owner = (this.state.subjects ?? []).find((subject) => S.subjectFiles(subject).includes(ref.handle));
     // The first plain picture on an edit family carries the switch: cited like
     // the rest, or the one edited in place.
-    const edits = refs.editsFirst && slot === 0 && !this.state.init && !guide && !owner;
+    const edits = refs.editsFirst && ref === S.preStageEditableRef(this.state) && !this.state.init;
     const editing = S.preStageEditsFirst(this.state);
     const role = guide
       ? t("guide")
@@ -1103,6 +1107,12 @@ export class PreStageEditor {
                 + "pill sets the canvas. Click to edit this picture in place instead."),
             onclick: () => {
               this.state.edit_first = !this.state.edit_first;
+              // The compiler promotes the first plain picture, which may
+              // otherwise be a guide. Only an explicit edit opts into moving
+              // this picture; loading a reference pool keeps its order.
+              if (this.state.edit_first) {
+                this.state.refs = [ref, ...this.state.refs.filter((r) => r !== ref)];
+              }
               this.commit();
             },
           })
@@ -2155,9 +2165,27 @@ export class PreStageBody {
       this.editor?.takeGuide?.({ path: filename });
       return this.reveal();
     }
-    const first = this.state.refs[0];
-    if (first) first.filename = filename;
-    else this.state.refs.unshift({ handle: S.nextPreStageHandle(this.state), filename, kind: "image", role: "reference" });
+    if (this.state.init) {
+      // An explicit init still owns partial denoise. Replace its picture,
+      // not a reference while the old init keeps controlling the canvas.
+      applyPick(this.state.init, { path: filename });
+      S.dropMods(this.state.init);
+    } else {
+      const first = S.preStageEditableRef(this.state);
+      if (!first && this.state.refs.length >= S.preStageMaxRefs(this.state)) {
+        // The pool may be entirely cast pictures or guides. Keep them intact
+        // and refuse explicitly instead of inserting an unrenderable slot.
+        this.reveal();
+        this.editor?.flash?.(this.editor.refBlocked());
+        return;
+      }
+      const edited = first ?? { handle: S.nextPreStageHandle(this.state), kind: "image", role: "reference" };
+      applyPick(edited, { path: filename });
+      // A rendition encodes the old file/framing, not the newly shown output.
+      S.dropMods(edited);
+      this.state.refs = [edited, ...this.state.refs.filter((ref) => ref !== edited)];
+      this.state.edit_first = true;
+    }
     this.commit();
     this.editor?.probeInit?.();
     this.reveal();
