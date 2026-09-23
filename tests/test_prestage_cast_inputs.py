@@ -96,8 +96,16 @@ with tempfile.TemporaryDirectory(prefix="continuity-cast-inputs-") as root:
     folders.models_dir = root
     folders.add_model_folder_path = lambda *args: None
     folders.get_folder_paths = lambda folder: [root]
-    folders.is_within_directory = lambda base, path: os.path.commonpath([base, path]) == base
+    folders.is_within_directory = lambda base, path: os.path.commonpath(
+        [os.path.realpath(base), os.path.realpath(path)]) == os.path.realpath(base)
     sys.modules["folder_paths"] = folders
+    # On macOS a temp root may be /var/... while resolve supplies /private/var/...
+    # for its file. Exercise that aliasing contract on every platform.
+    alias = os.path.join(root, "alias")
+    candidate = os.path.join(root, "cast", "anna.flux2.safetensors")
+    with patch.object(os.path, "realpath", side_effect=lambda path: root if path == alias else path):
+        check("folder containment compares resolved roots and files",
+              folders.is_within_directory(alias, candidate), True)
     write_mod(root, "cast/anna.flux2")
     # The suffix is deliberately misleading. Only the header identifies space.
     write_mod(root, "cast/not-klein.flux2", "h3_video")
@@ -131,6 +139,12 @@ with tempfile.TemporaryDirectory(prefix="continuity-cast-inputs-") as root:
         check("Klein's compiled prompt cites the retained latent slot",
               result.prompt, "Picture 1 (a woman in a red coat) at dusk")
     check("node preparation does not mutate the caller's blob", source, before)
+    prepared = ps._cast_refmod_spaces(source, pkg.flux2klein_still)
+    with patch.object(rm, "resolve", side_effect=AssertionError("compiler touched disk")), \
+            patch.object(rm, "header", side_effect=AssertionError("compiler read a header")):
+        result = ci.compile_prestage(prepared, pkg.flux2klein_still)
+    check("the pure compiler consumes stamped spaces without file access",
+          (result.refs, result.mods), ([mod], {0: mod}))
     succeeds("untrusted space cannot hide a valid Klein latent",
              blob(mod, refs=[{"handle": "img-1", "filename": mod, "space": "h3_video"}]),
              [mod], {0: mod})
@@ -142,13 +156,47 @@ with tempfile.TemporaryDirectory(prefix="continuity-cast-inputs-") as root:
                                       "description": "a woman"}],
                   refs=[{"handle": "img-1", "filename": foreign},
                         {"handle": "img-2", "filename": "anna.png"}]), ["anna.png"])
-    refuses("a referenced missing mod is not silently dropped", blob("refmod:missing"),
-            "missing")
-    refuses("a referenced invalid header is not silently dropped", blob("refmod:broken"),
-            "not a safetensors file")
+    for unavailable in ("refmod:missing", "refmod:broken"):
+        result = succeeds("an unavailable Cast mod falls back to its description",
+                          blob(unavailable, refs=[{"handle": "img-1", "filename": unavailable,
+                                                  "space": "flux2"}]), [])
+        if result:
+            check("an unavailable mod cannot keep its stale space",
+                  result.prompt, "a woman in a red coat at dusk")
+    with patch.object(rm, "header", side_effect=rm.RefModError("permission denied")):
+        succeeds("an unreadable Cast mod falls back to its description", blob(mod), [])
+    refuses("an unavailable mod with no description still needs words",
+            blob("refmod:missing", subjects=[{"handle": "anna", "from": ["img-1"]}]),
+            "describe them")
+    succeeds("an unavailable look does not hide a later usable mod",
+             blob(subjects=[{"handle": "anna", "from": ["img-1", "img-2"],
+                             "description": "a woman"}],
+                  refs=[{"handle": "img-1", "filename": "refmod:missing", "space": "flux2"},
+                        {"handle": "img-2", "filename": mod}]), [mod], {0: mod})
 
-    # No new I/O or refusal for references this render does not need. The
-    # selected photo is before the missing mod, exactly as Cast selection is.
+    # The boundary supplies facts for every cited member's mod, even after a
+    # usable photo or latent. Only cast_into_still chooses which look to send.
+    for first in ("anna.png", mod):
+        source = blob(subjects=[{"handle": "anna", "from": ["img-1", "img-2", "img-3"],
+                                "description": "a woman"},
+                               {"handle": "bea", "from": ["img-4"], "description": "another woman"}],
+                      refs=[{"handle": "img-1", "filename": first},
+                            {"handle": "img-2", "filename": mod},
+                            {"handle": "img-3", "filename": foreign},
+                            {"handle": "img-4", "filename": mod}])
+        prepared = ps._cast_refmod_spaces(source, pkg.flux2klein_still)
+        check("all cited source mods are stamped after an already usable look",
+              [r.get("space") for r in prepared["refs"]],
+              ["flux2" if first == mod else None, "flux2", "h3_video", None])
+        succeeds("the compiler alone still selects the first usable look", source,
+                 [first], {0: mod} if first == mod else {})
+    word_member = {"handle": "anna", "from": ["img-1"], "description": "a woman",
+                   "wears": {"flux2klein": {"send": "words"}}}
+    prepared = ps._cast_refmod_spaces(blob(mod, subjects=[word_member]), pkg.flux2klein_still)
+    check("words mode is also left for the compiler to decide",
+          prepared["refs"][0].get("space"), "flux2")
+
+    # Uncited members and families without latent references need no headers.
     lookup = rm.header
     calls = []
 
@@ -163,7 +211,7 @@ with tempfile.TemporaryDirectory(prefix="continuity-cast-inputs-") as root:
                  blob("refmod:missing", arch="ideogram4"), [])
         member = {"handle": "anna", "from": ["img-1"], "description": "a woman",
                   "wears": {"flux2klein": {"send": "words"}}}
-        succeeds("explicit words mode does not inspect a missing mod",
+        succeeds("explicit words mode tolerates a missing mod",
                  blob("refmod:missing", subjects=[member]), [])
         succeeds("a removed or muted source absent from refs remains words",
                  blob("refmod:missing", refs=[]), [])
@@ -172,7 +220,7 @@ with tempfile.TemporaryDirectory(prefix="continuity-cast-inputs-") as root:
                  blob(subjects=[member], refs=[{"handle": "img-1", "filename": "anna.png"},
                                                {"handle": "img-2", "filename": "refmod:missing"}]),
                  ["anna.png"])
-        check("unused and words-only references cause no header reads", calls, [])
+        check("unneeded or missing files cause no header reads", calls, [])
         # Two cast members can share one file: validate once per node execution.
         succeeds("a shared RefMod is resolved once",
                  blob(mod, prompt="@anna beside @bea", subjects=[

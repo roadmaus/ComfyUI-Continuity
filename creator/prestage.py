@@ -102,28 +102,26 @@ def _cast_refmod_spaces(data, family):
     by_handle = {str(r["handle"]): r for r in refs if isinstance(r, dict) and r.get("handle")}
     spaces = {}
     for member in subjects.cited(cast, [str(data.get("prompt") or "")]):
-        if member.send == "words":
-            continue
-        # Match cast_into_still's first usable look. An uncited member, a
-        # words-only choice, or a later unused look must not acquire disk I/O
-        # (or a new missing-file error) just because it is saved in the Cast.
+        # Supply every source's header facts; cast_into_still alone chooses
+        # the first usable look and whether this member is sent as words.
         for handle in member.sources:
             ref = by_handle.get(handle)
             if ref is None:
                 continue
             filename = ref.get("filename")
             if not refmod.is_mod(filename):
-                break
-            try:
-                if filename not in spaces:
+                continue
+            if filename not in spaces:
+                try:
                     spaces[filename] = refmod.header(refmod.resolve(filename))["space"]
-            except refmod.RefModError as exc:
-                raise CompileError(f"@{member.handle} (@{handle}): {exc}") from exc
-            # Replace, rather than trust, a stale/browser-supplied space. A
-            # valid other-family mod keeps the existing description fallback.
-            ref["space"] = spaces[filename]
-            if ref["space"] == space:
-                break
+                except refmod.RefModError:
+                    spaces[filename] = None
+            # Never trust stale/browser-supplied metadata. Like the chat
+            # route, an unreadable file has no space and falls back to words
+            # (or another usable look) in the pure compiler.
+            ref.pop("space", None)
+            if spaces[filename] is not None:
+                ref["space"] = spaces[filename]
     return {**data, "refs": refs}
 
 
