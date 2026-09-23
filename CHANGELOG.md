@@ -6,6 +6,22 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**Image to 3D: a picture lifted into a textured mesh, from the tools
+dashboard.** A new tool beside the benches that queues core's own Pixal3D /
+TRELLIS.2 graph, transcribed from its template, with only the choices worth
+making left as controls: the model, extra views of the same object, detail,
+background, surface and face count. Pixal3D keeps the mesh aligned to the
+picture's estimated camera, and on the tool's WebGL stage the picture stands in
+front of that camera with the mesh at the end of its rays. Each of the six
+stages (cut-out, camera, sparse structure, shape, texture, bake) is shown as it
+lands, with how long it took, and a finished stage can be pressed to see what it
+made. A second build with only the surface changed starts at the texture,
+because the queue's cache keeps the structure and the shape. The GLB goes to
+`output/continuity/meshes/`, and a turntable clip of it can be written to the
+input folder to cite in a shot. One picture falls back to the multi-view model
+when that is the only Pixal3D checkpoint on disk. three.js r160 is vendored for
+the stage and loaded only when the tool opens. Built and checked on the lab.
+
 **Storyboard starters for Qwen Image 2.1, at 4 and 6 shots.** Two presets
 that put one character across that many 16:9 panels on one landscape sheet,
 2×2 or 2×3, at the family's native edge on its own row. A card per count
