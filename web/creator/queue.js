@@ -393,3 +393,83 @@ function collect(onProgress) {
 
   return { promise, expect, abandon };
 }
+
+// ---- following a whole graph ------------------------------------------------
+
+/**
+ * Follow a prompt of many nodes — the image-to-3D build — rather than one job.
+ *
+ * `run` above waits for one `executed` and resolves with it, which is the whole
+ * of a `ContinuityJob`. A graph of core's nodes says much more on the wire, and
+ * all of it is worth hearing: every node's state and step count on
+ * `progress_state`, each reporting node's output on `executed`, and one of
+ * success, error or interruption at the end. So this hands every one of those
+ * to the caller as it arrives, and resolves when the prompt is over.
+ *
+ * The same ordering rule as `collect`: armed before the POST goes out, with
+ * whatever arrives before the reply names the prompt held and replayed against
+ * it. A graph whose every node is cached can finish inside the round trip.
+ *
+ * `handlers` is `{progress(nodes), executed(node, output)}`; the promise
+ * resolves on success, and rejects with the node's own message on an error or
+ * with `cancelled` set on an interruption.
+ *
+ * -> `{expect(promptId), abandon(), promise}`.
+ */
+export function follow(handlers = {}) {
+  let resolve, reject;
+  const promise = new Promise((res, rej) => { resolve = res; reject = rej; });
+  const off = [];
+  let promptId = null;
+  const held = [];
+  const stop = () => { for (const remove of off.splice(0)) remove(); };
+  const table = {
+    progress_state: ({ detail }) => handlers.progress?.(detail.nodes ?? {}),
+    executed: ({ detail }) => handlers.executed?.(String(detail.node ?? detail.display_node ?? ""),
+                                                 detail.output ?? {}),
+    execution_success: () => { stop(); resolve(); },
+    execution_error: ({ detail }) => {
+      stop();
+      const error = new Error(detail.exception_message || t("the job failed"));
+      error.node = detail.node_id ?? null;
+      reject(error);
+    },
+    execution_interrupted: () => {
+      stop();
+      const cancelled = new Error(t("cancelled"));
+      cancelled.cancelled = true;
+      reject(cancelled);
+    },
+  };
+  for (const [name, handler] of Object.entries(table)) {
+    const gated = (event) => {
+      if (promptId === null) { held.push([name, event]); return; }
+      if (event.detail?.prompt_id !== promptId) return;
+      handler(event);
+    };
+    api.addEventListener(name, gated);
+    off.push(() => api.removeEventListener(name, gated));
+  }
+  return {
+    promise,
+    expect(id) {
+      promptId = id;
+      for (const [name, event] of held.splice(0)) {
+        if (event.detail?.prompt_id === promptId) table[name](event);
+      }
+    },
+    abandon() { stop(); held.length = 0; },
+  };
+}
+
+/** Stop one prompt: off the queue if it is still waiting, interrupted if it is
+ *  the one running. Targeted by id, so a render that happens to be on the
+ *  sampler instead is left alone. */
+export async function stopPrompt(promptId) {
+  await dropQueued(promptId);
+  await api.fetchApi("/interrupt", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ prompt_id: String(promptId) }),
+  }).catch(() => {});
+}

@@ -1245,6 +1245,38 @@ export async function upscaleRun(body, options) {
   return answer;
 }
 
+// ---- image to 3D -------------------------------------------------------------
+//
+// Not a job in `runJob`'s sense: what goes on the queue is a graph of core's
+// own nodes (`creator/lift.py`), so the caller follows it with `queue.follow`
+// rather than waiting for one `executed`.
+
+/** Which of the lift's models this machine has: `{role: {file, folder, found, url}}`. */
+export async function liftModels() {
+  const response = await api.fetchApi("/continuity/lift/models");
+  if (!response.ok) throw new Error(t("the model list could not be read ({status})", { status: response.status }));
+  return (await response.json()).models ?? {};
+}
+
+/**
+ * Queue one build. -> `{prompt_id, plan, name}`, or throws the server's
+ * sentence — with `missing` on it when the refusal is a model not on disk.
+ */
+export async function liftRun(body) {
+  const response = await api.fetchApi("/continuity/lift/run", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ...body, client_id: api.clientId }),
+  });
+  const answer = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    const error = new Error(answer.error || t("that job could not be started ({status})", { status: response.status }));
+    error.missing = answer.missing ?? null;
+    throw error;
+  }
+  return answer;
+}
+
 // ---- the DLSS 5 refiner -----------------------------------------------------
 //
 // Not a bench: the refiner runs inside renders and on the upscale bench. What

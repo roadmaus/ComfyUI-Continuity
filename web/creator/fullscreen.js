@@ -61,6 +61,7 @@ import { buildDashboard } from "./navigate.js";
 import { openBlockout } from "./blockout.js";
 import { openControl } from "./control.js";
 import { openUpscale } from "./upscale.js";
+import { openLift } from "./lift.js";
 import { openChat } from "./chat.js";
 import { openLoupe } from "./loupe.js";
 import { openPresetLibrary } from "./presetlib.js";
@@ -938,8 +939,23 @@ class Fullscreen {
             // it rather than the ✕ at the other end of the bar.
             back: () => this.openDash(),
           }) },
+        // Its own room, not a bench: a mesh is walked around rather than put
+        // on a light box. It starts from the piece's still when there is one —
+        // the picture a shot is built on is usually the object in it.
+        { label: t("Image to 3D"), glyph: "cube",
+          sub: t("Lift a picture into a textured mesh you can stage and shoot around"),
+          art: { kind: "lift" },
+          go: () => openLift({ source: this.stillTake(), back: () => this.openDash() }) },
       ] },
     ];
+  }
+
+  /** The piece's still as an asset, or the shot's take when that is a picture. */
+  stillTake() {
+    const pre = stageSource(this.shown?.pre ?? null);
+    if (pre) return pre;
+    const take = this.lastTake();
+    return take?.kind === "image" ? take : null;
   }
 
   /**

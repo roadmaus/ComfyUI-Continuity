@@ -20,6 +20,7 @@ from .creator.routes import blockout  # noqa: F401  (registers /continuity/block
 from .creator.routes import chat  # noqa: F401  (registers /continuity/chat)
 from .creator.routes import control  # noqa: F401  (registers /continuity/control)
 from .creator.routes import families  # noqa: F401  (registers /continuity/families)
+from .creator.routes import lift  # noqa: F401  (registers /continuity/lift)
 from .creator.routes import neural  # noqa: F401  (registers /continuity/neural)
 from .creator.routes import plate  # noqa: F401  (registers /continuity/plate)
 from .creator.routes import refmod  # noqa: F401  (registers /continuity/refmod)

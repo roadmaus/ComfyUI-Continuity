@@ -27,6 +27,7 @@ import { css as neural } from "./styles/neural.js";
 import { css as loupe } from "./styles/loupe.js";
 import { css as blockout } from "./styles/blockout.js";
 import { css as chat } from "./styles/chat.js";
+import { css as lift } from "./styles/lift.js";
 
 const CSS = [
   base,
@@ -63,6 +64,9 @@ const CSS = [
   // other side, so the two rules it turns round have to win over the ones they
   // are turning round.
   chat,
+  // The image-to-3D room borrows the benches' bar and overlay, so it comes
+  // after them; nothing later reaches into it.
+  lift,
   // Last: the shell hosts every body in the pack and lifts the caps the node
   // face put on them, so its rules have to win over the sections that set them.
   fullscreen,

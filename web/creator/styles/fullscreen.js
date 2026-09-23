@@ -1655,6 +1655,40 @@ export const css = `
   .mmc-dash-made { transition: none; }
 }
 
+/* The image-to-3D card, drawn: a picture on the lit ground, the rays from its
+   camera through it, and the wire cube they lift out. Amber is the rays only,
+   as on the tool's own stage; they brighten and the cube turns under the
+   pointer. */
+.mmc-dash-lift {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(120% 95% at 60% 45%,
+                    color-mix(in srgb, var(--mmc-ink) 13%, transparent), transparent 74%),
+    var(--mmc-surface-3);
+}
+.mmc-dash-lift svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.mmc-dash-rays line {
+  stroke: var(--mmc-accent); stroke-width: .6; opacity: .45;
+  transition: opacity 220ms ease;
+}
+.mmc-dash-pic {
+  fill: var(--mmc-media-bg); stroke: color-mix(in srgb, var(--mmc-ink) 45%, transparent); stroke-width: .6;
+}
+.mmc-dash-subject { fill: color-mix(in srgb, var(--mmc-ink) 38%, transparent); }
+.mmc-dash-cube path {
+  fill: none; stroke: color-mix(in srgb, var(--mmc-ink) 70%, transparent); stroke-width: .9;
+  stroke-linejoin: round;
+}
+.mmc-dash-cube {
+  transform-box: fill-box; transform-origin: 50% 50%;
+  transition: transform 420ms cubic-bezier(.2, .7, .3, 1);
+}
+.mmc-dash-card:hover .mmc-dash-rays line, .mmc-dash-card:focus-visible .mmc-dash-rays line { opacity: .95; }
+.mmc-dash-card:hover .mmc-dash-cube, .mmc-dash-card:focus-visible .mmc-dash-cube { transform: rotate(-8deg) scale(1.06); }
+@media (prefers-reduced-motion: reduce) {
+  .mmc-dash-cube, .mmc-dash-rays line { transition: none; }
+}
+
 /* The first day, and the fallback everywhere else: no picture on the piece, so
  * the card wears its own glyph at poster size, anchored to the plate's lower
  * left and cropped by its bottom edge. Cropped deliberately — a glyph centred

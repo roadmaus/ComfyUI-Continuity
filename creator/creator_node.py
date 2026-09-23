@@ -54,7 +54,7 @@ import json
 
 from comfy_api.latest import ComfyExtension, io
 
-from . import (accel, canvas, compile as compiler, guide as guides, job_node,
+from . import (accel, canvas, compile as compiler, guide as guides, job_node, liftnode,
                media, models, neural, neuralpass, outputs, prestage, redetail,
                redetailpass, refmodnode, sampling, settings, timeline, vdn)
 from .core import emit as loop
@@ -419,7 +419,7 @@ class MiniMaxCreatorExtension(ComfyExtension):
                 *prestage.NODES, *hires.NODES, *facepass.NODES, *seamrestore.NODES,
                 *motionfix.NODES, *guidepass.NODES,
                 *redetailpass.NODES, *neuralpass.NODES, *vdn.NODES,
-                *refmodnode.NODES]
+                *refmodnode.NODES, *liftnode.NODES]
 
 
 async def comfy_entrypoint() -> MiniMaxCreatorExtension:

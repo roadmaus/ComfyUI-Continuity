@@ -41,6 +41,10 @@ STILLS = "continuity/stills"
 # would be the start of two.
 UPSCALED = "continuity/upscaled"
 
+# And the fourth, for the same reason as the third: the image-to-3D tool writes
+# its mesh itself (`liftnode.py`), so this is a directory rather than a prefix.
+MESHES = "continuity/meshes"
+
 # What the two shelves held before there was a second family: one folder each,
 # with H3's name on the files in both. Kept because `settings.py` has to be able
 # to recognise them — a machine that never typed a folder is on these, and

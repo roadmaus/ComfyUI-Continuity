@@ -130,7 +130,7 @@ function plate(item) {
  *  exchange is the exchange. So one kind is drawn here in the same vocabulary
  *  the rest of the plate is styled in, rather than a photograph being found for
  *  it that would be a picture of something else. */
-const DRAWN = new Set(["chat"]);
+const DRAWN = new Set(["chat", "lift"]);
 
 /** A picture, at the plate's size and cropped to it. */
 const frame = (url, cls = "") =>
@@ -226,6 +226,33 @@ const TREATMENTS = {
     el("span", { class: "mmc-dash-back" }),
     el("span", { class: "mmc-dash-made" }),
   ]),
+
+  /** A picture, its camera, and the mesh at the end of its rays.
+   *
+   *  Drawn, like the chat card, and for a stronger reason: the tool's result
+   *  is a thing you turn in your hands, and a photograph of one would be the
+   *  one view of it the card cannot turn. What the card can show is the idea
+   *  the tool is built on — the picture stands in front of its own camera and
+   *  the mesh is lifted out along the rays through it — in the amber the
+   *  tool's own stage draws those rays in. Under the pointer the rays light
+   *  and the cube turns, which is the build happening. */
+  lift: () => {
+    const plate = el("div", { class: "mmc-dash-lift" });
+    // Static markup, nothing interpolated into it: an SVG drawn once.
+    plate.innerHTML = `<svg viewBox="0 0 160 90" aria-hidden="true">
+      <g class="mmc-dash-rays">
+        <line x1="8" y1="45" x2="150" y2="6"/><line x1="8" y1="45" x2="150" y2="84"/>
+        <line x1="8" y1="45" x2="150" y2="30"/><line x1="8" y1="45" x2="150" y2="60"/>
+      </g>
+      <rect class="mmc-dash-pic" x="40" y="31" width="22" height="28" rx="1.5"/>
+      <ellipse class="mmc-dash-subject" cx="51" cy="47" rx="6" ry="8"/>
+      <g class="mmc-dash-cube">
+        <path d="M112 25l17 9.5v19L112 63l-17-9.5v-19z"/>
+        <path d="M112 44.5L95 34.5M112 44.5l17-10M112 44.5V63"/>
+      </g>
+    </svg>`;
+    return plate;
+  },
 
   /** The frame, dealt out. A preset is a setup you can put back, so the card is
    *  the same picture three times over — one setting, saved, and saved again —
