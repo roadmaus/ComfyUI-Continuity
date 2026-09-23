@@ -531,7 +531,10 @@ def compile_prestage(data, family, image_size_lookup=None):
     # The cast, written into the still's own terms first: a member's picture
     # is a reference from here on, their name is its citation, and what they
     # wear on this family is on the stack before the words are collected.
-    data = cast_into_still(data, registry.STILL_ARCHES.get(getattr(family, "ARCH", None)), space)
+    # A words-only family still reads a Cast member's description. Do not
+    # promote their attached photo only to refuse it below as a plain ref.
+    data = cast_into_still(data, registry.STILL_ARCHES.get(getattr(family, "ARCH", None)),
+                          space, takes_pictures=family.TAKES_REFS)
 
     prompt = str(data.get("prompt") or "").strip()
     if not prompt:
