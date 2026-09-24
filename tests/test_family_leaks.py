@@ -23,8 +23,10 @@ to a manifest-declared control already travel in the manifest. The frozen
 strings (routes, node ids, storage keys) are contracts, not leaks.
 
 Excluded wholesale: `manifest.js` (the one file allowed to know), `locales/`
-and `presets/` (dictionaries and the vendored atlas), `creator.js` at the web
-root (the extension shell that owns the frozen node-id table).
+and `presets/` (dictionaries and the vendored atlas), `vendor/` (upstream
+libraries, whose identifiers — three.js's `hash3D` — are nobody's family),
+`creator.js` at the web root (the extension shell that owns the frozen node-id
+table).
 
     python3 tests/test_family_leaks.py
 """
@@ -37,7 +39,7 @@ from harness import FAILURES, passed
 
 TOKEN = re.compile(r"fl2va|ref2va|h3|minimax", re.IGNORECASE)
 
-SKIP_DIRS = {"locales", "presets"}
+SKIP_DIRS = {"locales", "presets", "vendor"}
 SKIP_FILES = {os.path.join(layout.WEB_ROOT, "manifest.js")}
 
 
