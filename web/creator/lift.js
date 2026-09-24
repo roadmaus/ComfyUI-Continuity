@@ -38,6 +38,10 @@ const SUBFOLDER = "continuity/lift";
 /** Where the finished mesh lands, under output/ — `outputs.MESHES`. */
 const SHELF = "continuity/meshes";
 const PREFS_KEY = "mmc.lift";
+// How the stage shades the mesh. A way of looking, not a build setting, so it
+// is kept apart from `PREFS_KEY`: the settings there are what a build is keyed
+// on, and flipping this must never make the mesh on the stage read as stale.
+const SHADING_KEY = "mmc.lift.shading";
 
 const SIDES = ["front", "left", "back", "right"];
 const STAGES = ["cutout", "camera", "structure", "shape", "texture", "bake"];
@@ -135,6 +139,7 @@ class Lift {
     this.built = null;               // the settings the mesh on the stage was built with
     this.error = null;
     this.mode = "textured";
+    this.shading = this.rememberedShading();
     this.picture = true;
     this.atCamera = false;
     this.turning = null;
@@ -148,6 +153,18 @@ class Lift {
     } catch { return {}; }
   }
 
+  rememberedShading() {
+    try { return localStorage.getItem(SHADING_KEY) === "flat" ? "flat" : "smooth"; }
+    catch { return "smooth"; }
+  }
+
+  setShading(shading) {
+    this.shading = shading;
+    try { localStorage.setItem(SHADING_KEY, shading); } catch { /* private mode */ }
+    this.stage?.setShading(shading);
+    this.paintViews();
+  }
+
   remember() {
     try { localStorage.setItem(PREFS_KEY, JSON.stringify(this.settings)); } catch { /* private mode */ }
   }
@@ -159,6 +176,7 @@ class Lift {
     this.slots = el("div", { class: "mmc-lf-slots" });
     this.holderNote = el("div", { class: "mmc-lf-holdnote" });
     this.modes = el("div", { class: "mmc-lf-seg mmc-lf-modes", role: "group", "aria-label": t("Surface view") });
+    this.shades = el("div", { class: "mmc-lf-seg mmc-lf-shades", role: "group", "aria-label": t("Shading") });
     this.pictureChip = el("button", { class: "mmc-lf-chip", onclick: () => this.togglePicture() },
                           [el("i"), el("span", { text: t("Picture in scene") })]);
     this.cameraChip = el("button", { class: "mmc-lf-chip", onclick: () => this.toPicture() },
@@ -176,6 +194,7 @@ class Lift {
       el("div", { class: "mmc-lf-holder" }, [this.slots, this.holderNote]),
       el("div", { class: "mmc-lf-views" }, [
         this.modes,
+        this.shades,
         el("div", { class: "mmc-lf-chips" }, [this.pictureChip, this.cameraChip]),
       ]),
       this.caption,
@@ -250,6 +269,7 @@ class Lift {
       const { LiftStage } = await import("./liftstage.js");
       if (!this.overlay.isConnected) return;
       this.stage = new LiftStage(this.glass);
+      this.stage.shading = this.shading;
       this.stage.onLeave = () => {
         if (!this.atCamera) return;
         this.atCamera = false;
@@ -719,6 +739,14 @@ class Lift {
       "aria-pressed": meshUp && (this.mode === mode || (clayOnly && mode === "clay" && this.mode === "textured")),
       onclick: () => { this.mode = mode; this.stage?.setMode(mode); this.paintViews(); },
     })));
+    const shadings = [["smooth", t("Smooth"), t("Normals blended across faces")],
+                      ["flat", t("Flat"), t("One normal per face, every facet shows")]];
+    this.shades.replaceChildren(...shadings.map(([shading, label, title]) => el("button", {
+      title,
+      disabled: !meshUp,
+      "aria-pressed": meshUp && this.shading === shading,
+      onclick: () => this.setShading(shading),
+    }, [icon(shading, 13), el("span", { text: label })])));
     const camera = !!this.cameraOf();
     this.pictureChip.disabled = !camera;
     this.pictureChip.setAttribute("aria-pressed", String(camera && this.picture));

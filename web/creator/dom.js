@@ -220,6 +220,10 @@ export const ICONS = {
   // under a LoRA chip is. `swap` above is the cast's and reads as two things
   // trading places; this one is "try a different one in this slot".
   mute: `<circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/>`,
+  // The image-to-3D stage's two shadings, drawn as the same ball: smooth is a
+  // sphere with one soft meridian, flat is that sphere cut into facets.
+  smooth: `<circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a4.5 8.5 0 000 17"/>`,
+  flat: `<path d="M12 3.5l7.4 4.25v8.5L12 20.5l-7.4-4.25v-8.5z"/><path d="M12 3.5v8.5l7.4 4.25M12 12l-7.4 4.25"/>`,
   shuffle: `<path d="m18 14 4 4-4 4"/><path d="m18 2 4 4-4 4"/><path d="M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-8.6a4 4 0 0 1 3.3-1.7H22"/><path d="M2 6h1.972a4 4 0 0 1 3.6 2.2"/><path d="M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45"/>`,
 };
 

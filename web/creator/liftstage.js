@@ -36,6 +36,57 @@ const AMBER = 0xf0a63c;
 const PLANE_AT = 0.42;
 const RAYS_TO = 1.45;
 
+/**
+ * Smooth vertex normals for a mesh that came without any, welded by position.
+ *
+ * The GLBs the build writes carry no NORMAL attribute, and GLTFLoader answers
+ * that by drawing the mesh flat-shaded. `computeVertexNormals` would not fix
+ * it: an unwrapped mesh is split at every UV seam, so it would leave a crease
+ * along each one. Here every copy of a point shares one normal — the
+ * area-weighted sum of the faces around it — and the seams disappear.
+ */
+function smoothNormals(geometry) {
+  const position = geometry.attributes.position;
+  const count = position.count;
+  geometry.computeBoundingBox();
+  const size = geometry.boundingBox.getSize(new THREE.Vector3()).length() || 1;
+  const scale = 1e6 / size;
+  const weld = new Uint32Array(count);
+  const seen = new Map();
+  for (let v = 0; v < count; v += 1) {
+    const key = `${Math.round(position.getX(v) * scale)},${Math.round(position.getY(v) * scale)},${Math.round(position.getZ(v) * scale)}`;
+    let first = seen.get(key);
+    if (first === undefined) seen.set(key, first = v);
+    weld[v] = first;
+  }
+  const sums = new Float32Array(count * 3);
+  const index = geometry.index;
+  const faces = (index ? index.count : count) / 3;
+  const a = new THREE.Vector3(), b = new THREE.Vector3(), c = new THREE.Vector3();
+  for (let f = 0; f < faces; f += 1) {
+    const i = index ? index.getX(f * 3) : f * 3;
+    const j = index ? index.getX(f * 3 + 1) : f * 3 + 1;
+    const k = index ? index.getX(f * 3 + 2) : f * 3 + 2;
+    a.fromBufferAttribute(position, i);
+    b.fromBufferAttribute(position, j).sub(a);
+    c.fromBufferAttribute(position, k).sub(a);
+    // Unnormalised on purpose: the cross product's length is twice the face's
+    // area, so a sliver next to a big face barely moves the corner they share.
+    b.cross(c);
+    for (const v of [weld[i], weld[j], weld[k]]) {
+      sums[v * 3] += b.x; sums[v * 3 + 1] += b.y; sums[v * 3 + 2] += b.z;
+    }
+  }
+  const normals = new Float32Array(count * 3);
+  for (let v = 0; v < count; v += 1) {
+    const w = weld[v] * 3;
+    a.set(sums[w], sums[w + 1], sums[w + 2]);
+    if (a.lengthSq() === 0) a.set(0, 1, 0);
+    a.normalize().toArray(normals, v * 3);
+  }
+  geometry.setAttribute("normal", new THREE.BufferAttribute(normals, 3));
+}
+
 const reduced = () => matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
 
 export class LiftStage {
@@ -96,6 +147,7 @@ export class LiftStage {
     this.model = null;               // what is on the stage now
     this.wire = null;
     this.mode = "textured";
+    this.shading = "smooth";
     this.pictureCamera = null;       // {position, fov} or null
     this.picture = null;
     this.rays = null;
@@ -257,6 +309,7 @@ export class LiftStage {
           root.traverse((part) => {
             if (!part.isMesh) return;
             part.castShadow = true;
+            if (!part.geometry.attributes.normal) smoothNormals(part.geometry);
             part.userData.own = part.material;
           });
           resolve(root);
@@ -295,6 +348,12 @@ export class LiftStage {
     this.grid.position.y = y;
   }
 
+  /** How its normals are read: "smooth" across faces, or "flat" per face. */
+  setShading(shading) {
+    this.shading = shading;
+    this.applyMode();
+  }
+
   /** How the mesh is drawn: textured, clay, wire or normals. */
   setMode(mode) {
     this.mode = mode;
@@ -308,6 +367,7 @@ export class LiftStage {
     this.clay ??= new THREE.MeshStandardMaterial({ color: 0xb9b4ac, roughness: 0.85 });
     this.dark ??= new THREE.MeshStandardMaterial({ color: 0x2a2e35, roughness: 0.9 });
     this.normals ??= new THREE.MeshNormalMaterial();
+    const flat = this.shading === "flat";
     this.dropWire();
     root.traverse((part) => {
       if (!part.isMesh) return;
@@ -315,6 +375,14 @@ export class LiftStage {
         : mode === "wire" ? this.dark
           : mode === "normals" ? this.normals
             : part.userData.own;
+      // Flat is the shader's own derivative normal rather than a split copy of
+      // the geometry: nothing new in memory, and every face reads as one plane
+      // whatever the file's normals say.
+      for (const material of [].concat(part.material)) {
+        if (material.flatShading === flat) continue;
+        material.flatShading = flat;
+        material.needsUpdate = true;
+      }
     });
     if (mode === "wire") {
       // A wireframe material over the same geometry rather than
