@@ -1,4 +1,4 @@
-// three.js r160 (0.160.0), vendored by tools/vendor_three.py. MIT, see LICENSE.
+// three 0.170.0, vendored by tools/vendor_three.py. MIT, see LICENSE.
 /**
  * https://github.com/google/model-viewer/blob/master/packages/model-viewer/src/three-components/EnvironmentScene.ts
  */
@@ -15,7 +15,7 @@ import {
 
 class RoomEnvironment extends Scene {
 
-	constructor( renderer = null ) {
+	constructor() {
 
 		super();
 
@@ -25,11 +25,7 @@ class RoomEnvironment extends Scene {
 		const roomMaterial = new MeshStandardMaterial( { side: BackSide } );
 		const boxMaterial = new MeshStandardMaterial();
 
-		let intensity = 5;
-
-		if ( renderer !== null && renderer._useLegacyLights === false ) intensity = 900;
-
-		const mainLight = new PointLight( 0xffffff, intensity, 28, 2 );
+		const mainLight = new PointLight( 0xffffff, 900, 28, 2 );
 		mainLight.position.set( 0.418, 16.199, 0.300 );
 		this.add( mainLight );
 

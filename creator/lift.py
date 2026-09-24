@@ -35,6 +35,16 @@ half of this, but `Preview3DAdvanced` wants a viewport state only its canvas
 widget can supply, and a stage has to be recognisable by the tool that queued
 it; a node of our own answers both.
 
+**A finished mesh keeps what it was made from.** The GLB is only geometry and
+maps; the tool also needs the picture it was lifted from, the camera that
+picture was taken with and the settings of the build, or a mesh opened again
+tomorrow is a mesh with nowhere to stand its picture and no way to be built
+again. So the final stage is wired the cut-out and the field of view as well as
+the mesh, and handed `keep`, the rest as JSON; it writes all of it beside the
+GLB in a `.lift/` folder (`KEPT`), and `shelf` reads it back for the picker.
+A dot folder because the picker's walk and the gallery skip dot names: these
+are the mesh's own papers, not renders.
+
 **Node keys are named, never numbered.** ComfyUI files outputs and progress
 under the key and the frontend hands it to `getNodeById`, so a numeric key moves
 the progress bar of whatever canvas node shares it (`jobs.KEY` says the same).
@@ -45,6 +55,8 @@ inspect the graph without booting anything. `catalogue` is the one function that
 touches `folder_paths`, and it imports it where it runs.
 """
 
+import json
+import os
 import re
 
 # Where finished meshes land, under the output folder. Named in `outputs.py`
@@ -106,6 +118,11 @@ FACES_MIN, FACES_MAX = 10000, 2000000
 # are drawn this narrow, and a photographed set of views is not what this path
 # is for.
 VIEWS_FOV = 20.0
+
+# The folder beside a finished mesh that holds what it was made from — see the
+# module docstring. `<stem>.json`, `<stem>.png` (the cut-out) and
+# `<stem>.<map>.png` (the swatches), one set per GLB.
+KEPT = ".lift"
 
 # The six stages the tool draws, in the order they run. The keys are what the
 # frontend's track is labelled by; which nodes belong to which is decided in
@@ -285,10 +302,35 @@ def _cutout(graph, side, filename, settings, pad):
     return picture, alpha
 
 
-def _stage(graph, stage, final=None, **inputs):
-    """The node that reports one stage's result to the tool."""
+def _stage(graph, stage, final=None, keep=None, **inputs):
+    """The node that reports one stage's result to the tool.
+
+    `keep` is what the final stage is wired on top of its mesh — the cut-out,
+    the field of view and the build's record (`_keeping`) — and None for every
+    stage whose file is an intermediate.
+    """
     return graph.add(f"show-{stage}", "ContinuityLiftStage", stage,
-                     stage=stage, final=final or "", **inputs)
+                     stage=stage, final=final or "", **inputs, **(keep if final else {}))
+
+
+def _keeping(settings, role, camera, front, front_alpha):
+    """The final stage's extra inputs: what the mesh is kept with.
+
+    The field of view MoGe found is a link, because it is only known once the
+    graph runs; a camera fixed in advance (the rig's) is in the record already.
+    """
+    record = {
+        "settings": {key: settings[key] for key in (*CHOICES, "faces")},
+        "seed": settings["seed"],
+        "views": settings["views"],
+        "camera": camera,
+        "model": role,
+    }
+    inputs = {"image": _out(front), "alpha": _out(front_alpha),
+              "keep": json.dumps(record, sort_keys=True)}
+    if camera is not None and camera["fov"] is None:
+        inputs["value"] = _out("lift-fov")
+    return inputs
 
 
 def build(settings, models):
@@ -410,8 +452,9 @@ def build(settings, models):
     graph.add("decimate", "DecimateMesh", "shape", mesh=_out("lift-remesh"),
               target_face_count=settings["faces"], placement_mode="midpoint")
     graph.add("smooth", "MeshSmoothNormals", "shape", mesh=_out("lift-decimate"), crease_angle=180.0)
+    keep = _keeping(settings, role, camera, front, front_alpha)
     _stage(graph, "shape", mesh=_out("lift-smooth"),
-           final=None if textured else settings["name"])
+           final=None if textured else settings["name"], keep=keep)
 
     skipped = []
     if not (pixal and single):
@@ -434,18 +477,18 @@ def build(settings, models):
                   voxel_colors=_out("lift-colors"))
         pbr = settings["surface"] == "pbr"
         _stage(graph, "texture", mesh=_out("lift-painted"),
-               final=None if pbr else settings["name"])
+               final=None if pbr else settings["name"], keep=keep)
         if not pbr:
             skipped.append("bake")
         else:
-            _bake(graph, settings)
+            _bake(graph, settings, keep)
 
     plan = {"stages": graph.stage_of, "skipped": skipped, "camera": camera,
             "order": list(STAGES), "model": role}
     return graph.nodes, plan
 
 
-def _bake(graph, settings):
+def _bake(graph, settings, keep):
     """The template's PBR tail: unwrap, bake four maps, put them on the mesh."""
     size = settings["texture"]
     graph.add("unwrap", "UnwrapMesh", "bake", mesh=_out("lift-smooth"),
@@ -464,7 +507,99 @@ def _bake(graph, settings):
               roughness=_out("lift-maps", 2), occlusion=_out("lift-occlusion"),
               normal_map=_out("lift-normal-map"))
     graph.add("final", "MeshSmoothNormals", "bake", mesh=_out("lift-textured"), crease_angle=180.0)
-    _stage(graph, "bake", mesh=_out("lift-final"), final=settings["name"],
+    _stage(graph, "bake", mesh=_out("lift-final"), final=settings["name"], keep=keep,
            base_color=_out("lift-maps", 0), metallic=_out("lift-maps", 1),
            roughness=_out("lift-maps", 2), normal_map=_out("lift-normal-map"),
            occlusion=_out("lift-occlusion"))
+
+
+# ---- the shelf ----------------------------------------------------------------
+
+
+def kept_file(folder, stem, suffix):
+    """Where one of a mesh's papers lives: `<folder>/.lift/<stem><suffix>`."""
+    return os.path.join(folder, KEPT, stem + suffix)
+
+
+def shelf():
+    """Every mesh under the output shelf, for the picker's Meshes tab. Walks a
+    folder — run it off the event loop. -> `(rows, folders)`.
+
+    A row is the picker's (`path`, `name`, `subfolder`, `kind`, `size`,
+    `mtime`) with `kind` "mesh", plus `mesh`, the `/view` record of the GLB,
+    and `lift`, what it was kept with (see `kept`) or None for a GLB that has
+    no papers — one written before meshes kept any, or dropped on the shelf by
+    hand. Such a mesh still opens; it just has no picture to stand beside it.
+
+    `subfolder` is relative to the shelf, which is what the picker's shelves
+    are made of; `mesh.subfolder` is relative to the output folder, which is
+    what `/view` wants.
+    """
+    import folder_paths
+
+    output = folder_paths.get_output_directory()
+    root = os.path.join(output, *MESHES.split("/"))
+    rows, folders = [], []
+    pending = [root]
+    while pending:
+        directory = pending.pop(0)
+        try:
+            with os.scandir(directory) as scan:
+                entries = sorted(scan, key=lambda e: e.name)
+        except OSError:
+            continue
+        inside = os.path.relpath(directory, root).replace(os.sep, "/")
+        inside = "" if inside == "." else inside
+        if inside:
+            folders.append(inside)
+        where = os.path.relpath(directory, output).replace(os.sep, "/")
+        for entry in entries:
+            if entry.name.startswith("."):
+                continue
+            if entry.is_dir(follow_symlinks=False):
+                pending.append(entry.path)
+                continue
+            if not entry.name.lower().endswith(".glb"):
+                continue
+            try:
+                stat = entry.stat()
+            except OSError:
+                continue
+            rows.append({
+                "path": f"{where}/{entry.name} [output]", "name": entry.name,
+                "subfolder": inside, "kind": "mesh", "size": stat.st_size, "mtime": stat.st_mtime,
+                "mesh": {"filename": entry.name, "subfolder": where, "type": "output"},
+                "lift": kept(directory, where, entry.name[:-4], folder_paths),
+            })
+    return rows, folders
+
+
+def kept(directory, where, stem, folder_paths):
+    """A mesh's papers, as the tool reads them back, or None if it has none.
+
+    The file names inside become `/view` records, and the pictures it was
+    built from are dropped if they have since left the input folder: the mesh
+    still opens, and the slot says there is a picture to add rather than
+    pointing at one that is gone.
+    """
+    try:
+        with open(kept_file(directory, stem, ".json"), encoding="utf-8") as handle:
+            record = json.load(handle)
+    except (OSError, ValueError):
+        return None
+    if not isinstance(record, dict):
+        return None
+    papers = f"{where}/{KEPT}"
+    view = lambda name: {"filename": name, "subfolder": papers, "type": "output"}  # noqa: E731
+    out = {key: record.get(key) for key in ("settings", "seed", "camera", "model", "stage",
+                                            "faces", "bytes")}
+    out["picture"] = view(record["picture"]) if record.get("picture") else None
+    out["maps"] = {name: view(file) for name, file in (record.get("maps") or {}).items()}
+    sides = {side: path for side, path in (record.get("views") or {}).items()
+             if side in VIEWS and isinstance(path, str)}
+    # How many pictures it was built from, whether or not they are still there:
+    # one picture and a rig of them ran different stages.
+    out["sides"] = len(sides)
+    out["views"] = {side: path for side, path in sides.items()
+                    if folder_paths.exists_annotated_filepath(path)}
+    return out

@@ -25,7 +25,7 @@ import { queueState, watch as watchQueue, dropQueued } from "./queue.js";
 // the list the current tab is looking at, and every organize path goes through
 // it rather than reaching for `this.assets`.
 const KIND_LABEL = { image: "Image", video: "Video", audio: "Audio",
-                     renders: "Renders", guides: "Guide", refmods: "RefMod" };
+                     renders: "Renders", guides: "Guide", refmods: "RefMod", meshes: "Meshes" };
 const ACCEPT = { image: "image/*", video: "video/*", audio: "audio/*",
                  guides: "video/*", refmods: ".safetensors" };
 
@@ -52,6 +52,9 @@ const PAGE_SIZE = 60;
 // in PAGE_SIZE batches; past it a pager appears, because a ten-thousand-file
 // folder should be jumped through, not scrolled end to end.
 const PER_PAGE = 240;
+
+/** A face count the way the image-to-3D tool writes one: 200k, 1.2M. */
+const meshFaces = (n) => (n >= 1e6 ? `${(n / 1e6).toFixed(1)}M` : `${Math.round(n / 1000)}k`);
 
 /** The small chevron the shelf row points with: sideways between crumbs, and
  *  on a chip that has folders inside it. CSS turns it. */
@@ -98,6 +101,9 @@ export class Picker {
     // whose rows keep their own kinds (a mod is a picture or a clip). See
     // `creator/refmod.py`.
     this.mods = [];
+    // The image-to-3D tool's shelf: a fourth place, of GLBs, each shown by the
+    // picture it was lifted from. See `creator/lift.py`, `shelf`.
+    this.meshes = [];
     this.loaded = false;
     // Which shelf the grid shows: "all", "fav", or an input subfolder. Shelves
     // are shared across tabs — a folder is a place, not a kind.
@@ -242,6 +248,7 @@ export class Picker {
     if (this.kind === "renders") this.uploadButton.style.display = "none";
     // RefMods are not a folder the picker browses, so there is none to open.
     if (this.kind === "refmods") { this.organizeButton.style.display = "none"; this.revealButton.style.display = "none"; this.uploadButton.textContent = this.uploadLabel(); }
+    if (this.kind === "meshes") this.hideFolderTools();
     this.modal.style.position = "relative";
 
     this.overlay = el("div", {
@@ -267,15 +274,17 @@ export class Picker {
       // All three at once. The two folders have nothing to say to each other,
       // and waiting for input to come back before asking for output made a slow
       // disk twice as slow for no reason (#4).
-      const [assets, renders, mods, prefs] = await Promise.all([
+      const [assets, renders, mods, meshes, prefs] = await Promise.all([
         listAssets({ force }),
         this.options.kinds.includes("renders") ? listAssets({ force, root: "output" }) : [],
         this.options.kinds.includes("refmods") ? listAssets({ force, root: "refmods" }) : [],
+        this.options.kinds.includes("meshes") ? listAssets({ force, root: "meshes" }) : [],
         loadPickerPrefs(),
       ]);
       this.assets = assets;
       this.renders = renders;
       this.mods = mods;
+      this.meshes = meshes;
       this.prefs = prefs;
       // A mark on a file the listing no longer has is a mark on nothing.
       this.marked = this.marked.filter((p) => this.activeAssets().some((a) => a.path === p));
@@ -302,6 +311,7 @@ export class Picker {
       this.assets = [];
       this.renders = [];
       this.mods = [];
+      this.meshes = [];
       this.loaded = true;
       this.loadError = error.message;
     }
@@ -335,7 +345,8 @@ export class Picker {
     this.organizeButton.style.display = kind === "refmods" ? "none" : "";
     this.revealButton.style.display = kind === "refmods" ? "none" : "";
     if (kind === "refmods" && this.organize) this.setOrganize(false);
-    if (kind !== "renders") this.uploadButton.textContent = this.uploadLabel();
+    if (kind !== "renders" && kind !== "meshes") this.uploadButton.textContent = this.uploadLabel();
+    if (kind === "meshes") this.hideFolderTools();
     // Shelves are shared between the input tabs — a folder is a place, not a
     // kind — but the output folder is a different place, so crossing that line
     // opens where that root was last left rather than on a shelf that is not
@@ -370,12 +381,23 @@ export class Picker {
     else this.refreshCell(asset);
   }
 
+  /** The Meshes tab takes no upload and organizes nothing: a mesh arrives by
+   *  being built, and the move and delete routes act on the media roots, which
+   *  would leave the papers beside a moved GLB behind. */
+  hideFolderTools() {
+    this.uploadButton.style.display = "none";
+    this.organizeButton.style.display = "none";
+    this.revealButton.style.display = "none";
+    if (this.organize) this.setOrganize(false);
+  }
+
   /** The listing the current tab is browsing. The one place that knows the
    *  renders tab reads a different folder; everything organize-related goes
    *  through it, which is why there is only one implementation of any of it. */
   activeAssets() {
     return this.kind === "renders" ? this.renders
-      : this.kind === "refmods" ? this.mods : this.assets;
+      : this.kind === "refmods" ? this.mods
+        : this.kind === "meshes" ? this.meshes : this.assets;
   }
 
   /** The label the upload button wears when it is not uploading. */
@@ -397,7 +419,8 @@ export class Picker {
 
   /** Which root the tab is browsing, as the server names it. */
   rootName() {
-    return this.kind === "renders" ? "output" : this.kind === "refmods" ? "refmods" : "input";
+    return this.kind === "renders" ? "output"
+      : this.kind === "refmods" || this.kind === "meshes" ? this.kind : "input";
   }
 
   /** Which root the tab is browsing. The shelf is remembered per root, not per
@@ -408,7 +431,7 @@ export class Picker {
   }
 
   rootKeyOf(kind) {
-    return kind === "renders" ? "renders" : kind === "refmods" ? "refmods" : "input";
+    return kind === "renders" || kind === "refmods" || kind === "meshes" ? kind : "input";
   }
 
   /** Open where the picker was last left. A remembered folder that has since
@@ -498,6 +521,7 @@ export class Picker {
     const scoped = this.kind === "renders"
       ? (this.options.only ? this.renders.filter((a) => a.kind === this.options.only) : this.renders)
       : this.kind === "guides" ? this.assets.filter(isGuide)
+      : this.kind === "meshes" ? this.meshes
       : this.assets.filter((a) => a.kind === this.kind);
     const count = (test) => scoped.filter(test).length;
     const here = this.here();
@@ -579,8 +603,10 @@ export class Picker {
       strip.scrollLeft += event.deltaY;
     }, { passive: false });
 
-    const drop = this.emptyShelfChip(here);
-    this.shelfRow.replaceChildren(crumbs, strip, this.newShelfChip(here),
+    // Folders on the mesh shelf are made in a file manager, if at all: the
+    // folder routes act on the media roots.
+    const drop = this.kind === "meshes" ? null : this.emptyShelfChip(here);
+    this.shelfRow.replaceChildren(crumbs, strip, ...(this.kind === "meshes" ? [] : [this.newShelfChip(here)]),
                                   ...(drop ? [drop] : []));
     requestAnimationFrame(() => this.markStripEdges(strip));
   }
@@ -872,6 +898,7 @@ export class Picker {
       : this.kind === "renders" ? () => true
       // Mods are a place too, and every one is a reference of its own kind.
       : this.kind === "refmods" ? () => true
+      : this.kind === "meshes" ? () => true
       // The guide tab is a place, not a kind: every clip the bench has traced,
       // and nothing else in the input folder.
       : this.kind === "guides" ? isGuide
@@ -950,6 +977,8 @@ export class Picker {
           : this.kind === "refmods"
             ? t("No RefMods yet — import a .safetensors and they join the cast, or save "
               + "a cast member's pictures from their card.")
+          : this.kind === "meshes" && this.shelf === "all"
+            ? t("No meshes yet. Build one in Image to 3D and it is kept here.")
           : this.shelf === "fav"
             ? t("No favorites yet — hover a file and hit the star.")
             : this.shelf !== "all"
@@ -1139,12 +1168,13 @@ export class Picker {
       }
       // A mod made elsewhere has no picture beside it until a render decodes
       // one; the cell says what it is rather than showing a broken image.
-      if (asset.mod) {
+      if (asset.mod || asset.kind === "mesh") {
         thumb.addEventListener("error", () => thumb.replaceWith(this.fallback(asset, "cube")));
       }
       cell.appendChild(thumb);
     } else {
-      cell.appendChild(this.fallback(asset, "audio"));
+      // A mesh kept without its papers has no picture to be shown by.
+      cell.appendChild(this.fallback(asset, asset.kind === "mesh" ? "cube" : "audio"));
     }
 
     cell.appendChild(el("div", { class: "mmc-check" }));
@@ -1173,6 +1203,12 @@ export class Picker {
           t(asset.source === "stack" ? "stack" : asset.mode === "training" ? "compressed" : "full")} · ${
           t("{count} tokens", { count: asset.tokens ?? 0 })}`,
       }));
+    } else if (asset.kind === "mesh") {
+      // What a mesh is read for at a glance: how heavy it is.
+      if (asset.lift?.faces) {
+        cell.appendChild(el("div", { class: "mmc-cell-mod",
+                                     text: t("{count} faces", { count: meshFaces(asset.lift.faces) }) }));
+      }
     } else if (!this.organize) {
       if (asset.kind !== "image") cell.appendChild(this.badge(asset));
       if (asset.kind !== "audio") cell.appendChild(this.cropBadge(asset));
@@ -1205,7 +1241,7 @@ export class Picker {
     // Organizing is dragging: the cell rides to a shelf chip. The chips take
     // it from `this.dragging` — dataTransfer only carries strings.
     // A mod's home is the model folders; the shelves are input's.
-    cell.draggable = !asset.mod;
+    cell.draggable = !asset.mod && asset.kind !== "mesh";
     cell.addEventListener("dragstart", (event) => {
       this.dragging = asset;
       event.dataTransfer.effectAllowed = "move";
@@ -1345,7 +1381,11 @@ export class Picker {
    *  cell could not give it. Opened by double-click on any tab. */
   view(asset) {
     let unmount;
-    const media = asset.kind === "audio"
+    // A mesh is shown by its picture here; the tool is where it is walked around.
+    if (asset.kind === "mesh" && !stillUrl(asset)) return;
+    const media = asset.kind === "mesh"
+      ? el("img", { class: "mmc-light-media", src: stillUrl(asset), alt: asset.name })
+      : asset.kind === "audio"
       ? el("audio", { class: "mmc-light-audio", src: viewUrl(asset.path), controls: true, autoplay: true })
       : asset.kind === "video" && !asset.mod
         ? el("video", { class: "mmc-light-media", src: viewUrl(asset.path), controls: true, autoplay: true, loop: true })

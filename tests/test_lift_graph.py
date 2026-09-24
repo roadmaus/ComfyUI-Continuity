@@ -177,7 +177,9 @@ with tempfile.TemporaryDirectory() as scratch:
     with open(path, "rb") as handle:
         check("it is a GLB", handle.read(4), b"glTF")
 
-    first = liftnode.ContinuityLiftStage.execute(stage="bake", mesh=cube, final="jug",
+    keep = '{"camera": {"fov": null, "pad": 1.0}, "seed": 42, "views": {"front": "jug.png"}}'
+    first = liftnode.ContinuityLiftStage.execute(stage="bake", mesh=cube, final="jug", image=image,
+                                                 alpha=alpha, value=38.5, keep=keep,
                                                  base_color=image).ui["continuity_lift"][0]
     second = liftnode.ContinuityLiftStage.execute(stage="bake", mesh=cube, final="jug").ui["continuity_lift"][0]
     check("the kept mesh lands on the shelf", (first["mesh"]["type"], first["mesh"]["subfolder"]),
@@ -186,5 +188,19 @@ with tempfile.TemporaryDirectory() as scratch:
     check("and the next one does not overwrite it", second["mesh"]["filename"], "jug-2.glb")
     check("it says it is the final one", first.get("final"), True)
     check("a map is reported as a swatch", sorted(first["maps"]), ["base_color"])
+    shelf = os.path.join(folder_paths.get_output_directory(), *lift.MESHES.split("/"))
+    check("the kept mesh's picture is one of its papers", first["image"],
+          {"filename": "jug.png", "subfolder": f"{lift.MESHES}/{lift.KEPT}", "type": "output"})
+    check("and so are its swatches", first["maps"]["base_color"]["subfolder"], f"{lift.MESHES}/{lift.KEPT}")
+    import json
+    with open(lift.kept_file(shelf, "jug", ".json"), encoding="utf-8") as handle:
+        papers = json.load(handle)
+    check("the camera is kept whole, with the fov the run found", papers["camera"], {"fov": 38.5, "pad": 1.0})
+    check("the record names the files beside it",
+          (papers["picture"], papers["maps"], papers["faces"], papers["stage"]),
+          ("jug.png", {"base_color": "jug.base_color.png"}, 12, "bake"))
+    check("the second mesh has papers of its own", os.path.exists(lift.kept_file(shelf, "jug-2", ".json")), True)
+    rows, _ = lift.shelf()
+    check("both are on the shelf", sorted(row["name"] for row in rows), ["jug-2.glb", "jug.glb"])
 
 passed("the lift graph holds against core, and its stage node writes what it says")

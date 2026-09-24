@@ -179,4 +179,74 @@ check("a missing camera model is named", [entry["role"] for entry in lift.missin
 settings = lift.spec({"views": {"front": "a.png"}, "model": "trellis"})
 check("TRELLIS.2 does not need it", lift.missing(settings, absent), [])
 
+# ---- what a finished mesh is kept with ----------------------------------------------
+
+import json  # noqa: E402
+import os  # noqa: E402
+import sys  # noqa: E402
+import tempfile  # noqa: E402
+import types  # noqa: E402
+
+settings, prompt, plan = built()
+final = prompt["lift-show-bake"]["inputs"]
+check("the final stage is wired the cut-out", (final["image"], final["alpha"]),
+      (["lift-front-crop", 0], ["lift-front-alpha", 0]))
+check("and MoGe's field of view, which only the run knows", final["value"], ["lift-fov", 0])
+record = json.loads(final["keep"])
+check("the record holds the settings a build is keyed on", record["settings"],
+      {"model": "pixal", "detail": "standard", "background": "remove", "surface": "pbr",
+       "texture": 2048, "faces": 200000})
+check("the seed and the pictures", (record["seed"], record["views"]), (42, {"front": "lift/jug.png"}))
+check("the camera, its fov still to come", record["camera"], {"fov": None, "pad": 1.0})
+check("no intermediate stage carries a record",
+      [key for key, node in prompt.items() if "keep" in node["inputs"]], ["lift-show-bake"])
+
+settings, prompt, plan = built(views={"front": "a.png", "back": "b.png"}, surface="color")
+final = prompt["lift-show-texture"]["inputs"]
+check("the rig's camera is known in advance, so nothing is wired for it", "value" in final, False)
+check("and is in the record whole", json.loads(final["keep"])["camera"], {"fov": lift.VIEWS_FOV, "pad": 1.1})
+
+settings, prompt, plan = built(model="trellis", surface="none")
+final = prompt["lift-show-shape"]["inputs"]
+check("TRELLIS.2 keeps its picture but no camera",
+      ("image" in final, "value" in final, json.loads(final["keep"])["camera"]), (True, False, None))
+
+# The shelf, against a folder on disk and a stand-in for core's folder_paths.
+with tempfile.TemporaryDirectory() as scratch:
+    output = os.path.join(scratch, "output")
+    shelf = os.path.join(output, *lift.MESHES.split("/"))
+    os.makedirs(os.path.join(shelf, lift.KEPT))
+    os.makedirs(os.path.join(shelf, "keepers"))
+    for name in ("jug.glb", "loose.glb", "keepers/cup.glb", ".lift/stray.glb", "notes.txt"):
+        with open(os.path.join(shelf, *name.split("/")), "wb") as handle:
+            handle.write(b"glTF")
+    with open(lift.kept_file(shelf, "jug", ".json"), "w", encoding="utf-8") as handle:
+        json.dump({"settings": {"model": "pixal"}, "seed": 7, "camera": {"fov": 38.5, "pad": 1.0},
+                   "views": {"front": "lift/jug.png", "left": "lift/gone.png", "top": "x.png"},
+                   "picture": "jug.png", "maps": {"base_color": "jug.base_color.png"},
+                   "stage": "bake", "faces": 1200, "bytes": 99}, handle)
+    sys.modules["folder_paths"] = types.SimpleNamespace(
+        get_output_directory=lambda: output,
+        exists_annotated_filepath=lambda path: path != "lift/gone.png")
+    try:
+        rows, folders = lift.shelf()
+    finally:
+        del sys.modules["folder_paths"]
+    by_name = {row["name"]: row for row in rows}
+    check("every GLB on the shelf, and nothing else", sorted(by_name), ["cup.glb", "jug.glb", "loose.glb"])
+    check("the papers' folder is not a shelf", folders, ["keepers"])
+    jug = by_name["jug.glb"]
+    check("a row the picker can file", (jug["path"], jug["subfolder"], jug["kind"]),
+          ("continuity/meshes/jug.glb [output]", "", "mesh"))
+    check("a mesh in a folder is filed under it", by_name["cup.glb"]["subfolder"], "keepers")
+    check("the GLB is fetched from the output folder", jug["mesh"],
+          {"filename": "jug.glb", "subfolder": "continuity/meshes", "type": "output"})
+    check("its picture is one of its papers", jug["lift"]["picture"],
+          {"filename": "jug.png", "subfolder": "continuity/meshes/.lift", "type": "output"})
+    check("a picture that has left the input folder is dropped, and so is a side that is not one",
+          jug["lift"]["views"], {"front": "lift/jug.png"})
+    check("but it still says it was built from two", jug["lift"]["sides"], 2)
+    check("the camera comes back whole", jug["lift"]["camera"], {"fov": 38.5, "pad": 1.0})
+    check("a GLB with no papers still opens, with none", by_name["loose.glb"]["lift"], None)
+
 passed("all lift tests passed")
