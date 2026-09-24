@@ -23,6 +23,20 @@ export const css = `
 .mmc-lf-gl { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: grab; }
 .mmc-lf-gl:active { cursor: grabbing; }
 
+/* The frame the photo and the turntable are shot through. The room outside it
+   is dimmed rather than hidden, so the mesh can still be turned by a part that
+   is out of shot; its size in the corner is the photo's, in pixels. */
+.mmc-lf-frame {
+  position: absolute; z-index: 1; pointer-events: none; border-radius: 2px;
+  border: 1px solid color-mix(in srgb, var(--mmc-strong) 55%, transparent);
+  box-shadow: 0 0 0 100vmax color-mix(in srgb, var(--mmc-media-bg) 55%, transparent);
+}
+.mmc-lf-frame[hidden] { display: none; }
+.mmc-lf-frame span {
+  position: absolute; right: 8px; bottom: 6px;
+  font-size: calc(11px * var(--mmc-type)); color: var(--mmc-dim); font-variant-numeric: tabular-nums;
+}
+
 /* Before anything has been built: what the stage is for, in the middle of it. */
 .mmc-lf-empty {
   position: absolute; left: 50%; top: 44%; transform: translate(-50%, -50%);
@@ -34,6 +48,24 @@ export const css = `
 /* The display above outranks the browser's own rule for the attribute, so
    hiding it has to be said here or it stays over the mesh. */
 .mmc-lf-empty[hidden] { display: none; }
+.mmc-lf-reopen {
+  pointer-events: auto; margin-top: 4px; padding: 4px 6px; border: 0; background: none; cursor: pointer;
+  font-family: inherit; font-size: calc(12.5px * var(--mmc-type)); color: var(--mmc-text);
+  text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--mmc-line-3);
+}
+.mmc-lf-reopen:hover { color: var(--mmc-strong); text-decoration-color: currentColor; }
+.mmc-lf-reopen:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 2px; border-radius: 4px; }
+
+/* Open mesh, in the bar: the shelf, in the picker. */
+.mmc-lf-open {
+  display: flex; align-items: center; gap: 7px; margin-right: 6px; padding: 5px 11px;
+  border-radius: 10px; border: 1px solid var(--mmc-line); background: none; cursor: pointer;
+  font-family: inherit; font-size: calc(12.5px * var(--mmc-type)); color: var(--mmc-text);
+}
+.mmc-lf-open svg { stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linejoin: round; opacity: .8; }
+.mmc-lf-open:hover:not(:disabled) { background: var(--mmc-surface); border-color: var(--mmc-line-2); }
+.mmc-lf-open:disabled { opacity: .45; cursor: default; }
+.mmc-lf-open:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 2px; }
 
 /* The pictures, top left. They are the input, so they stay in view over the
    scene they were lifted into. */
@@ -201,6 +233,10 @@ export const css = `
   min-height: 0; display: flex; flex-direction: column;
   border-left: 1px solid var(--mmc-line); background: var(--mmc-bg);
 }
+/* Build or Shoot: what the mesh is, or how it is shot. Three classes, so the
+   width outranks .mmc-lf-seg.wide's 100%, which with these margins overflowed
+   the drawer. */
+.mmc-lf-seg.wide.mmc-lf-tabs { flex: none; width: auto; margin: 14px 18px 0; }
 .mmc-lf-drawer-body {
   flex: 1; min-height: 0; overflow: auto; overscroll-behavior: contain;
   padding: 18px 18px 10px; display: flex; flex-direction: column; gap: 18px;
@@ -225,6 +261,7 @@ export const css = `
 .mmc-lf-note { margin: 0; font-size: calc(12px * var(--mmc-type)); line-height: 1.45; color: var(--mmc-dim); }
 .mmc-lf-field input[type="range"] { width: 100%; margin: 0; accent-color: var(--mmc-accent); }
 .mmc-lf-rule { flex: none; height: 1px; background: var(--mmc-line); }
+.mmc-lf-passes { display: flex; flex-wrap: wrap; gap: 6px; }
 
 /* The files a build needs and this machine does not have, and where they are. */
 .mmc-lf-missing {
@@ -265,6 +302,14 @@ export const css = `
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .mmc-lf-filepath { font-size: calc(12px * var(--mmc-type)); color: var(--mmc-dim); overflow-wrap: anywhere; }
+.mmc-lf-reveal {
+  flex: none; margin-left: auto; width: 32px; height: 32px; display: grid; place-items: center;
+  border-radius: 9px; border: 1px solid var(--mmc-line); background: none; cursor: pointer; color: var(--mmc-dim);
+}
+.mmc-lf-reveal svg { stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linejoin: round; }
+.mmc-lf-reveal:hover:not(:disabled) { color: var(--mmc-strong); background: var(--mmc-surface-2); }
+.mmc-lf-reveal:disabled { opacity: .45; cursor: default; }
+.mmc-lf-reveal:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 2px; }
 .mmc-lf-doors { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 .mmc-lf-door {
   display: flex; flex-direction: column; gap: 1px; text-align: left; cursor: pointer;
@@ -272,11 +317,11 @@ export const css = `
   background: var(--mmc-surface); border: 1px solid var(--mmc-line);
 }
 .mmc-lf-door:hover:not(:disabled) { background: var(--mmc-surface-2); border-color: var(--mmc-line-2); }
-.mmc-lf-door:disabled { cursor: default; }
+.mmc-lf-door:disabled { cursor: default; opacity: .42; }
 .mmc-lf-door:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 2px; }
 .mmc-lf-door b { font-size: calc(12.5px * var(--mmc-type)); font-weight: 600; }
 .mmc-lf-door span { font-size: calc(11.5px * var(--mmc-type)); line-height: 1.35; color: var(--mmc-dim); }
-.mmc-lf-out.waiting .mmc-lf-file, .mmc-lf-out.waiting .mmc-lf-doors { opacity: .42; }
+.mmc-lf-out.waiting .mmc-lf-file { opacity: .42; }
 
 /* --- narrow ------------------------------------------------------------------ */
 @media (max-width: 860px) {

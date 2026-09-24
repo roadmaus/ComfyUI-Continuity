@@ -33,7 +33,7 @@ from aiohttp import web
 import folder_paths
 from server import PromptServer
 
-from . import (assets, compile as compiler, crop as framing, latents, lorameta, media,
+from . import (assets, compile as compiler, crop as framing, latents, lift, lorameta, media,
                models, refmod, preview, settings, vdn)
 from .guard import same_origin
 
@@ -508,7 +508,8 @@ async def list_vdn(request):
 
 @PromptServer.instance.routes.get("/continuity/assets")
 async def list_assets(request):
-    """The picker's grid: `?root=input` (the default) or `?root=output`.
+    """The picker's grid: `?root=input` (the default) or `?root=output` — or one
+    of the two places that are not media folders, `refmods` and `meshes`.
 
     The output listing is the gallery — finished renders, browsed with the same
     machinery as the input folder. Its paths come back annotated (` [output]`),
@@ -519,6 +520,14 @@ async def list_assets(request):
         # its own rows, browsed by the same grid. See `refmod.listing`.
         loop = asyncio.get_running_loop()
         rows, folders = await loop.run_in_executor(None, refmod.listing)
+        rows.sort(key=lambda a: a["mtime"], reverse=True)
+        return web.json_response({"assets": rows, "folders": folders, "truncated": False})
+    if request.query.get("root") == "meshes":
+        # The image-to-3D tool's shelf, each GLB with the papers it was kept
+        # with. A place of its own for the same reason: a mesh is no kind the
+        # media folders list, and no reference slot could take one.
+        loop = asyncio.get_running_loop()
+        rows, folders = await loop.run_in_executor(None, lift.shelf)
         rows.sort(key=lambda a: a["mtime"], reverse=True)
         return web.json_response({"assets": rows, "folders": folders, "truncated": False})
     if request.query.get("root") == "output":

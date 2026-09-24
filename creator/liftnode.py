@@ -16,7 +16,9 @@ pack's own `continuity_lift` key, which the frontend's node bodies never read.
 Intermediates go to the temp folder, which ComfyUI empties on start: they are
 pictures of work in progress and nobody should find a drawer of voxel meshes
 in their output folder. The one mesh a request asks to keep — the stage named
-`final` — goes to `output/continuity/meshes/`, beside the renders.
+`final` — goes to `output/continuity/meshes/`, beside the renders, and takes
+its papers with it: the cut-out, the swatches and the build's record, in the
+`.lift/` folder beside it (`lift.KEPT`), so the tool can open it again later.
 """
 
 import json
@@ -28,7 +30,7 @@ import numpy as np
 from comfy_api.latest import io
 from PIL import Image
 
-from . import outputs
+from . import lift, outputs
 
 log = logging.getLogger(__name__)
 
@@ -103,6 +105,8 @@ class ContinuityLiftStage(io.ComfyNode):
                 io.Image.Input("alpha", optional=True),
                 io.Mesh.Input("mesh", optional=True),
                 io.Float.Input("value", optional=True, force_input=True),
+                # The final stage's record of the build, as JSON — `lift._keeping`.
+                io.String.Input("keep", optional=True, default=""),
                 *maps,
             ],
         )
@@ -116,11 +120,23 @@ class ContinuityLiftStage(io.ComfyNode):
         return uuid.uuid4().hex
 
     @classmethod
-    def execute(cls, stage, final="", image=None, alpha=None, mesh=None, value=None,
+    def execute(cls, stage, final="", image=None, alpha=None, mesh=None, value=None, keep="",
                 **maps) -> io.NodeOutput:
         record = {"stage": stage}
+        # The kept mesh's papers go beside it; name them once the GLB has one.
+        papers = None
+        if final and mesh is not None:
+            glb_path, glb_where = _final_file(final)
+            papers = (os.path.dirname(glb_path), glb_where["filename"][:-4], glb_where["subfolder"])
+            os.makedirs(os.path.join(papers[0], lift.KEPT), exist_ok=True)
+
+        def keep_file(suffix):
+            folder, stem, subfolder = papers
+            return lift.kept_file(folder, stem, suffix), {
+                "filename": stem + suffix, "subfolder": f"{subfolder}/{lift.KEPT}", "type": "output"}
+
         if image is not None:
-            path, where = _temp_file(".png")
+            path, where = keep_file(".png") if papers else _temp_file(".png")
             _pixels(image, alpha).save(path)
             record["image"] = where
         if value is not None:
@@ -131,7 +147,7 @@ class ContinuityLiftStage(io.ComfyNode):
             glb = mesh_item_to_glb_bytes(mesh, 0)
             if glb is None:
                 raise ValueError(f"the {stage} stage made an empty mesh")
-            path, where = _final_file(final) if final else _temp_file(".glb")
+            path, where = (glb_path, glb_where) if papers else _temp_file(".glb")
             with open(path, "wb") as handle:
                 handle.write(glb)
             record["mesh"] = where
@@ -148,15 +164,37 @@ class ContinuityLiftStage(io.ComfyNode):
                 continue
             thumb = _pixels(picture)
             thumb.thumbnail((SWATCH, SWATCH))
-            path, where = _temp_file(".png")
+            path, where = keep_file(f".{name}.png") if papers else _temp_file(".png")
             thumb.save(path)
             swatches[name] = where
         if swatches:
             record["maps"] = swatches
+        if papers:
+            cls.keep_papers(keep_file, keep, record)
         # Round-tripped so a value the wire cannot carry fails here, by name,
         # rather than as a websocket that drops the message.
         json.dumps(record)
         return io.NodeOutput(ui={"continuity_lift": [record]})
+
+    @staticmethod
+    def keep_papers(keep_file, keep, record):
+        """The build's record beside the kept mesh: what `keep` said, the camera
+        made whole with the field of view that arrived on the wire, and what
+        this stage wrote. File names, not `/view` records — the folder is the
+        mesh's, and `lift.kept` rebuilds the records from wherever it is read."""
+        try:
+            papers = json.loads(keep) if keep else {}
+        except ValueError:
+            raise ValueError(f"the {record['stage']} stage was handed a record that is not JSON") from None
+        camera = papers.get("camera")
+        if camera and camera.get("fov") is None:
+            camera["fov"] = record.get("value")
+        papers.update(stage=record["stage"], faces=record["faces"], bytes=record["bytes"],
+                      picture=record["image"]["filename"] if "image" in record else None,
+                      maps={name: where["filename"] for name, where in record.get("maps", {}).items()})
+        path, _ = keep_file(".json")
+        with open(path, "w", encoding="utf-8") as handle:
+            json.dump(papers, handle, indent=1, sort_keys=True)
 
 
 NODES = [ContinuityLiftStage]

@@ -20,6 +20,21 @@
 // voxels, the clay shape, the painted mesh — which is how a build that went
 // wrong says where it went wrong.
 //
+// **A mesh can be opened again.** The finished GLB keeps its papers beside it
+// (`creator/lift.py`, `KEPT`): the cut-out, the camera, the settings and the
+// seed. The picker's Meshes tab lists the shelf with those pictures as the
+// thumbnails, and opening one puts the tool back where that build left it —
+// the mesh on the stage, the picture at its camera, the settings in the drawer,
+// ready to be built again. The intermediates are not kept (they are temp
+// files), so their stages read as done but have nothing to show.
+//
+// **The stage is a set, not just a viewer.** The drawer's Shoot page lights
+// it (an HDRI, turned and dimmed), grounds it (a contact shadow), can stand the
+// surroundings behind the mesh, and lays a frame over it; the photo and the
+// turntable are both shot through that frame, so what is written is what was
+// staged. None of it is a build setting: it lives under its own key and never
+// makes the mesh on the stage read as stale.
+//
 // **Changing a setting does not throw the mesh away.** It is still a real answer
 // to the settings it was built with, and the track says it is out of date
 // rather than clearing it. Building again with nothing changed draws a new seed:
@@ -27,7 +42,7 @@
 // button that does nothing the second time is a broken button.
 
 import { el, icon, mark, dragsFiles, mountOverlay, keepScroll } from "./dom.js";
-import { upload, viewUrl, outputUrl, liftModels, liftRun, revealFolder,
+import { upload, viewUrl, outputUrl, liftModels, liftRun, revealFolder, invalidate,
          blockoutFrames, blockoutWrite } from "./api.js";
 import { openPicker } from "./picker.js";
 import { t } from "./i18n.js";
@@ -42,8 +57,28 @@ const PREFS_KEY = "mmc.lift";
 // is kept apart from `PREFS_KEY`: the settings there are what a build is keyed
 // on, and flipping this must never make the mesh on the stage read as stale.
 const SHADING_KEY = "mmc.lift.shading";
+// How the stage is lit and framed, and which page of the drawer is open. Ways
+// of looking too, for the same reason.
+const STAGING_KEY = "mmc.lift.stage";
+const DRAWER_KEY = "mmc.lift.drawer";
+/** Where photos are written, under input/, to be cited with @. */
+const SHOTS = "continuity/lift/shots";
+/** A photo's longer side, and a turntable frame's. */
+const PHOTO_LONG = 2048;
+const TURNTABLE_LONG = 1024;
+/** How many samples a path-traced photo accumulates. */
+const RENDER_SAMPLES = 256;
+
+const STAGING = { light: "studio", turn: 0, brightness: 1, sun: 1, surroundings: false, blur: 0,
+                  shadow: true, frame: "16:9", passes: ["depth"], render: false };
+const LIGHTS = ["studio", "outdoor", "neutral"];
+const FRAMES = { "16:9": 16 / 9, "1:1": 1, "9:16": 9 / 16 };
+const PASSES = ["depth", "normals", "mask"];
 
 const SIDES = ["front", "left", "back", "right"];
+/** The stages where the picture is the subject, so it stands in the scene by
+ *  default; past them the mesh is, and the rig only gets in the way of it. */
+const PICTURE_STAGES = ["cutout", "camera"];
 const STAGES = ["cutout", "camera", "structure", "shape", "texture", "bake"];
 
 // The settings a build takes, their choices, and their defaults — the frontend's
@@ -102,6 +137,20 @@ export function needs(settings, views, models = null) {
   return roles;
 }
 
+/** One labelled control in the drawer, with a note under it when it has one. */
+const field = (label, control, note = null, extra = null) => el("div", { class: "mmc-lf-field" }, [
+  el("div", { class: "mmc-lf-label" }, [el("span", { text: label }), extra]),
+  control,
+  note ? el("p", { class: "mmc-lf-note", text: note }) : null,
+]);
+
+/** A photo's file stem: the mesh's name and when it was taken, to the second. */
+const shotStem = (name, at = new Date()) => {
+  const two = (n) => String(n).padStart(2, "0");
+  return `${name}-${at.getFullYear()}${two(at.getMonth() + 1)}${two(at.getDate())}`
+    + `-${two(at.getHours())}${two(at.getMinutes())}${two(at.getSeconds())}`;
+};
+
 let open = null;
 
 /**
@@ -140,10 +189,36 @@ class Lift {
     this.error = null;
     this.mode = "textured";
     this.shading = this.rememberedShading();
+    // Whether the picture and its camera rig stand in the scene. The one switch
+    // for it: set per stage by `look` (on where the picture is the subject, off
+    // once there is a mesh to look at) and flipped by "Picture in scene".
     this.picture = true;
     this.atCamera = false;
     this.turning = null;
+    this.snapping = false;          // a photo is being taken; while traced, {done, of}
+    this.stopTrace = false;
     this.queue = { remaining: 0, running: false };
+    this.staging = this.rememberedStaging();
+    this.tab = this.rememberedTab();
+    this.previewFrame = false;       // a shot door is hovered: show what it will shoot
+    this.opened = null;              // the shelf row the stage was opened from
+  }
+
+  rememberedStaging() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STAGING_KEY) || "{}");
+      const kept = Object.fromEntries(Object.entries(saved).filter(([key]) => key in STAGING));
+      const staging = { ...STAGING, ...kept };
+      if (!LIGHTS.includes(staging.light)) staging.light = STAGING.light;
+      if (!(staging.frame in FRAMES)) staging.frame = STAGING.frame;
+      staging.passes = Array.isArray(staging.passes) ? staging.passes.filter((pass) => PASSES.includes(pass)) : [];
+      return staging;
+    } catch { return { ...STAGING }; }
+  }
+
+  rememberedTab() {
+    try { return localStorage.getItem(DRAWER_KEY) === "stage" ? "stage" : "build"; }
+    catch { return "build"; }
   }
 
   remembered() {
@@ -188,8 +263,15 @@ class Lift {
     this.note = el("div", { class: "mmc-lf-est" });
     this.toastBox = el("div", { class: "mmc-lf-toast", role: "status" });
 
+    this.frameSize = el("span");
+    this.frameBox = el("div", { class: "mmc-lf-frame", "aria-hidden": "true", hidden: true }, [this.frameSize]);
+    this.foot = el("div", { class: "mmc-lf-foot" }, [
+      this.track,
+      el("div", { class: "mmc-lf-go" }, [this.runButton, this.note]),
+    ]);
     const stageBox = el("section", { class: "mmc-lf-stage", "aria-label": t("3D stage") }, [
       this.glass,
+      this.frameBox,
       this.empty,
       el("div", { class: "mmc-lf-holder" }, [this.slots, this.holderNote]),
       el("div", { class: "mmc-lf-views" }, [
@@ -199,16 +281,14 @@ class Lift {
       ]),
       this.caption,
       this.toastBox,
-      el("div", { class: "mmc-lf-foot" }, [
-        this.track,
-        el("div", { class: "mmc-lf-go" }, [this.runButton, this.note]),
-      ]),
+      this.foot,
     ]);
 
     this.drawerBody = keepScroll(el("div", { class: "mmc-lf-drawer-body" }));
     this.out = el("div", { class: "mmc-lf-out" });
+    this.drawerTabs = el("div", { class: "mmc-lf-seg wide mmc-lf-tabs", role: "tablist" });
     const drawer = el("aside", { class: "mmc-lf-drawer", "aria-label": t("Settings") },
-                      [this.drawerBody, this.out]);
+                      [this.drawerTabs, this.drawerBody, this.out]);
 
     this.sheet = el("div", { class: "mmc-lf" }, [
       el("div", { class: "mmc-bn-bar" }, [
@@ -228,6 +308,10 @@ class Lift {
         el("span", { class: "mmc-bn-slash", text: "/" }),
         el("span", { class: "mmc-bn-here", text: t("Image to 3D") }),
         el("span", { class: "mmc-bn-gap" }),
+        this.openButton = el("button", {
+          class: "mmc-lf-open", title: t("Open a mesh from output/{folder}", { folder: SHELF }),
+          onclick: () => this.openShelf(),
+        }, [icon("cube", 14), el("span", { text: t("Open mesh") })]),
         el("button", { class: "mmc-close", text: "✕", title: t("Close"), onclick: () => this.close() }),
       ]),
       el("div", { class: "mmc-lf-room" }, [stageBox, drawer]),
@@ -255,6 +339,9 @@ class Lift {
     }, [this.sheet]);
 
     this.unmount = mountOverlay(this.overlay, () => this.close());
+    // The frame is laid out in the stage's pixels, so it moves with the room.
+    this.frameWatch = new ResizeObserver(() => this.paintFrame());
+    this.frameWatch.observe(stageBox);
     this.unwatchQueue = watchQueue((state) => {
       this.queue = state;
       if (this.overlay.isConnected && this.running) this.paintRun();
@@ -276,6 +363,7 @@ class Lift {
         this.stage.pictureOpacity(1);
         this.paintViews();
       };
+      this.applyStaging();
     } catch (error) {
       console.error("[Continuity] the 3D stage could not start", error);
       this.error = t("The 3D stage could not start: {message}", { message: String(error.message || error) });
@@ -293,6 +381,7 @@ class Lift {
   close() {
     if (open === this) open = null;
     this.unwatchQueue?.();
+    this.frameWatch?.disconnect();
     this.following?.abandon();
     clearInterval(this.clock);
     this.stage?.dispose();
@@ -306,9 +395,11 @@ class Lift {
     this.paintViews();
     this.paintTrack();
     this.paintRun();
+    this.paintTabs();
     this.paintDrawer();
     this.paintOut();
     this.paintCaption();
+    this.paintFrame();
   }
 
   // ---- the pictures -------------------------------------------------------------
@@ -362,11 +453,14 @@ class Lift {
 
   async browse(side) {
     const chosen = await openPicker({
-      kinds: ["image", "renders"], kind: "image", single: true,
+      kinds: ["image", "renders", "meshes"], kind: "image", single: true,
       capacity: () => ({ used: 0, max: 1, filesLeft: 1 }),
     });
     const asset = chosen?.[0];
     if (!asset || !this.overlay.isConnected) return;
+    // The same picker as everywhere, so its Meshes tab is here too; a mesh
+    // picked from it is opened rather than lifted.
+    if (asset.kind === "mesh") { this.openMesh(asset); return; }
     if (asset.kind && asset.kind !== "image") {
       this.toast(t("Pick a picture — a clip has no single view to lift."));
       return;
@@ -397,6 +491,10 @@ class Lift {
   // ---- the settings ---------------------------------------------------------------
 
   paintDrawer() {
+    if (this.tab === "stage") {
+      this.drawerBody.replaceChildren(...this.stagingFields().filter(Boolean));
+      return;
+    }
     const s = this.settings;
     const many = this.viewCount() > 1;
     const pixal = s.model === "pixal";
@@ -405,12 +503,6 @@ class Lift {
         text: label, "aria-pressed": s[key] === value,
         onclick: () => this.change({ [key]: value }),
       })));
-    const field = (label, control, note = null, extra = null) => el("div", { class: "mmc-lf-field" }, [
-      el("div", { class: "mmc-lf-label" }, [el("span", { text: label }), extra]),
-      control,
-      note ? el("p", { class: "mmc-lf-note", text: note }) : null,
-    ]);
-
     const modelName = !pixal ? "TRELLIS.2"
       : roleOf(s, this.viewCount(), this.models) === "pixal_views" ? t("Pixal3D multi-view") : "Pixal3D";
     const modelSub = many ? t("From {n} views of one object", { n: this.viewCount() })
@@ -494,6 +586,131 @@ class Lift {
     this.render();
   }
 
+  // ---- the stage page -------------------------------------------------------------
+
+  paintTabs() {
+    const tabs = [["build", t("Build")], ["stage", t("Shoot")]];
+    this.drawerTabs.replaceChildren(...tabs.map(([tab, label]) => el("button", {
+      role: "tab", text: label, "aria-selected": this.tab === tab, "aria-pressed": this.tab === tab,
+      onclick: () => this.setTab(tab),
+    })));
+  }
+
+  setTab(tab) {
+    this.tab = tab;
+    try { localStorage.setItem(DRAWER_KEY, tab); } catch { /* private mode */ }
+    this.paintTabs();
+    this.paintDrawer();
+    this.paintFrame();
+  }
+
+  stagingFields() {
+    const g = this.staging;
+    const seg = (key, options) => el("div", { class: "mmc-lf-seg wide", role: "group" },
+      options.map(([value, label]) => el("button", {
+        text: label, "aria-pressed": g[key] === value,
+        onclick: () => this.restage({ [key]: value }),
+      })));
+    // A slider changes the stage as it moves and repaints nothing but its own
+    // reading, so the drag is never interrupted by the drawer being rebuilt.
+    const slider = (key, min, max, step, read, label) => {
+      const shown = el("output", { class: "mmc-lf-value", text: read(g[key]) });
+      const input = el("input", {
+        type: "range", min, max, step, value: g[key], "aria-label": label,
+        oninput: (event) => {
+          const value = Number(event.target.value);
+          shown.textContent = read(value);
+          this.restage({ [key]: value }, { quiet: true });
+        },
+      });
+      return [input, shown];
+    };
+    const percent = (value) => `${Math.round(value * 100)}%`;
+    const [turn, turnShown] = slider("turn", 0, 359, 1, (value) => `${value}°`, t("Turn the light"));
+    const [bright, brightShown] = slider("brightness", 0.2, 2, 0.05, percent, t("Brightness"));
+    const [sun, sunShown] = slider("sun", 0, 1, 0.05, percent, t("Sun"));
+    const [blur, blurShown] = slider("blur", 0, 1, 0.05, percent, t("Softness"));
+    const lightNote = { studio: t("Softboxes all round, the way a product is shot."),
+                        outdoor: t("Midday sun over an open field. Hard light from one side."),
+                        neutral: t("A plain grey room. Even, and says nothing about where it is.") };
+    const passNames = { depth: t("Depth"), normals: t("Normals"), mask: t("Mask") };
+    return [
+      field(t("Lighting"), seg("light", [["studio", t("Studio")], ["outdoor", t("Outdoor")], ["neutral", t("Neutral")]]),
+            lightNote[g.light]),
+      field(t("Turn the light"), turn, null, turnShown),
+      field(t("Brightness"), bright, null, brightShown),
+      g.light === "neutral"
+        ? null
+        : field(t("Sun"), sun, t("The brightest part of the light, cast as real shadows. Less of it is less light, not softer light."), sunShown),
+      field(t("Background"), seg("surroundings", [[false, t("Plain")], [true, t("Surroundings")]]),
+            g.surroundings ? t("The light's own picture stands behind the mesh, in photos and turntables too.") : null),
+      g.surroundings ? field(t("Softness"), blur, null, blurShown) : null,
+      field(t("Ground shadow"), seg("shadow", [[true, t("On")], [false, t("Off")]])),
+      field(t("Frame"), seg("frame", Object.keys(FRAMES).map((frame) => [frame, frame])),
+            t("Photos and turntables are shot through it.")),
+      el("div", { class: "mmc-lf-rule" }),
+      field(t("Photo"), el("div", { class: "mmc-lf-seg wide", role: "group" }, [
+        el("button", { text: t("As staged"), "aria-pressed": !g.render, onclick: () => this.restage({ render: false }) }),
+        el("button", { text: t("Path traced"), "aria-pressed": g.render, disabled: g.light === "neutral",
+                       onclick: () => this.restage({ render: true }) }),
+      ]), g.light === "neutral" ? t("The Neutral room cannot be path traced. Pick Studio or Outdoor.")
+        : g.render ? t("Light is traced as it bounces: real shadows, reflections, the mesh shading itself. Takes a while, longer with the ground shadow on.")
+          : null),
+      field(t("Photo passes"), el("div", { class: "mmc-lf-passes", role: "group" }, PASSES.map((pass) => el("button", {
+        class: "mmc-lf-chip", "aria-pressed": g.passes.includes(pass),
+        onclick: () => this.restage({ passes: g.passes.includes(pass)
+          ? g.passes.filter((other) => other !== pass) : PASSES.filter((other) => other === pass || g.passes.includes(other)) }),
+      }, [el("i"), el("span", { text: passNames[pass] })]))),
+            t("Every photo is the picture as staged. These are drawn from the mesh alone, on black, and written beside it.")),
+    ];
+  }
+
+  /** Change how the stage is set. `quiet` leaves the drawer as it is. */
+  restage(patch, { quiet = false } = {}) {
+    Object.assign(this.staging, patch);
+    try { localStorage.setItem(STAGING_KEY, JSON.stringify(this.staging)); } catch { /* private mode */ }
+    this.applyStaging(Object.keys(patch));
+    if (!quiet) this.paintDrawer();
+    this.paintOut();
+  }
+
+  /** Put the staging on the stage — all of it, or only what `keys` names. */
+  applyStaging(keys = Object.keys(STAGING)) {
+    const stage = this.stage;
+    if (!stage) return;
+    const g = this.staging;
+    const has = (...names) => names.some((name) => keys.includes(name));
+    if (has("light")) {
+      stage.setLight(g.light).catch((error) => {
+        console.error("[Continuity] the stage's light could not be loaded", error);
+        this.toast(t("That light could not be loaded: {message}", { message: String(error.message || error) }));
+      });
+    }
+    if (has("turn")) stage.setTurn(g.turn);
+    if (has("brightness")) stage.setBrightness(g.brightness);
+    if (has("sun")) stage.setSunStrength(g.sun);
+    if (has("surroundings", "blur")) stage.setSurroundings(g.surroundings, g.blur);
+    if (has("shadow")) stage.setShadow(g.shadow);
+    if (has("frame")) this.paintFrame();
+  }
+
+  /** The frame the shots are taken through: laid out on the stage, and shown
+   *  while the stage page is open or a shot's door is pointed at. */
+  paintFrame() {
+    const stage = this.stage;
+    if (!stage || !this.frameBox) return;
+    stage.setFrame({ aspect: FRAMES[this.staging.frame],
+                     insets: { top: 16, right: 16, left: 16, bottom: this.foot.offsetHeight + 8 } });
+    const rect = stage.frameRect();
+    const meshUp = !!this.results[this.viewing]?.mesh;
+    this.frameBox.hidden = !rect || !meshUp || !(this.tab === "stage" || this.previewFrame);
+    if (!rect) return;
+    Object.assign(this.frameBox.style, { left: `${rect.x}px`, top: `${rect.y}px`,
+                                         width: `${rect.w}px`, height: `${rect.h}px` });
+    const { width, height } = stage.shotSize(PHOTO_LONG);
+    this.frameSize.textContent = `${width} × ${height}`;
+  }
+
   /** The settings a build sends, as a comparable string. */
   signature() {
     const views = Object.fromEntries(SIDES.map((side) => [side, this.views[side]?.path ?? null]));
@@ -527,6 +744,7 @@ class Lift {
     this.began = null;
     this.results = {};
     this.atCamera = false;
+    this.opened = null;
     const signature = this.signature();
     const following = follow({
       started: () => { this.began = performance.now(); },
@@ -550,7 +768,10 @@ class Lift {
       await following.promise;
       this.built = signature;
       const final = Object.values(this.results).find((record) => record.final);
-      if (final) this.toast(t("Written to output/{path}", { path: `${final.mesh.subfolder}/${final.mesh.filename}` }));
+      if (final) {
+        invalidate("meshes");
+        this.toast(t("Written to output/{path}", { path: `${final.mesh.subfolder}/${final.mesh.filename}` }));
+      }
     } catch (error) {
       following.abandon();
       for (const stage of STAGES) if (this.state[stage] === "run") this.state[stage] = "fail";
@@ -605,6 +826,67 @@ class Lift {
     }
     this.look(stage);
     this.render();
+  }
+
+  // ---- opening a mesh ------------------------------------------------------------
+
+  /** The shelf, in the picker, on its Meshes tab. */
+  async openShelf() {
+    if (this.running) return;
+    const chosen = await openPicker({ kinds: ["meshes"], kind: "meshes", single: true });
+    const row = chosen?.[0];
+    if (row && this.overlay.isConnected) this.openMesh(row);
+  }
+
+  /**
+   * Put a mesh from the shelf back on the stage, with what it was kept with.
+   *
+   * The track is rebuilt from the papers rather than from the wire: the stages
+   * the build ran read as done, the ones it skipped as skipped, and only what
+   * was kept — the cut-out, the camera, the mesh — can be pressed. A GLB with
+   * no papers opens bare: the mesh and nothing else.
+   */
+  async openMesh(row) {
+    if (this.running) return;
+    const papers = row.lift ?? null;
+    this.error = null;
+    this.opened = row;
+    this.name = row.name.replace(/\.glb$/i, "");
+    this.plan = { stages: {}, skipped: [], camera: papers?.camera?.fov ? papers.camera : null };
+    this.state = {};
+    this.progress = {};
+    this.times = {};
+    this.results = {};
+    this.viewing = null;
+    this.framed = false;
+    this.atCamera = false;
+    const stage = papers?.stage && STAGES.includes(papers.stage) ? papers.stage : "bake";
+    if (papers) {
+      if (papers.settings) {
+        this.settings = { ...DEFAULTS, ...Object.fromEntries(
+          Object.entries(papers.settings).filter(([key]) => key in DEFAULTS)) };
+      }
+      if (Number.isInteger(papers.seed)) this.seed = papers.seed;
+      this.views = Object.fromEntries(SIDES.map((side) => [side,
+        papers.views?.[side] ? { path: papers.views[side], kind: "image" } : null]));
+      const single = this.settings.model === "pixal" && (papers.sides ?? 1) === 1;
+      for (const each of STAGES) {
+        this.state[each] = STAGES.indexOf(each) > STAGES.indexOf(stage) ? "skip"
+          : each === "camera" && !single ? "skip" : "done";
+      }
+      if (papers.picture) this.results.cutout = { stage: "cutout", image: papers.picture };
+      if (single && this.plan.camera) this.results.camera = { stage: "camera", value: this.plan.camera.fov };
+    } else {
+      this.state[stage] = "done";
+    }
+    this.results[stage] = { stage, final: true, mesh: row.mesh, bytes: row.size,
+                            faces: papers?.faces ?? null, maps: papers?.maps ?? null,
+                            image: papers?.picture ?? null };
+    // Built again from here, it is these settings with a new seed; without its
+    // pictures it cannot be built at all, and Build says so.
+    this.built = this.signature();
+    this.render();
+    await this.look(stage);
   }
 
   // ---- the track --------------------------------------------------------------------
@@ -664,6 +946,7 @@ class Lift {
         : missing ? t("Download the missing models first.")
           : waiting && (this.queue.remaining > 1 || queueBusy()) ? t("Waiting for the render ahead of it")
             : this.stale() ? t("Settings changed since this build")
+              : this.opened && !this.running ? t("Opened from the shelf")
               : this.built && !this.running ? t("Built in {time}", { time: seconds(this.elapsed()) })
                 : this.running ? t("Building on this machine") : "";
     this.note.textContent = note;
@@ -689,11 +972,14 @@ class Lift {
   /** Put one stage's result on the stage. */
   async look(stage) {
     this.viewing = stage;
+    this.picture = PICTURE_STAGES.includes(stage);
     const record = this.results[stage];
     const stageView = this.stage;
     this.paintTrack();
     this.paintCaption();
     this.paintViews();
+    this.paintFrame();
+    this.paintOut();
     if (!stageView || !record) return;
     const cutout = this.results.cutout?.image ? outputUrl(this.results.cutout.image) : null;
     const camera = this.cameraOf();
@@ -701,6 +987,7 @@ class Lift {
       // No camera yet, or none at all for TRELLIS.2: the cut-out still stands
       // on a notional one, so there is something to see at the first stage.
       stageView.setPicture(camera ?? { fov: 40, pad: 1 }, cutout);
+      stageView.showPicture(this.picture);
       await stageView.show(null);
       await stageView.toPicture();
       stageView.pictureOpacity(1);
@@ -748,8 +1035,11 @@ class Lift {
       onclick: () => this.setShading(shading),
     }, [icon(shading, 13), el("span", { text: label })])));
     const camera = !!this.cameraOf();
-    this.pictureChip.disabled = !camera;
-    this.pictureChip.setAttribute("aria-pressed", String(camera && this.picture));
+    // At the cut-out the picture stands on a notional camera, so it can be
+    // shown before there is a real one.
+    const standing = camera || (this.viewing === "cutout" && !!this.results.cutout?.image);
+    this.pictureChip.disabled = !standing;
+    this.pictureChip.setAttribute("aria-pressed", String(standing && this.picture));
     this.cameraChip.disabled = !camera;
     this.cameraChip.setAttribute("aria-pressed", String(this.atCamera));
   }
@@ -757,14 +1047,19 @@ class Lift {
   togglePicture() {
     this.picture = !this.picture;
     this.stage?.showPicture(this.picture);
+    // Back on at the picture's camera: half of it, as `toPicture` would.
+    if (this.picture) this.stage?.pictureOpacity(this.atCamera ? 0.5 : 1);
     this.paintViews();
+    this.paintCaption();
   }
 
   async toPicture() {
     if (!this.stage || !this.cameraOf()) return;
     const cutout = this.results.cutout?.image ? outputUrl(this.results.cutout.image) : null;
+    // The view only. Whether the picture stands in it is "Picture in scene"'s
+    // to say, here as everywhere.
     if (!this.stage.picture) this.stage.setPicture(this.cameraOf(), cutout);
-    this.stage.showPicture(true);
+    this.stage.showPicture(this.picture);
     await this.stage.toPicture();
     // Half the picture at its own camera: the mesh is meant to sit exactly
     // under it, and this is where that is checked.
@@ -778,9 +1073,12 @@ class Lift {
     const record = this.results[this.viewing];
     let text = null;
     let small = null;
-    if (this.atCamera) {
+    if (this.atCamera && this.picture) {
       text = t("Seen from the picture's camera: the mesh sits under its own picture");
       small = t("drag to leave");
+    } else if (record && this.opened && !this.opened.lift) {
+      text = this.opened.name;
+      small = t("nothing was kept with it, so there is no picture to stand beside it");
     } else if (record) {
       const faces = record.faces ? count(record.faces) : "";
       ({
@@ -800,7 +1098,9 @@ class Lift {
       el("b", { text: this.views.front ? t("Ready to build") : t("Add a picture to lift") }),
       el("span", { text: this.views.front
         ? t("The mesh stands here, under the picture it was lifted from.")
-        : t("Drop one anywhere, or press the Front slot. One object on a plain ground lifts best.") }));
+        : t("Drop one anywhere, or press the Front slot. One object on a plain ground lifts best.") }),
+      el("button", { class: "mmc-lf-reopen", text: t("Open a mesh you built before"),
+                     onclick: () => this.openShelf() }));
     if (nothing && this.running) this.empty.hidden = true;
   }
 
@@ -808,43 +1108,118 @@ class Lift {
 
   paintOut() {
     const final = Object.values(this.results).find((record) => record.final);
+    const meshUp = !!this.stage && !!this.results[this.viewing]?.mesh;
     const turning = this.turning;
+    const busy = turning !== null || this.snapping;
+    // Pointing at a shot's door shows the frame it will be taken through, on
+    // the build page too, where the frame is otherwise not drawn.
+    const aim = {
+      onpointerenter: () => { this.previewFrame = true; this.paintFrame(); },
+      onpointerleave: () => { this.previewFrame = false; this.paintFrame(); },
+      onfocus: () => { this.previewFrame = true; this.paintFrame(); },
+      onblur: () => { this.previewFrame = false; this.paintFrame(); },
+    };
     this.out.classList.toggle("waiting", !final);
+    this.openButton.disabled = this.running;
     this.out.replaceChildren(
       el("div", { class: "mmc-lf-file" }, [
         el("div", { class: "mmc-lf-glyph", text: "GLB" }),
         el("div", { class: "mmc-lf-fileword" }, [
           el("div", { class: "mmc-lf-filename", text: final ? final.mesh.filename : `${this.name ?? "mesh"}.glb` }),
           el("div", { class: "mmc-lf-filepath", text: final
-            ? t("{size} MB in output/{folder}", { size: (final.bytes / 1048576).toFixed(1), folder: SHELF })
+            ? t("{size} MB in output/{folder}", { size: (final.bytes / 1048576).toFixed(1), folder: final.mesh.subfolder })
             : t("Lands in output/{folder}", { folder: SHELF }) }),
         ]),
+        el("button", {
+          class: "mmc-lf-reveal", disabled: !final, title: t("Show in folder"), "aria-label": t("Show in folder"),
+          onclick: () => revealFolder("output", final.mesh.subfolder)
+            .catch((error) => this.toast(String(error.message || error))),
+        }, [icon("folderOpen", 15)]),
       ]),
       el("div", { class: "mmc-lf-doors" }, [
         el("button", {
-          class: "mmc-lf-door", disabled: !final,
-          onclick: () => revealFolder("output", SHELF).catch((error) => this.toast(String(error.message || error))),
-        }, [el("b", { text: t("Show in folder") }), el("span", { text: t("The GLB, beside the renders") })]),
+          class: "mmc-lf-door", onclick: () => this.takePhoto(), ...aim,
+          // Pressable while tracing: a second press stops the render.
+          disabled: !this.snapping?.of && (!meshUp || busy),
+        }, this.snapping?.of ? [
+          el("b", { text: t("Rendering {n}%", { n: Math.round((this.snapping.done / this.snapping.of) * 100) }) }),
+          el("span", { text: t("{done} of {of} samples. Press to stop.", this.snapping) }),
+        ] : [
+          el("b", { text: this.snapping ? t("Taking the photo…")
+            : this.staging.render && this.staging.light !== "neutral" ? t("Render photo") : t("Take photo") }),
+          el("span", { text: this.staging.passes.length
+            ? t("Through the frame, with its passes, to cite with @")
+            : t("Through the frame, to cite with @") }),
+        ]),
         el("button", {
-          class: "mmc-lf-door", disabled: !final || !!turning,
-          onclick: () => this.turntable(),
+          class: "mmc-lf-door", disabled: !meshUp || busy, onclick: () => this.turntable(), ...aim,
         }, [
-          el("b", { text: turning ? t("Rendering {n}%", { n: turning }) : t("Turntable clip") }),
-          el("span", { text: t("One orbit, written to the input folder to cite with @") }),
+          el("b", { text: turning !== null ? t("Rendering {n}%", { n: turning }) : t("Turntable clip") }),
+          el("span", { text: t("One orbit through the frame, to cite with @") }),
         ]),
       ]),
     );
   }
 
-  /** One orbit of the finished mesh, rendered here and written as a clip. */
+  /** A photo of the stage through the frame, and the passes picked for it,
+   *  written to the input folder side by side. Path traced when the Shoot page
+   *  says so and the stage can be; pressed again while tracing, it stops and
+   *  writes nothing. */
+  async takePhoto() {
+    if (this.snapping?.of) { this.stopTrace = true; return; }
+    if (!this.stage || this.snapping || this.turning !== null || !this.results[this.viewing]?.mesh) return;
+    const traced = this.staging.render && this.staging.light !== "neutral";
+    if (traced && this.stage.traceable() === "mode") {
+      this.toast(t("Path tracing draws surfaces. Switch the view to Textured or Clay first."));
+      return;
+    }
+    this.snapping = traced ? { done: 0, of: RENDER_SAMPLES } : true;
+    this.stopTrace = false;
+    this.paintOut();
+    try {
+      const shots = {};
+      if (traced) {
+        shots.beauty = await this.stage.trace({
+          long: PHOTO_LONG, samples: RENDER_SAMPLES, stopped: () => this.stopTrace,
+          onSample: (done, of) => {
+            if (done === this.snapping.done) return;
+            this.snapping = { done, of };
+            this.paintOut();
+          },
+        });
+        if (this.stopTrace) { this.toast(t("Render stopped. Nothing was written.")); return; }
+      }
+      Object.assign(shots, await this.stage.photo({ long: PHOTO_LONG, passes: this.staging.passes, beauty: !traced }));
+      const stem = shotStem(this.name ?? "mesh");
+      let beauty = null;
+      for (const pass of ["beauty", ...PASSES]) {
+        if (!shots[pass]) continue;
+        const name = pass === "beauty" ? `${stem}.png` : `${stem}-${pass}.png`;
+        const asset = await upload(new File([shots[pass]], name, { type: "image/png" }), SHOTS);
+        beauty ??= asset;
+      }
+      const passes = Object.keys(shots).length - 1;
+      this.toast(passes
+        ? t("Photo and {n} passes written to input/{path}", { n: passes, path: beauty.path })
+        : t("Photo written to input/{path}", { path: beauty.path }));
+    } catch (error) {
+      console.error("[Continuity] the photo could not be taken", error);
+      this.toast(String(error.message || error));
+    } finally {
+      this.snapping = false;
+      this.stopTrace = false;
+      if (this.overlay.isConnected) this.paintOut();
+    }
+  }
+
+  /** One orbit of what is on the stage, through the frame, written as a clip. */
   async turntable() {
-    const final = Object.values(this.results).find((record) => record.final);
-    if (!final || !this.stage || this.turning) return;
+    if (!this.stage || this.turning !== null || this.snapping || !this.results[this.viewing]?.mesh) return;
     this.turning = 0;
     this.paintOut();
     try {
-      if (this.viewing !== final.stage) await this.look(final.stage);
       const blobs = await this.stage.turntable({
+        long: TURNTABLE_LONG,
         onFrame: (done, of) => {
           const n = Math.round((done / of) * 90);
           if (n !== this.turning) { this.turning = n; this.paintOut(); }

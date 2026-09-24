@@ -200,14 +200,45 @@ structure and the shape come from ComfyUI's cache. Building again with nothing
 changed draws a different take.
 
 On the stage the picture stands in front of its own camera, with the mesh at
-the end of its rays. **Picture's camera** looks through that camera, so the
-mesh sits under the picture it was lifted from; drag to leave it. **Textured**,
-**Clay**, **Wire** and **Normals** change how the surface is drawn. After a
-Full PBR build the drawer lists the baked maps, each opening at full size.
+the end of its rays. It is shown at the cut-out and the camera stages and
+hidden after them; **Picture in scene** brings it back. **Picture's camera**
+looks through that camera, so the mesh sits under the picture it was lifted
+from; drag to leave it. **Textured**, **Clay**, **Wire** and **Normals** change
+how the surface is drawn. After a Full PBR build the drawer lists the baked
+maps, each opening at full size.
 
-The finished GLB lands in `output/continuity/meshes/`, beside your renders.
-**Turntable clip** renders one orbit of the mesh into the input folder, to cite
-with `@` in a shot.
+The finished GLB lands in `output/continuity/meshes/`, beside your renders,
+with what it was made from kept next to it (the cut-out, the camera, the
+settings). **Open mesh** in the bar lists that shelf in the picker, the same
+picker as everywhere with a **Meshes** tab, and puts a mesh back on the stage
+with its picture at its camera and its settings in the drawer, ready to be
+built again. A GLB with nothing kept beside it still opens, without a picture.
+
+The drawer's **Shoot** page sets the stage for photos and turntables:
+
+- **Lighting.** **Studio** and **Outdoor** are HDRIs from
+  [Poly Haven](https://polyhaven.com) (CC0, 4k); **Neutral** is a plain grey
+  room. **Turn the light** rotates it around the mesh, **Brightness** scales
+  it, and **Sun** is how much of the HDRI's brightest part is cast as a real
+  shadow-casting light (less of it is less light, not softer light).
+- **Background.** **Plain**, or **Surroundings**: the HDRI itself behind the
+  mesh, with a **Softness** blur.
+- **Ground shadow.** A contact shadow and the sun's shadow on an invisible
+  floor.
+- **Frame.** 16:9, 1:1 or 9:16, drawn over the stage while the Shoot page is
+  open. Photos and turntables are taken through it.
+- **Photo.** **As staged** draws the photo the way the stage does, instantly.
+  **Path traced** traces the light (real shadows, reflections, the mesh shading
+  itself) at 256 samples; it takes a while, longer with the ground shadow on,
+  and pressing the button again stops it. Neutral cannot be path traced.
+- **Photo passes.** **Depth** (near is bright), **Normals** (red right, green
+  up, blue toward the camera) and **Mask**, drawn from the mesh alone on black
+  and written beside the photo.
+
+**Take photo** writes the photo and its passes to
+`input/continuity/lift/shots/`; **Turntable clip** renders one orbit from the
+view on screen into the input folder. Both are there to cite with `@` in a
+shot.
 
 Files: [models.md](models.md#image-to-3d).
 

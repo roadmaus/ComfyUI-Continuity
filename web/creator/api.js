@@ -944,6 +944,8 @@ export function thumbUrl(path, version, crop = null, { full = false } = {}) {
  */
 export function stillUrl(asset) {
   if (!asset?.path) return null;
+  // A mesh's picture is the cut-out it was lifted from, kept beside it.
+  if (asset.kind === "mesh") return asset.lift?.picture ? outputUrl(asset.lift.picture) : null;
   if (asset.kind !== "video" && asset.kind !== "image") return null;
   return viewUrl(asset.path, { preview: true, version: asset.mtime });
 }
