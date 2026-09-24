@@ -94,6 +94,9 @@ export const css = `
 .mmc-lf-seg button[aria-pressed="true"] { background: var(--mmc-surface-3); color: var(--mmc-strong); }
 .mmc-lf-seg button:disabled { color: var(--mmc-off); opacity: .55; cursor: default; }
 .mmc-lf-seg button:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: -2px; }
+.mmc-lf-shades button { display: inline-flex; align-items: center; gap: 5px; padding-left: 8px; }
+.mmc-lf-shades svg { flex: none; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linejoin: round; opacity: .8; }
+.mmc-lf-shades button[aria-pressed="true"] svg { color: var(--mmc-accent); opacity: 1; }
 .mmc-lf-chips { display: flex; gap: 6px; }
 .mmc-lf-chip {
   display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
