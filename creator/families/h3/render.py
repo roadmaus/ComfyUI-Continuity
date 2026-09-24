@@ -204,6 +204,18 @@ def patched(graph, model, sampling, acceleration, weights):
     return core.graph_preview(graph, model, weights, declare.RULES.fps)
 
 
+def _lora_loader_inputs():
+    """The machine's loader choice, visible to every ordinary segment's cache.
+
+    Face, motion and seam repairs re-emit conditioning too: leaving the choice
+    off those nodes quietly switches them back to the family's vendored stack.
+    Omit the default so unchanged workflows retain their existing cache keys.
+    The guide-LoRA finisher has its own intentionally core-only model node.
+    """
+    loader = settings.lora_loader()
+    return {"lora_loader": loader} if loader != settings.DEFAULTS["lora_loader"] else {}
+
+
 def face_payload(payload, face):
     """The payload the face pass's *conditioning* is built from.
 
@@ -361,11 +373,7 @@ class H3(base.Family):
             # `accel.opening` — and the distill file is already out of the
             # piece, so the lead model is the first output, unpatched twice.
             inputs["hold_lora"] = run.lora
-        if settings.lora_loader() != settings.DEFAULTS["lora_loader"]:
-            # The loader is a machine setting, and a setting read behind the
-            # node is invisible to the cache — so it rides as an input, and
-            # only off its default, so every render before it keeps its key.
-            inputs["lora_loader"] = settings.lora_loader()
+        inputs.update(_lora_loader_inputs())
         # The VAEs are wired into the encoder only when this segment actually
         # encodes with them — a keyframe or a sound seam. A text-only segment
         # touches neither until decode, and a decode node runs after sampling
@@ -736,7 +744,10 @@ class H3(base.Family):
         # steps a lead-in splits are not in it to split.
         refine_against = graph.node(
             "ConditioningZeroOut", conditioning=second.out(1)).out(0)
-        refine_model = patched(graph, second.out(0), sampling, acceleration, weights)
+        # A short refine has its own schedule. TeaCache's final-step protection
+        # is relative to that schedule, not the main pass's longer step count.
+        refine_sampling = replace(sampling, steps=compiled.refine.steps or sampling.steps)
+        refine_model = patched(graph, second.out(0), refine_sampling, acceleration, weights)
         # The trained upscaler rides as an input only when the piece asks for
         # it, so a piece on bicubic keeps the cache key it had. Asked here and
         # not in compile because the file is a weight, and the weights are
@@ -759,7 +770,7 @@ class H3(base.Family):
             model=refine_model, positive=second.out(1), negative=refine_against,
             latent=latent,
             width=compiled.refine.width, height=compiled.refine.height,
-            seed=seed, steps=compiled.refine.steps or sampling.steps, cfg=sampling.cfg,
+            seed=seed, steps=refine_sampling.steps, cfg=sampling.cfg,
             sampler_name=sampling.sampler_name, scheduler=sampling.scheduler,
             denoise=compiled.refine.denoise,
             **({"upscaler": upscaler} if upscaler else {}),
@@ -775,7 +786,8 @@ class H3(base.Family):
         # No seam links on it: `prev_image` and the rest anchor the full
         # canvas, and there is no full canvas in a crop.
         face_inputs = {"clip": links.clip,
-                       "segment_data": json.dumps(payload, sort_keys=True)}
+                       "segment_data": json.dumps(payload, sort_keys=True),
+                       **_lora_loader_inputs()}
         if compiled.encodes_video():
             face_inputs["vae"] = links.vae
         if compiled.encodes_audio():
@@ -855,7 +867,8 @@ class H3(base.Family):
         source = motion_payload(payload, compiled)
         fixed = compiler.compile_segment(source, image_size_lookup=media.image_size)
         inputs = {"clip": links.clip,
-                  "segment_data": json.dumps(source, sort_keys=True)}
+                  "segment_data": json.dumps(source, sort_keys=True),
+                  **_lora_loader_inputs()}
         if fixed.encodes_video():
             inputs["vae"] = links.vae
             inputs["vae_name"] = weights.vae or ""
@@ -890,7 +903,8 @@ class H3(base.Family):
         source = restore_payload(payload, compiled)
         restore = compiler.compile_segment(source, image_size_lookup=media.image_size)
         inputs = {"clip": links.clip,
-                  "segment_data": json.dumps(source, sort_keys=True)}
+                  "segment_data": json.dumps(source, sort_keys=True),
+                  **_lora_loader_inputs()}
         if restore.encodes_video():
             inputs["vae"] = links.vae
             inputs["vae_name"] = weights.vae or ""

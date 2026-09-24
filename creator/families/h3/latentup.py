@@ -196,6 +196,20 @@ def _build(sd):
     return LatentResizer3D(conv_in.shape[1], in_blocks, out_blocks, conv_in.shape[0], kernels[0])
 
 
+def _compute_dtype(sd, device):
+    # A uniform half checkpoint can stay half only when core permits that dtype
+    # on the load device (including --force-fp32). These are plain nn modules,
+    # so the manual-cast fallback is not available. Mixed files stay FP32;
+    # integer buffers do not select a floating-point computation dtype.
+    dtypes = {value.dtype for value in sd.values()
+              if isinstance(value, torch.Tensor) and value.is_floating_point()}
+    if dtypes == {torch.float16} and comfy.model_management.should_use_fp16(device=device):
+        return torch.float16
+    if dtypes == {torch.bfloat16} and comfy.model_management.should_use_bf16(device=device):
+        return torch.bfloat16
+    return torch.float32
+
+
 def load(name):
     """The upscaler `name` (a file under models/latent_upscale_models), as a patcher."""
     if name in _LOADED:
@@ -205,13 +219,15 @@ def load(name):
     if "model" in sd and isinstance(sd["model"], dict):
         sd = sd["model"]
     sd = {k[len("upscaler."):] if k.startswith("upscaler.") else k: v for k, v in sd.items()}
-    model = _build(sd)
+    # load_state_dict copies into the destination's dtype; a freshly built
+    # nn.Module is FP32 even when the file is FP16/BF16. Preserve half storage
+    # and computation only when the load device's policy permits it.
+    device = comfy.model_management.get_torch_device()
+    model = _build(sd).to(dtype=_compute_dtype(sd, device))
     model.load_state_dict(sd, strict=True)
     model.eval().requires_grad_(False)
-    # The file's own precision, which is fp16 or bf16 for the published ones;
-    # an fp32 file stays fp32.
     patcher = comfy.model_patcher.ModelPatcher(
-        model, load_device=comfy.model_management.get_torch_device(),
+        model, load_device=device,
         offload_device=comfy.model_management.unet_offload_device())
     _LOADED[name] = patcher
     return patcher
