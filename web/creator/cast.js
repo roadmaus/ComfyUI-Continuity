@@ -53,7 +53,7 @@
 // lives, and there are two hosts.
 
 import { refmodFileUrl, viewUrl } from "./api.js";
-import { dismissable, el, icon, placeNear } from "./dom.js";
+import { dismissable, el, icon, mountOverlay, placeNear } from "./dom.js";
 import { t } from "./i18n.js";
 import { loraBase, openLoras } from "./loras.js";
 import { DEFAULT_SPACE, costMark, keepable, looks, modIn, remakeMods } from "./refmod.js";
@@ -708,9 +708,8 @@ export class CastShelf {
     }, open ? this.openCard(subject, problem, where) : [this.shutRow(subject, problem, where)]);
   }
 
-  /** Their line. Everything on it is a readout — the one button is the line
-   *  itself, which opens them — so nothing here can be clicked by accident on the
-   *  way to somewhere else. */
+  /** Their line opens the member for editing. The representative face keeps
+   *  its own preview gesture; the other details on the line are readouts. */
   shutRow(subject, problem, where) {
     return el("div", { class: "mmc-cast-row" }, [
       el("button", {
@@ -786,6 +785,13 @@ export class CastShelf {
    *  it, and the way to keep them, on the end of its own top line. */
   openCard(subject, problem, where) {
     const hue = `mmc-tag-${S.tagIndex(subject.handle || "x")}`;
+    const closeTitle = t("Close @{handle}", { handle: subject.handle });
+    const close = () => {
+      this.opened = null;
+      // A row waiting for an "instead" nobody typed is not a change.
+      this.changing = null;
+      this.renderSoon();
+    };
     return [
       el("div", { class: "mmc-cast-top" }, [
         this.face(subject),
@@ -800,6 +806,13 @@ export class CastShelf {
               text: t(subject.takes ?? "person"),
               onclick: (event) => this.pickTakes(event.currentTarget, subject),
             }),
+            // Only the unused first-line space is a second way out. Keeping
+            // this a sibling button leaves inputs, pictures and menus alone.
+            el("button", {
+              class: "mmc-cast-collapse-area", type: "button",
+              title: closeTitle, "aria-label": closeTitle, "aria-expanded": "true",
+              onclick: close,
+            }),
           ]),
           this.descriptionField(subject),
         ]),
@@ -807,14 +820,9 @@ export class CastShelf {
           this.whereButton(subject, where),
           el("button", {
             class: "mmc-cast-shut",
-            title: t("Close @{handle}", { handle: subject.handle }),
+            title: closeTitle,
             "aria-expanded": "true",
-            onclick: () => {
-              this.opened = null;
-              // A row waiting for an "instead" nobody typed is not a change.
-              this.changing = null;
-              this.renderSoon();
-            },
+            onclick: close,
           }, [icon("chevron", 14)]),
           el("button", {
             class: "mmc-asset-x", text: "✕",
@@ -1076,16 +1084,55 @@ export class CastShelf {
     const still = (subject.from ?? [])
       .map((handle) => assets.find((a) => a.handle === handle))
       .find((a) => a?.kind === "image" || (a && S.isRefMod(a)));
-    if (still) {
+    if (still?.filename) {
       return el("img", {
         class: "mmc-cast-face", alt: "",
         src: viewUrl(still.filename, { preview: true, crop: S.thumbCrop(still) }),
+        title: t("{path} — double-click to view", { path: still.filename }),
+        // Only the representative image beside @name previews on double-click.
+        // The reference tiles below keep their role menus, and clicking the
+        // rest of a collapsed header still opens the member for editing.
+        // Do not blur a name/description field on the first click: its deferred
+        // redraw could replace this image before the second click arrives.
+        onmousedown: (event) => event.preventDefault(),
+        onclick: (event) => event.stopPropagation(),
+        ondblclick: (event) => {
+          event.stopPropagation();
+          this.viewFace(subject, still);
+        },
       });
     }
     // The glyph follows what they are: a person glyph over a described *place*
     // says the wrong thing, and the card's whole job is saying what they are.
     return el("span", { class: "mmc-cast-face mmc-cast-face-blank" },
               [icon(BLANK_FACE[subject.takes ?? "person"] ?? "face", 22)]);
+  }
+
+  /** The picker's read-only lightbox, on the same image and framing as the face. */
+  viewFace(subject, asset) {
+    if (!asset?.filename) return;
+    const caption = `@${subject.handle || t("unnamed")}`;
+    const previous = document.activeElement;
+    let unmount;
+    const close = () => {
+      unmount();
+      if (previous?.isConnected) previous.focus();
+    };
+    const overlay = el("div", {
+      class: "mmc-overlay", tabindex: "-1", role: "dialog",
+      "aria-modal": "true", "aria-label": caption,
+      onpointerdown: (event) => { if (event.target === overlay) close(); },
+    }, [
+      el("div", { class: "mmc-light" }, [
+        el("img", {
+          class: "mmc-light-media", alt: caption,
+          src: viewUrl(asset.filename, { crop: S.thumbCrop(asset) }),
+        }),
+        el("div", { class: "mmc-light-name", text: caption }),
+      ]),
+    ]);
+    unmount = mountOverlay(overlay, close);
+    overlay.focus();
   }
 
   nameField(subject) {
