@@ -237,10 +237,35 @@ export const css = `
 /* The card keeps showing the typed sentence because that is what the shot is
    recognised by — dimmed, because it is not what the shot queues. */
 .mmc-tl-card-prompt.superseded { opacity: .42; }
+/* Reference counts must not compete with non-shrinking take/repair badges.
+   On a narrow card that gave CJK labels only one character of room. */
+.mmc-tl-card-refs {
+  color: var(--mmc-dim); font-size: calc(11px * var(--mmc-type));
+  text-align: right; white-space: nowrap;
+}
 .mmc-tl-card-meta {
   color: var(--mmc-dim); font-size: calc(11px * var(--mmc-type));
-  display: flex; align-items: center; gap: 6px;
+  display: flex; align-items: center; flex-wrap: wrap; gap: 6px;
 }
+.mmc-tl-card-meta > span { min-width: 0; overflow-wrap: anywhere; }
+/* The existing seed control, sized for the strip rather than a modal's full
+   sampler row. Short shots and larger text still need space for its buttons;
+   long seed values scroll inside the editable input, never over the footer. */
+/* Insets do not scale with text. Keep them outside the multiplier so a short
+   card still fits translated mode labels at the smallest supported type. */
+.mmc-tl-card:has(> .mmc-tl-card-seed) { min-width: calc(26px + 170px * var(--mmc-type)); }
+.mmc-tl-card-seed { display: flex; justify-content: flex-end; min-width: 0; }
+.mmc-tl-card-seed .mmc-pill {
+  box-sizing: border-box; max-width: 100%; min-width: 0;
+  height: calc(28px * var(--mmc-type)); padding: 0 4px;
+}
+.mmc-tl-card-seed .mmc-step {
+  flex: none; width: calc(22px * var(--mmc-type)); height: calc(26px * var(--mmc-type));
+}
+.mmc-tl-card-seed .mmc-seed-input {
+  min-width: 0; flex-shrink: 1; font-size: calc(11px * var(--mmc-type));
+}
+.mmc-tl-card-seed .mmc-seed-mode { flex: none; }
 /* This shot's half of the face pass, and its motion fix. Unlit while the shot
    is opted out, so a strip tells you at a glance which cards are being
    repaired. */
@@ -248,8 +273,7 @@ export const css = `
   border: 0; padding: 1px 6px; border-radius: 6px; cursor: pointer;
   background: var(--mmc-surface-3); color: var(--mmc-dim);
   font-size: calc(10px * var(--mmc-type)); font-family: inherit; margin-left: auto;
-  /* The narrowest card wraps its meta text onto two lines; the chip is the
-     part that must stay readable, so it neither shrinks nor breaks. */
+  /* Badges wrap as whole controls; their labels neither shrink nor break. */
   flex: none; white-space: nowrap;
 }
 .mmc-tl-card-face.on, .mmc-tl-card-motion.on { background: color-mix(in srgb, var(--mmc-blue) 18%, transparent); color: var(--mmc-blue); }

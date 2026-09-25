@@ -28,7 +28,7 @@ import { openPicture, editPicture, asPick, cropLabel } from "./picture.js";
 import { openAspectPopover, openResolutionPopover, openChoicePopover, facesPill, neuralPill, guideLoraPill, stepperPill,
          aspectGlyph, resolutionPillText, PILL_GLYPH } from "./pills.js";
 import { refine, refineButton, chosenModel as refineModel } from "./refine.js";
-import { adopted, blobIO, samplingBar } from "./sampling.js";
+import { adopted, blobIO, samplingBar, segmentSeedPill } from "./sampling.js";
 import { Stage, stageSource } from "./stage.js";
 import { watchSubmittedPrompts, submittedPrompt } from "./queue.js";
 import { familyPill, weightsPill, loadCatalog, adoptWeights, rememberedWeights } from "./models.js";
@@ -2741,7 +2741,6 @@ class Timeline {
     const prompt = typed || rewrite || "";
 
     const meta = [];
-    if (refs) meta.push(t(refs === 1 ? "{count} ref" : "{count} refs", { count: refs }));
     // The sheet this card is shown counts as one of its pictures, and the
     // strip should say at a glance which cards see the piece.
     if (!shared && S.storyboardSheet(this.timeline, index).length) meta.push(t("storyboard"));
@@ -2864,14 +2863,35 @@ class Timeline {
         text: prompt || t("No prompt yet"),
         title: using && typed ? t("Not queued — this card's rewrite is. Open it to read or revert.") : "",
       }),
+      ...(refs ? [el("div", {
+        class: "mmc-tl-card-refs",
+        text: t(refs === 1 ? "{count} ref" : "{count} refs", { count: refs }),
+      })] : []),
       ...(meta.length || faceChip || motionChip || chip
         ? [el("div", { class: "mmc-tl-card-meta" }, [
-            ...(meta.length ? [el("span", { text: meta.join(" · ") })] : []),
+            ...meta.map((text) => el("span", { text })),
             ...(chip ? [chip] : []),
             ...(motionChip ? [motionChip] : []),
             ...(faceChip ? [faceChip] : []),
           ])]
         : []),
+      // The same per-shot override the editor exposed, now reachable from the
+      // strip. A merged pass still samples on its first shot's seed; later
+      // shots keep their own seed for prompt alternatives and for unmerging.
+      el("div", {
+        class: "mmc-tl-card-seed",
+        onpointerdown: (event) => event.stopPropagation(),
+        onclick: (event) => event.stopPropagation(),
+        ondblclick: (event) => event.stopPropagation(),
+      }, [segmentSeedPill({
+        own: S.segmentSeed(segment),
+        piece: this.pieceSeed(),
+        taken: S.takeOn(segment)?.seed ?? null,
+        onChange: (seed) => {
+          if (seed === null) delete segment.seed; else segment.seed = seed;
+          this.commit();
+        },
+      })]),
       el("div", { class: "mmc-tl-card-foot" }, [
         el("button", { class: "mmc-tl-edit", text: t("Edit"), onclick: () => this.edit(index) }),
         el("button", {
@@ -3260,16 +3280,8 @@ class Timeline {
       // it is a cut inside one generation, and continuity there is the model's
       // to keep rather than a wiring decision — and neither has shot 1.
       continuePill: index > 0 && S.passOf(this.timeline, index).start === index,
-      // The one sampler setting this card may answer for itself. The rest of
-      // the row is the node's — one look, one schedule, one set of
-      // accelerators — but a card retaken until it came out right is a card
-      // whose noise is its own, and holding the piece's number still is the
-      // whole point of retaking one pass. See `segmentSeedPill`.
-      seedTarget: () => ({
-        own: S.segmentSeed(segment),
-        piece: this.pieceSeed(),
-        taken: S.takeOn(segment)?.seed ?? null,
-      }),
+      // The card's seed is edited on the strip; the generic editor's optional
+      // seedTarget stays unset here so the control has only one location.
       // One card, refined against the whole timeline: the server compiles the
       // strip to build this segment's payload, so the rewrite is written knowing
       // the global prompt, the canvas and whether this shot continues the last.

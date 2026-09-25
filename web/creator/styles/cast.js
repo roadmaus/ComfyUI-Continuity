@@ -57,9 +57,8 @@ export const css = `
 /* --- shut: one line ------------------------------------------------------- */
 
 .mmc-cast-row { display: flex; align-items: center; gap: 4px; min-width: 0; padding-right: 8px; }
-/* The line is the button. Nothing else on it can be pressed, so opening
-   somebody is a click anywhere along them — and the ✕ beside it is the one thing
-   you can hit on purpose. */
+/* The line opens the member, except for the representative picture which
+   reserves its double-click for a preview. The separate ✕ removes them. */
 .mmc-cast-grip {
   flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px;
   padding: 7px 4px 7px 9px; background: none; border: 0; cursor: pointer;
@@ -121,6 +120,15 @@ export const css = `
 .mmc-cast-chev { display: flex; color: var(--mmc-off); flex: none; }
 
 /* --- open: the way back out ----------------------------------------------- */
+
+.mmc-cast-collapse-area {
+  flex: 1; min-width: 0; align-self: stretch; min-height: 24px;
+  padding: 0; border: 0; border-radius: 6px; background: none; cursor: pointer;
+}
+.mmc-cast-collapse-area:hover { background: var(--mmc-surface-3); }
+.mmc-cast-collapse-area:focus-visible {
+  outline: 2px solid var(--mmc-accent); outline-offset: -2px;
+}
 
 .mmc-cast-shut {
   display: flex; align-items: center; justify-content: center;
@@ -259,6 +267,8 @@ export const css = `
   width: 46px; height: 46px; border-radius: 10px; object-fit: cover; flex: none;
   background: var(--mmc-surface-3); box-shadow: 0 0 0 2px var(--tag, transparent);
 }
+/* Only a real representative image opens the read-only preview. */
+img.mmc-cast-face { cursor: zoom-in; }
 .mmc-cast-face-blank {
   display: flex; align-items: center; justify-content: center; color: var(--mmc-off);
   box-shadow: inset 0 0 0 1px var(--mmc-line);
