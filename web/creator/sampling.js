@@ -242,7 +242,7 @@ export function adopted(raw, widgets, parse, serialize) {
  * @returns {HTMLElement}
  */
 /**
- * One card's own seed, on the card's own editor.
+ * One card's own seed, shared by the strip and optional editor callers.
  *
  * Not the sampler row: steps, cfg, the sampler and the accelerators describe
  * how the piece is run and there is one answer to that for the whole node. The
