@@ -156,6 +156,70 @@ export const css = `
 }
 .mmc-stage-gallery:hover { border-color: var(--mmc-edge-2); background: var(--mmc-scrim-3); }
 
+/* A finished clip owns a native transport along its lower edge. Its actions
+   and clocks therefore live below the media, never over that transport. Live
+   sampling, failed slates and finished stills retain their overlay readout. */
+.mmc-stage[data-state="done"][data-media="video"] {
+  height: auto; aspect-ratio: auto; box-sizing: border-box;
+}
+.mmc-stage[data-state="done"][data-media="video"] .mmc-stage-media {
+  flex: none; min-width: 0; width: 100%; height: auto;
+  aspect-ratio: var(--mmc-media-ar, auto);
+}
+.mmc-stage[data-state="done"][data-media="video"] .mmc-stage-video {
+  width: 100%; height: 100%; min-width: 0; max-width: none;
+}
+/* The satellite keeps the picture at the node's height; the footer extends
+   below it. Do not spend part of the old picture height on the new readout.
+   Satellite.follow supplies this length in graph units, before its transform. */
+.mmc-satellite .mmc-stage[data-state="done"][data-media="video"] {
+  width: clamp(240px, calc(var(--mmc-stage-height, 360px) * var(--mmc-media-arn, 1)), 1200px);
+}
+.mmc-satellite .mmc-stage[data-state="done"][data-media="video"] .mmc-stage-media {
+  height: var(--mmc-stage-height, 360px); aspect-ratio: auto;
+}
+:is(.mmc-stage[data-state="done"][data-media="video"],
+    .mmc-fs-review-card[data-media="video"]) > .mmc-stage-readout {
+  position: static; flex: none; box-sizing: border-box; width: 100%; min-width: 0;
+  display: flex; flex-direction: column; align-items: stretch;
+  justify-content: flex-start; gap: 8px; padding: 10px;
+  background: var(--mmc-media-bg); border-top: 1px solid var(--mmc-line);
+  pointer-events: auto;
+}
+:is(.mmc-stage[data-state="done"][data-media="video"],
+    .mmc-fs-review-card[data-media="video"]) > .mmc-stage-readout:empty { display: none; }
+:is(.mmc-stage[data-state="done"][data-media="video"],
+    .mmc-fs-review-card[data-media="video"]) .mmc-stage-actions {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-start;
+  min-width: 0; gap: 6px;
+}
+:is(.mmc-stage[data-state="done"][data-media="video"],
+    .mmc-fs-review-card[data-media="video"]) .mmc-stage-actions > .mmc-stage-chip {
+  max-width: 100%; box-sizing: border-box; white-space: normal; overflow-wrap: anywhere;
+}
+:is(.mmc-stage[data-state="done"][data-media="video"],
+    .mmc-fs-review-card[data-media="video"]) .mmc-stage-times {
+  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
+  min-width: 0; gap: 6px 12px;
+}
+:is(.mmc-stage[data-state="done"][data-media="video"],
+    .mmc-fs-review-card[data-media="video"]) .mmc-stage-times .mmc-stage-clock {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 7px;
+  min-width: 0; max-width: 100%; box-sizing: border-box;
+  white-space: normal; border-radius: 8px;
+}
+/* Labelled clocks also appear on a live picture or a finished still. Give
+   those the same readable separator, without touching legacy text-only chips. */
+.mmc-stage-clock:has(.mmc-stage-clock-value) {
+  display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 2px 7px;
+  min-width: 0; max-width: 100%; box-sizing: border-box; white-space: normal;
+}
+.mmc-stage-clock-label { min-width: 0; color: var(--mmc-dim); overflow-wrap: anywhere; }
+.mmc-stage-clock-value {
+  flex: none; white-space: nowrap; font-variant-numeric: tabular-nums;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
 /* --- the weights control -------------------------------------------------- */
 /* A required file nobody has picked. The same warm orange the resolution slider
    uses past 768 and for the same reason: it is a fact about the render, said

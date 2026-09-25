@@ -66,6 +66,9 @@ const { api } = await import("../scripts/api.js");
 const { Stage } = await import("./web/creator/stage.js");
 const out = {};
 const text = (stage) => stage.root.textContent.replace(/\\s+/g, " ").trim();
+// The lightweight shim stores each element's own text rather than aggregating
+// descendants; the labeled clocks now have separate label/value spans.
+const chipText = (node) => node.textContent + node.children.map(chipText).join("");
 const slate = (stage) => ({
   state: stage.state,
   showing: stage.showing(),
@@ -74,7 +77,7 @@ const slate = (stage) => ({
     item.querySelector(".mmc-stage-slate-where")?.textContent ?? null,
     item.querySelector(".mmc-stage-slate-what")?.textContent ?? null,
   ]),
-  chips: [...stage.root.querySelectorAll(".mmc-stage-chip")].map((chip) => chip.textContent),
+  chips: [...stage.root.querySelectorAll(".mmc-stage-chip")].map(chipText),
 });
 
 const graph = {
@@ -189,7 +192,8 @@ check("a raise in our own expansion names no where",
 check("somebody else's failure is not ours", got["foreign"]["state"], "idle")
 check("a press refused mid-run rides the readout over the live picture",
       (got["midRun"]["state"], got["midRun"]["lead"], got["midRun"]["chips"]),
-      ("sampling", None, ["3 / 20", "Next render not started: Prompt has no outputs", "0:00"]))
+      ("sampling", None, ["3 / 20", "Next render not started: Prompt has no outputs",
+                          "Total execution0:00", "Render window0:00"]))
 check("the next run's first word clears the slate", got["cleared"], {"state": "sampling", "slate": False})
 
 passed("a render that never started, or failed upstream, says so on the stage")

@@ -577,6 +577,29 @@ export const css = `
   min-width: 300px; max-width: min(460px, 100%); height: auto; max-height: 100%;
 }
 .mmc-fs-still .mmc-stage { max-width: 100%; max-height: 66vh; }
+/* A finished clip's width must not depend on its wrapping footer height.
+   Subtracting the footer before deriving width creates a feedback loop on a
+   short portrait plate: narrower card, taller footer, narrower card again.
+   Pick a stable width from the room and picture, with a readable text-scaled
+   floor capped by the room. Only then spend the remaining height on media.
+   The whole picture remains visible through contain; narrow portrait clips
+   may gain side letterboxing so their clocks and transport remain usable. */
+.mmc-fs-dock .mmc-stage[data-state="done"][data-media="video"][data-sized] {
+  --mmc-finished-width: min(calc(100cqw * var(--mmc-plate-scale, 1)),
+    max(calc(240px * var(--mmc-type)), calc(100cqh * var(--mmc-plate-scale, 1) * var(--mmc-media-arn, 1))));
+  width: var(--mmc-finished-width);
+  height: min(calc(100cqh * var(--mmc-plate-scale, 1)),
+    calc((var(--mmc-finished-width) - 2px) / var(--mmc-media-arn, 1) + var(--mmc-stage-footer-height, 0px) + 2px));
+  aspect-ratio: auto;
+}
+.mmc-fs-still .mmc-stage[data-state="done"][data-media="video"][data-sized] {
+  width: min(100%, max(calc(240px * var(--mmc-type)), calc(66vh * var(--mmc-media-arn, 1))));
+  height: 66vh; aspect-ratio: auto;
+}
+.mmc-fs-dock .mmc-stage[data-state="done"][data-media="video"] > .mmc-stage-media,
+.mmc-fs-still .mmc-stage[data-state="done"][data-media="video"] > .mmc-stage-media {
+  flex: 1 1 0; height: 0; min-height: 0; aspect-ratio: auto;
+}
 
 /* --- an earlier take, on the picture --------------------------------------- */
 /*
@@ -638,6 +661,22 @@ export const css = `
   opacity: 0; transition: opacity 120ms ease;
 }
 .mmc-fs-review-card[data-sized] .mmc-fs-review-media { opacity: 1; }
+/* Earlier clips use the same below-media readout as the live plate. Stills
+   retain their original overlay, and reviewing never resizes the live stage. */
+.mmc-fs-review-card[data-media="video"] {
+  display: flex; flex-direction: column; min-width: 0; min-height: 0;
+  aspect-ratio: auto; box-sizing: border-box;
+}
+.mmc-fs-review-card[data-media="video"][data-sized] {
+  --mmc-finished-width: min(calc(100cqw * var(--mmc-plate-scale, 1)),
+    max(calc(240px * var(--mmc-type)), calc(100cqh * var(--mmc-plate-scale, 1) * var(--mmc-review-arn, 1))));
+  width: var(--mmc-finished-width);
+  height: min(calc(100cqh * var(--mmc-plate-scale, 1)),
+    calc(var(--mmc-finished-width) / var(--mmc-review-arn, 1) + var(--mmc-stage-footer-height, 0px)));
+}
+.mmc-fs-review-card[data-media="video"] .mmc-fs-review-media {
+  flex: 1 1 0; min-height: 0; width: 100%; height: 0; aspect-ratio: auto;
+}
 
 /* In the readout's left slot, where the stage puts Gallery — and opting back
    into the pointer the row gives up, exactly as that button does. */

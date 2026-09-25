@@ -65,7 +65,7 @@ import { openLift } from "./lift.js";
 import { openChat } from "./chat.js";
 import { openLoupe } from "./loupe.js";
 import { openPresetLibrary } from "./presetlib.js";
-import { elapsed, stageSource } from "./stage.js";
+import { elapsed, stageSource, timingChips, watchFooterSize } from "./stage.js";
 import { t } from "./i18n.js";
 import { noteFullscreen } from "./styles.js";
 import * as S from "./state.js";
@@ -1363,30 +1363,27 @@ class Fullscreen {
         });
     if (media.tagName === "VIDEO") media.muted = true;
 
-    this.reviewCard = el("div", { class: "mmc-fs-review-card" }, [
+    const clocks = el("div", { class: "mmc-stage-side end mmc-stage-times" }, timingChips(result));
+    this.reviewCard = el("div", {
+      class: "mmc-fs-review-card", "data-media": result.isImage ? "image" : "video",
+    }, [
       media,
-      // The plate's own readout grammar, in the plate's own two slots: the way
-      // out on the left where the stage puts Gallery, the clock on the right
-      // where the stage puts the clock. A take on the picture has to say it is
-      // not the render — and saying it here means the picture never has to be
-      // taken away from you to make the point.
+      // Same footer as the live video, outside the native seek controls.
+      // The result carries its own clocks; reviewing it during a later queue
+      // must not borrow that queue's timing.
       el("div", { class: "mmc-stage-readout" }, [
-        el("div", { class: "mmc-stage-side" }, [
+        el("div", { class: "mmc-stage-side mmc-stage-actions" }, [
           el("button", {
             class: "mmc-stage-chip mmc-fs-review-back",
             onclick: () => this.endReview(),
           }, [icon("rewind", 13), el("span", { text: t("Back to the render") })]),
           ...this.reviewChips(result),
         ]),
-        result.tookMs
-          ? el("div", { class: "mmc-stage-side end" }, [
-              el("span", { class: "mmc-stage-chip mmc-stage-clock",
-                           title: t("How long this render took"),
-                           text: elapsed(result.tookMs) }),
-            ])
-          : null,
+        clocks,
       ]),
     ]);
+    this.stopReviewFooterSize = watchFooterSize(this.reviewCard,
+      this.reviewCard.querySelector(".mmc-stage-readout"));
     this.reviewLayer = el("div", {
       class: "mmc-fs-review",
       // The room around the card, which is the same gesture as the room around
@@ -1400,6 +1397,23 @@ class Fullscreen {
     // is the room dimming, and the take is the thing crossing it.
     requestAnimationFrame(() => this.reviewLayer?.classList.add("lit"));
     this.reviewing = { result, tile, media, from: tile.getBoundingClientRect() };
+    // A save may land before downstream nodes finish. Stage updates this same
+    // result object; refresh only its clock row, never the playing review video.
+    if (result.totalPending) {
+      const state = this.reviewing;
+      state.timingTicker = setInterval(() => {
+        if (this.reviewing !== state) {
+          clearInterval(state.timingTicker);
+          state.timingTicker = null;
+          return;
+        }
+        clocks.replaceChildren(...timingChips(result));
+        if (!result.totalPending) {
+          clearInterval(state.timingTicker);
+          state.timingTicker = null;
+        }
+      }, 1000);
+    }
   }
 
   /**
@@ -1454,6 +1468,10 @@ class Fullscreen {
   endReview({ animate = true } = {}) {
     const state = this.reviewing;
     if (!state) return;
+    clearInterval(state.timingTicker);
+    state.timingTicker = null;
+    this.stopReviewFooterSize?.();
+    this.stopReviewFooterSize = null;
     this.reviewing = null;
     const { tile } = state;
     const layer = this.reviewLayer;

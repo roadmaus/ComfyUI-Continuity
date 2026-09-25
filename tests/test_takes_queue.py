@@ -165,7 +165,7 @@ const deliver = (body,id,reports) => say('executed',{
   }}};
   const tasks=[];
   body.stage.onTakes=(reports,context)=>{const task=body.takeTakes(reports,context);tasks.push(task);return task;};
-  body.stage.promptId='recovered';body.stage.state='sampling';
+  body.stage.promptId='recovered';body.stage.begin();
   await body.stage.probe();await Promise.all(tasks);
   assert.deepEqual(names(body),['recovered.mp4 [output]']);
   assert.deepEqual([...S.editedSince(body.timeline)],[0]);
@@ -188,7 +188,7 @@ const deliver = (body,id,reports) => say('executed',{
 {
   const body=make(['probe']);let resolve;
   deferredHistory=new Promise(done=>{resolve=done;});
-  body.stage.promptId='old';body.stage.state='sampling';
+  body.stage.promptId='old';body.stage.begin();
   const pending=body.stage.probe();
   say('execution_start',{prompt_id:'new'});
   resolve({ok:true,json:async()=>({old:{prompt:[0,'old',outputOf(body)],outputs:{

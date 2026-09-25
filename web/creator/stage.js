@@ -13,8 +13,8 @@
 // floats at the node's right edge, so the picture arrives beside the controls
 // rather than displacing them.
 //
-// The step count and the clock are overlaid on the picture for the same reason:
-// a caption row under the box is space the picture could have had.
+// Running previews keep their light overlay. A finished video's actions and
+// clocks sit below the media, leaving the browser's native transport untouched.
 //
 // **Everything here keys off the node's own id**, because a render is a subgraph
 // and nothing in it is on the canvas:
@@ -38,6 +38,7 @@ import { outputUrl, uiSetting } from "./api.js";
 import { openLoupe } from "./loupe.js";
 import { submission } from "./queue.js";
 import { t } from "./i18n.js";
+import { ExecutionTiming } from "./timing.js";
 
 /** Every event this listens to. `b_preview` is the metadata-less legacy frame:
  *  it names no node, so it is only trusted while `progress_state` already says
@@ -48,7 +49,7 @@ import { t } from "./i18n.js";
  *  one failure the socket never carries. */
 const EVENTS = ["progress_state", "b_preview_with_metadata", "b_preview",
                 "kj_preview_override", "executing", "executed", "execution_error",
-                "execution_start", "execution_interrupted", "mmc_segment", "mmc_refused",
+                "execution_start", "execution_success", "execution_interrupted", "mmc_segment", "mmc_refused",
                 "reconnected", "status"];
 
 /** A progress report this long is a sampler; the loaders and decoders report a
@@ -172,7 +173,13 @@ export class Stage {
     // The same items for a press refused *while* this stage is sampling —
     // said in the readout rather than over the live picture. See `mmc_refused`.
     this.refused = null;
-    this.startedAt = 0;
+    this.startedAt = null;
+    this.renderPromptId = null;
+    this.timing = new ExecutionTiming();
+    this.probes = new Set();
+    this.probeAgain = new Set();
+    this.probeTimes = new Map();
+    this.destroyed = false;
     // Which queued prompt the stage believes it is watching, and when it last
     // heard anything about it. Between them they are the whole of the recovery
     // path in `probe()`: the id says what to ask the server about, and the
@@ -187,12 +194,13 @@ export class Stage {
     // How long the finished render took, in ms. Held past the run because the
     // clock is the one reading the readout keeps after the picture lands: the
     // whole reason you watch it tick is to know what the next one will cost.
-    this.tookMs = 0;
+    this.tookMs = null;
 
     this.media = el("div", { class: "mmc-stage-media" });
     this.rule = el("div", { class: "mmc-stage-rule" });
     this.readout = el("div", { class: "mmc-stage-readout" });
     this.root = el("div", { class: "mmc-stage" }, [this.media, this.rule, this.readout]);
+    this.stopFooterSize = watchFooterSize(this.root, this.readout);
 
     this.onEvent = (event) => this.handle(event.type, event.detail);
     for (const name of EVENTS) api.addEventListener(name, this.onEvent);
@@ -203,6 +211,8 @@ export class Stage {
   /** Called when the node body is torn down. Listeners on `api` outlive the DOM
    *  otherwise, and a deleted node would go on decoding previews forever. */
   destroy() {
+    this.destroyed = true;
+    this.stopFooterSize();
     for (const name of EVENTS) api.removeEventListener(name, this.onEvent);
     this.releaseFrame();
     clearInterval(this.ticker);
@@ -265,6 +275,12 @@ export class Stage {
   // ---- the wire ------------------------------------------------------------
 
   handle(type, detail) {
+    // Core's frontend emits a bare null for the queue's final `executing`,
+    // after history has been filed. Reconnection also need not have a payload.
+    if (type === "reconnected" || (type === "executing" && detail === null)) {
+      this.recoverTimings(true);
+      return;
+    }
     if (!detail) return;
     switch (type) {
       case "execution_start":
@@ -284,7 +300,8 @@ export class Stage {
         // Kept even though this stage may turn out to have no part in the run:
         // it is the only place the prompt id is ever said, and by the time the
         // stage knows the render is its own the message has long gone by.
-        this.promptId = detail.prompt_id ?? null;
+        this.promptId = detail.prompt_id == null ? null : String(detail.prompt_id);
+        this.timing.start(this.promptId, detail.timestamp);
         this.claimed = false;
         this.lastNewsAt = Date.now();
         break;
@@ -306,21 +323,15 @@ export class Stage {
         this.news();
         break;
 
-      case "reconnected":
-        // The wire came back. Nothing that happened while it was gone will be
-        // repeated — `executed` is sent once, to whoever was listening — so the
-        // question goes to the server now rather than after another 30 seconds
-        // of silence.
-        if (this.state !== "sampling") break;
-        this.probedAt = 0;
-        this.probe();
-        break;
-
       case "status":
         // Some frontends announce a reattached socket only by sending the queue
         // state down it. A `status` arriving in the middle of a long silence is
         // that, near enough, and costs one small GET to act on.
-        if (this.state === "sampling" && this.quiet() > QUIET_MS) this.probe();
+        if (this.quiet() > QUIET_MS) this.recoverTimings();
+        break;
+
+      case "execution_success":
+        this.endTiming(type, detail);
         break;
 
       case "progress_state": {
@@ -334,6 +345,7 @@ export class Stage {
           if (!best || (entry.max ?? 0) > (best.max ?? 0)) best = entry;
         }
         if (!best) break;
+        if (!this.acceptPrompt(detail.prompt_id ?? best.prompt_id)) break;
         this.news();
         // The stage opens the moment something with real steps is running —
         // not on the loaders (their one-step reports stay below the
@@ -345,7 +357,7 @@ export class Stage {
         // `execution_start`), "there is something in the box" no longer means
         // "a render is under way", and a stage that asked the box would never
         // start the clock on the second take at all.
-        if (this.state !== "sampling") {
+        if (this.state !== "sampling" || this.renderPromptId !== this.promptId) {
           if ((best.max ?? 0) < OPENS_ON_STEPS) break;
           this.begin();
           this.render();
@@ -360,6 +372,7 @@ export class Stage {
         // latent format at a decoder, which nothing does. This is the fallback
         // when KJNodes is not installed, and it beats an empty box.
         if (!this.ours(detail.parentNodeId) && !this.ours(detail.nodeId)) break;
+        if (!this.acceptPrompt(detail.promptId ?? detail.prompt_id)) break;
         this.news();
         this.metaFrameAt = Date.now();
         this.begin();
@@ -377,6 +390,7 @@ export class Stage {
         // down whenever the metadata variant is flowing, which carries the
         // same picture with a name on it.
         if (this.state !== "sampling") break;
+        if (this.renderPromptId !== this.promptId) break;
         if (this.metaFrameAt && Date.now() - this.metaFrameAt < 2000) break;
         const blob = detail instanceof Blob ? detail : detail.blob;
         if (!blob) break;
@@ -401,6 +415,7 @@ export class Stage {
         // a stage that trusted the id alone showed nothing until the file
         // landed.
         if (!this.ours(detail.node_id) && !this.claimed) break;
+        if (!this.acceptPrompt(detail.prompt_id)) break;
         this.news();
         // The boundary-0 message carries the sigma schedule and often no picture
         // at all. Take the step count from it, but do not open the stage on it —
@@ -429,6 +444,7 @@ export class Stage {
         // render coming back even though the node that made it is not on the
         // canvas.
         if (String(detail.display_node) !== String(this.nodeId())) break;
+        if (!this.acceptPrompt(detail.prompt_id, { completed: true })) break;
         this.finish(detail.output, { promptId: detail.prompt_id ?? this.promptId });
         break;
 
@@ -444,18 +460,17 @@ export class Stage {
         break;
 
       case "execution_interrupted":
+        this.endTiming(type, detail);
         // Cancelled. There is no `executed` and no `execution_error` coming, so
         // without this the stage sat on "sampling" forever — and everything that
         // reads `onState` sat with it: the fullscreen editor's Render button
         // stayed a readout of a run that had already stopped, with no way back
         // to a button short of closing the editor.
         //
-        // Whose run it was is not asked, for the same reason `b_preview` does
-        // not ask: the queue runs one thing at a time, so an interrupt landing
-        // while this stage is sampling is this stage's interrupt. The payload
-        // names the node the executor was inside, which is somewhere in the
-        // expansion and not reliably prefixed with ours.
+        // The error's node can be anywhere in the expansion; its prompt id,
+        // unlike that node id, reliably identifies the run being interrupted.
         if (this.state !== "sampling") break;
+        if (!this.sameRender(detail.prompt_id)) break;
         // Back to nothing, rather than leaving the last preview frame up: it is
         // a step of a video that was never finished, and a stage still showing
         // it reads as a render that landed.
@@ -463,6 +478,11 @@ export class Stage {
         break;
 
       case "execution_error": {
+        this.endTiming(type, detail);
+        if (detail.prompt_id && this.promptId && String(detail.prompt_id) !== String(this.promptId)) break;
+        // A later node can fail after our save succeeded. Keep that valid file
+        // and finalize its total without replacing it with a failure slate.
+        if (this.state === "done" && this.result?.promptId === String(detail.prompt_id)) break;
         // Ours if the node that raised is in our expansion — or if the press
         // that queued this prompt was ours and the node that raised is a
         // loader wired in upstream: the failure is still the answer to that
@@ -507,6 +527,73 @@ export class Stage {
     return ids.some((id) => this.ours(id));
   }
 
+  /** Frames without ids belong to the active queue. Named late messages from
+   *  a previous queue must not start a fresh clock or overwrite its successor. */
+  acceptPrompt(promptId, { completed = false } = {}) {
+    const id = promptId == null ? this.promptId : String(promptId);
+    const known = id == null ? null : this.timing.runs.get(id);
+    if (!completed && known?.terminal) return false;
+    if (id && this.promptId && id !== this.promptId && known) return false;
+    // A stage mounted/reconnected after execution_start can learn the current
+    // prompt from progress. Its missing start time stays unknown until history.
+    if (id) this.promptId = id;
+    this.timing.get(id);
+    return true;
+  }
+
+  sameRender(promptId) {
+    return promptId == null ? this.renderPromptId === this.promptId
+      : String(promptId) === this.renderPromptId;
+  }
+
+  endTiming(type, detail) {
+    const id = detail.prompt_id == null ? this.promptId : String(detail.prompt_id);
+    this.timing.stop(id, type, detail.timestamp);
+    this.renderReadout();
+    this.syncTicker();
+    const run = id == null ? null : this.timing.runs.get(id);
+    if (run?.results.size || this.awaitingResult(id)) this.probe(id, true);
+  }
+
+  awaitingResult(promptId) {
+    if (this.state === "sampling") return this.sameRender(promptId);
+    // A cached result has no sampler/begin at all. An observed own executing
+    // node is enough to recover its missed save, without claiming other queues.
+    return this.state !== "failed" && this.claimed && this.promptId === promptId
+      && this.result?.promptId !== promptId;
+  }
+
+  /** The two clocks describe the shown result, never another stage's queue. */
+  clockTiming() {
+    if (this.state === "done" && this.result) {
+      const { totalMs = null, tookMs = null, totalPending = false } = this.result;
+      return { totalMs, tookMs, totalPending };
+    }
+    if (this.state !== "sampling" && this.state !== "failed") {
+      return { totalMs: null, tookMs: null, totalPending: false };
+    }
+    const run = this.renderPromptId == null ? null : this.timing.runs.get(this.renderPromptId);
+    return { ...this.timing.read(run), tookMs: this.state === "sampling" && this.startedAt !== null
+      ? Math.max(0, Date.now() - this.startedAt) : this.tookMs };
+  }
+
+  syncTicker() {
+    const needed = this.state === "sampling" || this.timing.pendingResults().length;
+    if (needed && !this.ticker && !this.destroyed) this.ticker = setInterval(() => this.tick(), 1000);
+    if (!needed) { clearInterval(this.ticker); this.ticker = null; }
+  }
+
+  recoverTimings(force = false) {
+    const ids = new Set(this.timing.pendingResults().map((run) => run.promptId));
+    if (this.state === "sampling" && this.renderPromptId) ids.add(this.renderPromptId);
+    if (this.promptId && this.awaitingResult(this.promptId)) ids.add(this.promptId);
+    // execution_success is sent just before history is filed. `executing:null`
+    // gives a missed-start total a second chance after that small race.
+    if (this.result?.promptId && this.result.totalMs === null
+        && !this.timing.runs.get(this.result.promptId)?.history) ids.add(this.result.promptId);
+    for (const id of ids) this.probe(id, force);
+  }
+
   /**
    * The run is over and there is no picture. The slate replaces whatever the
    * box held — a previous take left up under a failure reads as the failure's
@@ -517,12 +604,15 @@ export class Stage {
    *   — a refusal is the one case it did not. The clock is kept only if the
    *   sampler was reached: a loader that raised has no time worth reading.
    */
-  fail(items, { started }) {
-    const tookMs = this.state === "sampling" && this.startedAt ? Date.now() - this.startedAt : 0;
-    clearInterval(this.ticker);
+  fail(items, { started, promptId = this.promptId, recovered = false }) {
+    const observedRender = started && !recovered && this.state === "sampling" && this.sameRender(promptId);
+    const tookMs = observedRender && this.startedAt !== null ? Math.max(0, Date.now() - this.startedAt) : null;
+    const renderPromptId = started ? promptId : null;
     this.clearRender();
     this.state = "failed";
     this.tookMs = tookMs;
+    this.renderPromptId = renderPromptId;
+    this.syncTicker();
     this.failure = { started, items: items.filter((item) => item?.what) };
     if (!this.failure.items.length) this.failure.items.push({ where: null, what: t("the render failed") });
     this.render();
@@ -536,7 +626,9 @@ export class Stage {
     this.result = null;
     this.failure = null;
     this.refused = null;
-    this.tookMs = 0;
+    this.tookMs = null;
+    this.startedAt = null;
+    this.renderPromptId = null;
     this.progress = null;
     this.segment = null;
     this.releaseFrame();
@@ -546,30 +638,32 @@ export class Stage {
   }
 
   reset() {
-    clearInterval(this.ticker);
     this.promptId = null;
     this.claimed = false;
     this.lastNewsAt = 0;
     this.probedAt = 0;
     this.state = "idle";
     this.clearRender();
+    this.syncTicker();
     this.render();
   }
 
   /** First frame of a queue. Starts the clock once rather than on every step, so
    *  the elapsed readout is elapsed and not a stutter. */
   begin() {
-    if (this.state === "sampling") return;
+    if (this.state === "sampling" && this.renderPromptId === this.promptId) return;
     // The first word that this queue is ours, and so the moment the last one's
     // picture stops being the answer — see `execution_start`.
     this.clearRender();
     this.state = "sampling";
+    this.renderPromptId = this.promptId;
+    this.timing.get(this.renderPromptId);
+    this.probedAt = 0;
     this.startedAt = Date.now();
     this.lastNewsAt = Date.now();
-    clearInterval(this.ticker);
     // Only the readout, and only once a second: the frames arrive when they
     // arrive, and a full render on a timer would fight the preview for the box.
-    this.ticker = setInterval(() => this.tick(), 1000);
+    this.syncTicker();
   }
 
   // ---- the render lands, however it reaches us -----------------------------
@@ -585,7 +679,7 @@ export class Stage {
    * `MiniMaxH3SaveImage` reports `mmc_image` instead; which one arrives is also
    * what says whether the result is a clip or a still.
    */
-  finish(output, { promptId = this.promptId, prompt = null } = {}) {
+  finish(output, { promptId = this.promptId, prompt = null, recovered = false } = {}) {
     // The passes, each as its own file, so a card whose pass came out right
     // never has to be sampled again. Before the `saved` gate: most takes now
     // arrive one at a time from `ContinuityTake` while the render is still
@@ -594,23 +688,35 @@ export class Stage {
     if (output?.mmc_takes?.length) this.onTakes?.(output.mmc_takes, { promptId, prompt });
     const saved = output?.mmc_video?.[0] ?? output?.mmc_image?.[0];
     if (!saved) return;
+    promptId = promptId == null ? null : String(promptId);
+    // Duplicate delivery is not another render window, nor a reason to restart
+    // playback. History may still improve the total on this same result object.
+    if (promptId && this.result?.promptId === promptId && this.result.url === outputUrl(saved)) {
+      this.timing.refreshAll();
+      this.renderReadout();
+      return;
+    }
+    const observedSave = !recovered && this.state === "sampling" && this.sameRender(promptId);
+    const tookMs = observedSave && this.startedAt !== null ? Math.max(0, Date.now() - this.startedAt) : null;
     this.state = "done";
     this.progress = null;
     // The clock stops here rather than on the next tick, so what the readout
     // shows after the render is the render's own length and not a second of
     // whatever happened to follow it.
-    this.tookMs = this.startedAt ? Date.now() - this.startedAt : 0;
+    this.tookMs = tookMs;
+    this.renderPromptId = promptId;
     this.result = { url: outputUrl(saved), name: saved.filename,
                     isImage: !output?.mmc_video, saved,
                     // Carried on the result as well as held here: the
                     // fullscreen reel keeps finished renders past the run
                     // that made them, and a take without its cost is a
                     // picture you can only compare on looks.
-                    tookMs: this.tookMs };
+                    tookMs: this.tookMs, promptId };
+    this.timing.attach(promptId, this.result);
     // The finished clip takes the preview's place, so the last sampled frame is
     // now a picture that can never be shown again — and the clock it was
     // ticking under has stopped.
-    clearInterval(this.ticker);
+    this.syncTicker();
     this.releaseFrame();
     this.frame = null;
     this.render();
@@ -631,8 +737,9 @@ export class Stage {
   /** One second of a running render: the clock, and — once the wire has gone
    *  quiet for longer than a slow step explains — a question to the server. */
   tick() {
+    this.timing.refreshAll();
     this.renderReadout();
-    if (this.state === "sampling" && this.quiet() > QUIET_MS) this.probe();
+    if (this.quiet() > QUIET_MS) this.recoverTimings();
   }
 
   /**
@@ -647,26 +754,36 @@ export class Stage {
    * a laptop that slept, a tab reopened on a render already running.
    *
    * `/history/{prompt_id}` holds the same payload the message carried, so the
-   * recovery is to read it back rather than to guess from a timeout. A prompt
-   * that is not in it yet is a render still running, which is the answer as
-   * often as not — a slow step is silence too — and that case does nothing but
-   * let the readout say it has lost contact.
+   * recovery is to read it back rather than to guess from a timeout. A missing
+   * entry normally means the render is still running, but can also mean its
+   * history is unavailable. Neither proves a completion time; a slow step is
+   * silence too, so that case only lets the readout say it has lost contact.
    */
-  async probe() {
-    if (this.probing || !this.promptId) return;
-    if (Date.now() - this.probedAt < PROBE_EVERY_MS) return;
+  async probe(promptId = this.renderPromptId ?? this.promptId, force = false) {
+    if (this.destroyed || !promptId) return;
+    if (this.probes.has(promptId)) {
+      if (force) this.probeAgain.add(promptId);
+      return;
+    }
+    const current = promptId === (this.renderPromptId ?? this.promptId);
+    const probedAt = current ? this.probedAt : this.probeTimes.get(promptId);
+    if (!force && probedAt && Date.now() - probedAt < PROBE_EVERY_MS) return;
+    this.probes.add(promptId);
     this.probing = true;
-    this.probedAt = Date.now();
-    const promptId = this.promptId;
+    this.probeTimes.set(promptId, Date.now());
+    if (current) this.probedAt = Date.now();
     try {
       const response = await api.fetchApi(`/history/${encodeURIComponent(promptId)}`);
       if (!response.ok) return;
       const entry = (await response.json())?.[promptId];
+      if (this.destroyed || !entry) return;
+      this.timing.fromHistory(promptId, entry);
+      this.syncTicker();
+      this.renderReadout();
       // The stage may have caught up on its own while this was in flight — the
       // wire coming back mid-probe is the likeliest moment of all — and a probe
       // must never overwrite a result that arrived the ordinary way.
-      if (this.state !== "sampling" || this.promptId !== promptId) return;
-      if (!entry) return;
+      if (this.promptId !== promptId || !this.awaitingResult(promptId)) return;
       // The takes first, wherever the entry holds them: `ContinuityTake`
       // reports them one node at a time, so they are scattered across the
       // entry's outputs rather than riding the save node's. The failed render
@@ -676,7 +793,10 @@ export class Stage {
       if (takes.length) this.onTakes?.(takes, { promptId, prompt: entry.prompt });
       const output = this.savedOutput(entry.outputs, entry.meta);
       if (output) {
-        this.finish(output, { promptId, prompt: entry.prompt });
+        // History has workflow boundaries, not the time our save node emitted
+        // its file. Counting through a disconnected tab would invent a render
+        // duration, so only the total is recovered from that authoritative log.
+        this.finish(output, { promptId, prompt: entry.prompt, recovered: true });
         return;
       }
       // In history, with nothing of ours in it: the render failed or was
@@ -685,9 +805,13 @@ export class Stage {
       // a stage that cannot tell "running" from "over" gets cancelled by hand.
       this.fail([{ where: null,
                    what: failureText(entry.status) ?? t("the render ended without a file") }],
-                { started: true });
+                { started: true, promptId, recovered: true });
     } catch { /* the wire is down as well; the ticker asks again in five seconds */ }
-    finally { this.probing = false; }
+    finally {
+      this.probes.delete(promptId);
+      this.probing = this.probes.size > 0;
+      if (this.probeAgain.delete(promptId) && !this.destroyed) this.probe(promptId, true);
+    }
   }
 
   /**
@@ -738,6 +862,8 @@ export class Stage {
     const showing = this.showing();
     this.root.style.display = showing ? "flex" : "none";
     this.root.dataset.state = this.state;
+    if (this.state === "done" && this.result) this.root.dataset.media = this.result.isImage ? "image" : "video";
+    else delete this.root.dataset.media;
     // Told rather than inferred: the owner has to give up the height the prompt
     // box was growing into, and it cannot know to do that from a re-render it
     // did not trigger.
@@ -822,10 +948,7 @@ export class Stage {
                + "result the moment it lands."),
         text: t("out of contact {when}", { when: elapsed(this.quiet()) }),
       }));
-      right.push(el("span", {
-        class: "mmc-stage-chip mmc-stage-clock",
-        text: elapsed(Date.now() - this.startedAt),
-      }));
+      right.push(...timingChips(this.clockTiming()));
     } else if (this.state === "done") {
       // A finished render is the picture — plus the way to the ones before it,
       // plus whatever hand-off chips the owner builds from the result (the
@@ -847,18 +970,12 @@ export class Stage {
         onclick: () => this.onRestyle(),
         onpointerdown: (event) => event.stopPropagation(),
       }));
-      // The same slot the ticking clock had. Titled rather than labelled: the
-      // row is read at a glance and "took" is a word the position already says.
-      if (this.tookMs) right.push(el("span", {
-        class: "mmc-stage-chip mmc-stage-clock",
-        title: t("How long this render took"),
-        text: elapsed(this.tookMs),
-      }));
+      right.push(...timingChips(this.clockTiming()));
     }
 
     this.readout.replaceChildren(
-      ...(left.length ? [el("div", { class: "mmc-stage-side" }, left)] : []),
-      ...(right.length ? [el("div", { class: "mmc-stage-side end" }, right)] : []),
+      ...(left.length ? [el("div", { class: "mmc-stage-side mmc-stage-actions" }, left)] : []),
+      ...(right.length ? [el("div", { class: "mmc-stage-side end mmc-stage-times" }, right)] : []),
     );
   }
 
@@ -995,10 +1112,48 @@ export class Stage {
   }
 }
 
-/** `92000` -> `"1:32"`. Minutes only: a render that runs for an hour has bigger
- *  problems than its readout. Exported because the fullscreen lip captions each
- *  past take with what it cost, and two clocks in one window that round
- *  differently is one clock too many. */
+/** A read-only pair, shared by the live stage and fullscreen take review.
+ *  Labels matter: neither the difference nor the shorter number means model
+ *  loading or sampler-only time. Unknown old/cached results are not zero. */
+export function timingChips({ totalMs = null, tookMs = null, totalPending = false } = {}) {
+  const whole = t("From workflow execution start to completion, including loading and other nodes; queue waiting is excluded.");
+  const window = t("From the first detected sampling progress or preview to the saved result, including decoding, post-processing and saving; not sampling alone.");
+  return [
+    [t("Total execution"), totalMs, whole, totalPending],
+    [t("Render window"), tookMs, window, false],
+  ].map(([label, ms, explanation, pending]) => {
+    const known = Number.isFinite(ms) && ms >= 0;
+    const note = pending ? t("The workflow is still running.")
+      : known ? "" : t("Timing is unavailable for this result.");
+    return el("span", {
+      class: "mmc-stage-chip mmc-stage-clock",
+      title: [explanation, note].filter(Boolean).join(" "),
+      "aria-label": `${label}: ${known ? elapsed(ms) : "—"}${note ? `. ${note}` : ""}`,
+    }, [
+      el("span", { class: "mmc-stage-clock-label", text: label }),
+      el("span", { class: "mmc-stage-clock-value", text: known ? elapsed(ms) : "—" }),
+    ]);
+  });
+}
+
+/** Measure the footer in layout pixels, not canvas-zoomed screen pixels.
+ *  Text scale, translations and wrapping can all change its height. The dock
+ *  subtracts this from its media budget so the video retains its own aspect.
+ *  A no-op in non-browser harnesses; the observer is owned by the view. */
+export function watchFooterSize(root, readout) {
+  if (typeof ResizeObserver === "undefined") return () => {};
+  let previous = -1;
+  const observer = new ResizeObserver(() => {
+    const height = readout.offsetHeight;
+    if (Number.isFinite(height) && height !== previous) {
+      previous = height;
+      root.style.setProperty("--mmc-stage-footer-height", `${height}px`);
+    }
+  });
+  observer.observe(readout);
+  return () => observer.disconnect();
+}
+
 /** What a history entry's status says went wrong, if it says anything.
  *  `messages` holds the events that would have come down the socket, as
  *  `[name, payload]` pairs — kept by the server for exactly this reason. */
@@ -1011,5 +1166,7 @@ function failureText(status) {
 
 export function elapsed(ms) {
   const total = Math.max(0, Math.round(ms / 1000));
-  return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, "0")}`;
+  const seconds = String(total % 60).padStart(2, "0");
+  if (total < 3600) return `${Math.floor(total / 60)}:${seconds}`;
+  return `${Math.floor(total / 3600)}:${String(Math.floor(total / 60) % 60).padStart(2, "0")}:${seconds}`;
 }

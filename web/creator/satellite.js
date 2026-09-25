@@ -122,6 +122,10 @@ export class Satellite {
         ? `translate(${x}px, ${y}px) translateX(-100%) scale(${scale})`
         : `translate(${x}px, ${y}px) scale(${scale})`;
       this.root.style.height = `${node.size[1] + title}px`;
+      // Finished video footers extend below the original picture height.
+      // Keep the graph-unit height explicit; transformed screen pixels would
+      // shrink or enlarge the media incorrectly when the canvas is zoomed.
+      this.root.style.setProperty("--mmc-stage-height", `${node.size[1] + title}px`);
     }
     this.raf = requestAnimationFrame(() => this.follow());
   }
