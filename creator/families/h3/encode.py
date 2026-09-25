@@ -21,6 +21,7 @@ import node_helpers
 import torch
 from comfy.ldm.minimax.model import FRAME_PER_TOKEN
 from ... import audiolatent, latents, media, refmod
+from . import payload as payload_repair
 from .payload import AUDIO_END_KEY, CORE_ANCHORS_ANYWHERE, FRAME_INDEX_KEY
 from comfy_extras.nodes_minimax_h3 import (
     CANVAS_MULTIPLE,
@@ -580,8 +581,43 @@ def _seam_blocks(audio_vae, compiled, loaded, frame_count):
     return blocks
 
 
+def _native_audio_seams(conditioning):
+    """Move only end-anchored seam audio from private refs to public guides.
+
+    Ray workers receive conditioning, not our local forward wrapper. A guide's
+    start can express the same end anchor when its actual audio length is
+    subtracted. Ordinary audio references (including unblended seams) stay in
+    place, and the text/picture/audio presentation assembled above is untouched.
+    Copy each scheduled entry's metadata so cached input conditioning is never
+    changed in place.
+
+    Removing a seam from the reference span changes the absolute target origin,
+    not its relative seam alignment. This is deliberately Raylight-only; it is
+    not a claim of numerically identical rendering to the local wrapper path.
+    """
+    result = []
+    for tensor, values in conditioning:
+        refs = values.get("minimax_refs") or []
+        seams = [ref for ref in refs if AUDIO_END_KEY in ref]
+        if not seams:
+            result.append([tensor, values])
+            continue
+        values = dict(values)
+        values["minimax_keyframes"] = [
+            *(values.get("minimax_keyframes") or []),
+            *(payload_repair.seam_audio_keyframe(ref) for ref in seams),
+        ]
+        remaining = [ref for ref in refs if AUDIO_END_KEY not in ref]
+        if remaining:
+            values["minimax_refs"] = remaining
+        else:
+            values.pop("minimax_refs", None)
+        result.append([tensor, values])
+    return result
+
+
 def encode(clip, vae, audio_vae, compiled, loaded, checkpoints=None, sound=None,
-           masked_seam=False):
+           masked_seam=False, native_audio_seams=False):
     """-> (conditioning, latent). `loaded` maps asset handle -> decoded media.
 
     `masked_seam` is the third seam road (`settings.seam_handoff = "masked"`):
@@ -589,6 +625,11 @@ def encode(clip, vae, audio_vae, compiled, loaded, checkpoints=None, sound=None,
     rather than pinned guides — `_masked_prefix`. Only where the run fits this
     canvas; otherwise the seam falls back to the guides, as the latent road
     does, and says so in the log.
+
+    `native_audio_seams` is selected only by the Raylight backend. Its workers
+    cannot receive the local payload repair, so blended audio travels as public
+    timeline guides on a core that passed the audio-anchor capability probe.
+    The default keeps the existing single-GPU conditioning unchanged.
 
     `checkpoints` names the VAE files on `vae` and `audio_vae`, for the
     reference cache to key on — `{"vae": ..., "audio_vae": ...}`. Names rather
@@ -608,6 +649,11 @@ def encode(clip, vae, audio_vae, compiled, loaded, checkpoints=None, sound=None,
     out of the denoise. A piece may carry both: "this is the music, and the
     voice should sound like that" is a coherent thing to ask for.
     """
+    if (native_audio_seams and (compiled.continues_audio or compiled.ends_on_audio)
+            and not payload_repair.CORE_AUDIO_ANCHORS):
+        raise ValueError(
+            "Raylight sound seams require ComfyUI native audio timeline anchors. "
+            "Update ComfyUI, switch the sound seam off, or use single-GPU.")
     inherited = loaded.get(PREV_LATENT, {}).get("latent")
     if masked_seam and compiled.continues and compiled.feather > 1 and inherited is not None:
         run = _context_run(inherited, compiled.feather, compiled.width, compiled.height)
@@ -621,6 +667,8 @@ def encode(clip, vae, audio_vae, compiled, loaded, checkpoints=None, sound=None,
                                           checkpoints or {})
     else:
         cond, latent = _encode_frames(clip, vae, audio_vae, compiled, loaded)
+    if native_audio_seams:
+        cond = _native_audio_seams(cond)
     if MASKED_RUN in loaded:
         latent = _masked_prefix(latent, loaded[MASKED_RUN]["latent"])
     return cond, audiolatent.apply_av(latent, audio_vae, sound or [],

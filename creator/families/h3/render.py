@@ -615,14 +615,14 @@ class H3(base.Family):
         ships, the accelerators are refused above, and the preview comes in
         through the bridge below.
         """
-        from .payload import CORE_ANCHORS_ANYWHERE
+        from .payload import CORE_ANCHORS_ANYWHERE, CORE_AUDIO_ANCHORS
 
         # Everything this generation asks for that the workers cannot carry,
         # said before a node is built. The label is the card's number where the
         # loop stamped one — a strip's fourth shot should say so.
         progress = payload.get("progress") or {}
         label = f"Segment {progress['index']}" if progress.get("index") else None
-        raylight.refuse_run(compiled, splits, label)
+        raylight.refuse_run(compiled, splits, label, audio_anchors=CORE_AUDIO_ANCHORS)
         raylight.refuse_seam(compiled, CORE_ANCHORS_ANYWHERE, label)
 
         actors = links.actors.of(compiled.checkpoint,
