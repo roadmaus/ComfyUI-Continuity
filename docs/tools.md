@@ -582,6 +582,27 @@ ComfyUI-Lora-Manager formats all read). Per-LoRA strength, trigger words
 prefixed at compile time and shown under the chips, versions grouped per
 model, favourites, and saved stacks. Strengths you set are remembered.
 
+Card labels use the existing metadata title and base-model/version subtitle by
+default, including the shared title for a group of versions. To avoid inherited
+training names, turn on **Settings > Interface > Skip model metadata in LoRA
+cards** and reopen the LoRA manager. This preference is **off by default** and
+is saved for this installation, not in the workflow.
+
+When enabled, labels use an optional same-stem `.cm-info.json` (StabilityMatrix):
+`UserTitle`, then `ModelName`, supplies the title; `BaseModel` and `VersionName`
+supply the subtitle. Missing or invalid text falls back to the selected file's
+basename and relative path, respectively. Switching versions updates these
+local labels to that file. Turning the setting off restores the original labels.
+Neither mode changes loading, triggers, strengths, grouping or detail metadata.
+
+An explicit same-stem local preview, such as `StudioLighting.preview.jpeg`
+beside `StudioLighting.safetensors`, takes priority for the card thumbnail in
+either label mode.
+This does not require a `.cm-info.json` file; without an explicit preview the
+existing thumbnail fallbacks remain. Both companions are optional files, not
+an application dependency: ordinary ComfyUI users need no StabilityMatrix
+installation or configuration. **Rescan** refreshes changed companions.
+
 Each entry names the checkpoints it claims. A LoRA that would match no keys on
 the checkpoint it lands on is refused rather than quietly rendering an
 unchanged video.

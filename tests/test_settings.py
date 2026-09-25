@@ -99,6 +99,17 @@ check("a null autoplay setting is the default",
       settings.clean({"autoplay_previews": None})["autoplay_previews"], True)
 refuses("an autoplay setting that is not a boolean", {"autoplay_previews": "yes"}, "true or false")
 
+# Card labels retain the model metadata unless the user explicitly opts out.
+check("LoRA cards use model metadata by default", settings.clean({})["lora_skip_metadata"], False)
+check("a null LoRA metadata setting keeps the default",
+      settings.clean({"lora_skip_metadata": None})["lora_skip_metadata"], False)
+for value in (False, True):
+    check(f"LoRA metadata preference preserves {value}",
+          settings.clean({"lora_skip_metadata": value})["lora_skip_metadata"], value)
+for value in (0, 1, "true", "false", [], {}):
+    refuses(f"LoRA metadata preference rejects {value!r}",
+            {"lora_skip_metadata": value}, "true or false")
+
 # The turbo lead-in: how many opening steps a distilled render samples without
 # the distillation. A whole number of steps rather than a boolean, because "off"
 # and "how far" are one answer — and held to a ceiling, past which the idea
@@ -413,6 +424,24 @@ with tempfile.TemporaryDirectory() as directory:
         json.dump({}, handle)
     check("a file missing a key is the default for that key",
           settings.load(), dict(settings.DEFAULTS))
+
+with tempfile.TemporaryDirectory() as directory:
+    settings.path = lambda: os.path.join(directory, settings.FILE)
+    check("saving LoRA card preference enables it",
+          settings.save({"lora_skip_metadata": True})["lora_skip_metadata"], True)
+    check("LoRA card preference survives reload", settings.load()["lora_skip_metadata"], True)
+    check("unrelated settings patches retain LoRA card preference",
+          settings.save({"video_crf": 18})["lora_skip_metadata"], True)
+    check("saving false restores metadata labels",
+          settings.save({"lora_skip_metadata": False})["lora_skip_metadata"], False)
+    check("false survives reload", settings.load()["lora_skip_metadata"], False)
+    check("changing card labels retains render settings", settings.load()["video_crf"], 18)
+    settings.save({"lora_skip_metadata": True})
+    check("a null patch restores the card default",
+          settings.save({"lora_skip_metadata": None})["lora_skip_metadata"], False)
+    settings.save({"lora_skip_metadata": True})
+    check("reset restores model metadata labels", settings.reset()["lora_skip_metadata"], False)
+    check("reset survives reload", settings.load()["lora_skip_metadata"], False)
 
 # ---- the file the pack wrote when it was called MiniMax Creator ---------------
 #

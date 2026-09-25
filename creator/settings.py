@@ -113,6 +113,8 @@ DEFAULTS = {
     # where a dozen finished renders is a dozen looping decoders playing for
     # nobody. UI-only like the pills above: nothing queued ever reads it.
     "autoplay_previews": True,
+    # Card labels only; loading and the detail sheet keep their model metadata.
+    "lora_skip_metadata": False,
     # How many of a turbo render's opening steps run on the un-distilled
     # weights — the turbo LoRA held off the model for those steps and patched
     # on for the rest. 0 is off, which is what every render did before this
@@ -478,7 +480,8 @@ def clean(raw):
         if raw["lora_loader"] not in LORA_LOADERS:
             raise ValueError(f"lora_loader must be one of {', '.join(LORA_LOADERS)}")
         clean_settings["lora_loader"] = raw["lora_loader"]
-    for flag in ("show_shift_pills", "autoplay_previews", "advanced", "latent_cache"):
+    for flag in ("show_shift_pills", "autoplay_previews", "advanced", "latent_cache",
+                 "lora_skip_metadata"):
         if flag in raw and raw[flag] is not None:
             if not isinstance(raw[flag], bool):
                 raise ValueError(f"{flag} must be true or false")

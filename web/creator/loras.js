@@ -6,11 +6,10 @@
 // would have meant closing the modal to find out what you picked. So every
 // control writes straight through to creator_data and the only exit is Done.
 //
-// Cards come from models/loras. Everything above the filename — showcase image,
-// title, base model, trigger words — comes from whatever sidecars are beside the
-// file, which is `lorameta.py`'s problem rather than this file's: half a dozen
-// tools write half a dozen layouts and they all arrive here as one row shape. A
-// LoRA nothing has ever described still gets a working card from its filename.
+// Cards come from models/loras. Metadata supplies the shared model title and
+// selected version's subtitle by default. The optional filename display uses
+// that file's .cm-info.json, then its filename and path. `lorameta.py` collects
+// both labels along with showcase images, trigger words and settings.
 //
 // A real collection is hundreds or thousands of files, so the grid never holds
 // all of them: a folder picker narrows what the server even walks, and what
@@ -29,7 +28,8 @@
 // the same data would be a second set of those answers to keep in step.
 
 import { el, ICONS, svg, drawFrame, mountOverlay } from "./dom.js";
-import { listLoras, listLorasNamed, loraPreviewUrl, loadLoraPrefs, loraPrefsNow, saveLoraPrefs } from "./api.js";
+import { listLoras, listLorasNamed, loraPreviewUrl, loadLoraPrefs, loraPrefsNow, saveLoraPrefs,
+         primeSettings, uiSetting } from "./api.js";
 import { openLoraDetail } from "./loradetail.js";
 import { forgetLoraNames } from "./turbo.js";
 import { listPresets, loadBody, savePreset, deletePreset } from "./presets.js";
@@ -234,10 +234,8 @@ function groupRows(rows) {
     // The newest is the one a card opens on when nothing else decides it, and
     // the sort above put it last.
     group.newest = group.members[group.members.length - 1].name;
-    // A model's title is the model's and not the version's. A sidecar knows the
-    // difference; a folder of bare filenames does not, so the shared head of
-    // the names stands in for it — which is the same string the pills were cut
-    // away from, so card and pills together spell each filename back out.
+    // The default label belongs to the whole model. Bare files use their
+    // shared head, with the version pills supplying the differing tails.
     const titled = group.members.find((row) => row.title);
     group.title = titled?.title || commonHead(stems)
       || stems.reduce((shortest, stem) => (stem.length < shortest.length ? stem : shortest));
@@ -665,6 +663,7 @@ class LoraManager {
     this.scales = new Map();  // file name -> index into SCALES
     this.shown = 0;
     this.loaded = false;
+    this.closed = false;
     // Which LoRAs on screen were set up from memory rather than from their
     // sidecar, so the card can say so — a slider sitting somewhere the file's
     // author did not put it is otherwise unexplained.
@@ -752,14 +751,18 @@ class LoraManager {
 
     this.renderFoot();
     this.start();
-    setTimeout(() => this.search.focus(), 30);
+    setTimeout(() => { if (!this.closed) this.search.focus(); }, 30);
   }
 
-  /** Read what was remembered, then open on it. The prefs are one small file
-   *  and the grid is showing "Loading…" for the listing regardless, so there is
-   *  nothing to be gained by drawing a scope the user did not leave it in. */
+  /** Read the saved scope and display setting before drawing the first cards.
+   *  The manager can be the first surface opened, before any node primes the
+   *  shared settings cache. Closing while either request is pending ends it. */
   async start() {
-    this.prefs = { ...(await loadLoraPrefs()) };
+    const [prefs] = await Promise.all([
+      loadLoraPrefs(), new Promise((resolve) => primeSettings(resolve)),
+    ]);
+    if (this.closed) return;
+    this.prefs = { ...prefs };
     // A LoRA asked for by name is the whole reason the window is open, and it
     // will not be on a shelf that does not hold it. Its own folder is where it
     // certainly is.
@@ -790,7 +793,7 @@ class LoraManager {
     }
     // A slow folder answering after you have already moved on would otherwise
     // repaint the grid with the wrong folder's cards.
-    if (scope !== this.scope) return;
+    if (this.closed || scope !== this.scope) return;
     this.rows = body.loras ?? [];
     this.folders = body.folders ?? this.folders;
     this.missing = body.missing ?? [];
@@ -858,7 +861,8 @@ class LoraManager {
   visible() {
     if (!this.query) return this.rows;
     return this.rows.filter((row) =>
-      [row.name, row.title, row.version, row.base_model, ...(row.tags || []), ...(row.trained_words || [])]
+      [row.name, row.card_title, row.card_subtitle, row.title, row.version, row.base_model,
+       ...(row.tags || []), ...(row.trained_words || [])]
         .filter(Boolean).join(" ").toLowerCase().includes(this.query));
   }
 
@@ -1505,13 +1509,17 @@ class LoraManager {
     if (row.preview === "video") this.hoverClip(art, check, loraPreviewUrl(row.name));
     card.appendChild(art);
 
-    // The title is the model's and the sub line is this file's: with four
-    // versions on one card the name has to stop moving when you click between
-    // them, or the pills read as four different LoRAs rather than one.
-    const meta = [row.base_model, row.version].filter(Boolean).join(" · ");
+    // Metadata remains the default. The optional display describes the exact
+    // selected file; neither embedded names nor a sibling's title fill gaps.
+    const skipMetadata = uiSetting("lora_skip_metadata", false) === true;
+    const title = skipMetadata
+      ? row.card_title || row.base || baseName(row.name) : group.title || row.base;
+    const subtitle = skipMetadata
+      ? row.card_subtitle || row.name
+      : [row.base_model, row.version].filter(Boolean).join(" · ") || row.name;
     const body = el("div", { class: "mmc-lora-body" }, [
-      el("div", { class: "mmc-lora-name", text: group.title || row.base, title: row.name }),
-      el("div", { class: "mmc-lora-sub", text: meta || row.name, title: row.name }),
+      el("div", { class: "mmc-lora-name", text: title, title: row.name }),
+      el("div", { class: "mmc-lora-sub", text: subtitle, title: row.name }),
     ]);
     if (group.members.length > 1) body.appendChild(this.versionRow(group, row));
     // Until the LoRA is active its trigger words are just information; once it
@@ -2072,6 +2080,8 @@ class LoraManager {
   }
 
   close() {
+    if (this.closed) return;
+    this.closed = true;
     // The observer holds strong references to every card it still watches.
     this.stillWatch.disconnect();
     this.unmount();
