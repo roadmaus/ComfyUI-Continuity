@@ -248,8 +248,8 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
         # Nothing to patch, and nothing to hand back: the multi-GPU backend
         # loads the transformer inside Ray's workers and merges the LoRAs there,
         # so both MODEL outputs are None and the graph wires neither of them.
-        # Everything below this line — the seams, the encode — is unchanged,
-        # because all of it happens on this side of the wire either way.
+        # Encoding still happens here. Distributed sound seams use public audio
+        # guides because a local forward wrapper cannot reach Ray's workers.
         distributed = sampler_backend == raylight.RAYLIGHT
         model = lead = None
         if not distributed:
@@ -347,7 +347,8 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
             clip, vae, audio_vae, compiled, loaded,
             {"vae": vae_name, "audio_vae": audio_vae_name},
             sound=payload.get("sound"),
-            masked_seam=payload.get("seam_road") == "masked")
+            masked_seam=payload.get("seam_road") == "masked",
+            native_audio_seams=distributed)
         return io.NodeOutput(model, cond, latent, model if lead is None else lead)
 
 

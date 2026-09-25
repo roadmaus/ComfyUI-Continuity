@@ -52,9 +52,10 @@ one the switch was thrown on:
   different adapters on them. Two `RayUNETLoader`s off one initializer is two
   full loads into the same workers, and they would fight over which model the
   actors hold.
-- **Blended audio seams.** The soundtrack's tail is anchored on this segment's
-  own timeline by a diffusion-model wrapper (`families/h3/payload.py`), and a
-  wrapper on this side of the wire never reaches the workers' forward.
+- **Audio seams on incompatible cores.** Native audio keyframes carry the
+  soundtrack's end anchor through conditioning on a core that passes the
+  capability checks in `families/h3/payload.py`. The older fallback needs a
+  local forward wrapper, which never reaches the workers, and stays refused.
 - The **refine, face, hires and re-detail passes**, all of which sample
   in-process against a real MODEL object.
 - The **accelerators**, except the attention backend, which Raylight owns on its
@@ -286,7 +287,7 @@ def refuse_accel(acceleration):
         )
 
 
-def refuse_run(compiled, splits, label=None):
+def refuse_run(compiled, splits, label=None, *, audio_anchors=False):
     """Refuse one compiled generation Ray cannot make.
 
     `label` names the segment where there is more than one, the same way
@@ -302,15 +303,14 @@ def refuse_run(compiled, splits, label=None):
             f"sends the whole schedule to one sampler, or set the backend back "
             f"to single-GPU."
         )
-    if compiled.continues_audio or compiled.ends_on_audio:
+    if (compiled.continues_audio or compiled.ends_on_audio) and not audio_anchors:
         raise ValueError(
-            f"{where}this seam carries the soundtrack across the cut, and the "
-            f"tail is anchored on the segment's own timeline by a wrapper "
-            f"around the forward pass — which runs on this side of the wire and "
-            f"never reaches Raylight's workers. Sampled through Ray the sound "
-            f"would be read as an imitation reference instead of a "
-            f"continuation. Switch the sound seam off for this shot, or set the "
-            f"backend back to single-GPU."
+            f"{where}this seam carries the soundtrack across the cut, but "
+            f"this ComfyUI did not pass the native audio timeline-anchor check. "
+            f"The fallback forward wrapper never reaches Raylight's workers, "
+            f"so it cannot place this sound as a continuation. Update ComfyUI "
+            f"to a build with native audio timeline anchors, switch the sound "
+            f"seam off for this shot, or set the backend back to single-GPU."
         )
     for pass_name, attribute, setting in (
             ("refine", "refine", "the two-pass upscale"),
@@ -328,9 +328,9 @@ def refuse_run(compiled, splits, label=None):
 def refuse_seam(compiled, anchors_anywhere, label=None):
     """Refuse a picture seam on a core too old to place its anchors.
 
-    The wrapper that repairs a keyframe's coordinate is the same one the audio
-    tail needs and is just as unreachable from here; on a core with the general
-    anchor there is nothing to repair and a picture seam sails through, which is
+    The wrapper that repairs a keyframe's coordinate is the same one the legacy
+    audio tail needs and is just as unreachable from here; on a core with the
+    general anchor there is nothing to repair and a picture seam sails through, which is
     every core since 2026-08-14. See `families/h3/payload.py`.
     """
     if anchors_anywhere:

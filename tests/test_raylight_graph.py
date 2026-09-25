@@ -22,6 +22,7 @@ import importlib
 import json
 import os
 import sys
+from unittest.mock import patch
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PACKAGE = os.path.basename(ROOT)
@@ -618,16 +619,43 @@ expect_error(
     lambda: strip_build(upscale="redetail", upscale_models=UPSCALE_MODELS),
     "re-detail pass")
 
-# The soundtrack carried across a cut. The tail is anchored by a wrapper around
-# the forward, and a wrapper here never reaches the workers — so the sound would
-# be read as an imitation reference instead of a continuation.
-expect_error(
-    "a sound seam is refused rather than quietly turned into a reference",
-    lambda: strip_build(segments=[
-        {"prompt": "wide", "duration_s": 5},
-        {"prompt": "closer", "duration_s": 5,
-         "continue": True, "continue_audio": True}]),
-    "sound seam")
+# A native audio guide travels in conditioning, so a capable core can carry a
+# sound seam to the workers without the local forward wrapper. Keep the old
+# refusal on an incompatible core, regardless of the core running this suite.
+payload_mod = importlib.import_module(f"{PACKAGE}.creator.families.h3.payload")
+sound_segments = [
+    {"prompt": "wide", "duration_s": 5},
+    {"prompt": "closer", "duration_s": 5,
+     "continue": True, "continue_audio": True, "feather": 22},
+]
+with patch.object(payload_mod, "CORE_AUDIO_ANCHORS", False):
+    expect_error(
+        "a sound seam still refuses a core without native audio anchors",
+        lambda: strip_build(segments=sound_segments), "sound seam")
+with patch.object(payload_mod, "CORE_AUDIO_ANCHORS", True):
+    sound_graph = by_class(strip_build(segments=sound_segments))
+    check("a native sound seam emits both distributed samplers",
+          len(sound_graph[ray.SAMPLER_NODE]), 2)
+    sound_passes = sound_graph["MiniMaxH3TimelineSegment"]
+    check("the sound seam's segment keeps the Raylight backend",
+          sound_passes[1][1]["sampler_backend"], "raylight")
+    check("the inherited audio reaches the segment",
+          "prev_audio" in sound_passes[1][1], True)
+
+    # A supplied clip creates the far-side sound seam on the generated pass.
+    # Only expansion is under test; the clip's presence check need not read a
+    # real file, and no clip node is executed by this suite.
+    with patch.object(cn.media, "resolve", side_effect=lambda filename: filename):
+        tail_graph = by_class(strip_build(segments=[
+            {"prompt": "wide", "duration_s": 5},
+            {"kind": "clip", "filename": "ending.mp4", "duration_s": 3,
+             "width": 1344, "height": 768, "continue": True,
+             "continue_audio": True, "feather": 22},
+        ]))
+    check("a native far-side sound seam emits one distributed sampler",
+          len(tail_graph[ray.SAMPLER_NODE]), 1)
+    check("the supplied clip's audio reaches the generated pass",
+          "next_audio" in tail_graph["MiniMaxH3TimelineSegment"][0][1], True)
 check("...where a picture-only seam sails through on a core that anchors itself",
       len(by_class(strip_build(segments=[
           {"prompt": "wide", "duration_s": 5},

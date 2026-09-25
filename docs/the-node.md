@@ -429,13 +429,22 @@ quietly dropped from the render:
 
 - the refine (two-pass upscale), faces and re-detail passes,
 - the turbo lead-in,
-- sound seams, meaning a shot continuing the previous one's soundtrack,
+- sound seams on a ComfyUI build without native audio-guide support,
 - ControlNet guides: they reach H3 through the conditioning, so they would
   arrive intact and then be ignored by Raylight's own forward pass,
 - every accelerator except sage attention, which Raylight runs itself,
 - device pins from ComfyUI-MultiGPU: the Ray workers want the cards,
 - a strip that routes to both checkpoints. Force the route to Ref2VA; it takes
   everything FL2VA does.
+
+Blended sound seams use native audio keyframes on compatible ComfyUI builds,
+including a shot continuing the previous soundtrack or joining a supplied
+clip's sound. Continuity checks that fractional audio anchors and mixed
+keyframe/reference payloads work before queueing; older or incompatible cores
+refuse the seam with an update or single-GPU option. Ordinary audio references
+and unblended sound seams keep their existing reference behavior. This path is
+verified at the CPU conditioning and layout level; multi-GPU generation and
+audio quality have not been verified.
 
 One thing changes without being refused: LoRAs are merged inside the workers by
 ComfyUI's own loader instead of this pack's H3 stack, which is worse on

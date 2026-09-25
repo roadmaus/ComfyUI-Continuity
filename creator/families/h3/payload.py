@@ -1,5 +1,4 @@
-"""Seam conditioning core cannot express: keyframes with references, and
-guides at real timeline positions.
+"""Native audio seam anchors and compatibility repairs for older conditioning.
 
 The open weights accept more than their documented input conditions. FL2VA
 reads reference audio; Ref2VA reads pinned frames; and a conditioning row's
@@ -16,10 +15,13 @@ module wrote in by hand — and made `extra_conds` append rather than overwrite,
 so keyframes and references coexist. On such a core `encode.py` passes real
 indices straight through (`CORE_ANCHORS_ANYWHERE` below), the two video
 repairs here have nothing keyed to act on, and the wrapper's remaining job is
-the audio tail: core anchors a guide's sound *starting* at its frame, and a
-ref-audio block sits in the imitation span before the clip, but a seam needs a
-tail that *ends* on a frame of the target's own timeline. No core release
-expresses that, so the `AUDIO_END_KEY` rewrite runs on every core.
+the audio tail. The local sampler retains that reference-block rewrite so its
+conditioning is unchanged. Distributed sampling instead uses native audio
+keyframes when `CORE_AUDIO_ANCHORS` verifies their layout: subtract the encoded
+tail's duration from its end coordinate to express the same end alignment as a
+start anchor. The coordinate can be fractional or slightly negative because
+the audio and video grids differ. This is conditioning, not a frozen region of
+the target audio latent, and does not require a wrapper in Ray's workers.
 
 On an older core, both of the original gaps are still there, and the wrapper
 still repairs them in full. First, `MiniMaxH3.extra_conds` cannot carry
@@ -71,6 +73,8 @@ papered over with misplaced anchors.
 """
 
 import inspect
+import math
+import sys
 
 import torch
 
@@ -103,6 +107,148 @@ FRAME_INDEX_KEY = "minimax_creator_frame_index"
 # timeline. One audio latent step spans exactly one time unit, and one pixel
 # frame spans FRAME_RESCALE of them.
 AUDIO_END_KEY = "minimax_creator_audio_end_frame"
+
+
+def seam_audio_keyframe(ref):
+    """An end-aligned seam reference as a native, start-aligned audio guide.
+
+    Use the encoded tensor's length, not rounded seconds or `ref_audio_t`:
+    native audio guides get their row count from that same tensor. Do not round
+    or clamp the anchor; either would move the seam on the 40 Hz audio grid.
+    The reference and its tensor are left untouched.
+    """
+    audio = ref.get("audio_latent")
+    if (ref.get("kind") != "audio" or audio is None or getattr(audio, "ndim", None) != 4
+            or audio.shape[2] != 2 or audio.shape[-1] < 1):
+        raise ValueError("An audio seam needs a non-empty stereo audio latent.")
+    try:
+        end = float(ref[AUDIO_END_KEY])
+    except (KeyError, TypeError, ValueError):
+        raise ValueError("An audio seam needs a finite end-frame coordinate.") from None
+    if not math.isfinite(end):
+        raise ValueError("An audio seam needs a finite end-frame coordinate.")
+    return {
+        "resolved_frame_index": end - int(audio.shape[-1]) / FRAME_RESCALE,
+        "audio_latent": audio,
+    }
+
+
+def _supports_audio_anchors(layout_type=PackedLayout):
+    """Probe native audio guides without weights, a model, or a GPU.
+
+    A constructor signature does not establish audio support: check fractional
+    negative anchors, guide/reference coexistence, channel-major stereo rows,
+    and which audio rows remain conditioning. Any incompatible layout fails
+    closed so the distributed backend can keep its actionable refusal.
+    """
+    try:
+        with torch.device("cpu"):
+            video = torch.zeros(1, 24, 1, 2, 4)
+            guides = [(-0.25, 3), (1.25, 2)]
+            keyframes = [{"resolved_frame_index": 2, "latent": video}]
+            keyframes.extend({"resolved_frame_index": start,
+                              "audio_latent": torch.zeros(1, 32, 2, steps)}
+                             for start, steps in guides)
+            refs = [
+                {"kind": "image", "latent_h": 2, "latent_w": 4, "latent": video},
+                {"kind": "audio", "ref_audio_t": 2,
+                 "audio_latent": torch.zeros(1, 32, 2, 2)},
+            ]
+            layout = layout_type(7, 2, 2, 4, 10, keyframes=keyframes, refs=refs)
+            segments = layout.segments
+            if [kind for _, _, kind in segments] != [
+                    "text", "cond", "cond_audio", "cond_audio", "ref_img",
+                    "ref_audio", "audio", "video"]:
+                return False
+            origin = float(layout.position_ids[segments[-1][0], 0])
+            if not math.isclose(origin, 10.0):  # text + image span + reference audio
+                return False
+            a, b, _ = segments[1]
+            if b - a != 2 or not torch.allclose(
+                    layout.position_ids[a:b, 0],
+                    torch.full((2,), origin + FRAME_RESCALE * 2, dtype=torch.float64)):
+                return False
+            target_a, target_b, _ = segments[-2]
+            if target_b - target_a != 20:
+                return False
+            stereo = layout.position_ids[[target_a, target_a + 10], 1:]
+            if not bool((stereo[:, 0] == 0).all()) or not stereo[0, 1] < stereo[1, 1]:
+                return False
+            for (start, steps), (a, b, _) in zip(guides, segments[2:4]):
+                expected_t = (origin + FRAME_RESCALE * start
+                              + torch.arange(steps, dtype=torch.float64)).repeat(2)
+                expected_hw = stereo.repeat_interleave(steps, dim=0)
+                if (b - a != steps * 2
+                        or not torch.allclose(layout.position_ids[a:b, 0], expected_t)
+                        or not torch.equal(layout.position_ids[a:b, 1:], expected_hw)):
+                    return False
+            audio_segments = [(a, b, kind) for a, b, kind in segments
+                              if kind in ("cond_audio", "ref_audio", "audio")]
+            positions = torch.cat([torch.arange(a, b) for a, b, _ in audio_segments])
+            updates = torch.cat([torch.full((b - a,), kind == "audio", dtype=torch.bool)
+                                 for a, b, kind in audio_segments])
+            return (torch.equal(layout.audio_pos, positions)
+                    and torch.equal(layout.audio_update, updates))
+    except Exception:
+        return False
+
+
+def _supports_audio_payload(model_type=None):
+    """Check core keeps guide and reference tensors in layout order.
+
+    Use the real `extra_conds`, but bypass the model constructor and the base
+    class's unrelated conditioning hooks. No transformer is built, and omitting
+    text embeddings avoids text preprocessing. Only inspect core if it has
+    already loaded the class: a capability check must not trigger model-module
+    imports on the single-GPU path.
+    """
+    try:
+        if model_type is None:
+            model_type = getattr(sys.modules.get("comfy.model_base"), "MiniMaxH3", None)
+            if model_type is None:
+                return False
+
+        class PayloadProbe(model_type):
+            def __init__(self):
+                pass
+
+            def concat_cond(self, **kwargs):
+                return None
+
+            def encode_adm(self, **kwargs):
+                return None
+
+            def audio_scale(self):
+                return 1.0
+
+        with torch.device("cpu"):
+            videos = [torch.zeros(1, 24, 1, 2, 4) for _ in range(2)]
+            audios = [torch.zeros(1, 32, 2, steps) for steps in (3, 2, 1)]
+            keyframes = [
+                {"resolved_frame_index": 2, "latent": videos[0]},
+                {"resolved_frame_index": -0.25, "audio_latent": audios[0]},
+                {"resolved_frame_index": 1.25, "audio_latent": audios[1]},
+            ]
+            refs = [
+                {"kind": "image", "latent_h": 2, "latent_w": 4,
+                 "latent": videos[1]},
+                {"kind": "audio", "ref_audio_t": 1, "audio_latent": audios[2]},
+            ]
+            payload = PayloadProbe().extra_conds(
+                minimax_keyframes=keyframes, minimax_refs=refs)["minimax_payload"].cond
+            for name, expected in (("cond_video_latents", videos),
+                                   ("cond_audio_latents", audios)):
+                actual = payload.get(name, [])
+                if len(actual) != len(expected) or any(
+                        left is not right for left, right in zip(actual, expected)):
+                    return False
+            return True
+    except Exception:
+        return False
+
+
+CORE_AUDIO_ANCHORS = (CORE_ANCHORS_ANYWHERE and _supports_audio_anchors()
+                      and _supports_audio_payload())
 
 # Stamped on a layout whose positions were already rewritten. The layout is
 # built once per sampling run and shared across steps; the rewrite is
