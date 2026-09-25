@@ -162,10 +162,10 @@ const out = {};
   out.grouped = {
     // Six files, four cards: three lenas became one, and the split pair did not.
     cards: cards().length,
-    pills: pills("lena_v10").map((node) => node.textContent),
+    pills: pills("lena").map((node) => node.textContent),
     // Nothing pinned and nothing in the stack, so the card opens on the newest
     // — which natural order says is v10, not v2.
-    opensOn: shown("lena_v10")?.textContent ?? null,
+    opensOn: shown("lena")?.textContent ?? null,
     split: cards().map((node) => find("mmc-lora-name", node).textContent).sort(),
   };
 
@@ -175,7 +175,7 @@ const out = {};
   picker.value = "chars";
   fire(picker, "change", { target: picker });
   await settle();
-  out.scoped = { cards: cards().length, pills: pills("lena_v10").length };
+  out.scoped = { cards: cards().length, pills: pills("lena").length };
 
   // Back to everything: the scope is remembered across openings, and the cases
   // below want the whole collection.
@@ -188,14 +188,14 @@ const out = {};
 
 {
   const state = await open({ loras: [], assets: [] });
-  add("lena_v10");
-  const slider = rangeIn(find("mmc-lora-ctl", card("lena_v10")));
+  add("lena");
+  const slider = rangeIn(find("mmc-lora-ctl", card("lena")));
   fire(slider, "input", { target: { value: "0.42" } });
   fire(slider, "change");
   state.loras[0].modes = ["ref2va"];   // one of this family's routed slots
   out.before = { name: state.loras[0].name, strength: state.loras[0].strength };
 
-  click(pill("lena_v10", "v1"));
+  click(pill("lena", "v1"));
   out.after = {
     // One entry still, on the other file, at the weight it was dialled to.
     count: state.loras.length,
@@ -211,14 +211,14 @@ const out = {};
 
 {
   await open({ loras: [], assets: [] });
-  click(pill("lena_v10", "v2"));             // nothing in the stack: only a look
-  click(find("mmc-ver-pin", card("lena_v2")));
+  click(pill("lena", "v2"));                 // nothing in the stack: only a look
+  click(find("mmc-ver-pin", card("lena")));
   await settle();
 
   await open({ loras: [], assets: [] });
   out.pinned = {
-    opensOn: shown("lena_v2")?.textContent ?? null,
-    marked: find("mmc-ver-pin", card("lena_v2")).className.includes("on"),
+    opensOn: shown("lena")?.textContent ?? null,
+    marked: find("mmc-ver-pin", card("lena")).className.includes("on"),
   };
 }
 
@@ -226,8 +226,8 @@ const out = {};
 
 {
   const state = await open({ loras: [], assets: [] });
-  add("lena_v2");
-  out.styleSpan = find("mmc-lora-span", card("lena_v2")).textContent;
+  add("lena");
+  out.styleSpan = find("mmc-lora-span", card("lena")).textContent;
 
   // Nothing but its own name says this one is a slider, and that is enough:
   // ±2 would put its whole working range inside a fifth of the track.
@@ -269,7 +269,7 @@ check("...and the card opens on the newest of them", got["grouped"]["opensOn"], 
 # The one direction the grouping must not be clever in: these two go in a stack
 # together, so a card offering a choice between them would hide half the answer.
 check("a split LoRA's two halves stay two cards", got["grouped"]["split"],
-      ["age_slider", "detail_high_noise", "detail_low_noise", "lena_v10"])
+      ["age_slider", "detail_high_noise", "detail_low_noise", "lena"])
 check("a folder still decides what is on screen", got["scoped"], {"cards": 1, "pills": 3})
 
 # ---- switching version ------------------------------------------------------

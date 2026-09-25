@@ -27,9 +27,10 @@ authoritative about different things. Civitai knows the title, the stats and the
 sibling versions; a user who typed an activation text into A1111's metadata
 editor knows the trigger words better than Civitai does, because that field *is*
 their correction of it. So each field has its own source order (`FIELD_ORDER`),
-and a detail sheet can legitimately show a Civitai title next to the user's own
-triggers. Card labels are deliberately separate: `.cm-info.json` display text
-or the selected filename/path, never an inherited training title.
+and a card can legitimately show a Civitai title next to the user's own triggers.
+Optional local card labels are deliberately separate: `.cm-info.json` display
+text or the selected filename/path. The frontend uses them only when the user
+opts out of metadata-derived labels; the merged record is unchanged either way.
 
 **One readdir per folder, not one stat per guess.** Seven layouts times a dozen
 extensions times a few hundred files is fifty thousand `stat` calls for a single
@@ -1323,12 +1324,14 @@ ROW_FIELDS = ("title", "version", "type", "base_model", "tags", "trained_words",
 
 
 def _card_labels(probe, name):
-    """Optional StabilityMatrix labels, otherwise the file the user selected.
+    """Local labels for the optional metadata-skip display mode.
 
     Keep presentation separate from the merged model metadata: a training
     title or architecture can be useful in the detail sheet without being a
-    useful name for the downloaded LoRA. No StabilityMatrix installation is
-    needed; only an exact same-stem sidecar is consulted, field by field.
+    useful name for the downloaded LoRA. The default UI still uses metadata;
+    these extra fields let the display preference change without a row-cache
+    flush. No StabilityMatrix installation is needed; only an exact same-stem
+    sidecar is consulted, field by field.
     """
     info = probe.load(".cm-info.json") or {}
     title = (_text(info.get("UserTitle")) or _text(info.get("ModelName"))

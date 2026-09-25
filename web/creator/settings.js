@@ -374,6 +374,13 @@ const LORA_LOADERS = [
         + "on a different shot. Pick this to match a result made outside this pack." },
 ];
 
+const LORA_CARD_METADATA = [
+  { value: false, label: "Off",
+    note: "Use model metadata for card titles and subtitles." },
+  { value: true, label: "On",
+    note: "Use same-stem .cm-info.json labels when available; otherwise show the file name and path." },
+];
+
 const SEAM_HANDOFFS = [
   { value: "frames", label: "Frames",
     note: "The road every render took before: the tail is read off the decode "
@@ -1183,6 +1190,17 @@ class SettingsPage {
     const lift = Number(this.settings.surface_lift) || 1;
     const percent = (value) => `${Math.round(value * 100)}%`;
     return this.card("Interface", [
+      this.row({
+        key: "lora_skip_metadata",
+        name: "Skip model metadata in LoRA cards",
+        ...this.segment({
+          options: LORA_CARD_METADATA,
+          value: this.settings.lora_skip_metadata === true,
+          also: "Card labels only. LoRA loading, trigger words, detail metadata and local "
+              + "thumbnails stay unchanged. Reopen the LoRA manager to apply changes.",
+          apply: (value) => this.set({ lora_skip_metadata: value }),
+        }),
+      }),
       this.row({
         key: "text_scale",
         name: "Text size",
