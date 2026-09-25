@@ -2850,4 +2850,10 @@ export const ja = {
  "Render stopped. Nothing was written.": "レンダーを止めました。何も保存していません。",
  "Render photo": "写真をレンダー",
  "{done} of {of} samples. Press to stop.": "{of} サンプル中 {done}。押すと止まります。",
+ "Total execution": "総実行時間",
+ "Render window": "レンダー区間",
+ "From workflow execution start to completion, including loading and other nodes; queue waiting is excluded.": "ワークフローの実行開始から完了までの時間です。読み込みや他のノードの実行を含み、キューでの待ち時間は含みません。",
+ "From the first detected sampling progress or preview to the saved result, including decoding, post-processing and saving; not sampling alone.": "サンプリングの進行またはプレビューを最初に検出してから、結果が保存されるまでの時間です。デコード、後処理、保存を含み、サンプリングだけの時間ではありません。",
+ "The workflow is still running.": "ワークフローはまだ実行中です。",
+ "Timing is unavailable for this result.": "この結果の時間情報は利用できません。",
 };

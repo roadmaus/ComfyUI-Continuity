@@ -2851,4 +2851,10 @@ export const ko = {
  "Render stopped. Nothing was written.": "렌더를 멈췄습니다. 아무것도 저장하지 않았습니다.",
  "Render photo": "사진 렌더",
  "{done} of {of} samples. Press to stop.": "샘플 {of}개 중 {done}개. 누르면 멈춥니다.",
+ "Total execution": "전체 실행",
+ "Render window": "렌더 구간",
+ "From workflow execution start to completion, including loading and other nodes; queue waiting is excluded.": "워크플로 실행 시작부터 완료까지의 시간입니다. 로딩과 다른 노드의 실행을 포함하며, 대기열에서 기다린 시간은 제외합니다.",
+ "From the first detected sampling progress or preview to the saved result, including decoding, post-processing and saving; not sampling alone.": "샘플링 진행 또는 미리보기가 처음 감지된 시점부터 결과 저장까지의 시간입니다. 디코딩, 후처리와 저장을 포함하며, 샘플링만의 시간이 아닙니다.",
+ "The workflow is still running.": "워크플로가 아직 실행 중입니다.",
+ "Timing is unavailable for this result.": "이 결과의 시간 정보를 확인할 수 없습니다.",
 };

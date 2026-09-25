@@ -2851,4 +2851,10 @@ export const zh = {
  "Render stopped. Nothing was written.": "渲染已停止，未写入任何文件。",
  "Render photo": "渲染照片",
  "{done} of {of} samples. Press to stop.": "{of} 个采样中的 {done} 个。按下即停止。",
+ "Total execution": "总执行时间",
+ "Render window": "渲染区间",
+ "From workflow execution start to completion, including loading and other nodes; queue waiting is excluded.": "从工作流开始执行到完成的时间，包括加载和其他节点的执行，不包括排队等待时间。",
+ "From the first detected sampling progress or preview to the saved result, including decoding, post-processing and saving; not sampling alone.": "从首次检测到采样进度或预览，到结果保存完成的时间，包括解码、后处理和保存，并非仅指采样时间。",
+ "The workflow is still running.": "工作流仍在运行。",
+ "Timing is unavailable for this result.": "此结果的耗时信息不可用。",
 };
