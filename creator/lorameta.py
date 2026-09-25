@@ -27,7 +27,9 @@ authoritative about different things. Civitai knows the title, the stats and the
 sibling versions; a user who typed an activation text into A1111's metadata
 editor knows the trigger words better than Civitai does, because that field *is*
 their correction of it. So each field has its own source order (`FIELD_ORDER`),
-and a card can legitimately show a Civitai title next to the user's own triggers.
+and a detail sheet can legitimately show a Civitai title next to the user's own
+triggers. Card labels are deliberately separate: `.cm-info.json` display text
+or the selected filename/path, never an inherited training title.
 
 **One readdir per folder, not one stat per guess.** Seven layouts times a dozen
 extensions times a few hundred files is fifty thousand `stat` calls for a single
@@ -1320,6 +1322,44 @@ ROW_FIELDS = ("title", "version", "type", "base_model", "tags", "trained_words",
               "nsfw", "model_id", "version_id", "strength")
 
 
+def _card_labels(probe, name):
+    """Optional StabilityMatrix labels, otherwise the file the user selected.
+
+    Keep presentation separate from the merged model metadata: a training
+    title or architecture can be useful in the detail sheet without being a
+    useful name for the downloaded LoRA. No StabilityMatrix installation is
+    needed; only an exact same-stem sidecar is consulted, field by field.
+    """
+    info = probe.load(".cm-info.json") or {}
+    title = (_text(info.get("UserTitle")) or _text(info.get("ModelName"))
+             or os.path.splitext(os.path.basename(name))[0])
+    subtitle = " · ".join(part for part in (
+        _text(info.get("BaseModel")), _text(info.get("VersionName")),
+    ) if part) or name
+    return title, subtitle
+
+
+def _card_preview(probe, record=None):
+    """Prefer an explicit local cover, retaining the existing fallback chain.
+
+    StabilityMatrix's `{stem}.preview.jpeg` is one of these companions. It
+    works without `.cm-info.json` too, and does not require an application
+    check, network lookup or a new dependency. Keep this choice at the card
+    boundary so the detail sheet's provider metadata and galleries stay intact.
+    Both the listing and the preview route use this choice (including its kind).
+    """
+    for extension in PREVIEW_ORDER:
+        entry = probe.entry(".preview" + extension)
+        if entry is None or entry.is_dir:
+            continue
+        found = _media(os.path.join(probe.directory, entry.name), entry.size)
+        if found:
+            return found
+    if record is None:
+        record = describe(probe)
+    return record.get("preview")
+
+
 def row(name, path):
     """One card's worth of a LoRA, cached against everything beside it."""
     probe = Probe(path)
@@ -1335,13 +1375,16 @@ def row(name, path):
     size, mtime = (own.size, own.mtime) if own else _stat(path)
 
     record = describe(probe)
+    card_title, card_subtitle = _card_labels(probe, name)
     built = {
         "name": name,
         "base": os.path.splitext(os.path.basename(name))[0],
         "folder": os.path.dirname(name),
+        "card_title": card_title,
+        "card_subtitle": card_subtitle,
         "size": size,
         "mtime": mtime,
-        "preview": (record.get("preview") or {}).get("kind"),
+        "preview": (_card_preview(probe, record) or {}).get("kind"),
         "sources": record["sources"],
         "downloads": (record.get("stats") or {}).get("downloads"),
     }
@@ -1356,7 +1399,7 @@ def row(name, path):
 
 def preview(path):
     """The card's image or clip: `(path, None)` or `(None, (bytes, mime))`."""
-    found = describe(path).get("preview")
+    found = _card_preview(Probe(path))
     if not found:
         return None, None
     if found.get("path"):

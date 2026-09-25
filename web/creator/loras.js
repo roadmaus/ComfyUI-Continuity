@@ -6,11 +6,10 @@
 // would have meant closing the modal to find out what you picked. So every
 // control writes straight through to creator_data and the only exit is Done.
 //
-// Cards come from models/loras. Everything above the filename — showcase image,
-// title, base model, trigger words — comes from whatever sidecars are beside the
-// file, which is `lorameta.py`'s problem rather than this file's: half a dozen
-// tools write half a dozen layouts and they all arrive here as one row shape. A
-// LoRA nothing has ever described still gets a working card from its filename.
+// Cards come from models/loras. Their title and subtitle come from the file's
+// own .cm-info.json, falling back to its filename and path. Other metadata —
+// showcase image, trigger words, settings — is collected by `lorameta.py` from
+// the sidecars and header into one row shape.
 //
 // A real collection is hundreds or thousands of files, so the grid never holds
 // all of them: a folder picker narrows what the server even walks, and what
@@ -234,13 +233,6 @@ function groupRows(rows) {
     // The newest is the one a card opens on when nothing else decides it, and
     // the sort above put it last.
     group.newest = group.members[group.members.length - 1].name;
-    // A model's title is the model's and not the version's. A sidecar knows the
-    // difference; a folder of bare filenames does not, so the shared head of
-    // the names stands in for it — which is the same string the pills were cut
-    // away from, so card and pills together spell each filename back out.
-    const titled = group.members.find((row) => row.title);
-    group.title = titled?.title || commonHead(stems)
-      || stems.reduce((shortest, stem) => (stem.length < shortest.length ? stem : shortest));
   }
   return [...groups.values()];
 }
@@ -858,7 +850,8 @@ class LoraManager {
   visible() {
     if (!this.query) return this.rows;
     return this.rows.filter((row) =>
-      [row.name, row.title, row.version, row.base_model, ...(row.tags || []), ...(row.trained_words || [])]
+      [row.name, row.card_title, row.card_subtitle, row.title, row.version, row.base_model,
+       ...(row.tags || []), ...(row.trained_words || [])]
         .filter(Boolean).join(" ").toLowerCase().includes(this.query));
   }
 
@@ -1505,13 +1498,12 @@ class LoraManager {
     if (row.preview === "video") this.hoverClip(art, check, loraPreviewUrl(row.name));
     card.appendChild(art);
 
-    // The title is the model's and the sub line is this file's: with four
-    // versions on one card the name has to stop moving when you click between
-    // them, or the pills read as four different LoRAs rather than one.
-    const meta = [row.base_model, row.version].filter(Boolean).join(" · ");
+    // These labels describe the selected file, including when a version pill
+    // changes it. Raw metadata and another member's title cannot name this
+    // card; an older response without display fields uses the exact filename.
     const body = el("div", { class: "mmc-lora-body" }, [
-      el("div", { class: "mmc-lora-name", text: group.title || row.base, title: row.name }),
-      el("div", { class: "mmc-lora-sub", text: meta || row.name, title: row.name }),
+      el("div", { class: "mmc-lora-name", text: row.card_title || row.base || baseName(row.name), title: row.name }),
+      el("div", { class: "mmc-lora-sub", text: row.card_subtitle || row.name, title: row.name }),
     ]);
     if (group.members.length > 1) body.appendChild(this.versionRow(group, row));
     // Until the LoRA is active its trigger words are just information; once it
